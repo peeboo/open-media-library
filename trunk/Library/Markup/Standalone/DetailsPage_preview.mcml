@@ -1,0 +1,280 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:me="Me">
+
+	<UI Name="DetailsPage_preview">
+		<Properties>
+			<Font Name="BoldFont" FontName="Verdana" FontSize="24"	FontStyle="Bold"/>
+			<Font Name="Heading" FontName="Verdana" FontSize="14"	FontStyle="Bold"/>
+			<Font Name="Normal" FontName="Verdana" FontSize="15"/>
+			<Font Name="Details" FontName="Verdana" FontSize="14"/>
+			<Font Name="NormalBold" FontName="Verdana" FontSize="16" FontStyle="Bold"/>
+
+			<!-- The layout we will use to display the headings. -->
+			<GridLayout Name="GridLayout" Orientation="Horizontal" Columns="4" AllowWrap="false"
+						Spacing="10,10" MajorAlignment="Fill" MinorAlignment="Fill"/>
+		</Properties>
+
+		<Locals>
+			<ArrayListDataSet Name="ActorList">
+				<Source>
+					<cor:String String="Sean Penn"/>
+					<cor:String String="Naomi Watts"/>
+					<cor:String String="Benicio Del Toro"/>
+					<cor:String String="Charlotte Gainsbourg"/>
+					<cor:String String="Melissa Leo"/>
+				</Source>
+			</ArrayListDataSet>
+
+			<ArrayListDataSet Name="DirectorList">
+				<Source>
+					<cor:String String="Alejandro González Iñárritu"/>
+					<cor:String String="Alejandro González Iñárritu"/>
+				</Source>
+			</ArrayListDataSet>
+
+			<ArrayListDataSet Name="ProducerList">
+				<Source>
+					<cor:String String="Alejandro Gonzalez Inarritu"/>
+					<cor:String String="Robert Salerno"/>
+				</Source>
+			</ArrayListDataSet>
+
+			<!-- The ScrollingHandler which reacts to user keyboard input. -->
+			<!-- Turn on handing of arrow keys for scrolling (not on by    -->
+			<!-- default).                                                 -->
+			<!-- NOTE: HandlerStage must be "Direct" (which is default).   -->
+			<ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true"/>
+
+			<!-- ScrollingData contains many ways to customize how scrolling -->
+			<!-- should behave. It has methods to change the current scroll  -->
+			<!-- position and it also reports the position. In this case,    -->
+			<!-- the default values are used for the sample.                 -->
+			<ScrollingData Name="ScrollingData"/>
+		</Locals>
+
+		<!-- This is where the scrolling objects get hooked up to each     -->
+		<!-- other. Default rules are a good place to do this since Rules  -->
+		<!-- get run after the rest of the UI is created and ready to go.  -->
+		<Rules>
+
+			<!-- Give ScrollingData to ScrollingHandler. -->
+			<Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+
+			<!-- Change background color when gaining focus. -->
+			<!--<Condition Source="[Input.KeyFocus]" SourceValue="true"
+					   Target="[Background.Content]" Value="MintCream"/>-->
+
+
+			<!-- Bind the current page from the scrolling data to our display. -->
+			<!--<Binding Source="[ScrollingData.CurrentPage]" Target="[CurrentPage.Content]">
+				<Transformer>
+					<FormatTransformer Format="Current page: {0:F0}"/>
+				</Transformer>
+			</Binding>-->
+
+			<!-- Bind the total page count from the scrolling data to our display. -->
+			<!--<Binding Source="[ScrollingData.TotalPages]" Target="[TotalPages.Content]">
+				<Transformer>
+					<FormatTransformer Format="Total pages: {0:F0}"/>
+				</Transformer>
+			</Binding>-->
+
+		</Rules>
+
+		<Content>
+			<ColorFill Content="Transparent" Layout="Form">
+				<Children>
+					<Panel Name="Image" Layout="VerticalFlow">
+						<LayoutInput>
+							<FormLayoutInput Left="Parent,0,20" Top="Parent,0,20" Bottom="Parent,1"/>
+						</LayoutInput>
+						<Children>
+							<Graphic Name="cover" Content="image://me:cover" MinimumSize="336,480" MaximumSize="336,480" />
+							<Clip Orientation="Vertical" FadeSize="40" NearOffset="70" MaximumSize="336, 480">
+								<Children>
+									<Graphic Name="coverflip" CenterPointPercent=".5,.5,.5" Scale="1,-1,1"
+											 Content="image://me:cover" Alpha=".4" >
+									</Graphic>
+								</Children>
+							</Clip>
+						</Children>
+					</Panel>
+
+					<Text Name="Title" Content="21 Grams" Font="[BoldFont]" Color="White" >
+						<LayoutInput>
+							<FormLayoutInput Left="Image,1.02" Top="Parent,0,15" Right="Rating,0"/>
+						</LayoutInput>
+					</Text>
+
+					<Text Name="Rating" Content="R (Restricted)" Font="[BoldFont]" Color="White" >
+						<LayoutInput>
+							<FormLayoutInput Right="Parent,1,-20" Top="Parent,0,15"/>
+						</LayoutInput>
+					</Text>
+
+					<Text Name="Company" Content=" " Font="[Heading]" Color="SlateGray" >
+						<LayoutInput>
+							<FormLayoutInput Left="Image,1.02" Top="Title,1"/>
+						</LayoutInput>
+					</Text>
+
+					<Panel Name="SummaryPanel" >
+						<LayoutInput>
+							<FormLayoutInput Left="Image,1.02" Top="Company,1" Right="Parent,1" />
+						</LayoutInput>
+						<Children>
+
+							<!-- Scroller's parent which displays background color. It offsets -->
+							<!-- the Scroller using padding and the Scroller fades the clipped -->
+							<!-- text outside itself (negative fade size).                     -->
+							<!-- This piece of the UI is MouseInteractive.                     -->
+							<ColorFill Name="Background" Content="Transparent" MouseInteractive="true" Padding="0,0,0,20" MaximumSize="0,350">
+								<!--Padding="30,30,30,30"  Margins="30,0,30,0">-->
+								<Children>
+
+									<!-- The Scroller. It referrs to the ScrollingData too. -->
+									<Scroller Orientation="Vertical" FadeSize="-20" ScrollingData="[ScrollingData]">
+										<Children>
+
+											<!-- Text to scroll. Filled with rich text (RTF) content. -->
+											<!-- You can use Wordpad to generate RTF content.         -->
+											<Text Name="Summary" WordWrap="true" Font="[Normal]"
+												  Color="White" Content="Sean Penn and Benecio Del Toro, two of the most gripping actors around, play wildly different men linked through a grieving woman (Naomi Watts, Mulholland Drive, The Ring) in 21 Grams. Del Toro (Traffic, The Usual Suspects) delves deep into the role of an ex-con turned born-again Christian, a deeply conflicted man struggling to set right a terrible accident, even at the expense of his family. Penn (Mystic River, Dead Man Walking) captures a cynical, philandering professor in dire need of a heart transplant, which he gets from the death of Watts' husband. 21 Grams slips back in forth in time, creating an intricate emotional web out of the past and the present that slowly draws these three together; the result is remarkably fluid and compelling. The movie overreaches for metaphors towards the end, but that doesn't erase the power of the deeply felt performances.Sean Penn and Benecio Del Toro, two of the most gripping actors around, play wildly different men linked through a grieving woman (Naomi Watts, Mulholland Drive, The Ring) in 21 Grams. Del Toro (Traffic, The Usual Suspects) delves deep into the role of an ex-con turned born-again Christian, a deeply conflicted man struggling to set right a terrible accident, even at the expense of his family. Penn (Mystic River, Dead Man Walking) captures a cynical, philandering professor in dire need of a heart transplant, which he gets from the death of Watts' husband. 21 Grams slips back in forth in time, creating an intricate emotional web out of the past and the present that slowly draws these three together; the result is remarkably fluid and compelling. The movie overreaches for metaphors towards the end, but that doesn't erase the power of the deeply felt performances.Sean Penn and Benecio Del Toro, two of the most gripping actors around, play wildly different men linked through a grieving woman (Naomi Watts, Mulholland Drive, The Ring) in 21 Grams. Del Toro (Traffic, The Usual Suspects) delves deep into the role of an ex-con turned born-again Christian, a deeply conflicted man struggling to set right a terrible accident, even at the expense of his family. Penn (Mystic River, Dead Man Walking) captures a cynical, philandering professor in dire need of a heart transplant, which he gets from the death of Watts' husband. 21 Grams slips back in forth in time, creating an intricate emotional web out of the past and the present that slowly draws these three together; the result is remarkably fluid and compelling. The movie overreaches for metaphors towards the end, but that doesn't erase the power of the deeply felt performances." >
+
+												<!-- Smooth scrolling. -->
+												<Animations>
+													<Animation Type="Move">
+														<Keyframes>
+															<PositionKeyframe Time="0" Value="0,0,0" RelativeTo="Current"
+																			  Interpolation="Exp"/>
+															<PositionKeyframe Time=".1" Value="0,0,0"/>
+														</Keyframes>
+													</Animation>
+												</Animations>
+											</Text>
+
+										</Children>
+									</Scroller>
+
+
+									<!-- The Scroller. It referrs to the ScrollingData too. -->
+									<!--<Scroller Orientation="Vertical" FadeSize="-1">
+								<Children>
+									-->
+									<!-- Text to scroll. Filled with rich text (RTF) content. -->
+									<!--
+									-->
+									<!-- You can use Wordpad to generate RTF content.         -->
+									<!--
+									<Text Name="Summary" WordWrap="true" MaximumSize="0,350" Font="[Normal]" 
+										  Color="White" Content="Sean Penn and Benecio Del Toro, two of the most gripping actors around, play wildly different men linked through a grieving woman (Naomi Watts, Mulholland Drive, The Ring) in 21 Grams. Del Toro (Traffic, The Usual Suspects) delves deep into the role of an ex-con turned born-again Christian, a deeply conflicted man struggling to set right a terrible accident, even at the expense of his family. Penn (Mystic River, Dead Man Walking) captures a cynical, philandering professor in dire need of a heart transplant, which he gets from the death of Watts' husband. 21 Grams slips back in forth in time, creating an intricate emotional web out of the past and the present that slowly draws these three together; the result is remarkably fluid and compelling. The movie overreaches for metaphors towards the end, but that doesn't erase the power of the deeply felt performances.Sean Penn and Benecio Del Toro, two of the most gripping actors around, play wildly different men linked through a grieving woman (Naomi Watts, Mulholland Drive, The Ring) in 21 Grams. Del Toro (Traffic, The Usual Suspects) delves deep into the role of an ex-con turned born-again Christian, a deeply conflicted man struggling to set right a terrible accident, even at the expense of his family. Penn (Mystic River, Dead Man Walking) captures a cynical, philandering professor in dire need of a heart transplant, which he gets from the death of Watts' husband. 21 Grams slips back in forth in time, creating an intricate emotional web out of the past and the present that slowly draws these three together; the result is remarkably fluid and compelling. The movie overreaches for metaphors towards the end, but that doesn't erase the power of the deeply felt performances.Sean Penn and Benecio Del Toro, two of the most gripping actors around, play wildly different men linked through a grieving woman (Naomi Watts, Mulholland Drive, The Ring) in 21 Grams. Del Toro (Traffic, The Usual Suspects) delves deep into the role of an ex-con turned born-again Christian, a deeply conflicted man struggling to set right a terrible accident, even at the expense of his family. Penn (Mystic River, Dead Man Walking) captures a cynical, philandering professor in dire need of a heart transplant, which he gets from the death of Watts' husband. 21 Grams slips back in forth in time, creating an intricate emotional web out of the past and the present that slowly draws these three together; the result is remarkably fluid and compelling. The movie overreaches for metaphors towards the end, but that doesn't erase the power of the deeply felt performances." >
+										-->
+									<!-- Smooth scrolling. -->
+									<!--
+										-->
+									<!--<Animations>
+											<Animation Loop="-1">
+												<Keyframes>
+													<PositionKeyframe Time="0.0" Value="0,0,0" Interpolation="Linear" RelativeTo="Current" />
+													<PositionKeyframe Time="20.0" Value="0,-400,0" RelativeTo="Final" />
+												</Keyframes>
+											</Animation>
+										</Animations>-->
+									<!--
+									</Text>
+
+								</Children>
+							</Scroller>-->
+								</Children>
+							</ColorFill>
+						</Children>
+					</Panel>
+
+					<Panel Layout="[GridLayout]">
+						<LayoutInput>
+							<FormLayoutInput Left="Image,1.02" Top="SummaryPanel,1" Right="Parent,1"/>
+						</LayoutInput>
+						<Children>
+							<Panel Layout="VerticalFlow">
+								<Children>
+									<Text Name="MovieDetails" Content="Movie Details" Font="[NormalBold]" Color="SlateGray" />
+
+									<Text Name="Release" Content="Release 2007" Font="[Details]" Color="White" />
+
+									<Text Name="Runtime" Content="125 mins" Font="[Details]" Color="White" />
+
+									<Panel>
+										<Layout>
+											<FlowLayout Orientation="Horizontal"/>
+										</Layout>
+										<Children>
+											<Text Name="Imdb" Content="IMDB Rating: " Font="[Details]" Color="White"/>
+											<Text Name="Imdb2" Content="7.2" Font="[Details]" Color="White"/>
+										</Children>
+									</Panel>
+
+								</Children>
+
+							</Panel>
+
+							<Panel Layout="VerticalFlow">
+								<Children>
+									<Text Name="Actors" Content="Actors" Font="[NormalBold]" Color="SlateGray" />
+
+									<Repeater Source="[ActorList]" Layout="VerticalFlow">
+										<Content>
+											<Text Content="[RepeatedItem!cor:String]" Font="[Details]" WordWrap="true" Color="White" />
+										</Content>
+									</Repeater>
+								</Children>
+							</Panel>
+
+
+							<Panel Layout="VerticalFlow">
+								<Children>
+									<Text Name="Directors" Content="Directors" Font="[NormalBold]" Color="SlateGray" />
+
+									<Repeater Source="[DirectorList]" Layout="VerticalFlow">
+										<Content>
+											<Text Content="[RepeatedItem!cor:String]" Font="[Details]" WordWrap="true" Color="White" />
+										</Content>
+									</Repeater>
+								</Children>
+							</Panel>
+
+							<Panel Layout="VerticalFlow">
+								<Children>
+									<Text Name="Producers" Content="Producers" Font="[NormalBold]" Color="SlateGray" />
+
+									<Repeater Source="[ProducerList]" Layout="VerticalFlow">
+										<Content>
+											<Text Content="[RepeatedItem!cor:String]" Font="[Details]" WordWrap="true" Color="White" />
+										</Content>
+									</Repeater>
+								</Children>
+							</Panel>
+
+						</Children>
+					</Panel>
+
+
+					<Text Name="PlayButton" Content="Play Movie" Font="[Heading]" Color="SlateGray" >
+						<LayoutInput>
+							<FormLayoutInput Right="Parent,1,-20" Bottom="Parent,1,-20"/>
+						</LayoutInput>
+					</Text>
+
+				</Children>
+			</ColorFill>
+		</Content>
+	</UI>
+
+	<UI Name="PlayButton">
+
+
+	</UI>
+
+	<Image Name="cover" Source="file://F:\Program Files\Collectorz.com\Movie Collector\Data\Images\21 Grams (2003)4786_f.jpg"
+         NineGrid="14,13,15,14"/>
+</Mcml>
