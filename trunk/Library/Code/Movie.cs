@@ -8,6 +8,7 @@ using System.Xml;
 using Microsoft.MediaCenter.UI;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace Library
 {
@@ -18,33 +19,39 @@ namespace Library
         public static int REAR_COVER = 3;
         private DataSet dataSet;
         const string HTML_TAG_PATTERN = "<.*?>";
-        private static DisplayItem[] myArr = null;
+        private static DisplayItem[] myMovies = null;
         private static Boolean initialized = false;
 
         public Movie()
         {
-            string fileName = "C:\\Users\\Public\\Open Media Library\\movies.xml";
-            TextReader rawReader = null;
-            try
-            {
-                rawReader = new StreamReader(fileName);
-            }
-            catch (DirectoryNotFoundException e)
-            {
-                // directory does not exist, therefore Z was not
-                // installed correctly
-                throw new InvalidOperationException("The application data has not been correctly installed.", e);
-            }
-            XmlReader xmlReader = new XmlTextReader(rawReader);
+            Trace.WriteLine("Movie:Movie()");
 
-            dataSet = new DataSet("Movie");
-            dataSet.ReadXml(xmlReader);
-            
+            Type ImporterClassType = getImporterClassType();
+            if (ImporterClassType.IsClass)
+            {
+                try
+                {
+                    object obj = Activator.CreateInstance(ImporterClassType);
+                    MethodInfo mi = ImporterClassType.GetMethod("GetDataSet");
+                    dataSet = (DataSet)mi.Invoke(obj, null);
+                }
+                catch (FileNotFoundException e)
+                {
+                    Trace.WriteLine(e.Message);
+                }
+            }
+
             initialize();
+        }
+
+        private Type getImporterClassType()
+        {
+            return typeof(MoviesXmlImporter);
         }
 
         public void initialize()
         {
+            Trace.WriteLine("Movie:initialize()");
             createGallery();
             initialized = true;
         }
@@ -57,13 +64,14 @@ namespace Library
                 {
                     initialize();
                 }
-                return myArr;
+                return myMovies;
             }
         }
 
         public DisplayItem[] createGallery()
         {
-            if (myArr == null)
+            Trace.WriteLine("Movie:createGallery()");
+            if (myMovies == null)
             {
                 DataTable tbl_Movie = dataSet.Tables["movie"];
                 ArrayList list = new ArrayList();
@@ -71,23 +79,27 @@ namespace Library
                 {
                     list.Add(CreateGalleryItem(movieData));
                 }
-                myArr = (DisplayItem[])list.ToArray(typeof(DisplayItem));
+                myMovies = (DisplayItem[])list.ToArray(typeof(DisplayItem));
             }
-            return myArr;
+            return myMovies;
         }
 
-        /// <summary>
-        /// Construct a gallery item for a row of data.
-        /// </summary>
         private DisplayItem CreateGalleryItem(DataRow movieData)
         {
+            Trace.WriteLine("Movie::CreateGalleryItem()");
             DisplayItem item = new DisplayItem();
-            //item.Description = (string)movieData["title"];
+            item.Description = (string)movieData["title"];
             item.title = (string)movieData["title"];
             item.itemId = int.Parse((string)movieData["id"]);
+            //item.image = LoadImage("c:\\2001ASpaceOdyssey1968237_f.jpg");
             item.image = LoadImage((string)movieData["coverfront"]);
             item.runtime = (string)movieData["runtime"];
-            item.mpaaRating = getChildColumn(movieData, "movie_mpaarating", "displayname");
+            item.mpaaRating = getChildColumn(movieData, "mpaarating", "displayname");
+            item.imdbRating = "N/A";
+
+            /*
+            
+            
 
             if (movieData["imdbrating"] == System.DBNull.Value)
             {
@@ -97,7 +109,7 @@ namespace Library
             {
                 item.imdbRating = (string)movieData["imdbrating"];
             }
-
+            */
             //
             // Hook up an event for when the gallery item is invoked.
             //
@@ -113,13 +125,9 @@ namespace Library
             return item;
         }
 
-
-        /// <summary>
-        /// Create a details page for a movie.
-        /// NOTE: This is public to enable debug markup access.
-        /// </summary>
         public DetailsPage CreateDetailsPage(int movieId)
         {
+            Trace.WriteLine("Movie:CreateDetailsPage()");
             DetailsPage page = new DetailsPage();
 
             //
@@ -143,16 +151,14 @@ namespace Library
             page.Producers = metadata.Producers;
             page.Writers = metadata.Writers;
             page.ImdbRating = metadata.ImdbRating;
-            page.LocalMedia = new System.IO.FileInfo(metadata.Url);
+            //page.LocalMedia = new System.IO.FileInfo("C:\\users\\dxs\\documents\\Downloads\\Good Eats - Season 6\\Good Eats - S06E16 - Beet It.avi");
 
             return page;
         }
 
-        /// <summary>
-        /// Take the raw movie data row and create a nicely typed struct.
-        /// </summary>
         private MovieMetadata ExtractMetadata(DataRow movieData, int movieId)
         {
+            Trace.WriteLine("Movie:ExtractMetadata()");
             MovieMetadata metadata = new MovieMetadata();
             metadata.Id = movieId;
 
@@ -165,8 +171,8 @@ namespace Library
             metadata.Url = getUrl(movieData);
             metadata.Directors = getCrew(movieData, "dfDirector");
             metadata.Producers = getCrew(movieData, "dfProducer");
-            metadata.Rating = getChildColumn(movieData, "movie_mpaarating", "displayname");
-            
+            //metadata.Rating = getChildColumn(movieData, "mpaarating", "displayname");
+            /*
             if (movieData["imdbrating"] == System.DBNull.Value)
             {
                 metadata.ImdbRating = "N/A";
@@ -175,7 +181,7 @@ namespace Library
             {
                 metadata.ImdbRating = (string)movieData["imdbrating"];
             }
-
+            */
             //
             // Genre
             //
@@ -191,6 +197,7 @@ namespace Library
 
         private IList getActors(DataRow dataRow)
         {
+            Trace.WriteLine("Movie:getActors()");
             IList Actors = new List <string>();
             DataRow[] castTable = dataRow.GetChildRows("movie_cast");
             DataRow castR = castTable[0];
@@ -208,6 +215,7 @@ namespace Library
 
         private IList getCrew(DataRow dataRow, String fieldId)
         {
+            Trace.WriteLine("Movie:getCrew()");
             IList crew = new List<string>();
             DataRow[] castTable = dataRow.GetChildRows("movie_crew");
             DataRow castR = castTable[0];
@@ -228,6 +236,7 @@ namespace Library
 
         private string getUrl(DataRow dataRow)
         {
+            Trace.WriteLine("Movie:getUrl()");
             IList crew = new List<string>();
             DataRow[] castTable = dataRow.GetChildRows("movie_links");
             DataRow castR = castTable[0];
@@ -245,41 +254,49 @@ namespace Library
             return null;
         }
 
-        /// <summary>
-        /// Gets a child column from a specified row
-        /// getChildColumn(movieData, "movie_releasedate", "date");
-        /// </summary>
-        /// <param name="dataRow">current row</param>
-        /// <param name="relatedTable">child table</param>
-        /// <param name="column">the column in the child table</param>
         private String getChildColumn(DataRow dataRow, String relatedTable, String column)
         {
+            Trace.WriteLine("Movie:getChildColumn() Column: " + column + " RelatedTable: " + relatedTable);
             DataRow[] rows = dataRow.GetChildRows(relatedTable);
-            return (string)rows[0][column];
+
+            string data_point = string.Empty;
+
+            if (rows.Length > 0)
+            {
+                try
+                {
+                    data_point = (string)rows[0][column];
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.Message);
+                }
+            }
+            return data_point;
         }
 
         private string StripHTML(string inputString)
         {
+            Trace.WriteLine("Movie:StripHTML()");
             return Regex.Replace(inputString, HTML_TAG_PATTERN, string.Empty);
         }
 
         private string StripRating(string inputString)
         {
+            Trace.WriteLine("Movie:StripRating()");
             return Regex.Replace(inputString, "()", string.Empty);
         }
 
-        /// <summary>
-        /// Get a movie data row given a unique id.
-        /// </summary>
         public DataRow GetMovieData(int itemId)
         {
+            Trace.WriteLine("Movie:getMovieData()");
             DataTable tbl_Movie = dataSet.Tables["movie"];
             return Movie.GetSingleDataRow(tbl_Movie, "id", itemId);
         }
 
-
         public static DataRow GetSingleDataRow(DataTable table, string column, object value)
         {
+            Trace.WriteLine("Movie:GetSingleDataRow()");
             string query = String.Format("{0} = '{1}'", column, value);
             DataRow[] matches = table.Select(query);
 
@@ -289,11 +306,9 @@ namespace Library
             return matches[0];
         }
 
-        /// <summary>
-        /// Helper method to load an image from our data directory.
-        /// </summary>
         private static Image LoadImage(string imageName)
         {
+            Trace.WriteLine("Movie:LoadImage()");
             try
             {
                 return new Image("file://" + imageName);

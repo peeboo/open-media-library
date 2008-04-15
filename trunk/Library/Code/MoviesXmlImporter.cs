@@ -2,15 +2,17 @@ using System;
 using System.IO;
 using System.Xml;
 using System.Data;
+using System.Diagnostics;
 
 namespace Library
 {
     public class MoviesXmlImporter
     {
-        public DataSet dataSet;
+        public DataSet _dataSet;
 
         public MoviesXmlImporter()
         {
+            Trace.WriteLine("using internal " + typeof(MoviesXmlImporter).Name + " class through reflection");
             string fileName = "C:\\movies.xml";
             TextReader rawReader = null;
             try
@@ -25,10 +27,14 @@ namespace Library
             }
             XmlReader xmlReader = new XmlTextReader(rawReader);
 
-            dataSet = new DataSet("Movie");
-            dataSet.ReadXml(xmlReader);
+            _dataSet = new DataSet("Movie");
+            _dataSet.ReadXml(xmlReader);
         }
 
+        public DataSet GetDataSet()
+        {
+            return _dataSet;
+        }
         ~MoviesXmlImporter()
         {
         }
