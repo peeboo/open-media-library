@@ -14,12 +14,16 @@ namespace Library
 {
     public class Movie
     {
+        static object syncObj = new object();
+        static MethodInfo fromStreamMethodInfo = null;
+
         public static int TITLE = 14;
         public static int FRONT_COVER = 2;
         public static int REAR_COVER = 3;
         private DataSet dataSet;
         const string HTML_TAG_PATTERN = "<.*?>";
         private static DisplayItem[] myMovies = null;
+        private static Title[] titles = null;
         private static Boolean initialized = false;
 
         public Movie()
@@ -32,7 +36,7 @@ namespace Library
                 try
                 {
                     object obj = Activator.CreateInstance(ImporterClassType);
-                    MethodInfo mi = ImporterClassType.GetMethod("GetDataSet");
+                    MethodInfo mi = ImporterClassType.GetMethod("getDataSet");
                     dataSet = (DataSet)mi.Invoke(obj, null);
                 }
                 catch (FileNotFoundException e)
@@ -60,6 +64,7 @@ namespace Library
         {
             get
             {
+                Trace.WriteLine("Movies:GetMovies() With " + myMovies.Length + " movies");
                 if (!initialized)
                 {
                     initialize();
@@ -82,6 +87,48 @@ namespace Library
                 myMovies = (DisplayItem[])list.ToArray(typeof(DisplayItem));
             }
             return myMovies;
+
+            /* new way
+            if (myMovies == null)
+            {
+                if (titles.Length > 0)
+                {
+                    ArrayList list = new ArrayList();
+                    foreach (Title title in titles)
+                    {
+                        list.Add(CreateGalleryItem(title));
+                    }
+                    myMovies = (DisplayItem[])list.ToArray(typeof(DisplayItem));
+                }
+                else
+                    myMovies[0] = new DisplayItem();
+            }
+            return myMovies;
+            */
+        }
+
+        private DisplayItem CreateGalleryItem(Title title)
+        {
+            Trace.WriteLine("Movie:CreateGalleryItem(Title)");
+            DisplayItem item = new DisplayItem();
+            item.Description = title.description;
+            item.title = title.Name;
+            item.itemId = title.itemId;
+            item.image = ConvertImage(title.boxart);
+            item.runtime = title.runtime;
+            item.mpaaRating = title.mpaa_rating;
+            item.imdbRating = title.imdb_rating;
+
+            item.Invoked += delegate(object sender, EventArgs args)
+            {
+                DisplayItem galleryItem = (DisplayItem)sender;
+
+                // Navigate to a details page for this item.
+                DetailsPage page = CreateDetailsPage(galleryItem.itemId);
+                Application.Current.GoToDetails(page);
+            };
+
+            return item;
         }
 
         private DisplayItem CreateGalleryItem(DataRow movieData)
@@ -319,6 +366,39 @@ namespace Library
             }
 
             return null;
+        }
+
+        private static Image ConvertImage(System.Drawing.Image d_image)
+        {
+            Stream strm = new MemoryStream();
+            d_image.Save(strm, System.Drawing.Imaging.ImageFormat.MemoryBmp);
+            return ImageFromStream(strm);
+        }
+
+        private static Image ImageFromStream(Stream stream)
+        {
+            if (fromStreamMethodInfo == null)
+            {
+                lock (syncObj)
+                {
+                    MethodInfo[] mis = typeof(Image).GetMethods(BindingFlags.Static | BindingFlags.NonPublic);
+
+                    foreach (MethodInfo mi in mis)
+                    {
+                        ParameterInfo[] pis = mi.GetParameters();
+                        if (mi.Name == "FromStream" && pis.Length == 2)
+                        {
+                            if (pis[0].ParameterType == typeof(String) &&
+                                pis[1].ParameterType == typeof(Stream))
+                            {
+                                fromStreamMethodInfo = mi;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return (Image)fromStreamMethodInfo.Invoke(null, new object[] { null, stream });
         }
     }
 }

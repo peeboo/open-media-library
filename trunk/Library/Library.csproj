@@ -46,17 +46,20 @@
     <Reference Include="Microsoft.MediaCenter.UI" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Application.cs" />
+    <Compile Include="Code\IDataImporter.cs" />
     <Compile Include="Code\DetailsPage.cs" />
     <Compile Include="Code\DisplayItem.cs" />
     <Compile Include="Code\DVDProfilerImporter.cs" />
     <Compile Include="Code\Launch.cs" />
     <Compile Include="Code\Movie.cs" />
     <Compile Include="Code\MovieMetadata.cs" />
-    <Compile Include="Code\MoviesXmlImporter.cs" />
+    <Compile Include="Code\MovieCollectorzImporter.cs" />
+    <Compile Include="Code\Title.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
