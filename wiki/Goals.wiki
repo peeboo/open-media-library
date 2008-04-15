@@ -3,3 +3,13 @@
 Transcode360 support
 
 Multiple data source options
+
+Multiple views (posterview, CowerFlow etc) 
+
+Multiple sorting methods 
+
+One click install 
+
+Client/Server maintenance of metadata
+
+Database driven with xml override possibility
