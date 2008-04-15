@@ -8,10 +8,10 @@
 	<String Id="Property_ArpHelpLink">http://msdn.microsoft.com/mce/</String>
 	<String Id="Property_ArpUrlInfoAbout">http://msdn.microsoft.com/mce/</String>
 	<String Id="Property_ProductLanguage">1033</String>
-	<String Id="Property_ProductName">Library</String>
+	<String Id="Property_ProductName">Open Media Library</String>
 	<String Id="Property_CompanyName">MyCompany</String>
 
-	<String Id="Package_Description">Library</String>
+	<String Id="Package_Description">Open Media Library</String>
 	<String Id="Package_Comments">This Installer database contains the logic and data required to install Library.</String>
 
 </WixLocalization>
