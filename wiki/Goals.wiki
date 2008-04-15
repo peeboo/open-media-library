@@ -12,4 +12,4 @@ One click install
 
 Client/Server maintenance of metadata
 
-Database driven with xml override possibility
+Database driven with xml override possibility (do we want this using sql or datafile based?)
