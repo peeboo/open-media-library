@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
 using System.IO;
+using System.Diagnostics;
 
 namespace Library
 {
@@ -13,6 +13,7 @@ namespace Library
         private AddInHost host;
         private HistoryOrientedPageSession session;
         private static Movie movie;
+        public bool IsExtender;
 
         public Application()
             : this(null, null)
@@ -21,15 +22,14 @@ namespace Library
 
         public Application(HistoryOrientedPageSession session, AddInHost host)
         {
+            Debug.WriteLine("Application:Application()");
             this.session = session;
+            IsExtender = host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
             this.host = host;
             singleApplicationInstance = this;
             movie = new Movie();
         }
 
-        /// <summary>
-        /// The one and only instance of Application running in this Z process
-        /// </summary>
         public static Application Current
         {
             get
@@ -49,6 +49,7 @@ namespace Library
 
         public void GoToMenu()
         {
+            Trace.WriteLine("Application:GoToMenu()");
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
             properties["Movie"] = movie;
@@ -57,14 +58,11 @@ namespace Library
             {
                 session.GoToPage("resx://Library/Library.Resources/Menu", properties);
             }
-            else
-            {
-                Debug.WriteLine("GoToMenu");
-            }
         }
 
         public void GoToDetails(DetailsPage page)
         {
+            Trace.WriteLine("Application:GoToDetails()");
             if (page == null)
                 throw new System.Exception("The method or operation is not implemented.");
 
