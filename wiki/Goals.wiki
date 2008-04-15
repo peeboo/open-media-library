@@ -4,7 +4,7 @@ Transcode360 support
 
 Multiple data source options
 
-Multiple views (posterview, cowerflow etc) 
+Multiple views (posterview, coverflow etc) 
 
 Multiple sorting methods 
 
