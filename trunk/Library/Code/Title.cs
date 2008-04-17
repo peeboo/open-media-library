@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System.Drawing;
 using System.Runtime.Serialization;
 
 namespace Library
@@ -14,7 +13,7 @@ namespace Library
         private string _name;
         private string _description;
         private int _itemId;
-        private Image _boxart;
+        private string _boxart_path;
         private string _runtime;
         private string _mpaa_rating;
         private string _imdb_rating;
@@ -45,17 +44,17 @@ namespace Library
             get { return _itemId; }
             set
             {
-                if (value != null)
+                if (value >= 0)
                     _itemId = value;
             }
         }
-        public Image boxart
+        public string boxart_path
         {
-            get { return _boxart; }
+            get { return _boxart_path; }
             set
             {
                 if (value != null)
-                    _boxart = value;
+                    _boxart_path = value;
             }
         }
         public string runtime
@@ -101,7 +100,7 @@ namespace Library
             _name = (string)info.GetValue("name", typeof(string));
             _description = (string)info.GetValue("description", typeof(string));
             _itemId = (int)info.GetValue("itemid", typeof(int));
-            _boxart = (Image)info.GetValue("boxart", typeof(Image));
+            _boxart_path = (string)info.GetValue("boxart_path", typeof(string));
             _runtime = (string)info.GetValue("runtime", typeof(string));
             _mpaa_rating = (string)info.GetValue("mpaa_rating", typeof(string));
             _imdb_rating = (string)info.GetValue("imdb_rating", typeof(string));
@@ -114,7 +113,7 @@ namespace Library
             info.AddValue("name", _name);
             info.AddValue("description", _description);
             info.AddValue("itemid", _itemId);
-            info.AddValue("boxart", _boxart);
+            info.AddValue("boxart_path", _boxart_path);
             info.AddValue("runtime", _runtime);
             info.AddValue("mpaa_rating", _mpaa_rating);
             info.AddValue("imdb_rating", _imdb_rating);

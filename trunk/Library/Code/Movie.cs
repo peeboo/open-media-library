@@ -8,113 +8,77 @@ using System.Xml;
 using Microsoft.MediaCenter.UI;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Reflection;
 
 namespace Library
 {
     public class Movie
     {
-        static object syncObj = new object();
-        static MethodInfo fromStreamMethodInfo = null;
-
-        public static int TITLE = 14;
-        public static int FRONT_COVER = 2;
-        public static int REAR_COVER = 3;
+        private bool useTitles = true;
         private DataSet dataSet;
+        private static TitleCollection titleCollection;
+
         const string HTML_TAG_PATTERN = "<.*?>";
         private static DisplayItem[] myMovies = null;
-        private static Title[] titles = null;
         private static Boolean initialized = false;
 
         public Movie()
         {
             Trace.WriteLine("Movie:Movie()");
-
-            Type ImporterClassType = getImporterClassType();
-            if (ImporterClassType.IsClass)
-            {
-                try
-                {
-                    object obj = Activator.CreateInstance(ImporterClassType);
-                    MethodInfo mi = ImporterClassType.GetMethod("getDataSet");
-                    dataSet = (DataSet)mi.Invoke(obj, null);
-                }
-                catch (FileNotFoundException e)
-                {
-                    Trace.WriteLine(e.Message);
-                }
-            }
-
+            titleCollection = new TitleCollection();
+            Utilities.ImportData(ref dataSet);
             initialize();
         }
-
-        private Type getImporterClassType()
-        {
-            return typeof(MoviesXmlImporter);
-        }
-
         public void initialize()
         {
-            Trace.WriteLine("Movie:initialize()");
             createGallery();
             initialized = true;
         }
-
         public DisplayItem[] GetMovies
         {
             get
             {
-                Trace.WriteLine("Movies:GetMovies() With " + myMovies.Length + " movies");
                 if (!initialized)
-                {
                     initialize();
-                }
+
                 return myMovies;
             }
         }
-
         public DisplayItem[] createGallery()
         {
-            Trace.WriteLine("Movie:createGallery()");
             if (myMovies == null)
             {
-                DataTable tbl_Movie = dataSet.Tables["movie"];
                 ArrayList list = new ArrayList();
-                foreach (DataRow movieData in tbl_Movie.Rows)
+                if (useTitles)
                 {
-                    list.Add(CreateGalleryItem(movieData));
-                }
-                myMovies = (DisplayItem[])list.ToArray(typeof(DisplayItem));
-            }
-            return myMovies;
-
-            /* new way
-            if (myMovies == null)
-            {
-                if (titles.Length > 0)
-                {
-                    ArrayList list = new ArrayList();
-                    foreach (Title title in titles)
+                    foreach (Title title in titleCollection)
                     {
                         list.Add(CreateGalleryItem(title));
                     }
-                    myMovies = (DisplayItem[])list.ToArray(typeof(DisplayItem));
                 }
                 else
-                    myMovies[0] = new DisplayItem();
+                {
+                    Trace.WriteLine("using movieData");
+                    DataTable tbl_Movie = dataSet.Tables["movie"];
+                    foreach (DataRow movieData in tbl_Movie.Rows)
+                    {
+                        list.Add(CreateGalleryItem(movieData));
+                    }
+                }
+                titleCollection.saveTitleCollection();
+                myMovies = (DisplayItem[])list.ToArray(typeof(DisplayItem));
             }
             return myMovies;
-            */
         }
-
         private DisplayItem CreateGalleryItem(Title title)
         {
-            Trace.WriteLine("Movie:CreateGalleryItem(Title)");
+            Trace.WriteLine("Movie:CreateGalleryItem(): Title");
             DisplayItem item = new DisplayItem();
             item.Description = title.description;
             item.title = title.Name;
             item.itemId = title.itemId;
-            item.image = ConvertImage(title.boxart);
+            Trace.WriteLine("here");
+            item.image = Utilities.LoadImage(title.boxart_path);
+            Trace.WriteLine("and here");
             item.runtime = title.runtime;
             item.mpaaRating = title.mpaa_rating;
             item.imdbRating = title.imdb_rating;
@@ -130,82 +94,46 @@ namespace Library
 
             return item;
         }
-
-        private DisplayItem CreateGalleryItem(DataRow movieData)
+        private IList GetActors(Title title)
         {
-            Trace.WriteLine("Movie::CreateGalleryItem()");
-            DisplayItem item = new DisplayItem();
-            item.Description = (string)movieData["title"];
-            item.title = (string)movieData["title"];
-            item.itemId = int.Parse((string)movieData["id"]);
-            //item.image = LoadImage("c:\\2001ASpaceOdyssey1968237_f.jpg");
-            item.image = LoadImage((string)movieData["coverfront"]);
-            item.runtime = (string)movieData["runtime"];
-            item.mpaaRating = getChildColumn(movieData, "mpaarating", "displayname");
-            item.imdbRating = "N/A";
-
-            /*
-            
-            
-
-            if (movieData["imdbrating"] == System.DBNull.Value)
+            IList Actors = new List<string>();
+            foreach (string actor_name in title.actors)
             {
-                item.imdbRating = "N/A";
+                Actors.Add(actor_name);
             }
-            else
+            return Actors;
+        }
+        private IList GetCrew(Title title)
+        {
+            IList crew = new List<string>();
+            foreach (string crew_member in title.crew)
             {
-                item.imdbRating = (string)movieData["imdbrating"];
+                crew.Add(crew_member);
             }
-            */
-            //
-            // Hook up an event for when the gallery item is invoked.
-            //
-            item.Invoked += delegate(object sender, EventArgs args)
+            return crew;
+        }
+        private string getUrl(DataRow dataRow)
+        {
+            IList crew = new List<string>();
+            DataRow[] castTable = dataRow.GetChildRows("movie_links");
+            DataRow castR = castTable[0];
+
+            DataRow[] urlRow = castR.GetChildRows("links_link");
+
+            // Get the entries that match our movie.
+            foreach (DataRow url in urlRow)
             {
-                DisplayItem galleryItem = (DisplayItem)sender;
-
-                // Navigate to a details page for this item.
-                DetailsPage page = CreateDetailsPage(galleryItem.itemId);
-                Application.Current.GoToDetails(page);
-            };
-
-            return item;
+                if (url["urltype"].Equals("Movie"))
+                {
+                    return (string) url["url"];                    
+                }
+            }
+            return null;
         }
 
-        public DetailsPage CreateDetailsPage(int movieId)
-        {
-            Trace.WriteLine("Movie:CreateDetailsPage()");
-            DetailsPage page = new DetailsPage();
-
-            //
-            // Get the full metadata from this row.
-            //
-            DataRow movieData = GetMovieData(movieId);
-            MovieMetadata metadata = ExtractMetadata(movieData, movieId);
-
-
-            //
-            // Fill in the page's easy properties.
-            //
-            page.Title = metadata.Title;
-            page.Summary = metadata.Summary;
-            page.Background = LoadImage(metadata.ImagePath);
-            page.Rating = metadata.Rating;
-            page.Length = metadata.Length;
-            page.ReleaseDate = metadata.ReleaseDate;
-            page.Actors = metadata.Actors;
-            page.Directors = metadata.Directors;
-            page.Producers = metadata.Producers;
-            page.Writers = metadata.Writers;
-            page.ImdbRating = metadata.ImdbRating;
-            //page.LocalMedia = new System.IO.FileInfo("C:\\users\\dxs\\documents\\Downloads\\Good Eats - Season 6\\Good Eats - S06E16 - Beet It.avi");
-
-            return page;
-        }
-
+        #region deprecated methods
         private MovieMetadata ExtractMetadata(DataRow movieData, int movieId)
         {
-            Trace.WriteLine("Movie:ExtractMetadata()");
             MovieMetadata metadata = new MovieMetadata();
             metadata.Id = movieId;
 
@@ -241,11 +169,81 @@ namespace Library
 
             return metadata;
         }
+        private string StripHTML(string inputString)
+        {
+            return Regex.Replace(inputString, HTML_TAG_PATTERN, string.Empty);
+        }
+        private string StripRating(string inputString)
+        {
+            return Regex.Replace(inputString, "()", string.Empty);
+        }
+        public DetailsPage CreateDetailsPage(int movieId)
+        {
+            DetailsPage page = new DetailsPage();
 
+            //
+            // Get the full metadata from this row.
+            //
+            DataRow movieData = GetMovieData(movieId);
+            MovieMetadata metadata = ExtractMetadata(movieData, movieId);
+
+
+            //
+            // Fill in the page's easy properties.
+            //
+            page.Title = metadata.Title;
+            page.Summary = metadata.Summary;
+            page.Background = Utilities.LoadImage(metadata.ImagePath);
+            page.Rating = metadata.Rating;
+            page.Length = metadata.Length;
+            page.ReleaseDate = metadata.ReleaseDate;
+            page.Actors = metadata.Actors;
+            page.Directors = metadata.Directors;
+            page.Producers = metadata.Producers;
+            page.Writers = metadata.Writers;
+            page.ImdbRating = metadata.ImdbRating;
+            //page.LocalMedia = new System.IO.FileInfo("C:\\users\\dxs\\documents\\Downloads\\Good Eats - Season 6\\Good Eats - S06E16 - Beet It.avi");
+
+            return page;
+        }
+        private DisplayItem CreateGalleryItem(DataRow movieData)
+        {
+            Trace.WriteLine("Movie::CreateGalleryItem()");
+            DisplayItem item = new DisplayItem();
+            Title title = new Title();
+            item.Description = (string)movieData["title"];
+            title.description = item.Description;
+            item.title = (string)movieData["title"];
+            title.Name = item.title;
+            item.itemId = int.Parse((string)movieData["id"]);
+            title.itemId = item.itemId;
+            item.image = Utilities.LoadImage((string)movieData["coverfront"]);
+            title.boxart_path = (string)movieData["coverfront"];
+            item.runtime = (string)movieData["runtime"];
+            title.runtime = item.runtime;
+            item.mpaaRating = getChildColumn(movieData, "mpaarating", "displayname");
+            title.mpaa_rating = item.mpaaRating;
+            item.imdbRating = "N/A";
+            title.imdb_rating = item.imdbRating;
+
+            titleCollection.AddTitle(title);
+            //
+            // Hook up an event for when the gallery item is invoked.
+            //
+            item.Invoked += delegate(object sender, EventArgs args)
+            {
+                DisplayItem galleryItem = (DisplayItem)sender;
+
+                // Navigate to a details page for this item.
+                DetailsPage page = CreateDetailsPage(galleryItem.itemId);
+                Application.Current.GoToDetails(page);
+            };
+
+            return item;
+        }
         private IList getActors(DataRow dataRow)
         {
-            Trace.WriteLine("Movie:getActors()");
-            IList Actors = new List <string>();
+            IList Actors = new List<string>();
             DataRow[] castTable = dataRow.GetChildRows("movie_cast");
             DataRow castR = castTable[0];
 
@@ -259,10 +257,8 @@ namespace Library
             }
             return Actors;
         }
-
         private IList getCrew(DataRow dataRow, String fieldId)
         {
-            Trace.WriteLine("Movie:getCrew()");
             IList crew = new List<string>();
             DataRow[] castTable = dataRow.GetChildRows("movie_crew");
             DataRow castR = castTable[0];
@@ -280,30 +276,23 @@ namespace Library
             }
             return crew;
         }
-
-        private string getUrl(DataRow dataRow)
+        public DataRow GetMovieData(int itemId)
         {
-            Trace.WriteLine("Movie:getUrl()");
-            IList crew = new List<string>();
-            DataRow[] castTable = dataRow.GetChildRows("movie_links");
-            DataRow castR = castTable[0];
-
-            DataRow[] urlRow = castR.GetChildRows("links_link");
-
-            // Get the entries that match our movie.
-            foreach (DataRow url in urlRow)
-            {
-                if (url["urltype"].Equals("Movie"))
-                {
-                    return (string) url["url"];                    
-                }
-            }
-            return null;
+            DataTable tbl_Movie = dataSet.Tables["movie"];
+            return Movie.GetSingleDataRow(tbl_Movie, "id", itemId);
         }
+        public static DataRow GetSingleDataRow(DataTable table, string column, object value)
+        {
+            string query = String.Format("{0} = '{1}'", column, value);
+            DataRow[] matches = table.Select(query);
 
+            if (matches.Length != 1)
+                throw new Exception("Unable to find a matching for " + query);
+
+            return matches[0];
+        }
         private String getChildColumn(DataRow dataRow, String relatedTable, String column)
         {
-            Trace.WriteLine("Movie:getChildColumn() Column: " + column + " RelatedTable: " + relatedTable);
             DataRow[] rows = dataRow.GetChildRows(relatedTable);
 
             string data_point = string.Empty;
@@ -321,84 +310,6 @@ namespace Library
             }
             return data_point;
         }
-
-        private string StripHTML(string inputString)
-        {
-            Trace.WriteLine("Movie:StripHTML()");
-            return Regex.Replace(inputString, HTML_TAG_PATTERN, string.Empty);
-        }
-
-        private string StripRating(string inputString)
-        {
-            Trace.WriteLine("Movie:StripRating()");
-            return Regex.Replace(inputString, "()", string.Empty);
-        }
-
-        public DataRow GetMovieData(int itemId)
-        {
-            Trace.WriteLine("Movie:getMovieData()");
-            DataTable tbl_Movie = dataSet.Tables["movie"];
-            return Movie.GetSingleDataRow(tbl_Movie, "id", itemId);
-        }
-
-        public static DataRow GetSingleDataRow(DataTable table, string column, object value)
-        {
-            Trace.WriteLine("Movie:GetSingleDataRow()");
-            string query = String.Format("{0} = '{1}'", column, value);
-            DataRow[] matches = table.Select(query);
-
-            if (matches.Length != 1)
-                throw new Exception("Unable to find a matching for " + query);
-
-            return matches[0];
-        }
-
-        private static Image LoadImage(string imageName)
-        {
-            Trace.WriteLine("Movie:LoadImage()");
-            try
-            {
-                return new Image("file://" + imageName);
-            }
-            catch (Exception)
-            {
-                Debug.WriteLine("Error loading image: " + imageName);
-            }
-
-            return null;
-        }
-
-        private static Image ConvertImage(System.Drawing.Image d_image)
-        {
-            Stream strm = new MemoryStream();
-            d_image.Save(strm, System.Drawing.Imaging.ImageFormat.MemoryBmp);
-            return ImageFromStream(strm);
-        }
-
-        private static Image ImageFromStream(Stream stream)
-        {
-            if (fromStreamMethodInfo == null)
-            {
-                lock (syncObj)
-                {
-                    MethodInfo[] mis = typeof(Image).GetMethods(BindingFlags.Static | BindingFlags.NonPublic);
-
-                    foreach (MethodInfo mi in mis)
-                    {
-                        ParameterInfo[] pis = mi.GetParameters();
-                        if (mi.Name == "FromStream" && pis.Length == 2)
-                        {
-                            if (pis[0].ParameterType == typeof(String) &&
-                                pis[1].ParameterType == typeof(Stream))
-                            {
-                                fromStreamMethodInfo = mi;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return (Image)fromStreamMethodInfo.Invoke(null, new object[] { null, stream });
-        }
+        #endregion
     }
 }
