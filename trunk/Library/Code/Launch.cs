@@ -13,7 +13,7 @@ namespace Library
 
         public void Initialize(Dictionary<string, object> appInfo, Dictionary<string, object> entryPointInfo)
         {
-            Log = new FileStream("C:\\debug.txt", FileMode.OpenOrCreate);
+            Log = new FileStream("C:\\debug.txt", FileMode.OpenOrCreate|FileMode.Truncate);
             Trace.Listeners.Add(new TextWriterTraceListener(Log));
             Trace.WriteLine("Launch:Initialize()");
         }
