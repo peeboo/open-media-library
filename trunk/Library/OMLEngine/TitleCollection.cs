@@ -14,6 +14,7 @@ namespace OMLEngine
         private List<Title> _titles;
         private bool _NeedSetup = false;
         private bool _IsReadOnly = false;
+        private string _database_filename;
 
         #region ICollection properties and methods
         public bool IsReadOnly
@@ -77,9 +78,16 @@ namespace OMLEngine
         }
         #endregion
 
+        public TitleCollection(string database_filename)
+        {
+            Trace.WriteLine("TitleCollection:TitleCollection(database_filename)");
+            _database_filename = database_filename;
+            _titles = new List<Title>();
+        }
         public TitleCollection()
         {
             Trace.WriteLine("TitleCollection:TitleCollection()");
+            _database_filename = @"C:\\oml.dat";
             _titles = new List<Title>();
         }
         ~TitleCollection()
@@ -93,7 +101,7 @@ namespace OMLEngine
             Stream stream;
             try
             {
-                stream = File.Open("C:\\oml.dat", FileMode.OpenOrCreate);
+                stream = File.Open(_database_filename, FileMode.OpenOrCreate);
             }
             catch (Exception e)
             {
@@ -116,7 +124,7 @@ namespace OMLEngine
             Stream stm;
             try
             {
-                stm = File.Open(@"c:\\oml.dat", FileMode.OpenOrCreate);
+                stm = File.Open(_database_filename, FileMode.OpenOrCreate);
             }
             catch (Exception ex)
             {

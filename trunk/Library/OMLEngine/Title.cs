@@ -10,23 +10,37 @@ namespace OMLEngine
     public class Title : ISerializable
     {
         #region locals
+        private string _file_location;
         private string _name;
         private string _description;
         private int _itemId;
-        private string _boxart_path;
+        private string _front_boxart_path;
+        private string _back_boxart_path;
         private string _runtime;
         private string _mpaa_rating;
-        private string _imdb_rating;
-        private string _summary;
+        private string _synopsis;
+        private string _distributor;
+        private string _country_of_origin;
+        private string _official_website_url;
+        private DateTime _release_date;
+        private DateTime _date_added;
+        private string _importer_source;
         private List<string> _actors;
         private List<string> _crew;
         private List<string> _directors;
         private List<string> _writers;
         private List<string> _producers;
-        private DateTime _release_date;
+        private List<string> _sound_formats;
+        private List<string> _language_formats;
+        private List<string> _genres;
         #endregion
 
         #region properties
+        public string FileLocation
+        {
+            get { return _file_location; }
+            set { _file_location = value; }
+        }
         public string Name
         {
             get { return _name; }
@@ -53,14 +67,15 @@ namespace OMLEngine
                     _itemId = value;
             }
         }
-        public string boxart_path
+        public string front_boxart_path
         {
-            get { return _boxart_path; }
-            set
-            {
-                if (value != null)
-                    _boxart_path = value;
-            }
+            get { return _front_boxart_path; }
+            set { _front_boxart_path = value; }
+        }
+        public string back_boxart_path
+        {
+            get { return _back_boxart_path; }
+            set { _back_boxart_path = value; }
         }
         public string Runtime
         {
@@ -80,23 +95,25 @@ namespace OMLEngine
                     _mpaa_rating = value;
             }
         }
-        public string IMDBRating
+        public string Synopsis
         {
-            get { return _imdb_rating; }
-            set
-            {
-                if (value != null)
-                    _imdb_rating = value;
-            }
+            get { return _synopsis; }
+            set { _synopsis = value; }
         }
-        public string Summary
+        public string Distributor
         {
-            get { return _summary; }
-            set
-            {
-                if (value != null)
-                    _summary = value;
-            }
+            get { return _distributor; }
+            set { _distributor = value; }
+        }
+        public string Country_Of_Origin
+        {
+            get { return _country_of_origin; }
+            set { _country_of_origin = value; }
+        }
+        public string Official_Website_Url
+        {
+            get { return _official_website_url; }
+            set { _official_website_url = value; }
         }
         public DateTime ReleaseDate
         {
@@ -106,6 +123,28 @@ namespace OMLEngine
                 if (value != null)
                     _release_date = value;
             }
+        }
+        public DateTime DateAdded
+        {
+            get { return _date_added; }
+            set { _date_added = value; }
+        }
+        public string Importer_Source
+        {
+            get { return _importer_source; }
+            set { _importer_source = value; }
+        }
+        public IList SoundFormats
+        {
+            get { return _language_formats; }
+        }
+        public IList LanguageFormats
+        {
+            get { return _sound_formats; }
+        }
+        public IList Genres
+        {
+            get { return _genres; }
         }
         public IList Actors
         {
@@ -132,53 +171,56 @@ namespace OMLEngine
         #region serialization methods
         public Title(SerializationInfo info, StreamingContext ctxt)
         {
-/*
-        private string _name;
-        private string _description;
-        private int _itemId;
-        private string _boxart_path;
-        private string _runtime;
-        private string _mpaa_rating;
-        private string _imdb_rating;
-        private string _summary;
-        private List<string> _actors;
-        private List<string> _crew;
-        private List<string> _directors;
-        private List<string> _writers;
-        private List<string> _producers;
-        private DateTime _release_date;
-
-*/
+            _file_location = (string)info.GetValue("file_location", typeof(string));
             _name = (string)info.GetValue("name", typeof(string));
             _description = (string)info.GetValue("description", typeof(string));
             _itemId = (int)info.GetValue("itemid", typeof(int));
-            _boxart_path = (string)info.GetValue("boxart_path", typeof(string));
+            _front_boxart_path = (string)info.GetValue("front_boxart_path", typeof(string));
+            _back_boxart_path = (string)info.GetValue("back_boxart_path", typeof(string));
+            _synopsis = (string)info.GetValue("synopsis", typeof(string));
+            _distributor = (string)info.GetValue("distributor", typeof(string));
+            _country_of_origin = (string)info.GetValue("country_of_origin", typeof(string));
+            _official_website_url = (string)info.GetValue("official_website_url", typeof(string));
+            _date_added = (DateTime)info.GetValue("date_added", typeof(DateTime));
+            _importer_source = (string)info.GetValue("importer_source", typeof(string));
             _runtime = (string)info.GetValue("runtime", typeof(string));
             _mpaa_rating = (string)info.GetValue("mpaa_rating", typeof(string));
-            _imdb_rating = (string)info.GetValue("imdb_rating", typeof(string));
+            _release_date = (DateTime)info.GetValue("release_date", typeof(DateTime));
             _actors = (List<string>)info.GetValue("actors", typeof(List<string>));
             _crew = (List<string>)info.GetValue("crew", typeof(List<string>));
             _producers = (List<string>)info.GetValue("producers", typeof(List<string>));
             _writers = (List<string>)info.GetValue("writers", typeof(List<string>));
             _directors = (List<string>)info.GetValue("directors", typeof(List<string>));
-            _release_date = (DateTime)info.GetValue("release_date", typeof(DateTime));
+            _sound_formats = (List<string>)info.GetValue("sound_formats", typeof(List<string>));
+            _language_formats = (List<string>)info.GetValue("language_formats", typeof(List<string>));
+            _genres = (List<string>)info.GetValue("genres", typeof(List<string>));
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
+            info.AddValue("file_location", _file_location);
             info.AddValue("name", _name);
             info.AddValue("description", _description);
             info.AddValue("itemid", _itemId);
-            info.AddValue("boxart_path", _boxart_path);
+            info.AddValue("front_boxart_path", _front_boxart_path);
+            info.AddValue("back_boxart_path", _back_boxart_path);
+            info.AddValue("synopsis", _synopsis);
+            info.AddValue("distributor", _distributor);
+            info.AddValue("country_of_origin", _country_of_origin);
+            info.AddValue("official_website_url", _official_website_url);
+            info.AddValue("date_added", _date_added);
+            info.AddValue("importer_source", _importer_source);
             info.AddValue("runtime", _runtime);
             info.AddValue("mpaa_rating", _mpaa_rating);
-            info.AddValue("imdb_rating", _imdb_rating);
+            info.AddValue("release_date", _release_date);
             info.AddValue("actors", _actors);
             info.AddValue("crew", _crew);
             info.AddValue("producers", _producers);
             info.AddValue("writers", _writers);
             info.AddValue("directors", _directors);
-            info.AddValue("release_date", _release_date);
+            info.AddValue("sound_formats", _sound_formats);
+            info.AddValue("language_formats", _language_formats);
+            info.AddValue("genres", _genres);
         }
         #endregion
 
@@ -189,6 +231,9 @@ namespace OMLEngine
             _directors = new List<string>();
             _writers = new List<string>();
             _producers = new List<string>();
+            _sound_formats = new List<string>();
+            _language_formats = new List<string>();
+            _genres = new List<string>();
         }
 
         ~Title()
