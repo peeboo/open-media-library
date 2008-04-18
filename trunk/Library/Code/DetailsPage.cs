@@ -230,7 +230,6 @@ namespace Library
         private string releaseDate;
         private string length;
         private string rating;
-        private string Genre; //to do
         private string title;
         private string summary;
         private IList commands;

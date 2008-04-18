@@ -6,67 +6,85 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Library
+namespace OMLEngine
 {
     [Serializable()]
-    public class TitleCollection : ISerializable
+    public class TitleCollection : ArrayList, ISerializable
     {
         private List<Title> _titles;
         private bool _NeedSetup = false;
+        private bool _IsReadOnly = false;
 
+        #region ICollection properties and methods
+        public bool IsReadOnly
+        {
+            get { return _IsReadOnly; }
+            set { _IsReadOnly = value; }
+        }
         public bool NeedSetup
         {
             get { return _NeedSetup; }
             set { _NeedSetup = value; }
         }
-
         public int Count
         {
             get { return _titles.Count; }
         }
-
         public IEnumerator GetEnumerator()
         {
-            return _titles.GetEnumerator();
+            return new TitleEnum(_titles.ToArray());
         }
+        /*
+        public IEnumerable<Title> GetEnumerator()
+        {
+        }
+        */
+        public void Add(Title title)
+        {
+            if (!_titles.Contains(title))
+                _titles.Add(title);
+        }
+        public void Clear()
+        {
+            _titles = null;
+        }
+        public bool Contains(Title title)
+        {
+            return _titles.Contains(title);
+        }
+        public bool Remove(Title title)
+        {
+            return _titles.Remove(title);
+        }
+        public void CopyTo(Array array, int index)
+        {
+            return;
+            /*
+            int i = index;
+            foreach (Title title in _titles)
+            {
+                array[i] = title;
+                i++;
+            }
+            */
+        }
+        public bool IsSynchronized
+        {
+            get { return false; }
+        }
+        public Object SyncRoot {
+            get { return this; }
+        }
+        #endregion
 
         public TitleCollection()
         {
             Trace.WriteLine("TitleCollection:TitleCollection()");
             _titles = new List<Title>();
-            loadTitleCollection();
         }
-
         ~TitleCollection()
         {
             Trace.WriteLine("TitleCollection:~TitleCollection(): Holding " + _titles.Count + " titles");
-            saveTitleCollection();
-        }
-
-        public List<Title> GetTitles()
-        {
-            return _titles;
-        }
-
-        public void AddTitle(Title title)
-        {
-            if (! _titles.Contains(title))
-                _titles.Add(title);
-        }
-
-        public void AddTitles(List<Title> titles)
-        {
-            foreach (Title title in titles)
-            {
-                if (!titles.Contains(title))
-                    titles.Add(title);
-            }
-        }
-
-        public void RemoveTitle(Title title)
-        {
-            if (_titles.Contains(title))
-                _titles.Remove(title);
         }
 
         public bool saveTitleCollection()
@@ -134,6 +152,39 @@ namespace Library
             info.AddValue("titles", _titles);
         }
         #endregion
+    }
 
+    public class TitleEnum : IEnumerator
+    {
+        public Title[] _title;
+        int position = -1;
+
+        public TitleEnum(Title[] list)
+        {
+            _title = list;
+        }
+        public bool MoveNext()
+        {
+            position++;
+            return (position < _title.Length);
+        }
+        public void Reset()
+        {
+            position = -1;
+        }
+        public object Current
+        {
+            get
+            {
+                try
+                {
+                    return _title[position];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    throw new InvalidOperationException();
+                }
+            }
+        }
     }
 }

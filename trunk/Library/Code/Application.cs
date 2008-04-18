@@ -22,12 +22,14 @@ namespace Library
 
         public Application(HistoryOrientedPageSession session, AddInHost host)
         {
-            Debug.WriteLine("Application:Application()");
+            Trace.WriteLine("Application:Application()");
             this.session = session;
-            IsExtender = host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
+            this.IsExtender = host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
             this.host = host;
             singleApplicationInstance = this;
+            Trace.WriteLine("here");
             movie = new Movie();
+            Trace.WriteLine("and here");
         }
 
         public static Application Current

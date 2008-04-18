@@ -1,26 +1,12 @@
 ﻿using System;
-using Microsoft.MediaCenter.UI;
 using System.Diagnostics;
 using System.Data;
 using System.Reflection;
 
-namespace Library
+namespace OMLEngine
 {
     public static class Utilities
     {
-        public static Image LoadImage(string imageName)
-        {
-            try
-            {
-                return new Image("file://" + imageName);
-            }
-            catch (Exception)
-            {
-                Trace.WriteLine("Error loading image: " + imageName);
-            }
-            return null;
-        }
-
         public static void ImportData(ref DataSet dataSet)
         {
             Type importerClassType = getImporterClassType();
