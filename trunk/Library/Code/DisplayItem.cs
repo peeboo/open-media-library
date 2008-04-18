@@ -14,7 +14,6 @@ namespace Library
         private IList content;
         private int id;
         public string mpaaRating;
-        public string imdbRating;
 
         public DisplayItem() { }
         
@@ -26,7 +25,6 @@ namespace Library
                 image = value;
             }
         }
-
         public int itemId
         {
             get { return id; }
@@ -38,11 +36,6 @@ namespace Library
                 }
             }
         }
-
-        /// <summary>
-        /// The list of items in the page.
-        /// This list should only contain objects of type ThumbnailCommand.
-        /// </summary>
         public IList Content
         {
             get { return content; }
@@ -55,7 +48,6 @@ namespace Library
                 }
             }
         }
-
         public string GetTitle
         {
             get { return title; }
@@ -64,7 +56,6 @@ namespace Library
                 title = value;
             }
         }
-
         public string GetRuntime
         {
             get { return runtime; }
@@ -73,19 +64,9 @@ namespace Library
                 title = value;
             }
         }
-
         public string GetMpaaRating
         {
             get { return mpaaRating; }
-            set
-            {
-                title = value;
-            }
-        }
-
-        public string GetImdbRating
-        {
-            get { return imdbRating; }
             set
             {
                 title = value;

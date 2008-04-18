@@ -129,16 +129,6 @@
 									<Text Name="Release" Content="[DetailsPage.ReleaseDate]" Font="[Normal]" Color="White" />
 
 									<Text Name="Runtime" Content="[DetailsPage.Length]" Font="[Normal]" Color="White" />
-
-									<Panel>
-										<Layout>
-											<FlowLayout Orientation="Horizontal"/>
-										</Layout>
-										<Children>
-											<Text Name="Imdb" Content="IMDB Rating:" Font="[Normal]" Color="White"/>
-											<Text Name="Imdb2" Content="[DetailsPage.ImdbRating]" Font="[Normal]" Color="White"/>
-										</Children>
-									</Panel>
 								</Children>
 
 							</Panel>

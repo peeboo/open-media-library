@@ -48,7 +48,6 @@
 					<Set Target="[TitleText.Content]" Value="[Choice.Chosen!a:DisplayItem.GetTitle]"/>
 					<Set Target="[Runtime.Content]" Value="[Choice.Chosen!a:DisplayItem.GetRuntime]"/>
 					<Set Target="[MpaaRating.Content]" Value="[Choice.Chosen!a:DisplayItem.GetMpaaRating]"/>
-					<Set Target="[ImdbRaiting.Content]" Value="[Choice.Chosen!a:DisplayItem.GetImdbRating]"/>
 					<!--<Set Target="[DescriptionDisplay.Content]" Value="[Choice.Chosen!rss:MediaItem.Description]"/>-->
 				</Actions>
 			</Changed>
@@ -80,26 +79,12 @@
 							<FormLayoutInput Left="Parent,0,0" Right="Parent,.30,1" Top="LeftPanelTitle,1,0"/>
 						</LayoutInput>
 					</Panel>
-
-					<Panel Name="LeftPanelCompany" >
-						<Layout>
-							<FlowLayout Orientation="Horizontal"/>
-						</Layout>
-						<Children>
-							<Text Content="IMDB Rating: " WordWrap="true" Font="Verdana,20" Color="LightBlue" />
-							<Text Name="ImdbRaiting" Content=" " WordWrap="true" Font="Verdana,20" Color="LightBlue" />
-						</Children>
-						<LayoutInput>
-							<FormLayoutInput Left="Parent,0,0" Right="Parent,.30,1" Top="LeftPanelRating,1,0"/>
-						</LayoutInput>
-					</Panel>
-
 					<Panel Name="LeftPanelRuntime" >
 						<Children>
 							<Text Name="Runtime" Content=" " WordWrap="true" Font="Verdana,20" Color="LightBlue" />
 						</Children>
 						<LayoutInput>
-							<FormLayoutInput Left="Parent,0,0" Right="Parent,.30,1" Top="LeftPanelCompany,1,0"/>
+							<FormLayoutInput Left="Parent,0,0" Right="Parent,.30,1" Top="LeftPanelRating,1,0"/>
 						</LayoutInput>
 					</Panel>
 

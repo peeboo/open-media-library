@@ -28,7 +28,6 @@ namespace Library
                 _localMedia = value; 
             }
         }
-
         public string getUrl
         {
             get
@@ -157,19 +156,6 @@ namespace Library
             }
         }
 
-        public string ImdbRating
-        {
-            get { return imdbRating; }
-            set
-            {
-                if (imdbRating != value)
-                {
-                    imdbRating = value;
-                    FirePropertyChanged("ImdbRating");
-                }
-            }
-        }
-
         public IList Actors
         {
             get { return actors; }
@@ -226,7 +212,6 @@ namespace Library
         private IList producers;
         private IList directors;
         private IList actors;
-        private string imdbRating;
         private string releaseDate;
         private string length;
         private string rating;

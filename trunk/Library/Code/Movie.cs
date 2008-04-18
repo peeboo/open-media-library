@@ -1,13 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Data;
 using System.Collections;
-using System.IO;
-using System.Xml;
 using Microsoft.MediaCenter.UI;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 using OMLEngine;
 
 namespace Library
@@ -25,7 +20,7 @@ namespace Library
             Trace.WriteLine("Movie:Movie()");
             dataSet = new DataSet();
             titleCollection = new TitleCollection();
-//            titleCollection.loadTitleCollection();
+            titleCollection.loadTitleCollection();
 //            Utilities.ImportData(ref dataSet);
             initialize();
         }
@@ -42,6 +37,14 @@ namespace Library
                 if (!initialized)
                     initialize();
 
+                if (myTitles != null)
+                {
+                    Trace.WriteLine("GetMovies: returning " + myTitles.Length + " titles");
+                }
+                else
+                {
+                    Trace.WriteLine("GetMovies: myTitles is null");
+                }
                 return myTitles;
             }
         }
@@ -51,14 +54,12 @@ namespace Library
             if (myTitles == null)
             {
                 ArrayList list = new ArrayList();
-                /*
                 foreach (Title title in titleCollection)
                 {
                     list.Add(CreateGalleryItem(title));
                 }
                 titleCollection.saveTitleCollection();
                 myTitles = (DisplayItem[])list.ToArray(typeof(DisplayItem));
-                */
             }
             return myTitles;
         }
@@ -69,37 +70,35 @@ namespace Library
             item.Description = title.Description;
             item.title = title.Name;
             item.itemId = title.itemId;
-            item.image = LoadImage(title.boxart_path);
+            item.image = LoadImage(title.front_boxart_path);
             item.runtime = title.Runtime;
             item.mpaaRating = title.MPAARating;
-            item.imdbRating = title.IMDBRating;
 
             item.Invoked += delegate(object sender, EventArgs args)
             {
                 DisplayItem galleryItem = (DisplayItem)sender;
 
                 // Navigate to a details page for this item.
-                DetailsPage page = CreateDetailsPage(title);
+                DetailsPage page = CreateDetailsPage(item);
                 Application.Current.GoToDetails(page);
             };
 
             return item;
         }
-        public DetailsPage CreateDetailsPage(Title title)
+        public DetailsPage CreateDetailsPage(DisplayItem item)
         {
             Trace.WriteLine("Movie:CreateDetailsPage()");
             DetailsPage page = new DetailsPage();
-            page.Title = title.Name;
-            page.Summary = title.Summary;
-            page.Background = LoadImage(title.boxart_path);
-            page.Rating = title.MPAARating;
-            page.Length = title.Runtime;
-            page.ReleaseDate = title.ReleaseDate.ToShortDateString();
-            page.Actors = title.Actors;
-            page.Directors = title.Directors;
-            page.Producers = title.Producers;
-            page.Writers = title.Writers;
-            page.ImdbRating = title.IMDBRating;
+            page.Title = item.title;
+//            page.Summary;
+            page.Background = item.image;
+            page.Rating = item.mpaaRating;
+            page.Length = item.runtime;
+//            page.ReleaseDate;
+//            page.Actors;
+//            page.Directors;
+//            page.Producers;
+//            page.Writers;
             //page.LocalMedia = new System.IO.FileInfo("C:\\users\\dxs\\documents\\Downloads\\Good Eats - Season 6\\Good Eats - S06E16 - Beet It.avi");
 
             return page;
