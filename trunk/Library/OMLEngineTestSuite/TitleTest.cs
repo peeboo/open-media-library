@@ -74,17 +74,17 @@ namespace OMLEngineTestSuite
             Assert.IsInstanceOfType(target, typeof(Title));
         }
 
-        /// <summary>
+        /// <synopsis>
         ///A test for Summary
-        ///</summary>
+        ///</synopsis>
         [TestMethod()]
-        public void SummaryTest()
+        public void SynopsisTest()
         {
             Title target = new Title();
             string expected = string.Empty;
             string actual;
-            target.Summary = expected;
-            actual = target.Summary;
+            target.Synopsis = expected;
+            actual = target.Synopsis;
             Assert.AreEqual(expected, actual);
         }
 
@@ -172,20 +172,6 @@ namespace OMLEngineTestSuite
         }
 
         /// <summary>
-        ///A test for IMDBRating
-        ///</summary>
-        [TestMethod()]
-        public void IMDBRatingTest()
-        {
-            Title target = new Title();
-            string expected = "Rated (PG)";
-            string actual;
-            target.IMDBRating = expected;
-            actual = target.IMDBRating;
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
         ///A test for Directors
         ///</summary>
         [TestMethod()]
@@ -232,13 +218,13 @@ namespace OMLEngineTestSuite
         ///A test for boxart_path
         ///</summary>
         [TestMethod()]
-        public void boxart_pathTest()
+        public void front_boxart_pathTest()
         {
             Title target = new Title();
             string expected = "c:\\program files\\img.jpg";
             string actual;
-            target.boxart_path = expected;
-            actual = target.boxart_path;
+            target.front_boxart_path = expected;
+            actual = target.front_boxart_path;
             Assert.AreEqual(expected, actual);
         }
 

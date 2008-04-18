@@ -114,17 +114,39 @@ namespace OMLEngineTestSuite
             Assert.AreEqual(target.Count, 1);
         }
 
-        /// <summary>
-        ///A test for saveTitleCollection
-        ///</summary>
+        /// <test_serialization_functionality>
+        /// A test to ensure that the saving and loading is working correctly
+        /// </test_serialization_functionality>
         [TestMethod()]
-        public void saveTitleCollectionTest()
+        public void SaveAndLoadTest()
         {
-            TitleCollection target = new TitleCollection();
-            bool expected = true;
-            bool actual;
-            actual = target.saveTitleCollection();
-            Assert.AreEqual(expected, actual);
+            TitleCollection target = new TitleCollection("c:\\oml.dat");
+            Title title1 = new Title();
+            title1.Name = "My Movie";
+            title1.ReleaseDate = new DateTime(2008, 01, 01);
+            title1.Runtime = "110";
+            title1.front_boxart_path = "c:\\2001ASpaceOdyssey1968237_f.jpg";
+            title1.Description = "my desc";
+            title1.itemId = 1;
+            title1.MPAARating = "Rated R";
+            title1.Synopsis = "this is a cool synopsis";
+            target.Add(title1);
+
+            target.saveTitleCollection();
+
+            TitleCollection target2 = new TitleCollection("c:\\oml.dat");
+            target2.loadTitleCollection();
+            Assert.AreEqual(target2.Count, 1);
+
+            foreach (Title mytitle in target2)
+            {
+                Assert.IsInstanceOfType(mytitle, typeof(Title));
+                Assert.AreEqual("My Movie", mytitle.Name);
+                Assert.AreEqual("110", mytitle.Runtime);
+                Assert.AreEqual(new DateTime(2008, 01, 01).ToShortDateString(),
+                                mytitle.ReleaseDate.ToShortDateString());
+                Assert.AreEqual("c:\\2001ASpaceOdyssey1968237_f.jpg", mytitle.front_boxart_path);
+            }
         }
 
         /// <summary>
@@ -147,21 +169,6 @@ namespace OMLEngineTestSuite
             Assert.AreEqual(true, actual);
             Assert.AreEqual(target.Count, 0);
         }
-
-        /// <summary>
-        ///A test for loadTitleCollection
-        ///</summary>
-        [TestMethod()]
-        public void loadTitleCollectionTest()
-        {
-            TitleCollection target = new TitleCollection(); // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
-            bool actual;
-            actual = target.loadTitleCollection();
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
         /// <summary>
         ///A test for Contains
         ///</summary>
