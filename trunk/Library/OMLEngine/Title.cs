@@ -32,7 +32,7 @@ namespace OMLEngine
         private List<string> _producers;
         private List<string> _sound_formats;
         private List<string> _language_formats;
-        private List<string> _genres;
+        private List<Genre> _genres;
         #endregion
 
         #region properties
@@ -193,7 +193,7 @@ namespace OMLEngine
             _directors = (List<string>)info.GetValue("directors", typeof(List<string>));
             _sound_formats = (List<string>)info.GetValue("sound_formats", typeof(List<string>));
             _language_formats = (List<string>)info.GetValue("language_formats", typeof(List<string>));
-            _genres = (List<string>)info.GetValue("genres", typeof(List<string>));
+            _genres = (List<Genre>)info.GetValue("genres", typeof(List<Genre>));
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
@@ -233,9 +233,8 @@ namespace OMLEngine
             _producers = new List<string>();
             _sound_formats = new List<string>();
             _language_formats = new List<string>();
-            _genres = new List<string>();
+            _genres = new List<Genre>();
         }
-
         ~Title()
         {
         }
@@ -261,6 +260,18 @@ namespace OMLEngine
         public void AddProducer(string producer)
         {
             _producers.Add(producer);
+        }
+        public void AddGenre(Genre genre)
+        {
+            _genres.Add(genre);
+        }
+        public void AddSoundFormat(string sound_format)
+        {
+            _sound_formats.Add(sound_format);
+        }
+        public void AddLanguageFormat(string language_format)
+        {
+            _language_formats.Add(language_format);
         }
     }
 }

@@ -61,259 +61,6 @@ namespace OMLEngineTestSuite
         //
         #endregion
 
-
-        /// <summary>
-        ///A test for Writers
-        ///</summary>
-        [TestMethod()]
-        public void WritersTest()
-        {
-            Title target = new Title();
-            target.Name = "My Movie";
-            target.itemId = 1;
-            Assert.IsInstanceOfType(target, typeof(Title));
-        }
-
-        /// <synopsis>
-        ///A test for Summary
-        ///</synopsis>
-        [TestMethod()]
-        public void SynopsisTest()
-        {
-            Title target = new Title();
-            string expected = string.Empty;
-            string actual;
-            target.Synopsis = expected;
-            actual = target.Synopsis;
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for Runtime
-        ///</summary>
-        [TestMethod()]
-        public void RuntimeTest()
-        {
-            Title target = new Title();
-            string expected = string.Empty;
-            string actual;
-            target.Runtime = expected;
-            actual = target.Runtime;
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for ReleaseDate
-        ///</summary>
-        [TestMethod()]
-        public void ReleaseDateTest()
-        {
-            Title target = new Title();
-            DateTime expected = new DateTime();
-            DateTime actual;
-            target.ReleaseDate = expected;
-            actual = target.ReleaseDate;
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for Producers
-        ///</summary>
-        [TestMethod()]
-        public void ProducersTest()
-        {
-            Title target = new Title();
-            IList actual;
-            actual = target.Producers;
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(actual.Count, 0);
-        }
-
-        /// <summary>
-        ///A test for Name
-        ///</summary>
-        [TestMethod()]
-        public void NameTest()
-        {
-            Title target = new Title();
-            string expected = "My Movie";
-            string actual;
-            target.Name = expected;
-            actual = target.Name;
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for MPAARating
-        ///</summary>
-        [TestMethod()]
-        public void MPAARatingTest()
-        {
-            Title target = new Title();
-            string expected = "Rated (R)";
-            string actual;
-            target.MPAARating = expected;
-            actual = target.MPAARating;
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for itemId
-        ///</summary>
-        [TestMethod()]
-        public void itemIdTest()
-        {
-            Title target = new Title();
-            int expected = 4;
-            int actual;
-            target.itemId = expected;
-            actual = target.itemId;
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for Directors
-        ///</summary>
-        [TestMethod()]
-        public void DirectorsTest()
-        {
-            Title target = new Title();
-            IList actual;
-            actual = target.Directors;
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(actual.Count, 0);
-            target.Directors.Add("boo");
-            actual = target.Directors;
-            Assert.AreEqual(actual.Count, 1);
-        }
-
-        /// <summary>
-        ///A test for Description
-        ///</summary>
-        [TestMethod()]
-        public void DescriptionTest()
-        {
-            Title target = new Title();
-            string expected = "This is the description of my movie that I like very, very much";
-            string actual;
-            target.Description = expected;
-            actual = target.Description;
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for Crew
-        ///</summary>
-        [TestMethod()]
-        public void CrewTest()
-        {
-            Title target = new Title();
-            IList actual;
-            actual = target.Crew;
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(actual.Count, 0);
-        }
-
-        /// <summary>
-        ///A test for boxart_path
-        ///</summary>
-        [TestMethod()]
-        public void front_boxart_pathTest()
-        {
-            Title target = new Title();
-            string expected = "c:\\program files\\img.jpg";
-            string actual;
-            target.front_boxart_path = expected;
-            actual = target.front_boxart_path;
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for Actors
-        ///</summary>
-        [TestMethod()]
-        public void ActorsTest()
-        {
-            Title target = new Title();
-            IList actual;
-            actual = target.Actors;
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(actual.Count, 0);
-        }
-
-        /// <summary>
-        ///A test for GetObjectData
-        ///</summary>
-        [TestMethod()]
-        public void GetObjectDataTest()
-        {
-            Title target = new Title(); // TODO: Initialize to an appropriate value
-            SerializationInfo info = null; // TODO: Initialize to an appropriate value
-            StreamingContext ctxt = new StreamingContext(); // TODO: Initialize to an appropriate value
-            target.GetObjectData(info, ctxt);
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
-        }
-
-        /// <summary>
-        ///A test for AddWriter
-        ///</summary>
-        [TestMethod()]
-        public void AddWriterTest()
-        {
-            Title target = new Title();
-            string writer = string.Empty;
-            target.AddWriter(writer);
-            Assert.IsTrue(target.Writers.Contains(writer));
-        }
-
-        /// <summary>
-        ///A test for AddProducer
-        ///</summary>
-        [TestMethod()]
-        public void AddProducerTest()
-        {
-            Title target = new Title();
-            string producer = string.Empty;
-            target.AddProducer(producer);
-            Assert.IsTrue(target.Producers.Contains(producer));
-        }
-
-        /// <summary>
-        ///A test for AddDirector
-        ///</summary>
-        [TestMethod()]
-        public void AddDirectorTest()
-        {
-            Title target = new Title();
-            string director = string.Empty;
-            target.AddDirector(director);
-            Assert.IsTrue(target.Directors.Contains(director));
-        }
-
-        /// <summary>
-        ///A test for AddCrew
-        ///</summary>
-        [TestMethod()]
-        public void AddCrewTest()
-        {
-            Title target = new Title();
-            string crew_member = string.Empty;
-            target.AddCrew(crew_member);
-            Assert.IsTrue(target.Crew.Contains(crew_member));
-        }
-
-        /// <summary>
-        ///A test for AddActor
-        ///</summary>
-        [TestMethod()]
-        public void AddActorTest()
-        {
-            Title target = new Title();
-            string actor = string.Empty;
-            target.AddActor(actor);
-            Assert.IsTrue(target.Actors.Contains(actor));
-        }
-
         /// <summary>
         ///A test for Title Constructor
         ///</summary>
@@ -322,6 +69,73 @@ namespace OMLEngineTestSuite
         {
             Title target = new Title();
             Assert.IsTrue(target.Actors != null);
+        }
+
+        [TestMethod()]
+        public void TestBaseCase()
+        {
+            Title title = new Title();
+            title.itemId = 1;
+            title.Name = "My Title";
+            title.back_boxart_path = "c:\\img.jpg";
+            title.front_boxart_path = "c:\\img.jpg";
+            title.Country_Of_Origin = "US";
+            title.DateAdded = new DateTime(2008, 01, 01);
+            title.Description = "My Description";
+            title.Distributor = "Paramount";
+            title.FileLocation = "c:\\video.mkv";
+            title.Importer_Source = "DVD";
+            title.MPAARating = "R";
+            title.Official_Website_Url = "www.mymovie.com";
+            title.ReleaseDate = new DateTime(2008, 01, 01);
+            title.Runtime = "110";
+            title.Synopsis = "my synopsis is here";
+
+            Assert.AreEqual(1, title.itemId);
+            Assert.AreEqual("My Title", title.Name);
+            Assert.AreEqual("c:\\img.jpg", title.back_boxart_path);
+            Assert.AreEqual("c:\\img.jpg", title.front_boxart_path);
+            Assert.AreEqual("US", title.Country_Of_Origin);
+            Assert.AreEqual("1/1/2008", title.DateAdded.ToShortDateString());
+            Assert.AreEqual("My Description", title.Description);
+            Assert.AreEqual("Paramount", title.Distributor);
+            Assert.AreEqual("c:\\video.mkv", title.FileLocation);
+            Assert.AreEqual("DVD", title.Importer_Source);
+            Assert.AreEqual("R", title.MPAARating);
+            Assert.AreEqual("www.mymovie.com", title.Official_Website_Url);
+            Assert.AreEqual("1/1/2008", title.ReleaseDate.ToShortDateString());
+            Assert.AreEqual("110", title.Runtime);
+            Assert.AreEqual("my synopsis is here", title.Synopsis);
+        }
+
+        [TestMethod()]
+        public void TestIListMembers()
+        {
+            Title title = new Title();
+
+            title.AddActor("Translucent");
+            Assert.AreEqual(1, title.Actors.Count);
+            Assert.AreEqual("Translucent", title.Actors[0]);
+
+            title.AddCrew("Cast Member");
+            Assert.AreEqual(1, title.Crew.Count);
+            Assert.AreEqual("Cast Member", title.Crew[0]);
+
+            title.AddDirector("cool director");
+            Assert.AreEqual(1, title.Directors.Count);
+            Assert.AreEqual("cool director", title.Directors[0]);
+
+            title.AddProducer("sony");
+            Assert.AreEqual(1, title.Producers.Count);
+            Assert.AreEqual("sony", title.Producers[0]);
+
+            title.AddWriter("terry pratchet");
+            Assert.AreEqual(1, title.Writers.Count);
+            Assert.AreEqual("terry pratchet", title.Writers[0]);
+
+            title.AddGenre(Genre.Comedy);
+            Assert.AreEqual(1, title.Genres.Count);
+            Assert.AreEqual(Genre.Comedy, title.Genres[0]);
         }
     }
 }

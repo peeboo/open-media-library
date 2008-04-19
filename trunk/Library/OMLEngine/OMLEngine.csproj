@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DVDProfilerImporter.cs" />
+    <Compile Include="Genre.cs" />
     <Compile Include="IDataImporter.cs" />
     <Compile Include="MovieCollectorzImporter.cs" />
     <Compile Include="MovieMetadata.cs" />
