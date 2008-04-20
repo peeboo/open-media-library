@@ -42,13 +42,11 @@
 			<!-- Our list of choices come from the MediaServer. -->
 			<Default Target="[Choice.Options]" Value="[Movie.GetMovies]"/>
 
-			<!-- When the chosen RSS feed item changes, update the title and description. -->
 			<Changed Source="[Choice.Chosen]">
 				<Actions>
 					<Set Target="[TitleText.Content]" Value="[Choice.Chosen!a:DisplayItem.GetTitle]"/>
 					<Set Target="[Runtime.Content]" Value="[Choice.Chosen!a:DisplayItem.GetRuntime]"/>
 					<Set Target="[MpaaRating.Content]" Value="[Choice.Chosen!a:DisplayItem.GetMpaaRating]"/>
-					<!--<Set Target="[DescriptionDisplay.Content]" Value="[Choice.Chosen!rss:MediaItem.Description]"/>-->
 				</Actions>
 			</Changed>
 		</Rules>

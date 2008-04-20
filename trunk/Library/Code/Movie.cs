@@ -66,13 +66,7 @@ namespace Library
         private DisplayItem CreateGalleryItem(Title title)
         {
             Trace.WriteLine("Movie:CreateGalleryItem(): Title");
-            DisplayItem item = new DisplayItem();
-            item.Description = title.Description;
-            item.title = title.Name;
-            item.itemId = title.itemId;
-            item.image = LoadImage(title.front_boxart_path);
-            item.runtime = title.Runtime;
-            item.mpaaRating = title.MPAARating;
+            DisplayItem item = new DisplayItem(title);
 
             item.Invoked += delegate(object sender, EventArgs args)
             {
@@ -89,23 +83,25 @@ namespace Library
         {
             Trace.WriteLine("Movie:CreateDetailsPage()");
             DetailsPage page = new DetailsPage();
-            page.Title = item.title;
-//            page.Summary;
-            page.Background = item.image;
-            page.Rating = item.mpaaRating;
-            page.Length = item.runtime;
-//            page.ReleaseDate;
-//            page.Actors;
-//            page.Directors;
-//            page.Producers;
-//            page.Writers;
-            //page.LocalMedia = new System.IO.FileInfo("C:\\users\\dxs\\documents\\Downloads\\Good Eats - Season 6\\Good Eats - S06E16 - Beet It.avi");
+            page.Title = item.GetTitle;
+            page.Summary = item.GetSummary;
+            page.Background = item.GetImage;
+            page.Rating = item.GetMpaaRating;
+            page.Length = item.GetRuntime;
+            page.ReleaseDate = item.GetReleaseDate;
+            page.Actors = item.GetActors;
+            page.Directors = item.GetDirectors;
+            page.Producers = item.GetProducers;
+            page.Writers = item.GetWriters;
+            page.LocalMedia = new System.IO.FileInfo("C:\\users\\dxs\\documents\\Downloads\\Good Eats - Season 6\\Good Eats - S06E16 - Beet It.avi");
 
             return page;
         }
         public static Image LoadImage(string imageName)
         {
             Trace.WriteLine("Movie:LoadImage()");
+            return new Image("file://" + imageName);
+            /*
             try
             {
                 return new Image("file://" + imageName);
@@ -115,6 +111,7 @@ namespace Library
                 Trace.WriteLine("Error loading image: " + imageName);
             }
             return null;
+            */
         }
     }
 }
