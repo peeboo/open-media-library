@@ -10,16 +10,18 @@ namespace Library
     public class DisplayItem : Command
     {
         private Title _titleObj;
+        private Image _front_boxart;
 
         public DisplayItem() { }
         public DisplayItem(Title title)
         {
             _titleObj = title;
+            _front_boxart = Movie.LoadImage(_titleObj.front_boxart_path);
         }
         
         public Image GetImage
         {
-            get { return Movie.LoadImage(_titleObj.front_boxart_path); }
+            get { return _front_boxart; }
         }
         public int itemId
         {

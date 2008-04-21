@@ -49,7 +49,7 @@
 							<FormLayoutInput Left="Parent,0,20" Top="Parent,0,20" Bottom="Parent,1"/>
 						</LayoutInput>
 						<Children>
-							<Graphic Name="cover" Content="[DetailsPage.Background]" MinimumSize="336,480" MaximumSize="336,480" />
+							<Graphic Name="Cover" Content="[DetailsPage.Background]" MinimumSize="336,480" MaximumSize="336,480" />
 							<Clip Orientation="Vertical" FadeSize="40" NearOffset="70" MaximumSize="336, 480">
 								<Children>
 									<Graphic Name="coverflip" CenterPointPercent=".5,.5,.5" Scale="1,-1,1"

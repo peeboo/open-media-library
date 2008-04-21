@@ -41,7 +41,7 @@
 				<Directory Id="EhomeFolder" Name="eHome"/>
 			</Directory>
 			<Directory Id="ProgramFilesFolder" Name="Program Files">
-				<Directory Id="MyCompany" Name="MyCompany">
+				<Directory Id="OML" Name="OML">
 					<Directory Id="APPROOTDIRECTORY" Name="Library"/>
 				</Directory>
 			</Directory>
@@ -57,7 +57,16 @@
 			<Component Id="Library.dll" Guid="6bee7ed8-c866-470b-9656-8b0320c923b5" DiskId="1">
 				<File Id="Library.dll" Name="Library.dll" KeyPath="yes" Source="..\bin\$(var.BuildType)\Library.dll" Checksum="yes" Vital="yes" Assembly=".net"/>
 			</Component>
-			<Component Id="Registration.xml" Guid="68b08279-69c0-42fb-b087-30a20ee12608" DiskId="1">
+
+      <Component Id="OMLEngine.dll"
+                 Guid="fa02e91a-33fd-45e9-b189-a2cf15d3ea90"
+                 DiskId="1">
+        <File Id="OMLEngine.dll"
+              Name="OMLEngine.dll"
+              Source="..\OMLEngine\bin\$(var.BuildType)\OMLEngine.dll"
+              Vital="yes"/>
+      </Component>
+      <Component Id="Registration.xml" Guid="68b08279-69c0-42fb-b087-30a20ee12608" DiskId="1">
 				<File Id="Registration.xml" Name="Registration.xml" Source="..\Registration.xml" Checksum="no" />
 			</Component>
 			<Component Id="Application.png" Guid="34c83bcd-a522-4103-8bac-ad159113d313" DiskId="1">
@@ -70,6 +79,7 @@
 		<!-- can be displayed and allow user selection in setup UI if desired.                               -->
 		<Feature Id="APPROOTFEATURE" Title="Library" Level="1">
 			<ComponentRef Id="Library.dll" />
+      <ComponentRef Id="OMLEngine.dll" />
 			<ComponentRef Id="Registration.xml" />
 			<ComponentRef Id="Application.png" />
 		</Feature>
@@ -210,6 +220,6 @@
 
 		<!-- In WiX v3.0, this variable is used to override the default license agreement text that is       -->
 		<!-- included in the WixUIExtension with a custom file.                                              -->
-		<WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+		<WixVariable Id="WixUILicenseRtf" Value="License.txt" />
 	</Product>
 </Wix>

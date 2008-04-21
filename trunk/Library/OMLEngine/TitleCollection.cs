@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.IO;
 using System.Diagnostics;
 using System.Collections;
@@ -145,6 +146,65 @@ namespace OMLEngine
                 return true;
             }
             return false;
+        }
+
+        public DataTable ToDataTable()
+        {
+            DataTable dt = new DataTable("Titles");
+            dt.Columns.Add("Name").DataType = typeof(string);
+            dt.Columns.Add("Description").DataType = typeof(string);
+            dt.Columns.Add("FileLocation").DataType = typeof(string);
+            dt.Columns.Add("id").DataType = typeof(int);
+            dt.Columns.Add("front_boxart").DataType = typeof(string);
+            dt.Columns.Add("back_boxart").DataType = typeof(string);
+            dt.Columns.Add("Runtime");
+            dt.Columns.Add("Rating");
+            dt.Columns.Add("Synopsis");
+            dt.Columns.Add("Distributor");
+            dt.Columns.Add("Country");
+            dt.Columns.Add("Website");
+            dt.Columns.Add("ReleaseDate");
+            dt.Columns.Add("DateAdded");
+            dt.Columns.Add("Source");
+            dt.Columns.Add("Actors");
+            dt.Columns.Add("Crew");
+            dt.Columns.Add("Directors");
+            dt.Columns.Add("Writers");
+            dt.Columns.Add("Producers");
+            dt.Columns.Add("SoundFormats");
+            dt.Columns.Add("LanguageFormats");
+            dt.Columns.Add("Genres");
+
+            foreach (Title ti in _titles)
+            {
+                DataRow row = dt.NewRow();
+                row["Name"] = ti.Name;
+                row["Description"] = ti.Description;
+                row["FileLocation"] = ti.FileLocation;
+                row["id"] = ti.itemId;
+                row["front_boxart"] = ti.front_boxart_path;
+                row["back_boxart"] = ti.back_boxart_path;
+                row["Runtime"] = ti.Runtime;
+                row["Rating"] = ti.MPAARating;
+                row["Synopsis"] = ti.Synopsis;
+                row["Distributor"] = ti.Distributor;
+                row["Country"] = ti.Country_Of_Origin;
+                row["Website"] = ti.Official_Website_Url;
+                row["ReleaseDate"] = ti.ReleaseDate;
+                row["DateAdded"] = ti.DateAdded;
+                row["Source"] = ti.Importer_Source;
+                row["Actors"] = ti.Actors;
+                row["Crew"] = ti.Crew;
+                row["Directors"] = ti.Directors;
+                row["Writers"] = ti.Writers;
+                row["Producers"] = ti.Producers;
+                row["SoundFormats"] = ti.SoundFormats;
+                row["LanguageFormats"] = ti.LanguageFormats;
+                row["Genres"] = ti.Genres;
+
+                dt.Rows.Add(row);
+            }
+            return dt;
         }
 
         #region serialization methods

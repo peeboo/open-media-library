@@ -14,12 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Library.vsmdi = Library.vsmdi
 		Library1.vsmdi = Library1.vsmdi
 		Library2.vsmdi = Library2.vsmdi
+		Library3.vsmdi = Library3.vsmdi
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 	EndProjectSection
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = Library2.vsmdi
+		CategoryFile = Library3.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
