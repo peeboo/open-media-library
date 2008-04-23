@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace OMLEngine
 {
-    public class MoviesXmlImporter : IDataImporter
+    public class MoviesXmlImporter
     {
         const string HTML_TAG_PATTERN = "<.*?>";
         public DataSet _dataSet;
@@ -33,6 +33,14 @@ namespace OMLEngine
 
             _dataSet = new DataSet("Movie");
             _dataSet.ReadXml(xmlReader);
+        }
+        ~MoviesXmlImporter()
+        {
+        }
+
+        public string getName()
+        {
+            return "MoviesXmlImporter";
         }
         public DataSet getDataSet()
         {
@@ -63,9 +71,7 @@ namespace OMLEngine
             IList crew = new List<string>();
             return crew;
         }
-        ~MoviesXmlImporter()
-        {
-        }
+
         private MovieMetadata ExtractMetadata(DataRow movieData, int movieId)
         {
             MovieMetadata metadata = new MovieMetadata();

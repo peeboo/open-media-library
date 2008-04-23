@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Data;
 using System.Collections;
 using Microsoft.MediaCenter.UI;
@@ -99,19 +100,14 @@ namespace Library
         }
         public static Image LoadImage(string imageName)
         {
-            Trace.WriteLine("Movie:LoadImage()");
-            return new Image("file://" + imageName);
-            /*
-            try
+            if (File.Exists("file://" + imageName))
             {
                 return new Image("file://" + imageName);
             }
-            catch (Exception)
+            else
             {
-                Trace.WriteLine("Error loading image: " + imageName);
+                return new Image("resx://Library/Library.Resources/nocover");
             }
-            return null;
-            */
         }
     }
 }

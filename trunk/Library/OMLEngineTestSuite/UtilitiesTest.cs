@@ -86,7 +86,15 @@ namespace OMLEngineTestSuite
         {
             Type expected = typeof(MoviesXmlImporter);
             Type actual;
-            actual = Utilities.getImporterClassType();
+            actual = Utilities.getImporterClassType("MoviesXmlImporter");
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void ValidateImporterTest()
+        {
+            bool expected = true;
+            bool actual = Utilities.ValidateImporter("MoviesXmlImporter");
             Assert.AreEqual(expected, actual);
         }
     }

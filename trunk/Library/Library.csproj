@@ -73,7 +73,6 @@
     <None Include="DevInstall.cmd" />
     <None Include="library.snk" />
     <None Include="Setup\Build.bat" />
-    <None Include="Setup\License.rtf" />
     <None Include="Setup\Setup-en-us.wxl" />
     <None Include="Setup\Setup.wxs" />
     <None Include="Readme.htm" />
@@ -84,6 +83,8 @@
     <Content Include="Markup\Styles.mcml" />
     <Content Include="Registration.xml" />
     <Content Include="Images\Application.png" />
+    <None Include="Resources\nocover.png" />
+    <Content Include="Setup\License.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

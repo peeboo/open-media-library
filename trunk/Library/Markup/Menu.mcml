@@ -171,7 +171,7 @@
 									<!-- flow.  MajorAlignment and MinorAlignment specify how -->
 									<!-- the content should be placed within the space if it  -->
 									<!-- is smaller than the reference size.                  -->
-									<GridLayout Repeat="WhenTooSmall" Rows="4"  Orientation="Vertical" AllowWrap="true"
+									<GridLayout Repeat="WhenTooBig" Rows="4"  Orientation="Vertical" AllowWrap="true"
 												ReferenceSize="112, 160" Spacing="1,0" MajorAlignment="Center" MinorAlignment="Center"/>
 								</Layout>
 								<Content>
