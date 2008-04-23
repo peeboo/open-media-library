@@ -22,7 +22,6 @@ namespace Library
             dataSet = new DataSet();
             titleCollection = new TitleCollection();
             titleCollection.loadTitleCollection();
-//            Utilities.ImportData(ref dataSet);
             initialize();
         }
         public void initialize()
@@ -100,7 +99,8 @@ namespace Library
         }
         public static Image LoadImage(string imageName)
         {
-            if (File.Exists("file://" + imageName))
+            Trace.WriteLine("LoadImage (location) : " + "file://" + imageName);
+            if (File.Exists(imageName))
             {
                 return new Image("file://" + imageName);
             }

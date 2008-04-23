@@ -12,6 +12,7 @@ namespace OMLEngine
     [Serializable()]
     public class TitleCollection : ArrayList, ISerializable
     {
+        private bool _useDatabase;
         private List<Title> _titles;
         private bool _NeedSetup = false;
         private bool _IsReadOnly = false;
@@ -82,12 +83,14 @@ namespace OMLEngine
         public TitleCollection(string database_filename)
         {
             Trace.WriteLine("TitleCollection:TitleCollection(database_filename)");
+            _useDatabase = true;
             _database_filename = database_filename;
             _titles = new List<Title>();
         }
         public TitleCollection()
         {
             Trace.WriteLine("TitleCollection:TitleCollection()");
+            _useDatabase = true;
             _database_filename = @"C:\\oml.dat";
             _titles = new List<Title>();
         }
@@ -99,53 +102,60 @@ namespace OMLEngine
         public bool saveTitleCollection()
         {
             Trace.WriteLine("saveTitleCollection()");
-            Stream stream;
-            try
+            if (_useDatabase)
             {
-                stream = File.Open(_database_filename, FileMode.OpenOrCreate);
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Error reading file: " + e.Message);
-                return false;
-            }
-            BinaryFormatter bformatter = new BinaryFormatter();
-            bformatter.Serialize(stream, _titles.Count);
+                Stream stream;
+                try
+                {
+                    stream = File.Open(_database_filename, FileMode.OpenOrCreate);
+                }
+                catch (Exception e)
+                {
+                    Trace.WriteLine("Error reading file: " + e.Message);
+                    return false;
+                }
+                BinaryFormatter bformatter = new BinaryFormatter();
+                bformatter.Serialize(stream, _titles.Count);
 
-            foreach (Title title in _titles)
-                bformatter.Serialize(stream, title);
+                foreach (Title title in _titles)
+                    bformatter.Serialize(stream, title);
 
-            stream.Close();
+                stream.Close();
+            }
 
             return true;
         }
         public bool loadTitleCollection()
         {
             Trace.WriteLine("loadTitleCollection()");
-            Stream stm;
-            try
+            if (_useDatabase)
             {
-                stm = File.Open(_database_filename, FileMode.OpenOrCreate);
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine("Error loading title collection: " + ex.Message);
+                Stream stm;
+                try
+                {
+                    stm = File.Open(_database_filename, FileMode.OpenOrCreate);
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine("Error loading title collection: " + ex.Message);
+                    return false;
+                }
+
+                if (stm.Length > 0)
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    int numTitles = (int)bf.Deserialize(stm);
+                    for (int i = 0; i < numTitles; i++)
+                    {
+                        _titles.Add((Title)bf.Deserialize(stm));
+                    }
+                    stm.Close();
+                    Trace.WriteLine("Loaded: " + numTitles + " titles");
+                    return true;
+                }
                 return false;
             }
-
-            if (stm.Length > 0)
-            {
-                BinaryFormatter bf = new BinaryFormatter();
-                int numTitles = (int)bf.Deserialize(stm);
-                for (int i = 0; i < numTitles; i++)
-                {
-                    _titles.Add((Title)bf.Deserialize(stm));
-                }
-                stm.Close();
-                Trace.WriteLine("Loaded: " + numTitles + " titles");
-                return true;
-            }
-            return false;
+            return true;
         }
 
         public DataTable ToDataTable()
