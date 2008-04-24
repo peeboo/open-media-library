@@ -1,0 +1,7 @@
+C:\Users\dxs\Documents\Visual Studio 2008\Projects\OML\MovieCollectorz\bin\Debug\MovieCollectorz.dll
+C:\Users\dxs\Documents\Visual Studio 2008\Projects\OML\MovieCollectorz\bin\Debug\MovieCollectorz.pdb
+C:\Users\dxs\Documents\Visual Studio 2008\Projects\OML\MovieCollectorz\bin\Debug\OMLSDK.dll
+C:\Users\dxs\Documents\Visual Studio 2008\Projects\OML\MovieCollectorz\bin\Debug\OMLSDK.pdb
+C:\Users\dxs\Documents\Visual Studio 2008\Projects\OML\MovieCollectorz\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\dxs\Documents\Visual Studio 2008\Projects\OML\MovieCollectorz\obj\Debug\MovieCollectorz.dll
+C:\Users\dxs\Documents\Visual Studio 2008\Projects\OML\MovieCollectorz\obj\Debug\MovieCollectorz.pdb
