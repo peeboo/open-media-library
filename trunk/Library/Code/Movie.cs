@@ -18,15 +18,13 @@ namespace Library
 
         public Movie()
         {
-            Trace.WriteLine("Movie:Movie()");
-            dataSet = new DataSet();
+//            dataSet = new DataSet();
             titleCollection = new TitleCollection();
             titleCollection.loadTitleCollection();
             initialize();
         }
         public void initialize()
         {
-            Trace.WriteLine("Movie:initialize()");
             createGallery();
             initialized = true;
         }
@@ -36,21 +34,11 @@ namespace Library
             {
                 if (!initialized)
                     initialize();
-
-                if (myTitles != null)
-                {
-                    Trace.WriteLine("GetMovies: returning " + myTitles.Length + " titles");
-                }
-                else
-                {
-                    Trace.WriteLine("GetMovies: myTitles is null");
-                }
                 return myTitles;
             }
         }
         public DisplayItem[] createGallery()
         {
-            Trace.WriteLine("Movie:createGallery()");
             if (myTitles == null)
             {
                 ArrayList list = new ArrayList();
@@ -65,7 +53,6 @@ namespace Library
         }
         private DisplayItem CreateGalleryItem(Title title)
         {
-            Trace.WriteLine("Movie:CreateGalleryItem(): Title");
             DisplayItem item = new DisplayItem(title);
 
             item.Invoked += delegate(object sender, EventArgs args)
@@ -81,7 +68,6 @@ namespace Library
         }
         public DetailsPage CreateDetailsPage(DisplayItem item)
         {
-            Trace.WriteLine("Movie:CreateDetailsPage()");
             DetailsPage page = new DetailsPage();
             page.Title = item.GetTitle;
             page.Summary = item.GetSummary;
@@ -99,7 +85,6 @@ namespace Library
         }
         public static Image LoadImage(string imageName)
         {
-            Trace.WriteLine("LoadImage (location) : " + "file://" + imageName);
             if (File.Exists(imageName))
             {
                 return new Image("file://" + imageName);

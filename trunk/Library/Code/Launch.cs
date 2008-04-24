@@ -13,7 +13,11 @@ namespace Library
 
         public void Initialize(Dictionary<string, object> appInfo, Dictionary<string, object> entryPointInfo)
         {
-            Log = new FileStream("C:\\debug.txt", FileMode.OpenOrCreate|FileMode.Truncate);
+            if (File.Exists("c:\\debug.txt"))
+                Log = new FileStream("c:\\debug.txt", FileMode.Truncate);
+            else
+                Log = new FileStream("c:\\debug.txt", FileMode.OpenOrCreate);
+
             Trace.Listeners.Add(new TextWriterTraceListener(Log));
             Trace.WriteLine("Launch:Initialize()");
         }
@@ -26,7 +30,6 @@ namespace Library
 
         public void Launch(AddInHost host)
         {
-            Trace.WriteLine("Launch:Launch()");
             s_session = new HistoryOrientedPageSession();
             Application app = new Application(s_session, host);
             app.GoToMenu();

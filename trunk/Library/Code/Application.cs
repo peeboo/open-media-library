@@ -22,14 +22,11 @@ namespace Library
 
         public Application(HistoryOrientedPageSession session, AddInHost host)
         {
-            Trace.WriteLine("Application:Application()");
             this.session = session;
             this.IsExtender = host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
             this.host = host;
             singleApplicationInstance = this;
-            Trace.WriteLine("here");
             movie = new Movie();
-            Trace.WriteLine("and here");
         }
 
         public static Application Current
@@ -51,7 +48,6 @@ namespace Library
 
         public void GoToMenu()
         {
-            Trace.WriteLine("Application:GoToMenu()");
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
             properties["Movie"] = movie;
@@ -64,7 +60,6 @@ namespace Library
 
         public void GoToDetails(DetailsPage page)
         {
-            Trace.WriteLine("Application:GoToDetails()");
             if (page == null)
                 throw new System.Exception("The method or operation is not implemented.");
 
