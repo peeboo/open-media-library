@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVDProfilerPlugin", "DVDProfilerPlugin\DVDProfilerPlugin.csproj", "{8D8056BC-5D9B-4FAD-AD05-CB11D059B511}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMoviesPlugin", "MyMoviesPlugin\MyMoviesPlugin.csproj", "{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLDatabaseEditor", "OMLDatabaseEditor\OMLDatabaseEditor.csproj", "{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLEngineTestSuite", "OMLEngineTestSuite\OMLEngineTestSuite.csproj", "{F19231FB-EDA7-43FD-AAD6-DC419A2D9C29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieCollectorzPlugin", "MovieCollectorz\MovieCollectorzPlugin.csproj", "{5228D6B1-AB63-4DE9-B7AB-8A60F56A3570}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLEngine", "OMLEngine\OMLEngine.csproj", "{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLSDK", "OMLSDK\OMLSDK.csproj", "{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Files", "Sample Files", "{A33B027F-EC1B-4AC4-86D4-909C1BCB9AC7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D8056BC-5D9B-4FAD-AD05-CB11D059B511}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D8056BC-5D9B-4FAD-AD05-CB11D059B511}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D8056BC-5D9B-4FAD-AD05-CB11D059B511}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D8056BC-5D9B-4FAD-AD05-CB11D059B511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F19231FB-EDA7-43FD-AAD6-DC419A2D9C29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F19231FB-EDA7-43FD-AAD6-DC419A2D9C29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F19231FB-EDA7-43FD-AAD6-DC419A2D9C29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F19231FB-EDA7-43FD-AAD6-DC419A2D9C29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5228D6B1-AB63-4DE9-B7AB-8A60F56A3570}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5228D6B1-AB63-4DE9-B7AB-8A60F56A3570}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5228D6B1-AB63-4DE9-B7AB-8A60F56A3570}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5228D6B1-AB63-4DE9-B7AB-8A60F56A3570}.Release|Any CPU.Build.0 = Release|Any CPU
+		{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
