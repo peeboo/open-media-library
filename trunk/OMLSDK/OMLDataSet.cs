@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace OMLSDK
@@ -94,9 +95,23 @@ namespace OMLSDK
             colCrew.ColumnName = "Crew";
             table.Columns.Add(colCrew);
         }
+        public DataRow NewRow()
+        {
+            return this.NewRow();
+        }
         public void AddRow(DataRow row)
         {
             this.AddRow(row);
+        }
+        public ArrayList GetColumnNames()
+        {
+            ArrayList column_names = new ArrayList();
+            DataColumnCollection dcc = this.Tables[0].Columns;
+            foreach (DataColumn col in dcc)
+            {
+                column_names.Add(col.ColumnName);
+            }
+            return column_names;
         }
     }
 }

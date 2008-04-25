@@ -15,9 +15,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLEngine", "OMLEngine\OMLE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLSDK", "OMLSDK\OMLSDK.csproj", "{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Files", "Sample Files", "{A33B027F-EC1B-4AC4-86D4-909C1BCB9AC7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "Library\Library.csproj", "{2D747049-9A5C-4FFB-919F-1FD47BC18B3D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Files", "Sample Files", "{1AC49F02-A28A-48B9-A7B6-AC7A82CC7645}"
+	ProjectSection(SolutionItems) = preProject
+		Sample Files\2001.jpg = Sample Files\2001.jpg
+		Sample Files\dvd_profiler.xml = Sample Files\dvd_profiler.xml
+		Sample Files\Movie_Collectorz.xml = Sample Files\Movie_Collectorz.xml
+		Sample Files\MyMovies.xml = Sample Files\MyMovies.xml
+		Sample Files\oml.dat = Sample Files\oml.dat
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
