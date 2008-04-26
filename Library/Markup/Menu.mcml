@@ -33,6 +33,7 @@
 					<Set Target="[TitleText.Content]" Value="[Choice.Chosen!a:DisplayItem.GetTitle]"/>
 					<Set Target="[Runtime.Content]" Value="[Choice.Chosen!a:DisplayItem.GetRuntime]"/>
 					<Set Target="[MpaaRating.Content]" Value="[Choice.Chosen!a:DisplayItem.GetMpaaRating]"/>
+          <Set Target="[Summary.Content]" Value="[Choice.Chosen!a:DisplayItem.GetSummary]"/>
 				</Actions>
 			</Changed>
 		</Rules>
@@ -43,7 +44,12 @@
 
 					<Panel Name="LeftPanelTitle" >
 						<Children>
-							<Text Name="TitleText" Content="Dumb and Dumber [Unrated]" WordWrap="true" Font="Verdana,26" Color="White" />
+							<Text Name="TitleText" WordWrap="true" Font="Verdana,26" Color="White">
+                <Animations>
+                  <TransformAnimation Source="animation://me:ChangeHide"/>
+                  <TransformAnimation Source="animation://me:ChangeShow"/>
+                </Animations>
+              </Text>
 						</Children>
 						<LayoutInput>
 							<FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Top="Parent,0,50" />
@@ -56,7 +62,12 @@
 						</Layout>
 						<Children>
 							<Text Content="[" WordWrap="true" Font="Verdana,20" Color="LightBlue" />
-							<Text Name="MpaaRating" Content="NR" WordWrap="true" Font="Verdana,20" Color="LightBlue" />
+							<Text Name="MpaaRating" Content="NR" WordWrap="true" Font="Verdana,20" Color="LightBlue">
+                <Animations>
+                  <TransformAnimation Source="animation://me:ChangeHide"/>
+                  <TransformAnimation Source="animation://me:ChangeShow"/>
+                </Animations>
+              </Text>
 							<Text Content="]" WordWrap="true" Font="Verdana,20" Color="LightBlue" />
 						</Children>
 						<LayoutInput>
@@ -64,13 +75,41 @@
 						</LayoutInput>
 					</Panel>
 					<Panel Name="LeftPanelRuntime" >
+            <Layout>
+              <FlowLayout Orientation="Horizontal"/>
+            </Layout>
 						<Children>
-							<Text Name="Runtime" Content=" " WordWrap="true" Font="Verdana,20" Color="LightBlue" />
+							<Text Name="Runtime" Content=" " WordWrap="true" Font="Verdana,20" Color="LightBlue">
+                <Animations>
+                  <TransformAnimation Source="animation://me:ChangeHide"/>
+                  <TransformAnimation Source="animation://me:ChangeShow"/>
+                </Animations>
+              </Text>
+              <Text Name="RuntimeSuffix" Content=" mins" WordWrap="true" Font="Verdana,20" Color="LightBlue">
+                <Animations>
+                  <TransformAnimation Source="animation://me:ChangeHide"/>
+                  <TransformAnimation Source="animation://me:ChangeShow"/>
+                </Animations>
+              </Text>
 						</Children>
 						<LayoutInput>
 							<FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Top="LeftPanelRating,1,0"/>
 						</LayoutInput>
 					</Panel>
+
+          <Panel Name="LeftPanelSummary" >
+            <Children>
+              <Text Name="Summary" Content="" WordWrap="true" Font="Verdana,12" Color="LightBlue">
+                <Animations>
+                  <TransformAnimation Source="animation://me:ChangeHide"/>
+                  <TransformAnimation Source="animation://me:ChangeShow"/>
+                </Animations>
+              </Text>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,15" Right="Parent,.3,-50" Top="LeftPanelRuntime,1,50"/>
+            </LayoutInput>
+          </Panel>
 
 					<!-- Display of the current and total pages. -->
 					<Panel Name="PageStats" Layout="HorizontalFlow">
@@ -300,9 +339,19 @@
     <Content>
       <Panel Name="Indicator" Layout="HorizontalFlow">
         <Children>
-          <Text Name="CurrentPage" Content="[Choi.ChosenIndex!cor:String]" Font="Verdana,15" Color="White"/>
+          <Text Name="CurrentPage" Content="[Choi.ChosenIndex!cor:String]" Font="Verdana,15" Color="White">
+            <Animations>
+              <TransformAnimation Source="animation://me:ChangeHide"/>
+              <TransformAnimation Source="animation://me:ChangeShow"/>
+            </Animations>
+          </Text>
           <Text Content="|" Margins="5,0,5,0" Font="Verdana,15" Color="LightBlue"/>
-          <Text Name="TotalPages" Content="[Choi.Options.Count!cor:String]" Font="Verdana,15" Color="LightBlue"/>
+          <Text Name="TotalPages" Content="[Choi.Options.Count!cor:String]" Font="Verdana,15" Color="LightBlue">
+            <Animations>
+              <TransformAnimation Source="animation://me:ChangeHide"/>
+              <TransformAnimation Source="animation://me:ChangeShow"/>
+            </Animations>
+          </Text>
         </Children>
       </Panel>
     </Content>
@@ -320,6 +369,21 @@
     <Keyframes>
       <ScaleKeyframe Time="0.0" RelativeTo="Current"/>
       <ScaleKeyframe Time="0.05" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="ChangeHide" Type="ContentChangeHide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Absolute" Value="1.0"/>
+      <AlphaKeyframe Time="0.2" RelativeTo="Absolute" Value="0.0" Interpolation="EaseOut"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="ChangeShow" Type="ContentChangeShow">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Absolute" Value="0.0"/>
+      <AlphaKeyframe Time="0.2" RelativeTo="Absolute" Value="0.0"/>
+      <AlphaKeyframe Time="0.6" RelativeTo="Absolute" Value="1.0" Interpolation="EaseIn"/>
     </Keyframes>
   </Animation>
 </Mcml>
