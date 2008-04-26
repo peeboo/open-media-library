@@ -314,6 +314,9 @@
             <LayoutInput>
               <AnchorLayoutInput Left="ImagePanel,-0.03" Right="ImagePanel,1.03" Top="ImagePanel,-0.02" Bottom="ImagePanel,1.02"/>
             </LayoutInput>
+            <Animations>
+              <Animation Animation="animation://me:OverlayIdle"/>
+            </Animations>
           </Graphic>
 
         </Children>
@@ -384,6 +387,16 @@
       <AlphaKeyframe Time="0.0" RelativeTo="Absolute" Value="0.0"/>
       <AlphaKeyframe Time="0.2" RelativeTo="Absolute" Value="0.0"/>
       <AlphaKeyframe Time="0.6" RelativeTo="Absolute" Value="1.0" Interpolation="EaseIn"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="OverlayIdle" Type="Idle" Loop="-1">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Absolute" Value="1.0"/>
+      <AlphaKeyframe Time="2.0" RelativeTo="Absolute" Value="0.5" Interpolation="EaseOut"/>
+      <AlphaKeyframe Time="2.5" RelativeTo="Absolute" Value="0.5"/>
+      <AlphaKeyframe Time="3.0" RelativeTo="Absolute" Value="0.75"/>
+      <AlphaKeyframe Time="3.5" RelativeTo="Absolute" Value="1.0" Interpolation="EaseIn"/>
     </Keyframes>
   </Animation>
 </Mcml>
