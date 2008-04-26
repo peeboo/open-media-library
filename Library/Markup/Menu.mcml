@@ -97,14 +97,18 @@
 						</LayoutInput>
 					</Panel>
 
-          <Panel Name="LeftPanelSummary" >
+          <Panel Name="LeftPanelSummary" MaximumSize="0,300">
             <Children>
-              <Text Name="Summary" Content="" WordWrap="true" Font="Verdana,12" Color="LightBlue">
-                <Animations>
-                  <TransformAnimation Source="animation://me:ChangeHide"/>
-                  <TransformAnimation Source="animation://me:ChangeShow"/>
-                </Animations>
-              </Text>
+              <Clip Orientation="Vertical" FadeSize="50" NearOffset="-50">
+                <Children>
+                  <Text Name="Summary" Content="" WordWrap="true" Font="Verdana,14" Color="LightBlue">
+                    <Animations>
+                      <TransformAnimation Source="animation://me:ChangeHide"/>
+                      <TransformAnimation Source="animation://me:ChangeShow"/>
+                    </Animations>
+                  </Text>
+                </Children>
+              </Clip>
             </Children>
             <LayoutInput>
               <FormLayoutInput Left="Parent,0,15" Right="Parent,.3,-50" Top="LeftPanelRuntime,1,50"/>
@@ -125,7 +129,7 @@
 						<Children>
 							<Clip Orientation="Horizontal" FadeSize="40" NearOffset="70">
 								<Children>
-									<ColorFill Name="LeftTab" Content="Black" Alpha=".6"/>
+									<ColorFill Name="LeftTab" Content="Black" Alpha=".8"/>
 								</Children>
 							</Clip>
 						</Children>
@@ -195,7 +199,7 @@
 									<!-- the content should be placed within the space if it  -->
 									<!-- is smaller than the reference size.                  -->
 									<GridLayout Repeat="WhenTooBig" Rows="4"  Orientation="Vertical" AllowWrap="true"
-												ReferenceSize="112, 160" Spacing="1,0" MajorAlignment="Center" MinorAlignment="Center"/>
+												ReferenceSize="112, 160" Spacing="1,0" MajorAlignment="Center" MinorAlignment="Center" RepeatGap="100"/>
 								</Layout>
 								<Content>
 
