@@ -78,6 +78,7 @@
     <None Include="Readme.htm" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\Focus_Outline.png" />
     <Content Include="Markup\DetailsPage.mcml" />
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\Styles.mcml" />
