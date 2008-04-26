@@ -46,7 +46,7 @@
 							<Text Name="TitleText" Content="Dumb and Dumber [Unrated]" WordWrap="true" Font="Verdana,26" Color="White" />
 						</Children>
 						<LayoutInput>
-							<FormLayoutInput Left="Parent,0,0" Right="Parent,.30,1" Top="Parent,0,50" />
+							<FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Top="Parent,0,50" />
 						</LayoutInput>
 					</Panel>
 
@@ -60,7 +60,7 @@
 							<Text Content="]" WordWrap="true" Font="Verdana,20" Color="LightBlue" />
 						</Children>
 						<LayoutInput>
-							<FormLayoutInput Left="Parent,0,0" Right="Parent,.30,1" Top="LeftPanelTitle,1,0"/>
+							<FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Top="LeftPanelTitle,1,0"/>
 						</LayoutInput>
 					</Panel>
 					<Panel Name="LeftPanelRuntime" >
@@ -68,7 +68,7 @@
 							<Text Name="Runtime" Content=" " WordWrap="true" Font="Verdana,20" Color="LightBlue" />
 						</Children>
 						<LayoutInput>
-							<FormLayoutInput Left="Parent,0,0" Right="Parent,.30,1" Top="LeftPanelRating,1,0"/>
+							<FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Top="LeftPanelRating,1,0"/>
 						</LayoutInput>
 					</Panel>
 
@@ -78,7 +78,7 @@
               <me:PositionIndicator Choi="[Choice]" />
 						</Children>
 						<LayoutInput>
-							<FormLayoutInput Left="Parent,0,0" Right="Parent,.30,1" Bottom="Parent,.95,-2"/>
+							<FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Bottom="Parent,1,-15"/>
 						</LayoutInput>
 					</Panel>
 
