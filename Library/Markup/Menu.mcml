@@ -25,20 +25,6 @@
 		</Locals>
 
 		<Rules>
-			<!-- Bind total pages. -->
-			<Binding Source="[ScrollingData.TotalPages]" Target="[TotalPages.Content]">
-				<Transformer>
-					<FormatTransformer Format="{0:0}"/>
-				</Transformer>
-			</Binding>
-
-			<!-- Bind the current page. -->
-			<Binding Source="[ScrollingData.CurrentPage]" Target="[CurrentPage.Content]">
-				<Transformer>
-					<FormatTransformer Format="{0:0}"/>
-				</Transformer>
-			</Binding>
-
 			<!-- Our list of choices come from the MediaServer. -->
 			<Default Target="[Choice.Options]" Value="[Movie.GetMovies]"/>
 
@@ -89,9 +75,7 @@
 					<!-- Display of the current and total pages. -->
 					<Panel Name="PageStats" Layout="HorizontalFlow">
 						<Children>
-							<Text Name="CurrentPage" Content="5" Font="Verdana,15" Color="LightBlue"/>
-							<Text Content=" | " Margins="10,0,10,0" Font="Verdana,15" Color="LightBlue"/>
-							<Text Name="TotalPages" Content="10" Font="Verdana,15" Color="LightBlue"/>
+              <me:PositionIndicator Choi="[Choice]" />
 						</Children>
 						<LayoutInput>
 							<FormLayoutInput Left="Parent,0,0" Right="Parent,.30,1" Bottom="Parent,.95,-2"/>
@@ -273,6 +257,29 @@
 			<Graphic Name="Cover" Content="[DisplayItem.GetImage]"/>
 		</Content>
 	</UI>
+
+  <UI Name="PositionIndicator">
+    <Properties>
+      <Choice Name="Choi" Choice="$Required" />
+    </Properties>
+    <Rules>
+      <Binding Target="[CurrentPage.Content]" Source="[Choi.ChosenIndex!cor:String]">
+        <Transformer>
+          <MathTransformer Add="1" />
+        </Transformer>
+      </Binding>
+      <Binding Target="[CurrentPage.Content]" Source="[Choi.Options.Count!cor:String]" />
+    </Rules>
+    <Content>
+      <Panel Name="Indicator" Layout="HorizontalFlow">
+        <Children>
+          <Text Name="CurrentPage" Content="[Choi.ChosenIndex!cor:String]" Font="Verdana,15" Color="White"/>
+          <Text Content="|" Margins="5,0,5,0" Font="Verdana,15" Color="LightBlue"/>
+          <Text Name="TotalPages" Content="[Choi.Options.Count!cor:String]" Font="Verdana,15" Color="LightBlue"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
 
 	<!-- Animation so we scroll smoothly -->
 	<Animation Name="MoveAnimation" Type="Move">
