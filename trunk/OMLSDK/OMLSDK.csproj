@@ -36,17 +36,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OMLDataSet.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="OMLPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
-      <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
-      <Name>OMLEngine</Name>
-    </ProjectReference>
+    <Compile Include="Title.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

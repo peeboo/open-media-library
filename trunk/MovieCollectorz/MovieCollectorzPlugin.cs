@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using OMLSDK;
-using OMLEngine;
 using System.IO;
 using System.Diagnostics;
 using System.Xml;
@@ -115,7 +114,6 @@ namespace MovieCollectorz
                 else
                     Trace.WriteLine("Error saving row");
             }
-            CompleteAdditions();
 
             return true;
         }

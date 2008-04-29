@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using OMLEngine;
 
 namespace OMLSDK
 {
@@ -31,16 +30,6 @@ namespace OMLSDK
         public bool ValidateTitle(Title title_to_validate)
         {
             return true;
-        }
-        public void CompleteAdditions()
-        {
-            TitleCollection tc = new TitleCollection();
-            tc.loadTitleCollection();
-            foreach (Title newTitle in titles)
-            {
-                tc.Add(newTitle);
-            }
-            tc.saveTitleCollection();
         }
         public string getName()
         {
