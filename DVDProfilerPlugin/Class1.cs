@@ -4,7 +4,7 @@ using OMLSDK;
 
 namespace DVDProfilerPlugin
 {
-    public class Class1 : IDataImporter
+    public class Class1 : OMLPlugin
     {
         public OMLDataSet GetOmlDataSet()
         {
