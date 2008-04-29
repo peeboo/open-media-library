@@ -13,6 +13,10 @@ namespace OMLSDK
         {
             get { return totalRowsAdded; }
         }
+        public List<Title> GetTitles
+        {
+            get { return titles; }
+        }
 
         public OMLPlugin()
         {

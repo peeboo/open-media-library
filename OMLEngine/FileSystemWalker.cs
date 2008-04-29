@@ -5,13 +5,18 @@ using System.Text;
 
 namespace OMLEngine
 {
-    class FileSystemWalker
+    public class FileSystemWalker
     {
         public static string RootDirectory =
-            Environment.SpecialFolder.LocalApplicationData + "/OpenMediaLibrary";
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\OpenMediaLibrary";
 
         public static string ImageDirectory =
-            RootDirectory + "/Images";
+            RootDirectory + "\\Images";
+
+        public static string PluginDirectory =
+            RootDirectory + "\\plugins";
+        public static string LogDirectory =
+            RootDirectory + "\\logs";
 
         public static bool RootDirExists()
         {
@@ -20,9 +25,42 @@ namespace OMLEngine
 
             return false;
         }
+        public static bool ImageDirExists()
+        {
+            if (Directory.Exists(ImageDirectory))
+                return true;
+
+            return false;
+        }
+        public static bool PluginsDirExists()
+        {
+            if (Directory.Exists(PluginDirectory))
+                return true;
+
+            return false;
+        }
+        public static bool LogDirExists()
+        {
+            if (Directory.Exists(LogDirectory))
+                return true;
+
+            return false;
+        }
         public static void createRootDirectory()
         {
             Directory.CreateDirectory(RootDirectory);
+        }
+        public static void createImageDirectory()
+        {
+            Directory.CreateDirectory(ImageDirectory);
+        }
+        public static void createPluginsDirectory()
+        {
+            Directory.CreateDirectory(PluginDirectory);
+        }
+        public static void createLogDirectory()
+        {
+            Directory.CreateDirectory(LogDirectory);
         }
         public static void changeToRootDirectory()
         {

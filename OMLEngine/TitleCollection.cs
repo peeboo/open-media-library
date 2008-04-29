@@ -91,7 +91,8 @@ namespace OMLEngine
         {
             Trace.WriteLine("TitleCollection:TitleCollection()");
             _useDatabase = true;
-            _database_filename = @"C:\\oml.dat";
+            _database_filename = FileSystemWalker.RootDirectory + "\\oml.dat";
+//            _database_filename = @"C:\\oml.dat";
             _titles = new List<Title>();
         }
         ~TitleCollection()

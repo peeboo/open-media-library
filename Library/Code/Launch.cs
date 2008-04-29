@@ -13,10 +13,12 @@ namespace Library
 
         public void Initialize(Dictionary<string, object> appInfo, Dictionary<string, object> entryPointInfo)
         {
-            if (File.Exists("c:\\debug.txt"))
-                Log = new FileStream("c:\\debug.txt", FileMode.Truncate);
+            OMLEngine.Utilities.RawSetup();
+
+            if (File.Exists(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt"))
+                Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.Truncate);
             else
-                Log = new FileStream("c:\\debug.txt", FileMode.OpenOrCreate);
+                Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.OpenOrCreate);
 
             Trace.Listeners.Add(new TextWriterTraceListener(Log));
             Trace.WriteLine("Launch:Initialize()");
