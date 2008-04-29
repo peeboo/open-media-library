@@ -6,18 +6,10 @@ using System.Xml.XPath;
 
 namespace MyMoviesPlugin
 {
-    public class MyMoviesImporter : IDataImporter
+    public class MyMoviesImporter : OMLPlugin
     {
-        private OMLDataSet ods;
-
-        public MyMoviesImporter()
+        public MyMoviesImporter() : base()
         {
-            ods = new OMLDataSet();
-        }
-
-        public OMLDataSet GetOmlDataSet()
-        {
-            return ods;
         }
     }
 }

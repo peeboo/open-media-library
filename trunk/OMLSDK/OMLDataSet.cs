@@ -7,7 +7,7 @@ namespace OMLSDK
 {
     public class OMLDataSet : DataSet
     {
-        public OMLDataSet()
+        public OMLDataSet() : base()
         {
             DataTable table = new DataTable("Titles");
             DataColumn colName = new DataColumn();
@@ -94,14 +94,16 @@ namespace OMLSDK
             colCrew.DataType = typeof(List<string>);
             colCrew.ColumnName = "Crew";
             table.Columns.Add(colCrew);
+
+            Tables.Add(table);
         }
         public DataRow NewRow()
         {
-            return this.NewRow();
+            return this.Tables[0].NewRow();
         }
         public void AddRow(DataRow row)
         {
-            this.AddRow(row);
+            this.Tables[0].Rows.Add(row);
         }
         public ArrayList GetColumnNames()
         {
