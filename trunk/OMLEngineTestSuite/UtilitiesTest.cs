@@ -71,31 +71,12 @@ namespace OMLEngineTestSuite
         [TestMethod()]
         public void ImportDataTest()
         {
+            Utilities.RawSetup();
             DataSet dataSet = null; // TODO: Initialize to an appropriate value
             DataSet dataSetExpected = null; // TODO: Initialize to an appropriate value
             Utilities.ImportData(ref dataSet);
             Assert.AreEqual(dataSetExpected, dataSet);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
-        }
-
-        /// <summary>
-        ///A test for getImporterClassType
-        ///</summary>
-        [TestMethod()]
-        public void getImporterClassTypeTest()
-        {
-            Type expected = typeof(MoviesXmlImporter);
-            Type actual;
-            actual = Utilities.getImporterClassType("MoviesXmlImporter");
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod()]
-        public void ValidateImporterTest()
-        {
-            bool expected = true;
-            bool actual = Utilities.ValidateImporter("MoviesXmlImporter");
-            Assert.AreEqual(expected, actual);
         }
     }
 }

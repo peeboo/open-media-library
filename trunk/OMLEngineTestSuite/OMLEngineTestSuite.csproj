@@ -42,9 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MovieCollectorzPluginTest.cs" />
-    <Compile Include="DVDProfilerImporterTest.cs" />
-    <Compile Include="OMLDataSetTest.cs" />
     <Compile Include="OMLPluginTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TitleCollectionTest.cs" />
