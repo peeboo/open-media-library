@@ -8,14 +8,29 @@ namespace OMLSDK
     {
         List<Title> titles;
         private int totalRowsAdded = 0;
+        private string _description = @"";
+        private string _author = @"";
+        private string _name = "OMLPlugin";
 
-        public int TotalRowsAdded
+        public int GetTotalTitlesAdded
         {
             get { return totalRowsAdded; }
         }
         public List<Title> GetTitles
         {
             get { return titles; }
+        }
+        public string GetName
+        {
+            get { return _name; }
+        }
+        public string GetDescription
+        {
+            get { return _description; }
+        }
+        public string GetAuthor
+        {
+            get { return _author; }
         }
 
         public OMLPlugin()
@@ -34,10 +49,6 @@ namespace OMLSDK
         public bool ValidateTitle(Title title_to_validate)
         {
             return true;
-        }
-        public string getName()
-        {
-            throw new Exception("Called base class getName()");
         }
     }
 }
