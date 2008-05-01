@@ -76,6 +76,7 @@ namespace OMLEngineTestSuite
         {
             Title title = new Title();
             title.itemId = 1;
+            title.sourceId = "001";
             title.Name = "My Title";
             title.back_boxart_path = "c:\\img.jpg";
             title.front_boxart_path = "c:\\img.jpg";
@@ -85,7 +86,7 @@ namespace OMLEngineTestSuite
             title.Distributor = "Paramount";
             title.FileLocation = "c:\\video.mkv";
             title.Importer_Source = "DVD";
-            title.MPAARating = "R";
+            title.MPAARating = Title.Rating.R;
             title.Official_Website_Url = "www.mymovie.com";
             title.ReleaseDate = new DateTime(2008, 01, 01);
             title.Runtime = "110";
@@ -106,36 +107,6 @@ namespace OMLEngineTestSuite
             Assert.AreEqual("1/1/2008", title.ReleaseDate.ToShortDateString());
             Assert.AreEqual("110", title.Runtime);
             Assert.AreEqual("my synopsis is here", title.Synopsis);
-        }
-
-        [TestMethod()]
-        public void TestIListMembers()
-        {
-            Title title = new Title();
-
-            title.AddActor("Translucent");
-            Assert.AreEqual(1, title.Actors.Count);
-            Assert.AreEqual("Translucent", title.Actors[0]);
-
-            title.AddCrew("Cast Member");
-            Assert.AreEqual(1, title.Crew.Count);
-            Assert.AreEqual("Cast Member", title.Crew[0]);
-
-            title.AddDirector("cool director");
-            Assert.AreEqual(1, title.Directors.Count);
-            Assert.AreEqual("cool director", title.Directors[0]);
-
-            title.AddProducer("sony");
-            Assert.AreEqual(1, title.Producers.Count);
-            Assert.AreEqual("sony", title.Producers[0]);
-
-            title.AddWriter("terry pratchet");
-            Assert.AreEqual(1, title.Writers.Count);
-            Assert.AreEqual("terry pratchet", title.Writers[0]);
-
-            title.AddGenre(Genre.Comedy);
-            Assert.AreEqual(1, title.Genres.Count);
-            Assert.AreEqual(Genre.Comedy, title.Genres[0]);
         }
     }
 }

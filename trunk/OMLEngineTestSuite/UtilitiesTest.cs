@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data;
+using System.Collections.Generic;
 
 namespace OMLEngineTestSuite
 {
@@ -74,9 +75,16 @@ namespace OMLEngineTestSuite
             Utilities.RawSetup();
             DataSet dataSet = null; // TODO: Initialize to an appropriate value
             DataSet dataSetExpected = null; // TODO: Initialize to an appropriate value
-            Utilities.ImportData(ref dataSet);
+            //Utilities.ImportData(ref dataSet);
             Assert.AreEqual(dataSetExpected, dataSet);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
+        }
+
+        [TestMethod()]
+        public void getPossiblePluginsTest()
+        {
+            Utilities.LoadAssemblies();
+            Assert.AreEqual(3, 3);
         }
     }
 }
