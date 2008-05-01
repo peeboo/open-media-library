@@ -72,7 +72,7 @@ namespace Library
             page.Title = item.GetTitle;
             page.Summary = item.GetSummary;
             page.Background = item.GetImage;
-            page.Rating = item.GetMpaaRating;
+            //page.Rating = item.GetMpaaRating;
             page.Length = item.GetRuntime;
             page.ReleaseDate = item.GetReleaseDate;
             page.Actors = item.GetActors;

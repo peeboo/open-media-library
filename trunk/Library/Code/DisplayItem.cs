@@ -35,7 +35,7 @@ namespace Library
         {
             get { return _titleObj.Runtime; }
         }
-        public string GetMpaaRating
+        public Title.Rating GetMpaaRating
         {
             get { return _titleObj.MPAARating; }
         }
