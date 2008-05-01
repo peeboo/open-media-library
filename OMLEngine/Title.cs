@@ -10,10 +10,13 @@ namespace OMLEngine
     public class Title : ISerializable
     {
         #region locals
+        private int _watched;
         private string _file_location;
         private string _name;
         private string _description;
         private int _itemId;
+        private string _sourceId;
+        private string _source_name;
         private string _front_boxart_path;
         private string _back_boxart_path;
         private string _runtime;
@@ -25,10 +28,10 @@ namespace OMLEngine
         private DateTime _release_date;
         private DateTime _date_added;
         private string _importer_source;
-        private List<string> _actors;
-        private List<string> _crew;
-        private List<string> _directors;
-        private List<string> _writers;
+        private List<Person> _actors;
+        private List<Person> _crew;
+        private List<Person> _directors;
+        private List<Person> _writers;
         private List<string> _producers;
         private List<string> _sound_formats;
         private List<string> _language_formats;
@@ -65,6 +68,24 @@ namespace OMLEngine
             {
                 if (value >= 0)
                     _itemId = value;
+            }
+        }
+        public string sourceId
+        {
+            get { return _sourceId; }
+            set
+            {
+                if (value != null)
+                    _sourceId = value;
+            }
+        }
+        public string sourceName
+        {
+            get { return _source_name; }
+            set
+            {
+                if (value != null)
+                    _source_name = value;
             }
         }
         public string front_boxart_path
@@ -175,6 +196,8 @@ namespace OMLEngine
             _name = (string)info.GetValue("name", typeof(string));
             _description = (string)info.GetValue("description", typeof(string));
             _itemId = (int)info.GetValue("itemid", typeof(int));
+            _sourceId = (string)info.GetValue("sourceid", typeof(string));
+            _source_name = (string)info.GetValue("sourcename", typeof(string));
             _front_boxart_path = (string)info.GetValue("front_boxart_path", typeof(string));
             _back_boxart_path = (string)info.GetValue("back_boxart_path", typeof(string));
             _synopsis = (string)info.GetValue("synopsis", typeof(string));
@@ -186,11 +209,11 @@ namespace OMLEngine
             _runtime = (string)info.GetValue("runtime", typeof(string));
             _mpaa_rating = (string)info.GetValue("mpaa_rating", typeof(string));
             _release_date = (DateTime)info.GetValue("release_date", typeof(DateTime));
-            _actors = (List<string>)info.GetValue("actors", typeof(List<string>));
-            _crew = (List<string>)info.GetValue("crew", typeof(List<string>));
+            _actors = (List<Person>)info.GetValue("actors", typeof(List<Person>));
+            _crew = (List<Person>)info.GetValue("crew", typeof(List<Person>));
             _producers = (List<string>)info.GetValue("producers", typeof(List<string>));
-            _writers = (List<string>)info.GetValue("writers", typeof(List<string>));
-            _directors = (List<string>)info.GetValue("directors", typeof(List<string>));
+            _writers = (List<Person>)info.GetValue("writers", typeof(List<Person>));
+            _directors = (List<Person>)info.GetValue("directors", typeof(List<Person>));
             _sound_formats = (List<string>)info.GetValue("sound_formats", typeof(List<string>));
             _language_formats = (List<string>)info.GetValue("language_formats", typeof(List<string>));
             _genres = (List<Genre>)info.GetValue("genres", typeof(List<Genre>));
@@ -202,6 +225,8 @@ namespace OMLEngine
             info.AddValue("name", _name);
             info.AddValue("description", _description);
             info.AddValue("itemid", _itemId);
+            info.AddValue("sourceid", _sourceId);
+            info.AddValue("sourcename", _source_name);
             info.AddValue("front_boxart_path", _front_boxart_path);
             info.AddValue("back_boxart_path", _back_boxart_path);
             info.AddValue("synopsis", _synopsis);
@@ -226,10 +251,10 @@ namespace OMLEngine
 
         public Title()
         {
-            _actors = new List<string>();
-            _crew = new List<string>();
-            _directors = new List<string>();
-            _writers = new List<string>();
+            _actors = new List<Person>();
+            _crew = new List<Person>();
+            _directors = new List<Person>();
+            _writers = new List<Person>();
             _producers = new List<string>();
             _sound_formats = new List<string>();
             _language_formats = new List<string>();
@@ -239,21 +264,21 @@ namespace OMLEngine
         {
         }
 
-        public void AddActor(string actor)
+        public void AddActor(Person actor)
         {
             if (!_actors.Contains(actor))
                 _actors.Add(actor);
         }
-        public void AddCrew(string crew_member)
+        public void AddCrew(Person crew_member)
         {
             if (!_crew.Contains(crew_member))
                 _crew.Add(crew_member);
         }
-        public void AddDirector(string director)
+        public void AddDirector(Person director)
         {
             _directors.Add(director);
         }
-        public void AddWriter(string writer)
+        public void AddWriter(Person writer)
         {
             _writers.Add(writer);
         }
