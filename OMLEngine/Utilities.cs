@@ -10,6 +10,9 @@ namespace OMLEngine
 {
     public static class Utilities
     {
+        /// <summary>
+        /// Static list of methods that ALL plugins must define
+        /// </summary>
         public static string[] RequiredMethods = new string[4] {
             "get_GetTitles",
             "get_TotalRowsAdded",
@@ -17,7 +20,12 @@ namespace OMLEngine
             "get_GetAuthor"
         };
 
-        public static void ImportData(Type importerClassType)
+        /// <summary>
+        /// Loads data from plugin classes and creates a List of Title objects
+        /// </summary>
+        /// <param name="importerClassType">Type of importer class</param>
+        /// <returns>IList of Title objects</returns>
+        public static IList<Title> ImportData(Type importerClassType)
         {
             List<Title> titles;
             if (importerClassType.IsClass)
@@ -39,6 +47,7 @@ namespace OMLEngine
                                 Trace.WriteLine("Would add title" + title.Name);
                             }
                         }
+                        return titles;
                     }
                 }
                 catch (Exception e)
@@ -46,8 +55,15 @@ namespace OMLEngine
                     Trace.WriteLine("Importer Error: " + e.Message);
                 }
             }
+            return null;
         }
 
+        /// <summary>
+        /// Scans the plugins directory for all possible plugins
+        /// and validates each one before returns a list of all assemblies
+        /// that passed validation.
+        /// </summary>
+        /// <returns>A List of plugin names</returns>
         public static List<string> getPossiblePlugins()
         {
             List<string> plugins = new List<string>();
@@ -62,6 +78,11 @@ namespace OMLEngine
             }
             return plugins;
         }
+
+        /// <summary>
+        /// Loads all valid plugins into memory
+        /// </summary>
+        /// <returns>A List of the Type objects representing all valid plugins found</returns>
         public static List<Type> LoadAssemblies()
         {
             List<Type> validPlugins = new List<Type>();
@@ -82,6 +103,12 @@ namespace OMLEngine
             return validPlugins;
         }
 
+        /// <summary>
+        /// Checks a given plugin Type and ensures that it contains
+        /// the required methods for use.
+        /// </summary>
+        /// <param name="type">Type of the plugin to be validated</param>
+        /// <returns>True on successful validation</returns>
         public static bool ValidatePlugin(Type type)
         {
             if (type.IsClass)
@@ -108,6 +135,12 @@ namespace OMLEngine
             }
             return true;
         }
+
+        /// <summary>
+        /// Validates or creates required directories for the proper function
+        /// of the Open Media Library application
+        /// </summary>
+        /// <returns>True on success</returns>
         public static bool RawSetup()
         {
             if (!FileSystemWalker.RootDirExists())
@@ -125,6 +158,14 @@ namespace OMLEngine
             return true;
         }
 
+        /// <summary>
+        /// Given a list of available methods and the method to search for,
+        /// scan through all the available methods looking for the requested
+        /// method.
+        /// </summary>
+        /// <param name="methods">List of methods to scan through</param>
+        /// <param name="required_method">name of method to find</param>
+        /// <returns>True on success</returns>
         private static bool ContainsMethod(MethodInfo[] methods, string required_method)
         {
             foreach (MethodInfo mi in methods)

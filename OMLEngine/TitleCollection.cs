@@ -87,6 +87,10 @@ namespace OMLEngine
         }
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="database_filename">full path of filename to use as the database</param>
         public TitleCollection(string database_filename)
         {
             Trace.WriteLine("TitleCollection:TitleCollection(database_filename)");
@@ -96,6 +100,10 @@ namespace OMLEngine
             if (_titles.Count == 0)
                 _NeedSetup = true;
         }
+        /// <summary>
+        /// Generic constructor
+        /// (Uses the default database file)
+        /// </summary>
         public TitleCollection()
         {
             Trace.WriteLine("TitleCollection:TitleCollection()");
@@ -105,11 +113,18 @@ namespace OMLEngine
             if (_titles.Count == 0)
                 _NeedSetup = true;
         }
+        /// <summary>
+        /// Default destructor
+        /// </summary>
         ~TitleCollection()
         {
             Trace.WriteLine("TitleCollection:~TitleCollection(): Holding " + _titles.Count + " titles");
         }
 
+        /// <summary>
+        /// Saves the current list of titles to the db file
+        /// </summary>
+        /// <returns>True on success</returns>
         public bool saveTitleCollection()
         {
             Trace.WriteLine("saveTitleCollection()");
@@ -136,6 +151,10 @@ namespace OMLEngine
 
             return true;
         }
+        /// <summary>
+        /// Loads the dbfile into memory
+        /// </summary>
+        /// <returns>True on success</returns>
         public bool loadTitleCollection()
         {
             Trace.WriteLine("loadTitleCollection()");
@@ -169,6 +188,11 @@ namespace OMLEngine
             return true;
         }
 
+        /// <summary>
+        /// Takes all titles in the collection and creates a DataTable object for use
+        /// by the Media Center UI
+        /// </summary>
+        /// <returns>DataTable object contains all the titles in the collection.</returns>
         public DataTable ToDataTable()
         {
             DataTable dt = new DataTable("Titles");
@@ -242,7 +266,9 @@ namespace OMLEngine
         }
         #endregion
     }
-
+    /// <summary>
+    /// Provides Enumerator functionality on the TitleCollection object
+    /// </summary>
     public class TitleEnum : IEnumerator
     {
         public Title[] _title;
