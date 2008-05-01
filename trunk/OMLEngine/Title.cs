@@ -9,6 +9,7 @@ namespace OMLEngine
     [Serializable()]
     public class Title : ISerializable
     {
+        public enum Rating { G, PG, PG13, NC17, R, X };
         #region locals
         private int _watched;
         private string _file_location;
@@ -20,7 +21,7 @@ namespace OMLEngine
         private string _front_boxart_path;
         private string _back_boxart_path;
         private string _runtime;
-        private string _mpaa_rating;
+        private Rating _mpaa_rating;
         private string _synopsis;
         private string _distributor;
         private string _country_of_origin;
@@ -39,11 +40,17 @@ namespace OMLEngine
         #endregion
 
         #region properties
+        /// <summary>
+        ///  Physical location of media
+        /// </summary>
         public string FileLocation
         {
             get { return _file_location; }
             set { _file_location = value; }
         }
+        /// <summary>
+        /// Display name of movie
+        /// </summary>
         public string Name
         {
             get { return _name; }
@@ -52,6 +59,9 @@ namespace OMLEngine
                     _name = value;
             }
         }
+        /// <summary>
+        /// Short description of the Title
+        /// </summary>
         public string Description
         {
             get { return _description; }
@@ -61,6 +71,9 @@ namespace OMLEngine
                     _description = value;
             }
         }
+        /// <summary>
+        /// Internal id of the Title
+        /// </summary>
         public int itemId
         {
             get { return _itemId; }
@@ -70,6 +83,9 @@ namespace OMLEngine
                     _itemId = value;
             }
         }
+        /// <summary>
+        /// Unique id from the Source of our title info (MyMovies, DVD Profiler, etc).
+        /// </summary>
         public string sourceId
         {
             get { return _sourceId; }
@@ -79,6 +95,9 @@ namespace OMLEngine
                     _sourceId = value;
             }
         }
+        /// <summary>
+        /// Name of the source for our info (MyMovies, DVD Profiler, etc)
+        /// </summary>
         public string sourceName
         {
             get { return _source_name; }
@@ -88,16 +107,25 @@ namespace OMLEngine
                     _source_name = value;
             }
         }
+        /// <summary>
+        /// Pull path to the cover art image
+        /// </summary>
         public string front_boxart_path
         {
             get { return _front_boxart_path; }
             set { _front_boxart_path = value; }
         }
+        /// <summary>
+        /// Full path to the rear cover art image
+        /// </summary>
         public string back_boxart_path
         {
             get { return _back_boxart_path; }
             set { _back_boxart_path = value; }
         }
+        /// <summary>
+        /// Runtime in minutes of the title
+        /// </summary>
         public string Runtime
         {
             get { return _runtime; }
@@ -107,7 +135,10 @@ namespace OMLEngine
                     _runtime = value;
             }
         }
-        public string MPAARating
+        /// <summary>
+        /// Rating of the film acording to the MPAA
+        /// </summary>
+        public Rating MPAARating
         {
             get { return _mpaa_rating; }
             set
@@ -116,26 +147,41 @@ namespace OMLEngine
                     _mpaa_rating = value;
             }
         }
+        /// <summary>
+        /// Long description of title
+        /// </summary>
         public string Synopsis
         {
             get { return _synopsis; }
             set { _synopsis = value; }
         }
+        /// <summary>
+        /// Name of distribution company
+        /// </summary>
         public string Distributor
         {
             get { return _distributor; }
             set { _distributor = value; }
         }
+        /// <summary>
+        /// Country where the title was created/first released
+        /// </summary>
         public string Country_Of_Origin
         {
             get { return _country_of_origin; }
             set { _country_of_origin = value; }
         }
+        /// <summary>
+        /// website for title (if it has one)
+        /// </summary>
         public string Official_Website_Url
         {
             get { return _official_website_url; }
             set { _official_website_url = value; }
         }
+        /// <summary>
+        /// Original date of release (or re-release)
+        /// </summary>
         public DateTime ReleaseDate
         {
             get { return _release_date; }
@@ -145,44 +191,74 @@ namespace OMLEngine
                     _release_date = value;
             }
         }
+        /// <summary>
+        /// Date that this title was added to the database
+        /// </summary>
         public DateTime DateAdded
         {
             get { return _date_added; }
             set { _date_added = value; }
         }
+        /// <summary>
+        /// Name of the source from which meta-data was gathered (MyMovies, DVD Profiler, etc.)
+        /// </summary>
         public string Importer_Source
         {
             get { return _importer_source; }
             set { _importer_source = value; }
         }
+        /// <summary>
+        /// List of sound formats (DTS, DD5.1, DD2.0, etc)
+        /// </summary>
         public IList SoundFormats
         {
             get { return _language_formats; }
         }
+        /// <summary>
+        /// List of languages (English, Spanish, French, etc)
+        /// </summary>
         public IList LanguageFormats
         {
             get { return _sound_formats; }
         }
+        /// <summary>
+        /// List of Genres (see the Genre Enumerator)
+        /// </summary>
         public IList Genres
         {
             get { return _genres; }
         }
+        /// <summary>
+        /// List of actors (Person objects)
+        /// </summary>
         public IList Actors
         {
             get { return _actors; }
         }
+        /// <summary>
+        /// List of Person objects that worked on the film
+        /// </summary>
         public IList Crew
         {
             get { return _crew; }
         }
+        /// <summary>
+        /// List of Person objects that directed the title (usually one Person)
+        /// </summary>
         public IList Directors
         {
             get { return _directors; }
         }
+        /// <summary>
+        /// List of Person objects that wrote the title
+        /// </summary>
         public IList Writers
         {
             get { return _writers; }
         }
+        /// <summary>
+        /// List of people/companies that produced the title
+        /// </summary>
         public IList Producers
         {
             get { return _producers; }
@@ -190,6 +266,11 @@ namespace OMLEngine
         #endregion
 
         #region serialization methods
+        /// <summary>
+        /// Constructor used for loading from database file
+        /// </summary>
+        /// <param name="info">SerializationInfo object</param>
+        /// <param name="ctxt">StreamingContext object</param>
         public Title(SerializationInfo info, StreamingContext ctxt)
         {
             _file_location = (string)info.GetValue("file_location", typeof(string));
@@ -207,7 +288,7 @@ namespace OMLEngine
             _date_added = (DateTime)info.GetValue("date_added", typeof(DateTime));
             _importer_source = (string)info.GetValue("importer_source", typeof(string));
             _runtime = (string)info.GetValue("runtime", typeof(string));
-            _mpaa_rating = (string)info.GetValue("mpaa_rating", typeof(string));
+            _mpaa_rating = (Rating)info.GetValue("mpaa_rating", typeof(Rating));
             _release_date = (DateTime)info.GetValue("release_date", typeof(DateTime));
             _actors = (List<Person>)info.GetValue("actors", typeof(List<Person>));
             _crew = (List<Person>)info.GetValue("crew", typeof(List<Person>));
@@ -219,6 +300,11 @@ namespace OMLEngine
             _genres = (List<Genre>)info.GetValue("genres", typeof(List<Genre>));
         }
 
+        /// <summary>
+        /// Used for serializing the title object (required for the ISerializable interface)
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="ctxt"></param>
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             info.AddValue("file_location", _file_location);
@@ -249,6 +335,9 @@ namespace OMLEngine
         }
         #endregion
 
+        /// <summary>
+        /// Generic Constructor, inits all the IList items
+        /// </summary>
         public Title()
         {
             _actors = new List<Person>();
@@ -260,40 +349,76 @@ namespace OMLEngine
             _language_formats = new List<string>();
             _genres = new List<Genre>();
         }
+
+        /// <summary>
+        /// Default destructor
+        /// </summary>
         ~Title()
         {
         }
 
+        /// <summary>
+        /// Add a Person object to the actors list
+        /// </summary>
+        /// <param name="actor">Person object to add</param>
         public void AddActor(Person actor)
         {
             if (!_actors.Contains(actor))
                 _actors.Add(actor);
         }
+        /// <summary>
+        /// Add a Person object to the crew list
+        /// </summary>
+        /// <param name="crew_member">Person object to add</param>
         public void AddCrew(Person crew_member)
         {
             if (!_crew.Contains(crew_member))
                 _crew.Add(crew_member);
         }
+        /// <summary>
+        /// Add a Person object to the directors list
+        /// </summary>
+        /// <param name="director">Person object to add</param>
         public void AddDirector(Person director)
         {
             _directors.Add(director);
         }
+        /// <summary>
+        /// Add a Person object to the writers list
+        /// </summary>
+        /// <param name="writer">Person object to add</param>
         public void AddWriter(Person writer)
         {
             _writers.Add(writer);
         }
+        /// <summary>
+        /// Add a string (person name or company name) to the producers list
+        /// </summary>
+        /// <param name="producer">string name to add</param>
         public void AddProducer(string producer)
         {
             _producers.Add(producer);
         }
+        /// <summary>
+        /// Add a Genre to the genres list
+        /// </summary>
+        /// <param name="genre">A Genre from the Genre enum</param>
         public void AddGenre(Genre genre)
         {
             _genres.Add(genre);
         }
+        /// <summary>
+        /// Add a string sound format to the sound formats list
+        /// </summary>
+        /// <param name="sound_format">string name to add</param>
         public void AddSoundFormat(string sound_format)
         {
             _sound_formats.Add(sound_format);
         }
+        /// <summary>
+        /// Add a string language to the language formats list
+        /// </summary>
+        /// <param name="language_format">string name to add</param>
         public void AddLanguageFormat(string language_format)
         {
             _language_formats.Add(language_format);

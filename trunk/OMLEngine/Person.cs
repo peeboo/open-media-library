@@ -13,6 +13,9 @@ namespace OMLEngine
         private string _name;
         private Sex _sex;
 
+        /// <summary>
+        /// Name of person
+        /// </summary>
         public string name
         {
             get { return _name; }
@@ -22,6 +25,10 @@ namespace OMLEngine
                     _name = value;
             }
         }
+
+        /// <summary>
+        /// Sex of Person (using the Sex enum)
+        /// </summary>
         public Sex sex
         {
             get { return _sex; }
@@ -32,10 +39,17 @@ namespace OMLEngine
             }
         }
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public Person()
         {
         }
 
+        /// <summary>
+        /// Constructor with a name
+        /// </summary>
+        /// <param name="name">name of person to create</param>
         public Person(string name)
         {
             _name = name;
