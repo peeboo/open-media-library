@@ -8,6 +8,18 @@ using System.Collections.Generic;
 
 namespace OMLEngine
 {
+    public enum Genre { Comedy, Drama, Action, Romance };
+
+    public enum Sex { Male, Female };
+
+    public enum SourceDatabase
+    {
+        OML,
+        MyMovies,
+        DVDProfiler,
+        MovieCollectorz
+    };
+
     public static class Utilities
     {
         /// <summary>

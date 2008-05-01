@@ -8,8 +8,6 @@ namespace OMLEngine
     [Serializable()]
     public class Person : ISerializable
     {
-        public enum Sex { Male, Female };
-
         private string _name;
         private Sex _sex;
 
