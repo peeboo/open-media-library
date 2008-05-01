@@ -105,7 +105,7 @@ namespace OMLDatabaseEditor
             current_title.Description = tbDescription.Text;
             current_title.ReleaseDate = dtpReleaseDate.Value;
             current_title.Runtime = tbRunTime.Text;
-            current_title.MPAARating = cbRating.Text;
+            //current_title.MPAARating = cbRating.Text;
             current_title.Distributor = tbDistributor.Text;
             current_title.Country_Of_Origin = tbCountryOfOrigin.Text;
             current_title.Official_Website_Url = tbWebsite.Text;
@@ -122,7 +122,7 @@ namespace OMLDatabaseEditor
             tbDescription.Text = current_title.Description;
             dtpReleaseDate.Value = current_title.ReleaseDate;
             tbRunTime.Text = current_title.Runtime;
-            cbRating.Text = current_title.MPAARating;
+            //cbRating.Text = current_title.MPAARating;
             tbDistributor.Text = current_title.Distributor;
             tbCountryOfOrigin.Text = current_title.Country_Of_Origin;
             tbWebsite.Text = current_title.Official_Website_Url;
@@ -132,8 +132,14 @@ namespace OMLDatabaseEditor
 
             if (current_title.front_boxart_path != null && current_title.front_boxart_path.Length > 0)
             {
-                front_cover = new Bitmap(current_title.front_boxart_path);
-                pbFrontCover.Image = (Image)front_cover;
+                try
+                {
+                    front_cover = new Bitmap(current_title.front_boxart_path);
+                    pbFrontCover.Image = (Image)front_cover;
+                }
+                catch (Exception e)
+                {
+                }
             }
 
             if (current_title.back_boxart_path != null && current_title.back_boxart_path.Length > 0)
