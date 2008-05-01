@@ -10,22 +10,23 @@ namespace OMLEngine
 {
     public static class Utilities
     {
-        public static string[] RequiredMethods = new string[2] {
-            "GetTitles",
-            "TotalRowsAdded",
+        public static string[] RequiredMethods = new string[4] {
+            "get_GetTitles",
+            "get_TotalRowsAdded",
+            "get_GetDescription",
+            "get_GetAuthor"
         };
 
-        public static void ImportData(ref DataSet dataSet)
+        public static void ImportData(Type importerClassType)
         {
             List<Title> titles;
-            Type importerClassType = getImporterClassType("");
             if (importerClassType.IsClass)
             {
                 try
                 {
                     object obj = Activator.CreateInstance(importerClassType);
 
-                    MethodInfo mi = importerClassType.GetMethod("TotalRowsAdded");
+                    MethodInfo mi = importerClassType.GetMethod("GetTotalRowsAdded");
                     int totalTitles = (int)mi.Invoke(obj, null);
                     if (totalTitles > 0) {
                         mi = importerClassType.GetMethod("GetTitles");
@@ -46,41 +47,67 @@ namespace OMLEngine
                 }
             }
         }
-        public static bool ValidateImporter(string importerClassName)
+
+        public static List<string> getPossiblePlugins()
         {
-            Type importerClassType = getImporterClassType(importerClassName);
-            if (importerClassType.IsClass)
+            List<string> plugins = new List<string>();
+            if (FileSystemWalker.PluginsDirExists())
+            {
+                string[] files = Directory.GetFiles(FileSystemWalker.PluginDirectory);
+                foreach (string possible_file in files)
+                {
+                    if (!possible_file.Contains("OMLSDK"))
+                        plugins.Add(possible_file);
+                }
+            }
+            return plugins;
+        }
+        public static List<Type> LoadAssemblies()
+        {
+            List<Type> validPlugins = new List<Type>();
+            Assembly asm = null;
+            List<string> possible_plugins = getPossiblePlugins();
+            foreach (string posPlugin in possible_plugins)
+            {
+                asm = Assembly.LoadFile(posPlugin);
+                Type[] types = asm.GetTypes();
+                foreach (Type type in types)
+                {
+                    if (ValidatePlugin(type))
+                    {
+                        validPlugins.Add(type);
+                    }
+                }
+            }
+            return validPlugins;
+        }
+
+        public static bool ValidatePlugin(Type type)
+        {
+            if (type.IsClass)
             {
                 try
                 {
-                    object obj = Activator.CreateInstance(importerClassType);
-                    foreach (string required_method in RequiredMethods)
+                    object obj = Activator.CreateInstance(type);
+                    MethodInfo[] methods = type.GetMethods();
+
+                    foreach (string required_meth in RequiredMethods)
                     {
-                        MethodInfo mi = importerClassType.GetMethod(required_method, BindingFlags.Instance);
-                        if (mi == null)
+                        if (!ContainsMethod(methods, required_meth))
                             return false;
                     }
-                    return true;
                 }
                 catch (Exception e)
                 {
                     Trace.WriteLine("Failed to validate Importer: " +
-                                    importerClassName +
+                                    type +
                                     " with error: " +
                                     e.Message);
                     return false;
                 }
             }
-            else
-            {
-                return false;
-            }
+            return true;
         }
-        public static Type getImporterClassType(string importerClassName)
-        {
-            return typeof(int);
-        }
-
         public static bool RawSetup()
         {
             if (!FileSystemWalker.RootDirExists())
@@ -96,6 +123,16 @@ namespace OMLEngine
                 FileSystemWalker.createLogDirectory();
 
             return true;
+        }
+
+        private static bool ContainsMethod(MethodInfo[] methods, string required_method)
+        {
+            foreach (MethodInfo mi in methods)
+            {
+                if (mi.Name == required_method)
+                    return true;
+            }
+            return false;
         }
     }
 }

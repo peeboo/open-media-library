@@ -46,6 +46,9 @@ namespace OMLEngine
         {
             if (!_titles.Contains(title))
                 _titles.Add(title);
+
+            if (_NeedSetup == true)
+                _NeedSetup = false;
         }
         public void Clear()
         {
@@ -57,7 +60,11 @@ namespace OMLEngine
         }
         public bool Remove(Title title)
         {
-            return _titles.Remove(title);
+            bool result = _titles.Remove(title);
+            if (_titles.Count == 0)
+                _NeedSetup = true;
+
+            return result;
         }
         public void CopyTo(Array array, int index)
         {
@@ -86,14 +93,17 @@ namespace OMLEngine
             _useDatabase = true;
             _database_filename = database_filename;
             _titles = new List<Title>();
+            if (_titles.Count == 0)
+                _NeedSetup = true;
         }
         public TitleCollection()
         {
             Trace.WriteLine("TitleCollection:TitleCollection()");
             _useDatabase = true;
             _database_filename = FileSystemWalker.RootDirectory + "\\oml.dat";
-//            _database_filename = @"C:\\oml.dat";
             _titles = new List<Title>();
+            if (_titles.Count == 0)
+                _NeedSetup = true;
         }
         ~TitleCollection()
         {
