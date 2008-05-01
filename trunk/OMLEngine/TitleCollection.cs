@@ -13,6 +13,7 @@ namespace OMLEngine
     public class TitleCollection : ArrayList, ISerializable
     {
         private bool _useDatabase;
+        private SourceDatabase _source_database_to_use;
         private List<Title> _titles;
         private bool _NeedSetup = false;
         private bool _IsReadOnly = false;
@@ -88,6 +89,17 @@ namespace OMLEngine
         #endregion
 
         /// <summary>
+        /// Get/Set the Source Database type to use
+        /// </summary>
+        public SourceDatabase SourceDatabaseToUse
+        {
+            get { return _source_database_to_use; }
+            set
+            {
+                _source_database_to_use = value;
+            }
+        }
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="database_filename">full path of filename to use as the database</param>
@@ -95,6 +107,7 @@ namespace OMLEngine
         {
             Trace.WriteLine("TitleCollection:TitleCollection(database_filename)");
             _useDatabase = true;
+            _source_database_to_use = SourceDatabase.OML;
             _database_filename = database_filename;
             _titles = new List<Title>();
             if (_titles.Count == 0)
@@ -108,6 +121,7 @@ namespace OMLEngine
         {
             Trace.WriteLine("TitleCollection:TitleCollection()");
             _useDatabase = true;
+            _source_database_to_use = SourceDatabase.OML;
             _database_filename = FileSystemWalker.RootDirectory + "\\oml.dat";
             _titles = new List<Title>();
             if (_titles.Count == 0)
@@ -128,29 +142,43 @@ namespace OMLEngine
         public bool saveTitleCollection()
         {
             Trace.WriteLine("saveTitleCollection()");
-            if (_useDatabase)
+            switch (_source_database_to_use)
             {
-                Stream stream;
-                try
-                {
-                    stream = File.Open(_database_filename, FileMode.OpenOrCreate);
-                }
-                catch (Exception e)
-                {
-                    Trace.WriteLine("Error reading file: " + e.Message);
-                    return false;
-                }
-                BinaryFormatter bformatter = new BinaryFormatter();
-                bformatter.Serialize(stream, _titles.Count);
-
-                foreach (Title title in _titles)
-                    bformatter.Serialize(stream, title);
-
-                stream.Close();
+                case SourceDatabase.OML:
+                    return _saveTitleCollectionForOML();
+                case SourceDatabase.DVDProfiler:
+                    return true;
+                case SourceDatabase.MovieCollectorz:
+                    return true;
+                case SourceDatabase.MyMovies:
+                    return true;
+                default:
+                    return true;
             }
+        }
 
+        private bool _saveTitleCollectionForOML()
+        {
+            Stream stream;
+            try
+            {
+                stream = File.Open(_database_filename, FileMode.OpenOrCreate);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Error reading file: " + e.Message);
+                return false;
+            }
+            BinaryFormatter bformatter = new BinaryFormatter();
+            bformatter.Serialize(stream, _titles.Count);
+
+            foreach (Title title in _titles)
+                bformatter.Serialize(stream, title);
+
+            stream.Close();
             return true;
         }
+
         /// <summary>
         /// Loads the dbfile into memory
         /// </summary>
@@ -158,36 +186,63 @@ namespace OMLEngine
         public bool loadTitleCollection()
         {
             Trace.WriteLine("loadTitleCollection()");
-            if (_useDatabase)
+            switch (_source_database_to_use)
             {
-                Stream stm;
-                try
-                {
-                    stm = File.Open(_database_filename, FileMode.OpenOrCreate);
-                }
-                catch (Exception ex)
-                {
-                    Trace.WriteLine("Error loading title collection: " + ex.Message);
+                case SourceDatabase.OML:
+                    return _loadTitleCollectionFromOML();
+                case SourceDatabase.DVDProfiler:
+                    return _loadTitleCollectionFromDVDProfiler();
+                case SourceDatabase.MovieCollectorz:
+                    return _loadTitleCollectionFromMovieCollectorz();
+                case SourceDatabase.MyMovies:
+                    return _loadTitleCollectionFromMyMovies();
+                default:
                     return false;
-                }
-
-                if (stm.Length > 0)
-                {
-                    BinaryFormatter bf = new BinaryFormatter();
-                    int numTitles = (int)bf.Deserialize(stm);
-                    for (int i = 0; i < numTitles; i++)
-                    {
-                        _titles.Add((Title)bf.Deserialize(stm));
-                    }
-                    stm.Close();
-                    Trace.WriteLine("Loaded: " + numTitles + " titles");
-                    return true;
-                }
-                return false;
             }
-            return true;
         }
 
+        private bool _loadTitleCollectionFromMyMovies()
+        {
+            return false;
+        }
+
+        private bool _loadTitleCollectionFromMovieCollectorz()
+        {
+            return false;
+        }
+
+        private bool _loadTitleCollectionFromDVDProfiler()
+        {
+            return false;
+        }
+
+        private bool _loadTitleCollectionFromOML()
+        {
+            Stream stm;
+            try
+            {
+                stm = File.Open(_database_filename, FileMode.OpenOrCreate);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine("Error loading title collection: " + ex.Message);
+                return false;
+            }
+
+            if (stm.Length > 0)
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                int numTitles = (int)bf.Deserialize(stm);
+                for (int i = 0; i < numTitles; i++)
+                {
+                    _titles.Add((Title)bf.Deserialize(stm));
+                }
+                stm.Close();
+                Trace.WriteLine("Loaded: " + numTitles + " titles");
+                return true;
+            }
+            return false;
+        }
         /// <summary>
         /// Takes all titles in the collection and creates a DataTable object for use
         /// by the Media Center UI
