@@ -21,6 +21,12 @@ namespace Library
 //            dataSet = new DataSet();
             titleCollection = new TitleCollection();
             titleCollection.loadTitleCollection();
+            if (titleCollection.Count == 0)
+            {
+                Title t = new Title();
+                t.Name = "No Titles in Database";
+                titleCollection.Add(t);
+            }
             initialize();
         }
         public void initialize()
