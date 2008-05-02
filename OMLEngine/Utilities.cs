@@ -8,10 +8,44 @@ using System.Collections.Generic;
 
 namespace OMLEngine
 {
-    public enum Genre { Comedy, Drama, Action, Romance };
+    #region Global Enumerators
+    /// <summary>
+    /// Enumerator for Ratings
+    /// </summary>
+    public enum Rating
+    {
+        G,
+        PG,
+        PG13,
+        NC17,
+        R,
+        X,
+        XXX
+    };
 
-    public enum Sex { Male, Female };
+    /// <summary>
+    /// Enumerator for Genres
+    /// </summary>
+    public enum Genre
+    {
+        Comedy,
+        Drama,
+        Action,
+        Romance
+    };
 
+    /// <summary>
+    /// Enumerator for Sex
+    /// </summary>
+    public enum Sex
+    {
+        Male,
+        Female
+    };
+
+    /// <summary>
+    /// Enumerator for SourceDatabases
+    /// </summary>
     public enum SourceDatabase
     {
         OML,
@@ -19,6 +53,43 @@ namespace OMLEngine
         DVDProfiler,
         MovieCollectorz
     };
+
+    /// <summary>
+    /// Enumerator for Video Fromats
+    /// </summary>
+    public enum VideoFormat
+    {
+        ASF, // WMV style
+        AVC, // AVC H264
+        AVI, // DivX, Xvid, etc
+        BIN, // using an image loader lib and load/play this as a DVD
+        BLURAY, // detect which drive supports this and request the disc
+        CUE, // using an image loader lib and load/play this as a DVD
+        DVD, // detect which drive supports this and request the disc
+        DVRMS, // MPG
+        H264, // AVC OR MP4
+        HDDVD, // detect which drive supports this and request the disc
+        IFO, // Online DVD
+        IMG, // using an image loader lib and load/play this as a DVD
+        ISO, // using an image loader lib and load/play this as a DVD
+        MDF, // using an image loader lib and load/play this as a DVD
+        MKV, // Likely h264
+        MOV, // Quicktime
+        MPG,
+        MPEG,
+        MP4, // DivX, AVC, or H264
+        OFFLINEBLURAY, // detect which drive supports this and request the disc
+        OFFLINEDVD, // detect which drive supports this and request the disc
+        OFFLINEHDDVD, // detect which drive supports this and request the disc
+        OGM, // Similar to MKV
+        TS, // MPEG2
+        WMV,
+        VOB, // MPEG2
+        WVX, // wtf is this?
+        ASX, // wtf is this?
+        WPL // playlist file?
+    };
+    #endregion
 
     public static class Utilities
     {

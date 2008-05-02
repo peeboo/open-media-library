@@ -9,10 +9,11 @@ namespace OMLEngine
     [Serializable()]
     public class Title : ISerializable
     {
-        public enum Rating { G, PG, PG13, NC17, R, X };
         #region locals
         private int _watched;
         private string _file_location;
+        private VideoFormat _video_format;
+        private bool _transcode_to_extender;
         private string _name;
         private string _description;
         private int _itemId;
@@ -47,6 +48,24 @@ namespace OMLEngine
         {
             get { return _file_location; }
             set { _file_location = value; }
+        }
+
+        /// <summary>
+        /// Video format of title
+        /// </summary>
+        public VideoFormat VideoFormat
+        {
+            get { return _video_format; }
+            set { _video_format = value; }
+        }
+
+        /// <summary>
+        /// Does title need to be transcoded to extender devices
+        /// </summary>
+        public bool TranscodeToExtender
+        {
+            get { return _transcode_to_extender; }
+            set { _transcode_to_extender = value; }
         }
         /// <summary>
         /// Display name of movie
@@ -273,23 +292,25 @@ namespace OMLEngine
         /// <param name="ctxt">StreamingContext object</param>
         public Title(SerializationInfo info, StreamingContext ctxt)
         {
-            _file_location = (string)info.GetValue("file_location", typeof(string));
-            _name = (string)info.GetValue("name", typeof(string));
-            _description = (string)info.GetValue("description", typeof(string));
+            _file_location = info.GetString("file_location");
+            _video_format = (VideoFormat)info.GetValue("video_format", typeof(VideoFormat));
+            _transcode_to_extender = info.GetBoolean("transcode_to_extender");
+            _name = info.GetString("name");
+            _description = info.GetString("description");
             _itemId = (int)info.GetValue("itemid", typeof(int));
-            _sourceId = (string)info.GetValue("sourceid", typeof(string));
-            _source_name = (string)info.GetValue("sourcename", typeof(string));
-            _front_boxart_path = (string)info.GetValue("front_boxart_path", typeof(string));
-            _back_boxart_path = (string)info.GetValue("back_boxart_path", typeof(string));
-            _synopsis = (string)info.GetValue("synopsis", typeof(string));
-            _distributor = (string)info.GetValue("distributor", typeof(string));
-            _country_of_origin = (string)info.GetValue("country_of_origin", typeof(string));
-            _official_website_url = (string)info.GetValue("official_website_url", typeof(string));
-            _date_added = (DateTime)info.GetValue("date_added", typeof(DateTime));
-            _importer_source = (string)info.GetValue("importer_source", typeof(string));
-            _runtime = (string)info.GetValue("runtime", typeof(string));
+            _sourceId = info.GetString("sourceid");
+            _source_name = info.GetString("sourcename");
+            _front_boxart_path = info.GetString("front_boxart_path");
+            _back_boxart_path = info.GetString("back_boxart_path");
+            _synopsis = info.GetString("synopsis");
+            _distributor = info.GetString("distributor");
+            _country_of_origin = info.GetString("country_of_origin");
+            _official_website_url = info.GetString("official_website_url");
+            _date_added = info.GetDateTime("date_added");
+            _importer_source = info.GetString("importer_source");
+            _runtime = info.GetString("runtime");
             _mpaa_rating = (Rating)info.GetValue("mpaa_rating", typeof(Rating));
-            _release_date = (DateTime)info.GetValue("release_date", typeof(DateTime));
+            _release_date = info.GetDateTime("release_date");
             _actors = (List<Person>)info.GetValue("actors", typeof(List<Person>));
             _crew = (List<Person>)info.GetValue("crew", typeof(List<Person>));
             _producers = (List<string>)info.GetValue("producers", typeof(List<string>));
@@ -308,6 +329,8 @@ namespace OMLEngine
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             info.AddValue("file_location", _file_location);
+            info.AddValue("video_format", _video_format);
+            info.AddValue("transcode_to_extender", _transcode_to_extender);
             info.AddValue("name", _name);
             info.AddValue("description", _description);
             info.AddValue("itemid", _itemId);
