@@ -1,0 +1,2 @@
+﻿Auto update feature
+Install Transcode360 support
