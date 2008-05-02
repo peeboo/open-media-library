@@ -35,9 +35,9 @@ namespace Library
         {
             get { return _titleObj.Runtime; }
         }
-        public Title.Rating GetMpaaRating
+        public string GetMpaaRating
         {
-            get { return _titleObj.MPAARating; }
+            get { return (string)Enum.GetName(typeof(Rating), _titleObj.MPAARating); }
         }
         public string GetSummary
         {
