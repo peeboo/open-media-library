@@ -86,7 +86,7 @@ namespace OMLEngineTestSuite
             title.Distributor = "Paramount";
             title.FileLocation = "c:\\video.mkv";
             title.Importer_Source = "DVD";
-            title.MPAARating = Title.Rating.R;
+            title.MPAARating = Rating.R;
             title.Official_Website_Url = "www.mymovie.com";
             title.ReleaseDate = new DateTime(2008, 01, 01);
             title.Runtime = "110";
