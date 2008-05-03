@@ -41,6 +41,19 @@ namespace OMLEngine
         #endregion
 
         #region properties
+
+        /// <summary>
+        /// Has this title been watched before or not
+        /// </summary>
+        public int HasWatched
+        {
+            get { return _watched; }
+            set
+            {
+                _watched = value;
+            }
+        }
+
         /// <summary>
         ///  Physical location of media
         /// </summary>
