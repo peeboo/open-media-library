@@ -11,7 +11,7 @@ namespace OMLEngine
         /// Location of Root directory for ALL OML files
         /// </summary>
         public static string RootDirectory =
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\OpenMediaLibrary";
+            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + "\\OpenMediaLibrary";
 
         /// <summary>
         /// Location for cover art and other images to be stored
