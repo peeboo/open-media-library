@@ -7,26 +7,42 @@
 <?define Property_UpgradeCode = "0921ec75-fddc-46f8-bdf4-a5d697351567" ?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="$(var.Property_ProductCode)" UpgradeCode="$(var.Property_UpgradeCode)" Name="!(loc.Property_ProductName)" Language="!(loc.Property_ProductLanguage)" Version="$(var.Property_ProductVersion)" Manufacturer="!(loc.Property_CompanyName)">
+	<Product Id="$(var.Property_ProductCode)"
+           UpgradeCode="$(var.Property_UpgradeCode)"
+           Name="!(loc.Property_ProductName)"
+           Language="!(loc.Property_ProductLanguage)"
+           Version="$(var.Property_ProductVersion)"
+           Manufacturer="!(loc.Property_CompanyName)">
 
-		<Package Description="!(loc.Package_Description)" Comments="!(loc.Package_Comments)" InstallerVersion="200" Compressed="yes" />
+		<Package Description="!(loc.Package_Description)"
+             Comments="!(loc.Package_Comments)"
+             InstallerVersion="200"
+             Compressed="yes" />
 
 		<!-- This information enables Windows Installer major upgrade functionality so users can seamlessly  -->
 		<!-- install a new version of the product and have the old version automatically uninstall behind    -->
 		<!-- the scenes. See the following topic in the MSDN Library for additional information:             -->
 		<!-- http://msdn.microsoft.com/library/default.asp?url=/library/en-us/msi/setup/major_upgrades.asp   -->
 		<Upgrade Id="$(var.Property_UpgradeCode)">
-			<UpgradeVersion Minimum="$(var.Property_ProductVersion)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED" />
-			<UpgradeVersion Minimum="1.0.0.0" IncludeMinimum="yes" Maximum="$(var.Property_ProductVersion)" IncludeMaximum="no" Property="OLDERVERSIONBEINGUPGRADED" />
+			<UpgradeVersion Minimum="$(var.Property_ProductVersion)"
+                      OnlyDetect="yes" 
+                      Property="NEWERVERSIONDETECTED" />
+			<UpgradeVersion Minimum="1.0.0.0" 
+                      IncludeMinimum="yes" 
+                      Maximum="$(var.Property_ProductVersion)" 
+                      IncludeMaximum="no" 
+                      Property="OLDERVERSIONBEINGUPGRADED" />
 		</Upgrade>
 
 		<!-- This custom action prevents users from installing if a newer version of this product is already -->
 		<!-- installed on the system. This is a part of Windows Installer major upgrade functionality.       -->
-		<CustomAction Id="CA_BlockOlderVersionInstall" Error="!(loc.LaunchCondition_LaterVersion)" />
+		<CustomAction Id="CA_BlockOlderVersionInstall" 
+                  Error="!(loc.LaunchCondition_LaterVersion)" />
 
 		<!-- This custom action prevents users from installing this product on unsupported operating system  -->
 		<!-- versions. The conditions that are checked for operating system version are defined below.       -->
-		<CustomAction Id="CA_ErrWrongWindowsVersion" Error="!(loc.LaunchCondition_WrongOSVersion)" />
+		<CustomAction Id="CA_ErrWrongWindowsVersion" 
+                  Error="!(loc.LaunchCondition_WrongOSVersion)" />
 
 		<!-- This condition adds an item to the LaunchCondition table of the MSI to block a user from        -->
 		<!-- installing this product unless they have administrative privileges on the system.               -->
@@ -41,9 +57,7 @@
 				<Directory Id="EhomeFolder" Name="eHome"/>
 			</Directory>
 			<Directory Id="ProgramFilesFolder" Name="Program Files">
-				<Directory Id="OML" Name="OML">
-					<Directory Id="APPROOTDIRECTORY" Name="Library"/>
-				</Directory>
+        <Directory Id="APPROOTDIRECTORY" Name="OpenMediaLibrary" />
 			</Directory>
 		</Directory>
 
@@ -55,29 +69,45 @@
 		<!-- the file it contains will install to.                                                           -->
 		<DirectoryRef Id="APPROOTDIRECTORY">
 			<Component Id="Library.dll" Guid="6bee7ed8-c866-470b-9656-8b0320c923b5" DiskId="1">
-				<File Id="Library.dll" Name="Library.dll" KeyPath="yes" Source="..\bin\$(var.BuildType)\Library.dll" Checksum="yes" Vital="yes" Assembly=".net"/>
+				<File Id="Library.dll"
+              Name="Library.dll"
+              KeyPath="yes"
+              Source="..\bin\$(var.BuildType)\Library.dll"
+              Checksum="yes"
+              Vital="yes"
+              Assembly=".net"/>
 			</Component>
-
-      <Component Id="OMLEngine.dll"
-                 Guid="fa02e91a-33fd-45e9-b189-a2cf15d3ea90"
-                 DiskId="1">
+      <Component Id="OMLEngine.dll" Guid="fa02e91a-33fd-45e9-b189-a2cf15d3ea90" DiskId="1">
         <File Id="OMLEngine.dll"
               Name="OMLEngine.dll"
-              Source="..\OMLEngine\bin\$(var.BuildType)\OMLEngine.dll"
-              Vital="yes"/>
+              KeyPath="yes"
+              Source="..\..\OMLEngine\bin\$(var.BuildType)\OMLEngine.dll"
+              Checksum="yes"
+              Vital="yes"
+              Assembly=".net" />
       </Component>
-      <Component Id="Registration.xml" Guid="68b08279-69c0-42fb-b087-30a20ee12608" DiskId="1">
-				<File Id="Registration.xml" Name="Registration.xml" Source="..\Registration.xml" Checksum="no" />
+			<Component Id="Registration.xml" 
+                 Guid="68b08279-69c0-42fb-b087-30a20ee12608" 
+                 DiskId="1">
+				<File Id="Registration.xml" 
+              Name="Registration.xml" 
+              Source="..\Registration.xml" 
+              Checksum="no" />
 			</Component>
-			<Component Id="Application.png" Guid="34c83bcd-a522-4103-8bac-ad159113d313" DiskId="1">
-				<File Id="Application.png" Name="Application.png" Source="..\Images\Application.png" Checksum="no" />
+			<Component Id="Application.png" 
+                 Guid="34c83bcd-a522-4103-8bac-ad159113d313" 
+                 DiskId="1">
+				<File Id="Application.png" 
+              Name="Application.png" 
+              Source="..\Images\Application.png" 
+              Checksum="no" />
 			</Component>
 		</DirectoryRef>
 
 		<!-- This is a list of features that are installed as a part of this product. In this case, there is -->
 		<!-- only one feature. Each feature contains a list of components that it will install. Features can -->
 		<!-- can be displayed and allow user selection in setup UI if desired.                               -->
-		<Feature Id="APPROOTFEATURE" Title="Library" Level="1">
+		<Feature Id="APPROOTFEATURE" Title="Open Media Library" Level="1">
 			<ComponentRef Id="Library.dll" />
       <ComponentRef Id="OMLEngine.dll" />
 			<ComponentRef Id="Registration.xml" />
@@ -220,6 +250,7 @@
 
 		<!-- In WiX v3.0, this variable is used to override the default license agreement text that is       -->
 		<!-- included in the WixUIExtension with a custom file.                                              -->
-		<WixVariable Id="WixUILicenseRtf" Value="License.txt" />
+		<WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
 	</Product>
 </Wix>
+
