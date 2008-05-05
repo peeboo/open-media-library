@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MyMoviesPlugin</RootNamespace>
     <AssemblyName>MyMoviesPlugin</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -33,6 +33,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -41,6 +44,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
+      <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
+      <Name>OMLEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OMLSDK\OMLSDK.csproj">
       <Project>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</Project>
       <Name>OMLSDK</Name>

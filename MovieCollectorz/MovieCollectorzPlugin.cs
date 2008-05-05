@@ -3,6 +3,7 @@ using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using OMLEngine;
 using OMLSDK;
 using System.IO;
 using System.Diagnostics;
@@ -72,8 +73,8 @@ namespace MovieCollectorz
                             break;
                         case "mpaarating":
                             XmlNode ratingNode = node.SelectSingleNode("displayname");
-                            if (ratingNode != null)
-                                newTitle.MPAARating = ratingNode.InnerText;
+//                            if (ratingNode != null)
+//                                newTitle.MPAARating = ratingNode.InnerText;
                             break;
                         case "runtimeminutes":
                             newTitle.Runtime = node.InnerText;
@@ -84,8 +85,8 @@ namespace MovieCollectorz
                             foreach (XmlNode person in persons)
                             {
                                 XmlNode disNameNode = person.SelectSingleNode("displayname");
-                                if (disNameNode != null)
-                                    newTitle.AddActor(disNameNode.InnerText);
+//                                if (disNameNode != null)
+//                                    newTitle.AddActor(disNameNode.InnerText);
                             }
                             break;
                         case "crew":
