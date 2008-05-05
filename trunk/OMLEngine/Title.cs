@@ -2,7 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 using System.Runtime.Serialization;
+
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Channels.Tcp;
+using Transcode360.Interface;
 
 namespace OMLEngine
 {
@@ -458,6 +464,35 @@ namespace OMLEngine
         public void AddLanguageFormat(string language_format)
         {
             _language_formats.Add(language_format);
+        }
+
+        public bool PlayTranscodedMedia(ref string path_to_buffer)
+        {
+            try
+            {
+                Hashtable properties = new Hashtable();
+                properties.Add("name", "");
+                TcpClientChannel channel = new TcpClientChannel(properties, null);
+                ChannelServices.RegisterChannel(channel);
+
+                ITranscode360 server = (ITranscode360)Activator.GetObject(typeof(ITranscode360),
+                            "tcp://localhost:1401/RemotingServices/Transcode360");
+
+                // call an interface, not interested in the result as long as we don't get a 
+                // socket/remoting exception we're happy
+                if (server.Transcode(FileLocation, out path_to_buffer, DateTime.Now.ToBinary()))
+                {
+                    if (server.IsMediaTranscoding(FileLocation))
+                        return true;
+                }
+
+                ChannelServices.UnregisterChannel(channel);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+            }
+            return false;
         }
     }
 }
