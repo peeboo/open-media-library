@@ -115,11 +115,6 @@ namespace OMLEngine
         public int itemId
         {
             get { return _itemId; }
-            set
-            {
-                if (value >= 0)
-                    _itemId = value;
-            }
         }
         /// <summary>
         /// Unique id from the Source of our title info (MyMovies, DVD Profiler, etc).
@@ -390,6 +385,8 @@ namespace OMLEngine
             _sound_formats = new List<string>();
             _language_formats = new List<string>();
             _genres = new List<Genre>();
+            Random random = new Random(new DateTime().Millisecond);
+            _itemId = random.Next();
         }
 
         /// <summary>

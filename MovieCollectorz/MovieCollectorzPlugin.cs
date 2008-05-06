@@ -42,7 +42,7 @@ namespace MovieCollectorz
                     switch (node.Name)
                     {
                         case "id":
-                            newTitle.itemId = int.Parse(node.InnerText);
+//                            newTitle.itemId = int.Parse(node.InnerText);
                             break;
                         case "coverfront":
                             newTitle.front_boxart_path = node.InnerText;

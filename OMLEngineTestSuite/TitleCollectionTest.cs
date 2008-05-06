@@ -127,7 +127,6 @@ namespace OMLEngineTestSuite
             title1.Runtime = "110";
             title1.front_boxart_path = "c:\\2001ASpaceOdyssey1968237_f.jpg";
             title1.Description = "my desc";
-            title1.itemId = 1;
             title1.MPAARating = Rating.R;
             title1.Synopsis = "this is a cool synopsis";
             target.Add(title1);
