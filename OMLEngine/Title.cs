@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.Runtime.Serialization;
+using System.Reflection;
 
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
-using Transcode360.Interface;
 
 namespace OMLEngine
 {
@@ -468,31 +468,43 @@ namespace OMLEngine
 
         public bool PlayTranscodedMedia(ref string path_to_buffer)
         {
-            try
+            /*
+            Type ITranscode360Type = null;
+            if (Utilities.IsTranscode360LibraryAvailable())
             {
-                Hashtable properties = new Hashtable();
-                properties.Add("name", "");
-                TcpClientChannel channel = new TcpClientChannel(properties, null);
-                ChannelServices.RegisterChannel(channel);
-
-                ITranscode360 server = (ITranscode360)Activator.GetObject(typeof(ITranscode360),
-                            "tcp://localhost:1401/RemotingServices/Transcode360");
-
-                // call an interface, not interested in the result as long as we don't get a 
-                // socket/remoting exception we're happy
-                if (server.Transcode(FileLocation, out path_to_buffer, DateTime.Now.ToBinary()))
+                ITranscode360Type =
+                    Utilities.LoadTranscode360Assembly(
+                        @"c:\\program files\\transcode360\\Transcode360.Interface.dll");
+                if (ITranscode360Type != null)
                 {
-                    if (server.IsMediaTranscoding(FileLocation))
-                        return true;
-                }
+                    try
+                    {
+                        Hashtable properties = new Hashtable();
+                        properties.Add("name", "");
+                        TcpClientChannel channel = new TcpClientChannel(properties, null);
+                        ChannelServices.RegisterChannel(channel);
 
-                ChannelServices.UnregisterChannel(channel);
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex.Message);
+                        object obj = Activator.GetObject(typeof(ITranscode360Type),
+                                                         "tcp://localhost:1401/RemotingServices/Transcode360");
+
+                        // call an interface, not interested in the result as long as we don't get a 
+                        // socket/remoting exception we're happy
+                        if (obj.Transcode(FileLocation, out path_to_buffer, DateTime.Now.ToBinary()))
+                        {
+                            if (obj.IsMediaTranscoding(FileLocation))
+                                return true;
+                        }
+
+                        ChannelServices.UnregisterChannel(channel);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex.Message);
+                    }
+                }
             }
             return false;
+            */
         }
     }
 }

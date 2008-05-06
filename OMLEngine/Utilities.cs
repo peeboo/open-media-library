@@ -258,5 +258,41 @@ namespace OMLEngine
             }
             return false;
         }
+
+        public static bool IsTranscode360LibraryAvailable()
+        {
+            FileInfo fi;
+            try
+            {
+                fi = new FileInfo(@"c:\\program files\\transcode360\\Transcode360.Interface.dll");
+                return true;
+            }
+            catch (Exception)
+            {
+                Trace.WriteLine("Transcode360.Interface.dll not found");
+                return false;
+            }
+        }
+
+        public static Type LoadTranscode360Assembly(string path_to_transcode360_dll)
+        {
+            Assembly asm = null;
+
+            try
+            {
+                asm = Assembly.LoadFile(path_to_transcode360_dll);
+                Type[] types = asm.GetTypes();
+                foreach (Type type in types)
+                {
+                    if (type.Name.CompareTo(@"ITranscode360") == 0)
+                        return type;
+                }
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Unable to load Transcode360: " + e.Message);
+            }
+            return null;
+        }
     }
 }
