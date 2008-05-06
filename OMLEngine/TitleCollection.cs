@@ -37,15 +37,9 @@ namespace OMLEngine
         {
             return new TitleEnum(_titles.ToArray());
         }
-        /*
-        public IEnumerable<Title> GetEnumerator()
+        private void Add(Title title)
         {
-        }
-        */
-        public void Add(Title title)
-        {
-            if (! find_for_id(title.itemId))
-                _titles.Add(title);
+            _titles.Add(title);
         }
         public void Clear()
         {
@@ -53,15 +47,11 @@ namespace OMLEngine
         }
         public bool Contains(Title title)
         {
-            return _titles.Contains(title);
+            return find_for_id(title.itemId);
         }
-        public bool Remove(Title title)
+        private bool Remove(Title title)
         {
-            bool result = _titles.Remove(title);
-            if (_titles.Count == 0)
-                _NeedSetup = true;
-
-            return result;
+            return _titles.Remove(title);
         }
         public void CopyTo(Array array, int index)
         {
@@ -84,6 +74,41 @@ namespace OMLEngine
         }
         #endregion
 
+        /// <summary>
+        /// Adds a new Title to the Collection
+        /// </summary>
+        /// <param name="title">A new Title Object</param>
+        /// <returns>TITLE_COLLECTION_STATUS (usually TC_OK)</returns>
+        public TITLE_COLLECTION_STATUS AddTitle(Title title)
+        {
+            if (! find_for_id(title.itemId))
+            {
+                _titles.Add(title);
+                return TITLE_COLLECTION_STATUS.TC_OK;
+            }
+            return TITLE_COLLECTION_STATUS.TC_TITLE_ALREADY_EXISTS;
+        }
+
+        /// <summary>
+        /// Removes an existing Title from the Collection
+        /// </summary>
+        /// <param name="title">A Title Object</param>
+        /// <returns>TITLE_COLLECTION_STATUS (usually TC_OK)</returns>
+        public TITLE_COLLECTION_STATUS RemoveTitle(Title title)
+        {
+            if (find_for_id(title.itemId))
+            {
+                _titles.Remove(title);
+                return TITLE_COLLECTION_STATUS.TC_OK;
+            }
+            return TITLE_COLLECTION_STATUS.TC_TITLE_DOES_NOT_EXIST;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool find_for_id(int id)
         {
             foreach (Title title in _titles)
