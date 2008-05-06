@@ -89,6 +89,17 @@ namespace OMLEngine
         ASX, // wtf is this?
         WPL // playlist file?
     };
+
+    /// <summary>
+    /// Enumerator for various TitleCollection errors
+    /// </summary>
+    public enum TITLE_COLLECTION_STATUS
+    {
+        TC_OK,
+        TC_TITLE_ALREADY_EXISTS,
+        TC_TITLE_NAME_FORMAT_RELEASE_ALREADY_EXISTS,
+        TC_TITLE_DOES_NOT_EXIST
+    };
     #endregion
 
     public static class Utilities

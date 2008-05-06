@@ -157,15 +157,15 @@ namespace OMLEngineTestSuite
             TitleCollection target = new TitleCollection();
             Title title = null;
             bool expected = false;
-            bool actual;
-            actual = target.Remove(title);
-            Assert.AreEqual(expected, actual);
+            TITLE_COLLECTION_STATUS actual;
+            actual = target.RemoveTitle(title);
+            Assert.AreEqual(TITLE_COLLECTION_STATUS.TC_OK, actual);
 
             Title myTitle = new Title();
             target.Add(myTitle);
             Assert.AreEqual(target.Count, 1);
-            actual = target.Remove(myTitle);
-            Assert.AreEqual(true, actual);
+            actual = target.RemoveTitle(myTitle);
+            Assert.AreEqual(TITLE_COLLECTION_STATUS.TC_OK, actual);
             Assert.AreEqual(target.Count, 0);
         }
         /// <summary>
@@ -193,7 +193,7 @@ namespace OMLEngineTestSuite
         {
             TitleCollection target = new TitleCollection();
             Title title = new Title();
-            target.Add(title);
+            target.AddTitle(title);
             Assert.AreEqual(true, target.Contains(title));
         }
     }
