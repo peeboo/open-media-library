@@ -75,7 +75,6 @@ namespace OMLEngineTestSuite
         public void TestBaseCase()
         {
             Title title = new Title();
-            title.itemId = 1;
             title.sourceId = "001";
             title.Name = "My Title";
             title.back_boxart_path = "c:\\img.jpg";
@@ -92,7 +91,6 @@ namespace OMLEngineTestSuite
             title.Runtime = "110";
             title.Synopsis = "my synopsis is here";
 
-            Assert.AreEqual(1, title.itemId);
             Assert.AreEqual("My Title", title.Name);
             Assert.AreEqual("c:\\img.jpg", title.back_boxart_path);
             Assert.AreEqual("c:\\img.jpg", title.front_boxart_path);

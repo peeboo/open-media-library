@@ -44,11 +44,8 @@ namespace OMLEngine
         */
         public void Add(Title title)
         {
-            if (!_titles.Contains(title))
+            if (! find_for_id(title.itemId))
                 _titles.Add(title);
-
-            if (_NeedSetup == true)
-                _NeedSetup = false;
         }
         public void Clear()
         {
@@ -87,6 +84,15 @@ namespace OMLEngine
         }
         #endregion
 
+        public bool find_for_id(int id)
+        {
+            foreach (Title title in _titles)
+            {
+                if (title.itemId == id)
+                    return true;
+            }
+            return false;
+        }
         /// <summary>
         /// Get/Set the Source Database type to use
         /// </summary>
