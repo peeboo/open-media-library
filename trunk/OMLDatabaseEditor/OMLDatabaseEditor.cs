@@ -115,7 +115,7 @@ namespace OMLDatabaseEditor
             current_title.Name = tbTitle.Text;
             current_title.Description = tbDescription.Text;
             current_title.ReleaseDate = dtpReleaseDate.Value;
-            current_title.Runtime = tbRunTime.Text;
+            current_title.Runtime = Int32.Parse(tbRunTime.Text);
             //current_title.MPAARating = cbRating.Text;
             current_title.Distributor = tbDistributor.Text;
             current_title.Country_Of_Origin = tbCountryOfOrigin.Text;
@@ -133,7 +133,7 @@ namespace OMLDatabaseEditor
             tbDescription.Text = current_title.Description;
             if (current_title.ReleaseDate.Year > 0001)
                 dtpReleaseDate.Value = current_title.ReleaseDate;
-            tbRunTime.Text = current_title.Runtime;
+            tbRunTime.Text = current_title.Runtime.ToString();
             if (current_title.MPAARating != null)
                 cbRating.SelectedIndex = (int)current_title.MPAARating;
             tbDistributor.Text = current_title.Distributor;

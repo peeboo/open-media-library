@@ -126,7 +126,7 @@ namespace MyMoviesPlugin
                 case "ParentalRating":
                     break;
                 case "RunningTime":
-                    newTitle.Runtime = node.InnerText;
+                    newTitle.Runtime = Int32.Parse(node.InnerText);
                     break;
                 case "Persons":
                     break;

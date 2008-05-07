@@ -54,6 +54,8 @@
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="library.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -68,7 +70,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>"$(DevEnvDir)..\..\..\Microsoft SDKs\Windows\v6.1\Bin\GacUtil.exe" /i "$(TargetPath)" /f</PostBuildEvent>
   </PropertyGroup>
 </Project>
