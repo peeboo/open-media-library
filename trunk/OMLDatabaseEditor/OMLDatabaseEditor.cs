@@ -24,9 +24,20 @@ namespace OMLDatabaseEditor
             _titleCollection = new TitleCollection();
             _titleCollection.loadTitleCollection();
             SetupTitleList();
+            SetupRating();
             current_title = new Title();
             current_title_has_changed = false;
         }
+
+        private void SetupRating()
+        {
+            string[] rating_names = Enum.GetNames(typeof(Rating));
+            foreach (string rating in rating_names)
+            {
+                cbRating.Items.Add(rating);
+            }
+        }
+
         private void SetupTitleList()
         {
             dt = GetTitlesDataTable();
@@ -120,9 +131,11 @@ namespace OMLDatabaseEditor
             current_title = t;
             tbTitle.Text = current_title.Name;
             tbDescription.Text = current_title.Description;
-            dtpReleaseDate.Value = current_title.ReleaseDate;
+            if (current_title.ReleaseDate.Year > 0001)
+                dtpReleaseDate.Value = current_title.ReleaseDate;
             tbRunTime.Text = current_title.Runtime;
-            //cbRating.Text = current_title.MPAARating;
+            if (current_title.MPAARating != null)
+                cbRating.SelectedIndex = (int)current_title.MPAARating;
             tbDistributor.Text = current_title.Distributor;
             tbCountryOfOrigin.Text = current_title.Country_Of_Origin;
             tbWebsite.Text = current_title.Official_Website_Url;
@@ -141,11 +154,19 @@ namespace OMLDatabaseEditor
                 {
                 }
             }
+            else
+            {
+                pbFrontCover.Image = pbFrontCover.InitialImage;
+            }
 
             if (current_title.back_boxart_path != null && current_title.back_boxart_path.Length > 0)
             {
                 back_cover = new Bitmap(current_title.back_boxart_path);
                 pbBackCover.Image = (Image)back_cover;
+            }
+            else
+            {
+                pbBackCover.Image = pbBackCover.InitialImage;
             }
         }
 
