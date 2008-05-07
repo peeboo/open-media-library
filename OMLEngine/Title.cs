@@ -27,7 +27,7 @@ namespace OMLEngine
         private string _source_name;
         private string _front_boxart_path;
         private string _back_boxart_path;
-        private string _runtime;
+        private int _runtime;
         private Rating _mpaa_rating;
         private string _synopsis;
         private string _distributor;
@@ -78,14 +78,6 @@ namespace OMLEngine
             set { _video_format = value; }
         }
 
-        /// <summary>
-        /// Does title need to be transcoded to extender devices
-        /// </summary>
-        public bool TranscodeToExtender
-        {
-            get { return _transcode_to_extender; }
-            set { _transcode_to_extender = value; }
-        }
         /// <summary>
         /// Display name of movie
         /// </summary>
@@ -159,14 +151,10 @@ namespace OMLEngine
         /// <summary>
         /// Runtime in minutes of the title
         /// </summary>
-        public string Runtime
+        public int Runtime
         {
             get { return _runtime; }
-            set
-            {
-                if (value != null)
-                    _runtime = value;
-            }
+            set { _runtime = value; }
         }
         /// <summary>
         /// Rating of the film acording to the MPAA
@@ -322,7 +310,7 @@ namespace OMLEngine
             _official_website_url = info.GetString("official_website_url");
             _date_added = info.GetDateTime("date_added");
             _importer_source = info.GetString("importer_source");
-            _runtime = info.GetString("runtime");
+            _runtime = (int)info.GetValue("runtime", typeof(int));
             _mpaa_rating = (Rating)info.GetValue("mpaa_rating", typeof(Rating));
             _release_date = info.GetDateTime("release_date");
             _actors = (List<Person>)info.GetValue("actors", typeof(List<Person>));
@@ -506,6 +494,41 @@ namespace OMLEngine
             }
             return false;
             */
+        }
+
+        public bool NeedToMountBeforePlaying()
+        {
+            switch (this.VideoFormat)
+            {
+                case VideoFormat.BIN:
+                    return true;
+                case VideoFormat.CUE:
+                    return true;
+                case VideoFormat.IMG:
+                    return true;
+                case VideoFormat.ISO:
+                    return true;
+                case VideoFormat.MDF:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        public bool NeedToTranscodeToExtenders()
+        {
+            switch (this.VideoFormat)
+            {
+                case VideoFormat.DVRMS:
+                    return false;
+                case VideoFormat.MPEG:
+                    return false;
+                case VideoFormat.MPG:
+                    return false;
+                case VideoFormat.WMV:
+                    return false;
+                default:
+                    return true;
+            }
         }
     }
 }

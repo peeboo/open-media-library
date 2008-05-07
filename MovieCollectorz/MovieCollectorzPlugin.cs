@@ -77,7 +77,7 @@ namespace MovieCollectorz
 //                                newTitle.MPAARating = ratingNode.InnerText;
                             break;
                         case "runtimeminutes":
-                            newTitle.Runtime = node.InnerText;
+                            newTitle.Runtime = Int32.Parse(node.InnerText);
                             break;
                         case "cast":
                             List<string> actors = new List<string>();

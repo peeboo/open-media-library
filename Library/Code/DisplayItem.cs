@@ -36,7 +36,7 @@ namespace Library
         }
         public string GetRuntime
         {
-            get { return _titleObj.Runtime; }
+            get { return _titleObj.Runtime.ToString(); }
         }
         public string GetMpaaRating
         {
@@ -85,7 +85,7 @@ namespace Library
         public void DynamicPlayMedia()
         {
             string path_to_media = _titleObj.FileLocation;
-            if (Application.Current.IsExtender && _titleObj.TranscodeToExtender)
+            if (Application.Current.IsExtender && _titleObj.NeedToTranscodeToExtenders())
             {
                 string new_path = string.Empty;
                 if (_titleObj.PlayTranscodedMedia(ref new_path))
