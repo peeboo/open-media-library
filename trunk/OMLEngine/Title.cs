@@ -333,6 +333,9 @@ namespace OMLEngine
             _sound_formats = (List<string>)info.GetValue("sound_formats", typeof(List<string>));
             _language_formats = (List<string>)info.GetValue("language_formats", typeof(List<string>));
             _genres = (List<Genre>)info.GetValue("genres", typeof(List<Genre>));
+
+            if (_itemId == 0)
+                _itemId = Utilities.NewRandomNumber();
         }
 
         /// <summary>
@@ -386,7 +389,7 @@ namespace OMLEngine
             _language_formats = new List<string>();
             _genres = new List<Genre>();
             Random random = new Random(new DateTime().Millisecond);
-            _itemId = random.Next();
+            _itemId = Utilities.NewRandomNumber();
         }
 
         /// <summary>

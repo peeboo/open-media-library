@@ -104,6 +104,8 @@ namespace OMLEngine
 
     public static class Utilities
     {
+
+        private static Random random = new Random(new DateTime().Millisecond);
         /// <summary>
         /// Static list of methods that ALL plugins must define
         /// </summary>
@@ -304,6 +306,11 @@ namespace OMLEngine
                 Trace.WriteLine("Unable to load Transcode360: " + e.Message);
             }
             return null;
+        }
+
+        public static int NewRandomNumber()
+        {
+            return random.Next();
         }
     }
 }
