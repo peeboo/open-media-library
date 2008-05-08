@@ -10,25 +10,14 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace OMLEngine
 {
     [Serializable()]
-    public class TitleCollection : ArrayList, ISerializable
+    public class TitleCollection : ISerializable
     {
         private SourceDatabase _source_database_to_use;
         private List<Title> _titles;
-        private bool _NeedSetup = false;
         private bool _IsReadOnly = false;
         private string _database_filename;
 
         #region ICollection properties and methods
-        public bool IsReadOnly
-        {
-            get { return _IsReadOnly; }
-            set { _IsReadOnly = value; }
-        }
-        public bool NeedSetup
-        {
-            get { return _NeedSetup; }
-            set { _NeedSetup = value; }
-        }
         public int Count
         {
             get { return _titles.Count; }
@@ -139,8 +128,6 @@ namespace OMLEngine
             _source_database_to_use = SourceDatabase.OML;
             _database_filename = database_filename;
             _titles = new List<Title>();
-            if (_titles.Count == 0)
-                _NeedSetup = true;
         }
         /// <summary>
         /// Generic constructor
@@ -152,8 +139,6 @@ namespace OMLEngine
             _source_database_to_use = SourceDatabase.OML;
             _database_filename = FileSystemWalker.RootDirectory + "\\oml.dat";
             _titles = new List<Title>();
-            if (_titles.Count == 0)
-                _NeedSetup = true;
         }
         /// <summary>
         /// Default destructor
