@@ -162,11 +162,7 @@ namespace OMLEngine
         public Rating MPAARating
         {
             get { return _mpaa_rating; }
-            set
-            {
-                if (value != null)
-                    _mpaa_rating = value;
-            }
+            set { _mpaa_rating = value; }
         }
         /// <summary>
         /// Long description of title

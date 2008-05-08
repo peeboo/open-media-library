@@ -75,7 +75,7 @@ namespace OMLDatabaseEditor
         }
         private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
         {
-            _titleCollection.Remove(current_title);
+            _titleCollection.RemoveTitle(current_title);
         }
         private void dgv_title_list_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -133,9 +133,9 @@ namespace OMLDatabaseEditor
             tbDescription.Text = current_title.Description;
             if (current_title.ReleaseDate.Year > 0001)
                 dtpReleaseDate.Value = current_title.ReleaseDate;
+
             tbRunTime.Text = current_title.Runtime.ToString();
-            if (current_title.MPAARating != null)
-                cbRating.SelectedIndex = (int)current_title.MPAARating;
+            cbRating.SelectedIndex = (int)current_title.MPAARating;
             tbDistributor.Text = current_title.Distributor;
             tbCountryOfOrigin.Text = current_title.Country_Of_Origin;
             tbWebsite.Text = current_title.Official_Website_Url;
@@ -150,7 +150,7 @@ namespace OMLDatabaseEditor
                     front_cover = new Bitmap(current_title.front_boxart_path);
                     pbFrontCover.Image = (Image)front_cover;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                 }
             }

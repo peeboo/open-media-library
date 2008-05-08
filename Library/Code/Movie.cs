@@ -25,7 +25,7 @@ namespace Library
             {
                 Title t = new Title();
                 t.Name = "No Titles in Database";
-                titleCollection.Add(t);
+                titleCollection.AddTitle(t);
             }
             initialize();
         }

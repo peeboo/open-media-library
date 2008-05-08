@@ -199,10 +199,10 @@
 									<!-- the content should be placed within the space if it  -->
 									<!-- is smaller than the reference size.                  -->
 									<GridLayout Repeat="WhenTooBig"
-                              Rows="4"
+                              Rows="3"
                               Orientation="Vertical"
                               AllowWrap="true"
-                              ReferenceSize="112, 160"
+                              ReferenceSize="150, 214"
                               Spacing="1,0"
                               MajorAlignment="Fill"
                               MinorAlignment="Center"

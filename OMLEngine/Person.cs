@@ -45,11 +45,7 @@ namespace OMLEngine
         public Sex sex
         {
             get { return _sex; }
-            set
-            {
-                if (value != null)
-                    _sex = value;
-            }
+            set { _sex = value; }
         }
 
         /// <summary>

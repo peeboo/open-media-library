@@ -46,13 +46,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestTitleCollection.cs" />
     <Compile Include="TitleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MyMoviesPlugin\MyMoviesPlugin.csproj">
+      <Project>{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}</Project>
+      <Name>MyMoviesPlugin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
       <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
       <Name>OMLEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OMLSDK\OMLSDK.csproj">
+      <Project>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</Project>
+      <Name>OMLSDK</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
