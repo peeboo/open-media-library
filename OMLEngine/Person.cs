@@ -8,8 +8,7 @@ namespace OMLEngine
     [Serializable()]
     public class Person : ISerializable
     {
-        private string _first_name;
-        private string _last_name;
+        private string _full_name;
         private Sex _sex;
         private DateTime _birth_date;
         private string _photo_path;
@@ -17,25 +16,13 @@ namespace OMLEngine
         /// <summary>
         /// First name of person
         /// </summary>
-        public string first_name
+        public string full_name
         {
-            get { return _first_name; }
+            get { return _full_name; }
             set
             {
                 if (value != null)
-                    _first_name = value;
-            }
-        }
-
-        /// <summary>
-        /// Last name of person
-        /// </summary>
-        public string last_name
-        {
-            get { return _last_name; }
-            set
-            {
-                _last_name = value;
+                    _full_name = value;
             }
         }
 
@@ -84,24 +71,21 @@ namespace OMLEngine
         /// </summary>
         /// <param name="first_name">string name</param>
         /// <param name="last_name">string name</param>
-        public Person(string first_name, string last_name)
+        public Person(string full_name)
         {
-            _first_name = first_name;
-            _last_name = last_name;
+            _full_name = full_name;
         }
 
         public Person(SerializationInfo info, StreamingContext ctxt)
         {
-            _first_name = info.GetString("first_name");
-            _last_name = info.GetString("last_name");
+            _full_name = info.GetString("full_name");
             _sex = (Sex)info.GetValue("sex", typeof(Sex));
             _birth_date = info.GetDateTime("birth_date");
             _photo_path = info.GetString("photo_path");
         }
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
-            info.AddValue("first_name", _first_name);
-            info.AddValue("last_name", _last_name);
+            info.AddValue("full_name", _full_name);
             info.AddValue("sex", _sex);
             info.AddValue("birth_date", _birth_date);
             info.AddValue("photo_path", _photo_path);

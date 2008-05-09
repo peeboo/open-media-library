@@ -70,15 +70,39 @@ namespace Library
         }
         public IList GetActors
         {
-            get { return _titleObj.Actors; }
+            get
+            {
+                List<string> actor_names = new List<string>();
+                foreach (Person p in _titleObj.Actors)
+                {
+                    actor_names.Add(p.full_name);
+                }
+                return actor_names;
+            }
         }
         public IList GetCrew
         {
-            get { return _titleObj.Crew; }
+            get
+            {
+                List<string> crew_names = new List<string>();
+                foreach (Person p in _titleObj.Crew)
+                {
+                    crew_names.Add(p.full_name);
+                }
+                return crew_names;
+            }
         }
         public IList GetDirectors
         {
-            get { return _titleObj.Directors; }
+            get
+            {
+                List<string> director_names = new List<string>();
+                foreach (Person p in _titleObj.Directors)
+                {
+                    director_names.Add(p.full_name);
+                }
+                return director_names;
+            }
         }
         public IList GetProducers
         {

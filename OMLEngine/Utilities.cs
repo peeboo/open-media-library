@@ -14,13 +14,15 @@ namespace OMLEngine
     /// </summary>
     public enum Rating
     {
+        Unknown,
         G,
         PG,
         PG13,
         NC17,
         R,
         X,
-        XXX
+        XXX,
+        Unrated
     };
 
     /// <summary>
