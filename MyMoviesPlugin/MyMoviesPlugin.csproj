@@ -12,6 +12,8 @@
     <AssemblyName>MyMoviesPlugin</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>library.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,6 +54,9 @@
       <Project>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</Project>
       <Name>OMLSDK</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="library.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
