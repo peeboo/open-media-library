@@ -87,7 +87,7 @@
               Vital="yes"
               Assembly=".net" />
       </Component>
-      <Component Id="OMLSDK.dll" Guid="" DiskId="1">
+      <Component Id="OMLSDK.dll" Guid="26097a63-fc55-41d2-a8d5-432809de99fc" DiskId="1">
         <File Id="OMLSDK.dll"
               Name="OMLSDK.dll"
               KeyPath="yes"
@@ -96,7 +96,7 @@
               Vital="yes"
               Assembly=".net" />
       </Component>
-      <Component Id="MyMoviesPlugin.dll" Guid="" DiskId="1">
+      <Component Id="MyMoviesPlugin.dll" Guid="4102ad78-c010-4367-8454-7317713ccfe6" DiskId="1">
         <File Id="MyMoviesPlugin.dll"
               Name="MyMoviesPlugin.dll"
               KeyPath="yes"

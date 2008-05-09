@@ -12,7 +12,7 @@ using System.Xml.XPath;
 
 namespace MovieCollectorz
 {
-    public class MovieCollectorzPlugin : OMLPlugin
+    public class MovieCollectorzPlugin : OMLPlugin, IOMLPlugin
     {
         TextReader tr = null;
 
@@ -118,7 +118,7 @@ namespace MovieCollectorz
 
             return true;
         }
-        public string GetName()
+        public override string GetName()
         {
             return "MovieCollectorzPlugin";
         }

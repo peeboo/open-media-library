@@ -13,7 +13,7 @@ namespace OMLTestSuite
             MyMoviesImporter importer = new MyMoviesImporter();
             importer.Load("C:\\mymovies.xml");
 
-            foreach (Title t in importer.GetTitles)
+            foreach (Title t in importer.GetTitles())
             {
                 if (t.FileLocation != null)
                     tc.AddTitle(t);

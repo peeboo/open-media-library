@@ -5,35 +5,35 @@ using OMLEngine;
 
 namespace OMLSDK
 {
-    public class OMLPlugin
+    public class OMLPlugin :IOMLPlugin
     {
         List<Title> titles;
         private int totalRowsAdded = 0;
-        private string _description = @"";
-        private string _author = @"";
-        private string _name = "OMLPlugin";
 
-        public int GetTotalTitlesAdded
+        public virtual string GetName()
         {
-            get { return totalRowsAdded; }
+            throw new Exception("You must implement this method in your class.");
         }
-        public List<Title> GetTitles
+        public virtual string GetDescription()
         {
-            get { return titles; }
+            throw new Exception("You must implement this method in your class.");
         }
-        public string GetName
+        public virtual string GetAuthor()
         {
-            get { return _name; }
+            throw new Exception("You must implement this method in your class.");
         }
-        public string GetDescription
+        public virtual bool Load(string filename)
         {
-            get { return _description; }
+            throw new Exception("You must implement this method in your class.");
         }
-        public string GetAuthor
+        public int GetTotalTitlesAdded()
         {
-            get { return _author; }
+            return totalRowsAdded;
         }
-
+        public List<Title> GetTitles()
+        {
+            return titles;
+        }
         public OMLPlugin()
         {
             titles = new List<Title>();
@@ -50,6 +50,11 @@ namespace OMLSDK
         public bool ValidateTitle(Title title_to_validate)
         {
             return true;
+
+            if (title_to_validate.FileLocation != null && title_to_validate.FileLocation.Length > 0)
+                return true;
+
+            return false;
         }
         public bool IsSupportedFormat(string file_extension)
         {

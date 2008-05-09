@@ -13,22 +13,21 @@ namespace OMLEngine
     public class TitleCollection : ISerializable
     {
         private SourceDatabase _source_database_to_use;
-        private List<Title> _titles;
-        private bool _IsReadOnly = false;
+        private SortedArrayList _titles;
         private string _database_filename;
 
-        #region ICollection properties and methods
+        #region SortedArrayList properties and methods
         public int Count
         {
             get { return _titles.Count; }
         }
         public IEnumerator GetEnumerator()
         {
-            return new TitleEnum(_titles.ToArray());
+            return _titles.GetEnumerator();
         }
         private void Add(Title title)
         {
-            _titles.Add(title);
+            _titles.AddSorted(title);
         }
         public void Clear()
         {
@@ -38,28 +37,9 @@ namespace OMLEngine
         {
             return find_for_id(title.itemId);
         }
-        private bool Remove(Title title)
+        private void Remove(Title title)
         {
-            return _titles.Remove(title);
-        }
-        public void CopyTo(Array array, int index)
-        {
-            return;
-            /*
-            int i = index;
-            foreach (Title title in _titles)
-            {
-                array[i] = title;
-                i++;
-            }
-            */
-        }
-        public bool IsSynchronized
-        {
-            get { return false; }
-        }
-        public Object SyncRoot {
-            get { return this; }
+            _titles.Remove(title);
         }
         #endregion
 
@@ -127,7 +107,7 @@ namespace OMLEngine
             Trace.WriteLine("TitleCollection:TitleCollection(database_filename)");
             _source_database_to_use = SourceDatabase.OML;
             _database_filename = database_filename;
-            _titles = new List<Title>();
+            _titles = new SortedArrayList();
         }
         /// <summary>
         /// Generic constructor
@@ -138,7 +118,7 @@ namespace OMLEngine
             Trace.WriteLine("TitleCollection:TitleCollection()");
             _source_database_to_use = SourceDatabase.OML;
             _database_filename = FileSystemWalker.RootDirectory + "\\oml.dat";
-            _titles = new List<Title>();
+            _titles = new SortedArrayList();
         }
         /// <summary>
         /// Default destructor
@@ -155,6 +135,10 @@ namespace OMLEngine
         public bool saveTitleCollection()
         {
             Trace.WriteLine("saveTitleCollection()");
+
+            IComparer myComparer = new TitleComparer();
+            _titles.Sort(myComparer);
+
             switch (_source_database_to_use)
             {
                 case SourceDatabase.OML:
@@ -357,7 +341,7 @@ namespace OMLEngine
         public TitleCollection(SerializationInfo info, StreamingContext ctxt)
         {
             Trace.WriteLine("TitleCollection:TitleCollection (Serialized)");
-            _titles = (List<Title>)info.GetValue("titles", typeof(List<Title>));
+            _titles = (SortedArrayList)info.GetValue("titles", typeof(SortedArrayList));
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
@@ -401,6 +385,14 @@ namespace OMLEngine
                     throw new InvalidOperationException();
                 }
             }
+        }
+    }
+
+    public class TitleComparer : IComparer
+    {
+        int IComparer.Compare(Object a, Object b)
+        {
+            return ((new CaseInsensitiveComparer()).Compare(((Title)a).Name, ((Title)b).Name));
         }
     }
 }
