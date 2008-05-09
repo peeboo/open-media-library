@@ -104,7 +104,6 @@ namespace OMLEngine
 
     public static class Utilities
     {
-
         private static Random random = new Random(new DateTime().Millisecond);
         /// <summary>
         /// Static list of methods that ALL plugins must define
@@ -175,6 +174,11 @@ namespace OMLEngine
             return plugins;
         }
 
+        public static string FileSearchPattern()
+        {
+            string[] extension_names = Enum.GetNames(typeof(VideoFormat));
+            return string.Join(",", extension_names);
+        }
         /// <summary>
         /// Loads all valid plugins into memory
         /// </summary>
