@@ -132,6 +132,30 @@ namespace MyMoviesPlugin
                     break;
                 case "Studios":
                     break;
+                case "Discs":
+                    XmlNodeList discs = node.SelectNodes("Disc");
+                    foreach (XmlNode disc in discs)
+                    {
+                        XmlNode sideA = disc.SelectSingleNode("LocationSideA");
+                        if (sideA != null)
+                        {
+                            string directory = sideA.InnerText;
+                            DirectoryInfo di = new DirectoryInfo(directory);
+                            if (di != null)
+                            {
+                                FileInfo[] fileInfos =
+                                    di.GetFiles(Utilities.FileSearchPattern(), SearchOption.TopDirectoryOnly);
+                                foreach (FileInfo fi in fileInfos)
+                                {
+                                    string ext = fi.Extension;
+                                    newTitle.VideoFormat =
+                                        (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                                    newTitle.FileLocation = fi.FullName;
+                                }
+                            }
+                        }
+                    }
+                    break;
             }
         }
     }
