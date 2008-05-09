@@ -74,7 +74,11 @@ namespace Library
         }
         public DetailsPage CreateDetailsPage(DisplayItem item)
         {
+            Trace.WriteLine("Creating a detailspage");
             DetailsPage page = new DetailsPage();
+            Trace.WriteLine("adding the item");
+            page.Item = item;
+            Trace.WriteLine("done adding item");
             page.Title = item.GetTitle;
             page.Summary = item.GetSummary;
             page.Background = item.GetImage;
@@ -85,8 +89,10 @@ namespace Library
             page.Directors = item.GetDirectors;
             page.Producers = item.GetProducers;
             page.Writers = item.GetWriters;
-            page.LocalMedia = new System.IO.FileInfo("C:\\users\\dxs\\documents\\Downloads\\Good Eats - Season 6\\Good Eats - S06E16 - Beet It.avi");
-
+            Trace.WriteLine("adding the media");
+            Trace.WriteLine("The media is: " + item.GetMedia);
+            page.LocalMedia = new System.IO.FileInfo(item.GetMedia);
+            Trace.WriteLine("done adding media");
             return page;
         }
         public static Image LoadImage(string imageName)

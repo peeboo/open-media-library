@@ -140,17 +140,22 @@ namespace MyMoviesPlugin
                         if (sideA != null)
                         {
                             string directory = sideA.InnerText;
-                            DirectoryInfo di = new DirectoryInfo(directory);
-                            if (di != null)
+                            if (directory.Length > 0)
                             {
-                                FileInfo[] fileInfos =
-                                    di.GetFiles(Utilities.FileSearchPattern(), SearchOption.TopDirectoryOnly);
-                                foreach (FileInfo fi in fileInfos)
+                                DirectoryInfo di = new DirectoryInfo(directory);
+                                if (di != null)
                                 {
-                                    string ext = fi.Extension;
-                                    newTitle.VideoFormat =
-                                        (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                                    newTitle.FileLocation = fi.FullName;
+                                    FileInfo[] fileInfos = di.GetFiles("*.avi");
+                                    foreach (FileInfo fi in fileInfos)
+                                    {
+                                        string ext = fi.Extension.Substring(1);
+                                        if (IsSupportedFormat(ext))
+                                        {
+                                            newTitle.VideoFormat =
+                                                (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                                            newTitle.FileLocation = fi.FullName;
+                                        }
+                                    }
                                 }
                             }
                         }

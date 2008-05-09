@@ -201,9 +201,9 @@
 			<Changed Source="[Command.Invoked]">
 				<Actions>
 					<Invoke Target="[AddInHost.MediaCenterEnvironment.PlayMedia]"
-								mediaType="Video"
-								media="[DetailsPage.getUrl]"
-								addToQueue="false"/>
+								  mediaType="Video"
+								  media="[DetailsPage.getUrl]"
+								  addToQueue="false"/>
 
 					<Invoke Target="[AddInHost.MediaCenterEnvironment.MediaExperience.GoToFullScreen]"/>
 				</Actions>

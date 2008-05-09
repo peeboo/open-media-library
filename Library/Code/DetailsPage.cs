@@ -16,7 +16,13 @@ namespace Library
     /// </summary>
     public class DetailsPage : ModelItem
     {
+        private DisplayItem _item = null;
 
+        public DisplayItem Item
+        {
+            get { return _item; }
+            set { _item = value; }
+        }
         /// <summary>The URI of the media at its locally cached location.</summary>
         private FileInfo _localMedia = null;
         /// <summary>Gets or sets the URI of the media at its locally cached location.</summary>
@@ -32,7 +38,7 @@ namespace Library
         {
             get
             {
-                return _localMedia.FullName;
+                return _item.DynamicPlayMedia();
             }
         }
 
