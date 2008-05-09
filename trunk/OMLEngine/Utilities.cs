@@ -176,8 +176,8 @@ namespace OMLEngine
 
         public static string FileSearchPattern()
         {
-            string[] extension_names = Enum.GetNames(typeof(VideoFormat));
-            return string.Join(",", extension_names);
+            return "*.asf,*.avc,*.avi,*.bin,*.cue,*.dvr-ms,*.h264,*.img,*.iso,*.mdf,*.mkv" +
+                   "*.mov,*.mpg,*.mpeg,*.mp4,*.ogm,*.ts,*.wmv,*.vob,video_ts";
         }
         /// <summary>
         /// Loads all valid plugins into memory

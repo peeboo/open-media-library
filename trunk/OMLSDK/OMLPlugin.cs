@@ -51,5 +51,15 @@ namespace OMLSDK
         {
             return true;
         }
+        public bool IsSupportedFormat(string file_extension)
+        {
+            string[] formats = Enum.GetNames(typeof(VideoFormat));
+            foreach (string format in formats)
+            {
+                if (file_extension.ToUpper().CompareTo(format.ToUpper()) == 0)
+                    return true;
+            }
+            return false;
+        }
     }
 }
