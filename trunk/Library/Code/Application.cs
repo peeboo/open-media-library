@@ -7,42 +7,36 @@ using System.Diagnostics;
 
 namespace Library
 {
-    public class Application : ModelItem
+    /// <summary>
+    /// Starting point for the OML
+    /// </summary>
+    public class OMLApplication : ModelItem
     {
-        private static Application singleApplicationInstance;
-        private AddInHost host;
-        private HistoryOrientedPageSession session;
-        private static Movie movie;
-        public bool IsExtender;
-
-        public Application()
+        public OMLApplication()
             : this(null, null)
         {
         }
 
-        public Application(HistoryOrientedPageSession session, AddInHost host)
+        public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
         {
-            this.session = session;
-            this.IsExtender = host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
-            this.host = host;
-            singleApplicationInstance = this;
-            movie = new Movie();
+            this._session = session;
+            this._isExtender = host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
+            this._host = host;
+            _singleApplicationInstance = this;
+            _movieGallery = new MovieGallery();
         }
 
-        public static Application Current
+        public static OMLApplication Current
         {
-            get
-            {
-                return singleApplicationInstance;
-            }
+            get { return _singleApplicationInstance; }
         }
 
         public MediaCenterEnvironment MediaCenterEnvironment
         {
             get
             {
-                if (host == null) return null;
-                return host.MediaCenterEnvironment;
+                if (_host == null) return null;
+                return _host.MediaCenterEnvironment;
             }
         }
 
@@ -50,11 +44,11 @@ namespace Library
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
-            properties["Movie"] = movie;
+            properties["MovieBrowser"] = _movieGallery;
 
-            if (session != null)
+            if (_session != null)
             {
-                session.GoToPage("resx://Library/Library.Resources/Menu", properties);
+                _session.GoToPage("resx://Library/Library.Resources/Menu", properties);
             }
         }
 
@@ -70,12 +64,26 @@ namespace Library
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["DetailsPage"] = page;
             properties["Application"] = this;
-           
+
             // If we have no page session, just spit out a trace statement.
-            if (session != null)
+            if (_session != null)
             {
-                session.GoToPage("resx://Library/Library.Resources/DetailsPage", properties);
+                _session.GoToPage("resx://Library/Library.Resources/DetailsPage", properties);
             }
         }
+
+        // properties
+        public bool IsExtender
+        {
+            get { return _isExtender; }
+        }
+
+        // private data
+        private static OMLApplication _singleApplicationInstance;
+        private AddInHost _host;
+        private HistoryOrientedPageSession _session;
+        private static MovieGallery _movieGallery;
+        private bool _isExtender;
+
     }
 }

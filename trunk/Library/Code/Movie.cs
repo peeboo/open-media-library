@@ -8,91 +8,74 @@ using OMLEngine;
 
 namespace Library
 {
-    public class Movie
+    public class MovieGallery
     {
-        private DataSet dataSet;
-        private static TitleCollection titleCollection;
+        //private DataSet                 _dataSet;
+        private static TitleCollection _titleCollection;
+        private static MovieItem[] _myTitles = null;
+        private static Boolean _initialized = false;
 
-        private static DisplayItem[] myTitles = null;
-        private static Boolean initialized = false;
-
-        public Movie()
+        public MovieGallery()
         {
-//            dataSet = new DataSet();
-            titleCollection = new TitleCollection();
-            titleCollection.loadTitleCollection();
-            if (titleCollection.Count == 0)
+            //            dataSet = new DataSet();
+            _titleCollection = new TitleCollection();
+            _titleCollection.loadTitleCollection();
+            if (_titleCollection.Count == 0)
             {
                 Title t = new Title();
                 t.Name = "No Titles in Database";
-                titleCollection.AddTitle(t);
+                _titleCollection.AddTitle(t);
             }
-            initialize();
+            Initialize();
         }
-        public void initialize()
+        public void Initialize()
         {
-            createGallery();
-            initialized = true;
+            CreateGallery();
+            _initialized = true;
         }
-        public DisplayItem[] GetMovies
+
+        public MovieItem[] Movies
         {
             get
             {
-                if (!initialized)
-                    initialize();
-                return myTitles;
+                if (!_initialized) Initialize();
+                return _myTitles;
             }
         }
-        public DisplayItem[] createGallery()
+        public MovieItem[] CreateGallery()
         {
-            if (myTitles == null)
+            if (_myTitles == null)
             {
                 SortedArrayList list = new SortedArrayList();
-                foreach (Title title in titleCollection)
+                foreach (Title title in _titleCollection)
                 {
                     list.Add(CreateGalleryItem(title));
                 }
-                titleCollection.saveTitleCollection();
-                myTitles = (DisplayItem[])list.ToArray(typeof(DisplayItem));
+                _titleCollection.saveTitleCollection();
+                _myTitles = (MovieItem[])list.ToArray(typeof(MovieItem));
             }
-            return myTitles;
+            return _myTitles;
         }
-        private DisplayItem CreateGalleryItem(Title title)
+        private MovieItem CreateGalleryItem(Title title)
         {
-            DisplayItem item = new DisplayItem(title);
+            MovieItem item = new MovieItem(title);
 
             item.Invoked += delegate(object sender, EventArgs args)
             {
-                DisplayItem galleryItem = (DisplayItem)sender;
+                MovieItem galleryItem = (MovieItem)sender;
 
                 // Navigate to a details page for this item.
                 DetailsPage page = CreateDetailsPage(item);
-                Application.Current.GoToDetails(page);
+                OMLApplication.Current.GoToDetails(page);
             };
 
             return item;
         }
-        public DetailsPage CreateDetailsPage(DisplayItem item)
+        public DetailsPage CreateDetailsPage(MovieItem item)
         {
             Trace.WriteLine("Creating a detailspage");
-            DetailsPage page = new DetailsPage();
+            DetailsPage page = new DetailsPage(item);
             Trace.WriteLine("adding the item");
-            page.Item = item;
-            Trace.WriteLine("done adding item");
-            page.Title = item.GetTitle;
-            page.Summary = item.GetSummary;
-            page.Background = item.GetImage;
-            page.Rating = item.GetMpaaRating;
-            page.Length = item.GetRuntime;
-            page.ReleaseDate = item.GetReleaseDate;
-            page.Actors = item.GetActors;
-            page.Directors = item.GetDirectors;
-            page.Producers = item.GetProducers;
-            page.Writers = item.GetWriters;
-            Trace.WriteLine("adding the media");
-            Trace.WriteLine("The media is: " + item.GetMedia);
-            page.LocalMedia = new System.IO.FileInfo(item.GetMedia);
-            Trace.WriteLine("done adding media");
             return page;
         }
         public static Image LoadImage(string imageName)
