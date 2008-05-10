@@ -61,6 +61,7 @@
     <Compile Include="Code\DisplayItem.cs" />
     <Compile Include="Code\Launch.cs" />
     <Compile Include="Code\Movie.cs" />
+    <Compile Include="Code\MoviePlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
