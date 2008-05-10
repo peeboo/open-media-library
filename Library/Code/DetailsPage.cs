@@ -1,12 +1,11 @@
 using System;
 using System.Collections;
-
 using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Xml;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.Hosting;
-
+using System.Diagnostics;
 
 namespace Library
 {
@@ -16,30 +15,52 @@ namespace Library
     /// </summary>
     public class DetailsPage : ModelItem
     {
-        private DisplayItem _item = null;
-
-        public DisplayItem Item
-        {
-            get { return _item; }
-            set { _item = value; }
-        }
         /// <summary>The URI of the media at its locally cached location.</summary>
         private FileInfo _localMedia = null;
+        private MovieItem _movieDetails = null;
+
+        public DetailsPage(MovieItem item)
+        {
+            LoadDetails(item);
+        }
+
+        private void LoadDetails(MovieItem item)
+        {
+            _movieDetails = item;
+
+            if (item.FrontCover == null)
+            {
+                Trace.WriteLine("Details Page.LoadMovies: front cover is null");
+            }
+
+            _backgroundImage = item.FrontCover;
+
+            try
+            {
+                _localMedia = new System.IO.FileInfo(item.FileLocation);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Details Page.LoadMovies exception: " + e.Message);
+            }
+        }
+
+        public MovieItem MovieDetails
+        {
+            get { return _movieDetails; }
+            set { _movieDetails = value; }
+        }
         /// <summary>Gets or sets the URI of the media at its locally cached location.</summary>
         public FileInfo LocalMedia
         {
             get { return _localMedia; }
-            set
-            {
-                _localMedia = value; 
-            }
+            set { _localMedia = value; }
         }
+
+        //TODO: let the MoviePlayer do the transcoding
         public string getUrl
         {
-            get
-            {
-                return _item.DynamicPlayMedia();
-            }
+            get { return _movieDetails.DynamicPlayMedia(); }
         }
 
         /// <summary>
@@ -47,12 +68,12 @@ namespace Library
         /// </summary>
         public string Title
         {
-            get { return title; }
+            get { return _movieDetails.Name; }
             set
             {
-                if (title != value)
+                if (_movieDetails.Name != value)
                 {
-                    title = value;
+                    _movieDetails.Name = value;
                     FirePropertyChanged("Title");
                 }
             }
@@ -63,12 +84,12 @@ namespace Library
         /// </summary>
         public string Summary
         {
-            get { return summary; }
+            get { return _movieDetails.Synopsis; }
             set
             {
-                if (summary != value)
+                if (_movieDetails.Synopsis != value)
                 {
-                    summary = value;
+                    _movieDetails.Synopsis = value;
                     FirePropertyChanged("Summary");
                 }
             }
@@ -80,12 +101,12 @@ namespace Library
         /// </summary>
         public IList Commands
         {
-            get { return commands; }
+            get { return _commands; }
             set
             {
-                if (commands != value)
+                if (_commands != value)
                 {
-                    commands = value;
+                    _commands = value;
                     FirePropertyChanged("Commands");
                 }
             }
@@ -96,12 +117,12 @@ namespace Library
         /// </summary>
         public string Metadata
         {
-            get { return metadata; }
+            get { return _metadata; }
             set
             {
-                if (metadata != value)
+                if (_metadata != value)
                 {
-                    metadata = value;
+                    _metadata = value;
                     FirePropertyChanged("Metadata");
                 }
             }
@@ -112,12 +133,12 @@ namespace Library
         /// </summary>
         public Image Background
         {
-            get { return backgroundImage; }
+            get { return _backgroundImage; }
             set
             {
-                if (backgroundImage != value)
+                if (_backgroundImage != value)
                 {
-                    backgroundImage = value;
+                    _backgroundImage = value;
                     FirePropertyChanged("Background");
                 }
             }
@@ -125,12 +146,15 @@ namespace Library
 
         public string Rating
         {
-            get { return rating; }
+            // this is a bit ugly, we need a better way
+            get { return _movieDetails.Rating; }
+
             set
             {
-                if (rating != value)
+
+                if (_movieDetails.Rating != value)
                 {
-                    rating = value;
+                    _movieDetails.Rating = value;
                     FirePropertyChanged("Rating");
                 }
             }
@@ -138,12 +162,12 @@ namespace Library
 
         public string Length
         {
-            get { return length; }
+            get { return _movieDetails.Runtime; }
             set
             {
-                if (length != value)
+                if (_movieDetails.Runtime != value)
                 {
-                    length = value;
+                    _movieDetails.Runtime = value;
                     FirePropertyChanged("Length");
                 }
             }
@@ -151,12 +175,12 @@ namespace Library
 
         public string ReleaseDate
         {
-            get { return releaseDate; }
+            get { return _movieDetails.ReleaseDate; }
             set
             {
-                if (releaseDate != value)
+                if (_movieDetails.ReleaseDate != value)
                 {
-                    releaseDate = value;
+                    _movieDetails.ReleaseDate = value;
                     FirePropertyChanged("ReleaseDate");
                 }
             }
@@ -164,67 +188,76 @@ namespace Library
 
         public IList Actors
         {
-            get { return actors; }
-            set
-            {
-                if (actors != value)
-                {
-                    actors = value;
-                    FirePropertyChanged("Actors");
-                }
-            }
+            get { return _movieDetails.Actors; }
+            //set
+            //{
+            //    if (_movieDetails.Actors != value)
+            //    {
+            //        _movieDetails.Actors = value;
+            //        FirePropertyChanged("Actors");
+            //    }
+            //}
         }
 
         public IList Directors
         {
-            get { return directors; }
-            set
-            {
-                if (directors != value)
-                {
-                    directors = value;
-                    FirePropertyChanged("Directors");
-                }
-            }
+            get { return _movieDetails.Directors; }
+            //set
+            //{
+            //    if (_movieDetails.Directors != value)
+            //    {
+            //        _movieDetails.Directors = value;
+            //        FirePropertyChanged("Directors");
+            //    }
+            //}
         }
 
         public IList Producers
         {
-            get { return producers; }
-            set
-            {
-                if (producers != value)
-                {
-                    producers = value;
-                    FirePropertyChanged("Producers");
-                }
-            }
+            get { return _movieDetails.Producers; }
+            //set
+            //{
+            //    if (_movieDetails.Producers != value)
+            //    {
+            //        _movieDetails.Producers = value;
+            //        FirePropertyChanged("Producers");
+            //    }
+            //}
         }
 
         public IList Writers
         {
-            get { return writers; }
-            set
-            {
-                if (writers != value)
-                {
-                    writers = value;
-                    FirePropertyChanged("Writers");
-                }
-            }
+            get { return _movieDetails.Writers; }
+            //set
+            //{
+            //    if (_movieDetails.Writers != value)
+            //    {
+            //        _movieDetails.Writers = value;
+            //        FirePropertyChanged("Writers");
+            //    }
+            //}
         }
 
-        private IList writers;
-        private IList producers;
-        private IList directors;
-        private IList actors;
-        private string releaseDate;
-        private string length;
-        private string rating;
-        private string title;
-        private string summary;
-        private IList commands;
-        private string metadata;
-        private Image backgroundImage;
+        public void PlayMovie()
+        {
+            IPlayMovie moviePlayer = MoviePlayerFactory.CreateMoviePlayer(AddInHost.Current, _movieDetails);
+            moviePlayer.PlayMovie();
+            //AddInHost.Current.MediaCenterEnvironment.Dialog("test", "test", DialogButtons.Ok, 5, true);
+        }
+
+        //private DisplayItem _movieDetails;
+
+        //////private IList writers;
+        //////private IList producers;
+        //////private IList directors;
+        //////private IList actors;
+        //////private string releaseDate;
+        //////private string length;
+        //////private string rating;
+        //////private string title;
+        //////private string summary;
+        private IList _commands;
+        private string _metadata;
+        private Image _backgroundImage;
     }
 }

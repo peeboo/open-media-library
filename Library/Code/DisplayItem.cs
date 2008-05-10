@@ -9,66 +9,90 @@ using System.Diagnostics;
 
 namespace Library
 {
-    public class DisplayItem : Command
+    public class MovieItem : Command
     {
         private Title _titleObj;
-        private Image _front_boxart;
-        private Image _back_boxart;
+        private Image _frontCoverArtImage;
+        private Image _backCoverArtImage;
 
-        public DisplayItem() { }
-        public DisplayItem(Title title)
+        //public DisplayItem() { }
+        public MovieItem(Title title)
         {
             _titleObj = title;
-            _front_boxart = Movie.LoadImage(_titleObj.front_boxart_path);
-            _back_boxart = Movie.LoadImage(_titleObj.back_boxart_path);
+            _frontCoverArtImage = MovieGallery.LoadImage(_titleObj.front_boxart_path);
+            _backCoverArtImage = MovieGallery.LoadImage(_titleObj.back_boxart_path);
         }
 
-        public string GetMedia
+        public Title TitleObject
+        {
+            get { return _titleObj; }
+        }
+
+        public string FileLocation
         {
             get { return _titleObj.FileLocation; }
+            set { _titleObj.FileLocation = value; }
         }
-        
-        public Image GetImage
+
+        public Image FrontCover
         {
-            get { return _front_boxart; }
+            get { return _frontCoverArtImage; }
+            set { _frontCoverArtImage = value; }
         }
+
+        public Image BackCover
+        {
+            get { return _backCoverArtImage; }
+            set { _backCoverArtImage = value; }
+        }
+
         public int itemId
         {
             get { return _titleObj.itemId; }
         }
-        public string GetTitle
+        public string Name
         {
             get { return _titleObj.Name; }
+            set { _titleObj.Name = value; }
         }
-        public string GetRuntime
+        public string Runtime
         {
             get { return _titleObj.Runtime.ToString(); }
+            set { _titleObj.Runtime = Convert.ToInt32(value); }
         }
-        public string GetMpaaRating
+        public string Rating
         {
+            //TODO: ugly, change this
             get { return (string)Enum.GetName(typeof(Rating), _titleObj.MPAARating); }
+            set { }
         }
-        public string GetSummary
+        public string Synopsis
         {
             get { return _titleObj.Synopsis; }
+            set { _titleObj.Synopsis = value; }
         }
-        public string GetDistributor
+        public string Distributor
         {
             get { return _titleObj.Distributor; }
+            set { _titleObj.Distributor = value; }
         }
-        public string GetCountryOfOrigin
+        public string CountryOfOrigin
         {
             get { return _titleObj.Country_Of_Origin; }
+            set { _titleObj.Country_Of_Origin = value; }
         }
-        public string GetOfficialMovieWebsite
+        public string OfficialWebsite
         {
             get { return _titleObj.Official_Website_Url; }
+            set { _titleObj.Official_Website_Url = value; }
         }
-        public string GetReleaseDate
+        public string ReleaseDate
         {
             get { return _titleObj.ReleaseDate.ToShortDateString(); }
+            //TODO
+            set { }
         }
-        public IList GetActors
+        public IList Actors
         {
             get
             {
@@ -79,8 +103,9 @@ namespace Library
                 }
                 return actor_names;
             }
+            //set { _titleObj.Actors = value; }
         }
-        public IList GetCrew
+        public IList Crew
         {
             get
             {
@@ -91,8 +116,9 @@ namespace Library
                 }
                 return crew_names;
             }
+            //set { _titleObj.Crew = value; }
         }
-        public IList GetDirectors
+        public IList Directors
         {
             get
             {
@@ -103,19 +129,22 @@ namespace Library
                 }
                 return director_names;
             }
+            //set { _titleObj.Directors = value; }
         }
-        public IList GetProducers
+        public IList Producers
         {
             get { return _titleObj.Producers; }
+            //set { _titleObj.Producers = value; }
         }
-        public IList GetWriters
+        public IList Writers
         {
             get { return _titleObj.Writers; }
+            //set { _titleObj.Writers = value; }
         }
         public string DynamicPlayMedia()
         {
             string path_to_media = _titleObj.FileLocation;
-            if (Application.Current.IsExtender && _titleObj.NeedToTranscodeToExtenders())
+            if (OMLApplication.Current.IsExtender && _titleObj.NeedToTranscodeToExtenders())
             {
                 Trace.WriteLine("We are an extender");
                 string new_path = string.Empty;

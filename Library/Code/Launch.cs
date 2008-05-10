@@ -33,7 +33,7 @@ namespace Library
         public void Launch(AddInHost host)
         {
             s_session = new HistoryOrientedPageSession();
-            Application app = new Application(s_session, host);
+            OMLApplication app = new OMLApplication(s_session, host);
             app.GoToMenu();
         }
     }
