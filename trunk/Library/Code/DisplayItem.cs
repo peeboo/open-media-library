@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
 using System.Collections;
@@ -21,6 +22,12 @@ namespace Library
             _titleObj = title;
             _frontCoverArtImage = MovieGallery.LoadImage(_titleObj.front_boxart_path);
             _backCoverArtImage = MovieGallery.LoadImage(_titleObj.back_boxart_path);
+        }
+
+        public void PlayMovie()
+        {
+            IPlayMovie moviePlayer = MoviePlayerFactory.CreateMoviePlayer(this);
+            moviePlayer.PlayMovie();
         }
 
         public Title TitleObject
