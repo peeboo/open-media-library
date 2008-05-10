@@ -240,9 +240,7 @@ namespace Library
 
         public void PlayMovie()
         {
-            IPlayMovie moviePlayer = MoviePlayerFactory.CreateMoviePlayer(AddInHost.Current, _movieDetails);
-            moviePlayer.PlayMovie();
-            //AddInHost.Current.MediaCenterEnvironment.Dialog("test", "test", DialogButtons.Ok, 5, true);
+            _movieDetails.PlayMovie();
         }
 
         //private DisplayItem _movieDetails;

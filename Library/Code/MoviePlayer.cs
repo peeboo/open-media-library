@@ -31,27 +31,27 @@ namespace Library
         /// </summary>
         /// <param name="title">The title.</param>
         /// <returns></returns>
-        static public IPlayMovie CreateMoviePlayer(AddInHost host, MovieItem title)
+        static public IPlayMovie CreateMoviePlayer(MovieItem title)
         {
             // for now play just online titles. add offline capabilities soon
             if (File.Exists(title.FileLocation) || Directory.Exists(title.FileLocation))
             {
                 if (title.TitleObject.VideoFormat == VideoFormat.DVD)
                 {
-                    return new DVDPlayer(host, title);
+                    return new DVDPlayer(title);
                 }
                 else if (title.TitleObject.NeedToMountBeforePlaying())
                 {
-                    return new MountImagePlayer(host, title);
+                    return new MountImagePlayer(title);
                 }
                 else
                 {
-                    return new VideoPlayer(host, title);
+                    return new VideoPlayer(title);
                 }
             }
             else
             {
-                return new UnavailableMoviePlayer(host, title);
+                return new UnavailableMoviePlayer(title);
             }
         }
     }
@@ -61,22 +61,50 @@ namespace Library
     /// </summary>
     public class DVDPlayer : IPlayMovie
     {
-        public DVDPlayer(AddInHost host, MovieItem title)
+        public DVDPlayer(MovieItem title)
         {
             _title = title;
-            _host = host;
         }
 
         public bool PlayMovie()
         {
-            if (_host != null)
+            string media = "DVD://" + _title.FileLocation;
+            media.Replace('\\', '/');
+            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, media, false))
             {
-                string media = "DVD://" + _title.FileLocation;
-                media.Replace('\\', '/');
-                _host.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, media, false);
-                if (_host.MediaCenterEnvironment.MediaExperience != null)
+                if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                 {
-                    _host.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
+                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+
+        MovieItem _title;
+    }
+
+    /// <summary>
+    /// VideoPlayer class for playing standard videos (AVIs, etc)
+    /// </summary>
+    public class VideoPlayer : IPlayMovie
+    {
+        public VideoPlayer(MovieItem title)
+        {
+            _title = title;
+        }
+
+        public bool PlayMovie()
+        {
+            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, _title.FileLocation, false))
+            {
+                if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
+                {
+                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                 }
                 return true;
             }
@@ -87,70 +115,31 @@ namespace Library
         }
 
         MovieItem _title;
-        AddInHost _host;
-    }
-
-    /// <summary>
-    /// VideoPlayer class for playing standard videos (AVIs, etc)
-    /// </summary>
-    public class VideoPlayer : IPlayMovie
-    {
-        public VideoPlayer(AddInHost host, MovieItem title)
-        {
-            _title = title;
-            _host = host;
-        }
-
-        public bool PlayMovie()
-        {
-            if (_host != null)
-            {
-                return _host.MediaCenterEnvironment.PlayMedia(MediaType.Video, _title.FileLocation, false);
-                if (_host.MediaCenterEnvironment.MediaExperience != null)
-                {
-                    _host.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        AddInHost _host;
-        MovieItem _title;
     }
 
     public class UnavailableMoviePlayer : IPlayMovie
     {
-        public UnavailableMoviePlayer(AddInHost host, MovieItem title)
+        public UnavailableMoviePlayer(MovieItem title)
         {
             _title = title;
-            _host = host;
         }
 
         public bool PlayMovie()
         {
             // show a popup or a page explaining the error
             //return false;
-            if (_host != null)
-            {
-                _host.MediaCenterEnvironment.Dialog("Could not find file [" + _title.FileLocation + "] or don't know how to play this file type", "Error", DialogButtons.Ok, 0, true);
-            }
+            AddInHost.Current.MediaCenterEnvironment.Dialog("Could not find file [" + _title.FileLocation + "] or don't know how to play this file type", "Error", DialogButtons.Ok, 0, true);
             return false;
-
         }
 
-        AddInHost _host;
         MovieItem _title;
     }
 
     public class MountImagePlayer : IPlayMovie
     {
-        public MountImagePlayer(AddInHost host, MovieItem title)
+        public MountImagePlayer(MovieItem title)
         {
             _title = title;
-            _host = host;
         }
 
         public bool PlayMovie()
@@ -159,7 +148,6 @@ namespace Library
             return false;
         }
 
-        AddInHost _host;
         MovieItem _title;
     }
 
