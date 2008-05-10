@@ -92,7 +92,7 @@ namespace MyMoviesPlugin
                         try {
                             fi = new FileInfo(current_filename);
                             string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
-                                                   "\\F" + newTitle.Name +
+                                                   "\\F" + newTitle.itemId +
                                                    fi.Extension;
                             CopyImage(current_filename, new_full_name);
                             newTitle.front_boxart_path = new_full_name;
@@ -108,7 +108,7 @@ namespace MyMoviesPlugin
                         {
                             fi = new FileInfo(current_filename);
                             string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
-                                                   "\\B" + newTitle.Name +
+                                                   "\\B" + newTitle.itemId +
                                                    fi.Extension;
                             CopyImage(current_filename, new_full_name);
                             newTitle.back_boxart_path = new_full_name;
