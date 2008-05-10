@@ -18,7 +18,7 @@ pushd "%~dp0"
 
 SET WIX_BUILD_LOCATION=%ProgramFilesPath%\Windows Installer XML v3\bin
 SET APP_INTERMEDIATE_PATH=..\obj\%BUILD_TYPE%
-SET OUTPUTNAME=..\bin\%BUILD_TYPE%\setup.msi
+SET OUTPUTNAME=..\bin\%BUILD_TYPE%\omlsetupx86.msi
 
 REM Cleanup leftover intermediate files
 
