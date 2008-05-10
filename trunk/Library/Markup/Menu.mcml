@@ -4,82 +4,82 @@
 	  xmlns:cor="assembly://MSCorLib/System"
 	  xmlns:me="Me">
 
-	<UI Name="Default">
+  <UI Name="Default">
 
-		<Properties>
-			<a:Application Name="Application" Application="$Required"/>
-			<a:Movie Name="Movie" Movie="$Required"/>
-			<Color Name="BackgroundColor" Color="color://s:BackgroundColor"/>
-		</Properties>
-		
-		<Locals>
-			<!-- Data used by scrollers. Contains current and total page data. -->
-			<!-- It is also used to configure how the Scroller behaves as far  -->
-			<!-- as focus. In this case, we want the current focused item to   -->
-			<!-- always appear 30% from the left of the Scroller.              -->
-			<ScrollingData Name="ScrollingData" LockedPosition=".5"/>
+    <Properties>
+      <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+      <Color Name="BackgroundColor" Color="color://s:BackgroundColor"/>
+    </Properties>
 
-			<!-- Storage of item selection. -->
-			<Choice Name="Choice"/>
-			<Command Name="Selection"/>
-		</Locals>
+    <Locals>
+      <!-- Data used by scrollers. Contains current and total page data. -->
+      <!-- It is also used to configure how the Scroller behaves as far  -->
+      <!-- as focus. In this case, we want the current focused item to   -->
+      <!-- always appear 30% from the left of the Scroller.              -->
+      <ScrollingData Name="ScrollingData" LockedPosition=".5"/>
 
-		<Rules>
-			<!-- Our list of choices come from the MediaServer. -->
-			<Default Target="[Choice.Options]" Value="[Movie.GetMovies]"/>
+      <!-- Storage of item selection. -->
+      <Choice Name="Choice"/>
+      <Command Name="Selection"/>
+    </Locals>
 
-			<Changed Source="[Choice.Chosen]">
-				<Actions>
-					<Set Target="[TitleText.Content]" Value="[Choice.Chosen!a:DisplayItem.GetTitle]"/>
-					<Set Target="[Runtime.Content]" Value="[Choice.Chosen!a:DisplayItem.GetRuntime]"/>
-					<Set Target="[MpaaRating.Content]" Value="[Choice.Chosen!a:DisplayItem.GetMpaaRating]"/>
-          <Set Target="[Summary.Content]" Value="[Choice.Chosen!a:DisplayItem.GetSummary]"/>
-				</Actions>
-			</Changed>
-		</Rules>
-		
-		<Content>
-			<ColorFill Content="Transparent" Layout="Form">
-				<Children>
+    <Rules>
+      <!-- Our list of choices come from the MediaServer. -->
+      <Default Target="[Choice.Options]" Value="[MovieBrowser.Movies]"/>
 
-					<Panel Name="LeftPanelTitle" >
-						<Children>
-							<Text Name="TitleText" WordWrap="true" Font="Verdana,26" Color="White">
+      <Changed Source="[Choice.Chosen]">
+        <Actions>
+          <Set Target="[TitleText.Content]" Value="[Choice.Chosen!a:MovieItem.Name]"/>
+          <Set Target="[Runtime.Content]" Value="[Choice.Chosen!a:MovieItem.Runtime]"/>
+          <Set Target="[MpaaRating.Content]" Value="[Choice.Chosen!a:MovieItem.Rating]"/>
+          <Set Target="[Summary.Content]" Value="[Choice.Chosen!a:MovieItem.Synopsis]"/>
+        </Actions>
+      </Changed>
+    </Rules>
+
+    <Content>
+      <ColorFill Content="Transparent" Layout="Form">
+        <Children>
+
+          <Panel Name="LeftPanelTitle" >
+            <Children>
+              <Text Name="TitleText" WordWrap="true" Font="Verdana,26" Color="White">
                 <Animations>
                   <TransformAnimation Source="animation://me:ChangeHide"/>
                   <TransformAnimation Source="animation://me:ChangeShow"/>
                 </Animations>
               </Text>
-						</Children>
-						<LayoutInput>
-							<FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Top="Parent,0,50" />
-						</LayoutInput>
-					</Panel>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Top="Parent,0,50" />
+            </LayoutInput>
+          </Panel>
 
-					<Panel Name="LeftPanelRating" >
-						<Layout>
-							<FlowLayout Orientation="Horizontal"/>
-						</Layout>
-						<Children>
-							<Text Content="[" WordWrap="true" Font="Verdana,20" Color="LightBlue" />
-							<Text Name="MpaaRating" Content="NR" WordWrap="true" Font="Verdana,20" Color="LightBlue">
-                <Animations>
-                  <TransformAnimation Source="animation://me:ChangeHide"/>
-                  <TransformAnimation Source="animation://me:ChangeShow"/>
-                </Animations>
-              </Text>
-							<Text Content="]" WordWrap="true" Font="Verdana,20" Color="LightBlue" />
-						</Children>
-						<LayoutInput>
-							<FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Top="LeftPanelTitle,1,0"/>
-						</LayoutInput>
-					</Panel>
-					<Panel Name="LeftPanelRuntime" >
+          <Panel Name="LeftPanelRating" >
             <Layout>
               <FlowLayout Orientation="Horizontal"/>
             </Layout>
-						<Children>
-							<Text Name="Runtime" Content=" " WordWrap="true" Font="Verdana,20" Color="LightBlue">
+            <Children>
+              <Text Content="[" WordWrap="true" Font="Verdana,20" Color="LightBlue" />
+              <Text Name="MpaaRating" Content="NR" WordWrap="true" Font="Verdana,20" Color="LightBlue">
+                <Animations>
+                  <TransformAnimation Source="animation://me:ChangeHide"/>
+                  <TransformAnimation Source="animation://me:ChangeShow"/>
+                </Animations>
+              </Text>
+              <Text Content="]" WordWrap="true" Font="Verdana,20" Color="LightBlue" />
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Top="LeftPanelTitle,1,0"/>
+            </LayoutInput>
+          </Panel>
+          <Panel Name="LeftPanelRuntime" >
+            <Layout>
+              <FlowLayout Orientation="Horizontal"/>
+            </Layout>
+            <Children>
+              <Text Name="Runtime" Content=" " WordWrap="true" Font="Verdana,20" Color="LightBlue">
                 <Animations>
                   <TransformAnimation Source="animation://me:ChangeHide"/>
                   <TransformAnimation Source="animation://me:ChangeShow"/>
@@ -91,11 +91,11 @@
                   <TransformAnimation Source="animation://me:ChangeShow"/>
                 </Animations>
               </Text>
-						</Children>
-						<LayoutInput>
-							<FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Top="LeftPanelRating,1,0"/>
-						</LayoutInput>
-					</Panel>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Top="LeftPanelRating,1,0"/>
+            </LayoutInput>
+          </Panel>
 
           <Panel Name="LeftPanelSummary" MaximumSize="0,300">
             <Children>
@@ -115,90 +115,89 @@
             </LayoutInput>
           </Panel>
 
-					<!-- Display of the current and total pages. -->
-					<Panel Name="PageStats" Layout="HorizontalFlow">
-						<Children>
+          <!-- Display of the current and total pages. -->
+          <Panel Name="PageStats" Layout="HorizontalFlow">
+            <Children>
               <me:PositionIndicator Choi="[Choice]" />
-						</Children>
-						<LayoutInput>
-							<FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Bottom="Parent,1,-15"/>
-						</LayoutInput>
-					</Panel>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,15" Right="Parent,.30,1" Bottom="Parent,1,-15"/>
+            </LayoutInput>
+          </Panel>
 
-					<Panel Name="LeftPanel" >
-						<Children>
-							<Clip Orientation="Horizontal" FadeSize="40" NearOffset="70">
-								<Children>
-									<ColorFill Name="LeftTab" Content="Black" Alpha=".8"/>
-								</Children>
-							</Clip>
-						</Children>
-						<LayoutInput>
-							<FormLayoutInput Left="Parent,-.5,0" Right="Parent,.30,1" Top="Parent,-.5,0" Bottom="Parent,1.5,1"/>
-						</LayoutInput>
-					</Panel>
+          <Panel Name="LeftPanel" >
+            <Children>
+              <Clip Orientation="Horizontal" FadeSize="40" NearOffset="70">
+                <Children>
+                  <ColorFill Name="LeftTab" Content="Black" Alpha=".8"/>
+                </Children>
+              </Clip>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,-.5,0" Right="Parent,.30,1" Top="Parent,-.5,0" Bottom="Parent,1.5,1"/>
+            </LayoutInput>
+          </Panel>
 
-					<Panel>
-						<Children>
-							<me:Gallery Name="MovieGallery" Choice="[Choice]" Selection="[Selection]" Movie="[Movie]" Application="[Application]" ScrollingData="[ScrollingData]">
-							</me:Gallery>
-						</Children>
-						<LayoutInput>
-							<FormLayoutInput Left="Parent,0,20" Right="Parent,1,-20" Top="Parent,0,50" Bottom="Parent,.95,-2"/>
-						</LayoutInput>
-					</Panel>
-				</Children>
-			</ColorFill>
-		</Content>
+          <Panel>
+            <Children>
+              <me:Gallery Name="MovieGallery" Choice="[Choice]" Selection="[Selection]" MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]">
+              </me:Gallery>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,20" Right="Parent,1,-20" Top="Parent,0,50" Bottom="Parent,.95,-2"/>
+            </LayoutInput>
+          </Panel>
+        </Children>
+      </ColorFill>
+    </Content>
 
-	</UI>
+  </UI>
 
-	<UI Name="Gallery">
-		<Properties>
-			<a:Movie Name="Movie" Movie="$Required"/>
-			<a:Application Name="Application" Application="$Required"/>
-			
-			<ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
-			<Choice Name="Choice" Choice="$Required"/>
-			<Command Name="Selection"/>
-		</Properties>
+  <UI Name="Gallery">
+    <Properties>
+      <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+      <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
+      <Choice Name="Choice" Choice="$Required"/>
+      <Command Name="Selection"/>
+    </Properties>
 
-		<Locals>
-			<!-- Create an input handler for scrolling. -->
-			<ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
-		</Locals>
+    <Locals>
+      <!-- Create an input handler for scrolling. -->
+      <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
+    </Locals>
 
-		<Rules>
-			<!-- Wire up the scrolling to enable "list-based" scrolling. -->
-			<Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
-			<Default Target="[ScrollingData.Repeater]" Value="[GalleryRepeater]"/>
-		</Rules>
+    <Rules>
+      <!-- Wire up the scrolling to enable "list-based" scrolling. -->
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[GalleryRepeater]"/>
+    </Rules>
 
-		<Content>
-			<Panel Name="GalleryContainer" Layout="Form">
-				<Children>
+    <Content>
+      <Panel Name="GalleryContainer" Layout="Form">
+        <Children>
 
-					<!-- Put in a scroller so that if we repeat, the row will scroll. -->
-					<Scroller Orientation="Horizontal"  ScrollingData="[ScrollingData]" >
-						<Children>
+          <!-- Put in a scroller so that if we repeat, the row will scroll. -->
+          <Scroller Orientation="Horizontal"  ScrollingData="[ScrollingData]" >
+            <Children>
 
-							<!-- Hook up our list to the repeater.  -->
-							<Repeater Name="GalleryRepeater" Navigation="FlowVertical" Source="[Choice.Options]" DiscardOffscreenVisuals="true">
-								<Animations>
-									<Animation Animation="animation://me:MoveAnimation"/>
-								</Animations>
+              <!-- Hook up our list to the repeater.  -->
+              <Repeater Name="GalleryRepeater" Navigation="FlowVertical" Source="[Choice.Options]" DiscardOffscreenVisuals="true">
+                <Animations>
+                  <Animation Animation="animation://me:MoveAnimation"/>
+                </Animations>
 
-								<Layout>
+                <Layout>
 
-									<!-- The actual GridLayout.  Set the repeat to the passed -->
-									<!-- in value.  The ReferenceSize specifies the size to be-->
-									<!-- used for each item it is laying out.  Thus, even     -->
-									<!-- though our images are different sizes, each will be  -->
-									<!-- placed inside a 150 x 200 space, ensuring a uniform  -->
-									<!-- flow.  MajorAlignment and MinorAlignment specify how -->
-									<!-- the content should be placed within the space if it  -->
-									<!-- is smaller than the reference size.                  -->
-									<GridLayout Repeat="WhenTooBig"
+                  <!-- The actual GridLayout.  Set the repeat to the passed -->
+                  <!-- in value.  The ReferenceSize specifies the size to be-->
+                  <!-- used for each item it is laying out.  Thus, even     -->
+                  <!-- though our images are different sizes, each will be  -->
+                  <!-- placed inside a 150 x 200 space, ensuring a uniform  -->
+                  <!-- flow.  MajorAlignment and MinorAlignment specify how -->
+                  <!-- the content should be placed within the space if it  -->
+                  <!-- is smaller than the reference size.                  -->
+                  <GridLayout Repeat="WhenTooBig"
                               Rows="3"
                               Orientation="Vertical"
                               AllowWrap="true"
@@ -207,116 +206,116 @@
                               MajorAlignment="Fill"
                               MinorAlignment="Center"
                               RepeatGap="100"/>
-								</Layout>
-								<Content>
+                </Layout>
+                <Content>
 
-									<!-- For each item, repeat our RepeatedItem UI, passing in-->
-									<!-- the index of the item and the image.                 -->
-									<me:RepeatedItem Choice="[Choice]" Selection="[Selection]" Option="[RepeatedItem]" OptionIndex="[RepeatedItemIndex]" DisplayItem="[RepeatedItem!a:DisplayItem]" Application="[Application]"/>
-								</Content>
-							</Repeater>
+                  <!-- For each item, repeat our RepeatedItem UI, passing in-->
+                  <!-- the index of the item and the image.                 -->
+                  <me:RepeatedItem Choice="[Choice]" Selection="[Selection]" Option="[RepeatedItem]" OptionIndex="[RepeatedItemIndex]" MovieItem="[RepeatedItem!a:MovieItem]" Application="[Application]"/>
+                </Content>
+              </Repeater>
 
-						</Children>
-					</Scroller>
+            </Children>
+          </Scroller>
 
-				</Children>
-			</Panel>
-		</Content>
+        </Children>
+      </Panel>
+    </Content>
 
-	</UI>
+  </UI>
 
 
-	<!-- The RepeatedItem UI is what gets repeated for each image in our list -->
-	<!-- from the ScrollingSample UI.  It displays the image itself, the      -->
-	<!-- item's index and "Real" indexes, and a background color fill that    -->
-	<!-- changes color when it receives key focus.                            -->
-	<UI Name="RepeatedItem">
-		<Properties>
-			<a:Application Name="Application" Application="$Required"/>
-			<a:DisplayItem Name="DisplayItem" DisplayItem="$Required"/>
+  <!-- The RepeatedItem UI is what gets repeated for each image in our list -->
+  <!-- from the ScrollingSample UI.  It displays the image itself, the      -->
+  <!-- item's index and "Real" indexes, and a background color fill that    -->
+  <!-- changes color when it receives key focus.                            -->
+  <UI Name="RepeatedItem">
+    <Properties>
+      <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <a:MovieItem Name="MovieItem" MovieItem="$Required"/>
 
-			<!-- The index passed down from the repeater.-->
-			<Index Name="OptionIndex" Index="$Required"/>
-			<cor:Object Name="Option" Object="$Required"/>
+      <!-- The index passed down from the repeater.-->
+      <Index Name="OptionIndex" Index="$Required"/>
+      <cor:Object Name="Option" Object="$Required"/>
 
-			<!-- The image from our list.                -->
-			<!--<Image Name="ImageSource" Image="$Required"/>-->
-			
-			<Choice Name="Choice" Choice="$Required"/>
-			<Command Name="Selection" Command="$Required"/>
-      
+      <!-- The image from our list.                -->
+      <!--<Image Name="ImageSource" Image="$Required"/>-->
+
+      <Choice Name="Choice" Choice="$Required"/>
+      <Command Name="Selection" Command="$Required"/>
+
       <Image Name="BackgroundImage" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
-		</Properties>
+    </Properties>
 
-		<Locals>
-			<!--<ClickHandler Name="Clicker"/>-->
-			<ClickHandler Name="Clicker" Command="[DisplayItem]"/>
-		</Locals>
+    <Locals>
+      <!--<ClickHandler Name="Clicker"/>-->
+      <ClickHandler Name="Clicker" Command="[MovieItem]"/>
+    </Locals>
 
-		<Rules>
-			<Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+    <Rules>
+      <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
 
-			<!-- Mark ourselves as KeyInteractive so we can receive key focus.    -->
-			<Default Target="[Input.KeyInteractive]" Value="true"/>
+      <!-- Mark ourselves as KeyInteractive so we can receive key focus.    -->
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
 
-			<!-- If we get key focus, change our background color to indicate it. -->
-			<Condition Source="[Input.KeyFocus]" SourceValue="true">
-				<Actions>
+      <!-- If we get key focus, change our background color to indicate it. -->
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
           <Set Target="[Cover.Alpha]" Value="1.0"/>
           <Set Target="[Background.Visible]" Value="true"/>
-					<!-- Play an animation on the cover target item. -->
-					<PlayAnimation Target="[ItemPanel]">
-						<Animation>
-							<!-- This animation will scale the image. -->
-							<Animation Loop="0" CenterPointPercent=".5,.5,0" >
-								<Keyframes>
-									<ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
-									<ScaleKeyframe Time="0.4" Value="1.5,1.5,1.5" RelativeTo="Final" />
-								</Keyframes>
-							</Animation>
-						</Animation>
-					</PlayAnimation>
-				</Actions>
-			</Condition>
+          <!-- Play an animation on the cover target item. -->
+          <PlayAnimation Target="[ItemPanel]">
+            <Animation>
+              <!-- This animation will scale the image. -->
+              <Animation Loop="0" CenterPointPercent=".5,.5,0" >
+                <Keyframes>
+                  <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+                  <ScaleKeyframe Time="0.4" Value="1.5,1.5,1.5" RelativeTo="Final" />
+                </Keyframes>
+              </Animation>
+            </Animation>
+          </PlayAnimation>
+        </Actions>
+      </Condition>
 
-			<!-- when we loose focus -->
-			<Condition Source="[Input.KeyFocus]" SourceValue="false">
-				<Actions>
-					<!-- Play an animation on the cover target item. -->
-					<PlayAnimation Target="[ItemPanel]">
-						<Animation>
-							<!-- This animation will scale the image. -->
-							<Animation Loop="0">
-								<Keyframes>
-									<ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
-									<ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
-								</Keyframes>
-							</Animation>
-						</Animation>
-					</PlayAnimation>
-				</Actions>
-			</Condition>
+      <!-- when we loose focus -->
+      <Condition Source="[Input.KeyFocus]" SourceValue="false">
+        <Actions>
+          <!-- Play an animation on the cover target item. -->
+          <PlayAnimation Target="[ItemPanel]">
+            <Animation>
+              <!-- This animation will scale the image. -->
+              <Animation Loop="0">
+                <Keyframes>
+                  <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
+                  <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
+                </Keyframes>
+              </Animation>
+            </Animation>
+          </PlayAnimation>
+        </Actions>
+      </Condition>
 
-			<!-- When this item gets keyboard focus, it's now selected. -->
-			<Condition Source="[Input.KeyFocus]" ConditionOp="ChangedTo" SourceValue="true">
-				<Actions>
-					<!-- Update the Choice to point to this item as chosen. -->
-					<Set Target="[Choice.ChosenIndex]" Value="[OptionIndex.SourceValue]"/>
-				</Actions>
-			</Condition>
-		</Rules>
+      <!-- When this item gets keyboard focus, it's now selected. -->
+      <Condition Source="[Input.KeyFocus]" ConditionOp="ChangedTo" SourceValue="true">
+        <Actions>
+          <!-- Update the Choice to point to this item as chosen. -->
+          <Set Target="[Choice.ChosenIndex]" Value="[OptionIndex.SourceValue]"/>
+        </Actions>
+      </Condition>
+    </Rules>
 
-		<Content>
+    <Content>
 
 
 
       <Panel Name="ItemPanel" Layout="Anchor" Scale="1.0,1.0,1.0" CenterPointPercent="0.5,0.75,0.0">
         <Children>
 
-           <Panel Name="ImagePanel" Margins="0,0,0,0">
+          <Panel Name="ImagePanel" Margins="0,0,0,0">
             <Children>
 
-              <Graphic Name="Cover" Content="[DisplayItem.GetImage]" Alpha="0.7" SizingPolicy="SizeToConstraint"/>
+              <Graphic Name="Cover" Content="[MovieItem.FrontCover]" Alpha="0.7" SizingPolicy="SizeToConstraint"/>
 
             </Children>
           </Panel>
@@ -333,10 +332,10 @@
         </Children>
 
       </Panel>
-     
-      
-		</Content>
-	</UI>
+
+
+    </Content>
+  </UI>
 
   <UI Name="PositionIndicator">
     <Properties>
@@ -371,13 +370,13 @@
     </Content>
   </UI>
 
-	<!-- Animation so we scroll smoothly -->
-	<Animation Name="MoveAnimation" Type="Move">
-		<Keyframes>
-			<PositionKeyframe Time="0.0" Value="0,0,0" RelativeTo="Current"/>
-			<PositionKeyframe Time="0.2" Value="0,0,0"/>
-		</Keyframes>
-	</Animation>
+  <!-- Animation so we scroll smoothly -->
+  <Animation Name="MoveAnimation" Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" Value="0,0,0" RelativeTo="Current"/>
+      <PositionKeyframe Time="0.2" Value="0,0,0"/>
+    </Keyframes>
+  </Animation>
 
   <Animation Name="Scale" Type="Scale">
     <Keyframes>
