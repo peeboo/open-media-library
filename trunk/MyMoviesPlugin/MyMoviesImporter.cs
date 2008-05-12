@@ -219,7 +219,7 @@ namespace MyMoviesPlugin
                                         {
                                             if (info.GetType().Equals(typeof(FileInfo)))
                                             {
-                                                string ext = info.Extension;
+                                                string ext = info.Extension.Substring(1);
                                                 if (IsSupportedFormat(ext))
                                                 {
                                                     newTitle.VideoFormat =
