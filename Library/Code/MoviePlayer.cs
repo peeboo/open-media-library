@@ -6,6 +6,7 @@ using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
 using System.IO;
+using System.Diagnostics;
 
 namespace Library
 {
@@ -38,19 +39,23 @@ namespace Library
             {
                 if (title.TitleObject.VideoFormat == VideoFormat.DVD)
                 {
+                    Trace.WriteLine("DVDMoviePlayer created");
                     return new DVDPlayer(title);
                 }
                 else if (title.TitleObject.NeedToMountBeforePlaying())
                 {
+                    Trace.WriteLine("MountImageMoviePlayer created");
                     return new MountImagePlayer(title);
                 }
                 else
                 {
+                    Trace.WriteLine("VideoPlayer created");
                     return new VideoPlayer(title);
                 }
             }
             else
             {
+                Trace.WriteLine("UnavailableMoviePlayer created");
                 return new UnavailableMoviePlayer(title);
             }
         }
@@ -128,7 +133,9 @@ namespace Library
         {
             // show a popup or a page explaining the error
             //return false;
-            AddInHost.Current.MediaCenterEnvironment.Dialog("Could not find file [" + _title.FileLocation + "] or don't know how to play this file type", "Error", DialogButtons.Ok, 0, true);
+            AddInHost.Current.MediaCenterEnvironment.Dialog(
+                "Could not find file [" + _title.FileLocation + "] or don't know how to play this file type",
+                "Error", DialogButtons.Ok, 0, true);
             return false;
         }
 
@@ -144,7 +151,35 @@ namespace Library
 
         public bool PlayMovie()
         {
-            // mount the file, then figure out which other player we want to create
+            if (MountTitle(_title))
+            {
+                string mount_location = GetMountLocation();
+                if (mount_location != null && mount_location.Length > 0)
+                {
+                    _title.FileLocation = mount_location;
+                    IPlayMovie player = new DVDPlayer(_title);
+                    return player.PlayMovie();
+                }
+            }
+            return false;
+        }
+
+        private string GetMountLocation()
+        {
+            return string.Empty;
+        }
+
+        private bool MountTitle(MovieItem title)
+        {
+            if (DaemonToolsFound())
+            {
+            }
+
+            return false;
+        }
+
+        private bool DaemonToolsFound()
+        {
             return false;
         }
 
