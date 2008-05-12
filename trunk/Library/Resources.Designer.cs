@@ -60,6 +60,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] Default {
+            get {
+                object obj = ResourceManager.GetObject("Default", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] DetailsPage {
             get {
                 object obj = ResourceManager.GetObject("DetailsPage", resourceCulture);
@@ -85,6 +92,13 @@ namespace Library {
             get {
                 object obj = ResourceManager.GetObject("nocover", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static byte[] Setup {
+            get {
+                object obj = ResourceManager.GetObject("Setup", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

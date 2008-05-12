@@ -11,6 +11,7 @@ namespace Library
     public class MovieGallery
     {
         //private DataSet                 _dataSet;
+        private static Boolean _NeedSetup = false;
         private static TitleCollection _titleCollection;
         private static MovieItem[] _myTitles = null;
         private static Boolean _initialized = false;
@@ -22,12 +23,19 @@ namespace Library
             _titleCollection.loadTitleCollection();
             if (_titleCollection.Count == 0)
             {
+                _NeedSetup = true;
                 Title t = new Title();
                 t.Name = "No Titles in Database";
                 _titleCollection.AddTitle(t);
             }
             Initialize();
         }
+
+        public String NeedSetup
+        {
+            get { return _NeedSetup.ToString(); }
+        }
+
         public void Initialize()
         {
             CreateGallery();
