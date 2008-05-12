@@ -64,26 +64,35 @@ namespace OMLEngine
         ASF, // WMV style
         AVC, // AVC H264
         AVI, // DivX, Xvid, etc
+        B5T, // BlindWrite image
+        B6T, // BlindWrite image
         BIN, // using an image loader lib and load/play this as a DVD
         BLURAY, // detect which drive supports this and request the disc
-        CUE, // using an image loader lib and load/play this as a DVD
+        BWT, // BlindWrite image
+        CCD, // CloneCD image
+        CDI, // DiscJuggler Image
+        CUE, // cue sheet
         DVD, // detect which drive supports this and request the disc
         DVRMS, // MPG
         H264, // AVC OR MP4
         HDDVD, // detect which drive supports this and request the disc
         IFO, // Online DVD
         IMG, // using an image loader lib and load/play this as a DVD
-        ISO, // using an image loader lib and load/play this as a DVD
+        ISO, // Standard ISO image
+        ISZ, // Compressed ISO image
         MDF, // using an image loader lib and load/play this as a DVD
+        MDS, // Media Descriptor file
         MKV, // Likely h264
         MOV, // Quicktime
         MPG,
         MPEG,
         MP4, // DivX, AVC, or H264
+        NRG, // Nero image
         OFFLINEBLURAY, // detect which drive supports this and request the disc
         OFFLINEDVD, // detect which drive supports this and request the disc
         OFFLINEHDDVD, // detect which drive supports this and request the disc
         OGM, // Similar to MKV
+        PDI, // Instant CD/DVD image
         TS, // MPEG2
         WMV,
         VOB, // MPEG2
