@@ -12,29 +12,6 @@ namespace OMLEngine
     /// <summary>
     /// Enumerator for Ratings
     /// </summary>
-    public enum Rating
-    {
-        Unknown,
-        G,
-        PG,
-        PG13,
-        NC17,
-        R,
-        X,
-        XXX,
-        Unrated
-    };
-
-    /// <summary>
-    /// Enumerator for Genres
-    /// </summary>
-    public enum Genre
-    {
-        Comedy,
-        Drama,
-        Action,
-        Romance
-    };
 
     /// <summary>
     /// Enumerator for Sex
