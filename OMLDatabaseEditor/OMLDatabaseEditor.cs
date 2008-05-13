@@ -31,11 +31,12 @@ namespace OMLDatabaseEditor
 
         private void SetupRating()
         {
-            string[] rating_names = Enum.GetNames(typeof(Rating));
-            foreach (string rating in rating_names)
-            {
-                cbRating.Items.Add(rating);
-            }
+            //TODO
+            //////string[] rating_names = Enum.GetNames(typeof(Rating));
+            //////foreach (string rating in rating_names)
+            //////{
+            //////    cbRating.Items.Add(rating);
+            //////}
         }
 
         private void SetupTitleList()
@@ -63,7 +64,7 @@ namespace OMLDatabaseEditor
             foreach (Title title in _titleCollection)
             {
                 row = dt.NewRow();
-                row["itemId"] = title.itemId;
+                row["itemId"] = title.InternalItemID;
                 row["TitleName"] = title.Name;
                 dt.Rows.Add(row);
             }
@@ -83,7 +84,7 @@ namespace OMLDatabaseEditor
 
             foreach (Title t in _titleCollection)
             {
-                if (t.itemId.CompareTo((int)row["itemId"]) == 0)
+                if (t.InternalItemID.CompareTo((int)row["itemId"]) == 0)
                     if (CheckAndUpdateCurrentTitle())
                         SetNewCurrentTitle(t);
             }
@@ -118,9 +119,9 @@ namespace OMLDatabaseEditor
             current_title.Runtime = Int32.Parse(tbRunTime.Text);
             //current_title.MPAARating = cbRating.Text;
             current_title.Distributor = tbDistributor.Text;
-            current_title.Country_Of_Origin = tbCountryOfOrigin.Text;
-            current_title.Official_Website_Url = tbWebsite.Text;
-            current_title.Importer_Source = tbImporterSource.Text;
+            current_title.CountryOfOrigin = tbCountryOfOrigin.Text;
+            current_title.OfficialWebsiteURL = tbWebsite.Text;
+            current_title.ImporterSource = tbImporterSource.Text;
             current_title.DateAdded = dtpDateAdded.Value;
             current_title.Synopsis = tbSynopsis.Text;
 
@@ -135,19 +136,19 @@ namespace OMLDatabaseEditor
                 dtpReleaseDate.Value = current_title.ReleaseDate;
 
             tbRunTime.Text = current_title.Runtime.ToString();
-            cbRating.SelectedIndex = (int)current_title.MPAARating;
+            //cbRating.SelectedIndex = (int)current_title.MPAARating;
             tbDistributor.Text = current_title.Distributor;
-            tbCountryOfOrigin.Text = current_title.Country_Of_Origin;
-            tbWebsite.Text = current_title.Official_Website_Url;
-            tbImporterSource.Text = current_title.Importer_Source;
+            tbCountryOfOrigin.Text = current_title.CountryOfOrigin;
+            tbWebsite.Text = current_title.OfficialWebsiteURL;
+            tbImporterSource.Text = current_title.ImporterSource;
             //dtpDateAdded.Value = current_title.DateAdded;
             tbSynopsis.Text = current_title.Synopsis;
 
-            if (current_title.front_boxart_path != null && current_title.front_boxart_path.Length > 0)
+            if (current_title.FrontCoverPath != null && current_title.FrontCoverPath.Length > 0)
             {
                 try
                 {
-                    front_cover = new Bitmap(current_title.front_boxart_path);
+                    front_cover = new Bitmap(current_title.FrontCoverPath);
                     pbFrontCover.Image = (Image)front_cover;
                 }
                 catch (Exception)
@@ -159,9 +160,9 @@ namespace OMLDatabaseEditor
                 pbFrontCover.Image = pbFrontCover.InitialImage;
             }
 
-            if (current_title.back_boxart_path != null && current_title.back_boxart_path.Length > 0)
+            if (current_title.BackCoverPath != null && current_title.BackCoverPath.Length > 0)
             {
-                back_cover = new Bitmap(current_title.back_boxart_path);
+                back_cover = new Bitmap(current_title.BackCoverPath);
                 pbBackCover.Image = (Image)back_cover;
             }
             else
