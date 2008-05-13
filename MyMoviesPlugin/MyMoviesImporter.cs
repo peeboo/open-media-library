@@ -81,7 +81,7 @@ namespace MyMoviesPlugin
             switch (node.Name)
             {
                 case "WebServiceId":
-                    newTitle.sourceId = node.InnerText;
+                    newTitle.MetadataSourceID = node.InnerText;
                     break;
                 case "Covers":
                     XmlNode front_node = node.ChildNodes[0];
@@ -92,10 +92,10 @@ namespace MyMoviesPlugin
                         try {
                             fi = new FileInfo(current_filename);
                             string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
-                                                   "\\F" + newTitle.itemId +
+                                                   "\\F" + newTitle.InternalItemID +
                                                    fi.Extension;
                             CopyImage(current_filename, new_full_name);
-                            newTitle.front_boxart_path = new_full_name;
+                            newTitle.FrontCoverPath = new_full_name;
                         }
                         catch (Exception e) { Trace.WriteLine(e.Message); }
                     }
@@ -108,10 +108,10 @@ namespace MyMoviesPlugin
                         {
                             fi = new FileInfo(current_filename);
                             string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
-                                                   "\\B" + newTitle.itemId +
+                                                   "\\B" + newTitle.InternalItemID +
                                                    fi.Extension;
                             CopyImage(current_filename, new_full_name);
-                            newTitle.back_boxart_path = new_full_name;
+                            newTitle.BackCoverPath = new_full_name;
                         }
                         catch (Exception e) { Trace.WriteLine(e.Message); }
                     }
@@ -142,23 +142,23 @@ namespace MyMoviesPlugin
                             switch (mmRatingId)
                             {
                                 case 0:
-                                    newTitle.MPAARating = Rating.Unrated;
+                                    newTitle.MPAARating = "Unrated";
                                     break;
                                 case 1:
-                                    newTitle.MPAARating = Rating.G;
+                                    newTitle.MPAARating = "G";
                                     break;
                                 case 2:
                                     break;
                                 case 3:
-                                    newTitle.MPAARating = Rating.PG;
+                                    newTitle.MPAARating = "PG";
                                     break;
                                 case 4:
-                                    newTitle.MPAARating = Rating.PG13;
+                                    newTitle.MPAARating = "PG13";
                                     break;
                                 case 5:
                                     break;
                                 case 6:
-                                    newTitle.MPAARating = Rating.R;
+                                    newTitle.MPAARating = "R";
                                     break;
                             }
                         }
@@ -196,7 +196,7 @@ namespace MyMoviesPlugin
                     }
                     break;
                 case "Country":
-                    newTitle.Country_Of_Origin = node.InnerText;
+                    newTitle.CountryOfOrigin = node.InnerText;
                     break;
                 case "Discs":
                     XmlNodeList discs = node.SelectNodes("Disc");
