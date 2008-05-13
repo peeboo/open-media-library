@@ -16,12 +16,11 @@ namespace Library
         private Image _frontCoverArtImage;
         private Image _backCoverArtImage;
 
-        //public DisplayItem() { }
         public MovieItem(Title title)
         {
             _titleObj = title;
-            _frontCoverArtImage = MovieGallery.LoadImage(_titleObj.front_boxart_path);
-            _backCoverArtImage = MovieGallery.LoadImage(_titleObj.back_boxart_path);
+            _frontCoverArtImage = MovieGallery.LoadImage(_titleObj.FrontCoverPath);
+            _backCoverArtImage = MovieGallery.LoadImage(_titleObj.BackCoverPath);
         }
 
         public void PlayMovie()
@@ -55,8 +54,14 @@ namespace Library
 
         public int itemId
         {
-            get { return _titleObj.itemId; }
+            get { return _titleObj.InternalItemID; }
         }
+
+        public int UseStarRating
+        {
+            get { return _titleObj.UserStarRating; }
+        }
+
         public string Name
         {
             get { return _titleObj.Name; }
@@ -69,8 +74,7 @@ namespace Library
         }
         public string Rating
         {
-            //TODO: ugly, change this
-            get { return (string)Enum.GetName(typeof(Rating), _titleObj.MPAARating); }
+            get { return _titleObj.MPAARating; }
             set { }
         }
         public string Synopsis
@@ -85,13 +89,13 @@ namespace Library
         }
         public string CountryOfOrigin
         {
-            get { return _titleObj.Country_Of_Origin; }
-            set { _titleObj.Country_Of_Origin = value; }
+            get { return _titleObj.CountryOfOrigin; }
+            set { _titleObj.CountryOfOrigin = value; }
         }
         public string OfficialWebsite
         {
-            get { return _titleObj.Official_Website_Url; }
-            set { _titleObj.Official_Website_Url = value; }
+            get { return _titleObj.OfficialWebsiteURL; }
+            set { _titleObj.OfficialWebsiteURL = value; }
         }
         public string ReleaseDate
         {
@@ -147,19 +151,6 @@ namespace Library
         {
             get { return _titleObj.Writers; }
             //set { _titleObj.Writers = value; }
-        }
-        public string DynamicPlayMedia()
-        {
-            string path_to_media = _titleObj.FileLocation;
-            if (OMLApplication.Current.IsExtender && _titleObj.NeedToTranscodeToExtenders())
-            {
-                Trace.WriteLine("We are an extender");
-                string new_path = string.Empty;
-                if (_titleObj.PlayTranscodedMedia(ref new_path))
-                    path_to_media = new_path;
-            }
-            Trace.WriteLine("Returning path: " + path_to_media);
-            return path_to_media;
         }
     }
 }
