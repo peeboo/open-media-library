@@ -62,6 +62,11 @@
     <Compile Include="Code\Launch.cs" />
     <Compile Include="Code\Movie.cs" />
     <Compile Include="Code\MoviePlayer.cs" />
+    <Compile Include="Code\MoviePlayerDVD.cs" />
+    <Compile Include="Code\MoviePlayerMountImage.cs" />
+    <Compile Include="Code\MoviePlayerTranscode.cs" />
+    <Compile Include="Code\MoviePlayerUnavailable.cs" />
+    <Compile Include="Code\MoviePlayerVideo.cs" />
     <Compile Include="OML.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -86,6 +91,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\Focus_Outline.png" />
+    <Content Include="Markup\Button.mcml" />
+    <Content Include="Markup\CoreControls.mcml" />
     <Content Include="Markup\DetailsPage.mcml" />
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\Default.mcml" />
@@ -103,6 +110,13 @@
     <None Include="Setupx64\License.rtf" />
     <None Include="Setupx64\Setup-en-us.wxl" />
     <None Include="Setupx64\Setup.wxs" />
+    <None Include="Resources\buttonfocus.png" />
+    <None Include="Resources\buttonnonfocus.png" />
+    <None Include="Resources\checkboxfocus.png" />
+    <None Include="Resources\checkboxnonfocus.png" />
+    <None Include="Resources\Container.png" />
+    <None Include="Resources\editboxfocus.png" />
+    <None Include="Resources\editboxnonfocus.png" />
     <Content Include="Setupx64\License.txt" />
     <Content Include="Setup\License.txt" />
   </ItemGroup>
