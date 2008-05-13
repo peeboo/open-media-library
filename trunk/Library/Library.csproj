@@ -95,7 +95,6 @@
     <Content Include="Markup\CoreControls.mcml" />
     <Content Include="Markup\DetailsPage.mcml" />
     <Content Include="Markup\Menu.mcml" />
-    <Content Include="Markup\Default.mcml" />
     <Content Include="Markup\Setup.mcml" />
     <Content Include="Markup\Styles.mcml" />
     <Content Include="Registration.xml" />
