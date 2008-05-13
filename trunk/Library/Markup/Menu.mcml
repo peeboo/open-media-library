@@ -4,7 +4,7 @@
 	  xmlns:cor="assembly://MSCorLib/System"
 	  xmlns:me="Me">
 
-  <UI Name="Default">
+  <UI Name="MainMenu">
 
     <Properties>
       <a:OMLApplication Name="Application" OMLApplication="$Required"/>
@@ -135,7 +135,7 @@
               </Clip>
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,-50" Top="LeftPanelRuntime,1,50"/>
+              <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,-50" Top="LeftPanelRuntime,1,50" Bottom="Parent,1"/>
             </LayoutInput>
           </Panel>
 
