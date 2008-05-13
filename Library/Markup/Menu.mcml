@@ -58,14 +58,7 @@
     <Content>
       <ColorFill Content="Transparent" Layout="Form">
         <Children>
-          
-          <!-- Place the Now Playing UI at the bottom left of the screen. --><!--
-          <NowPlaying ShowFullMetadata="OnFocus" SnapToDefaultPosition="true">
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0" Bottom="Parent,1" Right="Parent,1" Top="Parent,1"/>
-            </LayoutInput>
-          </NowPlaying>-->
-          
+ 
           <Panel Name="LeftPanelTitle" >
             <Children>
               <Text Name="TitleText" WordWrap="true" Font="Verdana,26" Color="White">
@@ -98,6 +91,7 @@
               <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,1" Top="LeftPanelTitle,1,0"/>
             </LayoutInput>
           </Panel>
+          
           <Panel Name="LeftPanelRuntime" >
             <Layout>
               <FlowLayout Orientation="Horizontal"/>
