@@ -20,7 +20,7 @@ namespace Library
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
         {
             this._session = session;
-            this._isExtender = host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
+            this._isExtender = !host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
             this._host = host;
             _singleApplicationInstance = this;
             _movieGallery = new MovieGallery();
@@ -52,7 +52,7 @@ namespace Library
             }
         }
 
-        public void GoToDetails(DetailsPage page)
+        public void GoToDetails(MovieDetailsPage page)
         {
             if (page == null)
                 throw new System.Exception("The method or operation is not implemented.");
