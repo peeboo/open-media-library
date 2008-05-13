@@ -14,19 +14,11 @@
     </Properties>
 
     <Locals>
-      <cor:String Name="FirstRun" String="True"/>
+      <cor:Boolean Name="FirstRun" Boolean="True"/>
     </Locals>
 
 		<Rules>
-      
-      <Condition Source="[FirstRun]"
-                 SourceValue="True">
-      </Condition>
-      
-      <Condition Source="[FirstRun]"
-                 SourceValue="False">        
-      </Condition>
-      
+     
       <Condition Source="[MovieBrowser.NeedSetup]" SourceValue="True">
         <Actions>
           <Set Target="[FirstRun]" Value="False" />
