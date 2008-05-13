@@ -10,55 +10,21 @@ namespace Library
 {
     public class MovieGallery
     {
-        //private DataSet                 _dataSet;
-        private static Boolean _NeedSetup = false;
         private static TitleCollection _titleCollection;
         private static MovieItem[] _myTitles = null;
-        private static Boolean _initialized = false;
 
         public MovieGallery()
         {
-            //            dataSet = new DataSet();
             _titleCollection = new TitleCollection();
-            _titleCollection.loadTitleCollection();
-            if (_titleCollection.Count == 0)
-            {
-                _NeedSetup = true;
-                Title t = new Title();
-                t.Name = "No Titles in Database";
-                _titleCollection.AddTitle(t);
-            }
-            Initialize();
-        }
-
-        public String NeedSetup
-        {
-            get { return _NeedSetup.ToString(); }
-        }
-
-        public void Initialize()
-        {
+            LoadMovies();
             CreateGallery();
-            _initialized = true;
         }
 
-        public DataTable MoviesDataSet
+        public void LoadMovies()
         {
-            get
-            {
-                if (!_initialized) Initialize();
-                return _titleCollection.ToDataTable();
-            }
+            _titleCollection.loadTitleCollection();
         }
 
-        public MovieItem[] Movies
-        {
-            get
-            {
-                if (!_initialized) Initialize();
-                return _myTitles;
-            }
-        }
         public MovieItem[] CreateGallery()
         {
             if (_myTitles == null)
@@ -72,6 +38,22 @@ namespace Library
                 _myTitles = (MovieItem[])list.ToArray(typeof(MovieItem));
             }
             return _myTitles;
+        }
+
+        public DataTable MoviesDataSet
+        {
+            get
+            {
+                return _titleCollection.ToDataTable();
+            }
+        }
+
+        public MovieItem[] Movies
+        {
+            get
+            {
+                return _myTitles;
+            }
         }
         private MovieItem CreateGalleryItem(Title title)
         {

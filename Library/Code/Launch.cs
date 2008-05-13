@@ -34,7 +34,7 @@ namespace Library
         {
             s_session = new HistoryOrientedPageSession();
             OMLApplication app = new OMLApplication(s_session, host);
-            app.GoToMenu();
+            app.Startup();
         }
     }
 }

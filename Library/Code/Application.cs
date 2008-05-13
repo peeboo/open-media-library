@@ -26,6 +26,14 @@ namespace Library
             _movieGallery = new MovieGallery();
         }
 
+        public void Startup()
+        {
+            if (_movieGallery.Movies != null && _movieGallery.Movies.Length > 0)
+                GoToMenu();
+            else
+                GoToSetup();
+        }
+
         public static OMLApplication Current
         {
             get { return _singleApplicationInstance; }
@@ -40,6 +48,19 @@ namespace Library
             }
         }
 
+        public void GoToSetup()
+        {
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+            properties["Application"] = this;
+            properties["MovieBrowser"] = _movieGallery;
+
+            if (_session != null)
+            {
+                _session.GoToPage("resx://Library/Library.Resources/Setup", properties);
+            }
+        }
+
+    
         public void GoToMenu()
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();
