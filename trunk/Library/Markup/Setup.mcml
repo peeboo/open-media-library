@@ -8,7 +8,7 @@
 		</Properties>
 
 		<Locals>
-			<cor:String Name="MyString" String="Hello"/>
+			<cor:String Name="MyString" String="No movies found! This is the setup page (TODO!)"/>
 		</Locals>
 
 		<Rules>
