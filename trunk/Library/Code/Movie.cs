@@ -42,6 +42,15 @@ namespace Library
             _initialized = true;
         }
 
+        public DataTable MoviesDataSet
+        {
+            get
+            {
+                if (!_initialized) Initialize();
+                return _titleCollection.ToDataTable();
+            }
+        }
+
         public MovieItem[] Movies
         {
             get
@@ -73,16 +82,16 @@ namespace Library
                 MovieItem galleryItem = (MovieItem)sender;
 
                 // Navigate to a details page for this item.
-                DetailsPage page = CreateDetailsPage(item);
+                MovieDetailsPage page = CreateDetailsPage(item);
                 OMLApplication.Current.GoToDetails(page);
             };
 
             return item;
         }
-        public DetailsPage CreateDetailsPage(MovieItem item)
+        public MovieDetailsPage CreateDetailsPage(MovieItem item)
         {
             Trace.WriteLine("Creating a detailspage");
-            DetailsPage page = new DetailsPage(item);
+            MovieDetailsPage page = new MovieDetailsPage(item);
             Trace.WriteLine("adding the item");
             return page;
         }
