@@ -45,7 +45,7 @@ namespace MovieCollectorz
 //                            newTitle.itemId = int.Parse(node.InnerText);
                             break;
                         case "coverfront":
-                            newTitle.front_boxart_path = node.InnerText;
+                            newTitle.FrontCoverPath = node.InnerText;
                             break;
                         case "format":
                             break;
@@ -73,8 +73,8 @@ namespace MovieCollectorz
                             break;
                         case "mpaarating":
                             XmlNode ratingNode = node.SelectSingleNode("displayname");
-//                            if (ratingNode != null)
-//                                newTitle.MPAARating = ratingNode.InnerText;
+                            if (ratingNode != null)
+                                newTitle.MPAARating = ratingNode.InnerText;
                             break;
                         case "runtimeminutes":
                             newTitle.Runtime = Int32.Parse(node.InnerText);
@@ -85,8 +85,8 @@ namespace MovieCollectorz
                             foreach (XmlNode person in persons)
                             {
                                 XmlNode disNameNode = person.SelectSingleNode("displayname");
-//                                if (disNameNode != null)
-//                                    newTitle.AddActor(disNameNode.InnerText);
+                                if (disNameNode != null)
+                                    newTitle.AddActor( new Person(disNameNode.InnerText));
                             }
                             break;
                         case "crew":
