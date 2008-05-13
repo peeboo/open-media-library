@@ -32,158 +32,76 @@ namespace Library
         /// </summary>
         /// <param name="title">The title.</param>
         /// <returns></returns>
-        static public IPlayMovie CreateMoviePlayer(MovieItem title)
+        static public IPlayMovie CreateMoviePlayer(MovieItem movieItem)
         {
-            // for now play just online titles. add offline capabilities soon
-            if (File.Exists(title.FileLocation) || Directory.Exists(title.FileLocation))
+            // for now play just online titles. add offline capabilities later
+            if (File.Exists(movieItem.FileLocation) || Directory.Exists(movieItem.FileLocation))
             {
-                if (title.TitleObject.VideoFormat == VideoFormat.DVD)
+                if (OMLApplication.Current.IsExtender && NeedsTranscode(movieItem.TitleObject) )
                 {
-                    Trace.WriteLine("DVDMoviePlayer created");
-                    return new DVDPlayer(title);
+                    Trace.WriteLine("TranscodePlayer created");
+                    return new TranscodePlayer(movieItem);
                 }
-                else if (title.TitleObject.NeedToMountBeforePlaying())
+                else if (NeedsMounting(movieItem.TitleObject))
                 {
                     Trace.WriteLine("MountImageMoviePlayer created");
-                    return new MountImagePlayer(title);
+                    return new MountImagePlayer(movieItem);
+                }
+                else if (movieItem.TitleObject.VideoFormat == VideoFormat.DVD)
+                {
+                    Trace.WriteLine("DVDMoviePlayer created");
+                    return new DVDPlayer(movieItem);
                 }
                 else
                 {
                     Trace.WriteLine("VideoPlayer created");
-                    return new VideoPlayer(title);
+                    return new VideoPlayer(movieItem);
                 }
             }
             else
             {
                 Trace.WriteLine("UnavailableMoviePlayer created");
-                return new UnavailableMoviePlayer(title);
+                return new UnavailableMoviePlayer(movieItem);
+            }
+        }
+
+        // keep all the Playing logic here
+        static private bool NeedsMounting( Title title )
+        {
+            switch (title.VideoFormat)
+            {
+                case VideoFormat.BIN:
+                    return true;
+                case VideoFormat.CUE:
+                    return true;
+                case VideoFormat.IMG:
+                    return true;
+                case VideoFormat.ISO:
+                    return true;
+                case VideoFormat.MDF:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        // keep all the Playing logic here
+        static private bool NeedsTranscode( Title title)
+        {
+            switch (title.VideoFormat)
+            {
+                case VideoFormat.DVRMS:
+                    return false;
+                case VideoFormat.MPEG:
+                    return false;
+                case VideoFormat.MPG:
+                    return false;
+                case VideoFormat.WMV:
+                    return false;
+                default:
+                    return true;
             }
         }
     }
-
-    /// <summary>
-    /// DVDPlayer class for playing a DVD
-    /// </summary>
-    public class DVDPlayer : IPlayMovie
-    {
-        public DVDPlayer(MovieItem title)
-        {
-            _title = title;
-        }
-
-        public bool PlayMovie()
-        {
-            string media = "DVD://" + _title.FileLocation;
-            media.Replace('\\', '/');
-            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, media, false))
-            {
-                if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
-                {
-                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            
-        }
-
-        MovieItem _title;
-    }
-
-    /// <summary>
-    /// VideoPlayer class for playing standard videos (AVIs, etc)
-    /// </summary>
-    public class VideoPlayer : IPlayMovie
-    {
-        public VideoPlayer(MovieItem title)
-        {
-            _title = title;
-        }
-
-        public bool PlayMovie()
-        {
-            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, _title.FileLocation, false))
-            {
-                if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
-                {
-                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        MovieItem _title;
-    }
-
-    public class UnavailableMoviePlayer : IPlayMovie
-    {
-        public UnavailableMoviePlayer(MovieItem title)
-        {
-            _title = title;
-        }
-
-        public bool PlayMovie()
-        {
-            // show a popup or a page explaining the error
-            //return false;
-            AddInHost.Current.MediaCenterEnvironment.Dialog(
-                "Could not find file [" + _title.FileLocation + "] or don't know how to play this file type",
-                "Error", DialogButtons.Ok, 0, true);
-            return false;
-        }
-
-        MovieItem _title;
-    }
-
-    public class MountImagePlayer : IPlayMovie
-    {
-        public MountImagePlayer(MovieItem title)
-        {
-            _title = title;
-        }
-
-        public bool PlayMovie()
-        {
-            if (MountTitle(_title))
-            {
-                string mount_location = GetMountLocation();
-                if (mount_location != null && mount_location.Length > 0)
-                {
-                    _title.FileLocation = mount_location;
-                    IPlayMovie player = new DVDPlayer(_title);
-                    return player.PlayMovie();
-                }
-            }
-            return false;
-        }
-
-        private string GetMountLocation()
-        {
-            return string.Empty;
-        }
-
-        private bool MountTitle(MovieItem title)
-        {
-            if (DaemonToolsFound())
-            {
-            }
-
-            return false;
-        }
-
-        private bool DaemonToolsFound()
-        {
-            return false;
-        }
-
-        MovieItem _title;
-    }
-
 }
+
