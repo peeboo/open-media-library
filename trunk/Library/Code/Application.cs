@@ -48,7 +48,7 @@ namespace Library
 
             if (_session != null)
             {
-                _session.GoToPage("resx://Library/Library.Resources/Default", properties);
+                _session.GoToPage("resx://Library/Library.Resources/Menu", properties);
             }
         }
 
