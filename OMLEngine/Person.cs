@@ -22,7 +22,7 @@ namespace OMLEngine
             set
             {
                 if (value != null)
-                    _full_name = value;
+                    _full_name = value.Trim();
             }
         }
 
