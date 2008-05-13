@@ -18,11 +18,42 @@ namespace Library
 
         public bool PlayMovie()
         {
-            AddInHost.Current.MediaCenterEnvironment.Dialog("Mounting images not implemented yet. File " + _title.FileLocation, "Error", DialogButtons.Cancel, 0, true);
-
-            // mount the file, then figure out which other player we want to create
+            if (MountTitle(_title))
+            {
+                string mount_location = GetMountLocation();
+                if (mount_location != null && mount_location.Length > 0)
+                {
+                    _title.FileLocation = mount_location;
+                    IPlayMovie player = new DVDPlayer(_title);
+                    return player.PlayMovie();
+                }
+                else
+                {
+                    AddInHost.Current.MediaCenterEnvironment.Dialog("Mounting images not implemented yet. File " + _title.FileLocation, "Error", DialogButtons.Cancel, 0, true);
+                }
+            }
             return false;
         }
+
+        private string GetMountLocation()
+        {
+            return string.Empty;
+        }
+
+        private bool MountTitle(MovieItem title)
+        {
+            if (DaemonToolsFound())
+            {
+            }
+
+            return false;
+        }
+
+        private bool DaemonToolsFound()
+        {
+            return false;
+        }
+
         MovieItem _title;
     }
 
