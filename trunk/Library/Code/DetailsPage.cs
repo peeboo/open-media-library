@@ -13,13 +13,13 @@ namespace Library
     /// This object contains the standard set of information displayed in the 
     /// details page UI.
     /// </summary>
-    public class DetailsPage : ModelItem
+    public class MovieDetailsPage : ModelItem
     {
         /// <summary>The URI of the media at its locally cached location.</summary>
         private FileInfo _localMedia = null;
         private MovieItem _movieDetails = null;
 
-        public DetailsPage(MovieItem item)
+        public MovieDetailsPage(MovieItem item)
         {
             LoadDetails(item);
         }
@@ -55,12 +55,6 @@ namespace Library
         {
             get { return _localMedia; }
             set { _localMedia = value; }
-        }
-
-        //TODO: let the MoviePlayer do the transcoding
-        public string getUrl
-        {
-            get { return _movieDetails.DynamicPlayMedia(); }
         }
 
         /// <summary>
@@ -147,7 +141,13 @@ namespace Library
         public string Rating
         {
             // this is a bit ugly, we need a better way
-            get { return _movieDetails.Rating; }
+            get 
+            {
+                if (_movieDetails.Rating.Trim().Length > 0)
+                    return _movieDetails.Rating;
+                else
+                    return "";
+            }
 
             set
             {
@@ -162,7 +162,13 @@ namespace Library
 
         public string Length
         {
-            get { return _movieDetails.Runtime; }
+            get 
+            {
+                if( _movieDetails.TitleObject.Runtime > 0 )
+                    return _movieDetails.Runtime + " min"; 
+                else
+                    return ""; 
+            }
             set
             {
                 if (_movieDetails.Runtime != value)
@@ -175,54 +181,45 @@ namespace Library
 
         public string ReleaseDate
         {
-            get { return _movieDetails.ReleaseDate; }
-            set
+            get 
             {
-                if (_movieDetails.ReleaseDate != value)
-                {
-                    _movieDetails.ReleaseDate = value;
-                    FirePropertyChanged("ReleaseDate");
-                }
+                if (_movieDetails.TitleObject.ReleaseDate != DateTime.MinValue)
+                    return _movieDetails.ReleaseDate;
+                else
+                    return "";
+            }
+        }
+
+        public string ReleaseYear
+        {
+            get
+            {
+                if (_movieDetails.TitleObject.ReleaseDate != DateTime.MinValue)
+                    return Convert.ToString(_movieDetails.TitleObject.ReleaseDate.Year);
+                else
+                    return "";
             }
         }
 
         public IList Actors
         {
             get { return _movieDetails.Actors; }
-            //set
-            //{
-            //    if (_movieDetails.Actors != value)
-            //    {
-            //        _movieDetails.Actors = value;
-            //        FirePropertyChanged("Actors");
-            //    }
-            //}
         }
 
         public IList Directors
         {
             get { return _movieDetails.Directors; }
-            //set
-            //{
-            //    if (_movieDetails.Directors != value)
-            //    {
-            //        _movieDetails.Directors = value;
-            //        FirePropertyChanged("Directors");
-            //    }
-            //}
         }
+
+        public IList Genres
+        {
+            get { return _movieDetails.TitleObject.Genres; }
+        }
+  
 
         public IList Producers
         {
             get { return _movieDetails.Producers; }
-            //set
-            //{
-            //    if (_movieDetails.Producers != value)
-            //    {
-            //        _movieDetails.Producers = value;
-            //        FirePropertyChanged("Producers");
-            //    }
-            //}
         }
 
         public IList Writers
