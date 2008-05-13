@@ -17,36 +17,73 @@ namespace OMLEngine
     {
         #region locals
         private int _watched;
-        private string _file_location;
-        private VideoFormat _video_format;
-        private bool _transcode_to_extender;
+        private string _fileLocation;
+        private VideoFormat _videoFormat;
+        private bool _needsTranscode;
         private string _name;
         private string _description;
         private int _itemId;
-        private string _sourceId;
-        private string _source_name;
-        private string _front_boxart_path;
-        private string _back_boxart_path;
+        private string _metadataSourceId;
+        private string _sourceName;
+        private string _frontCoverPath;
+        private string _backCoverPath;
         private int _runtime;
-        private Rating _mpaa_rating;
+        private string _MPAARating;
         private string _synopsis;
         private string _distributor;
-        private string _country_of_origin;
-        private string _official_website_url;
-        private DateTime _release_date;
-        private DateTime _date_added;
-        private string _importer_source;
+        private string _countryOfOrigin;
+        private string _officialWebsiteURL;
+        private DateTime _releaseDate;
+        private DateTime _dateAdded;
+        private string _importerSource;
         private List<Person> _actors;
         private List<Person> _crew;
         private List<Person> _directors;
         private List<Person> _writers;
         private List<string> _producers;
-        private List<string> _sound_formats;
-        private List<string> _language_formats;
-        private List<Genre> _genres;
+        private List<string> _soundFormats;
+        private List<string> _languageFormats;
+        private List<string> _genres;
+        private int _userStarRating;
+        private string _aspectRatio;    // Widescreen, 1.33, 1.66, 
+        private string _videoStandard;  // NTSC, PAL
+        private string _UPC;
+        private string _originalName;
+
+
         #endregion
 
         #region properties
+
+        public string OriginalName
+        {
+            get { return _originalName; }
+            set { _originalName = value; }
+        } 
+
+        public string VideoStandard
+        {
+            get { return _videoStandard; }
+            set { _videoStandard = value; }
+        }
+
+        public string AspectRatio
+        {
+            get { return _aspectRatio; }
+            set { _aspectRatio = value; }
+        }
+
+        public string UPC
+        {
+            get { return _UPC; }
+            set { _UPC = value; }
+        }
+
+        public int UserStarRating
+        {
+            get { return _userStarRating; }
+            set { _userStarRating = value; }
+        }
 
         /// <summary>
         /// Has this title been watched before or not
@@ -65,8 +102,8 @@ namespace OMLEngine
         /// </summary>
         public string FileLocation
         {
-            get { return _file_location; }
-            set { _file_location = value; }
+            get { return _fileLocation; }
+            set { _fileLocation = value; }
         }
 
         /// <summary>
@@ -74,8 +111,8 @@ namespace OMLEngine
         /// </summary>
         public VideoFormat VideoFormat
         {
-            get { return _video_format; }
-            set { _video_format = value; }
+            get { return _videoFormat; }
+            set { _videoFormat = value; }
         }
 
         /// <summary>
@@ -104,49 +141,49 @@ namespace OMLEngine
         /// <summary>
         /// Internal id of the Title
         /// </summary>
-        public int itemId
+        public int InternalItemID
         {
             get { return _itemId; }
         }
         /// <summary>
         /// Unique id from the Source of our title info (MyMovies, DVD Profiler, etc).
         /// </summary>
-        public string sourceId
+        public string MetadataSourceID
         {
-            get { return _sourceId; }
+            get { return _metadataSourceId; }
             set
             {
                 if (value != null)
-                    _sourceId = value;
+                    _metadataSourceId = value;
             }
         }
         /// <summary>
         /// Name of the source for our info (MyMovies, DVD Profiler, etc)
         /// </summary>
-        public string sourceName
+        public string MetadataSourceName
         {
-            get { return _source_name; }
+            get { return _sourceName; }
             set
             {
                 if (value != null)
-                    _source_name = value;
+                    _sourceName = value;
             }
         }
         /// <summary>
         /// Pull path to the cover art image
         /// </summary>
-        public string front_boxart_path
+        public string FrontCoverPath
         {
-            get { return _front_boxart_path; }
-            set { _front_boxart_path = value; }
+            get { return _frontCoverPath; }
+            set { _frontCoverPath = value; }
         }
         /// <summary>
         /// Full path to the rear cover art image
         /// </summary>
-        public string back_boxart_path
+        public string BackCoverPath
         {
-            get { return _back_boxart_path; }
-            set { _back_boxart_path = value; }
+            get { return _backCoverPath; }
+            set { _backCoverPath = value; }
         }
         /// <summary>
         /// Runtime in minutes of the title
@@ -159,10 +196,10 @@ namespace OMLEngine
         /// <summary>
         /// Rating of the film acording to the MPAA
         /// </summary>
-        public Rating MPAARating
+        public string MPAARating
         {
-            get { return _mpaa_rating; }
-            set { _mpaa_rating = value; }
+            get { return _MPAARating; }
+            set { _MPAARating = value; }
         }
         /// <summary>
         /// Long description of title
@@ -183,29 +220,29 @@ namespace OMLEngine
         /// <summary>
         /// Country where the title was created/first released
         /// </summary>
-        public string Country_Of_Origin
+        public string CountryOfOrigin
         {
-            get { return _country_of_origin; }
-            set { _country_of_origin = value; }
+            get { return _countryOfOrigin; }
+            set { _countryOfOrigin = value; }
         }
         /// <summary>
         /// website for title (if it has one)
         /// </summary>
-        public string Official_Website_Url
+        public string OfficialWebsiteURL
         {
-            get { return _official_website_url; }
-            set { _official_website_url = value; }
+            get { return _officialWebsiteURL; }
+            set { _officialWebsiteURL = value; }
         }
         /// <summary>
         /// Original date of release (or re-release)
         /// </summary>
         public DateTime ReleaseDate
         {
-            get { return _release_date; }
+            get { return _releaseDate; }
             set
             {
                 if (value != null)
-                    _release_date = value;
+                    _releaseDate = value;
             }
         }
         /// <summary>
@@ -213,33 +250,33 @@ namespace OMLEngine
         /// </summary>
         public DateTime DateAdded
         {
-            get { return _date_added; }
-            set { _date_added = value; }
+            get { return _dateAdded; }
+            set { _dateAdded = value; }
         }
         /// <summary>
         /// Name of the source from which meta-data was gathered (MyMovies, DVD Profiler, etc.)
         /// </summary>
-        public string Importer_Source
+        public string ImporterSource
         {
-            get { return _importer_source; }
-            set { _importer_source = value; }
+            get { return _importerSource; }
+            set { _importerSource = value; }
         }
         /// <summary>
         /// List of sound formats (DTS, DD5.1, DD2.0, etc)
         /// </summary>
         public IList SoundFormats
         {
-            get { return _language_formats; }
+            get { return _languageFormats; }
         }
         /// <summary>
         /// List of languages (English, Spanish, French, etc)
         /// </summary>
         public IList LanguageFormats
         {
-            get { return _sound_formats; }
+            get { return _soundFormats; }
         }
         /// <summary>
-        /// List of Genres (see the Genre Enumerator)
+        /// List of Genres
         /// </summary>
         public IList Genres
         {
@@ -290,33 +327,38 @@ namespace OMLEngine
         /// <param name="ctxt">StreamingContext object</param>
         public Title(SerializationInfo info, StreamingContext ctxt)
         {
-            _file_location = info.GetString("file_location");
-            _video_format = (VideoFormat)info.GetValue("video_format", typeof(VideoFormat));
-            _transcode_to_extender = info.GetBoolean("transcode_to_extender");
+            _fileLocation = info.GetString("file_location");
+            _videoFormat = (VideoFormat)info.GetValue("video_format", typeof(VideoFormat));
+            _needsTranscode = info.GetBoolean("transcode_to_extender");
             _name = info.GetString("name");
             _description = info.GetString("description");
             _itemId = (int)info.GetValue("itemid", typeof(int));
-            _sourceId = info.GetString("sourceid");
-            _source_name = info.GetString("sourcename");
-            _front_boxart_path = info.GetString("front_boxart_path");
-            _back_boxart_path = info.GetString("back_boxart_path");
+            _metadataSourceId = info.GetString("sourceid");
+            _sourceName = info.GetString("sourcename");
+            _frontCoverPath = info.GetString("front_boxart_path");
+            _backCoverPath = info.GetString("back_boxart_path");
             _synopsis = info.GetString("synopsis");
             _distributor = info.GetString("distributor");
-            _country_of_origin = info.GetString("country_of_origin");
-            _official_website_url = info.GetString("official_website_url");
-            _date_added = info.GetDateTime("date_added");
-            _importer_source = info.GetString("importer_source");
+            _countryOfOrigin = info.GetString("country_of_origin");
+            _officialWebsiteURL = info.GetString("official_website_url");
+            _dateAdded = info.GetDateTime("date_added");
+            _importerSource = info.GetString("importer_source");
             _runtime = (int)info.GetValue("runtime", typeof(int));
-            _mpaa_rating = (Rating)info.GetValue("mpaa_rating", typeof(Rating));
-            _release_date = info.GetDateTime("release_date");
+            _MPAARating = info.GetString("mpaa_rating");
+            _releaseDate = info.GetDateTime("release_date");
             _actors = (List<Person>)info.GetValue("actors", typeof(List<Person>));
             _crew = (List<Person>)info.GetValue("crew", typeof(List<Person>));
             _producers = (List<string>)info.GetValue("producers", typeof(List<string>));
             _writers = (List<Person>)info.GetValue("writers", typeof(List<Person>));
             _directors = (List<Person>)info.GetValue("directors", typeof(List<Person>));
-            _sound_formats = (List<string>)info.GetValue("sound_formats", typeof(List<string>));
-            _language_formats = (List<string>)info.GetValue("language_formats", typeof(List<string>));
-            _genres = (List<Genre>)info.GetValue("genres", typeof(List<Genre>));
+            _soundFormats = (List<string>)info.GetValue("sound_formats", typeof(List<string>));
+            _languageFormats = (List<string>)info.GetValue("language_formats", typeof(List<string>));
+            _genres = (List<string>)info.GetValue("genres", typeof(List<string>));
+            _userStarRating = (int)info.GetValue("user_star_rating", typeof(int));
+            _aspectRatio = info.GetString("aspect_ratio");
+            _videoStandard = info.GetString("video_standard");
+            _UPC = info.GetString("upc");
+            _originalName = info.GetString("original_name");
 
             if (_itemId == 0)
                 _itemId = Utilities.NewRandomNumber();
@@ -329,33 +371,39 @@ namespace OMLEngine
         /// <param name="ctxt"></param>
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
-            info.AddValue("file_location", _file_location);
-            info.AddValue("video_format", _video_format);
-            info.AddValue("transcode_to_extender", _transcode_to_extender);
+            info.AddValue("file_location", _fileLocation);
+            info.AddValue("video_format", _videoFormat);
+            info.AddValue("transcode_to_extender", _needsTranscode);
             info.AddValue("name", _name);
             info.AddValue("description", _description);
             info.AddValue("itemid", _itemId);
-            info.AddValue("sourceid", _sourceId);
-            info.AddValue("sourcename", _source_name);
-            info.AddValue("front_boxart_path", _front_boxart_path);
-            info.AddValue("back_boxart_path", _back_boxart_path);
+            info.AddValue("sourceid", _metadataSourceId);
+            info.AddValue("sourcename", _sourceName);
+            info.AddValue("front_boxart_path", _frontCoverPath);
+            info.AddValue("back_boxart_path", _backCoverPath);
             info.AddValue("synopsis", _synopsis);
             info.AddValue("distributor", _distributor);
-            info.AddValue("country_of_origin", _country_of_origin);
-            info.AddValue("official_website_url", _official_website_url);
-            info.AddValue("date_added", _date_added);
-            info.AddValue("importer_source", _importer_source);
+            info.AddValue("country_of_origin", _countryOfOrigin);
+            info.AddValue("official_website_url", _officialWebsiteURL);
+            info.AddValue("date_added", _dateAdded);
+            info.AddValue("importer_source", _importerSource);
             info.AddValue("runtime", _runtime);
-            info.AddValue("mpaa_rating", _mpaa_rating);
-            info.AddValue("release_date", _release_date);
+            info.AddValue("mpaa_rating", _MPAARating);
+            info.AddValue("release_date", _releaseDate);
             info.AddValue("actors", _actors);
             info.AddValue("crew", _crew);
             info.AddValue("producers", _producers);
             info.AddValue("writers", _writers);
             info.AddValue("directors", _directors);
-            info.AddValue("sound_formats", _sound_formats);
-            info.AddValue("language_formats", _language_formats);
+            info.AddValue("sound_formats", _soundFormats);
+            info.AddValue("language_formats", _languageFormats);
             info.AddValue("genres", _genres);
+            info.AddValue("user_star_rating", _userStarRating);
+            info.AddValue("aspect_ratio", _aspectRatio);
+            info.AddValue("video_standard", _videoStandard);
+            info.AddValue("upc", _UPC);
+            info.AddValue("original_name", _originalName);
+
         }
         #endregion
 
@@ -369,9 +417,9 @@ namespace OMLEngine
             _directors = new List<Person>();
             _writers = new List<Person>();
             _producers = new List<string>();
-            _sound_formats = new List<string>();
-            _language_formats = new List<string>();
-            _genres = new List<Genre>();
+            _soundFormats = new List<string>();
+            _languageFormats = new List<string>();
+            _genres = new List<string>();
             Random random = new Random(new DateTime().Millisecond);
             _itemId = Utilities.NewRandomNumber();
         }
@@ -429,7 +477,7 @@ namespace OMLEngine
         /// Add a Genre to the genres list
         /// </summary>
         /// <param name="genre">A Genre from the Genre enum</param>
-        public void AddGenre(Genre genre)
+        public void AddGenre(string genre)
         {
             _genres.Add(genre);
         }
@@ -439,7 +487,7 @@ namespace OMLEngine
         /// <param name="sound_format">string name to add</param>
         public void AddSoundFormat(string sound_format)
         {
-            _sound_formats.Add(sound_format);
+            _soundFormats.Add(sound_format);
         }
         /// <summary>
         /// Add a string language to the language formats list
@@ -447,84 +495,9 @@ namespace OMLEngine
         /// <param name="language_format">string name to add</param>
         public void AddLanguageFormat(string language_format)
         {
-            _language_formats.Add(language_format);
+            _languageFormats.Add(language_format);
         }
 
-        public bool PlayTranscodedMedia(ref string path_to_buffer)
-        {
-            return false;
-            /*
-            Type ITranscode360Type = null;
-            if (Utilities.IsTranscode360LibraryAvailable())
-            {
-                ITranscode360Type =
-                    Utilities.LoadTranscode360Assembly(
-                        @"c:\\program files\\transcode360\\Transcode360.Interface.dll");
-                if (ITranscode360Type != null)
-                {
-                    try
-                    {
-                        Hashtable properties = new Hashtable();
-                        properties.Add("name", "");
-                        TcpClientChannel channel = new TcpClientChannel(properties, null);
-                        ChannelServices.RegisterChannel(channel);
 
-                        object obj = Activator.GetObject(typeof(ITranscode360Type),
-                                                         "tcp://localhost:1401/RemotingServices/Transcode360");
-
-                        // call an interface, not interested in the result as long as we don't get a 
-                        // socket/remoting exception we're happy
-                        if (obj.Transcode(FileLocation, out path_to_buffer, DateTime.Now.ToBinary()))
-                        {
-                            if (obj.IsMediaTranscoding(FileLocation))
-                                return true;
-                        }
-
-                        ChannelServices.UnregisterChannel(channel);
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine(ex.Message);
-                    }
-                }
-            }
-            return false;
-            */
-        }
-
-        public bool NeedToMountBeforePlaying()
-        {
-            switch (this.VideoFormat)
-            {
-                case VideoFormat.BIN:
-                    return true;
-                case VideoFormat.CUE:
-                    return true;
-                case VideoFormat.IMG:
-                    return true;
-                case VideoFormat.ISO:
-                    return true;
-                case VideoFormat.MDF:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-        public bool NeedToTranscodeToExtenders()
-        {
-            switch (this.VideoFormat)
-            {
-                case VideoFormat.DVRMS:
-                    return false;
-                case VideoFormat.MPEG:
-                    return false;
-                case VideoFormat.MPG:
-                    return false;
-                case VideoFormat.WMV:
-                    return false;
-                default:
-                    return true;
-            }
-        }
     }
 }
