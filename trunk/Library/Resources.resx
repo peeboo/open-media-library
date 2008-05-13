@@ -124,12 +124,7 @@
   <data name="Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\menu.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Default"
-        type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\default.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Setup"
-        type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="Setup" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\setup.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="nocover" type="System.Resources.ResXFileRef, System.Windows.Forms">
