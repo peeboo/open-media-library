@@ -35,7 +35,7 @@ namespace OMLEngine
         }
         public bool Contains(Title title)
         {
-            return find_for_id(title.itemId);
+            return find_for_id(title.InternalItemID);
         }
         private void Remove(Title title)
         {
@@ -50,7 +50,7 @@ namespace OMLEngine
         /// <returns>TITLE_COLLECTION_STATUS (usually TC_OK)</returns>
         public TITLE_COLLECTION_STATUS AddTitle(Title title)
         {
-            if (! find_for_id(title.itemId))
+            if (! find_for_id(title.InternalItemID))
             {
                 _titles.Add(title);
                 return TITLE_COLLECTION_STATUS.TC_OK;
@@ -65,7 +65,7 @@ namespace OMLEngine
         /// <returns>TITLE_COLLECTION_STATUS (usually TC_OK)</returns>
         public TITLE_COLLECTION_STATUS RemoveTitle(Title title)
         {
-            if (find_for_id(title.itemId))
+            if (find_for_id(title.InternalItemID))
             {
                 _titles.Remove(title);
                 return TITLE_COLLECTION_STATUS.TC_OK;
@@ -82,7 +82,7 @@ namespace OMLEngine
         {
             foreach (Title title in _titles)
             {
-                if (title.itemId == id)
+                if (title.InternalItemID == id)
                     return true;
             }
             return false;
@@ -304,6 +304,11 @@ namespace OMLEngine
             dt.Columns.Add("SoundFormats");
             dt.Columns.Add("LanguageFormats");
             dt.Columns.Add("Genres");
+            dt.Columns.Add("UserStarRating");
+            dt.Columns.Add("AspectRatio");
+            dt.Columns.Add("VideoStandard");
+            dt.Columns.Add("UPC");
+            dt.Columns.Add("OriginalName");
 
             foreach (Title ti in _titles)
             {
@@ -311,18 +316,18 @@ namespace OMLEngine
                 row["Name"] = ti.Name;
                 row["Description"] = ti.Description;
                 row["FileLocation"] = ti.FileLocation;
-                row["id"] = ti.itemId;
-                row["front_boxart"] = ti.front_boxart_path;
-                row["back_boxart"] = ti.back_boxart_path;
+                row["id"] = ti.InternalItemID;
+                row["front_boxart"] = ti.FrontCoverPath;
+                row["back_boxart"] = ti.BackCoverPath;
                 row["Runtime"] = ti.Runtime;
                 row["Rating"] = ti.MPAARating;
                 row["Synopsis"] = ti.Synopsis;
                 row["Distributor"] = ti.Distributor;
-                row["Country"] = ti.Country_Of_Origin;
-                row["Website"] = ti.Official_Website_Url;
+                row["Country"] = ti.CountryOfOrigin;
+                row["Website"] = ti.OfficialWebsiteURL;
                 row["ReleaseDate"] = ti.ReleaseDate;
                 row["DateAdded"] = ti.DateAdded;
-                row["Source"] = ti.Importer_Source;
+                row["Source"] = ti.ImporterSource;
                 row["Actors"] = ti.Actors;
                 row["Crew"] = ti.Crew;
                 row["Directors"] = ti.Directors;
@@ -331,7 +336,11 @@ namespace OMLEngine
                 row["SoundFormats"] = ti.SoundFormats;
                 row["LanguageFormats"] = ti.LanguageFormats;
                 row["Genres"] = ti.Genres;
-
+                row["UserStarRating"] = ti.UserStarRating;
+                row["AspectRatio"] = ti.AspectRatio;
+                row["VideoStandard"] = ti.VideoStandard;
+                row["UPC"] = ti.UPC;
+                row["OriginalName"] = ti.OriginalName;
                 dt.Rows.Add(row);
             }
             return dt;
