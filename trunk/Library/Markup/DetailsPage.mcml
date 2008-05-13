@@ -2,24 +2,24 @@
 	  xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
 	  xmlns:cor="assembly://MsCorLib/System"
 	  xmlns:a="assembly://Library/Library"
-	  xmlns:s="resx://Library/Library.Resources/Styles"
+    xmlns:coll="assembly://MsCorLib/System.Collections"
+    xmlns:s="resx://Library/Library.Resources/Styles"
+    xmlns:controls="resx://Library/Library.Resources/CoreControls" 
 	  xmlns:me="Me">
 
-  <UI Name="DetailsPage">
+  <UI Name="MovieDetails">
     <Properties>
       <a:OMLApplication Name="Application" OMLApplication="$Required"/>
-      <a:DetailsPage Name="DetailsPage" DetailsPage="$Required"/>
-      <Font Name="BoldFont" FontName="Verdana" FontSize="24"	FontStyle="Bold"/>
-      <Font Name="Heading" FontName="Verdana" FontSize="14"	FontStyle="Bold"/>
-      <Font Name="Normal" FontName="Verdana" FontSize="16"/>
-      <Font Name="NormalBold" FontName="Verdana" FontSize="16" FontStyle="Bold"/>
+      <a:MovieDetailsPage Name="DetailsPage" MovieDetailsPage="$Required"/>
 
       <!-- The layout we will use to display the headings. -->
-      <GridLayout Name="GridLayout" Orientation="Horizontal" Columns="4" AllowWrap="false"
+      <GridLayout Name="GridLayout" Orientation="Horizontal" Columns="2" AllowWrap="false"
 						Spacing="10,10" MajorAlignment="Fill" MinorAlignment="Fill"/>
     </Properties>
 
     <Locals>
+      <ShortcutHandler Name="PlayHandler" Shortcut="Play"/>
+
       <!-- AddInHost is where all Windows Media Center-specific services start -->
       <!-- from. It must appear in the Locals section of a markup file.        -->
       <addin:AddInHost Name="AddInHost"/>
@@ -34,11 +34,32 @@
       <!-- position and it also reports the position. In this case,    -->
       <!-- the default values are used for the sample.                 -->
       <ScrollingData Name="ScrollingData"/>
+
+      <Command Name="PlayMovieCommand" Description="Play Movie"/>
     </Locals>
 
     <Rules>
       <!-- Give ScrollingData to ScrollingHandler. -->
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+
+      <Changed Source="[PlayMovieCommand.Invoked]">
+        <Actions>
+          <Invoke Target ="[DetailsPage.PlayMovie]"/>
+        </Actions>
+      </Changed>
+
+
+      <!-- Handle the Play on remote -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[PlayHandler.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target ="[DetailsPage.PlayMovie]"/>
+        </Actions>
+      </Rule>
+      
     </Rules>
 
     <Content>
@@ -46,7 +67,7 @@
         <Children>
           <Panel Name="Image" Layout="VerticalFlow">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0,20" Top="Parent,0,20" Bottom="Parent,1"/>
+              <FormLayoutInput Left="Parent,0.05,20" Top="Parent,0.05,20" Bottom="Parent,1"/>
             </LayoutInput>
             <Children>
               <Graphic Name="Cover" Content="[DetailsPage.Background]" MinimumSize="336,480" MaximumSize="336,480" />
@@ -60,123 +81,94 @@
             </Children>
           </Panel>
 
-          <Text Name="Title" Content="[DetailsPage.Title]" Font="[BoldFont]" Color="White" >
+          <!--<controls:Button Name ="PlayMovie" DetailsPage="[DetailsPage]" Description="Play Movie"   PlayRate="2">
             <LayoutInput>
-              <FormLayoutInput Left="Image,1.02" Top="Parent,0,15" Right="Rating,0"/>
+              <FormLayoutInput Left = "Image,1.02" Top="Parent,0.05,15"/>
+            </LayoutInput>
+          </controls:Button>-->
+
+          <controls:Button Name="PlayMovie" Model="[PlayMovieCommand]"  >
+            <LayoutInput>
+              <FormLayoutInput Left = "Image,1.02" Top="Parent,0.05,15"/>
+            </LayoutInput>
+          </controls:Button>
+          <!--<me:PlayRateButton Name ="PlayMovie" DetailsPage="[DetailsPage]" Description="Play Movie"   PlayRate="2">
+            <LayoutInput>
+              <FormLayoutInput Left = "Image,1.02" Top="Parent,0.05,15"/>
+            </LayoutInput>
+          </me:PlayRateButton>-->
+
+          <Text Name="Title" Content="[DetailsPage.Title]" Font="font://s:Heading" Color="color://s:HeadingColor" >
+            <LayoutInput>
+              <FormLayoutInput Left="Image,1.02" Top="PlayMovie,1.05" Right="Parent,0.95"/>
             </LayoutInput>
           </Text>
 
-          <Text Name="Rating" Content="[DetailsPage.Rating]" Font="[BoldFont]" Color="White" >
-            <LayoutInput>
-              <FormLayoutInput Right="Parent,1,-20" Top="Parent,0,15"/>
-            </LayoutInput>
-          </Text>
+          <Panel Name="MainDetails" >
+            <Layout>
+              <FlowLayout Orientation="Horizontal" Spacing="15,15" />
+            </Layout>
 
-          <Text Name="Company" Content=" " Font="[Heading]" Color="SlateGray" >
-            <LayoutInput>
-              <FormLayoutInput Left="Image,1.02" Top="Title,1"/>
-            </LayoutInput>
-          </Text>
-
-          <Panel Name="SummaryPanel">
-            <LayoutInput>
-              <FormLayoutInput Left="Image,1.02" Top="Company,1" Right="Parent,1" />
-            </LayoutInput>
             <Children>
-              <!-- Scroller's parent which displays background color. It offsets -->
-              <!-- the Scroller using padding and the Scroller fades the clipped -->
-              <!-- text outside itself (negative fade size).                     -->
-              <!-- This piece of the UI is MouseInteractive.                     -->
-              <ColorFill Name="Background" Content="Transparent" MouseInteractive="true" Padding="0,0,0,20" MaximumSize="0,350">
-                <!--Padding="30,30,30,30"  Margins="30,0,30,0">-->
-                <Children>
+              <Text Content="[DetailsPage.ReleaseYear]" Font="font://s:Small" WordWrap="false" Color="color://s:NormalColor" />
+              <Text Content="[DetailsPage.Length]" Font="font://s:Small" WordWrap="false" Color="color://s:NormalColor" />
+              <Repeater Source="[DetailsPage.Genres]" Layout="HorizontalFlow">
+                <Content>
+                  <Text Content="[RepeatedItem!cor:String]" Font="font://s:Small" WordWrap="false" Color="color://s:NormalColor" />
+                </Content>
+              </Repeater>
 
-                  <!-- The Scroller. It referrs to the ScrollingData too. -->
-                  <Scroller Orientation="Vertical" FadeSize="-20" ScrollingData="[ScrollingData]">
-                    <Children>
-                      <!-- Text to scroll. Filled with rich text (RTF) content. -->
-                      <!-- You can use Wordpad to generate RTF content.         -->
-                      <Text Name="Summary" MaximumSize="0,350" WordWrap="true" Font="[Normal]"
-												  Color="White" Content="[DetailsPage.Summary]" >
-                        <!-- Smooth scrolling. -->
-                        <Animations>
-                          <Animation Type="Move">
-                            <Keyframes>
-                              <PositionKeyframe Time="0" Value="0,0,0" RelativeTo="Current"
-																			  Interpolation="Exp"/>
-                              <PositionKeyframe Time=".1" Value="0,0,0"/>
-                            </Keyframes>
-                          </Animation>
-                        </Animations>
-                      </Text>
-
-                    </Children>
-                  </Scroller>
-                </Children>
-              </ColorFill>
             </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Image,1.02" Top="Title,1.05"/>
+            </LayoutInput>
           </Panel>
+
+          <Text Name="Rating" Content="[DetailsPage.Rating]" Font="font://s:Small" Color="color://s:NormalColor" >
+            <LayoutInput>
+              <FormLayoutInput Left="Image,1.02" Top="MainDetails,1.05" />
+            </LayoutInput>
+          </Text>
+
+          
+          <me:SynopsisPanel Name="MovieSynopsis" Synopsis="[DetailsPage.Summary]">
+            <LayoutInput>
+              <FormLayoutInput Left="Image,1.02" Top="Rating,1.05,5" Right="Parent,0.95" />
+            </LayoutInput>
+          </me:SynopsisPanel>
+
+
+          <Text Name="DirectorLabel" Content="Directed by: " Font="font://s:LabelFont" Color="color://s:LabelColor" >
+            <LayoutInput>
+              <FormLayoutInput Left="Image,1.02" Top="MovieSynopsis,1.02,15"/>
+            </LayoutInput>
+          </Text>
+
+          <Panel Name="Director" Layout="HorizontalFlow">
+            <Children>
+              <Repeater Source="[DetailsPage.Directors]" Layout="HorizontalFlow">
+                <Content>
+                  <Text Content="[RepeatedItem!cor:String]" Font="font://s:Normal" WordWrap="false" Color="color://s:NormalColor" />
+                </Content>
+              </Repeater>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="DirectorLabel,1.02" Top="MovieSynopsis,1.02,15"/>
+            </LayoutInput>
+          </Panel>
+
 
           <Panel Layout="[GridLayout]">
             <LayoutInput>
-              <FormLayoutInput Left="Image,1.02" Top="SummaryPanel,1" Right="Parent,1"/>
+              <FormLayoutInput Left="Image,1.02" Top="DirectorLabel,1.02" Right="Parent,1" Bottom="Parent,0.7"/>
             </LayoutInput>
             <Children>
-              <Panel Layout="VerticalFlow">
-                <Children>
-                  <Text Name="MovieDetails" Content="Movie Details" Font="[NormalBold]" Color="SlateGray" />
-
-                  <Text Name="Release" Content="[DetailsPage.ReleaseDate]" Font="[Normal]" Color="White" />
-
-                  <Text Name="Runtime" Content="[DetailsPage.Length]" Font="[Normal]" Color="White" />
-                </Children>
-
-              </Panel>
-
-              <Panel Layout="VerticalFlow">
-                <Children>
-                  <Text Name="Actors" Content="Actors" Font="[NormalBold]" Color="SlateGray" />
-
-                  <Repeater Source="[DetailsPage.Actors]" Layout="VerticalFlow">
-                    <Content>
-                      <Text Content="[RepeatedItem!cor:String]" Font="[Normal]" WordWrap="true" Color="White" />
-                    </Content>
-                  </Repeater>
-                </Children>
-              </Panel>
-
-              <Panel Layout="VerticalFlow">
-                <Children>
-                  <Text Name="Directors" Content="Directors" Font="[NormalBold]" Color="SlateGray" />
-
-                  <Repeater Source="[DetailsPage.Directors]" Layout="VerticalFlow">
-                    <Content>
-                      <Text Content="[RepeatedItem!cor:String]" Font="[Normal]" WordWrap="true" Color="White" />
-                    </Content>
-                  </Repeater>
-                </Children>
-              </Panel>
-
-              <Panel Layout="VerticalFlow">
-                <Children>
-                  <Text Name="Producers" Content="Producers" Font="[NormalBold]" Color="SlateGray" />
-
-                  <Repeater Source="[DetailsPage.Producers]" Layout="VerticalFlow">
-                    <Content>
-                      <Text Content="[RepeatedItem!cor:String]" Font="[Normal]" WordWrap="true" Color="White" />
-                    </Content>
-                  </Repeater>
-                </Children>
-              </Panel>
-
+              <me:ActorsPanel Name="Actors" ActorList="[DetailsPage.Actors]">
+              </me:ActorsPanel>
+              
             </Children>
           </Panel>
 
-          <me:PlayRateButton DetailsPage="[DetailsPage]" Description="Play Movie"   PlayRate="2">
-            <LayoutInput>
-              <FormLayoutInput Right="Parent,1,-20" Bottom="Parent,1,-20"/>
-            </LayoutInput>
-          </me:PlayRateButton>
         </Children>
       </ColorFill>
     </Content>
@@ -185,7 +177,7 @@
   <!-- Button for changing the play rate -->
   <UI Name="PlayRateButton">
     <Properties>
-      <a:DetailsPage Name="DetailsPage" DetailsPage="$Required"/>
+      <a:MovieDetailsPage Name="DetailsPage" MovieDetailsPage="$Required"/>
       <cor:Single Name="PlayRate" Single="0"/>
       <cor:String Name="Description" String="ButtonName"/>
     </Properties>
@@ -201,18 +193,12 @@
       <Changed Source="[Command.Invoked]">
         <Actions>
           <Invoke Target ="[DetailsPage.PlayMovie]"/>
-          <!--<Invoke Target="[AddInHost.MediaCenterEnvironment.PlayMedia]"
-								  mediaType="Video"
-								  media="[DetailsPage.getUrl]"
-								  addToQueue="false"/>-->
-
-          <!--<Invoke Target="[AddInHost.MediaCenterEnvironment.MediaExperience.GoToFullScreen]"/>-->
         </Actions>
       </Changed>
     </Rules>
 
     <Content>
-      <me:SimpleButton Command="[Command]" />
+      <me:SimpleButton Command="[Command]"/>
     </Content>
 
   </UI>
@@ -236,9 +222,6 @@
       <Color Name="LabelHoverColor" Color="DimGray"/>
       <Color Name="LabelPressedColor" Color="Black"/>
 
-      <!-- Label font property. -->
-      <Font Name="LabelFont" Font="Arial,20"/>
-      <Font Name="Heading" FontName="Verdana" FontSize="14"	FontStyle="Bold"/>
     </Properties>
 
     <Locals>
@@ -255,6 +238,7 @@
       <Binding Source="[Command.Description]" Target="[Label.Content]"/>
 
       <Binding Source="[Command]" Target="[Clicker.Command]"/>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
 
       <!-- Change color on click. -->
       <Condition Source="[Clicker.Clicking]" SourceValue="true">
@@ -286,10 +270,119 @@
       <!-- Solid background color. -->
       <ColorFill Name="Background" Content="[BackgroundColor]" Padding="5,5,5,5">
         <Children>
-          <Text Name="Label" Content="Play Movie" Font="[Heading]" Color="SlateGray" />
+          <Text Name="Label" Content="Play Movie" Font="font://s:Heading" Color="color://s:HeadingColor" />
         </Children>
       </ColorFill>
     </Content>
 
   </UI>
+
+  <UI Name="SynopsisPanel" >
+    <Properties>
+      <cor:String Name="Synopsis" String="$Required"/>
+      <Font Name="Normal" FontName="Verdana" FontSize="16"/>
+    </Properties>
+    
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true" HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Direct"/>
+      <ScrollingData Name="ScrollingData" />
+
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[Summary.Color]" Value="color://s:FocusColor"/>
+        </Actions>
+      </Condition>
+
+    </Rules>
+    
+    <Content>
+      <Panel Name="SummaryPanel">
+        <LayoutInput>
+          <FormLayoutInput Left="Image,1.02" Top="Runtime,0.95" Right="Parent,0.95" />
+        </LayoutInput>
+        <Children>
+          <!-- Scroller's parent which displays background color. It offsets -->
+          <!-- the Scroller using padding and the Scroller fades the clipped -->
+          <!-- text outside itself (negative fade size).                     -->
+          <!-- This piece of the UI is MouseInteractive.                     -->
+          <ColorFill Name="Background" Content="Transparent"  MouseInteractive="true" Padding="0,0,0,20" MaximumSize="0,200">
+            <!--Padding="30,30,30,30"  Margins="30,0,30,0">-->
+            <Children>
+
+              <!-- The Scroller. It referrs to the ScrollingData too. -->
+              <Scroller Name="Scroll" Orientation="Vertical" FadeSize="5" ScrollingData="[ScrollingData]" >
+                <Children>
+                  <!-- Text to scroll. Filled with rich text (RTF) content. -->
+                  <!-- You can use Wordpad to generate RTF content.         -->
+                  <Text Name="Summary" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor" Content="[Synopsis]" >
+                    <!-- Smooth scrolling. -->
+                    <Animations>
+                      <Animation Type="Move">
+                        <Keyframes>
+                          <PositionKeyframe Time="0" Value="0,0,0" RelativeTo="Current"
+                                    Interpolation="Exp"/>
+                          <PositionKeyframe Time=".1" Value="0,0,0"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Text>
+                </Children>
+              </Scroller>
+            </Children>
+          </ColorFill>
+        </Children>
+      </Panel>
+
+
+
+    </Content>
+  </UI>
+
+  <UI Name="ActorsPanel">
+    <Properties>
+      <coll:IList Name="ActorList" IList="$Required" />
+    </Properties>
+    
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true"/>
+      <!-- ScrollingData contains many ways to customize how scrolling -->
+      <!-- should behave. It has methods to change the current scroll  -->
+      <!-- position and it also reports the position. In this case,    -->
+      <!-- the default values are used for the sample.                 -->
+      <ScrollingData Name="ScrollingData"/>
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+
+      <!--<Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          --><!--<Set Target="[RepeatedItem!]" Value="White"/>--><!--
+        </Actions>
+      </Condition>-->
+    </Rules>
+    
+    <Content>
+          <Panel Layout="VerticalFlow">
+            <Children>
+              <Text Name="Actors" Content="Actors" Font ="font://s:LabelFont" Color="color://s:LabelColor" />
+
+              <Repeater Source="[ActorList]" Layout="VerticalFlow" MaximumSize="200,200">
+                <Content>
+                  <Text Content="[RepeatedItem!cor:String]" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor" />
+                </Content>
+              </Repeater>
+            </Children>
+          </Panel>
+    </Content>
+  </UI>
+
+
 </Mcml>
