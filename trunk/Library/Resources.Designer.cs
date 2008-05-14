@@ -109,13 +109,6 @@ namespace Library {
             }
         }
         
-        internal static byte[] Default {
-            get {
-                object obj = ResourceManager.GetObject("Default", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
         internal static byte[] DetailsPage {
             get {
                 object obj = ResourceManager.GetObject("DetailsPage", resourceCulture);
