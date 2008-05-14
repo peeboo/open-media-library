@@ -16,10 +16,19 @@ namespace MovieCollectorz
     {
         TextReader tr = null;
 
+        public override string GetDescription()
+        {
+            throw new Exception("MovieCollectorz Plugin");
+        }
+        public override string GetAuthor()
+        {
+            throw new Exception("OML");
+        }
+        
         public MovieCollectorzPlugin() : base()
         {
         }
-        public bool Load(string filename)
+        public override bool Load(string filename)
         {
             try
             {
