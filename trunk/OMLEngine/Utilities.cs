@@ -5,6 +5,7 @@ using System.Data;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace OMLEngine
 {
@@ -71,6 +72,7 @@ namespace OMLEngine
         OGM, // Similar to MKV
         PDI, // Instant CD/DVD image
         TS, // MPEG2
+        UIF,
         WMV,
         VOB, // MPEG2
         WVX, // wtf is this?
@@ -303,6 +305,50 @@ namespace OMLEngine
         public static int NewRandomNumber()
         {
             return random.Next();
+        }
+
+        public static bool HasDaemonTools()
+        {
+            OMLConfigManager cm = new OMLConfigManager();
+            string miso_path = cm.GetValue("DaemonTools");
+            if (miso_path != null && miso_path.Length > 0)
+                return true;
+
+            return false;
+        }
+
+        public static DriveInfo DriveInfoForDrive(string VirtualDiscDrive)
+        {
+            if (VirtualDiscDrive == null || VirtualDiscDrive.Length < 1)
+                return null;
+
+            DriveInfo[] drives = DriveInfo.GetDrives();
+            foreach (DriveInfo drive in drives)
+            {
+                string driveName = drive.Name.Substring(0, 1);
+                if (driveName.ToUpper().Substring(0, 1).CompareTo(VirtualDiscDrive.ToUpper()) == 0)
+                {
+                    return drive;
+                }
+            }
+            return null;
+        }
+
+        public static void UnmountVirtualDrive(string VirtualDiscDriveNumber)
+        {
+            OMLConfigManager cm = new OMLConfigManager();
+            string mount_util_path = cm.GetValue("DaemonTools");
+
+            Process cmd = new Process();
+            cmd.StartInfo.FileName = "\"" + mount_util_path + "\"";
+            cmd.StartInfo.Arguments = @"-unmount " + VirtualDiscDriveNumber;
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.RedirectStandardError = true;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.UseShellExecute = false;
+
+            cmd.Start();
+            Thread.Sleep(10);
         }
     }
 }
