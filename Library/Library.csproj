@@ -56,11 +56,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\Application.cs" />
-    <Compile Include="Code\DetailsPage.cs" />
-    <Compile Include="Code\DisplayItem.cs" />
+    <Compile Include="Code\OMLApplication.cs" />
+    <Compile Include="Code\MovieDetailsPage.cs" />
+    <Compile Include="Code\MovieItem.cs" />
     <Compile Include="Code\Launch.cs" />
-    <Compile Include="Code\Movie.cs" />
+    <Compile Include="Code\MovieGallery.cs" />
     <Compile Include="Code\MoviePlayer.cs" />
     <Compile Include="Code\MoviePlayerDVD.cs" />
     <Compile Include="Code\MoviePlayerMountImage.cs" />
