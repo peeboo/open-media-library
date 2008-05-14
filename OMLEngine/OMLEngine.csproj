@@ -53,6 +53,7 @@
     <Compile Include="Title.cs" />
     <Compile Include="TitleCollection.cs" />
     <Compile Include="Utilities.cs" />
+    <Compile Include="WindowsPlayListManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="library.snk" />
