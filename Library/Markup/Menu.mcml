@@ -61,7 +61,7 @@
  
           <Panel Name="LeftPanelTitle" >
             <Children>
-              <Text Name="TitleText" WordWrap="true" Font="Verdana,26" Color="White">
+              <Text Name="TitleText" WordWrap="true" Font="font://s:Heading" Color="color://s:HeadingColor">
                 <Animations>
                   <TransformAnimation Source="animation://me:ChangeHide"/>
                   <TransformAnimation Source="animation://me:ChangeShow"/>
@@ -78,14 +78,14 @@
               <FlowLayout Orientation="Horizontal"/>
             </Layout>
             <Children>
-              <Text Content="[" WordWrap="true" Font="Verdana,20" Color="LightBlue" />
-              <Text Name="MpaaRating" Content="NR" WordWrap="true" Font="Verdana,20" Color="LightBlue">
+              <!--<Text Content="[" WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor" />-->
+              <Text Name="MpaaRating" Content="NR" WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor">
                 <Animations>
                   <TransformAnimation Source="animation://me:ChangeHide"/>
                   <TransformAnimation Source="animation://me:ChangeShow"/>
                 </Animations>
               </Text>
-              <Text Content="]" WordWrap="true" Font="Verdana,20" Color="LightBlue" />
+              <!--<Text Content="]" WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor" />-->
             </Children>
             <LayoutInput>
               <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,1" Top="LeftPanelTitle,1,0"/>
@@ -97,13 +97,13 @@
               <FlowLayout Orientation="Horizontal"/>
             </Layout>
             <Children>
-              <Text Name="Runtime" Content=" " WordWrap="true" Font="Verdana,20" Color="LightBlue">
+              <Text Name="Runtime" Content=" " WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor">
                 <Animations>
                   <TransformAnimation Source="animation://me:ChangeHide"/>
                   <TransformAnimation Source="animation://me:ChangeShow"/>
                 </Animations>
               </Text>
-              <Text Name="RuntimeSuffix" Content=" mins" WordWrap="true" Font="Verdana,20" Color="LightBlue">
+              <Text Name="RuntimeSuffix" Content=" mins" WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor">
                 <Animations>
                   <TransformAnimation Source="animation://me:ChangeHide"/>
                   <TransformAnimation Source="animation://me:ChangeShow"/>
@@ -115,11 +115,11 @@
             </LayoutInput>
           </Panel>
 
-          <Panel Name="LeftPanelSummary" MaximumSize="0,300">
+          <Panel Name="LeftPanelSummary" MaximumSize="0,400">
             <Children>
               <Clip Orientation="Vertical" FadeSize="50" NearOffset="-50">
                 <Children>
-                  <Text Name="Summary" Content="" WordWrap="true" Font="Verdana,14" Color="LightBlue">
+                  <Text Name="Summary" Content="" WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor">
                     <Animations>
                       <TransformAnimation Source="animation://me:ChangeHide"/>
                       <TransformAnimation Source="animation://me:ChangeShow"/>
@@ -129,7 +129,7 @@
               </Clip>
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,-50" Top="LeftPanelRuntime,1,50" Bottom="Parent,1"/>
+              <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,-50" Top="LeftPanelRuntime,1,50"/>
             </LayoutInput>
           </Panel>
 
@@ -147,12 +147,12 @@
             <Children>
               <Clip Orientation="Horizontal" FadeSize="40" NearOffset="70">
                 <Children>
-                  <ColorFill Name="LeftTab" Content="Black" Alpha=".8"/>
+                  <ColorFill Name="LeftTab" Content="Black" Alpha="0.8"/>
                 </Children>
               </Clip>
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="Parent,-.5,0" Right="Parent,.35,1" Top="Parent,-.5,0" Bottom="Parent,1.5,1"/>
+              <FormLayoutInput Left="Parent,-0.5,0" Right="Parent,.35,1" Top="Parent,-.5,0" Bottom="Parent,1.5,1"/>
             </LayoutInput>
           </Panel>
 
