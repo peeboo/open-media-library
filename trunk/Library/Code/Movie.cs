@@ -8,10 +8,11 @@ using OMLEngine;
 
 namespace Library
 {
-    public class MovieGallery
+    public class MovieGallery : ModelItem
     {
         private static TitleCollection _titleCollection;
         private static MovieItem[] _myTitles = null;
+        private static DataSet _dataSet;
 
         public MovieGallery()
         {
@@ -20,12 +21,12 @@ namespace Library
             CreateGallery();
         }
 
-        public void LoadMovies()
+        private void LoadMovies()
         {
             _titleCollection.loadTitleCollection();
         }
 
-        public MovieItem[] CreateGallery()
+        private MovieItem[] CreateGallery()
         {
             if (_myTitles == null)
             {
@@ -34,9 +35,10 @@ namespace Library
                 {
                     list.Add(CreateGalleryItem(title));
                 }
-                //_titleCollection.saveTitleCollection();
                 _myTitles = (MovieItem[])list.ToArray(typeof(MovieItem));
             }
+            _dataSet = _titleCollection.GetDataSet();
+            
             return _myTitles;
         }
 
@@ -47,6 +49,7 @@ namespace Library
                 return _myTitles;
             }
         }
+
         private MovieItem CreateGalleryItem(Title title)
         {
             MovieItem item = new MovieItem(title);
@@ -62,11 +65,11 @@ namespace Library
 
             return item;
         }
+
         public MovieDetailsPage CreateDetailsPage(MovieItem item)
         {
             Trace.WriteLine("Creating a detailspage");
             MovieDetailsPage page = new MovieDetailsPage(item);
-            Trace.WriteLine("adding the item");
             return page;
         }
         public static Image LoadImage(string imageName)
