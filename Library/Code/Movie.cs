@@ -34,18 +34,10 @@ namespace Library
                 {
                     list.Add(CreateGalleryItem(title));
                 }
-                _titleCollection.saveTitleCollection();
+                //_titleCollection.saveTitleCollection();
                 _myTitles = (MovieItem[])list.ToArray(typeof(MovieItem));
             }
             return _myTitles;
-        }
-
-        public DataTable MoviesDataSet
-        {
-            get
-            {
-                return _titleCollection.ToDataTable();
-            }
         }
 
         public MovieItem[] Movies
