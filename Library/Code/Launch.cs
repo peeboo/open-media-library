@@ -15,13 +15,24 @@ namespace Library
         {
             OMLEngine.Utilities.RawSetup();
 
-            if (File.Exists(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt"))
-                Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.Truncate);
-            else
-                Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.OpenOrCreate);
+            try
+            {
+                if (File.Exists(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt"))
+                    Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.Truncate);
+                else
+                    Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.OpenOrCreate);
 
-            Trace.Listeners.Add(new TextWriterTraceListener(Log));
-            Trace.WriteLine("Launch:Initialize()");
+                Trace.Listeners.Add(new TextWriterTraceListener(Log));
+                Trace.WriteLine("Launch:Initialize()");
+            }
+            catch (IOException)
+            { }
+        }
+
+        ~MyAddIn()
+        {
+            Trace.Flush();
+            Log.Close();
         }
 
         public void Uninitialize()
