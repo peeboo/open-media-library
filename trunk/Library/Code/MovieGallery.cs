@@ -12,7 +12,7 @@ namespace Library
     {
         private static TitleCollection _titleCollection;
         private static MovieItem[] _myTitles = null;
-        private static DataSet _dataSet;
+        private static DataTable _dataTable;
 
         public MovieGallery()
         {
@@ -37,7 +37,7 @@ namespace Library
                 }
                 _myTitles = (MovieItem[])list.ToArray(typeof(MovieItem));
             }
-            _dataSet = _titleCollection.GetDataSet();
+            _dataTable = _titleCollection.ToDataTable();
             
             return _myTitles;
         }
