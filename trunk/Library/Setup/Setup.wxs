@@ -87,24 +87,6 @@
               Vital="yes"
               Assembly=".net" />
       </Component>
-      <Component Id="OMLSDK.dll" Guid="26097a63-fc55-41d2-a8d5-432809de99fc" DiskId="1">
-        <File Id="OMLSDK.dll"
-              Name="OMLSDK.dll"
-              KeyPath="yes"
-              Source="..\..\OMLSDK\bin\$(var.BuildType)\OMLSDK.dll"
-              Checksum="yes"
-              Vital="yes"
-              Assembly=".net" />
-      </Component>
-      <Component Id="MyMoviesPlugin.dll" Guid="4102ad78-c010-4367-8454-7317713ccfe6" DiskId="1">
-        <File Id="MyMoviesPlugin.dll"
-              Name="MyMoviesPlugin.dll"
-              KeyPath="yes"
-              Source="..\..\MyMoviesPlugin\bin\$(var.BuildType)\MyMoviesPlugin.dll"
-              Checksum="yes"
-              Vital="yes"
-              Assembly=".net" />
-      </Component>
       <Component Id="Registration.xml" 
                  Guid="68b08279-69c0-42fb-b087-30a20ee12608" 
                  DiskId="1">
@@ -129,8 +111,6 @@
 		<Feature Id="APPROOTFEATURE" Title="Open Media Library" Level="1">
 			<ComponentRef Id="Library.dll" />
       <ComponentRef Id="OMLEngine.dll" />
-      <ComponentRef Id="OMLSDK.dll" />
-      <ComponentRef Id="MyMoviesPlugin.dll" />
 			<ComponentRef Id="Registration.xml" />
 			<ComponentRef Id="Application.png" />
 		</Feature>

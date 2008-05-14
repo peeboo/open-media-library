@@ -13,14 +13,8 @@
     </Properties>
 
     <Locals>
-      <!-- Data used by scrollers. Contains current and total page data. -->
-      <!-- It is also used to configure how the Scroller behaves as far  -->
-      <!-- as focus. In this case, we want the current focused item to   -->
-      <!-- always appear 30% from the left of the Scroller.              -->
       <ScrollingData Name="ScrollingData" LockedPosition=".5"/>
       <Command Name="PlayCommand" Description="Play Command"/>
-      <!--<ShortcutHandler Name="PlayHandler" Command="PlayCommand"  Shortcut="Play"/>-->
-      <!-- Storage of item selection. -->
       <Choice Name="Choice"/>
       <Command Name="Selection"/>
     </Locals>
@@ -38,21 +32,6 @@
         </Actions>
       </Changed>
     
-      <!--<Changed Source="[PlayCommand.Invoked]">
-        <Actions>
-          <Invoke Target ="[Choice.Chosen!a:MovieItem.PlayMovie]"/>
-        </Actions>
-      </Changed>-->
-    
-      <!-- Handle the Play on remote -->
-      <!--<Rule>
-        <Conditions>
-          <Modified Source="[PlayHandler.Invoked]"/>
-        </Conditions>
-        <Actions>
-          <Invoke Target ="[Choice.Chosen!a:MovieItem.PlayMovie]"/>
-        </Actions>
-      </Rule>-->
       </Rules>
 
     <Content>
