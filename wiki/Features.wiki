@@ -22,6 +22,6 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (_IN DEVELOPMENT_) Movie Collectorz Xml support (one single file)
   * (_IN DEVELOPMENT_) DVD playback
   * (*DONE*) VIDEO_TS playback
-  * (*DONE*) Image file playback with auto-mounting/unmounting using daemontools (iso, bin, cue, img, udf)
+  * (*DONE*) Image file playback with auto-mounting/unmounting using Daemon Tools (iso, bin, cue, img, udf)
   * (*DONE*) Codec based playback support
   * (_IN DEVELOPMENT_) multi-file (single movie in multiple files) playback support (auto create playlists)
