@@ -27,7 +27,7 @@ namespace OMLTestSuite
             importer.Load("C:\\mymovies.xml");
 
             foreach (Title t in importer.GetTitles())
-                tc.AddTitle(t);
+                tc.Add(t);
 
             tc.saveTitleCollection();
             tc = null;
