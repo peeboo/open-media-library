@@ -51,7 +51,7 @@ namespace MovieCollectorz
                     switch (node.Name)
                     {
                         case "id":
-//                            newTitle.itemId = int.Parse(node.InnerText);
+                            newTitle.MetadataSourceID = node.InnerText;
                             break;
                         case "coverfront":
                             newTitle.FrontCoverPath = node.InnerText;

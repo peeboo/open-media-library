@@ -64,23 +64,13 @@ namespace OMLEngine
             generatorNode.Attributes.Append(genAttr2);
             headNode.AppendChild(generatorNode);
 
-            // TotalDuration tag
-            XmlNode totalDurationNode = xDoc.CreateNode(XmlNodeType.Element, "meta", "");
-            XmlAttribute tdAttr1 = xDoc.CreateAttribute("name");
-            tdAttr1.InnerText = "TotalDuration";
-            totalDurationNode.Attributes.Append(tdAttr1);
-            XmlAttribute tdAttr2 = xDoc.CreateAttribute("content");
-            tdAttr2.InnerText = "";
-            totalDurationNode.Attributes.Append(tdAttr2);
-            headNode.AppendChild(totalDurationNode);
-
             // ItemCount tag
             XmlNode icNode = xDoc.CreateNode(XmlNodeType.Element, "meta", "");
             XmlAttribute icAttr1 = xDoc.CreateAttribute("name");
             icAttr1.InnerText = "ItemCount";
             icNode.Attributes.Append(icAttr1);
             XmlAttribute icAttr2 = xDoc.CreateAttribute("content");
-            icAttr2.InnerText = "";
+            icAttr2.InnerText = "0";
             icNode.Attributes.Append(icAttr2);
             headNode.AppendChild(icNode);
 
@@ -93,6 +83,7 @@ namespace OMLEngine
             // body node
             XmlNode bodyNode = xDoc.CreateNode(XmlNodeType.Element, "body", "");
             XmlNode bodySeqNode = xDoc.CreateNode(XmlNodeType.Element, "seq", "");
+            int totalItems = 0;
             foreach (PlayListItem item in PlayListItems)
             {
                 XmlNode mediaNode = xDoc.CreateNode(XmlNodeType.Element, "media", "");
@@ -100,7 +91,11 @@ namespace OMLEngine
                 srcAttr.InnerText = item.title.FileLocation;
                 mediaNode.Attributes.Append(srcAttr);
                 bodySeqNode.AppendChild(mediaNode);
+                totalItems++;
             }
+
+            // set total items on the ItemCount node
+            icAttr2.InnerText = totalItems.ToString();
 
             // put the bodySeqNode on the body
             bodyNode.AppendChild(bodySeqNode);
