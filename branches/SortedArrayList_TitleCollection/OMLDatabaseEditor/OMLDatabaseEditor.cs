@@ -76,7 +76,7 @@ namespace OMLDatabaseEditor
         }
         private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
         {
-            _titleCollection.Remove(current_title);
+            _titleCollection.RemoveTitle(current_title);
         }
         private void dgv_title_list_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {

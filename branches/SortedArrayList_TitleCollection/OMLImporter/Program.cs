@@ -91,7 +91,7 @@ namespace OMLImporter
                             List<Title> titles = plugin.GetTitles();
                             foreach (Title t in titles)
                             {
-                                tc.Add(t);
+                                tc.AddTitle(t);
                             }
                             tc.saveTitleCollection();
                             Console.WriteLine("Complete");

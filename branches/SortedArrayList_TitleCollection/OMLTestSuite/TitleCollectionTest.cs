@@ -16,8 +16,8 @@ namespace OMLTestSuite
             Title title2 = new Title();
             title2.Name = "A Movie";
 
-            tc.Add(title1);
-            tc.Add(title2);
+            tc.AddTitle(title1);
+            tc.AddTitle(title2);
 
             Assert.AreEqual(2, tc.Count);
         }

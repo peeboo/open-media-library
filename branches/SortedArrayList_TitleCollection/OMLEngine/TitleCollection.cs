@@ -10,10 +10,68 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace OMLEngine
 {
     [Serializable()]
-    public class TitleCollection : SortedArrayList, ISerializable
+    public class TitleCollection : ISerializable
     {
         private SourceDatabase _source_database_to_use;
+        private SortedArrayList _titles;
         private string _database_filename;
+
+        #region SortedArrayList properties and methods
+        public int Count
+        {
+            get { return _titles.Count; }
+        }
+        public IEnumerator GetEnumerator()
+        {
+            return _titles.GetEnumerator();
+        }
+        private void Add(Title title)
+        {
+            _titles.AddSorted(title);
+        }
+        public void Clear()
+        {
+            _titles = null;
+        }
+        public bool Contains(Title title)
+        {
+            return find_for_id(title.InternalItemID);
+        }
+        private void Remove(Title title)
+        {
+            _titles.Remove(title);
+        }
+        #endregion
+
+        /// <summary>
+        /// Adds a new Title to the Collection
+        /// </summary>
+        /// <param name="title">A new Title Object</param>
+        /// <returns>TITLE_COLLECTION_STATUS (usually TC_OK)</returns>
+        public TITLE_COLLECTION_STATUS AddTitle(Title title)
+        {
+            if (! find_for_id(title.InternalItemID))
+            {
+                _titles.Add(title);
+                return TITLE_COLLECTION_STATUS.TC_OK;
+            }
+            return TITLE_COLLECTION_STATUS.TC_TITLE_ALREADY_EXISTS;
+        }
+
+        /// <summary>
+        /// Removes an existing Title from the Collection
+        /// </summary>
+        /// <param name="title">A Title Object</param>
+        /// <returns>TITLE_COLLECTION_STATUS (usually TC_OK)</returns>
+        public TITLE_COLLECTION_STATUS RemoveTitle(Title title)
+        {
+            if (find_for_id(title.InternalItemID))
+            {
+                _titles.Remove(title);
+                return TITLE_COLLECTION_STATUS.TC_OK;
+            }
+            return TITLE_COLLECTION_STATUS.TC_TITLE_DOES_NOT_EXIST;
+        }
 
         /// <summary>
         /// 
@@ -22,7 +80,7 @@ namespace OMLEngine
         /// <returns></returns>
         public bool find_for_id(int id)
         {
-            foreach (Title title in this)
+            foreach (Title title in _titles)
             {
                 if (title.InternalItemID == id)
                     return true;
@@ -49,6 +107,7 @@ namespace OMLEngine
             Trace.WriteLine("TitleCollection:TitleCollection(database_filename)");
             _source_database_to_use = SourceDatabase.OML;
             _database_filename = database_filename;
+            _titles = new SortedArrayList();
         }
         /// <summary>
         /// Generic constructor
@@ -59,13 +118,14 @@ namespace OMLEngine
             Trace.WriteLine("TitleCollection:TitleCollection()");
             _source_database_to_use = SourceDatabase.OML;
             _database_filename = FileSystemWalker.RootDirectory + "\\oml.dat";
+            _titles = new SortedArrayList();
         }
         /// <summary>
         /// Default destructor
         /// </summary>
         ~TitleCollection()
         {
-            Trace.WriteLine("TitleCollection:~TitleCollection(): Holding " + Count + " titles");
+            Trace.WriteLine("TitleCollection:~TitleCollection(): Holding " + _titles.Count + " titles");
         }
 
         /// <summary>
@@ -75,6 +135,9 @@ namespace OMLEngine
         public bool saveTitleCollection()
         {
             Trace.WriteLine("saveTitleCollection()");
+
+            IComparer myComparer = new TitleComparer();
+            _titles.Sort(myComparer);
 
             switch (_source_database_to_use)
             {
@@ -107,9 +170,9 @@ namespace OMLEngine
             try
             {
                 BinaryFormatter bformatter = new BinaryFormatter();
-                bformatter.Serialize(stream, Count);
+                bformatter.Serialize(stream, _titles.Count);
 
-                foreach (Title title in this)
+                foreach (Title title in _titles)
                     bformatter.Serialize(stream, title);
 
                 stream.Close();
@@ -197,7 +260,7 @@ namespace OMLEngine
                     int numTitles = (int)bf.Deserialize(stm);
                     for (int i = 0; i < numTitles; i++)
                     {
-                        Add((Title)bf.Deserialize(stm));
+                        _titles.Add((Title)bf.Deserialize(stm));
                     }
                     stm.Close();
                     Trace.WriteLine("Loaded: " + numTitles + " titles");
@@ -247,7 +310,7 @@ namespace OMLEngine
             dt.Columns.Add("UPC");
             dt.Columns.Add("OriginalName");
 
-            foreach (Title ti in this)
+            foreach (Title ti in _titles)
             {
                 DataRow row = dt.NewRow();
                 row["Name"] = ti.Name;
@@ -287,16 +350,58 @@ namespace OMLEngine
         public TitleCollection(SerializationInfo info, StreamingContext ctxt)
         {
             Trace.WriteLine("TitleCollection:TitleCollection (Serialized)");
-            TitleCollection tc = (TitleCollection)info.GetValue("TitleCollection", typeof(TitleCollection));
-            foreach (Title title in tc)
-                Add(title);
+            _titles = (SortedArrayList)info.GetValue("titles", typeof(SortedArrayList));
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             Trace.WriteLine("TitleCollection:GetObjectData()");
-            info.AddValue("TitleCollection", this);
+            info.AddValue("titles", _titles);
         }
         #endregion
+    }
+    /// <summary>
+    /// Provides Enumerator functionality on the TitleCollection object
+    /// </summary>
+    public class TitleEnum : IEnumerator
+    {
+        public Title[] _title;
+        int position = -1;
+
+        public TitleEnum(Title[] list)
+        {
+            _title = list;
+        }
+        public bool MoveNext()
+        {
+            position++;
+            return (position < _title.Length);
+        }
+        public void Reset()
+        {
+            position = -1;
+        }
+        public object Current
+        {
+            get
+            {
+                try
+                {
+                    return _title[position];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    throw new InvalidOperationException();
+                }
+            }
+        }
+    }
+
+    public class TitleComparer : IComparer
+    {
+        int IComparer.Compare(Object a, Object b)
+        {
+            return ((new CaseInsensitiveComparer()).Compare(((Title)a).Name, ((Title)b).Name));
+        }
     }
 }
