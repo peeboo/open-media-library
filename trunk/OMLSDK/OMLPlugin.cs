@@ -50,11 +50,6 @@ namespace OMLSDK
         public bool ValidateTitle(Title title_to_validate)
         {
             return true;
-
-            if (title_to_validate.FileLocation != null && title_to_validate.FileLocation.Length > 0)
-                return true;
-
-            return false;
         }
         public bool IsSupportedFormat(string file_extension)
         {

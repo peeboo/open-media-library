@@ -266,14 +266,14 @@ namespace OMLEngine
         /// </summary>
         public IList SoundFormats
         {
-            get { return _languageFormats; }
+            get { return _soundFormats; }
         }
         /// <summary>
         /// List of languages (English, Spanish, French, etc)
         /// </summary>
         public IList LanguageFormats
         {
-            get { return _soundFormats; }
+            get { return _languageFormats; }
         }
         /// <summary>
         /// List of Genres
