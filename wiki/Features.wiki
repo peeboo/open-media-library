@@ -25,3 +25,4 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (*DONE*) Image file playback with auto-mounting/unmounting using Daemon Tools (iso, bin, cue, img, udf)
   * (*DONE*) Codec based playback support
   * (_IN DEVELOPMENT_) multi-file (single movie in multiple files) playback support (auto create playlists)
+  * (ON HOLD) Boxset support (group multiple titles on the main menu into a single boxart shown)
