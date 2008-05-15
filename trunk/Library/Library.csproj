@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\MoviePlayerWPL.cs" />
     <Compile Include="Code\OMLApplication.cs" />
     <Compile Include="Code\MovieDetailsPage.cs" />
     <Compile Include="Code\MovieItem.cs" />
