@@ -12,6 +12,7 @@ namespace Library
 {
     public class MovieItem : Command
     {
+        private WindowsPlayListManager _wplm;
         private Title _titleObj;
         private Image _frontCoverArtImage;
         private Image _backCoverArtImage;
@@ -21,6 +22,11 @@ namespace Library
             _titleObj = title;
             _frontCoverArtImage = MovieGallery.LoadImage(_titleObj.FrontCoverPath);
             _backCoverArtImage = MovieGallery.LoadImage(_titleObj.BackCoverPath);
+        }
+
+        public MovieItem(WindowsPlayListManager wplm)
+        {
+            _wplm = wplm;
         }
 
         public void PlayMovie()

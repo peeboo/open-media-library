@@ -52,6 +52,11 @@ namespace Library
                     Trace.WriteLine("DVDMoviePlayer created");
                     return new DVDPlayer(movieItem);
                 }
+                else if (movieItem.TitleObject.VideoFormat == VideoFormat.WPL)
+                {
+                    Trace.WriteLine("WPLMoviePlayer created");
+                    return new MoviePlayerWPL(movieItem);
+                }
                 else
                 {
                     Trace.WriteLine("VideoPlayer created");

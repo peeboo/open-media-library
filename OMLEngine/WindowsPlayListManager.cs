@@ -5,16 +5,25 @@ namespace OMLEngine
 {
     public class WindowsPlayListManager
     {
-        SortedArrayList PlayListItems;
+        private SortedArrayList _PlayListItems;
+
+        public PlayListItem[] PlayListItems
+        {
+            get
+            {
+                _PlayListItems.Sort();
+                return (PlayListItem[])_PlayListItems.ToArray();
+            }
+        }
 
         public WindowsPlayListManager()
         {
-            PlayListItems = new SortedArrayList();
+            _PlayListItems = new SortedArrayList();
         }
 
         public WindowsPlayListManager(string filePath)
         {
-            PlayListItems = new SortedArrayList();
+            _PlayListItems = new SortedArrayList();
         }
 
         ~WindowsPlayListManager()
@@ -23,8 +32,8 @@ namespace OMLEngine
 
         public void AddItem(PlayListItem item)
         {
-            item.SortOrder = PlayListItems.Count;
-            PlayListItems.Add(item);
+            item.SortOrder = _PlayListItems.Count;
+            _PlayListItems.Add(item);
         }
 
         public PlayListItem RemoveItem(PlayListItem item)
@@ -35,7 +44,7 @@ namespace OMLEngine
         public void WriteWPLFile(string filePath)
         {
             // pre-sort the items.
-            PlayListItems.Sort();
+            _PlayListItems.Sort();
 
             XmlDocument xDoc = new XmlDocument();
 
