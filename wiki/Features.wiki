@@ -20,7 +20,7 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (ON HOLD) Mymovies Xml support (one file per folder)
   * (_IN DEVELOPMENT_) DVD Profiler Xml support (one single file)
   * (_IN DEVELOPMENT_) Movie Collectorz Xml support (one single file)
-  * (_IN DEVELOPMENT_) DVD playback
+  * (_IN DEVELOPMENT_) DVD playback (actual discs in a real drive, see mounting/unmounting for images of discs)
   * (*DONE*) VIDEO_TS playback
   * (*DONE*) Image file playback with auto-mounting/unmounting using Daemon Tools (iso, bin, cue, img, udf)
   * (*DONE*) Codec based playback support
