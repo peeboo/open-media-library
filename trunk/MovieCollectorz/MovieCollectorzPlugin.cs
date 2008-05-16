@@ -57,8 +57,25 @@ namespace MovieCollectorz
                             newTitle.FrontCoverPath = node.InnerText;
                             break;
                         case "format":
+                            XmlNode formatNode = node.SelectSingleNode("displayname");
+                            if (formatNode != null)
+                            {
+                                switch (formatNode.InnerText.ToUpper())
+                                {
+                                    case "DVD":
+                                        newTitle.VideoFormat = VideoFormat.DVD;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
                             break;
                         case "language":
+                            XmlNodeList langNodes = node.SelectNodes("displayname");
+                            foreach (XmlNode languageNode in langNodes)
+                            {
+                                newTitle.AddLanguageFormat(languageNode.InnerText);
+                            }
                             break;
                         case "title":
                             newTitle.Name = node.InnerText;
@@ -89,7 +106,6 @@ namespace MovieCollectorz
                             newTitle.Runtime = Int32.Parse(node.InnerText);
                             break;
                         case "cast":
-                            List<string> actors = new List<string>();
                             XmlNodeList persons = node.SelectNodes("//person");
                             foreach (XmlNode person in persons)
                             {
@@ -99,13 +115,46 @@ namespace MovieCollectorz
                             }
                             break;
                         case "crew":
+                            XmlNodeList crewMembers = node.SelectNodes("crewmember");
+                            foreach (XmlNode crewMember in crewMembers)
+                            {
+                                XmlNode roleId = crewMember.SelectSingleNode("role id");
+                                if (roleId != null)
+                                {
+                                    if (roleId.InnerText.ToUpper().CompareTo("DIRECTOR") == 0)
+                                    {
+                                        XmlNode directorName = crewMember.SelectSingleNode("displayname");
+                                        if (directorName != null)
+                                            newTitle.AddDirector(new Person(directorName.InnerText));
+                                    }
+                                    else
+                                    {
+                                        XmlNode crewMemberName = crewMember.SelectSingleNode("displayname");
+                                        if (crewMemberName != null)
+                                            newTitle.AddCrew(new Person(crewMemberName.InnerText));
+                                    }
+                                }
+                            }
                             break;
                         case "studios":
+                            XmlNodeList studioNodes = node.SelectNodes("displayname");
+                            foreach (XmlNode studioNode in studioNodes)
+                                newTitle.Distributor = studioNode.InnerText; // currently we only hold one studio (in this case the last one)
                             break;
                         case "distributor":
                             XmlNode distNode = node.SelectSingleNode("displayname");
                             if (distNode != null)
                                 newTitle.Distributor = distNode.InnerText;
+                            break;
+                        case "country":
+                            XmlNode countryNode = node.SelectSingleNode("displayname");
+                            if (countryNode != null)
+                                newTitle.CountryOfOrigin = countryNode.InnerText;
+                            break;
+                        case "upc":
+                            newTitle.UPC = node.InnerText;
+                            break;
+                        default:
                             break;
                     }
                 }
