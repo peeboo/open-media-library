@@ -1,7 +1,7 @@
 = Features/Requests Status =
 
 Features: All requested, refused, and current features are listed here.
-Each item should contain both a status.
+Each item should contain a status.
 
 Legend:
 
