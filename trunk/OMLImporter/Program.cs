@@ -11,6 +11,7 @@ namespace OMLImporter
     {
         public static double VERSION = 0.1;
 
+
         [STAThread]
         static void Main(string[] args)
         {
@@ -19,6 +20,7 @@ namespace OMLImporter
 
             PrintHeader();
 
+            /* This will be used to pass params and not use the menu (automation use?)
             if (args.Length > 0)
             {
                 foreach (string arg in args)
@@ -28,90 +30,77 @@ namespace OMLImporter
                     }
                 }
             }
+            */
 
             if (plugin == null)
             {
-                Console.WriteLine("Which Importer would you like to use:");
-                Console.WriteLine("1) MyMovies");
-                Console.WriteLine("2) DVD Profiler");
-                Console.WriteLine("3) Movie Collectorz");
-                Console.Write("Choice: ");
-
-                string response = Console.ReadLine();
-                response = response.Substring(0, 1);
-                switch (Int32.Parse(response))
-                {
-                    case 1:
-                        plugin = new MyMoviesPlugin.MyMoviesImporter();
-                        break;
-                    case 2:
-                        plugin = new DVDProfilerPlugin.DVDProfilerImporter();
-                        break;
-                    case 3:
-                        plugin = new MovieCollectorz.MovieCollectorzPlugin();
-                        break;
-                    default:
-                        Usage();
-                        return;
-                }
-                Console.WriteLine();
+                Menu(ref plugin);
             }
 
             if (plugin != null && file_to_import.Length == 0)
             {
-                OpenFileDialog ofDiag = new OpenFileDialog();
-                ofDiag.InitialDirectory = "c:\\";
-                ofDiag.Filter = "Xml files (*.xml)|*.xml|All files (*.*)|*.*";
-                ofDiag.FilterIndex = 1;
-                ofDiag.RestoreDirectory = true;
-                ofDiag.AutoUpgradeEnabled = true;
-                ofDiag.CheckFileExists = true;
-                ofDiag.CheckPathExists = true;
-                ofDiag.Multiselect = false;
-                ofDiag.Title = "Select " + plugin.GetName() + " file to import";
-
-                if (ofDiag.ShowDialog() == DialogResult.OK)
-                {
-                    file_to_import = ofDiag.FileName;
-                }
+                GetFile(ref file_to_import, plugin);
             }
 
             if (plugin != null && file_to_import.Length > 0)
             {
-                FileInfo fi;
-                try
-                {
-                    fi = new FileInfo(file_to_import);
-                    if (fi.Exists)
-                    {
-                        Console.WriteLine("Loading file " + file_to_import + " using " + plugin.GetName() + " importer");
-                        if (ImportFile(plugin, fi))
-                        {
-                            TitleCollection tc = new TitleCollection();
-                            List<Title> titles = plugin.GetTitles();
-                            foreach (Title t in titles)
-                            {
-                                tc.Add(t);
-                            }
-                            tc.saveTitleCollection();
-                            Console.WriteLine("Complete");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Error importing file: File doesn't exist.");
-                            return;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Failed to import file (" + file_to_import + "): " + e.Message);
-                }
+                ProcessFile(plugin, file_to_import);
+                Menu(ref plugin);
             }
             else
             {
                 Usage();
             }
+        }
+
+        public static void GetFile(ref string file_to_import, OMLPlugin plugin)
+        {
+            OpenFileDialog ofDiag = new OpenFileDialog();
+            ofDiag.InitialDirectory = "c:\\";
+            ofDiag.Filter = "Xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            ofDiag.FilterIndex = 1;
+            ofDiag.RestoreDirectory = true;
+            ofDiag.AutoUpgradeEnabled = true;
+            ofDiag.CheckFileExists = true;
+            ofDiag.CheckPathExists = true;
+            ofDiag.Multiselect = false;
+            ofDiag.Title = "Select " + plugin.GetName() + " file to import";
+
+            if (ofDiag.ShowDialog() == DialogResult.OK)
+            {
+                file_to_import = ofDiag.FileName;
+            }
+        }
+
+        public static void Menu(ref OMLPlugin plugin)
+        {
+            Console.WriteLine("Which Importer would you like to use:");
+            Console.WriteLine("1) MyMovies");
+            Console.WriteLine("2) DVD Profiler");
+            Console.WriteLine("3) Movie Collectorz");
+            Console.WriteLine("4) Quit");
+            Console.Write("Choice: ");
+
+            string response = Console.ReadLine();
+            response = response.Substring(0, 1);
+            switch (Int32.Parse(response))
+            {
+                case 1:
+                    plugin = new MyMoviesPlugin.MyMoviesImporter();
+                    break;
+                case 2:
+                    plugin = new DVDProfilerPlugin.DVDProfilerImporter();
+                    break;
+                case 3:
+                    plugin = new MovieCollectorz.MovieCollectorzPlugin();
+                    break;
+                case 4:
+                    return;
+                default:
+                    Usage();
+                    return;
+            }
+            Console.WriteLine();
         }
 
         public static bool ImportFile(OMLPlugin plugin, FileInfo fInfo)
@@ -129,6 +118,81 @@ namespace OMLImporter
         {
             Console.WriteLine("OML Data Importer v" + VERSION);
             Console.WriteLine("Licensed under GPL V3\n");
+        }
+
+        public static void LoadTitlesIntoDatabase(OMLPlugin plugin)
+        {
+            TitleCollection tc = new TitleCollection();
+            List<Title> titles = plugin.GetTitles();
+            Console.WriteLine("Found " + titles.Count + " titles");
+
+            int numberOfTitlesAdded = 0;
+            int numberOfTitlesSkipped = 0;
+            bool YesToAll = false;
+
+            if (Console.In.Peek() > 0)
+                Console.In.ReadToEnd(); // flush out anything still in there
+
+            foreach (Title t in titles)
+            {
+                Console.WriteLine("Adding: " + t.Name);
+                if (YesToAll == false)
+                {
+                    Console.WriteLine("Would you like to add this title? (y/n/a)");
+                    string response = Console.ReadLine();
+                    switch (response.ToUpper())
+                    {
+                        case "Y":
+                            tc.Add(t);
+                            numberOfTitlesAdded++;
+                            break;
+                        case "N":
+                            numberOfTitlesSkipped++;
+                            break;
+                        case "A":
+                            YesToAll = true;
+                            tc.Add(t);
+                            numberOfTitlesAdded++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    tc.Add(t);
+                    numberOfTitlesAdded++;
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine("Added " + numberOfTitlesAdded + " titles");
+            Console.WriteLine("Skipped " + numberOfTitlesSkipped + " titles");
+            tc.saveTitleCollection();
+            Console.WriteLine("Complete");
+        }
+
+        public static void ProcessFile(OMLPlugin plugin, string file_to_import)
+        {
+            FileInfo fi;
+            try
+            {
+                fi = new FileInfo(file_to_import);
+                if (fi.Exists)
+                {
+                    Console.WriteLine("Loading file " + file_to_import + " using " + plugin.GetName() + " importer");
+                    if (ImportFile(plugin, fi))
+                        LoadTitlesIntoDatabase(plugin);
+                    else
+                    {
+                        Console.WriteLine("Error importing file: File doesn't exist.");
+                        return;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to import file (" + file_to_import + "): " + e.Message);
+            }
         }
     }
 }
