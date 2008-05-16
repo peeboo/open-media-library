@@ -1,0 +1,25 @@
+#summary Compiling the OML source is easy
+#labels compile,source
+
+= Introduction =
+
+A lot of people want to try out OML, but a public release isn't available yet so here you have the instructions on how to compile it yourself.
+
+
+= Details =
+
+1) Compile the project (using any version of Visual Studio 2008 with Media Center SDK 5.3).
+
+2) using a visual studio cmd prompt go into the Library\Setup (or Setup64) dir and run Build.bat
+
+Note: This will require wix 3.0 (wix.sourceforge.net) to be installed.
+
+3) run the installer
+
+4) copy the OMLEngine\OML.config file to \program files\openmedialibrary and edit to your needs
+
+5) run the OMLImporter.exe located in OMLImporter\bin\(debug or release)\ and follow its direction.  It will ask which importer to use (mymovies, dvd profiler and/or movie collectorz).  An open file dialog will appear, select your xml file.  This will take a moment to import your titles into oml.
+
+At this point you should be good to go.  If your not seeing what something similar to what I posted the please post the files located in \program files\openmedialibrary\logs and your \program files\openmedialibrary\oml.dat file on our forums and we'll take a look at whats going on.  (Note, it wont be a high priority, but we'll get to it). 
+
+NOTE:  The Movie Collectorz and the DVD Profiler plugins will not currently produce anything that can "play" movies since either of these apps contain location information for media.  If you want a decent exp. for now I'd stick with the mymovies export file.
