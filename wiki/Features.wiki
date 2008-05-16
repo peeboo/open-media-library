@@ -27,6 +27,9 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (_IN DEVELOPMENT_) DVD playback (actual discs in a real drive, see mounting/unmounting for images of discs)
   * (_IN DEVELOPMENT_) multi-file (single movie in multiple files) playback support (auto create playlists)
   * (_IN DEVELOPMENT_) Extender support
+  * (_IN DEVELOPMENT_) Filter by genre, rating, date, runtime, year etc
+  * (_IN DEVELOPMENT_) Triple tap: jumping to movie by using letters on remote control
+  * (_IN DEVELOPMENT_) Search functinality
 
   * (ON HOLD) Native VMC UI controls design
   * (ON HOLD) Movie Label 2009 Xml support
@@ -36,8 +39,6 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (ON HOLD) Movie Collectorz Xml support (one file per folder)
   * (ON HOLD) Boxset and season support (group multiple titles on the main menu into a single boxart/season shown)
   * (ON HOLD) Releated movies on the movie detail page
-  * (ON HOLD) Filter by genre, rating, date, runtime, year etc
-  * (ON HOLD) Search functinality
   * (ON HOLD) Parental filter with password
   * (ON HOLD) Selection of audio track from eg. dvd and mkv
   * (ON HOLD) Selection of subtitle track from eg. dvd and mkv
@@ -46,7 +47,6 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (ON HOLD) View: Instead of moving a cursor around the screen, the cursor is frozen center and instead the movie rows move
   * (ON HOLD) Using 3rd party programs as datasource
   * (ON HOLD) Movie queue
-  * (ON HOLD) Triple tap: jumping to movie by using letters on remote control
   * (ON HOLD) Movie trailer support
   * (ON HOLD) DVD changer support
   * (ON HOLD) Windows Home Server support
