@@ -30,6 +30,7 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (_IN DEVELOPMENT_) Filter by genre, rating, date, runtime, year etc
   * (_IN DEVELOPMENT_) Triple tap: jumping to movie by using letters on remote control
   * (_IN DEVELOPMENT_) Search functinality
+  * (_IN DEVELOPMENT_) Image caching for speed in loading images
 
   * (ON HOLD) Native VMC UI controls design
   * (ON HOLD) Movie Label 2009 Xml support
