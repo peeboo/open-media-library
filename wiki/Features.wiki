@@ -28,6 +28,7 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (_IN DEVELOPMENT_) multi-file (single movie in multiple files) playback support (auto create playlists)
   * (_IN DEVELOPMENT_) Extender support
 
+  * (ON HOLD) Native VMC UI controls design
   * (ON HOLD) Movie Label 2009 Xml support
   * (ON HOLD) Ant Movie Catalog Xml support
   * (ON HOLD) Mymovies Xml support (one file per folder)
