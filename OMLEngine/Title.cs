@@ -13,7 +13,7 @@ using System.Runtime.Remoting.Channels.Tcp;
 namespace OMLEngine
 {
     [Serializable()]
-    public class Title : ISerializable
+    public class Title : IComparable, ISerializable
     {
         #region locals
         private int _watched;
@@ -498,6 +498,19 @@ namespace OMLEngine
             _languageFormats.Add(language_format);
         }
 
-
+        /*
+        public int CompareTo(object other)
+        {
+            return InternalItemID.CompareTo(
+                ((Title)other).InternalItemID
+                );
+        }
+        */
+        public int CompareTo(object other)
+        {
+            return Name.CompareTo(
+                ((Title)other).Name
+                );
+        }
     }
 }

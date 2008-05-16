@@ -20,14 +20,14 @@ namespace OMLEngine
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public bool find_for_id(int id)
+        public Title find_for_id(int id)
         {
             foreach (Title title in this)
             {
                 if (title.InternalItemID == id)
-                    return true;
+                    return title;
             }
-            return false;
+            return null;
         }
         /// <summary>
         /// Get/Set the Source Database type to use
