@@ -29,4 +29,4 @@ Note: This will require wix 3.0 (wix.sourceforge.net) to be installed.
 
 At this point you should be good to go.  If your not seeing what something similar to what I posted the please post the files located in \program files\openmedialibrary\logs and your \program files\openmedialibrary\oml.dat file on our forums and we'll take a look at whats going on.  (Note, it wont be a high priority, but we'll get to it). 
 
-NOTE:  DVD Profiler plugin will not currently produce anything that can "play" movies since either of these apps contain location information for media.  If you want a decent exp. for now I'd stick with the mymovies export file or movie collectorz.
+NOTE:  DVD Profiler plugin will not currently produce anything that can "play" movies since either of these apps contain location information for media.  If you want a decent exp. for now I'd stick with the mymovies export file or movie collectorz. The Movie Collectorz imported was tested with version 5.5 build 2.
