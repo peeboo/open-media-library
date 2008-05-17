@@ -8,7 +8,12 @@ A lot of people want to try out OML, but a public release isn't available yet so
 
 = Details =
 
-1) Compile the project using Visual Studio 2008 (the free version [http://www.microsoft.com/express/vcsharp/ Visual C# 2008 Express Edition] will also work). 
+Requirements
+  * Visual Studio 2008
+  * NUNIT (http://www.nunit.org/index.php?p=download)
+  * WIX
+
+1) Compile the project using Visual Studio 2008 (the free version [http://www.microsoft.com/express/vcsharp/ Visual C# 2008 Express Edition] will also work). Build -> Rebuild Solution
 
 Note: This has to be done on a pc with Vista Media Center and the  [http://www.microsoft.com/downloads/details.aspx?FamilyID=A43EA0B7-B85F-4612-AA08-3BF128C5873E&displaylang=en Media Center SDK 5.3] installed.
 
@@ -16,7 +21,7 @@ Note: This has to be done on a pc with Vista Media Center and the  [http://www.m
 
 Note: This will require wix 3.0 (wix.sourceforge.net) to be installed.
 
-3) run the installer
+3) run the installer located in the Library/bin/Release folder.
 
 4) copy the OMLEngine\OML.config file to \program files\openmedialibrary and edit to your needs
 
@@ -24,4 +29,4 @@ Note: This will require wix 3.0 (wix.sourceforge.net) to be installed.
 
 At this point you should be good to go.  If your not seeing what something similar to what I posted the please post the files located in \program files\openmedialibrary\logs and your \program files\openmedialibrary\oml.dat file on our forums and we'll take a look at whats going on.  (Note, it wont be a high priority, but we'll get to it). 
 
-NOTE:  The Movie Collectorz and the DVD Profiler plugins will not currently produce anything that can "play" movies since either of these apps contain location information for media.  If you want a decent exp. for now I'd stick with the mymovies export file.
+NOTE:  DVD Profiler plugin will not currently produce anything that can "play" movies since either of these apps contain location information for media.  If you want a decent exp. for now I'd stick with the mymovies export file or movie collectorz.
