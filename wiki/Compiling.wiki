@@ -5,6 +5,9 @@
 
 A lot of people want to try out OML, but a public release isn't available yet so here you have the instructions on how to compile it yourself.
 
+For a reference how to use the SVN look here:
+http://internetducttape.com/2007/03/03/howto_google_code_hosting_subversion_tortoisesvn/
+
 
 = Details =
 
