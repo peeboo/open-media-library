@@ -9,11 +9,13 @@ using System.IO;
 using System.Diagnostics;
 using System.Xml;
 using System.Xml.XPath;
+using System.Text.RegularExpressions;
 
 namespace MovieCollectorz
 {
     public class MovieCollectorzPlugin : OMLPlugin, IOMLPlugin
     {
+        const string HTML_TAG_PATTERN = "<.*?>";
         TextReader tr = null;
 
         public override string GetDescription()
@@ -56,20 +58,23 @@ namespace MovieCollectorz
                         case "coverfront":
                             newTitle.FrontCoverPath = node.InnerText;
                             break;
-                        case "format":
-                            XmlNode formatNode = node.SelectSingleNode("displayname");
-                            if (formatNode != null)
-                            {
-                                switch (formatNode.InnerText.ToUpper())
-                                {
-                                    case "DVD":
-                                        newTitle.VideoFormat = VideoFormat.DVD;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                            break;
+                        // this case just represents if the disc is a DVD or blu ray move.
+                        // can use this to put a little ICON on the screen to notify the user
+                        //
+                        //case "format":
+                        //    XmlNode formatNode = node.SelectSingleNode("displayname");
+                        //    if (formatNode != null)
+                        //    {
+                        //        switch (formatNode.InnerText.ToUpper())
+                        //        {
+                        //            case "DVD":
+                        //                newTitle.VideoFormat = VideoFormat.DVD;
+                        //                break;
+                        //            default:
+                        //                break;
+                        //        }
+                        //    }
+                        //    break;
                         case "language":
                             XmlNodeList langNodes = node.SelectNodes("displayname");
                             foreach (XmlNode languageNode in langNodes)
@@ -81,7 +86,7 @@ namespace MovieCollectorz
                             newTitle.Name = node.InnerText;
                             break;
                         case "plot":
-                            newTitle.Synopsis = node.InnerText;
+                            newTitle.Synopsis = StripHTML(node.InnerText);
                             break;
                         case "releasedate":
                             XmlNode rdYear = node.SelectSingleNode("//year");
@@ -118,14 +123,18 @@ namespace MovieCollectorz
                             XmlNodeList crewMembers = node.SelectNodes("crewmember");
                             foreach (XmlNode crewMember in crewMembers)
                             {
-                                XmlNode roleId = crewMember.SelectSingleNode("role id");
+                                XmlNode roleId = crewMember.SelectSingleNode("roleid");
                                 if (roleId != null)
                                 {
-                                    if (roleId.InnerText.ToUpper().CompareTo("DIRECTOR") == 0)
+                                    if (roleId.InnerText.ToUpper().CompareTo("DFDIRECTOR") == 0)
                                     {
-                                        XmlNode directorName = crewMember.SelectSingleNode("displayname");
-                                        if (directorName != null)
-                                            newTitle.AddDirector(new Person(directorName.InnerText));
+                                        XmlNode person = crewMember.SelectSingleNode("person");
+                                        if (person != null)
+                                        {
+                                            XmlNode displayName = person.SelectSingleNode("displayname");
+                                            if (displayName != null)
+                                                newTitle.AddDirector(new Person(displayName.InnerText));
+                                        }
                                     }
                                     else
                                     {
@@ -154,6 +163,34 @@ namespace MovieCollectorz
                         case "upc":
                             newTitle.UPC = node.InnerText;
                             break;
+
+                        case "links":
+                            XmlNodeList links = node.SelectNodes("link");
+                            foreach (XmlNode link in links)
+                            {
+                                XmlNode urlType = link.SelectSingleNode("urltype");
+                                if (urlType != null)
+                                {
+                                    if (urlType.InnerText.ToUpper().CompareTo("MOVIE") == 0)
+                                    {
+                                        XmlNode url = link.SelectSingleNode("url");
+                                        if (url != null)
+                                        {
+                                            FileInfo fi = new FileInfo(url.InnerText);
+                                            string ext = fi.Extension.Substring(1);
+                                            
+                                            if (IsSupportedFormat(ext))
+                                            {
+                                                newTitle.VideoFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                                                newTitle.FileLocation = url.InnerText;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+
                         default:
                             break;
                     }
@@ -180,5 +217,11 @@ namespace MovieCollectorz
         {
             return "MovieCollectorzPlugin";
         }
+
+        private string StripHTML(string inputString)
+        {
+            return Regex.Replace(inputString, HTML_TAG_PATTERN, string.Empty);
+        }
+
     }
 }
