@@ -24,7 +24,7 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (*DONE*) DVD Library manager support
   * (*DONE*) DVD Profiler Xml support (one single file)
   * (*DONE*) Movie Collectorz Xml support (one single file)
-  * (*DONE*) Image caching for speed in loading images (using VirtualList class)
+  * (*DONE*) Image caching for speed in loading images (using [http://msdn.microsoft.com/en-us/library/bb189787.aspx VirtualList] class)
 
   * (_IN DEVELOPMENT_) DVD playback (actual discs in a real drive, see mounting/unmounting for images of discs)
   * (_IN DEVELOPMENT_) multi-file (single movie in multiple files) playback support (auto create playlists)
