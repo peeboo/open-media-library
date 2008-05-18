@@ -87,7 +87,7 @@
             </LayoutInput>
           </controls:Button>-->
 
-          <controls:Button Name="PlayMovie" Model="[PlayMovieCommand]"  >
+          <controls:Button Name="PlayMovie" Model="[PlayMovieCommand]">
             <LayoutInput>
               <FormLayoutInput Left = "Image,1.02" Top="Parent,0.05,15"/>
             </LayoutInput>

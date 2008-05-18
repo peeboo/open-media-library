@@ -69,6 +69,8 @@
     <Compile Include="Code\MoviePlayerTranscode.cs" />
     <Compile Include="Code\MoviePlayerUnavailable.cs" />
     <Compile Include="Code\MoviePlayerVideo.cs" />
+    <Compile Include="Code\Setup.cs" />
+    <Compile Include="Code\TreeView.cs" />
     <Compile Include="OML.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -92,13 +94,43 @@
     <None Include="Readme.htm" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\ButtonDisabled.png" />
+    <Content Include="Images\ButtonDormant.png" />
+    <Content Include="Images\ButtonLeftFocus.png" />
+    <Content Include="Images\ButtonLeftFocusOverlay.png" />
+    <Content Include="Images\ButtonNoFocus.png" />
+    <Content Include="Images\ButtonPressedAfterGlow.png" />
+    <Content Include="Images\ButtonPressedHighlight.png" />
+    <Content Include="Images\ButtonRadioButtonBullet.png" />
+    <Content Include="Images\ButtonRadioButtonBulletFocus.png" />
+    <Content Include="Images\ButtonRadioButtonBulletNoFocus.png" />
+    <Content Include="Images\ButtonRadioButtonOutlineFocus.png" />
+    <Content Include="Images\ButtonRadioButtonOutlineNoFocus.png" />
+    <Content Include="Images\FirstRunCheckBoxCheckedDisabled.png" />
+    <Content Include="Images\FirstRunCheckBoxCheckedFocus.png" />
+    <Content Include="Images\FirstRunCheckBoxCheckedNoFocus.png" />
+    <Content Include="Images\FirstRunCheckBoxCheckedPressed.png" />
+    <Content Include="Images\FirstRunCheckBoxUncheckedDisabled.png" />
+    <Content Include="Images\FirstRunCheckBoxUncheckedFocus.png" />
+    <Content Include="Images\FirstRunCheckBoxUncheckedNoFocus.png" />
+    <Content Include="Images\FirstRunCheckBoxUncheckedPressed.png" />
     <Content Include="Images\Focus_Outline.png" />
+    <Content Include="Images\SpinnerArrowBackDormant.png" />
+    <Content Include="Images\SpinnerArrowBackFocus.png" />
+    <Content Include="Images\SpinnerArrowBackNoFocus.png" />
+    <Content Include="Images\SpinnerArrowForwardDormant.png" />
+    <Content Include="Images\SpinnerArrowForwardFocus.png" />
+    <Content Include="Images\SpinnerArrowForwardNoFocus.png" />
     <Content Include="Markup\Button.mcml" />
     <Content Include="Markup\CoreControls.mcml" />
     <Content Include="Markup\DetailsPage.mcml" />
     <Content Include="Markup\FilterList.mcml" />
     <Content Include="Markup\Menu.mcml" />
+    <Content Include="Markup\RadioButtonGroup.mcml" />
+    <Content Include="Markup\SelectFileToImport.mcml" />
+    <Content Include="Markup\SelectImporter.mcml" />
     <Content Include="Markup\Setup.mcml" />
+    <Content Include="Markup\SimpleRadioButton.mcml" />
     <Content Include="Markup\Styles.mcml" />
     <Content Include="Registration.xml" />
     <Content Include="Images\Application.png" />

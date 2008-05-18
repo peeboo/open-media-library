@@ -1,23 +1,46 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
-	  xmlns:cor="assembly://MSCorLib/System">
+      xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
+      xmlns:cor="assembly://MsCorLib/System"
+      xmlns:a="assembly://Library/Library"
+      xmlns:coll="assembly://MsCorLib/System.Collections"
+      xmlns:s="resx://Library/Library.Resources/Styles"
+      xmlns:controls="resx://Library/Library.Resources/CoreControls"
+      xmlns:me="Me">
 
-	<UI Name="Setup">
+  <UI Name="Setup">
 
-		<Properties>
-			<Color Name="MyColor" Color="White"/>
-		</Properties>
+    <Locals>
+      <Command Name="BeginSetupCommand"
+               Description="Begin Setup"/>
+    </Locals>
 
-		<Locals>
-			<cor:String Name="MyString" String="No movies found! This is the setup page (TODO!)"/>
-		</Locals>
-
-		<Rules>
-			<Default Target="[MyText.Content]" Value="[MyString]"/>
-		</Rules>
-
+    <Rules>
+      <Changed Source="[BeginSetupCommand.Invoked]">
+        <Actions>
+          <Navigate Source="@resx://Library/Library.Resources/SelectImporter" />
+        </Actions>
+      </Changed>
+    </Rules>
+    
 		<Content>
-			<Text Name="MyText" Color="[MyColor]" Font="Calibri, 24"/>
-		</Content>
+      <ColorFill Content="Transparent"
+                 Layout="Form">
+        <Children>
+
+          <Text Name="MyText"
+                Content="Welcome to Open Media Library.  It looks like we need to go through some basic setup please click Start below to begin."
+                Color="White"
+                Font="Calibri, 24"
+                WordWrap="true"/>
+
+          <controls:Button Name="Begin Setup"
+                           Model="[BeginSetupCommand]">
+          </controls:Button>
+
+        </Children>
+      </ColorFill>
+
+    </Content>
 
 	</UI>
 

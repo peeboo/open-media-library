@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace OMLEngine
 {
@@ -174,6 +176,43 @@ namespace OMLEngine
                 }
             }
             return requested_drives;
+        }
+
+
+        // Actual instance class starts here
+        private DirectoryInfo _baseDir;
+        private DirectoryInfo _currentDir;
+        private ArrayList _directors_to_scan;
+
+        public FileSystemWalker()
+        {
+        }
+
+        public FileSystemWalker(string starting_dir)
+        {
+            DirectoryInfo dInfo = null;
+            try
+            {
+                if (Directory.Exists(starting_dir)) 
+                {
+                    dInfo = new DirectoryInfo(starting_dir);
+                    if (dInfo != null)
+                        _baseDir = dInfo;
+                }
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(starting_dir + " doesn't exist");
+            }
+        }
+
+        public FileSystemWalker(DirectoryInfo starting_dir)
+        {
+            _baseDir = starting_dir;
+        }
+
+        ~FileSystemWalker()
+        {
         }
     }
 }

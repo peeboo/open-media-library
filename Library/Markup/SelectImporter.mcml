@@ -1,0 +1,49 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:cor="assembly://MsCorLib/System"
+      xmlns:a="assembly://Library/Library"
+      xmlns:rbg="resx://Library/Library.Resources/RadioButtonGroup"
+      xmlns:controls="resx://Library/Library.Resources/CoreControls"
+      xmlns:me="Me">
+
+  <UI Name="SelectImporter">
+
+    <Properties>
+      <a:Setup Name="Setup" />
+    </Properties>
+    <Locals>
+
+      <Command Name="NextCommand"
+               Description="Next"/>
+
+    </Locals>
+
+    <Rules>
+      <Changed Source="[NextCommand.Invoked]">
+        <Actions>
+          <Navigate Source="@resx://Library/Library.Resources/SelectFileToImport" Setup="[Setup]" />
+        </Actions>
+      </Changed>
+    </Rules>
+
+    <Content>
+      <Panel Layout="Form">
+        <Children>
+          <Text Content="Please select which Importer you would like to use." />
+          <Panel>
+            <LayoutInput>
+              <FormLayoutInput Horizontal="Center" Vertical="Center" />
+            </LayoutInput>
+            <Children>
+              <rbg:RadioButtonGroup Model="[Setup.ImporterSelection]" />
+              <controls:Button Name="Next"
+                               Model="[NextCommand]">
+              </controls:Button>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+		</Content>
+
+	</UI>
+
+</Mcml>
