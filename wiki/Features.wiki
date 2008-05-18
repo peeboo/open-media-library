@@ -22,16 +22,17 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (*DONE*) Image file playback with auto-mounting/unmounting using Daemon Tools (iso, bin, cue, img, udf)
   * (*DONE*) Codec based playback support
   * (*DONE*) DVD Library manager support
+  * (*DONE*) DVD Profiler Xml support (one single file)
+  * (*DONE*) Movie Collectorz Xml support (one single file)
+  * (*DONE*) Image caching for speed in loading images (using VirtualList class)
 
-  * (_IN DEVELOPMENT_) DVD Profiler Xml support (one single file)
-  * (_IN DEVELOPMENT_) Movie Collectorz Xml support (one single file)
   * (_IN DEVELOPMENT_) DVD playback (actual discs in a real drive, see mounting/unmounting for images of discs)
   * (_IN DEVELOPMENT_) multi-file (single movie in multiple files) playback support (auto create playlists)
   * (_IN DEVELOPMENT_) Extender support
   * (_IN DEVELOPMENT_) Filter by genre, rating, date, runtime, year etc
   * (_IN DEVELOPMENT_) Triple tap: jumping to movie by using letters on remote control
-  * (_IN DEVELOPMENT_) Search functinality
-  * (_IN DEVELOPMENT_) Image caching for speed in loading images
+  * (_IN DEVELOPMENT_) Search functionality
+  * (_IN DEVELOPMENT_) UI based setup (importers, daemontools settings, etc)
 
   * (ON HOLD) Native VMC UI controls design
   * (ON HOLD) Movie Label 2009 Xml support
