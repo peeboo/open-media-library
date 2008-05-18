@@ -21,6 +21,7 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (*DONE*) VIDEO_TS playback
   * (*DONE*) Image file playback with auto-mounting/unmounting using Daemon Tools (iso, bin, cue, img, udf)
   * (*DONE*) Codec based playback support
+  * (*DONE*) DVD Library manager support
 
   * (_IN DEVELOPMENT_) DVD Profiler Xml support (one single file)
   * (_IN DEVELOPMENT_) Movie Collectorz Xml support (one single file)
@@ -51,7 +52,6 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (ON HOLD) Movie trailer support
   * (ON HOLD) DVD changer support
   * (ON HOLD) Windows Home Server support
-  * (ON HOLD) DVD Library manager support
   * (ON HOLD) View: File/folder view
   * (ON HOLD) Autoupdate feature/automatic information of new build
   * (ON HOLD) Delete movie feature, deleting everything releated to the movie (metadata, moviefile, moviefolder, covers etc)
