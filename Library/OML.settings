@@ -8,5 +8,14 @@
     <Setting Name="ShowFileLocation" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="GalleryView" Type="System.String" Scope="User">
+      <Value Profile="(Default)">FrontCoverArt</Value>
+    </Setting>
+    <Setting Name="ActorView" Type="System.String" Scope="User">
+      <Value Profile="(Default)">List</Value>
+    </Setting>
+    <Setting Name="DirectorView" Type="System.String" Scope="User">
+      <Value Profile="(Default)">List</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
