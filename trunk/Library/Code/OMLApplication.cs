@@ -28,7 +28,7 @@ namespace Library
 
         public void Startup()
         {
-            if (_movieGallery.Movies != null && _movieGallery.Movies.Length > 0)
+            if (_movieGallery.Items != null && _movieGallery.Items.Count > 0)
                 GoToMenu();
             else
                 GoToSetup();

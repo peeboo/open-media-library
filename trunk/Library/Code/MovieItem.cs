@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
@@ -10,19 +11,59 @@ using System.Diagnostics;
 
 namespace Library
 {
-    public class MovieItem : Command
+    public class GalleryItem : Command
+    {
+        public static Image NoCoverImage = new Image("resx://Library/Library.Resources/nocover");
+
+        private Image _itemImage;
+
+        public Image ItemImage
+        {
+            get { return _itemImage; }
+            set 
+            { 
+                _itemImage = value;
+                FirePropertyChanged("ItemImage");
+            }
+        }
+
+        virtual public string GetDescription()
+        {
+            return "";
+        }
+
+        public static Image LoadImage(string imageName)
+        {
+            if (File.Exists(imageName))
+            {
+                return new Image("file://" + imageName);
+            }
+            else
+            {
+                return new Image("resx://Library/Library.Resources/nocover");
+            }
+        }
+    }
+
+    public class MovieItem : GalleryItem
     {
         private WindowsPlayListManager _wplm;
         private Title _titleObj;
-        private Image _frontCoverArtImage;
+        //private Image _frontCoverArtImage;
         private Image _backCoverArtImage;
 
         public MovieItem(Title title)
         {
             _titleObj = title;
-            _frontCoverArtImage = MovieGallery.LoadImage(_titleObj.FrontCoverPath);
-            _backCoverArtImage = MovieGallery.LoadImage(_titleObj.BackCoverPath);
+            _backCoverArtImage = NoCoverImage;
+            ItemImage = NoCoverImage;
         }
+
+        override public string GetDescription()
+        {
+            return _titleObj.Name;
+        }
+
 
         public MovieItem(WindowsPlayListManager wplm)
         {
@@ -48,8 +89,8 @@ namespace Library
 
         public Image FrontCover
         {
-            get { return _frontCoverArtImage; }
-            set { _frontCoverArtImage = value; }
+            get { return ItemImage; }
+            set { ItemImage = value; }
         }
 
         public Image BackCover
