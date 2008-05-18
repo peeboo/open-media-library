@@ -1,9 +1,12 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
 	  xmlns:a="assembly://Library/Library"
 	  xmlns:s="resx://Library/Library.Resources/Styles"
+    xmlns:filter="resx://Library/Library.Resources/FilterList"
 	  xmlns:cor="assembly://MSCorLib/System"
 	  xmlns:me="Me">
 
+  <Aggregate Source="resx://Library/Library.Resources/FilterList"/>
+  
   <UI Name="MainMenu">
 
     <Properties>
@@ -21,7 +24,8 @@
 
     <Rules>
       <!-- Our list of choices come from the MediaServer. -->
-      <Default Target="[Choice.Options]" Value="[MovieBrowser.Movies]"/>
+      <Default Target="[Choice.Options]" Value="[MovieBrowser.Items]"/>
+      <!--<Default Target="[Choice.Options]" Value="[MovieBrowser.Movies]"/>-->
 
       <Changed Source="[Choice.Chosen]">
         <Actions>
@@ -137,15 +141,31 @@
 
           <Panel>
             <Children>
-              <me:Gallery Name="MovieGallery" Choice="[Choice]" Selection="[Selection]" MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]">
-              </me:Gallery>
+              <filter:FilterList Page="[MovieBrowser]" Margins="0,-4,100,0" MinimumSize="0,32"/>
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05,20" Right="Parent,1,-20" Top="Parent,0.05,50" Bottom="Parent,.95,-50"/>
+              <FormLayoutInput Left="Parent,0.35,20" Right="Parent,1,-20" Top="Parent,0.05,50"/>
             </LayoutInput>
           </Panel>
+
+
+            <Panel>
+            
+              <Children>
+                <me:Gallery Name="MovieGallery" Choice="[Choice]" Selection="[Selection]" MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]">
+                </me:Gallery>
+              </Children>
+             
+              <LayoutInput>
+                <FormLayoutInput Left="Parent,0.05,20" Right="Parent,1,-20" Top="Parent,0.10,50" Bottom="Parent,.95,-50"/>
+              </LayoutInput>
+            
+            </Panel>
+          
         </Children>
+        
       </ColorFill>
+      
     </Content>
 
   </UI>
@@ -172,6 +192,7 @@
 
     <Content>
       <Panel Name="GalleryContainer" Layout="Form">
+
         <Children>
 
           <!-- Put in a scroller so that if we repeat, the row will scroll. -->
@@ -198,7 +219,7 @@
                               Rows="3"
                               Orientation="Vertical"
                               AllowWrap="true"
-                              ReferenceSize="150, 214"
+                              ReferenceSize="150, 200"
                               Spacing="1,0"
                               MajorAlignment="Fill"
                               MinorAlignment="Center"
@@ -252,6 +273,9 @@
     <Rules>
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
 
+      <Binding Source="[MovieItem.ItemImage]" Target="[Cover.Content]" />
+        
+
       <!-- Mark ourselves as KeyInteractive so we can receive key focus.    -->
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
@@ -300,10 +324,10 @@
           <Set Target="[Choice.ChosenIndex]" Value="[OptionIndex.SourceValue]"/>
         </Actions>
       </Condition>
+      
     </Rules>
 
     <Content>
-
 
 
       <Panel Name="ItemPanel" Layout="Anchor" Scale="1.0,1.0,1.0" CenterPointPercent="0.5,0.75,0.0">
@@ -311,9 +335,7 @@
 
           <Panel Name="ImagePanel" Margins="0,0,0,0">
             <Children>
-
-              <Graphic Name="Cover" Content="[MovieItem.FrontCover]" Alpha="0.7" SizingPolicy="SizeToConstraint"/>
-
+              <Graphic Name="Cover" Content="[MovieItem.ItemImage]" Alpha="0.7" SizingPolicy="SizeToConstraint"/>
             </Children>
           </Panel>
 
@@ -338,30 +360,38 @@
     <Properties>
       <Choice Name="Choi" Choice="$Required" />
     </Properties>
+    
     <Rules>
+      
       <Binding Target="[CurrentPage.Content]" Source="[Choi.ChosenIndex!cor:String]">
         <Transformer>
           <MathTransformer Add="1" />
         </Transformer>
       </Binding>
-      <Binding Target="[CurrentPage.Content]" Source="[Choi.Options.Count!cor:String]" />
+      
+      <Binding Target="[TotalPages.Content]" Source="[Choi.Options.Count!cor:String]" />
     </Rules>
+    
     <Content>
       <Panel Name="Indicator" Layout="HorizontalFlow">
         <Children>
+          
           <Text Name="CurrentPage" Content="[Choi.ChosenIndex!cor:String]" Font="Verdana,15" Color="White">
             <Animations>
               <TransformAnimation Source="animation://me:ChangeHide"/>
               <TransformAnimation Source="animation://me:ChangeShow"/>
             </Animations>
           </Text>
+          
           <Text Content="|" Margins="5,0,5,0" Font="Verdana,15" Color="LightBlue"/>
+          
           <Text Name="TotalPages" Content="[Choi.Options.Count!cor:String]" Font="Verdana,15" Color="LightBlue">
             <Animations>
               <TransformAnimation Source="animation://me:ChangeHide"/>
               <TransformAnimation Source="animation://me:ChangeShow"/>
             </Animations>
           </Text>
+          
         </Children>
       </Panel>
     </Content>
