@@ -130,6 +130,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] FilterList {
+            get {
+                object obj = ResourceManager.GetObject("FilterList", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Focus_Outline {
             get {
                 object obj = ResourceManager.GetObject("Focus_Outline", resourceCulture);
