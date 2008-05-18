@@ -1,0 +1,94 @@
+﻿<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:z="assembly://Library/Library"
+	  xmlns:sys="assembly://mscorlib/System"
+	  xmlns:styles="resx://Library/Library.Resources/Styles"
+	  xmlns:core="resx://Library/Library.Resources/CoreControls"
+	  xmlns:me="Me">
+
+  <!-- A list of filters on a filtered content page -->
+  <UI Name="FilterList">
+    <Properties>
+      <z:MovieGallery Name="Page" MovieGallery="$Required"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingData Name="ScrollingData"/>
+      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true" HandlePageCommands="true" HandlePageKeys="true"/>
+      
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[Repeater]"/>
+      
+      <Rule>
+        <Conditions>
+          <IsValid Source="[Page.CurrentFilter.AvailableChoices]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Repeater.Source]" Value="[Page.CurrentFilter.AvailableChoices.Options]"/>
+        </Actions>
+      </Rule>
+    </Rules>
+
+    <Content>
+      <Scroller Name="Scroll" Orientation="Horizontal" FadeSize="5" ScrollingData="[ScrollingData]" >
+        <Children>
+        <Repeater Name="Repeater"  Navigation="RememberFocus"  >
+          <Layout>
+            <FlowLayout Orientation="Horizontal" Spacing="2,0"/>
+          </Layout>
+          <Content>
+
+            <me:FilterButton Option="[RepeatedItem]" Choice="[Page.CurrentFilter.AvailableChoices]"/>
+
+          </Content>
+        </Repeater>
+        </Children>
+      </Scroller>
+      
+    </Content>
+  </UI>
+
+  <!-- A single filter from a filter list -->
+  <UI Name="FilterButton">
+    <Properties>
+      <sys:Object Name="Option" Object="$Required"/>
+      <Choice Name="Choice" Choice="$Required"/>
+    </Properties>
+
+    <Locals>
+      <Command Name="SelectOption"/>
+    </Locals>
+
+    <Rules>
+      <!-- When the button is clicked, set this guy as the selected filter. -->
+      <Changed Source="[SelectOption.Invoked]">
+        <Actions>
+          <Set Target="[Choice.Chosen]" Value="[Option]"/>
+        </Actions>
+      </Changed>
+
+      <!-- If we are the active filter set Selected to true. -->
+      <Condition Source="[Choice.Chosen]" SourceValue="[Option]" Target="[SelectOption.Selected]" Value="true"/>
+      <Default Target="[SelectOption.Selected]" Value="false"/>
+
+      <!-- If this is a ModelItem, use the Description property for the label. -->
+      <Rule>
+        <Conditions>
+          <IsType Source="[Option]" Type="ModelItem"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SelectOption.Description]" Value="[Option!ModelItem.Description]"/>
+        </Actions>
+      </Rule>
+      <!-- Otherwise just use ToString(). -->
+      <Default Target="[SelectOption.Description]" Value="[Option.ToString]"/>
+    </Rules>
+
+    <Content>
+      <core:Button Model="[SelectOption]" TextColor="color://styles:Text.Active" TextMargins="8,-2,8,2"/>
+    </Content>
+  </UI>
+
+</Mcml>
