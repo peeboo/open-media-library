@@ -83,6 +83,11 @@ namespace Library
                 string volLabel = string.Empty;
                 int _tries = 0;
                 DriveInfo dInfo = Utilities.DriveInfoForDrive(VirtualDiscDrive);
+                /* We need to give daemontools a bit of time to complete
+                 * mounting the image, so we wait 100 milliseconds and check it
+                 * if its ready then we go, if not then we wait again but we
+                 * only wait for a total of 100 * 100 milliseconds (100m. x 100 tries)
+                */
                 do
                 {
                     try
