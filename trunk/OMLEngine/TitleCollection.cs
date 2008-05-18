@@ -210,6 +210,9 @@ namespace OMLEngine
             }
             return false;
         }
+
+
+
         /// <summary>
         /// Takes all titles in the collection and creates a DataTable object for use
         /// by the Media Center UI
@@ -221,9 +224,12 @@ namespace OMLEngine
             dt.Columns.Add("Name").DataType = typeof(string);
             dt.Columns.Add("Description").DataType = typeof(string);
             dt.Columns.Add("FileLocation").DataType = typeof(string);
-            dt.Columns.Add("id").DataType = typeof(int);
-            dt.Columns.Add("front_boxart").DataType = typeof(string);
-            dt.Columns.Add("back_boxart").DataType = typeof(string);
+            
+            DataColumn idColumn = dt.Columns.Add("id");
+            idColumn.DataType = typeof(int);
+            dt.PrimaryKey = new DataColumn[] { idColumn };
+            dt.Columns.Add("FrontCoverPath").DataType = typeof(string);
+            dt.Columns.Add("BackCoverPath").DataType = typeof(string);
             dt.Columns.Add("Runtime");
             dt.Columns.Add("Rating");
             dt.Columns.Add("Synopsis");
@@ -246,7 +252,7 @@ namespace OMLEngine
             dt.Columns.Add("VideoStandard");
             dt.Columns.Add("UPC");
             dt.Columns.Add("OriginalName");
-
+            
             foreach (Title ti in this)
             {
                 DataRow row = dt.NewRow();
@@ -254,8 +260,8 @@ namespace OMLEngine
                 row["Description"] = ti.Description;
                 row["FileLocation"] = ti.FileLocation;
                 row["id"] = ti.InternalItemID;
-                row["front_boxart"] = ti.FrontCoverPath;
-                row["back_boxart"] = ti.BackCoverPath;
+                row["FrontCoverPath"] = ti.FrontCoverPath;
+                row["BackCoverPath"] = ti.BackCoverPath;
                 row["Runtime"] = ti.Runtime;
                 row["Rating"] = ti.MPAARating;
                 row["Synopsis"] = ti.Synopsis;
@@ -282,6 +288,8 @@ namespace OMLEngine
             }
             return dt;
         }
+
+ 
 
         #region serialization methods
         public TitleCollection(SerializationInfo info, StreamingContext ctxt)
