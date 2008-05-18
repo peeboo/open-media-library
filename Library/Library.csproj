@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Gallery.cs" />
     <Compile Include="Code\MoviePlayerWPL.cs" />
     <Compile Include="Code\OMLApplication.cs" />
     <Compile Include="Code\MovieDetailsPage.cs" />
@@ -95,6 +96,7 @@
     <Content Include="Markup\Button.mcml" />
     <Content Include="Markup\CoreControls.mcml" />
     <Content Include="Markup\DetailsPage.mcml" />
+    <Content Include="Markup\FilterList.mcml" />
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\Setup.mcml" />
     <Content Include="Markup\Styles.mcml" />
