@@ -32,4 +32,10 @@ Note: This will require wix 3.0 (wix.sourceforge.net) to be installed.
 
 At this point you should be good to go.  If your not seeing what something similar to what I posted the please post the files located in \program files\openmedialibrary\logs and your \program files\openmedialibrary\oml.dat file on our forums and we'll take a look at whats going on.  (Note, it wont be a high priority, but we'll get to it). 
 
-NOTE:  DVD Profiler plugin will not currently produce anything that can "play" movies since either of these apps contain location information for media.  If you want a decent exp. for now I'd stick with the mymovies export file or movie collectorz. The Movie Collectorz imported was tested with version 5.5 build 2.
+= Troubleshooting =
+
+*Q:* I get the following error compiling: Error 10 The command ""C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\..\..\..\Microsoft SDKs\Windows\v6.0\Bin\GacUtil.exe" /i "C:\OML\OMLEngine\bin\Release\OMLEngine.dll" /f" exited with code 3. OMLEngine
+
+*A:* First try to run Visual Studio as an administrator. If that doesn't help, try to go to \program files\microsoft SDKs\Windows\ if the only folder there is 6.0A then open a command prompt and go to \program files\microsoft sdk\windows and input: mklink v6.0 v6.0a. Try compiling again, should help. 
+
+NOTE:  DVD Profiler plugin will not currently produce anything that can "play" movies.  If you want to play movies for now I'd stick with the mymovies export file or movie collectorz untill DVD Profiler is fixed. The Movie Collectorz imported was tested with version 5.5 build 2.
