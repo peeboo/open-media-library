@@ -12,17 +12,17 @@ http://internetducttape.com/2007/03/03/howto_google_code_hosting_subversion_tort
 = Details =
 
 Requirements
-  * Visual Studio 2008
+  * Visual Studio 2008 (the free version [http://www.microsoft.com/express/vcsharp/ Visual C# 2008 Express Edition] will also work)
   * NUNIT (http://www.nunit.org/index.php?p=download)
-  * WIX
+  * WIX 3.0 (wix.sourceforge.net)
 
-1) Compile the project using Visual Studio 2008 (the free version [http://www.microsoft.com/express/vcsharp/ Visual C# 2008 Express Edition] will also work). Build -> Rebuild Solution
+1) Compile the project using Visual Studio 2008 . Build -> Rebuild Solution
 
 Note: This has to be done on a pc with Vista Media Center and the  [http://www.microsoft.com/downloads/details.aspx?FamilyID=A43EA0B7-B85F-4612-AA08-3BF128C5873E&displaylang=en Media Center SDK 5.3] installed.
 
 2) using a visual studio cmd prompt go into the Library\Setup (or Setup64) dir and run Build.bat
 
-Note: This will require wix 3.0 (wix.sourceforge.net) to be installed.
+Note: This will require wix 3.0 to be installed.
 
 3) run the installer located in the Library/bin/Release folder.
 
