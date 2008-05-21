@@ -15,6 +15,19 @@ namespace OMLEngine
         private SourceDatabase _source_database_to_use;
         private string _database_filename;
 
+        public void Replace(Title title)
+        {
+            Title t = find_for_id(title.InternalItemID);
+            if (t != null)
+            {
+                int index = this.IndexOf(t);
+                this[index] = title;
+            }
+            else
+            {
+                Add(title);
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
