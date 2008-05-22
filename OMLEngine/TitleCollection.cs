@@ -155,6 +155,7 @@ namespace OMLEngine
                 default:
                     return false;
             }
+            Sort();
         }
 
         /// <summary>
@@ -302,8 +303,6 @@ namespace OMLEngine
             return dt;
         }
 
- 
-
         #region serialization methods
         public TitleCollection(SerializationInfo info, StreamingContext ctxt)
         {
@@ -319,5 +318,6 @@ namespace OMLEngine
             info.AddValue("TitleCollection", this);
         }
         #endregion
+
     }
 }
