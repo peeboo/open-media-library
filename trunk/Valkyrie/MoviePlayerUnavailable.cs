@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using OMLEngine;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
 using System.IO;
 
-namespace Library
+namespace Valkyrie
 {
     public class UnavailableMoviePlayer : IPlayMovie
     {
+        public bool IsExtender()
+        {
+            return false;
+        }
+
         public UnavailableMoviePlayer(MovieItem title)
         {
             _title = title;

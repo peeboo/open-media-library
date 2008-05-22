@@ -284,6 +284,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap ListboxNoFocus {
+            get {
+                object obj = ResourceManager.GetObject("ListboxNoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static byte[] Menu {
             get {
                 object obj = ResourceManager.GetObject("Menu", resourceCulture);
@@ -305,9 +312,16 @@ namespace Library {
             }
         }
         
-        internal static byte[] SelectFileToImport {
+        internal static byte[] SelectDirectoriesToScan {
             get {
-                object obj = ResourceManager.GetObject("SelectFileToImport", resourceCulture);
+                object obj = ResourceManager.GetObject("SelectDirectoriesToScan", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] SelectFilesToImport {
+            get {
+                object obj = ResourceManager.GetObject("SelectFilesToImport", resourceCulture);
                 return ((byte[])(obj));
             }
         }

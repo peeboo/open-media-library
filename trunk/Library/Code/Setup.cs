@@ -13,11 +13,35 @@ namespace Library
 {
     public class Setup : ModelItem
     {
+        private static Setup current;
         private Choice _ImporterSelection = new Choice();
         private TreeView _treeView = new TreeView();
 
+        public static Setup Current
+        {
+            get { return current; }
+            set { current = value; }
+        }
+
+        public void AddCheckedNode(TreeNode node)
+        {
+            OMLApplication.DebugLine("Adding node: " + node.Title);
+            TreeView.CheckedNodes.Add(node);
+            FirePropertyChanged("CheckedNodes");
+        }
+
+        public void RemoveCheckedNode(TreeNode node)
+        {
+            OMLApplication.DebugLine("Removing node: " + node.Title);
+            if (TreeView.CheckedNodes.Contains(node))
+            {
+                TreeView.CheckedNodes.Remove(node);
+                FirePropertyChanged("CheckedNodes");
+            }
+        }
         public Setup()
         {
+            current = this;
             List<string> _Importers = new List<string>();
             _Importers.Add("MyMovies");
             _Importers.Add("DVD Profiler");
