@@ -66,30 +66,5 @@ namespace OMLTestSuite
             Assert.AreEqual(dt.Rows.Count, 1);
             Assert.AreEqual(dt.Columns.Count, 28);
         }
-
-        [Test]
-        public void TEST_REPLACE_METHOD()
-        {
-            TitleCollection tc = new TitleCollection("\\test.dat");
-            Title t = new Title();
-            t.Name = "Boo";
-            tc.Add(t);
-            tc.saveTitleCollection();
-
-            TitleCollection tc2 = new TitleCollection("\\test.dat");
-            tc2.loadTitleCollection();
-
-            Assert.AreEqual(1, tc2.Count);
-
-            Title t2 = (Title)tc2[0];
-
-            Assert.IsInstanceOfType(typeof(Title), t2);
-
-            t2.Runtime = 4;
-
-            tc2.Replace(t2);
-
-            Assert.AreEqual(4, ((Title)tc2[0]).Runtime);
-        }
     }
 }

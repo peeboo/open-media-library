@@ -6,7 +6,6 @@ using System.Xml;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.Hosting;
 using System.Diagnostics;
-using Valkyrie;
 
 namespace Library
 {
@@ -31,7 +30,7 @@ namespace Library
 
             if (item.FrontCover == null)
             {
-                OMLApplication.DebugLine("Details Page.LoadMovies: front cover is null");
+                Trace.WriteLine("Details Page.LoadMovies: front cover is null");
             }
 
             _backgroundImage = item.FrontCover;
@@ -42,7 +41,7 @@ namespace Library
             }
             catch (Exception e)
             {
-                OMLApplication.DebugLine("Details Page.LoadMovies exception: " + e.Message);
+                Trace.WriteLine("Details Page.LoadMovies exception: " + e.Message);
             }
         }
 

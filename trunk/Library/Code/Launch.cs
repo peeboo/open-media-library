@@ -23,7 +23,7 @@ namespace Library
                     Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.OpenOrCreate);
 
                 Trace.Listeners.Add(new TextWriterTraceListener(Log));
-                OMLApplication.DebugLine("Launch:Initialize()");
+                Trace.WriteLine("Launch:Initialize()");
             }
             catch (IOException)
             { }

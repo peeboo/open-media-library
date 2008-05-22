@@ -216,10 +216,10 @@
                   <!-- the content should be placed within the space if it  -->
                   <!-- is smaller than the reference size.                  -->
                   <GridLayout Repeat="WhenTooBig"
-                              Rows="[MovieBrowser.NumberOfMenuRows]"
+                              Rows="3"
                               Orientation="Vertical"
                               AllowWrap="true"
-                              ReferenceSize="[MovieBrowser.MenuImageSize]"
+                              ReferenceSize="150, 200"
                               Spacing="1,0"
                               MajorAlignment="Fill"
                               MinorAlignment="Center"
