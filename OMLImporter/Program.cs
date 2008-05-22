@@ -10,7 +10,7 @@ namespace OMLImporter
     class Program
     {
         public static double VERSION = 0.1;
-
+        public static int _exit = 0;
 
         [STAThread]
         static void Main(string[] args)
@@ -32,25 +32,17 @@ namespace OMLImporter
             }
             */
 
-            if (plugin == null)
+            do
             {
                 Menu(ref plugin);
-            }
-
-            if (plugin != null && file_to_import.Length == 0)
-            {
-                GetFile(ref file_to_import, plugin);
-            }
-
-            if (plugin != null && file_to_import.Length > 0)
-            {
-                ProcessFile(plugin, file_to_import);
-                Menu(ref plugin);
-            }
-            else
-            {
-                Usage();
-            }
+                if (plugin != null && file_to_import != null)
+                {
+                    GetFile(ref file_to_import, plugin);
+                    ProcessFile(plugin, file_to_import);
+                    plugin = null;
+                    file_to_import = null;
+                }
+            } while (Program._exit < 1);
         }
 
         public static void GetFile(ref string file_to_import, OMLPlugin plugin)
@@ -95,6 +87,7 @@ namespace OMLImporter
                     plugin = new MovieCollectorz.MovieCollectorzPlugin();
                     break;
                 case 4:
+                    Program._exit = 1;
                     return;
                 default:
                     Usage();
