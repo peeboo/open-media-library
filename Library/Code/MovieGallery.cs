@@ -23,8 +23,28 @@ namespace Library
         private Hashtable _genres = new Hashtable();
         private Hashtable _actors = new Hashtable();
         private Hashtable _directors = new Hashtable();
+        private int _NumberOfMenuRows = 2;
+        private Size _MenuImageSize = new Size(150, 200);
 
+        public Size MenuImageSize
+        {
+            get { return _MenuImageSize; }
+            set
+            {
+                _MenuImageSize = value;
+                FirePropertyChanged("MenuImageSize");
+            }
+        }
 
+        public int NumberOfMenuRows
+        {
+            get { return _NumberOfMenuRows; }
+            set
+            {
+                _NumberOfMenuRows = value;
+                FirePropertyChanged("NumberOfMenuRows");
+            }
+        }
 
         public Hashtable Genres
         {
