@@ -305,9 +305,16 @@ namespace Library {
             }
         }
         
-        internal static byte[] SelectFileToImport {
+        internal static byte[] SelectDirectoriesToScan {
             get {
-                object obj = ResourceManager.GetObject("SelectFileToImport", resourceCulture);
+                object obj = ResourceManager.GetObject("SelectDirectoriesToScan", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] SelectFilesToImport {
+            get {
+                object obj = ResourceManager.GetObject("SelectFilesToImport", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -315,6 +322,13 @@ namespace Library {
         internal static byte[] SelectImporter {
             get {
                 object obj = ResourceManager.GetObject("SelectImporter", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] SelectImporter1 {
+            get {
+                object obj = ResourceManager.GetObject("SelectImporter1", resourceCulture);
                 return ((byte[])(obj));
             }
         }
