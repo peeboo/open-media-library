@@ -8,45 +8,30 @@
   <UI Name="SelectFileToImport">
 
 		<Properties>
-      <a:Setup Name="Setup" Setup="$Required" />
+      <a:Setup Name="Setup"
+               Setup="$Required" />
 		</Properties>
 
 		<Locals>
       <Command Name="FocusedNodeChanged" />
-      <Command Name="BeginScanCommand" Description="Begin Scan" />
+			<cor:String Name="MyString"
+                  String="[Setup.ImporterSelection.Chosen!cor:String]"/>
 		</Locals>
 
-    <Rules>
-      <Changed Source="[BeginScanCommand.Invoked]">
-        <Actions>
-          <Navigate Source="@resx://Library/Library.Resources/SelectFilesToImport"
-                    Setup="[Setup]" />
-        </Actions>
-      </Changed>
+<!--    
+		<Rules>
       <Binding Target="[CurrentNodeLabel.Content]"
                Source="[Setup.TreeView.CheckedNode.ToString]" />
       <Binding Target="[CurrentNodeLabel.Content]"
-               Source="[FocusedNodeChanged.Description]" />
-    </Rules>
-
-    <Content>
+               Source="[FocusNodeChanged.Description]" />
+			<Default Target="[MyText.Content]" Value="[MyString]" />
+		</Rules>
+-->
+		<Content>
       
       <Panel Layout="VerticalFlow">
         <Children>
-
-          <Panel MinimumSize="561,200"
-                 MaximumSize="561,200">
-            <Children>
-              <Text Name="CurrentNodeLabel"
-                    Color="LightBlue"
-                    Margins="0,10,0,0"
-                    WordWrap="true" />
-
-            </Children>
-          </Panel>
-          <Graphic Content="image://me:ListboxNoFocus">
-            <Children>
-              
+          
           <Scroller Orientation="Vertical"
                     FadeSize="10"
                     Padding="15,15,15,15">
@@ -54,25 +39,20 @@
               
               <Repeater Layout="VerticalFlow"
                         Source="[Setup.TreeView.ChildNodes]">
-
+<!--
                 <Animations>
                   <Animation Animation="animation://me:ScrollerMoveItemSmooth" />
                 </Animations>
-
+-->
                 <Content>
                   <me:TreeNodeItem TreeNode="[RepeatedItem!a:TreeNode]"
                                    Focused="[FocusedNodeChanged]" />
                 </Content>
               </Repeater>
-            </Children>
-          </Scroller>
               
             </Children>
-          </Graphic>
-
-          <controls:Button Name="Begin Scan"
-                           Model="[BeginScanCommand]" />
-
+          </Scroller>
+          
         </Children>
       </Panel>
       
@@ -449,12 +429,13 @@
                    MaximumSize="[Size]"
                    SizingPolicy="SizeToContent"
                    HorizontalAlignment="Fill"
-                   VerticalAlignment="Fill">
-
+                   VerticalAlignment="Fill"
+                   >
+<!--
             <Animations>
               <Animation Animation="animation://me:ButtonFocusOverlayIdle"/>
             </Animations>
-
+-->
           </Graphic>
 
         </Children>
@@ -512,38 +493,5 @@
          Source="resx://Library/Library.Resources/SpinnerArrowForwardFocus" />
   <Image Name="SpinnerArrowForwardNoFocus"
          Source="resx://Library/Library.Resources/SpinnerArrowForwardNoFocus" />
-  <Image Name="ListboxNoFocus"
-         Source="resx://Library/Library.Resources/ListboxNoFocus" />
-
-  <Animation Name="ScrollerMoveItemSmooth"
-             Type="Move">
-    <Keyframes>
-      <PositionKeyframe Time="0.0"
-                        Value="0,0,0"
-                        RelativeTo="Current"
-                        Interpolation="EaseOut" />
-      <PositionKeyframe Time="0.2"
-                        Value="0,0,0"
-                        RelativeTo="Final" />
-    </Keyframes>
-  </Animation>
-
-  <Animation Name="ButtonFocusOverlayIdle"
-             Loop="-1"
-             Type="Idle">
-    <Keyframes>
-      <AlphaKeyframe Time="0.0"
-                     Value="0.0"
-                     Interpolation="SCurve"
-                     RelativeTo="Absolute"/>
-      <AlphaKeyframe Time="1.55"
-                     Value="0.60"
-                     Interpolation="SCurve"
-                     RelativeTo="Absolute"/>
-      <AlphaKeyframe Time="2.0"
-                     Value="0.0"
-                     RelativeTo="Absolute"/>
-    </Keyframes>
-  </Animation>
 
 </Mcml>

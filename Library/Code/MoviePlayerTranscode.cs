@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using OMLEngine;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
 using System.IO;
 
-namespace Valkyrie
+namespace Library
 {
     public class TranscodePlayer : IPlayMovie
     {
-        public bool IsExtender()
-        {
-            return false;
-        }
-
         public TranscodePlayer(MovieItem title)
         {
             _title = title;
@@ -62,7 +58,7 @@ namespace Valkyrie
                     }
                     catch (Exception ex)
                     {
-                        OMLApplication.DebugLine(ex.Message);
+                        Trace.WriteLine(ex.Message);
                     }
                 }
             }
@@ -74,13 +70,13 @@ namespace Valkyrie
         private string DynamicPlayMedia()
         {
             string path_to_media = _title.FileLocation;
-//            OMLApplication.DebugLine("We are an extender");
+//            Trace.WriteLine("We are an extender");
             string new_path = string.Empty;
             if (PlayTranscodedMedia(ref new_path))
             {
                 path_to_media = new_path;
             }
-  //          OMLApplication.DebugLine("Returning path: " + path_to_media);
+  //          Trace.WriteLine("Returning path: " + path_to_media);
             return path_to_media;
         }
     }

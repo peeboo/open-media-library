@@ -99,12 +99,6 @@ namespace Library
             get { return _isExtender; }
         }
 
-        public static void DebugLine(string msg)
-        {
-            Trace.WriteLine(msg);
-            Trace.Flush();
-        }
-
         // private data
         private static OMLApplication _singleApplicationInstance;
         private AddInHost _host;

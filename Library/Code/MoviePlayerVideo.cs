@@ -1,33 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using OMLEngine;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
 using System.IO;
 
-namespace Valkyrie
+namespace Library
 {
     /// <summary>
-    /// DVDPlayer class for playing a DVD
+    /// VideoPlayer class for playing standard videos (AVIs, etc)
     /// </summary>
-    public class DVDPlayer : IPlayMovie
+    public class VideoPlayer : IPlayMovie
     {
-        public bool IsExtender()
-        {
-            return false;
-        }
-
-        public DVDPlayer(MovieItem title)
+        public VideoPlayer(MovieItem title)
         {
             _title = title;
         }
 
         public bool PlayMovie()
         {
-            string media = "DVD://" + _title.FileLocation;
-            media.Replace('\\', '/');
-            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, media, false))
+            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, _title.FileLocation, false))
             {
                 if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                 {
@@ -39,10 +33,8 @@ namespace Valkyrie
             {
                 return false;
             }
-
         }
 
         MovieItem _title;
     }
-
 }

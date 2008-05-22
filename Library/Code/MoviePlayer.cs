@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using OMLEngine;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Diagnostics;
-using OMLEngine;
 
-namespace Valkyrie
+namespace Library
 {
     /// <summary>
     /// an interface required for movie players
@@ -20,7 +20,6 @@ namespace Valkyrie
         /// </summary>
         /// <returns></returns>
         bool PlayMovie();
-        bool IsExtender();
     }
 
     /// <summary>
@@ -38,29 +37,35 @@ namespace Valkyrie
             // for now play just online titles. add offline capabilities later
             if (File.Exists(movieItem.FileLocation) || Directory.Exists(movieItem.FileLocation))
             {
-                if (NeedsTranscode(movieItem.TitleObject) )
+                if (OMLApplication.Current.IsExtender && NeedsTranscode(movieItem.TitleObject) )
                 {
+                    Trace.WriteLine("TranscodePlayer created");
                     return new TranscodePlayer(movieItem);
                 }
                 else if (NeedsMounting(movieItem.TitleObject))
                 {
+                    Trace.WriteLine("MountImageMoviePlayer created");
                     return new MountImagePlayer(movieItem);
                 }
                 else if (movieItem.TitleObject.VideoFormat == VideoFormat.DVD)
                 {
+                    Trace.WriteLine("DVDMoviePlayer created");
                     return new DVDPlayer(movieItem);
                 }
                 else if (movieItem.TitleObject.VideoFormat == VideoFormat.WPL)
                 {
+                    Trace.WriteLine("WPLMoviePlayer created");
                     return new MoviePlayerWPL(movieItem);
                 }
                 else
                 {
+                    Trace.WriteLine("VideoPlayer created");
                     return new VideoPlayer(movieItem);
                 }
             }
             else
             {
+                Trace.WriteLine("UnavailableMoviePlayer created");
                 return new UnavailableMoviePlayer(movieItem);
             }
         }

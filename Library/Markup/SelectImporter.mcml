@@ -20,7 +20,7 @@
     <Rules>
       <Changed Source="[NextCommand.Invoked]">
         <Actions>
-          <Navigate Source="@resx://Library/Library.Resources/SelectDirectoriesToScan" Setup="[Setup]" />
+          <Navigate Source="@resx://Library/Library.Resources/SelectFileToImport" Setup="[Setup]" />
         </Actions>
       </Changed>
     </Rules>

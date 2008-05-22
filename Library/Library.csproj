@@ -16,7 +16,6 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,22 +51,25 @@
     <Reference Include="Microsoft.MediaCenter" />
     <Reference Include="Microsoft.MediaCenter.UI" />
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\DirectoryTreeNode.cs" />
     <Compile Include="Code\Gallery.cs" />
+    <Compile Include="Code\MoviePlayerWPL.cs" />
     <Compile Include="Code\OMLApplication.cs" />
     <Compile Include="Code\MovieDetailsPage.cs" />
+    <Compile Include="Code\MovieItem.cs" />
     <Compile Include="Code\Launch.cs" />
     <Compile Include="Code\MovieGallery.cs" />
+    <Compile Include="Code\MoviePlayer.cs" />
+    <Compile Include="Code\MoviePlayerDVD.cs" />
+    <Compile Include="Code\MoviePlayerMountImage.cs" />
+    <Compile Include="Code\MoviePlayerTranscode.cs" />
+    <Compile Include="Code\MoviePlayerUnavailable.cs" />
+    <Compile Include="Code\MoviePlayerVideo.cs" />
     <Compile Include="Code\Setup.cs" />
-    <Compile Include="Code\TreeNode.cs" />
     <Compile Include="Code\TreeView.cs" />
     <Compile Include="OML.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -75,11 +77,6 @@
       <DependentUpon>OML.settings</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -118,7 +115,6 @@
     <Content Include="Images\FirstRunCheckBoxUncheckedNoFocus.png" />
     <Content Include="Images\FirstRunCheckBoxUncheckedPressed.png" />
     <Content Include="Images\Focus_Outline.png" />
-    <Content Include="Images\ListboxNoFocus.png" />
     <Content Include="Images\SpinnerArrowBackDormant.png" />
     <Content Include="Images\SpinnerArrowBackFocus.png" />
     <Content Include="Images\SpinnerArrowBackNoFocus.png" />
@@ -131,8 +127,7 @@
     <Content Include="Markup\FilterList.mcml" />
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\RadioButtonGroup.mcml" />
-    <Content Include="Markup\SelectDirectoriesToScan.mcml" />
-    <Content Include="Markup\SelectFilesToImport.mcml" />
+    <Content Include="Markup\SelectFileToImport.mcml" />
     <Content Include="Markup\SelectImporter.mcml" />
     <Content Include="Markup\Setup.mcml" />
     <Content Include="Markup\SimpleRadioButton.mcml" />
@@ -143,10 +138,6 @@
     <None Include="OML.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>OML.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Resources\nocover.png" />
     <None Include="Setupx64\Build.bat" />
@@ -174,10 +165,6 @@
     <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
       <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
       <Name>OMLEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Valkyrie\Valkyrie.csproj">
-      <Project>{55822393-CFCF-4FD2-A6BD-72A71EBBACA6}</Project>
-      <Name>Valkyrie</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
