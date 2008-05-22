@@ -155,6 +155,7 @@ namespace OMLEngine
                 default:
                     return false;
             }
+            Sort();
         }
 
         /// <summary>
