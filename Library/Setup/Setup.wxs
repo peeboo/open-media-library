@@ -87,6 +87,17 @@
               Vital="yes"
               Assembly=".net" />
       </Component>
+      <Component Id="Valkyrie.dll"
+                 Guid="a4475e8a-f5c7-476f-b796-8b19577e25d2"
+                 DiskId="1">
+        <File Id="Valkyrie.dll"
+              Name="Valkyrie.dll"
+              KeyPath="yes"
+              Source="..\..\Valkyrie\bin\$(var.BuildType)\Valkyrie.dll"
+              Checksum="yes"
+              Vital="yes"
+              Assembly=".net" />
+      </Component>
       <Component Id="Registration.xml" 
                  Guid="68b08279-69c0-42fb-b087-30a20ee12608" 
                  DiskId="1">
@@ -111,6 +122,7 @@
 		<Feature Id="APPROOTFEATURE" Title="Open Media Library" Level="1">
 			<ComponentRef Id="Library.dll" />
       <ComponentRef Id="OMLEngine.dll" />
+      <ComponentRef Id="Valkyrie.dll" />
 			<ComponentRef Id="Registration.xml" />
 			<ComponentRef Id="Application.png" />
 		</Feature>

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.MediaCenter.UI;
 using System.Diagnostics;
 using OMLEngine;
+using Valkyrie;
 
 namespace Library
 {
@@ -23,8 +24,28 @@ namespace Library
         private Hashtable _genres = new Hashtable();
         private Hashtable _actors = new Hashtable();
         private Hashtable _directors = new Hashtable();
+        private int _NumberOfMenuRows = 2;
+        private Size _MenuImageSize = new Size(150, 200);
 
+        public Size MenuImageSize
+        {
+            get { return _MenuImageSize; }
+            set
+            {
+                _MenuImageSize = value;
+                FirePropertyChanged("MenuImageSize");
+            }
+        }
 
+        public int NumberOfMenuRows
+        {
+            get { return _NumberOfMenuRows; }
+            set
+            {
+                _NumberOfMenuRows = value;
+                FirePropertyChanged("NumberOfMenuRows");
+            }
+        }
 
         public Hashtable Genres
         {
@@ -43,7 +64,7 @@ namespace Library
 
         public MovieGallery()
         {
-            Trace.WriteLine("MovieGallery: constructor");
+            OMLApplication.DebugLine("MovieGallery: constructor");
 
             _titleCollection = new TitleCollection();
             _movies = new VirtualList(this, null);
@@ -64,7 +85,7 @@ namespace Library
             MovieItem item = (MovieItem)list[index];
             if (item.ItemImage == MovieItem.NoCoverImage)
             {
-                Trace.WriteLine("CompleteGalleryItem: loaded index: " + Convert.ToString(index));
+                OMLApplication.DebugLine("CompleteGalleryItem: loaded index: " + Convert.ToString(index));
                 item.ItemImage = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
                 item.BackCover = GalleryItem.LoadImage(item.TitleObject.BackCoverPath);
             }
@@ -113,7 +134,7 @@ namespace Library
 
         private void CreateGallery()
         {
-            Trace.WriteLine("MovieGallery: CreateGallery: start");
+            OMLApplication.DebugLine("MovieGallery: CreateGallery: start");
             _genres = new Hashtable();
             _actors = new Hashtable();
             _directors = new Hashtable();
@@ -125,7 +146,7 @@ namespace Library
                 AddToPersonList(title.Actors, _actors, movie);
                 AddToStringList(title.Genres, _genres, movie);
             }
-            Trace.WriteLine("MovieGallery: CreateGallery: end");
+            OMLApplication.DebugLine("MovieGallery: CreateGallery: end");
         }
 
         /// <summary>
@@ -155,7 +176,7 @@ namespace Library
 
         protected virtual void OnFilterChanged(object sender, EventArgs args)
         {
-                Trace.WriteLine("MovieGallery: OnGenreChanged");
+                OMLApplication.DebugLine("MovieGallery: OnGenreChanged");
                 //MovieGallery galleryPage = (MovieGallery)sender;
                 Choice c = (Choice)sender;
                 Filter activeFilter = c.Chosen as Filter;
@@ -164,7 +185,7 @@ namespace Library
 
         public MovieDetailsPage CreateDetailsPage(MovieItem item)
         {
-            Trace.WriteLine("Creating a detailspage");
+            OMLApplication.DebugLine("Creating a detailspage");
             MovieDetailsPage page = new MovieDetailsPage(item);
             return page;
         }
@@ -212,12 +233,12 @@ namespace Library
         /// </summary>
         private void FilterContent(Filter activeFilter)
         {
-            Trace.WriteLine("MovieGallery: Filtering content: activeFilter: " + activeFilter.Category + ", chosen: " + activeFilter.Description);
+            OMLApplication.DebugLine("MovieGallery: Filtering content: activeFilter: " + activeFilter.Category + ", chosen: " + activeFilter.Description);
             _movies.Clear();
 
             if (AllGenres == activeFilter.Description)
             {
-                Trace.WriteLine("MovieGallery: Filtering content: Getting all");
+                OMLApplication.DebugLine("MovieGallery: Filtering content: Getting all");
                 CreateGallery();
             }
             else

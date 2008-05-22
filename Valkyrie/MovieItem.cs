@@ -6,10 +6,10 @@ using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
 using System.Collections;
-using OMLEngine;
 using System.Diagnostics;
+using OMLEngine;
 
-namespace Library
+namespace Valkyrie
 {
     public class GalleryItem : Command
     {
