@@ -44,8 +44,7 @@ namespace Valkyrie
 
         private string GetMountLocation()
         {
-            OMLConfigManager cm = new OMLConfigManager();
-            string mount_location = cm.GetValue("VirtualDiscDrive");
+            string mount_location = null; // cm.GetValue("VirtualDiscDrive");
             if (mount_location != null && mount_location.Length > 0)
                 return mount_location;
 
@@ -55,10 +54,10 @@ namespace Valkyrie
         private bool MountTitle(MovieItem title)
         {
             Process cmd = new Process();
-            OMLConfigManager cm = new OMLConfigManager();
-            string mount_util_path = cm.GetValue("DaemonTools");
+
+            string mount_util_path = OMLEngine.Properties.Settings.Default.DaemonTools;
             string VirtualDiscDrive = GetMountLocation();
-            string VirtualDiscDriveNumber = cm.GetValue("VirtualDiscDriveNumber");
+            int VirtualDiscDriveNumber = OMLEngine.Properties.Settings.Default.VirtualDiscDriveNumber;
 
             Utilities.UnmountVirtualDrive(VirtualDiscDriveNumber);
             Thread.Sleep(100);
