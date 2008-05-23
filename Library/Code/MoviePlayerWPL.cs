@@ -5,19 +5,29 @@ namespace Library
 {
     class MoviePlayerWPL : IPlayMovie
     {
-        WindowsPlayListManager wplm;
+        MovieItem title;
 
-        public MoviePlayerWPL(MovieItem title)
+        public MoviePlayerWPL(MovieItem mItem)
         {
+            title = mItem;
         }
 
         public bool PlayMovie()
         {
-            foreach (PlayListItem item in wplm.PlayListItems)
+            foreach (PlayListItem item in title.PlayList.PlayListItems)
             {
+                MovieItem mItem = new MovieItem(item.title);
 
+                try
+                {
+                    IPlayMovie movie = MoviePlayerFactory.CreateMoviePlayer(mItem);
+                    movie.PlayMovie();
+                }
+                catch (Exception e)
+                {
+                }
             }
-            // go through the WindowsPlayListManager and create appropriate players for each (calling PlayMovie() on each)
+
             return true;
         }
     }

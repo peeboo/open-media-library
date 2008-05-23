@@ -49,7 +49,7 @@ namespace Library
     {
         private WindowsPlayListManager _wplm;
         private Title _titleObj;
-        //private Image _frontCoverArtImage;
+        private Image _frontCoverArtImage;
         private Image _backCoverArtImage;
 
         public MovieItem(Title title)
@@ -59,16 +59,16 @@ namespace Library
             ItemImage = NoCoverImage;
         }
 
+        public MovieItem(WindowsPlayListManager wplm)
+        {
+            _wplm = wplm;
+        }
+
         override public string GetDescription()
         {
             return _titleObj.Name;
         }
 
-
-        public MovieItem(WindowsPlayListManager wplm)
-        {
-            _wplm = wplm;
-        }
 
         public void PlayMovie()
         {
@@ -79,6 +79,11 @@ namespace Library
         public Title TitleObject
         {
             get { return _titleObj; }
+        }
+
+        public WindowsPlayListManager PlayList
+        {
+            get { return _wplm; }
         }
 
         public string FileLocation
