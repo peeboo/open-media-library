@@ -35,12 +35,15 @@ namespace OMLImporter
             do
             {
                 Menu(ref plugin);
-                if (plugin != null && file_to_import != null)
+                if (Program._exit < 1)
                 {
                     GetFile(ref file_to_import, plugin);
-                    ProcessFile(plugin, file_to_import);
-                    plugin = null;
-                    file_to_import = null;
+                    if (plugin != null && file_to_import != null)
+                    {
+                        ProcessFile(plugin, file_to_import);
+                        plugin = null;
+                        file_to_import = null;
+                    }
                 }
             } while (Program._exit < 1);
         }
