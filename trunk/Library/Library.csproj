@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\DirectoryTreeNode.cs" />
     <Compile Include="Code\MoviePlayerWPL.cs" />
     <Compile Include="Code\OMLApplication.cs" />
     <Compile Include="Code\MovieDetailsPage.cs" />
@@ -69,6 +70,9 @@
     <Compile Include="Code\MoviePlayerUnavailable.cs" />
     <Compile Include="Code\MoviePlayerVideo.cs" />
     <Compile Include="Code\PopupMenu.cs" />
+    <Compile Include="Code\Setup.cs" />
+    <Compile Include="Code\TreeNode.cs" />
+    <Compile Include="Code\TreeView.cs" />
     <Compile Include="OML.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -100,6 +104,10 @@
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\MovieGallery.mcml" />
     <Content Include="Markup\PopupMenu.mcml" />
+    <Content Include="Markup\RadioButtonGroup.mcml" />
+    <Content Include="Markup\SelectDirectoriesToScan.mcml" />
+    <Content Include="Markup\SelectFilesToImport.mcml" />
+    <Content Include="Markup\SelectImporter.mcml" />
     <Content Include="Markup\SelectionList.mcml" />
     <Content Include="Markup\Setup.mcml" />
     <Content Include="Markup\Styles.mcml" />
