@@ -1,0 +1,130 @@
+﻿<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:a="assembly://Library/Library"
+	  xmlns:s="resx://Library/Library.Resources/Styles"
+    xmlns:filter="resx://Library/Library.Resources/FilterList"
+    xmlns:pop="resx://Library/Library.Resources/PopupMenu"
+    xmlns:gallery="resx://Library/Library.Resources/MovieGallery"
+	  xmlns:cor="assembly://MSCorLib/System"
+    xmlns:col="assembly://MSCorLib/System.Collections"
+	  xmlns:me="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/FilterList"/>
+
+  <UI Name="MainMenu">
+
+    <Properties>
+      <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <Color Name="BackgroundColor" Color="color://s:BackgroundColor"/>
+      <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+      <col:IList Name="List" IList="$Required"/>
+      <cor:String Name="ListName" String="$Required" />
+      <cor:String Name="GalleryView" String="$Required" />
+      <IntRangedValue Name="FocusedIndex"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingData Name="ScrollingData"/>
+    </Locals>
+
+    <Content>
+      <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
+        <Children>
+
+          <Panel Name="TitlePanel" >
+            <Children>
+              <Text Name="GalleryTitle" Content="[ListName]" Font="font://s:TitleFont" HorizontalAlignment="Near" Color="color://s:NormalColor"/>
+            </Children>
+
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0.35,20" Right="Parent,1,-20" Top="Parent,0.04"/>
+            </LayoutInput>
+          </Panel>
+
+            <!-- Display of the current and total pages. -->
+          <Panel Name="PageStats" Layout="HorizontalFlow">
+            <Children>
+              <me:PositionIndicator Gallery="[MovieBrowser]" FocusedIndex="[FocusedIndex]" List="[List]" />
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,1" Bottom="Parent,0.95,-15"/>
+            </LayoutInput>
+          </Panel>
+
+          <Panel Name="GalleryPanel" MouseInteractive="true">
+            <Children>
+              <gallery:Gallery Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[List]">
+              </gallery:Gallery>
+            </Children>
+
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0.05,20" Right="Parent,1,-20" Top="Parent,0.10,50" Bottom="Parent,.95,-50"/>
+            </LayoutInput>
+          </Panel>
+
+        </Children>
+
+      </ColorFill>
+
+    </Content>
+
+  </UI>
+
+
+  <UI Name="PositionIndicator">
+    <Properties>
+      <a:MovieGallery Name="Gallery" MovieGallery="$Required" />
+      <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
+      <col:IList Name="List" IList="$Required"/>
+    </Properties>
+
+    <Locals>
+      <cor:String Name="FocusedIndexString" String=""/>
+    </Locals>
+
+    <Rules>
+
+      <!-- Whenever the focused index changes recreate our string. -->
+      <Changed Source="[FocusedIndex.Value]" InitialEvaluate="true">
+        <Actions>
+          <Set Target="[FocusedIndexString]" Value="[FocusedIndex.Value]">
+            <!-- Convert from zero-based to a one-based index -->
+            <Transformer>
+              <MathTransformer AddInt="1" Type="String"/>
+            </Transformer>
+          </Set>
+        </Actions>
+      </Changed>
+
+      <Binding Target="[CurrentPage.Content]" Source="[FocusedIndexString]"/>
+      <Binding Target="[TotalPages.Content]" Source="[List.Count.ToString]"/>
+
+    </Rules>
+
+    <Content>
+      <Panel Name="Indicator" Layout="HorizontalFlow">
+        <Children>
+
+          <Text Name="CurrentPage" Content="[FocusedIndexString]" Font="Verdana,15" Color="White">
+            <Animations>
+              <TransformAnimation Source="animation://s:ChangeHide"/>
+              <TransformAnimation Source="animation://s:ChangeShow"/>
+            </Animations>
+          </Text>
+
+          <Text Content="|" Margins="5,0,5,0" Font="Verdana,15" Color="LightBlue"/>
+
+          <Text Name="TotalPages" Content="[List.Count.ToString]" Font="Verdana,15" Color="LightBlue">
+            <Animations>
+              <TransformAnimation Source="animation://s:ChangeHide"/>
+              <TransformAnimation Source="animation://s:ChangeShow"/>
+            </Animations>
+          </Text>
+
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+
+
+</Mcml>

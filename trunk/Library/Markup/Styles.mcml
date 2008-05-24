@@ -33,6 +33,8 @@
   <Image Name="ButtonFocusImage" Source="resx://Library/Library.Resources/ButtonFocus" NineGrid="4,4,4,4"/>
   <Image Name="ButtonNonFocusImage" Source="resx://Library/Library.Resources/ButtonNonFocus" NineGrid="4,4,4,4"/>
 
+  <Font Name="TitleFont"             Font="Calibri,24"/>
+  <Font Name="ButtonFont"             Font="Calibri,24"/>
   <Font Name="LabelFont" FontName="Verdana" FontSize="16"/>
   <Font Name="SmallLabelFont" FontName="Verdana" FontSize="16"/>
   <Color Name="LabelColor" Color="White"/>
@@ -46,6 +48,45 @@
   <Font Name="Normal" FontName="Verdana" FontSize="16"/>
   <Font Name="Small" FontName="Verdana" FontSize="14"/>
   <Font Name="NormalBold" FontName="Verdana" FontSize="16" FontStyle="Bold"/>
-  
+
+  <!-- Animation so we scroll smoothly -->
+  <Animation Name="MoveAnimation" Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" Value="0,0,0" RelativeTo="Current"/>
+      <PositionKeyframe Time="0.2" Value="0,0,0"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="Scale" Type="Scale">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current"/>
+      <ScaleKeyframe Time="0.05" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="ChangeHide" Type="ContentChangeHide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Absolute" Value="1.0"/>
+      <AlphaKeyframe Time="0.2" RelativeTo="Absolute" Value="0.0" Interpolation="EaseOut"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="ChangeShow" Type="ContentChangeShow">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Absolute" Value="0.0"/>
+      <AlphaKeyframe Time="0.2" RelativeTo="Absolute" Value="0.0"/>
+      <AlphaKeyframe Time="0.6" RelativeTo="Absolute" Value="1.0" Interpolation="EaseIn"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="OverlayIdle" Type="Idle" Loop="-1">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Absolute" Value="1.0"/>
+      <AlphaKeyframe Time="2.0" RelativeTo="Absolute" Value="0.5" Interpolation="EaseOut"/>
+      <AlphaKeyframe Time="2.5" RelativeTo="Absolute" Value="0.5"/>
+      <AlphaKeyframe Time="3.0" RelativeTo="Absolute" Value="0.75"/>
+      <AlphaKeyframe Time="3.5" RelativeTo="Absolute" Value="1.0" Interpolation="EaseIn"/>
+    </Keyframes>
+  </Animation>
 </Mcml>
 

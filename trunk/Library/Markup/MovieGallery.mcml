@@ -1,0 +1,240 @@
+﻿<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:a="assembly://Library/Library"
+	  xmlns:s="resx://Library/Library.Resources/Styles"
+    xmlns:filter="resx://Library/Library.Resources/FilterList"
+	  xmlns:cor="assembly://MSCorLib/System"
+    xmlns:col="assembly://MSCorLib/System.Collections"
+	  xmlns:me="Me">
+
+  <!--xmlns:pop="resx://Library/Library.Resources/PopupMenu"-->
+
+  <UI Name="Gallery">
+  <Properties>
+    <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+    <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+    <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
+    <cor:String Name="GalleryView" String="$Required" />
+    <col:IList Name="List" IList="$Required"/>
+
+    <GridLayout Name="DefaultGrid" />
+
+    <GridLayout Name="GridLayout" Repeat="WhenTooBig"
+                Rows="3"
+                Orientation="Vertical"
+                AllowWrap="true"
+                ReferenceSize="150, 200"
+                Spacing="1,0"
+                MajorAlignment="Fill"
+                MinorAlignment="Center"
+                RepeatGap="100"/>
+
+    <GridLayout Name="ListLayout" Repeat="WhenTooBig"
+                Rows="8"
+                Orientation="Vertical"
+                AllowWrap="true"
+                ReferenceSize="350, 50"
+                Spacing="21,0"
+                MajorAlignment="Fill"
+                MinorAlignment="Fill"
+                RepeatGap="100"/>
+
+    <!-- An object to track which item in the list currently has focus -->
+    <IntRangedValue Name="FocusedIndex"/>
+        
+</Properties>
+
+  <Locals>
+    <!-- Create an input handler for scrolling. -->
+    <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
+
+  </Locals>
+
+  <Rules>
+    <Default Target="[Input.KeyInteractive]" Value="true" />
+    <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+    <Default Target="[ScrollingData.Repeater]" Value="[GalleryRepeater]"/>
+    
+    <Condition Source="[GalleryView]" SourceValue="List" ConditionOp="Equals" >
+      <Actions>
+        <Set Target="[GalleryRepeater.Layout]" Value="[ListLayout]" />
+      </Actions>
+    </Condition>
+
+    <Condition Source="[GalleryView]" SourceValue="Cover Art" ConditionOp="Equals" >
+      <Actions>
+        <Set Target="[GalleryRepeater.Layout]" Value="[GridLayout]" />
+      </Actions>
+    </Condition>
+
+  </Rules>
+
+  <Content>
+    <Panel Name="GalleryContainer" Layout="Form"  MouseInteractive="true">
+
+      <Children>
+
+        <!-- Put in a scroller so that if we repeat, the row will scroll. -->
+        <Scroller Orientation="Horizontal"  ScrollingData="[ScrollingData]" >
+          <Children>
+
+            <!-- Hook up our list to the repeater.  -->
+            <Repeater Name="GalleryRepeater" Navigation="FlowVertical" Source="[List]" DiscardOffscreenVisuals="true" Layout="[GridLayout]" >
+              <Animations>
+                <Animation Animation="animation://s:MoveAnimation"/>
+              </Animations>
+              <Content>
+
+                <!-- For each item, repeat our RepeatedItem UI, passing in-->
+                <!-- the index of the item and the image.                 -->
+                <me:RepeatedItem  Index="[RepeatedItemIndex]" FocusedIndex="[FocusedIndex]" GalleryItem="[RepeatedItem!a:GalleryItem]" Application="[Application]" MovieBrowser="[MovieBrowser]" GalleryView="[GalleryView]" />
+              </Content>
+            </Repeater>
+
+          </Children>
+        </Scroller>
+
+      </Children>
+    </Panel>
+  </Content>
+
+</UI>
+
+
+<!-- The RepeatedItem UI is what gets repeated for each image in our list -->
+<!-- from the ScrollingSample UI.  It displays the image itself, the      -->
+<!-- item's index and "Real" indexes, and a background color fill that    -->
+<!-- changes color when it receives key focus.                            -->
+<UI Name="RepeatedItem">
+  <Properties>
+    <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+    <a:GalleryItem Name="GalleryItem" GalleryItem="$Required"/>
+    <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+    <!-- Update these 2 values everytime we get the focus -->
+    <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
+    
+    <!-- The index passed down from the repeater.-->
+    <Index Name="Index" Index="$Required"/>
+    <cor:String Name="GalleryView" String="$Required" />    
+    <Image Name="BackgroundImage" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
+
+    <Animation Name="LostFocus" />
+    <Animation Name="GotFocus" />
+    
+  </Properties>
+
+  <Locals>
+    <ClickHandler Name="Clicker" Command="[GalleryItem]"/>
+  </Locals>
+
+  <Rules>
+    <!-- Mark ourselves as KeyInteractive so we can receive key focus.    -->
+    <Default Target="[Input.KeyInteractive]" Value="true"/>
+    
+    <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+
+    <Binding Source="[GalleryItem.CoverArt]" Target="[Cover.Content]" />
+    
+    <Condition Source="[GalleryView]" SourceValue="List" ConditionOp="Equals" >
+      <Actions>
+        <Set Target="[Cover.Visible]" Value="false" />
+        <Set Target="[Caption.Visible]" Value="true" />
+        <Set Target="[LostFocus]" Value="animation://me:LostFocusList" />
+        <Set Target="[GotFocus]" Value="animation://me:GotFocusList" />
+      </Actions>
+    </Condition>
+
+    <Condition Source="[GalleryView]" SourceValue="Cover Art" ConditionOp="Equals" >
+      <Actions>
+        <Set Target="[Cover.Visible]" Value="true" />
+        <Set Target="[Caption.Visible]" Value="false" />
+        <Set Target="[LostFocus]" Value="animation://me:LostFocusCoverArt" />
+        <Set Target="[GotFocus]" Value="animation://me:GotFocusCoverArt" />
+      </Actions>
+    </Condition>
+
+    <!-- If we get key focus, change our background color to indicate it. -->
+    <Condition Source="[Input.KeyFocus]" SourceValue="true">
+      <Actions>
+        <PlayAnimation Target="[ItemPanel]" Animation="[GotFocus]" />
+        <Set Target="[Cover.Alpha]" Value="1.0"/>
+        <Set Target="[Caption.Color]" Value="color://s:FocusColor" />
+        <Set Target="[Background.Visible]" Value="true"/>
+        <Set Target="[FocusedIndex.Value]" Value="[Index.Value]"/>
+        <Set Target="[MovieBrowser.FocusedItem]" Value="[GalleryItem]" />
+        <!-- Play an animation on the cover target item. -->
+        
+        <!--<PlayAnimation Target="[ItemPanel]" Animation="animation://me:GotFocusCoverArt" />-->
+      </Actions>
+    </Condition>
+
+    <!-- when we loose focus -->
+    <Condition Source="[Input.KeyFocus]" SourceValue="false">
+      <Actions>
+        <!-- Play an animation on the cover target item. -->
+        <PlayAnimation Target="[ItemPanel]" Animation="[LostFocus]"/>
+
+      </Actions>
+    </Condition>
+
+  </Rules>
+
+  <Content>
+    <Panel Name="ItemPanel" Layout="Anchor" Scale="1.0,1.0,1.0" CenterPointPercent="0.5,0.75,0.0">
+      <Children>
+        <Panel Name="ImagePanel" Margins="0,0,0,0">
+          <Children>
+            <Graphic Name="Cover" Content="[GalleryItem.CoverArt]" Alpha="0.7" SizingPolicy="SizeToConstraint"/>
+          </Children>
+        </Panel>
+
+        <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:EditText" Color="color://s:NormalColor"/>
+
+
+        <Graphic Name="Background" Content="[BackgroundImage]" Visible="false">
+          <LayoutInput>
+            <AnchorLayoutInput Left="ImagePanel,-0.03" Right="ImagePanel,1.03" Top="ImagePanel,-0.02" Bottom="ImagePanel,1.02"/>
+          </LayoutInput>
+          <Animations>
+            <Animation Animation="animation://s:OverlayIdle"/>
+          </Animations>
+        </Graphic>
+
+      </Children>
+
+    </Panel>
+
+  </Content>
+</UI>
+
+  <!-- This animation will scale the image. -->
+  <Animation Name="LostFocusCoverArt" Loop="0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
+      <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
+  
+  <Animation Name="GotFocusCoverArt" Loop="0" CenterPointPercent=".5,.5,0" >
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+      <ScaleKeyframe Time="0.4" Value="1.5,1.5,1.5" RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
+
+  <!-- This animation will scale the image. -->
+  <Animation Name="LostFocusList" Loop="0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
+      <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="GotFocusList" Loop="0" CenterPointPercent=".1,.1,0" >
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+      <ScaleKeyframe Time="0.2" Value="1.2,1.2,1.2" RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
+
+
+</Mcml>

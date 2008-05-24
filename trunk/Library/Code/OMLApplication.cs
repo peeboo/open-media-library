@@ -4,6 +4,10 @@ using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Diagnostics;
+using OMLEngine;
+using System.Collections;
+using System;
+using System.Data;
 
 namespace Library
 {
@@ -19,19 +23,21 @@ namespace Library
 
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
         {
+            Trace.TraceInformation("OMLApplication.OMLApplication");
             this._session = session;
             this._isExtender = !host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
             this._host = host;
             _singleApplicationInstance = this;
-            _movieGallery = new MovieGallery();
+            _titles = new TitleCollection();
+            _titles.loadTitleCollection();
         }
 
         public void Startup()
         {
-            if (_movieGallery.Items != null && _movieGallery.Items.Count > 0)
-                GoToMenu();
+            if ( _titles.Count > 0 )
+                GoToMenu( new MovieGallery(_titles, Category.Home ) );
             else
-                GoToSetup();
+                GoToSetup(null);
         }
 
         public static OMLApplication Current
@@ -48,12 +54,13 @@ namespace Library
             }
         }
 
-        public void GoToSetup()
+        public void GoToSetup( MovieGallery gallery )
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
-            properties["MovieBrowser"] = _movieGallery;
+            properties["MovieBrowser"] = gallery;
 
+            Trace.TraceInformation("OMLApplication.GoToSetup");
             if (_session != null)
             {
                 _session.GoToPage("resx://Library/Library.Resources/Setup", properties);
@@ -61,17 +68,35 @@ namespace Library
         }
 
     
-        public void GoToMenu()
+        public void GoToMenu(MovieGallery gallery)
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
-            properties["MovieBrowser"] = _movieGallery;
+            properties["MovieBrowser"] = gallery;
 
+            Trace.TraceInformation("OMLApplication.GoToMenu");
             if (_session != null)
             {
                 _session.GoToPage("resx://Library/Library.Resources/Menu", properties);
             }
         }
+
+        public void GoToSelectionList(MovieGallery gallery, IList list, string listName, string galleryView)
+        {
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+            properties["Application"] = this;
+            properties["MovieBrowser"] = gallery;
+            properties["List"] = list;
+            properties["ListName"] = listName;
+            properties["GalleryView"] = galleryView;
+
+            Trace.TraceInformation("OMLApplication.GoToMenu");
+            if (_session != null)
+            {
+                _session.GoToPage("resx://Library/Library.Resources/SelectionList", properties);
+            }
+        }
+
 
         public void GoToDetails(MovieDetailsPage page)
         {
@@ -86,6 +111,7 @@ namespace Library
             properties["DetailsPage"] = page;
             properties["Application"] = this;
 
+            Trace.TraceInformation("OMLApplication.GoToDetails");
             // If we have no page session, just spit out a trace statement.
             if (_session != null)
             {
@@ -99,17 +125,12 @@ namespace Library
             get { return _isExtender; }
         }
 
-        public static void DebugLine(string msg)
-        {
-            Trace.WriteLine(msg);
-            Trace.Flush();
-        }
-
         // private data
         private static OMLApplication _singleApplicationInstance;
         private AddInHost _host;
         private HistoryOrientedPageSession _session;
-        private static MovieGallery _movieGallery;
+        private TitleCollection _titles;
+
         private bool _isExtender;
 
     }

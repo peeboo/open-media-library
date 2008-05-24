@@ -87,7 +87,7 @@
             </LayoutInput>
           </controls:Button>-->
 
-          <controls:Button Name="PlayMovie" Model="[PlayMovieCommand]">
+          <controls:Button Name="PlayMovie" Model="[PlayMovieCommand]"  >
             <LayoutInput>
               <FormLayoutInput Left = "Image,1.02" Top="Parent,0.05,15"/>
             </LayoutInput>
@@ -174,108 +174,6 @@
     </Content>
   </UI>
 
-  <!-- Button for changing the play rate -->
-  <UI Name="PlayRateButton">
-    <Properties>
-      <a:MovieDetailsPage Name="DetailsPage" MovieDetailsPage="$Required"/>
-      <cor:Single Name="PlayRate" Single="0"/>
-      <cor:String Name="Description" String="ButtonName"/>
-    </Properties>
-
-    <Locals>
-      <addin:AddInHost Name="AddInHost"/>
-      <Command Name="Command" Description="Button Name"/>
-    </Locals>
-
-    <Rules>
-      <Binding Source="[Description]" Target="[Command.Description]"/>
-
-      <Changed Source="[Command.Invoked]">
-        <Actions>
-          <Invoke Target ="[DetailsPage.PlayMovie]"/>
-        </Actions>
-      </Changed>
-    </Rules>
-
-    <Content>
-      <me:SimpleButton Command="[Command]"/>
-    </Content>
-
-  </UI>
-
-  <!-- Simple button -->
-  <UI Name="SimpleButton">
-
-    <Properties>
-      <!-- Command is a required parameter. -->
-      <ICommand Name="Command" ICommand="$Required"/>
-
-      <!-- Background color properties. -->
-      <Color Name="BackgroundColor" Color="Transparent"/>
-      <Color Name="BackgroundFocusedColor" Color="Transparent"/>
-      <Color Name="BackgroundHoverColor" Color="PaleGoldenrod"/>
-      <Color Name="BackgroundPressedColor" Color="White"/>
-
-      <!-- Label color properties. -->
-      <Color Name="LabelColor" Color="White"/>
-      <Color Name="LabelFocusedColor" Color="White"/>
-      <Color Name="LabelHoverColor" Color="DimGray"/>
-      <Color Name="LabelPressedColor" Color="Black"/>
-
-    </Properties>
-
-    <Locals>
-      <!-- React to "click" input. -->
-      <ClickHandler Name="Clicker"/>
-
-    </Locals>
-
-    <Rules>
-
-      <!-- The command description is displayed by the text box. A  -->
-      <!-- binding is used in case the description changes at       -->
-      <!-- runtime.                                                 -->
-      <Binding Source="[Command.Description]" Target="[Label.Content]"/>
-
-      <Binding Source="[Command]" Target="[Clicker.Command]"/>
-      <Default Target="[Input.KeyInteractive]" Value="true"/>
-
-      <!-- Change color on click. -->
-      <Condition Source="[Clicker.Clicking]" SourceValue="true">
-        <Actions>
-          <Set Target="[Background.Content]" Value="[BackgroundPressedColor]"/>
-          <Set Target="[Label.Color]" Value="[LabelPressedColor]"/>
-        </Actions>
-      </Condition>
-
-      <!-- Change color on mouse focus. -->
-      <Condition Source="[Input.MouseFocus]" SourceValue="true">
-        <Actions>
-          <Set Target="[Background.Content]" Value="[BackgroundHoverColor]"/>
-          <Set Target="[Label.Color]" Value="[LabelHoverColor]"/>
-        </Actions>
-      </Condition>
-
-      <!-- Change color on key focus. -->
-      <Condition Source="[Input.KeyFocus]" SourceValue="true">
-        <Actions>
-          <Set Target="[Background.Content]" Value="[BackgroundFocusedColor]"/>
-          <Set Target="[Label.Color]" Value="[LabelFocusedColor]"/>
-        </Actions>
-      </Condition>
-
-    </Rules>
-
-    <Content>
-      <!-- Solid background color. -->
-      <ColorFill Name="Background" Content="[BackgroundColor]" Padding="5,5,5,5">
-        <Children>
-          <Text Name="Label" Content="Play Movie" Font="font://s:Heading" Color="color://s:HeadingColor" />
-        </Children>
-      </ColorFill>
-    </Content>
-
-  </UI>
 
   <UI Name="SynopsisPanel" >
     <Properties>
