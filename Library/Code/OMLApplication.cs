@@ -119,6 +119,12 @@ namespace Library
             }
         }
 
+        public static void DebugLine(string msg)
+        {
+            Trace.WriteLine(msg);
+            Trace.Flush();
+        }
+
         // properties
         public bool IsExtender
         {
