@@ -69,7 +69,6 @@
     <Compile Include="Code\MoviePlayerTranscode.cs" />
     <Compile Include="Code\MoviePlayerUnavailable.cs" />
     <Compile Include="Code\MoviePlayerVideo.cs" />
-    <Compile Include="Code\PopupMenu.cs" />
     <Compile Include="Code\Setup.cs" />
     <Compile Include="Code\TreeNode.cs" />
     <Compile Include="Code\TreeView.cs" />
@@ -103,7 +102,6 @@
     <Content Include="Markup\FilterList.mcml" />
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\MovieGallery.mcml" />
-    <Content Include="Markup\PopupMenu.mcml" />
     <Content Include="Markup\RadioButtonGroup.mcml" />
     <Content Include="Markup\SelectDirectoriesToScan.mcml" />
     <Content Include="Markup\SelectFilesToImport.mcml" />
