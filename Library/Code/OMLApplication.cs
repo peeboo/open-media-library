@@ -73,6 +73,7 @@ namespace Library
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
             properties["MovieBrowser"] = gallery;
+            properties["GalleryView"] = "Cover Art";
 
             Trace.TraceInformation("OMLApplication.GoToMenu");
             if (_session != null)

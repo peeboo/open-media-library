@@ -172,13 +172,6 @@ namespace Library {
             }
         }
         
-        internal static byte[] PopupMenu {
-            get {
-                object obj = ResourceManager.GetObject("PopupMenu", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
         internal static byte[] SelectionList {
             get {
                 object obj = ResourceManager.GetObject("SelectionList", resourceCulture);
