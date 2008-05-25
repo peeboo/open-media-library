@@ -159,6 +159,14 @@ namespace Library
             return m;
         }
 
+        public WindowsPlayListManager PlayList
+        {
+            get { return _wplm; }
+        }
+
+
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MovieItem"/> class.
         /// </summary>
@@ -457,7 +465,7 @@ namespace Library
         {
             get
             {
-                if (Gallery.DirectorsMovies.Contains(Name))
+                if ( Gallery != null && Gallery.DirectorsMovies.Contains(Name))
                 {
                     VirtualList movies = (VirtualList)Gallery.DirectorsMovies[Name];
                     return Name + " (" + Convert.ToString(movies.Count) + ")";
@@ -478,7 +486,7 @@ namespace Library
         public override void ItemSelected(object sender, EventArgs args)
         {
             DirectorItem galleryItem = (DirectorItem)sender;
-            OMLApplication.Current.GoToMenu( Gallery.CreateFilteredGallery(Category.Director, galleryItem.Name));
+            if( Gallery != null ) OMLApplication.Current.GoToMenu( Gallery.CreateFilteredGallery(Category.Director, galleryItem.Name));
         }
 
 
@@ -507,7 +515,7 @@ namespace Library
         {
             get
             {
-                if (Gallery.ActorsMovies.Contains(Name))
+                if (Gallery != null && Gallery.ActorsMovies.Contains(Name))
                 {
                     VirtualList movies = (VirtualList)Gallery.ActorsMovies[Name];
                     return Name + " (" + Convert.ToString(movies.Count) + ")";
@@ -522,7 +530,7 @@ namespace Library
         public override void ItemSelected(object sender, EventArgs args)
         {
             ActorItem galleryItem = (ActorItem)sender;
-            OMLApplication.Current.GoToMenu(Gallery.CreateFilteredGallery(Category.Actor, galleryItem.Name));
+            if( Gallery != null ) OMLApplication.Current.GoToMenu(Gallery.CreateFilteredGallery(Category.Actor, galleryItem.Name));
         }
 
         private Person _person;
@@ -545,7 +553,7 @@ namespace Library
         {
             get
             {
-                if (Gallery.GenresMovies.Contains(Name))
+                if (Gallery != null && Gallery.GenresMovies.Contains(Name))
                 {
                     VirtualList movies = (VirtualList)Gallery.GenresMovies[Name];
                     return Name + " (" + Convert.ToString(movies.Count) + ")";
@@ -559,7 +567,7 @@ namespace Library
         public override void ItemSelected(object sender, EventArgs args)
         {
             GenreItem galleryItem = (GenreItem)sender;
-            OMLApplication.Current.GoToMenu(Gallery.CreateFilteredGallery(Category.Genres, galleryItem.Name));
+            if (Gallery != null) OMLApplication.Current.GoToMenu(Gallery.CreateFilteredGallery(Category.Genres, galleryItem.Name));
         }
         private string _genre;
     }

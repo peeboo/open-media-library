@@ -6,8 +6,6 @@
     xmlns:col="assembly://MSCorLib/System.Collections"
 	  xmlns:me="Me">
 
-  <!--xmlns:pop="resx://Library/Library.Resources/PopupMenu"-->
-
   <UI Name="Gallery">
   <Properties>
     <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
