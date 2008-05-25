@@ -112,7 +112,6 @@
     <Content Include="Markup\Styles.mcml" />
     <Content Include="Registration.xml" />
     <Content Include="Images\Application.png" />
-    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
