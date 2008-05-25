@@ -172,6 +172,34 @@ namespace Library {
             }
         }
         
+        internal static byte[] RadioButtonGroup {
+            get {
+                object obj = ResourceManager.GetObject("RadioButtonGroup", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] SelectDirectoriesToScan {
+            get {
+                object obj = ResourceManager.GetObject("SelectDirectoriesToScan", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] SelectFilesToImport {
+            get {
+                object obj = ResourceManager.GetObject("SelectFilesToImport", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] SelectImporter {
+            get {
+                object obj = ResourceManager.GetObject("SelectImporter", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] SelectionList {
             get {
                 object obj = ResourceManager.GetObject("SelectionList", resourceCulture);
@@ -182,6 +210,13 @@ namespace Library {
         internal static byte[] Setup {
             get {
                 object obj = ResourceManager.GetObject("Setup", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] SimpleRadioButton {
+            get {
+                object obj = ResourceManager.GetObject("SimpleRadioButton", resourceCulture);
                 return ((byte[])(obj));
             }
         }

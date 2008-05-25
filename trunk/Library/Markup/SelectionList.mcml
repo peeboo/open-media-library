@@ -2,7 +2,6 @@
 	  xmlns:a="assembly://Library/Library"
 	  xmlns:s="resx://Library/Library.Resources/Styles"
     xmlns:filter="resx://Library/Library.Resources/FilterList"
-    xmlns:pop="resx://Library/Library.Resources/PopupMenu"
     xmlns:gallery="resx://Library/Library.Resources/MovieGallery"
 	  xmlns:cor="assembly://MSCorLib/System"
     xmlns:col="assembly://MSCorLib/System.Collections"

@@ -116,6 +116,29 @@ namespace Library
         
         #endregion
 
+        private int _NumberOfMenuRows = 2;
+        private Size _MenuImageSize = new Size(150, 200);
+
+        public Size MenuImageSize
+        {
+            get { return _MenuImageSize; }
+            set
+            {
+                _MenuImageSize = value;
+                FirePropertyChanged("MenuImageSize");
+            }
+        }
+
+        public int NumberOfMenuRows
+        {
+            get { return _NumberOfMenuRows; }
+            set
+            {
+                _NumberOfMenuRows = value;
+                FirePropertyChanged("NumberOfMenuRows");
+            }
+        }
+
         public string Title
         {
             get { return _title; }
@@ -138,6 +161,7 @@ namespace Library
                 }
             }
         }
+
         #region Construction
         public MovieGallery(string title)
         {
@@ -268,19 +292,19 @@ namespace Library
         public void GenreCategorySelected(object sender, EventArgs args)
         {
             Trace.TraceInformation("MovieGallery.GenreCategorySelected");
-            OMLApplication.Current.GoToSelectionList(this, Genres, Title + " > Genres", GalleryView.List);
+            OMLApplication.Current.GoToSelectionList(this, Genres, Title + " > Genres", "List");
         }
 
         public void DirectorsCategorySelected(object sender, EventArgs args)
         {
             Trace.TraceInformation("MovieGallery.DirectorsCategorySelected");
-            OMLApplication.Current.GoToSelectionList(this, Directors, Title + " > Directors", GalleryView.List);
+            OMLApplication.Current.GoToSelectionList(this, Directors, Title + " > Directors", Properties.Settings.Default.DirectorView);
         }
 
         public void ActorsCategorySelected(object sender, EventArgs args)
         {
             Trace.TraceInformation("MovieGallery.ActorsCategorySelected");
-            OMLApplication.Current.GoToSelectionList(this, Actors, Title + " > Actors", GalleryView.List);
+            OMLApplication.Current.GoToSelectionList(this, Actors, Title + " > Actors", Properties.Settings.Default.ActorView);
 
         }
 
