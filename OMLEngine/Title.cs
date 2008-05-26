@@ -17,38 +17,38 @@ namespace OMLEngine
     {
         #region locals
         private int _watched;
-        private string _fileLocation;
-        private VideoFormat _videoFormat;
-        private bool _needsTranscode;
-        private string _name;
-        private string _description;
-        private int _itemId;
-        private string _metadataSourceId;
-        private string _sourceName;
-        private string _frontCoverPath;
-        private string _backCoverPath;
-        private int _runtime;
-        private string _MPAARating;
-        private string _synopsis;
-        private string _distributor;
-        private string _countryOfOrigin;
-        private string _officialWebsiteURL;
+        private string _fileLocation = "";
+        private VideoFormat _videoFormat = VideoFormat.DVD;
+        private bool _needsTranscode = false;
+        private string _name = "";
+        private string _description = "";
+        private int _itemId = -1;
+        private string _metadataSourceId = "";
+        private string _sourceName = "";
+        private string _frontCoverPath = "";
+        private string _backCoverPath = "";
+        private int _runtime = 0;
+        private string _MPAARating = "";
+        private string _synopsis = "";
+        private string _distributor = "";
+        private string _countryOfOrigin = "";
+        private string _officialWebsiteURL = "";
         private DateTime _releaseDate;
         private DateTime _dateAdded;
-        private string _importerSource;
-        private List<Person> _actors;
-        private List<Person> _crew;
-        private List<Person> _directors;
-        private List<Person> _writers;
-        private List<string> _producers;
-        private List<string> _soundFormats;
-        private List<string> _languageFormats;
-        private List<string> _genres;
-        private int _userStarRating;
-        private string _aspectRatio;    // Widescreen, 1.33, 1.66, 
-        private string _videoStandard;  // NTSC, PAL
-        private string _UPC;
-        private string _originalName;
+        private string _importerSource = "";
+        private List<Person> _actors = new List<Person>();
+        private List<Person> _crew = new List<Person>();
+        private List<Person> _directors = new List<Person>();
+        private List<Person> _writers = new List<Person>();
+        private List<string> _producers = new List<string>();
+        private List<string> _soundFormats = new List<string>();
+        private List<string> _languageFormats = new List<string>();
+        private List<string> _genres = new List<string>();
+        private int _userStarRating = 0;
+        private string _aspectRatio = "";    // Widescreen, 1.33, 1.66, 
+        private string _videoStandard = "";  // NTSC, PAL
+        private string _UPC = "";
+        private string _originalName = "";
 
 
         #endregion
@@ -320,6 +320,19 @@ namespace OMLEngine
         #endregion
 
         #region serialization methods
+
+        private string GetSerializedString(SerializationInfo info, string id)
+        {
+            string result = info.GetString(id);
+            return (result == null ? String.Empty : result);
+        }
+
+        private  T GetSerializedList<T>(SerializationInfo info, string id) where T : new()
+        {
+            T result = (T)info.GetValue(id, typeof(T));
+            return (result == null ? new T() : result);
+        }
+
         /// <summary>
         /// Constructor used for loading from database file
         /// </summary>
@@ -327,38 +340,40 @@ namespace OMLEngine
         /// <param name="ctxt">StreamingContext object</param>
         public Title(SerializationInfo info, StreamingContext ctxt)
         {
-            _fileLocation = info.GetString("file_location");
+            _fileLocation = GetSerializedString(info, "file_location");
             _videoFormat = (VideoFormat)info.GetValue("video_format", typeof(VideoFormat));
             _needsTranscode = info.GetBoolean("transcode_to_extender");
-            _name = info.GetString("name");
-            _description = info.GetString("description");
+            _name = GetSerializedString(info,"name");
+            _description = GetSerializedString(info,"description");
             _itemId = (int)info.GetValue("itemid", typeof(int));
-            _metadataSourceId = info.GetString("sourceid");
-            _sourceName = info.GetString("sourcename");
-            _frontCoverPath = info.GetString("front_boxart_path");
-            _backCoverPath = info.GetString("back_boxart_path");
-            _synopsis = info.GetString("synopsis");
-            _distributor = info.GetString("distributor");
-            _countryOfOrigin = info.GetString("country_of_origin");
-            _officialWebsiteURL = info.GetString("official_website_url");
+            _metadataSourceId = GetSerializedString(info,"sourceid");
+            _sourceName = GetSerializedString(info,"sourcename");
+            _frontCoverPath = GetSerializedString(info,"front_boxart_path");
+            _backCoverPath = GetSerializedString(info,"back_boxart_path");
+            _synopsis = GetSerializedString(info,"synopsis");
+            _distributor = GetSerializedString(info,"distributor");
+            _countryOfOrigin = GetSerializedString(info,"country_of_origin");
+            _officialWebsiteURL = GetSerializedString(info,"official_website_url");
             _dateAdded = info.GetDateTime("date_added");
-            _importerSource = info.GetString("importer_source");
+            _importerSource = GetSerializedString(info,"importer_source");
             _runtime = (int)info.GetValue("runtime", typeof(int));
-            _MPAARating = info.GetString("mpaa_rating");
+            _MPAARating = GetSerializedString(info,"mpaa_rating");
+
             _releaseDate = info.GetDateTime("release_date");
-            _actors = (List<Person>)info.GetValue("actors", typeof(List<Person>));
-            _crew = (List<Person>)info.GetValue("crew", typeof(List<Person>));
-            _producers = (List<string>)info.GetValue("producers", typeof(List<string>));
-            _writers = (List<Person>)info.GetValue("writers", typeof(List<Person>));
-            _directors = (List<Person>)info.GetValue("directors", typeof(List<Person>));
-            _soundFormats = (List<string>)info.GetValue("sound_formats", typeof(List<string>));
-            _languageFormats = (List<string>)info.GetValue("language_formats", typeof(List<string>));
-            _genres = (List<string>)info.GetValue("genres", typeof(List<string>));
+            _actors = GetSerializedList<List<Person>>(info, "actors");
+            _crew = GetSerializedList<List<Person>>(info, "crew");
+            _producers = GetSerializedList<List<string>>(info, "producers");
+            _writers = GetSerializedList<List<Person>>(info, "writers");
+            _soundFormats = GetSerializedList<List<string>>(info, "sound_formats");
+            _directors = GetSerializedList<List<Person>>(info, "directors");
+            _languageFormats = GetSerializedList<List<string>>(info, "language_formats");
+            _genres = GetSerializedList<List<string>>(info, "genres");
+
             _userStarRating = (int)info.GetValue("user_star_rating", typeof(int));
-            _aspectRatio = info.GetString("aspect_ratio");
-            _videoStandard = info.GetString("video_standard");
-            _UPC = info.GetString("upc");
-            _originalName = info.GetString("original_name");
+            _aspectRatio = GetSerializedString(info,"aspect_ratio");
+            _videoStandard = GetSerializedString(info,"video_standard");
+            _UPC = GetSerializedString(info,"upc");
+            _originalName = GetSerializedString(info,"original_name");
 
             if (_itemId == 0)
                 _itemId = Utilities.NewRandomNumber();
