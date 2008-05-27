@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Open Media Library")]
 [assembly: AssemblyDescription("MCE broswer for your video library")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ECKInc.")]
+[assembly: AssemblyCompany("OpenMediaLibrary Development Team")]
 [assembly: AssemblyProduct("Open Media Library")]
 [assembly: AssemblyCopyright("Copyright ©  2008")]
 [assembly: AssemblyTrademark("")]
