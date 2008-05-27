@@ -26,7 +26,7 @@ namespace MyMoviesPlugin
         {
             _ShouldCopyImages = ShouldCopyImages;
             try { tr = new StreamReader(filename); }
-            catch (Exception e) { Trace.WriteLine(e.Message); }
+            catch (Exception e) { Utilities.DebugLine(e.Message); }
 
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(filename);
@@ -51,9 +51,9 @@ namespace MyMoviesPlugin
                 if (ValidateTitle(newTitle))
                 {
                     try { AddTitle(newTitle); }
-                    catch (Exception e) { Trace.WriteLine("Error adding row: " + e.Message); }
+                    catch (Exception e) { Utilities.DebugLine("Error adding row: " + e.Message); }
                 }
-                else Trace.WriteLine("Error saving row");
+                else Utilities.DebugLine("Error saving row");
             }
             return true;
         }
@@ -104,7 +104,7 @@ namespace MyMoviesPlugin
 
                             newTitle.FrontCoverPath = imagePath;
                         }
-                        catch (Exception e) { Trace.WriteLine(e.Message); }
+                        catch (Exception e) { Utilities.DebugLine(e.Message); }
                     }
                     XmlNode back_node = node.ChildNodes[1];
                     if (back_node != null)
@@ -124,7 +124,7 @@ namespace MyMoviesPlugin
                             }
                             newTitle.BackCoverPath = imagePath;
                         }
-                        catch (Exception e) { Trace.WriteLine(e.Message); }
+                        catch (Exception e) { Utilities.DebugLine(e.Message); }
                     }
                     break;
                 case "Description":
@@ -252,7 +252,7 @@ namespace MyMoviesPlugin
                                     }
                                 }
                                 catch (Exception e)
-                                { Trace.WriteLine("Error: " + e.Message); }
+                                { Utilities.DebugLine("Error: " + e.Message); }
                             }
                         }
                     }

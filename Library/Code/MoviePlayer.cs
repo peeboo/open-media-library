@@ -37,35 +37,37 @@ namespace Library
             // for now play just online titles. add offline capabilities later
             if (File.Exists(movieItem.FileLocation) || Directory.Exists(movieItem.FileLocation))
             {
+                return new TranscodePlayer(movieItem);
+
                 if (OMLApplication.Current.IsExtender && NeedsTranscode(movieItem.TitleObject) )
                 {
-                    Trace.WriteLine("TranscodePlayer created");
+                    OMLApplication.DebugLine("TranscodePlayer created");
                     return new TranscodePlayer(movieItem);
                 }
                 else if (NeedsMounting(movieItem.TitleObject))
                 {
-                    Trace.WriteLine("MountImageMoviePlayer created");
+                    OMLApplication.DebugLine("MountImageMoviePlayer created");
                     return new MountImagePlayer(movieItem);
                 }
                 else if (movieItem.TitleObject.VideoFormat == VideoFormat.DVD)
                 {
-                    Trace.WriteLine("DVDMoviePlayer created");
+                    OMLApplication.DebugLine("DVDMoviePlayer created");
                     return new DVDPlayer(movieItem);
                 }
                 else if (movieItem.TitleObject.VideoFormat == VideoFormat.WPL)
                 {
-                    Trace.WriteLine("WPLMoviePlayer created");
+                    OMLApplication.DebugLine("WPLMoviePlayer created");
                     return new MoviePlayerWPL(movieItem);
                 }
                 else
                 {
-                    Trace.WriteLine("VideoPlayer created");
+                    OMLApplication.DebugLine("VideoPlayer created");
                     return new VideoPlayer(movieItem);
                 }
             }
             else
             {
-                Trace.WriteLine("UnavailableMoviePlayer created");
+                OMLApplication.DebugLine("UnavailableMoviePlayer created");
                 return new UnavailableMoviePlayer(movieItem);
             }
         }

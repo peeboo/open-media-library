@@ -23,7 +23,7 @@ namespace Library
 
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
         {
-            Trace.TraceInformation("OMLApplication.OMLApplication");
+            OMLApplication.DebugLine("OMLApplication.OMLApplication");
             this._session = session;
             this._isExtender = !host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
             this._host = host;
@@ -60,7 +60,7 @@ namespace Library
             properties["Application"] = this;
             properties["MovieBrowser"] = gallery;
 
-            Trace.TraceInformation("OMLApplication.GoToSetup");
+            OMLApplication.DebugLine("OMLApplication.GoToSetup");
             if (_session != null)
             {
                 _session.GoToPage("resx://Library/Library.Resources/Setup", properties);
@@ -75,7 +75,7 @@ namespace Library
             properties["MovieBrowser"] = gallery;
             properties["GalleryView"] = Properties.Settings.Default.MovieView;
 
-            Trace.TraceInformation("OMLApplication.GoToMenu");
+            OMLApplication.DebugLine("OMLApplication.GoToMenu");
             if (_session != null)
             {
                 _session.GoToPage("resx://Library/Library.Resources/Menu", properties);
@@ -91,7 +91,7 @@ namespace Library
             properties["ListName"] = listName;
             properties["GalleryView"] = galleryView;
 
-            Trace.TraceInformation("OMLApplication.GoToMenu");
+            OMLApplication.DebugLine("OMLApplication.GoToMenu");
             if (_session != null)
             {
                 _session.GoToPage("resx://Library/Library.Resources/SelectionList", properties);
@@ -112,7 +112,7 @@ namespace Library
             properties["DetailsPage"] = page;
             properties["Application"] = this;
 
-            Trace.TraceInformation("OMLApplication.GoToDetails");
+            OMLApplication.DebugLine("OMLApplication.GoToDetails");
             // If we have no page session, just spit out a trace statement.
             if (_session != null)
             {
@@ -120,9 +120,9 @@ namespace Library
             }
         }
 
-        public static void DebugLine(string msg)
+        public static void DebugLine(string msg, params object[] paramArray)
         {
-            Trace.WriteLine(msg);
+            Trace.TraceInformation(msg, paramArray);
             Trace.Flush();
         }
 

@@ -9,6 +9,7 @@ using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
 using System.IO;
+using System.Diagnostics;
 
 namespace Library
 {
@@ -17,11 +18,13 @@ namespace Library
         public TranscodePlayer(MovieItem title)
         {
             _title = title;
+            DynamicPlayMedia();
         }
 
         public bool PlayMovie()
         {
             string path_to_buffer = "\\" + _title.itemId;
+
             return PlayTranscodedMedia(ref path_to_buffer);
             /*
             // mount the file, then figure out which other player we want to create
@@ -49,33 +52,40 @@ namespace Library
 
                 if (ITranscode360Type != null)
                 {
-                    Hashtable properties = new Hashtable();
-                    properties.Add("name", "");
-                    TcpClientChannel channel = new TcpClientChannel(properties, null);
-                    ChannelServices.RegisterChannel(channel);
-
-                    object server = Activator.GetObject(ITranscode360Type,
-                        "tcp://localhost:1401/RemotingServices/Transcode360");
-
-                    assignMethodInfoObjects(ITranscode360Type,
-                                            ref MIIsMediaTranscodeComplete,
-                                            ref MIIsMediaTranscoding,
-                                            ref MIIsMediaTranscodingWithParams,
-                                            ref MITranscode,
-                                            ref MITranscodeWithParams,
-                                            ref MIStopTranscoding);
-
-
-                    if (MIIsMediaTranscodeComplete != null &&
-                        MIIsMediaTranscoding != null &&
-                        MIIsMediaTranscodingWithParams != null &&
-                        MITranscode != null &&
-                        MITranscodeWithParams != null &&
-                        MIStopTranscoding != null)
+                    try
                     {
-                        object[] paramArray = new object[1];
-                        paramArray[0] = _title.FileLocation;
-                        MITranscode.Invoke(server, paramArray);
+                        Hashtable properties = new Hashtable();
+                        properties.Add("name", "");
+                        TcpClientChannel channel = new TcpClientChannel(properties, null);
+                        ChannelServices.RegisterChannel(channel);
+
+                        object server = Activator.GetObject(ITranscode360Type,
+                            "tcp://localhost:1401/RemotingServices/Transcode360");
+
+                        assignMethodInfoObjects(ITranscode360Type,
+                                                ref MIIsMediaTranscodeComplete,
+                                                ref MIIsMediaTranscoding,
+                                                ref MIIsMediaTranscodingWithParams,
+                                                ref MITranscode,
+                                                ref MITranscodeWithParams,
+                                                ref MIStopTranscoding);
+
+
+                        if (MIIsMediaTranscodeComplete != null &&
+                            MIIsMediaTranscoding != null &&
+                            MIIsMediaTranscodingWithParams != null &&
+                            MITranscode != null &&
+                            MITranscodeWithParams != null &&
+                            MIStopTranscoding != null)
+                        {
+                            object[] paramArray = new object[1];
+                            paramArray[0] = _title.FileLocation;
+                            MITranscode.Invoke(server, paramArray);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        OMLApplication.DebugLine("Error calling transcode360: " + e.Message);
                     }
                 }
             }
@@ -134,17 +144,24 @@ namespace Library
                     }
         }
 
-        private string DynamicPlayMedia()
+        private void DynamicPlayMedia()
         {
             string path_to_media = _title.FileLocation;
-//            Trace.WriteLine("We are an extender");
             string new_path = string.Empty;
+
             if (PlayTranscodedMedia(ref new_path))
             {
-                path_to_media = new_path;
+                if (new_path.Length > 0)
+                {
+                    _title.FileLocation = new_path;
+                    VideoPlayer vp = new VideoPlayer(_title);
+                    vp.PlayMovie();
+                }
             }
-  //          Trace.WriteLine("Returning path: " + path_to_media);
-            return path_to_media;
+            else
+            {
+                OMLApplication.DebugLine("Error playing file");
+            }
         }
     }
 }

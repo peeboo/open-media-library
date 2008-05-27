@@ -31,7 +31,7 @@ namespace OMLEngine
             }
             catch (Exception e)
             {
-                Trace.WriteLine("Error on init: " + e.Message);
+                Utilities.DebugLine("Error on init: " + e.Message);
             }
         }
 
@@ -61,7 +61,7 @@ namespace OMLEngine
             }
             catch (Exception e)
             {
-                Trace.WriteLine("Error: " + e.Message);
+                Utilities.DebugLine("Error: " + e.Message);
             }
             return null;
         }
@@ -90,7 +90,7 @@ namespace OMLEngine
             }
             catch (Exception e)
             {
-                Trace.WriteLine("Error: " + e.Message);
+                Utilities.DebugLine("Error: " + e.Message);
             }
         }
     }

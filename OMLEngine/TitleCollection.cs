@@ -59,7 +59,7 @@ namespace OMLEngine
         /// <param name="database_filename">full path of filename to use as the database</param>
         public TitleCollection(string database_filename)
         {
-            Trace.WriteLine("TitleCollection:TitleCollection(database_filename)");
+            Utilities.DebugLine("TitleCollection:TitleCollection(database_filename)");
             _source_database_to_use = SourceDatabase.OML;
             _database_filename = database_filename;
         }
@@ -69,7 +69,7 @@ namespace OMLEngine
         /// </summary>
         public TitleCollection()
         {
-            Trace.WriteLine("TitleCollection:TitleCollection()");
+            Utilities.DebugLine("TitleCollection:TitleCollection()");
             _source_database_to_use = SourceDatabase.OML;
             _database_filename = FileSystemWalker.RootDirectory + "\\oml.dat";
         }
@@ -78,7 +78,7 @@ namespace OMLEngine
         /// </summary>
         ~TitleCollection()
         {
-            Trace.WriteLine("TitleCollection:~TitleCollection(): Holding " + Count + " titles");
+            Utilities.DebugLine("TitleCollection:~TitleCollection(): Holding " + Count + " titles");
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace OMLEngine
         /// <returns>True on success</returns>
         public bool saveTitleCollection()
         {
-            Trace.WriteLine("saveTitleCollection()");
+            Utilities.DebugLine("saveTitleCollection()");
 
             switch (_source_database_to_use)
             {
@@ -113,7 +113,7 @@ namespace OMLEngine
             }
             catch (Exception e)
             {
-                Trace.WriteLine("Error reading file: " + e.Message);
+                Utilities.DebugLine("Error reading file: " + e.Message);
                 return false;
             }
 
@@ -130,7 +130,7 @@ namespace OMLEngine
             }
             catch (Exception e)
             {
-                Trace.WriteLine("Error writing file: " + e.Message);
+                Utilities.DebugLine("Error writing file: " + e.Message);
                 return false;
             }
         }
@@ -141,7 +141,7 @@ namespace OMLEngine
         /// <returns>True on success</returns>
         public bool loadTitleCollection()
         {
-            Trace.WriteLine("loadTitleCollection()");
+            Utilities.DebugLine("loadTitleCollection()");
             switch (_source_database_to_use)
             {
                 case SourceDatabase.OML:
@@ -191,7 +191,7 @@ namespace OMLEngine
         /// <returns>True on successful load</returns>
         private bool _loadTitleCollectionFromOML()
         {
-            Trace.WriteLine("Using OML database");
+            Utilities.DebugLine("Using OML database");
             Stream stm;
             try
             {
@@ -199,7 +199,7 @@ namespace OMLEngine
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("Error loading title collection: " + ex.Message);
+                Utilities.DebugLine("Error loading title collection: " + ex.Message);
                 return false;
             }
 
@@ -214,12 +214,12 @@ namespace OMLEngine
                         Add((Title)bf.Deserialize(stm));
                     }
                     stm.Close();
-                    Trace.WriteLine("Loaded: " + numTitles + " titles");
+                    Utilities.DebugLine("Loaded: " + numTitles + " titles");
                     return true;
                 }
                 catch (Exception e)
                 {
-                    Trace.WriteLine("Failed to load db file: " + e.Message);
+                    Utilities.DebugLine("Failed to load db file: " + e.Message);
                 }
             }
             return false;
@@ -308,7 +308,7 @@ namespace OMLEngine
         #region serialization methods
         public TitleCollection(SerializationInfo info, StreamingContext ctxt)
         {
-            Trace.WriteLine("TitleCollection:TitleCollection (Serialized)");
+            Utilities.DebugLine("TitleCollection:TitleCollection (Serialized)");
             TitleCollection tc = (TitleCollection)info.GetValue("TitleCollection", typeof(TitleCollection));
             foreach (Title title in tc)
                 Add(title);
@@ -316,7 +316,7 @@ namespace OMLEngine
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
-            Trace.WriteLine("TitleCollection:GetObjectData()");
+            Utilities.DebugLine("TitleCollection:GetObjectData()");
             info.AddValue("TitleCollection", this);
         }
         #endregion
