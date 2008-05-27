@@ -15,6 +15,7 @@ namespace MovieCollectorz
 {
     public class MovieCollectorzPlugin : OMLPlugin, IOMLPlugin
     {
+        bool _ShouldCopyImages = true;
         const string HTML_TAG_PATTERN = "<.*?>";
         TextReader tr = null;
 
@@ -30,8 +31,9 @@ namespace MovieCollectorz
         public MovieCollectorzPlugin() : base()
         {
         }
-        public override bool Load(string filename)
+        public override bool Load(string filename, bool ShouldCopyImages)
         {
+            _ShouldCopyImages = ShouldCopyImages;
             try
             {
                 tr = new StreamReader(filename);

@@ -11,6 +11,7 @@ namespace OMLImporter
     {
         public static double VERSION = 0.1;
         public static int _exit = 0;
+        public static bool _copyImages = true;
 
         [STAThread]
         static void Main(string[] args)
@@ -35,6 +36,7 @@ namespace OMLImporter
             do
             {
                 Menu(ref plugin);
+                AskIfShouldCopyImages();
                 if (Program._exit < 1)
                 {
                     GetFile(ref file_to_import, plugin);
@@ -99,9 +101,28 @@ namespace OMLImporter
             Console.WriteLine();
         }
 
+        public static void AskIfShouldCopyImages()
+        {
+            Console.WriteLine("Should we copy images to the OML images directory? (y/n)");
+            string response = Console.ReadLine();
+            response = response.Substring(0, 1);
+
+            switch (response.ToUpper())
+            {
+                case "N":
+                    Program._copyImages = false;
+                    break;
+                case "Y":
+                    Program._copyImages = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public static bool ImportFile(OMLPlugin plugin, FileInfo fInfo)
         {
-            return plugin.Load(fInfo.FullName);
+            return plugin.Load(fInfo.FullName, Program._copyImages);
         }
 
         public static void Usage()

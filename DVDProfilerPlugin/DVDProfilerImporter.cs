@@ -9,6 +9,7 @@ namespace DVDProfilerPlugin
 {
     public class DVDProfilerImporter : OMLPlugin, IOMLPlugin
     {
+        bool _ShouldCopyImages = true;
         TextReader tr = null;
         private static double VERSION = 0.1;
 
@@ -17,8 +18,9 @@ namespace DVDProfilerPlugin
         {
         }
 
-        public override bool Load(string filename)
+        public override bool Load(string filename, bool ShouldCopyImages)
         {
+            _ShouldCopyImages = ShouldCopyImages;
             try { tr = new StreamReader(filename); }
             catch (Exception e) { Trace.WriteLine(e.Message); }
 

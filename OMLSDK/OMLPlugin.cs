@@ -22,7 +22,7 @@ namespace OMLSDK
         {
             throw new Exception("You must implement this method in your class.");
         }
-        public virtual bool Load(string filename)
+        public virtual bool Load(string filename, bool ShouldCopyImages)
         {
             throw new Exception("You must implement this method in your class.");
         }

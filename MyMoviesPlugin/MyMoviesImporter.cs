@@ -14,6 +14,7 @@ namespace MyMoviesPlugin
 {
     public class MyMoviesImporter : OMLPlugin, IOMLPlugin
     {
+        bool _ShouldCopyImages = true;
         TextReader tr = null;
         private static double VERSION = 0.1;
 
@@ -21,8 +22,9 @@ namespace MyMoviesPlugin
         {
         }
 
-        public override bool Load(string filename)
+        public override bool Load(string filename, bool ShouldCopyImages)
         {
+            _ShouldCopyImages = ShouldCopyImages;
             try { tr = new StreamReader(filename); }
             catch (Exception e) { Trace.WriteLine(e.Message); }
 
@@ -87,31 +89,40 @@ namespace MyMoviesPlugin
                     XmlNode front_node = node.ChildNodes[0];
                     if (front_node != null)
                     {
-                        string current_filename = front_node.InnerText;
+                        string imagePath = front_node.InnerText;
                         FileInfo fi;
                         try {
-                            fi = new FileInfo(current_filename);
+                            fi = new FileInfo(imagePath);
                             string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
                                                    "\\F" + newTitle.InternalItemID +
                                                    fi.Extension;
-                            CopyImage(current_filename, new_full_name);
-                            newTitle.FrontCoverPath = new_full_name;
+                            if (_ShouldCopyImages)
+                            {
+                                CopyImage(imagePath, new_full_name);
+                                imagePath = new_full_name;
+                            }
+
+                            newTitle.FrontCoverPath = imagePath;
                         }
                         catch (Exception e) { Trace.WriteLine(e.Message); }
                     }
                     XmlNode back_node = node.ChildNodes[1];
                     if (back_node != null)
                     {
-                        string current_filename = back_node.InnerText;
+                        string imagePath = back_node.InnerText;
                         FileInfo fi;
                         try
                         {
-                            fi = new FileInfo(current_filename);
+                            fi = new FileInfo(imagePath);
                             string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
                                                    "\\B" + newTitle.InternalItemID +
                                                    fi.Extension;
-                            CopyImage(current_filename, new_full_name);
-                            newTitle.BackCoverPath = new_full_name;
+                            if (_ShouldCopyImages)
+                            {
+                                CopyImage(imagePath, new_full_name);
+                                imagePath = new_full_name;
+                            }
+                            newTitle.BackCoverPath = imagePath;
                         }
                         catch (Exception e) { Trace.WriteLine(e.Message); }
                     }

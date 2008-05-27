@@ -24,7 +24,8 @@ namespace OMLTestSuite
         {
             TitleCollection tc = new TitleCollection("\\testOML.dat");
             MyMoviesImporter importer = new MyMoviesImporter();
-            importer.Load("C:\\mymovies.xml");
+            bool ShouldCopyImages = false;
+            importer.Load("C:\\mymovies.xml", ShouldCopyImages);
 
             foreach (Title t in importer.GetTitles())
                 tc.Add(t);
