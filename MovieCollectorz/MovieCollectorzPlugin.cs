@@ -91,9 +91,9 @@ namespace MovieCollectorz
                             newTitle.Synopsis = StripHTML(node.InnerText);
                             break;
                         case "releasedate":
-                            XmlNode rdYear = node.SelectSingleNode("//year");
-                            XmlNode rdMonth = node.SelectSingleNode("//month");
-                            XmlNode rdDay = node.SelectSingleNode("//day");
+                            XmlNode rdYear = node.SelectSingleNode("year");
+                            XmlNode rdMonth = node.SelectSingleNode("month");
+                            XmlNode rdDay = node.SelectSingleNode("day");
 
                             if (rdYear != null && rdMonth != null && rdDay != null)
                             {
@@ -113,7 +113,7 @@ namespace MovieCollectorz
                             newTitle.Runtime = Int32.Parse(node.InnerText);
                             break;
                         case "cast":
-                            XmlNodeList persons = node.SelectNodes("//person");
+                            XmlNodeList persons = node.SelectNodes("person");
                             foreach (XmlNode person in persons)
                             {
                                 XmlNode disNameNode = person.SelectSingleNode("displayname");
