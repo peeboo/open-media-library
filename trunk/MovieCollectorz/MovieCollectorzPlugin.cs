@@ -40,7 +40,7 @@ namespace MovieCollectorz
             }
             catch (Exception e)
             {
-                Trace.WriteLine(e.Message);
+                Utilities.DebugLine(e.Message);
             }
 
             XmlDocument xDoc = new XmlDocument();
@@ -206,11 +206,11 @@ namespace MovieCollectorz
                     }
                     catch (Exception e)
                     {
-                        Trace.WriteLine("Error adding row: " + e.Message);
+                        Utilities.DebugLine("Error adding row: " + e.Message);
                     }
                 }
                 else
-                    Trace.WriteLine("Error saving row");
+                    Utilities.DebugLine("Error saving row");
             }
 
             return true;

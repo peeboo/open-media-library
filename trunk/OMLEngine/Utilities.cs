@@ -129,7 +129,7 @@ namespace OMLEngine
                         {
                             foreach (Title title in titles)
                             {
-                                Trace.WriteLine("Would add title" + title.Name);
+                                Utilities.DebugLine("Would add title" + title.Name);
                             }
                         }
                         return titles;
@@ -137,7 +137,7 @@ namespace OMLEngine
                 }
                 catch (Exception e)
                 {
-                    Trace.WriteLine("Importer Error: " + e.Message);
+                    Utilities.DebugLine("Importer Error: " + e.Message);
                 }
             }
             return null;
@@ -216,7 +216,7 @@ namespace OMLEngine
                 }
                 catch (Exception e)
                 {
-                    Trace.WriteLine("Failed to validate Importer: " +
+                    Utilities.DebugLine("Failed to validate Importer: " +
                                     type +
                                     " with error: " +
                                     e.Message);
@@ -276,7 +276,7 @@ namespace OMLEngine
             }
             catch (Exception)
             {
-                Trace.WriteLine("Transcode360.Interface.dll not found");
+                Utilities.DebugLine("Transcode360.Interface.dll not found");
                 return false;
             }
         }
@@ -299,7 +299,7 @@ namespace OMLEngine
             }
             catch (Exception e)
             {
-                Trace.WriteLine("Error loading Transcode360: " + e.Message);
+                Utilities.DebugLine("Error loading Transcode360: " + e.Message);
                 return null;
             }
         }
@@ -352,5 +352,12 @@ namespace OMLEngine
             cmd.Start();
             Thread.Sleep(10);
         }
+
+        public static void DebugLine(string msg, params object[] paramArray)
+        {
+            Trace.TraceInformation(msg, paramArray);
+            Trace.Flush();
+        }
+
     }
 }

@@ -203,7 +203,7 @@ namespace Library
         /// <returns></returns>
         public MovieDetailsPage CreateDetailsPage(MovieItem item)
         {
-            Trace.WriteLine("Creating a detailspage");
+            OMLApplication.DebugLine("Creating a detailspage");
             MovieDetailsPage page = new MovieDetailsPage(item);
             return page;
         }
