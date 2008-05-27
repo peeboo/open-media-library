@@ -288,18 +288,20 @@ namespace OMLEngine
             try
             {
                 asm = Assembly.LoadFile(path_to_transcode360_dll);
-                Type[] types = asm.GetTypes();
-                foreach (Type type in types)
-                {
-                    if (type.Name.CompareTo(@"ITranscode360") == 0)
-                        return type;
-                }
+                AppDomain.CurrentDomain.Load(asm.GetName());
+
+                Type ITranscode360 = asm.GetType("Transcode360.Interface.ITranscode360");
+
+                if (ITranscode360 != null)
+                    return ITranscode360;
+
+                return null;
             }
             catch (Exception e)
             {
-                Trace.WriteLine("Unable to load Transcode360: " + e.Message);
+                Trace.WriteLine("Error loading Transcode360: " + e.Message);
+                return null;
             }
-            return null;
         }
 
         public static int NewRandomNumber()
