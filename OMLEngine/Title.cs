@@ -321,16 +321,85 @@ namespace OMLEngine
 
         #region serialization methods
 
+        private DateTime GetSerializedDateTime(SerializationInfo info, string id)
+        {
+            try
+            {
+                DateTime dt = info.GetDateTime(id);
+                return (dt == null ? new DateTime(0) : dt);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedDateTime: " + e.Message);
+                return new DateTime(0);
+            }
+        }
+
+        private VideoFormat GetSerializedVideoFormat(SerializationInfo info, string id)
+        {
+            try
+            {
+                return (VideoFormat)info.GetValue(id, typeof(VideoFormat));
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedVideoFormat: " + e.Message);
+                return VideoFormat.DVD;
+            }
+        }
+
+        private bool GetSerializedBoolean(SerializationInfo info, string id)
+        {
+            try
+            {
+                return info.GetBoolean(id);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedBoolean: " + e.Message);
+                return false;
+            }
+        }
+
+        private int GetSerializedInt(SerializationInfo info, string id)
+        {
+            try
+            {
+                return (int)info.GetValue(id, typeof(int));
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedInt: " + e.Message);
+                return 0;
+            }
+        }
+
         private string GetSerializedString(SerializationInfo info, string id)
         {
-            string result = info.GetString(id);
-            return (result == null ? String.Empty : result);
+            try
+            {
+                string result = info.GetString(id);
+                return (result == null ? String.Empty : result);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedString: " + e.Message);
+                return String.Empty;
+            }
         }
 
         private  T GetSerializedList<T>(SerializationInfo info, string id) where T : new()
         {
-            T result = (T)info.GetValue(id, typeof(T));
-            return (result == null ? new T() : result);
+            try
+            {
+                T result = (T)info.GetValue(id, typeof(T));
+                return (result == null ? new T() : result);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedList: " + e.Message);
+                return new T();
+            }
         }
 
         /// <summary>
@@ -341,11 +410,11 @@ namespace OMLEngine
         public Title(SerializationInfo info, StreamingContext ctxt)
         {
             _fileLocation = GetSerializedString(info, "file_location");
-            _videoFormat = (VideoFormat)info.GetValue("video_format", typeof(VideoFormat));
-            _needsTranscode = info.GetBoolean("transcode_to_extender");
+            _videoFormat = GetSerializedVideoFormat(info, "video_format");
+            _needsTranscode = GetSerializedBoolean(info, "transcode_to_extender");
             _name = GetSerializedString(info,"name");
             _description = GetSerializedString(info,"description");
-            _itemId = (int)info.GetValue("itemid", typeof(int));
+            _itemId = GetSerializedInt( info,"itemid");
             _metadataSourceId = GetSerializedString(info,"sourceid");
             _sourceName = GetSerializedString(info,"sourcename");
             _frontCoverPath = GetSerializedString(info,"front_boxart_path");
@@ -354,12 +423,12 @@ namespace OMLEngine
             _distributor = GetSerializedString(info,"distributor");
             _countryOfOrigin = GetSerializedString(info,"country_of_origin");
             _officialWebsiteURL = GetSerializedString(info,"official_website_url");
-            _dateAdded = info.GetDateTime("date_added");
+            _dateAdded = GetSerializedDateTime(info, "date_added");
             _importerSource = GetSerializedString(info,"importer_source");
-            _runtime = (int)info.GetValue("runtime", typeof(int));
-            _MPAARating = GetSerializedString(info,"mpaa_rating");
+            _runtime = GetSerializedInt(info, "runtime");
+            _MPAARating = GetSerializedString(info, "mpaa_rating");
 
-            _releaseDate = info.GetDateTime("release_date");
+            _releaseDate = GetSerializedDateTime(info, "release_date");
             _actors = GetSerializedList<List<Person>>(info, "actors");
             _crew = GetSerializedList<List<Person>>(info, "crew");
             _producers = GetSerializedList<List<string>>(info, "producers");
@@ -369,7 +438,7 @@ namespace OMLEngine
             _languageFormats = GetSerializedList<List<string>>(info, "language_formats");
             _genres = GetSerializedList<List<string>>(info, "genres");
 
-            _userStarRating = (int)info.GetValue("user_star_rating", typeof(int));
+            _userStarRating = GetSerializedInt(info,"user_star_rating");
             _aspectRatio = GetSerializedString(info,"aspect_ratio");
             _videoStandard = GetSerializedString(info,"video_standard");
             _UPC = GetSerializedString(info,"upc");
