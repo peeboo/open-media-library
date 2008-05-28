@@ -14,6 +14,12 @@ namespace OMLEngine
     {
         private SourceDatabase _source_database_to_use;
         private string _database_filename;
+        private Hashtable _moviesByFilename = new Hashtable();
+
+        public Hashtable MoviesByFilename
+        {
+            get { return _moviesByFilename; }
+        }
 
         public void Replace(Title title)
         {
@@ -211,7 +217,9 @@ namespace OMLEngine
                     int numTitles = (int)bf.Deserialize(stm);
                     for (int i = 0; i < numTitles; i++)
                     {
-                        Add((Title)bf.Deserialize(stm));
+                        Title t = (Title)bf.Deserialize(stm);
+                        Add(t);
+                        _moviesByFilename.Add(t.FileLocation, t);
                     }
                     stm.Close();
                     Utilities.DebugLine("Loaded: " + numTitles + " titles");
