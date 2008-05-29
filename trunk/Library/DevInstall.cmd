@@ -6,7 +6,7 @@ ECHO.This script requires Administrative privileges to run properly.
 ECHO.Start > All Programs > Accessories> Right-Click Command Prompt > Select 'Run As Administrator'
 ECHO.
  
-set CompanyName=MyCompany
+set CompanyName=OpenMediaLibrary
 set AssemblyName=Library
 set RegistrationName=Registration
 set ProgramImage=Application.png
