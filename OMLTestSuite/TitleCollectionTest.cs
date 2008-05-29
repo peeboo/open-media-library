@@ -49,7 +49,7 @@ namespace OMLTestSuite
             tc.Add(t3);
             tc.Add(t4);
 
-            Title t = tc.find_for_id(t1.InternalItemID);
+            Title t = tc.GetTitleById(t1.InternalItemID);
             Assert.AreEqual(t1, t);
         }
 
