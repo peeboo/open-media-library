@@ -18,11 +18,16 @@ namespace OMLEngine
 
         public Hashtable MoviesByFilename
         {
-            get { return _moviesByFilename; }
+            get
+            {
+                Utilities.DebugLine("[TitleCollection] MoviesByFilename called");
+                return _moviesByFilename;
+            }
         }
 
         public void Replace(Title title)
         {
+            Utilities.DebugLine("[TitleCollection] Title ("+title.Name+") has been replaced");
             Title t = find_for_id(title.InternalItemID);
             if (t != null)
             {
@@ -41,6 +46,7 @@ namespace OMLEngine
         /// <returns></returns>
         public Title find_for_id(int id)
         {
+            Utilities.DebugLine("[TitleCollection] Title Lookup by Id: "+id);
             foreach (Title title in this)
             {
                 if (title.InternalItemID == id)
@@ -65,7 +71,7 @@ namespace OMLEngine
         /// <param name="database_filename">full path of filename to use as the database</param>
         public TitleCollection(string database_filename)
         {
-            Utilities.DebugLine("TitleCollection:TitleCollection(database_filename)");
+            Utilities.DebugLine("[TitleCollection] TitleCollection(database_filename)");
             _source_database_to_use = SourceDatabase.OML;
             _database_filename = database_filename;
         }
@@ -75,7 +81,7 @@ namespace OMLEngine
         /// </summary>
         public TitleCollection()
         {
-            Utilities.DebugLine("TitleCollection:TitleCollection()");
+            Utilities.DebugLine("[TitleCollection] TitleCollection()");
             _source_database_to_use = SourceDatabase.OML;
             _database_filename = FileSystemWalker.RootDirectory + "\\oml.dat";
         }
@@ -84,7 +90,7 @@ namespace OMLEngine
         /// </summary>
         ~TitleCollection()
         {
-            Utilities.DebugLine("TitleCollection:~TitleCollection(): Holding " + Count + " titles");
+            Utilities.DebugLine("[TitleCollection] ~TitleCollection(): Holding " + Count + " titles");
         }
 
         /// <summary>
@@ -147,7 +153,7 @@ namespace OMLEngine
         /// <returns>True on success</returns>
         public bool loadTitleCollection()
         {
-            Utilities.DebugLine("loadTitleCollection()");
+            Utilities.DebugLine("[TitleCollection] :loadTitleCollection()");
             switch (_source_database_to_use)
             {
                 case SourceDatabase.OML:
@@ -197,7 +203,7 @@ namespace OMLEngine
         /// <returns>True on successful load</returns>
         private bool _loadTitleCollectionFromOML()
         {
-            Utilities.DebugLine("Using OML database");
+            Utilities.DebugLine("[TitleCollection] Using OML database");
             Stream stm;
             try
             {
@@ -205,7 +211,7 @@ namespace OMLEngine
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("Error loading title collection: " + ex.Message);
+                Utilities.DebugLine("[TitleCollection] Error loading title collection: " + ex.Message);
                 return false;
             }
 
@@ -218,16 +224,24 @@ namespace OMLEngine
                     for (int i = 0; i < numTitles; i++)
                     {
                         Title t = (Title)bf.Deserialize(stm);
+                        Utilities.DebugLine("[TitleCollection] Adding Title: "+t.Name);
                         Add(t);
-                        _moviesByFilename.Add(t.FileLocation, t);
+                        try
+                        {
+                            _moviesByFilename.Add(t.FileLocation, t);
+                        }
+                        catch (Exception e)
+                        {
+                            //Utilities.DebugLine("Failed to add Title to _moviesByFilename (" + t.Name + "): " + e.Message);
+                        }
                     }
                     stm.Close();
-                    Utilities.DebugLine("Loaded: " + numTitles + " titles");
+                    Utilities.DebugLine("[TitleCollection] Loaded: " + numTitles + " titles");
                     return true;
                 }
                 catch (Exception e)
                 {
-                    Utilities.DebugLine("Failed to load db file: " + e.Message);
+                    Utilities.DebugLine("[TitleCollection] Failed to load db file: " + e.Message);
                 }
             }
             return false;
@@ -242,6 +256,7 @@ namespace OMLEngine
         /// <returns>DataTable object contains all the titles in the collection.</returns>
         public DataTable ToDataTable()
         {
+            Utilities.DebugLine("[TitleCollection] Converting TitleCollection to a DataTable");
             DataTable dt = new DataTable("Titles");
             dt.Columns.Add("Name").DataType = typeof(string);
             dt.Columns.Add("Description").DataType = typeof(string);
@@ -316,7 +331,7 @@ namespace OMLEngine
         #region serialization methods
         public TitleCollection(SerializationInfo info, StreamingContext ctxt)
         {
-            Utilities.DebugLine("TitleCollection:TitleCollection (Serialized)");
+            Utilities.DebugLine("[TitleCollection] TitleCollection (Serialized)");
             TitleCollection tc = (TitleCollection)info.GetValue("TitleCollection", typeof(TitleCollection));
             foreach (Title title in tc)
                 Add(title);
@@ -324,7 +339,7 @@ namespace OMLEngine
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
-            Utilities.DebugLine("TitleCollection:GetObjectData()");
+            Utilities.DebugLine("[TitleCollection] GetObjectData()");
             info.AddValue("TitleCollection", this);
         }
         #endregion

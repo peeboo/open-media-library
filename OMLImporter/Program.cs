@@ -36,17 +36,19 @@ namespace OMLImporter
             do
             {
                 Menu(ref plugin);
-                AskIfShouldCopyImages();
                 if (Program._exit < 1)
                 {
+                    AskIfShouldCopyImages();
                     GetFile(ref file_to_import, plugin);
                     if (plugin != null && file_to_import != null)
                     {
+                        Utilities.DebugLine("[OMLImporter] Found plugin and file, moving to process");
                         ProcessFile(plugin, file_to_import);
                         plugin = null;
                         file_to_import = null;
                     }
                 }
+                Utilities.DebugLine("");
             } while (Program._exit < 1);
         }
 
@@ -65,6 +67,7 @@ namespace OMLImporter
 
             if (ofDiag.ShowDialog() == DialogResult.OK)
             {
+                Utilities.DebugLine("[OMLImporter] Valid file found ("+ofDiag.FileName+")");
                 file_to_import = ofDiag.FileName;
             }
         }
@@ -106,7 +109,6 @@ namespace OMLImporter
             Console.WriteLine("Should we copy images to the OML images directory? (y/n)");
             string response = Console.ReadLine();
             response = response.Substring(0, 1);
-
             switch (response.ToUpper())
             {
                 case "N":
@@ -139,8 +141,10 @@ namespace OMLImporter
 
         public static void LoadTitlesIntoDatabase(OMLPlugin plugin)
         {
+            Utilities.DebugLine("[OMLImporter] Titles loaded, beginning Import process");
             TitleCollection tc = new TitleCollection();
             List<Title> titles = plugin.GetTitles();
+            Utilities.DebugLine("[OMLImporter] "+titles.Count+" titles found in input file");
             Console.WriteLine("Found " + titles.Count + " titles");
 
             int numberOfTitlesAdded = 0;

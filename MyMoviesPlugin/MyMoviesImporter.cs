@@ -20,20 +20,24 @@ namespace MyMoviesPlugin
 
         public MyMoviesImporter() : base()
         {
+            Utilities.DebugLine("[MyMoviesImporter] created");
         }
 
         public override bool Load(string filename, bool ShouldCopyImages)
         {
+            Utilities.DebugLine("[MyMoviesImporter] created[filename("+filename+"), ShouldCopyImages("+ShouldCopyImages+")]");
             _ShouldCopyImages = ShouldCopyImages;
             try { tr = new StreamReader(filename); }
-            catch (Exception e) { Utilities.DebugLine(e.Message); }
+            catch (Exception e) { Utilities.DebugLine("[MyMoviesImporter] " + e.Message); }
 
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(filename);
+            Utilities.DebugLine("[MyMoviesImporter] file loaded");
 
             XmlNodeList nodeList = xDoc.SelectNodes("//Titles/Title");
             foreach (XmlNode movieNode in nodeList)
             {
+                Utilities.DebugLine("[MyMoviesImporter] Found base Title node");
                 Title newTitle = new Title();
                 // first get the name
                 foreach (XmlNode node in movieNode.ChildNodes)
@@ -41,19 +45,22 @@ namespace MyMoviesPlugin
                     if (node.Name.CompareTo("LocalTitle") == 0)
                     {
                         newTitle.Name = node.InnerText;
+                        Utilities.DebugLine("[MyMoviesImporter] Title appears to be: "+newTitle.Name+" moving to load title meta data");
                         break;
                     }
                 }
                 foreach (XmlNode node in movieNode.ChildNodes)
                 {
+                    Utilities.DebugLine("[MyMoviesImporter] Processing node: " + node.Name);
                     process_node_switch(newTitle, node);
                 }
                 if (ValidateTitle(newTitle))
                 {
+                    Utilities.DebugLine("[MyMoviesImporter] Validating title");
                     try { AddTitle(newTitle); }
-                    catch (Exception e) { Utilities.DebugLine("Error adding row: " + e.Message); }
+                    catch (Exception e) { Utilities.DebugLine("[MyMoviesImporter] Error adding row: " + e.Message); }
                 }
-                else Utilities.DebugLine("Error saving row");
+                else Utilities.DebugLine("[MyMoviesImporter] Error saving row");
             }
             return true;
         }
@@ -73,9 +80,19 @@ namespace MyMoviesPlugin
 
         public string CopyImage(string from_location, string to_location)
         {
+            Utilities.DebugLine("[MyMoviesImporter] Copying Image: FROM("+from_location+") TO("+to_location+")");
             FileInfo fi = new FileInfo(from_location);
-            File.Copy(from_location, to_location, true);
-            return fi.Name;
+            if (fi.Exists)
+            {
+                Utilities.DebugLine("[MyMoviesImporter] File ("+from_location+") is valid, copying");
+                File.Copy(from_location, to_location, true);
+                return to_location;
+            }
+            else
+            {
+                Utilities.DebugLine("[MyMoviesImporter] File ("+from_location+") is invalid, keeping original location");
+                return from_location;
+            }
         }
 
         private void process_node_switch(Title newTitle, XmlNode node)
@@ -210,12 +227,14 @@ namespace MyMoviesPlugin
                     newTitle.CountryOfOrigin = node.InnerText;
                     break;
                 case "Discs":
+                    Utilities.DebugLine("[MyMoviesImporter] Beginning a Video File node");
                     XmlNodeList discs = node.SelectNodes("Disc");
                     foreach (XmlNode disc in discs)
                     {
                         XmlNode sideA = disc.SelectSingleNode("LocationSideA");
                         if (sideA != null)
                         {
+                            Utilities.DebugLine("[MyMoviesImporter] Found a file node, beginning investigation");
                             string directory = sideA.InnerText;
                             if (directory.Length > 0)
                             {
@@ -225,14 +244,17 @@ namespace MyMoviesPlugin
                                     di = new DirectoryInfo(directory);
                                     if (di != null)
                                     {
+                                        Utilities.DebugLine("[MyMoviesImporter] Directory is valid, searching for files");
                                         FileSystemInfo[] infos = di.GetFileSystemInfos();
                                         foreach (FileSystemInfo info in infos)
                                         {
+                                            Utilities.DebugLine("[MyMoviesImporter] Found a file ("+info.FullName+")");
                                             if (info.GetType().Equals(typeof(FileInfo)))
                                             {
                                                 string ext = info.Extension.Substring(1);
                                                 if (IsSupportedFormat(ext))
                                                 {
+                                                    Utilities.DebugLine("[MyMoviesImporter] File is a valid format, adding file");
                                                     newTitle.VideoFormat =
                                                         (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
                                                     newTitle.FileLocation = info.FullName;
@@ -241,8 +263,10 @@ namespace MyMoviesPlugin
                                             }
                                             if (info.GetType().Equals(typeof(DirectoryInfo)))
                                             {
+                                                Utilities.DebugLine("[MyMoviesImporter] Director found ("+info.FullName+")");
                                                 if (info.Name.ToUpper().CompareTo("VIDEO_TS") == 0)
                                                 {
+                                                    Utilities.DebugLine("[MyMoviesImporter] Video_ts directory found, adding");
                                                     newTitle.VideoFormat = VideoFormat.DVD;
                                                     newTitle.FileLocation = info.FullName;
                                                     break;

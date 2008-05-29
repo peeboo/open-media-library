@@ -409,6 +409,7 @@ namespace OMLEngine
         /// <param name="ctxt">StreamingContext object</param>
         public Title(SerializationInfo info, StreamingContext ctxt)
         {
+            Utilities.DebugLine("[Title] Loading Title from Serialization");
             _fileLocation = GetSerializedString(info, "file_location");
             _videoFormat = GetSerializedVideoFormat(info, "video_format");
             _needsTranscode = GetSerializedBoolean(info, "transcode_to_extender");
@@ -455,6 +456,7 @@ namespace OMLEngine
         /// <param name="ctxt"></param>
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
+            Utilities.DebugLine("[Title] Adding Title ("+_name+") to Serialization data");
             info.AddValue("file_location", _fileLocation);
             info.AddValue("video_format", _videoFormat);
             info.AddValue("transcode_to_extender", _needsTranscode);
@@ -496,6 +498,7 @@ namespace OMLEngine
         /// </summary>
         public Title()
         {
+            Utilities.DebugLine("[Title] Creating new Empty Title object");
             _actors = new List<Person>();
             _crew = new List<Person>();
             _directors = new List<Person>();
@@ -513,6 +516,7 @@ namespace OMLEngine
         /// </summary>
         ~Title()
         {
+            Utilities.DebugLine("[Title] Title destroyed");
         }
 
         /// <summary>

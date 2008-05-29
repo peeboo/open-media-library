@@ -94,6 +94,9 @@ namespace OMLEngine
 
     public static class Utilities
     {
+        private static TextWriterTraceListener tl;
+        private static FileStream Log;
+
         private static Random random = new Random(new DateTime().Millisecond);
         /// <summary>
         /// Static list of methods that ALL plugins must define
@@ -355,7 +358,21 @@ namespace OMLEngine
 
         public static void DebugLine(string msg, params object[] paramArray)
         {
-            Trace.TraceInformation(msg, paramArray);
+            if (Log == null)
+            {
+                try
+                {
+                    if (File.Exists(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt"))
+                        Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.Truncate);
+                    else
+                        Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.OpenOrCreate);
+
+                    Trace.Listeners.Add(new TextWriterTraceListener(Log));
+                }
+                catch (IOException)
+                { }
+            }
+            Trace.TraceInformation(DateTime.Now.ToString() +" "+ msg, paramArray);
             Trace.Flush();
         }
 
