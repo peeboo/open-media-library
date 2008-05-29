@@ -122,7 +122,7 @@ namespace Library
 
         public static void DebugLine(string msg, params object[] paramArray)
         {
-            Trace.TraceInformation(msg, paramArray);
+            Trace.TraceInformation(DateTime.Now.ToString() +" "+ msg, paramArray);
             Trace.Flush();
         }
 

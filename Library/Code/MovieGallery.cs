@@ -166,14 +166,14 @@ namespace Library
         public MovieGallery(string title)
         {
             _title = title;
-            OMLApplication.DebugLine("MovieGallery.MovieGallery: Title [{0}]", Title);
+            OMLApplication.DebugLine("[MovieGallery] MovieGallery: Title [{0}]", Title);
             Initialize(null);
         }
 
         public MovieGallery(TitleCollection col, string title)
         {
             _title = title;
-            OMLApplication.DebugLine("MovieGallery.MovieGallery: Title [{0}]", Title);
+            OMLApplication.DebugLine("[MovieGallery] MovieGallery: Title [{0}]", Title);
             Initialize(col);
         }
 
@@ -202,7 +202,7 @@ namespace Library
         /// <returns></returns>
         public MovieGallery CreateFilteredGallery(string category, string filter)
         {
-            OMLApplication.DebugLine("MovieGallery.CreateFilteredGallery: Category [{0}] Filter [{1}]", category, filter);
+            OMLApplication.DebugLine("[MovieGallery] CreateFilteredGallery: Category [{0}] Filter [{1}]", category, filter);
 
             if (category == Category.Genres)
             {
@@ -224,7 +224,7 @@ namespace Library
 
         private MovieGallery CreateFilteredGalleryHelper(Hashtable dataSource, string category, string filter)
         {
-            OMLApplication.DebugLine("MovieGallery.CreateFilteredCollection");
+            OMLApplication.DebugLine("[MovieGallery] CreateFilteredCollection");
             MovieGallery movies = new MovieGallery( _title + " > "  + filter);
             if (dataSource.Contains(filter))
             {
@@ -238,7 +238,7 @@ namespace Library
                 }
             }
 
-            OMLApplication.DebugLine("MovieGallery.CreateFilteredCollection: done: directors {0} actors {1} genres {2} movies {3}", movies._directors.Count, movies._actors.Count, movies._genres.Count, movies._movies.Count);
+            OMLApplication.DebugLine("[MovieGallery] CreateFilteredCollection: done: directors {0} actors {1} genres {2} movies {3}", movies._directors.Count, movies._actors.Count, movies._genres.Count, movies._movies.Count);
             movies._genres.Sort();
             movies._actors.Sort();
             movies._directors.Sort();
@@ -257,7 +257,7 @@ namespace Library
 
             if (col != null)
             {
-                OMLApplication.DebugLine("MovieGallery.LoadMovies: have TitleCollection");
+                OMLApplication.DebugLine("[MovieGallery] LoadMovies: have TitleCollection");
                 //col.loadTitleCollection();
                 col.Sort();
 
@@ -278,7 +278,7 @@ namespace Library
                 _actors.Sort();
                 FocusedItem = (GalleryItem)Movies[0];
             }
-            OMLApplication.DebugLine("MovieGallery.LoadMovies: done: directors {0} actors {1} genres {2} movies {3}", _directors.Count, _actors.Count, _genres.Count, _movies.Count);
+            OMLApplication.DebugLine("[MovieGallery] LoadMovies: done: directors {0} actors {1} genres {2} movies {3}", _directors.Count, _actors.Count, _genres.Count, _movies.Count);
         }
 
         #endregion
@@ -286,24 +286,24 @@ namespace Library
         #region Callbacks
         public void MovieCategorySelected(object sender, EventArgs args)
         {
-            OMLApplication.DebugLine("MovieGallery.MovieCategorySelected");
+            OMLApplication.DebugLine("[MovieGallery] MovieCategorySelected");
         }
 
         public void GenreCategorySelected(object sender, EventArgs args)
         {
-            OMLApplication.DebugLine("MovieGallery.GenreCategorySelected");
+            OMLApplication.DebugLine("[MovieGallery] GenreCategorySelected");
             OMLApplication.Current.GoToSelectionList(this, Genres, Title + " > Genres", "List");
         }
 
         public void DirectorsCategorySelected(object sender, EventArgs args)
         {
-            OMLApplication.DebugLine("MovieGallery.DirectorsCategorySelected");
+            OMLApplication.DebugLine("[MovieGallery] DirectorsCategorySelected");
             OMLApplication.Current.GoToSelectionList(this, Directors, Title + " > Directors", Properties.Settings.Default.DirectorView);
         }
 
         public void ActorsCategorySelected(object sender, EventArgs args)
         {
-            OMLApplication.DebugLine("MovieGallery.ActorsCategorySelected");
+            OMLApplication.DebugLine("[MovieGallery] ActorsCategorySelected");
             OMLApplication.Current.GoToSelectionList(this, Actors, Title + " > Actors", Properties.Settings.Default.ActorView);
 
         }
