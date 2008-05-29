@@ -15,6 +15,12 @@ namespace OMLEngine
         private SourceDatabase _source_database_to_use;
         private string _database_filename;
         private Hashtable _moviesByFilename = new Hashtable();
+        private Hashtable _moviesByItemId = new Hashtable();
+
+        public Hashtable MoviesByItemId
+        {
+            get { return _moviesByItemId; }
+        }
 
         public Hashtable MoviesByFilename
         {
@@ -27,8 +33,11 @@ namespace OMLEngine
 
         public void Replace(Title title)
         {
+
+
             Utilities.DebugLine("[TitleCollection] Title ("+title.Name+") has been replaced");
-            Title t = find_for_id(title.InternalItemID);
+            Title t = GetTitleById(title.InternalItemID);
+
             if (t != null)
             {
                 int index = this.IndexOf(t);
@@ -44,7 +53,7 @@ namespace OMLEngine
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Title find_for_id(int id)
+        public Title GetTitleById(int id)
         {
             Utilities.DebugLine("[TitleCollection] Title Lookup by Id: "+id);
             foreach (Title title in this)
@@ -220,6 +229,7 @@ namespace OMLEngine
                 try
                 {
                     BinaryFormatter bf = new BinaryFormatter();
+                    //BinaryFormatter bf = new BinaryFormatter();
                     int numTitles = (int)bf.Deserialize(stm);
                     for (int i = 0; i < numTitles; i++)
                     {
@@ -234,6 +244,7 @@ namespace OMLEngine
                         {
                             //Utilities.DebugLine("Failed to add Title to _moviesByFilename (" + t.Name + "): " + e.Message);
                         }
+                        _moviesByItemId.Add(t.InternalItemID, t);
                     }
                     stm.Close();
                     Utilities.DebugLine("[TitleCollection] Loaded: " + numTitles + " titles");
