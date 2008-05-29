@@ -60,4 +60,6 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (ON HOLD) Delete movie feature, deleting everything releated to the movie (metadata, moviefile, moviefolder, covers etc)
   * (ON HOLD) "Mark as watched" feature
   * (ON HOLD) Movie bookmark features
+  * (ON HOLD) Ripping DVD's to local/server harddrive
+  * (ON HOLD) Automatic metadata/cover art retrieval
   * (ON HOLD) Holding down the down button on the movie screen resolves in stopping scrolling and instead displaying letters changing up the alphabet. Stopping scrolling takes the user to the first movie starting with the letter chosen.
