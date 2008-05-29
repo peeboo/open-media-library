@@ -27,6 +27,7 @@ namespace Library
         private void LoadDetails(MovieItem item)
         {
             _movieDetails = item;
+            _localMedia = null;
 
             if (item.FrontCover == null)
             {
@@ -37,7 +38,8 @@ namespace Library
 
             try
             {
-                _localMedia = new System.IO.FileInfo(item.FileLocation);
+                if( File.Exists(item.FileLocation) )
+                    _localMedia = new System.IO.FileInfo(item.FileLocation);
             }
             catch (Exception e)
             {
@@ -140,7 +142,6 @@ namespace Library
 
         public string Rating
         {
-            // this is a bit ugly, we need a better way
             get 
             {
                 if (_movieDetails.Rating.Trim().Length > 0)
