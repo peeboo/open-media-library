@@ -82,5 +82,125 @@ namespace Library.Properties {
                 this["GenreView"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("List")]
+        public string DateAddedView {
+            get {
+                return ((string)(this["DateAddedView"]));
+            }
+            set {
+                this["DateAddedView"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("List")]
+        public string YearView {
+            get {
+                return ((string)(this["YearView"]));
+            }
+            set {
+                this["YearView"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Menu")]
+        public string StartPage {
+            get {
+                return ((string)(this["StartPage"]));
+            }
+            set {
+                this["StartPage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NameAscending")]
+        public string MovieSort {
+            get {
+                return ((string)(this["MovieSort"]));
+            }
+            set {
+                this["MovieSort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NameAscending")]
+        public string ActorSort {
+            get {
+                return ((string)(this["ActorSort"]));
+            }
+            set {
+                this["ActorSort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NameAscending")]
+        public string DirectorSort {
+            get {
+                return ((string)(this["DirectorSort"]));
+            }
+            set {
+                this["DirectorSort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NameDescending")]
+        public string YearSort {
+            get {
+                return ((string)(this["YearSort"]));
+            }
+            set {
+                this["YearSort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NameDescending")]
+        public string DateAddedSort {
+            get {
+                return ((string)(this["DateAddedSort"]));
+            }
+            set {
+                this["DateAddedSort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SortFullString {
+            get {
+                return ((bool)(this["SortFullString"]));
+            }
+            set {
+                this["SortFullString"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NameAscending")]
+        public string GenreSort {
+            get {
+                return ((string)(this["GenreSort"]));
+            }
+            set {
+                this["GenreSort"] = value;
+            }
+        }
     }
 }

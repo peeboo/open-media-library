@@ -39,7 +39,7 @@
             <FlowLayout Orientation="Horizontal" Spacing="8,0"/>
           </Layout>
           <Content>
-            <me:CategoryButton Category="[RepeatedItem!z:CategoryCommand]" Choice="[Page.Categories]"/>
+            <me:CategoryButton Category="[RepeatedItem!z:FilterCommand]" Choice="[Page.Categories]"/>
           </Content>
         </Repeater>
         </Children>
@@ -51,7 +51,7 @@
   <!-- A single filter from a filter list -->
   <UI Name="FilterButton">
     <Properties>
-      <z:CategoryCommand Name="Option" CategoryCommand="$Required"/>
+      <z:FilterCommand Name="Option" FilterCommand="$Required"/>
       <Choice Name="Choice" Choice="$Required"/>
     </Properties>
 
@@ -74,10 +74,10 @@
       <!-- If this is a ModelItem, use the Description property for the label. -->
       <Rule>
         <Conditions>
-          <IsType Source="[Option]" Type="z:CategoryCommand"/>
+          <IsType Source="[Option]" Type="z:FilterCommand"/>
         </Conditions>
         <Actions>
-          <Set Target="[SelectOption.Description]" Value="[Option!z:CategoryCommand.Caption]"/>
+          <Set Target="[SelectOption.Description]" Value="[Option!z:FilterCommand.Caption]"/>
         </Actions>
       </Rule>
       <!-- Otherwise just use ToString(). -->
@@ -94,7 +94,7 @@
   <!-- Simple button -->
   <UI Name="CategoryButton">
     <Properties>
-      <z:CategoryCommand Name="Category" CategoryCommand="$Required" />
+      <z:FilterCommand Name="Category" FilterCommand="$Required" />
       <Choice Name="Choice" Choice="$Required"/>
       
       <!-- Background color properties. -->

@@ -17,5 +17,35 @@
     <Setting Name="GenreView" Type="System.String" Scope="User">
       <Value Profile="(Default)">List</Value>
     </Setting>
+    <Setting Name="DateAddedView" Type="System.String" Scope="User">
+      <Value Profile="(Default)">List</Value>
+    </Setting>
+    <Setting Name="YearView" Type="System.String" Scope="User">
+      <Value Profile="(Default)">List</Value>
+    </Setting>
+    <Setting Name="StartPage" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Menu</Value>
+    </Setting>
+    <Setting Name="MovieSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">NameAscending</Value>
+    </Setting>
+    <Setting Name="ActorSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">NameAscending</Value>
+    </Setting>
+    <Setting Name="DirectorSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">NameAscending</Value>
+    </Setting>
+    <Setting Name="YearSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">NameDescending</Value>
+    </Setting>
+    <Setting Name="DateAddedSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">NameDescending</Value>
+    </Setting>
+    <Setting Name="SortFullString" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="GenreSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">NameAscending</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

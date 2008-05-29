@@ -21,6 +21,13 @@ namespace Library
         /// </summary>
         public static Image NoCoverImage = new Image("resx://Library/Library.Resources/nocover");
 
+
+        public Filter Category
+        {
+            get { return _category; }
+            set { _category = value; }
+        }
+
         public string Name
         {
             get { return _name; }
@@ -36,12 +43,13 @@ namespace Library
         /// <summary>
         /// Initializes a new instance of the <see cref="GalleryItem"/> class.
         /// </summary>
-        public GalleryItem(MovieGallery owner, string name, string caption)
+        public GalleryItem(MovieGallery owner, string name, string caption, Filter browseCategory)
             : base(owner)
         {
             _name = name;
             _caption = caption;
             _owner = owner;
+            _category = browseCategory;
             CoverArt = NoCoverImage;
             Invoked += ItemSelected;
         }
@@ -60,13 +68,40 @@ namespace Library
             }
         }
 
+        virtual public int ItemCount
+        {
+            get
+            {
+                if (Gallery != null && Category != null && Category.ItemMovieRelation.ContainsKey(Name))
+                {
+                    return Category.ItemMovieRelation[Name].Count;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
         /// <summary>
         /// Gets the description.
         /// </summary>
         /// <returns></returns>
         virtual public string Caption
         {
-            get { return _caption; }
+            get 
+            {
+                int itemCount = ItemCount;
+                if (itemCount > 0 )
+                {
+                    return Name + " (" + Convert.ToString( itemCount ) + ")";
+                }
+                else
+                {
+                    return Name;
+                }
+                
+            }
             set { _caption = value; }
         }
 
@@ -114,11 +149,13 @@ namespace Library
         /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         public virtual void ItemSelected(object sender, EventArgs args)
         {
+            GalleryItem galleryItem = (GalleryItem)sender;
+            if (Gallery != null) OMLApplication.Current.GoToMenu( Category.CreateGallery(galleryItem.Name) );
         }
 
         public virtual GalleryItem Clone(MovieGallery newOwner)
         {
-            return new GalleryItem(newOwner, Name, Caption);
+            return new GalleryItem(newOwner, Name, Caption, Category);
         }
 
         public int CompareTo(object obj)
@@ -127,7 +164,7 @@ namespace Library
             {
 
                 GalleryItem item = (GalleryItem)obj;
-                return _caption.CompareTo(item._caption);
+                return _name.CompareTo(item._name);
             }
             else
             {
@@ -141,6 +178,7 @@ namespace Library
         private string _details;
         private Image _itemImage;
         private MovieGallery _owner;
+        private Filter _category;
 
     }
 
@@ -172,7 +210,7 @@ namespace Library
         /// </summary>
         /// <param name="title">The title.</param>
         public MovieItem(Title title, MovieGallery owner)
-            : base(owner, title.Name, title.Name)
+            : base(owner, title.Name, title.Name, null)
         {
             _titleObj = title;
             _backCoverArtImage = NoCoverImage;
@@ -213,7 +251,7 @@ namespace Library
         /// </summary>
         /// <param name="wplm">The WPLM.</param>
         public MovieItem(WindowsPlayListManager wplm, MovieGallery owner)
-            : base(owner, "PlayList", "PlayList")
+            : base(owner, "PlayList", "PlayList", null)
         {
             _wplm = wplm;
         }
@@ -307,7 +345,7 @@ namespace Library
         public string Rating
         {
             get { return _titleObj.MPAARating; }
-            set { }
+            set { _titleObj.MPAARating = value; }
         }
 
         /// <summary>
@@ -436,140 +474,6 @@ namespace Library
         }
     }
 
-    /// <summary>
-    /// A movie director item
-    /// </summary>
-    public class DirectorItem : GalleryItem
-    {
-        public static Image NoDirectorImage = new Image("resx://Library/Library.Resources/nodirector");
 
-        public override GalleryItem Clone(MovieGallery newOwner)
-        {
-            DirectorItem m = new DirectorItem(_person, newOwner);
-            return m;
-        }
-
-        public DirectorItem(Person p, MovieGallery owner)
-            : base(owner, p.full_name, p.full_name)
-        {
-            _person = p;
-            CoverArt = NoDirectorImage;
-        }
-
-
-        /// <summary>
-        /// Gets the item sub caption.
-        /// </summary>
-        /// <value>The item sub caption.</value>
-        override public string Caption
-        {
-            get
-            {
-                if ( Gallery != null && Gallery.DirectorsMovies.Contains(Name))
-                {
-                    VirtualList movies = (VirtualList)Gallery.DirectorsMovies[Name];
-                    return Name + " (" + Convert.ToString(movies.Count) + ")";
-                }
-                else
-                {
-                    return Name;
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// A callback that gets called when the item is selected
-        /// </summary>
-        /// <param name="sender">The sender is a MovieItem.</param>
-        /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void ItemSelected(object sender, EventArgs args)
-        {
-            DirectorItem galleryItem = (DirectorItem)sender;
-            if( Gallery != null ) OMLApplication.Current.GoToMenu( Gallery.CreateFilteredGallery(Category.Director, galleryItem.Name));
-        }
-
-
-        private Person _person;
-    }
-
-    public class ActorItem : GalleryItem
-    {
-        public override GalleryItem Clone(MovieGallery newOwner)
-        {
-            ActorItem m = new ActorItem(_person, newOwner);
-            return m;
-        }
-
-        public ActorItem(Person p, MovieGallery owner)
-            : base(owner, p.full_name, p.full_name)
-        {
-            _person = p;
-        }
-
-        /// <summary>
-        /// Gets the item sub caption.
-        /// </summary>
-        /// <value>The item sub caption.</value>
-        override public string Caption
-        {
-            get
-            {
-                if (Gallery != null && Gallery.ActorsMovies.Contains(Name))
-                {
-                    VirtualList movies = (VirtualList)Gallery.ActorsMovies[Name];
-                    return Name + " (" + Convert.ToString(movies.Count) + ")";
-                }
-                else
-                {
-                    return Name;
-                }
-            }
-        }
-
-        public override void ItemSelected(object sender, EventArgs args)
-        {
-            ActorItem galleryItem = (ActorItem)sender;
-            if( Gallery != null ) OMLApplication.Current.GoToMenu(Gallery.CreateFilteredGallery(Category.Actor, galleryItem.Name));
-        }
-
-        private Person _person;
-    }
-
-    public class GenreItem : GalleryItem
-    {
-        public GenreItem(string s, MovieGallery owner)
-            : base(owner, s, s)
-        {
-            _genre = s;
-        }
-
-
-        /// <summary>
-        /// Gets the item sub caption.
-        /// </summary>
-        /// <value>The item sub caption.</value>
-        override public string Caption
-        {
-            get
-            {
-                if (Gallery != null && Gallery.GenresMovies.Contains(Name))
-                {
-                    VirtualList movies = (VirtualList)Gallery.GenresMovies[Name];
-                    return Name + " (" + Convert.ToString(movies.Count) + ")";
-                }
-                else
-                {
-                    return Name;
-                }
-            }
-        }
-        public override void ItemSelected(object sender, EventArgs args)
-        {
-            GenreItem galleryItem = (GenreItem)sender;
-            if (Gallery != null) OMLApplication.Current.GoToMenu(Gallery.CreateFilteredGallery(Category.Genres, galleryItem.Name));
-        }
-        private string _genre;
-    }
 
 }

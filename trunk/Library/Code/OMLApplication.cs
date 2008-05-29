@@ -35,7 +35,7 @@ namespace Library
         public void Startup()
         {
             if ( _titles.Count > 0 )
-                GoToMenu( new MovieGallery(_titles, Category.Home ) );
+                GoToMenu(new MovieGallery(_titles, Filter.Home));
             else
                 GoToSetup(null);
         }

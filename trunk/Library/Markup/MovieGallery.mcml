@@ -13,6 +13,8 @@
     <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
     <cor:String Name="GalleryView" String="$Required" />
     <col:IList Name="List" IList="$Required"/>
+    <!-- EditableText is a required parameter. -->
+    <EditableText Name="EditableText" />
 
     <GridLayout Name="DefaultGrid" />
 
@@ -44,14 +46,14 @@
   <Locals>
     <!-- Create an input handler for scrolling. -->
     <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
-
+    <TypingHandler Name="TypingHandler" EditableText="[MovieBrowser.JumpInListText]" TypingPolicy="TripleTap" HandlerStage="Bubbled"/>
   </Locals>
 
   <Rules>
     <Default Target="[Input.KeyInteractive]" Value="true" />
     <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
     <Default Target="[ScrollingData.Repeater]" Value="[GalleryRepeater]"/>
-    
+
     <Condition Source="[GalleryView]" SourceValue="List" ConditionOp="Equals" >
       <Actions>
         <Set Target="[GalleryRepeater.Layout]" Value="[ListLayout]" />
@@ -64,6 +66,12 @@
       </Actions>
     </Condition>
 
+    <Changed Source="[MovieBrowser.JumpToPosition]" >
+      <Actions>
+        <Invoke Target ="[GalleryRepeater.NavigateIntoIndex]" index="65" />
+      </Actions>
+    </Changed>
+    
   </Rules>
 
   <Content>
