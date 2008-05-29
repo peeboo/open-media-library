@@ -35,7 +35,7 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (_IN DEVELOPMENT_) Search functionality
   * (_IN DEVELOPMENT_) UI based setup (importers, daemontools settings, etc)
 
-
+  * (ON HOLD) Option to omit "The" in movie sorting and displaying
   * (ON HOLD) Native VMC UI controls design
   * (ON HOLD) Movie Label 2009 Xml support
   * (ON HOLD) Ant Movie Catalog Xml support
