@@ -14,7 +14,7 @@ namespace OMLEngine
         private string _photo_path;
 
         /// <summary>
-        /// First name of person
+        /// Full name
         /// </summary>
         public string full_name
         {

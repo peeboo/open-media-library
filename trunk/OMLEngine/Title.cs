@@ -49,36 +49,120 @@ namespace OMLEngine
         private string _videoStandard = "";  // NTSC, PAL
         private string _UPC = "";
         private string _originalName = "";
-
+        private List<string> _tags = new List<string>();
+        private Dictionary<string, string> _actingRoles = new Dictionary<string, string>(); // actor, role
+        private Dictionary<string, string> _nonActingRoles = new Dictionary<string, string>(); // name, role (ie. Vangelis, Music)
+        private Dictionary<string, string> _additionalFields = new Dictionary<string, string>();
+        private List<string> _photos;
+        private List<string> _trailers;
+        private List<int> _children;
+        private int _parent;
 
         #endregion
 
         #region properties
 
+        public Dictionary<string, string> NonActingRoles
+        {
+            get { return _nonActingRoles; }
+            set { _nonActingRoles = value; }
+        }
+
+        public Dictionary<string, string> ActingRoles
+        {
+            get { return _actingRoles; }
+            set { _actingRoles = value; }
+        }
+
+        public int Parent
+        {
+            get { return _parent; }
+            set { _parent = value; }
+        }
+
+        public List<int> Children
+        {
+            get { return _children; }
+            set { _children = value; }
+        }
+
+        public List<string> Photos
+        {
+            get { return _photos; }
+            set { _photos = value; }
+        }
+
+        public List<string> Trailers
+        {
+            get { return _trailers; }
+            set { _trailers = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the additional fields (for future expansion).
+        /// </summary>
+        /// <value>The additional fields.</value>
+        public Dictionary<string, string> AdditionalFields
+        {
+            get { return _additionalFields; }
+            set { _additionalFields = value; }
+        }
+
+
+        /// <summary>
+        /// A user can add tags to movies
+        /// </summary>
+        /// <value>The tags.</value>
+        public List<string> Tags
+        {
+            get { return _tags; }
+            set { _tags = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the name of the original name (especially for foreign movies)
+        /// </summary>
+        /// <value>The name of the original name.</value>
         public string OriginalName
         {
             get { return _originalName; }
             set { _originalName = value; }
-        } 
+        }
 
+        /// <summary>
+        /// Gets or sets the video standard (NTSC, PAL).
+        /// </summary>
+        /// <value>The video standard.</value>
         public string VideoStandard
         {
             get { return _videoStandard; }
             set { _videoStandard = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the aspect ratio (1.33:1, Widescreen, etc)
+        /// </summary>
+        /// <value>The aspect ratio.</value>
         public string AspectRatio
         {
             get { return _aspectRatio; }
             set { _aspectRatio = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the UPC.
+        /// </summary>
+        /// <value>The UPC.</value>
         public string UPC
         {
             get { return _UPC; }
             set { _UPC = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the user star rating (0 to 100)
+        /// </summary>
+        /// <value>The user star rating.</value>
         public int UserStarRating
         {
             get { return _userStarRating; }
@@ -107,7 +191,7 @@ namespace OMLEngine
         }
 
         /// <summary>
-        /// Video format of title
+        /// Video format of title (DVD, AVI, etc)
         /// </summary>
         public VideoFormat VideoFormat
         {
@@ -444,9 +528,14 @@ namespace OMLEngine
             _videoStandard = GetSerializedString(info,"video_standard");
             _UPC = GetSerializedString(info,"upc");
             _originalName = GetSerializedString(info,"original_name");
-
-            if (_itemId == 0)
-                _itemId = Utilities.NewRandomNumber();
+            _tags = GetSerializedList<List<string>>(info, "tags");
+            _additionalFields = GetSerializedList<Dictionary<string, string>>(info, "additional_fields");
+            _actingRoles = GetSerializedList<Dictionary<string, string>>(info, "acting_roles");
+            _nonActingRoles = GetSerializedList<Dictionary<string, string>>(info, "nonacting_roles");
+            _photos = GetSerializedList<List<string>>(info, "photos");
+            _trailers = GetSerializedList<List<string>>(info, "trailers");
+            _children = GetSerializedList<List<int>>(info, "children");
+            _parent = GetSerializedInt( info,"parent");       
         }
 
         /// <summary>
@@ -489,7 +578,14 @@ namespace OMLEngine
             info.AddValue("video_standard", _videoStandard);
             info.AddValue("upc", _UPC);
             info.AddValue("original_name", _originalName);
-
+            info.AddValue("tags", _tags);
+            info.AddValue("additional_fields", _additionalFields);
+            info.AddValue("acting_roles", _actingRoles);
+            info.AddValue("nonacting_roles", _nonActingRoles);
+            info.AddValue("photos", _photos);
+            info.AddValue("trailers", _trailers);
+            info.AddValue("children", _children);
+            info.AddValue("parent", _parent);
         }
         #endregion
 
