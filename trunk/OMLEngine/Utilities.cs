@@ -358,22 +358,28 @@ namespace OMLEngine
 
         public static void DebugLine(string msg, params object[] paramArray)
         {
-            if (Log == null)
+            try
             {
-                try
+                if (Log == null)
                 {
-                    if (File.Exists(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt"))
-                        Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.Truncate);
-                    else
-                        Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.OpenOrCreate);
+                    try
+                    {
+                        if (File.Exists(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt"))
+                            Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.Truncate);
+                        else
+                            Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.OpenOrCreate);
 
-                    Trace.Listeners.Add(new TextWriterTraceListener(Log));
+                        Trace.Listeners.Add(new TextWriterTraceListener(Log));
+                    }
+                    catch (IOException)
+                    { }
                 }
-                catch (IOException)
-                { }
+                Trace.TraceInformation(DateTime.Now.ToString() + " " + msg, paramArray);
+                Trace.Flush();
             }
-            Trace.TraceInformation(DateTime.Now.ToString() +" "+ msg, paramArray);
-            Trace.Flush();
+            catch
+            {
+            }
         }
 
     }

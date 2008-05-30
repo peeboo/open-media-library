@@ -57,10 +57,26 @@ namespace OMLEngine
         private List<string> _trailers;
         private List<int> _children;
         private int _parent;
+        private string _sortName;
+        private string _MPAARatingReason;
+
 
         #endregion
 
         #region properties
+
+        public string MPAARatingReason
+        {
+            get { return _MPAARatingReason; }
+            set { _MPAARatingReason = value; }
+        }
+
+
+        public string SortName
+        {
+            get { return _sortName; }
+            set { _sortName = value; }
+        }
 
         public Dictionary<string, string> NonActingRoles
         {
@@ -463,7 +479,7 @@ namespace OMLEngine
             try
             {
                 string result = info.GetString(id);
-                return (result == null ? String.Empty : result);
+                return (result == null ? String.Empty : result.Trim());
             }
             catch (Exception e)
             {
@@ -512,6 +528,7 @@ namespace OMLEngine
             _importerSource = GetSerializedString(info,"importer_source");
             _runtime = GetSerializedInt(info, "runtime");
             _MPAARating = GetSerializedString(info, "mpaa_rating");
+            
 
             _releaseDate = GetSerializedDateTime(info, "release_date");
             _actors = GetSerializedList<List<Person>>(info, "actors");
@@ -535,7 +552,11 @@ namespace OMLEngine
             _photos = GetSerializedList<List<string>>(info, "photos");
             _trailers = GetSerializedList<List<string>>(info, "trailers");
             _children = GetSerializedList<List<int>>(info, "children");
-            _parent = GetSerializedInt( info,"parent");       
+            _parent = GetSerializedInt( info,"parent");
+            _sortName = GetSerializedString(info, "sort_name");
+            _MPAARatingReason = GetSerializedString(info, "mpaa_rating_reason");
+
+            if (SortName.Length == 0) _sortName = _name;
         }
 
         /// <summary>
@@ -586,6 +607,8 @@ namespace OMLEngine
             info.AddValue("trailers", _trailers);
             info.AddValue("children", _children);
             info.AddValue("parent", _parent);
+            info.AddValue("sort_name", _sortName);
+            info.AddValue("mpaa_rating_reason", _MPAARatingReason);
         }
         #endregion
 
