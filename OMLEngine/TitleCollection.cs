@@ -10,7 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace OMLEngine
 {
     [Serializable()]
-    public class TitleCollection : SortedArrayList, ISerializable
+    public class TitleCollection : List<Title>, ISerializable
     {
         private SourceDatabase _source_database_to_use;
         private string _database_filename;
@@ -176,7 +176,7 @@ namespace OMLEngine
                 default:
                     return false;
             }
-            Sort();
+            
         }
 
         /// <summary>
@@ -229,7 +229,6 @@ namespace OMLEngine
                 try
                 {
                     BinaryFormatter bf = new BinaryFormatter();
-                    //BinaryFormatter bf = new BinaryFormatter();
                     int numTitles = (int)bf.Deserialize(stm);
                     for (int i = 0; i < numTitles; i++)
                     {
