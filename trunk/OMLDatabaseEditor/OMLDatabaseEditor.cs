@@ -388,7 +388,7 @@ namespace OMLDatabaseEditor
 
         private void grdTitleList_SelectionChanged(object sender, EventArgs e)
         {
-            /
+            
         }
 
     }
