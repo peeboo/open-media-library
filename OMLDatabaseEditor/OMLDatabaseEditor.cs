@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 using OMLEngine;
 
 namespace OMLDatabaseEditor
@@ -13,229 +14,383 @@ namespace OMLDatabaseEditor
     {
         private TitleCollection _titleCollection;
         private Title current_title;
-        private DataTable dt;
+        private DataTable _collectionAsDataTable;
         private Bitmap front_cover;
         private Bitmap back_cover;
-        private bool current_title_has_changed;
+        private Title _currentTitle = null;
+        private bool _titleChanged = false;
+        
+        CurrencyManager _currencyManager;
 
         public OMLDatabaseEditor()
         {
             InitializeComponent();
             _titleCollection = new TitleCollection();
             _titleCollection.loadTitleCollection();
-            formatDG();
             SetupTitleList();
-            //SetupRating();
-            //current_title = new Title();
-            //current_title_has_changed = false;
-        }
-
-        private void SetupRating()
-        {
-            //TODO
-            //////string[] rating_names = Enum.GetNames(typeof(Rating));
-            //////foreach (string rating in rating_names)
-            //////{
-            //////    cbRating.Items.Add(rating);
-            //////}
+            
         }
 
         private void SetupTitleList()
         {
-            dt = _titleCollection.ToDataTable();
-
-            dgv_title_list.AutoGenerateColumns = false;
-            dgv_title_list.DataSource = dt;
-        }
-        //private DataTable GetTitlesDataTable()
-        //{
-        //    DataTable dt = new DataTable("Titles");
-        //    DataColumn idCol = new DataColumn("itemId");
-        //    idCol.DataType = typeof(int);
-        //    dt.Columns.Add(idCol);
-
-        //    DataColumn nameCol = new DataColumn("TitleName");
-        //    nameCol.DataType = typeof(string);
-        //    dt.Columns.Add(nameCol);
-
-        //    DataColumn[] PrimaryKeyColumns = new DataColumn[1];
-        //    PrimaryKeyColumns[0] = dt.Columns["itemId"];
-        //    dt.PrimaryKey = PrimaryKeyColumns;
-
-        //    DataRow row;
-        //    foreach (Title title in _titleCollection)
-        //    {
-        //        row = dt.NewRow();
-        //        row["itemId"] = title.InternalItemID;
-        //        row["TitleName"] = title.Name;
-        //        dt.Rows.Add(row);
-        //    }
-
-        //    return dt;
-        //}
-        //private void toolStripButton1_Click(object sender, EventArgs e)
-        //{
-        //}
-        //private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
-        //{
-        //    _titleCollection.Remove(current_title);
-        //}
-        private void dgv_title_list_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-        //    DataRow row = dt.Rows[e.RowIndex];
-
-        //    foreach (Title t in _titleCollection)
-        //    {
-        //        if (t.InternalItemID.CompareTo((int)row["itemId"]) == 0)
-        //            if (CheckAndUpdateCurrentTitle())
-        //                SetNewCurrentTitle(t);
-        //    }
-        }
-        //private bool CheckAndUpdateCurrentTitle()
-        //{
-        //    if (current_title != null)
-        //    {
-        //        if (current_title_has_changed)
-        //        {
-        //            DialogResult result = MessageBox.Show(
-        //                "The current title seems to have some changes, would you like to save them?",
-        //                "Save Changes", MessageBoxButtons.YesNo);
-
-        //            switch (result)
-        //            {
-        //                case DialogResult.Yes:
-        //                    SaveCurrentTitle();
-        //                    break;
-        //                case DialogResult.No:
-        //                    break;
-        //            }
-        //        }
-        //    }
-        //    return true;
-        //}
-        //private void SaveCurrentTitle()
-        //{
-        //    current_title.Name = tbTitle.Text;
-        //    current_title.Description = tbDescription.Text;
-        //    current_title.ReleaseDate = dtpReleaseDate.Value;
-        //    current_title.Runtime = Int32.Parse(tbRunTime.Text);
-        //    //current_title.MPAARating = cbRating.Text;
-        //    current_title.Distributor = tbDistributor.Text;
-        //    current_title.CountryOfOrigin = tbCountryOfOrigin.Text;
-        //    current_title.OfficialWebsiteURL = tbWebsite.Text;
-        //    current_title.ImporterSource = tbImporterSource.Text;
-        //    current_title.DateAdded = dtpDateAdded.Value;
-        //    current_title.Synopsis = tbSynopsis.Text;
-
-        //    _titleCollection.saveTitleCollection();
-        //}
-        //private void SetNewCurrentTitle(Title t)
-        //{
-        //    current_title = t;
-        //    tbTitle.Text = current_title.Name;
-        //    tbDescription.Text = current_title.Description;
-        //    if (current_title.ReleaseDate.Year > 0001)
-        //        dtpReleaseDate.Value = current_title.ReleaseDate;
-
-        //    tbRunTime.Text = current_title.Runtime.ToString();
-        //    //cbRating.SelectedIndex = (int)current_title.MPAARating;
-        //    tbDistributor.Text = current_title.Distributor;
-        //    tbCountryOfOrigin.Text = current_title.CountryOfOrigin;
-        //    tbWebsite.Text = current_title.OfficialWebsiteURL;
-        //    tbImporterSource.Text = current_title.ImporterSource;
-        //    //dtpDateAdded.Value = current_title.DateAdded;
-        //    tbSynopsis.Text = current_title.Synopsis;
-
-        //    if (current_title.FrontCoverPath != null && current_title.FrontCoverPath.Length > 0)
-        //    {
-        //        try
-        //        {
-        //            front_cover = new Bitmap(current_title.FrontCoverPath);
-        //            pbFrontCover.Image = (Image)front_cover;
-        //        }
-        //        catch (Exception)
-        //        {
-        //        }
-        //    }
-        //    else
-        //    {
-        //        pbFrontCover.Image = pbFrontCover.InitialImage;
-        //    }
-
-        //    if (current_title.BackCoverPath != null && current_title.BackCoverPath.Length > 0)
-        //    {
-        //        back_cover = new Bitmap(current_title.BackCoverPath);
-        //        pbBackCover.Image = (Image)back_cover;
-        //    }
-        //    else
-        //    {
-        //        pbBackCover.Image = pbBackCover.InitialImage;
-        //    }
-        //}
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-        //    current_title_has_changed = true;
-        }
-
-        
-        /*
-        private void OMLDatabaseEditor_DragDrop(object sender, DragEventArgs e)
-        {
-            MessageBox.Show("haa!");
-        }
-
-        private void OMLDatabaseEditor_DragEnter(object sender, DragEventArgs e)
-        {
-            MessageBox.Show("Boo!");
-        }
-        */
-
-        private void dgv_title_list_cellFormatting(object sender, DataGridViewCellFormattingEventArgs e) 
-        {
-        //    if (dgv_title_list.Columns[e.ColumnIndex].Name == "Cover")
-        //    {
-        //        //if (dgv_title_list.Rows[e.RowIndex].Cells["Cover"].Value.ToString() != "")
-        //        //{
-        //            string fileName = (string)dgv_title_list.Rows[e.RowIndex].Cells["FrontCoverPath"].Value.ToString(); 
-        //                //fileName = dgv_title_list.Rows[e.RowIndex].Cells["Cover"].Value.ToString;
-        //            if (System.IO.File.Exists(fileName))
-        //            {
-        //                e.Value = Image.FromFile(fileName);
-        //            }
-        //        //}
-        //    }
-        }
-            
-        private void formatDG()
-        {
-            foreach (DataGridViewColumn c in dgv_title_list.Columns)
+            _collectionAsDataTable = GetTitlesDataTable();
+            grdTitleList.Rows.Clear();
+            foreach (Title t in _titleCollection)
             {
-                switch (c.Name)
-                {
-                    case "id":
-                        c.DataPropertyName = "id";
-                        c.Visible = false;
-                        break;
+                grdTitleList.Rows.Add(t.Name, t.InternalItemID);
+            }
 
-                    case "FrontCoverPath":
-                        c.DataPropertyName = "FrontCoverPath";
-                        c.Visible = false;
-                        break;
-                    
-                    case "Cover":
-                        c.DataPropertyName = "FrontCoverPath";
-                        c.Visible = false;
-                        break;
+            //grdTitleList.AutoGenerateColumns = false;
+            //grdTitleList.DataSource = _collectionAsDataTable;
+        }
+        private DataTable GetTitlesDataTable()
+        {
+            DataTable dt = new DataTable("Titles");
 
-                    case "TitleName":
-                        c.DataPropertyName = "Name";
-                        break;
-                    default:
-                        //c.Visible = false;
-                        break;
-                }
+            DataColumn idIndex = new DataColumn("Index");
+            idIndex.DataType = typeof(int);
+            dt.Columns.Add(idIndex);
+
+            DataColumn idCol = new DataColumn("itemId");
+            idCol.DataType = typeof(int);
+            dt.Columns.Add(idCol);
+
+            DataColumn nameCol = new DataColumn("TitleName");
+            nameCol.DataType = typeof(string);
+            dt.Columns.Add(nameCol);
+
+            DataColumn[] PrimaryKeyColumns = new DataColumn[1];
+            PrimaryKeyColumns[0] = dt.Columns["itemId"];
+            dt.PrimaryKey = PrimaryKeyColumns;
+
+            DataRow row;
+            int currentIndex = 0;
+            foreach (Title title in _titleCollection)
+            {
+                row = dt.NewRow();
+                row["Index"] = currentIndex;
+                row["itemId"] = title.InternalItemID;
+                row["TitleName"] = title.Name;
+                dt.Rows.Add(row);
+                currentIndex++;
+            }
+
+            return dt;
+        }
+
+        private void UpdateUIFromTitle(Title t)
+        {
+            labelDistributor.Text = t.Synopsis;
+            tbTitle.Text = t.Name;
+            tbOriginalName.Text = t.OriginalName;
+
+            try
+            {
+                dtpReleaseDate.Value = t.ReleaseDate;
+            }
+            catch
+            {
+                dtpReleaseDate.Value = DateTimePicker.MinimumDateTime;
+            }
+
+            try
+            {
+                dtpDateAdded.Value = t.DateAdded;
+            }
+            catch
+            {
+                dtpDateAdded.Value = DateTimePicker.MinimumDateTime;
+            }
+            
+            tbRunTime.Text = Convert.ToString(t.Runtime);
+            cbRating.Text = t.MPAARating;
+            tbCountryOfOrigin.Text = t.CountryOfOrigin;
+            tbFrontCover.Text = t.FrontCoverPath;
+            tbBackCover.Text = t.BackCoverPath;
+            pbFrontCover.Image = ReadImageFromFile(t.FrontCoverPath);
+            pbBackCover.Image = ReadImageFromFile(t.BackCoverPath);
+            cbAspectRatio.Text = t.AspectRatio;
+            if (t.SortName.Trim().Length > 0)
+                tbSortName.Text = t.SortName;
+            else
+                tbSortName.Text = t.Name;
+            tbRatingReason.Text = t.MPAARatingReason;
+            tbStudio.Text = t.Distributor;
+            tbFileLocation.Text = t.FileLocation;
+
+            tbUserRating.Text = Convert.ToString(t.UserStarRating);
+            
+            grdDirectors.Rows.Clear();
+            foreach( Person d in t.Directors )
+            {
+                grdDirectors.Rows.Add(d.full_name);
+            }
+
+            grdWriters.Rows.Clear();
+            foreach (Person w in t.Writers)
+            {
+                grdWriters.Rows.Add(w.full_name);
+            }
+
+            grdGenres.Rows.Clear();
+            foreach (string g in t.Genres)
+            {
+                grdGenres.Rows.Add(g);
+            }
+
+            grdTags.Rows.Clear();
+            foreach (string tag in t.Tags)
+            {
+                grdTags.Rows.Add(tag);
+            }
+
+            grdActors.ClearSelection();
+            foreach (KeyValuePair<string, string> role in t.ActingRoles)
+            {
+                grdActors.Rows.Add(role.Key, role.Value);
+            }
+
+            foreach (Person actor in t.Actors)
+            {
+                if( !t.ActingRoles.ContainsKey(actor.full_name) )
+                    grdActors.Rows.Add(actor.full_name, " ");
+            }
+
+            grdLanguages.Rows.Clear();
+            foreach (string l in t.LanguageFormats)
+            {
+                grdLanguages.Rows.Add(l);
+            }
+
+            grdAudioTracks.Rows.Clear();
+            foreach (string a in t.SoundFormats)
+            {
+                grdAudioTracks.Rows.Add(a);
+            }
+
+            _titleChanged = false;
+        }
+
+        private void UpdateTitleFromUI( Title t)
+        {
+            t.Synopsis = labelDistributor.Text.Trim();
+            t.Name = tbTitle.Text.Trim();
+            t.OriginalName = tbOriginalName.Text.Trim();
+
+            t.ReleaseDate = dtpReleaseDate.Value;
+            t.DateAdded = dtpDateAdded.Value;
+
+            t.Runtime  = Convert.ToInt32(tbRunTime.Text);
+            t.MPAARating = cbRating.Text.Trim();
+            t.CountryOfOrigin = tbCountryOfOrigin.Text.Trim();
+            t.FrontCoverPath = tbFrontCover.Text.Trim();
+            t.BackCoverPath = tbBackCover.Text.Trim();
+            t.AspectRatio = cbAspectRatio.Text.Trim();
+            if (tbSortName.Text.Trim().Length > 0)
+                t.SortName = tbSortName.Text.Trim();
+            else
+                t.SortName = t.Name;
+
+            t.MPAARatingReason = tbRatingReason.Text.Trim();
+            t.Distributor = tbStudio.Text.Trim();
+            t.FileLocation = tbFileLocation.Text.Trim();
+
+            t.UserStarRating = Convert.ToInt32(tbUserRating.Text);
+
+
+            t.Directors.Clear();
+            foreach (DataGridViewRow row in grdDirectors.Rows)
+            {
+                t.Directors.Add( new Person((string)row.Cells[0].Value));
+            }
+
+            t.Writers.Clear();
+            foreach (DataGridViewRow row in grdWriters.Rows)
+            {
+                t.Writers.Add(new Person((string)row.Cells[0].Value));
+            }
+
+            t.Genres.Clear();
+            foreach (DataGridViewRow row in grdGenres.Rows)
+            {
+                t.Genres.Add((string)row.Cells[0].Value);
+            }
+
+            t.Tags.Clear();
+            foreach (DataGridViewRow row in grdTags.Rows)
+            {
+                t.Tags.Add((string)row.Cells[0].Value);
+            }
+
+            t.Actors.Clear();
+            t.ActingRoles.Clear();
+            foreach (DataGridViewRow row in grdTags.Rows)
+            {
+                t.Actors.Add(new Person((string)row.Cells[0].Value));
+                t.ActingRoles.Add((string)row.Cells[0].Value, (string)row.Cells[1].Value);
+
+            }
+
+            t.LanguageFormats.Clear();
+            foreach (DataGridViewRow row in grdLanguages.Rows)
+            {
+                t.LanguageFormats.Add((string)row.Cells[0].Value);
+            }
+
+            t.SoundFormats.Clear();
+            foreach (DataGridViewRow row in grdAudioTracks.Rows)
+            {
+                t.SoundFormats.Add((string)row.Cells[0].Value);
             }
         }
+
+        private void dgv_title_list_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void OMLDatabaseEditor_Load(object sender, EventArgs e)
+        {
+            _currencyManager = (CurrencyManager)this.BindingContext[_titleCollection];
+        }
+
+
+        // Image.FromFile keeps a lock on the file and it cannot be udpated
+        public static Image ReadImageFromFile(string fileName)
+        {
+            try
+            {
+                if (File.Exists(fileName))
+                {
+                    using (FileStream fs = new FileStream(fileName, FileMode.Open))
+                    {
+                        byte[] buffer = new byte[fs.Length];
+                        fs.Read(buffer, 0, (int)fs.Length);
+                        using (MemoryStream ms = new MemoryStream(buffer))
+                        {
+                            Bitmap bmp1 = new Bitmap(ms);
+                            Bitmap bmp2 = new Bitmap(bmp1.Width, bmp1.Height, bmp1.PixelFormat);
+                            Graphics g = Graphics.FromImage(bmp2);
+                            GraphicsUnit pageUnit = new GraphicsUnit();
+                            g.DrawImage(bmp1, bmp2.GetBounds(ref pageUnit));
+
+
+                            return bmp2;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+
+            return null;
+        }
+
+
+        private void tbTitle_TextChanged(object sender, EventArgs e)
+        {
+            _titleChanged = true;
+        }
+
+        private void tbSortName_TextChanged(object sender, EventArgs e)
+        {
+            _titleChanged = true;
+        }
+
+        private void tbOriginalName_TextChanged(object sender, EventArgs e)
+        {
+            _titleChanged = true;
+        }
+
+        private void cbRating_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _titleChanged = true;
+        }
+
+        private void tbCountryOfOrigin_TextChanged(object sender, EventArgs e)
+        {
+            _titleChanged = true;
+        }
+
+
+        private void cbVideoStandard_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _titleChanged = true;
+        }
+
+        private void cbAspectRatio_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _titleChanged = true;
+
+        }
+
+        private void tbRunTime_TextChanged(object sender, EventArgs e)
+        {
+            _titleChanged = true;
+
+        }
+
+        private void tbUserRating_TextChanged(object sender, EventArgs e)
+        {
+            _titleChanged = true;
+
+        }
+
+        private void dtpDateAdded_ValueChanged(object sender, EventArgs e)
+        {
+            _titleChanged = true;
+
+        }
+
+        private void dtpReleaseDate_ValueChanged(object sender, EventArgs e)
+        {
+            _titleChanged = true;
+
+        }
+
+        private void SelectNewTitle( int rowIndex)
+        {
+            bool bSelectNewTitle = true;
+
+            if (_titleChanged)
+            {
+                DialogResult result = MessageBox.Show("Do you want to save the changes to the current movie?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                if (result == DialogResult.Cancel)
+                {
+                    bSelectNewTitle = false;
+                }
+                else if (result == DialogResult.Yes)
+                {
+                    UpdateTitleFromUI(_currentTitle);
+                    _titleChanged = false;
+                }
+                else
+                {
+                    _titleChanged = false;
+                }
+            }
+
+            if (bSelectNewTitle)
+            {
+                int itemId = (int)grdTitleList.Rows[rowIndex].Cells[1].Value;
+                _currentTitle = (Title)_titleCollection.MoviesByItemId[itemId];
+                UpdateUIFromTitle(_currentTitle);
+            }
+
+        }
+
+        private void grdTitleList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            SelectNewTitle(e.RowIndex);
+        }
+
+        private void grdTitleList_SelectionChanged(object sender, EventArgs e)
+        {
+            /
+        }
+
     }
 }
+
