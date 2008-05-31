@@ -37,8 +37,6 @@ namespace Library
             // for now play just online titles. add offline capabilities later
             if (File.Exists(movieItem.FileLocation) || Directory.Exists(movieItem.FileLocation))
             {
-                return new TranscodePlayer(movieItem);
-
                 if (OMLApplication.Current.IsExtender && NeedsTranscode(movieItem.TitleObject) )
                 {
                     OMLApplication.DebugLine("TranscodePlayer created");
