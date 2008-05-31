@@ -109,6 +109,15 @@ namespace MovieCollectorz
                             if (ratingNode != null)
                                 newTitle.MPAARating = ratingNode.InnerText;
                             break;
+                        case "genres":
+                            XmlNode genreNode = node.SelectSingleNode("genre");
+                            if (genreNode != null)
+                            {
+                                XmlNode disNameNode = genreNode.SelectSingleNode("displayname");
+                                if (disNameNode != null)
+                                    newTitle.AddGenre(disNameNode.InnerText);
+                            }
+                            break;
                         case "runtimeminutes":
                             newTitle.Runtime = Int32.Parse(node.InnerText);
                             break;
