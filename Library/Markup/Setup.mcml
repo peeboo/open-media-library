@@ -22,25 +22,67 @@
       </Changed>
     </Rules>
 
+
     <Content>
-      <ColorFill Content="Transparent"
-                 Layout="Form">
+      <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
         <Children>
 
-          <Text Name="MyText"
-                Content="Welcome to Open Media Library.  It looks like we need to go through some basic setup please click Start below to begin."
-                Color="White"
-                Font="Calibri, 24"
-                WordWrap="true"/>
+          <Panel Name="Bottom" >
+            <Children>
+              <Clip Orientation="Vertical">
+                <Children>
+                  <ColorFill Content="Black" Alpha="0.5"/>
+                </Children>
+              </Clip>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
+            </LayoutInput>
+          </Panel>
 
-          <controls:Button Name="Begin Setup"
-                           Model="[BeginSetupCommand]">
-          </controls:Button>
+          <Panel Name="Top" >
+            <Children>
+              <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue">
+              </Text>
+              <Clip Orientation="Vertical">
+                <Children>
+                  <ColorFill Content="Black" Alpha="0.5"/>
+                </Children>
+              </Clip>
+
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
+            </LayoutInput>
+          </Panel>
+
+          <Panel Name="Content" >
+            <Children>
+              <Clip Layout="VerticalFlow">
+                <Children>
+                  <Text Content="Welcome to Open Media Library Setup" Color="White" Font="Calibri, 26" />
+                  <Text Content="It looks like we need to go through some basic setup."
+                        Color="LightBlue"
+                        Font="Calibri, 20"
+                        WordWrap="true"/>
+                  <Text Content="Select Begin Setup to begin configuring Open Media Library."
+                        Color="LightBlue"
+                        Font="Calibri, 20"
+                        WordWrap="true"/>
+                  <controls:Button Name="Begin Setup" Model="[BeginSetupCommand]" />
+                </Children>
+              </Clip>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0.15,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
+            </LayoutInput>
+          </Panel>
 
         </Children>
       </ColorFill>
-
     </Content>
+
+
 
   </UI>
 
