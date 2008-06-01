@@ -15,17 +15,40 @@ namespace Library
 {
     public class TranscodePlayer : IPlayMovie
     {
+        object _server = null;
+        string path_to_buffer = string.Empty;
+        Type ITranscode360Type = null;
+        MethodInfo MIIsMediaTranscodeComplete = null;
+        MethodInfo MIIsMediaTranscoding = null;
+        MethodInfo MIIsMediaTranscodingWithParams = null;
+        MethodInfo MITranscode = null;
+        MethodInfo MITranscodeWithParams = null;
+        MethodInfo MIStopTranscoding = null;
+
         public TranscodePlayer(MovieItem title)
         {
             _title = title;
-            DynamicPlayMedia();
         }
 
         public bool PlayMovie()
         {
-            string path_to_buffer = "\\" + _title.itemId;
-
-            return PlayTranscodedMedia(ref path_to_buffer);
+            if (PlayTranscodedMedia(_title, ref path_to_buffer))
+            {
+                OMLApplication.DebugLine("PathToBuffer: " + path_to_buffer);
+                if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, path_to_buffer, false))
+                {
+                    if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
+                    {
+                        AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
+                    }
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
             /*
             // mount the file, then figure out which other player we want to create
             AddInHost.Current.MediaCenterEnvironment.Dialog("Transcoding not implemented yet. File " + _title.FileLocation, "Error", DialogButtons.Cancel, 0, true);
@@ -34,16 +57,8 @@ namespace Library
         }
         MovieItem _title;
 
-        public bool PlayTranscodedMedia(ref string path_to_buffer)
+        public bool PlayTranscodedMedia(MovieItem title, ref string path_to_buffer)
         {
-            Type ITranscode360Type = null;
-            MethodInfo MIIsMediaTranscodeComplete = null;
-            MethodInfo MIIsMediaTranscoding = null;
-            MethodInfo MIIsMediaTranscodingWithParams = null;
-            MethodInfo MITranscode = null;
-            MethodInfo MITranscodeWithParams = null;
-            MethodInfo MIStopTranscoding = null;
-
             if (Utilities.IsTranscode360LibraryAvailable())
             {
                 ITranscode360Type =
@@ -59,16 +74,10 @@ namespace Library
                         TcpClientChannel channel = new TcpClientChannel(properties, null);
                         ChannelServices.RegisterChannel(channel);
 
-                        object server = Activator.GetObject(ITranscode360Type,
+                        _server = Activator.GetObject(ITranscode360Type,
                             "tcp://localhost:1401/RemotingServices/Transcode360");
 
-                        assignMethodInfoObjects(ITranscode360Type,
-                                                ref MIIsMediaTranscodeComplete,
-                                                ref MIIsMediaTranscoding,
-                                                ref MIIsMediaTranscodingWithParams,
-                                                ref MITranscode,
-                                                ref MITranscodeWithParams,
-                                                ref MIStopTranscoding);
+                        assignMethodInfoObjects();
 
 
                         if (MIIsMediaTranscodeComplete != null &&
@@ -78,89 +87,143 @@ namespace Library
                             MITranscodeWithParams != null &&
                             MIStopTranscoding != null)
                         {
-                            object[] paramArray = new object[1];
-                            paramArray[0] = _title.FileLocation;
-                            MITranscode.Invoke(server, paramArray);
+                            if (isAlreadyTranscoding())
+                                setCurrentBufferPath();
+                            else
+                                startTranscode();
                         }
+                        return true;
                     }
                     catch (Exception e)
                     {
                         OMLApplication.DebugLine("Error calling transcode360: " + e.Message);
+                        return false;
                     }
                 }
-            }
-            return false;
-        }
-
-        private void assignMethodInfoObjects(Type ITranscode360Type,
-                                             ref MethodInfo MIIsMediaTranscodeComplete,
-                                             ref MethodInfo MIIsMediaTranscoding,
-                                             ref MethodInfo MIIsMediaTranscodingWithParams,
-                                             ref MethodInfo MITranscode,
-                                             ref MethodInfo MITranscodeWithParams,
-                                             ref MethodInfo MIStopTranscoding)
-        {
-                    MethodInfo[] methodInfos = ITranscode360Type.GetMethods();
-
-                    foreach (MethodInfo mi in methodInfos)
-                    {
-                        switch (mi.Name)
-                        {
-                            case "IsMediaTranscodeComplete":
-                                MIIsMediaTranscodeComplete = mi;
-                                break;
-                            case "IsMediaTranscoding":
-                                switch (mi.GetParameters().Length)
-                                {
-                                    case 1:
-                                        MIIsMediaTranscoding = mi;
-                                        break;
-                                    case 3:
-                                        MIIsMediaTranscodingWithParams = mi;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                break;
-                            case "Transcode":
-                                switch (mi.GetParameters().Length)
-                                {
-                                    case 3:
-                                        MITranscode = mi;
-                                        break;
-                                    case 6:
-                                        MITranscodeWithParams = mi;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                break;
-                            case "StopTranscoding":
-                                MIStopTranscoding = mi;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-        }
-
-        private void DynamicPlayMedia()
-        {
-            string path_to_media = _title.FileLocation;
-            string new_path = string.Empty;
-
-            if (PlayTranscodedMedia(ref new_path))
-            {
-                if (new_path.Length > 0)
+                else
                 {
-                    _title.FileLocation = new_path;
-                    VideoPlayer vp = new VideoPlayer(_title);
-                    vp.PlayMovie();
+                    OMLApplication.DebugLine("Didn't locate ITranscode360 interface");
+                    return false;
                 }
             }
             else
             {
-                OMLApplication.DebugLine("Error playing file");
+                OMLApplication.DebugLine("Transcode360 isn't available");
+                return false;
+            }
+        }
+
+        private bool isAlreadyTranscoding()
+        {
+            OMLApplication.DebugLine("Checking if file is already being transcoded");
+            bool retVal = false;
+            try
+            {
+                retVal = (bool)MIIsMediaTranscoding.Invoke(_server, new object[] {
+                _title.FileLocation
+            });
+            }
+            catch (Exception e)
+            {
+                OMLApplication.DebugLine("Error calling transcode360 (MIIsMediaTranscoding): " + e.Message);
+                foreach (ParameterInfo pInfo in MIIsMediaTranscoding.GetParameters())
+                {
+                    OMLApplication.DebugLine("parameter: " + pInfo.Name + " Type: " + pInfo.ParameterType.ToString());
+                }
+            }
+
+            return retVal;
+        }
+
+        private void setCurrentBufferPath()
+        {
+            OMLApplication.DebugLine("Setting the current path for a currently transcoding/ed file");
+            object[] paramArray = new object[] { _title.FileLocation };
+
+            try
+            {
+                MIIsMediaTranscoding.Invoke(_server, paramArray);
+                path_to_buffer = (string)paramArray[0];
+                OMLApplication.DebugLine("Setting transcoded path to: " + path_to_buffer);
+            }
+            catch (Exception e)
+            {
+                OMLApplication.DebugLine("Error calling transcode360 (MIIsMediaTranscoding): " + e.Message);
+                foreach (ParameterInfo pInfo in MIIsMediaTranscoding.GetParameters())
+                {
+                    OMLApplication.DebugLine("parameter: " + pInfo.Name + " Type: " + pInfo.ParameterType.ToString());
+                }
+            }
+        }
+
+        private void startTranscode()
+        {
+            OMLApplication.DebugLine("Starting a transcode job");
+            object[] paramArray = new object[3];
+            paramArray[0] = _title.FileLocation;
+            paramArray[1] = path_to_buffer;
+            paramArray[2] = 0;
+            try
+            {
+                MITranscode.Invoke(_server, paramArray);
+
+                path_to_buffer = (string)paramArray[1];
+                OMLApplication.DebugLine("Setting transcode path to: " + path_to_buffer);
+            }
+            catch (Exception e)
+            {
+                OMLApplication.DebugLine("Error calling transcode360 (MITranscode): " + e.Message);
+                foreach (ParameterInfo pInfo in MITranscode.GetParameters())
+                {
+                    OMLApplication.DebugLine("parameter: " + pInfo.Name + " Type: " + pInfo.ParameterType.ToString());
+                }
+            }
+        }
+
+        private void assignMethodInfoObjects()
+        {
+            OMLApplication.DebugLine("Locating and assigning Remote library methods");
+            MethodInfo[] methodInfos = ITranscode360Type.GetMethods();
+
+            foreach (MethodInfo mi in methodInfos)
+            {
+                switch (mi.Name)
+                {
+                    case "IsMediaTranscodeComplete":
+                        MIIsMediaTranscodeComplete = mi;
+                        break;
+                    case "IsMediaTranscoding":
+                        switch (mi.GetParameters().Length)
+                        {
+                            case 1:
+                                MIIsMediaTranscoding = mi;
+                                break;
+                            case 3:
+                                MIIsMediaTranscodingWithParams = mi;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case "Transcode":
+                        switch (mi.GetParameters().Length)
+                        {
+                            case 3:
+                                MITranscode = mi;
+                                break;
+                            case 6:
+                                MITranscodeWithParams = mi;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case "StopTranscoding":
+                        MIStopTranscoding = mi;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

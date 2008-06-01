@@ -35,6 +35,7 @@ namespace Library
         static public IPlayMovie CreateMoviePlayer(MovieItem movieItem)
         {
             // for now play just online titles. add offline capabilities later
+            OMLApplication.DebugLine("[MoviePlayerFactory] Determing MoviePlayer to use for: " + movieItem.FileLocation);
             if (File.Exists(movieItem.FileLocation) || Directory.Exists(movieItem.FileLocation))
             {
                 if (OMLApplication.Current.IsExtender && NeedsTranscode(movieItem.TitleObject) )
