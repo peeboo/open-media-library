@@ -14,14 +14,20 @@
       <a:OMLApplication Name="Application" OMLApplication="$Required"/>
       <Color Name="BackgroundColor" Color="color://s:BackgroundColor"/>
       <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+      <a:UISettings Name="UISettings" UISettings="$Required" />
       <IntRangedValue Name="FocusedIndex"/>
       <cor:String Name="GalleryView" String="$Required" />
       <cor:String Name="JumpValue" String="" />
+      
     </Properties>
 
     <Locals>
       <ScrollingData Name="ScrollingData" LockedPosition="0.38"/>
       <ScrollingData Name="TitleScrollingData" LockedPosition="0.38"/>
+
+      <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.DetailsLeftAnchor]" Offset = "15" Id="Parent"/>
+      <AnchorEdge Name="DetailsRightAnchor" Percent="[UISettings.DetailsRightAnchor]" Id="Parent"/>
+
     </Locals>
 
     <Rules>
@@ -66,7 +72,8 @@
               </Text>
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,1" Top="Parent,0.05,50" />
+              <!--<FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,1" Top="Parent,0.05,50" />-->
+              <FormLayoutInput Left="[DetailsLeftAnchor]" Right="[DetailsRightAnchor]" Top="Parent,0.05,50" />
             </LayoutInput>
           </Panel>
 
@@ -76,7 +83,7 @@
             </Layout>
 
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,1" Top="LeftPanelTitle,1,0"/>
+              <FormLayoutInput Left="[DetailsLeftAnchor]" Right="[DetailsRightAnchor]" Top="LeftPanelTitle,1,0"/>
             </LayoutInput>
           </Panel>
           
@@ -93,7 +100,7 @@
               </Text>
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,1" Top="LeftPanelRating,1,0"/>
+              <FormLayoutInput Left="[DetailsLeftAnchor]" Right="[DetailsRightAnchor]" Top="LeftPanelRating,1,0"/>
             </LayoutInput>
           </Panel>
 
@@ -111,7 +118,7 @@
               </Clip>
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,-50" Top="LeftPanelRuntime,1,50"/>
+              <FormLayoutInput Left="[DetailsLeftAnchor]" Right="Parent,.35,-50" Top="LeftPanelRuntime,1,50"/>
             </LayoutInput>
           </Panel>
 
@@ -121,7 +128,7 @@
               <me:PositionIndicator Gallery="[MovieBrowser]" FocusedIndex="[FocusedIndex]" />
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,1" Bottom="Parent,0.95,-15"/>
+              <FormLayoutInput Left="[DetailsLeftAnchor]" Right="Parent,.35,1" Bottom="Parent,0.95,-15"/>
             </LayoutInput>
           </Panel>
 

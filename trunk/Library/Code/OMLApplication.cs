@@ -59,6 +59,7 @@ namespace Library
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
             properties["MovieBrowser"] = gallery;
+            properties["UISettings"] = new UISettings();
 
             OMLApplication.DebugLine("OMLApplication.GoToSetup");
             if (_session != null)
@@ -74,6 +75,7 @@ namespace Library
             properties["Application"] = this;
             properties["MovieBrowser"] = gallery;
             properties["GalleryView"] = Properties.Settings.Default.MovieView;
+            properties["UISettings"] = new UISettings();
 
             OMLApplication.DebugLine("OMLApplication.GoToMenu");
             if (_session != null)
@@ -90,6 +92,7 @@ namespace Library
             properties["List"] = list;
             properties["ListName"] = listName;
             properties["GalleryView"] = galleryView;
+            properties["UISettings"] = new UISettings();
 
             OMLApplication.DebugLine("OMLApplication.GoToMenu");
             if (_session != null)
