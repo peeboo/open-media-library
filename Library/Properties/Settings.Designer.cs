@@ -202,5 +202,149 @@ namespace Library.Properties {
                 this["GenreSort"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public float DetailsLeftAnchor {
+            get {
+                return ((float)(this["DetailsLeftAnchor"]));
+            }
+            set {
+                this["DetailsLeftAnchor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public float DetailsTopAnchor {
+            get {
+                return ((float)(this["DetailsTopAnchor"]));
+            }
+            set {
+                this["DetailsTopAnchor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int DetailsLeftOffset {
+            get {
+                return ((int)(this["DetailsLeftOffset"]));
+            }
+            set {
+                this["DetailsLeftOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int DetailsTopOffset {
+            get {
+                return ((int)(this["DetailsTopOffset"]));
+            }
+            set {
+                this["DetailsTopOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.95")]
+        public float BottomAnchor {
+            get {
+                return ((float)(this["BottomAnchor"]));
+            }
+            set {
+                this["BottomAnchor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-15")]
+        public int BottomOffset {
+            get {
+                return ((int)(this["BottomOffset"]));
+            }
+            set {
+                this["BottomOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int GalleryCoverArtRows {
+            get {
+                return ((int)(this["GalleryCoverArtRows"]));
+            }
+            set {
+                this["GalleryCoverArtRows"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int GalleryListRows {
+            get {
+                return ((int)(this["GalleryListRows"]));
+            }
+            set {
+                this["GalleryListRows"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("150")]
+        public int CoverArtWidth {
+            get {
+                return ((int)(this["CoverArtWidth"]));
+            }
+            set {
+                this["CoverArtWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public int CoverArtHeight {
+            get {
+                return ((int)(this["CoverArtHeight"]));
+            }
+            set {
+                this["CoverArtHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("350")]
+        public int ListItemWidth {
+            get {
+                return ((int)(this["ListItemWidth"]));
+            }
+            set {
+                this["ListItemWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int ListItemHeight {
+            get {
+                return ((int)(this["ListItemHeight"]));
+            }
+            set {
+                this["ListItemHeight"] = value;
+            }
+        }
     }
 }

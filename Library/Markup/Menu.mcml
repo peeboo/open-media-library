@@ -25,9 +25,12 @@
       <ScrollingData Name="ScrollingData" LockedPosition="0.38"/>
       <ScrollingData Name="TitleScrollingData" LockedPosition="0.38"/>
 
-      <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.DetailsLeftAnchor]" Offset = "15" Id="Parent"/>
-      <AnchorEdge Name="DetailsRightAnchor" Percent="[UISettings.DetailsRightAnchor]" Id="Parent"/>
-
+      <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "[UISettings.Anchor.DetailsLeftOffset]" Id="Parent"/>
+      <AnchorEdge Name="DetailsRightAnchor" Percent="[UISettings.Anchor.DetailsRightAnchor]" Id="Parent"/>
+      <AnchorEdge Name="DetailsTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
+      <AnchorEdge Name="TitleTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset = "[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
+      <AnchorEdge Name="FiltersTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.FiltersTopOffset]" Id="Parent"/>
+      <AnchorEdge Name="GalleryBottomAnchor" Percent="[UISettings.Anchor.BottomAnchor]" Offset ="[UISettings.Anchor.BottomOffset]" Id="Parent"/>
     </Locals>
 
     <Rules>
@@ -57,7 +60,7 @@
             </Children>
 
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.35,20" Right="Parent,0.95" Top="Parent,0.04"/>
+              <FormLayoutInput Left="Parent,0.35,20" Right="Parent,0.95" Top="[TitleTopAnchor]"/>
             </LayoutInput>
           </Panel>
 
@@ -73,7 +76,7 @@
             </Children>
             <LayoutInput>
               <!--<FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,1" Top="Parent,0.05,50" />-->
-              <FormLayoutInput Left="[DetailsLeftAnchor]" Right="[DetailsRightAnchor]" Top="Parent,0.05,50" />
+              <FormLayoutInput Left="[DetailsLeftAnchor]" Right="[DetailsRightAnchor]" Top="[DetailsTopAnchor]" />
             </LayoutInput>
           </Panel>
 
@@ -128,7 +131,7 @@
               <me:PositionIndicator Gallery="[MovieBrowser]" FocusedIndex="[FocusedIndex]" />
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="[DetailsLeftAnchor]" Right="Parent,.35,1" Bottom="Parent,0.95,-15"/>
+              <FormLayoutInput Left="[DetailsLeftAnchor]" Right="Parent,.35,1" Bottom="[GalleryBottomAnchor]"/>
             </LayoutInput>
           </Panel>
 
@@ -160,19 +163,19 @@
             </Children>
             
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.38,-25" Right="Parent,1,-20" Top="Parent,0.04,50"/>
+              <FormLayoutInput Left="Parent,0.38,-25" Right="Parent,1,-20" Top="[FiltersTopAnchor]"/>
             </LayoutInput>
           </Panel>
 
 
             <Panel Name="GalleryPanel" MouseInteractive="true" FocusOrder="0">
               <Children>
-                <gallery:Gallery Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]">
+                <gallery:Gallery Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]">
                 </gallery:Gallery>
               </Children>
              
               <LayoutInput>
-                <FormLayoutInput Left="Parent,0.05,20" Right="Parent,1,-20" Top="Parent,0.10,50" Bottom="Parent,.95,-50"/>
+                <FormLayoutInput Left="Parent,0.05,20" Right="Parent,1,-20" Top="Filters,1,15" Bottom="[GalleryBottomAnchor]"/>
               </LayoutInput>
             </Panel>
           

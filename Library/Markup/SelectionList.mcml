@@ -15,6 +15,7 @@
       <a:OMLApplication Name="Application" OMLApplication="$Required"/>
       <Color Name="BackgroundColor" Color="color://s:BackgroundColor"/>
       <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+      <a:UISettings Name="UISettings" UISettings="$Required"/>
       <col:IList Name="List" IList="$Required"/>
       <cor:String Name="ListName" String="$Required" />
       <cor:String Name="GalleryView" String="$Required" />
@@ -52,7 +53,7 @@
 
           <Panel Name="GalleryPanel" MouseInteractive="true">
             <Children>
-              <gallery:Gallery Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[List]" JumpValue="[JumpValue]">
+              <gallery:Gallery Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[List]" JumpValue="[JumpValue]" UISettings="[UISettings]">
               </gallery:Gallery>
             </Children>
 

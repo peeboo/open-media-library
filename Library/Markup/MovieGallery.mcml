@@ -9,6 +9,7 @@
   <UI Name="Gallery">
   <Properties>
     <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+    <a:UISettings Name="UISettings" UISettings="$Required" />
     <a:OMLApplication Name="Application" OMLApplication="$Required"/>
     <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
     <cor:String Name="GalleryView" String="$Required" />
@@ -17,27 +18,7 @@
     <cor:String Name="JumpValue" String=""/>
     
 
-    <GridLayout Name="DefaultGrid" />
 
-    <GridLayout Name="GridLayout" Repeat="WhenTooBig"
-                Rows="3"
-                Orientation="Vertical"
-                AllowWrap="true"
-                ReferenceSize="150, 200"
-                Spacing="1,0"
-                MajorAlignment="Fill"
-                MinorAlignment="Center"
-                RepeatGap="100"/>
-
-    <GridLayout Name="ListLayout" Repeat="WhenTooBig"
-                Rows="8"
-                Orientation="Vertical"
-                AllowWrap="true"
-                ReferenceSize="350, 50"
-                Spacing="21,0"
-                MajorAlignment="Fill"
-                MinorAlignment="Fill"
-                RepeatGap="100"/>
 
     <!-- An object to track which item in the list currently has focus -->
     <IntRangedValue Name="FocusedIndex"/>
@@ -45,6 +26,28 @@
 </Properties>
 
   <Locals>
+    <GridLayout Name="DefaultGrid" />
+
+    <GridLayout Name="GridLayout" Repeat="WhenTooBig"
+                Rows="[UISettings.Gallery.CoverArtRows]"
+                Orientation="Vertical"
+                AllowWrap="true"
+                ReferenceSize="[UISettings.Gallery.CoverArtSize]"
+                Spacing="1,0"
+                MajorAlignment="Fill"
+                MinorAlignment="Center"
+                RepeatGap="100"/>
+
+    <GridLayout Name="ListLayout" Repeat="WhenTooBig"
+                Rows="[UISettings.Gallery.ListRows]"
+                Orientation="Vertical"
+                AllowWrap="true"
+                ReferenceSize="[UISettings.Gallery.ListItemSize]"
+                Spacing="21,0"
+                MajorAlignment="Fill"
+                MinorAlignment="Fill"
+                RepeatGap="100"/>
+    
     <!-- Create an input handler for scrolling. -->
     <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
     <!--<TypingHandler Name="TypingHandler" EditableText="[MovieBrowser.JumpInListText]"  HandlerStage="Bubbled"/>-->
