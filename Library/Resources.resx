@@ -241,9 +241,6 @@
   <data name="ListboxNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\listboxnofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="RadioButtonGroup" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\radiobuttongroup.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="SelectDirectoriesToScan" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\selectdirectoriestoscan.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -255,9 +252,6 @@
   </data>
   <data name="SelectionList" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\selectionlist.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="SimpleRadioButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\simpleradiobutton.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="SpinnerArrowBackDormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\spinnerarrowbackdormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -276,5 +270,26 @@
   </data>
   <data name="SpinnerArrowForwardNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\spinnerarrowforwardnofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Error" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>sounds\error.wav;System.IO.MemoryStream, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>sounds\focus.wav;System.IO.MemoryStream, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="MiniSelect" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>sounds\miniselect.wav;System.IO.MemoryStream, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PageTransition" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>sounds\pagetransition.wav;System.IO.MemoryStream, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Select" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>sounds\select.wav;System.IO.MemoryStream, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="RadioButtonGroup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\radiobuttongroup.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SimpleRadioButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\simpleradiobutton.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

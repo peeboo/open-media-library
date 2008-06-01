@@ -7,7 +7,7 @@
 	  xmlns:me="Me">
 
   <Aggregate Source="resx://Library/Library.Resources/FilterList"/>
-  
+
   <UI Name="MainMenu">
 
     <Properties>
@@ -16,6 +16,7 @@
       <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
       <IntRangedValue Name="FocusedIndex"/>
       <cor:String Name="GalleryView" String="$Required" />
+      <cor:String Name="JumpValue" String="" />
     </Properties>
 
     <Locals>
@@ -24,7 +25,8 @@
     </Locals>
 
     <Rules>
-
+      <Binding Source="[JumpValue]" Target="[JumpInText.Content]" />
+      
       <Rule>
         <Conditions>
           <IsValid Source="[MovieBrowser.FocusedItem]"/>
@@ -123,6 +125,15 @@
             </LayoutInput>
           </Panel>
 
+          <Panel Name="JumpInTextPanel" Layout="HorizontalFlow">
+            <Children>
+              <Text Name="JumpInText" Content="[JumpValue]" />
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0.55,15" Right="Parent,.95" Bottom="Parent,0.95,-15"/>
+            </LayoutInput>
+          </Panel>
+
           <Panel Name="LeftPanel" >
             <Children>
               <Clip Orientation="Horizontal" FadeSize="40" NearOffset="70">
@@ -149,7 +160,7 @@
 
             <Panel Name="GalleryPanel" MouseInteractive="true" FocusOrder="0">
               <Children>
-                <gallery:Gallery Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[MovieBrowser.Movies]">
+                <gallery:Gallery Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]">
                 </gallery:Gallery>
               </Children>
              

@@ -28,10 +28,17 @@ namespace Library
             set { _category = value; }
         }
 
-        public string Name
+        virtual public string Name
         {
             get { return _name; }
             set { _name = value; }
+        }
+
+
+        virtual public string SortName
+        {
+            get { return _sortName; }
+            set { _sortName = value; }
         }
 
         public MovieGallery Gallery
@@ -47,6 +54,7 @@ namespace Library
             : base(owner)
         {
             _name = name;
+            _sortName = name;
             _caption = caption;
             _owner = owner;
             _category = browseCategory;
@@ -173,6 +181,7 @@ namespace Library
         }
 
         private string _name;
+        private string _sortName;
         private string _caption;
         private string _subCaption;
         private string _details;
@@ -202,9 +211,6 @@ namespace Library
             get { return _wplm; }
         }
 
-
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MovieItem"/> class.
         /// </summary>
@@ -213,6 +219,7 @@ namespace Library
             : base(owner, title.Name, title.Name, null)
         {
             _titleObj = title;
+            SortName = title.SortName;
             _backCoverArtImage = NoCoverImage;
             CoverArt = NoCoverImage;
             SubCaption = _titleObj.MPAARating + "\r\n" + Convert.ToString(_titleObj.Runtime) + " minutes";
@@ -274,6 +281,8 @@ namespace Library
             get { return _titleObj; }
         }
 
+        
+
         /// <summary>
         /// Gets or sets the file location.
         /// </summary>
@@ -318,15 +327,15 @@ namespace Library
             get { return _titleObj.UserStarRating; }
         }
 
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        /// <value>The name.</value>
-        public string Name
-        {
-            get { return _titleObj.Name; }
-            set { _titleObj.Name = value; }
-        }
+        ///// <summary>
+        ///// Gets or sets the name.
+        ///// </summary>
+        ///// <value>The name.</value>
+        //override public string Name
+        //{
+        //    get { return _titleObj.Name; }
+        //    set { _titleObj.Name = value; }
+        //}
 
         /// <summary>
         /// Gets or sets the runtime.

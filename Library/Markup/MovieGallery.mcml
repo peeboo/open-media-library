@@ -14,7 +14,8 @@
     <cor:String Name="GalleryView" String="$Required" />
     <col:IList Name="List" IList="$Required"/>
     <!-- EditableText is a required parameter. -->
-    <EditableText Name="EditableText" />
+    <cor:String Name="JumpValue" String=""/>
+    
 
     <GridLayout Name="DefaultGrid" />
 
@@ -46,7 +47,9 @@
   <Locals>
     <!-- Create an input handler for scrolling. -->
     <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
+    <!--<TypingHandler Name="TypingHandler" EditableText="[MovieBrowser.JumpInListText]"  HandlerStage="Bubbled"/>-->
     <TypingHandler Name="TypingHandler" EditableText="[MovieBrowser.JumpInListText]" TypingPolicy="TripleTap" HandlerStage="Bubbled"/>
+    <Timer Name="ClearTimer" AutoRepeat="false" Interval="5000" Enabled="false"/>
   </Locals>
 
   <Rules>
@@ -66,9 +69,31 @@
       </Actions>
     </Condition>
 
+    <Rule>
+      <Conditions>
+        <Modified Source="[TypingHandler.Value]"/>
+      </Conditions>
+      <Actions>
+        <Set Target="[JumpValue]" Value="[TypingHandler.DisplayValue]"/>
+        <Invoke Target="[MovieBrowser.JumpToMovie]" jumpString="[TypingHandler.DisplayValue]" />
+      </Actions>
+    </Rule>
+
+
+    <Changed Source="[ClearTimer.Tick]">
+      <Actions>
+        <Set Target="[MovieBrowser.JumpInListText.Value]" Value="" />
+      </Actions>
+    </Changed>
+
     <Changed Source="[MovieBrowser.JumpToPosition]" >
       <Actions>
-        <Invoke Target ="[GalleryRepeater.NavigateIntoIndex]" index="65" />
+        <!--Scroll parameter is the number of items to scroll to, relative to the current position-->
+        <Invoke Target ="[ScrollingData.Scroll]" amount="[MovieBrowser.RelativeJumpToPosition]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        <Invoke Target="[ClearTimer.Start]"/>
+        <!--This is the absolute index-->
+        <Invoke Target ="[GalleryRepeater.NavigateIntoIndex]" index="[MovieBrowser.JumpToPosition]" InvokePolicy="Synchronous"/>
+        <Invoke Target="[ClearTimer.Start]" />
       </Actions>
     </Changed>
     
@@ -80,7 +105,7 @@
       <Children>
 
         <!-- Put in a scroller so that if we repeat, the row will scroll. -->
-        <Scroller Orientation="Horizontal"  ScrollingData="[ScrollingData]" >
+        <Scroller Name="GalleryScroller" Orientation="Horizontal"  ScrollingData="[ScrollingData]" >
           <Children>
 
             <!-- Hook up our list to the repeater.  -->

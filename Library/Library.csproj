@@ -162,6 +162,11 @@
     <Content Include="Resources\SpinnerArrowForwardNoFocus.png" />
     <Content Include="Setupx64\License.txt" />
     <Content Include="Setup\License.txt" />
+    <Content Include="Sounds\Error.wav" />
+    <Content Include="Sounds\Focus.wav" />
+    <Content Include="Sounds\MiniSelect.wav" />
+    <Content Include="Sounds\PageTransition.wav" />
+    <Content Include="Sounds\Select.wav" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
