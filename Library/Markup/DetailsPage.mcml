@@ -11,7 +11,7 @@
     <Properties>
       <a:OMLApplication Name="Application" OMLApplication="$Required"/>
       <a:MovieDetailsPage Name="DetailsPage" MovieDetailsPage="$Required"/>
-
+      <a:UISettings Name="UISettings" UISettings="$Required" />
       <!-- The layout we will use to display the headings. -->
       <GridLayout Name="GridLayout" Orientation="Horizontal" Columns="2" AllowWrap="false"
 						Spacing="10,10" MajorAlignment="Fill" MinorAlignment="Fill"/>
@@ -36,6 +36,14 @@
       <ScrollingData Name="ScrollingData"/>
 
       <Command Name="PlayMovieCommand" Description="Play Movie"/>
+
+      <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "[UISettings.Anchor.DetailsLeftOffset]" Id="Parent"/>
+      <AnchorEdge Name="DetailsRightAnchor" Percent="[UISettings.Anchor.DetailsRightAnchor]" Id="Parent"/>
+      <AnchorEdge Name="DetailsTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
+      <AnchorEdge Name="TitleTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset = "[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
+      <AnchorEdge Name="FiltersTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.FiltersTopOffset]" Id="Parent"/>
+      <AnchorEdge Name="GalleryBottomAnchor" Percent="[UISettings.Anchor.BottomAnchor]" Offset ="[UISettings.Anchor.BottomOffset]" Id="Parent"/>
+
     </Locals>
 
     <Rules>
@@ -65,10 +73,12 @@
     <Content>
       <ColorFill Content="Transparent" Layout="Form">
         <Children>
+          
           <Panel Name="Image" Layout="VerticalFlow">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05,20" Top="Parent,0.05,20" Bottom="Parent,1"/>
+              <FormLayoutInput Left="[DetailsLeftAnchor]" Top="[TitleTopAnchor]" Bottom="Parent,1"/>
             </LayoutInput>
+            
             <Children>
               <Graphic Name="Cover" Content="[DetailsPage.Background]" MinimumSize="336,480" MaximumSize="336,480" />
               <Clip Orientation="Vertical" FadeSize="40" NearOffset="70" MinimumSize="336,0" MaximumSize="336, 480">
@@ -81,22 +91,11 @@
             </Children>
           </Panel>
 
-          <!--<controls:Button Name ="PlayMovie" DetailsPage="[DetailsPage]" Description="Play Movie"   PlayRate="2">
-            <LayoutInput>
-              <FormLayoutInput Left = "Image,1.02" Top="Parent,0.05,15"/>
-            </LayoutInput>
-          </controls:Button>-->
-
           <controls:Button Name="PlayMovie" Model="[PlayMovieCommand]"  >
             <LayoutInput>
-              <FormLayoutInput Left = "Image,1.02" Top="Parent,0.05,15"/>
+              <FormLayoutInput Left = "Image,1.02" Top="[TitleTopAnchor]"/>
             </LayoutInput>
           </controls:Button>
-          <!--<me:PlayRateButton Name ="PlayMovie" DetailsPage="[DetailsPage]" Description="Play Movie"   PlayRate="2">
-            <LayoutInput>
-              <FormLayoutInput Left = "Image,1.02" Top="Parent,0.05,15"/>
-            </LayoutInput>
-          </me:PlayRateButton>-->
 
           <Text Name="Title" Content="[DetailsPage.Title]" Font="font://s:Heading" Color="color://s:HeadingColor" >
             <LayoutInput>
@@ -112,9 +111,9 @@
             <Children>
               <Text Content="[DetailsPage.ReleaseYear]" Font="font://s:Small" WordWrap="false" Color="color://s:NormalColor" />
               <Text Content="[DetailsPage.Length]" Font="font://s:Small" WordWrap="false" Color="color://s:NormalColor" />
-              <Repeater Source="[DetailsPage.Genres]" Layout="HorizontalFlow">
+              <Repeater Source="[DetailsPage.Genres]" Layout="HorizontalFlow" DividerName="Divider" >
                 <Content>
-                  <Text Content="[RepeatedItem!cor:String]" Font="font://s:Small" WordWrap="false" Color="color://s:NormalColor" />
+                  <Text Content="[RepeatedItem!cor:String]" Font="font://s:Small" WordWrap="false" Color="color://s:NormalColor"  Margins="5,0,5,0"/>
                 </Content>
               </Repeater>
 
@@ -163,7 +162,7 @@
               <FormLayoutInput Left="Image,1.02" Top="DirectorLabel,1.02" Right="Parent,1" Bottom="Parent,0.7"/>
             </LayoutInput>
             <Children>
-              <me:ActorsPanel Name="Actors" ActorList="[DetailsPage.Actors]">
+              <me:ActorsPanel Name="Actors" ActorList="[DetailsPage.ActingRoles]">
               </me:ActorsPanel>
               
             </Children>
@@ -171,6 +170,10 @@
 
         </Children>
       </ColorFill>
+    </Content>
+
+    <Content Name="Divider">
+      <Text Content="/" Font="font://s:Normal" WordWrap="false" Color="color://s:NormalColor" />
     </Content>
   </UI>
 
@@ -260,11 +263,6 @@
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
-      <!--<Condition Source="[Input.KeyFocus]" SourceValue="true">
-        <Actions>
-          --><!--<Set Target="[RepeatedItem!]" Value="White"/>--><!--
-        </Actions>
-      </Condition>-->
     </Rules>
     
     <Content>
