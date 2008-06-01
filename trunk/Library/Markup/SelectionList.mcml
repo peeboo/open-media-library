@@ -19,6 +19,7 @@
       <cor:String Name="ListName" String="$Required" />
       <cor:String Name="GalleryView" String="$Required" />
       <IntRangedValue Name="FocusedIndex"/>
+      <cor:String Name="JumpValue" String="" />
     </Properties>
 
     <Locals>
@@ -51,7 +52,7 @@
 
           <Panel Name="GalleryPanel" MouseInteractive="true">
             <Children>
-              <gallery:Gallery Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[List]">
+              <gallery:Gallery Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[List]" JumpValue="[JumpValue]">
               </gallery:Gallery>
             </Children>
 

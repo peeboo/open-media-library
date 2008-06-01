@@ -1,0 +1,51 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:cor="assembly://MsCorLib/System"
+      xmlns:srb="resx://Library/Library.Resources/SimpleRadioButton"
+      xmlns:me="Me">
+
+  <UI Name="RadioButtonGroup">
+
+		<Properties>
+      <Choice Name="Model"
+              Choice="$Required" />
+		</Properties>
+
+		<Rules>
+      <Binding Source="[Model.Chosen!cor:String]"
+               Target="[Selection.Content]" />
+      <Binding Source="[Model.Options]"
+               Target="[Repeater.Source]" />
+    </Rules>
+
+		<Content>
+      <Panel Name="RootPanel"
+             Layout="VerticalFlow"
+             MinimumSize="200,200">
+        <Children>
+
+          <Text Name="Selection"
+                Color="LightBlue"
+                Margins="0,0,0,10" />
+
+          <Repeater Name="Repeater"
+                    ContentName="RadioButton" >
+            <Layout>
+              <FlowLayout Orientation="Vertical"
+                          Spacing="5,0"
+                          ItemAlignment="Near"
+                          AllowWrap="true" />
+            </Layout>
+          </Repeater>
+
+        </Children>
+      </Panel>
+    </Content>
+
+    <Content Name="RadioButton">
+      <srb:SimpleRadioButton Model="[Model]"
+                            Option="[RepeatedItem!cor:String]" />
+    </Content>
+
+  </UI>
+
+</Mcml>

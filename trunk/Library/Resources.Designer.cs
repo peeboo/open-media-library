@@ -228,6 +228,12 @@ namespace Library {
             }
         }
         
+        internal static System.IO.UnmanagedMemoryStream Error {
+            get {
+                return ResourceManager.GetStream("Error", resourceCulture);
+            }
+        }
+        
         internal static byte[] FilterList {
             get {
                 object obj = ResourceManager.GetObject("FilterList", resourceCulture);
@@ -291,6 +297,12 @@ namespace Library {
             }
         }
         
+        internal static System.IO.UnmanagedMemoryStream Focus {
+            get {
+                return ResourceManager.GetStream("Focus", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap Focus_Outline {
             get {
                 object obj = ResourceManager.GetObject("Focus_Outline", resourceCulture);
@@ -309,6 +321,12 @@ namespace Library {
             get {
                 object obj = ResourceManager.GetObject("Menu", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        internal static System.IO.UnmanagedMemoryStream MiniSelect {
+            get {
+                return ResourceManager.GetStream("MiniSelect", resourceCulture);
             }
         }
         
@@ -333,10 +351,22 @@ namespace Library {
             }
         }
         
+        internal static System.IO.UnmanagedMemoryStream PageTransition {
+            get {
+                return ResourceManager.GetStream("PageTransition", resourceCulture);
+            }
+        }
+        
         internal static byte[] RadioButtonGroup {
             get {
                 object obj = ResourceManager.GetObject("RadioButtonGroup", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        internal static System.IO.UnmanagedMemoryStream Select {
+            get {
+                return ResourceManager.GetStream("Select", resourceCulture);
             }
         }
         

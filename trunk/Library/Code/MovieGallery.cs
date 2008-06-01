@@ -165,7 +165,7 @@ namespace Library
 
         private static int SortByNameAscending(MovieItem m1, MovieItem m2)
         {
-            return m1.Name.CompareTo(m2.Name);
+            return m1.SortName.CompareTo(m2.SortName);
         }
 
         private static int SortByNameDescending(MovieItem m1, MovieItem m2)
@@ -289,8 +289,8 @@ namespace Library
             
             _jumpInListText = new EditableText(this);
             _jumpInListText.Value = String.Empty;
-            _jumpInListText.Activity += new EventHandler(JumpInListTextActivity);
-            _jumpInListText.Submitted += new EventHandler(JumpInListTextSubmitted);
+            //_jumpInListText.Activity += new EventHandler(JumpInListTextActivity);
+            //_jumpInListText.Submitted += new EventHandler(JumpInListTextSubmitted);
             FocusedItem = new GalleryItem(this, "", "", null);
             _categoryChoice = new Choice(this, "Categories");
             CreateCategories();
@@ -303,31 +303,59 @@ namespace Library
             LoadMovies(col);
         }
 
-        void JumpInListTextSubmitted(object sender, EventArgs e)
-        {
-            JumpToMovie();
-        }
+        //public string JumpInText
+        //{
+        //    get { return _jumpInListText.Value; }
+        //    set { _jumpInListText.Value = value; }
+        //}
 
-        void JumpInListTextActivity(object sender, EventArgs e)
-        {
-            JumpToMovie();
-        }
+        //void JumpInListTextSubmitted(object sender, EventArgs e)
+        //{
+        //    EditableText t = (EditableText)sender;
+        //    Utilities.DebugLine("MovieGallery.JumpInListTextSubmitted: {0}", t.Value);
+        //    JumpToMovie(t.Value);
+        //}
 
-        private int _jumpToPosition = -1;
+        //void JumpInListTextActivity(object sender, EventArgs e)
+        //{
+        //    EditableText t = (EditableText)sender;
+        //    Utilities.DebugLine("MovieGallery.JumpInListTextActivity: {0}", t.Value);
+        //    JumpToMovie(t.Value);
+        //}
+
+        private int _jumpToPosition = -1;           // the ScrollData jump is relative (Scroll # of items)
+        private int _relativeJumpToPosition = -1;   // the Repeater jump (NavigateIntoIndex) is absolute
+
+        public int RelativeJumpToPosition
+        {
+            get { return _relativeJumpToPosition; }
+        }
 
         public int JumpToPosition
         {
             get { return _jumpToPosition; }
         }
 
-        void JumpToMovie()
+        public void JumpToMovie(string jumpString)
         {
-            string jumpString = _jumpInListText.Value;
+            if (jumpString.Length == 0) return;
+
+            Utilities.DebugLine("MovieGallery.JumpToString: {0}", jumpString);
             foreach (MovieItem m in _moviesVirtualList)
             {
-                if (m.Name.StartsWith(jumpString))
+                if (m.Name.StartsWith(_jumpInListText.Value, true, null))
                 {
-                    _jumpToPosition = 777;
+                    int focusedItemIndex = _moviesVirtualList.IndexOf(FocusedItem);
+                    if (focusedItemIndex < 0)
+                    {
+                        focusedItemIndex = 0;
+                    }
+
+                    _jumpToPosition = _moviesVirtualList.IndexOf(m);
+                    _relativeJumpToPosition = _jumpToPosition - focusedItemIndex;
+
+                    Utilities.DebugLine("MovieGallery.JumpToString: Found movie {0} pos {1} relpos {2}", m.Name, _jumpToPosition, _relativeJumpToPosition);
+                    FirePropertyChanged("JumpToPosition");
                     break;
                 }
             }
@@ -481,7 +509,7 @@ namespace Library
         delegate int MovieSort(MovieItem m1, MovieItem m2);
         private Comparison<MovieItem> _currentSort;
 
-         private GalleryItem _focusedItem;
+        private GalleryItem _focusedItem;
         private string _title;
 
         private int _NumberOfMenuRows = 2;
