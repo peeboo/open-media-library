@@ -520,7 +520,21 @@ namespace Library
         #endregion
    }
 
-  
+    public class UISettings
+    {
+        public UISettings() { }
+
+        public float DetailsLeftAnchor
+        {
+            get { return Properties.Settings.Default.DetailsLeftAnchor; }
+        }
+
+        public float DetailsRightAnchor
+        {
+            get { return Properties.Settings.Default.DetailsLeftAnchor + 0.30f; }
+        }
+
+    }
 
     public class Filter
     {

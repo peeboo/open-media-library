@@ -47,5 +47,8 @@
     <Setting Name="GenreSort" Type="System.String" Scope="User">
       <Value Profile="(Default)">NameAscending</Value>
     </Setting>
+    <Setting Name="DetailsLeftAnchor" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
