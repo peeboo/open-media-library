@@ -490,6 +490,7 @@ namespace Library
             }
             catch
             {
+                UISettings x = new UISettings();
             }
         }
         
@@ -522,8 +523,29 @@ namespace Library
 
     public class UISettings
     {
-        public UISettings() { }
+        public UISettings() 
+        { 
+            _anchorSettings = new AnchorSettings();
+            _gallerySettings = new GallerySettings();
+        }
 
+        public AnchorSettings Anchor
+        {
+            get { return _anchorSettings; }
+        }
+
+        public GallerySettings Gallery
+        {
+            get { return _gallerySettings; }
+        }
+
+        private AnchorSettings _anchorSettings;
+        private GallerySettings _gallerySettings;
+
+   }
+
+    public class AnchorSettings
+    {
         public float DetailsLeftAnchor
         {
             get { return Properties.Settings.Default.DetailsLeftAnchor; }
@@ -532,6 +554,60 @@ namespace Library
         public float DetailsRightAnchor
         {
             get { return Properties.Settings.Default.DetailsLeftAnchor + 0.30f; }
+        }
+
+        public int DetailsLeftOffset
+        {
+            get { return Properties.Settings.Default.DetailsLeftOffset; }
+        }
+
+        public float DetailsTopAnchor
+        {
+            get { return Properties.Settings.Default.DetailsTopAnchor; }
+        }
+
+        public int DetailsTopOffset
+        {
+            get { return Properties.Settings.Default.DetailsTopOffset; }
+        }
+
+        public int FiltersTopOffset
+        {
+            get { return Properties.Settings.Default.DetailsTopOffset + 50; }
+        }
+
+        public float BottomAnchor
+        {
+            get { return Properties.Settings.Default.BottomAnchor; }
+        }
+
+        public int BottomOffset
+        {
+            get { return Properties.Settings.Default.BottomOffset; }
+        }
+
+    }
+
+    public class GallerySettings
+    {
+        public int CoverArtRows
+        {
+            get { return Properties.Settings.Default.GalleryCoverArtRows; }
+        }
+
+        public int ListRows
+        {
+            get { return Properties.Settings.Default.GalleryListRows; }
+        }
+
+        public Size CoverArtSize
+        {
+            get { return new Size( Properties.Settings.Default.CoverArtWidth, Properties.Settings.Default.CoverArtHeight); }
+        }
+
+        public Size ListItemSize
+        {
+            get { return new Size(Properties.Settings.Default.ListItemWidth, Properties.Settings.Default.ListItemHeight); }
         }
 
     }
