@@ -226,6 +226,26 @@ namespace MyMoviesPlugin
                 case "Country":
                     newTitle.CountryOfOrigin = node.InnerText;
                     break;
+                case "Genres":
+                    XmlNodeList genreNodes = node.SelectNodes("Genre");
+                    foreach (XmlNode genreNode in genreNodes)
+                    {
+                        newTitle.AddGenre(genreNode.InnerText);
+                    }
+                    break;
+
+                case "AudioTracks":
+                    XmlNodeList audioTrackNodes = node.SelectNodes("AudioTrack");
+                    foreach (XmlNode audioTrackNode in audioTrackNodes)
+                    {
+                        string audioTrackString = string.Empty;
+                        XmlAttributeCollection attrs = audioTrackNode.Attributes;
+                        foreach (XmlAttribute attr in attrs)
+                        {
+                            audioTrackString += attr.Value + " ";
+                        }
+                    }
+                    break;
                 case "Discs":
                     Utilities.DebugLine("[MyMoviesImporter] Beginning a Video File node");
                     XmlNodeList discs = node.SelectNodes("Disc");
