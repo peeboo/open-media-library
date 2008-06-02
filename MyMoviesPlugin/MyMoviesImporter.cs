@@ -15,7 +15,6 @@ namespace MyMoviesPlugin
     public class MyMoviesImporter : OMLPlugin, IOMLPlugin
     {
         bool _ShouldCopyImages = true;
-        TextReader tr = null;
         private static double VERSION = 0.1;
 
         public MyMoviesImporter() : base()
@@ -27,8 +26,6 @@ namespace MyMoviesPlugin
         {
             Utilities.DebugLine("[MyMoviesImporter] created[filename("+filename+"), ShouldCopyImages("+ShouldCopyImages+")]");
             _ShouldCopyImages = ShouldCopyImages;
-            try { tr = new StreamReader(filename); }
-            catch (Exception e) { Utilities.DebugLine("[MyMoviesImporter] " + e.Message); }
 
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(filename);
