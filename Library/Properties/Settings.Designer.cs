@@ -253,7 +253,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.95")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public float BottomAnchor {
             get {
                 return ((float)(this["BottomAnchor"]));
@@ -344,6 +344,42 @@ namespace Library.Properties {
             }
             set {
                 this["ListItemHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NameDescending")]
+        public string UserRatingSort {
+            get {
+                return ((string)(this["UserRatingSort"]));
+            }
+            set {
+                this["UserRatingSort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public float RightAnchor {
+            get {
+                return ((float)(this["RightAnchor"]));
+            }
+            set {
+                this["RightAnchor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-15")]
+        public int RightOffset {
+            get {
+                return ((int)(this["RightOffset"]));
+            }
+            set {
+                this["RightOffset"] = value;
             }
         }
     }

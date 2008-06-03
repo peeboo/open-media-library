@@ -15,7 +15,8 @@
     <cor:String Name="GalleryView" String="$Required" />
     <col:IList Name="List" IList="$Required"/>
     <!-- EditableText is a required parameter. -->
-    <cor:String Name="JumpValue" String=""/>
+    <!--<cor:String Name="JumpValue" String=""/>-->
+    <EditableText Name="JumpValue"/>
     
 
 
@@ -77,10 +78,20 @@
         <Modified Source="[TypingHandler.Value]"/>
       </Conditions>
       <Actions>
-        <Set Target="[JumpValue]" Value="[TypingHandler.DisplayValue]"/>
+        <Set Target="[JumpValue.Value]" Value="[TypingHandler.Value]"/>
         <Invoke Target="[MovieBrowser.JumpToMovie]" jumpString="[TypingHandler.DisplayValue]" />
       </Actions>
     </Rule>
+
+    <Rule>
+      <Conditions>
+        <Modified Source="[TypingHandler.DisplayValue]"/>
+      </Conditions>
+      <Actions>
+        <Set Target="[JumpValue.Value]" Value="[TypingHandler.DisplayValue]"/>
+      </Actions>
+    </Rule>
+
 
 
     <Changed Source="[ClearTimer.Tick]">

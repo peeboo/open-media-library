@@ -36,18 +36,18 @@
   <Font Name="TitleFont"             Font="Calibri,24"/>
   <Font Name="ButtonFont"             Font="Calibri,24"/>
   <Font Name="LabelFont" FontName="Verdana" FontSize="16"/>
-  <Font Name="SmallLabelFont" FontName="Verdana" FontSize="16"/>
+  <Font Name="SmallLabelFont" FontName="Segoe Media Center" FontSize="16"/>
   <Color Name="LabelColor" Color="White"/>
   <Color Name="NormalColor" Color="LightBlue"/>
   <Color Name="FocusColor" Color="White"/>
   <Color Name="HeadingColor" Color="White"/>
   <Color Name="SelectedColor" Color="White"/>
   <Color Name="BackgroundColor" Color="Black"/>
-  <Font Name="BoldFont" FontName="Verdana" FontSize="16"	FontStyle="Bold"/>
-  <Font Name="Heading" FontName="Verdana" FontSize="20"	FontStyle="Bold"/>
-  <Font Name="Normal" FontName="Verdana" FontSize="16"/>
-  <Font Name="Small" FontName="Verdana" FontSize="14"/>
-  <Font Name="NormalBold" FontName="Verdana" FontSize="16" FontStyle="Bold"/>
+  <Font Name="BoldFont" FontName="Segoe Media Center" FontSize="16"	FontStyle="Bold"/>
+  <Font Name="Heading" FontName="Segoe Media Center" FontSize="20"	FontStyle="Bold"/>
+  <Font Name="Normal" FontName="Segoe Media Center" FontSize="16"/>
+  <Font Name="Small" FontName="Segoe Media Center" FontSize="14"/>
+  <Font Name="NormalBold" FontName="Segoe Media Center" FontSize="16" FontStyle="Bold"/>
 
   <!-- Animation so we scroll smoothly -->
   <Animation Name="MoveAnimation" Type="Move">
