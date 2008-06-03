@@ -389,8 +389,8 @@ namespace Library
 
             Filters[Filter.Year].AddMovie(Convert.ToString(title.ReleaseDate.Year), movie);
             Filters[Filter.DateAdded].AddMovie(title.DateAdded.ToShortDateString(), movie);
-            Filters[Filter.UserRating].AddMovie(Convert.ToString(title.UserStarRating), movie);
-
+            Filters[Filter.UserRating].AddMovie(((double)title.UserStarRating/10).ToString("0.0"), movie);
+            
             AddRuntimeFilter(movie);
         }
 
