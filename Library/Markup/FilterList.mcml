@@ -75,7 +75,7 @@
       <Color Name="LabelColor" Color="White"/>
       <Color Name="LabelFocusedColor" Color="White"/>
       <Color Name="LabelHoverColor" Color="DimGray"/>
-      <Color Name="LabelPressedColor" Color="Black"/>
+      <Color Name="LabelPressedColor" Color="Yellow"/>
 
     </Properties>
 
@@ -104,7 +104,7 @@
       <!-- Change color on click. -->
       <Condition Source="[Clicker.Clicking]" SourceValue="true">
         <Actions>
-          <Set Target="[Background.Content]" Value="[BackgroundPressedColor]"/>
+          <!--<Set Target="[Background.Content]" Value="[BackgroundPressedColor]"/>-->
           <Set Target="[Label.Color]" Value="[LabelPressedColor]"/>
         </Actions>
       </Condition>
