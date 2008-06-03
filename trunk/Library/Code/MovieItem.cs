@@ -199,6 +199,13 @@ namespace Library
         private WindowsPlayListManager _wplm;
         private Title _titleObj;
         private Image _backCoverArtImage;
+        private List<string> _actingRoles;
+
+        public List<string> ActingRoles
+        {
+            get { return _actingRoles; }
+            set { _actingRoles = value; }
+        }
 
         public override GalleryItem Clone(MovieGallery newOwner)
         {
@@ -224,6 +231,26 @@ namespace Library
             CoverArt = NoCoverImage;
             SubCaption = _titleObj.MPAARating + "\r\n" + Convert.ToString(_titleObj.Runtime) + " minutes";
             Details = _titleObj.Synopsis;
+            _actingRoles = new List<string>();
+
+            if (title.ActingRoles.Count > 0)
+            {
+
+                foreach (KeyValuePair<string, string> kvp in title.ActingRoles)
+                {
+                    if (kvp.Value.Trim().Length > 0)
+                        _actingRoles.Add(kvp.Key + " - " + kvp.Value);
+                    else
+                        _actingRoles.Add(kvp.Key);
+                }
+            }
+            else
+            {
+                foreach (Person actor in title.Actors)
+                {
+                    _actingRoles.Add(actor.full_name);
+                }
+            }
         }
 
 

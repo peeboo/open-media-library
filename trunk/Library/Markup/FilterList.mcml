@@ -3,6 +3,7 @@
 	  xmlns:sys="assembly://mscorlib/System"
 	  xmlns:styles="resx://Library/Library.Resources/Styles"
 	  xmlns:core="resx://Library/Library.Resources/CoreControls"
+    xmlns:c="resx://Library/Library.Resources/Controls"
 	  xmlns:me="Me">
 
   <!-- A list of filters on a filtered content page -->
@@ -32,62 +33,29 @@
     </Rules>
 
     <Content>
+      <!--<Panel>
+        <Children>
+          <c:Pivot Model="[Page.Categories]">
+          </c:Pivot>
+        </Children>
+      </Panel>-->
+      
       <Scroller Name="Scroll" Orientation="Horizontal" FadeSize="5" ScrollingData="[ScrollingData]" Navigation="ContainHorizontal" >
         <Children>
-        <Repeater Name="Repeater"  Navigation="RememberFocus"  >
+        <Repeater Name="Repeater"  Navigation="RememberFocus" >
           <Layout>
             <FlowLayout Orientation="Horizontal" Spacing="8,0"/>
           </Layout>
           <Content>
-            <me:CategoryButton Category="[RepeatedItem!z:FilterCommand]" Choice="[Page.Categories]"/>
+            <c:SimpleButton Command="[RepeatedItem!z:FilterCommand]" Text="[RepeatedItem!z:FilterCommand.Caption]" Size="180,51"/>
+            <!--<me:CategoryButton Category="[RepeatedItem!z:FilterCommand]" Choice="[Page.Categories]"/>-->
           </Content>
         </Repeater>
         </Children>
       </Scroller>
-      
     </Content>
-  </UI>
-
-  <!-- A single filter from a filter list -->
-  <UI Name="FilterButton">
-    <Properties>
-      <z:FilterCommand Name="Option" FilterCommand="$Required"/>
-      <Choice Name="Choice" Choice="$Required"/>
-    </Properties>
-
-    <Locals>
-      <Command Name="SelectOption"/>
-    </Locals>
-
-    <Rules>
-      <!-- When the button is clicked, set this guy as the selected filter. -->
-      <Changed Source="[SelectOption.Invoked]">
-        <Actions>
-          <Set Target="[Choice.Chosen]" Value="[Option]"/>
-        </Actions>
-      </Changed>
-
-      <!-- If we are the active filter set Selected to true. -->
-      <Condition Source="[Choice.Chosen]" SourceValue="[Option]" Target="[SelectOption.Selected]" Value="true"/>
-      <Default Target="[SelectOption.Selected]" Value="false"/>
-
-      <!-- If this is a ModelItem, use the Description property for the label. -->
-      <Rule>
-        <Conditions>
-          <IsType Source="[Option]" Type="z:FilterCommand"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[SelectOption.Description]" Value="[Option!z:FilterCommand.Caption]"/>
-        </Actions>
-      </Rule>
-      <!-- Otherwise just use ToString(). -->
-      <Default Target="[SelectOption.Description]" Value="[Option.ToString]"/>
-    </Rules>
-
-    <Content>
-      <core:Button Model="[SelectOption]" TextColor="color://styles:Text.Active" TextMargins="8,-2,8,2"/>
-      <!--<me:CategoryButton Command="[Option]" Caption="[Option!z:CategoryCommand.Caption]" />-->
-      <!--<me:CategoryButton Category="[Option!z:CategoryCommand]" />-->
+    <Content Name="Divider">
+      <Text Content="|" Font="font://styles:Normal" WordWrap="false" Color="color://styles:NormalColor" />
     </Content>
   </UI>
 
@@ -126,6 +94,7 @@
       <Binding Source="[Category]" Target="[Clicker.Command]"/>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
+     
       <Changed Source="[Category.Invoked]">
         <Actions>
           <Set Target="[Choice.Chosen]" Value="[Category]"/>

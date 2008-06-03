@@ -21,7 +21,10 @@ namespace Library
             Invoked += filter.OnFilterSelected;
         }
 
-
+        public override string ToString() 
+        {
+            return Caption;
+        }
 
         /// <summary>
         /// Gets the description.
@@ -517,6 +520,7 @@ namespace Library
         private Size _MenuImageSize = new Size(150, 200);
 
         EditableText _jumpInListText;
+ 
 
         #endregion
    }
@@ -586,6 +590,16 @@ namespace Library
             get { return Properties.Settings.Default.BottomOffset; }
         }
 
+
+        public float GalleryBottomAnchor
+        {
+            get { return Properties.Settings.Default.BottomAnchor - 0.05f; }
+        }
+
+        public int GalleryBottomOffset
+        {
+            get { return Properties.Settings.Default.BottomOffset - 15; }
+        }
     }
 
     public class GallerySettings
@@ -623,7 +637,7 @@ namespace Library
         //public const string ParentRating = "Parental Rating";
         //public const string UserRating = "User Rating";
         public const string Year = "Year";
-        public const string DateAdded = "Date Added";
+        public const string DateAdded = "Added";
         public const string Home = "OML Home";
         //public const string Movies = "Movies";
 

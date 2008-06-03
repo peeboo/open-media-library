@@ -3,7 +3,9 @@
 	  xmlns:s="resx://Library/Library.Resources/Styles"
     xmlns:filter="resx://Library/Library.Resources/FilterList"
     xmlns:gallery="resx://Library/Library.Resources/MovieGallery"
+    xmlns:c="resx://Library/Library.Resources/Controls"
 	  xmlns:cor="assembly://MSCorLib/System"
+    xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
 	  xmlns:me="Me">
 
   <Aggregate Source="resx://Library/Library.Resources/FilterList"/>
@@ -18,10 +20,12 @@
       <IntRangedValue Name="FocusedIndex"/>
       <cor:String Name="GalleryView" String="$Required" />
       <cor:String Name="JumpValue" String="" />
+      <Command Name="GoToNowPlaying" />
       
     </Properties>
 
     <Locals>
+      <addin:AddInHost Name="AddInHost"/>
       <ScrollingData Name="ScrollingData" LockedPosition="0.38"/>
       <ScrollingData Name="TitleScrollingData" LockedPosition="0.38"/>
 
@@ -30,10 +34,12 @@
       <AnchorEdge Name="DetailsTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
       <AnchorEdge Name="TitleTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset = "[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
       <AnchorEdge Name="FiltersTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.FiltersTopOffset]" Id="Parent"/>
-      <AnchorEdge Name="GalleryBottomAnchor" Percent="[UISettings.Anchor.BottomAnchor]" Offset ="[UISettings.Anchor.BottomOffset]" Id="Parent"/>
+      <AnchorEdge Name="GalleryBottomAnchor" Percent="[UISettings.Anchor.GalleryBottomAnchor]" Offset ="[UISettings.Anchor.GalleryBottomOffset]" Id="Parent"/>
+      <AnchorEdge Name="BottomAnchor" Percent="[UISettings.Anchor.BottomAnchor]" Offset ="[UISettings.Anchor.BottomOffset]" Id="Parent"/>
     </Locals>
 
     <Rules>
+      <!--<Default Target="[NowPlaying.Visible]" Value="false" />-->
       <Binding Source="[JumpValue]" Target="[JumpInText.Content]" />
       
       <Rule>
@@ -47,6 +53,30 @@
           <Set Target="[Summary.Content]" Value="[MovieBrowser.FocusedItem.Details]"/>
         </Actions>
       </Rule>
+
+
+      
+      <Rule>
+        <Conditions>
+          <IsValid Source="[AddInHost.Current.MediaCenterEnvironment.MediaExperience]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NowPlaying.Text]" Value="[Application.NowPlaying]" />
+          <Set Target="[NowPlayingPanel.Visible]" Value="true" />
+        </Actions>
+      </Rule>
+
+      <Changed Source="[Application.NowPlaying]" >
+        <Actions>
+          <Set Target="[NowPlaying.Text]" Value="[Application.NowPlaying]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[GoToNowPlaying.Invoked]" >
+        <Actions>
+          <Invoke Target="[AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen]" />
+        </Actions>
+      </Changed>
      
     </Rules>
 
@@ -131,9 +161,19 @@
               <me:PositionIndicator Gallery="[MovieBrowser]" FocusedIndex="[FocusedIndex]" />
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="[DetailsLeftAnchor]" Right="Parent,.35,1" Bottom="[GalleryBottomAnchor]"/>
+              <FormLayoutInput Left="[DetailsLeftAnchor]" Right="Parent,.35,1" Bottom="[BottomAnchor]"/>
             </LayoutInput>
           </Panel>
+
+          <Panel Name="NowPlayingPanel" Layout="HorizontalFlow" Visible="false">
+            <Children>
+              <c:SimpleButton Name="NowPlaying" Text="" Command="[GoToNowPlaying]" Size="400,51"/>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent, 0.36" Bottom="[BottomAnchor]"/>
+            </LayoutInput>
+          </Panel>
+
 
           <Panel Name="JumpInTextPanel" Layout="HorizontalFlow">
             <Children>

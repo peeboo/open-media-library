@@ -1,0 +1,10 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:a="assembly://Library/Library"
+      >
+
+  <Aggregate Source="resx://Library/Library.Resources/Animations" />
+  <Aggregate Source="resx://Library/Library.Resources/Colors" />
+  <Aggregate Source="resx://Library/Library.Resources/Sounds" />
+  <Aggregate Source="resx://Library/Library.Resources/FontNames" />
+  
+</Mcml>

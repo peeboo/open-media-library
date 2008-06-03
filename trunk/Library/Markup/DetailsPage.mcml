@@ -4,9 +4,12 @@
 	  xmlns:a="assembly://Library/Library"
     xmlns:coll="assembly://MsCorLib/System.Collections"
     xmlns:s="resx://Library/Library.Resources/Styles"
-    xmlns:controls="resx://Library/Library.Resources/CoreControls" 
+    xmlns:controls="resx://Library/Library.Resources/CoreControls"
+    xmlns:c="resx://Library/Library.Resources/Controls"
 	  xmlns:me="Me">
 
+  <Aggregate Source="resx://Library/Library.Resources/Base" />
+  
   <UI Name="MovieDetails">
     <Properties>
       <a:OMLApplication Name="Application" OMLApplication="$Required"/>
@@ -91,11 +94,17 @@
             </Children>
           </Panel>
 
-          <controls:Button Name="PlayMovie" Model="[PlayMovieCommand]"  >
+          <c:SimpleButton Name="PlayMovie" Command="[PlayMovieCommand]" Text="Play Movie" >
             <LayoutInput>
               <FormLayoutInput Left = "Image,1.02" Top="[TitleTopAnchor]"/>
             </LayoutInput>
-          </controls:Button>
+          </c:SimpleButton>
+
+          <!--<controls:Button Name="PlayMovie" Model="[PlayMovieCommand]"  >
+            <LayoutInput>
+              <FormLayoutInput Left = "Image,1.02" Top="[TitleTopAnchor]"/>
+            </LayoutInput>
+          </controls:Button>-->
 
           <Text Name="Title" Content="[DetailsPage.Title]" Font="font://s:Heading" Color="color://s:HeadingColor" >
             <LayoutInput>
