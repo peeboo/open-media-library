@@ -114,6 +114,7 @@ namespace Library
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["DetailsPage"] = page;
             properties["Application"] = this;
+            properties["UISettings"] = new UISettings();
 
             OMLApplication.DebugLine("OMLApplication.GoToDetails");
             // If we have no page session, just spit out a trace statement.
@@ -135,7 +136,19 @@ namespace Library
             get { return _isExtender; }
         }
 
+        public string NowPlaying
+        {
+            get { return _nowPlaying; }
+            set
+            {
+                _nowPlaying = value;
+                FirePropertyChanged("NowPlaying");
+            }
+        }
+
+
         // private data
+        private static string _nowPlaying;
         private static OMLApplication _singleApplicationInstance;
         private AddInHost _host;
         private HistoryOrientedPageSession _session;

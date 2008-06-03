@@ -27,6 +27,8 @@ namespace Library
             {
                 if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                 {
+                    OMLApplication.Current.NowPlaying = "Playing: " + _title.Name;
+                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += new PropertyChangedEventHandler(Transport_PropertyChanged);
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                 }
                 return true;
@@ -36,6 +38,24 @@ namespace Library
                 return false;
             }
 
+        }
+
+        void Transport_PropertyChanged(IPropertyObject sender, string property)
+        {
+            MediaTransport t = (MediaTransport)sender;
+            Utilities.DebugLine("DVDPlayer.Transport_PropertyChanged: movie {0} property {1} playrate {2} state {3} pos {4}", _title.Name, property, t.PlayRate, t.PlayState.ToString(), t.Position.ToString());
+            if (property == "PlayState")
+            {
+                if (t.PlayState == PlayState.Paused)
+                    OMLApplication.Current.NowPlaying = "Paused: " + _title.Name;
+                else if (t.PlayState == PlayState.Playing)
+                    OMLApplication.Current.NowPlaying = "Playing: " + _title.Name;
+                else if (t.PlayState == PlayState.Finished)
+                    OMLApplication.Current.NowPlaying = "Finished: " + _title.Name;
+                else if (t.PlayState == PlayState.Stopped)
+                    OMLApplication.Current.NowPlaying = "Stopped: " + _title.Name;
+
+            }
         }
 
         MovieItem _title;

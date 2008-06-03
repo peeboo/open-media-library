@@ -207,6 +207,11 @@ namespace Library
             get { return _movieDetails.Actors; }
         }
 
+        public IList ActingRoles
+        {
+            get { return _movieDetails.ActingRoles; }
+        }
+
         public IList Directors
         {
             get { return _movieDetails.Directors; }
