@@ -90,6 +90,23 @@ namespace OMLEngine
             set { _actingRoles = value; }
         }
 
+        public void AddActingRole(string actor, string role)
+        {
+            if (!_actingRoles.ContainsKey(actor))
+            {
+                _actingRoles.Add(actor, role);
+            }
+        }
+
+        public void AddNonActingRole(string name, string role)
+        {
+            if (!_nonActingRoles.ContainsKey(name))
+            {
+                _nonActingRoles.Add(name, role);
+            }
+        }
+
+
         public int Parent
         {
             get { return _parent; }
@@ -566,7 +583,7 @@ namespace OMLEngine
         /// <param name="ctxt"></param>
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
-            Utilities.DebugLine("[Title] Adding Title ("+_name+") to Serialization data");
+            //Utilities.DebugLine("[Title] Adding Title ("+_name+") to Serialization data");
             info.AddValue("file_location", _fileLocation);
             info.AddValue("video_format", _videoFormat);
             info.AddValue("transcode_to_extender", _needsTranscode);
