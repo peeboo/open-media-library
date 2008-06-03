@@ -20,7 +20,7 @@
       <cor:String Name="ListName" String="$Required" />
       <cor:String Name="GalleryView" String="$Required" />
       <IntRangedValue Name="FocusedIndex"/>
-      <cor:String Name="JumpValue" String="" />
+      <EditableText Name="JumpValue"/>
     </Properties>
 
     <Locals>

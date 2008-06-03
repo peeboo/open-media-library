@@ -19,7 +19,8 @@
       <a:UISettings Name="UISettings" UISettings="$Required" />
       <IntRangedValue Name="FocusedIndex"/>
       <cor:String Name="GalleryView" String="$Required" />
-      <cor:String Name="JumpValue" String="" />
+      <!--<cor:String Name="JumpValue" String="" />-->
+      <EditableText Name="JumpValue"/>
       <Command Name="GoToNowPlaying" />
     </Properties>
 
@@ -35,11 +36,12 @@
       <AnchorEdge Name="FiltersTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.FiltersTopOffset]" Id="Parent"/>
       <AnchorEdge Name="GalleryBottomAnchor" Percent="[UISettings.Anchor.GalleryBottomAnchor]" Offset ="[UISettings.Anchor.GalleryBottomOffset]" Id="Parent"/>
       <AnchorEdge Name="BottomAnchor" Percent="[UISettings.Anchor.BottomAnchor]" Offset ="[UISettings.Anchor.BottomOffset]" Id="Parent"/>
+      <AnchorEdge Name="RightAnchor" Percent="[UISettings.Anchor.RightAnchor]" Offset ="[UISettings.Anchor.RightOffset]" Id="Parent"/> 
     </Locals>
 
     <Rules>
       <!--<Default Target="[NowPlaying.Visible]" Value="false" />-->
-      <Binding Source="[JumpValue]" Target="[JumpInText.Content]" />
+      <Binding Source="[JumpValue.Value]" Target="[JumpInText.Content]" />
       
       <Rule>
         <Conditions>
@@ -106,7 +108,6 @@
               </Text>
             </Children>
             <LayoutInput>
-              <!--<FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,1" Top="Parent,0.05,50" />-->
               <FormLayoutInput Left="[DetailsLeftAnchor]" Right="[DetailsRightAnchor]" Top="[DetailsTopAnchor]" />
             </LayoutInput>
           </Panel>
@@ -168,20 +169,20 @@
 
           <Panel Name="NowPlayingPanel" Layout="HorizontalFlow" Visible="true">
             <Children>
-              <c:SimpleButton Name="NowPlaying" Text="No movie is playing" Command="[GoToNowPlaying]" Size="400,51"/>
+              <c:SimpleButton Name="NowPlaying" Text="No movie is playing" Command="[GoToNowPlaying]" Size="400,51" Font="font://s:Normal"/>
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="Parent, 0.36" Bottom="[BottomAnchor]"/>
+              <FormLayoutInput Left="LeftPanel, 1,10" Bottom="[BottomAnchor]"/>
             </LayoutInput>
           </Panel>
 
 
           <Panel Name="JumpInTextPanel" Layout="HorizontalFlow">
             <Children>
-              <Text Name="JumpInText" Content="[JumpValue]" />
+              <Text Name="JumpInText" Content="" Font="Verdana,15" Color="LightBlue" HorizontalAlignment="Far"/>
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.55,15" Right="Parent,.95" Bottom="Parent,0.95,-15"/>
+              <FormLayoutInput Left="NowPlayingPanel,1.5" Right="[RightAnchor]" Bottom="[BottomAnchor]"/>
             </LayoutInput>
           </Panel>
 
