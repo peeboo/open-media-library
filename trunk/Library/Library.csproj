@@ -109,10 +109,10 @@
     <Content Include="Markup\Base\FontNames.mcml" />
     <Content Include="Markup\Base\Sounds.mcml" />
     <Content Include="Markup\Button.mcml" />
-    <Content Include="Markup\Controls\Controls.mcml" />
-    <Content Include="Markup\Controls\Pivot.mcml" />
-    <Content Include="Markup\Controls\PivotItem.mcml" />
-    <Content Include="Markup\Controls\SimpleButton.mcml" />
+    <Content Include="Markup\Control\Controls.mcml" />
+    <Content Include="Markup\Control\Pivot.mcml" />
+    <Content Include="Markup\Control\PivotItem.mcml" />
+    <Content Include="Markup\Control\SimpleButton.mcml" />
     <Content Include="Markup\CoreControls.mcml" />
     <Content Include="Markup\DetailsPage.mcml" />
     <Content Include="Markup\FilterList.mcml" />
