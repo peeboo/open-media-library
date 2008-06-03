@@ -204,7 +204,7 @@
         <Set Target="[Cover.Alpha]" Value="1.0"/>
         <Set Target="[Caption.Color]" Value="color://s:FocusColor" />
         <Set Target="[Background.Visible]" Value="true"/>
-        <Set Target="[FocusedIndex.Value]" Value="[Index.Value]"/>
+        <Set Target="[FocusedIndex.Value]" Value="[Index.SourceValue]"/>
         <Set Target="[MovieBrowser.FocusedItem]" Value="[GalleryItem]" />
         <!-- Play an animation on the cover target item. -->
         
