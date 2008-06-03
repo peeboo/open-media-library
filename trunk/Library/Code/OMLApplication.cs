@@ -30,6 +30,7 @@ namespace Library
             _singleApplicationInstance = this;
             _titles = new TitleCollection();
             _titles.loadTitleCollection();
+            _nowPlaying = "Playing an unknown movie";
         }
 
         public void Startup()
