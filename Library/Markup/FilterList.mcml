@@ -42,13 +42,13 @@
       
       <Scroller Name="Scroll" Orientation="Horizontal" FadeSize="5" ScrollingData="[ScrollingData]" Navigation="ContainHorizontal" >
         <Children>
-        <Repeater Name="Repeater"  Navigation="RememberFocus" >
+        <Repeater Name="Repeater"  Navigation="RememberFocus" DividerName="Divider" >
           <Layout>
             <FlowLayout Orientation="Horizontal" Spacing="8,0"/>
           </Layout>
           <Content>
-            <c:SimpleButton Command="[RepeatedItem!z:FilterCommand]" Text="[RepeatedItem!z:FilterCommand.Caption]" Size="180,51"/>
-            <!--<me:CategoryButton Category="[RepeatedItem!z:FilterCommand]" Choice="[Page.Categories]"/>-->
+            <!--<c:SimpleButton Command="[RepeatedItem!z:FilterCommand]" Text="[RepeatedItem!z:FilterCommand.Caption]" Size="180,51"/>-->
+            <me:CategoryButton Category="[RepeatedItem!z:FilterCommand]" Choice="[Page.Categories]"/>
           </Content>
         </Repeater>
         </Children>
@@ -129,9 +129,9 @@
 
     <Content>
       <!-- Solid background color. -->
-      <ColorFill Name="Background" Content="[BackgroundColor]" Padding="5,5,5,5">
+      <ColorFill Name="Background" Content="[BackgroundColor]" Padding="5,0,5,0">
         <Children>
-          <Text Name="Label" Content="[Category.Caption]" Font="font://styles:ButtonFont" Color="color://styles:NormalColor" />
+          <Text Name="Label" Content="[Category.Caption]" Font="font://styles:Normal" Color="color://styles:NormalColor" />
         </Children>
       </ColorFill>
     </Content>

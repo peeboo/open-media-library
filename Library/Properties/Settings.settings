@@ -83,5 +83,8 @@
     <Setting Name="ListItemHeight" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">50</Value>
     </Setting>
+    <Setting Name="UserRatingSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">NameDescending</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

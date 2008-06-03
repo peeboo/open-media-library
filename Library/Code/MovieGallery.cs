@@ -277,6 +277,7 @@ namespace Library
             _categories.Add(new FilterCommand(Filters[Filter.DateAdded]));
             _categories.Add(new FilterCommand(Filters[Filter.Year]));
             _categories.Add(new FilterCommand(Filters[Filter.Runtime]));
+            _categories.Add(new FilterCommand(Filters[Filter.UserRating]));
             _categoryChoice = new Choice(this, "Categories", _categories);
         }
 
@@ -288,6 +289,7 @@ namespace Library
             _filters.Add(Filter.Year, new Filter(Filter.Year, this, Properties.Settings.Default.YearView, true, Properties.Settings.Default.YearSort));
             _filters.Add(Filter.DateAdded, new Filter(Filter.DateAdded, this, Properties.Settings.Default.DateAddedView, true, Properties.Settings.Default.DateAddedSort));
             _filters.Add(Filter.Runtime, new Filter(Filter.Runtime, this, GalleryView.List, false, String.Empty));
+            _filters.Add(Filter.UserRating, new Filter(Filter.UserRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.UserRatingSort));
 
             _jumpInListText = new EditableText(this);
             _jumpInListText.Value = String.Empty;
@@ -387,6 +389,7 @@ namespace Library
 
             Filters[Filter.Year].AddMovie(Convert.ToString(title.ReleaseDate.Year), movie);
             Filters[Filter.DateAdded].AddMovie(title.DateAdded.ToShortDateString(), movie);
+            Filters[Filter.UserRating].AddMovie(Convert.ToString(title.UserStarRating), movie);
 
             AddRuntimeFilter(movie);
         }
@@ -634,9 +637,9 @@ namespace Library
         public const string Runtime = "Runtime";
         //public const string Country = "Country";
         //public const string ParentRating = "Parental Rating";
-        //public const string UserRating = "User Rating";
+        public const string UserRating = "User Rating";
         public const string Year = "Year";
-        public const string DateAdded = "Added";
+        public const string DateAdded = "Date Added";
         public const string Home = "OML Home";
         //public const string Movies = "Movies";
 
