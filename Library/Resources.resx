@@ -304,26 +304,14 @@
   <data name="FontNames" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\base\fontnames.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="SimpleButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\controls\simplebutton.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="Sounds" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\base\sounds.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Controls" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\controls\controls.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Pivot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\controls\pivot.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="PivotArrowLeftNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\PivotArrowLeftNoFocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="PivotArrowRightNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\PivotArrowRightNoFocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="PivotItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\controls\pivotitem.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="ButtonRightFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\buttonrightfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -372,5 +360,17 @@
   </data>
   <data name="SpinnerBluebarLargeNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\spinnerbluebarlargenofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Controls" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\controls.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Pivot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\pivot.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PivotItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\pivotitem.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SimpleButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\simplebutton.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
