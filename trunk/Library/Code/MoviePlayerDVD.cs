@@ -27,8 +27,9 @@ namespace Library
             {
                 if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                 {
+                    Utilities.DebugLine("DVDPlayer.PlayMovie: movie {0} Playing", _title.Name);
                     OMLApplication.Current.NowPlaying = "Playing: " + _title.Name;
-                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += new PropertyChangedEventHandler(Transport_PropertyChanged);
+                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                 }
                 return true;
@@ -47,14 +48,33 @@ namespace Library
             if (property == "PlayState")
             {
                 if (t.PlayState == PlayState.Paused)
+                {
                     OMLApplication.Current.NowPlaying = "Paused: " + _title.Name;
+                    Utilities.DebugLine("DVDPlayer.Transport_PropertyChanged: movie {0} Paused", _title.Name);
+                }
                 else if (t.PlayState == PlayState.Playing)
+                {
                     OMLApplication.Current.NowPlaying = "Playing: " + _title.Name;
+                    Utilities.DebugLine("DVDPlayer.Transport_PropertyChanged: movie {0} Playing", _title.Name);
+                }
                 else if (t.PlayState == PlayState.Finished)
+                {
+                    Utilities.DebugLine("DVDPlayer.Transport_PropertyChanged: movie {0} Finished", _title.Name);
                     OMLApplication.Current.NowPlaying = "Finished: " + _title.Name;
+                    t.PropertyChanged -= Transport_PropertyChanged;
+                }
                 else if (t.PlayState == PlayState.Stopped)
+                {
                     OMLApplication.Current.NowPlaying = "Stopped: " + _title.Name;
-
+                    Utilities.DebugLine("DVDPlayer.Transport_PropertyChanged: movie {0} Stopped", _title.Name);
+                    t.PropertyChanged -= Transport_PropertyChanged;
+                }
+                else if (t.PlayState == PlayState.Undefined)
+                {
+                    OMLApplication.Current.NowPlaying = "Last Watched: " + _title.Name;
+                    Utilities.DebugLine("DVDPlayer.Transport_PropertyChanged: movie {0} LastWatched", _title.Name);
+                    t.PropertyChanged -= Transport_PropertyChanged;
+                }
             }
         }
 
