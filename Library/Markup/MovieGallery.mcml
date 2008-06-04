@@ -182,7 +182,7 @@
     
     <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
 
-    <Binding Source="[GalleryItem.CoverArt]" Target="[Cover.Content]" />
+    <Binding Source="[GalleryItem.MenuCoverArt]" Target="[Cover.Content]" />
     
     <Condition Source="[GalleryView]" SourceValue="List" ConditionOp="Equals" >
       <Actions>

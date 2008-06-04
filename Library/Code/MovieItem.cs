@@ -59,6 +59,7 @@ namespace Library
             _owner = owner;
             _category = browseCategory;
             CoverArt = NoCoverImage;
+            MenuCoverArt = NoCoverImage;
             Invoked += ItemSelected;
         }
 
@@ -73,6 +74,16 @@ namespace Library
             { 
                 _itemImage = value;
                 FirePropertyChanged("CoverArt");
+            }
+        }
+
+        public Image MenuCoverArt
+        {
+            get { return _menuItemImage; }
+            set
+            {
+                _menuItemImage = value;
+                FirePropertyChanged("MenuCoverArt");
             }
         }
 
@@ -186,6 +197,7 @@ namespace Library
         private string _subCaption;
         private string _details;
         private Image _itemImage;
+        private Image _menuItemImage;
         private MovieGallery _owner;
         private Filter _category;
 
@@ -223,6 +235,7 @@ namespace Library
             SortName = title.SortName;
             _backCoverArtImage = NoCoverImage;
             CoverArt = NoCoverImage;
+            MenuCoverArt = NoCoverImage;
             if( _titleObj.Directors.Count > 0 )
                 SubCaption = "Directed by: " + ((Person)_titleObj.Directors[0]).full_name + "\r\n";
 
@@ -351,6 +364,11 @@ namespace Library
             set { CoverArt = value; }
         }
 
+        public Image MenuFrontCover
+        {
+            get { return MenuCoverArt; }
+            set { MenuCoverArt = value; }
+        }
         /// <summary>
         /// Gets or sets the back cover.
         /// </summary>

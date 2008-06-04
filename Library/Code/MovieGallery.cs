@@ -453,6 +453,7 @@ namespace Library
                 MovieItem item = (MovieItem)list[index];
                 if (item.CoverArt == MovieItem.NoCoverImage)
                 {
+                    item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverMenuPath);
                     item.CoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
                     item.BackCover = GalleryItem.LoadImage(item.TitleObject.BackCoverPath);
                 }
@@ -494,6 +495,7 @@ namespace Library
     public class GalleryView
     {
         public const string List = "List";
+        public const string MenuCoverArt = "Menu Cover Art";
         public const string CoverArt = "Cover Art";
     }
 }
