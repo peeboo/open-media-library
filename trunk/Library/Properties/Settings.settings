@@ -92,5 +92,11 @@
     <Setting Name="RightOffset" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">-15</Value>
     </Setting>
+    <Setting Name="GallerySpacingHorizontal" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="GallerySpacingVertical" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
