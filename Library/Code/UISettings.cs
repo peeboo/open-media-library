@@ -50,6 +50,12 @@ namespace Library
             get { return Properties.Settings.Default.DetailsLeftOffset; }
         }
 
+        public int DetailsLeftBackgroundOffset
+        {
+            get { return Properties.Settings.Default.DetailsLeftOffset-50; }
+        }
+
+
         public float DetailsTopAnchor
         {
             get { return Properties.Settings.Default.DetailsTopAnchor; }

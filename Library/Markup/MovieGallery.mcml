@@ -3,6 +3,7 @@
 	  xmlns:s="resx://Library/Library.Resources/Styles"
     xmlns:filter="resx://Library/Library.Resources/FilterList"
 	  xmlns:cor="assembly://MSCorLib/System"
+    xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
     xmlns:col="assembly://MSCorLib/System.Collections"
 	  xmlns:me="Me">
 
@@ -14,12 +15,7 @@
     <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
     <cor:String Name="GalleryView" String="$Required" />
     <col:IList Name="List" IList="$Required"/>
-    <!-- EditableText is a required parameter. -->
-    <!--<cor:String Name="JumpValue" String=""/>-->
     <EditableText Name="JumpValue"/>
-    
-
-
 
     <!-- An object to track which item in the list currently has focus -->
     <IntRangedValue Name="FocusedIndex"/>
@@ -51,9 +47,18 @@
     
     <!-- Create an input handler for scrolling. -->
     <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
-    <!--<TypingHandler Name="TypingHandler" EditableText="[MovieBrowser.JumpInListText]"  HandlerStage="Bubbled"/>-->
     <TypingHandler Name="TypingHandler" EditableText="[MovieBrowser.JumpInListText]" TypingPolicy="TripleTap" HandlerStage="Bubbled"/>
+    <ShortcutHandler Name="PlayHandler" Shortcut="Play" HandlerStage="Bubbled"/>
     <Timer Name="ClearTimer" AutoRepeat="false" Interval="5000" Enabled="false"/>
+    <addin:AddInHost Name="AddInHost"/>
+    <!-- This is the list of buttons that will be displayed on the -->
+    <!-- dialog                                                    -->
+    <ArrayListDataSet Name="DialogButtons">
+      <Source>
+        <cor:String cor:String="Hello"/>
+        <cor:String cor:String="Goodbye"/>
+      </Source>
+    </ArrayListDataSet>
   </Locals>
 
   <Rules>
@@ -110,7 +115,7 @@
         <Invoke Target="[ClearTimer.Start]" />
       </Actions>
     </Changed>
-    
+
   </Rules>
 
   <Content>
