@@ -30,7 +30,7 @@ namespace Library
             _singleApplicationInstance = this;
             _titles = new TitleCollection();
             _titles.loadTitleCollection();
-            _nowPlaying = "Playing an unknown movie";
+            _nowPlayingMovieName = "Playing an unknown movie";
         }
 
         public void Startup()
@@ -137,19 +137,38 @@ namespace Library
             get { return _isExtender; }
         }
 
-        public string NowPlaying
+        public string NowPlayingMovieName
         {
-            get { return _nowPlaying; }
+            get { return _nowPlayingMovieName; }
             set
             {
-                _nowPlaying = value;
+                Utilities.DebugLine("OMLApplication.NowPlayingMovieName {0}", value);
+                _nowPlayingMovieName = value;
                 FirePropertyChanged("NowPlaying");
             }
         }
 
+        public string NowPlayingStatus
+        {
+            get { return _nowPlayingStatus; }
+            set 
+            {
+                Utilities.DebugLine("OMLApplication.NowPlayingStatus {0}", value);
+                FirePropertyChanged("NowPlaying");  
+                _nowPlayingStatus = value; 
+            }
+        }
+
+        public string NowPlaying
+        {
+            get { return NowPlayingStatus + ": " + NowPlayingMovieName; }
+        }
+
 
         // private data
-        private static string _nowPlaying;
+        private  string _nowPlayingMovieName;
+        private  string _nowPlayingStatus;
+
         private static OMLApplication _singleApplicationInstance;
         private AddInHost _host;
         private HistoryOrientedPageSession _session;
