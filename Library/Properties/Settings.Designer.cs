@@ -229,7 +229,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
         public int DetailsLeftOffset {
             get {
                 return ((int)(this["DetailsLeftOffset"]));
@@ -380,6 +380,30 @@ namespace Library.Properties {
             }
             set {
                 this["RightOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int GallerySpacingHorizontal {
+            get {
+                return ((int)(this["GallerySpacingHorizontal"]));
+            }
+            set {
+                this["GallerySpacingHorizontal"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int GallerySpacingVertical {
+            get {
+                return ((int)(this["GallerySpacingVertical"]));
+            }
+            set {
+                this["GallerySpacingVertical"] = value;
             }
         }
     }
