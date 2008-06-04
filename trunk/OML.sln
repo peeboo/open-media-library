@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Files", "Sample File
 		Sample Files\oml.dat = Sample Files\oml.dat
 		Sample Files\oml_menu.jpg = Sample Files\oml_menu.jpg
 		Sample Files\oml_title.jpg = Sample Files\oml_title.jpg
+		Sample Files\test.wpl = Sample Files\test.wpl
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F3E848C8-53F7-42B2-B637-F6A69E06CDEC}"

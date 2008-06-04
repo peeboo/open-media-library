@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Xml;
+using System.Collections;
 
 namespace OMLEngine
 {
     public class WindowsPlayListManager
     {
-        private SortedArrayList _PlayListItems;
+        private ArrayList _PlayListItems;
 
-        public PlayListItem[] PlayListItems
+        public ArrayList PlayListItems
         {
             get
             {
-                _PlayListItems.Sort();
-                return (PlayListItem[])_PlayListItems.ToArray();
+                return _PlayListItems;
             }
         }
 
@@ -24,6 +24,7 @@ namespace OMLEngine
         public WindowsPlayListManager(string filePath)
         {
             _PlayListItems = new SortedArrayList();
+            ReadWPLFile(filePath);
         }
 
         ~WindowsPlayListManager()
@@ -88,7 +89,7 @@ namespace OMLEngine
             {
                 XmlNode mediaNode = xDoc.CreateNode(XmlNodeType.Element, "media", "");
                 XmlAttribute srcAttr = xDoc.CreateAttribute("src");
-                srcAttr.InnerText = item.title.FileLocation;
+                srcAttr.InnerText = item.FileLocation;
                 mediaNode.Attributes.Append(srcAttr);
                 bodySeqNode.AppendChild(mediaNode);
                 totalItems++;
@@ -112,25 +113,49 @@ namespace OMLEngine
             xDoc.Save(filePath);
         }
 
-        public void ReadWPLFIle(string filePath)
+        public void ReadWPLFile(string filePath)
         {
+            Utilities.DebugLine("[WindowsPlayListManager] Reading Playlist file");
+            XmlDocument xDoc = new XmlDocument();
+            try
+            {
+                xDoc.Load(filePath);
+
+                XmlNodeList mediaNodes = xDoc.SelectNodes("//smil/body/seq/media");
+                Utilities.DebugLine("[WindowsPlayListManager] Found " + mediaNodes.Count + " media nodes");
+                foreach (XmlNode mediaNode in mediaNodes)
+                {
+                    foreach (XmlAttribute attr in mediaNode.Attributes)
+                    {
+                        if (attr.Name.ToUpper().CompareTo("SRC") == 0)
+                        {
+                            Utilities.DebugLine("[WindowsPlayListManager] Found media item: " + attr.Value);
+                            _PlayListItems.Add(new PlayListItem(attr.Value));
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Utilities.DebugLine("[WindowsPlayListManager] Error: " + e.Message);
+            }
         }
     }
 
     public class PlayListItem : IComparable
     {
-        private Title _title;
+        private string _fileLocation;
         private int _sortOrder;
 
-        public PlayListItem(Title t)
+        public PlayListItem(string FileLocation)
         {
-            _title = t;
+            _fileLocation = FileLocation;
         }
 
-        public Title title
+        public string FileLocation
         {
-            get { return _title; }
-            set { _title = value; }
+            get { return _fileLocation; }
+            set { _fileLocation = value; }
         }
 
         public int SortOrder
