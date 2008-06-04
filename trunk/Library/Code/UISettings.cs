@@ -126,5 +126,9 @@ namespace Library
             get { return new Size(Properties.Settings.Default.ListItemWidth, Properties.Settings.Default.ListItemHeight); }
         }
 
+        public Size GallerySpacing
+        {
+            get { return new Size(Properties.Settings.Default.GallerySpacingHorizontal, Properties.Settings.Default.GallerySpacingVertical); }
+        }
     }
 }
