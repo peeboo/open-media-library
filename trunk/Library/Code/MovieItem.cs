@@ -229,7 +229,44 @@ namespace Library
             SortName = title.SortName;
             _backCoverArtImage = NoCoverImage;
             CoverArt = NoCoverImage;
-            SubCaption = _titleObj.MPAARating + "\r\n" + Convert.ToString(_titleObj.Runtime) + " minutes";
+            if( _titleObj.Directors.Count > 0 )
+                SubCaption = "Directed by: " + ((Person)_titleObj.Directors[0]).full_name + "\r\n";
+
+            int actorCount = 0;
+            if (_titleObj.Actors.Count > 0)
+            {
+                SubCaption += "Actors: ";
+            }
+            foreach (Person actor in _titleObj.Actors)
+            {
+                if (actor.full_name.Trim().Length > 0)
+                {
+                    if (actorCount > 0)
+                        SubCaption += ", ";
+
+                    SubCaption += actor.full_name;
+                    actorCount++;
+                    if (actorCount == 6)
+                    {
+                        SubCaption += " ...";
+                        break;
+                    }
+                }
+            }
+
+            if (_titleObj.Actors.Count > 0)
+            {
+                SubCaption += "\r\n";
+            }
+
+            SubCaption += _titleObj.MPAARating + "\r\n";
+            
+            if (_titleObj.Runtime > 0)
+                SubCaption += "Runtime: " + Convert.ToString(_titleObj.Runtime) + " minutes\r\n";
+            
+            if( _titleObj.UserStarRating > 0 )
+                SubCaption += "User Rating: " + ((double)(_titleObj.UserStarRating/10)).ToString("0.0");
+
             Details = _titleObj.Synopsis;
             _actingRoles = new List<string>();
 

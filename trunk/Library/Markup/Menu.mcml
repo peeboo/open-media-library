@@ -30,6 +30,8 @@
       <ScrollingData Name="TitleScrollingData" LockedPosition="0.38"/>
 
       <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "[UISettings.Anchor.DetailsLeftOffset]" Id="Parent"/>
+      <AnchorEdge Name="DetailsLeftBackgroundAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "[UISettings.Anchor.DetailsLeftBackgroundOffset]" Id="Parent"/>
+      <AnchorEdge Name="DetailsRightBackgroundAnchor" Percent="[UISettings.Anchor.DetailsRightAnchor]" Offset = "50" Id="Parent"/>
       <AnchorEdge Name="DetailsRightAnchor" Percent="[UISettings.Anchor.DetailsRightAnchor]" Id="Parent"/>
       <AnchorEdge Name="DetailsTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
       <AnchorEdge Name="TitleTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset = "[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
@@ -93,7 +95,7 @@
             </Children>
 
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.35,20" Right="Parent,0.95" Top="[TitleTopAnchor]"/>
+              <FormLayoutInput Left="Parent,0.35,20" Right="[RightAnchor]" Top="[TitleTopAnchor]"/>
             </LayoutInput>
           </Panel>
 
@@ -127,7 +129,7 @@
               <FlowLayout Orientation="Horizontal"/>
             </Layout>
             <Children>
-              <Text Name="SubCaption" Content=" " WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor">
+              <Text Name="SubCaption" Content=" " WordWrap="true" Font="font://s:Small" Color="White">
                 <Animations>
                   <TransformAnimation Source="animation://s:ChangeHide"/>
                   <TransformAnimation Source="animation://s:ChangeShow"/>
@@ -143,7 +145,7 @@
             <Children>
               <Clip Orientation="Vertical" FadeSize="50" NearOffset="-50">
                 <Children>
-                  <Text Name="Summary" Content="" WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor">
+                  <Text Name="Summary" Content="" WordWrap="true" Font="font://s:Small" Color="White">
                     <Animations>
                       <TransformAnimation Source="animation://s:ChangeHide"/>
                       <TransformAnimation Source="animation://s:ChangeShow"/>
@@ -188,14 +190,15 @@
 
           <Panel Name="LeftPanel" >
             <Children>
-              <Clip Orientation="Horizontal" FadeSize="40" NearOffset="70">
+              <Clip Orientation="Horizontal" FadeSize="50" NearOffset="20">
                 <Children>
                   <ColorFill Name="LeftTab" Content="Black" Alpha="0.8"/>
                 </Children>
               </Clip>
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="Parent,-0.5,0" Right="Parent,.35,1" Top="Parent,-.5,0" Bottom="Parent,1.5,1"/>
+              <FormLayoutInput Left="[DetailsLeftBackgroundAnchor]" Right="[DetailsRightBackgroundAnchor]" Top="Parent,-.5,0" Bottom="Parent,1.5,1"/>
+              <!--<FormLayoutInput Left="Parent,-0.5,0" Right="Parent, 0.35, 1" Top="Parent,-.5,0" Bottom="Parent,1.5,1"/>-->
             </LayoutInput>
           </Panel>
 
