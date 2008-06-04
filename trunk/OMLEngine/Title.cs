@@ -26,6 +26,7 @@ namespace OMLEngine
         private string _metadataSourceId = "";
         private string _sourceName = "";
         private string _frontCoverPath = "";
+        private string _frontCoverMenuPath = "";
         private string _backCoverPath = "";
         private int _runtime = 0;
         private string _MPAARating = "";
@@ -294,6 +295,12 @@ namespace OMLEngine
             get { return _frontCoverPath; }
             set { _frontCoverPath = value; }
         }
+
+        public string FrontCoverMenuPath
+        {
+            get { return _frontCoverMenuPath; }
+            set { _frontCoverMenuPath = value; }
+        }
         /// <summary>
         /// Full path to the rear cover art image
         /// </summary>
@@ -536,6 +543,7 @@ namespace OMLEngine
             _metadataSourceId = GetSerializedString(info,"sourceid");
             _sourceName = GetSerializedString(info,"sourcename");
             _frontCoverPath = GetSerializedString(info,"front_boxart_path");
+            _frontCoverMenuPath = GetSerializedString(info, "front_boxart_menu_path");
             _backCoverPath = GetSerializedString(info,"back_boxart_path");
             _synopsis = GetSerializedString(info,"synopsis");
             _distributor = GetSerializedString(info,"distributor");
@@ -593,6 +601,7 @@ namespace OMLEngine
             info.AddValue("sourceid", _metadataSourceId);
             info.AddValue("sourcename", _sourceName);
             info.AddValue("front_boxart_path", _frontCoverPath);
+            info.AddValue("front_boxart_menu_path", _frontCoverMenuPath);
             info.AddValue("back_boxart_path", _backCoverPath);
             info.AddValue("synopsis", _synopsis);
             info.AddValue("distributor", _distributor);
