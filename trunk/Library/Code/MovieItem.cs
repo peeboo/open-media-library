@@ -196,7 +196,6 @@ namespace Library
     /// </summary>
     public class MovieItem : GalleryItem
     {
-        private WindowsPlayListManager _wplm;
         private Title _titleObj;
         private Image _backCoverArtImage;
         private List<string> _actingRoles;
@@ -211,11 +210,6 @@ namespace Library
         {
             MovieItem m = new MovieItem(_titleObj, newOwner);
             return m;
-        }
-
-        public WindowsPlayListManager PlayList
-        {
-            get { return _wplm; }
         }
 
         /// <summary>
@@ -315,16 +309,6 @@ namespace Library
             OMLApplication.DebugLine("Creating a detailspage");
             MovieDetailsPage page = new MovieDetailsPage(item);
             return page;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MovieItem"/> class.
-        /// </summary>
-        /// <param name="wplm">The WPLM.</param>
-        public MovieItem(WindowsPlayListManager wplm, MovieGallery owner)
-            : base(owner, "PlayList", "PlayList", null)
-        {
-            _wplm = wplm;
         }
 
         /// <summary>
