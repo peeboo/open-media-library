@@ -6,6 +6,9 @@ using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
 
 namespace OMLEngine
 {
@@ -382,5 +385,78 @@ namespace OMLEngine
             }
         }
 
+        // Image resizing methods taken from a public post on forums.msdn.microsoft.com
+        // Written by user: PeacError on Wed. Nov 1st, 2006
+        // Link: http://forums.msdn.microsoft.com/en-US/csharpgeneral/thread/33d0acc4-bf4c-475b-9b43-0fa1093c1e19/
+        public static Image ScaleImageByPercentage(Image img, double percent)
+        {
+            double fractionalPercentage = (percent / 100.0);
+            int outputWidth = (int)(img.Width * fractionalPercentage);
+            int outputHeight = (int)(img.Height * fractionalPercentage);
+
+            return ScaleImage(img, outputWidth, outputHeight);
+        }
+
+        public static Image ScaleImage(Image img, int outputWidth, int outputHeight)
+        {
+            Bitmap outputImage = new Bitmap(outputWidth, outputHeight, img.PixelFormat);
+            outputImage.SetResolution(img.HorizontalResolution, img.VerticalResolution);
+
+            Graphics graphics = Graphics.FromImage(outputImage);
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            graphics.DrawImage(img,
+                               new Rectangle(0, 0, outputWidth, outputHeight),
+                               new Rectangle(0, 0, img.Width, img.Height),
+                               GraphicsUnit.Pixel);
+
+            return outputImage;
+        }
+
+        public static Image ScaleImageByHeight(Image img, int height)
+        {
+            double fractionalPercentage = ((double)height / (double)img.Height);
+            int outputWidth = (int)(img.Width * fractionalPercentage);
+            int outputHeight = height;
+
+            return ScaleImage(img, outputWidth, outputHeight);
+        }
+
+        public static Image ScaleImageByWidth(Image img, int width)
+        {
+            double fractionalPercentage = ((double)width / (double)img.Width);
+            int outputWidth = width;
+            int outputHeight = (int)(img.Height * fractionalPercentage);
+
+            return ScaleImage(img, outputWidth, outputHeight);
+        }
+
+        public static Image ScaleImageDownTillFits(Image img, Size size)
+        {
+            Image ret = img;
+            bool bFound = false;
+
+            if ((img.Width > size.Width) || (img.Height > size.Height))
+            {
+                for (double percent = 100; percent > 0; percent--)
+                {
+                    double fractionalPercentage = (percent / 100.0);
+                    int outputWidth = (int)(img.Width * fractionalPercentage);
+                    int outputHeight = (int)(img.Height * fractionalPercentage);
+
+                    if ((outputWidth < size.Width) && (outputHeight < size.Height))
+                    {
+                        bFound = true;
+                        ret = ScaleImage(img, outputWidth, outputHeight);
+                        break;
+                    }
+                }
+
+                if (!bFound)
+                {
+                    ret = ScaleImage(img, size.Width, size.Height);
+                }
+            }
+            return ret;
+        }
     }
 }
