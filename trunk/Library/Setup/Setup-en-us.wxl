@@ -11,8 +11,7 @@
 	<String Id="Property_ProductName">Open Media Library</String>
 	<String Id="Property_CompanyName">Open Media Library Team</String>
 
-	<String Id="Package_Description">Open Media Library</String>
+	<String Id="Package_Description">Open Media Library Add-In for Vista Media Center</String>
 	<String Id="Package_Comments">This Installer database contains the logic and data required to install Library.</String>
-
 </WixLocalization>
 

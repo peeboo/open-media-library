@@ -13,9 +13,6 @@ using System.Drawing.Drawing2D;
 namespace OMLEngine
 {
     #region Global Enumerators
-    /// <summary>
-    /// Enumerator for Ratings
-    /// </summary>
 
     /// <summary>
     /// Enumerator for Sex

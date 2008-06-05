@@ -219,6 +219,7 @@
     <None Include="Resources\spinnerbluebarlargedormant.png" />
     <None Include="Resources\spinnerbluebarlargefocus.png" />
     <None Include="Resources\spinnerbluebarlargenofocus.png" />
+    <None Include="Setup\License.rtf" />
     <Content Include="Setupx64\License.txt" />
     <Content Include="Setup\License.txt" />
     <Content Include="Sounds\Error.wav" />
