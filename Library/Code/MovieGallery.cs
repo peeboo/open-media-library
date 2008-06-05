@@ -453,7 +453,20 @@ namespace Library
                 MovieItem item = (MovieItem)list[index];
                 if (item.CoverArt == MovieItem.NoCoverImage)
                 {
-                    item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverMenuPath);
+                    // if for some reason we dont have the menu file, use the regular cover for the menu
+                    if (! string.IsNullOrEmpty(item.TitleObject.FrontCoverMenuPath))
+                    {
+                        if (File.Exists(item.TitleObject.FrontCoverMenuPath))
+                        {
+                            item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverMenuPath);
+                        }
+                        else
+                        {
+                            OMLApplication.DebugLine("Unable to locate Menu image: using regular front cover image");
+                            item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
+                        }
+                    }
+                    
                     item.CoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
                     item.BackCover = GalleryItem.LoadImage(item.TitleObject.BackCoverPath);
                 }

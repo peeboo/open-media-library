@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using OMLEngine;
+using System.Drawing;
 
 namespace OMLSDK
 {
@@ -60,6 +61,21 @@ namespace OMLSDK
                     return true;
             }
             return false;
+        }
+        public static void BuildResizedMenuImage(Title t)
+        {
+            if (t.FrontCoverPath.Length > 0)
+            {
+                Image coverArtImage = Image.FromFile(t.FrontCoverPath);
+                if (coverArtImage != null)
+                {
+                    Image menuCoverArtImage = Utilities.ScaleImageByHeight(coverArtImage, 200);
+                    string img_path = FileSystemWalker.ImageDirectory +
+                                      "\\MF" + t.InternalItemID + ".jpg";
+                    menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    t.FrontCoverMenuPath = img_path;
+                }
+            }
         }
     }
 }

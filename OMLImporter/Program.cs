@@ -4,7 +4,6 @@ using System.IO;
 using System.Windows.Forms;
 using OMLSDK;
 using OMLEngine;
-using System.Drawing;
 
 namespace OMLImporter
 {
@@ -182,7 +181,7 @@ namespace OMLImporter
                 }
                 else
                 {
-                    BuildResizedMenuImage(t);
+                    OMLPlugin.BuildResizedMenuImage(t);
                     tc.Add(t);
                     numberOfTitlesAdded++;
                 }
@@ -215,22 +214,6 @@ namespace OMLImporter
             catch (Exception e)
             {
                 Console.WriteLine("Failed to import file (" + file_to_import + "): " + e.Message);
-            }
-        }
-
-        public static void BuildResizedMenuImage(Title t)
-        {
-            if (t.FrontCoverPath.Length > 0)
-            {
-                Image coverArtImage = Image.FromFile(t.FrontCoverPath);
-                if (coverArtImage != null)
-                {
-                    Image menuCoverArtImage = Utilities.ScaleImageByHeight(coverArtImage, 200);
-                    string img_path = FileSystemWalker.ImageDirectory +
-                                      "\\MF" + t.InternalItemID + ".jpg";
-                    menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    t.FrontCoverMenuPath = img_path;
-                }
             }
         }
     }

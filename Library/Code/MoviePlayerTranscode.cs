@@ -39,6 +39,7 @@ namespace Library
                 {
                     if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                     {
+                        AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += Transport_PropertyChanged;
                         AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                     }
                     return true;
@@ -156,6 +157,25 @@ namespace Library
             }
         }
 
+        private void stopTranscode()
+        {
+            OMLApplication.DebugLine("Stopping a transcode job");
+            object[] paramArary = new object[3];
+
+            try
+            {
+                MIStopTranscoding.Invoke(_server, paramArary);
+            }
+            catch (Exception e)
+            {
+                OMLApplication.DebugLine("Error calling transcode360 (MIStopTranscoding): " + e.Message);
+                foreach (ParameterInfo pInfo in MIStopTranscoding.GetParameters())
+                {
+                    OMLApplication.DebugLine("parameter: " + pInfo.Name + " Type: " + pInfo.ParameterType.ToString());
+                }
+            }
+        }
+
         private void startTranscode()
         {
             OMLApplication.DebugLine("Starting a transcode job");
@@ -223,6 +243,21 @@ namespace Library
                         break;
                     default:
                         break;
+                }
+            }
+        }
+
+        public void Transport_PropertyChanged(IPropertyObject sender, string property)
+        {
+            MediaTransport t = (MediaTransport)sender;
+            Utilities.DebugLine("MoviePlayerTranscode.Transport_PropertyChanged: movie {0} property {1} playrate {2} state {3} pos {4}", OMLApplication.Current.NowPlayingMovieName, property, t.PlayRate, t.PlayState.ToString(), t.Position.ToString());
+            if (property == "PlayState")
+            {
+                if (t.PlayState == PlayState.Finished || t.PlayState == PlayState.Stopped)
+                {
+                    Utilities.DebugLine("MoviePlayerTranscode.Transport_PropertyChanged: movie {0} Finished", OMLApplication.Current.NowPlayingMovieName);
+                    OMLApplication.Current.NowPlayingStatus = "Finished";
+                    stopTranscode();
                 }
             }
         }
