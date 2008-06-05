@@ -13,7 +13,6 @@ using System.Drawing.Drawing2D;
 namespace OMLEngine
 {
     #region Global Enumerators
-
     /// <summary>
     /// Enumerator for Sex
     /// </summary>
@@ -454,6 +453,24 @@ namespace OMLEngine
                 }
             }
             return ret;
+        }
+
+        public static Size ResolutionOfVideoFile(string fileName)
+        {
+            Size size = new Size(0, 0);
+            Utilities.DebugLine("Determining Resolution of: " + fileName);
+            Microsoft.DirectX.AudioVideoPlayback.Video video;
+
+            if (File.Exists(fileName))
+            {
+                video = Microsoft.DirectX.AudioVideoPlayback.Video.FromFile(fileName);
+                if (video != null)
+                {
+                    Utilities.DebugLine("Resolution found: " + video.DefaultSize.Width + "x" + video.DefaultSize.Height);
+                    size = video.DefaultSize;
+                }
+            }
+            return size;
         }
     }
 }

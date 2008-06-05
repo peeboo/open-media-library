@@ -31,6 +31,12 @@ namespace OMLEngine
             }
         }
 
+        public void Replace(Title newTitle, Title oldTitle)
+        {
+            Remove(oldTitle);
+            Add(newTitle);
+        }
+
         public void Replace(Title title)
         {
 
