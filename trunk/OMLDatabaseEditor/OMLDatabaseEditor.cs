@@ -145,7 +145,7 @@ namespace OMLDatabaseEditor
                 grdTags.Rows.Add(tag);
             }
 
-            grdActors.ClearSelection();
+            grdActors.Rows.Clear();
             foreach (KeyValuePair<string, string> role in t.ActingRoles)
             {
                 grdActors.Rows.Add(role.Key, role.Value);
