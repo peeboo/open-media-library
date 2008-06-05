@@ -88,6 +88,8 @@
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.grdTitleList = new System.Windows.Forms.DataGridView();
+            this.TitleName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpTitleDetails = new System.Windows.Forms.TabPage();
             this.panelMain = new System.Windows.Forms.Panel();
@@ -154,8 +156,8 @@
             this.tpWeb = new System.Windows.Forms.TabPage();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.cbWebImpoter = new System.Windows.Forms.ComboBox();
-            this.TitleName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -179,6 +181,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tpWeb.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -243,6 +246,7 @@
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.saveToolStripMenuItem.Text = "&Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
@@ -444,17 +448,19 @@
             // 
             this.toolStripContainer1.ContentPanel.AutoScroll = true;
             this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainer1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(859, 648);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(859, 619);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(859, 694);
+            this.toolStripContainer1.Size = new System.Drawing.Size(859, 690);
             this.toolStripContainer1.TabIndex = 3;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
             // toolStripContainer1.TopToolStripPanel
             // 
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.menuStrip1);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
+            this.toolStripContainer1.TopToolStripPanel.Click += new System.EventHandler(this.toolStripContainer1_TopToolStripPanel_Click);
             // 
             // splitContainer1
             // 
@@ -470,7 +476,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tabControl1);
-            this.splitContainer1.Size = new System.Drawing.Size(859, 648);
+            this.splitContainer1.Size = new System.Drawing.Size(859, 619);
             this.splitContainer1.SplitterDistance = 247;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -510,11 +516,25 @@
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.grdTitleList.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.grdTitleList.Size = new System.Drawing.Size(247, 648);
+            this.grdTitleList.Size = new System.Drawing.Size(247, 619);
             this.grdTitleList.TabIndex = 0;
             this.grdTitleList.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_title_list_CellContentDoubleClick);
             this.grdTitleList.SelectionChanged += new System.EventHandler(this.grdTitleList_SelectionChanged);
             this.grdTitleList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdTitleList_CellContentClick);
+            // 
+            // TitleName
+            // 
+            this.TitleName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.TitleName.DataPropertyName = "TitleName";
+            this.TitleName.HeaderText = "Title Name";
+            this.TitleName.Name = "TitleName";
+            this.TitleName.ReadOnly = true;
+            // 
+            // colItemID
+            // 
+            this.colItemID.HeaderText = "ID";
+            this.colItemID.Name = "colItemID";
+            this.colItemID.ReadOnly = true;
             // 
             // tabControl1
             // 
@@ -524,7 +544,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(608, 648);
+            this.tabControl1.Size = new System.Drawing.Size(608, 619);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.tabControl1.TabIndex = 0;
             // 
@@ -535,7 +555,7 @@
             this.tpTitleDetails.Location = new System.Drawing.Point(4, 22);
             this.tpTitleDetails.Name = "tpTitleDetails";
             this.tpTitleDetails.Padding = new System.Windows.Forms.Padding(3);
-            this.tpTitleDetails.Size = new System.Drawing.Size(600, 622);
+            this.tpTitleDetails.Size = new System.Drawing.Size(600, 593);
             this.tpTitleDetails.TabIndex = 0;
             this.tpTitleDetails.Text = "Title Details";
             this.tpTitleDetails.UseVisualStyleBackColor = true;
@@ -1323,7 +1343,7 @@
             this.tpWeb.Location = new System.Drawing.Point(4, 22);
             this.tpWeb.Name = "tpWeb";
             this.tpWeb.Padding = new System.Windows.Forms.Padding(3);
-            this.tpWeb.Size = new System.Drawing.Size(600, 622);
+            this.tpWeb.Size = new System.Drawing.Size(600, 593);
             this.tpWeb.TabIndex = 1;
             this.tpWeb.Text = "Web Browser";
             this.tpWeb.UseVisualStyleBackColor = true;
@@ -1334,7 +1354,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(3, 3);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(594, 616);
+            this.webBrowser1.Size = new System.Drawing.Size(594, 587);
             this.webBrowser1.TabIndex = 1;
             // 
             // cbWebImpoter
@@ -1345,26 +1365,32 @@
             this.cbWebImpoter.Size = new System.Drawing.Size(546, 21);
             this.cbWebImpoter.TabIndex = 0;
             // 
-            // TitleName
+            // toolStrip1
             // 
-            this.TitleName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.TitleName.DataPropertyName = "TitleName";
-            this.TitleName.HeaderText = "Title Name";
-            this.TitleName.Name = "TitleName";
-            this.TitleName.ReadOnly = true;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton1});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 24);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(66, 25);
+            this.toolStrip1.TabIndex = 1;
             // 
-            // colItemID
+            // toolStripButton1
             // 
-            this.colItemID.HeaderText = "ID";
-            this.colItemID.Name = "colItemID";
-            this.colItemID.ReadOnly = true;
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // OMLDatabaseEditor
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(859, 694);
+            this.ClientSize = new System.Drawing.Size(859, 690);
             this.Controls.Add(this.toolStripContainer1);
             this.DoubleBuffered = true;
             this.MainMenuStrip = this.menuStrip1;
@@ -1400,6 +1426,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tpWeb.ResumeLayout(false);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1509,6 +1537,8 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.DataGridViewTextBoxColumn TitleName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colItemID;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }
 

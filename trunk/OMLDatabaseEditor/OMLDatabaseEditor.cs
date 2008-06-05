@@ -33,7 +33,7 @@ namespace OMLDatabaseEditor
 
         private void SetupTitleList()
         {
-            _collectionAsDataTable = GetTitlesDataTable();
+            //_collectionAsDataTable = GetTitlesDataTable();
             grdTitleList.Rows.Clear();
             foreach (Title t in _titleCollection)
             {
@@ -43,6 +43,7 @@ namespace OMLDatabaseEditor
             //grdTitleList.AutoGenerateColumns = false;
             //grdTitleList.DataSource = _collectionAsDataTable;
         }
+        
         private DataTable GetTitlesDataTable()
         {
             DataTable dt = new DataTable("Titles");
@@ -226,9 +227,9 @@ namespace OMLDatabaseEditor
             t.ActingRoles.Clear();
             foreach (DataGridViewRow row in grdTags.Rows)
             {
+                if (row.Cells[0].Value == null || row.Cells[1].Value == null) return;
                 t.Actors.Add(new Person((string)row.Cells[0].Value));
                 t.ActingRoles.Add((string)row.Cells[0].Value, (string)row.Cells[1].Value);
-
             }
 
             t.LanguageFormats.Clear();
@@ -255,7 +256,7 @@ namespace OMLDatabaseEditor
         }
 
 
-        // Image.FromFile keeps a lock on the file and it cannot be udpated
+        // Image.FromFile keeps a lock on the file and it cannot be updated
         public static Image ReadImageFromFile(string fileName)
         {
             try
@@ -349,7 +350,11 @@ namespace OMLDatabaseEditor
             _titleChanged = true;
 
         }
-
+        private void UpdateDBFromCurrentTitle(Title t)
+        {
+            _titleCollection.Replace(t);
+            _titleCollection.saveTitleCollection();
+        }
         private void SelectNewTitle( int rowIndex)
         {
             bool bSelectNewTitle = true;
@@ -364,6 +369,7 @@ namespace OMLDatabaseEditor
                 else if (result == DialogResult.Yes)
                 {
                     UpdateTitleFromUI(_currentTitle);
+                    UpdateDBFromCurrentTitle(_currentTitle);
                     _titleChanged = false;
                 }
                 else
@@ -389,6 +395,25 @@ namespace OMLDatabaseEditor
         private void grdTitleList_SelectionChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private void toolStripContainer1_TopToolStripPanel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateTitleFromUI(_currentTitle);
+            UpdateDBFromCurrentTitle(_currentTitle);
+            _titleChanged = false;
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            UpdateTitleFromUI(_currentTitle);
+            UpdateDBFromCurrentTitle(_currentTitle);
+            _titleChanged = false;
         }
 
     }
