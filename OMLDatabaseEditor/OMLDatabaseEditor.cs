@@ -202,24 +202,28 @@ namespace OMLDatabaseEditor
             t.Directors.Clear();
             foreach (DataGridViewRow row in grdDirectors.Rows)
             {
+                if (row.Cells[0].Value == null) return;
                 t.Directors.Add( new Person((string)row.Cells[0].Value));
             }
 
             t.Writers.Clear();
             foreach (DataGridViewRow row in grdWriters.Rows)
             {
+                if (row.Cells[0].Value == null) return;
                 t.Writers.Add(new Person((string)row.Cells[0].Value));
             }
 
             t.Genres.Clear();
             foreach (DataGridViewRow row in grdGenres.Rows)
             {
+                if (row.Cells[0].Value == null) return;
                 t.Genres.Add((string)row.Cells[0].Value);
             }
 
             t.Tags.Clear();
             foreach (DataGridViewRow row in grdTags.Rows)
             {
+                if (row.Cells[0].Value == null) return;
                 t.Tags.Add((string)row.Cells[0].Value);
             }
 
@@ -235,12 +239,14 @@ namespace OMLDatabaseEditor
             t.LanguageFormats.Clear();
             foreach (DataGridViewRow row in grdLanguages.Rows)
             {
+                if (row.Cells[0].Value == null) return;
                 t.LanguageFormats.Add((string)row.Cells[0].Value);
             }
 
             t.SoundFormats.Clear();
             foreach (DataGridViewRow row in grdAudioTracks.Rows)
             {
+                if (row.Cells[0].Value == null) return;
                 t.SoundFormats.Add((string)row.Cells[0].Value);
             }
         }
