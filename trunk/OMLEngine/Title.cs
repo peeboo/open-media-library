@@ -93,6 +93,7 @@ namespace OMLEngine
 
         public void AddActingRole(string actor, string role)
         {
+            if (actor == null || role == null) return;
             if (!_actingRoles.ContainsKey(actor))
             {
                 _actingRoles.Add(actor, role);
@@ -101,6 +102,7 @@ namespace OMLEngine
 
         public void AddNonActingRole(string name, string role)
         {
+            if (name == null || role == null) return;
             if (!_nonActingRoles.ContainsKey(name))
             {
                 _nonActingRoles.Add(name, role);
@@ -670,6 +672,7 @@ namespace OMLEngine
         /// <param name="actor">Person object to add</param>
         public void AddActor(Person actor)
         {
+            if (actor == null) return;
             if (!_actors.Contains(actor))
                 _actors.Add(actor);
         }
@@ -679,6 +682,7 @@ namespace OMLEngine
         /// <param name="crew_member">Person object to add</param>
         public void AddCrew(Person crew_member)
         {
+            if (crew_member == null) return;
             if (!_crew.Contains(crew_member))
                 _crew.Add(crew_member);
         }
@@ -688,6 +692,7 @@ namespace OMLEngine
         /// <param name="director">Person object to add</param>
         public void AddDirector(Person director)
         {
+            if (director == null) return;
             _directors.Add(director);
         }
         /// <summary>
@@ -696,6 +701,7 @@ namespace OMLEngine
         /// <param name="writer">Person object to add</param>
         public void AddWriter(Person writer)
         {
+            if (writer == null) return;
             _writers.Add(writer);
         }
         /// <summary>
@@ -704,6 +710,7 @@ namespace OMLEngine
         /// <param name="producer">string name to add</param>
         public void AddProducer(string producer)
         {
+            if (producer == null) return;
             _producers.Add(producer);
         }
         /// <summary>
@@ -712,6 +719,7 @@ namespace OMLEngine
         /// <param name="genre">A Genre from the Genre enum</param>
         public void AddGenre(string genre)
         {
+            if (genre == null) return;
             _genres.Add(genre);
         }
         /// <summary>
@@ -720,6 +728,7 @@ namespace OMLEngine
         /// <param name="sound_format">string name to add</param>
         public void AddSoundFormat(string sound_format)
         {
+            if (sound_format == null) return;
             _soundFormats.Add(sound_format);
         }
         /// <summary>
@@ -728,6 +737,7 @@ namespace OMLEngine
         /// <param name="language_format">string name to add</param>
         public void AddLanguageFormat(string language_format)
         {
+            if (language_format == null) return;
             _languageFormats.Add(language_format);
         }
 
