@@ -4,23 +4,22 @@ using System.IO;
 using System.Windows.Forms;
 using OMLSDK;
 using OMLEngine;
+using System.Drawing;
 
 namespace OMLImporter
 {
     class Program
     {
         public static double VERSION = 0.1;
-        public static int _exit = 0;
+        private static TitleCollection tc = new TitleCollection();
+        private static Boolean isDirty = false;
         public static bool _copyImages = true;
 
         [STAThread]
         static void Main(string[] args)
         {
-            OMLPlugin plugin = null;
-            string file_to_import = string.Empty;
-
             PrintHeader();
-
+            Menu();
             /* This will be used to pass params and not use the menu (automation use?)
             if (args.Length > 0)
             {
@@ -32,31 +31,13 @@ namespace OMLImporter
                 }
             }
             */
-
-            do
-            {
-                Menu(ref plugin);
-                if (Program._exit < 1)
-                {
-                    AskIfShouldCopyImages();
-                    GetFile(ref file_to_import, plugin);
-                    if (plugin != null && file_to_import != null)
-                    {
-                        Utilities.DebugLine("[OMLImporter] Found plugin and file, moving to process");
-                        ProcessFile(plugin, file_to_import);
-                        plugin = null;
-                        file_to_import = null;
-                    }
-                }
-                Utilities.DebugLine("");
-            } while (Program._exit < 1);
         }
 
-        public static void GetFile(ref string file_to_import, OMLPlugin plugin)
+        public static DialogResult GetFile(ref string file_to_import, OMLPlugin plugin)
         {
             OpenFileDialog ofDiag = new OpenFileDialog();
             ofDiag.InitialDirectory = "c:\\";
-            ofDiag.Filter = "Xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            ofDiag.Filter = "Xml files (*.xml)|*.xml|DVR-MS Files (*.dvr-ms)|*.dvr-ms|All files (*.*)|*.*";
             ofDiag.FilterIndex = 1;
             ofDiag.RestoreDirectory = true;
             ofDiag.AutoUpgradeEnabled = true;
@@ -64,44 +45,68 @@ namespace OMLImporter
             ofDiag.CheckPathExists = true;
             ofDiag.Multiselect = false;
             ofDiag.Title = "Select " + plugin.GetName() + " file to import";
-
-            if (ofDiag.ShowDialog() == DialogResult.OK)
+            DialogResult dlgRslt = ofDiag.ShowDialog();
+            if (dlgRslt == DialogResult.OK)
             {
                 Utilities.DebugLine("[OMLImporter] Valid file found ("+ofDiag.FileName+")");
                 file_to_import = ofDiag.FileName;
             }
+            return dlgRslt;
         }
 
-        public static void Menu(ref OMLPlugin plugin)
+        public static void Menu()
         {
-            Console.WriteLine("Which Importer would you like to use:");
-            Console.WriteLine("1) MyMovies");
-            Console.WriteLine("2) DVD Profiler");
-            Console.WriteLine("3) Movie Collectorz");
-            Console.WriteLine("4) Quit");
-            Console.Write("Choice: ");
+            OMLPlugin plugin = null;
+            string file_to_import = string.Empty;
 
-            string response = Console.ReadLine();
-            response = response.Substring(0, 1);
-            switch (Int32.Parse(response))
+            while (true)
             {
-                case 1:
-                    plugin = new MyMoviesPlugin.MyMoviesImporter();
-                    break;
-                case 2:
-                    plugin = new DVDProfilerPlugin.DVDProfilerImporter();
-                    break;
-                case 3:
-                    plugin = new MovieCollectorz.MovieCollectorzPlugin();
-                    break;
-                case 4:
-                    Program._exit = 1;
-                    return;
-                default:
-                    Usage();
-                    return;
+                Console.WriteLine("Which Importer would you like to use:");
+                Console.WriteLine("1) MyMovies");
+                Console.WriteLine("2) DVD Profiler");
+                Console.WriteLine("3) Movie Collectorz");
+                Console.WriteLine("4) DVRMS Movie Files");
+                Console.WriteLine("5) Quit");
+                Console.Write("Choice: ");
+
+                string response = Console.ReadLine();
+                response = response.Substring(0, 1);
+                switch (Int32.Parse(response))
+                {
+                    case 1:
+                        AskIfShouldCopyImages();
+                        plugin = new MyMoviesPlugin.MyMoviesImporter();
+                        break;
+                    case 2:
+                        AskIfShouldCopyImages();
+                        plugin = new DVDProfilerPlugin.DVDProfilerImporter();
+                        break;
+                    case 3:
+                        AskIfShouldCopyImages();
+                        plugin = new MovieCollectorz.MovieCollectorzPlugin();
+                        break;
+                    case 4:
+                        plugin = new DVRMS.DVRMSPlugin();
+                        break;
+                    case 5:
+                        if (isDirty) 
+                        {
+                            tc.saveTitleCollection();
+                        }
+                        Console.WriteLine("Complete");
+                        return;
+                    default:
+                        Usage();
+                        continue;
+                }
+                Console.WriteLine();
+
+                if (GetFile(ref file_to_import, plugin) == DialogResult.OK)
+                {
+                    ProcessFile(plugin, file_to_import);
+                }
             }
-            Console.WriteLine();
+
         }
 
         public static void AskIfShouldCopyImages()
@@ -142,9 +147,7 @@ namespace OMLImporter
         public static void LoadTitlesIntoDatabase(OMLPlugin plugin)
         {
             Utilities.DebugLine("[OMLImporter] Titles loaded, beginning Import process");
-            TitleCollection tc = new TitleCollection();
-            tc.loadTitleCollection();
-
+            //TitleCollection tc = new TitleCollection();
             List<Title> titles = plugin.GetTitles();
             Utilities.DebugLine("[OMLImporter] "+titles.Count+" titles found in input file");
             Console.WriteLine("Found " + titles.Count + " titles");
@@ -158,6 +161,7 @@ namespace OMLImporter
 
             foreach (Title t in titles)
             {
+                Console.WriteLine("Adding: " + t.Name);
                 if (YesToAll == false)
                 {
                     Console.WriteLine("Would you like to add this title? (y/n/a)");
@@ -183,28 +187,17 @@ namespace OMLImporter
                 else
                 {
                     OMLPlugin.BuildResizedMenuImage(t);
-                    System.Collections.Hashtable fileNames = tc.MoviesByFilename;
-
-                    if (tc.MoviesByFilename.ContainsKey(t.FileLocation))
-                    {
-                        Console.WriteLine("Replacing: " + t.Name);
-                        Title oldTitle = (Title)tc.MoviesByFilename[t.FileLocation];
-                        tc.Replace(t, oldTitle);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Adding: " + t.Name);
-                        tc.Add(t);
-                    }
-
+                    tc.Add(t);
                     numberOfTitlesAdded++;
                 }
             }
+
+            if (numberOfTitlesAdded > 0) isDirty = true;
             Console.WriteLine();
             Console.WriteLine("Added " + numberOfTitlesAdded + " titles");
             Console.WriteLine("Skipped " + numberOfTitlesSkipped + " titles");
-            tc.saveTitleCollection();
-            Console.WriteLine("Complete");
+            //tc.saveTitleCollection();
+            //Console.WriteLine("Complete");
         }
 
         public static void ProcessFile(OMLPlugin plugin, string file_to_import)
