@@ -17,7 +17,6 @@ namespace MovieCollectorz
     {
         bool _ShouldCopyImages = true;
         const string HTML_TAG_PATTERN = "<.*?>";
-        TextReader tr = null;
 
         public override string GetDescription()
         {
@@ -34,14 +33,6 @@ namespace MovieCollectorz
         public override bool Load(string filename, bool ShouldCopyImages)
         {
             _ShouldCopyImages = ShouldCopyImages;
-            try
-            {
-                tr = new StreamReader(filename);
-            }
-            catch (Exception e)
-            {
-                Utilities.DebugLine(e.Message);
-            }
 
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(filename);
