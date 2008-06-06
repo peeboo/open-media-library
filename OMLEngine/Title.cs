@@ -60,11 +60,19 @@ namespace OMLEngine
         private int _parent;
         private string _sortName;
         private string _MPAARatingReason;
+        private string _videoDetails;
 
 
         #endregion
 
         #region properties
+
+
+        public string VideoDetails
+        {
+            get { return _videoDetails; }
+            set { _videoDetails = value; }
+        }
 
         public string MPAARatingReason
         {
@@ -582,6 +590,7 @@ namespace OMLEngine
             _parent = GetSerializedInt( info,"parent");
             _sortName = GetSerializedString(info, "sort_name");
             _MPAARatingReason = GetSerializedString(info, "mpaa_rating_reason");
+            _videoDetails = GetSerializedString(info, "video_details");
 
             if (SortName.Length == 0) _sortName = _name;
         }
@@ -637,6 +646,7 @@ namespace OMLEngine
             info.AddValue("parent", _parent);
             info.AddValue("sort_name", _sortName);
             info.AddValue("mpaa_rating_reason", _MPAARatingReason);
+            info.AddValue("video_deatils", _videoDetails);
         }
         #endregion
 
