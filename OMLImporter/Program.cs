@@ -143,6 +143,8 @@ namespace OMLImporter
         {
             Utilities.DebugLine("[OMLImporter] Titles loaded, beginning Import process");
             TitleCollection tc = new TitleCollection();
+            tc.loadTitleCollection();
+
             List<Title> titles = plugin.GetTitles();
             Utilities.DebugLine("[OMLImporter] "+titles.Count+" titles found in input file");
             Console.WriteLine("Found " + titles.Count + " titles");
@@ -156,7 +158,6 @@ namespace OMLImporter
 
             foreach (Title t in titles)
             {
-                Console.WriteLine("Adding: " + t.Name);
                 if (YesToAll == false)
                 {
                     Console.WriteLine("Would you like to add this title? (y/n/a)");
@@ -182,7 +183,20 @@ namespace OMLImporter
                 else
                 {
                     OMLPlugin.BuildResizedMenuImage(t);
-                    tc.Add(t);
+                    System.Collections.Hashtable fileNames = tc.MoviesByFilename;
+
+                    if (tc.MoviesByFilename.ContainsKey(t.FileLocation))
+                    {
+                        Console.WriteLine("Replacing: " + t.Name);
+                        Title oldTitle = (Title)tc.MoviesByFilename[t.FileLocation];
+                        tc.Replace(t, oldTitle);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Adding: " + t.Name);
+                        tc.Add(t);
+                    }
+
                     numberOfTitlesAdded++;
                 }
             }
