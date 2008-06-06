@@ -7,10 +7,10 @@ using System.Diagnostics;
 
 namespace DVDProfilerPlugin
 {
+    [CLSCompliant(true)]
     public class DVDProfilerImporter : OMLPlugin, IOMLPlugin
     {
         bool _ShouldCopyImages = true;
-        TextReader tr = null;
         private static double VERSION = 0.1;
 
         public DVDProfilerImporter()
@@ -21,8 +21,6 @@ namespace DVDProfilerPlugin
         public override bool Load(string filename, bool ShouldCopyImages)
         {
             _ShouldCopyImages = ShouldCopyImages;
-            try { tr = new StreamReader(filename); }
-            catch (Exception e) { Trace.WriteLine(e.Message); }
 
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(filename);
@@ -70,14 +68,7 @@ namespace DVDProfilerPlugin
             return "DVDProfiler xml file importer for Open Media Library v" + VERSION;
         }
 
-        public string CopyImage(string from_location, string to_location)
-        {
-            FileInfo fi = new FileInfo(from_location);
-            File.Copy(from_location, to_location, true);
-            return fi.Name;
-        }
-
-        private void process_node_switch(Title newTitle, XmlNode node)
+        private static void process_node_switch(Title newTitle, XmlNode node)
         {
             switch (node.Name)
             {
@@ -88,17 +79,17 @@ namespace DVDProfilerPlugin
                     XmlNode isDVD = node.SelectSingleNode("DVD");
                     XmlNode isHDDVD = node.SelectSingleNode("HDDVD");
                     XmlNode isBluRay = node.SelectSingleNode("BluRay");
-                    if (isDVD != null && isDVD.InnerText.ToUpper().CompareTo("TRUE") == 0)
+                    if (isDVD != null && String.Compare(isDVD.InnerText, "TRUE", StringComparison.CurrentCultureIgnoreCase) == 0)
                     {
                         newTitle.VideoFormat = VideoFormat.DVD;
                         break;
                     }
-                    if (isHDDVD != null && isHDDVD.InnerText.ToUpper().CompareTo("TRUE") == 0)
+                    if (isHDDVD != null && String.Compare(isHDDVD.InnerText, "TRUE", StringComparison.CurrentCultureIgnoreCase) == 0)
                     {
                         newTitle.VideoFormat = VideoFormat.HDDVD;
                         break;
                     }
-                    if (isBluRay != null && isBluRay.InnerText.ToUpper().CompareTo("TRUE") == 0)
+                    if (isBluRay != null && String.Compare(isBluRay.InnerText, "TRUE", StringComparison.CurrentCultureIgnoreCase) == 0)
                     {
                         newTitle.VideoFormat = VideoFormat.BLURAY;
                         break;
