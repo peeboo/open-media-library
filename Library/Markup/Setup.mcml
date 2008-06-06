@@ -22,7 +22,6 @@
       </Changed>
     </Rules>
 
-
     <Content>
       <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
         <Children>
@@ -42,7 +41,7 @@
 
           <Panel Name="Top" >
             <Children>
-              <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue">
+              <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0">
               </Text>
               <Clip Orientation="Vertical">
                 <Children>
@@ -81,8 +80,6 @@
         </Children>
       </ColorFill>
     </Content>
-
-
 
   </UI>
 

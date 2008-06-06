@@ -46,6 +46,7 @@ namespace Library
             _Importers.Add("MyMovies");
             _Importers.Add("DVD Profiler");
             _Importers.Add("Movie Collectorz");
+            _Importers.Add("DVR-MS Files");
 
             _ImporterSelection.Options = _Importers;
 
