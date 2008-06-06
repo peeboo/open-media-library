@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using OMLEngine;
 using System.Drawing;
+using System.IO;
 
 namespace OMLSDK
 {
@@ -33,6 +34,7 @@ namespace OMLSDK
         }
         public List<Title> GetTitles()
         {
+            titles.Sort();
             return titles;
         }
         public OMLPlugin()
@@ -45,6 +47,18 @@ namespace OMLSDK
         }
         public void AddTitle(Title newTitle)
         {
+            if (string.IsNullOrEmpty(newTitle.AspectRatio))
+            {
+                Utilities.DebugLine("Setting AspectRatio for Title: " + newTitle.Name);
+                SetAspectRatio(newTitle);
+            }
+
+            if (newTitle.DateAdded.CompareTo(new DateTime(0001, 1, 1)) == 0)
+            {
+                Utilities.DebugLine("Setting Date Added for title: " + newTitle.Name);
+                newTitle.DateAdded = DateTime.Now;
+            }
+
             titles.Add(newTitle);
             totalRowsAdded++;
         }
@@ -76,6 +90,29 @@ namespace OMLSDK
                     t.FrontCoverMenuPath = img_path;
                 }
             }
+        }
+        public void SetAspectRatio(Title t)
+        {
+            string fileName = string.Empty;
+            if (t.VideoFormat == VideoFormat.DVD)
+            {
+                fileName = t.FileLocation + "\\vts_01_0.vob";
+            }
+            else
+                fileName = t.FileLocation;
+
+            Utilities.DebugLine("Scanning Res for: " + fileName);
+            Size size = Utilities.ResolutionOfVideoFile(fileName);
+            if (size.Width > 0 && size.Height > 0)
+            {
+                t.AspectRatio = size.Width.ToString() + "x" + size.Height.ToString();
+            }
+        }
+        public static string CopyImage(string from_location, string to_location)
+        {
+            FileInfo fi = new FileInfo(from_location);
+            File.Copy(from_location, to_location, true);
+            return fi.Name;
         }
     }
 }
