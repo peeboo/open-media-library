@@ -646,7 +646,7 @@ namespace OMLEngine
             info.AddValue("parent", _parent);
             info.AddValue("sort_name", _sortName);
             info.AddValue("mpaa_rating_reason", _MPAARatingReason);
-            info.AddValue("video_deatils", _videoDetails);
+            info.AddValue("video_details", _videoDetails);
         }
         #endregion
 
