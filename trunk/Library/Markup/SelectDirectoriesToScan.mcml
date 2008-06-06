@@ -6,79 +6,101 @@
       xmlns:me="Me">
 
   <UI Name="SelectFileToImport">
+      <Properties>
+          <a:Setup Name="Setup" Setup="$Required" />
+      </Properties>
 
-		<Properties>
-      <a:Setup Name="Setup" Setup="$Required" />
-		</Properties>
+      <Locals>
+          <Command Name="FocusedNodeChanged" />
+          <Command Name="BeginScanCommand" Description="Begin Scan" />
+      </Locals>
 
-		<Locals>
-      <Command Name="FocusedNodeChanged" />
-      <Command Name="BeginScanCommand" Description="Begin Scan" />
-		</Locals>
+      <Rules>
+          <Changed Source="[BeginScanCommand.Invoked]">
+              <Actions>
+                  <Navigate Source="@resx://Library/Library.Resources/SelectFilesToImport"
+                            Setup="[Setup]" />
+              </Actions>
+          </Changed>
+      </Rules>
 
-    <Rules>
-      <Changed Source="[BeginScanCommand.Invoked]">
-        <Actions>
-          <Navigate Source="@resx://Library/Library.Resources/SelectFilesToImport"
-                    Setup="[Setup]" />
-        </Actions>
-      </Changed>
-      <Binding Target="[CurrentNodeLabel.Content]"
-               Source="[Setup.TreeView.CheckedNode.ToString]" />
-      <Binding Target="[CurrentNodeLabel.Content]"
-               Source="[FocusedNodeChanged.Description]" />
-    </Rules>
+      <Content>
+          <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
+              <Children>
 
-    <Content>
-      
-      <Panel Layout="VerticalFlow">
-        <Children>
+                  <Panel Name="Bottom" >
+                      <Children>
+                          <Clip Orientation="Vertical">
+                              <Children>
+                                  <ColorFill Content="Black" Alpha="0.5"/>
+                              </Children>
+                          </Clip>
+                      </Children>
+                      <LayoutInput>
+                          <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
+                      </LayoutInput>
+                  </Panel>
 
-          <Panel MinimumSize="561,200"
-                 MaximumSize="561,200">
-            <Children>
-              <Text Name="CurrentNodeLabel"
-                    Color="LightBlue"
-                    Margins="0,10,0,0"
-                    WordWrap="true" />
+                  <Panel Name="Top" >
+                      <Children>
+                          <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0">
+                          </Text>
+                          <Clip Orientation="Vertical">
+                              <Children>
+                                  <ColorFill Content="Black" Alpha="0.5"/>
+                              </Children>
+                          </Clip>
 
-            </Children>
-          </Panel>
-          <Graphic Content="image://me:ListboxNoFocus">
-            <Children>
-              
-          <Scroller Orientation="Vertical"
-                    FadeSize="10"
-                    Padding="15,15,15,15">
-            <Children>
-              
-              <Repeater Layout="VerticalFlow"
-                        Source="[Setup.TreeView.ChildNodes]">
+                      </Children>
+                      <LayoutInput>
+                          <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
+                      </LayoutInput>
+                  </Panel>
 
-                <Animations>
-                  <Animation Animation="animation://me:ScrollerMoveItemSmooth" />
-                </Animations>
+                  <Panel Name="Content">
+                      <Children>
+                          <Clip Layout="VerticalFlow">
+                              <Children>
 
-                <Content>
-                  <me:TreeNodeItem TreeNode="[RepeatedItem!a:TreeNode]"
-                                   Focused="[FocusedNodeChanged]" />
-                </Content>
-              </Repeater>
-            </Children>
-          </Scroller>
-              
-            </Children>
-          </Graphic>
+                                  <Graphic Content="image://me:ListboxNoFocus" Margins="0,0,0,20">
+                                      <Children>
 
-          <controls:Button Name="Begin Scan"
-                           Model="[BeginScanCommand]" />
+                                          <Scroller Orientation="Vertical"
+                                                    FadeSize="10"
+                                                    Padding="15,15,15,15">
+                                              <Children>
 
-        </Children>
-      </Panel>
-      
-		</Content>
+                                                  <Repeater Layout="VerticalFlow"
+                                                            Source="[Setup.TreeView.ChildNodes]">
 
-	</UI>
+                                                      <Animations>
+                                                          <Animation Animation="animation://me:ScrollerMoveItemSmooth" />
+                                                      </Animations>
+
+                                                      <Content>
+                                                          <me:TreeNodeItem TreeNode="[RepeatedItem!a:TreeNode]"
+                                                                           Focused="[FocusedNodeChanged]" />
+                                                      </Content>
+                                                  </Repeater>
+                                              </Children>
+                                          </Scroller>
+
+                                      </Children>
+                                  </Graphic>
+                                  <controls:Button Name="Begin Scan" Model="[BeginScanCommand]" />
+
+                              </Children>
+                          </Clip>
+                      </Children>
+                      <LayoutInput>
+                          <FormLayoutInput Left="Parent,0.15,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
+                      </LayoutInput>
+                  </Panel>
+
+              </Children>
+          </ColorFill>
+      </Content>
+  </UI>
 
   <UI Name="TreeNodeItem">
 
@@ -421,45 +443,45 @@
 
     </Rules>
 
-    <Content>
+      <Content>
 
-      <Panel>
-        <Children>
+          <Panel>
+              <Children>
 
-          <Graphic Name="imgButton"
-                   Content="[ImageNoFocus]"
-                   Padding="12,7,12,7"
-                   MouseInteractive="true"
-                   MinimumSize="[Size]"
-                   MaximumSize="[Size]"
-                   SizingPolicy="SizeToContent"
-                   HorizontalAlignment="Fill"
-                   VerticalAlignment="Fill"
+                  <Graphic Name="imgButton"
+                           Content="[ImageNoFocus]"
+                           Padding="12,7,12,7"
+                           MouseInteractive="true"
+                           MinimumSize="[Size]"
+                           MaximumSize="[Size]"
+                           SizingPolicy="SizeToContent"
+                           HorizontalAlignment="Fill"
+                           VerticalAlignment="Fill"
                    >
-            <Children>
-              <Text Name="Label"
-                    Color="White"
-                    Margins="0,0,0,0" />
-            </Children>
-          </Graphic>
+                      <Children>
+                          <Text Name="Label"
+                                Color="White"
+                                Margins="0,0,0,0" />
+                      </Children>
+                  </Graphic>
 
-          <Graphic Name="imgFocusOverlay"
-                   Content="image://me:ButtonLeftFocusOverlay"
-                   MinimumSize="[Size]"
-                   MaximumSize="[Size]"
-                   SizingPolicy="SizeToContent"
-                   HorizontalAlignment="Fill"
-                   VerticalAlignment="Fill">
+                  <Graphic Name="imgFocusOverlay"
+                           Content="image://me:ButtonLeftFocusOverlay"
+                           MinimumSize="[Size]"
+                           MaximumSize="[Size]"
+                           SizingPolicy="SizeToContent"
+                           HorizontalAlignment="Fill"
+                           VerticalAlignment="Fill">
 
-            <Animations>
-              <Animation Animation="animation://me:ButtonFocusOverlayIdle"/>
-            </Animations>
+                      <Animations>
+                          <Animation Animation="animation://me:ButtonFocusOverlayIdle"/>
+                      </Animations>
 
-          </Graphic>
+                  </Graphic>
 
-        </Children>
-      </Panel>
-    </Content>
+              </Children>
+          </Panel>
+      </Content>
   </UI>
 
   <Image Name="ButtonDisabled"
@@ -483,7 +505,6 @@
   <Image Name="ButtonPressedHighlight"
          Source="resx://Library/Library.Resources/ButtonPressedHighlight"
          NineGrid="7,7,7,7" />
-
   <Image Name="FirstRunCheckBoxCheckedDisabled"
          Source="resx://Library/Library.Resources/FirstRunCheckBoxCheckedDisabled"/>
   <Image Name="FirstRunCheckBoxCheckedFocus"
@@ -527,7 +548,6 @@
                         RelativeTo="Final" />
     </Keyframes>
   </Animation>
-
   <Animation Name="ButtonFocusOverlayIdle"
              Loop="-1"
              Type="Idle">

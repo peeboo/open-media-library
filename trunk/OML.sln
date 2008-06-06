@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLTestSuite", "OMLTestSuit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLImporter", "OMLImporter\OMLImporter.csproj", "{4D49BE81-B5F9-4885-BE11-1523D141EA10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVRMSPlugin", "DVRMSPlugin\DVRMSPlugin.csproj", "{82D93509-55CC-4350-98D1-C964861266A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{4D49BE81-B5F9-4885-BE11-1523D141EA10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D49BE81-B5F9-4885-BE11-1523D141EA10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D49BE81-B5F9-4885-BE11-1523D141EA10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82D93509-55CC-4350-98D1-C964861266A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82D93509-55CC-4350-98D1-C964861266A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82D93509-55CC-4350-98D1-C964861266A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82D93509-55CC-4350-98D1-C964861266A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

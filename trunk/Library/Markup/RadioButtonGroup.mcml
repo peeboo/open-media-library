@@ -19,8 +19,7 @@
 
 		<Content>
       <Panel Name="RootPanel"
-             Layout="VerticalFlow"
-             MinimumSize="200,200">
+             Layout="VerticalFlow">
         <Children>
 
           <Text Name="Selection"

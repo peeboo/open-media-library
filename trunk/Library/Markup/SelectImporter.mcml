@@ -45,7 +45,7 @@
             </Panel>
             <Panel Name="Top" >
                 <Children>
-                    <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue"/>
+                    <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0"/>
                     <Clip Orientation="Vertical">
                         <Children>
                             <ColorFill Content="Black" Alpha="0.5"/>
@@ -63,10 +63,8 @@
                     <Clip Layout="VerticalFlow">
                         <Children>
                             <Text Content="Select an Importer" Color="White" Font="Calibri, 26" />
-                                    <rbg:RadioButtonGroup Model="[Setup.ImporterSelection]" />
-                                    <controls:Button Name="Next"
-                                                     Model="[NextCommand]">
-                                    </controls:Button>
+                            <rbg:RadioButtonGroup Model="[Setup.ImporterSelection]" />
+                            <controls:Button Name="Next" Model="[NextCommand]" />
                         </Children>
                     </Clip>
                 </Children>
