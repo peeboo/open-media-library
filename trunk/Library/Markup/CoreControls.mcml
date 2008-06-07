@@ -4,5 +4,6 @@
   <!-- Core controls -->
   <Aggregate Source="resx://Library/Library.Resources/Button" />
   <Aggregate Source="resx://Library/Library.Resources/RadioButtonGroup" />
+  <Aggregate Source="resx://Library/Library.Resources/WaitCursor" />
 
 </Mcml>

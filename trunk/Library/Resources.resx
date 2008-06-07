@@ -373,4 +373,13 @@
   <data name="SimpleButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\control\simplebutton.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="BusyBack" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\busyback.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BusyFront" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\busyfront.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WaitCursor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\waitcursor.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

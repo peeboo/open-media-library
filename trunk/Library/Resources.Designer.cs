@@ -81,6 +81,20 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap BusyBack {
+            get {
+                object obj = ResourceManager.GetObject("BusyBack", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap BusyFront {
+            get {
+                object obj = ResourceManager.GetObject("BusyFront", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static byte[] Button {
             get {
                 object obj = ResourceManager.GetObject("Button", resourceCulture);
@@ -646,6 +660,13 @@ namespace Library {
         internal static byte[] Styles {
             get {
                 object obj = ResourceManager.GetObject("Styles", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] WaitCursor {
+            get {
+                object obj = ResourceManager.GetObject("WaitCursor", resourceCulture);
                 return ((byte[])(obj));
             }
         }
