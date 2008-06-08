@@ -256,7 +256,7 @@ namespace Library
                 if (t.PlayState == PlayState.Finished || t.PlayState == PlayState.Stopped)
                 {
                     Utilities.DebugLine("MoviePlayerTranscode.Transport_PropertyChanged: movie {0} Finished", OMLApplication.Current.NowPlayingMovieName);
-                    OMLApplication.Current.NowPlayingStatus = "Finished";
+                    OMLApplication.Current.NowPlayingStatus = PlayState.Finished;
                     stopTranscode();
                 }
             }

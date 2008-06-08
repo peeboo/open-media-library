@@ -57,13 +57,13 @@
       <Value Profile="(Default)">80</Value>
     </Setting>
     <Setting Name="DetailsTopOffset" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">15</Value>
+      <Value Profile="(Default)">30</Value>
     </Setting>
     <Setting Name="BottomAnchor" Type="System.Single" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="BottomOffset" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">-15</Value>
+      <Value Profile="(Default)">-30</Value>
     </Setting>
     <Setting Name="GalleryCoverArtRows" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3</Value>
@@ -90,7 +90,7 @@
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="RightOffset" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">-15</Value>
+      <Value Profile="(Default)">-30</Value>
     </Setting>
     <Setting Name="GallerySpacingHorizontal" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>

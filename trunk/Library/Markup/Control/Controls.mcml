@@ -5,7 +5,7 @@
       >
 
   <!--<Aggregate Source="resx://Library/Library.Resources/HeaderButton" />-->
-  <!--<Aggregate Source="resx://Library/Library.Resources/HeaderText" />-->
+  <Aggregate Source="resx://Library/Library.Resources/HeaderText" />
   <Aggregate Source="resx://Library/Library.Resources/SimpleButton" />
   <!--<Aggregate Source="resx://Library/Library.Resources/SimpleCheckbox" />-->
   <!--<Aggregate Source="resx://Library/Library.Resources/SimpleEditbox" />-->

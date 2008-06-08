@@ -30,7 +30,7 @@
                 Orientation="Vertical"
                 AllowWrap="true"
                 ReferenceSize="[UISettings.Gallery.CoverArtSize]"
-                Spacing="1,0"
+                Spacing="[UISettings.Gallery.GallerySpacing]"
                 MajorAlignment="Fill"
                 MinorAlignment="Center"
                 RepeatGap="100"/>
@@ -51,14 +51,6 @@
     <ShortcutHandler Name="PlayHandler" Shortcut="Play" HandlerStage="Bubbled"/>
     <Timer Name="ClearTimer" AutoRepeat="false" Interval="5000" Enabled="false"/>
     <addin:AddInHost Name="AddInHost"/>
-    <!-- This is the list of buttons that will be displayed on the -->
-    <!-- dialog                                                    -->
-    <ArrayListDataSet Name="DialogButtons">
-      <Source>
-        <cor:String cor:String="Hello"/>
-        <cor:String cor:String="Goodbye"/>
-      </Source>
-    </ArrayListDataSet>
   </Locals>
 
   <Rules>
@@ -182,7 +174,7 @@
     
     <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
 
-    <Binding Source="[GalleryItem.MenuCoverArt]" Target="[Cover.Content]" />
+    <Binding Source="[GalleryItem.CoverArt]" Target="[Cover.Content]" />
     
     <Condition Source="[GalleryView]" SourceValue="List" ConditionOp="Equals" >
       <Actions>

@@ -34,7 +34,7 @@
       <AnchorEdge Name="DetailsRightBackgroundAnchor" Percent="[UISettings.Anchor.DetailsRightAnchor]" Offset = "50" Id="Parent"/>
       <AnchorEdge Name="DetailsRightAnchor" Percent="[UISettings.Anchor.DetailsRightAnchor]" Id="Parent"/>
       <AnchorEdge Name="DetailsTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
-      <AnchorEdge Name="TitleTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset = "[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
+      <AnchorEdge Name="TitleTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset = "0" Id="Parent"/>
       <AnchorEdge Name="FiltersTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.FiltersTopOffset]" Id="Parent"/>
       <AnchorEdge Name="GalleryBottomAnchor" Percent="[UISettings.Anchor.GalleryBottomAnchor]" Offset ="[UISettings.Anchor.GalleryBottomOffset]" Id="Parent"/>
       <AnchorEdge Name="BottomAnchor" Percent="[UISettings.Anchor.BottomAnchor]" Offset ="[UISettings.Anchor.BottomOffset]" Id="Parent"/>
@@ -91,11 +91,17 @@
 
           <Panel Name="TitlePanel" >
             <Children>
-              <Text Name="GalleryTitle" Content="[MovieBrowser.Title]" Font="font://s:TitleFont" HorizontalAlignment="Near" Color="color://s:NormalColor"/>
+              <!--<Text Name="GalleryTitle" Content="[MovieBrowser.Title]" Font="font://s:TitleFont" HorizontalAlignment="Near" Color="color://s:NormalColor"/>-->
+              <c:HeaderText Name="GalleryTitle" Text="[MovieBrowser.Title]" />
             </Children>
 
-            <LayoutInput>
+            <!--<LayoutInput>
               <FormLayoutInput Left="Parent,0.35,20" Right="[RightAnchor]" Top="[TitleTopAnchor]"/>
+            </LayoutInput>-->
+
+            <LayoutInput>
+              <FormLayoutInput Left="Parent, 0.04" Top="[TitleTopAnchor]" Right="[RightAnchor]" />
+              <!--<FormLayoutInput Left="Parent, 0.04" Top="Parent,0.04" Right="Parent,0.04" />-->
             </LayoutInput>
           </Panel>
 
