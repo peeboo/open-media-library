@@ -79,31 +79,8 @@ namespace Library
             Utilities.DebugLine("MoviePlayerFactory.Transport_PropertyChanged: movie {0} property {1} playrate {2} state {3} pos {4}", OMLApplication.Current.NowPlayingMovieName, property, t.PlayRate, t.PlayState.ToString(), t.Position.ToString());
             if (property == "PlayState")
             {
-                if (t.PlayState == PlayState.Paused)
-                {
-                    OMLApplication.Current.NowPlayingStatus = "Paused";
-                    Utilities.DebugLine("MoviePlayerFactory.Transport_PropertyChanged: movie {0} Paused", OMLApplication.Current.NowPlayingMovieName);
-                }
-                else if (t.PlayState == PlayState.Playing)
-                {
-                    OMLApplication.Current.NowPlayingStatus = "Playing";
-                    Utilities.DebugLine("MoviePlayerFactory.Transport_PropertyChanged: movie {0} Playing", OMLApplication.Current.NowPlayingMovieName);
-                }
-                else if (t.PlayState == PlayState.Finished)
-                {
-                    Utilities.DebugLine("MoviePlayerFactory.Transport_PropertyChanged: movie {0} Finished", OMLApplication.Current.NowPlayingMovieName);
-                    OMLApplication.Current.NowPlayingStatus = "Finished";
-                }
-                else if (t.PlayState == PlayState.Stopped)
-                {
-                    OMLApplication.Current.NowPlayingStatus = "Stopped ";
-                    Utilities.DebugLine("MoviePlayerFactory.Transport_PropertyChanged: movie {0} Stopped", OMLApplication.Current.NowPlayingMovieName);
-                }
-                else if (t.PlayState == PlayState.Undefined)
-                {
-                    OMLApplication.Current.NowPlayingStatus = "Last Watched";
-                    Utilities.DebugLine("MoviePlayerFactory.Transport_PropertyChanged: movie {0} LastWatched", OMLApplication.Current.NowPlayingMovieName);
-                }
+                OMLApplication.Current.NowPlayingStatus = t.PlayState;
+                Utilities.DebugLine("MoviePlayerFactory.Transport_PropertyChanged: movie {0} state {1}", OMLApplication.Current.NowPlayingMovieName, t.PlayState.ToString());
             }
         }
 
