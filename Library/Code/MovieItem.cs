@@ -236,8 +236,18 @@ namespace Library
             _backCoverArtImage = NoCoverImage;
             CoverArt = NoCoverImage;
             MenuCoverArt = NoCoverImage;
+
+            if (_titleObj.Runtime > 0)
+                SubCaption += "Runtime: " + Convert.ToString(_titleObj.Runtime) + " minutes\n";
+
+            if (_titleObj.UserStarRating > 0)
+                SubCaption += "User Rating: " + ((double)(_titleObj.UserStarRating / 10)).ToString("0.0") + "\n";
+
+            SubCaption += _titleObj.MPAARating + "\n";
+
+
             if( _titleObj.Directors.Count > 0 )
-                SubCaption = "Directed by: " + ((Person)_titleObj.Directors[0]).full_name + "\r\n";
+                SubCaption += "Directed by: " + ((Person)_titleObj.Directors[0]).full_name + "\n";
 
             int actorCount = 0;
             if (_titleObj.Actors.Count > 0)
@@ -263,16 +273,9 @@ namespace Library
 
             if (_titleObj.Actors.Count > 0)
             {
-                SubCaption += "\r\n";
+                SubCaption += "\n";
             }
 
-            SubCaption += _titleObj.MPAARating + "\r\n";
-            
-            if (_titleObj.Runtime > 0)
-                SubCaption += "Runtime: " + Convert.ToString(_titleObj.Runtime) + " minutes\r\n";
-            
-            if( _titleObj.UserStarRating > 0 )
-                SubCaption += "User Rating: " + ((double)(_titleObj.UserStarRating/10)).ToString("0.0");
 
             Details = _titleObj.Synopsis;
             _actingRoles = new List<string>();

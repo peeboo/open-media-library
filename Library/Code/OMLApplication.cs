@@ -148,7 +148,7 @@ namespace Library
             }
         }
 
-        public string NowPlayingStatus
+        public PlayState NowPlayingStatus
         {
             get { return _nowPlayingStatus; }
             set 
@@ -161,13 +161,13 @@ namespace Library
 
         public string NowPlaying
         {
-            get { return NowPlayingStatus + ": " + NowPlayingMovieName; }
+            get { return NowPlayingStatus.ToString() + ": " + NowPlayingMovieName; }
         }
 
 
         // private data
         private  string _nowPlayingMovieName;
-        private  string _nowPlayingStatus;
+        private  PlayState _nowPlayingStatus;
 
         private static OMLApplication _singleApplicationInstance;
         private AddInHost _host;

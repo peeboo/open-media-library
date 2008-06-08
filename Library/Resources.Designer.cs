@@ -387,6 +387,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] HeaderText {
+            get {
+                object obj = ResourceManager.GetObject("HeaderText", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ListboxNoFocus {
             get {
                 object obj = ResourceManager.GetObject("ListboxNoFocus", resourceCulture);

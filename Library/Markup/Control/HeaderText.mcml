@@ -15,10 +15,10 @@
 
     <Content>
 
-      <Clip FadeSize="25" MaximumSize="500,70" NearOffset="-40" Orientation="Vertical">
+      <Clip FadeSize="25"  NearOffset="-40" Orientation="Vertical">
         <Children>
 
-          <Text Content="[Text]" Color="White" Font="font://me:Font" Alpha="0.65" CenterPointPercent="1,0,1" />
+          <Text Content="[Text]" Color="White" Font="font://me:Font" Alpha="0.65" CenterPointPercent="1,0,1"  HorizontalAlignment="Far"/>
 
         </Children>
       </Clip>
