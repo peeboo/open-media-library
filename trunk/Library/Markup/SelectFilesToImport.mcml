@@ -5,54 +5,214 @@
       xmlns:controls="resx://Library/Library.Resources/CoreControls"
       xmlns:me="Me">
 
-  <UI Name="SelectFilesToImport">
+    <UI Name="SelectFilesToImport">
 
-		<Properties>
-      <a:Setup Name="Setup" Setup="$Required" />
-		</Properties>
-
-		<Content>
-      <Repeater Name="FilesToImportRepeater"
-                Navigation="FlowVertical"
-                Source="[Setup.TreeView.CheckedNodes]"
-                DiscardOffscreenVisuals="true">
-
-        <Animations>
-          <Animation Animation="animation://me:ScrollerMoveItemSmooth" />
-        </Animations>
+        <Properties>
+            <a:Setup Name="Setup" Setup="$Required" />
+        </Properties>
 
         <Content>
-          <me:RepeatedItem TreeNode="[RepeatedItem!a:TreeNode]" />
+            <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
+                <Children>
+
+                    <Panel Name="Bottom" >
+                        <Children>
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                    <Panel Name="Top" >
+                        <Children>
+                            <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0">
+                            </Text>
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
+
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                    <Panel Name="Content" >
+                        <Children>
+                            <Clip Layout="VerticalFlow">
+                                <Children>
+                                    <Text Content="Ready to begin importing your movies" Color="White" Font="Calibri, 26" />
+                                    <me:ShouldCopyImages Setup="[Setup]" />
+                                </Children>
+                            </Clip>
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0.15,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                </Children>
+            </ColorFill>
         </Content>
-      </Repeater>
-		</Content>
+    </UI>
 
-	</UI>
+    <UI Name="ShouldCopyImages">
+        <Properties>
+            <a:Setup Name="Setup" Setup="$Required" />
+        </Properties>
+        <Content>
+            <Panel Layout="HorizontalFlow">
+                <Children>
+                    <me:SimpleCheckbox Name="Checked" Checked="[Setup.ShouldCopyImages]"/>
+                    <Text Name="should_copy_images_text" Content="Should we copy images to the local OML directory?" />
+                </Children>
+            </Panel>
+        </Content>   
+    </UI>    
+    <UI Name="SimpleCheckbox">
+        <Properties>
+            <BooleanChoice Name="Checked"
+                           BooleanChoice="$Required" />
+        </Properties>
 
-  <UI Name="RepeatedItem">
-    <Properties>
-      <a:TreeNode Name="TreeNode"
-                  TreeNode="$Required" />
-    </Properties>
-    <Content>
-      <Text Name="Stuff"
-            Content="[TreeNode.Title]"
-            Color="White" />
-    </Content>
-  </UI>
+        <Locals>
+            <ClickHandler Name="Clicker" />
+            <BooleanTransformer Name="BooleanInverseTransformer" Inverse="true" />
+        </Locals>
 
-  <Animation Name="ScrollerMoveItemSmooth"
-             Type="Move">
-    <Keyframes>
-      <PositionKeyframe Time="0.0"
-                        Value="0,0,0"
-                        RelativeTo="Current"
-                        Interpolation="EaseOut" />
-      <PositionKeyframe Time="0.2"
-                        Value="0,0,0"
-                        RelativeTo="Final" />
-    </Keyframes>
-  </Animation>
+        <Rules>
+            <Default Target="[Input.KeyInteractive]"
+                     Value="true" />
+            <Binding Source="[Checked.Description]"
+                     Target="[Label.Content]" />
+            <Changed Source="[Clicker.Invoked]">
+                <Actions>
+                    <Set Target="[Checked.Value]"
+                         Value="[Checked.Value]"
+                         Transformer="[BooleanInverseTransformer]" />
+                </Actions>
+            </Changed>
 
+            <Condition Source="[Clicker.Clicking]"
+                       SourceValue="true">
+                <Conditions>
+                    <Equality Source="[Checked.Value]"
+                              Value="true" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[Background.Content]"
+                         Value="image://me:FirstRunCheckBoxCheckedFocus" />
+                </Actions>
+            </Condition>
+
+            <Condition Source="[Clicker.Clicking]"
+                       SourceValue="true">
+                <Conditions>
+                    <Equality Source="[Checked.Value]"
+                              Value="false" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[Background.Content]"
+                         Value="image://me:FirstRunCheckBoxUncheckedFocus" />
+                </Actions>
+            </Condition>
+
+            <Condition Source="[Input.KeyFocus]"
+                       SourceValue="true">
+                <Conditions>
+                    <Equality Source="[Checked.Value]"
+                              Value="true" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[Background.Content]"
+                         Value="image://me:FirstRunCheckBoxCheckedFocus" />
+                </Actions>
+            </Condition>
+
+            <Condition Source="[Input.KeyFocus]"
+                       SourceValue="true">
+                <Conditions>
+                    <Equality Source="[Checked.Value]"
+                              Value="false" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[Background.Content]"
+                         Value="image://me:FirstRunCheckBoxUncheckedFocus" />
+                </Actions>
+            </Condition>
+
+            <Condition Source="[Input.KeyFocus]"
+                       SourceValue="false">
+                <Conditions>
+                    <Equality Source="[Checked.Value]"
+                              Value="true" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[Background.Content]"
+                         Value="image://me:FirstRunCheckBoxCheckedNoFocus" />
+                </Actions>
+            </Condition>
+
+            <Condition Source="[Input.KeyFocus]"
+                       SourceValue="false">
+                <Conditions>
+                    <Equality Source="[Checked.Value]"
+                              Value="false" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[Background.Content]"
+                         Value="image://me:FirstRunCheckBoxUncheckedNoFocus" />
+                </Actions>
+            </Condition>
+
+        </Rules>
+
+        <Content>
+            <Panel>
+
+                <Layout>
+                    <FlowLayout Orientation="Horizontal"
+                                ItemAlignment="Center" />
+                </Layout>
+
+                <Children>
+
+                    <Panel Name="Items"
+                           Layout="HorizontalFlow">
+                        <Children>
+
+                            <Graphic Name="Background"
+                                     Content="image://me:FirstRunCheckBoxUncheckedNoFocus"
+                                     Margins="0,0,0,0"
+                                     MaximumSize="34,34" />
+                            <Text Name="Label"
+                                  Color="White"
+                                  Margins="10,0,0,10" />
+
+                        </Children>
+                    </Panel>
+
+                </Children>
+
+            </Panel>
+        </Content>
+
+    </UI>
+
+    <Image Name="FirstRunCheckBoxUncheckedNoFocus"
+           Source="resx://Library/Library.Resources/FirstRunCheckBoxUncheckedNoFocus"/>
+    <Image Name="FirstRunCheckBoxCheckedFocus"
+           Source="resx://Library/Library.Resources/FirstRunCheckBoxCheckedFocus"/>
+    <Image Name="FirstRunCheckBoxUncheckedFocus"
+           Source="resx://Library/Library.Resources/FirstRunCheckBoxUncheckedFocus"/>
+    <Image Name="FirstRunCheckBoxCheckedNoFocus"
+           Source="resx://Library/Library.Resources/FirstRunCheckBoxCheckedNoFocus"/>
 
 </Mcml>

@@ -18,7 +18,7 @@ namespace Library
         }
 
         public DirectoryTreeNode(String title, String fullPath, TreeView treeView)
-            : base(title)
+            : base(title, fullPath)
         {
             FullPath = fullPath;
             TreeView = treeView;
@@ -68,8 +68,10 @@ namespace Library
         {
             return FullPath;
         }
+
         private void TreeView_OnCheckedNodeChanged(object sender, TreeNodeEventArgs e)
         {
+            OMLApplication.DebugLine("CheckedNodeChanged: " + e.Node.Title);
             Checked.Value = (e.Node == this);
         }
 

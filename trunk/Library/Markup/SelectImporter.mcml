@@ -8,75 +8,106 @@
       xmlns:controls="resx://Library/Library.Resources/CoreControls"
       xmlns:me="Me">
 
-  <UI Name="SelectImporter">
+    <UI Name="SelectImporter">
 
-    <Properties>
-      <a:Setup Name="Setup" />
-    </Properties>
-    <Locals>
+        <Properties>
+            <a:Setup Name="Setup" Setup="$Required"/>
+        </Properties>
+        <Locals>
 
-      <Command Name="NextCommand"
-               Description="Next"/>
+            <Command Name="NextCommand" Description="Next"/>
 
-    </Locals>
+        </Locals>
 
-    <Rules>
-      <Changed Source="[NextCommand.Invoked]">
-        <Actions>
-          <Navigate Source="@resx://Library/Library.Resources/SelectDirectoriesToScan" Setup="[Setup]" />
-        </Actions>
-      </Changed>
-    </Rules>
+        <Rules>
+            <Changed Source="[NextCommand.Invoked]">
+                <Actions>
+                    <Navigate Source="@resx://Library/Library.Resources/SelectDirectoriesToScan" Setup="[Setup]" />
+                </Actions>
+            </Changed>
+        </Rules>
 
-    <Content>
-      <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
-        <Children>
-            <Panel Name="Bottom" >
+        <Content>
+            <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
                 <Children>
-                    <Clip Orientation="Vertical">
+                    <Panel Name="Bottom" >
                         <Children>
-                            <ColorFill Content="Black" Alpha="0.5"/>
+                            <Panel Layout="Fill" Margins="50,0,0,0">
+                                <Children>
+                                    <Panel Layout="VerticalFlow">
+                                        <Children>
+                                            <Clip Layout="HorizontalFlow">
+                                                <Children>
+                                                    <Clip Layout="Grid">
+                                                        <Children>
+                                                            <Text Name="SelectedImporterLabel" Content="Selected Importer: " Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                            <Text Name="SelectedImporterText" Content="[Setup.ImporterSelection.Chosen!cor:String]" Font="Calibri, 20" Color="LightBlue"/>
+                                                            <Text Name="" Content="" Font="" Color=""/>
+                                                            <Text Name="" Content="" Font="" Color=""/>
+                                                        </Children>
+                                                    </Clip>
+                                                </Children>
+                                            </Clip>
+                                            <Clip Layout="HorizontalFlow">
+                                                <Children>
+                                                    <Clip Layout="Grid">
+                                                        <Children>
+                                                            <Text Name="ShouldCopyImagesLabel" Content="Copy Images: " Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                            <Text Name="ShouldCopyImagesText" Content="[Setup.ShouldCopyImages.Value!cor:String]" Font="Calibri, 20" Color="LightBlue"/>
+                                                            <Text Name="" Content="" Font="" Color=""/>
+                                                            <Text Name="" Content="" Font="" Color=""/>
+                                                        </Children>
+                                                    </Clip>
+                                                </Children>
+                                            </Clip>
+                                        </Children>
+                                    </Panel>
+                                </Children>
+                            </Panel>
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
                         </Children>
-                    </Clip>
-                </Children>
-                <LayoutInput>
-                    <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
-                </LayoutInput>
-            </Panel>
-            <Panel Name="Top" >
-                <Children>
-                    <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0"/>
-                    <Clip Orientation="Vertical">
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
+                        </LayoutInput>
+                    </Panel>
+                    <Panel Name="Top" >
                         <Children>
-                            <ColorFill Content="Black" Alpha="0.5"/>
+                            <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0"/>
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
+
                         </Children>
-                    </Clip>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                    <Panel Name="Content" >
+                        <Children>
+                            <Clip Layout="VerticalFlow">
+                                <Children>
+                                    <Text Content="Select an Importer" Color="White" Font="Calibri, 26" />
+                                    <rbg:RadioButtonGroup Model="[Setup.ImporterSelection]" />
+                                    <controls:Button Name="Next" Model="[NextCommand]" />
+                                </Children>
+                            </Clip>
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0.15,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
+                        </LayoutInput>
+                    </Panel>
 
                 </Children>
-                <LayoutInput>
-                    <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
-                </LayoutInput>
-            </Panel>
+            </ColorFill>
+        </Content>
 
-            <Panel Name="Content" >
-                <Children>
-                    <Clip Layout="VerticalFlow">
-                        <Children>
-                            <Text Content="Select an Importer" Color="White" Font="Calibri, 26" />
-                            <rbg:RadioButtonGroup Model="[Setup.ImporterSelection]" />
-                            <controls:Button Name="Next" Model="[NextCommand]" />
-                        </Children>
-                    </Clip>
-                </Children>
-                <LayoutInput>
-                    <FormLayoutInput Left="Parent,0.15,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
-                </LayoutInput>
-            </Panel>
-
-        </Children>
-      </ColorFill>
-    </Content>
-   
-	</UI>
+    </UI>
 
 </Mcml>

@@ -56,21 +56,4 @@ namespace Library
         }
 
     }
-
-    public class TreeNodeEventArgs : EventArgs
-    {
-        private TreeNode _node = null;
-
-        public TreeNodeEventArgs(TreeNode node)
-        {
-            _node = node;
-        }
-
-        public TreeNode Node
-        {
-            get { return _node; }
-            set { _node = value; }
-        }
-
-    }
 }
