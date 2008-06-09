@@ -67,11 +67,16 @@ namespace OMLEngine
         public void Add(Title newTitle)
         {
             _list.Add(newTitle);
+            _moviesByFilename.Add(newTitle.FileLocation, newTitle);
+            _moviesByItemId.Add(newTitle.InternalItemID, newTitle);
         }
 
         public void Remove(Title newTitle)
         {
+            _moviesByItemId.Remove(newTitle.InternalItemID);
+            _moviesByFilename.Remove(newTitle.FileLocation);
             _list.Remove(newTitle);
+
         }
 
         public void Replace(Title newTitle, Title oldTitle)
