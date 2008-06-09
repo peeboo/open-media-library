@@ -84,7 +84,6 @@ namespace Library
                     _ImporterSelection.Options = _items;
                     _ImporterSelection.ChosenChanged += new EventHandler(_ImporterSelection_ChosenChanged);
                 }
-                FirePropertyChanged("ImporterSelection");
                 return _ImporterSelection;
             }
             set
