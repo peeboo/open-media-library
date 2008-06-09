@@ -20,6 +20,9 @@
         </Locals>
 
         <Rules>
+                <Binding Source="[Setup.ShouldCopyImages.Value!cor:String]" Target="[ShouldCopyImagesText.Content]" />
+                <Binding Source="[Setup.ImporterSelection.Chosen!cor:String]" Target="[SelectedImporterText.Content]"/>
+
             <Changed Source="[NextCommand.Invoked]">
                 <Actions>
                     <Navigate Source="@resx://Library/Library.Resources/SelectDirectoriesToScan" Setup="[Setup]" />
@@ -41,7 +44,7 @@
                                                     <Clip Layout="Grid">
                                                         <Children>
                                                             <Text Name="SelectedImporterLabel" Content="Selected Importer: " Font="Calibri, 20, Bold" Color="LightBlue"/>
-                                                            <Text Name="SelectedImporterText" Content="[Setup.ImporterSelection.Chosen!cor:String]" Font="Calibri, 20" Color="LightBlue"/>
+                                                            <Text Name="SelectedImporterText" Font="Calibri, 20" Color="LightBlue"/>
                                                         </Children>
                                                     </Clip>
                                                 </Children>
@@ -51,7 +54,7 @@
                                                     <Clip Layout="Grid">
                                                         <Children>
                                                             <Text Name="ShouldCopyImagesLabel" Content="Copy Images: " Font="Calibri, 20, Bold" Color="LightBlue"/>
-                                                            <Text Name="ShouldCopyImagesText" Content="[Setup.ShouldCopyImages.Value!cor:String]" Font="Calibri, 20" Color="LightBlue"/>
+                                                            <Text Name="ShouldCopyImagesText" Font="Calibri, 20" Color="LightBlue"/>
                                                         </Children>
                                                     </Clip>
                                                 </Children>

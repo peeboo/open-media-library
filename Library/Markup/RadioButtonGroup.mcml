@@ -11,8 +11,6 @@
 		</Properties>
 
 		<Rules>
-      <Binding Source="[Model.Chosen!cor:String]"
-               Target="[Selection.Content]" />
       <Binding Source="[Model.Options]"
                Target="[Repeater.Source]" />
     </Rules>
@@ -21,10 +19,6 @@
       <Panel Name="RootPanel"
              Layout="VerticalFlow">
         <Children>
-
-          <Text Name="Selection"
-                Color="LightBlue"
-                Margins="0,0,0,10" />
 
           <Repeater Name="Repeater"
                     ContentName="RadioButton" >
