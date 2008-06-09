@@ -10,25 +10,68 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace OMLEngine
 {
     [Serializable()]
-    public class TitleCollection : List<Title>, ISerializable
+    public class TitleCollection : ISerializable
     {
+        private List<Title> _list = new List<Title>();
         private SourceDatabase _source_database_to_use;
         private string _database_filename;
-        private Hashtable _moviesByFilename = new Hashtable();
-        private Hashtable _moviesByItemId = new Hashtable();
+        private Dictionary<string, Title> _moviesByFilename = new Dictionary<string, Title>();
+        private Dictionary<int, Title> _moviesByItemId = new Dictionary<int, Title>();
 
-        public Hashtable MoviesByItemId
+        public Dictionary<int, Title> MoviesByItemId
         {
             get { return _moviesByItemId; }
         }
 
-        public Hashtable MoviesByFilename
+        public Dictionary<string, Title> MoviesByFilename
         {
             get
             {
                 Utilities.DebugLine("[TitleCollection] MoviesByFilename called");
                 return _moviesByFilename;
             }
+        }
+
+
+        public List<Title>.Enumerator GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
+
+        public Title this[int index]
+        {
+            get 
+            {
+                if (index >= 0 && index < _list.Count)
+                {
+                    return _list[index];
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public void Sort()
+        {
+            _list.Sort();
+        }
+
+        public int Count
+        {
+            get { return _list.Count; }
+        }
+
+
+        public void Add(Title newTitle)
+        {
+            _list.Add(newTitle);
+        }
+
+        public void Remove(Title newTitle)
+        {
+            _list.Remove(newTitle);
         }
 
         public void Replace(Title newTitle, Title oldTitle)
@@ -40,14 +83,13 @@ namespace OMLEngine
         public void Replace(Title title)
         {
 
-
             Utilities.DebugLine("[TitleCollection] Title ("+title.Name+") has been replaced");
             Title t = GetTitleById(title.InternalItemID);
 
             if (t != null)
             {
-                int index = this.IndexOf(t);
-                this[index] = title;
+                int index = _list.IndexOf(t);
+                _list[index] = title;
             }
             else
             {
@@ -62,11 +104,11 @@ namespace OMLEngine
         public Title GetTitleById(int id)
         {
             Utilities.DebugLine("[TitleCollection] Title Lookup by Id: "+id);
-            foreach (Title title in this)
+            if (_moviesByItemId.ContainsKey(id))
             {
-                if (title.InternalItemID == id)
-                    return title;
+                return _moviesByItemId[id];
             }
+
             return null;
         }
         /// <summary>
@@ -105,7 +147,7 @@ namespace OMLEngine
         /// </summary>
         ~TitleCollection()
         {
-            Utilities.DebugLine("[TitleCollection] ~TitleCollection(): Holding " + Count + " titles");
+            Utilities.DebugLine("[TitleCollection] ~TitleCollection(): Holding " + _list.Count + " titles");
         }
 
         /// <summary>
@@ -115,20 +157,7 @@ namespace OMLEngine
         public bool saveTitleCollection()
         {
             Utilities.DebugLine("saveTitleCollection()");
-
-            switch (_source_database_to_use)
-            {
-                case SourceDatabase.OML:
-                    return _saveTitleCollectionForOML();
-                case SourceDatabase.DVDProfiler:
-                    return true;
-                case SourceDatabase.MovieCollectorz:
-                    return true;
-                case SourceDatabase.MyMovies:
-                    return true;
-                default:
-                    return true;
-            }
+            return _saveTitleCollectionForOML();
         }
 
         private bool _saveTitleCollectionForOML()
@@ -147,9 +176,9 @@ namespace OMLEngine
             try
             {
                 BinaryFormatter bformatter = new BinaryFormatter();
-                bformatter.Serialize(stream, Count);
+                bformatter.Serialize(stream, _list.Count);
 
-                foreach (Title title in this)
+                foreach (Title title in _list)
                     bformatter.Serialize(stream, title);
 
                 stream.Close();
@@ -169,47 +198,7 @@ namespace OMLEngine
         public bool loadTitleCollection()
         {
             Utilities.DebugLine("[TitleCollection] :loadTitleCollection()");
-            switch (_source_database_to_use)
-            {
-                case SourceDatabase.OML:
-                    return _loadTitleCollectionFromOML();
-                case SourceDatabase.DVDProfiler:
-                    return _loadTitleCollectionFromDVDProfiler();
-                case SourceDatabase.MovieCollectorz:
-                    return _loadTitleCollectionFromMovieCollectorz();
-                case SourceDatabase.MyMovies:
-                    return _loadTitleCollectionFromMyMovies();
-                default:
-                    return false;
-            }
-            
-        }
-
-        /// <summary>
-        /// Loads data from MyMovies xml file
-        /// </summary>
-        /// <returns>True on successful load</returns>
-        private bool _loadTitleCollectionFromMyMovies()
-        {
-            return false;
-        }
-
-        /// <summary>
-        /// Loads data from MovieCollectorz xml file
-        /// </summary>
-        /// <returns>True on successful load</returns>
-        private bool _loadTitleCollectionFromMovieCollectorz()
-        {
-            return false;
-        }
-
-        /// <summary>
-        /// Loads data form DVDProfiler xml file
-        /// </summary>
-        /// <returns>True on successful load</returns>
-        private bool _loadTitleCollectionFromDVDProfiler()
-        {
-            return false;
+            return _loadTitleCollectionFromOML();
         }
 
         /// <summary>
@@ -268,7 +257,7 @@ namespace OMLEngine
         public TitleCollection(SerializationInfo info, StreamingContext ctxt)
         {
             Utilities.DebugLine("[TitleCollection] TitleCollection (Serialized)");
-            TitleCollection tc = (TitleCollection)info.GetValue("TitleCollection", typeof(TitleCollection));
+            List<Title> tc = (List <Title>)info.GetValue("TitleCollection", typeof(TitleCollection));
             foreach (Title title in tc)
                 Add(title);
         }
@@ -276,7 +265,7 @@ namespace OMLEngine
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             Utilities.DebugLine("[TitleCollection] GetObjectData()");
-            info.AddValue("TitleCollection", this);
+            info.AddValue("TitleCollection", _list);
         }
         #endregion
     }
