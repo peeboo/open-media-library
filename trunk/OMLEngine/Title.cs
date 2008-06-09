@@ -42,7 +42,6 @@ namespace OMLEngine
         private List<Person> _directors = new List<Person>();
         private List<Person> _writers = new List<Person>();
         private List<string> _producers = new List<string>();
-        private List<string> _soundFormats = new List<string>();
         private List<string> _languageFormats = new List<string>();
         private List<string> _genres = new List<string>();
         private int _userStarRating = 0;
@@ -54,19 +53,40 @@ namespace OMLEngine
         private Dictionary<string, string> _actingRoles = new Dictionary<string, string>(); // actor, role
         private Dictionary<string, string> _nonActingRoles = new Dictionary<string, string>(); // name, role (ie. Vangelis, Music)
         private Dictionary<string, string> _additionalFields = new Dictionary<string, string>();
-        private List<string> _photos;
-        private List<string> _trailers;
-        private List<int> _children;
-        private int _parent;
-        private string _sortName;
-        private string _MPAARatingReason;
-        private string _videoDetails;
+        private List<string> _photos = new List<string>();
+        private List<string> _trailers = new List<string>();
+        private List<int> _children = new List<int>();
+        private int _parent = 0;
+        private string _sortName = "";
+        private string _MPAARatingReason = "";
+        private string _videoDetails = "";
+        private List<string> _subtitles = new List<string>();
+        private string _videoResolution = "";
+        private List<string> _extraFeatures = new List<string>();
 
 
         #endregion
 
         #region properties
 
+
+        public List<string> ExtraFeatures
+        {
+            get { return _extraFeatures; }
+            set { _extraFeatures = value; }
+        }
+
+        public string VideoResolution
+        {
+            get { return _videoResolution; }
+            set { _videoResolution = value; }
+        }
+        
+        public List<string> Subtitles
+        {
+            get { return _subtitles; }
+            set { _subtitles = value; }
+        }
 
         public string VideoDetails
         {
@@ -396,14 +416,7 @@ namespace OMLEngine
             set { _importerSource = value; }
         }
         /// <summary>
-        /// List of sound formats (DTS, DD5.1, DD2.0, etc)
-        /// </summary>
-        public IList SoundFormats
-        {
-            get { return _soundFormats; }
-        }
-        /// <summary>
-        /// List of languages (English, Spanish, French, etc)
+        /// List of languages (English, Spanish, French, DTS, DD5.1, DD2.0, etc)
         /// </summary>
         public IList LanguageFormats
         {
@@ -570,7 +583,6 @@ namespace OMLEngine
             _crew = GetSerializedList<List<Person>>(info, "crew");
             _producers = GetSerializedList<List<string>>(info, "producers");
             _writers = GetSerializedList<List<Person>>(info, "writers");
-            _soundFormats = GetSerializedList<List<string>>(info, "sound_formats");
             _directors = GetSerializedList<List<Person>>(info, "directors");
             _languageFormats = GetSerializedList<List<string>>(info, "language_formats");
             _genres = GetSerializedList<List<string>>(info, "genres");
@@ -591,7 +603,16 @@ namespace OMLEngine
             _sortName = GetSerializedString(info, "sort_name");
             _MPAARatingReason = GetSerializedString(info, "mpaa_rating_reason");
             _videoDetails = GetSerializedString(info, "video_details");
-
+            _subtitles = GetSerializedList<List<string>>(info, "subtitles");
+            if (_videoFormat == VideoFormat.DVD)
+            {
+                if (_videoStandard == "PAL")
+                    _videoResolution = "720x576";
+                else
+                    _videoResolution = "720x480";
+            }
+            _videoResolution = GetSerializedString(info, "video_resolution");
+            _extraFeatures = GetSerializedList<List<string>>(info, "extra_features");
             if (SortName.Length == 0) _sortName = _name;
         }
 
@@ -628,7 +649,6 @@ namespace OMLEngine
             info.AddValue("producers", _producers);
             info.AddValue("writers", _writers);
             info.AddValue("directors", _directors);
-            info.AddValue("sound_formats", _soundFormats);
             info.AddValue("language_formats", _languageFormats);
             info.AddValue("genres", _genres);
             info.AddValue("user_star_rating", _userStarRating);
@@ -647,6 +667,9 @@ namespace OMLEngine
             info.AddValue("sort_name", _sortName);
             info.AddValue("mpaa_rating_reason", _MPAARatingReason);
             info.AddValue("video_details", _videoDetails);
+            info.AddValue("subtitles", _subtitles);
+            info.AddValue("video_resolution", _videoResolution);
+            info.AddValue("extra_features", _extraFeatures);
         }
         #endregion
 
@@ -661,7 +684,6 @@ namespace OMLEngine
             _directors = new List<Person>();
             _writers = new List<Person>();
             _producers = new List<string>();
-            _soundFormats = new List<string>();
             _languageFormats = new List<string>();
             _genres = new List<string>();
             Random random = new Random(new DateTime().Millisecond);
@@ -732,14 +754,15 @@ namespace OMLEngine
             if (genre == null) return;
             _genres.Add(genre);
         }
+
         /// <summary>
-        /// Add a string sound format to the sound formats list
+        /// Add a subtitle
         /// </summary>
-        /// <param name="sound_format">string name to add</param>
-        public void AddSoundFormat(string sound_format)
+        /// <param name="language_format">string name to add</param>
+        public void AddSubtitle(string subtitle)
         {
-            if (sound_format == null) return;
-            _soundFormats.Add(sound_format);
+            if (subtitle == null) return;
+            _subtitles.Add(subtitle);
         }
         /// <summary>
         /// Add a string language to the language formats list

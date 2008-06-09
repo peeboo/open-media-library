@@ -286,7 +286,7 @@ namespace Library
                 foreach (KeyValuePair<string, string> kvp in title.ActingRoles)
                 {
                     if (kvp.Value.Trim().Length > 0)
-                        _actingRoles.Add(kvp.Key + " - " + kvp.Value);
+                        _actingRoles.Add(kvp.Key + " as " + kvp.Value);
                     else
                         _actingRoles.Add(kvp.Key);
                 }
@@ -299,7 +299,6 @@ namespace Library
                 }
             }
         }
-
 
         /// <summary>
         /// A callback that gets called when the movie is selected
@@ -472,9 +471,7 @@ namespace Library
         /// <value>The release date.</value>
         public string ReleaseDate
         {
-            get { return _titleObj.ReleaseDate.ToShortDateString(); }
-            //TODO
-            set { }
+            get { return _titleObj.ReleaseDate.ToString("MMMM dd, yyyy"); }
         }
 
         /// <summary>
