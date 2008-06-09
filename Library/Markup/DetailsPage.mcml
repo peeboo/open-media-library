@@ -40,7 +40,8 @@
 
       <Command Name="PlayMovieCommand" Description="Play Movie"/>
 
-      <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "[UISettings.Anchor.DetailsLeftOffset]" Id="Parent"/>
+      <AnchorEdge Name="ImageLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "[UISettings.Anchor.DetailsLeftOffset]" Id="Parent"/>
+      <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "400" Id="Parent"/>
       <AnchorEdge Name="DetailsRightAnchor" Percent="[UISettings.Anchor.DetailsRightAnchor]" Id="Parent"/>
       <AnchorEdge Name="DetailsTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
       <AnchorEdge Name="TitleTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset = "[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
@@ -79,7 +80,7 @@
           
           <Panel Name="Image" Layout="VerticalFlow">
             <LayoutInput>
-              <FormLayoutInput Left="[DetailsLeftAnchor]" Top="[TitleTopAnchor]" Bottom="Parent,1"/>
+              <FormLayoutInput Left="[ImageLeftAnchor]" Top="[TitleTopAnchor]" Bottom="Parent,1"/>
             </LayoutInput>
             
             <Children>
@@ -100,81 +101,82 @@
             </LayoutInput>
           </c:SimpleButton>
 
-          <!--<controls:Button Name="PlayMovie" Model="[PlayMovieCommand]"  >
-            <LayoutInput>
-              <FormLayoutInput Left = "Image,1.02" Top="[TitleTopAnchor]"/>
-            </LayoutInput>
-          </controls:Button>-->
-
           <Text Name="Title" Content="[DetailsPage.Title]" Font="font://s:Heading" Color="color://s:HeadingColor" >
             <LayoutInput>
               <FormLayoutInput Left="Image,1.02" Top="PlayMovie,1.05" Right="Parent,0.95"/>
             </LayoutInput>
           </Text>
 
-          <Panel Name="MainDetails" >
+          <Panel Name="SubDetails">
             <Layout>
-              <FlowLayout Orientation="Horizontal" Spacing="15,15" />
+              <FlowLayout Orientation="Vertical" />
             </Layout>
 
             <Children>
-              <Text Content="[DetailsPage.ReleaseYear]" Font="font://s:Small" WordWrap="false" Color="color://s:NormalColor" />
-              <Text Content="[DetailsPage.Length]" Font="font://s:Small" WordWrap="false" Color="color://s:NormalColor" />
-              <Repeater Source="[DetailsPage.Genres]" Layout="HorizontalFlow" DividerName="Divider" >
-                <Content>
-                  <Text Content="[RepeatedItem!cor:String]" Font="font://s:Small" WordWrap="false" Color="color://s:NormalColor"  Margins="5,0,5,0"/>
-                </Content>
-              </Repeater>
+              <Panel Name="MainDetails" >
+                <Layout>
+                  <FlowLayout Orientation="Horizontal" Spacing="15,15" />
+                </Layout>
 
-            </Children>
-            <LayoutInput>
-              <FormLayoutInput Left="Image,1.02" Top="Title,1.05"/>
-            </LayoutInput>
-          </Panel>
+                <Children>
+                  <me:TextWithLabel Label="Runtime: " Text="[DetailsPage.Length]" />
+                  <me:TextWithLabel Label="User Rating: " Text="[DetailsPage.UserRating]" />
+                  <me:TextWithLabel Label="Release Date: " Text="[DetailsPage.ReleaseDate]" />
+                </Children>
+              </Panel>
+              
+              <me:TextWithLabel Label="Genres: " Text="[DetailsPage.GenresAsString]" />
+              <me:TextWithLabel Label="Tags: " Text="[DetailsPage.TagsAsString]" />
 
-          <Text Name="Rating" Content="[DetailsPage.Rating]" Font="font://s:Small" Color="color://s:NormalColor" >
-            <LayoutInput>
-              <FormLayoutInput Left="Image,1.02" Top="MainDetails,1.05" />
-            </LayoutInput>
-          </Text>
+              <Panel Name="DirectorsWRiters" >
+                <Layout>
+                  <FlowLayout Orientation="Horizontal" Spacing="15,15" />
+                </Layout>
 
-          
-          <me:SynopsisPanel Name="MovieSynopsis" Synopsis="[DetailsPage.Summary]">
-            <LayoutInput>
-              <FormLayoutInput Left="Image,1.02" Top="Rating,1.05,5" Right="Parent,0.95" />
-            </LayoutInput>
-          </me:SynopsisPanel>
+                <Children>
+                  <me:TextWithLabel Label="Directors: " Text="[DetailsPage.DirectorsAsString]" />
+                  <me:TextWithLabel Label="Writers: " Text="[DetailsPage.WritersAsString]" />
+                </Children>
+              </Panel>
+              
+              
+              <me:TextWithLabel Label="Parental Rating: " Text="[DetailsPage.Rating]" />
 
+              <Panel Name="VideoDetails" >
+                <Layout>
+                  <FlowLayout Orientation="Horizontal" Spacing="15,15" />
+                </Layout>
 
-          <Text Name="DirectorLabel" Content="Directed by: " Font="font://s:LabelFont" Color="color://s:LabelColor" >
-            <LayoutInput>
-              <FormLayoutInput Left="Image,1.02" Top="MovieSynopsis,1.02,15"/>
-            </LayoutInput>
-          </Text>
+                <Children>
+                  <me:TextWithLabel Label="Format: " Text="[DetailsPage.MovieDetails.TitleObject.VideoFormat.ToString]" />
+                  <me:TextWithLabel Label="Resolution: " Text="[DetailsPage.MovieDetails.TitleObject.VideoResolution]" />
+                  <me:TextWithLabel Label="Aspect Ratio: " Text="[DetailsPage.MovieDetails.TitleObject.AspectRatio]" />
+                  <me:TextWithLabel Label="System: " Text="[DetailsPage.MovieDetails.TitleObject.VideoStandard]" />
+                  <me:TextWithLabel Label="Video Details: " Text="[DetailsPage.MovieDetails.TitleObject.VideoDetails]" />
+                </Children>
+              </Panel>
 
-          <Panel Name="Director" Layout="HorizontalFlow">
-            <Children>
-              <Repeater Source="[DetailsPage.Directors]" Layout="HorizontalFlow">
-                <Content>
-                  <Text Content="[RepeatedItem!cor:String]" Font="font://s:Normal" WordWrap="false" Color="color://s:NormalColor" />
-                </Content>
-              </Repeater>
-            </Children>
-            <LayoutInput>
-              <FormLayoutInput Left="DirectorLabel,1.02" Top="MovieSynopsis,1.02,15"/>
-            </LayoutInput>
-          </Panel>
+              <me:TextWithLabel Label="Path: " Text="[DetailsPage.MovieDetails.TitleObject.FileLocation]" />
+              <me:TextWithLabel Label="Sound : " Text="[DetailsPage.LanguagesAsString]" />
+              <me:TextWithLabel Label="SubTitles : " Text="[DetailsPage.SubtitlesAsString]" />
+              <me:TextWithLabel Label="Synopsis: " Text=" " />
+              <me:SynopsisPanel Synopsis="[DetailsPage.Summary]"/>
 
-
-          <Panel Layout="[GridLayout]">
-            <LayoutInput>
-              <FormLayoutInput Left="Image,1.02" Top="DirectorLabel,1.02" Right="Parent,1" Bottom="Parent,0.7"/>
-            </LayoutInput>
-            <Children>
-              <me:ActorsPanel Name="Actors" ActorList="[DetailsPage.ActingRoles]">
-              </me:ActorsPanel>
+              <Panel Layout="[GridLayout]">
+                <LayoutInput>
+                  <FormLayoutInput Left="Parent, 1"/>
+                </LayoutInput>
+                <Children>
+                  <me:ActorsPanel Name="Actors" ActorList="[DetailsPage.ActingRoles]">
+                  </me:ActorsPanel>
+                </Children>
+              </Panel>
               
             </Children>
+            
+            <LayoutInput>
+              <FormLayoutInput Left="[DetailsLeftAnchor]" Top="Title,1.05" Right="Parent,0.95"/>
+            </LayoutInput>
           </Panel>
 
         </Children>
@@ -230,7 +232,7 @@
                 <Children>
                   <!-- Text to scroll. Filled with rich text (RTF) content. -->
                   <!-- You can use Wordpad to generate RTF content.         -->
-                  <Text Name="Summary" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor" Content="[Synopsis]" >
+                  <Text Name="Summary" WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor" Content="[Synopsis]" >
                     <!-- Smooth scrolling. -->
                     <Animations>
                       <Animation Type="Move">
@@ -281,7 +283,7 @@
 
               <Repeater Source="[ActorList]" Layout="VerticalFlow" MaximumSize="200,200">
                 <Content>
-                  <Text Content="[RepeatedItem!cor:String]" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor" />
+                  <Text Content="[RepeatedItem!cor:String]" WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor" />
                 </Content>
               </Repeater>
             </Children>
@@ -289,5 +291,36 @@
     </Content>
   </UI>
 
+  <UI Name="TextWithLabel">
+    <Properties>
+      <cor:String Name="Label" String="$Required" />
+      <cor:String Name="Text" String="$Required" />
+    </Properties>
+
+    <Rules>
+      
+      <Rule>
+        <Conditions>
+          <Equality Source="[Text]" Value=""/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LabelField.Visible]" Value="false" />
+          <Set Target="[TextField.Visible]" Value="false" />
+        </Actions>
+       </Rule>
+    </Rules>
+    
+    <Content>
+      <Panel Layout="HorizontalFlow">
+        <Children>
+          <Text Name="LabelField" Content="[Label]" Font="font://s:Small" Color="color://s:LabelColor" />
+          <Text Name="TextField" Content="[Text]" Font="font://s:Small" Color="color://s:NormalColor" />
+            <!--<LayoutInput>
+              <FormLayoutInput Left="Image,1.02" Top="MovieSynopsis,1.02,15"/>
+            </LayoutInput>-->
+          </Children>
+      </Panel>
+    </Content>
+  </UI>
 
 </Mcml>

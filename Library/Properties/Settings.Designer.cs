@@ -229,7 +229,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
         public int DetailsLeftOffset {
             get {
                 return ((int)(this["DetailsLeftOffset"]));

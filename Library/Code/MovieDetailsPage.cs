@@ -6,6 +6,7 @@ using System.Xml;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.Hosting;
 using System.Diagnostics;
+using OMLEngine;
 
 namespace Library
 {
@@ -47,6 +48,33 @@ namespace Library
             }
         }
 
+        public string DirectorsAsString
+        {
+            get
+            {
+                string dirs = "";
+                foreach (Person p in _movieDetails.TitleObject.Directors)
+                {
+                    if (dirs.Length > 0) dirs += ", ";
+                    dirs += p.full_name;
+                }
+                return dirs;
+            }
+        }
+
+        public string WritersAsString
+        {
+            get
+            {
+                string dirs = "";
+                foreach (Person p in _movieDetails.TitleObject.Writers)
+                {
+                    if (dirs.Length > 0) dirs += ", ";
+                    dirs += p.full_name;
+                }
+                return dirs;
+            }
+        }
         public MovieItem MovieDetails
         {
             get { return _movieDetails; }
@@ -57,6 +85,11 @@ namespace Library
         {
             get { return _localMedia; }
             set { _localMedia = value; }
+        }
+
+        public string UserRating
+        {
+            get { return ((double)_movieDetails.UseStarRating / 10).ToString(); }
         }
 
         /// <summary>
@@ -166,7 +199,7 @@ namespace Library
             get 
             {
                 if( _movieDetails.TitleObject.Runtime > 0 )
-                    return _movieDetails.Runtime + " min"; 
+                    return  _movieDetails.Runtime + " min"; 
                 else
                     return ""; 
             }
@@ -221,7 +254,71 @@ namespace Library
         {
             get { return _movieDetails.TitleObject.Genres; }
         }
-  
+
+        public string GenresAsString
+        {
+            get
+            {
+                string res = "";
+                foreach (string s in _movieDetails.TitleObject.Genres)
+                {
+                    if (res.Length > 0) res += ", ";
+                    res += s;
+                }
+                return res;
+           }
+        }
+
+        public string TagsAsString
+        {
+            get
+            {
+                string res = "";
+                foreach (string s in _movieDetails.TitleObject.Tags)
+                {
+                    if (res.Length > 0) res += ", ";
+                    res += s;
+                }
+                return res;
+            }
+        }
+        public string LanguagesAsString
+        {
+            get
+            {
+                string res = "";
+                foreach (string s in _movieDetails.TitleObject.LanguageFormats)
+                {
+                    if (res.Length > 0) res += ", ";
+                    res += s;
+                }
+                return res;
+            }
+        }
+
+        public string VideoDetails
+        {
+            get
+            {
+                string details = "";
+                details += _movieDetails.TitleObject.VideoFormat.ToString();
+                return _movieDetails.TitleObject.VideoDetails; 
+            }
+        }
+
+        public string SubtitlesAsString
+        {
+            get
+            {
+                string res = "";
+                foreach (string s in _movieDetails.TitleObject.Subtitles)
+                {
+                    if (res.Length > 0) res += ", ";
+                    res += s;
+                }
+                return res;
+            }
+        }
 
         public IList Producers
         {
@@ -246,17 +343,6 @@ namespace Library
             _movieDetails.PlayMovie();
         }
 
-        //private DisplayItem _movieDetails;
-
-        //////private IList writers;
-        //////private IList producers;
-        //////private IList directors;
-        //////private IList actors;
-        //////private string releaseDate;
-        //////private string length;
-        //////private string rating;
-        //////private string title;
-        //////private string summary;
         private IList _commands;
         private string _metadata;
         private Image _backgroundImage;

@@ -109,6 +109,15 @@ namespace MovieCollectorz
                                     newTitle.AddGenre(disNameNode.InnerText);
                             }
                             break;
+                        case "subtitles":
+                            XmlNode subtitleNode = node.SelectSingleNode("subtitle");
+                            if (subtitleNode != null)
+                            {
+                                XmlNode disNameNode = subtitleNode.SelectSingleNode("displayname");
+                                if (disNameNode != null)
+                                    newTitle.AddSubtitle(disNameNode.InnerText);
+                            }
+                            break;
                         case "runtimeminutes":
                             newTitle.Runtime = Int32.Parse(node.InnerText);
                             break;

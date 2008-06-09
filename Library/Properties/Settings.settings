@@ -54,7 +54,7 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="DetailsLeftOffset" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">80</Value>
+      <Value Profile="(Default)">50</Value>
     </Setting>
     <Setting Name="DetailsTopOffset" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">30</Value>

@@ -198,12 +198,18 @@ namespace MyMoviesPlugin
                     {
                         XmlNode nameNode = personNode.SelectSingleNode("Name");
                         XmlNode typeNode = personNode.SelectSingleNode("Type");
+                        XmlNode roleNode = personNode.SelectSingleNode("Role");
+                        string role = "";
+                        if (roleNode != null)
+                            role = roleNode.InnerText;
+
 
                         Person p = new Person(nameNode.InnerText);
                         switch (typeNode.InnerText)
                         {
                             case "Actor":
                                 newTitle.AddActor(p);
+                                newTitle.AddActingRole(nameNode.InnerText, role);
                                 break;
                             case "Director":
                                 newTitle.AddDirector(p);
@@ -223,6 +229,15 @@ namespace MyMoviesPlugin
                 case "Country":
                     newTitle.CountryOfOrigin = node.InnerText;
                     break;
+                case "AspectRatio":
+                    newTitle.AspectRatio = node.InnerText;
+                    break;
+                case "OriginalTitle":
+                    newTitle.OriginalName = node.InnerText;
+                    break;
+                case "SortTitle":
+                    newTitle.SortName = node.InnerText;
+                    break;
                 case "Genres":
                     XmlNodeList genreNodes = node.SelectNodes("Genre");
                     foreach (XmlNode genreNode in genreNodes)
@@ -239,10 +254,27 @@ namespace MyMoviesPlugin
                         XmlAttributeCollection attrs = audioTrackNode.Attributes;
                         foreach (XmlAttribute attr in attrs)
                         {
-                            audioTrackString += attr.Value + " ";
+                            if (audioTrackString.Length > 0) audioTrackString += ", "; 
+                            audioTrackString += attr.Value;
                         }
+                        newTitle.AddLanguageFormat(audioTrackString);
                     }
                     break;
+                case "Subtitles":
+                    XmlNodeList subtitleNodes = node.SelectNodes("Subtitle");
+                    foreach (XmlNode subtitleNode in subtitleNodes)
+                    {
+                        string subtitleString = string.Empty;
+                        XmlAttributeCollection attrs = subtitleNode.Attributes;
+                        foreach (XmlAttribute attr in attrs)
+                        {
+                            if (subtitleString.Length > 0) subtitleString += ", ";
+                            subtitleString += attr.Value;
+                        }
+                        newTitle.AddSubtitle(subtitleString);
+                    }
+                    break;
+
                 case "Discs":
                     Utilities.DebugLine("[MyMoviesImporter] Beginning a Video File node");
                     XmlNodeList discs = node.SelectNodes("Disc");

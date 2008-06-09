@@ -158,13 +158,13 @@ namespace OMLDatabaseEditor
             }
 
             grdLanguages.Rows.Clear();
-            foreach (string l in t.LanguageFormats)
+            foreach (string l in t.Subtitles)
             {
                 grdLanguages.Rows.Add(l);
             }
 
             grdAudioTracks.Rows.Clear();
-            foreach (string a in t.SoundFormats)
+            foreach (string a in t.LanguageFormats)
             {
                 grdAudioTracks.Rows.Add(a);
             }
@@ -243,11 +243,11 @@ namespace OMLDatabaseEditor
                 t.LanguageFormats.Add((string)row.Cells[0].Value);
             }
 
-            t.SoundFormats.Clear();
+            t.Subtitles.Clear();
             foreach (DataGridViewRow row in grdAudioTracks.Rows)
             {
                 if (row.Cells[0].Value == null) return;
-                t.SoundFormats.Add((string)row.Cells[0].Value);
+                t.Subtitles.Add((string)row.Cells[0].Value);
             }
         }
 
