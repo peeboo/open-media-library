@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLImporter", "OMLImporter\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVRMSPlugin", "DVRMSPlugin\DVRMSPlugin.csproj", "{82D93509-55CC-4350-98D1-C964861266A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VMCDVDLibraryPlugin", "VMCDVDLibraryPlugin\VMCDVDLibraryPlugin.csproj", "{CEEBFC5A-9CAB-40D1-A453-8C30A13F0CD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{82D93509-55CC-4350-98D1-C964861266A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82D93509-55CC-4350-98D1-C964861266A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82D93509-55CC-4350-98D1-C964861266A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEEBFC5A-9CAB-40D1-A453-8C30A13F0CD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEEBFC5A-9CAB-40D1-A453-8C30A13F0CD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEEBFC5A-9CAB-40D1-A453-8C30A13F0CD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEEBFC5A-9CAB-40D1-A453-8C30A13F0CD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

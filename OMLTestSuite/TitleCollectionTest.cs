@@ -52,19 +52,5 @@ namespace OMLTestSuite
             Title t = tc.GetTitleById(t1.InternalItemID);
             Assert.AreEqual(t1, t);
         }
-
-        [Test]
-        public void TEST_TO_DATASET_TABLE_OBJECT()
-        {
-            TitleCollection tc = new TitleCollection();
-            Title t1 = new Title();
-            tc.Add(t1);
-
-            DataTable dt = tc.ToDataTable();
-
-            Assert.IsInstanceOfType(typeof(DataTable), dt);
-            Assert.AreEqual(dt.Rows.Count, 1);
-            Assert.AreEqual(dt.Columns.Count, 28);
-        }
     }
 }
