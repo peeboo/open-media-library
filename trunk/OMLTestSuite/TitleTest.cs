@@ -44,7 +44,6 @@ namespace OMLTestSuite
             t.AddLanguageFormat("English");
             t.AddLanguageFormat("French");
             t.AddProducer("Sony");
-            t.AddSoundFormat("DD5.1");
             t.AddWriter(new Person("Timothy"));
 
             Assert.AreEqual("Widescreen", t.AspectRatio);
@@ -83,8 +82,6 @@ namespace OMLTestSuite
             Assert.AreEqual("French", t.LanguageFormats[1]);
             Assert.AreEqual(1, t.Producers.Count);
             Assert.AreEqual("Sony", t.Producers[0]);
-            Assert.AreEqual(1, t.SoundFormats.Count);
-            Assert.AreEqual("DD5.1", t.SoundFormats[0]);
             Assert.AreEqual(1, t.Writers.Count);
             Assert.AreEqual("Timothy", ((Person)t.Writers[0]).full_name);
         }
