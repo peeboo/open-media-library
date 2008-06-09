@@ -22,6 +22,11 @@ namespace Library
         public BooleanChoice ShouldCopyImages
         {
             get { return _shouldCopyImages; }
+            set
+            {
+                _shouldCopyImages = value;
+                FirePropertyChanged("ShouldCopyImages");
+            }
         }
 
         public static Setup Current
