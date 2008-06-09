@@ -54,6 +54,18 @@ namespace OMLImporter
             return dlgRslt;
         }
 
+        public static DialogResult GetFolder(ref string file_to_import, OMLPlugin plugin)
+        {
+            FolderBrowserDialog ofDiag = new FolderBrowserDialog();
+            DialogResult res = ofDiag.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                file_to_import = ofDiag.SelectedPath.ToUpper();
+            }
+
+            return res;
+        }
+
         public static void Menu()
         {
             OMLPlugin plugin = null;
@@ -66,8 +78,11 @@ namespace OMLImporter
                 Console.WriteLine("2) DVD Profiler");
                 Console.WriteLine("3) Movie Collectorz");
                 Console.WriteLine("4) DVRMS Movie Files");
-                Console.WriteLine("5) Quit");
+                Console.WriteLine("5) VMC Built-in DVD Library");
+                Console.WriteLine("6) Quit");
                 Console.Write("Choice: ");
+
+                bool showFolderSelection = false;
 
                 string response = Console.ReadLine();
                 response = response.Substring(0, 1);
@@ -89,6 +104,10 @@ namespace OMLImporter
                         plugin = new DVRMS.DVRMSPlugin();
                         break;
                     case 5:
+                        showFolderSelection = true;
+                        plugin = new VMCDVDLibraryPlugin.DVDLibraryImporter();
+                        break;
+                    case 6:
                         if (isDirty) 
                         {
                             tc.saveTitleCollection();
@@ -101,9 +120,19 @@ namespace OMLImporter
                 }
                 Console.WriteLine();
 
-                if (GetFile(ref file_to_import, plugin) == DialogResult.OK)
+                if (showFolderSelection)
                 {
-                    ProcessFile(plugin, file_to_import);
+                    if (GetFolder(ref file_to_import, plugin) == DialogResult.OK)
+                    {
+                        ProcessFile(plugin, file_to_import);
+                    }
+                }
+                else
+                {
+                    if (GetFile(ref file_to_import, plugin) == DialogResult.OK)
+                    {
+                        ProcessFile(plugin, file_to_import);
+                    }
                 }
             }
 
@@ -127,9 +156,9 @@ namespace OMLImporter
             }
         }
 
-        public static bool ImportFile(OMLPlugin plugin, FileInfo fInfo)
+        public static bool ImportFile(OMLPlugin plugin, string fileName)
         {
-            return plugin.Load(fInfo.FullName, Program._copyImages);
+            return plugin.Load(fileName, Program._copyImages);
         }
 
         public static void Usage()
@@ -202,14 +231,12 @@ namespace OMLImporter
 
         public static void ProcessFile(OMLPlugin plugin, string file_to_import)
         {
-            FileInfo fi;
             try
             {
-                fi = new FileInfo(file_to_import);
-                if (fi.Exists)
+                if (File.Exists(file_to_import) || Directory.Exists(file_to_import))
                 {
                     Console.WriteLine("Loading file " + file_to_import + " using " + plugin.GetName() + " importer");
-                    if (ImportFile(plugin, fi))
+                    if (ImportFile(plugin, file_to_import))
                         LoadTitlesIntoDatabase(plugin);
                     else
                     {
