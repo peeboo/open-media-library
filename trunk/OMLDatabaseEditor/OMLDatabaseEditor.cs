@@ -384,7 +384,7 @@ namespace OMLDatabaseEditor
                 }
             }
 
-            if (bSelectNewTitle)
+            if (bSelectNewTitle && (rowIndex >= 0))
             {
                 int itemId = (int)grdTitleList.Rows[rowIndex].Cells[1].Value;
                 _currentTitle = (Title)_titleCollection.MoviesByItemId[itemId];
