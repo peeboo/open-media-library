@@ -1,86 +1,118 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
       xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
-      xmlns:cor="assembly://MsCorLib/System"
-      xmlns:a="assembly://Library/Library"
       xmlns:coll="assembly://MsCorLib/System.Collections"
       xmlns:s="resx://Library/Library.Resources/Styles"
+      xmlns:cor="assembly://MsCorLib/System"
+      xmlns:a="assembly://Library/Library"
       xmlns:controls="resx://Library/Library.Resources/CoreControls"
       xmlns:me="Me">
 
-  <UI Name="Setup">
+    <UI Name="Setup">
 
-    <Locals>
-      <Command Name="BeginSetupCommand"
-               Description="Begin Setup"/>
-    </Locals>
+        <Locals>
+            <Command Name="BeginSetupCommand"
+                     Description="Begin Setup"/>
+        </Locals>
+        
+        <Properties>
+            <a:Setup Name="Setup" />
+        </Properties>
 
-    <Rules>
-      <Changed Source="[BeginSetupCommand.Invoked]">
-        <Actions>
-          <Navigate Source="@resx://Library/Library.Resources/SelectImporter" />
-        </Actions>
-      </Changed>
-    </Rules>
+        <Rules>
+            <Changed Source="[BeginSetupCommand.Invoked]">
+                <Actions>
+                    <Navigate Source="@resx://Library/Library.Resources/SelectImporter" Setup="[Setup]" />
+                </Actions>
+            </Changed>
+        </Rules>
 
-    <Content>
-      <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
-        <Children>
-
-          <Panel Name="Bottom" >
-            <Children>
-              <Clip Orientation="Vertical">
+        <Content>
+            <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
                 <Children>
-                  <ColorFill Content="Black" Alpha="0.5"/>
+
+                    <Panel Name="Bottom" >
+                        <Children>
+                            <Panel Layout="Fill" Margins="50,0,0,0">
+                                <Children>
+                                    <Panel Layout="VerticalFlow">
+                                        <Children>
+                                            <Clip Layout="HorizontalFlow">
+                                                <Children>
+                                                    <Clip Layout="Grid">
+                                                        <Children>
+                                                            <Text Name="SelectedImporterLabel" Content="Selected Importer: " Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                            <Text Name="SelectedImporterText" Content="[Setup.ImporterSelection.Chosen!cor:String]" Font="Calibri, 20" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+                                                </Children>
+                                            </Clip>
+                                            <Clip Layout="HorizontalFlow">
+                                                <Children>
+                                                    <Clip Layout="Grid">
+                                                        <Children>
+                                                            <Text Name="ShouldCopyImagesLabel" Content="Copy Images: " Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                            <Text Name="ShouldCopyImagesText" Content="[Setup.ShouldCopyImages.Value!cor:String]" Font="Calibri, 20" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+                                                </Children>
+                                            </Clip>
+                                        </Children>
+                                    </Panel>
+                                </Children>
+                            </Panel>
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                    <Panel Name="Top">
+                        <Children>
+                            <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0">
+                            </Text>
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
+
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                    <Panel Name="Content" >
+                        <Children>
+                            <Clip Layout="VerticalFlow">
+                                <Children>
+                                    <Text Content="Welcome to Open Media Library Setup" Color="White" Font="Calibri, 26" />
+                                    <Text Content="It looks like we need to go through some basic setup."
+                                          Color="LightBlue"
+                                          Font="Calibri, 20"
+                                          WordWrap="true"/>
+                                    <Text Content="Select Begin Setup to begin configuring Open Media Library."
+                                          Color="LightBlue"
+                                          Font="Calibri, 20"
+                                          WordWrap="true"/>
+                                    <controls:Button Name="Begin Setup" Model="[BeginSetupCommand]" />
+                                </Children>
+                            </Clip>
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0.15,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
+                        </LayoutInput>
+                    </Panel>
+
                 </Children>
-              </Clip>
-            </Children>
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
-            </LayoutInput>
-          </Panel>
+            </ColorFill>
+        </Content>
 
-          <Panel Name="Top" >
-            <Children>
-              <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0">
-              </Text>
-              <Clip Orientation="Vertical">
-                <Children>
-                  <ColorFill Content="Black" Alpha="0.5"/>
-                </Children>
-              </Clip>
-
-            </Children>
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
-            </LayoutInput>
-          </Panel>
-
-          <Panel Name="Content" >
-            <Children>
-              <Clip Layout="VerticalFlow">
-                <Children>
-                  <Text Content="Welcome to Open Media Library Setup" Color="White" Font="Calibri, 26" />
-                  <Text Content="It looks like we need to go through some basic setup."
-                        Color="LightBlue"
-                        Font="Calibri, 20"
-                        WordWrap="true"/>
-                  <Text Content="Select Begin Setup to begin configuring Open Media Library."
-                        Color="LightBlue"
-                        Font="Calibri, 20"
-                        WordWrap="true"/>
-                  <controls:Button Name="Begin Setup" Model="[BeginSetupCommand]" />
-                </Children>
-              </Clip>
-            </Children>
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0.15,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
-            </LayoutInput>
-          </Panel>
-
-        </Children>
-      </ColorFill>
-    </Content>
-
-  </UI>
+    </UI>
 
 </Mcml>

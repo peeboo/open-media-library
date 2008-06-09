@@ -6,6 +6,7 @@ namespace Library
 {
     public class TreeNode : ModelItem
     {
+        private string _fullPath = string.Empty;
         private string _title = string.Empty;
         private ArrayListDataSet _childNodes = new ArrayListDataSet();
         private bool _hasChildNodes = false;
@@ -30,7 +31,20 @@ namespace Library
         public String Title
         {
             get { return _title; }
-            set { _title = value; }
+            set
+            {
+                _title = value;
+                FirePropertyChanged("Title");
+            }
+        }
+        public String FullPath
+        {
+            get { return _fullPath; }
+            set
+            {
+                _fullPath = value;
+                FirePropertyChanged("FullPath");
+            }
         }
         public bool HasChildNodes
         {
@@ -62,12 +76,15 @@ namespace Library
             get { return new Inset((50 * Level), 0, 0, 0); }
         }
 
-        public TreeNode(String title)
+        public TreeNode(String title, String fullPath)
         {
             Title = title;
+            FullPath = fullPath;
             Checked.ChosenChanged += new EventHandler(delegate(object sender, EventArgs e)
             {
-                //if (Checked.Value) TreeView.CheckedNode = this;
+                // this is the one that works
+                OMLApplication.DebugLine("Changed: " + this.GetType().ToString());
+                Setup.Current.AddCheckedNode(this);
             });
         }
 

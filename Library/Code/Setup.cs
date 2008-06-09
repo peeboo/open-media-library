@@ -8,14 +8,21 @@ using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
 using OMLEngine;
 using System.Diagnostics;
+using OMLSDK;
 
 namespace Library
 {
     public class Setup : ModelItem
     {
         private static Setup current;
-        private Choice _ImporterSelection = new Choice();
-        private TreeView _treeView = new TreeView();
+        private Choice _ImporterSelection = null;
+        private TreeView _treeView = null;
+        private BooleanChoice _shouldCopyImages = new BooleanChoice();
+
+        public BooleanChoice ShouldCopyImages
+        {
+            get { return _shouldCopyImages; }
+        }
 
         public static Setup Current
         {
@@ -39,6 +46,7 @@ namespace Library
                 FirePropertyChanged("CheckedNodes");
             }
         }
+
         public Setup()
         {
             current = this;
@@ -47,19 +55,12 @@ namespace Library
             _Importers.Add("DVD Profiler");
             _Importers.Add("Movie Collectorz");
             _Importers.Add("DVR-MS Files");
+            _Importers.Add("DVDID XML Directory Scanner");
 
-            _ImporterSelection.Options = _Importers;
+            ImporterSelection.Options = _Importers;
 
-            foreach (DriveInfo dInfo in DriveInfo.GetDrives())
-            {
-                if (dInfo.DriveType == DriveType.Fixed || dInfo.DriveType == DriveType.Network)
-                {
-                    DirectoryTreeNode node = new DirectoryTreeNode(dInfo.Name + " (" + dInfo.VolumeLabel + ")",
-                                                                   dInfo.RootDirectory.FullName,
-                                                                   TreeView);
-                    TreeView.ChildNodes.Add(node);
-                }
-            }
+            /*
+            */
         }
 
         public Choice ImporterSelection
@@ -73,20 +74,57 @@ namespace Library
                     _items.Add("MyMovies");
                     _items.Add("DVD Profiler");
                     _items.Add("Movie Collectorz");
+                    _items.Add("DVR-MS Files");
 
                     _ImporterSelection.Options = _items;
+                    _ImporterSelection.ChosenChanged += new EventHandler(_ImporterSelection_ChosenChanged);
                 }
+                FirePropertyChanged("ImporterSelection");
                 return _ImporterSelection;
             }
             set
             {
                 _ImporterSelection = value;
+                FirePropertyChanged("ImporterSelection");
             }
+        }
+
+        public void _ImporterSelection_ChosenChanged(object sender, EventArgs e)
+        {
+            Choice c = (Choice)sender;
+            OMLApplication.DebugLine("Item Chosed: " + c.Options[c.ChosenIndex]);
+
+        }
+
+        public void TreeView_OnCheckedNodeChanged(object sender, TreeNodeEventArgs e)
+        {
+            OMLApplication.DebugLine("CheckedNodeChanged: " + e.Node.Title);
+            //Checked.Value = (e.Node == this);
         }
 
         public TreeView TreeView
         {
-            get { return _treeView; }
+            get
+            {
+                if (_treeView == null)
+                {
+                    _treeView = new TreeView();
+                    foreach (DriveInfo dInfo in DriveInfo.GetDrives())
+                    {
+                        if (dInfo.DriveType == DriveType.Fixed)
+                        {
+                            DirectoryTreeNode node = new DirectoryTreeNode(dInfo.Name + " (" + dInfo.VolumeLabel + ")",
+                                                                           dInfo.RootDirectory.FullName,
+                                                                           _treeView);
+                            _treeView.ChildNodes.Add(node);
+                            TreeView.CheckedNodeChanged +=
+                                new EventHandler<TreeNodeEventArgs>(TreeView_OnCheckedNodeChanged);
+                        }
+                    }
+                }
+
+                return _treeView;
+            }
             set { _treeView = value; }
         }
     }
