@@ -101,6 +101,9 @@ namespace DVDProfilerPlugin
                 case "CountryOfOrigin":
                     newTitle.CountryOfOrigin = node.InnerText;
                     break;
+                case "OriginalTitle":
+                    newTitle.OriginalName = node.InnerText;
+                    break;
                 case "Released":
                     string release_date = node.InnerText;
                     string[] parts = release_date.Split('-');
@@ -142,18 +145,27 @@ namespace DVDProfilerPlugin
                         newTitle.Distributor = studioNode.InnerText;
                     }
                     break;
+                case "Subtitles":
+                    XmlNodeList subtitles = node.SelectNodes("Subtitle");
+                    foreach (XmlNode subtitleNode in subtitles)
+                    {
+                        newTitle.AddSubtitle(subtitleNode.InnerText);
+                    }
+                    break;
                 case "Audio":
+                    string audioTrack = "";
                     XmlNodeList languages = node.SelectNodes("AudioContent");
                     foreach (XmlNode langNode in languages)
                     {
-                        newTitle.AddLanguageFormat(langNode.InnerText);
+                        audioTrack = langNode.InnerText;
                     }
 
                     XmlNodeList soundFormats = node.SelectNodes("AudioFormat");
                     foreach (XmlNode soundFormatNode in soundFormats)
                     {
-                        newTitle.AddSoundFormat(soundFormatNode.InnerText);
+                        audioTrack += ", " + soundFormatNode.InnerText;
                     }
+                    newTitle.AddLanguageFormat(audioTrack);
                     break;
                 case "Actors":
                     XmlNodeList actors = node.SelectNodes("Actor");
@@ -161,6 +173,7 @@ namespace DVDProfilerPlugin
                     {
                         string first_name = string.Empty;
                         string last_name = string.Empty;
+                        string role = string.Empty;
 
                         XmlAttributeCollection attrs = actorNode.Attributes;
                         foreach (XmlAttribute attr in attrs)
@@ -173,12 +186,18 @@ namespace DVDProfilerPlugin
                                 case "LastName":
                                     last_name = attr.Value;
                                     break;
+                                case "Role":
+                                    role = attr.Value;
+                                    break;
                                 default:
                                     break;
                             }
                         }
                         if (first_name.Length > 0 && last_name.Length > 0)
+                        {
                             newTitle.AddActor(new Person(first_name + " " + last_name));
+                            newTitle.AddActingRole(first_name + last_name, role);
+                        }
                     }
                     break;
                 case "Credits":
