@@ -95,7 +95,12 @@ namespace VMCDVDLibraryPlugin
                     }
                     else
                     {
-                        return null;
+                        // for DVDs with no dvdid.xml add a stripped down title with just a suggested name
+                        Title t = new Title();
+                        t.ImporterSource = "VMCDVDLibraryPlugin";
+                        t.MetadataSourceName = "VMC DVD Library";
+                        t.Name = GetSuggestedMovieName(folderName);
+                        return t;
                     }
                 }
             }
