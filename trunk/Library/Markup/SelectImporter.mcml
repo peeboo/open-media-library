@@ -42,8 +42,6 @@
                                                         <Children>
                                                             <Text Name="SelectedImporterLabel" Content="Selected Importer: " Font="Calibri, 20, Bold" Color="LightBlue"/>
                                                             <Text Name="SelectedImporterText" Content="[Setup.ImporterSelection.Chosen!cor:String]" Font="Calibri, 20" Color="LightBlue"/>
-                                                            <Text Name="" Content="" Font="" Color=""/>
-                                                            <Text Name="" Content="" Font="" Color=""/>
                                                         </Children>
                                                     </Clip>
                                                 </Children>
@@ -54,8 +52,6 @@
                                                         <Children>
                                                             <Text Name="ShouldCopyImagesLabel" Content="Copy Images: " Font="Calibri, 20, Bold" Color="LightBlue"/>
                                                             <Text Name="ShouldCopyImagesText" Content="[Setup.ShouldCopyImages.Value!cor:String]" Font="Calibri, 20" Color="LightBlue"/>
-                                                            <Text Name="" Content="" Font="" Color=""/>
-                                                            <Text Name="" Content="" Font="" Color=""/>
                                                         </Children>
                                                     </Clip>
                                                 </Children>

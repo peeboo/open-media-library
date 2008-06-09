@@ -13,7 +13,7 @@
             <Command Name="BeginSetupCommand"
                      Description="Begin Setup"/>
         </Locals>
-        
+
         <Properties>
             <a:Setup Name="Setup" />
         </Properties>
