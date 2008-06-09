@@ -235,15 +235,6 @@ namespace OMLEngine
                         Title t = (Title)bf.Deserialize(stm);
                         //Utilities.DebugLine("[TitleCollection] Adding Title: "+t.Name);
                         Add(t);
-                        try
-                        {
-                            _moviesByFilename.Add(t.FileLocation, t);
-                        }
-                        catch (Exception e)
-                        {
-                            //Utilities.DebugLine("Failed to add Title to _moviesByFilename (" + t.Name + "): " + e.Message);
-                        }
-                        _moviesByItemId.Add(t.InternalItemID, t);
                     }
                     stm.Close();
                     Utilities.DebugLine("[TitleCollection] Loaded: " + numTitles + " titles");
