@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using Toub.MediaCenter.Dvrms.Metadata;
 
-namespace DVRMS
+namespace DVRMSPlugin
 {
     public class DVRMSPlugin : OMLPlugin, IOMLPlugin
     {

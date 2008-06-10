@@ -98,10 +98,10 @@ namespace OMLImporter
                         break;
                     case 3:
                         AskIfShouldCopyImages();
-                        plugin = new MovieCollectorz.MovieCollectorzPlugin();
+                        plugin = new MovieCollectorzPlugin.MovieCollectorzPlugin();
                         break;
                     case 4:
-                        plugin = new DVRMS.DVRMSPlugin();
+                        plugin = new DVRMSPlugin.DVRMSPlugin();
                         break;
                     case 5:
                         showFolderSelection = true;

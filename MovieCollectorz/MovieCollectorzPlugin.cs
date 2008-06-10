@@ -11,7 +11,7 @@ using System.Xml;
 using System.Xml.XPath;
 using System.Text.RegularExpressions;
 
-namespace MovieCollectorz
+namespace MovieCollectorzPlugin
 {
     public class MovieCollectorzPlugin : OMLPlugin, IOMLPlugin
     {
