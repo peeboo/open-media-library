@@ -16,12 +16,12 @@ set ProgramFilesPath=%ProgramFiles%
 
 pushd "%~dp0"
 
-svn info > info.tmp
-for /f "tokens=1,2" %%i in (info.tmp) do if "%%i" == "Revision:" set REVISION_NUMBER=%%j
-del info.tmp
+REM svn info > info.tmp
+REM for /f "tokens=1,2" %%i in (info.tmp) do if "%%i" == "Revision:" set REVISION_NUMBER=%%j
+REM del info.tmp
 SET WIX_BUILD_LOCATION=%ProgramFilesPath%\Windows Installer XML v3\bin
 SET APP_INTERMEDIATE_PATH=..\obj\%BUILD_TYPE%
-SET OUTPUTNAME=..\bin\%BUILD_TYPE%\omlsetupx64_%REVISION_NUMBER%.msi
+SET OUTPUTNAME=..\bin\%BUILD_TYPE%\omlsetupx64.msi
 
 REM Cleanup leftover intermediate files
 
