@@ -123,6 +123,7 @@
     <Content Include="Markup\CoreControls.mcml" />
     <Content Include="Markup\DetailsPage.mcml" />
     <Content Include="Markup\FilterList.mcml" />
+    <Content Include="Markup\McmlFile1.mcml" />
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\MovieGallery.mcml" />
     <Content Include="Markup\RadioButtonGroup.mcml" />
@@ -131,6 +132,8 @@
     <Content Include="Markup\SelectImporter.mcml" />
     <Content Include="Markup\SelectionList.mcml" />
     <Content Include="Markup\Setup.mcml" />
+    <Content Include="Markup\SetupBottom.mcml" />
+    <Content Include="Markup\SetupTop.mcml" />
     <Content Include="Markup\SimpleRadioButton.mcml" />
     <Content Include="Markup\Styles.mcml" />
     <Content Include="Registration.xml" />
@@ -245,9 +248,33 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DVDProfilerPlugin\DVDProfilerPlugin.csproj">
+      <Project>{8D8056BC-5D9B-4FAD-AD05-CB11D059B511}</Project>
+      <Name>DVDProfilerPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DVRMSPlugin\DVRMSPlugin.csproj">
+      <Project>{82D93509-55CC-4350-98D1-C964861266A9}</Project>
+      <Name>DVRMSPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MovieCollectorz\MovieCollectorzPlugin.csproj">
+      <Project>{5228D6B1-AB63-4DE9-B7AB-8A60F56A3570}</Project>
+      <Name>MovieCollectorzPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyMoviesPlugin\MyMoviesPlugin.csproj">
+      <Project>{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}</Project>
+      <Name>MyMoviesPlugin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
       <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
       <Name>OMLEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OMLSDK\OMLSDK.csproj">
+      <Project>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</Project>
+      <Name>OMLSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VMCDVDLibraryPlugin\VMCDVDLibraryPlugin.csproj">
+      <Project>{CEEBFC5A-9CAB-40D1-A453-8C30A13F0CD4}</Project>
+      <Name>VMCDVDLibraryPlugin</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

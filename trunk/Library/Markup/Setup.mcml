@@ -54,6 +54,8 @@
                                                             <Text Name="ShouldCopyImagesText" Content="[Setup.ShouldCopyImages.Value!cor:String]" Font="Calibri, 20" Color="LightBlue"/>
                                                         </Children>
                                                     </Clip>
+                                                    <Clip Layout="HorizontalFlow">
+                                                    </Clip>
                                                 </Children>
                                             </Clip>
                                         </Children>

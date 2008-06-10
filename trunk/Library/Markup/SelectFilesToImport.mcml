@@ -14,8 +14,10 @@
         <Rules>
             <Binding Source="[Setup.ShouldCopyImages.Value!cor:String]" Target="[ShouldCopyImagesText.Content]" />
             <Binding Source="[Setup.ImporterSelection.Chosen!cor:String]" Target="[SelectedImporterText.Content]"/>
+            <Binding Source="[Setup.TotalTitlesFound!cor:String]" Target="[TotalTitlesFoundText.Content]"/>
+            <Binding Source="[Setup.TotalTitlesAdded!cor:String]" Target="[TotalTitlesAddedText.Content]"/>
         </Rules>
-        
+
         <Content>
             <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
                 <Children>
@@ -63,26 +65,62 @@
 
                     <Panel Name="Top" >
                         <Children>
-                            <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0">
-                            </Text>
+                            <Panel Layout="Fill" Margins="50,20,0,0">
+                                <Children>
+                                    <Panel Layout="HorizontalFlow">
+                                        <Children>
+                                            <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue"/>
+                                            <Panel Layout="VerticalFlow" Padding="50,0,0,0">
+                                                <Children>
+                                                    <Panel Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Name="TotalTitlesFoundLabel" Font="Calibri, 20, Bold" Color="LightBlue" Content="Total Titles Found: "/>
+                                                            <Text Name="TotalTitlesFoundText" Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Panel>
+                                                    <Panel Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Name="TotalTitlesAddedLabel" Font="Calibri, 20, Bold" Color="LightBlue" Content="Total Titles Added: "/>
+                                                            <Text Name="TotalTitlesAddedText" Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Panel>
+                                                </Children>
+                                            </Panel>
+                                        </Children>
+                                    </Panel>
+                                </Children>
+                            </Panel>
                             <Clip Orientation="Vertical">
                                 <Children>
                                     <ColorFill Content="Black" Alpha="0.5"/>
                                 </Children>
                             </Clip>
-
                         </Children>
                         <LayoutInput>
                             <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
                         </LayoutInput>
+
                     </Panel>
 
-                    <Panel Name="Content" >
+                    <Panel Name="Content" DebugOutline="Red">
                         <Children>
-                            <Clip Layout="VerticalFlow">
+                            <Clip Layout="Fill">
                                 <Children>
-                                    <Text Content="Ready to begin importing your movies" Color="White" Font="Calibri, 26" />
-                                    <me:ShouldCopyImages Setup="[Setup]" />
+                                    <Panel Layout="HorizontalFlow">
+                                        <Children>
+                                            <Panel Layout="VerticalFlow" DebugOutline="Red">
+                                                <Children>
+                                                    <Text Content="Ready to begin importing your movies" Color="White" Font="Calibri, 26" />
+                                                    <me:ShouldCopyImages Setup="[Setup]" />
+                                                </Children>
+                                            </Panel>
+                                            <Panel Layout="VerticalFlow" DebugOutline="Red">
+                                                <Children>
+                                                    <Text Content="CurrentTitle: " />
+                                                </Children>
+                                            </Panel>
+                                        </Children>
+                                    </Panel>
                                 </Children>
                             </Clip>
                         </Children>
@@ -108,8 +146,8 @@
                     <Text Name="should_copy_images_text" Content="Should we copy images to the local OML directory?" />
                 </Children>
             </Panel>
-        </Content>   
-    </UI>    
+        </Content>
+    </UI>
     <UI Name="SimpleCheckbox">
         <Properties>
             <BooleanChoice Name="Checked"
