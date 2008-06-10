@@ -86,22 +86,35 @@ namespace VMCDVDLibraryPlugin
                             xmlFile = "";
                     }
 
+                    Title t = null;
                     // xmlFile contains the dvdid - then we need to lookup in the cache folder based on this id
                     if (xmlFile != "" && File.Exists(xmlFile))
                     {
                         string dvdid = GetDVDID(xmlFile);
                         string xmlDetailsFile = GetDVDCacheFileName(dvdid);
-                        return ReadMetaData(xmlDetailsFile);
+                        t = ReadMetaData(xmlDetailsFile);
                     }
                     else
                     {
                         // for DVDs with no dvdid.xml add a stripped down title with just a suggested name
-                        Title t = new Title();
-                        t.ImporterSource = "VMCDVDLibraryPlugin";
-                        t.MetadataSourceName = "VMC DVD Library";
+                        t = new Title();
                         t.Name = GetSuggestedMovieName(folderName);
                         return t;
                     }
+
+                    t.ImporterSource = "VMCDVDLibraryPlugin";
+                    t.VideoFormat = VideoFormat.DVD;
+                    if (File.Exists(folderName + "\\VTS_01_1.VOB"))
+                    {
+                        t.FileLocation = folderName;
+                    }
+                    else
+                    {
+                        t.FileLocation = folderName + "\\VIDEO_TS";
+                    }
+
+                    t.MetadataSourceName = "VMC DVD Library";
+                    return t;
                 }
             }
             catch (Exception ex)
