@@ -686,7 +686,6 @@ namespace OMLEngine
             _producers = new List<string>();
             _languageFormats = new List<string>();
             _genres = new List<string>();
-            Random random = new Random(new DateTime().Millisecond);
             _itemId = Utilities.NewRandomNumber();
         }
 
