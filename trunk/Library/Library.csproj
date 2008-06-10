@@ -51,6 +51,10 @@
   <ItemGroup>
     <Reference Include="Microsoft.MediaCenter" />
     <Reference Include="Microsoft.MediaCenter.UI" />
+    <Reference Include="OMLSDK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=74d3b407d6cf16f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\OMLSDK\bin\Debug\OMLSDK.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -76,6 +80,7 @@
     <Compile Include="Code\MoviePlayerVideo.cs" />
     <Compile Include="Code\Setup.cs" />
     <Compile Include="Code\TreeNode.cs" />
+    <Compile Include="Code\TreeNodeEventArgs.cs" />
     <Compile Include="Code\TreeView.cs" />
     <Compile Include="Code\UISettings.cs" />
     <Compile Include="Code\Filters.cs" />
