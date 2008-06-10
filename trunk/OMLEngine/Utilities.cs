@@ -96,7 +96,7 @@ namespace OMLEngine
         private static TextWriterTraceListener tl;
         private static FileStream Log;
 
-        private static Random random = new Random(new DateTime().Millisecond);
+        private static Random random;
         /// <summary>
         /// Static list of methods that ALL plugins must define
         /// </summary>
@@ -308,6 +308,9 @@ namespace OMLEngine
 
         public static int NewRandomNumber()
         {
+            if (Utilities.random == null)
+                Utilities.random = new Random(DateTime.Now.Millisecond);
+
             return random.Next();
         }
 
