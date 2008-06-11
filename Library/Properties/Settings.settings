@@ -1,105 +1,105 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Library.Properties" GeneratedClassName="Settings">
-  <Profiles />
-  <Settings>
-    <Setting Name="ShowFileLocation" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="MovieView" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Cover Art</Value>
-    </Setting>
-    <Setting Name="ActorView" Type="System.String" Scope="User">
-      <Value Profile="(Default)">List</Value>
-    </Setting>
-    <Setting Name="DirectorView" Type="System.String" Scope="User">
-      <Value Profile="(Default)">List</Value>
-    </Setting>
-    <Setting Name="GenreView" Type="System.String" Scope="User">
-      <Value Profile="(Default)">List</Value>
-    </Setting>
-    <Setting Name="DateAddedView" Type="System.String" Scope="User">
-      <Value Profile="(Default)">List</Value>
-    </Setting>
-    <Setting Name="YearView" Type="System.String" Scope="User">
-      <Value Profile="(Default)">List</Value>
-    </Setting>
-    <Setting Name="StartPage" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Menu</Value>
-    </Setting>
-    <Setting Name="MovieSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameAscending</Value>
-    </Setting>
-    <Setting Name="ActorSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameAscending</Value>
-    </Setting>
-    <Setting Name="DirectorSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameAscending</Value>
-    </Setting>
-    <Setting Name="YearSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameDescending</Value>
-    </Setting>
-    <Setting Name="DateAddedSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameDescending</Value>
-    </Setting>
-    <Setting Name="SortFullString" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="GenreSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameAscending</Value>
-    </Setting>
-    <Setting Name="DetailsLeftAnchor" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="DetailsTopAnchor" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="DetailsLeftOffset" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">50</Value>
-    </Setting>
-    <Setting Name="DetailsTopOffset" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">30</Value>
-    </Setting>
-    <Setting Name="BottomAnchor" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
-    <Setting Name="BottomOffset" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">-30</Value>
-    </Setting>
-    <Setting Name="GalleryCoverArtRows" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">3</Value>
-    </Setting>
-    <Setting Name="GalleryListRows" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
-    </Setting>
-    <Setting Name="CoverArtWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">150</Value>
-    </Setting>
-    <Setting Name="CoverArtHeight" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="ListItemWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">350</Value>
-    </Setting>
-    <Setting Name="ListItemHeight" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">50</Value>
-    </Setting>
-    <Setting Name="UserRatingSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameDescending</Value>
-    </Setting>
-    <Setting Name="RightAnchor" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
-    <Setting Name="RightOffset" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">-30</Value>
-    </Setting>
-    <Setting Name="GallerySpacingHorizontal" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
-    </Setting>
-    <Setting Name="GallerySpacingVertical" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
-    </Setting>
-    <Setting Name="NameAscendingSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameAscending</Value>
-    </Setting>
-  </Settings>
+    <Profiles />
+    <Settings>
+        <Setting Name="ShowFileLocation" Type="System.Boolean" Scope="User">
+            <Value Profile="(Default)">True</Value>
+        </Setting>
+        <Setting Name="MovieView" Type="System.String" Scope="User">
+            <Value Profile="(Default)">Cover Art</Value>
+        </Setting>
+        <Setting Name="ActorView" Type="System.String" Scope="User">
+            <Value Profile="(Default)">List</Value>
+        </Setting>
+        <Setting Name="DirectorView" Type="System.String" Scope="User">
+            <Value Profile="(Default)">List</Value>
+        </Setting>
+        <Setting Name="GenreView" Type="System.String" Scope="User">
+            <Value Profile="(Default)">List</Value>
+        </Setting>
+        <Setting Name="DateAddedView" Type="System.String" Scope="User">
+            <Value Profile="(Default)">List</Value>
+        </Setting>
+        <Setting Name="YearView" Type="System.String" Scope="User">
+            <Value Profile="(Default)">List</Value>
+        </Setting>
+        <Setting Name="StartPage" Type="System.String" Scope="User">
+            <Value Profile="(Default)">Menu</Value>
+        </Setting>
+        <Setting Name="MovieSort" Type="System.String" Scope="User">
+            <Value Profile="(Default)">NameAscending</Value>
+        </Setting>
+        <Setting Name="ActorSort" Type="System.String" Scope="User">
+            <Value Profile="(Default)">NameAscending</Value>
+        </Setting>
+        <Setting Name="DirectorSort" Type="System.String" Scope="User">
+            <Value Profile="(Default)">NameAscending</Value>
+        </Setting>
+        <Setting Name="YearSort" Type="System.String" Scope="User">
+            <Value Profile="(Default)">NameDescending</Value>
+        </Setting>
+        <Setting Name="DateAddedSort" Type="System.String" Scope="User">
+            <Value Profile="(Default)">NameDescending</Value>
+        </Setting>
+        <Setting Name="SortFullString" Type="System.Boolean" Scope="User">
+            <Value Profile="(Default)">True</Value>
+        </Setting>
+        <Setting Name="GenreSort" Type="System.String" Scope="User">
+            <Value Profile="(Default)">NameAscending</Value>
+        </Setting>
+        <Setting Name="DetailsLeftAnchor" Type="System.Single" Scope="User">
+            <Value Profile="(Default)">0</Value>
+        </Setting>
+        <Setting Name="DetailsTopAnchor" Type="System.Single" Scope="User">
+            <Value Profile="(Default)">0</Value>
+        </Setting>
+        <Setting Name="DetailsLeftOffset" Type="System.Int32" Scope="User">
+            <Value Profile="(Default)">50</Value>
+        </Setting>
+        <Setting Name="DetailsTopOffset" Type="System.Int32" Scope="User">
+            <Value Profile="(Default)">30</Value>
+        </Setting>
+        <Setting Name="BottomAnchor" Type="System.Single" Scope="User">
+            <Value Profile="(Default)">1</Value>
+        </Setting>
+        <Setting Name="BottomOffset" Type="System.Int32" Scope="User">
+            <Value Profile="(Default)">-30</Value>
+        </Setting>
+        <Setting Name="GalleryCoverArtRows" Type="System.Int32" Scope="User">
+            <Value Profile="(Default)">3</Value>
+        </Setting>
+        <Setting Name="GalleryListRows" Type="System.Int32" Scope="User">
+            <Value Profile="(Default)">10</Value>
+        </Setting>
+        <Setting Name="CoverArtWidth" Type="System.Int32" Scope="User">
+            <Value Profile="(Default)">150</Value>
+        </Setting>
+        <Setting Name="CoverArtHeight" Type="System.Int32" Scope="User">
+            <Value Profile="(Default)">200</Value>
+        </Setting>
+        <Setting Name="ListItemWidth" Type="System.Int32" Scope="User">
+            <Value Profile="(Default)">350</Value>
+        </Setting>
+        <Setting Name="ListItemHeight" Type="System.Int32" Scope="User">
+            <Value Profile="(Default)">50</Value>
+        </Setting>
+        <Setting Name="UserRatingSort" Type="System.String" Scope="User">
+            <Value Profile="(Default)">NameDescending</Value>
+        </Setting>
+        <Setting Name="RightAnchor" Type="System.Single" Scope="User">
+            <Value Profile="(Default)">1</Value>
+        </Setting>
+        <Setting Name="RightOffset" Type="System.Int32" Scope="User">
+            <Value Profile="(Default)">-30</Value>
+        </Setting>
+        <Setting Name="GallerySpacingHorizontal" Type="System.Int32" Scope="User">
+            <Value Profile="(Default)">10</Value>
+        </Setting>
+        <Setting Name="GallerySpacingVertical" Type="System.Int32" Scope="User">
+            <Value Profile="(Default)">10</Value>
+        </Setting>
+        <Setting Name="NameAscendingSort" Type="System.String" Scope="User">
+            <Value Profile="(Default)">NameAscending</Value>
+        </Setting>
+    </Settings>
 </SettingsFile>
