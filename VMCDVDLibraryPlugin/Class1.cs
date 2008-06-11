@@ -44,58 +44,73 @@ namespace VMCDVDLibraryPlugin
             try
             {
                 List<string> dirList = new List<string>();
+                List<string> fileList = new List<string>();
                 GetSubFolders(startFolder, dirList);
                 dirList.Add(startFolder);
 
                 foreach (string currentFolder in dirList)
                 {
                     Title dvd = GetDVDMetaData(currentFolder);
-                    string[] fileNames = Directory.GetFiles(currentFolder);
+                    string[] fileNames = null;
+                    try
+                    {
+                        fileNames = Directory.GetFiles(currentFolder);
+                    }
+                    catch
+                    {
+                        fileNames = null;
+                    }
 
                     if (dvd != null)
                     {
                         // if any video files are found in the DVD folder assume they are trailers
-                        foreach (string video in fileNames)
+                        if (fileNames != null)
                         {
-                            string extension = Path.GetExtension(video).ToUpper();
-                            if (SupportedVideoExtensions.Contains(extension))
+                            foreach (string video in fileNames)
                             {
-                                dvd.Trailers.Add(video);
+                                string extension = Path.GetExtension(video).ToUpper();
+                                if (SupportedVideoExtensions.Contains(extension))
+                                {
+                                    dvd.Trailers.Add(video);
+                                }
                             }
                         }
                         AddTitle(dvd);
                     }// found dvd
                     else
                     {
-                        foreach (string video in fileNames)
+                        if( fileNames != null )
                         {
-                            string extension = Path.GetExtension(video).ToUpper().Substring(1);
-                            if (SupportedVideoExtensions.Contains(extension))
+                            foreach (string video in fileNames)
                             {
-                                Title newVideo = new Title();
-                                newVideo.Name = GetSuggestedMovieName(video);
-                                newVideo.FileLocation = video;
+                                string extension = Path.GetExtension(video).ToUpper().Substring(1);
+                                if (SupportedVideoExtensions.Contains(extension))
+                                {
+                                    Title newVideo = new Title();
+                                    newVideo.Name = GetSuggestedMovieName(video);
+                                    newVideo.FileLocation = video;
 
-                                string pathWithNoExtension = Path.GetFileNameWithoutExtension(video);
-                                if (File.Exists(pathWithNoExtension + ".jpg"))
-                                {
-                                    newVideo.FrontCoverPath = pathWithNoExtension + ".jpg";
-                                }
+                                    string pathWithNoExtension = Path.GetFileNameWithoutExtension(video);
+                                    if (File.Exists(pathWithNoExtension + ".jpg"))
+                                    {
+                                        newVideo.FrontCoverPath = pathWithNoExtension + ".jpg";
+                                    }
 
-                                if (File.Exists(pathWithNoExtension + ".OML.XML"))
-                                {
-                                    // fore the future
-                                    UpdateTitleFromOMLXML(newVideo);
-                                }
+                                    if (File.Exists(pathWithNoExtension + ".OML.XML"))
+                                    {
+                                        // fore the future
+                                        UpdateTitleFromOMLXML(newVideo);
+                                    }
 
-                                try
-                                {
-                                    VideoFormat vf = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
-                                    newVideo.VideoFormat = vf;
-                                    AddTitle(newVideo);
-                                }
-                                catch
-                                {
+                                    try
+                                    {
+                                        VideoFormat vf = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
+                                        newVideo.VideoFormat = vf;
+                                        AddTitle(newVideo);
+                                    }
+                                    catch
+                                    {
+                                    }
                                 }
                             }
                         }
