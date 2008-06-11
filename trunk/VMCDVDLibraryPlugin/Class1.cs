@@ -49,11 +49,57 @@ namespace VMCDVDLibraryPlugin
 
                 foreach (string currentFolder in dirList)
                 {
-                    Title t = GetDVDMetaData(currentFolder);
+                    Title dvd = GetDVDMetaData(currentFolder);
+                    string[] fileNames = Directory.GetFiles(currentFolder);
 
-                    if (t != null)
+                    if (dvd != null)
                     {
-                        AddTitle(t);
+                        // if any video files are found in the DVD folder assume they are trailers
+                        foreach (string video in fileNames)
+                        {
+                            string extension = Path.GetExtension(video).ToUpper();
+                            if (SupportedVideoExtensions.Contains(extension))
+                            {
+                                dvd.Trailers.Add(video);
+                            }
+                        }
+                        AddTitle(dvd);
+                    }// found dvd
+                    else
+                    {
+                        foreach (string video in fileNames)
+                        {
+                            string extension = Path.GetExtension(video).ToUpper().Substring(1);
+                            if (SupportedVideoExtensions.Contains(extension))
+                            {
+                                Title newVideo = new Title();
+                                newVideo.Name = GetSuggestedMovieName(video);
+                                newVideo.FileLocation = video;
+
+                                string pathWithNoExtension = Path.GetFileNameWithoutExtension(video);
+                                if (File.Exists(pathWithNoExtension + ".jpg"))
+                                {
+                                    newVideo.FrontCoverPath = pathWithNoExtension + ".jpg";
+                                }
+
+                                if (File.Exists(pathWithNoExtension + ".OML.XML"))
+                                {
+                                    // fore the future
+                                    UpdateTitleFromOMLXML(newVideo);
+                                }
+
+                                try
+                                {
+                                    VideoFormat vf = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
+                                    newVideo.VideoFormat = vf;
+                                    AddTitle(newVideo);
+                                }
+                                catch
+                                {
+                                }
+                            }
+                        }
+
                     }
                 } // loop through the sub folders
             }
@@ -61,7 +107,6 @@ namespace VMCDVDLibraryPlugin
             {
             }
         }
-
 
         private Title GetDVDMetaData(string folderName)
         {
@@ -302,14 +347,14 @@ namespace VMCDVDLibraryPlugin
             get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Microsoft\\eHome\\DvdInfoCache"; }
         }
 
-        private string GetSuggestedMovieName(string dvdFolderNameFullPath)
+        private string GetSuggestedMovieName(string fullPath)
         {
-            string folderName = Path.GetFileName(dvdFolderNameFullPath);
-            folderName = folderName.Trim();
-            folderName = folderName.Replace('_', ' ');
-            folderName = folderName.Replace('-', ' ');
-            folderName = folderName.Replace('.', ' ');
-            return folderName;
+            string suggestedName = Path.GetFileName(fullPath);
+            suggestedName = suggestedName.Trim();
+            suggestedName = suggestedName.Replace('_', ' ');
+            suggestedName = suggestedName.Replace('-', ' ');
+            suggestedName = suggestedName.Replace('.', ' ');
+            return suggestedName;
         }
 
         private void GetSubFolders(string startFolder, List<string> folderList)
@@ -339,5 +384,44 @@ namespace VMCDVDLibraryPlugin
             }
         }
 
+        private void UpdateTitleFromOMLXML(Title t)
+        {
+        }
+
+        HashSet<string> SupportedVideoExtensions = new HashSet<string>() 
+        {
+        "ASF",
+        "AVC",
+        "AVI", // DivX, Xvid, etc
+        "B5T", // BlindWrite image
+        "B6T", // BlindWrite image
+        "BIN", // using an image loader lib and load/play this as a DVD
+        "BWT", // BlindWrite image
+        "CCD", // CloneCD image
+        "CDI", // DiscJuggler Image
+        "CUE", // cue sheet
+        "DVR-MS", // MPG
+        "H264", // AVC OR MP4
+        "IMG", // using an image loader lib and load/play this as a DVD
+        "ISO", // Standard ISO image
+        "ISZ", // Compressed ISO image
+        "MDF", // using an image loader lib and load/play this as a DVD
+        "MDS", // Media Descriptor file
+        "MKV", // Likely h264
+        "MOV", // Quicktime
+        "MPG",
+        "MPEG",
+        "MP4", // DivX, AVC, or H264
+        "NRG", // Nero image
+        "OGM", // Similar to MKV
+        "PDI", // Instant CD/DVD image
+        "TS", // MPEG2
+        "UIF",
+        "WMV",
+        //"VOB", // MPEG2 - make sure it's not part of a DVD
+        "WVX", // wtf is this?
+        "ASX", // wtf is this?
+        "WPL" // playlist file?
+        };
     }
 }
