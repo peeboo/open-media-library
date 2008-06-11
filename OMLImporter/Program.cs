@@ -11,7 +11,7 @@ namespace OMLImporter
     class Program
     {
         public static double VERSION = 0.1;
-        private static TitleCollection tc = new TitleCollection();
+        private static TitleCollection mainTitleCollection = new TitleCollection();
         private static Boolean isDirty = false;
         public static bool _copyImages = true;
 
@@ -70,21 +70,27 @@ namespace OMLImporter
         {
             OMLPlugin plugin = null;
             string file_to_import = string.Empty;
-
+            Console.WriteLine("Loading current titles...");
+            mainTitleCollection.loadTitleCollection();
             while (true)
             {
+                Console.WriteLine("OML Importer: Current {0} titles in the database", mainTitleCollection.Count);
                 Console.WriteLine("Which Importer would you like to use:");
                 Console.WriteLine("1) MyMovies");
                 Console.WriteLine("2) DVD Profiler");
                 Console.WriteLine("3) Movie Collectorz");
                 Console.WriteLine("4) DVRMS Movie Files");
-                Console.WriteLine("5) VMC Built-in DVD Library");
-                Console.WriteLine("6) Quit");
+                Console.WriteLine("5) Scan Folders For DVDs and Videos");
+                Console.WriteLine("6) Save the New Titles");
+                Console.WriteLine("7) Quit (No Saving)");
+                Console.WriteLine("8) Remove all titles from the database (be carefull!!!)");
                 Console.Write("Choice: ");
 
                 bool showFolderSelection = false;
 
                 string response = Console.ReadLine();
+                if (response.Length == 0) continue;
+
                 response = response.Substring(0, 1);
                 switch (Int32.Parse(response))
                 {
@@ -110,10 +116,43 @@ namespace OMLImporter
                     case 6:
                         if (isDirty) 
                         {
-                            tc.saveTitleCollection();
+                            Console.WriteLine("Adding Titles ...");
+                            mainTitleCollection.saveTitleCollection();
                         }
-                        Console.WriteLine("Complete");
+                        Console.WriteLine("Complete!");
+                        continue;
+                        break;
+                    case 7:
+                        if (isDirty)
+                        {
+                            Console.WriteLine("You have not saved your changes. Do you want to save before quitting? (y/n)");
+                            string answer = Console.ReadLine();
+                            if (answer.ToUpper() == "Y")
+                            {
+                                Console.WriteLine("Adding Titles ...");
+                                mainTitleCollection.saveTitleCollection();
+                                isDirty = false;
+                            }
+                        }
+                        Console.WriteLine("Complete!");
                         return;
+                    case 8:
+                        Console.WriteLine("This option will delete all titles from the database immediately! This operation can be undone!");
+                        Console.WriteLine("Are you sure you want to delete all the titles from the database? (please type YES)");
+                        string deleteAllAnswer = Console.ReadLine();
+                        if (deleteAllAnswer == "YES")
+                        {
+                            Console.WriteLine("Removing all entries...");
+                            mainTitleCollection = new TitleCollection();
+                            mainTitleCollection.saveTitleCollection();
+                            isDirty = false;
+                            Console.WriteLine("Done!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Operation aborted. No titles have been deleted!");
+                        }
+                        continue;
                     default:
                         Usage();
                         continue;
@@ -190,6 +229,13 @@ namespace OMLImporter
 
             foreach (Title t in titles)
             {
+                if (mainTitleCollection.ContainsFileName(t.FileLocation))
+                {
+                    Console.WriteLine("Title {0} at location {1} skipped because already in the collection", t.Name, t.FileLocation);
+                    numberOfTitlesSkipped++;
+                    continue;
+                }
+
                 Console.WriteLine("Adding: " + t.Name);
                 if (YesToAll == false)
                 {
@@ -198,7 +244,7 @@ namespace OMLImporter
                     switch (response.ToUpper())
                     {
                         case "Y":
-                            tc.Add(t);
+                            mainTitleCollection.Add(t);
                             numberOfTitlesAdded++;
                             break;
                         case "N":
@@ -206,7 +252,7 @@ namespace OMLImporter
                             break;
                         case "A":
                             YesToAll = true;
-                            tc.Add(t);
+                            mainTitleCollection.Add(t);
                             numberOfTitlesAdded++;
                             break;
                         default:
@@ -216,7 +262,7 @@ namespace OMLImporter
                 else
                 {
                     OMLPlugin.BuildResizedMenuImage(t);
-                    tc.Add(t);
+                    mainTitleCollection.Add(t);
                     numberOfTitlesAdded++;
                 }
             }
