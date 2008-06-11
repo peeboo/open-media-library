@@ -242,6 +242,7 @@ namespace Library
             _categories.Add(new FilterCommand(Filters[Filter.Year]));
             _categories.Add(new FilterCommand(Filters[Filter.Runtime]));
             _categories.Add(new FilterCommand(Filters[Filter.UserRating]));
+            _categories.Add(new FilterCommand(Filters[Filter.VideoFormat]));
             _categoryChoice = new Choice(this, "Categories", _categories);
         }
 
@@ -254,11 +255,10 @@ namespace Library
             _filters.Add(Filter.DateAdded, new Filter(Filter.DateAdded, this, Properties.Settings.Default.DateAddedView, true, Properties.Settings.Default.DateAddedSort));
             _filters.Add(Filter.Runtime, new Filter(Filter.Runtime, this, GalleryView.List, false, String.Empty));
             _filters.Add(Filter.UserRating, new Filter(Filter.UserRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.UserRatingSort));
+            _filters.Add(Filter.VideoFormat, new Filter(Filter.VideoFormat, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
 
             _jumpInListText = new EditableText(this);
             _jumpInListText.Value = String.Empty;
-            //_jumpInListText.Activity += new EventHandler(JumpInListTextActivity);
-            //_jumpInListText.Submitted += new EventHandler(JumpInListTextSubmitted);
             FocusedItem = new GalleryItem(this, "", "", null);
             _categoryChoice = new Choice(this, "Categories");
             CreateCategories();
@@ -270,26 +270,6 @@ namespace Library
                 _currentSort = SortByNameAscending;
             LoadMovies(col);
         }
-
-        //public string JumpInText
-        //{
-        //    get { return _jumpInListText.Value; }
-        //    set { _jumpInListText.Value = value; }
-        //}
-
-        //void JumpInListTextSubmitted(object sender, EventArgs e)
-        //{
-        //    EditableText t = (EditableText)sender;
-        //    Utilities.DebugLine("MovieGallery.JumpInListTextSubmitted: {0}", t.Value);
-        //    JumpToMovie(t.Value);
-        //}
-
-        //void JumpInListTextActivity(object sender, EventArgs e)
-        //{
-        //    EditableText t = (EditableText)sender;
-        //    Utilities.DebugLine("MovieGallery.JumpInListTextActivity: {0}", t.Value);
-        //    JumpToMovie(t.Value);
-        //}
 
         private int _jumpToPosition = -1;           // the ScrollData jump is relative (Scroll # of items)
         private int _relativeJumpToPosition = -1;   // the Repeater jump (NavigateIntoIndex) is absolute
@@ -354,6 +334,7 @@ namespace Library
             Filters[Filter.Year].AddMovie(Convert.ToString(title.ReleaseDate.Year), movie);
             Filters[Filter.DateAdded].AddMovie(title.DateAdded.ToShortDateString(), movie);
             Filters[Filter.UserRating].AddMovie(((double)title.UserStarRating/10).ToString("0.0"), movie);
+            Filters[Filter.VideoFormat].AddMovie(title.VideoFormat.ToString(), movie);
             
             AddRuntimeFilter(movie);
         }

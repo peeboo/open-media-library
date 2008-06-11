@@ -59,8 +59,7 @@ namespace Library
         public const string Year = "Year";
         public const string DateAdded = "Date Added";
         public const string Home = "OML Home";
-        //public const string Movies = "Movies";
-
+        public const string VideoFormat = "Format";
 
         public string Name
         {
