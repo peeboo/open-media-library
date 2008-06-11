@@ -109,11 +109,11 @@ namespace DVDProfilerPlugin
                     string[] parts = release_date.Split('-');
                     if (parts.Length == 3)
                     {
-                        int year = Int32.Parse(parts[0]);
-                        int month = Int32.Parse(parts[1]);
-                        int day = Int32.Parse(parts[2]);
-
-                        if (year != null && month != null && day != null)
+                        int year; int month; int day;
+                        Int32.TryParse(parts[0], out year);
+                        Int32.TryParse(parts[1], out month);
+                        Int32.TryParse(parts[2], out day);
+                        if (year != 0 && month != 0 && day != 0)
                             newTitle.ReleaseDate = new DateTime(year, month, day);
                     }
                     break;
