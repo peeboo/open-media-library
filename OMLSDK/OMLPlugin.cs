@@ -50,7 +50,7 @@ namespace OMLSDK
             if (string.IsNullOrEmpty(newTitle.AspectRatio))
             {
                 Utilities.DebugLine("Setting AspectRatio for Title: " + newTitle.Name);
-                SetAspectRatio(newTitle);
+                //SetAspectRatio(newTitle);
             }
 
             if (newTitle.DateAdded.CompareTo(new DateTime(0001, 1, 1)) == 0)
@@ -91,6 +91,7 @@ namespace OMLSDK
                 }
             }
         }
+        /*
         public void SetAspectRatio(Title t)
         {
             string fileName = string.Empty;
@@ -115,6 +116,7 @@ namespace OMLSDK
             }
              
         }
+        */
         public static string CopyImage(string from_location, string to_location)
         {
             FileInfo fi = new FileInfo(from_location);
