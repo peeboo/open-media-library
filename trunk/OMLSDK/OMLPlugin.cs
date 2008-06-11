@@ -101,12 +101,19 @@ namespace OMLSDK
             else
                 fileName = t.FileLocation;
 
-            Utilities.DebugLine("Scanning Res for: " + fileName);
-            Size size = Utilities.ResolutionOfVideoFile(fileName);
-            if (size.Width > 0 && size.Height > 0)
+            try 
             {
-                t.AspectRatio = size.Width.ToString() + "x" + size.Height.ToString();
+                Utilities.DebugLine("Scanning Res for: " + fileName);
+                Size size = Utilities.ResolutionOfVideoFile(fileName);
+                if (size.Width > 0 && size.Height > 0)
+                {
+                    t.AspectRatio = size.Width.ToString() + "x" + size.Height.ToString();
+                }
             }
+            catch (Exception ex) 
+            {
+            }
+             
         }
         public static string CopyImage(string from_location, string to_location)
         {

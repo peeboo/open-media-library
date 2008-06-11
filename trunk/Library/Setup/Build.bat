@@ -25,8 +25,8 @@ SET OUTPUTNAME=..\bin\%BUILD_TYPE%\omlsetupx86.msi
 
 REM Cleanup leftover intermediate files
 
-del /f /q "%APP_INTERMEDIATE_PATH%\*.wixobj"
-del /f /q "%OUTPUTNAME%"
+if exist "%APP_INTERMEDIATE_PATH%\*.wixobj" del /f /q "%APP_INTERMEDIATE_PATH%\*.wixobj"
+if exist "%OUTPUTNAME%" del /f /q "%OUTPUTNAME%"
 
 REM Build the MSI for the setup package
 
