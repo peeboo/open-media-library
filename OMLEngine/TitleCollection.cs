@@ -23,15 +23,10 @@ namespace OMLEngine
             get { return _moviesByItemId; }
         }
 
-        public Dictionary<string, Title> MoviesByFilename
+        public bool ContainsFileName(string filename)
         {
-            get
-            {
-                Utilities.DebugLine("[TitleCollection] MoviesByFilename called");
-                return _moviesByFilename;
-            }
+            return (_moviesByFilename.ContainsKey(filename.ToUpper()));
         }
-
 
         public List<Title>.Enumerator GetEnumerator()
         {
