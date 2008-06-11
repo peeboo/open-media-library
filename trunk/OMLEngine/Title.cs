@@ -69,7 +69,6 @@ namespace OMLEngine
 
         #region properties
 
-
         public List<string> ExtraFeatures
         {
             get { return _extraFeatures; }
@@ -251,7 +250,7 @@ namespace OMLEngine
         public string FileLocation
         {
             get { return _fileLocation; }
-            set { _fileLocation = value; }
+            set { _fileLocation = value.ToUpper(); }
         }
 
         /// <summary>
