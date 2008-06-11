@@ -57,7 +57,9 @@
       <Component Id="OMLSDK.dll" Guid="26097a63-fc55-41d2-a8d5-432809de99fc" DiskId="1">
         <File Id="OMLSDK.dll" Name="OMLSDK.dll" KeyPath="yes" Source="..\..\OMLSDK\bin\$(var.BuildType)\OMLSDK.dll" Checksum="yes" Vital="yes" Assembly=".net" />
       </Component>
-      <Component Id="DVRMS"
+      <Component Id="DVRMSPlugin.dll" Guid="ec74a168-53ae-4bef-a72d-3ff093bb8b0f" DiskId="1">
+        <File Id="DVRMSPlugin.dll" Name="DVRMSPlugin.dll" KeyPath="yes" Source="..\..\DVRMSPlugin\bin\$(var.BuildType)\DVRMSPlugin.dll" Checksum="yes" Vital="yes" Assembly=".net" />
+      </Component>
       <Component Id="DVDProfilerPlugin.dll" Guid="b7f12ef4-e500-4d0e-bfbe-d77eae64176c" DiskId="1">
         <File Id="DVDProfilerPlugin.dll" Name="DVDProfilerPlugin.dll" KeyPath="yes" Source="..\..\DVDProfilerPlugin\bin\$(var.BuildType)\DVDProfilerPlugin.dll" Checksum="yes" Vital="yes" Assembly=".net" />
       </Component>
@@ -80,6 +82,7 @@
       <ComponentRef Id="Registration.xml" />
       <ComponentRef Id="Application.png" />
       <ComponentRef Id="OMLSDK.dll" />
+      <ComponentRef Id="DVRMSPlugin.dll" />
       <ComponentRef Id="DVDProfilerPlugin.dll" />
       <ComponentRef Id="MovieCollectorz.dll" />
       <ComponentRef Id="MyMoviesPlugin.dll" />
