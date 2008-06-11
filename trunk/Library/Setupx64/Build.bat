@@ -5,12 +5,14 @@ REM Determine whether we are on an 32 or 64 bit machine
 if "%PROCESSOR_ARCHITECTURE%"=="x86" if "%PROCESSOR_ARCHITEW6432%"=="" goto x86
 
 set ProgramFilesPath=%ProgramFiles(x86)%
+SET OUTPUTNAME=..\bin\%BUILD_TYPE%\omlsetupx64.msi
 
 goto startInstall
 
 :x86
 
 set ProgramFilesPath=%ProgramFiles%
+SET OUTPUTNAME=..\bin\%BUILD_TYPE%\omlsetupx86.msi
 
 :startInstall
 
@@ -21,12 +23,11 @@ REM for /f "tokens=1,2" %%i in (info.tmp) do if "%%i" == "Revision:" set REVISIO
 REM del info.tmp
 SET WIX_BUILD_LOCATION=%ProgramFilesPath%\Windows Installer XML v3\bin
 SET APP_INTERMEDIATE_PATH=..\obj\%BUILD_TYPE%
-SET OUTPUTNAME=..\bin\%BUILD_TYPE%\omlsetupx64.msi
 
 REM Cleanup leftover intermediate files
 
-del /f /q "%APP_INTERMEDIATE_PATH%\*.wixobj"
-del /f /q "%OUTPUTNAME%"
+if exist "%APP_INTERMEDIATE_PATH%\*.wixobj" del /f /q "%APP_INTERMEDIATE_PATH%\*.wixobj"
+if exist "%OUTPUTNAME%" del /f /q "%OUTPUTNAME%"
 
 REM Build the MSI for the setup package
 
