@@ -137,7 +137,7 @@ namespace OMLImporter
                         Console.WriteLine("Complete!");
                         return;
                     case 8:
-                        Console.WriteLine("This option will delete all titles from the database immediately! This operation can be undone!");
+                        Console.WriteLine("This option will delete all titles from the database immediately! This operation CANNOT be undone!");
                         Console.WriteLine("Are you sure you want to delete all the titles from the database? (please type YES)");
                         string deleteAllAnswer = Console.ReadLine();
                         if (deleteAllAnswer == "YES")
