@@ -19,8 +19,6 @@ namespace OMLDatabaseEditor
         private Bitmap back_cover;
         private Title _currentTitle = null;
         private bool _titleChanged = false;
-        
-        CurrencyManager _currencyManager;
 
         public OMLDatabaseEditor()
         {
@@ -34,51 +32,31 @@ namespace OMLDatabaseEditor
         private void SetupTitleList()
         {
             //_collectionAsDataTable = GetTitlesDataTable();
-            grdTitleList.Rows.Clear();
             foreach (Title t in _titleCollection)
             {
-                grdTitleList.Rows.Add(t.Name, t.InternalItemID);
+                tvSourceList_AddItem(t.Name, t.InternalItemID, "Movies");
             }
 
             //grdTitleList.AutoGenerateColumns = false;
             //grdTitleList.DataSource = _collectionAsDataTable;
         }
-        
-        private DataTable GetTitlesDataTable()
+
+        private void tvSourceList_AddItem(string text, int id, string type)
         {
-            DataTable dt = new DataTable("Titles");
+            TreeNode nod = new TreeNode();
+            nod.Name = id.ToString();
+            nod.Text = text;
+            //nod.Tag = n.NewNodeTag.ToString();
 
-            DataColumn idIndex = new DataColumn("Index");
-            idIndex.DataType = typeof(int);
-            dt.Columns.Add(idIndex);
-
-            DataColumn idCol = new DataColumn("itemId");
-            idCol.DataType = typeof(int);
-            dt.Columns.Add(idCol);
-
-            DataColumn nameCol = new DataColumn("TitleName");
-            nameCol.DataType = typeof(string);
-            dt.Columns.Add(nameCol);
-
-            DataColumn[] PrimaryKeyColumns = new DataColumn[1];
-            PrimaryKeyColumns[0] = dt.Columns["itemId"];
-            dt.PrimaryKey = PrimaryKeyColumns;
-
-            DataRow row;
-            int currentIndex = 0;
-            foreach (Title title in _titleCollection)
-            {
-                row = dt.NewRow();
-                row["Index"] = currentIndex;
-                row["itemId"] = title.InternalItemID;
-                row["TitleName"] = title.Name;
-                dt.Rows.Add(row);
-                currentIndex++;
-            }
-
-            return dt;
+            //TreeNode TreeNodeParent = new TreeNode();
+            //TreeNodeParent = tvSourceList.Nodes.Find(type, true)//.SelectedNode.Nodes.Add(nod);
+            
+            //nod.Parent.Name = type;
+            tvSourceList.Nodes["OML Database"].Nodes[type].Nodes.Add(nod);
+            tvSourceList.Nodes["OML Database"].ExpandAll();
+            tvSourceList.Nodes["OML Database"].Nodes[type].ExpandAll();
         }
-
+        
         private void UpdateUIFromTitle(Title t)
         {
             labelDistributor.Text = t.Synopsis;
@@ -181,7 +159,13 @@ namespace OMLDatabaseEditor
             t.ReleaseDate = dtpReleaseDate.Value;
             t.DateAdded = dtpDateAdded.Value;
 
-            t.Runtime  = Convert.ToInt32(tbRunTime.Text);
+            int RunTime;
+            if (int.TryParse(tbRunTime.Text, out RunTime) == false)
+            {
+                RunTime = 0;
+            }
+            t.Runtime = RunTime;
+
             t.MPAARating = cbRating.Text.Trim();
             t.CountryOfOrigin = tbCountryOfOrigin.Text.Trim();
             t.FrontCoverPath = tbFrontCover.Text.Trim();
@@ -196,8 +180,12 @@ namespace OMLDatabaseEditor
             t.Distributor = tbStudio.Text.Trim();
             t.FileLocation = tbFileLocation.Text.Trim();
 
-            t.UserStarRating = Convert.ToInt32(tbUserRating.Text);
-
+            int UserStarRating;
+            if (int.TryParse(tbUserRating.Text, out UserStarRating) == false)
+            {
+                UserStarRating = 0;
+            }
+            t.UserStarRating = UserStarRating;
 
             t.Directors.Clear();
             foreach (DataGridViewRow row in grdDirectors.Rows)
@@ -258,7 +246,7 @@ namespace OMLDatabaseEditor
 
         private void OMLDatabaseEditor_Load(object sender, EventArgs e)
         {
-            _currencyManager = (CurrencyManager)this.BindingContext[_titleCollection];
+            //_currencyManager = (CurrencyManager)this.BindingContext[_titleCollection];
         }
 
 
@@ -361,7 +349,7 @@ namespace OMLDatabaseEditor
             _titleCollection.Replace(t);
             _titleCollection.saveTitleCollection();
         }
-        private void SelectNewTitle( int rowIndex)
+        private void SelectNewTitle( int titleID)
         {
             bool bSelectNewTitle = true;
 
@@ -384,9 +372,9 @@ namespace OMLDatabaseEditor
                 }
             }
 
-            if (bSelectNewTitle && (rowIndex >= 0))
+            if (bSelectNewTitle)
             {
-                int itemId = (int)grdTitleList.Rows[rowIndex].Cells[1].Value;
+                int itemId = titleID;
                 _currentTitle = (Title)_titleCollection.MoviesByItemId[itemId];
                 UpdateUIFromTitle(_currentTitle);
             }
@@ -396,16 +384,6 @@ namespace OMLDatabaseEditor
         private void grdTitleList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             SelectNewTitle(e.RowIndex);
-        }
-
-        private void grdTitleList_SelectionChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void toolStripContainer1_TopToolStripPanel_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -422,6 +400,27 @@ namespace OMLDatabaseEditor
             _titleChanged = false;
         }
 
-    }
+        private void tsbNewTitle_Click(object sender, EventArgs e)
+        {
+            Title t = new Title();
+            _titleCollection.Add(t);
+
+            _currentTitle = (Title)_titleCollection.MoviesByItemId[t.InternalItemID];
+
+            tvSourceList_AddItem("New Movie", t.InternalItemID, "Movies");
+        }
+
+        private void tvSourceList_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node.Parent != null)
+            {
+                if (e.Node.Parent.Name == "Movies")
+                {
+                    SelectNewTitle(int.Parse(e.Node.Name));
+                }
+            }
+        }
+
+    } 
 }
 
