@@ -79,6 +79,10 @@ namespace DVRMSPlugin
                             newTitle.ImporterSource = @"DVRMSImporter";
                             newTitle.MetadataSourceName = @"DVR-MS";
                             newTitle.FileLocation = file;
+                            if (!String.IsNullOrEmpty(newTitle.AspectRatio))
+                            {
+                                newTitle.AspectRatio = @"Widescreen";
+                            }
                             string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
                             newTitle.VideoFormat = (VideoFormat) Enum.Parse(typeof(VideoFormat), ext, true);
                             string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
@@ -166,6 +170,10 @@ namespace DVRMSPlugin
                             {
                                 newTitle.FrontCoverPath = cover;
                             }
+                        }
+                        if (String.IsNullOrEmpty(newTitle.AspectRatio))
+                        {
+                            newTitle.AspectRatio = @"Widescreen";
                         }
                         if (String.IsNullOrEmpty(newTitle.MPAARating))
                         {
