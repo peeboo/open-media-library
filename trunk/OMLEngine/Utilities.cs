@@ -309,9 +309,14 @@ namespace OMLEngine
         public static int NewRandomNumber()
         {
             if (Utilities.random == null)
+            {
+                DebugLine("[Utilities] Initializing Random number Generator");
                 Utilities.random = new Random(DateTime.Now.Millisecond);
+            }
 
-            return random.Next();
+            int rand_num = random.Next();
+            DebugLine("[Utilities] Random Number Generated: " + rand_num.ToString());
+            return rand_num;
         }
 
         public static bool HasDaemonTools()
@@ -458,6 +463,7 @@ namespace OMLEngine
             return ret;
         }
 
+        /*
         public static Size ResolutionOfVideoFile(string fileName)
         {
             Size size = new Size(0, 0);
@@ -475,5 +481,6 @@ namespace OMLEngine
             }
             return size;
         }
+        */
     }
 }

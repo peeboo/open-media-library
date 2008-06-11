@@ -123,7 +123,6 @@
     <Content Include="Markup\CoreControls.mcml" />
     <Content Include="Markup\DetailsPage.mcml" />
     <Content Include="Markup\FilterList.mcml" />
-    <Content Include="Markup\McmlFile1.mcml" />
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\MovieGallery.mcml" />
     <Content Include="Markup\RadioButtonGroup.mcml" />
@@ -233,7 +232,6 @@
     <None Include="Resources\spinnerbluebarlargenofocus.png" />
     <None Include="Setup\License.rtf" />
     <Content Include="Setupx64\License.txt" />
-    <Content Include="Setup\License.txt" />
     <Content Include="Sounds\Error.wav" />
     <Content Include="Sounds\Focus.wav" />
     <Content Include="Sounds\MiniSelect.wav" />

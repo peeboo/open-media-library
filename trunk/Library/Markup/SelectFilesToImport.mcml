@@ -7,8 +7,17 @@
 
     <UI Name="SelectFilesToImport">
 
+        <Locals>
+            <Command Name="BeginLoadingCommand"
+                     Description="Begin Loading"/>
+            <Command Name="SkipTitleButtonCommand"
+                     Description="Skip Title"/>
+            <Command Name="AddTitleButtonCommand"
+                     Description="Add Title"/>
+        </Locals>
+
         <Properties>
-            <a:Setup Name="Setup" Setup="$Required" />
+            <a:Setup Name="Setup"/>
         </Properties>
 
         <Rules>
@@ -16,6 +25,40 @@
             <Binding Source="[Setup.ImporterSelection.Chosen!cor:String]" Target="[SelectedImporterText.Content]"/>
             <Binding Source="[Setup.TotalTitlesFound!cor:String]" Target="[TotalTitlesFoundText.Content]"/>
             <Binding Source="[Setup.TotalTitlesAdded!cor:String]" Target="[TotalTitlesAddedText.Content]"/>
+            <Binding Source="[Setup.TotalTitlesSkipped!cor:String]" Target="[TotalTitlesSkippedText.Content]"/>
+            <Binding Source="[Setup.CurrentTitleImage]" Target="[CurrentTitleImage.Content]"/>
+            <Binding Source="[Setup.CurrentTitleName]" Target="[CurrentTitleNameText.Content]"/>
+
+            <Changed Source="[BeginLoadingCommand.Invoked]">
+                <Actions>
+                    <Invoke InvokePolicy="AsynchronousLowPri" Target="[Setup.BeginLoading]"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[SkipTitleButtonCommand.Invoked]">
+                <Actions>
+                    <Invoke Target="[Setup.SkipCurrentTitle]"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[AddTitleButtonCommand.Invoked]">
+                <Actions>
+                    <Invoke Target="[Setup.AddCurrentTitle]"/>
+                </Actions>
+            </Changed>
+
+            <Changed Source="[Setup.LoadStarted]" InitialEvaluate="false">
+                <Actions>
+                    <Set Target="[waitCursor.Visible]" Value="true"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[Setup.LoadComplete]" InitialEvaluate="false">
+                <Actions>
+                    <Set Target="[waitCursor.Visible]" Value="false"/>
+                    <Set Target="[loadingTitlesButton.Visible]" Value="false"/>
+                    <Set Target="[SkipTitleButton.Visible]" Value="true"/>
+                    <Set Target="[AddTitleButton.Visible]" Value="true"/>
+                </Actions>
+            </Changed>
+            
         </Rules>
 
         <Content>
@@ -74,14 +117,20 @@
                                                 <Children>
                                                     <Panel Layout="HorizontalFlow">
                                                         <Children>
-                                                            <Text Name="TotalTitlesFoundLabel" Font="Calibri, 20, Bold" Color="LightBlue" Content="Total Titles Found: "/>
-                                                            <Text Name="TotalTitlesFoundText" Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                            <Text Name="TotalTitlesFoundLabel" Font="Calibri, 14, Bold" Color="LightBlue" Content="Total Titles Found: "/>
+                                                            <Text Name="TotalTitlesFoundText" Font="Calibri, 14, Bold" Color="LightBlue"/>
                                                         </Children>
                                                     </Panel>
                                                     <Panel Layout="HorizontalFlow">
                                                         <Children>
-                                                            <Text Name="TotalTitlesAddedLabel" Font="Calibri, 20, Bold" Color="LightBlue" Content="Total Titles Added: "/>
-                                                            <Text Name="TotalTitlesAddedText" Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                            <Text Name="TotalTitlesAddedLabel" Font="Calibri, 14, Bold" Color="LightBlue" Content="Total Titles Added: "/>
+                                                            <Text Name="TotalTitlesAddedText" Font="Calibri, 14, Bold" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Panel>
+                                                    <Panel Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Name="TotalTitlesSkippedLabel" Font="Calibri, 14, Bold" Color="LightBlue" Content="Total Titles Skipped: "/>
+                                                            <Text Name="TotalTitlesSkippedText" Font="Calibri, 14" Color="LightBlue"/>
                                                         </Children>
                                                     </Panel>
                                                 </Children>
@@ -102,27 +151,44 @@
 
                     </Panel>
 
-                    <Panel Name="Content" DebugOutline="Red">
+                    <Panel Name="Content" Layout="Fill">
                         <Children>
-                            <Clip Layout="Fill">
+                            <controls:WaitCursor Name="waitCursor" Visible="false"/>
+                            <Panel Layout="HorizontalFlow">
                                 <Children>
-                                    <Panel Layout="HorizontalFlow">
+                                    <Panel Layout="VerticalFlow" MaximumSize="400,400">
                                         <Children>
-                                            <Panel Layout="VerticalFlow" DebugOutline="Red">
+                                            <Text Content="Settings: " Font="Calibri, 20" Color="LightBlue"/>
+                                            <me:ShouldCopyImages Setup="[Setup]"/>
+                                        </Children>
+                                        <LayoutInput>
+                                            <DockLayoutInput Position="Left"/>
+                                        </LayoutInput>
+                                    </Panel>
+                                    <Panel Layout="VerticalFlow" MaximumSize="400,400">
+                                        <Children>
+                                            <Graphic MaintainAspectRatio="true" SizingPolicy="SizeToConstraint" Name="CurrentTitleImage" Content="[Setup.DefaultImage]" MinimumSize="150,200" MaximumSize="150,200" />
+                                            <Panel Layout="HorizontalFlow">
                                                 <Children>
-                                                    <Text Content="Ready to begin importing your movies" Color="White" Font="Calibri, 26" />
-                                                    <me:ShouldCopyImages Setup="[Setup]" />
+                                                    <Text Name="CurrentTitleNameLabel" Content="Current Title: " Font="Calibri, 16, Bold" Color="LightBlue"/>
+                                                    <Text Name="CurrentTitleNameText" Font="Calibri, 16" Color="LightBlue"/>
                                                 </Children>
                                             </Panel>
-                                            <Panel Layout="VerticalFlow" DebugOutline="Red">
+                                            <Panel Layout="HorizontalFlow">
                                                 <Children>
-                                                    <Text Content="CurrentTitle: " />
+                                                    <controls:Button Name="loadingTitlesButton" Model="[BeginLoadingCommand]" />
+                                                    <controls:Button Name="AddTitleButton" Model="[AddTitleButtonCommand]" Visible="false"/>
+                                                    <Text Content=" "/>
+                                                    <controls:Button Name="SkipTitleButton" Model="[SkipTitleButtonCommand]" Visible="false"/>
                                                 </Children>
                                             </Panel>
                                         </Children>
+                                        <LayoutInput>
+                                            <DockLayoutInput Position="Right"/>
+                                        </LayoutInput>
                                     </Panel>
                                 </Children>
-                            </Clip>
+                            </Panel>
                         </Children>
                         <LayoutInput>
                             <FormLayoutInput Left="Parent,0.15,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
@@ -143,11 +209,12 @@
             <Panel Layout="HorizontalFlow">
                 <Children>
                     <me:SimpleCheckbox Name="ShouldCopyImages" Checked="[Setup.ShouldCopyImages]"/>
-                    <Text Name="should_copy_images_text" Content="Should we copy images to the local OML directory?" />
+                    <Text Name="should_copy_images_text" Font="Calibri, 16" Color="LightBlue" Content="Copy images to OML image directory" WordWrap="true" />
                 </Children>
             </Panel>
         </Content>
     </UI>
+
     <UI Name="SimpleCheckbox">
         <Properties>
             <BooleanChoice Name="Checked"
