@@ -251,7 +251,7 @@ namespace Library
             if (_titleObj.UserStarRating > 0)
                 SubCaption += "User Rating: " + ((double)(_titleObj.UserStarRating / 10)).ToString("0.0") + "\n";
 
-            SubCaption += _titleObj.MPAARating + "\n";
+            SubCaption += _titleObj.ParentalRating + "\n";
 
 
             if( _titleObj.Directors.Count > 0 )
@@ -429,8 +429,8 @@ namespace Library
         /// <value>The rating.</value>
         public string Rating
         {
-            get { return _titleObj.MPAARating; }
-            set { _titleObj.MPAARating = value; }
+            get { return _titleObj.ParentalRating; }
+            set { _titleObj.ParentalRating = value; }
         }
 
         /// <summary>
@@ -449,8 +449,8 @@ namespace Library
         /// <value>The distributor.</value>
         public string Distributor
         {
-            get { return _titleObj.Distributor; }
-            set { _titleObj.Distributor = value; }
+            get { return _titleObj.Studio; }
+            set { _titleObj.Studio = value; }
         }
 
         /// <summary>
@@ -500,23 +500,7 @@ namespace Library
             //set { _titleObj.Actors = value; }
         }
 
-        /// <summary>
-        /// Gets the crew.
-        /// </summary>
-        /// <value>The crew.</value>
-        public IList Crew
-        {
-            get
-            {
-                List<string> crew_names = new List<string>();
-                foreach (Person p in _titleObj.Crew)
-                {
-                    crew_names.Add(p.full_name);
-                }
-                return crew_names;
-            }
-            //set { _titleObj.Crew = value; }
-        }
+
 
         /// <summary>
         /// Gets the directors.
