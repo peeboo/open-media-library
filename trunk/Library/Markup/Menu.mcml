@@ -38,7 +38,9 @@
       <AnchorEdge Name="FiltersTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.FiltersTopOffset]" Id="Parent"/>
       <AnchorEdge Name="GalleryBottomAnchor" Percent="[UISettings.Anchor.GalleryBottomAnchor]" Offset ="[UISettings.Anchor.GalleryBottomOffset]" Id="Parent"/>
       <AnchorEdge Name="BottomAnchor" Percent="[UISettings.Anchor.BottomAnchor]" Offset ="[UISettings.Anchor.BottomOffset]" Id="Parent"/>
-      <AnchorEdge Name="RightAnchor" Percent="[UISettings.Anchor.RightAnchor]" Offset ="[UISettings.Anchor.RightOffset]" Id="Parent"/> 
+      <AnchorEdge Name="RightAnchor" Percent="[UISettings.Anchor.RightAnchor]" Offset ="[UISettings.Anchor.RightOffset]" Id="Parent"/>
+
+      <ShortcutHandler Name="MoreInfo" />
     </Locals>
 
     <Rules>
@@ -186,7 +188,8 @@
 
           <Panel Name="JumpInTextPanel" Layout="HorizontalFlow">
             <Children>
-              <Text Name="JumpInText" Content="" Font="Verdana,15" Color="LightBlue" HorizontalAlignment="Far"/>
+              <Text Name="JumpInText" Content="" Font="Verdana,25" Color="White" HorizontalAlignment="Far"/>
+              
             </Children>
             <LayoutInput>
               <FormLayoutInput Left="NowPlayingPanel,1.5" Right="[RightAnchor]" Bottom="[BottomAnchor]"/>

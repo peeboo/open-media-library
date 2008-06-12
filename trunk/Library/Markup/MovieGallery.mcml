@@ -185,6 +185,12 @@
       </Actions>
     </Condition>
 
+    <Condition Source="[GalleryItem.HasCover]" SourceValue="false" ConditionOp="Equals" >
+      <Actions>
+        <Set Target="[Caption.Visible]" Value="true" />
+      </Actions>
+    </Condition>
+
     <Condition Source="[GalleryView]" SourceValue="Cover Art" ConditionOp="Equals" >
       <Actions>
         <Set Target="[Cover.Visible]" Value="true" />
@@ -194,6 +200,7 @@
       </Actions>
     </Condition>
 
+      
     <!-- If we get key focus, change our background color to indicate it. -->
     <Condition Source="[Input.KeyFocus]" SourceValue="true">
       <Actions>
@@ -229,7 +236,7 @@
           </Children>
         </Panel>
 
-        <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:EditText" Color="color://s:NormalColor"/>
+        <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:EditText" Color="White"/>
 
 
         <Graphic Name="Background" Content="[BackgroundImage]" Visible="false">
