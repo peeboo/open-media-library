@@ -16,12 +16,11 @@ namespace OMLEngine
     public class Title : IComparable, ISerializable
     {
         #region locals
-        private int _watched;
+        private int _watchedCount;
         private string _fileLocation = "";
         private VideoFormat _videoFormat = VideoFormat.DVD;
         private bool _needsTranscode = false;
         private string _name = "";
-        private string _description = "";
         private int _itemId = -1;
         private string _metadataSourceId = "";
         private string _sourceName = "";
@@ -29,20 +28,19 @@ namespace OMLEngine
         private string _frontCoverMenuPath = "";
         private string _backCoverPath = "";
         private int _runtime = 0;
-        private string _MPAARating = "";
+        private string _parentalRating = "";
         private string _synopsis = "";
-        private string _distributor = "";
+        private string _studio = "";
         private string _countryOfOrigin = "";
         private string _officialWebsiteURL = "";
         private DateTime _releaseDate;
         private DateTime _dateAdded;
         private string _importerSource = "";
         private List<Person> _actors = new List<Person>();
-        private List<Person> _crew = new List<Person>();
         private List<Person> _directors = new List<Person>();
         private List<Person> _writers = new List<Person>();
         private List<string> _producers = new List<string>();
-        private List<string> _languageFormats = new List<string>();
+        private List<string> _audioTracks = new List<string>();
         private List<string> _genres = new List<string>();
         private int _userStarRating = 0;
         private string _aspectRatio = "";    // Widescreen, 1.33, 1.66, 
@@ -58,7 +56,7 @@ namespace OMLEngine
         private List<int> _children = new List<int>();
         private int _parent = 0;
         private string _sortName = "";
-        private string _MPAARatingReason = "";
+        private string _parentalRatingReason = "";
         private string _videoDetails = "";
         private List<string> _subtitles = new List<string>();
         private string _videoResolution = "";
@@ -93,17 +91,23 @@ namespace OMLEngine
             set { _videoDetails = value; }
         }
 
-        public string MPAARatingReason
+        public string ParentalRatingReason
         {
-            get { return _MPAARatingReason; }
-            set { _MPAARatingReason = value; }
+            get { return _parentalRatingReason; }
+            set { _parentalRatingReason = value; }
         }
 
 
         public string SortName
         {
-            get { return _sortName; }
-            set { _sortName = value; }
+            get 
+            {
+                if (String.IsNullOrEmpty(_sortName))
+                    return Name;
+                else
+                    return _sortName; 
+            }
+            set { _sortName = value.Trim(); }
         }
 
         public Dictionary<string, string> NonActingRoles
@@ -235,12 +239,12 @@ namespace OMLEngine
         /// <summary>
         /// Has this title been watched before or not
         /// </summary>
-        public int HasWatched
+        public int WatchedCount
         {
-            get { return _watched; }
+            get { return _watchedCount; }
             set
             {
-                _watched = value;
+                _watchedCount = value;
             }
         }
 
@@ -273,18 +277,7 @@ namespace OMLEngine
                     _name = value;
             }
         }
-        /// <summary>
-        /// Short description of the Title
-        /// </summary>
-        public string Description
-        {
-            get { return _description; }
-            set
-            {
-                if (value != null)
-                    _description = value;
-            }
-        }
+
         /// <summary>
         /// Internal id of the Title
         /// </summary>
@@ -349,10 +342,10 @@ namespace OMLEngine
         /// <summary>
         /// Rating of the film acording to the MPAA
         /// </summary>
-        public string MPAARating
+        public string ParentalRating
         {
-            get { return _MPAARating; }
-            set { _MPAARating = value; }
+            get { return _parentalRating; }
+            set { _parentalRating = value; }
         }
         /// <summary>
         /// Long description of title
@@ -363,12 +356,12 @@ namespace OMLEngine
             set { _synopsis = value; }
         }
         /// <summary>
-        /// Name of distribution company
+        /// Name of studio company
         /// </summary>
-        public string Distributor
+        public string Studio
         {
-            get { return _distributor; }
-            set { _distributor = value; }
+            get { return _studio; }
+            set { _studio = value; }
         }
         /// <summary>
         /// Country where the title was created/first released
@@ -417,9 +410,9 @@ namespace OMLEngine
         /// <summary>
         /// List of languages (English, Spanish, French, DTS, DD5.1, DD2.0, etc)
         /// </summary>
-        public IList LanguageFormats
+        public IList AudioTracks
         {
-            get { return _languageFormats; }
+            get { return _audioTracks; }
         }
         /// <summary>
         /// List of Genres
@@ -434,13 +427,6 @@ namespace OMLEngine
         public IList Actors
         {
             get { return _actors; }
-        }
-        /// <summary>
-        /// List of Person objects that worked on the film
-        /// </summary>
-        public IList Crew
-        {
-            get { return _crew; }
         }
         /// <summary>
         /// List of Person objects that directed the title (usually one Person)
@@ -560,7 +546,6 @@ namespace OMLEngine
             _videoFormat = GetSerializedVideoFormat(info, "video_format");
             _needsTranscode = GetSerializedBoolean(info, "transcode_to_extender");
             _name = GetSerializedString(info,"name");
-            _description = GetSerializedString(info,"description");
             _itemId = GetSerializedInt( info,"itemid");
             _metadataSourceId = GetSerializedString(info,"sourceid");
             _sourceName = GetSerializedString(info,"sourcename");
@@ -568,22 +553,21 @@ namespace OMLEngine
             _frontCoverMenuPath = GetSerializedString(info, "front_boxart_menu_path");
             _backCoverPath = GetSerializedString(info,"back_boxart_path");
             _synopsis = GetSerializedString(info,"synopsis");
-            _distributor = GetSerializedString(info,"distributor");
+            _studio = GetSerializedString(info,"distributor");
             _countryOfOrigin = GetSerializedString(info,"country_of_origin");
             _officialWebsiteURL = GetSerializedString(info,"official_website_url");
             _dateAdded = GetSerializedDateTime(info, "date_added");
             _importerSource = GetSerializedString(info,"importer_source");
             _runtime = GetSerializedInt(info, "runtime");
-            _MPAARating = GetSerializedString(info, "mpaa_rating");
+            _parentalRating = GetSerializedString(info, "mpaa_rating");
             
 
             _releaseDate = GetSerializedDateTime(info, "release_date");
             _actors = GetSerializedList<List<Person>>(info, "actors");
-            _crew = GetSerializedList<List<Person>>(info, "crew");
             _producers = GetSerializedList<List<string>>(info, "producers");
             _writers = GetSerializedList<List<Person>>(info, "writers");
             _directors = GetSerializedList<List<Person>>(info, "directors");
-            _languageFormats = GetSerializedList<List<string>>(info, "language_formats");
+            _audioTracks = GetSerializedList<List<string>>(info, "language_formats");
             _genres = GetSerializedList<List<string>>(info, "genres");
 
             _userStarRating = GetSerializedInt(info,"user_star_rating");
@@ -600,7 +584,7 @@ namespace OMLEngine
             _children = GetSerializedList<List<int>>(info, "children");
             _parent = GetSerializedInt( info,"parent");
             _sortName = GetSerializedString(info, "sort_name");
-            _MPAARatingReason = GetSerializedString(info, "mpaa_rating_reason");
+            _parentalRatingReason = GetSerializedString(info, "mpaa_rating_reason");
             _videoDetails = GetSerializedString(info, "video_details");
             _subtitles = GetSerializedList<List<string>>(info, "subtitles");
             if (_videoFormat == VideoFormat.DVD)
@@ -612,7 +596,6 @@ namespace OMLEngine
             }
             _videoResolution = GetSerializedString(info, "video_resolution");
             _extraFeatures = GetSerializedList<List<string>>(info, "extra_features");
-            if (SortName.Length == 0) _sortName = _name;
         }
 
         /// <summary>
@@ -627,7 +610,6 @@ namespace OMLEngine
             info.AddValue("video_format", _videoFormat);
             info.AddValue("transcode_to_extender", _needsTranscode);
             info.AddValue("name", _name);
-            info.AddValue("description", _description);
             info.AddValue("itemid", _itemId);
             info.AddValue("sourceid", _metadataSourceId);
             info.AddValue("sourcename", _sourceName);
@@ -635,20 +617,19 @@ namespace OMLEngine
             info.AddValue("front_boxart_menu_path", _frontCoverMenuPath);
             info.AddValue("back_boxart_path", _backCoverPath);
             info.AddValue("synopsis", _synopsis);
-            info.AddValue("distributor", _distributor);
+            info.AddValue("distributor", _studio);
             info.AddValue("country_of_origin", _countryOfOrigin);
             info.AddValue("official_website_url", _officialWebsiteURL);
             info.AddValue("date_added", _dateAdded);
             info.AddValue("importer_source", _importerSource);
             info.AddValue("runtime", _runtime);
-            info.AddValue("mpaa_rating", _MPAARating);
+            info.AddValue("mpaa_rating", _parentalRating);
             info.AddValue("release_date", _releaseDate);
             info.AddValue("actors", _actors);
-            info.AddValue("crew", _crew);
             info.AddValue("producers", _producers);
             info.AddValue("writers", _writers);
             info.AddValue("directors", _directors);
-            info.AddValue("language_formats", _languageFormats);
+            info.AddValue("language_formats", _audioTracks);
             info.AddValue("genres", _genres);
             info.AddValue("user_star_rating", _userStarRating);
             info.AddValue("aspect_ratio", _aspectRatio);
@@ -664,7 +645,7 @@ namespace OMLEngine
             info.AddValue("children", _children);
             info.AddValue("parent", _parent);
             info.AddValue("sort_name", _sortName);
-            info.AddValue("mpaa_rating_reason", _MPAARatingReason);
+            info.AddValue("mpaa_rating_reason", _parentalRatingReason);
             info.AddValue("video_details", _videoDetails);
             info.AddValue("subtitles", _subtitles);
             info.AddValue("video_resolution", _videoResolution);
@@ -679,11 +660,10 @@ namespace OMLEngine
         {
             Utilities.DebugLine("[Title] Creating new Empty Title object");
             _actors = new List<Person>();
-            _crew = new List<Person>();
             _directors = new List<Person>();
             _writers = new List<Person>();
             _producers = new List<string>();
-            _languageFormats = new List<string>();
+            _audioTracks = new List<string>();
             _genres = new List<string>();
             _itemId = Utilities.NewRandomNumber();
         }
@@ -706,16 +686,7 @@ namespace OMLEngine
             if (!_actors.Contains(actor))
                 _actors.Add(actor);
         }
-        /// <summary>
-        /// Add a Person object to the crew list
-        /// </summary>
-        /// <param name="crew_member">Person object to add</param>
-        public void AddCrew(Person crew_member)
-        {
-            if (crew_member == null) return;
-            if (!_crew.Contains(crew_member))
-                _crew.Add(crew_member);
-        }
+
         /// <summary>
         /// Add a Person object to the directors list
         /// </summary>
@@ -769,7 +740,7 @@ namespace OMLEngine
         public void AddLanguageFormat(string language_format)
         {
             if (language_format == null) return;
-            _languageFormats.Add(language_format);
+            _audioTracks.Add(language_format);
         }
 
         /*

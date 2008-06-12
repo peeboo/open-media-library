@@ -140,7 +140,7 @@ namespace DVRMSPlugin
                         case DvrmsMetadataEditor.ParentalRating:
                             if (!String.IsNullOrEmpty((string)attr.Value))
                             {
-                                newTitle.MPAARating = (string)attr.Value;
+                                newTitle.ParentalRating = (string)attr.Value;
                             }
                             break;
                         case DvrmsMetadataEditor.Credits:
@@ -192,9 +192,9 @@ namespace DVRMSPlugin
                         {
                             newTitle.AspectRatio = @"Widescreen";
                         }
-                        if (String.IsNullOrEmpty(newTitle.MPAARating))
+                        if (String.IsNullOrEmpty(newTitle.ParentalRating))
                         {
-                            newTitle.MPAARating = @"--";
+                            newTitle.ParentalRating = @"--";
                         }
                         AddTitle(newTitle);
                     }

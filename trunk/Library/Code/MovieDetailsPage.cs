@@ -287,7 +287,7 @@ namespace Library
             get
             {
                 string res = "";
-                foreach (string s in _movieDetails.TitleObject.LanguageFormats)
+                foreach (string s in _movieDetails.TitleObject.AudioTracks)
                 {
                     if (res.Length > 0) res += ", ";
                     res += s;

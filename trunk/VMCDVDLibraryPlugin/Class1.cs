@@ -216,7 +216,7 @@ namespace VMCDVDLibraryPlugin
 
                         bFound = reader.ReadToFollowing("studio");
                         if (bFound)
-                            t.Distributor = reader.ReadString();
+                            t.Studio = reader.ReadString();
 
                         bFound = reader.ReadToFollowing("leadPerformer");
                         if (bFound)
@@ -243,7 +243,7 @@ namespace VMCDVDLibraryPlugin
 
                         bFound = reader.ReadToFollowing("MPAARating");
                         if (bFound)
-                            t.MPAARating = reader.ReadString();
+                            t.ParentalRating = reader.ReadString();
 
                         bFound = reader.ReadToFollowing("language");
                         if (bFound)
