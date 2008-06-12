@@ -41,6 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\MediaEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\MediaEditor.Designer.cs">
+      <DependentUpon>MediaEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MediaList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\MediaList.Designer.cs">
+      <DependentUpon>MediaList.cs</DependentUpon>
+    </Compile>
     <Compile Include="OMLDatabaseEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -49,6 +61,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\MediaEditor.resx">
+      <DependentUpon>MediaEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="OMLDatabaseEditor.resx">
       <DependentUpon>OMLDatabaseEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -86,7 +102,6 @@
     <None Include="Resources\document-save.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\" />
     <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

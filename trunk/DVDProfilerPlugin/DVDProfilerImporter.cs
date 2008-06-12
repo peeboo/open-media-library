@@ -129,7 +129,7 @@ namespace DVDProfilerPlugin
                     newTitle.Runtime = Int32.Parse(node.InnerText);
                     break;
                 case "Rating":
-                    newTitle.MPAARating = node.InnerText;
+                    newTitle.ParentalRating = node.InnerText;
                     break;
                 case "Genres":
                     XmlNodeList genres = node.SelectNodes("Genre");
@@ -150,7 +150,7 @@ namespace DVDProfilerPlugin
                     XmlNodeList studios = node.SelectNodes("Studio");
                     foreach (XmlNode studioNode in studios)
                     {
-                        newTitle.Distributor = studioNode.InnerText;
+                        newTitle.Studio = studioNode.InnerText;
                     }
                     break;
                 case "Subtitles":

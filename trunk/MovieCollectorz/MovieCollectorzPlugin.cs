@@ -94,7 +94,7 @@ namespace MovieCollectorzPlugin
                         case "mpaarating":
                             XmlNode ratingNode = node.SelectSingleNode("displayname");
                             if (ratingNode != null)
-                                newTitle.MPAARating = ratingNode.InnerText;
+                                newTitle.ParentalRating = ratingNode.InnerText;
                             break;
                         case "genres":
                             XmlNode genreNode = node.SelectSingleNode("genre");
@@ -147,7 +147,7 @@ namespace MovieCollectorzPlugin
                                     {
                                         XmlNode crewMemberName = crewMember.SelectSingleNode("displayname");
                                         if (crewMemberName != null)
-                                            newTitle.AddCrew(new Person(crewMemberName.InnerText));
+                                            newTitle.AddNonActingRole(crewMemberName.InnerText, "crew");
                                     }
                                 }
                             }
@@ -155,12 +155,12 @@ namespace MovieCollectorzPlugin
                         case "studios":
                             XmlNodeList studioNodes = node.SelectNodes("displayname");
                             foreach (XmlNode studioNode in studioNodes)
-                                newTitle.Distributor = studioNode.InnerText; // currently we only hold one studio (in this case the last one)
+                                newTitle.Studio = studioNode.InnerText; // currently we only hold one studio (in this case the last one)
                             break;
                         case "distributor":
                             XmlNode distNode = node.SelectSingleNode("displayname");
                             if (distNode != null)
-                                newTitle.Distributor = distNode.InnerText;
+                                newTitle.Studio = distNode.InnerText;
                             break;
                         case "country":
                             XmlNode countryNode = node.SelectSingleNode("displayname");
