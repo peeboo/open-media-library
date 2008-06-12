@@ -36,6 +36,10 @@ namespace OMLSDK
         {
             return true;
         }
+        public virtual Boolean FolderSelection()
+        {
+            return false;
+        }
         public virtual string GetVersion()
         {
             throw new Exception("You must implement this method in your class.");

@@ -21,6 +21,10 @@ namespace VMCDVDLibraryPlugin
             Utilities.DebugLine("[DVDLibraryImporter] created");
         }
 
+        public override bool FolderSelection()
+        {
+            return true;
+        }
         public override string GetVersion()
         {
             return "0.9.0.0";

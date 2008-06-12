@@ -7,6 +7,7 @@ namespace OMLSDK
     public interface IOMLPlugin
     {
         Boolean CopyImages();
+        Boolean FolderSelection();
         string GetVersion();
         string GetMenu();
         string GetName();
