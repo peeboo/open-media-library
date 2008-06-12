@@ -271,8 +271,6 @@ namespace Library
             LoadMovies(col);
         }
 
-        private int _jumpToPosition = -1;           // the ScrollData jump is relative (Scroll # of items)
-        private int _relativeJumpToPosition = -1;   // the Repeater jump (NavigateIntoIndex) is absolute
 
         public int RelativeJumpToPosition
         {
@@ -481,7 +479,9 @@ namespace Library
         private Size _MenuImageSize = new Size(150, 200);
 
         EditableText _jumpInListText;
- 
+        private int _jumpToPosition = -1;           // the ScrollData jump is relative (Scroll # of items)
+        private int _relativeJumpToPosition = -1;   // the Repeater jump (NavigateIntoIndex) is absolute
+
 
         #endregion
    }
