@@ -18,6 +18,8 @@ namespace Library
 {
     public class Setup : ModelItem
     {
+        #region variables
+        private string _currentTitleVideoFormat = string.Empty;
         private string _filename = string.Empty;
         private OMLPlugin _plugin;
         private int _currentTitleIndex;
@@ -26,6 +28,7 @@ namespace Library
         private int _TotalTitlesAdded = 0;
         private int _TotalTitlesFound = 0;
         private int _TotalTitlesSkipped = 0;
+        private bool _AllTitlesProcessed = false;
         private static Setup current;
         private Choice _ImporterSelection = null;
         private TreeView _treeView = null;
@@ -38,7 +41,9 @@ namespace Library
 
         private BooleanChoice _shouldCopyImages = new BooleanChoice();
         private TitleCollection _titleCollection = new TitleCollection();
+        #endregion
 
+        #region Properties
         public Image DefaultImage
         {
             get
@@ -64,7 +69,15 @@ namespace Library
                 FirePropertyChanged("LoadComplete");
             }
         }
-
+        public string CurrentTitleVideoFormat
+        {
+            get { return _currentTitleVideoFormat; }
+            set
+            {
+                _currentTitleVideoFormat = value;
+                FirePropertyChanged("CurrentTitleVideoFormat");
+            }
+        }
         public Image CurrentTitleImage
         {
             get { return _currentTitleImage; }
@@ -74,7 +87,6 @@ namespace Library
                 FirePropertyChanged("CurrentTitleImage");
             }
         }
-
         public int CurrentTitleIndex
         {
             get { return _currentTitleIndex; }
@@ -84,7 +96,16 @@ namespace Library
                 FirePropertyChanged("CurrentTitleIndex");
             }
         }
-
+        public bool AllTitlesProcessed
+        {
+            get { return _AllTitlesProcessed; }
+            set
+            {
+                _AllTitlesProcessed = true;
+                _titleCollection.saveTitleCollection();
+                FirePropertyChanged("AllTitlesProcessed");
+            }
+        }
         public int TotalTitlesSkipped
         {
             get { return _TotalTitlesSkipped; }
@@ -103,7 +124,6 @@ namespace Library
                 FirePropertyChanged("TotalTitlesAdded");
             }
         }
-
         public string CurrentTitleName
         {
             get { return _currentTitleName; }
@@ -113,7 +133,6 @@ namespace Library
                 FirePropertyChanged("CurrentTitleName");
             }
         }
-
         public int TotalTitlesFound
         {
             get { return _TotalTitlesFound; }
@@ -123,7 +142,6 @@ namespace Library
                 FirePropertyChanged("TotalTitlesFound");
             }
         }
-
         public bool IsDirty
         {
             get { return _isDirty; }
@@ -133,7 +151,6 @@ namespace Library
                 FirePropertyChanged("IsDirty");
             }
         }
-
         public BooleanChoice ShouldCopyImages
         {
             get { return _shouldCopyImages; }
@@ -143,56 +160,64 @@ namespace Library
                 FirePropertyChanged("ShouldCopyImages");
             }
         }
-
         public static Setup Current
         {
             get { return current; }
             set { current = value; }
         }
+        #endregion
 
         public void SkipCurrentTitle()
         {
-            TotalTitlesSkipped = TotalTitlesSkipped + 1;
+            TotalTitlesSkipped++;
             if (TotalTitlesFound > CurrentTitleIndex + 1)
             {
-                CurrentTitleIndex = CurrentTitleIndex + 1;
+                CurrentTitleIndex++;
                 CurrentTitleName = _titles[CurrentTitleIndex].Name;
                 CurrentTitleImage = MovieItem.LoadImage(_titles[CurrentTitleIndex].FrontCoverPath);
+                CurrentTitleVideoFormat = Enum.GetName(typeof(VideoFormat), _titles[CurrentTitleIndex].VideoFormat);
             }
             else
             {
-                CurrentTitleName = "No more Titles";
-                CurrentTitleImage = MovieItem.NoCoverImage;
+                AllTitlesProcessed = true;
             }
         }
 
         public void AddCurrentTitle()
         {
-            TotalTitlesAdded = TotalTitlesAdded + 1;
+            TotalTitlesAdded++;
             OMLApplication.DebugLine("[Setup UI] Adding title: " + _titles[CurrentTitleIndex].InternalItemID);
             _titleCollection.Add(_titles[CurrentTitleIndex]);
             if (TotalTitlesFound > CurrentTitleIndex + 1)
             {
-                CurrentTitleIndex = CurrentTitleIndex + 1;
+                CurrentTitleIndex++;
                 CurrentTitleName = _titles[CurrentTitleIndex].Name;
                 CurrentTitleImage = MovieItem.LoadImage(_titles[CurrentTitleIndex].FrontCoverPath);
             }
             else
             {
-                CurrentTitleName = "No more Titles";
-                CurrentTitleImage = MovieItem.NoCoverImage;
+                AllTitlesProcessed = true;
             }
         }
 
-        public void AddAllTitles()
+        public void AddAllCurrentTitles()
         {
-            for (CurrentTitleIndex = CurrentTitleIndex; CurrentTitleIndex < TotalTitlesFound - 1; CurrentTitleIndex = CurrentTitleIndex + 1)
+            TotalTitlesAdded++;
+            OMLApplication.DebugLine("[Setup UI] Adding title: " + _titles[CurrentTitleIndex].InternalItemID);
+            _titleCollection.Add(_titles[CurrentTitleIndex]);
+            if (TotalTitlesFound > CurrentTitleIndex + 1)
             {
-                TotalTitlesAdded = TotalTitlesAdded + 1;
-                _titleCollection.Add(_titles[CurrentTitleIndex]);
+                for (; CurrentTitleIndex < TotalTitlesFound - 1;)
+                {
+                    CurrentTitleName = _titles[CurrentTitleIndex].Name;
+                    CurrentTitleImage = MovieItem.LoadImage(_titles[CurrentTitleIndex].FrontCoverPath);
+                    AddCurrentTitle();
+                }
             }
-            CurrentTitleName = "No more Titles";
-            CurrentTitleImage = MovieItem.NoCoverImage;
+            else
+            {
+                AllTitlesProcessed = true;
+            }
         }
 
         public void BeginLoading()
@@ -234,7 +259,7 @@ namespace Library
             }
             catch (Exception e)
             {
-                OMLApplication.DebugLine("Error finding file");
+                OMLApplication.DebugLine("Error finding file: " + e.Message);
             }
         }
 
@@ -325,19 +350,6 @@ namespace Library
             return plugin.Load(file_to_import, _shouldCopyImages.Value);
         }
 
-        public void LoadTitlesIntoDatabase(OMLPlugin plugin)
-        {
-            List<Title> titles = plugin.GetTitles();
-
-            foreach (Title t in titles)
-            {
-                CurrentTitleName = t.Name;
-                CurrentTitleImage = GalleryItem.LoadImage(t.FrontCoverPath);
-                _titleCollection.Add(t);
-                TotalTitlesAdded = TotalTitlesAdded + 1;
-            }
-        }
-
         public OMLPlugin GetPlugin()
         {
             string strChosenImporter = (string)Setup.Current._ImporterSelection.Chosen;
@@ -346,22 +358,16 @@ namespace Library
             {
                 case "DVDID XML Files":
                     return new MyMoviesImporter();
-                    break;
                 case "MyMovies":
                     return new MyMoviesImporter();
-                    break;
                 case "DVD Profiler":
                     return new MyMoviesImporter();
-                    break;
                 case "Movie Collectorz":
                     return new MyMoviesImporter();
-                    break;
                 case "DVR-MS Files":
                     return new MyMoviesImporter();
-                    break;
                 default:
                     return new MyMoviesImporter();
-                    break;
             }
         }
     }

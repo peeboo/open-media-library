@@ -3,6 +3,7 @@
       xmlns:a="assembly://Library/Library"
       xmlns:rbg="resx://Library/Library.Resources/RadioButtonGroup"
       xmlns:controls="resx://Library/Library.Resources/CoreControls"
+      xmlns:c="resx://Library/Library.Resources/Controls"
       xmlns:me="Me">
 
     <UI Name="SelectFilesToImport">
@@ -14,6 +15,8 @@
                      Description="Skip Title"/>
             <Command Name="AddTitleButtonCommand"
                      Description="Add Title"/>
+            <Command Name="AddAllTitleButtonCommand"
+                     Description="Add All Titles"/>
         </Locals>
 
         <Properties>
@@ -28,6 +31,7 @@
             <Binding Source="[Setup.TotalTitlesSkipped!cor:String]" Target="[TotalTitlesSkippedText.Content]"/>
             <Binding Source="[Setup.CurrentTitleImage]" Target="[CurrentTitleImage.Content]"/>
             <Binding Source="[Setup.CurrentTitleName]" Target="[CurrentTitleNameText.Content]"/>
+            <Binding Source="[Setup.CurrentTitleVideoFormat]" Target="[CurrentTitleVideoFormatText.Content]"/>
 
             <Changed Source="[BeginLoadingCommand.Invoked]">
                 <Actions>
@@ -44,7 +48,11 @@
                     <Invoke Target="[Setup.AddCurrentTitle]"/>
                 </Actions>
             </Changed>
-
+            <Changed Source="[AddAllTitleButtonCommand.Invoked]">
+                <Actions>
+                    <Invoke Target="[Setup.AddAllCurrentTitles]"/>
+                </Actions>
+            </Changed>
             <Changed Source="[Setup.LoadStarted]" InitialEvaluate="false">
                 <Actions>
                     <Set Target="[waitCursor.Visible]" Value="true"/>
@@ -56,14 +64,21 @@
                     <Set Target="[loadingTitlesButton.Visible]" Value="false"/>
                     <Set Target="[SkipTitleButton.Visible]" Value="true"/>
                     <Set Target="[AddTitleButton.Visible]" Value="true"/>
+                    <Set Target="[AddAllTitleButton.Visible]" Value="true"/>
                 </Actions>
             </Changed>
-            
+            <Changed Source="[Setup.AllTitlesProcessed]" InitialEvaluate="false">
+                <Actions>
+                    <Set Target="[Content.Visible]" Value="false"/>
+                </Actions>
+            </Changed>
+
         </Rules>
 
         <Content>
             <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
                 <Children>
+                    <controls:WaitCursor Name="waitCursor" Visible="false"/>
 
                     <Panel Name="Bottom" >
                         <Children>
@@ -153,10 +168,9 @@
 
                     <Panel Name="Content" Layout="Fill">
                         <Children>
-                            <controls:WaitCursor Name="waitCursor" Visible="false"/>
-                            <Panel Layout="HorizontalFlow">
+                            <Panel Layout="VerticalFlow">
                                 <Children>
-                                    <Panel Layout="VerticalFlow" MaximumSize="400,400">
+                                    <Panel Name="TopHalf" Layout="VerticalFlow" DebugOutline="Red">
                                         <Children>
                                             <Text Content="Settings: " Font="Calibri, 20" Color="LightBlue"/>
                                             <me:ShouldCopyImages Setup="[Setup]"/>
@@ -165,21 +179,31 @@
                                             <DockLayoutInput Position="Left"/>
                                         </LayoutInput>
                                     </Panel>
-                                    <Panel Layout="VerticalFlow" MaximumSize="400,400">
+                                    <Panel Name="BottomHalf" Layout="VerticalFlow">
                                         <Children>
                                             <Graphic MaintainAspectRatio="true" SizingPolicy="SizeToConstraint" Name="CurrentTitleImage" Content="[Setup.DefaultImage]" MinimumSize="150,200" MaximumSize="150,200" />
-                                            <Panel Layout="HorizontalFlow">
+                                            <Panel Layout="VerticalFlow">
                                                 <Children>
-                                                    <Text Name="CurrentTitleNameLabel" Content="Current Title: " Font="Calibri, 16, Bold" Color="LightBlue"/>
-                                                    <Text Name="CurrentTitleNameText" Font="Calibri, 16" Color="LightBlue"/>
+                                                    <Panel Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Name="CurrentTitleNameLabel" Content="Current Title: " Font="Calibri, 16, Bold" Color="LightBlue"/>
+                                                            <Text Name="CurrentTitleNameText" Font="Calibri, 16" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Panel>
+                                                    <Panel Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Name="CurrentTitleVideoFormatLabel" Content="Video Format: " Font="Calibri, 16, Bold" Color="LightBlue"/>
+                                                            <Text Name="CurrentTitleVideoFormatText" Font="Calibri, 16" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Panel>
                                                 </Children>
                                             </Panel>
-                                            <Panel Layout="HorizontalFlow">
+                                            <Panel Layout="VerticalFlow">
                                                 <Children>
-                                                    <controls:Button Name="loadingTitlesButton" Model="[BeginLoadingCommand]" />
-                                                    <controls:Button Name="AddTitleButton" Model="[AddTitleButtonCommand]" Visible="false"/>
-                                                    <Text Content=" "/>
-                                                    <controls:Button Name="SkipTitleButton" Model="[SkipTitleButtonCommand]" Visible="false"/>
+                                                    <c:SimpleButton Name="loadingTitlesButton" Command="[BeginLoadingCommand]" Text="Being Loading Movies"/>
+                                                    <c:SimpleButton Name="AddTitleButton" Command="[AddTitleButtonCommand]" Text="Add Movie" Visible="false"/>
+                                                    <c:SimpleButton Name="AddAllTitleButton" Command="[AddAllTitleButtonCommand]" Text="Add All Movies" Visible="false"/>
+                                                    <c:SimpleButton Name="SkipTitleButton" Command="[SkipTitleButtonCommand]" Text="Skip This Movie" Visible="false"/>
                                                 </Children>
                                             </Panel>
                                         </Children>

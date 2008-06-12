@@ -73,7 +73,7 @@ namespace Library
                         Hashtable properties = new Hashtable();
                         properties.Add("name", "");
                         TcpClientChannel channel = new TcpClientChannel(properties, null);
-                        ChannelServices.RegisterChannel(channel);
+                        ChannelServices.RegisterChannel(channel, false);
 
                         _server = Activator.GetObject(ITranscode360Type,
                             "tcp://localhost:1401/RemotingServices/Transcode360");

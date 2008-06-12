@@ -93,7 +93,6 @@ namespace OMLEngine
 
     public static class Utilities
     {
-        private static TextWriterTraceListener tl;
         private static FileStream Log;
 
         private static Random random;

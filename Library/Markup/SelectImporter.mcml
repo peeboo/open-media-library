@@ -6,6 +6,7 @@
       xmlns:a="assembly://Library/Library"
       xmlns:rbg="resx://Library/Library.Resources/RadioButtonGroup"
       xmlns:controls="resx://Library/Library.Resources/CoreControls"
+      xmlns:c="resx://Library/Library.Resources/Controls"
       xmlns:me="Me">
 
     <UI Name="SelectImporter">
@@ -94,7 +95,7 @@
                                 <Children>
                                     <Text Content="Select an Importer" Color="White" Font="Calibri, 26" />
                                     <rbg:RadioButtonGroup Model="[Setup.ImporterSelection]" />
-                                    <controls:Button Name="Next" Model="[NextCommand]" />
+                                    <c:SimpleButton Name="Next" Command="[NextCommand]" Text="Next"/>
                                 </Children>
                             </Clip>
                         </Children>

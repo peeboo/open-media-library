@@ -82,7 +82,7 @@ namespace MyMoviesPlugin
             return "MyMovies xml file importer for Open Media Library v" + VERSION;
         }
 
-        public string CopyImage(string from_location, string to_location)
+/*        public string CopyImage(string from_location, string to_location)
         {
             Utilities.DebugLine("[MyMoviesImporter] Copying Image: FROM("+from_location+") TO("+to_location+")");
             FileInfo fi = new FileInfo(from_location);
@@ -98,7 +98,7 @@ namespace MyMoviesPlugin
                 return from_location;
             }
         }
-
+*/
         private void process_node_switch(Title newTitle, XmlNode node)
         {
             switch (node.Name)
