@@ -446,13 +446,16 @@ namespace Library
                         }
                     }
                     
-                    item.CoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
-                    item.BackCover = GalleryItem.LoadImage(item.TitleObject.BackCoverPath);
+                    if( File.Exists(item.TitleObject.FrontCoverPath) )
+                        item.CoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
+                    
+                    if( File.Exists(item.TitleObject.BackCoverPath) )
+                        item.BackCover = GalleryItem.LoadImage(item.TitleObject.BackCoverPath);
                 }
             }
             catch
             {
-                UISettings x = new UISettings();
+                
             }
         }
         
