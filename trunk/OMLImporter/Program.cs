@@ -134,6 +134,7 @@ namespace OMLImporter
                     {
                         Console.WriteLine("Adding Titles ...");
                         mainTitleCollection.saveTitleCollection();
+                        isDirty = false;
                     }
                     Console.WriteLine("Complete!");
                     continue;
