@@ -34,6 +34,14 @@ namespace Library
             set { _name = value; }
         }
 
+        public bool HasCover
+        {
+            get 
+            {
+                bool hasCover = (_itemImage != NoCoverImage);
+                return hasCover;
+            }
+        }
 
         virtual public string SortName
         {

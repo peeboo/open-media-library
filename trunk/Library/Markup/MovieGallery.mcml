@@ -185,16 +185,40 @@
       </Actions>
     </Condition>
 
-    <Condition Source="[GalleryItem.HasCover]" SourceValue="false" ConditionOp="Equals" >
+    <!--<Rule>
+      <Conditions>
+        <Equality Source="[GalleryView]" Value="Cover Art" ConditionOp="Equals" />
+        <Equality Source="[GalleryItem.HasCover]" Value="true" ConditionOp="Equals" />
+      </Conditions>
       <Actions>
-        <Set Target="[Caption.Visible]" Value="true" />
+        <Set Target="[Caption.Visible]" Value="false" />
       </Actions>
-    </Condition>
+    </Rule>-->
 
+    <Changed Source="[GalleryItem.MenuCoverArt]" InitialEvaluate="true">
+      <Conditions>
+        <Equality Source="[GalleryView]" Value="Cover Art" ConditionOp="Equals" />
+        <Equality Source="[GalleryItem.HasCover]" Value="true" ConditionOp="Equals" />
+      </Conditions>
+      <Actions>
+        <Set Target="[Caption.Visible]" Value="false" />
+      </Actions>
+    </Changed>
+
+    <Changed Source="[GalleryItem.CoverArt]" InitialEvaluate="true">
+      <Conditions>
+        <Equality Source="[GalleryView]" Value="Cover Art" ConditionOp="Equals" />
+        <Equality Source="[GalleryItem.HasCover]" Value="true" ConditionOp="Equals" />
+      </Conditions>
+      <Actions>
+        <Set Target="[Caption.Visible]" Value="false" />
+      </Actions>
+    </Changed>
+
+    
     <Condition Source="[GalleryView]" SourceValue="Cover Art" ConditionOp="Equals" >
       <Actions>
         <Set Target="[Cover.Visible]" Value="true" />
-        <Set Target="[Caption.Visible]" Value="false" />
         <Set Target="[LostFocus]" Value="animation://me:LostFocusCoverArt" />
         <Set Target="[GotFocus]" Value="animation://me:GotFocusCoverArt" />
       </Actions>
