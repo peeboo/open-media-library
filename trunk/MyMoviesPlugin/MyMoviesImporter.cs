@@ -61,7 +61,14 @@ namespace MyMoviesPlugin
             }
             return true;
         }
-
+        public override string GetVersion()
+        {
+            return "0.9.0.0";
+        }
+        public override string GetMenu()
+        {
+            return "MyMovies";
+        }
         public override string GetName()
         {
             return "MyMoviesPlugin";

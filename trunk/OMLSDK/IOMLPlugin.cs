@@ -6,6 +6,9 @@ namespace OMLSDK
 {
     public interface IOMLPlugin
     {
+        Boolean CopyImages();
+        string GetVersion();
+        string GetMenu();
         string GetName();
         string GetDescription();
         string GetAuthor();

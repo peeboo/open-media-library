@@ -19,19 +19,34 @@ namespace DVRMSPlugin
         {
         }
 
+        public override bool CopyImages()
+        {
+            return false;
+        }
+
+        public override string GetVersion()
+        {
+            return "0.9.0.0";
+        }
+
+        public override string GetMenu()
+        {
+            return "DVRMS Movie Files";
+        }
         public override string GetName()
         {
-            return "DVRMSPlugin";
+            System.Type tipe = this.GetType();
+            return tipe.Name;
         }
 
         public override string GetDescription()
         {
-            return "DVRMS File Extractor Plugin";
+            return "DVRMS File Extractor Plugin v" + Version;
         }
 
         public override string GetAuthor()
         {
-            return "Thom Lamb";
+            return "OML Development Team";
         }
 
         public override bool Load(string filename, bool ShouldCopyImages)
@@ -59,6 +74,7 @@ namespace DVRMSPlugin
             foreach (string file in files)
             {
                 Title newTitle = new Title();
+                newTitle.Name = Path.GetFileNameWithoutExtension(file);
                 IDictionary meta;
                 DvrmsMetadataEditor editor = new DvrmsMetadataEditor(file);
                 meta = editor.GetAttributes();
@@ -73,8 +89,6 @@ namespace DVRMSPlugin
                             if (!String.IsNullOrEmpty(sTitle))
                             {
                                 newTitle.Name = sTitle;
-                            } else {
-                                newTitle.Name = Path.GetFileNameWithoutExtension(file);
                             }
                             newTitle.ImporterSource = @"DVRMSImporter";
                             newTitle.MetadataSourceName = @"DVR-MS";
@@ -107,11 +121,14 @@ namespace DVRMSPlugin
                             {
                                 string sGenre = (string)attr.Value;
                                 string [] gen = sGenre.Split(',');
+                                newTitle.Genres.Clear();
                                 foreach (string genre in gen)
                                 {
-                                    string uGenre = genre.ToUpper();
-                                    if (uGenre.StartsWith("MOVIE")) continue;
-                                    newTitle.AddGenre(genre.Trim());
+                                    string uGenre = genre.ToUpper().Trim();
+                                    if (String.IsNullOrEmpty(uGenre)) continue;
+                                    if (uGenre.StartsWith(@"MOVIE")) continue;
+                                    uGenre = genre.Trim();
+                                    newTitle.AddGenre(uGenre);
                                 }
                             }
                             break;
