@@ -55,6 +55,14 @@ namespace DVDProfilerPlugin
             return true;
         }
 
+        public override string GetVersion()
+        {
+            return "0.9.0.0";
+        }
+        public override string GetMenu()
+        {
+            return "DVD Profiler";
+        }
         public override string GetName()
         {
             return "DVDProfilerPlugin";

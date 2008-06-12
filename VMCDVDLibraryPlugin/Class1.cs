@@ -21,6 +21,14 @@ namespace VMCDVDLibraryPlugin
             Utilities.DebugLine("[DVDLibraryImporter] created");
         }
 
+        public override string GetVersion()
+        {
+            return "0.9.0.0";
+        }
+        public override string GetMenu()
+        {
+            return "Scan Folders For DVDs and Videos";
+        }
         public override string GetName()
         {
             return "VMCDVDLibraryPlugin";

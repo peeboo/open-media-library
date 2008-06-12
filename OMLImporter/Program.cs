@@ -14,12 +14,19 @@ namespace OMLImporter
         private static TitleCollection mainTitleCollection = new TitleCollection();
         private static Boolean isDirty = false;
         public static bool _copyImages = true;
+        private static List<OMLPlugin> plugins = new List<OMLPlugin>();
 
         [STAThread]
         static void Main(string[] args)
         {
+            LoadPlugins();
             PrintHeader();
             Menu();
+            for (int ii = 0; ii < plugins.Count; ii++)
+            {
+                plugins[ii] = null;
+            }
+            plugins = null;
             /* This will be used to pass params and not use the menu (automation use?)
             if (args.Length > 0)
             {
@@ -31,6 +38,15 @@ namespace OMLImporter
                 }
             }
             */
+        }
+
+        private static void LoadPlugins()
+        {
+            plugins.Add(new MyMoviesPlugin.MyMoviesImporter());
+            plugins.Add(new DVDProfilerPlugin.DVDProfilerImporter());
+            plugins.Add(new MovieCollectorzPlugin.MovieCollectorzPlugin());
+            plugins.Add(new DVRMSPlugin.DVRMSPlugin());
+            plugins.Add(new VMCDVDLibraryPlugin.DVDLibraryImporter());
         }
 
         public static DialogResult GetFile(ref string file_to_import, OMLPlugin plugin)
@@ -74,16 +90,26 @@ namespace OMLImporter
             mainTitleCollection.loadTitleCollection();
             while (true)
             {
+                plugin = null;
+                Console.Clear();
                 Console.WriteLine("OML Importer: Current {0} titles in the database", mainTitleCollection.Count);
                 Console.WriteLine("Which Importer would you like to use:");
-                Console.WriteLine("1) MyMovies");
-                Console.WriteLine("2) DVD Profiler");
-                Console.WriteLine("3) Movie Collectorz");
-                Console.WriteLine("4) DVRMS Movie Files");
-                Console.WriteLine("5) Scan Folders For DVDs and Videos");
-                Console.WriteLine("6) Save the New Titles");
-                Console.WriteLine("7) Quit (No Saving)");
-                Console.WriteLine("8) Remove all titles from the database (be carefull!!!)");
+                int ii;
+                for (ii = 0; ii < plugins.Count; ii++)
+                {
+                    OMLPlugin pi = plugins[ii];
+                    string sFmt = "{0}) {1} (v{2})";
+                    Console.WriteLine(string.Format(sFmt, (ii + 1), pi.Menu, pi.Version));
+                }
+                //foreach (OMLPlugin pi in plugins)
+                //{
+                //    Console.WriteLine(string.Format("{0}) {1} (v{2})", ii++, pi.Name, pi.Version));
+                //}
+                ii++;
+                Console.WriteLine(String.Format("{0}) Save the New Titles", ii++));
+                Console.WriteLine(String.Format("{0}) Quit (No Saving)", ii++));
+                Console.WriteLine(String.Format("{0}) Remove all titles from the database (be carefull!!!)", ii++));
+                Console.WriteLine();
                 Console.Write("Choice: ");
 
                 bool showFolderSelection = false;
@@ -91,72 +117,74 @@ namespace OMLImporter
                 string response = Console.ReadLine();
                 if (response.Length == 0) continue;
 
-                response = response.Substring(0, 1);
-                switch (Int32.Parse(response))
+                //response = response.Substring(0, 1);
+                Int32 iResp;
+                if (!Int32.TryParse(response, out iResp)) continue;
+
+                if (iResp < plugins.Count)
                 {
-                    case 1:
-                        AskIfShouldCopyImages();
-                        plugin = new MyMoviesPlugin.MyMoviesImporter();
-                        break;
-                    case 2:
-                        AskIfShouldCopyImages();
-                        plugin = new DVDProfilerPlugin.DVDProfilerImporter();
-                        break;
-                    case 3:
-                        AskIfShouldCopyImages();
-                        plugin = new MovieCollectorzPlugin.MovieCollectorzPlugin();
-                        break;
-                    case 4:
-                        plugin = new DVRMSPlugin.DVRMSPlugin();
-                        break;
-                    case 5:
-                        showFolderSelection = true;
-                        plugin = new VMCDVDLibraryPlugin.DVDLibraryImporter();
-                        break;
-                    case 6:
-                        if (isDirty) 
+                    --iResp;
+                    plugin = plugins[iResp];
+                    if (plugins[iResp].CopyImages()) AskIfShouldCopyImages();
+                } 
+                else if (iResp == (plugins.Count))
+                {
+                    showFolderSelection = true;
+                    plugin = plugins[iResp];
+                    if (plugins[iResp].CopyImages()) AskIfShouldCopyImages();
+                } 
+                else if (iResp == (plugins.Count + 1))
+                {               
+                    if (isDirty) 
+                    {
+                        Console.WriteLine("Adding Titles ...");
+                        mainTitleCollection.saveTitleCollection();
+                    }
+                    Console.WriteLine("Complete!");
+                    continue;
+                } 
+                else if (iResp == (plugins.Count + 2))
+                {
+                    if (isDirty)
+                    {
+                        Console.WriteLine("You have not saved your changes. Do you want to save before quitting? (y/n)");
+                        string answer = Console.ReadLine();
+                        if (answer.ToUpper() == "Y")
                         {
                             Console.WriteLine("Adding Titles ...");
                             mainTitleCollection.saveTitleCollection();
-                        }
-                        Console.WriteLine("Complete!");
-                        continue;
-                        break;
-                    case 7:
-                        if (isDirty)
-                        {
-                            Console.WriteLine("You have not saved your changes. Do you want to save before quitting? (y/n)");
-                            string answer = Console.ReadLine();
-                            if (answer.ToUpper() == "Y")
-                            {
-                                Console.WriteLine("Adding Titles ...");
-                                mainTitleCollection.saveTitleCollection();
-                                isDirty = false;
-                            }
-                        }
-                        Console.WriteLine("Complete!");
-                        return;
-                    case 8:
-                        Console.WriteLine("This option will delete all titles from the database immediately! This operation CANNOT be undone!");
-                        Console.WriteLine("Are you sure you want to delete all the titles from the database? (please type YES)");
-                        string deleteAllAnswer = Console.ReadLine();
-                        if (deleteAllAnswer == "YES")
-                        {
-                            Console.WriteLine("Removing all entries...");
-                            mainTitleCollection = new TitleCollection();
-                            mainTitleCollection.saveTitleCollection();
                             isDirty = false;
-                            Console.WriteLine("Done!");
                         }
-                        else
-                        {
-                            Console.WriteLine("Operation aborted. No titles have been deleted!");
-                        }
-                        continue;
-                    default:
+                    }
+                    Console.WriteLine("Complete!");
+                    return;
+                } 
+                else if (iResp == (plugins.Count + 3))
+                {
+                    Console.WriteLine("This option will delete all titles from the database immediately! This operation CANNOT be undone!");
+                    Console.WriteLine("Are you sure you want to delete all the titles from the database? (please type YES)");
+                    string deleteAllAnswer = Console.ReadLine();
+                    if (deleteAllAnswer == "YES")
+                    {
+                        Console.WriteLine("Removing all entries...");
+                        mainTitleCollection = new TitleCollection();
+                        mainTitleCollection.saveTitleCollection();
+                        isDirty = false;
+                        Console.WriteLine("Done!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Operation aborted. No titles have been deleted!");
+                    }
+                    continue;
+                } 
+                else
+                {
                         Usage();
                         continue;
                 }
+
+                if (plugin == null) continue;
                 Console.WriteLine();
 
                 if (showFolderSelection)

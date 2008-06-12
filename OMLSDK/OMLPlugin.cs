@@ -12,6 +12,38 @@ namespace OMLSDK
         List<Title> titles;
         private int totalRowsAdded = 0;
 
+        public string Name
+        {
+            get { return GetName(); }
+        }
+
+        public string Version
+        {
+            get { return GetVersion(); }
+        }
+
+        public string Description
+        {
+            get { return GetDescription(); }
+        }
+
+        public string Menu
+        {
+            get { return GetMenu();  }
+        }
+
+        public virtual Boolean CopyImages()
+        {
+            return true;
+        }
+        public virtual string GetVersion()
+        {
+            throw new Exception("You must implement this method in your class.");
+        }
+        public virtual string GetMenu()
+        {
+            throw new Exception("You must implement this method in your class.");
+        }
         public virtual string GetName()
         {
             throw new Exception("You must implement this method in your class.");

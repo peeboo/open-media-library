@@ -18,10 +18,6 @@ namespace MovieCollectorzPlugin
         bool _ShouldCopyImages = true;
         const string HTML_TAG_PATTERN = "<.*?>";
 
-        public override string GetDescription()
-        {
-            throw new Exception("MovieCollectorz Plugin");
-        }
         public override string GetAuthor()
         {
             throw new Exception("OML");
@@ -224,9 +220,21 @@ namespace MovieCollectorzPlugin
 
             return true;
         }
+        public override string GetVersion()
+        {
+            return "0.9.0.0";
+        }
+        public override string GetMenu()
+        {
+            return "Movie Collectorz";
+        }
         public override string GetName()
         {
             return "MovieCollectorzPlugin";
+        }
+        public override string GetDescription()
+        {
+            return "Movie Collectorz";
         }
 
         private string StripHTML(string inputString)
