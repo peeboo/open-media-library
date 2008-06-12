@@ -25,6 +25,7 @@ namespace OMLEngine
 
         public bool ContainsFileName(string filename)
         {
+            if (filename.Trim().Length == 0) return false;
             return (_moviesByFilename.ContainsKey(filename.ToUpper()));
         }
 
@@ -63,7 +64,7 @@ namespace OMLEngine
         {
             _list.Add(newTitle);
 
-            if (!_moviesByFilename.ContainsKey(newTitle.FileLocation))
+            if ( newTitle.FileLocation.Length > 0 && !_moviesByFilename.ContainsKey(newTitle.FileLocation))
             {
                 _moviesByFilename.Add(newTitle.FileLocation, newTitle);
             }

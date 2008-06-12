@@ -250,7 +250,7 @@ namespace OMLEngine
         public string FileLocation
         {
             get { return _fileLocation; }
-            set { _fileLocation = value.ToUpper(); }
+            set { _fileLocation = value.ToUpper().Trim(); }
         }
 
         /// <summary>
