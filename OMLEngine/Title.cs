@@ -237,7 +237,7 @@ namespace OMLEngine
         }
 
         /// <summary>
-        /// Has this title been watched before or not
+        /// Number of times video has been watched
         /// </summary>
         public int WatchedCount
         {
@@ -340,7 +340,7 @@ namespace OMLEngine
             set { _runtime = value; }
         }
         /// <summary>
-        /// Rating of the film acording to the MPAA
+        /// Rating of the film 
         /// </summary>
         public string ParentalRating
         {

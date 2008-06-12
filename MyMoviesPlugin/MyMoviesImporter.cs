@@ -174,23 +174,23 @@ namespace MyMoviesPlugin
                             switch (mmRatingId)
                             {
                                 case 0:
-                                    newTitle.MPAARating = "Unrated";
+                                    newTitle.ParentalRating = "Unrated";
                                     break;
                                 case 1:
-                                    newTitle.MPAARating = "G";
+                                    newTitle.ParentalRating = "G";
                                     break;
                                 case 2:
                                     break;
                                 case 3:
-                                    newTitle.MPAARating = "PG";
+                                    newTitle.ParentalRating = "PG";
                                     break;
                                 case 4:
-                                    newTitle.MPAARating = "PG13";
+                                    newTitle.ParentalRating = "PG13";
                                     break;
                                 case 5:
                                     break;
                                 case 6:
-                                    newTitle.MPAARating = "R";
+                                    newTitle.ParentalRating = "R";
                                     break;
                             }
                         }
@@ -230,7 +230,7 @@ namespace MyMoviesPlugin
                     XmlNodeList studios = node.SelectNodes("Studio");
                     foreach (XmlNode studioNode in studios)
                     {
-                        newTitle.Distributor = studioNode.InnerText;
+                        newTitle.Studio = studioNode.InnerText;
                     }
                     break;
                 case "Country":
