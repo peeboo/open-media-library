@@ -42,7 +42,6 @@
     </Locals>
 
     <Rules>
-      <!--<Default Target="[NowPlaying.Visible]" Value="false" />-->
       <Binding Source="[JumpValue.Value]" Target="[JumpInText.Content]" />
       
       <Rule>

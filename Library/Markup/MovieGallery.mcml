@@ -77,17 +77,18 @@
       <Actions>
         <Set Target="[JumpValue.Value]" Value="[TypingHandler.Value]"/>
         <Invoke Target="[MovieBrowser.JumpToMovie]" jumpString="[TypingHandler.DisplayValue]" />
+        <Invoke Target="[ClearTimer.Start]" />
       </Actions>
     </Rule>
 
-    <Rule>
+    <!--<Rule>
       <Conditions>
         <Modified Source="[TypingHandler.DisplayValue]"/>
       </Conditions>
       <Actions>
         <Set Target="[JumpValue.Value]" Value="[TypingHandler.DisplayValue]"/>
       </Actions>
-    </Rule>
+    </Rule>-->
 
 
 
@@ -101,7 +102,6 @@
       <Actions>
         <!--Scroll parameter is the number of items to scroll to, relative to the current position-->
         <Invoke Target ="[ScrollingData.Scroll]" amount="[MovieBrowser.RelativeJumpToPosition]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
-        <Invoke Target="[ClearTimer.Start]"/>
         <!--This is the absolute index-->
         <Invoke Target ="[GalleryRepeater.NavigateIntoIndex]" index="[MovieBrowser.JumpToPosition]" InvokePolicy="Synchronous"/>
         <Invoke Target="[ClearTimer.Start]" />
