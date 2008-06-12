@@ -7,6 +7,10 @@ using System.Diagnostics;
 
 namespace OMLEngine
 {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class FileSystemWalker
     {
         /// <summary>
@@ -180,14 +184,28 @@ namespace OMLEngine
 
 
         // Actual instance class starts here
+        /// <summary>
+        /// 
+        /// </summary>
         private DirectoryInfo _baseDir;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private DirectoryInfo _currentDir;
         private ArrayList _directors_to_scan;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public FileSystemWalker()
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="starting_dir"></param>
         public FileSystemWalker(string starting_dir)
         {
             DirectoryInfo dInfo = null;
@@ -206,11 +224,18 @@ namespace OMLEngine
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="starting_dir"></param>
         public FileSystemWalker(DirectoryInfo starting_dir)
         {
             _baseDir = starting_dir;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         ~FileSystemWalker()
         {
         }
