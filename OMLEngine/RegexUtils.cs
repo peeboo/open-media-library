@@ -5,8 +5,18 @@ using System.Text.RegularExpressions;
 
 namespace OMLEngine
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class RegexUtils
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="matchPattern"></param>
+        /// <param name="findAllUnique"></param>
+        /// <returns></returns>
         public static Match[] FindSubstrings(string source, string matchPattern, bool findAllUnique)
         {
             SortedList uniqueMatches = new SortedList();
@@ -37,6 +47,14 @@ namespace OMLEngine
 
             return (retArray);
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="matchPattern"></param>
+        /// <param name="wantInitialMatch"></param>
+        /// <returns></returns>
         public static ArrayList ExtractGroupings(string source, string matchPattern, bool wantInitialMatch)
         {
             ArrayList keyedMatches = new ArrayList();
@@ -67,6 +85,12 @@ namespace OMLEngine
 
             return (keyedMatches);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="testPattern"></param>
+        /// <returns></returns>
         public static bool VerifyRegEx(string testPattern)
         {
             bool isValid = true;
@@ -91,28 +115,82 @@ namespace OMLEngine
 
             return (isValid);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="matchPattern"></param>
+        /// <param name="replaceStr"></param>
+        /// <returns></returns>
         public static string Replace(string source, char matchPattern, string replaceStr)
         {
             return (Replace(source, matchPattern.ToString(), replaceStr, -1, 0));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="matchPattern"></param>
+        /// <param name="replaceStr"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public static string Replace(string source, char matchPattern, string replaceStr, int count)
         {
             return (Replace(source.ToString(), matchPattern.ToString(), replaceStr,
                                  count, 0));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="matchPattern"></param>
+        /// <param name="replaceStr"></param>
+        /// <param name="count"></param>
+        /// <param name="startPos"></param>
+        /// <returns></returns>
         public static string Replace(string source, char matchPattern, string replaceStr, int count, int startPos)
         {
             return (Replace(source.ToString(), matchPattern.ToString(), replaceStr,
                             count, startPos));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="matchPattern"></param>
+        /// <param name="replaceStr"></param>
+        /// <returns></returns>
         public static string Replace(string source, string matchPattern, string replaceStr)
         {
             return (Replace(source, matchPattern, replaceStr, -1, 0));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="matchPattern"></param>
+        /// <param name="replaceStr"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public static string Replace(string source, string matchPattern, string replaceStr, int count)
         {
             return (Replace(source, matchPattern, replaceStr, count, 0));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="matchPattern"></param>
+        /// <param name="replaceStr"></param>
+        /// <param name="count"></param>
+        /// <param name="startPos"></param>
+        /// <returns></returns>
         public static string Replace(string source, string matchPattern, string replaceStr, int count, int startPos)
         {
             Regex RE = new Regex(matchPattern);
@@ -120,6 +198,12 @@ namespace OMLEngine
 
             return (newString);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="theMatch"></param>
+        /// <returns></returns>
         public static string MatchHandler(Match theMatch)
         {
             // Handle Top property of the Property tag
@@ -164,6 +248,12 @@ namespace OMLEngine
 
             return (theMatch.Value);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="matchPattern"></param>
+        /// <param name="source"></param>
         public static void ComplexReplace(string matchPattern, string source)
         {
             MatchEvaluator replaceCallback = new MatchEvaluator(MatchHandler);
@@ -172,6 +262,11 @@ namespace OMLEngine
 
             Console.WriteLine("Replaced String = " + newString);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="assmName"></param>
         public static void CreateRegExDLL(string assmName)
         {
             RegexCompilationInfo[] RE = new RegexCompilationInfo[2] 
@@ -186,6 +281,13 @@ namespace OMLEngine
 
             Regex.CompileToAssembly(RE, aName);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="isFileName"></param>
+        /// <returns></returns>
         public static long LineCount(string source, bool isFileName)
         {
             if (source != null)
@@ -223,6 +325,14 @@ namespace OMLEngine
                 return (0);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="pattern"></param>
+        /// <param name="isFileName"></param>
+        /// <returns></returns>
         public static ArrayList GetLines(string source, string pattern, bool isFileName)
         {
             string text = source;
@@ -275,6 +385,13 @@ namespace OMLEngine
 
             return (matchedLines);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="startPointOfMatch"></param>
+        /// <returns></returns>
         public static int GetBeginningOfLine(string text, int startPointOfMatch)
         {
             if (startPointOfMatch > 0)
@@ -298,6 +415,13 @@ namespace OMLEngine
 
             return (startPointOfMatch);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="endPointOfMatch"></param>
+        /// <returns></returns>
         public static int GetEndOfLine(string text, int endPointOfMatch)
         {
             if (endPointOfMatch >= 0 && endPointOfMatch < text.Length)
@@ -316,6 +440,14 @@ namespace OMLEngine
 
             return (endPointOfMatch);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="pattern"></param>
+        /// <param name="occurrence"></param>
+        /// <returns></returns>
         public static Match FindOccurrenceOf(string source, string pattern, int occurrence)
         {
             if (occurrence < 1)
@@ -340,6 +472,14 @@ namespace OMLEngine
                 return (theMatches[occurrence]);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="pattern"></param>
+        /// <param name="occurrence"></param>
+        /// <returns></returns>
         public static ArrayList FindEachOccurrenceOf(string source, string pattern, int occurrence)
         {
             ArrayList occurrences = new ArrayList();

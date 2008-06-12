@@ -4,10 +4,16 @@ using System.Collections;
 
 namespace OMLEngine
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class WindowsPlayListManager
     {
         private ArrayList _PlayListItems;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ArrayList PlayListItems
         {
             get
@@ -16,32 +22,55 @@ namespace OMLEngine
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public WindowsPlayListManager()
         {
             _PlayListItems = new SortedArrayList();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
         public WindowsPlayListManager(string filePath)
         {
             _PlayListItems = new SortedArrayList();
             ReadWPLFile(filePath);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         ~WindowsPlayListManager()
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
         public void AddItem(PlayListItem item)
         {
             item.SortOrder = _PlayListItems.Count;
             _PlayListItems.Add(item);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public PlayListItem RemoveItem(PlayListItem item)
         {
             return null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
         public void WriteWPLFile(string filePath)
         {
             // pre-sort the items.
@@ -113,6 +142,10 @@ namespace OMLEngine
             xDoc.Save(filePath);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
         public void ReadWPLFile(string filePath)
         {
             Utilities.DebugLine("[WindowsPlayListManager] Reading Playlist file");
@@ -142,28 +175,46 @@ namespace OMLEngine
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class PlayListItem : IComparable
     {
         private string _fileLocation;
         private int _sortOrder;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="FileLocation"></param>
         public PlayListItem(string FileLocation)
         {
             _fileLocation = FileLocation;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string FileLocation
         {
             get { return _fileLocation; }
             set { _fileLocation = value; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int SortOrder
         {
             get { return _sortOrder; }
             set { _sortOrder = value; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="other_item"></param>
+        /// <returns></returns>
         public int CompareTo(object other_item)
         {
             return this._sortOrder.CompareTo(((PlayListItem)other_item)._sortOrder);

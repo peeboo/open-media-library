@@ -5,6 +5,9 @@ using System.Runtime.Serialization;
 
 namespace OMLEngine
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Serializable()]
     public class Person : ISerializable
     {
@@ -69,13 +72,17 @@ namespace OMLEngine
         /// <summary>
         /// Constructor with first and last name
         /// </summary>
-        /// <param name="first_name">string name</param>
-        /// <param name="last_name">string name</param>
+        /// <param name="full_name">string name</param>
         public Person(string full_name)
         {
             _full_name = full_name;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="ctxt"></param>
         public Person(SerializationInfo info, StreamingContext ctxt)
         {
             _full_name = info.GetString("full_name");
@@ -83,6 +90,12 @@ namespace OMLEngine
             _birth_date = info.GetDateTime("birth_date");
             _photo_path = info.GetString("photo_path");
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="ctxt"></param>
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             info.AddValue("full_name", _full_name);
