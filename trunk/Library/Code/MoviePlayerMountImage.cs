@@ -96,7 +96,7 @@ namespace Library
                         dInfo = Utilities.DriveInfoForDrive(VirtualDiscDrive);
                         volLabel = dInfo.VolumeLabel;
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         OMLApplication.DebugLine("Not ready, sleeping for 100 milliseconds");
                         Thread.Sleep(100);

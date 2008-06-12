@@ -5,6 +5,7 @@
       xmlns:cor="assembly://MsCorLib/System"
       xmlns:a="assembly://Library/Library"
       xmlns:controls="resx://Library/Library.Resources/CoreControls"
+      xmlns:c="resx://Library/Library.Resources/Controls"
       xmlns:me="Me">
 
     <UI Name="Setup">
@@ -102,7 +103,7 @@
                                           Color="LightBlue"
                                           Font="Calibri, 20"
                                           WordWrap="true"/>
-                                    <controls:Button Name="Begin Setup" Model="[BeginSetupCommand]" />
+                                    <c:SimpleButton Name="Begin Setup" Command="[BeginSetupCommand]" Text="Begin Setup"/>
                                 </Children>
                             </Clip>
                         </Children>

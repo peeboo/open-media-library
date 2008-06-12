@@ -3,6 +3,7 @@
       xmlns:a="assembly://Library/Library"
       xmlns:rbg="resx://Library/Library.Resources/RadioButtonGroup"
       xmlns:controls="resx://Library/Library.Resources/CoreControls"
+      xmlns:c="resx://Library/Library.Resources/Controls"
       xmlns:me="Me">
 
   <UI Name="SelectFileToImport">
@@ -115,7 +116,7 @@
 
                                       </Children>
                                   </Graphic>
-                                  <controls:Button Name="Begin Scan" Model="[BeginScanCommand]" />
+                                  <c:SimpleButton Name="Begin Scan" Command="[BeginScanCommand]" Text="Begin Scan"/>
 
                               </Children>
                           </Clip>
