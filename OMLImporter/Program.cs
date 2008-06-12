@@ -120,20 +120,15 @@ namespace OMLImporter
                 //response = response.Substring(0, 1);
                 Int32 iResp;
                 if (!Int32.TryParse(response, out iResp)) continue;
-
+                if (!(0 < iResp && iResp < ii)) continue;
+                --iResp;
                 if (iResp < plugins.Count)
                 {
-                    --iResp;
                     plugin = plugins[iResp];
+                    showFolderSelection = plugin.FolderSelection();
                     if (plugins[iResp].CopyImages()) AskIfShouldCopyImages();
                 } 
                 else if (iResp == (plugins.Count))
-                {
-                    showFolderSelection = true;
-                    plugin = plugins[iResp];
-                    if (plugins[iResp].CopyImages()) AskIfShouldCopyImages();
-                } 
-                else if (iResp == (plugins.Count + 1))
                 {               
                     if (isDirty) 
                     {
@@ -143,7 +138,7 @@ namespace OMLImporter
                     Console.WriteLine("Complete!");
                     continue;
                 } 
-                else if (iResp == (plugins.Count + 2))
+                else if (iResp == (plugins.Count + 1))
                 {
                     if (isDirty)
                     {
@@ -159,7 +154,7 @@ namespace OMLImporter
                     Console.WriteLine("Complete!");
                     return;
                 } 
-                else if (iResp == (plugins.Count + 3))
+                else if (iResp == (plugins.Count + 2))
                 {
                     Console.WriteLine("This option will delete all titles from the database immediately! This operation CANNOT be undone!");
                     Console.WriteLine("Are you sure you want to delete all the titles from the database? (please type YES)");
@@ -201,6 +196,7 @@ namespace OMLImporter
                         ProcessFile(plugin, file_to_import);
                     }
                 }
+                Console.ReadLine();
             }
 
         }
