@@ -405,12 +405,14 @@ namespace OMLEngine
             Bitmap outputImage = new Bitmap(outputWidth, outputHeight, img.PixelFormat);
             outputImage.SetResolution(img.HorizontalResolution, img.VerticalResolution);
 
-            Graphics graphics = Graphics.FromImage(outputImage);
-            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            graphics.DrawImage(img,
-                               new Rectangle(0, 0, outputWidth, outputHeight),
-                               new Rectangle(0, 0, img.Width, img.Height),
-                               GraphicsUnit.Pixel);
+            using (Graphics graphics = Graphics.FromImage(outputImage))
+            {
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.DrawImage(img,
+                                   new Rectangle(0, 0, outputWidth, outputHeight),
+                                   new Rectangle(0, 0, img.Width, img.Height),
+                                   GraphicsUnit.Pixel);
+            }
 
             return outputImage;
         }
