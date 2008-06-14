@@ -116,14 +116,19 @@ namespace OMLSDK
         {
             if (t.FrontCoverPath.Length > 0)
             {
-                Image coverArtImage = Image.FromFile(t.FrontCoverPath);
-                if (coverArtImage != null)
+                using (Image coverArtImage = Image.FromFile(t.FrontCoverPath))
                 {
-                    Image menuCoverArtImage = Utilities.ScaleImageByHeight(coverArtImage, 200);
-                    string img_path = FileSystemWalker.ImageDirectory +
-                                      "\\MF" + t.InternalItemID + ".jpg";
-                    menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    t.FrontCoverMenuPath = img_path;
+
+                    if (coverArtImage != null)
+                    {
+                        using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(coverArtImage, 200))
+                        {
+                            string img_path = FileSystemWalker.ImageDirectory +
+                                          "\\MF" + t.InternalItemID + ".jpg";
+                            menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            t.FrontCoverMenuPath = img_path;
+                        }
+                    }
                 }
             }
         }
@@ -156,7 +161,7 @@ namespace OMLSDK
         public static string CopyImage(string from_location, string to_location)
         {
             FileInfo fi = new FileInfo(from_location);
-            File.Copy(from_location, to_location, true);
+            fi.CopyTo(to_location, true);
             return fi.Name;
         }
     }
