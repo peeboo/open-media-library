@@ -52,7 +52,7 @@ namespace Library
 
         public int DetailsLeftBackgroundOffset
         {
-            get { return Properties.Settings.Default.DetailsLeftOffset-50; }
+            get { return Properties.Settings.Default.DetailsLeftOffset-200; }
         }
 
 
