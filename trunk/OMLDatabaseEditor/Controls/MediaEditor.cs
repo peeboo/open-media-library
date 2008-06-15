@@ -257,7 +257,7 @@ namespace OMLDatabaseEditor.Controls
             {
                 try
                 {
-                    if (sender.Equals(button2))
+                    if (sender.Equals(button2) || sender.Equals(pbFrontCover))
                     {
                         tbFrontCover.Text = ofd.FileName;
                         //pbFrontCover.ImageLocation = ofd.FileName;

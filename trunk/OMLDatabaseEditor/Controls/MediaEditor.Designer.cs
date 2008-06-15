@@ -212,6 +212,7 @@
             this.pbFrontCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbFrontCover.TabIndex = 4;
             this.pbFrontCover.TabStop = false;
+            this.pbFrontCover.DoubleClick += new System.EventHandler(this.CoverButton_Click);
             // 
             // pbBackCover
             // 
@@ -222,6 +223,7 @@
             this.pbBackCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbBackCover.TabIndex = 18;
             this.pbBackCover.TabStop = false;
+            this.pbBackCover.DoubleClick += new System.EventHandler(this.CoverButton_Click);
             // 
             // groupBox1
             // 
