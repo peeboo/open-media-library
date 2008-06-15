@@ -1,0 +1,23 @@
+Action
+Adult
+Adventure
+Animation
+Anime
+Classic
+Comedy
+Documentary
+Drama
+Family
+Fantasy
+Horror
+Martial Arts
+Music
+Musical
+Romance
+Science Fiction
+Special Interest
+Sports
+Suspense/Thriller
+Television
+War
+Western
