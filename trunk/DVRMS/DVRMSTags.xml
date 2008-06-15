@@ -1,0 +1,18 @@
+<xml>
+  <DVRMSTag Name="WM/Genre" Type="String" />
+  <DVRMSTag Name="WM/MediaCredits" Type="String">Actor1/Actor2;Director;Not Certain;RestOfCast1/RestOfCast2</DVRMSTag>
+  <DVRMSTag Name="WM/MediaIsDelay" Type="Boolean">False</DVRMSTag>
+  <DVRMSTag Name="WM/MediaIsFinale" Type="Boolean">False</DVRMSTag>
+  <DVRMSTag Name="WM/MediaIsLive" Type="Boolean">False</DVRMSTag>
+  <DVRMSTag Name="WM/MediaIsMovie" Type="Boolean">True</DVRMSTag>
+  <DVRMSTag Name="WM/MediaIsPremiere" Type="Boolean">False</DVRMSTag>
+  <DVRMSTag Name="WM/MediaIsRepeat" Type="Boolean">False</DVRMSTag>
+  <DVRMSTag Name="WM/MediaIsSAP" Type="Boolean">False</DVRMSTag>
+  <DVRMSTag Name="WM/MediaIsStereo" Type="Boolean">False</DVRMSTag>
+  <DVRMSTag Name="WM/MediaIsSubtitled" Type="Boolean">False</DVRMSTag>
+  <DVRMSTag Name="WM/MediaIsTape" Type="Boolean">False</DVRMSTag>
+  <DVRMSTag Name="WM/ParentalRating" Type="String" />
+  <DVRMSTag Name="WM/ParentalRatingReason" Type="String" />
+  <DVRMSTag Name="WM/SubTitle" Type="String" />
+  <DVRMSTag Name="WM/SubTitleDescription" Type="String" />
+</xml>
