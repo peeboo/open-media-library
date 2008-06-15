@@ -184,12 +184,6 @@ namespace OMLDatabaseEditor
             _titleChanged = false;
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            //MapEditor.ChangeTitle(_currentTitle);
-            _titleChanged = false;
-        }
-
         private void tsbNewTitle_Click(object sender, EventArgs e)
         {
             Title t = new Title();
