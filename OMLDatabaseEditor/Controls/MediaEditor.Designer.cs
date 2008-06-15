@@ -42,6 +42,8 @@
             this.pbFrontCover = new System.Windows.Forms.PictureBox();
             this.pbBackCover = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblFrontCover = new System.Windows.Forms.Label();
+            this.lblBackCover = new System.Windows.Forms.Label();
             this.grdDirectors = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -103,8 +105,6 @@
             this.label19 = new System.Windows.Forms.Label();
             this.cbRating = new System.Windows.Forms.ComboBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.lblBackCover = new System.Windows.Forms.Label();
-            this.lblFrontCover = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -131,11 +131,14 @@
             // 
             // tbFrontCover
             // 
+            this.tbFrontCover.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.tbFrontCover.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
             this.tbFrontCover.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbFrontCover.Location = new System.Drawing.Point(6, 223);
             this.tbFrontCover.Name = "tbFrontCover";
             this.tbFrontCover.Size = new System.Drawing.Size(115, 21);
             this.tbFrontCover.TabIndex = 17;
+            this.tbFrontCover.TextChanged += new System.EventHandler(this.tbFrontCover_TextChanged);
             // 
             // button1
             // 
@@ -146,6 +149,7 @@
             this.button1.TabIndex = 53;
             this.button1.Text = "Browse";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.CoverButton_Click);
             // 
             // button2
             // 
@@ -156,9 +160,12 @@
             this.button2.TabIndex = 54;
             this.button2.Text = "Browse";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.CoverButton_Click);
             // 
             // tbFileLocation
             // 
+            this.tbFileLocation.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.tbFileLocation.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
             this.tbFileLocation.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbFileLocation.Location = new System.Drawing.Point(8, 506);
             this.tbFileLocation.Name = "tbFileLocation";
@@ -167,6 +174,8 @@
             // 
             // tbBackCover
             // 
+            this.tbBackCover.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.tbBackCover.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
             this.tbBackCover.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbBackCover.Location = new System.Drawing.Point(8, 465);
             this.tbBackCover.Name = "tbBackCover";
@@ -234,6 +243,24 @@
             this.groupBox1.TabIndex = 57;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Movie Locations";
+            // 
+            // lblFrontCover
+            // 
+            this.lblFrontCover.AutoSize = true;
+            this.lblFrontCover.Location = new System.Drawing.Point(6, 207);
+            this.lblFrontCover.Name = "lblFrontCover";
+            this.lblFrontCover.Size = new System.Drawing.Size(62, 12);
+            this.lblFrontCover.TabIndex = 30;
+            this.lblFrontCover.Text = "Front Cover";
+            // 
+            // lblBackCover
+            // 
+            this.lblBackCover.AutoSize = true;
+            this.lblBackCover.Location = new System.Drawing.Point(8, 449);
+            this.lblBackCover.Name = "lblBackCover";
+            this.lblBackCover.Size = new System.Drawing.Size(58, 12);
+            this.lblBackCover.TabIndex = 55;
+            this.lblBackCover.Text = "Back Cover";
             // 
             // grdDirectors
             // 
@@ -929,24 +956,6 @@
             this.groupBox5.TabIndex = 50;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Movie Details";
-            // 
-            // lblBackCover
-            // 
-            this.lblBackCover.AutoSize = true;
-            this.lblBackCover.Location = new System.Drawing.Point(8, 449);
-            this.lblBackCover.Name = "lblBackCover";
-            this.lblBackCover.Size = new System.Drawing.Size(58, 12);
-            this.lblBackCover.TabIndex = 55;
-            this.lblBackCover.Text = "Back Cover";
-            // 
-            // lblFrontCover
-            // 
-            this.lblFrontCover.AutoSize = true;
-            this.lblFrontCover.Location = new System.Drawing.Point(6, 207);
-            this.lblFrontCover.Name = "lblFrontCover";
-            this.lblFrontCover.Size = new System.Drawing.Size(62, 12);
-            this.lblFrontCover.TabIndex = 30;
-            this.lblFrontCover.Text = "Front Cover";
             // 
             // MediaEditor
             // 
