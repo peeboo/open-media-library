@@ -164,6 +164,12 @@ namespace Library
             get { return NowPlayingStatus.ToString() + ": " + NowPlayingMovieName; }
         }
 
+        public TitleCollection ReloadTitleCollection()
+        {
+            _titles.loadTitleCollection();
+            return _titles;
+        }
+
 
         // private data
         private  string _nowPlayingMovieName;

@@ -17,12 +17,19 @@
 
         <Properties>
             <a:Setup Name="Setup" />
+            <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+            <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+            <a:UISettings Name="UISettings" UISettings="$Required" />
         </Properties>
 
         <Rules>
             <Changed Source="[BeginSetupCommand.Invoked]">
                 <Actions>
-                    <Navigate Source="@resx://Library/Library.Resources/SelectImporter" Setup="[Setup]" />
+                    <Navigate Source="@resx://Library/Library.Resources/SelectImporter"
+                              Setup="[Setup]"
+                              OMLApplication="[Application]"
+                              MovieGallery="[MovieBrowser]"
+                              UISettings="[UISettings]"/>
                 </Actions>
             </Changed>
         </Rules>

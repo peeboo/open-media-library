@@ -17,10 +17,17 @@
                      Description="Add Title"/>
             <Command Name="AddAllTitleButtonCommand"
                      Description="Add All Titles"/>
+            <Command Name="RestartImportCommand"
+                     Description="Restart Importer Process"/>
+            <Command Name="StartOMLCommand"
+                     Description="Start OML"/>
         </Locals>
 
         <Properties>
-            <a:Setup Name="Setup"/>
+            <a:Setup Name="Setup" Setup="$Required"/>
+            <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+            <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+            <a:UISettings Name="UISettings" UISettings="$Required" />
         </Properties>
 
         <Rules>
@@ -31,11 +38,36 @@
             <Binding Source="[Setup.TotalTitlesSkipped!cor:String]" Target="[TotalTitlesSkippedText.Content]"/>
             <Binding Source="[Setup.CurrentTitleImage]" Target="[CurrentTitleImage.Content]"/>
             <Binding Source="[Setup.CurrentTitleName]" Target="[CurrentTitleNameText.Content]"/>
+            <Binding Source="[Setup.CurrentTitleReleaseYear]" Target="[CurrentTitleReleaseYearText.Content]"/>
+            <Binding Source="[Setup.CurrentTitleRuntime]" Target="[CurrentTitleRuntimeText.Content]"/>
+            <Binding Source="[Setup.CurrentTitleRating]" Target="[CurrentTitleRatingText.Content]"/>
             <Binding Source="[Setup.CurrentTitleVideoFormat]" Target="[CurrentTitleVideoFormatText.Content]"/>
 
+            <Changed Source="[StartOMLCommand.Invoked]">
+                <Actions>
+                    <Invoke Target="[Setup.gotoMenu]"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[RestartImportCommand.Invoked]">
+                <Actions>
+                    <Invoke Target="[Setup.Reset]" />
+                    <Navigate Source="@resx://Library/Library.Resources/SelectImporter"
+                              Setup="[Setup]"
+                              OMLApplication="[Application]"
+                              MovieGallery="[MovieBrowser]"
+                              UISettings="[UISettings]"/>
+
+                </Actions>
+            </Changed>
             <Changed Source="[BeginLoadingCommand.Invoked]">
                 <Actions>
                     <Invoke InvokePolicy="AsynchronousLowPri" Target="[Setup.BeginLoading]"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[Setup.AllTitlesProcessed]" InitialEvaluate="false">
+                <Actions>
+                    <Set Target="[TitleLoadPanel.Visible]" Value="false"/>
+                    <Set Target="[TitlesCompletePanel.Visible]" Value="true"/>
                 </Actions>
             </Changed>
             <Changed Source="[SkipTitleButtonCommand.Invoked]">
@@ -50,7 +82,17 @@
             </Changed>
             <Changed Source="[AddAllTitleButtonCommand.Invoked]">
                 <Actions>
-                    <Invoke Target="[Setup.AddAllCurrentTitles]"/>
+                    <Invoke InvokePolicy="AsynchronousLowPri" Target="[Setup.AddAllCurrentTitles]"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[Setup.AddingAllStarted]" InitialEvaluate="false">
+                <Actions>
+                    <Set Target="[waitCursor.Visible]" Value="true"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[Setup.AddingAllComplete]" InitialEvaluate="false">
+                <Actions>
+                    <Set Target="[waitCursor.Visible]" Value="false"/>
                 </Actions>
             </Changed>
             <Changed Source="[Setup.LoadStarted]" InitialEvaluate="false">
@@ -65,11 +107,6 @@
                     <Set Target="[SkipTitleButton.Visible]" Value="true"/>
                     <Set Target="[AddTitleButton.Visible]" Value="true"/>
                     <Set Target="[AddAllTitleButton.Visible]" Value="true"/>
-                </Actions>
-            </Changed>
-            <Changed Source="[Setup.AllTitlesProcessed]" InitialEvaluate="false">
-                <Actions>
-                    <Set Target="[Content.Visible]" Value="false"/>
                 </Actions>
             </Changed>
 
@@ -168,48 +205,71 @@
 
                     <Panel Name="Content" Layout="Fill">
                         <Children>
-                            <Panel Layout="VerticalFlow">
+                            <Panel Name="TitleLoadPanel" Layout="VerticalFlow">
                                 <Children>
-                                    <Panel Name="TopHalf" Layout="VerticalFlow" DebugOutline="Red">
+                                    <Panel Layout="HorizontalFlow">
                                         <Children>
-                                            <Text Content="Settings: " Font="Calibri, 20" Color="LightBlue"/>
-                                            <me:ShouldCopyImages Setup="[Setup]"/>
-                                        </Children>
-                                        <LayoutInput>
-                                            <DockLayoutInput Position="Left"/>
-                                        </LayoutInput>
-                                    </Panel>
-                                    <Panel Name="BottomHalf" Layout="VerticalFlow">
-                                        <Children>
-                                            <Graphic MaintainAspectRatio="true" SizingPolicy="SizeToConstraint" Name="CurrentTitleImage" Content="[Setup.DefaultImage]" MinimumSize="150,200" MaximumSize="150,200" />
                                             <Panel Layout="VerticalFlow">
                                                 <Children>
-                                                    <Panel Layout="HorizontalFlow">
+                                                    <Text Content="Settings: " Font="Calibri, 20" Color="LightBlue"/>
+                                                    <me:ShouldCopyImages Setup="[Setup]"/>
+                                                </Children>
+                                            </Panel>
+                                            <Panel Layout="VerticalFlow">
+                                                <Children>
+                                                    <Clip Layout="VerticalFlow">
                                                         <Children>
-                                                            <Text Name="CurrentTitleNameLabel" Content="Current Title: " Font="Calibri, 16, Bold" Color="LightBlue"/>
+                                                            <Graphic MaintainAspectRatio="true" SizingPolicy="SizeToConstraint" Name="CurrentTitleImage" Content="[Setup.DefaultImage]" MinimumSize="150,200" MaximumSize="150,200" />
                                                             <Text Name="CurrentTitleNameText" Font="Calibri, 16" Color="LightBlue"/>
                                                         </Children>
-                                                    </Panel>
-                                                    <Panel Layout="HorizontalFlow">
+                                                    </Clip>
+                                                    <Clip Layout="HorizontalFlow">
                                                         <Children>
-                                                            <Text Name="CurrentTitleVideoFormatLabel" Content="Video Format: " Font="Calibri, 16, Bold" Color="LightBlue"/>
-                                                            <Text Name="CurrentTitleVideoFormatText" Font="Calibri, 16" Color="LightBlue"/>
+                                                            <Text Content="Release Year: " Font="Calibri, 12, Bold" Color="LightBlue"/>
+                                                            <Text Name="CurrentTitleReleaseYearText" Font="Calibri, 12" Color="LightBlue"/>
                                                         </Children>
-                                                    </Panel>
-                                                </Children>
-                                            </Panel>
-                                            <Panel Layout="VerticalFlow">
-                                                <Children>
-                                                    <c:SimpleButton Name="loadingTitlesButton" Command="[BeginLoadingCommand]" Text="Being Loading Movies"/>
-                                                    <c:SimpleButton Name="AddTitleButton" Command="[AddTitleButtonCommand]" Text="Add Movie" Visible="false"/>
-                                                    <c:SimpleButton Name="AddAllTitleButton" Command="[AddAllTitleButtonCommand]" Text="Add All Movies" Visible="false"/>
-                                                    <c:SimpleButton Name="SkipTitleButton" Command="[SkipTitleButtonCommand]" Text="Skip This Movie" Visible="false"/>
+                                                    </Clip>
+                                                    <Clip Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Content="Runtime: " Font="Calibri, 12, Bold" Color="LightBlue"/>
+                                                            <Text Name="CurrentTitleRuntimeText" Font="Calibri, 12" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+                                                    <Clip Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Content="Rating: " Font="Calibri, 12, Bold" Color="LightBlue"/>
+                                                            <Text Name="CurrentTitleRatingText" Font="Calibri, 12" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+                                                    <Clip Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Content="Video Format: " Font="Calibri, 12, Bold" Color="LightBlue"/>
+                                                            <Text Name="CurrentTitleVideoFormatText" Font="Calibri, 12" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+
                                                 </Children>
                                             </Panel>
                                         </Children>
-                                        <LayoutInput>
-                                            <DockLayoutInput Position="Right"/>
-                                        </LayoutInput>
+                                    </Panel>
+                                    <Panel Layout="HorizontalFlow">
+                                        <Children>
+                                            <c:SimpleButton Name="loadingTitlesButton" Command="[BeginLoadingCommand]" Text="Start Loading"/>
+                                            <c:SimpleButton Name="AddTitleButton" Command="[AddTitleButtonCommand]" Text="Add Movie" Visible="false"/>
+                                            <c:SimpleButton Name="AddAllTitleButton" Command="[AddAllTitleButtonCommand]" Text="Add All Movies" Visible="false"/>
+                                            <c:SimpleButton Name="SkipTitleButton" Command="[SkipTitleButtonCommand]" Text="Skip This Movie" Visible="false"/>
+                                        </Children>
+                                    </Panel>
+                                </Children>
+                            </Panel>
+                            <Panel Name="TitlesCompletePanel" Layout="VerticalFlow" Visible="false">
+                                <Children>
+                                    <Text Content="All Titles have been processed." Font="Calibri, 20" Color="LightBlue"/>
+                                    <Panel Layout="HorizontalFlow">
+                                        <Children>
+                                            <c:SimpleButton Name="restartImportButton" Command="[RestartImportCommand]" Text="Restart Import"/>
+                                            <c:SimpleButton Name="startOMLButton" Command="[StartOMLCommand]" Text="Start OML"/>
+                                        </Children>
                                     </Panel>
                                 </Children>
                             </Panel>
@@ -233,7 +293,7 @@
             <Panel Layout="HorizontalFlow">
                 <Children>
                     <me:SimpleCheckbox Name="ShouldCopyImages" Checked="[Setup.ShouldCopyImages]"/>
-                    <Text Name="should_copy_images_text" Font="Calibri, 16" Color="LightBlue" Content="Copy images to OML image directory" WordWrap="true" />
+                    <Text Name="should_copy_images_text" Font="Calibri, 16" Color="LightBlue" Content="Copy images locally" WordWrap="true" />
                 </Children>
             </Panel>
         </Content>
