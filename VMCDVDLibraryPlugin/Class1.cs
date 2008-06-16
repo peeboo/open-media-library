@@ -132,6 +132,7 @@ namespace VMCDVDLibraryPlugin
             }
             catch (Exception ex)
             {
+                Utilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
             }
         }
 
@@ -191,6 +192,7 @@ namespace VMCDVDLibraryPlugin
             }
             catch (Exception ex)
             {
+                Utilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
             }
 
             return null;
@@ -298,6 +300,7 @@ namespace VMCDVDLibraryPlugin
             }
             catch (Exception ex)
             {
+                Utilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
                 return null;
             }
 
@@ -346,7 +349,7 @@ namespace VMCDVDLibraryPlugin
             }
             catch (Exception ex)
             {
-
+                Utilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
             }
             return dvdid;
         }
@@ -407,6 +410,7 @@ namespace VMCDVDLibraryPlugin
             }
             catch (Exception ex)
             {
+                Utilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
                 // ignore any permission errors
             }
         }
