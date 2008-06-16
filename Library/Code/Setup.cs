@@ -19,12 +19,10 @@ namespace Library
     public class Setup : ModelItem
     {
         #region variables
-        private string _currentTitleVideoFormat = string.Empty;
+        private Title _currentTitle;
         private string _filename = string.Empty;
         private OMLPlugin _plugin;
         private int _currentTitleIndex;
-        private string _currentTitleName = string.Empty;
-        private Image _currentTitleImage = null;
         private int _TotalTitlesAdded = 0;
         private int _TotalTitlesFound = 0;
         private int _TotalTitlesSkipped = 0;
@@ -38,17 +36,41 @@ namespace Library
         private List<Title> _titles;
         private bool _loadStarted = false;
         private bool _loadComplete = false;
+        private bool _addingAllStarted = false;
+        private bool _addingAllComplete = false;
 
         private BooleanChoice _shouldCopyImages = new BooleanChoice();
         private TitleCollection _titleCollection = new TitleCollection();
         #endregion
 
         #region Properties
+        public ArrayListDataSet CheckedNodes
+        {
+            get { return _treeView.CheckedNodes; }
+        }
         public Image DefaultImage
         {
             get
             {
                 return MovieItem.NoCoverImage;
+            }
+        }
+        public bool AddingAllStarted
+        {
+            get { return _addingAllStarted; }
+            set
+            {
+                _addingAllStarted = value;
+                FirePropertyChanged("AddingAllStarted");
+            }
+        }
+        public bool AddingAllComplete
+        {
+            get { return _addingAllComplete; }
+            set
+            {
+                _addingAllComplete = value;
+                FirePropertyChanged("AddingAllComplete");
             }
         }
         public bool LoadStarted
@@ -69,22 +91,68 @@ namespace Library
                 FirePropertyChanged("LoadComplete");
             }
         }
-        public string CurrentTitleVideoFormat
+        public Title CurrentTitle
         {
-            get { return _currentTitleVideoFormat; }
+            get { return _currentTitle; }
             set
             {
-                _currentTitleVideoFormat = value;
+                _currentTitle = value;
+                FirePropertyChanged("CurrentTitleName");
                 FirePropertyChanged("CurrentTitleVideoFormat");
+                FirePropertyChanged("CurrentTitleImage");
+                FirePropertyChanged("CurrentTitleReleaseYear");
+                FirePropertyChanged("CurrentTitleRuntime");
+                FirePropertyChanged("CurrentTitleRating");
+            }
+        }
+        public string CurrentTitleRating
+        {
+            get
+            {
+                if (CurrentTitle != null)
+                    return CurrentTitle.ParentalRating;
+
+                return string.Empty;
+            }
+        }
+        public string CurrentTitleRuntime
+        {
+            get
+            {
+                if (CurrentTitle != null)
+                    return CurrentTitle.Runtime.ToString();
+
+                return string.Empty;
+            }
+        }
+        public string CurrentTitleVideoFormat
+        {
+            get
+            {
+                if (CurrentTitle != null)
+                    return Enum.GetName(typeof(VideoFormat), _currentTitle.VideoFormat);
+
+                return string.Empty;
+            }
+        }
+        public string CurrentTitleReleaseYear
+        {
+            get
+            {
+                if (CurrentTitle != null)
+                    return CurrentTitle.ReleaseDate.ToLongDateString();
+
+                return string.Empty;
             }
         }
         public Image CurrentTitleImage
         {
-            get { return _currentTitleImage; }
-            set
+            get
             {
-                _currentTitleImage = value;
-                FirePropertyChanged("CurrentTitleImage");
+                if (CurrentTitle != null)
+                    return MovieItem.LoadImage(CurrentTitle.FrontCoverPath);
+
+                return MovieItem.NoCoverImage;
             }
         }
         public int CurrentTitleIndex
@@ -126,11 +194,12 @@ namespace Library
         }
         public string CurrentTitleName
         {
-            get { return _currentTitleName; }
-            set
+            get
             {
-                _currentTitleName = value;
-                FirePropertyChanged("CurrentTitleName");
+                if (CurrentTitle != null)
+                    return _currentTitle.Name;
+
+                return string.Empty;
             }
         }
         public int TotalTitlesFound
@@ -173,9 +242,7 @@ namespace Library
             if (TotalTitlesFound > CurrentTitleIndex + 1)
             {
                 CurrentTitleIndex++;
-                CurrentTitleName = _titles[CurrentTitleIndex].Name;
-                CurrentTitleImage = MovieItem.LoadImage(_titles[CurrentTitleIndex].FrontCoverPath);
-                CurrentTitleVideoFormat = Enum.GetName(typeof(VideoFormat), _titles[CurrentTitleIndex].VideoFormat);
+                CurrentTitle = _titles[CurrentTitleIndex];
             }
             else
             {
@@ -186,13 +253,13 @@ namespace Library
         public void AddCurrentTitle()
         {
             TotalTitlesAdded++;
-            OMLApplication.DebugLine("[Setup UI] Adding title: " + _titles[CurrentTitleIndex].InternalItemID);
-            _titleCollection.Add(_titles[CurrentTitleIndex]);
+            OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.InternalItemID);
+            OMLPlugin.BuildResizedMenuImage(CurrentTitle);
+            _titleCollection.Add(CurrentTitle);
             if (TotalTitlesFound > CurrentTitleIndex + 1)
             {
                 CurrentTitleIndex++;
-                CurrentTitleName = _titles[CurrentTitleIndex].Name;
-                CurrentTitleImage = MovieItem.LoadImage(_titles[CurrentTitleIndex].FrontCoverPath);
+                CurrentTitle = _titles[CurrentTitleIndex];
             }
             else
             {
@@ -200,24 +267,57 @@ namespace Library
             }
         }
 
+        public void Reset()
+        {
+            OMLApplication.DebugLine("Resetting the Setup object");
+            _AllTitlesProcessed = false;
+            _currentTitle = null;
+            _currentTitleIndex = 0;
+            _filename = string.Empty;
+            _loadComplete = false;
+            _loadStarted = false;
+            _titles = null;
+            _titleCollection.loadTitleCollection();
+            _treeView.CheckedNodes.Clear();
+        }
+
+        public void gotoMenu()
+        {
+            TitleCollection tc = OMLApplication.Current.ReloadTitleCollection();
+            OMLApplication.Current.GoToMenu(new MovieGallery(tc, Filter.Home));
+        }
+
         public void AddAllCurrentTitles()
         {
-            TotalTitlesAdded++;
-            OMLApplication.DebugLine("[Setup UI] Adding title: " + _titles[CurrentTitleIndex].InternalItemID);
-            _titleCollection.Add(_titles[CurrentTitleIndex]);
-            if (TotalTitlesFound > CurrentTitleIndex + 1)
+            OMLApplication.DebugLine("[Setup] Starting deferred all titles import");
+            Application.DeferredInvokeOnWorkerThread(new DeferredHandler(_AddAllCurrentTitles),
+                                                     new DeferredHandler(_DoneAddingAllCurrentTitles),
+                                                     new object[] { });
+        }
+
+        public void _AddAllCurrentTitles(object args)
+        {
+            OMLApplication.DebugLine("[Setup] AddingAllCurrentTitles Started");
+            AddingAllStarted = true;
+            OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.InternalItemID);
+            _titleCollection.Add(CurrentTitle);
+            while (TotalTitlesFound > CurrentTitleIndex + 1)
             {
-                for (; CurrentTitleIndex < TotalTitlesFound - 1;)
-                {
-                    CurrentTitleName = _titles[CurrentTitleIndex].Name;
-                    CurrentTitleImage = MovieItem.LoadImage(_titles[CurrentTitleIndex].FrontCoverPath);
-                    AddCurrentTitle();
-                }
+                _currentTitle = _titles[CurrentTitleIndex];
+                _TotalTitlesAdded++;
+                OMLApplication.DebugLine("[Setup] Adding title: " + _currentTitle.Name);
+                OMLPlugin.BuildResizedMenuImage(_currentTitle);
+                _titleCollection.Add(_currentTitle);
+                _currentTitle = _titles[++CurrentTitleIndex];
             }
-            else
-            {
-                AllTitlesProcessed = true;
-            }
+        }
+
+        public void _DoneAddingAllCurrentTitles(object args)
+        {
+            OMLApplication.DebugLine("[Setup] AddingAllCurrentTitles Completed");
+            AddingAllComplete = true;
+            AllTitlesProcessed = true;
+            FirePropertyChanged("TotalTitlesAdded");
         }
 
         public void BeginLoading()
@@ -241,8 +341,7 @@ namespace Library
             {
                 TotalTitlesFound = _titles.Count;
                 CurrentTitleIndex = 0;
-                CurrentTitleName = _titles[CurrentTitleIndex].Name;
-                CurrentTitleImage = MovieItem.LoadImage(_titles[CurrentTitleIndex].FrontCoverPath);
+                CurrentTitle = _titles[CurrentTitleIndex];
             }
         }
 
@@ -313,12 +412,6 @@ namespace Library
 
         }
 
-        public void TreeView_OnCheckedNodeChanged(object sender, TreeNodeEventArgs e)
-        {
-            OMLApplication.DebugLine("CheckedNodeChanged: " + e.Node.Title);
-            //Checked.Value = (e.Node == this);
-        }
-
         public TreeView TreeView
         {
             get
@@ -328,14 +421,12 @@ namespace Library
                     _treeView = new TreeView();
                     foreach (DriveInfo dInfo in DriveInfo.GetDrives())
                     {
-                        if (dInfo.DriveType == DriveType.Fixed)
+                        if (dInfo.DriveType == DriveType.Fixed || dInfo.DriveType == DriveType.Network)
                         {
                             DirectoryTreeNode node = new DirectoryTreeNode(dInfo.Name + " (" + dInfo.VolumeLabel + ")",
                                                                            dInfo.RootDirectory.FullName,
                                                                            _treeView);
                             _treeView.ChildNodes.Add(node);
-                            TreeView.CheckedNodeChanged +=
-                                new EventHandler<TreeNodeEventArgs>(TreeView_OnCheckedNodeChanged);
                         }
                     }
                 }

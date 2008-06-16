@@ -13,6 +13,9 @@
 
         <Properties>
             <a:Setup Name="Setup" Setup="$Required"/>
+            <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+            <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+            <a:UISettings Name="UISettings" UISettings="$Required" />
         </Properties>
         <Locals>
 
@@ -26,7 +29,11 @@
 
             <Changed Source="[NextCommand.Invoked]">
                 <Actions>
-                    <Navigate Source="@resx://Library/Library.Resources/SelectDirectoriesToScan" Setup="[Setup]" />
+                    <Navigate Source="@resx://Library/Library.Resources/SelectDirectoriesToScan"
+                              Setup="[Setup]"
+                              OMLApplication="[Application]"
+                              MovieGallery="[MovieBrowser]"
+                              UISettings="[UISettings]"/>
                 </Actions>
             </Changed>
         </Rules>
