@@ -437,11 +437,12 @@ namespace Library
                     {
                         if (File.Exists(item.TitleObject.FrontCoverMenuPath))
                         {
+                            OMLApplication.DebugLine("FrontCoverMenuArt found: " + item.TitleObject.FrontCoverMenuPath);
                             item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverMenuPath);
                         }
                         else
                         {
-                            OMLApplication.DebugLine("Unable to locate Menu image: using regular front cover image");
+                            OMLApplication.DebugLine("Unable to locate Menu image: " + item.TitleObject.FrontCoverPath);
                             item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
                         }
                     }
