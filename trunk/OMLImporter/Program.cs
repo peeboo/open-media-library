@@ -286,7 +286,6 @@ namespace OMLImporter
                 }
                 else
                 {
-                    OMLPlugin.BuildResizedMenuImage(t);
                     mainTitleCollection.Add(t);
                     numberOfTitlesAdded++;
                 }
