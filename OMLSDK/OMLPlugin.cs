@@ -96,6 +96,7 @@ namespace OMLSDK
             }
 
             titles.Add(newTitle);
+            BuildResizedMenuImage(newTitle);
             totalRowsAdded++;
         }
         public bool ValidateTitle(Title title_to_validate)
