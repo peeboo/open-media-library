@@ -15,7 +15,6 @@ namespace MovieCollectorzPlugin
 {
     public class MovieCollectorzPlugin : OMLPlugin, IOMLPlugin
     {
-        bool _ShouldCopyImages = true;
         const string HTML_TAG_PATTERN = "<.*?>";
 
         public override string GetAuthor()
@@ -26,10 +25,8 @@ namespace MovieCollectorzPlugin
         public MovieCollectorzPlugin() : base()
         {
         }
-        public override bool Load(string filename, bool ShouldCopyImages)
+        public override bool Load(string filename)
         {
-            _ShouldCopyImages = ShouldCopyImages;
-
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(filename);
 
@@ -45,7 +42,7 @@ namespace MovieCollectorzPlugin
                             newTitle.MetadataSourceID = node.InnerText;
                             break;
                         case "coverfront":
-                            newTitle.FrontCoverPath = node.InnerText;
+                            SetFrontCoverImage(ref newTitle, node.InnerText);
                             break;
                         // this case just represents if the disc is a DVD or blu ray move.
                         // can use this to put a little ICON on the screen to notify the user

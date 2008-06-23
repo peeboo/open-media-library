@@ -49,7 +49,7 @@ namespace DVRMSPlugin
             return "OML Development Team";
         }
 
-        public override bool Load(string filename, bool ShouldCopyImages)
+        public override bool Load(string filename)
         {
             string fPath = System.IO.Path.GetDirectoryName(filename);
             ProcessDir(fPath);
@@ -102,7 +102,7 @@ namespace DVRMSPlugin
                             string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
                             if (File.Exists(cover))
                             {
-                                newTitle.FrontCoverPath = cover;
+                                SetFrontCoverImage(ref newTitle, cover);
                             }
                             break;
                         case DvrmsMetadataEditor.MediaOriginalBroadcastDateTime:

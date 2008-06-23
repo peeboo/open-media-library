@@ -9,6 +9,7 @@ namespace OMLSDK
 {
     public class OMLPlugin :IOMLPlugin
     {
+        bool _ShouldCopyImages = true;
         List<Title> titles;
         private int totalRowsAdded = 0;
 
@@ -30,6 +31,15 @@ namespace OMLSDK
         public string Menu
         {
             get { return GetMenu();  }
+        }
+
+        public bool ShouldCopyImages
+        {
+            get { return _ShouldCopyImages; }
+            set
+            {
+                _ShouldCopyImages = value;
+            }
         }
 
         public virtual Boolean CopyImages()
@@ -60,7 +70,7 @@ namespace OMLSDK
         {
             throw new Exception("You must implement this method in your class.");
         }
-        public virtual bool Load(string filename, bool ShouldCopyImages)
+        public virtual bool Load(string filename)
         {
             throw new Exception("You must implement this method in your class.");
         }
@@ -164,6 +174,24 @@ namespace OMLSDK
             FileInfo fi = new FileInfo(from_location);
             fi.CopyTo(to_location, true);
             return fi.Name;
+        }
+        public void SetFrontCoverImage(ref Title newTitle, string imagePath)
+        {
+            FileInfo fi;
+            try {
+                fi = new FileInfo(imagePath);
+                string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
+                                                   "\\F" + newTitle.InternalItemID +
+                                                   fi.Extension;
+                if (ShouldCopyImages)
+                {
+                    CopyImage(imagePath, new_full_name);
+                    imagePath = new_full_name;
+                }
+
+                newTitle.FrontCoverPath = imagePath;
+            }
+            catch (Exception e) { Utilities.DebugLine(e.Message); }
         }
     }
 }
