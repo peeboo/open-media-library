@@ -222,7 +222,8 @@ namespace OMLImporter
 
         public static bool ImportFile(OMLPlugin plugin, string fileName)
         {
-            return plugin.Load(fileName, Program._copyImages);
+            plugin.ShouldCopyImages = Program._copyImages;
+            return plugin.Load(fileName);
         }
 
         public static void Usage()

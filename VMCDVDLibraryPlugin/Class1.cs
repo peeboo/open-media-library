@@ -45,7 +45,7 @@ namespace VMCDVDLibraryPlugin
         {
             return "VMC DVD Library importer for Open Media Library v" + VERSION;
         }
-        public override bool Load(string filename, bool ShouldCopyImages)
+        public override bool Load(string filename)
         {
             GetMovies(filename);
             return true;
@@ -105,7 +105,7 @@ namespace VMCDVDLibraryPlugin
                                     string pathWithNoExtension = Path.GetFileNameWithoutExtension(video);
                                     if (File.Exists(pathWithNoExtension + ".jpg"))
                                     {
-                                        newVideo.FrontCoverPath = pathWithNoExtension + ".jpg";
+                                        SetFrontCoverImage(ref newVideo, pathWithNoExtension + ".jpg");
                                     }
 
                                     if (File.Exists(pathWithNoExtension + ".OML.XML"))
@@ -275,7 +275,7 @@ namespace VMCDVDLibraryPlugin
 
                         bFound = reader.ReadToFollowing("largeCoverParams");
                         if (bFound)
-                            t.FrontCoverPath = reader.ReadString();
+                            SetFrontCoverImage(ref t, reader.ReadString());
 
                         bFound = reader.ReadToFollowing("duration");
                         if (bFound)

@@ -10,7 +10,6 @@ namespace DVDProfilerPlugin
     [CLSCompliant(true)]
     public class DVDProfilerImporter : OMLPlugin, IOMLPlugin
     {
-        bool _ShouldCopyImages = true;
         private static double VERSION = 0.1;
 
         public DVDProfilerImporter()
@@ -18,10 +17,8 @@ namespace DVDProfilerPlugin
         {
         }
 
-        public override bool Load(string filename, bool ShouldCopyImages)
+        public override bool Load(string filename)
         {
-            _ShouldCopyImages = ShouldCopyImages;
-
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(filename);
 
