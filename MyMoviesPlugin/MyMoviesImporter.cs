@@ -79,6 +79,24 @@ namespace MyMoviesPlugin
         {
             return "MyMovies xml file importer for Open Media Library v" + VERSION;
         }
+
+/*        public string CopyImage(string from_location, string to_location)
+        {
+            Utilities.DebugLine("[MyMoviesImporter] Copying Image: FROM("+from_location+") TO("+to_location+")");
+            FileInfo fi = new FileInfo(from_location);
+            if (fi.Exists)
+            {
+                Utilities.DebugLine("[MyMoviesImporter] File ("+from_location+") is valid, copying");
+                File.Copy(from_location, to_location, true);
+                return to_location;
+            }
+            else
+            {
+                Utilities.DebugLine("[MyMoviesImporter] File ("+from_location+") is invalid, keeping original location");
+                return from_location;
+            }
+        }
+*/
         private void process_node_switch(Title newTitle, XmlNode node)
         {
             switch (node.Name)
@@ -91,12 +109,27 @@ namespace MyMoviesPlugin
                     if (front_node != null)
                     {
                         string imagePath = front_node.InnerText;
+                        SetFrontCoverImage(ref newTitle, imagePath);
                     }
                     XmlNode back_node = node.ChildNodes[1];
                     if (back_node != null)
                     {
                         string imagePath = back_node.InnerText;
-                        SetFrontCoverImage(ref newTitle, imagePath);
+                        FileInfo fi;
+                        try
+                        {
+                            fi = new FileInfo(imagePath);
+                            string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
+                                                   "\\B" + newTitle.InternalItemID +
+                                                   fi.Extension;
+                            if (ShouldCopyImages)
+                            {
+                                CopyImage(imagePath, new_full_name);
+                                imagePath = new_full_name;
+                            }
+                            newTitle.BackCoverPath = imagePath;
+                        }
+                        catch (Exception e) { Utilities.DebugLine(e.Message); }
                     }
                     break;
                 case "Description":
