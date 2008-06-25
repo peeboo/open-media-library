@@ -244,49 +244,9 @@ namespace OMLDatabaseEditor.Controls
             return null;
         }
 
-        private void CoverButton_Click(object sender, EventArgs e)
+        private void label1_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.InitialDirectory = @"C:\";
-            ofd.Filter = @"JPG files (*.jpg)|*.jpg|All Files (*.*)|*.*";
-            ofd.FilterIndex = 1;
-            ofd.CheckPathExists = true;
-            ofd.CheckFileExists = true;
-            ofd.RestoreDirectory = true;
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    if (sender.Equals(button2) || sender.Equals(pbFrontCover))
-                    {
-                        tbFrontCover.Text = ofd.FileName;
-                        //pbFrontCover.ImageLocation = ofd.FileName;
-                    }
-                    else
-                    {
-                        tbBackCover.Text = ofd.FileName;
-                        //pbBackCover.ImageLocation = ofd.FileName;
-                    }
-                }
-                catch (Exception ex)
-                {
-                }
-            }
-        }
 
-        private void tbFrontCover_TextChanged(object sender, EventArgs e)
-        {
-            if (System.IO.File.Exists(((TextBox) sender).Text))
-            {
-                if (sender.Equals(tbFrontCover))
-                {
-                    pbFrontCover.ImageLocation = ((TextBox) sender).Text;
-                }
-                else
-                {
-                    pbBackCover.ImageLocation = ((TextBox) sender).Text;
-                }
-            }
         }
 
 
