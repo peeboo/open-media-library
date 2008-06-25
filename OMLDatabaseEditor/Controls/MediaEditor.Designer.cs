@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tbFrontCover = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -39,24 +39,22 @@
             this.tbBackCover = new System.Windows.Forms.TextBox();
             this.lblFileLocation = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
-            this.pbFrontCover = new System.Windows.Forms.PictureBox();
-            this.pbBackCover = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lblFrontCover = new System.Windows.Forms.Label();
             this.lblBackCover = new System.Windows.Forms.Label();
             this.grdDirectors = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tbpDirectors = new System.Windows.Forms.TabPage();
             this.grdWriters = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tbpWriters = new System.Windows.Forms.TabPage();
             this.grdGenres = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tbpProducers = new System.Windows.Forms.TabPage();
             this.grdActors = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tbpActorsRoles = new System.Windows.Forms.TabPage();
             this.tbcCredits = new System.Windows.Forms.TabControl();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.grdTags = new System.Windows.Forms.DataGridView();
@@ -105,17 +103,27 @@
             this.label19 = new System.Windows.Forms.Label();
             this.cbRating = new System.Windows.Forms.ComboBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).BeginInit();
+            this.tbpNonActorRoles = new System.Windows.Forms.TabPage();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabExtraFeatures = new System.Windows.Forms.TabPage();
+            this.tabVideoDetails = new System.Windows.Forms.TabPage();
+            this.gbxOther = new System.Windows.Forms.GroupBox();
+            this.lblUPCCode = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.lblWebsite = new System.Windows.Forms.Label();
+            this.pbFrontCover = new System.Windows.Forms.PictureBox();
+            this.pbBackCover = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdDirectors)).BeginInit();
-            this.tabPage1.SuspendLayout();
+            this.tbpDirectors.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdWriters)).BeginInit();
-            this.tabPage2.SuspendLayout();
+            this.tbpWriters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdGenres)).BeginInit();
-            this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdActors)).BeginInit();
-            this.tabPage4.SuspendLayout();
+            this.tbpActorsRoles.SuspendLayout();
             this.tbcCredits.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdTags)).BeginInit();
@@ -127,29 +135,29 @@
             this.tabControl2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.gbxOther.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).BeginInit();
             this.SuspendLayout();
             // 
             // tbFrontCover
             // 
-            this.tbFrontCover.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.tbFrontCover.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
             this.tbFrontCover.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbFrontCover.Location = new System.Drawing.Point(6, 223);
             this.tbFrontCover.Name = "tbFrontCover";
             this.tbFrontCover.Size = new System.Drawing.Size(115, 21);
             this.tbFrontCover.TabIndex = 17;
-            this.tbFrontCover.TextChanged += new System.EventHandler(this.tbFrontCover_TextChanged);
             // 
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(126, 464);
+            this.button1.Location = new System.Drawing.Point(124, 449);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(53, 22);
             this.button1.TabIndex = 53;
             this.button1.Text = "Browse";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.CoverButton_Click);
             // 
             // button2
             // 
@@ -160,24 +168,19 @@
             this.button2.TabIndex = 54;
             this.button2.Text = "Browse";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.CoverButton_Click);
             // 
             // tbFileLocation
             // 
-            this.tbFileLocation.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.tbFileLocation.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
             this.tbFileLocation.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbFileLocation.Location = new System.Drawing.Point(8, 506);
+            this.tbFileLocation.Location = new System.Drawing.Point(6, 490);
             this.tbFileLocation.Name = "tbFileLocation";
             this.tbFileLocation.Size = new System.Drawing.Size(115, 21);
             this.tbFileLocation.TabIndex = 44;
             // 
             // tbBackCover
             // 
-            this.tbBackCover.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.tbBackCover.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
             this.tbBackCover.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbBackCover.Location = new System.Drawing.Point(8, 465);
+            this.tbBackCover.Location = new System.Drawing.Point(6, 451);
             this.tbBackCover.Name = "tbBackCover";
             this.tbBackCover.Size = new System.Drawing.Size(115, 21);
             this.tbBackCover.TabIndex = 20;
@@ -186,7 +189,7 @@
             // 
             this.lblFileLocation.AutoSize = true;
             this.lblFileLocation.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFileLocation.Location = new System.Drawing.Point(8, 490);
+            this.lblFileLocation.Location = new System.Drawing.Point(6, 475);
             this.lblFileLocation.Name = "lblFileLocation";
             this.lblFileLocation.Size = new System.Drawing.Size(65, 12);
             this.lblFileLocation.TabIndex = 43;
@@ -195,35 +198,13 @@
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(126, 505);
+            this.button3.Location = new System.Drawing.Point(124, 489);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(53, 22);
             this.button3.TabIndex = 47;
             this.button3.Text = "Browse";
             this.button3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.button3.UseVisualStyleBackColor = true;
-            // 
-            // pbFrontCover
-            // 
-            this.pbFrontCover.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pbFrontCover.Location = new System.Drawing.Point(6, 19);
-            this.pbFrontCover.Name = "pbFrontCover";
-            this.pbFrontCover.Size = new System.Drawing.Size(160, 200);
-            this.pbFrontCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbFrontCover.TabIndex = 4;
-            this.pbFrontCover.TabStop = false;
-            this.pbFrontCover.DoubleClick += new System.EventHandler(this.CoverButton_Click);
-            // 
-            // pbBackCover
-            // 
-            this.pbBackCover.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pbBackCover.Location = new System.Drawing.Point(8, 260);
-            this.pbBackCover.Name = "pbBackCover";
-            this.pbBackCover.Size = new System.Drawing.Size(160, 200);
-            this.pbBackCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbBackCover.TabIndex = 18;
-            this.pbBackCover.TabStop = false;
-            this.pbBackCover.DoubleClick += new System.EventHandler(this.CoverButton_Click);
             // 
             // groupBox1
             // 
@@ -241,7 +222,7 @@
             this.groupBox1.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(183, 534);
+            this.groupBox1.Size = new System.Drawing.Size(183, 516);
             this.groupBox1.TabIndex = 57;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Movie Locations";
@@ -258,7 +239,7 @@
             // lblBackCover
             // 
             this.lblBackCover.AutoSize = true;
-            this.lblBackCover.Location = new System.Drawing.Point(8, 449);
+            this.lblBackCover.Location = new System.Drawing.Point(8, 436);
             this.lblBackCover.Name = "lblBackCover";
             this.lblBackCover.Size = new System.Drawing.Size(58, 12);
             this.lblBackCover.TabIndex = 55;
@@ -279,7 +260,7 @@
             this.grdDirectors.Name = "grdDirectors";
             this.grdDirectors.RowHeadersWidth = 26;
             this.grdDirectors.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdDirectors.Size = new System.Drawing.Size(401, 63);
+            this.grdDirectors.Size = new System.Drawing.Size(401, 92);
             this.grdDirectors.TabIndex = 23;
             // 
             // dataGridViewTextBoxColumn1
@@ -288,16 +269,16 @@
             this.dataGridViewTextBoxColumn1.HeaderText = "Name";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             // 
-            // tabPage1
+            // tbpDirectors
             // 
-            this.tabPage1.Controls.Add(this.grdDirectors);
-            this.tabPage1.Location = new System.Drawing.Point(4, 21);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(401, 62);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Directors";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tbpDirectors.Controls.Add(this.grdDirectors);
+            this.tbpDirectors.Location = new System.Drawing.Point(4, 21);
+            this.tbpDirectors.Name = "tbpDirectors";
+            this.tbpDirectors.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpDirectors.Size = new System.Drawing.Size(401, 84);
+            this.tbpDirectors.TabIndex = 0;
+            this.tbpDirectors.Text = "Directors";
+            this.tbpDirectors.UseVisualStyleBackColor = true;
             // 
             // grdWriters
             // 
@@ -313,8 +294,8 @@
             this.grdWriters.Location = new System.Drawing.Point(0, 0);
             this.grdWriters.Name = "grdWriters";
             this.grdWriters.RowHeadersWidth = 26;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdWriters.RowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdWriters.RowsDefaultCellStyle = dataGridViewCellStyle1;
             this.grdWriters.Size = new System.Drawing.Size(401, 63);
             this.grdWriters.TabIndex = 32;
             // 
@@ -324,17 +305,17 @@
             this.dataGridViewTextBoxColumn2.HeaderText = "Name";
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             // 
-            // tabPage2
+            // tbpWriters
             // 
-            this.tabPage2.Controls.Add(this.grdWriters);
-            this.tabPage2.Location = new System.Drawing.Point(4, 21);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(401, 62);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Writers";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            this.tabPage2.Visible = false;
+            this.tbpWriters.Controls.Add(this.grdWriters);
+            this.tbpWriters.Location = new System.Drawing.Point(4, 21);
+            this.tbpWriters.Name = "tbpWriters";
+            this.tbpWriters.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpWriters.Size = new System.Drawing.Size(401, 55);
+            this.tbpWriters.TabIndex = 1;
+            this.tbpWriters.Text = "Writers";
+            this.tbpWriters.UseVisualStyleBackColor = true;
+            this.tbpWriters.Visible = false;
             // 
             // grdGenres
             // 
@@ -344,13 +325,12 @@
             this.grdGenres.ColumnHeadersVisible = false;
             this.grdGenres.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn3});
-            this.grdGenres.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grdGenres.Location = new System.Drawing.Point(0, 0);
+            this.grdGenres.Location = new System.Drawing.Point(195, 368);
             this.grdGenres.Name = "grdGenres";
             this.grdGenres.RowHeadersWidth = 26;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdGenres.RowsDefaultCellStyle = dataGridViewCellStyle6;
-            this.grdGenres.Size = new System.Drawing.Size(401, 62);
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdGenres.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            this.grdGenres.Size = new System.Drawing.Size(138, 52);
             this.grdGenres.TabIndex = 24;
             // 
             // dataGridViewTextBoxColumn3
@@ -359,16 +339,15 @@
             this.dataGridViewTextBoxColumn3.HeaderText = "Name";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             // 
-            // tabPage3
+            // tbpProducers
             // 
-            this.tabPage3.Controls.Add(this.grdGenres);
-            this.tabPage3.Location = new System.Drawing.Point(4, 21);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(401, 62);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Genres";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            this.tabPage3.Visible = false;
+            this.tbpProducers.Location = new System.Drawing.Point(4, 21);
+            this.tbpProducers.Name = "tbpProducers";
+            this.tbpProducers.Size = new System.Drawing.Size(401, 55);
+            this.tbpProducers.TabIndex = 2;
+            this.tbpProducers.Text = "Producers";
+            this.tbpProducers.UseVisualStyleBackColor = true;
+            this.tbpProducers.Visible = false;
             // 
             // grdActors
             // 
@@ -384,8 +363,8 @@
             this.grdActors.Location = new System.Drawing.Point(0, 0);
             this.grdActors.Name = "grdActors";
             this.grdActors.RowHeadersWidth = 26;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdActors.RowsDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdActors.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.grdActors.Size = new System.Drawing.Size(401, 62);
             this.grdActors.TabIndex = 29;
             // 
@@ -401,29 +380,30 @@
             this.dataGridViewTextBoxColumn5.HeaderText = "Role";
             this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
             // 
-            // tabPage4
+            // tbpActorsRoles
             // 
-            this.tabPage4.Controls.Add(this.grdActors);
-            this.tabPage4.Location = new System.Drawing.Point(4, 21);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(401, 62);
-            this.tabPage4.TabIndex = 4;
-            this.tabPage4.Text = "Actors/Roles";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            this.tabPage4.Visible = false;
+            this.tbpActorsRoles.Controls.Add(this.grdActors);
+            this.tbpActorsRoles.Location = new System.Drawing.Point(4, 21);
+            this.tbpActorsRoles.Name = "tbpActorsRoles";
+            this.tbpActorsRoles.Size = new System.Drawing.Size(401, 55);
+            this.tbpActorsRoles.TabIndex = 4;
+            this.tbpActorsRoles.Text = "Actors/Roles";
+            this.tbpActorsRoles.UseVisualStyleBackColor = true;
+            this.tbpActorsRoles.Visible = false;
             // 
             // tbcCredits
             // 
-            this.tbcCredits.Controls.Add(this.tabPage1);
-            this.tbcCredits.Controls.Add(this.tabPage2);
-            this.tbcCredits.Controls.Add(this.tabPage3);
-            this.tbcCredits.Controls.Add(this.tabPage4);
+            this.tbcCredits.Controls.Add(this.tbpDirectors);
+            this.tbcCredits.Controls.Add(this.tbpWriters);
+            this.tbcCredits.Controls.Add(this.tbpProducers);
+            this.tbcCredits.Controls.Add(this.tbpActorsRoles);
+            this.tbcCredits.Controls.Add(this.tbpNonActorRoles);
             this.tbcCredits.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcCredits.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbcCredits.Location = new System.Drawing.Point(3, 16);
             this.tbcCredits.Name = "tbcCredits";
             this.tbcCredits.SelectedIndex = 0;
-            this.tbcCredits.Size = new System.Drawing.Size(409, 87);
+            this.tbcCredits.Size = new System.Drawing.Size(409, 109);
             this.tbcCredits.TabIndex = 49;
             // 
             // groupBox2
@@ -435,7 +415,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(195, 263);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(415, 106);
+            this.groupBox2.Size = new System.Drawing.Size(415, 128);
             this.groupBox2.TabIndex = 56;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Credits";
@@ -555,6 +535,7 @@
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.tabControl1);
             this.groupBox3.Controls.Add(this.grdTags);
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.label3);
@@ -566,7 +547,7 @@
             this.groupBox3.Controls.Add(this.tbOriginalName);
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox3.Location = new System.Drawing.Point(195, 375);
+            this.groupBox3.Location = new System.Drawing.Point(195, 531);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(200, 234);
             this.groupBox3.TabIndex = 52;
@@ -585,8 +566,8 @@
             this.grdAudioTracks.Location = new System.Drawing.Point(3, 3);
             this.grdAudioTracks.Name = "grdAudioTracks";
             this.grdAudioTracks.RowHeadersWidth = 26;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdAudioTracks.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdAudioTracks.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.grdAudioTracks.Size = new System.Drawing.Size(189, 85);
             this.grdAudioTracks.TabIndex = 36;
             // 
@@ -750,7 +731,7 @@
             this.groupBox4.Controls.Add(this.comboBox2);
             this.groupBox4.Controls.Add(this.label10);
             this.groupBox4.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox4.Location = new System.Drawing.Point(401, 376);
+            this.groupBox4.Location = new System.Drawing.Point(394, 505);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(209, 234);
             this.groupBox4.TabIndex = 51;
@@ -959,11 +940,139 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Movie Details";
             // 
+            // tbpNonActorRoles
+            // 
+            this.tbpNonActorRoles.Location = new System.Drawing.Point(4, 21);
+            this.tbpNonActorRoles.Name = "tbpNonActorRoles";
+            this.tbpNonActorRoles.Size = new System.Drawing.Size(401, 55);
+            this.tbpNonActorRoles.TabIndex = 5;
+            this.tbpNonActorRoles.Text = "NonActing/Roles";
+            this.tbpNonActorRoles.UseVisualStyleBackColor = true;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabExtraFeatures);
+            this.tabControl1.Controls.Add(this.tabVideoDetails);
+            this.tabControl1.Location = new System.Drawing.Point(20, 160);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(180, 122);
+            this.tabControl1.TabIndex = 58;
+            // 
+            // tabExtraFeatures
+            // 
+            this.tabExtraFeatures.Location = new System.Drawing.Point(4, 21);
+            this.tabExtraFeatures.Name = "tabExtraFeatures";
+            this.tabExtraFeatures.Padding = new System.Windows.Forms.Padding(3);
+            this.tabExtraFeatures.Size = new System.Drawing.Size(172, 97);
+            this.tabExtraFeatures.TabIndex = 0;
+            this.tabExtraFeatures.Text = "Extra Features";
+            this.tabExtraFeatures.UseVisualStyleBackColor = true;
+            // 
+            // tabVideoDetails
+            // 
+            this.tabVideoDetails.Location = new System.Drawing.Point(4, 21);
+            this.tabVideoDetails.Name = "tabVideoDetails";
+            this.tabVideoDetails.Padding = new System.Windows.Forms.Padding(3);
+            this.tabVideoDetails.Size = new System.Drawing.Size(172, 97);
+            this.tabVideoDetails.TabIndex = 1;
+            this.tabVideoDetails.Text = "Video Details";
+            this.tabVideoDetails.UseVisualStyleBackColor = true;
+            // 
+            // gbxOther
+            // 
+            this.gbxOther.Controls.Add(this.textBox3);
+            this.gbxOther.Controls.Add(this.label1);
+            this.gbxOther.Controls.Add(this.lblWebsite);
+            this.gbxOther.Controls.Add(this.textBox2);
+            this.gbxOther.Controls.Add(this.textBox1);
+            this.gbxOther.Controls.Add(this.lblUPCCode);
+            this.gbxOther.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gbxOther.Location = new System.Drawing.Point(3, 526);
+            this.gbxOther.Name = "gbxOther";
+            this.gbxOther.Size = new System.Drawing.Size(183, 125);
+            this.gbxOther.TabIndex = 58;
+            this.gbxOther.TabStop = false;
+            this.gbxOther.Text = "Other";
+            // 
+            // lblUPCCode
+            // 
+            this.lblUPCCode.AutoSize = true;
+            this.lblUPCCode.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUPCCode.Location = new System.Drawing.Point(31, 19);
+            this.lblUPCCode.Name = "lblUPCCode";
+            this.lblUPCCode.Size = new System.Drawing.Size(49, 12);
+            this.lblUPCCode.TabIndex = 0;
+            this.lblUPCCode.Text = "UPC Code";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(80, 16);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(98, 21);
+            this.textBox1.TabIndex = 1;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(80, 44);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(97, 20);
+            this.textBox2.TabIndex = 2;
+            // 
+            // lblWebsite
+            // 
+            this.lblWebsite.AutoSize = true;
+            this.lblWebsite.Location = new System.Drawing.Point(38, 47);
+            this.lblWebsite.Name = "lblWebsite";
+            this.lblWebsite.Size = new System.Drawing.Size(42, 12);
+            this.lblWebsite.TabIndex = 3;
+            this.lblWebsite.Text = "Website";
+            this.lblWebsite.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // pbFrontCover
+            // 
+            this.pbFrontCover.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pbFrontCover.Location = new System.Drawing.Point(6, 19);
+            this.pbFrontCover.Name = "pbFrontCover";
+            this.pbFrontCover.Size = new System.Drawing.Size(160, 200);
+            this.pbFrontCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbFrontCover.TabIndex = 4;
+            this.pbFrontCover.TabStop = false;
+            // 
+            // pbBackCover
+            // 
+            this.pbBackCover.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pbBackCover.Location = new System.Drawing.Point(6, 246);
+            this.pbBackCover.Name = "pbBackCover";
+            this.pbBackCover.Size = new System.Drawing.Size(160, 200);
+            this.pbBackCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbBackCover.TabIndex = 18;
+            this.pbBackCover.TabStop = false;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(4, 74);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 12);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Watched Count";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(80, 71);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(96, 20);
+            this.textBox3.TabIndex = 5;
+            // 
             // MediaEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.Controls.Add(this.gbxOther);
+            this.Controls.Add(this.grdGenres);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox5);
@@ -971,20 +1080,17 @@
             this.Controls.Add(this.groupBox4);
             this.MinimumSize = new System.Drawing.Size(620, 613);
             this.Name = "MediaEditor";
-            this.Size = new System.Drawing.Size(620, 613);
+            this.Size = new System.Drawing.Size(620, 769);
             this.Load += new System.EventHandler(this.MediaEditor_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdDirectors)).EndInit();
-            this.tabPage1.ResumeLayout(false);
+            this.tbpDirectors.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdWriters)).EndInit();
-            this.tabPage2.ResumeLayout(false);
+            this.tbpWriters.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdGenres)).EndInit();
-            this.tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdActors)).EndInit();
-            this.tabPage4.ResumeLayout(false);
+            this.tbpActorsRoles.ResumeLayout(false);
             this.tbcCredits.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdTags)).EndInit();
@@ -999,6 +1105,11 @@
             this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.gbxOther.ResumeLayout(false);
+            this.gbxOther.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1017,17 +1128,17 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DataGridView grdDirectors;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tbpDirectors;
         private System.Windows.Forms.DataGridView grdWriters;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tbpWriters;
         private System.Windows.Forms.DataGridView grdGenres;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tbpProducers;
         private System.Windows.Forms.DataGridView grdActors;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TabPage tbpActorsRoles;
         private System.Windows.Forms.TabControl tbcCredits;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridView grdTags;
@@ -1078,5 +1189,16 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label lblFrontCover;
         private System.Windows.Forms.Label lblBackCover;
+        private System.Windows.Forms.TabPage tbpNonActorRoles;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabExtraFeatures;
+        private System.Windows.Forms.TabPage tabVideoDetails;
+        private System.Windows.Forms.GroupBox gbxOther;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label lblUPCCode;
+        private System.Windows.Forms.Label lblWebsite;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label label1;
     }
 }

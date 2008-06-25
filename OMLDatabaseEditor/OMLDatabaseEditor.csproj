@@ -65,6 +65,10 @@
       <DependentUpon>MediaEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\MediaList.resx">
+      <DependentUpon>MediaList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="OMLDatabaseEditor.resx">
       <DependentUpon>OMLDatabaseEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -100,6 +104,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\document-save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\document-new1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="Resources\document-save1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\saveHS.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NewDocumentHS.BMP" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ClosePreviewHS.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\DataSources\" />
