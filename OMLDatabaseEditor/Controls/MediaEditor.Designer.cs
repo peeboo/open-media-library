@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tbFrontCover = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -159,6 +159,7 @@
             this.tbFrontCover.Name = "tbFrontCover";
             this.tbFrontCover.Size = new System.Drawing.Size(115, 21);
             this.tbFrontCover.TabIndex = 17;
+            this.tbFrontCover.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // button1
             // 
@@ -187,6 +188,7 @@
             this.tbFileLocation.Name = "tbFileLocation";
             this.tbFileLocation.Size = new System.Drawing.Size(115, 21);
             this.tbFileLocation.TabIndex = 44;
+            this.tbFileLocation.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // tbBackCover
             // 
@@ -195,6 +197,7 @@
             this.tbBackCover.Name = "tbBackCover";
             this.tbBackCover.Size = new System.Drawing.Size(115, 21);
             this.tbBackCover.TabIndex = 20;
+            this.tbBackCover.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // lblFileLocation
             // 
@@ -321,8 +324,8 @@
             this.grdWriters.Location = new System.Drawing.Point(3, 3);
             this.grdWriters.Name = "grdWriters";
             this.grdWriters.RowHeadersWidth = 26;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdWriters.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdWriters.RowsDefaultCellStyle = dataGridViewCellStyle7;
             this.grdWriters.Size = new System.Drawing.Size(395, 78);
             this.grdWriters.TabIndex = 32;
             // 
@@ -355,8 +358,8 @@
             this.grdGenres.Location = new System.Drawing.Point(202, 422);
             this.grdGenres.Name = "grdGenres";
             this.grdGenres.RowHeadersWidth = 26;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdGenres.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdGenres.RowsDefaultCellStyle = dataGridViewCellStyle8;
             this.grdGenres.Size = new System.Drawing.Size(138, 52);
             this.grdGenres.TabIndex = 24;
             // 
@@ -389,8 +392,8 @@
             this.grdActors.Location = new System.Drawing.Point(0, 0);
             this.grdActors.Name = "grdActors";
             this.grdActors.RowHeadersWidth = 26;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdActors.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdActors.RowsDefaultCellStyle = dataGridViewCellStyle9;
             this.grdActors.Size = new System.Drawing.Size(401, 84);
             this.grdActors.TabIndex = 29;
             // 
@@ -508,6 +511,7 @@
             this.tbUserRating.Name = "tbUserRating";
             this.tbUserRating.Size = new System.Drawing.Size(95, 21);
             this.tbUserRating.TabIndex = 21;
+            this.tbUserRating.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label4
             // 
@@ -547,6 +551,7 @@
             this.tbSortName.Name = "tbSortName";
             this.tbSortName.Size = new System.Drawing.Size(95, 21);
             this.tbSortName.TabIndex = 46;
+            this.tbSortName.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // tbOriginalName
             // 
@@ -556,6 +561,7 @@
             this.tbOriginalName.Name = "tbOriginalName";
             this.tbOriginalName.Size = new System.Drawing.Size(106, 21);
             this.tbOriginalName.TabIndex = 3;
+            this.tbOriginalName.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label6
             // 
@@ -626,8 +632,8 @@
             this.grdAudioTracks.Location = new System.Drawing.Point(3, 3);
             this.grdAudioTracks.Name = "grdAudioTracks";
             this.grdAudioTracks.RowHeadersWidth = 26;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdAudioTracks.RowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdAudioTracks.RowsDefaultCellStyle = dataGridViewCellStyle10;
             this.grdAudioTracks.Size = new System.Drawing.Size(189, 85);
             this.grdAudioTracks.TabIndex = 36;
             // 
@@ -702,6 +708,7 @@
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(102, 21);
             this.textBox7.TabIndex = 46;
+            this.textBox7.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label7
             // 
@@ -722,6 +729,7 @@
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(102, 21);
             this.textBox8.TabIndex = 44;
+            this.textBox8.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label8
             // 
@@ -753,6 +761,7 @@
             this.cbAspectRatio.Name = "cbAspectRatio";
             this.cbAspectRatio.Size = new System.Drawing.Size(102, 21);
             this.cbAspectRatio.TabIndex = 40;
+            this.cbAspectRatio.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // comboBox2
             // 
@@ -767,6 +776,7 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(102, 21);
             this.comboBox2.TabIndex = 42;
+            this.comboBox2.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label10
             // 
@@ -836,6 +846,7 @@
             this.tbSummary.Name = "tbSummary";
             this.tbSummary.Size = new System.Drawing.Size(397, 81);
             this.tbSummary.TabIndex = 3;
+            this.tbSummary.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label13
             // 
@@ -856,6 +867,7 @@
             this.tbRunTime.Name = "tbRunTime";
             this.tbRunTime.Size = new System.Drawing.Size(121, 21);
             this.tbRunTime.TabIndex = 18;
+            this.tbRunTime.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label14
             // 
@@ -886,6 +898,7 @@
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(397, 21);
             this.tbName.TabIndex = 1;
+            this.tbName.TextChanged += new System.EventHandler(this.TitleNameChanges);
             // 
             // tbRatingReason
             // 
@@ -894,6 +907,7 @@
             this.tbRatingReason.Name = "tbRatingReason";
             this.tbRatingReason.Size = new System.Drawing.Size(89, 21);
             this.tbRatingReason.TabIndex = 47;
+            this.tbRatingReason.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label16
             // 
@@ -934,6 +948,7 @@
             this.tbStudio.Name = "tbStudio";
             this.tbStudio.Size = new System.Drawing.Size(151, 21);
             this.tbStudio.TabIndex = 38;
+            this.tbStudio.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // tbCountry
             // 
@@ -943,6 +958,7 @@
             this.tbCountry.Name = "tbCountry";
             this.tbCountry.Size = new System.Drawing.Size(151, 21);
             this.tbCountry.TabIndex = 36;
+            this.tbCountry.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label19
             // 
@@ -1028,6 +1044,7 @@
             this.tbWatchedCount.Name = "tbWatchedCount";
             this.tbWatchedCount.Size = new System.Drawing.Size(95, 20);
             this.tbWatchedCount.TabIndex = 5;
+            this.tbWatchedCount.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label1
             // 
@@ -1053,6 +1070,7 @@
             this.tbWebsite.Name = "tbWebsite";
             this.tbWebsite.Size = new System.Drawing.Size(95, 20);
             this.tbWebsite.TabIndex = 2;
+            this.tbWebsite.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // tbUPC
             // 
@@ -1061,6 +1079,7 @@
             this.tbUPC.Name = "tbUPC";
             this.tbUPC.Size = new System.Drawing.Size(95, 21);
             this.tbUPC.TabIndex = 1;
+            this.tbUPC.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // lblUPCCode
             // 
@@ -1084,8 +1103,8 @@
             this.grdProducers.Location = new System.Drawing.Point(0, 0);
             this.grdProducers.Name = "grdProducers";
             this.grdProducers.RowHeadersWidth = 26;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdProducers.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdProducers.RowsDefaultCellStyle = dataGridViewCellStyle11;
             this.grdProducers.Size = new System.Drawing.Size(401, 84);
             this.grdProducers.TabIndex = 33;
             // 
@@ -1107,8 +1126,8 @@
             this.grdNonActors.Location = new System.Drawing.Point(0, 0);
             this.grdNonActors.Name = "grdNonActors";
             this.grdNonActors.RowHeadersWidth = 26;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdNonActors.RowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdNonActors.RowsDefaultCellStyle = dataGridViewCellStyle12;
             this.grdNonActors.Size = new System.Drawing.Size(401, 84);
             this.grdNonActors.TabIndex = 30;
             // 
