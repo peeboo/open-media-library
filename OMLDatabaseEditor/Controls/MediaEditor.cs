@@ -10,25 +10,86 @@ using System.IO;
 
 namespace OMLDatabaseEditor.Controls
 {
+    
     public partial class MediaEditor : UserControl
     {
+        public delegate void TitleChangeEventHandler(object sender, EventArgs e);
+        public delegate void TitleNameChangeEventHandler(object sender, EventArgs e);
+        public delegate void SavedEventHandler(object sender, EventArgs e);
+
+        public event TitleChangeEventHandler TitleChanged;
+        public event TitleNameChangeEventHandler TitleNameChanged;
+        public event SavedEventHandler SavedTitle;
+
+        private TitleStatus _status;
+        private int _itemID = 0;
+        private string _titleName = "";
+        
+        public enum TitleStatus {Initial, UnsavedChanges, Saved}
+
+        public int itemID 
+        {
+            get { return _itemID; }
+        }
+             
+        public TitleStatus Status 
+        {
+            get { return _status; }
+        }
+
+        public string TitleName
+        {
+            get { return _titleName; }
+        }
+
+        private void _titleChanged(EventArgs e)
+        {
+            if (TitleChanged != null && Status != TitleStatus.UnsavedChanges)
+            {
+                _status = TitleStatus.UnsavedChanges;
+                TitleChanged(this, e);
+            }
+        }
+
+        private void _titleNameChanged(EventArgs e)
+        {
+            if (TitleNameChanged != null)
+            {
+                _titleName = tbName.Text;
+                _status = TitleStatus.UnsavedChanges;
+                TitleNameChanged(this, e);
+            }
+        }
+
+        private void _savedTitle(EventArgs e)
+        {
+            if (SavedTitle != null && Status == TitleStatus.UnsavedChanges)
+            {
+                _status = TitleStatus.Saved;
+                SavedTitle(this, e);
+            }
+        }
+
         public MediaEditor()
         {
             InitializeComponent();
         }
 
-        private void MediaEditor_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        public void ChangeTitle(Title t)
+        public void LoadTitle(Title t)
         {
             UpdateUIFromTitle(t);
         }
 
+        public void SaveToTitle(Title t)
+        {
+            UpdateTitleFromUI(t);
+            _savedTitle(EventArgs.Empty);
+        }
+
         private void UpdateUIFromTitle(Title t)
         {
+            _itemID = t.InternalItemID;
+
             // Movie Locations
             pbFrontCover.Image = ReadImageFromFile(t.FrontCoverPath);
             tbFrontCover.Text = t.FrontCoverPath;
@@ -53,31 +114,48 @@ namespace OMLDatabaseEditor.Controls
             tbStudio.Text = t.Studio;
             tbRunTime.Text = Convert.ToString(t.Runtime);
 
+            // Categores
+            grdGenres.Rows.Clear();
+            foreach (string g in t.Genres)
+            {
+                grdGenres.Rows.Add(g);
+            }
+
+            grdTags.Rows.Clear();
+            foreach (string tag in t.Tags)
+            {
+                grdTags.Rows.Add(tag);
+            }
+
             // Credits
             grdDirectors.Rows.Clear();
             foreach (Person d in t.Directors)
             {
                 grdDirectors.Rows.Add(d.full_name);
             }
+
             grdWriters.Rows.Clear();
             foreach (Person w in t.Writers)
             {
                 grdWriters.Rows.Add(w.full_name);
             }
-            grdGenres.Rows.Clear();
-            foreach (string g in t.Genres)
+
+            grdProducers.Rows.Clear();
+            foreach (string p in t.Producers)
             {
-                grdGenres.Rows.Add(g);
+                grdProducers.Rows.Add(p.ToString());
             }
+
             grdActors.Rows.Clear();
-            foreach (Person actor in t.Actors)
-            {
-                if (!t.ActingRoles.ContainsKey(actor.full_name))
-                    grdActors.Rows.Add(actor.full_name, " ");
-            }
             foreach (KeyValuePair<string, string> role in t.ActingRoles)
             {
                 grdActors.Rows.Add(role.Key, role.Value);
+            }
+
+            grdNonActors.Rows.Clear();
+            foreach (KeyValuePair<string, string> role in t.NonActingRoles)
+            {
+                grdNonActors.Rows.Add(role.Key, role.Value);
             }
 
             // Your Movie Details
@@ -99,11 +177,7 @@ namespace OMLDatabaseEditor.Controls
                 dtpDateAdded.Value = DateTimePicker.MinimumDateTime;
             }
             tbUserRating.Text = Convert.ToString(t.UserStarRating);
-            grdTags.Rows.Clear();
-            foreach (string tag in t.Tags)
-            {
-                grdTags.Rows.Add(tag);
-            }
+            
 
             //File Details
             cbAspectRatio.Text = t.AspectRatio;
@@ -119,9 +193,7 @@ namespace OMLDatabaseEditor.Controls
             }
         }
 
-
-
-        public void UpdateTitleFromUI(Title t)
+        private void UpdateTitleFromUI(Title t)
         {
             // Movie Locations
             t.FrontCoverPath = tbFrontCover.Text;
@@ -143,34 +215,72 @@ namespace OMLDatabaseEditor.Controls
             }
             t.Runtime = RunTime;
 
+            // Categores
+            t.Genres.Clear();
+            foreach (DataGridViewRow row in grdGenres.Rows)
+            {
+                if (row.Cells[0].Value != null)
+                {
+                    t.Genres.Add((string)row.Cells[0].Value);
+                }
+            }
+
+            t.Tags.Clear();
+            foreach (DataGridViewRow row in grdTags.Rows)
+            {
+                if (row.Cells[0].Value != null)
+                {
+                    t.Tags.Add((string)row.Cells[0].Value);
+                }
+            }
+
             // Credits
             t.Directors.Clear();
             foreach (DataGridViewRow row in grdDirectors.Rows)
             {
-                if (row.Cells[0].Value == null) return;
-                t.Directors.Add(new Person((string)row.Cells[0].Value));
+                if (row.Cells[0].Value != null)
+                {
+                    t.Directors.Add(new Person((string)row.Cells[0].Value));
+                }
             }
 
             t.Writers.Clear();
             foreach (DataGridViewRow row in grdWriters.Rows)
             {
-                if (row.Cells[0].Value == null) return;
-                t.Writers.Add(new Person((string)row.Cells[0].Value));
+                if (row.Cells[0].Value != null)
+                {
+                    t.Writers.Add(new Person((string)row.Cells[0].Value));
+                }
             }
 
-            t.Genres.Clear();
-            foreach (DataGridViewRow row in grdGenres.Rows)
+            t.Producers.Clear();
+            foreach (DataGridViewRow row in grdProducers.Rows)
             {
-                if (row.Cells[0].Value == null) return;
-                t.Genres.Add((string)row.Cells[0].Value);
+                if (row.Cells[0].Value != null)
+                {
+                    t.Producers.Add(row.Cells[0].Value);
+                }
             }
-            t.Actors.Clear();
+
             t.ActingRoles.Clear();
-            foreach (DataGridViewRow row in grdTags.Rows)
+            foreach (DataGridViewRow row in grdActors.Rows)
             {
-                if (row.Cells[0].Value == null || row.Cells[1].Value == null) return;
-                t.Actors.Add(new Person((string)row.Cells[0].Value));
-                t.ActingRoles.Add((string)row.Cells[0].Value, (string)row.Cells[1].Value);
+                if (row.Cells[0].Value != null && row.Cells[1].Value != null)
+                {
+                    t.ActingRoles.Add((string)row.Cells[0].Value, (string)row.Cells[1].Value);
+                }
+                
+            }
+
+            t.NonActingRoles.Clear();
+            foreach (DataGridViewRow row in grdNonActors.Rows)
+            {
+                if (row.Cells[0].Value != null && row.Cells[1].Value != null)
+                {
+
+                    t.NonActingRoles.Add((string)row.Cells[0].Value, (string)row.Cells[1].Value);
+                }
+
             }
 
             // Your Movie Details
@@ -186,29 +296,27 @@ namespace OMLDatabaseEditor.Controls
                 UserStarRating = 0;
             }
             t.UserStarRating = UserStarRating;
-            t.Tags.Clear();
-            foreach (DataGridViewRow row in grdTags.Rows)
-            {
-                if (row.Cells[0].Value == null) return;
-                t.Tags.Add((string)row.Cells[0].Value);
-            }
-
+            
             // File Details
             t.AspectRatio = cbAspectRatio.Text.Trim();
            
             t.AudioTracks.Clear();
             foreach (DataGridViewRow row in grdSubtitles.Rows)
             {
-                if (row.Cells[0].Value == null) return;
-                t.AudioTracks.Add((string)row.Cells[0].Value);
+                if (row.Cells[0].Value != null)
+                {
+                    t.AudioTracks.Add((string)row.Cells[0].Value);
+                }
             }
 
             t.Subtitles.Clear();
             foreach (DataGridViewRow row in grdAudioTracks.Rows)
             {
-                if (row.Cells[0].Value == null) return;
-                t.Subtitles.Add((string)row.Cells[0].Value);
-            }
+                if (row.Cells[0].Value != null)
+                {
+                    t.Subtitles.Add((string)row.Cells[0].Value);
+                }
+            }    
         }
 
         // Image.FromFile keeps a lock on the file and it cannot be updated
@@ -244,11 +352,85 @@ namespace OMLDatabaseEditor.Controls
             return null;
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void CoverButton_Click(object sender, EventArgs e)
         {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.InitialDirectory = @"C:\";
+            ofd.Filter = @"JPG files (*.jpg)|*.jpg|All Files (*.*)|*.*";
+            ofd.FilterIndex = 1;
+            ofd.CheckPathExists = true;
+            ofd.CheckFileExists = true;
+            ofd.RestoreDirectory = true;
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if (sender.Equals(button2) || sender.Equals(pbFrontCover))
+                    {
+                        tbFrontCover.Text = ofd.FileName;
+                        //pbFrontCover.ImageLocation = ofd.FileName;
+                    }
+                    else
+                    {
+                        tbBackCover.Text = ofd.FileName;
+                        //pbBackCover.ImageLocation = ofd.FileName;
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+        }
+
+        private void tbFrontCover_TextChanged(object sender, EventArgs e)
+        {
+            if (System.IO.File.Exists(((TextBox) sender).Text))
+            {
+                if (sender.Equals(tbFrontCover))
+                {
+                    pbFrontCover.ImageLocation = ((TextBox) sender).Text;
+                }
+                else
+                {
+                    pbBackCover.ImageLocation = ((TextBox) sender).Text;
+                }
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.InitialDirectory = @"C:\";
+            ofd.CheckPathExists = true;
+            ofd.CheckFileExists = true;
+            ofd.RestoreDirectory = true;
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    tbFileLocation.Text = ofd.FileName;
+                }
+                catch (Exception ex)
+                {
+                }
+            }
 
         }
 
+        private void TitleChanges(object sender, EventArgs e)
+        {
+            _titleChanged(EventArgs.Empty);
+        }
+
+        private void grd_CellChanges(object sender, DataGridViewCellEventArgs e)
+        {
+            _titleChanged(EventArgs.Empty);
+        }
+
+        private void TitleNameChanges(Object sender, EventArgs e)
+        {
+            _titleNameChanged(EventArgs.Empty);
+        }
 
     }
 }
