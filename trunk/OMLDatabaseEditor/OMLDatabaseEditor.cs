@@ -100,9 +100,12 @@ namespace OMLDatabaseEditor
 
         private void MenuItemEditTab_Click(object sender, EventArgs e)
         {
-            if (tvSourceList.SelectedNode.Tag.ToString() == "Movies")
+            if (tvSourceList.SelectedNode.Tag != null)
             {
-                EditNewTab(int.Parse(tvSourceList.SelectedNode.Name));
+                if (tvSourceList.SelectedNode.Tag.ToString() == "Movies")
+                {
+                    EditNewTab(int.Parse(tvSourceList.SelectedNode.Name));
+                }
             }
         }
 
