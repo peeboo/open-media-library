@@ -112,11 +112,11 @@
             this.cbRating = new System.Windows.Forms.ComboBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.gbxOther = new System.Windows.Forms.GroupBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.tbWatchedCount = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lblWebsite = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tbWebsite = new System.Windows.Forms.TextBox();
+            this.tbUPC = new System.Windows.Forms.TextBox();
             this.lblUPCCode = new System.Windows.Forms.Label();
             this.grdProducers = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -494,7 +494,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(20, 93);
+            this.label3.Location = new System.Drawing.Point(16, 124);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(59, 12);
             this.label3.TabIndex = 20;
@@ -504,16 +504,16 @@
             // 
             this.tbUserRating.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tbUserRating.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbUserRating.Location = new System.Drawing.Point(87, 90);
+            this.tbUserRating.Location = new System.Drawing.Point(81, 122);
             this.tbUserRating.Name = "tbUserRating";
-            this.tbUserRating.Size = new System.Drawing.Size(106, 21);
+            this.tbUserRating.Size = new System.Drawing.Size(95, 21);
             this.tbUserRating.TabIndex = 21;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(21, 67);
+            this.label4.Location = new System.Drawing.Point(17, 98);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(58, 12);
             this.label4.TabIndex = 6;
@@ -524,16 +524,16 @@
             this.dtpDateAdded.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpDateAdded.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpDateAdded.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpDateAdded.Location = new System.Drawing.Point(87, 64);
+            this.dtpDateAdded.Location = new System.Drawing.Point(81, 95);
             this.dtpDateAdded.Name = "dtpDateAdded";
-            this.dtpDateAdded.Size = new System.Drawing.Size(106, 21);
+            this.dtpDateAdded.Size = new System.Drawing.Size(95, 21);
             this.dtpDateAdded.TabIndex = 14;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(26, 16);
+            this.label5.Location = new System.Drawing.Point(22, 150);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(53, 12);
             this.label5.TabIndex = 45;
@@ -543,9 +543,9 @@
             // 
             this.tbSortName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tbSortName.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbSortName.Location = new System.Drawing.Point(87, 12);
+            this.tbSortName.Location = new System.Drawing.Point(81, 149);
             this.tbSortName.Name = "tbSortName";
-            this.tbSortName.Size = new System.Drawing.Size(107, 21);
+            this.tbSortName.Size = new System.Drawing.Size(95, 21);
             this.tbSortName.TabIndex = 46;
             // 
             // tbOriginalName
@@ -574,12 +574,6 @@
             this.groupBox3.Controls.Add(this.tabControl1);
             this.groupBox3.Controls.Add(this.grdTags);
             this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Controls.Add(this.tbUserRating);
-            this.groupBox3.Controls.Add(this.label4);
-            this.groupBox3.Controls.Add(this.dtpDateAdded);
-            this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.tbSortName);
             this.groupBox3.Controls.Add(this.tbOriginalName);
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1008,31 +1002,37 @@
             // 
             // gbxOther
             // 
-            this.gbxOther.Controls.Add(this.textBox3);
+            this.gbxOther.Controls.Add(this.tbWatchedCount);
             this.gbxOther.Controls.Add(this.label1);
             this.gbxOther.Controls.Add(this.lblWebsite);
-            this.gbxOther.Controls.Add(this.textBox2);
-            this.gbxOther.Controls.Add(this.textBox1);
+            this.gbxOther.Controls.Add(this.label5);
+            this.gbxOther.Controls.Add(this.tbSortName);
+            this.gbxOther.Controls.Add(this.label3);
+            this.gbxOther.Controls.Add(this.tbWebsite);
+            this.gbxOther.Controls.Add(this.tbUserRating);
+            this.gbxOther.Controls.Add(this.tbUPC);
+            this.gbxOther.Controls.Add(this.label4);
+            this.gbxOther.Controls.Add(this.dtpDateAdded);
             this.gbxOther.Controls.Add(this.lblUPCCode);
             this.gbxOther.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbxOther.Location = new System.Drawing.Point(3, 526);
             this.gbxOther.Name = "gbxOther";
-            this.gbxOther.Size = new System.Drawing.Size(183, 125);
+            this.gbxOther.Size = new System.Drawing.Size(183, 213);
             this.gbxOther.TabIndex = 58;
             this.gbxOther.TabStop = false;
             this.gbxOther.Text = "Other";
             // 
-            // textBox3
+            // tbWatchedCount
             // 
-            this.textBox3.Location = new System.Drawing.Point(80, 71);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(96, 20);
-            this.textBox3.TabIndex = 5;
+            this.tbWatchedCount.Location = new System.Drawing.Point(81, 69);
+            this.tbWatchedCount.Name = "tbWatchedCount";
+            this.tbWatchedCount.Size = new System.Drawing.Size(95, 20);
+            this.tbWatchedCount.TabIndex = 5;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 74);
+            this.label1.Location = new System.Drawing.Point(-1, 72);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 12);
             this.label1.TabIndex = 4;
@@ -1041,32 +1041,32 @@
             // lblWebsite
             // 
             this.lblWebsite.AutoSize = true;
-            this.lblWebsite.Location = new System.Drawing.Point(38, 47);
+            this.lblWebsite.Location = new System.Drawing.Point(33, 46);
             this.lblWebsite.Name = "lblWebsite";
             this.lblWebsite.Size = new System.Drawing.Size(42, 12);
             this.lblWebsite.TabIndex = 3;
             this.lblWebsite.Text = "Website";
             // 
-            // textBox2
+            // tbWebsite
             // 
-            this.textBox2.Location = new System.Drawing.Point(80, 44);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(97, 20);
-            this.textBox2.TabIndex = 2;
+            this.tbWebsite.Location = new System.Drawing.Point(81, 43);
+            this.tbWebsite.Name = "tbWebsite";
+            this.tbWebsite.Size = new System.Drawing.Size(95, 20);
+            this.tbWebsite.TabIndex = 2;
             // 
-            // textBox1
+            // tbUPC
             // 
-            this.textBox1.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(80, 16);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(98, 21);
-            this.textBox1.TabIndex = 1;
+            this.tbUPC.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbUPC.Location = new System.Drawing.Point(81, 16);
+            this.tbUPC.Name = "tbUPC";
+            this.tbUPC.Size = new System.Drawing.Size(95, 21);
+            this.tbUPC.TabIndex = 1;
             // 
             // lblUPCCode
             // 
             this.lblUPCCode.AutoSize = true;
             this.lblUPCCode.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUPCCode.Location = new System.Drawing.Point(31, 19);
+            this.lblUPCCode.Location = new System.Drawing.Point(26, 20);
             this.lblUPCCode.Name = "lblUPCCode";
             this.lblUPCCode.Size = new System.Drawing.Size(49, 12);
             this.lblUPCCode.TabIndex = 0;
@@ -1255,11 +1255,11 @@
         private System.Windows.Forms.TabPage tabExtraFeatures;
         private System.Windows.Forms.TabPage tabVideoDetails;
         private System.Windows.Forms.GroupBox gbxOther;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tbUPC;
         private System.Windows.Forms.Label lblUPCCode;
         private System.Windows.Forms.Label lblWebsite;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox tbWebsite;
+        private System.Windows.Forms.TextBox tbWatchedCount;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView grdProducers;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
