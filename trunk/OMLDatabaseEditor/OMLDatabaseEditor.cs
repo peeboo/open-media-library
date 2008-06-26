@@ -38,7 +38,6 @@ namespace OMLDatabaseEditor
             nod.Name = id.ToString();
             nod.Text = text;
             nod.Tag = "Movies";
-
             tvSourceList.Nodes["OML Database"].Nodes[type].Nodes.Add(nod);
             tvSourceList.Nodes["OML Database"].ExpandAll();
             tvSourceList.Nodes["OML Database"].Nodes[type].ExpandAll();
@@ -170,21 +169,21 @@ namespace OMLDatabaseEditor
         {
             Controls.MediaEditor _currentEditor = (Controls.MediaEditor)sender;
 
-            tabsMediaPanel.TabPages[_currentEditor.itemID.ToString()].Text = "*" + _currentEditor.tbName.Text;
+            tabsMediaPanel.TabPages[_currentEditor.itemID.ToString()].Text = "*" + _currentEditor.TitleName;
         }
 
         private void TitleNameChanges(object sender, EventArgs e)
         {
             Controls.MediaEditor _currentEditor = (Controls.MediaEditor)sender;
 
-            tabsMediaPanel.TabPages[_currentEditor.itemID.ToString()].Text = "*" + _currentEditor.tbName.Text;
+            tabsMediaPanel.TabPages[_currentEditor.itemID.ToString()].Text = "*" + _currentEditor.TitleName;
         }
 
         private void SavedTitle(object sender, EventArgs e)
         {
             Controls.MediaEditor _currentEditor = (Controls.MediaEditor)sender;
 
-            tabsMediaPanel.TabPages[_currentEditor.itemID.ToString()].Text = _currentEditor.tbName.Text;
+            tabsMediaPanel.TabPages[_currentEditor.itemID.ToString()].Text = _currentEditor.TitleName;
         }
 
     }
