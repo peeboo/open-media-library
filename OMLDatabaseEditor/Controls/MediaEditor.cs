@@ -97,6 +97,14 @@ namespace OMLDatabaseEditor.Controls
             tbBackCover.Text = t.BackCoverPath;
             tbFileLocation.Text = t.FileLocation;
 
+            // Other
+            tbUPC.Text = t.UPC;
+            tbWebsite.Text = t.OfficialWebsiteURL;
+            tbWatchedCount.Text = t.WatchedCount;
+            dtpDateAdded.Value = t.DateAdded;
+            tbUserRating.Text = t.UserStarRating;
+            tbSortName.Text = t.SortName;
+
             // Movie Details
             tbName.Text = t.Name;
             tbSummary.Text = t.Synopsis;
@@ -195,10 +203,28 @@ namespace OMLDatabaseEditor.Controls
 
         private void UpdateTitleFromUI(Title t)
         {
+            int tmpint;
+
             // Movie Locations
             t.FrontCoverPath = tbFrontCover.Text;
             t.BackCoverPath = tbBackCover.Text;
             t.FileLocation = tbFileLocation.Text;
+
+            // Other
+            t.UPC = tbUPC.Text;
+            t.OfficialWebsiteURL = tbWebsite.Text;
+            if (int.TryParse(tbWatchedCount.Text, out tmpint) == false)
+            {
+                tmpint = 0;
+            }
+            t.WatchedCount = tmpint;
+            t.DateAdded = dtpDateAdded.Value;
+            if (int.TryParse(tbUserRating.Text, out tmpint) == false)
+            {
+                tmpint = 0;
+            }
+            t.UserStarRating = tmpint;
+            t.SortName = tbSortName.Text;
 
             // Movie Details
             t.Name = tbName.Text.Trim();
@@ -208,12 +234,11 @@ namespace OMLDatabaseEditor.Controls
             t.ParentalRatingReason = tbRatingReason.Text.Trim();
             t.CountryOfOrigin = tbCountry.Text.Trim();
             t.Studio = tbStudio.Text.Trim();
-            int RunTime;
-            if (int.TryParse(tbRunTime.Text, out RunTime) == false)
+            if (int.TryParse(tbRunTime.Text, out tmpint) == false)
             {
-                RunTime = 0;
+                tmpint = 0;
             }
-            t.Runtime = RunTime;
+            t.Runtime = tmpint;
 
             // Categores
             t.Genres.Clear();
