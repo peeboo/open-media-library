@@ -30,11 +30,17 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (*DONE*) Extender support
 
 
-  * (_IN DEVELOPMENT_) DVD playback (actual discs in a real drive, see mounting/unmounting for images of discs)
-  * (_IN DEVELOPMENT_) Filter by genre, rating, date, runtime, year etc
-  * (_IN DEVELOPMENT_) Triple tap: jumping to movie by using letters on remote control
-  * (_IN DEVELOPMENT_) Search functionality
-  * (_IN DEVELOPMENT_) UI based setup (importers, daemontools settings, etc)
+  * (_IN DEVELOPMENT_) DVD playback (actual discs in a real drive, see mounting/unmounting for images of discs) (0% Complete)
+  * (_IN DEVELOPMENT_) Filter by genre, rating, date, runtime, year etc (90% Complete)
+  * (_IN DEVELOPMENT_) Triple tap: jumping to movie by using letters on remote control (80% Complete)
+  * (_IN DEVELOPMENT_) Search functionality (0% Complete)
+  * (_IN DEVELOPMENT_) UI based setup (importers, daemontools settings, etc) (70% Complete)
+  * (_IN DEVELOPMENT_) Metadata editor (Unknown% Complete)
+  * (_IN DEVELOPMENT_) Using 3rd party programs as datasource (10% Complete)
+  * (_IN DEVELOPMENT_) Movie trailer support (80% Complete)
+  * (_IN DEVELOPMENT_) Movie bookmark features (20% Complete)
+  * (_IN DEVELOPMENT_) Support for Blu-Ray/HD-DVD (50% Complete)
+
 
   * (ON HOLD) Define OML xml scheme for 3rd party export/import
   * (ON HOLD) Option to omit "The" in movie sorting and displaying
@@ -49,21 +55,16 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (ON HOLD) Parental filter with password
   * (ON HOLD) Selection of audio track from eg. dvd and mkv
   * (ON HOLD) Selection of subtitle track from eg. dvd and mkv
-  * (ON HOLD) Metadata editor
   * (ON HOLD) Multiple right-click options
   * (ON HOLD) View: Instead of moving a cursor around the screen, the cursor is frozen center and instead the movie rows move
-  * (ON HOLD) Using 3rd party programs as datasource
   * (ON HOLD) Movie queue
-  * (ON HOLD) Movie trailer support
   * (ON HOLD) DVD changer support
   * (ON HOLD) Windows Home Server support
   * (ON HOLD) View: File/folder view
   * (ON HOLD) Autoupdate feature/automatic information of new build
   * (ON HOLD) Delete movie feature, deleting everything releated to the movie (metadata, moviefile, moviefolder, covers etc)
   * (ON HOLD) "Mark as watched" feature
-  * (ON HOLD) Movie bookmark features
   * (ON HOLD) Ripping DVD's to local/server harddrive
   * (ON HOLD) Automatic metadata/cover art retrieval
-  * (ON HOLD) Support for Blu-Ray/HD-DVD
   * (ON HOLD) Support of other languages
   * (ON HOLD) Holding down the down button on the movie screen resolves in stopping scrolling and instead displaying letters changing up the alphabet. Stopping scrolling takes the user to the first movie starting with the letter chosen.
