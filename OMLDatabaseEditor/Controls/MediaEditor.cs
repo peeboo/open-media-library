@@ -119,9 +119,11 @@ namespace OMLDatabaseEditor.Controls
             }
             cbRating.Text = t.ParentalRating;
             tbRatingReason.Text = t.ParentalRatingReason;
+            tbRunTime.Text = Convert.ToString(t.Runtime);
+            tbOriginalName.Text = t.OriginalName;
             tbCountry.Text = t.CountryOfOrigin;
             tbStudio.Text = t.Studio;
-            tbRunTime.Text = Convert.ToString(t.Runtime);
+
 
             // Categores
             grdGenres.Rows.Clear();
@@ -176,7 +178,7 @@ namespace OMLDatabaseEditor.Controls
             {
                 tbSortName.Text = t.Name;
             }
-            tbOriginalName.Text = t.OriginalName;
+            
             try
             {
                 dtpDateAdded.Value = t.DateAdded;
@@ -233,13 +235,15 @@ namespace OMLDatabaseEditor.Controls
             t.ReleaseDate = dtpReleaseDate.Value;
             t.ParentalRating = cbRating.Text.Trim();
             t.ParentalRatingReason = tbRatingReason.Text.Trim();
-            t.CountryOfOrigin = tbCountry.Text.Trim();
-            t.Studio = tbStudio.Text.Trim();
             if (int.TryParse(tbRunTime.Text, out tmpint) == false)
             {
                 tmpint = 0;
             }
             t.Runtime = tmpint;
+            t.OriginalName = tbOriginalName.Text.Trim();
+            t.CountryOfOrigin = tbCountry.Text.Trim();
+            t.Studio = tbStudio.Text.Trim();
+
 
             // Categores
             t.Genres.Clear();
@@ -314,7 +318,7 @@ namespace OMLDatabaseEditor.Controls
                 t.SortName = tbSortName.Text.Trim();
             else
                 t.SortName = t.Name;
-            t.OriginalName = tbOriginalName.Text.Trim();
+
             t.DateAdded = dtpDateAdded.Value;
             int UserStarRating;
             if (int.TryParse(tbUserRating.Text, out UserStarRating) == false)
@@ -380,7 +384,30 @@ namespace OMLDatabaseEditor.Controls
 
         private void CoverButton_Click(object sender, EventArgs e)
         {
-
+            OpenFileDialog ofd = new OpenFileDialog(); 
+            ofd.InitialDirectory = @"C:\"; 
+            ofd.Filter = @"JPG files (*.jpg)|*.jpg|All Files (*.*)|*.*"; 
+            ofd.FilterIndex = 1; 
+            ofd.CheckPathExists = true; 
+            ofd.CheckFileExists = true; 
+            ofd.RestoreDirectory = true; 
+            if (ofd.ShowDialog() == DialogResult.OK) 
+            { 
+                try 
+                { 
+                    if (sender.Equals(button2) || sender.Equals(pbFrontCover)) 
+                    { 
+                        tbFrontCover.Text = ofd.FileName; 
+                        //pbFrontCover.ImageLocation = ofd.FileName; 
+                    } else { 
+                        tbBackCover.Text = ofd.FileName; 
+                        //pbBackCover.ImageLocation = ofd.FileName; 
+                    } 
+                } 
+                catch (Exception ex) 
+                { 
+                } 
+            }
         }
 
         private void tbFrontCover_TextChanged(object sender, EventArgs e)
