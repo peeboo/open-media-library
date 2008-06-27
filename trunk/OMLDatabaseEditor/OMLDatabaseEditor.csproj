@@ -109,7 +109,6 @@
     <None Include="Resources\document-new1.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\document-save1.png" />
   </ItemGroup>
   <ItemGroup>

@@ -41,8 +41,7 @@ namespace Library
 
         private string GetMountLocation()
         {
-            OMLConfigManager cm = new OMLConfigManager();
-            string mount_location = cm.GetValue("VirtualDiscDrive");
+            string mount_location = OMLEngine.Properties.Settings.Default.VirtualDiscDrive;
             if (mount_location != null && mount_location.Length > 0)
                 return mount_location;
 
@@ -53,11 +52,10 @@ namespace Library
         {
             OMLApplication.DebugLine("Mounting Title");
             Process cmd = new Process();
-            OMLConfigManager cm = new OMLConfigManager();
-            string mount_util_path = cm.GetValue("DaemonTools");
+            string mount_util_path = OMLEngine.Properties.Settings.Default.DaemonTools;
             OMLApplication.DebugLine("DaemonTools: " + mount_util_path);
             string VirtualDiscDrive = GetMountLocation();
-            string VirtualDiscDriveNumber = cm.GetValue("VirtualDiscDriveNumber");
+            int VirtualDiscDriveNumber = OMLEngine.Properties.Settings.Default.VirtualDiscDriveNumber;
             OMLApplication.DebugLine("Drive: " + VirtualDiscDrive);
 
             OMLApplication.DebugLine("Unmounting any old image");

@@ -320,9 +320,8 @@ namespace OMLEngine
 
         public static bool HasDaemonTools()
         {
-            OMLConfigManager cm = new OMLConfigManager();
-            string miso_path = cm.GetValue("DaemonTools");
-            if (miso_path != null && miso_path.Length > 0)
+            string daemontools_path = OMLEngine.Properties.Settings.Default.DaemonTools;
+            if (daemontools_path != null && daemontools_path.Length > 0)
                 return true;
 
             return false;
@@ -345,14 +344,13 @@ namespace OMLEngine
             return null;
         }
 
-        public static void UnmountVirtualDrive(string VirtualDiscDriveNumber)
+        public static void UnmountVirtualDrive(int VirtualDiscDriveNumber)
         {
-            OMLConfigManager cm = new OMLConfigManager();
-            string mount_util_path = cm.GetValue("DaemonTools");
+            string mount_util_path = OMLEngine.Properties.Settings.Default.DaemonTools;
 
             Process cmd = new Process();
             cmd.StartInfo.FileName = "\"" + mount_util_path + "\"";
-            cmd.StartInfo.Arguments = @"-unmount " + VirtualDiscDriveNumber;
+            cmd.StartInfo.Arguments = @"-unmount " + VirtualDiscDriveNumber.ToString();
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.RedirectStandardError = true;
             cmd.StartInfo.RedirectStandardOutput = true;

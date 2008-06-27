@@ -19,9 +19,6 @@ namespace OMLTestSuite
             tct.TEST_BASE_CASE();
             tct.TEST_FIND_FOR_ID();
             tct.TEST_SOURCE_DATABASE_TO_USE();
-
-            OMLConfigManagerTest omlcm = new OMLConfigManagerTest();
-            omlcm.TEST_BASE_CASE();
         }
     }
 }
