@@ -220,7 +220,7 @@ namespace OMLEngine
             }
             catch (Exception e)
             {
-                Utilities.DebugLine(starting_dir + " doesn't exist");
+                Utilities.DebugLine(starting_dir + " doesn't exist: " + e.Message);
             }
         }
 

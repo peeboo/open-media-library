@@ -2,14 +2,17 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="OMLEngine.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="DaemonTools" Type="System.String" Scope="Application">
+    <Setting Name="DaemonTools" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="VirtualDiscDrive" Type="System.String" Scope="Application">
+    <Setting Name="VirtualDiscDrive" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="VirtualDiscDriveNumber" Type="System.Int32" Scope="Application">
+    <Setting Name="VirtualDiscDriveNumber" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="CopyImages" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

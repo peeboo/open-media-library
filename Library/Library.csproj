@@ -79,6 +79,7 @@
     <Compile Include="Code\MoviePlayerTranscode.cs" />
     <Compile Include="Code\MoviePlayerUnavailable.cs" />
     <Compile Include="Code\MoviePlayerVideo.cs" />
+    <Compile Include="Code\OMLSettings.cs" />
     <Compile Include="Code\Setup.cs" />
     <Compile Include="Code\TreeNode.cs" />
     <Compile Include="Code\TreeNodeEventArgs.cs" />
