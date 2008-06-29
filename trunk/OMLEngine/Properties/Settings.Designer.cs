@@ -23,30 +23,51 @@ namespace OMLEngine.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string DaemonTools {
             get {
                 return ((string)(this["DaemonTools"]));
             }
+            set {
+                this["DaemonTools"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string VirtualDiscDrive {
             get {
                 return ((string)(this["VirtualDiscDrive"]));
             }
+            set {
+                this["VirtualDiscDrive"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int VirtualDiscDriveNumber {
             get {
                 return ((int)(this["VirtualDiscDriveNumber"]));
+            }
+            set {
+                this["VirtualDiscDriveNumber"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CopyImages {
+            get {
+                return ((bool)(this["CopyImages"]));
+            }
+            set {
+                this["CopyImages"] = value;
             }
         }
     }
