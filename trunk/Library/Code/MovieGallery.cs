@@ -438,17 +438,17 @@ namespace Library
                         if (File.Exists(item.TitleObject.FrontCoverMenuPath))
                         {
                             OMLApplication.DebugLine("FrontCoverMenuArt found: " + item.TitleObject.FrontCoverMenuPath);
-                            item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverMenuPath);
+                            item.CoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverMenuPath);
                         }
                         else
                         {
                             OMLApplication.DebugLine("Unable to locate Menu image: " + item.TitleObject.FrontCoverPath);
-                            item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
+                            item.CoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
                         }
                     }
-                    
-                    if( File.Exists(item.TitleObject.FrontCoverPath) )
-                        item.CoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
+
+                    if (File.Exists(item.TitleObject.FrontCoverPath))
+                        item.FrontCover = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
                     
                     if( File.Exists(item.TitleObject.BackCoverPath) )
                         item.BackCover = GalleryItem.LoadImage(item.TitleObject.BackCoverPath);
