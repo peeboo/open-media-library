@@ -332,7 +332,8 @@ namespace Library
             Filters[Filter.Year].AddMovie(Convert.ToString(title.ReleaseDate.Year), movie);
             Filters[Filter.DateAdded].AddMovie(title.DateAdded.ToShortDateString(), movie);
             Filters[Filter.UserRating].AddMovie(((double)title.UserStarRating/10).ToString("0.0"), movie);
-            Filters[Filter.VideoFormat].AddMovie(title.VideoFormat.ToString(), movie);
+            if (title.Disks.Count > 0)
+                Filters[Filter.VideoFormat].AddMovie(title.Disks[0].Format.ToString(), movie);  //Should really do this independently for each disk, but for now, this should be fine
             
             AddRuntimeFilter(movie);
         }

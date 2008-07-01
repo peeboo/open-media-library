@@ -21,7 +21,7 @@ namespace Library
 
         public bool PlayMovie()
         {
-            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, _title.FileLocation, false))
+            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, _title.SelectedDisk.Path, false))
             {
                 if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                 {

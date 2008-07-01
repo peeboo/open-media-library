@@ -130,7 +130,8 @@ namespace Library
             get
             {
                 if (CurrentTitle != null)
-                    return Enum.GetName(typeof(VideoFormat), _currentTitle.VideoFormat);
+                    if (CurrentTitle.Disks.Count > 0)
+                        return Enum.GetName(typeof(VideoFormat), _currentTitle.Disks[0].Format); //again should be per disk in future
 
                 return string.Empty;
             }

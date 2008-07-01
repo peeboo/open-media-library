@@ -9,7 +9,7 @@
 	  xmlns:me="Me">
 
   <Aggregate Source="resx://Library/Library.Resources/Base" />
-  
+
   <UI Name="MovieDetails">
     <Properties>
       <a:OMLApplication Name="Application" OMLApplication="$Required"/>
@@ -61,6 +61,26 @@
         </Actions>
       </Changed>
 
+      <Changed Source="[DetailsPage.ShowDisks]">
+        <Actions>
+          <DebugTrace Message="Got Show Disks Event, Changing Visibility and Play Movie Text."/>
+          <Set Target="[DVDButtons.Visible]" Value="true"></Set>
+          <Set Target="[SubDetails.Visible]" Value="false"></Set>
+          <Set Target="[DetailsPage.PlayMovieCommandText]" Value="Show Details"></Set>
+          <Set Target="[PlayMovie.Text]" Value="Show Details"></Set>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[DetailsPage.HideDisks]">
+        <Actions>
+          <DebugTrace Message="Got Hide Disks Event, Changing Visibility and Play Movie Text."/>
+          <Set Target="[DVDButtons.Visible]" Value="false"></Set>
+          <Set Target="[SubDetails.Visible]" Value="true"></Set>
+          <Set Target="[DetailsPage.PlayMovieCommandText]" Value="Show Discs"></Set>
+          <Set Target="[PlayMovie.Text]" Value="Show Discs"></Set>
+        </Actions>
+      </Changed>
+
 
       <!-- Handle the Play on remote -->
       <Rule>
@@ -71,18 +91,18 @@
           <Invoke Target ="[DetailsPage.PlayMovie]"/>
         </Actions>
       </Rule>
-      
+
     </Rules>
 
     <Content>
       <ColorFill Content="Transparent" Layout="Form">
         <Children>
-          
+
           <Panel Name="Image" Layout="VerticalFlow">
             <LayoutInput>
               <FormLayoutInput Left="[ImageLeftAnchor]" Top="[TitleTopAnchor]" Bottom="Parent,1"/>
             </LayoutInput>
-            
+
             <Children>
               <Graphic Name="Cover" Content="[DetailsPage.Background]" MinimumSize="336,480" MaximumSize="336,480" />
               <Clip Orientation="Vertical" FadeSize="40" NearOffset="70" MinimumSize="336,0" MaximumSize="336, 480">
@@ -94,8 +114,7 @@
               </Clip>
             </Children>
           </Panel>
-
-          <c:SimpleButton Name="PlayMovie" Command="[PlayMovieCommand]" Text="Play Movie" >
+          <c:SimpleButton Name="PlayMovie" Command="[PlayMovieCommand]" Text="[DetailsPage.PlayMovieCommandText]" >
             <LayoutInput>
               <FormLayoutInput Left = "Image,1.02" Top="[TitleTopAnchor]"/>
             </LayoutInput>
@@ -107,7 +126,23 @@
             </LayoutInput>
           </Text>
 
-          <Panel Name="SubDetails">
+          <Panel Name ="DVDButtons" Visible="false">
+            <Layout>
+              <FlowLayout Orientation="Vertical" />
+            </Layout>
+            <LayoutInput>
+              <FormLayoutInput Left="Image,1.05" Top="Title,1.0"/>
+            </LayoutInput>
+            <Children>
+              <me:DVDDisks Name="DiscList" DetailsPage="[DetailsPage]" DiskListChoice="[DetailsPage.DiskChoice]" >
+                <LayoutInput>
+                  <FormLayoutInput Left="Parent,.05" Top="Parent,.10" />
+                </LayoutInput>
+              </me:DVDDisks>
+            </Children>
+          </Panel>
+          
+          <Panel Name="SubDetails" Visible="true">
             <Layout>
               <FlowLayout Orientation="Vertical" />
             </Layout>
@@ -124,7 +159,7 @@
                   <me:TextWithLabel Label="Release Date: " Text="[DetailsPage.ReleaseDate]" />
                 </Children>
               </Panel>
-              
+
               <me:TextWithLabel Label="Genres: " Text="[DetailsPage.GenresAsString]" />
               <me:TextWithLabel Label="Tags: " Text="[DetailsPage.TagsAsString]" />
 
@@ -138,8 +173,8 @@
                   <me:TextWithLabel Label="Writers: " Text="[DetailsPage.WritersAsString]" />
                 </Children>
               </Panel>
-              
-              
+
+
               <me:TextWithLabel Label="Parental Rating: " Text="[DetailsPage.Rating]" />
 
               <Panel Name="VideoDetails" >
@@ -168,12 +203,13 @@
                 </LayoutInput>
                 <Children>
                   <me:ActorsPanel Name="Actors" ActorList="[DetailsPage.ActingRoles]">
+
                   </me:ActorsPanel>
                 </Children>
               </Panel>
-              
+
             </Children>
-            
+
             <LayoutInput>
               <FormLayoutInput Left="[DetailsLeftAnchor]" Top="Title,1.05" Right="Parent,0.95"/>
             </LayoutInput>
@@ -194,7 +230,7 @@
       <cor:String Name="Synopsis" String="$Required"/>
       <Font Name="Normal" FontName="Verdana" FontSize="16"/>
     </Properties>
-    
+
     <Locals>
       <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true" HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Direct"/>
       <ScrollingData Name="ScrollingData" />
@@ -212,7 +248,7 @@
       </Condition>
 
     </Rules>
-    
+
     <Content>
       <Panel Name="SummaryPanel">
         <LayoutInput>
@@ -260,7 +296,7 @@
     <Properties>
       <coll:IList Name="ActorList" IList="$Required" />
     </Properties>
-    
+
     <Locals>
       <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true"/>
       <!-- ScrollingData contains many ways to customize how scrolling -->
@@ -275,19 +311,19 @@
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
     </Rules>
-    
-    <Content>
-          <Panel Layout="VerticalFlow">
-            <Children>
-              <Text Name="Actors" Content="Actors" Font ="font://s:LabelFont" Color="color://s:LabelColor" />
 
-              <Repeater Source="[ActorList]" Layout="VerticalFlow" MaximumSize="200,200">
-                <Content>
-                  <Text Content="[RepeatedItem!cor:String]" WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor" />
-                </Content>
-              </Repeater>
-            </Children>
-          </Panel>
+    <Content>
+      <Panel Layout="VerticalFlow">
+        <Children>
+          <Text Name="Actors" Content="Actors" Font ="font://s:LabelFont" Color="color://s:LabelColor" />
+
+          <Repeater Source="[ActorList]" Layout="VerticalFlow" MaximumSize="200,200">
+            <Content>
+              <Text Content="[RepeatedItem!cor:String]" WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor"/>
+            </Content>
+          </Repeater>
+        </Children>
+      </Panel>
     </Content>
   </UI>
 
@@ -298,7 +334,7 @@
     </Properties>
 
     <Rules>
-      
+
       <Rule>
         <Conditions>
           <Equality Source="[Text]" Value=""/>
@@ -307,20 +343,83 @@
           <Set Target="[LabelField.Visible]" Value="false" />
           <Set Target="[TextField.Visible]" Value="false" />
         </Actions>
-       </Rule>
+      </Rule>
     </Rules>
-    
+
     <Content>
       <Panel Layout="HorizontalFlow">
         <Children>
           <Text Name="LabelField" Content="[Label]" Font="font://s:Small" Color="color://s:LabelColor" />
           <Text Name="TextField" Content="[Text]" Font="font://s:Small" Color="color://s:NormalColor" />
-            <!--<LayoutInput>
+          <!--<LayoutInput>
               <FormLayoutInput Left="Image,1.02" Top="MovieSynopsis,1.02,15"/>
             </LayoutInput>-->
-          </Children>
+        </Children>
       </Panel>
     </Content>
   </UI>
+
+  <UI Name="DVDDisks">
+    <Properties>
+      <a:MovieDetailsPage Name="DetailsPage" a:MovieDetailsPage="$Required" />
+      <Choice Name="DiskListChoice" Choice="$Required" />
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" />
+      <ScrollingData Name="ScrollingData" />
+      <MouseWheelHandler Name="WheelHandler"/>
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[DiskRepeater]"/>
+    </Rules>
+
+    <Content>
+      <Panel Layout="VerticalFlow">
+        <Children>
+          <Repeater Name="DiskRepeater" Source="[DiskListChoice.Options]">
+            <Layout>
+              <FlowLayout Orientation="Vertical" Spacing="2,0"/>
+            </Layout>
+
+            <Content>
+              <me:ShowDisc DetailsPage="[DetailsPage]" Index="[RepeatedItemIndex]" DiscName="[RepeatedItem!a:DiskWrapper.ToString]" />
+            </Content>
+          </Repeater>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="ShowDisc">
+    <Properties>
+      <a:MovieDetailsPage Name="DetailsPage" a:MovieDetailsPage="$Required" />
+      <cor:String Name="DiscName" cor:String="$Required" />
+      <Index Name="Index" Index="$Required"/>
+    </Properties>
+
+    <Locals>
+      <Command Name="PlaySelectedDisk" Description="Plays the selected disc"/>
+    </Locals>
+
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+
+      <Changed Source="[PlaySelectedDisk.Invoked]">
+        <Actions>
+          <DebugTrace Message="Playing Selected Disk"></DebugTrace>
+          <Invoke Target="[DetailsPage.PlayDisk]" SelectedDisk="[Index.Value]" />
+        </Actions>
+      </Changed>
+
+    </Rules>
+
+    <Content>
+      <c:SimpleButton Name="Button" Text="[DiscName]" Command="[PlaySelectedDisk]"/>
+    </Content>
+  </UI>
+
 
 </Mcml>

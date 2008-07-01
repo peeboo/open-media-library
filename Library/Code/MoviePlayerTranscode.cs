@@ -121,7 +121,7 @@ namespace Library
             try
             {
                 retVal = (bool)MIIsMediaTranscoding.Invoke(_server, new object[] {
-                _title.FileLocation
+                _title.SelectedDisk.Path
             });
             }
             catch (Exception e)
@@ -139,7 +139,7 @@ namespace Library
         private void setCurrentBufferPath()
         {
             OMLApplication.DebugLine("Setting the current path for a currently transcoding/ed file");
-            object[] paramArray = new object[] { _title.FileLocation };
+            object[] paramArray = new object[] { _title.SelectedDisk.Path };
 
             try
             {
@@ -180,7 +180,7 @@ namespace Library
         {
             OMLApplication.DebugLine("Starting a transcode job");
             object[] paramArray = new object[3];
-            paramArray[0] = _title.FileLocation;
+            paramArray[0] = _title.SelectedDisk.Path;
             paramArray[1] = path_to_buffer;
             paramArray[2] = 0;
             try
