@@ -61,11 +61,18 @@ namespace OMLEngine
         private List<string> _subtitles = new List<string>();
         private string _videoResolution = "";
         private List<string> _extraFeatures = new List<string>();
-
+        private List<Disk> _disks = new List<Disk>();
+        private Disk _selectedDisk = null;
 
         #endregion
 
         #region properties
+
+        public Disk SelectedDisk
+        {
+            get { return _selectedDisk; }
+            set { _selectedDisk = value; }
+        }
 
         public List<string> ExtraFeatures
         {
@@ -253,8 +260,21 @@ namespace OMLEngine
         /// </summary>
         public string FileLocation
         {
-            get { return _fileLocation; }
-            set { _fileLocation = value.ToUpper().Trim(); }
+            get 
+            {
+                if (this._disks.Count == 1)
+                    return (this._disks[0].Path);
+                else
+                    return (String.Empty);
+            
+            }
+        }
+
+        // To Support Multi-Disk!
+        public List<Disk> Disks
+        {
+            get { return _disks; }
+            set { _disks = value; }
         }
 
         /// <summary>
@@ -262,8 +282,13 @@ namespace OMLEngine
         /// </summary>
         public VideoFormat VideoFormat
         {
-            get { return _videoFormat; }
-            set { _videoFormat = value; }
+            get
+            {
+                if (this.Disks.Count > 0)
+                    return _disks[0].Format;
+                else
+                    return VideoFormat.DVD;
+            }
         }
 
         /// <summary>
@@ -587,6 +612,7 @@ namespace OMLEngine
             _parentalRatingReason = GetSerializedString(info, "mpaa_rating_reason");
             _videoDetails = GetSerializedString(info, "video_details");
             _subtitles = GetSerializedList<List<string>>(info, "subtitles");
+            _disks = GetSerializedList<List<Disk>>(info, "disks");
             if (_videoFormat == VideoFormat.DVD)
             {
                 if (_videoStandard == "PAL")
@@ -607,6 +633,7 @@ namespace OMLEngine
         {
             //Utilities.DebugLine("[Title] Adding Title ("+_name+") to Serialization data");
             info.AddValue("file_location", _fileLocation);
+            info.AddValue("disks", _disks);
             info.AddValue("video_format", _videoFormat);
             info.AddValue("transcode_to_extender", _needsTranscode);
             info.AddValue("name", _name);

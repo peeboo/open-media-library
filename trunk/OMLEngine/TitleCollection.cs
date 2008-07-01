@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
 
 namespace OMLEngine
 {
@@ -23,10 +24,10 @@ namespace OMLEngine
             get { return _moviesByItemId; }
         }
 
-        public bool ContainsFileName(string filename)
+        public bool ContainsDisks(List<Disk> disks)
         {
-            if (filename.Trim().Length == 0) return false;
-            return (_moviesByFilename.ContainsKey(filename.ToUpper()));
+            if (disks.Count == 0) return false;
+            return (_moviesByFilename.ContainsKey(GetDiskHash(disks)));
         }
 
         public List<Title>.Enumerator GetEnumerator()
@@ -64,9 +65,10 @@ namespace OMLEngine
         {
             _list.Add(newTitle);
 
-            if ( newTitle.FileLocation.Length > 0 && !_moviesByFilename.ContainsKey(newTitle.FileLocation))
+            string key = GetDiskHash(newTitle.Disks);
+            if ( newTitle.Disks.Count > 0 && !_moviesByFilename.ContainsKey(key))
             {
-                _moviesByFilename.Add(newTitle.FileLocation, newTitle);
+                _moviesByFilename.Add(key, newTitle);
             }
             if (!_moviesByItemId.ContainsKey(newTitle.InternalItemID))
             {
@@ -77,9 +79,21 @@ namespace OMLEngine
         public void Remove(Title newTitle)
         {
             _moviesByItemId.Remove(newTitle.InternalItemID);
-            _moviesByFilename.Remove(newTitle.FileLocation);
+            _moviesByFilename.Remove(GetDiskHash(newTitle.Disks));
             _list.Remove(newTitle);
 
+        }
+
+        private string GetDiskHash(List<Disk> disks)
+        {
+            string temp = "";
+            foreach (Disk d in disks)
+            {
+                // we will concatonate the path + name for each disk and take the MD5 hash of that to determine if
+                // the disk collection changed
+                temp += d.Name + d.Path;
+            }
+            return CalculateMD5Hash(temp);
         }
 
         public void Replace(Title newTitle, Title oldTitle)
@@ -187,7 +201,10 @@ namespace OMLEngine
                 bformatter.Serialize(stream, _list.Count);
 
                 foreach (Title title in _list)
+                {
+                    //REMOVE DUPLICATES HERE FROM THE PRIMARY COLLECTION!!!!
                     bformatter.Serialize(stream, title);
+                }
 
                 stream.Close();
                 return true;
@@ -250,6 +267,15 @@ namespace OMLEngine
             }
             return false;
         }
+
+        private string CalculateMD5Hash(string input)
+        {
+            MD5 md5 = System.Security.Cryptography.MD5.Create();
+            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+            byte[] hash = md5.ComputeHash(inputBytes);
+            return (Convert.ToBase64String(hash));            
+        }
+
 
 
         #region serialization methods
