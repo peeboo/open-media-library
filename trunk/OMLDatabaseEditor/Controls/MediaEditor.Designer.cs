@@ -28,19 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tbFrontCover = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.tbFileLocation = new System.Windows.Forms.TextBox();
             this.tbBackCover = new System.Windows.Forms.TextBox();
             this.lblFileLocation = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
+            this.btnDiskAdd = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lblFrontCover = new System.Windows.Forms.Label();
             this.lblBackCover = new System.Windows.Forms.Label();
@@ -55,12 +54,17 @@
             this.grdGenres = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbpProducers = new System.Windows.Forms.TabPage();
+            this.grdProducers = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.grdActors = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbpActorsRoles = new System.Windows.Forms.TabPage();
             this.tbcCredits = new System.Windows.Forms.TabControl();
             this.tbpNonActorRoles = new System.Windows.Forms.TabPage();
+            this.grdNonActors = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.grdTags = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -118,11 +122,9 @@
             this.tbWebsite = new System.Windows.Forms.TextBox();
             this.tbUPC = new System.Windows.Forms.TextBox();
             this.lblUPCCode = new System.Windows.Forms.Label();
-            this.grdProducers = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.grdNonActors = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnDisksRemove = new System.Windows.Forms.Button();
+            this.btnDiskEdit = new System.Windows.Forms.Button();
+            this.lstDisks = new System.Windows.Forms.ListBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).BeginInit();
@@ -132,10 +134,12 @@
             this.tbpWriters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdGenres)).BeginInit();
             this.tbpProducers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdProducers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdActors)).BeginInit();
             this.tbpActorsRoles.SuspendLayout();
             this.tbcCredits.SuspendLayout();
             this.tbpNonActorRoles.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdNonActors)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdTags)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -148,8 +152,6 @@
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.gbxOther.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.grdProducers)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.grdNonActors)).BeginInit();
             this.SuspendLayout();
             // 
             // tbFrontCover
@@ -183,15 +185,6 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.CoverButton_Click);
             // 
-            // tbFileLocation
-            // 
-            this.tbFileLocation.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbFileLocation.Location = new System.Drawing.Point(6, 490);
-            this.tbFileLocation.Name = "tbFileLocation";
-            this.tbFileLocation.Size = new System.Drawing.Size(115, 21);
-            this.tbFileLocation.TabIndex = 44;
-            this.tbFileLocation.TextChanged += new System.EventHandler(this.TitleChanges);
-            // 
             // tbBackCover
             // 
             this.tbBackCover.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -207,39 +200,41 @@
             this.lblFileLocation.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFileLocation.Location = new System.Drawing.Point(6, 475);
             this.lblFileLocation.Name = "lblFileLocation";
-            this.lblFileLocation.Size = new System.Drawing.Size(65, 12);
+            this.lblFileLocation.Size = new System.Drawing.Size(30, 12);
             this.lblFileLocation.TabIndex = 43;
-            this.lblFileLocation.Text = "File Location";
+            this.lblFileLocation.Text = "Discs";
             // 
-            // button3
+            // btnDiskAdd
             // 
-            this.button3.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(124, 489);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(53, 22);
-            this.button3.TabIndex = 47;
-            this.button3.Text = "Browse";
-            this.button3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.btnDiskAdd.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDiskAdd.Location = new System.Drawing.Point(127, 494);
+            this.btnDiskAdd.Name = "btnDiskAdd";
+            this.btnDiskAdd.Size = new System.Drawing.Size(53, 22);
+            this.btnDiskAdd.TabIndex = 47;
+            this.btnDiskAdd.Text = "Add...";
+            this.btnDiskAdd.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnDiskAdd.UseVisualStyleBackColor = true;
+            this.btnDiskAdd.Click += new System.EventHandler(this.button3_Click);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.lstDisks);
+            this.groupBox1.Controls.Add(this.btnDiskEdit);
+            this.groupBox1.Controls.Add(this.btnDisksRemove);
             this.groupBox1.Controls.Add(this.lblFrontCover);
             this.groupBox1.Controls.Add(this.lblBackCover);
             this.groupBox1.Controls.Add(this.tbFrontCover);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.tbFileLocation);
             this.groupBox1.Controls.Add(this.tbBackCover);
             this.groupBox1.Controls.Add(this.lblFileLocation);
-            this.groupBox1.Controls.Add(this.button3);
+            this.groupBox1.Controls.Add(this.btnDiskAdd);
             this.groupBox1.Controls.Add(this.pbFrontCover);
             this.groupBox1.Controls.Add(this.pbBackCover);
             this.groupBox1.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(183, 516);
+            this.groupBox1.Size = new System.Drawing.Size(183, 582);
             this.groupBox1.TabIndex = 57;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Movie Locations";
@@ -295,7 +290,7 @@
             this.grdDirectors.Name = "grdDirectors";
             this.grdDirectors.RowHeadersWidth = 26;
             this.grdDirectors.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdDirectors.Size = new System.Drawing.Size(395, 78);
+            this.grdDirectors.Size = new System.Drawing.Size(395, 116);
             this.grdDirectors.TabIndex = 23;
             // 
             // dataGridViewTextBoxColumn1
@@ -310,7 +305,7 @@
             this.tbpDirectors.Location = new System.Drawing.Point(4, 21);
             this.tbpDirectors.Name = "tbpDirectors";
             this.tbpDirectors.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpDirectors.Size = new System.Drawing.Size(401, 84);
+            this.tbpDirectors.Size = new System.Drawing.Size(401, 122);
             this.tbpDirectors.TabIndex = 0;
             this.tbpDirectors.Text = "Directors";
             this.tbpDirectors.UseVisualStyleBackColor = true;
@@ -327,9 +322,9 @@
             this.grdWriters.Location = new System.Drawing.Point(3, 3);
             this.grdWriters.Name = "grdWriters";
             this.grdWriters.RowHeadersWidth = 26;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdWriters.RowsDefaultCellStyle = dataGridViewCellStyle7;
-            this.grdWriters.Size = new System.Drawing.Size(395, 78);
+            dataGridViewCellStyle25.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdWriters.RowsDefaultCellStyle = dataGridViewCellStyle25;
+            this.grdWriters.Size = new System.Drawing.Size(395, 116);
             this.grdWriters.TabIndex = 32;
             // 
             // dataGridViewTextBoxColumn2
@@ -344,7 +339,7 @@
             this.tbpWriters.Location = new System.Drawing.Point(4, 21);
             this.tbpWriters.Name = "tbpWriters";
             this.tbpWriters.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpWriters.Size = new System.Drawing.Size(401, 84);
+            this.tbpWriters.Size = new System.Drawing.Size(401, 122);
             this.tbpWriters.TabIndex = 1;
             this.tbpWriters.Text = "Writers";
             this.tbpWriters.UseVisualStyleBackColor = true;
@@ -358,11 +353,11 @@
             this.grdGenres.ColumnHeadersVisible = false;
             this.grdGenres.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn3});
-            this.grdGenres.Location = new System.Drawing.Point(198, 455);
+            this.grdGenres.Location = new System.Drawing.Point(8, 19);
             this.grdGenres.Name = "grdGenres";
             this.grdGenres.RowHeadersWidth = 26;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdGenres.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle26.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdGenres.RowsDefaultCellStyle = dataGridViewCellStyle26;
             this.grdGenres.Size = new System.Drawing.Size(138, 52);
             this.grdGenres.TabIndex = 24;
             // 
@@ -377,11 +372,34 @@
             this.tbpProducers.Controls.Add(this.grdProducers);
             this.tbpProducers.Location = new System.Drawing.Point(4, 21);
             this.tbpProducers.Name = "tbpProducers";
-            this.tbpProducers.Size = new System.Drawing.Size(401, 84);
+            this.tbpProducers.Size = new System.Drawing.Size(401, 122);
             this.tbpProducers.TabIndex = 2;
             this.tbpProducers.Text = "Producers";
             this.tbpProducers.UseVisualStyleBackColor = true;
             this.tbpProducers.Visible = false;
+            // 
+            // grdProducers
+            // 
+            this.grdProducers.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            this.grdProducers.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.grdProducers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grdProducers.ColumnHeadersVisible = false;
+            this.grdProducers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn9});
+            this.grdProducers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grdProducers.Location = new System.Drawing.Point(0, 0);
+            this.grdProducers.Name = "grdProducers";
+            this.grdProducers.RowHeadersWidth = 26;
+            dataGridViewCellStyle27.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdProducers.RowsDefaultCellStyle = dataGridViewCellStyle27;
+            this.grdProducers.Size = new System.Drawing.Size(401, 122);
+            this.grdProducers.TabIndex = 33;
+            // 
+            // dataGridViewTextBoxColumn9
+            // 
+            this.dataGridViewTextBoxColumn9.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn9.HeaderText = "Name";
+            this.dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
             // 
             // grdActors
             // 
@@ -395,9 +413,9 @@
             this.grdActors.Location = new System.Drawing.Point(0, 0);
             this.grdActors.Name = "grdActors";
             this.grdActors.RowHeadersWidth = 26;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdActors.RowsDefaultCellStyle = dataGridViewCellStyle9;
-            this.grdActors.Size = new System.Drawing.Size(401, 84);
+            dataGridViewCellStyle28.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdActors.RowsDefaultCellStyle = dataGridViewCellStyle28;
+            this.grdActors.Size = new System.Drawing.Size(401, 122);
             this.grdActors.TabIndex = 29;
             // 
             // dataGridViewTextBoxColumn4
@@ -417,7 +435,7 @@
             this.tbpActorsRoles.Controls.Add(this.grdActors);
             this.tbpActorsRoles.Location = new System.Drawing.Point(4, 21);
             this.tbpActorsRoles.Name = "tbpActorsRoles";
-            this.tbpActorsRoles.Size = new System.Drawing.Size(401, 84);
+            this.tbpActorsRoles.Size = new System.Drawing.Size(401, 122);
             this.tbpActorsRoles.TabIndex = 4;
             this.tbpActorsRoles.Text = "Actors/Roles";
             this.tbpActorsRoles.UseVisualStyleBackColor = true;
@@ -435,7 +453,7 @@
             this.tbcCredits.Location = new System.Drawing.Point(3, 16);
             this.tbcCredits.Name = "tbcCredits";
             this.tbcCredits.SelectedIndex = 0;
-            this.tbcCredits.Size = new System.Drawing.Size(409, 109);
+            this.tbcCredits.Size = new System.Drawing.Size(409, 147);
             this.tbcCredits.TabIndex = 49;
             // 
             // tbpNonActorRoles
@@ -443,10 +461,39 @@
             this.tbpNonActorRoles.Controls.Add(this.grdNonActors);
             this.tbpNonActorRoles.Location = new System.Drawing.Point(4, 21);
             this.tbpNonActorRoles.Name = "tbpNonActorRoles";
-            this.tbpNonActorRoles.Size = new System.Drawing.Size(401, 84);
+            this.tbpNonActorRoles.Size = new System.Drawing.Size(401, 122);
             this.tbpNonActorRoles.TabIndex = 5;
             this.tbpNonActorRoles.Text = "NonActing/Roles";
             this.tbpNonActorRoles.UseVisualStyleBackColor = true;
+            // 
+            // grdNonActors
+            // 
+            this.grdNonActors.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            this.grdNonActors.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.grdNonActors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grdNonActors.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn10,
+            this.dataGridViewTextBoxColumn11});
+            this.grdNonActors.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grdNonActors.Location = new System.Drawing.Point(0, 0);
+            this.grdNonActors.Name = "grdNonActors";
+            this.grdNonActors.RowHeadersWidth = 26;
+            dataGridViewCellStyle29.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdNonActors.RowsDefaultCellStyle = dataGridViewCellStyle29;
+            this.grdNonActors.Size = new System.Drawing.Size(401, 122);
+            this.grdNonActors.TabIndex = 30;
+            // 
+            // dataGridViewTextBoxColumn10
+            // 
+            this.dataGridViewTextBoxColumn10.HeaderText = "Actor Name";
+            this.dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
+            this.dataGridViewTextBoxColumn10.Width = 160;
+            // 
+            // dataGridViewTextBoxColumn11
+            // 
+            this.dataGridViewTextBoxColumn11.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn11.HeaderText = "Role";
+            this.dataGridViewTextBoxColumn11.Name = "dataGridViewTextBoxColumn11";
             // 
             // groupBox2
             // 
@@ -457,7 +504,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(195, 321);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(415, 128);
+            this.groupBox2.Size = new System.Drawing.Size(415, 166);
             this.groupBox2.TabIndex = 56;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Credits";
@@ -582,10 +629,11 @@
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.tabControl1);
+            this.groupBox3.Controls.Add(this.grdGenres);
             this.groupBox3.Controls.Add(this.grdTags);
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox3.Location = new System.Drawing.Point(195, 531);
+            this.groupBox3.Location = new System.Drawing.Point(198, 500);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(200, 234);
             this.groupBox3.TabIndex = 52;
@@ -634,8 +682,8 @@
             this.grdAudioTracks.Location = new System.Drawing.Point(3, 3);
             this.grdAudioTracks.Name = "grdAudioTracks";
             this.grdAudioTracks.RowHeadersWidth = 26;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdAudioTracks.RowsDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle30.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdAudioTracks.RowsDefaultCellStyle = dataGridViewCellStyle30;
             this.grdAudioTracks.Size = new System.Drawing.Size(189, 85);
             this.grdAudioTracks.TabIndex = 36;
             // 
@@ -803,7 +851,7 @@
             this.groupBox4.Controls.Add(this.comboBox2);
             this.groupBox4.Controls.Add(this.label10);
             this.groupBox4.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox4.Location = new System.Drawing.Point(394, 505);
+            this.groupBox4.Location = new System.Drawing.Point(401, 500);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(209, 234);
             this.groupBox4.TabIndex = 51;
@@ -1034,7 +1082,7 @@
             this.gbxOther.Controls.Add(this.dtpDateAdded);
             this.gbxOther.Controls.Add(this.lblUPCCode);
             this.gbxOther.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbxOther.Location = new System.Drawing.Point(3, 526);
+            this.gbxOther.Location = new System.Drawing.Point(3, 591);
             this.gbxOther.Name = "gbxOther";
             this.gbxOther.Size = new System.Drawing.Size(183, 213);
             this.gbxOther.TabIndex = 58;
@@ -1094,57 +1142,39 @@
             this.lblUPCCode.TabIndex = 0;
             this.lblUPCCode.Text = "UPC Code";
             // 
-            // grdProducers
+            // btnDisksRemove
             // 
-            this.grdProducers.BackgroundColor = System.Drawing.SystemColors.ControlLight;
-            this.grdProducers.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.grdProducers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grdProducers.ColumnHeadersVisible = false;
-            this.grdProducers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn9});
-            this.grdProducers.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grdProducers.Location = new System.Drawing.Point(0, 0);
-            this.grdProducers.Name = "grdProducers";
-            this.grdProducers.RowHeadersWidth = 26;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdProducers.RowsDefaultCellStyle = dataGridViewCellStyle11;
-            this.grdProducers.Size = new System.Drawing.Size(401, 84);
-            this.grdProducers.TabIndex = 33;
+            this.btnDisksRemove.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDisksRemove.Location = new System.Drawing.Point(126, 522);
+            this.btnDisksRemove.Name = "btnDisksRemove";
+            this.btnDisksRemove.Size = new System.Drawing.Size(53, 22);
+            this.btnDisksRemove.TabIndex = 56;
+            this.btnDisksRemove.Text = "Remove";
+            this.btnDisksRemove.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnDisksRemove.UseVisualStyleBackColor = true;
+            this.btnDisksRemove.Click += new System.EventHandler(this.btnDisksRemove_Click);
             // 
-            // dataGridViewTextBoxColumn9
+            // btnDiskEdit
             // 
-            this.dataGridViewTextBoxColumn9.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn9.HeaderText = "Name";
-            this.dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
+            this.btnDiskEdit.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDiskEdit.Location = new System.Drawing.Point(126, 550);
+            this.btnDiskEdit.Name = "btnDiskEdit";
+            this.btnDiskEdit.Size = new System.Drawing.Size(53, 22);
+            this.btnDiskEdit.TabIndex = 57;
+            this.btnDiskEdit.Text = "Edit...";
+            this.btnDiskEdit.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnDiskEdit.UseVisualStyleBackColor = true;
+            this.btnDiskEdit.Click += new System.EventHandler(this.btnDiskEdit_Click);
             // 
-            // grdNonActors
+            // lstDisks
             // 
-            this.grdNonActors.BackgroundColor = System.Drawing.SystemColors.ControlLight;
-            this.grdNonActors.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.grdNonActors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grdNonActors.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn10,
-            this.dataGridViewTextBoxColumn11});
-            this.grdNonActors.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grdNonActors.Location = new System.Drawing.Point(0, 0);
-            this.grdNonActors.Name = "grdNonActors";
-            this.grdNonActors.RowHeadersWidth = 26;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdNonActors.RowsDefaultCellStyle = dataGridViewCellStyle12;
-            this.grdNonActors.Size = new System.Drawing.Size(401, 84);
-            this.grdNonActors.TabIndex = 30;
-            // 
-            // dataGridViewTextBoxColumn10
-            // 
-            this.dataGridViewTextBoxColumn10.HeaderText = "Actor Name";
-            this.dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
-            this.dataGridViewTextBoxColumn10.Width = 160;
-            // 
-            // dataGridViewTextBoxColumn11
-            // 
-            this.dataGridViewTextBoxColumn11.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn11.HeaderText = "Role";
-            this.dataGridViewTextBoxColumn11.Name = "dataGridViewTextBoxColumn11";
+            this.lstDisks.FormattingEnabled = true;
+            this.lstDisks.ItemHeight = 12;
+            this.lstDisks.Location = new System.Drawing.Point(6, 494);
+            this.lstDisks.Name = "lstDisks";
+            this.lstDisks.Size = new System.Drawing.Size(115, 76);
+            this.lstDisks.TabIndex = 58;
+            this.lstDisks.SelectedIndexChanged += new System.EventHandler(this.lstDisks_SelectedIndexChanged);
             // 
             // MediaEditor
             // 
@@ -1152,7 +1182,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.Controls.Add(this.gbxOther);
-            this.Controls.Add(this.grdGenres);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox5);
@@ -1160,7 +1189,8 @@
             this.Controls.Add(this.groupBox4);
             this.MinimumSize = new System.Drawing.Size(620, 613);
             this.Name = "MediaEditor";
-            this.Size = new System.Drawing.Size(620, 769);
+            this.Size = new System.Drawing.Size(620, 807);
+            this.Load += new System.EventHandler(this.MediaEditor_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).EndInit();
@@ -1171,10 +1201,12 @@
             this.tbpWriters.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdGenres)).EndInit();
             this.tbpProducers.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.grdProducers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdActors)).EndInit();
             this.tbpActorsRoles.ResumeLayout(false);
             this.tbcCredits.ResumeLayout(false);
             this.tbpNonActorRoles.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.grdNonActors)).EndInit();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdTags)).EndInit();
             this.groupBox3.ResumeLayout(false);
@@ -1191,8 +1223,6 @@
             this.groupBox5.PerformLayout();
             this.gbxOther.ResumeLayout(false);
             this.gbxOther.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.grdProducers)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.grdNonActors)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1202,10 +1232,9 @@
         private System.Windows.Forms.TextBox tbFrontCover;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox tbFileLocation;
         private System.Windows.Forms.TextBox tbBackCover;
         private System.Windows.Forms.Label lblFileLocation;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btnDiskAdd;
         private System.Windows.Forms.PictureBox pbFrontCover;
         private System.Windows.Forms.PictureBox pbBackCover;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -1288,5 +1317,8 @@
         private System.Windows.Forms.DataGridView grdNonActors;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn10;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn11;
+        private System.Windows.Forms.ListBox lstDisks;
+        private System.Windows.Forms.Button btnDiskEdit;
+        private System.Windows.Forms.Button btnDisksRemove;
     }
 }

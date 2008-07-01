@@ -51,11 +51,14 @@ namespace OMLDatabaseEditor
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Controls.MediaEditor _currentEditor = (Controls.MediaEditor)this.tabsMediaPanel.SelectedTab.Controls[0];
-            Title _currentTitle = (Title)_titleCollection.MoviesByItemId[int.Parse(this.tabsMediaPanel.SelectedTab.Name)];
+            if (this.tabsMediaPanel.SelectedTab != null)
+            {
+                Controls.MediaEditor _currentEditor = (Controls.MediaEditor)this.tabsMediaPanel.SelectedTab.Controls[0];
+                Title _currentTitle = (Title)_titleCollection.MoviesByItemId[int.Parse(this.tabsMediaPanel.SelectedTab.Name)];
 
-            _currentEditor.SaveToTitle(_currentTitle);
-            SaveTitleChangesToDB(_currentTitle);
+                _currentEditor.SaveToTitle(_currentTitle);
+                SaveTitleChangesToDB(_currentTitle);
+            }
         }
 
         private void tsbNewTitle_Click(object sender, EventArgs e)
@@ -188,7 +191,26 @@ namespace OMLDatabaseEditor
 
             tabsMediaPanel.TabPages[_currentEditor.itemID.ToString()].Text = _currentEditor.TitleName;
         }
+        
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (tvSourceList.SelectedNode.Tag != null)
+            {
+                if (tvSourceList.SelectedNode.Tag.ToString() == "Movies")
+                {
+                    Title titleToRemove = _titleCollection.MoviesByItemId[int.Parse(tvSourceList.SelectedNode.Name)];
+                    DialogResult result = MessageBox.Show("Are you sure you want to delete " + titleToRemove.Name + "?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                    if (result == DialogResult.Yes)
+                    {
+                        tvSourceList.Nodes.Remove(tvSourceList.SelectedNode);
+                        _titleCollection.Remove(titleToRemove);
+                        _titleCollection.saveTitleCollection();
+                    }                   
+                }
+            }
+        }
 
     }
 }
+
 

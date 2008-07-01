@@ -95,7 +95,11 @@ namespace OMLDatabaseEditor.Controls
             tbFrontCover.Text = t.FrontCoverPath;
             pbBackCover.Image = ReadImageFromFile(t.BackCoverPath);
             tbBackCover.Text = t.BackCoverPath;
-            tbFileLocation.Text = t.FileLocation;
+            foreach (Disk d in t.Disks)
+            {
+                lstDisks.Items.Add(d);
+            }
+            //tbFileLocation.Text = t.FileLocation;
 
             // Other
             tbUPC.Text = t.UPC;
@@ -211,7 +215,13 @@ namespace OMLDatabaseEditor.Controls
             // Movie Locations
             t.FrontCoverPath = tbFrontCover.Text;
             t.BackCoverPath = tbBackCover.Text;
-            t.FileLocation = tbFileLocation.Text;
+            t.Disks.Clear();
+            foreach (Disk d in lstDisks.Items)
+            {
+                t.Disks.Add(d); 
+            }
+            
+            //t.FileLocation = tbFileLocation.Text;
 
             // Other
             t.UPC = tbUPC.Text;
@@ -376,7 +386,7 @@ namespace OMLDatabaseEditor.Controls
             }
             catch (Exception ex)
             {
-
+                Utilities.DebugLine(ex.ToString());
             }
 
             return null;
@@ -405,7 +415,8 @@ namespace OMLDatabaseEditor.Controls
                     } 
                 } 
                 catch (Exception ex) 
-                { 
+                {
+                    Utilities.DebugLine(ex.ToString());
                 } 
             }
         }
@@ -427,20 +438,34 @@ namespace OMLDatabaseEditor.Controls
 
         private void button3_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.InitialDirectory = @"C:\";
-            ofd.CheckPathExists = true;
-            ofd.CheckFileExists = true;
-            ofd.RestoreDirectory = true;
-            if (ofd.ShowDialog() == DialogResult.OK)
+            //OpenFileDialog ofd = new OpenFileDialog();
+            //ofd.InitialDirectory = @"C:\";
+            //ofd.CheckPathExists = true;
+            //ofd.CheckFileExists = true;
+            //ofd.RestoreDirectory = true;
+            //if (ofd.ShowDialog() == DialogResult.OK)
+            //{
+            //    try
+            //    {
+            //        tbFileLocation.Text = ofd.FileName;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //    }
+            //}
+
+            DiskEditor dlg = new DiskEditor();
+            dlg.FileName = "Disc " + lstDisks.Items.Count + 1;
+            if (dlg.ShowDialog() == DialogResult.OK)
             {
-                try
-                {
-                    tbFileLocation.Text = ofd.FileName;
-                }
-                catch (Exception ex)
-                {
-                }
+                lstDisks.Items.Add(
+                    new Disk(
+                        dlg.FileName, 
+                        dlg.Path,
+                        (VideoFormat)Enum.Parse(
+                            typeof(VideoFormat), 
+                            Path.GetExtension(dlg.Path).ToUpper().Substring(1).Replace("-",""),
+                            true)));
             }
 
         }
@@ -458,6 +483,48 @@ namespace OMLDatabaseEditor.Controls
         private void TitleNameChanges(Object sender, EventArgs e)
         {
             _titleNameChanged(EventArgs.Empty);
+        }
+
+        private void lstDisks_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ValidateButtonState();            
+        }
+
+        private void ValidateButtonState()
+        {
+            bool buttonstate = !(lstDisks.SelectedIndex < 0);
+            this.btnDiskEdit.Enabled = buttonstate;
+            this.btnDisksRemove.Enabled = buttonstate;
+        }
+
+        private void MediaEditor_Load(object sender, EventArgs e)
+        {
+            ValidateButtonState();
+        }
+
+        private void btnDisksRemove_Click(object sender, EventArgs e)
+        {
+            lstDisks.Items.RemoveAt(lstDisks.SelectedIndex);
+        }
+
+        private void btnDiskEdit_Click(object sender, EventArgs e)
+        {
+            DiskEditor dlg = new DiskEditor();
+            dlg.Path = ((Disk)lstDisks.SelectedItem).Path;
+            dlg.FileName = ((Disk)lstDisks.SelectedItem).Name;
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                int currentselection = lstDisks.SelectedIndex;
+                lstDisks.Items.RemoveAt(currentselection);                    
+                lstDisks.Items.Insert(currentselection, 
+                    new Disk(
+                        dlg.FileName,
+                        dlg.Path,
+                        (VideoFormat)Enum.Parse(
+                            typeof(VideoFormat),
+                            Path.GetExtension(dlg.Path).ToUpper().Substring(1),
+                            true)));
+            }
         }
 
     }

@@ -77,6 +77,7 @@
             this.MenuStripTitle = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MenuItemEditNewTab = new System.Windows.Forms.ToolStripMenuItem();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -472,9 +473,10 @@
             // MenuStripTitle
             // 
             this.MenuStripTitle.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MenuItemEditNewTab});
+            this.MenuItemEditNewTab,
+            this.deleteToolStripMenuItem});
             this.MenuStripTitle.Name = "contextMenuStrip1";
-            this.MenuStripTitle.Size = new System.Drawing.Size(158, 26);
+            this.MenuStripTitle.Size = new System.Drawing.Size(158, 70);
             this.MenuStripTitle.Text = "test";
             // 
             // MenuItemEditNewTab
@@ -483,6 +485,13 @@
             this.MenuItemEditNewTab.Size = new System.Drawing.Size(157, 22);
             this.MenuItemEditNewTab.Text = "Edit in New Tab";
             this.MenuItemEditNewTab.Click += new System.EventHandler(this.MenuItemEditTab_Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // OMLDatabaseEditor
             // 
@@ -563,6 +572,8 @@
         private System.Windows.Forms.TabControl tabsMediaPanel;
         private System.Windows.Forms.ToolStripMenuItem MenuItemEditNewTab;
         private System.Windows.Forms.ToolStripButton tsbClose;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
     }
 }
+
 
