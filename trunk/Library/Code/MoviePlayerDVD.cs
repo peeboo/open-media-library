@@ -21,7 +21,7 @@ namespace Library
 
         public bool PlayMovie()
         {
-            string media = "DVD://" + _title.FileLocation;
+            string media = "DVD://" + _title.SelectedDisk.Path;
             media.Replace('\\', '/');
             if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, media, false))
             {

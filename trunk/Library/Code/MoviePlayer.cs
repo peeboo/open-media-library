@@ -36,8 +36,8 @@ namespace Library
         static public IPlayMovie CreateMoviePlayer(MovieItem movieItem)
         {
             // for now play just online titles. add offline capabilities later
-            OMLApplication.DebugLine("[MoviePlayerFactory] Determing MoviePlayer to use for: " + movieItem.FileLocation);
-            if (File.Exists(movieItem.FileLocation) || Directory.Exists(movieItem.FileLocation))
+            OMLApplication.DebugLine("[MoviePlayerFactory] Determing MoviePlayer to use for: " + movieItem.SelectedDisk.Path);
+            if (File.Exists(movieItem.SelectedDisk.Path) || Directory.Exists(movieItem.SelectedDisk.Path))
             {
                 if (OMLApplication.Current.IsExtender && NeedsTranscode(movieItem.TitleObject) )
                 {
@@ -49,12 +49,12 @@ namespace Library
                     OMLApplication.DebugLine("MountImageMoviePlayer created");
                     return new MountImagePlayer(movieItem);
                 }
-                else if (movieItem.TitleObject.VideoFormat == VideoFormat.DVD)
+                else if (movieItem.TitleObject.SelectedDisk.Format == VideoFormat.DVD)
                 {
                     OMLApplication.DebugLine("DVDMoviePlayer created");
                     return new DVDPlayer(movieItem);
                 }
-                else if (movieItem.TitleObject.VideoFormat == VideoFormat.WPL)
+                else if (movieItem.TitleObject.SelectedDisk.Format == VideoFormat.WPL)
                 {
                     OMLApplication.DebugLine("WPLMoviePlayer created");
                     return new MoviePlayerWPL(movieItem);
@@ -88,7 +88,7 @@ namespace Library
         // keep all the Playing logic here
         static private bool NeedsMounting( Title title )
         {
-            switch (title.VideoFormat)
+            switch (title.SelectedDisk.Format)
             {
                 case VideoFormat.BIN:
                     return true;
@@ -108,7 +108,7 @@ namespace Library
         // keep all the Playing logic here
         static private bool NeedsTranscode( Title title)
         {
-            switch (title.VideoFormat)
+            switch (title.SelectedDisk.Format)
             {
                 case VideoFormat.DVRMS:
                     return false;
@@ -124,4 +124,5 @@ namespace Library
         }
     }
 }
+
 

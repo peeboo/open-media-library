@@ -16,35 +16,37 @@ namespace Library
     /// </summary>
     public class MovieDetailsPage : ModelItem
     {
+
+        #region Private Variables
         /// <summary>The URI of the media at its locally cached location.</summary>
         private FileInfo _localMedia = null;
         private MovieItem _movieDetails = null;
+        private bool _isShowingDisks = false;
+        private string _playMovieCommandText = "Show Discs";
+        private IList _commands;
+        private string _metadata;
+        private Image _backgroundImage;
+        private Choice _diskChoice;
+        private Command _hideDisks;
+        private Command _showDisks;
+        #endregion
 
-        public MovieDetailsPage(MovieItem item)
+        #region Public Properties
+
+        public string PlayMovieCommandText
         {
-            LoadDetails(item);
-        }
-
-        private void LoadDetails(MovieItem item)
-        {
-            _movieDetails = item;
-            _localMedia = null;
-
-            if (item.FrontCover == null)
+            get
             {
-                OMLApplication.DebugLine("Details Page.LoadMovies: front cover is null");
+                if (this.MovieDetails.Disks.Count == 1)
+                    return "Play Movie";
+                else if (this.MovieDetails.Disks.Count == 0)
+                    return "No Discs!";
+                else
+                    return _playMovieCommandText;
             }
-
-            _backgroundImage = item.FrontCover;
-
-            try
+            set
             {
-                if( File.Exists(item.FileLocation) )
-                    _localMedia = new System.IO.FileInfo(item.FileLocation);
-            }
-            catch (Exception e)
-            {
-                OMLApplication.DebugLine("Details Page.LoadMovies exception: " + e.Message);
+                _playMovieCommandText = value;
             }
         }
 
@@ -175,7 +177,7 @@ namespace Library
 
         public string Rating
         {
-            get 
+            get
             {
                 if (_movieDetails.Rating.Trim().Length > 0)
                     return _movieDetails.Rating;
@@ -196,12 +198,12 @@ namespace Library
 
         public string Length
         {
-            get 
+            get
             {
-                if( _movieDetails.TitleObject.Runtime > 0 )
-                    return  _movieDetails.Runtime + " min"; 
+                if (_movieDetails.TitleObject.Runtime > 0)
+                    return _movieDetails.Runtime + " min";
                 else
-                    return ""; 
+                    return "";
             }
             set
             {
@@ -215,7 +217,7 @@ namespace Library
 
         public string ReleaseDate
         {
-            get 
+            get
             {
                 if (_movieDetails.TitleObject.ReleaseDate != DateTime.MinValue)
                     return _movieDetails.ReleaseDate;
@@ -266,7 +268,7 @@ namespace Library
                     res += s;
                 }
                 return res;
-           }
+            }
         }
 
         public string TagsAsString
@@ -301,8 +303,9 @@ namespace Library
             get
             {
                 string details = "";
-                details += _movieDetails.TitleObject.VideoFormat.ToString();
-                return _movieDetails.TitleObject.VideoDetails; 
+                if (_movieDetails.TitleObject.Disks.Count > 0)
+                    details += _movieDetails.TitleObject.Disks[0].Format.ToString();  //again, should really do this on a per disk bases, but this should be ok for now
+                return _movieDetails.TitleObject.VideoDetails;
             }
         }
 
@@ -338,13 +341,113 @@ namespace Library
             //}
         }
 
-        public void PlayMovie()
+        public Choice DiskChoice
         {
-            _movieDetails.PlayMovie();
+            get { return _diskChoice; }
         }
 
-        private IList _commands;
-        private string _metadata;
-        private Image _backgroundImage;
+        public Command ShowDisks
+        {
+            get { return _showDisks; }
+        }
+
+        public Command HideDisks
+        {
+            get { return _hideDisks; }
+        }
+
+        #endregion
+
+        public MovieDetailsPage(MovieItem item)
+        {
+            LoadDetails(item);
+        }
+
+        private void LoadDetails(MovieItem item)
+        {
+            _movieDetails = item;
+            _localMedia = null;
+
+            if (item.FrontCover == null)
+            {
+                OMLApplication.DebugLine("Details Page.LoadMovies: front cover is null");
+            }
+
+            _backgroundImage = item.FrontCover;
+
+            _diskChoice = new Choice();
+            if (_movieDetails.Disks.Count > 0)
+            {
+                _diskChoice.Options = _movieDetails.Disks;
+            }
+            else
+            {
+                Disk[] temp = { new Disk() };
+                _diskChoice.Options = temp; // MCE barfs if Options is bound to empty List.
+            }
+            _showDisks = new Command();
+            _hideDisks = new Command();
+
+            //try
+            //{
+            //    if( File.Exists(item.FileLocation) )
+            //        _localMedia = new System.IO.FileInfo(item.FileLocation);
+            //}
+            //catch (Exception e)
+            //{
+            //    OMLApplication.DebugLine("Details Page.LoadMovies exception: " + e.Message);
+            //}
+        }
+
+        
+        
+
+        public void PlayMovie()
+        {
+            if (_movieDetails.Disks.Count == 0)
+            {
+                Utilities.DebugLine("Movie has no disks!");
+            }
+            else if (_movieDetails.Disks.Count > 1)
+            {
+                if (_isShowingDisks)  // disk page is currently shown, so we should change to Hide Details
+                {
+                    HideDisks.Invoke();
+                    FirePropertyChanged("HideDisks");
+                    _isShowingDisks = false;
+                }
+                else  // Otherwise show the disk list and change the text to Show Discs
+                {
+                    ShowDisks.Invoke();
+                    FirePropertyChanged("ShowDisks");
+                    _isShowingDisks = true;
+                }
+            }
+            else  //only one disk, play it
+            {
+                _movieDetails.SelectedDisk = _movieDetails.Disks[0];
+                _movieDetails.PlayMovie();
+            }
+        }
+        
+        public void PlayDisk(int SelectedDisk)
+        {
+            // Play the Selected Disk
+            _movieDetails.SelectedDisk = _movieDetails.Disks[SelectedDisk];
+            _movieDetails.PlayMovie();
+        }
+    }
+
+
+    // since for some reason Media Center's MCML engine will not load the OMLEngine Assembly 
+    // This prevents me from casting the Disks Repeater items to Disk type.
+    // By creating this wrapper, I can do the cast successfully. 
+    public class DiskWrapper : Disk
+    {
+
     }
 }
+
+
+
+

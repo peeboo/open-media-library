@@ -220,6 +220,12 @@ namespace Library
         private Image _backCoverArtImage;
         private List<string> _actingRoles;
 
+        public Disk SelectedDisk
+        {
+            get { return _titleObj.SelectedDisk; }
+            set { _titleObj.SelectedDisk = value; }
+        }
+
         public List<string> ActingRoles
         {
             get { return _actingRoles; }
@@ -333,6 +339,8 @@ namespace Library
             MovieDetailsPage page = new MovieDetailsPage(item);
             return page;
         }
+     
+        
 
         /// <summary>
         /// Plays the movie.
@@ -358,10 +366,16 @@ namespace Library
         /// Gets or sets the file location.
         /// </summary>
         /// <value>The file location.</value>
-        public string FileLocation
+        //public string FileLocation
+        //{
+        //    get { return _titleObj.SelectedDisk.Path; }
+        //    set { _titleObj.SelectedDisk.Path = value; }
+        //}
+
+        public List<Disk> Disks
         {
-            get { return _titleObj.FileLocation; }
-            set { _titleObj.FileLocation = value; }
+            get { return _titleObj.Disks; }
+            set { _titleObj.Disks = value; }
         }
 
         /// <summary>

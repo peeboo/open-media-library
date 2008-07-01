@@ -26,14 +26,14 @@ namespace Library
                 OMLApplication.DebugLine("Going to play movie at: " + mount_location);
                 if (mount_location != null)
                 {
-                    _title.FileLocation = mount_location;
+                    _title.SelectedDisk.Path = mount_location;
                     IPlayMovie player = new DVDPlayer(_title);
                     OMLApplication.DebugLine("Playing now");
                     return player.PlayMovie();
                 }
                 else
                 {
-                    AddInHost.Current.MediaCenterEnvironment.Dialog("Mounting images not implemented yet. File " + _title.FileLocation, "Error", DialogButtons.Cancel, 0, true);
+                    AddInHost.Current.MediaCenterEnvironment.Dialog("Mounting images not implemented yet. File " + _title.SelectedDisk.Path, "Error", DialogButtons.Cancel, 0, true);
                 }
             }
             return false;
@@ -67,14 +67,14 @@ namespace Library
             {
                 OMLApplication.DebugLine("HasDaemonTools: TRUE");
                 cmd.StartInfo.FileName = "\"" + mount_util_path + "\"";
-                cmd.StartInfo.Arguments = @"-mount " + VirtualDiscDriveNumber + "," + "\"" + title.FileLocation + "\"";
+                cmd.StartInfo.Arguments = @"-mount " + VirtualDiscDriveNumber + "," + "\"" + title.SelectedDisk.Path + "\"";
                 cmd.StartInfo.CreateNoWindow = true;
                 cmd.StartInfo.RedirectStandardError = true;
                 cmd.StartInfo.RedirectStandardOutput = true;
                 cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 cmd.StartInfo.UseShellExecute = false;
 
-                OMLApplication.DebugLine("Mounting image: " + title.FileLocation);
+                OMLApplication.DebugLine("Mounting image: " + title.SelectedDisk.Path);
                 OMLApplication.DebugLine("CMD: " + cmd.StartInfo.FileName + cmd.StartInfo.Arguments);
                 cmd.Start();
 

@@ -19,8 +19,8 @@ namespace Library
             AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
             AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += Transport_PropertyChanged;
 
-            OMLApplication.DebugLine("[MoviePlayerWPL] Loading for playlist: " + _mItem.FileLocation);
-            _wplm = new WindowsPlayListManager(_mItem.FileLocation);
+            OMLApplication.DebugLine("[MoviePlayerWPL] Loading for playlist: " + _mItem.SelectedDisk.Path);
+            _wplm = new WindowsPlayListManager(_mItem.SelectedDisk.Path);
             _currentItem = 0;
         }
 
@@ -36,9 +36,9 @@ namespace Library
                     PlayListItem item = (PlayListItem)_wplm.PlayListItems[_currentItem];
                     if (item != null)
                     {
-                        _mItem.FileLocation = item.FileLocation;
-                        _mItem.TitleObject.VideoFormat = VideoFormat.WMV;
-                        Utilities.DebugLine("Playing now: " + _mItem.FileLocation);
+                        _mItem.SelectedDisk.Path = item.FileLocation;
+                        _mItem.TitleObject.SelectedDisk.Format = VideoFormat.WMV;
+                        Utilities.DebugLine("Playing now: " + _mItem.SelectedDisk.Path);
                         IPlayMovie player = MoviePlayerFactory.CreateMoviePlayer(_mItem);
                         if (player != null)
                             player.PlayMovie();

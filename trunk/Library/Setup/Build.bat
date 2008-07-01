@@ -5,17 +5,15 @@ REM Determine whether we are on an 32 or 64 bit machine
 if "%PROCESSOR_ARCHITECTURE%"=="x86" if "%PROCESSOR_ARCHITEW6432%"=="" goto x86
 
 set ProgramFilesPath=%ProgramFiles(x86)%
-SET OUTPUTNAME=..\bin\%BUILD_TYPE%\omlsetupx64.msi
 
 goto startInstall
 
 :x86
 
 set ProgramFilesPath=%ProgramFiles%
-SET OUTPUTNAME=..\bin\%BUILD_TYPE%\omlsetupx86.msi
 
 :startInstall
-
+SET OUTPUTNAME=..\bin\%BUILD_TYPE%\omlsetupx86.msi
 pushd "%~dp0"
 
 REM svn info > info.tmp
