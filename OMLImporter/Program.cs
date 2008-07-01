@@ -132,9 +132,8 @@ namespace OMLImporter
                 {               
                     if (isDirty) 
                     {
-                        Console.WriteLine("Adding Titles ...");
-                        mainTitleCollection.saveTitleCollection();
-                        isDirty = false;
+                        Console.WriteLine("Adding Titles ...");                        
+                        isDirty = !mainTitleCollection.saveTitleCollection();
                     }
                     Console.WriteLine("Complete!");
                     continue;
@@ -255,12 +254,13 @@ namespace OMLImporter
 
             foreach (Title t in titles)
             {
-                if (mainTitleCollection.ContainsFileName(t.FileLocation))
+                if (mainTitleCollection.ContainsDisks(t.Disks))
                 {
-                    Console.WriteLine("Title {0} at location {1} skipped because already in the collection", t.Name, t.FileLocation);
+                    Console.WriteLine("Title {0} at location {1} skipped because already in the collection", t.Name);
                     numberOfTitlesSkipped++;
                     continue;
                 }
+
 
                 Console.WriteLine("Adding: " + t.Name);
                 if (YesToAll == false)

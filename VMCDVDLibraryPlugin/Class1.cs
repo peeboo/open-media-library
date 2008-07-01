@@ -100,7 +100,10 @@ namespace VMCDVDLibraryPlugin
                                 {
                                     Title newVideo = new Title();
                                     newVideo.Name = GetSuggestedMovieName(video);
-                                    newVideo.FileLocation = video;
+                                    Disk disk = new Disk();
+                                    disk.Path = video;
+                                    disk.Name = "Disk 1";
+                                    disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
 
                                     string pathWithNoExtension = Path.GetFileNameWithoutExtension(video);
                                     if (File.Exists(pathWithNoExtension + ".jpg"))
@@ -113,16 +116,7 @@ namespace VMCDVDLibraryPlugin
                                         // fore the future
                                         UpdateTitleFromOMLXML(newVideo);
                                     }
-
-                                    try
-                                    {
-                                        VideoFormat vf = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
-                                        newVideo.VideoFormat = vf;
-                                        AddTitle(newVideo);
-                                    }
-                                    catch
-                                    {
-                                    }
+                                    AddTitle(newVideo);
                                 }
                             }
                         }
@@ -176,16 +170,18 @@ namespace VMCDVDLibraryPlugin
                     }
 
                     t.ImporterSource = "VMCDVDLibraryPlugin";
-                    t.VideoFormat = VideoFormat.DVD;
+                    Disk disk = new Disk();
+                    disk.Name = "Disk 1";
+                    disk.Format = VideoFormat.DVD;
                     if (File.Exists(folderName + "\\VTS_01_1.VOB"))
                     {
-                        t.FileLocation = folderName;
+                        disk.Path = folderName;
                     }
                     else
                     {
-                        t.FileLocation = folderName + "\\VIDEO_TS";
+                        disk.Path = folderName + "\\VIDEO_TS";
                     }
-
+                    t.Disks.Add(disk);
                     t.MetadataSourceName = "VMC DVD Library";
                     return t;
                 }

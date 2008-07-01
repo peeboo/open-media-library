@@ -185,8 +185,11 @@ namespace MovieCollectorzPlugin
                                             
                                             if (IsSupportedFormat(ext))
                                             {
-                                                newTitle.VideoFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                                                newTitle.FileLocation = url.InnerText;
+                                                Disk disk = new Disk();
+                                                disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                                                disk.Path = url.InnerText;
+                                                disk.Name = "Disk 1";
+                                                newTitle.Disks.Add(disk);
                                                 break;
                                             }
                                         }

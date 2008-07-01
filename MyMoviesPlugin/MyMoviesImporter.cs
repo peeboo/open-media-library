@@ -282,35 +282,61 @@ namespace MyMoviesPlugin
                                 try
                                 {
                                     di = new DirectoryInfo(directory);
-                                    if (di != null)
+                                    if (di.Exists)
                                     {
                                         Utilities.DebugLine("[MyMoviesImporter] Directory is valid, searching for files");
                                         FileSystemInfo[] infos = di.GetFileSystemInfos();
                                         foreach (FileSystemInfo info in infos)
                                         {
-                                            Utilities.DebugLine("[MyMoviesImporter] Found a file ("+info.FullName+")");
+                                            Utilities.DebugLine("[MyMoviesImporter] Found a file (" + info.FullName + ")");
                                             if (info.GetType().Equals(typeof(FileInfo)))
                                             {
                                                 string ext = info.Extension.Substring(1);
                                                 if (IsSupportedFormat(ext))
                                                 {
                                                     Utilities.DebugLine("[MyMoviesImporter] File is a valid format, adding file");
-                                                    newTitle.VideoFormat =
-                                                        (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                                                    newTitle.FileLocation = info.FullName;
+                                                    newTitle.Disks.Add(new Disk(
+                                                        disc.SelectSingleNode("Name").InnerText,
+                                                        info.FullName,
+                                                        (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true)));
                                                     break;
                                                 }
                                             }
                                             if (info.GetType().Equals(typeof(DirectoryInfo)))
                                             {
-                                                Utilities.DebugLine("[MyMoviesImporter] Director found ("+info.FullName+")");
+                                                Utilities.DebugLine("[MyMoviesImporter] directory found (" + info.FullName + ")");
                                                 if (info.Name.ToUpper().CompareTo("VIDEO_TS") == 0)
                                                 {
                                                     Utilities.DebugLine("[MyMoviesImporter] Video_ts directory found, adding");
-                                                    newTitle.VideoFormat = VideoFormat.DVD;
-                                                    newTitle.FileLocation = info.FullName;
+                                                    newTitle.Disks.Add(new Disk(
+                                                        disc.SelectSingleNode("Name").InnerText,
+                                                        info.FullName,
+                                                        VideoFormat.DVD));
                                                     break;
                                                 }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //it might be a file
+                                        FileInfo file = new FileInfo(directory);
+                                        if (file.Exists)
+                                        {
+                                            Utilities.DebugLine("[MyMoviesImporter] Found a file (" + file.FullName + ")");
+                                            if (file.GetType().Equals(typeof(FileInfo)))
+                                            {
+                                                string ext = file.Extension.Substring(1).Replace("-", "");
+                                                if (IsSupportedFormat(ext))
+                                                {
+                                                    Utilities.DebugLine("[MyMoviesImporter] File is a valid format, adding file");
+                                                    newTitle.Disks.Add(new Disk(
+                                                        disc.SelectSingleNode("Name").InnerText,
+                                                        file.FullName,
+                                                        (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true)));
+                                                    break;
+                                                }
+
                                             }
                                         }
                                     }
