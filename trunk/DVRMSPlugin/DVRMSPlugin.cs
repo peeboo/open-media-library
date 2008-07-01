@@ -92,13 +92,16 @@ namespace DVRMSPlugin
                             }
                             newTitle.ImporterSource = @"DVRMSImporter";
                             newTitle.MetadataSourceName = @"DVR-MS";
-                            newTitle.FileLocation = file;
+                            Disk disk = new Disk();
+                            string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
+                            disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                            disk.Path = file;
+                            disk.Name = "Disk 1";
+                            newTitle.Disks.Add(disk);
                             if (!String.IsNullOrEmpty(newTitle.AspectRatio))
                             {
                                 newTitle.AspectRatio = @"Widescreen";
                             }
-                            string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
-                            newTitle.VideoFormat = (VideoFormat) Enum.Parse(typeof(VideoFormat), ext, true);
                             string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
                             if (File.Exists(cover))
                             {
@@ -179,9 +182,12 @@ namespace DVRMSPlugin
                             newTitle.Name = Path.GetFileNameWithoutExtension(file);
                             newTitle.ImporterSource = @"DVRMSImporter";
                             newTitle.MetadataSourceName = @"DVR-MS";
-                            newTitle.FileLocation = file;
+                            Disk disk = new Disk();
+                            disk.Name = "Disk 1";
+                            disk.Path = file;
                             string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
-                            newTitle.VideoFormat = (VideoFormat) Enum.Parse(typeof(VideoFormat), ext, true);
+                            disk.Format = (VideoFormat) Enum.Parse(typeof(VideoFormat), ext, true);
+                            newTitle.Disks.Add(disk);                         
                             string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
                             if (File.Exists(cover))
                             {

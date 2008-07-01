@@ -17,7 +17,11 @@ namespace OMLTestSuite
             t.CountryOfOrigin = "US";
             t.DateAdded = new DateTime(2008, 01, 01);
             t.Studio = "Paramount";
-            t.FileLocation = "myfile.wpl";
+            Disk disk = new Disk();
+            disk.Name = "Disk 1";
+            disk.Path = "myfile.wpl";
+            disk.Format = VideoFormat.WPL;
+            t.Disks.Add(disk);
             t.FrontCoverPath = "front.jpg";
             t.WatchedCount = 1;
             t.ImporterSource = "MyMovies";
@@ -32,7 +36,6 @@ namespace OMLTestSuite
             t.Synopsis = "This is my long synopsis of my movie";
             t.UPC = "123ABC";
             t.UserStarRating = 5;
-            t.VideoFormat = VideoFormat.WPL;
             t.VideoStandard = "NTSC";
             t.AddActor(new Person("Translucent"));
             t.AddActor(new Person("taranu"));
@@ -50,7 +53,8 @@ namespace OMLTestSuite
             Assert.AreEqual("US", t.CountryOfOrigin);
             Assert.IsTrue(new DateTime(2008, 01, 01).CompareTo(t.DateAdded) == 0);
             Assert.AreEqual("Paramount", t.Studio);
-            Assert.AreEqual("myfile.wpl", t.FileLocation);
+            Assert.AreEqual("myfile.wpl", t.Disks[0].Path);
+            Assert.AreEqual("Disk 1", t.Disks[0].Name);
             Assert.AreEqual("front.jpg", t.FrontCoverPath);
             Assert.AreEqual(1, t.WatchedCount);
             Assert.AreEqual("MyMovies", t.ImporterSource);
@@ -63,7 +67,7 @@ namespace OMLTestSuite
             Assert.IsTrue(new DateTime(2008, 01, 01).CompareTo(t.ReleaseDate) == 0);
             Assert.AreEqual("123ABC", t.UPC);
             Assert.AreEqual(5, t.UserStarRating);
-            Assert.AreEqual(VideoFormat.WPL, t.VideoFormat);
+            Assert.AreEqual(VideoFormat.WPL, t.Disks[0].Format);
             Assert.AreEqual("NTSC", t.VideoStandard);
             Assert.AreEqual(2, t.Actors.Count);
             Assert.AreEqual("Translucent", ((Person)t.Actors[0]).full_name);

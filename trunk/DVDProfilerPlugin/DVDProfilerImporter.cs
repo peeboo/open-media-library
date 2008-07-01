@@ -84,21 +84,24 @@ namespace DVDProfilerPlugin
                     XmlNode isDVD = node.SelectSingleNode("DVD");
                     XmlNode isHDDVD = node.SelectSingleNode("HDDVD");
                     XmlNode isBluRay = node.SelectSingleNode("BluRay");
+                    Disk disk = new Disk();
+                    disk.Name = "Disk 1";
                     if (isDVD != null && String.Compare(isDVD.InnerText, "TRUE", StringComparison.CurrentCultureIgnoreCase) == 0)
                     {
-                        newTitle.VideoFormat = VideoFormat.DVD;
+                        disk.Format = VideoFormat.DVD;
                         break;
                     }
                     if (isHDDVD != null && String.Compare(isHDDVD.InnerText, "TRUE", StringComparison.CurrentCultureIgnoreCase) == 0)
                     {
-                        newTitle.VideoFormat = VideoFormat.HDDVD;
+                        disk.Format = VideoFormat.HDDVD;
                         break;
                     }
                     if (isBluRay != null && String.Compare(isBluRay.InnerText, "TRUE", StringComparison.CurrentCultureIgnoreCase) == 0)
                     {
-                        newTitle.VideoFormat = VideoFormat.BLURAY;
+                        disk.Format = VideoFormat.BLURAY;
                         break;
                     }
+                    newTitle.Disks.Add(disk);
                     break;
                 case "UPC":
                     newTitle.UPC = node.InnerText;
