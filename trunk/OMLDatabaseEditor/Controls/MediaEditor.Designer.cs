@@ -48,8 +48,6 @@
             this.btnDisksRemove = new System.Windows.Forms.Button();
             this.lblFrontCover = new System.Windows.Forms.Label();
             this.lblBackCover = new System.Windows.Forms.Label();
-            this.pbFrontCover = new System.Windows.Forms.PictureBox();
-            this.pbBackCover = new System.Windows.Forms.PictureBox();
             this.grdDirectors = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbpDirectors = new System.Windows.Forms.TabPage();
@@ -132,9 +130,9 @@
             this.grdVideoDetails = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cbVideoFormat = new System.Windows.Forms.ComboBox();
+            this.pbFrontCover = new System.Windows.Forms.PictureBox();
+            this.pbBackCover = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdDirectors)).BeginInit();
             this.tbpDirectors.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdWriters)).BeginInit();
@@ -165,6 +163,8 @@
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdExtraFeatures)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdVideoDetails)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).BeginInit();
             this.SuspendLayout();
             // 
             // tbFrontCover
@@ -304,26 +304,6 @@
             this.lblBackCover.TabIndex = 55;
             this.lblBackCover.Text = "Back Cover";
             // 
-            // pbFrontCover
-            // 
-            this.pbFrontCover.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pbFrontCover.Location = new System.Drawing.Point(6, 19);
-            this.pbFrontCover.Name = "pbFrontCover";
-            this.pbFrontCover.Size = new System.Drawing.Size(160, 200);
-            this.pbFrontCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbFrontCover.TabIndex = 4;
-            this.pbFrontCover.TabStop = false;
-            // 
-            // pbBackCover
-            // 
-            this.pbBackCover.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pbBackCover.Location = new System.Drawing.Point(6, 246);
-            this.pbBackCover.Name = "pbBackCover";
-            this.pbBackCover.Size = new System.Drawing.Size(160, 200);
-            this.pbBackCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbBackCover.TabIndex = 18;
-            this.pbBackCover.TabStop = false;
-            // 
             // grdDirectors
             // 
             this.grdDirectors.BackgroundColor = System.Drawing.SystemColors.ControlLight;
@@ -337,7 +317,7 @@
             this.grdDirectors.Name = "grdDirectors";
             this.grdDirectors.RowHeadersWidth = 26;
             this.grdDirectors.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdDirectors.Size = new System.Drawing.Size(401, 51);
+            this.grdDirectors.Size = new System.Drawing.Size(401, 119);
             this.grdDirectors.TabIndex = 23;
             // 
             // dataGridViewTextBoxColumn1
@@ -351,7 +331,7 @@
             this.tbpDirectors.Controls.Add(this.grdDirectors);
             this.tbpDirectors.Location = new System.Drawing.Point(4, 21);
             this.tbpDirectors.Name = "tbpDirectors";
-            this.tbpDirectors.Size = new System.Drawing.Size(401, 51);
+            this.tbpDirectors.Size = new System.Drawing.Size(401, 119);
             this.tbpDirectors.TabIndex = 0;
             this.tbpDirectors.Text = "Directors";
             this.tbpDirectors.UseVisualStyleBackColor = true;
@@ -370,7 +350,7 @@
             this.grdWriters.RowHeadersWidth = 26;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdWriters.RowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.grdWriters.Size = new System.Drawing.Size(401, 87);
+            this.grdWriters.Size = new System.Drawing.Size(401, 51);
             this.grdWriters.TabIndex = 32;
             // 
             // dataGridViewTextBoxColumn2
@@ -384,7 +364,7 @@
             this.tbpWriters.Controls.Add(this.grdWriters);
             this.tbpWriters.Location = new System.Drawing.Point(4, 21);
             this.tbpWriters.Name = "tbpWriters";
-            this.tbpWriters.Size = new System.Drawing.Size(401, 87);
+            this.tbpWriters.Size = new System.Drawing.Size(401, 51);
             this.tbpWriters.TabIndex = 1;
             this.tbpWriters.Text = "Writers";
             this.tbpWriters.UseVisualStyleBackColor = true;
@@ -404,7 +384,7 @@
             this.grdGenres.RowHeadersWidth = 26;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdGenres.RowsDefaultCellStyle = dataGridViewCellStyle2;
-            this.grdGenres.Size = new System.Drawing.Size(401, 91);
+            this.grdGenres.Size = new System.Drawing.Size(401, 90);
             this.grdGenres.TabIndex = 24;
             // 
             // dataGridViewTextBoxColumn3
@@ -418,7 +398,7 @@
             this.tbpProducers.Controls.Add(this.grdProducers);
             this.tbpProducers.Location = new System.Drawing.Point(4, 21);
             this.tbpProducers.Name = "tbpProducers";
-            this.tbpProducers.Size = new System.Drawing.Size(401, 87);
+            this.tbpProducers.Size = new System.Drawing.Size(401, 51);
             this.tbpProducers.TabIndex = 2;
             this.tbpProducers.Text = "Producers";
             this.tbpProducers.UseVisualStyleBackColor = true;
@@ -438,7 +418,7 @@
             this.grdProducers.RowHeadersWidth = 26;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdProducers.RowsDefaultCellStyle = dataGridViewCellStyle3;
-            this.grdProducers.Size = new System.Drawing.Size(401, 87);
+            this.grdProducers.Size = new System.Drawing.Size(401, 51);
             this.grdProducers.TabIndex = 33;
             // 
             // dataGridViewTextBoxColumn9
@@ -461,7 +441,7 @@
             this.grdActors.RowHeadersWidth = 26;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdActors.RowsDefaultCellStyle = dataGridViewCellStyle4;
-            this.grdActors.Size = new System.Drawing.Size(401, 87);
+            this.grdActors.Size = new System.Drawing.Size(401, 51);
             this.grdActors.TabIndex = 29;
             // 
             // dataGridViewTextBoxColumn4
@@ -481,7 +461,7 @@
             this.tbpActorsRoles.Controls.Add(this.grdActors);
             this.tbpActorsRoles.Location = new System.Drawing.Point(4, 21);
             this.tbpActorsRoles.Name = "tbpActorsRoles";
-            this.tbpActorsRoles.Size = new System.Drawing.Size(401, 87);
+            this.tbpActorsRoles.Size = new System.Drawing.Size(401, 51);
             this.tbpActorsRoles.TabIndex = 4;
             this.tbpActorsRoles.Text = "Actors/Roles";
             this.tbpActorsRoles.UseVisualStyleBackColor = true;
@@ -499,7 +479,7 @@
             this.tbcCredits.Location = new System.Drawing.Point(3, 16);
             this.tbcCredits.Name = "tbcCredits";
             this.tbcCredits.SelectedIndex = 0;
-            this.tbcCredits.Size = new System.Drawing.Size(409, 76);
+            this.tbcCredits.Size = new System.Drawing.Size(409, 144);
             this.tbcCredits.TabIndex = 49;
             // 
             // tbpNonActorRoles
@@ -507,7 +487,7 @@
             this.tbpNonActorRoles.Controls.Add(this.grdNonActors);
             this.tbpNonActorRoles.Location = new System.Drawing.Point(4, 21);
             this.tbpNonActorRoles.Name = "tbpNonActorRoles";
-            this.tbpNonActorRoles.Size = new System.Drawing.Size(401, 87);
+            this.tbpNonActorRoles.Size = new System.Drawing.Size(401, 51);
             this.tbpNonActorRoles.TabIndex = 5;
             this.tbpNonActorRoles.Text = "NonActing/Roles";
             this.tbpNonActorRoles.UseVisualStyleBackColor = true;
@@ -526,7 +506,7 @@
             this.grdNonActors.RowHeadersWidth = 26;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdNonActors.RowsDefaultCellStyle = dataGridViewCellStyle5;
-            this.grdNonActors.Size = new System.Drawing.Size(401, 87);
+            this.grdNonActors.Size = new System.Drawing.Size(401, 51);
             this.grdNonActors.TabIndex = 30;
             // 
             // dataGridViewTextBoxColumn10
@@ -550,7 +530,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(195, 424);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(415, 95);
+            this.groupBox2.Size = new System.Drawing.Size(415, 163);
             this.groupBox2.TabIndex = 56;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Credits";
@@ -702,7 +682,7 @@
             this.grdSubtitles.Margin = new System.Windows.Forms.Padding(0);
             this.grdSubtitles.Name = "grdSubtitles";
             this.grdSubtitles.RowHeadersWidth = 26;
-            this.grdSubtitles.Size = new System.Drawing.Size(401, 115);
+            this.grdSubtitles.Size = new System.Drawing.Size(401, 86);
             this.grdSubtitles.TabIndex = 34;
             // 
             // dataGridViewTextBoxColumn8
@@ -716,7 +696,7 @@
             this.tabPage6.Controls.Add(this.grdSubtitles);
             this.tabPage6.Location = new System.Drawing.Point(4, 21);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(401, 115);
+            this.tabPage6.Size = new System.Drawing.Size(401, 86);
             this.tabPage6.TabIndex = 1;
             this.tabPage6.Text = "Subtitles";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -727,8 +707,9 @@
             this.tabControl2.Controls.Add(this.tabPage6);
             this.tabControl2.Controls.Add(this.tabPage3);
             this.tabControl2.Controls.Add(this.tabPage4);
+            this.tabControl2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tabControl2.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl2.Location = new System.Drawing.Point(3, 65);
+            this.tabControl2.Location = new System.Drawing.Point(3, 62);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(409, 111);
@@ -825,7 +806,7 @@
             this.grpFileDetails.Controls.Add(this.cbVideoStandard);
             this.grpFileDetails.Controls.Add(this.label10);
             this.grpFileDetails.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpFileDetails.Location = new System.Drawing.Point(195, 525);
+            this.grpFileDetails.Location = new System.Drawing.Point(195, 593);
             this.grpFileDetails.Name = "grpFileDetails";
             this.grpFileDetails.Size = new System.Drawing.Size(415, 176);
             this.grpFileDetails.TabIndex = 51;
@@ -1167,7 +1148,7 @@
             this.tabPage3.Controls.Add(this.grdExtraFeatures);
             this.tabPage3.Location = new System.Drawing.Point(4, 21);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(401, 115);
+            this.tabPage3.Size = new System.Drawing.Size(401, 86);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Extra Features";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1177,7 +1158,7 @@
             this.tabPage4.Controls.Add(this.grdVideoDetails);
             this.tabPage4.Location = new System.Drawing.Point(4, 21);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(401, 118);
+            this.tabPage4.Size = new System.Drawing.Size(401, 86);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Video Details";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -1196,7 +1177,7 @@
             this.grdExtraFeatures.RowHeadersWidth = 26;
             dataGridViewCellStyle7.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdExtraFeatures.RowsDefaultCellStyle = dataGridViewCellStyle7;
-            this.grdExtraFeatures.Size = new System.Drawing.Size(401, 115);
+            this.grdExtraFeatures.Size = new System.Drawing.Size(401, 86);
             this.grdExtraFeatures.TabIndex = 37;
             // 
             // dataGridViewTextBoxColumn12
@@ -1220,7 +1201,7 @@
             this.grdVideoDetails.RowHeadersWidth = 26;
             dataGridViewCellStyle8.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdVideoDetails.RowsDefaultCellStyle = dataGridViewCellStyle8;
-            this.grdVideoDetails.Size = new System.Drawing.Size(401, 118);
+            this.grdVideoDetails.Size = new System.Drawing.Size(401, 86);
             this.grdVideoDetails.TabIndex = 37;
             // 
             // dataGridViewTextBoxColumn13
@@ -1237,6 +1218,26 @@
             this.cbVideoFormat.Name = "cbVideoFormat";
             this.cbVideoFormat.Size = new System.Drawing.Size(111, 20);
             this.cbVideoFormat.TabIndex = 49;
+            // 
+            // pbFrontCover
+            // 
+            this.pbFrontCover.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pbFrontCover.Location = new System.Drawing.Point(6, 19);
+            this.pbFrontCover.Name = "pbFrontCover";
+            this.pbFrontCover.Size = new System.Drawing.Size(160, 200);
+            this.pbFrontCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbFrontCover.TabIndex = 4;
+            this.pbFrontCover.TabStop = false;
+            // 
+            // pbBackCover
+            // 
+            this.pbBackCover.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pbBackCover.Location = new System.Drawing.Point(6, 246);
+            this.pbBackCover.Name = "pbBackCover";
+            this.pbBackCover.Size = new System.Drawing.Size(160, 200);
+            this.pbBackCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbBackCover.TabIndex = 18;
+            this.pbBackCover.TabStop = false;
             // 
             // MediaEditor
             // 
@@ -1256,8 +1257,6 @@
             this.Load += new System.EventHandler(this.MediaEditor_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdDirectors)).EndInit();
             this.tbpDirectors.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdWriters)).EndInit();
@@ -1291,6 +1290,8 @@
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdExtraFeatures)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdVideoDetails)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).EndInit();
             this.ResumeLayout(false);
 
         }
