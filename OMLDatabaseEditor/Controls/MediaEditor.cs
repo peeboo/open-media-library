@@ -172,40 +172,36 @@ namespace OMLDatabaseEditor.Controls
             {
                 grdNonActors.Rows.Add(role.Key, role.Value);
             }
-
-            // Your Movie Details
-            if (t.SortName.Trim().Length > 0)
-            {
-                tbSortName.Text = t.SortName;
-            }
-            else
-            {
-                tbSortName.Text = t.Name;
-            }
             
-            try
-            {
-                dtpDateAdded.Value = t.DateAdded;
-            }
-            catch
-            {
-                dtpDateAdded.Value = DateTimePicker.MinimumDateTime;
-            }
-            tbUserRating.Text = Convert.ToString(t.UserStarRating);
-            
-
             //File Details
             cbAspectRatio.Text = t.AspectRatio;
-            grdSubtitles.Rows.Clear();
-            foreach (string l in t.Subtitles)
-            {
-                grdSubtitles.Rows.Add(l);
-            }
+            cbVideoStandard.Text = t.VideoStandard;
+            //cbVideoFormat.Text = t.VideoFormat;
+            tbVideoResolution.Text = t.VideoResolution;
+
             grdAudioTracks.Rows.Clear();
             foreach (string a in t.AudioTracks)
             {
                 grdAudioTracks.Rows.Add(a);
             }
+
+            grdSubtitles.Rows.Clear();
+            foreach (string s in t.Subtitles)
+            {
+                grdSubtitles.Rows.Add(s);
+            }
+
+            grdExtraFeatures.Rows.Clear();
+            foreach (string ef in t.ExtraFeatures)
+            {
+                grdExtraFeatures.Rows.Add(ef);
+            }
+
+            //grdVideoDetails.Rows.Clear();
+            //foreach (string vd in t.VideoDetails)
+            //{
+            //    grdVideoDetails.Rows.Add(vd);
+            //}
         }
 
         private void UpdateTitleFromUI(Title t)
@@ -253,7 +249,6 @@ namespace OMLDatabaseEditor.Controls
             t.OriginalName = tbOriginalName.Text.Trim();
             t.CountryOfOrigin = tbCountry.Text.Trim();
             t.Studio = tbStudio.Text.Trim();
-
 
             // Categores
             t.Genres.Clear();
@@ -323,22 +318,11 @@ namespace OMLDatabaseEditor.Controls
 
             }
 
-            // Your Movie Details
-            if (tbSortName.Text.Trim().Length > 0)
-                t.SortName = tbSortName.Text.Trim();
-            else
-                t.SortName = t.Name;
-
-            t.DateAdded = dtpDateAdded.Value;
-            int UserStarRating;
-            if (int.TryParse(tbUserRating.Text, out UserStarRating) == false)
-            {
-                UserStarRating = 0;
-            }
-            t.UserStarRating = UserStarRating;
-            
             // File Details
             t.AspectRatio = cbAspectRatio.Text.Trim();
+            t.VideoStandard = cbVideoStandard.Text;
+           // t.VideoFormat = cbVideoFormat.Text;
+            t.VideoResolution = tbVideoResolution.Text;
            
             t.AudioTracks.Clear();
             foreach (DataGridViewRow row in grdSubtitles.Rows)
@@ -356,7 +340,25 @@ namespace OMLDatabaseEditor.Controls
                 {
                     t.Subtitles.Add((string)row.Cells[0].Value);
                 }
-            }    
+            }
+
+            t.ExtraFeatures.Clear();
+            foreach (DataGridViewRow row in grdExtraFeatures.Rows)
+            {
+                if (row.Cells[0].Value != null)
+                {
+                    t.ExtraFeatures.Add((string)row.Cells[0].Value);
+                }
+            }
+
+            //t.VideoDetails.Clear();
+            //foreach (DataGridViewRow row in grdVideoDetails.Rows)
+            //{
+            //    if (row.Cells[0].Value != null)
+            //    {
+            //        t.VideoDetails.Add((string)row.Cells[0].Value);
+            //    }
+            //}
         }
 
         // Image.FromFile keeps a lock on the file and it cannot be updated

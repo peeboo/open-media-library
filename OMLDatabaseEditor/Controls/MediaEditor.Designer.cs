@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tbFrontCover = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -41,6 +43,9 @@
             this.lblFileLocation = new System.Windows.Forms.Label();
             this.btnDiskAdd = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lstDisks = new System.Windows.Forms.ListBox();
+            this.btnDiskEdit = new System.Windows.Forms.Button();
+            this.btnDisksRemove = new System.Windows.Forms.Button();
             this.lblFrontCover = new System.Windows.Forms.Label();
             this.lblBackCover = new System.Windows.Forms.Label();
             this.pbFrontCover = new System.Windows.Forms.PictureBox();
@@ -68,7 +73,6 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.grdTags = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tbUserRating = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -77,10 +81,6 @@
             this.tbSortName = new System.Windows.Forms.TextBox();
             this.tbOriginalName = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabExtraFeatures = new System.Windows.Forms.TabPage();
-            this.tabVideoDetails = new System.Windows.Forms.TabPage();
             this.grdAudioTracks = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage5 = new System.Windows.Forms.TabPage();
@@ -88,15 +88,14 @@
             this.dataGridViewTextBoxColumn8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
-            this.textBox7 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.tbVideoResolution = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.cbAspectRatio = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.cbVideoStandard = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.grpFileDetails = new System.Windows.Forms.GroupBox();
             this.label11 = new System.Windows.Forms.Label();
             this.dtpReleaseDate = new System.Windows.Forms.DateTimePicker();
             this.label12 = new System.Windows.Forms.Label();
@@ -122,9 +121,17 @@
             this.tbWebsite = new System.Windows.Forms.TextBox();
             this.tbUPC = new System.Windows.Forms.TextBox();
             this.lblUPCCode = new System.Windows.Forms.Label();
-            this.btnDisksRemove = new System.Windows.Forms.Button();
-            this.btnDiskEdit = new System.Windows.Forms.Button();
-            this.lstDisks = new System.Windows.Forms.ListBox();
+            this.grpCategories = new System.Windows.Forms.GroupBox();
+            this.tbcCategories = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.grdExtraFeatures = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.grdVideoDetails = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cbVideoFormat = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).BeginInit();
@@ -142,16 +149,22 @@
             ((System.ComponentModel.ISupportInitialize)(this.grdNonActors)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdTags)).BeginInit();
-            this.groupBox3.SuspendLayout();
-            this.tabControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdAudioTracks)).BeginInit();
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdSubtitles)).BeginInit();
             this.tabPage6.SuspendLayout();
             this.tabControl2.SuspendLayout();
-            this.groupBox4.SuspendLayout();
+            this.grpFileDetails.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.gbxOther.SuspendLayout();
+            this.grpCategories.SuspendLayout();
+            this.tbcCategories.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdExtraFeatures)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grdVideoDetails)).BeginInit();
             this.SuspendLayout();
             // 
             // tbFrontCover
@@ -200,18 +213,18 @@
             this.lblFileLocation.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFileLocation.Location = new System.Drawing.Point(6, 475);
             this.lblFileLocation.Name = "lblFileLocation";
-            this.lblFileLocation.Size = new System.Drawing.Size(30, 12);
+            this.lblFileLocation.Size = new System.Drawing.Size(111, 12);
             this.lblFileLocation.TabIndex = 43;
-            this.lblFileLocation.Text = "Discs";
+            this.lblFileLocation.Text = "Disc and File Locations";
             // 
             // btnDiskAdd
             // 
             this.btnDiskAdd.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDiskAdd.Location = new System.Drawing.Point(127, 494);
+            this.btnDiskAdd.Location = new System.Drawing.Point(124, 494);
             this.btnDiskAdd.Name = "btnDiskAdd";
             this.btnDiskAdd.Size = new System.Drawing.Size(53, 22);
             this.btnDiskAdd.TabIndex = 47;
-            this.btnDiskAdd.Text = "Add...";
+            this.btnDiskAdd.Text = "Add";
             this.btnDiskAdd.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnDiskAdd.UseVisualStyleBackColor = true;
             this.btnDiskAdd.Click += new System.EventHandler(this.button3_Click);
@@ -238,6 +251,40 @@
             this.groupBox1.TabIndex = 57;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Movie Locations";
+            // 
+            // lstDisks
+            // 
+            this.lstDisks.FormattingEnabled = true;
+            this.lstDisks.ItemHeight = 12;
+            this.lstDisks.Location = new System.Drawing.Point(6, 494);
+            this.lstDisks.Name = "lstDisks";
+            this.lstDisks.Size = new System.Drawing.Size(115, 76);
+            this.lstDisks.TabIndex = 58;
+            this.lstDisks.SelectedIndexChanged += new System.EventHandler(this.lstDisks_SelectedIndexChanged);
+            // 
+            // btnDiskEdit
+            // 
+            this.btnDiskEdit.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDiskEdit.Location = new System.Drawing.Point(124, 550);
+            this.btnDiskEdit.Name = "btnDiskEdit";
+            this.btnDiskEdit.Size = new System.Drawing.Size(53, 22);
+            this.btnDiskEdit.TabIndex = 57;
+            this.btnDiskEdit.Text = "Edit";
+            this.btnDiskEdit.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnDiskEdit.UseVisualStyleBackColor = true;
+            this.btnDiskEdit.Click += new System.EventHandler(this.btnDiskEdit_Click);
+            // 
+            // btnDisksRemove
+            // 
+            this.btnDisksRemove.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDisksRemove.Location = new System.Drawing.Point(124, 522);
+            this.btnDisksRemove.Name = "btnDisksRemove";
+            this.btnDisksRemove.Size = new System.Drawing.Size(53, 22);
+            this.btnDisksRemove.TabIndex = 56;
+            this.btnDisksRemove.Text = "Remove";
+            this.btnDisksRemove.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnDisksRemove.UseVisualStyleBackColor = true;
+            this.btnDisksRemove.Click += new System.EventHandler(this.btnDisksRemove_Click);
             // 
             // lblFrontCover
             // 
@@ -286,11 +333,11 @@
             this.grdDirectors.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1});
             this.grdDirectors.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grdDirectors.Location = new System.Drawing.Point(3, 3);
+            this.grdDirectors.Location = new System.Drawing.Point(0, 0);
             this.grdDirectors.Name = "grdDirectors";
             this.grdDirectors.RowHeadersWidth = 26;
             this.grdDirectors.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdDirectors.Size = new System.Drawing.Size(395, 116);
+            this.grdDirectors.Size = new System.Drawing.Size(401, 51);
             this.grdDirectors.TabIndex = 23;
             // 
             // dataGridViewTextBoxColumn1
@@ -304,8 +351,7 @@
             this.tbpDirectors.Controls.Add(this.grdDirectors);
             this.tbpDirectors.Location = new System.Drawing.Point(4, 21);
             this.tbpDirectors.Name = "tbpDirectors";
-            this.tbpDirectors.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpDirectors.Size = new System.Drawing.Size(401, 122);
+            this.tbpDirectors.Size = new System.Drawing.Size(401, 51);
             this.tbpDirectors.TabIndex = 0;
             this.tbpDirectors.Text = "Directors";
             this.tbpDirectors.UseVisualStyleBackColor = true;
@@ -319,12 +365,12 @@
             this.grdWriters.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn2});
             this.grdWriters.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grdWriters.Location = new System.Drawing.Point(3, 3);
+            this.grdWriters.Location = new System.Drawing.Point(0, 0);
             this.grdWriters.Name = "grdWriters";
             this.grdWriters.RowHeadersWidth = 26;
-            dataGridViewCellStyle25.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdWriters.RowsDefaultCellStyle = dataGridViewCellStyle25;
-            this.grdWriters.Size = new System.Drawing.Size(395, 116);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdWriters.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.grdWriters.Size = new System.Drawing.Size(401, 87);
             this.grdWriters.TabIndex = 32;
             // 
             // dataGridViewTextBoxColumn2
@@ -338,8 +384,7 @@
             this.tbpWriters.Controls.Add(this.grdWriters);
             this.tbpWriters.Location = new System.Drawing.Point(4, 21);
             this.tbpWriters.Name = "tbpWriters";
-            this.tbpWriters.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpWriters.Size = new System.Drawing.Size(401, 122);
+            this.tbpWriters.Size = new System.Drawing.Size(401, 87);
             this.tbpWriters.TabIndex = 1;
             this.tbpWriters.Text = "Writers";
             this.tbpWriters.UseVisualStyleBackColor = true;
@@ -353,12 +398,13 @@
             this.grdGenres.ColumnHeadersVisible = false;
             this.grdGenres.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn3});
-            this.grdGenres.Location = new System.Drawing.Point(8, 19);
+            this.grdGenres.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grdGenres.Location = new System.Drawing.Point(0, 0);
             this.grdGenres.Name = "grdGenres";
             this.grdGenres.RowHeadersWidth = 26;
-            dataGridViewCellStyle26.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdGenres.RowsDefaultCellStyle = dataGridViewCellStyle26;
-            this.grdGenres.Size = new System.Drawing.Size(138, 52);
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdGenres.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            this.grdGenres.Size = new System.Drawing.Size(401, 91);
             this.grdGenres.TabIndex = 24;
             // 
             // dataGridViewTextBoxColumn3
@@ -372,7 +418,7 @@
             this.tbpProducers.Controls.Add(this.grdProducers);
             this.tbpProducers.Location = new System.Drawing.Point(4, 21);
             this.tbpProducers.Name = "tbpProducers";
-            this.tbpProducers.Size = new System.Drawing.Size(401, 122);
+            this.tbpProducers.Size = new System.Drawing.Size(401, 87);
             this.tbpProducers.TabIndex = 2;
             this.tbpProducers.Text = "Producers";
             this.tbpProducers.UseVisualStyleBackColor = true;
@@ -390,9 +436,9 @@
             this.grdProducers.Location = new System.Drawing.Point(0, 0);
             this.grdProducers.Name = "grdProducers";
             this.grdProducers.RowHeadersWidth = 26;
-            dataGridViewCellStyle27.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdProducers.RowsDefaultCellStyle = dataGridViewCellStyle27;
-            this.grdProducers.Size = new System.Drawing.Size(401, 122);
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdProducers.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            this.grdProducers.Size = new System.Drawing.Size(401, 87);
             this.grdProducers.TabIndex = 33;
             // 
             // dataGridViewTextBoxColumn9
@@ -413,9 +459,9 @@
             this.grdActors.Location = new System.Drawing.Point(0, 0);
             this.grdActors.Name = "grdActors";
             this.grdActors.RowHeadersWidth = 26;
-            dataGridViewCellStyle28.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdActors.RowsDefaultCellStyle = dataGridViewCellStyle28;
-            this.grdActors.Size = new System.Drawing.Size(401, 122);
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdActors.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            this.grdActors.Size = new System.Drawing.Size(401, 87);
             this.grdActors.TabIndex = 29;
             // 
             // dataGridViewTextBoxColumn4
@@ -435,7 +481,7 @@
             this.tbpActorsRoles.Controls.Add(this.grdActors);
             this.tbpActorsRoles.Location = new System.Drawing.Point(4, 21);
             this.tbpActorsRoles.Name = "tbpActorsRoles";
-            this.tbpActorsRoles.Size = new System.Drawing.Size(401, 122);
+            this.tbpActorsRoles.Size = new System.Drawing.Size(401, 87);
             this.tbpActorsRoles.TabIndex = 4;
             this.tbpActorsRoles.Text = "Actors/Roles";
             this.tbpActorsRoles.UseVisualStyleBackColor = true;
@@ -453,7 +499,7 @@
             this.tbcCredits.Location = new System.Drawing.Point(3, 16);
             this.tbcCredits.Name = "tbcCredits";
             this.tbcCredits.SelectedIndex = 0;
-            this.tbcCredits.Size = new System.Drawing.Size(409, 147);
+            this.tbcCredits.Size = new System.Drawing.Size(409, 76);
             this.tbcCredits.TabIndex = 49;
             // 
             // tbpNonActorRoles
@@ -461,7 +507,7 @@
             this.tbpNonActorRoles.Controls.Add(this.grdNonActors);
             this.tbpNonActorRoles.Location = new System.Drawing.Point(4, 21);
             this.tbpNonActorRoles.Name = "tbpNonActorRoles";
-            this.tbpNonActorRoles.Size = new System.Drawing.Size(401, 122);
+            this.tbpNonActorRoles.Size = new System.Drawing.Size(401, 87);
             this.tbpNonActorRoles.TabIndex = 5;
             this.tbpNonActorRoles.Text = "NonActing/Roles";
             this.tbpNonActorRoles.UseVisualStyleBackColor = true;
@@ -478,9 +524,9 @@
             this.grdNonActors.Location = new System.Drawing.Point(0, 0);
             this.grdNonActors.Name = "grdNonActors";
             this.grdNonActors.RowHeadersWidth = 26;
-            dataGridViewCellStyle29.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdNonActors.RowsDefaultCellStyle = dataGridViewCellStyle29;
-            this.grdNonActors.Size = new System.Drawing.Size(401, 122);
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdNonActors.RowsDefaultCellStyle = dataGridViewCellStyle5;
+            this.grdNonActors.Size = new System.Drawing.Size(401, 87);
             this.grdNonActors.TabIndex = 30;
             // 
             // dataGridViewTextBoxColumn10
@@ -502,29 +548,27 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.tbcCredits);
             this.groupBox2.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(195, 321);
+            this.groupBox2.Location = new System.Drawing.Point(195, 424);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(415, 166);
+            this.groupBox2.Size = new System.Drawing.Size(415, 95);
             this.groupBox2.TabIndex = 56;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Credits";
             // 
             // grdTags
             // 
-            this.grdTags.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.grdTags.BackgroundColor = System.Drawing.SystemColors.ControlLight;
             this.grdTags.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.grdTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grdTags.ColumnHeadersVisible = false;
             this.grdTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn6});
-            this.grdTags.Location = new System.Drawing.Point(87, 115);
+            this.grdTags.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grdTags.Location = new System.Drawing.Point(0, 0);
             this.grdTags.Name = "grdTags";
             this.grdTags.RowHeadersWidth = 26;
             this.grdTags.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdTags.Size = new System.Drawing.Size(107, 116);
+            this.grdTags.Size = new System.Drawing.Size(401, 91);
             this.grdTags.TabIndex = 26;
             // 
             // dataGridViewTextBoxColumn6
@@ -532,16 +576,6 @@
             this.dataGridViewTextBoxColumn6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn6.HeaderText = "Name";
             this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(53, 115);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(26, 12);
-            this.label2.TabIndex = 47;
-            this.label2.Text = "Tags";
             // 
             // label3
             // 
@@ -555,7 +589,6 @@
             // 
             // tbUserRating
             // 
-            this.tbUserRating.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tbUserRating.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbUserRating.Location = new System.Drawing.Point(81, 122);
             this.tbUserRating.Name = "tbUserRating";
@@ -575,7 +608,6 @@
             // 
             // dtpDateAdded
             // 
-            this.dtpDateAdded.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpDateAdded.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpDateAdded.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpDateAdded.Location = new System.Drawing.Point(81, 95);
@@ -595,7 +627,6 @@
             // 
             // tbSortName
             // 
-            this.tbSortName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tbSortName.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbSortName.Location = new System.Drawing.Point(81, 149);
             this.tbSortName.Name = "tbSortName";
@@ -624,52 +655,6 @@
             this.label6.TabIndex = 2;
             this.label6.Text = "Original Name";
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Controls.Add(this.tabControl1);
-            this.groupBox3.Controls.Add(this.grdGenres);
-            this.groupBox3.Controls.Add(this.grdTags);
-            this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox3.Location = new System.Drawing.Point(198, 500);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(200, 234);
-            this.groupBox3.TabIndex = 52;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Your Movie Details";
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabExtraFeatures);
-            this.tabControl1.Controls.Add(this.tabVideoDetails);
-            this.tabControl1.Location = new System.Drawing.Point(20, 160);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(180, 122);
-            this.tabControl1.TabIndex = 58;
-            // 
-            // tabExtraFeatures
-            // 
-            this.tabExtraFeatures.Location = new System.Drawing.Point(4, 21);
-            this.tabExtraFeatures.Name = "tabExtraFeatures";
-            this.tabExtraFeatures.Padding = new System.Windows.Forms.Padding(3);
-            this.tabExtraFeatures.Size = new System.Drawing.Size(172, 97);
-            this.tabExtraFeatures.TabIndex = 0;
-            this.tabExtraFeatures.Text = "Extra Features";
-            this.tabExtraFeatures.UseVisualStyleBackColor = true;
-            // 
-            // tabVideoDetails
-            // 
-            this.tabVideoDetails.Location = new System.Drawing.Point(4, 21);
-            this.tabVideoDetails.Name = "tabVideoDetails";
-            this.tabVideoDetails.Padding = new System.Windows.Forms.Padding(3);
-            this.tabVideoDetails.Size = new System.Drawing.Size(172, 97);
-            this.tabVideoDetails.TabIndex = 1;
-            this.tabVideoDetails.Text = "Video Details";
-            this.tabVideoDetails.UseVisualStyleBackColor = true;
-            // 
             // grdAudioTracks
             // 
             this.grdAudioTracks.BackgroundColor = System.Drawing.SystemColors.ControlLight;
@@ -679,12 +664,12 @@
             this.grdAudioTracks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn7});
             this.grdAudioTracks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grdAudioTracks.Location = new System.Drawing.Point(3, 3);
+            this.grdAudioTracks.Location = new System.Drawing.Point(0, 0);
             this.grdAudioTracks.Name = "grdAudioTracks";
             this.grdAudioTracks.RowHeadersWidth = 26;
-            dataGridViewCellStyle30.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdAudioTracks.RowsDefaultCellStyle = dataGridViewCellStyle30;
-            this.grdAudioTracks.Size = new System.Drawing.Size(189, 85);
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdAudioTracks.RowsDefaultCellStyle = dataGridViewCellStyle6;
+            this.grdAudioTracks.Size = new System.Drawing.Size(401, 86);
             this.grdAudioTracks.TabIndex = 36;
             // 
             // dataGridViewTextBoxColumn7
@@ -698,8 +683,7 @@
             this.tabPage5.Controls.Add(this.grdAudioTracks);
             this.tabPage5.Location = new System.Drawing.Point(4, 21);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(195, 91);
+            this.tabPage5.Size = new System.Drawing.Size(401, 86);
             this.tabPage5.TabIndex = 0;
             this.tabPage5.Text = "Audio Tracks";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -714,10 +698,11 @@
             this.grdSubtitles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn8});
             this.grdSubtitles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grdSubtitles.Location = new System.Drawing.Point(3, 3);
+            this.grdSubtitles.Location = new System.Drawing.Point(0, 0);
+            this.grdSubtitles.Margin = new System.Windows.Forms.Padding(0);
             this.grdSubtitles.Name = "grdSubtitles";
             this.grdSubtitles.RowHeadersWidth = 26;
-            this.grdSubtitles.Size = new System.Drawing.Size(189, 85);
+            this.grdSubtitles.Size = new System.Drawing.Size(401, 115);
             this.grdSubtitles.TabIndex = 34;
             // 
             // dataGridViewTextBoxColumn8
@@ -731,8 +716,7 @@
             this.tabPage6.Controls.Add(this.grdSubtitles);
             this.tabPage6.Location = new System.Drawing.Point(4, 21);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(195, 91);
+            this.tabPage6.Size = new System.Drawing.Size(401, 115);
             this.tabPage6.TabIndex = 1;
             this.tabPage6.Text = "Subtitles";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -741,51 +725,42 @@
             // 
             this.tabControl2.Controls.Add(this.tabPage5);
             this.tabControl2.Controls.Add(this.tabPage6);
-            this.tabControl2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.tabControl2.Controls.Add(this.tabPage3);
+            this.tabControl2.Controls.Add(this.tabPage4);
             this.tabControl2.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl2.Location = new System.Drawing.Point(3, 115);
+            this.tabControl2.Location = new System.Drawing.Point(3, 65);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(203, 116);
+            this.tabControl2.Size = new System.Drawing.Size(409, 111);
             this.tabControl2.TabIndex = 48;
-            // 
-            // textBox7
-            // 
-            this.textBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox7.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox7.Location = new System.Drawing.Point(101, 38);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(102, 21);
-            this.textBox7.TabIndex = 46;
-            this.textBox7.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
+            this.label7.Enabled = false;
             this.label7.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(23, 41);
+            this.label7.Location = new System.Drawing.Point(15, 41);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(69, 12);
             this.label7.TabIndex = 45;
             this.label7.Text = "Video Format";
             // 
-            // textBox8
+            // tbVideoResolution
             // 
-            this.textBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.tbVideoResolution.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox8.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox8.Location = new System.Drawing.Point(101, 63);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(102, 21);
-            this.textBox8.TabIndex = 44;
-            this.textBox8.TextChanged += new System.EventHandler(this.TitleChanges);
+            this.tbVideoResolution.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbVideoResolution.Location = new System.Drawing.Point(296, 38);
+            this.tbVideoResolution.Name = "tbVideoResolution";
+            this.tbVideoResolution.Size = new System.Drawing.Size(106, 21);
+            this.tbVideoResolution.TabIndex = 44;
+            this.tbVideoResolution.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(7, 67);
+            this.label8.Location = new System.Drawing.Point(203, 41);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(85, 12);
             this.label8.TabIndex = 43;
@@ -795,7 +770,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(28, 18);
+            this.label9.Location = new System.Drawing.Point(20, 16);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(64, 12);
             this.label9.TabIndex = 39;
@@ -803,60 +778,59 @@
             // 
             // cbAspectRatio
             // 
-            this.cbAspectRatio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cbAspectRatio.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbAspectRatio.FormattingEnabled = true;
-            this.cbAspectRatio.Location = new System.Drawing.Point(101, 13);
+            this.cbAspectRatio.Location = new System.Drawing.Point(90, 13);
             this.cbAspectRatio.Name = "cbAspectRatio";
-            this.cbAspectRatio.Size = new System.Drawing.Size(102, 21);
+            this.cbAspectRatio.Size = new System.Drawing.Size(111, 21);
             this.cbAspectRatio.TabIndex = 40;
             this.cbAspectRatio.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
-            // comboBox2
+            // cbVideoStandard
             // 
-            this.comboBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.cbVideoStandard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox2.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
+            this.cbVideoStandard.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbVideoStandard.FormattingEnabled = true;
+            this.cbVideoStandard.Items.AddRange(new object[] {
             "NTSC",
             "PAL"});
-            this.comboBox2.Location = new System.Drawing.Point(101, 88);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(102, 21);
-            this.comboBox2.TabIndex = 42;
-            this.comboBox2.TextChanged += new System.EventHandler(this.TitleChanges);
+            this.cbVideoStandard.Location = new System.Drawing.Point(296, 13);
+            this.cbVideoStandard.Name = "cbVideoStandard";
+            this.cbVideoStandard.Size = new System.Drawing.Size(106, 21);
+            this.cbVideoStandard.TabIndex = 42;
+            this.cbVideoStandard.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(16, 93);
+            this.label10.Location = new System.Drawing.Point(212, 16);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(76, 12);
             this.label10.TabIndex = 41;
             this.label10.Text = "Video Standard";
             // 
-            // groupBox4
+            // grpFileDetails
             // 
-            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox4.Controls.Add(this.tabControl2);
-            this.groupBox4.Controls.Add(this.textBox7);
-            this.groupBox4.Controls.Add(this.label7);
-            this.groupBox4.Controls.Add(this.textBox8);
-            this.groupBox4.Controls.Add(this.label8);
-            this.groupBox4.Controls.Add(this.label9);
-            this.groupBox4.Controls.Add(this.cbAspectRatio);
-            this.groupBox4.Controls.Add(this.comboBox2);
-            this.groupBox4.Controls.Add(this.label10);
-            this.groupBox4.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox4.Location = new System.Drawing.Point(401, 500);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(209, 234);
-            this.groupBox4.TabIndex = 51;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "File Details";
+            this.grpFileDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpFileDetails.Controls.Add(this.cbVideoFormat);
+            this.grpFileDetails.Controls.Add(this.tabControl2);
+            this.grpFileDetails.Controls.Add(this.label7);
+            this.grpFileDetails.Controls.Add(this.tbVideoResolution);
+            this.grpFileDetails.Controls.Add(this.label8);
+            this.grpFileDetails.Controls.Add(this.label9);
+            this.grpFileDetails.Controls.Add(this.cbAspectRatio);
+            this.grpFileDetails.Controls.Add(this.cbVideoStandard);
+            this.grpFileDetails.Controls.Add(this.label10);
+            this.grpFileDetails.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpFileDetails.Location = new System.Drawing.Point(195, 525);
+            this.grpFileDetails.Name = "grpFileDetails";
+            this.grpFileDetails.Size = new System.Drawing.Size(415, 176);
+            this.grpFileDetails.TabIndex = 51;
+            this.grpFileDetails.TabStop = false;
+            this.grpFileDetails.Text = "File Details";
             // 
             // label11
             // 
@@ -1084,7 +1058,7 @@
             this.gbxOther.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbxOther.Location = new System.Drawing.Point(3, 591);
             this.gbxOther.Name = "gbxOther";
-            this.gbxOther.Size = new System.Drawing.Size(183, 213);
+            this.gbxOther.Size = new System.Drawing.Size(183, 178);
             this.gbxOther.TabIndex = 58;
             this.gbxOther.TabStop = false;
             this.gbxOther.Text = "Other";
@@ -1142,54 +1116,143 @@
             this.lblUPCCode.TabIndex = 0;
             this.lblUPCCode.Text = "UPC Code";
             // 
-            // btnDisksRemove
+            // grpCategories
             // 
-            this.btnDisksRemove.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDisksRemove.Location = new System.Drawing.Point(126, 522);
-            this.btnDisksRemove.Name = "btnDisksRemove";
-            this.btnDisksRemove.Size = new System.Drawing.Size(53, 22);
-            this.btnDisksRemove.TabIndex = 56;
-            this.btnDisksRemove.Text = "Remove";
-            this.btnDisksRemove.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnDisksRemove.UseVisualStyleBackColor = true;
-            this.btnDisksRemove.Click += new System.EventHandler(this.btnDisksRemove_Click);
+            this.grpCategories.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpCategories.Controls.Add(this.tbcCategories);
+            this.grpCategories.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpCategories.Location = new System.Drawing.Point(195, 283);
+            this.grpCategories.Name = "grpCategories";
+            this.grpCategories.Size = new System.Drawing.Size(415, 135);
+            this.grpCategories.TabIndex = 59;
+            this.grpCategories.TabStop = false;
+            this.grpCategories.Text = "Categories";
             // 
-            // btnDiskEdit
+            // tbcCategories
             // 
-            this.btnDiskEdit.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDiskEdit.Location = new System.Drawing.Point(126, 550);
-            this.btnDiskEdit.Name = "btnDiskEdit";
-            this.btnDiskEdit.Size = new System.Drawing.Size(53, 22);
-            this.btnDiskEdit.TabIndex = 57;
-            this.btnDiskEdit.Text = "Edit...";
-            this.btnDiskEdit.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnDiskEdit.UseVisualStyleBackColor = true;
-            this.btnDiskEdit.Click += new System.EventHandler(this.btnDiskEdit_Click);
+            this.tbcCategories.Controls.Add(this.tabPage1);
+            this.tbcCategories.Controls.Add(this.tabPage2);
+            this.tbcCategories.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbcCategories.Location = new System.Drawing.Point(3, 16);
+            this.tbcCategories.Multiline = true;
+            this.tbcCategories.Name = "tbcCategories";
+            this.tbcCategories.Padding = new System.Drawing.Point(3, 3);
+            this.tbcCategories.SelectedIndex = 0;
+            this.tbcCategories.Size = new System.Drawing.Size(409, 116);
+            this.tbcCategories.TabIndex = 0;
             // 
-            // lstDisks
+            // tabPage1
             // 
-            this.lstDisks.FormattingEnabled = true;
-            this.lstDisks.ItemHeight = 12;
-            this.lstDisks.Location = new System.Drawing.Point(6, 494);
-            this.lstDisks.Name = "lstDisks";
-            this.lstDisks.Size = new System.Drawing.Size(115, 76);
-            this.lstDisks.TabIndex = 58;
-            this.lstDisks.SelectedIndexChanged += new System.EventHandler(this.lstDisks_SelectedIndexChanged);
+            this.tabPage1.Controls.Add(this.grdTags);
+            this.tabPage1.Location = new System.Drawing.Point(4, 21);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Size = new System.Drawing.Size(401, 91);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Tags";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.grdGenres);
+            this.tabPage2.Location = new System.Drawing.Point(4, 21);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Size = new System.Drawing.Size(401, 91);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Genres";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.grdExtraFeatures);
+            this.tabPage3.Location = new System.Drawing.Point(4, 21);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(401, 115);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Extra Features";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.grdVideoDetails);
+            this.tabPage4.Location = new System.Drawing.Point(4, 21);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(401, 118);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Video Details";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // grdExtraFeatures
+            // 
+            this.grdExtraFeatures.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            this.grdExtraFeatures.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.grdExtraFeatures.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grdExtraFeatures.ColumnHeadersVisible = false;
+            this.grdExtraFeatures.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn12});
+            this.grdExtraFeatures.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grdExtraFeatures.Location = new System.Drawing.Point(0, 0);
+            this.grdExtraFeatures.Name = "grdExtraFeatures";
+            this.grdExtraFeatures.RowHeadersWidth = 26;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdExtraFeatures.RowsDefaultCellStyle = dataGridViewCellStyle7;
+            this.grdExtraFeatures.Size = new System.Drawing.Size(401, 115);
+            this.grdExtraFeatures.TabIndex = 37;
+            // 
+            // dataGridViewTextBoxColumn12
+            // 
+            this.dataGridViewTextBoxColumn12.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn12.HeaderText = "Name";
+            this.dataGridViewTextBoxColumn12.Name = "dataGridViewTextBoxColumn12";
+            // 
+            // grdVideoDetails
+            // 
+            this.grdVideoDetails.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            this.grdVideoDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.grdVideoDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grdVideoDetails.ColumnHeadersVisible = false;
+            this.grdVideoDetails.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn13});
+            this.grdVideoDetails.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grdVideoDetails.Enabled = false;
+            this.grdVideoDetails.Location = new System.Drawing.Point(0, 0);
+            this.grdVideoDetails.Name = "grdVideoDetails";
+            this.grdVideoDetails.RowHeadersWidth = 26;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdVideoDetails.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            this.grdVideoDetails.Size = new System.Drawing.Size(401, 118);
+            this.grdVideoDetails.TabIndex = 37;
+            // 
+            // dataGridViewTextBoxColumn13
+            // 
+            this.dataGridViewTextBoxColumn13.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn13.HeaderText = "Name";
+            this.dataGridViewTextBoxColumn13.Name = "dataGridViewTextBoxColumn13";
+            // 
+            // cbVideoFormat
+            // 
+            this.cbVideoFormat.Enabled = false;
+            this.cbVideoFormat.FormattingEnabled = true;
+            this.cbVideoFormat.Location = new System.Drawing.Point(90, 38);
+            this.cbVideoFormat.Name = "cbVideoFormat";
+            this.cbVideoFormat.Size = new System.Drawing.Size(111, 20);
+            this.cbVideoFormat.TabIndex = 49;
             // 
             // MediaEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.Controls.Add(this.grpCategories);
             this.Controls.Add(this.gbxOther);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox5);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox4);
-            this.MinimumSize = new System.Drawing.Size(620, 613);
+            this.Controls.Add(this.grpFileDetails);
+            this.Margin = new System.Windows.Forms.Padding(0);
+            this.MinimumSize = new System.Drawing.Size(620, 772);
             this.Name = "MediaEditor";
-            this.Size = new System.Drawing.Size(620, 807);
+            this.Size = new System.Drawing.Size(620, 772);
             this.Load += new System.EventHandler(this.MediaEditor_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -1209,20 +1272,25 @@
             ((System.ComponentModel.ISupportInitialize)(this.grdNonActors)).EndInit();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdTags)).EndInit();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdAudioTracks)).EndInit();
             this.tabPage5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdSubtitles)).EndInit();
             this.tabPage6.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
+            this.grpFileDetails.ResumeLayout(false);
+            this.grpFileDetails.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.gbxOther.ResumeLayout(false);
             this.gbxOther.PerformLayout();
+            this.grpCategories.ResumeLayout(false);
+            this.tbcCategories.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.grdExtraFeatures)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grdVideoDetails)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1255,7 +1323,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridView grdTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbUserRating;
         private System.Windows.Forms.Label label4;
@@ -1264,7 +1331,6 @@
         private System.Windows.Forms.TextBox tbSortName;
         private System.Windows.Forms.TextBox tbOriginalName;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.DataGridView grdAudioTracks;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
         private System.Windows.Forms.TabPage tabPage5;
@@ -1272,15 +1338,14 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.TabControl tabControl2;
-        private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.TextBox tbVideoResolution;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox cbAspectRatio;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox cbVideoStandard;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox grpFileDetails;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.DateTimePicker dtpReleaseDate;
         private System.Windows.Forms.Label label12;
@@ -1302,9 +1367,6 @@
         private System.Windows.Forms.Label lblFrontCover;
         private System.Windows.Forms.Label lblBackCover;
         private System.Windows.Forms.TabPage tbpNonActorRoles;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabExtraFeatures;
-        private System.Windows.Forms.TabPage tabVideoDetails;
         private System.Windows.Forms.GroupBox gbxOther;
         private System.Windows.Forms.TextBox tbUPC;
         private System.Windows.Forms.Label lblUPCCode;
@@ -1320,5 +1382,16 @@
         private System.Windows.Forms.ListBox lstDisks;
         private System.Windows.Forms.Button btnDiskEdit;
         private System.Windows.Forms.Button btnDisksRemove;
+        private System.Windows.Forms.GroupBox grpCategories;
+        private System.Windows.Forms.TabControl tbcCategories;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.DataGridView grdExtraFeatures;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn12;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.DataGridView grdVideoDetails;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
+        private System.Windows.Forms.ComboBox cbVideoFormat;
     }
 }

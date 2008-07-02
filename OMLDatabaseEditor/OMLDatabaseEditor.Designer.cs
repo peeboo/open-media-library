@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OMLDatabaseEditor));
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Movies");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("OML Database", new System.Windows.Forms.TreeNode[] {
-            treeNode1});
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Import");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Movies");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("OML Database", new System.Windows.Forms.TreeNode[] {
+            treeNode4});
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Import");
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,8 +76,8 @@
             this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.MenuStripTitle = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MenuItemEditNewTab = new System.Windows.Forms.ToolStripMenuItem();
-            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.menuStrip1.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -100,7 +100,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(786, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(825, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -340,7 +340,7 @@
             this.statusStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.statusStrip1.Location = new System.Drawing.Point(0, 0);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(786, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(825, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -355,11 +355,11 @@
             // 
             this.toolStripContainer1.ContentPanel.AutoScroll = true;
             this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainer1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(786, 613);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(825, 667);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(786, 682);
+            this.toolStripContainer1.Size = new System.Drawing.Size(825, 736);
             this.toolStripContainer1.TabIndex = 3;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -385,12 +385,11 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.AutoScroll = true;
-            this.splitContainer1.Panel2.AutoScrollMargin = new System.Drawing.Size(10, 10);
-            this.splitContainer1.Panel2.AutoScrollMinSize = new System.Drawing.Size(620, 836);
+            this.splitContainer1.Panel2.AutoScrollMinSize = new System.Drawing.Size(620, 772);
             this.splitContainer1.Panel2.Controls.Add(this.tabsMediaPanel);
             this.splitContainer1.Panel2MinSize = 620;
-            this.splitContainer1.Size = new System.Drawing.Size(786, 613);
-            this.splitContainer1.SplitterDistance = 135;
+            this.splitContainer1.Size = new System.Drawing.Size(825, 667);
+            this.splitContainer1.SplitterDistance = 141;
             this.splitContainer1.TabIndex = 0;
             // 
             // tvSourceList
@@ -399,16 +398,16 @@
             this.tvSourceList.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tvSourceList.Location = new System.Drawing.Point(0, 0);
             this.tvSourceList.Name = "tvSourceList";
-            treeNode1.Name = "Movies";
-            treeNode1.Text = "Movies";
-            treeNode2.Name = "OML Database";
-            treeNode2.Text = "OML Database";
-            treeNode3.Name = "Import";
-            treeNode3.Text = "Import";
+            treeNode4.Name = "Movies";
+            treeNode4.Text = "Movies";
+            treeNode5.Name = "OML Database";
+            treeNode5.Text = "OML Database";
+            treeNode6.Name = "Import";
+            treeNode6.Text = "Import";
             this.tvSourceList.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2,
-            treeNode3});
-            this.tvSourceList.Size = new System.Drawing.Size(135, 613);
+            treeNode5,
+            treeNode6});
+            this.tvSourceList.Size = new System.Drawing.Size(141, 667);
             this.tvSourceList.TabIndex = 1;
             this.tvSourceList.DoubleClick += new System.EventHandler(this.MenuItemEditTab_Click);
             this.tvSourceList.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tvSourceList_MouseUp);
@@ -419,10 +418,12 @@
             this.tabsMediaPanel.HotTrack = true;
             this.tabsMediaPanel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.tabsMediaPanel.Location = new System.Drawing.Point(0, 0);
-            this.tabsMediaPanel.MinimumSize = new System.Drawing.Size(0, 836);
+            this.tabsMediaPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.tabsMediaPanel.MinimumSize = new System.Drawing.Size(0, 762);
             this.tabsMediaPanel.Name = "tabsMediaPanel";
+            this.tabsMediaPanel.Padding = new System.Drawing.Point(0, 0);
             this.tabsMediaPanel.SelectedIndex = 0;
-            this.tabsMediaPanel.Size = new System.Drawing.Size(630, 846);
+            this.tabsMediaPanel.Size = new System.Drawing.Size(663, 772);
             this.tabsMediaPanel.TabIndex = 0;
             // 
             // toolStrip1
@@ -476,7 +477,7 @@
             this.MenuItemEditNewTab,
             this.deleteToolStripMenuItem});
             this.MenuStripTitle.Name = "contextMenuStrip1";
-            this.MenuStripTitle.Size = new System.Drawing.Size(158, 70);
+            this.MenuStripTitle.Size = new System.Drawing.Size(158, 48);
             this.MenuStripTitle.Text = "test";
             // 
             // MenuItemEditNewTab
@@ -500,11 +501,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(786, 682);
+            this.ClientSize = new System.Drawing.Size(825, 736);
             this.Controls.Add(this.toolStripContainer1);
             this.DoubleBuffered = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.MinimumSize = new System.Drawing.Size(770, 36);
+            this.MinimumSize = new System.Drawing.Size(620, 772);
             this.Name = "OMLDatabaseEditor";
             this.Text = "OML Database Editor";
             this.menuStrip1.ResumeLayout(false);
