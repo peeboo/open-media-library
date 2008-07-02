@@ -30,7 +30,7 @@
                 Orientation="Vertical"
                 AllowWrap="true"
                 ReferenceSize="[UISettings.Gallery.CoverArtSize]"
-                Spacing="[UISettings.Gallery.GallerySpacing]"
+                Spacing="[UISettings.Gallery.CoverArtSpacing]"
                 MajorAlignment="Fill"
                 MinorAlignment="Center"
                 RepeatGap="100"/>
@@ -40,7 +40,7 @@
                 Orientation="Vertical"
                 AllowWrap="true"
                 ReferenceSize="[UISettings.Gallery.ListItemSize]"
-                Spacing="21,0"
+                Spacing="[UISettings.Gallery.ListSpacing]"
                 MajorAlignment="Fill"
                 MinorAlignment="Fill"
                 RepeatGap="100"/>
