@@ -350,22 +350,22 @@ namespace Library
                 FirePropertyChanged("RightOffset");
             }
         }
-        public int GallerySpacingHorizontal
+        public int CoverArtSpacingHorizontal
         {
-            get { return Properties.Settings.Default.GallerySpacingHorizontal; }
+            get { return Properties.Settings.Default.CoverArtSpacingHorizontal; }
         set
         {
-            Properties.Settings.Default.GallerySpacingHorizontal = value;
+            Properties.Settings.Default.CoverArtSpacingHorizontal = value;
             Properties.Settings.Default.Save();
             FirePropertyChanged("GallerySpacingHorizontal");
         }
         }
-        public int GallerySpacingVertical
+        public int CoverArtSpacingVertical
         {
-            get { return Properties.Settings.Default.GallerySpacingVertical; }
+            get { return Properties.Settings.Default.CoverArtSpacingVertical; }
             set
             {
-                Properties.Settings.Default.GallerySpacingVertical = value;
+                Properties.Settings.Default.CoverArtSpacingVertical = value;
                 Properties.Settings.Default.Save();
                 FirePropertyChanged("GallerySpacingVertical");
             }
