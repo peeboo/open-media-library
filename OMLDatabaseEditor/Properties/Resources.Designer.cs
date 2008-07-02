@@ -60,13 +60,6 @@ namespace OMLDatabaseEditor.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap _1403_Globe {
-            get {
-                object obj = ResourceManager.GetObject("1403_Globe", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap Application {
             get {
                 object obj = ResourceManager.GetObject("Application", resourceCulture);
@@ -81,34 +74,6 @@ namespace OMLDatabaseEditor.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap document_new {
-            get {
-                object obj = ResourceManager.GetObject("document-new", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap document_new1 {
-            get {
-                object obj = ResourceManager.GetObject("document-new1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap document_save {
-            get {
-                object obj = ResourceManager.GetObject("document-save", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap document_save1 {
-            get {
-                object obj = ResourceManager.GetObject("document-save1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap NewDocumentHS {
             get {
                 object obj = ResourceManager.GetObject("NewDocumentHS", resourceCulture);
@@ -119,13 +84,6 @@ namespace OMLDatabaseEditor.Properties {
         internal static System.Drawing.Bitmap saveHS {
             get {
                 object obj = ResourceManager.GetObject("saveHS", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Web_Globe {
-            get {
-                object obj = ResourceManager.GetObject("Web_Globe", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

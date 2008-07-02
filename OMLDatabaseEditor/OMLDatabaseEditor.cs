@@ -120,17 +120,20 @@ namespace OMLDatabaseEditor
             Editor.AutoSize = true;
             Editor.BackColor = System.Drawing.SystemColors.Control;
             Editor.Dock = System.Windows.Forms.DockStyle.Fill;
-            Editor.Font = new System.Drawing.Font("Cambria", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            Editor.Location = new System.Drawing.Point(3, 3);
-            Editor.MinimumSize = new System.Drawing.Size(600, 836);
+            Editor.Location = new System.Drawing.Point(0, 0);
             Editor.Name = "ME" + itemID.ToString();
-            Editor.Size = new System.Drawing.Size(616, 836);
-            Editor.TabIndex = 0;
 
             Title currentTitle = new Title();
             currentTitle = (Title)_titleCollection.MoviesByItemId[itemID];
-            tabsMediaPanel.TabPages.Add(itemID.ToString(), currentTitle.Name);
-            tabsMediaPanel.TabPages[itemID.ToString()].Controls.Add(Editor);
+
+            TabPage newpage = new TabPage(currentTitle.Name);
+            newpage.Controls.Add(Editor);
+            newpage.Size = new System.Drawing.Size(620, 772);
+            newpage.Margin = new System.Windows.Forms.Padding(0);
+            newpage.Padding = new System.Windows.Forms.Padding(0);
+
+            tabsMediaPanel.TabPages.Add(newpage);
+            
             Editor.LoadTitle(currentTitle);
             Editor.TitleChanged += new Controls.MediaEditor.TitleChangeEventHandler(this.TitleChanges);
             Editor.TitleNameChanged += new Controls.MediaEditor.TitleNameChangeEventHandler(this.TitleNameChanges);
