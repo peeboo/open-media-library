@@ -455,7 +455,7 @@ namespace OMLDatabaseEditor.Controls
             //}
 
             DiskEditor dlg = new DiskEditor();
-            dlg.FileName = "Disc " + lstDisks.Items.Count + 1;
+            dlg.FileName = "Disc " + (lstDisks.Items.Count + 1);
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 lstDisks.Items.Add(
