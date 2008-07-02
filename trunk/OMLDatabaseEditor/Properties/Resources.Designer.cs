@@ -60,6 +60,20 @@ namespace OMLDatabaseEditor.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap _1403_Globe {
+            get {
+                object obj = ResourceManager.GetObject("1403_Globe", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Application {
+            get {
+                object obj = ResourceManager.GetObject("Application", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ClosePreviewHS {
             get {
                 object obj = ResourceManager.GetObject("ClosePreviewHS", resourceCulture);
@@ -105,6 +119,13 @@ namespace OMLDatabaseEditor.Properties {
         internal static System.Drawing.Bitmap saveHS {
             get {
                 object obj = ResourceManager.GetObject("saveHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Web_Globe {
+            get {
+                object obj = ResourceManager.GetObject("Web_Globe", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
