@@ -239,63 +239,70 @@ namespace OMLImporter
 
         public static void LoadTitlesIntoDatabase(OMLPlugin plugin)
         {
-            Utilities.DebugLine("[OMLImporter] Titles loaded, beginning Import process");
-            //TitleCollection tc = new TitleCollection();
-            List<Title> titles = plugin.GetTitles();
-            Utilities.DebugLine("[OMLImporter] "+titles.Count+" titles found in input file");
-            Console.WriteLine("Found " + titles.Count + " titles");
-
-            int numberOfTitlesAdded = 0;
-            int numberOfTitlesSkipped = 0;
-            bool YesToAll = false;
-
-            if (Console.In.Peek() > 0)
-                Console.In.ReadToEnd(); // flush out anything still in there
-
-            foreach (Title t in titles)
+            try
             {
-                if (mainTitleCollection.ContainsDisks(t.Disks))
-                {
-                    Console.WriteLine("Title {0} at location {1} skipped because already in the collection", t.Name);
-                    numberOfTitlesSkipped++;
-                    continue;
-                }
+                Utilities.DebugLine("[OMLImporter] Titles loaded, beginning Import process");
+                //TitleCollection tc = new TitleCollection();
+                List<Title> titles = plugin.GetTitles();
+                Utilities.DebugLine("[OMLImporter] " + titles.Count + " titles found in input file");
+                Console.WriteLine("Found " + titles.Count + " titles");
 
+                int numberOfTitlesAdded = 0;
+                int numberOfTitlesSkipped = 0;
+                bool YesToAll = false;
 
-                Console.WriteLine("Adding: " + t.Name);
-                if (YesToAll == false)
+                if (Console.In.Peek() > 0)
+                    Console.In.ReadToEnd(); // flush out anything still in there
+
+                foreach (Title t in titles)
                 {
-                    Console.WriteLine("Would you like to add this title? (y/n/a)");
-                    string response = Console.ReadLine();
-                    switch (response.ToUpper())
+                    if (mainTitleCollection.ContainsDisks(t.Disks))
                     {
-                        case "Y":
-                            mainTitleCollection.Add(t);
-                            numberOfTitlesAdded++;
-                            break;
-                        case "N":
-                            numberOfTitlesSkipped++;
-                            break;
-                        case "A":
-                            YesToAll = true;
-                            mainTitleCollection.Add(t);
-                            numberOfTitlesAdded++;
-                            break;
-                        default:
-                            break;
+                        Console.WriteLine("Title {0} skipped because already in the collection", t.Name);
+                        numberOfTitlesSkipped++;
+                        continue;
+                    }
+
+
+                    Console.WriteLine("Adding: " + t.Name);
+                    if (YesToAll == false)
+                    {
+                        Console.WriteLine("Would you like to add this title? (y/n/a)");
+                        string response = Console.ReadLine();
+                        switch (response.ToUpper())
+                        {
+                            case "Y":
+                                mainTitleCollection.Add(t);
+                                numberOfTitlesAdded++;
+                                break;
+                            case "N":
+                                numberOfTitlesSkipped++;
+                                break;
+                            case "A":
+                                YesToAll = true;
+                                mainTitleCollection.Add(t);
+                                numberOfTitlesAdded++;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        mainTitleCollection.Add(t);
+                        numberOfTitlesAdded++;
                     }
                 }
-                else
-                {
-                    mainTitleCollection.Add(t);
-                    numberOfTitlesAdded++;
-                }
-            }
 
-            if (numberOfTitlesAdded > 0) isDirty = true;
-            Console.WriteLine();
-            Console.WriteLine("Added " + numberOfTitlesAdded + " titles");
-            Console.WriteLine("Skipped " + numberOfTitlesSkipped + " titles");
+                if (numberOfTitlesAdded > 0) isDirty = true;
+                Console.WriteLine();
+                Console.WriteLine("Added " + numberOfTitlesAdded + " titles");
+                Console.WriteLine("Skipped " + numberOfTitlesSkipped + " titles");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception in LoadTitlesIntoDatabase: %1", e.Message);
+            }
             //tc.saveTitleCollection();
             //Console.WriteLine("Complete");
         }
