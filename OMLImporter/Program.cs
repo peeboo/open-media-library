@@ -294,6 +294,8 @@ namespace OMLImporter
                     }
                 }
 
+                plugin.GetTitles().Clear();
+
                 if (numberOfTitlesAdded > 0) isDirty = true;
                 Console.WriteLine();
                 Console.WriteLine("Added " + numberOfTitlesAdded + " titles");
