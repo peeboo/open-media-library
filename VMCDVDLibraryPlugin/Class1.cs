@@ -62,6 +62,11 @@ namespace VMCDVDLibraryPlugin
 
                 foreach (string currentFolder in dirList)
                 {
+                    Utilities.DebugLine("DVDImporter: folder " + currentFolder);
+                    if (currentFolder.Contains("MSDVR"))
+                    {
+                        bool b = true;
+                    }
                     Title dvd = GetDVDMetaData(currentFolder);
                     string[] fileNames = null;
                     try
@@ -96,6 +101,7 @@ namespace VMCDVDLibraryPlugin
                             foreach (string video in fileNames)
                             {
                                 string extension = Path.GetExtension(video).ToUpper().Substring(1);
+                                extension = extension.Replace("-", "");
                                 if (SupportedVideoExtensions.Contains(extension))
                                 {
                                     Title newVideo = new Title();
@@ -428,6 +434,7 @@ namespace VMCDVDLibraryPlugin
         "CDI", // DiscJuggler Image
         "CUE", // cue sheet
         "DVR-MS", // MPG
+        "DVRMS", // MPG
         "H264", // AVC OR MP4
         "IMG", // using an image loader lib and load/play this as a DVD
         "ISO", // Standard ISO image
