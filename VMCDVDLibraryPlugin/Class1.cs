@@ -122,6 +122,7 @@ namespace VMCDVDLibraryPlugin
                                         // fore the future
                                         UpdateTitleFromOMLXML(newVideo);
                                     }
+                                    newVideo.Disks.Add(disk);
                                     AddTitle(newVideo);
                                 }
                             }
