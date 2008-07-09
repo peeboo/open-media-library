@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OMLSDK;
 using OMLEngine;
 using System.Collections;
@@ -13,43 +13,51 @@ namespace DVRMSPlugin
 {
     public class DVRMSPlugin : OMLPlugin, IOMLPlugin
     {
-        private static double VERSION = 0.1;
+        private static double MajorVersion = 0.9;
+        private static double MinorVersion = 0.0;
 
-        public DVRMSPlugin() : base()
+        public DVRMSPlugin()
+            : base()
         {
         }
 
-        public override bool CopyImages()
+        protected override bool GetCopyImages()
         {
             return false;
         }
 
-        public override string GetVersion()
+        protected override double GetVersionMajor()
         {
-            return "0.9.0.0";
+            return MajorVersion;
         }
 
-        public override string GetMenu()
+        protected override double GetVersionMinor()
+        {
+            return MinorVersion;
+        }
+
+        protected override string GetMenu()
         {
             return "DVRMS Movie Files";
         }
-        public override string GetName()
+
+        protected override string GetName()
         {
             System.Type tipe = this.GetType();
             return tipe.Name;
         }
 
-        public override string GetDescription()
+        protected override string GetDescription()
         {
             return "DVRMS File Extractor Plugin v" + Version;
         }
 
-        public override string GetAuthor()
+        protected override string GetAuthor()
         {
             return "OML Development Team";
         }
 
-        public override bool Load(string filename)
+        public override bool Load(string filename, bool ShouldCopyImages)
         {
             string fPath = System.IO.Path.GetDirectoryName(filename);
             ProcessDir(fPath);
@@ -58,9 +66,10 @@ namespace DVRMSPlugin
 
         private void ProcessDir(string fPath)
         {
-            ProcessFiles(fPath);
+            string[] files = Directory.GetFiles(fPath, @"*.dvr-ms");
+            ProcessFiles(files);
 
-            string [] dirs = Directory.GetDirectories(fPath);
+            string[] dirs = Directory.GetDirectories(fPath);
             foreach (string dir in dirs)
             {
                 ProcessDir(dir);
@@ -68,150 +77,163 @@ namespace DVRMSPlugin
 
         }
 
-        private void ProcessFiles(string fPath)
+        private void ProcessFiles(string[] sFiles)
         {
-            string[] files = Directory.GetFiles(fPath, @"*.dvr-ms");
-            foreach (string file in files)
+            foreach (string file in sFiles)
             {
-                Title newTitle = new Title();
-                newTitle.Name = Path.GetFileNameWithoutExtension(file);
-                IDictionary meta;
-                DvrmsMetadataEditor editor = new DvrmsMetadataEditor(file);
-                meta = editor.GetAttributes();
-                foreach (string item in meta.Keys)
-                {
-                    MetadataItem attr = (MetadataItem) meta[item];
-                    switch (item)
-                    {
-                        case DvrmsMetadataEditor.Title:
-                            string sTitle = (string)attr.Value;
-                            sTitle = sTitle.Trim();
-                            if (!String.IsNullOrEmpty(sTitle))
-                            {
-                                newTitle.Name = sTitle;
-                            }
-                            newTitle.ImporterSource = @"DVRMSImporter";
-                            newTitle.MetadataSourceName = @"DVR-MS";
-                            Disk disk = new Disk();
-                            string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
-                            disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                            disk.Path = file;
-                            disk.Name = "Disk 1";
-                            newTitle.Disks.Add(disk);
-                            if (!String.IsNullOrEmpty(newTitle.AspectRatio))
-                            {
-                                newTitle.AspectRatio = @"Widescreen";
-                            }
-                            string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
-                            if (File.Exists(cover))
-                            {
-                                SetFrontCoverImage(ref newTitle, cover);
-                            }
-                            break;
-                        case DvrmsMetadataEditor.MediaOriginalBroadcastDateTime:
-                            string sDT = (string)attr.Value;
-                            if (!String.IsNullOrEmpty(sDT))
-                            {
-                                DateTime dt;
-                                if (DateTime.TryParse(sDT, out dt))
-                                {
-                                    newTitle.ReleaseDate = dt;
-                                }
-                            }
-                            break;
-                        case DvrmsMetadataEditor.Genre:
-                            if (!String.IsNullOrEmpty((string)attr.Value))
-                            {
-                                string sGenre = (string)attr.Value;
-                                string [] gen = sGenre.Split(',');
-                                newTitle.Genres.Clear();
-                                foreach (string genre in gen)
-                                {
-                                    string uGenre = genre.ToUpper().Trim();
-                                    if (String.IsNullOrEmpty(uGenre)) continue;
-                                    if (uGenre.StartsWith(@"MOVIE")) continue;
-                                    uGenre = genre.Trim();
-                                    newTitle.AddGenre(uGenre);
-                                }
-                            }
-                            break;
-                        case DvrmsMetadataEditor.Duration:
-                            Int64 rTime = (long)attr.Value;
-                            rTime = rTime / 600 / 1000000;
-                            newTitle.Runtime = (int)rTime;
-                            break;
-                        case DvrmsMetadataEditor.ParentalRating:
-                            if (!String.IsNullOrEmpty((string)attr.Value))
-                            {
-                                newTitle.ParentalRating = (string)attr.Value;
-                            }
-                            break;
-                        case DvrmsMetadataEditor.Credits:
-                            string persona = (string)attr.Value;
-                            persona += @";;;;";
-                            string [] credits = persona.Split(';');
-                            string [] cast = credits[0].Split('/');
-                            foreach (string nm in cast)
-                            {
-                                if (!String.IsNullOrEmpty(nm)) newTitle.AddActor(new Person(nm));
-                            }
-                            string[] dirs = credits[1].Split('/');
-                            if (dirs.Length > 0)
-                            {
-                                if (!String.IsNullOrEmpty(dirs[0]))
-                                {
-                                    string nm = dirs[0];
-                                    newTitle.AddDirector(new Person(nm));
-                                }
-                            }
+                ProcessFile(file);
+            }
+        }
 
-                            break;
-                        case DvrmsMetadataEditor.SubtitleDescription:
-                            newTitle.Synopsis = (string)attr.Value;
-                            break;
-                    }
-                    attr = null;
-                }
-
-                if (ValidateTitle(newTitle))
+        private void ProcessFile(string file)
+        {
+            Title newTitle = new Title();
+            String fPath = Path.GetDirectoryName(file);
+            newTitle.Name = Path.GetFileNameWithoutExtension(file);
+            IDictionary meta;
+            DvrmsMetadataEditor editor = new DvrmsMetadataEditor(file);
+            meta = editor.GetAttributes();
+            foreach (string item in meta.Keys)
+            {
+                MetadataItem attr = (MetadataItem)meta[item];
+                switch (item)
                 {
-                    try
-                    {
-                        if (String.IsNullOrEmpty(newTitle.Name))
+                    case DvrmsMetadataEditor.Title:
+                        string sTitle = (string)attr.Value;
+                        sTitle = sTitle.Trim();
+                        if (!String.IsNullOrEmpty(sTitle))
                         {
-                            newTitle.Name = Path.GetFileNameWithoutExtension(file);
-                            newTitle.ImporterSource = @"DVRMSImporter";
-                            newTitle.MetadataSourceName = @"DVR-MS";
-                            Disk disk = new Disk();
-                            disk.Name = "Disk 1";
-                            disk.Path = file;
-                            string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
-                            disk.Format = (VideoFormat) Enum.Parse(typeof(VideoFormat), ext, true);
-                            newTitle.Disks.Add(disk);                         
-                            string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
-                            if (File.Exists(cover))
-                            {
-                                newTitle.FrontCoverPath = cover;
-                            }
+                            newTitle.Name = sTitle;
                         }
-                        if (String.IsNullOrEmpty(newTitle.AspectRatio))
+                        newTitle.ImporterSource = @"DVRMSImporter";
+                        newTitle.MetadataSourceName = @"DVR-MS";
+                        Disk disk = new Disk();
+                        string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
+                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                        disk.Path = file;
+                        disk.Name = "Disk 1";
+                        newTitle.Disks.Add(disk);
+                        //newTitle.FileLocation = file;
+                        if (!String.IsNullOrEmpty(newTitle.AspectRatio))
                         {
                             newTitle.AspectRatio = @"Widescreen";
                         }
-                        if (String.IsNullOrEmpty(newTitle.ParentalRating))
+                        //string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
+                        //newTitle.VideoFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                        string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
+                        if (File.Exists(cover))
                         {
-                            newTitle.ParentalRating = @"--";
+                            SetFrontCoverImage(ref newTitle, cover);
+                            //newTitle.FrontCoverPath = cover;
                         }
-                        AddTitle(newTitle);
-                    }
-                    catch (Exception e)
-                    {
-                        Trace.WriteLine("Error adding row: " + e.Message);
-                    }
+                        break;
+                    case DvrmsMetadataEditor.MediaOriginalBroadcastDateTime:
+                        string sDT = (string)attr.Value;
+                        if (!String.IsNullOrEmpty(sDT))
+                        {
+                            DateTime dt;
+                            if (DateTime.TryParse(sDT, out dt))
+                            {
+                                newTitle.ReleaseDate = dt;
+                            }
+                        }
+                        break;
+                    case DvrmsMetadataEditor.Genre:
+                        if (!String.IsNullOrEmpty((string)attr.Value))
+                        {
+                            string sGenre = (string)attr.Value;
+                            string[] gen = sGenre.Split(',');
+                            newTitle.Genres.Clear();
+                            foreach (string genre in gen)
+                            {
+                                string uGenre = genre.ToUpper().Trim();
+                                if (String.IsNullOrEmpty(uGenre)) continue;
+                                if (uGenre.StartsWith(@"MOVIE")) continue;
+                                uGenre = genre.Trim();
+                                newTitle.AddGenre(uGenre);
+                            }
+                        }
+                        break;
+                    case DvrmsMetadataEditor.Duration:
+                        Int64 rTime = (long)attr.Value;
+                        rTime = rTime / 600 / 1000000;
+                        newTitle.Runtime = (int)rTime;
+                        break;
+                    case DvrmsMetadataEditor.ParentalRating:
+                        if (!String.IsNullOrEmpty((string)attr.Value))
+                        {
+                            newTitle.ParentalRating = (string)attr.Value;
+                        }
+                        break;
+                    case DvrmsMetadataEditor.Credits:
+                        string persona = (string)attr.Value;
+                        persona += @";;;;";
+                        string[] credits = persona.Split(';');
+                        string[] cast = credits[0].Split('/');
+                        foreach (string nm in cast)
+                        {
+                            if (!String.IsNullOrEmpty(nm)) newTitle.AddActor(new Person(nm));
+                        }
+                        string[] dirs = credits[1].Split('/');
+                        if (dirs.Length > 0)
+                        {
+                            if (!String.IsNullOrEmpty(dirs[0]))
+                            {
+                                string nm = dirs[0];
+                                newTitle.AddDirector(new Person(nm));
+                            }
+                        }
+
+                        break;
+                    case DvrmsMetadataEditor.SubtitleDescription:
+                        newTitle.Synopsis = (string)attr.Value;
+                        break;
                 }
-                else
-                    Trace.WriteLine("Error saving row");
+                attr = null;
+            }
+
+            if (ValidateTitle(newTitle))
+            {
+                try
+                {
+                    if (String.IsNullOrEmpty(newTitle.Name))
+                    {
+                        newTitle.Name = Path.GetFileNameWithoutExtension(file);
+                        newTitle.ImporterSource = @"DVRMSImporter";
+                        newTitle.MetadataSourceName = @"DVR-MS";
+                        Disk disk = new Disk();
+                        disk.Name = "Disk 1";
+                        disk.Path = file;
+                        //newTitle.FileLocation = file;
+                        string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
+                        //newTitle.VideoFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                        newTitle.Disks.Add(disk);
+                        string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
+                        if (File.Exists(cover))
+                        {
+                            newTitle.FrontCoverPath = cover;
+                        }
+                    }
+                    if (String.IsNullOrEmpty(newTitle.AspectRatio))
+                    {
+                        newTitle.AspectRatio = @"Widescreen";
+                    }
+                    if (String.IsNullOrEmpty(newTitle.ParentalRating))
+                    {
+                        newTitle.ParentalRating = @"--";
+                    }
+                    AddTitle(newTitle);
+                }
+                catch (Exception e)
+                {
+                    Trace.WriteLine("Error adding row: " + e.Message);
                 }
             }
+            else
+            {
+                Trace.WriteLine("Error saving row");
+            }
+        }
     }
 }
