@@ -131,7 +131,7 @@
       <!-- Solid background color. -->
       <ColorFill Name="Background" Content="[BackgroundColor]" Padding="5,0,5,0">
         <Children>
-          <Text Name="Label" Content="[Category.Caption]" Font="font://styles:Normal" Color="color://styles:NormalColor" />
+          <Text Name="Label" Content="[Category.Caption]" Font="font://styles:NormalBold" Color="color://styles:NormalColor" />
         </Children>
       </ColorFill>
     </Content>

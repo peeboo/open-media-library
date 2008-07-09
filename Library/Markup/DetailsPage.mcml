@@ -228,7 +228,7 @@
   <UI Name="SynopsisPanel" >
     <Properties>
       <cor:String Name="Synopsis" String="$Required"/>
-      <Font Name="Normal" FontName="Verdana" FontSize="16"/>
+      <Font Name="Normal" FontName="Segoe Media Center" FontSize="20"/>
     </Properties>
 
     <Locals>
@@ -268,7 +268,7 @@
                 <Children>
                   <!-- Text to scroll. Filled with rich text (RTF) content. -->
                   <!-- You can use Wordpad to generate RTF content.         -->
-                  <Text Name="Summary" WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor" Content="[Synopsis]" >
+                  <Text Name="Summary" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor" Content="[Synopsis]" >
                     <!-- Smooth scrolling. -->
                     <Animations>
                       <Animation Type="Move">
@@ -319,7 +319,7 @@
 
           <Repeater Source="[ActorList]" Layout="VerticalFlow" MaximumSize="200,200">
             <Content>
-              <Text Content="[RepeatedItem!cor:String]" WordWrap="true" Font="font://s:Small" Color="color://s:NormalColor"/>
+              <Text Content="[RepeatedItem!cor:String]" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor"/>
             </Content>
           </Repeater>
         </Children>
@@ -349,8 +349,8 @@
     <Content>
       <Panel Layout="HorizontalFlow">
         <Children>
-          <Text Name="LabelField" Content="[Label]" Font="font://s:Small" Color="color://s:LabelColor" />
-          <Text Name="TextField" Content="[Text]" Font="font://s:Small" Color="color://s:NormalColor" />
+          <Text Name="LabelField" Content="[Label]" Font="font://s:Normal" Color="color://s:LabelColor" />
+          <Text Name="TextField" Content="[Text]" Font="font://s:Normal" Color="color://s:NormalColor" />
           <!--<LayoutInput>
               <FormLayoutInput Left="Image,1.02" Top="MovieSynopsis,1.02,15"/>
             </LayoutInput>-->

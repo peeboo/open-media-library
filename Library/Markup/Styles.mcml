@@ -35,7 +35,7 @@
 
   <Font Name="TitleFont"             Font="Calibri,24"/>
   <Font Name="ButtonFont"             Font="Calibri,24"/>
-  <Font Name="LabelFont" FontName="Verdana" FontSize="16"/>
+  <Font Name="LabelFont" FontName="Segoe Media Center" FontSize="20"/>
   <Font Name="SmallLabelFont" FontName="Segoe Media Center" FontSize="16"/>
   <Color Name="LabelColor" Color="White"/>
   <Color Name="NormalColor" Color="LightBlue"/>
@@ -44,10 +44,10 @@
   <Color Name="SelectedColor" Color="White"/>
   <Color Name="BackgroundColor" Color="Black"/>
   <Font Name="BoldFont" FontName="Segoe Media Center" FontSize="16"	FontStyle="Bold"/>
-  <Font Name="Heading" FontName="Segoe Media Center" FontSize="20"	FontStyle="Bold"/>
-  <Font Name="Normal" FontName="Segoe Media Center" FontSize="16"/>
+  <Font Name="Heading" FontName="Segoe Media Center" FontSize="22"	FontStyle="Bold"/>
+  <Font Name="Normal" FontName="Segoe Media Center" FontSize="18" FontStyle="Bold"/>
   <Font Name="Small" FontName="Segoe Media Center" FontSize="14"/>
-  <Font Name="NormalBold" FontName="Segoe Media Center" FontSize="16" FontStyle="Bold"/>
+  <Font Name="NormalBold" FontName="Segoe Media Center" FontSize="18" FontStyle="Bold"/>
 
   <!-- Animation so we scroll smoothly -->
   <Animation Name="MoveAnimation" Type="Move">
