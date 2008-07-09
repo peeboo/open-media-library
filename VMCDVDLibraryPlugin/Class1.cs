@@ -217,11 +217,11 @@ namespace VMCDVDLibraryPlugin
 
                         bFound = reader.ReadToFollowing("dvdTitle");
                         if (!bFound) return null;
-                        t.Name = reader.ReadString();
+                        t.Name = reader.ReadString().Trim();
 
                         bFound = reader.ReadToFollowing("studio");
                         if (bFound)
-                            t.Studio = reader.ReadString();
+                            t.Studio = reader.ReadString().Trim();
 
                         bFound = reader.ReadToFollowing("leadPerformer");
                         if (bFound)
@@ -230,8 +230,8 @@ namespace VMCDVDLibraryPlugin
                             string[] actors = leadPerformer.Split(new char[] { ';', ',', '|' });
                             foreach (string actor in actors)
                             {
-                                t.AddActor(new Person(actor));
-                                t.AddActingRole(actor, "");
+                                t.AddActor(new Person(actor.Trim()));
+                                t.AddActingRole(actor.Trim(), "");
                             }
                         }
 
@@ -242,22 +242,22 @@ namespace VMCDVDLibraryPlugin
                             string[] directors = directorList.Split(new char[] { ';', ',', '|' });
                             foreach (string director in directors)
                             {
-                                t.AddDirector(new Person(director));
+                                t.AddDirector(new Person(director.Trim()));
                             }
                         }
 
                         bFound = reader.ReadToFollowing("MPAARating");
                         if (bFound)
-                            t.ParentalRating = reader.ReadString();
+                            t.ParentalRating = reader.ReadString().Trim();
 
                         bFound = reader.ReadToFollowing("language");
                         if (bFound)
-                            t.AddLanguageFormat(reader.ReadString());
+                            t.AddLanguageFormat(reader.ReadString().Trim());
 
                         bFound = reader.ReadToFollowing("releaseDate");
                         if (bFound)
                         {
-                            string releaseDate = reader.ReadString();
+                            string releaseDate = reader.ReadString().Trim();
                             DateTime dt;
                             if (DateTime.TryParse(releaseDate, out dt))
                             {
@@ -272,13 +272,13 @@ namespace VMCDVDLibraryPlugin
                             string[] genres = genreList.Split(new char[] { ';', ',', '|' });
                             foreach (string genre in genres)
                             {
-                                t.AddGenre(genre);
+                                t.AddGenre(genre.Trim());
                             }
                         }
 
                         bFound = reader.ReadToFollowing("largeCoverParams");
                         if (bFound)
-                            SetFrontCoverImage(ref t, reader.ReadString());
+                            SetFrontCoverImage(ref t, reader.ReadString().Trim());
 
                         bFound = reader.ReadToFollowing("duration");
                         if (bFound)
@@ -292,7 +292,7 @@ namespace VMCDVDLibraryPlugin
 
                         bFound = reader.ReadToFollowing("synopsis");
                         if (bFound)
-                            t.Synopsis = reader.ReadString();
+                            t.Synopsis = reader.ReadString().Trim();
 
                     }
                 }
