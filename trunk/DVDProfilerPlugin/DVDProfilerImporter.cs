@@ -10,7 +10,6 @@ namespace DVDProfilerPlugin
     [CLSCompliant(true)]
     public class DVDProfilerImporter : OMLPlugin, IOMLPlugin
     {
-        private static double VERSION = 0.1;
 
         public DVDProfilerImporter()
             : base()
@@ -52,25 +51,32 @@ namespace DVDProfilerPlugin
             return true;
         }
 
-        public override string GetVersion()
+        private static double MajorVersion = 0.9;
+        private static double MinorVersion = 0.0;
+        protected override double GetVersionMajor()
         {
-            return "0.9.0.0";
+            return MajorVersion;
         }
-        public override string GetMenu()
+
+        protected override double GetVersionMinor()
+        {
+            return MinorVersion;
+        }
+        protected override string GetMenu()
         {
             return "DVD Profiler";
         }
-        public override string GetName()
+        protected override string GetName()
         {
             return "DVDProfilerPlugin";
         }
-        public override string GetAuthor()
+        protected override string GetAuthor()
         {
             return "OML Development Team";
         }
-        public override string GetDescription()
+        protected override string GetDescription()
         {
-            return "DVDProfiler xml file importer for Open Media Library v" + VERSION;
+            return "DVDProfiler xml file importer for Open Media Library v" + Version;
         }
 
         private static void process_node_switch(Title newTitle, XmlNode node)
