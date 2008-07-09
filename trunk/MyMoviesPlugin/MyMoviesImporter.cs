@@ -14,7 +14,6 @@ namespace MyMoviesPlugin
 {
     public class MyMoviesImporter : OMLPlugin, IOMLPlugin
     {
-        private static double VERSION = 0.1;
 
         public MyMoviesImporter() : base()
         {
@@ -23,7 +22,7 @@ namespace MyMoviesPlugin
 
         public override bool Load(string filename)
         {
-            Utilities.DebugLine("[MyMoviesImporter] created[filename("+filename+"), ShouldCopyImages("+ShouldCopyImages+")]");
+            Utilities.DebugLine("[MyMoviesImporter] created[filename("+filename+"), ShouldCopyImages("+CopyImages+")]");
 
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(filename);
@@ -59,25 +58,32 @@ namespace MyMoviesPlugin
             }
             return true;
         }
-        public override string GetVersion()
+        private static double MajorVersion = 0.9;
+        private static double MinorVersion = 0.0;
+        protected override double GetVersionMajor()
         {
-            return "0.9.0.0";
+            return MajorVersion;
         }
-        public override string GetMenu()
+
+        protected override double GetVersionMinor()
+        {
+            return MinorVersion;
+        }
+        protected override string GetMenu()
         {
             return "MyMovies";
         }
-        public override string GetName()
+        protected override string GetName()
         {
             return "MyMoviesPlugin";
         }
-        public override string GetAuthor()
+        protected override string GetAuthor()
         {
             return "OML Development Team";
         }
-        public override string GetDescription()
+        protected override string GetDescription()
         {
-            return "MyMovies xml file importer for Open Media Library v" + VERSION;
+            return "MyMovies xml file importer for Open Media Library v" + Version;
         }
 
 /*        public string CopyImage(string from_location, string to_location)
@@ -122,7 +128,7 @@ namespace MyMoviesPlugin
                             string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
                                                    "\\B" + newTitle.InternalItemID +
                                                    fi.Extension;
-                            if (ShouldCopyImages)
+                            if (CopyImages)
                             {
                                 CopyImage(imagePath, new_full_name);
                                 imagePath = new_full_name;

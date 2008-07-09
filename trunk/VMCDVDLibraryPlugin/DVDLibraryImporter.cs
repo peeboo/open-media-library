@@ -14,36 +14,42 @@ namespace VMCDVDLibraryPlugin
 {
     public class DVDLibraryImporter : OMLPlugin, IOMLPlugin
     {
-        private static double VERSION = 0.1;
         public DVDLibraryImporter()
             : base()
         {
             Utilities.DebugLine("[DVDLibraryImporter] created");
         }
 
-        public override bool FolderSelection()
+        protected override bool GetFolderSelect()
         {
             return true;
         }
-        public override string GetVersion()
+        private static double MajorVersion = 0.9;
+        private static double MinorVersion = 0.0;
+        protected override double GetVersionMajor()
         {
-            return "0.9.0.0";
+            return MajorVersion;
         }
-        public override string GetMenu()
+
+        protected override double GetVersionMinor()
+        {
+            return MinorVersion;
+        }
+        protected override string GetMenu()
         {
             return "Scan Folders For DVDs and Videos";
         }
-        public override string GetName()
+        protected override string GetName()
         {
             return "VMCDVDLibraryPlugin";
         }
-        public override string GetAuthor()
+        protected override string GetAuthor()
         {
             return "OML Development Team";
         }
-        public override string GetDescription()
+        protected override string GetDescription()
         {
-            return "VMC DVD Library importer for Open Media Library v" + VERSION;
+            return "VMC DVD Library importer for Open Media Library v" + Version;
         }
         public override bool Load(string filename)
         {
