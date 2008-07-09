@@ -177,6 +177,8 @@ namespace OMLSDK
         }
         public void SetFrontCoverImage(ref Title newTitle, string imagePath)
         {
+            if (!File.Exists(imagePath)) return;
+
             FileInfo fi;
             try {
                 fi = new FileInfo(imagePath);
