@@ -97,6 +97,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="library.snk" />
     <None Include="Properties\app.manifest" />
   </ItemGroup>
