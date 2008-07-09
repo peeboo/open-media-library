@@ -133,7 +133,7 @@
                             <FlowLayout Orientation="Horizontal"/>
                         </Layout>
                         <Children>
-                            <Text Name="SubCaption" Content=" " WordWrap="true" Font="font://s:Small" Color="White">
+                            <Text Name="SubCaption" Content=" " WordWrap="true" Font="font://s:Normal" Color="White">
                                 <Animations>
                                     <TransformAnimation Source="animation://s:ChangeHide"/>
                                     <TransformAnimation Source="animation://s:ChangeShow"/>
@@ -150,7 +150,7 @@
                         <Children>
                             <Clip Orientation="Vertical" FadeSize="50" NearOffset="-50">
                                 <Children>
-                                    <Text Name="Summary" Content="" WordWrap="true" Font="font://s:Small" Color="White">
+                                    <Text Name="Summary" Content="" WordWrap="true" Font="font://s:Normal" Color="White">
                                         <Animations>
                                             <TransformAnimation Source="animation://s:ChangeHide"/>
                                             <TransformAnimation Source="animation://s:ChangeShow"/>
@@ -273,7 +273,7 @@
             <Panel Name="Indicator" Layout="HorizontalFlow">
                 <Children>
 
-                    <Text Name="CurrentPage" Content="[FocusedIndexString]" Font="Verdana,15" Color="White">
+                    <Text Name="CurrentPage" Content="[FocusedIndexString]" Font="font://s:Normal" Color="White">
                         <Animations>
                             <TransformAnimation Source="animation://s:ChangeHide"/>
                             <TransformAnimation Source="animation://s:ChangeShow"/>
@@ -282,7 +282,7 @@
 
                     <Text Content="|" Margins="5,0,5,0" Font="Verdana,15" Color="LightBlue"/>
 
-                    <Text Name="TotalPages" Content="[Gallery.Movies.Count.ToString]" Font="Verdana,15" Color="LightBlue">
+                    <Text Name="TotalPages" Content="[Gallery.Movies.Count.ToString]" Font="font://s:Normal" Color="LightBlue">
                         <Animations>
                             <TransformAnimation Source="animation://s:ChangeHide"/>
                             <TransformAnimation Source="animation://s:ChangeShow"/>

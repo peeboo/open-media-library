@@ -26,6 +26,6 @@
     </Content>
   </UI>
 
-  <Font Name="Font" FontName="global://me:LightFontName" FontSize="30" />
+  <Font Name="Font" FontName="global://me:LightFontName" FontSize="30" FontStyle="Bold" />
 
 </Mcml>
