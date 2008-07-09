@@ -439,7 +439,7 @@ namespace Library
 
         public bool ImportFile(OMLPlugin plugin, string file_to_import)
         {
-            plugin.ShouldCopyImages = _shouldCopyImages.Value;
+            plugin.CopyImages = _shouldCopyImages.Value;
             return plugin.Load(file_to_import);
         }
 
