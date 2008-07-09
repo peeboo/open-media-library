@@ -166,7 +166,7 @@ namespace VMCDVDLibraryPlugin
                     {
                         string dvdid = GetDVDID(xmlFile);
                         string xmlDetailsFile = GetDVDCacheFileName(dvdid);
-                        t = ReadMetaData(xmlDetailsFile);
+                        t = ReadMetaData(folderName, xmlDetailsFile);
                     }
                     else
                     {
@@ -201,7 +201,7 @@ namespace VMCDVDLibraryPlugin
             return null;
         }
 
-        private Title ReadMetaData(string dvdCacheXMLFile)
+        private Title ReadMetaData(string movieFolder, string dvdCacheXMLFile)
         {
             Title t = new Title();
             try
@@ -276,9 +276,22 @@ namespace VMCDVDLibraryPlugin
                             }
                         }
 
+                        string imageFileName = "";
                         bFound = reader.ReadToFollowing("largeCoverParams");
                         if (bFound)
-                            SetFrontCoverImage(ref t, reader.ReadString().Trim());
+                        {
+                            imageFileName = reader.ReadString().Trim();
+                            if (!File.Exists(imageFileName) && File.Exists(movieFolder + "\\folder.jpg"))
+                            {
+                                imageFileName = movieFolder + "\\folder.jpg";
+                            }
+                        }
+                        else if( File.Exists(movieFolder + "\\folder.jpg" ) )
+                        {
+                            imageFileName = movieFolder + "\\folder.jpg";
+                        }
+
+                        SetFrontCoverImage(ref t, imageFileName);
 
                         bFound = reader.ReadToFollowing("duration");
                         if (bFound)
