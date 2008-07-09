@@ -17,7 +17,7 @@ namespace MovieCollectorzPlugin
     {
         const string HTML_TAG_PATTERN = "<.*?>";
 
-        public override string GetAuthor()
+        protected override string GetAuthor()
         {
             throw new Exception("OML");
         }
@@ -220,19 +220,28 @@ namespace MovieCollectorzPlugin
 
             return true;
         }
-        public override string GetVersion()
+
+        private static double MajorVersion = 0.9;
+        private static double MinorVersion = 0.0;
+        protected override double GetVersionMajor()
         {
-            return "0.9.0.0";
+            return MajorVersion;
         }
-        public override string GetMenu()
+
+        protected override double GetVersionMinor()
+        {
+            return MinorVersion;
+        }
+
+        protected override string GetMenu()
         {
             return "Movie Collectorz";
         }
-        public override string GetName()
+        protected override string GetName()
         {
             return "MovieCollectorzPlugin";
         }
-        public override string GetDescription()
+        protected override string GetDescription()
         {
             return "Movie Collectorz";
         }
