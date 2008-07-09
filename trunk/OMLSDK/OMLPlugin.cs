@@ -12,6 +12,7 @@ namespace OMLSDK
     {
         List<Title> titles;
         private int totalRowsAdded = 0;
+        private Boolean _copyImages = false;
 
         #region Properties
 
@@ -45,6 +46,7 @@ namespace OMLSDK
         public Boolean CopyImages
         {
             get { return GetCopyImages(); }
+            set { _copyImages = value; }
         }
 
         /// <summary>
@@ -335,7 +337,7 @@ namespace OMLSDK
         /// 
         /// </summary>
         /// <returns></returns>
-        protected virtual Boolean GetCopyImages() { return false; }
+        protected virtual Boolean GetCopyImages() { return _copyImages; }
 
         /// <summary>
         /// 
@@ -530,7 +532,7 @@ namespace OMLSDK
                 string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
                                                    "\\F" + newTitle.InternalItemID +
                                                    fi.Extension;
-                if (ShouldCopyImages)
+                if (CopyImages)
                 {
                     CopyImage(imagePath, new_full_name);
                     imagePath = new_full_name;
