@@ -60,7 +60,7 @@ namespace OMLImporter
             ofDiag.CheckFileExists = true;
             ofDiag.CheckPathExists = true;
             ofDiag.Multiselect = false;
-            ofDiag.Title = "Select " + plugin.GetName() + " file to import";
+            ofDiag.Title = "Select " + plugin.Name + " file to import";
             DialogResult dlgRslt = ofDiag.ShowDialog();
             if (dlgRslt == DialogResult.OK)
             {
@@ -125,8 +125,8 @@ namespace OMLImporter
                 if (iResp < plugins.Count)
                 {
                     plugin = plugins[iResp];
-                    showFolderSelection = plugin.FolderSelection();
-                    if (plugins[iResp].CopyImages()) AskIfShouldCopyImages();
+                    showFolderSelection = plugin.FolderSelect;
+                    if (plugins[iResp].CopyImages) AskIfShouldCopyImages();
                 } 
                 else if (iResp == (plugins.Count))
                 {               
@@ -315,7 +315,7 @@ namespace OMLImporter
             {
                 if (File.Exists(file_to_import) || Directory.Exists(file_to_import))
                 {
-                    Console.WriteLine("Loading file " + file_to_import + " using " + plugin.GetName() + " importer");
+                    Console.WriteLine("Loading file " + file_to_import + " using " + plugin.Name + " importer");
                     if (ImportFile(plugin, file_to_import))
                         LoadTitlesIntoDatabase(plugin);
                     else

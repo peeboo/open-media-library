@@ -1,96 +1,420 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using OMLEngine;
 using System.Drawing;
 using System.IO;
+using System.Windows.Forms;
+using OMLEngine;
 
 namespace OMLSDK
 {
     public class OMLPlugin :IOMLPlugin
     {
-        bool _ShouldCopyImages = true;
         List<Title> titles;
         private int totalRowsAdded = 0;
 
-        public string Name
+        #region Properties
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Boolean CanProcessDir
         {
-            get { return GetName(); }
+            get { return GetProcessDir(); }
         }
 
-        public string Version
+        /// <summary>
+        /// 
+        /// </summary>
+        public Boolean CanProcessFiles
         {
-            get { return GetVersion(); }
+            get { return GetProcessFiles(); }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public Boolean CanProcessFile
+        {
+            get { return GetProcessFile(); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Boolean CopyImages
+        {
+            get { return GetCopyImages(); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string Description
         {
             get { return GetDescription(); }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Filter
+        {
+            get { return GetFilter(); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Int32 FilterIndex
+        {
+            get { return GetFilterIndex(); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Boolean FolderSelect
+        {
+            get { return GetFolderSelect(); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string Menu
         {
             get { return GetMenu();  }
         }
 
-        public bool ShouldCopyImages
+        /// <summary>
+        /// 
+        /// </summary>
+        public Boolean MultiSelect
         {
-            get { return _ShouldCopyImages; }
-            set
+            get { return GetMultiselect(); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Name
+        {
+            get { return GetName(); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public int TotalTitlesAdded
+        {
+            get { return totalRowsAdded; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Version
+        {
+            get { return GetVersion(); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public double VersionMajor
+        {
+            get { return GetVersionMajor(); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public double VersionMinor
+        {
+            get { return GetVersionMinor(); }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual string[] GetWork()
+        {
+            if (this.FolderSelect)
             {
-                _ShouldCopyImages = value;
+                return GetFolder();
+            }
+            else
+            {
+                return GetFiles();
             }
         }
 
-        public virtual Boolean CopyImages()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string[] GetFolder()
         {
-            return true;
+            FolderBrowserDialog ofDiag = new FolderBrowserDialog();
+            DialogResult res = ofDiag.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                return new string[] { ofDiag.SelectedPath };
+            }
+            else
+            {
+                return null;
+            }
         }
-        public virtual Boolean FolderSelection()
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string[] GetFiles()
         {
-            return false;
+            OpenFileDialog ofDiag = new OpenFileDialog();
+            ofDiag.InitialDirectory = Properties.Settings.Default.InitialDirectory; //"c:\\";
+            ofDiag.Filter = this.Filter;
+            ofDiag.FilterIndex = this.FilterIndex;
+            ofDiag.RestoreDirectory = true;
+            ofDiag.AutoUpgradeEnabled = true;
+            ofDiag.CheckFileExists = true;
+            ofDiag.CheckPathExists = true;
+            ofDiag.Multiselect = this.MultiSelect;
+            ofDiag.Title = String.Format(@"Select {0} file to import", Name);
+            DialogResult dlgRslt = ofDiag.ShowDialog();
+            if (dlgRslt == DialogResult.OK)
+            {
+                Utilities.DebugLine(String.Format(@"[OMLImporter] Valid file found ({0})", ofDiag.FileName));
+                if (this.MultiSelect)
+                {
+                    return ofDiag.FileNames;
+                }
+                else
+                {
+                    return new string[] { ofDiag.FileName };
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
-        public virtual string GetVersion()
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="thework"></param>
+        public virtual void DoWork(string[] thework)
         {
-            throw new Exception("You must implement this method in your class.");
         }
-        public virtual string GetMenu()
-        {
-            throw new Exception("You must implement this method in your class.");
-        }
-        public virtual string GetName()
-        {
-            throw new Exception("You must implement this method in your class.");
-        }
-        public virtual string GetDescription()
-        {
-            throw new Exception("You must implement this method in your class.");
-        }
-        public virtual string GetAuthor()
-        {
-            throw new Exception("You must implement this method in your class.");
-        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public virtual bool Load(string filename)
         {
-            throw new Exception("You must implement this method in your class.");
+            return Load(filename, CopyImages);
         }
-        public int GetTotalTitlesAdded()
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string GetVersion()
         {
-            return totalRowsAdded;
+            return String.Format("{0:f}.{1:f}", VersionMajor, VersionMinor);
         }
+
+        #region Need to be implemented in descendant class
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string GetAuthor()
+        {
+            throw new Exception(@"You must implement this method in your class.");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string GetDescription()
+        {
+            throw new Exception(@"You must implement this method in your class.");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string GetMenu()
+        {
+            throw new Exception(@"You must implement this method in your class.");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string GetName()
+        {
+            throw new Exception(@"You must implement this method in your class.");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual double GetVersionMajor()
+        {
+            return 0.0;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual double GetVersionMinor()
+        {
+            return 0.0;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="ShouldCopyImages"></param>
+        /// <returns></returns>
+        public virtual bool Load(string filename, bool ShouldCopyImages)
+        {
+            throw new Exception(@"You must implement this method in your class.");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fPath"></param>
+        public virtual void ProcessDir(string fPath)
+        {
+            throw new Exception(@"You must implement this method in your class.");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sFiles"></param>
+        public virtual void ProcessFiles(string[] sFiles)
+        {
+            throw new Exception(@"You must implement this method in your class.");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
+        public virtual void ProcessFile(string file)
+        {
+            throw new Exception(@"You must implement this method in your class.");
+        }
+
+        #endregion
+
+        #region Overridable Stubs for readonly properties
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Boolean GetCopyImages() { return false; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string GetFilter()
+        {
+            return @"All files (*.*)|*.*";
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Int32 GetFilterIndex() { return 1; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Boolean GetMultiselect() { return false; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Boolean GetFolderSelect() { return false; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Boolean GetProcessDir() { return false; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Boolean GetProcessFiles() { return false; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Boolean GetProcessFile() { return false; }
+
+        #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public List<Title> GetTitles()
         {
             titles.Sort();
             return titles;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public OMLPlugin()
         {
             titles = new List<Title>();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Title newTitle()
         {
             return new Title();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="newTitle"></param>
         public void AddTitle(Title newTitle)
         {
             if (string.IsNullOrEmpty(newTitle.AspectRatio))
@@ -106,13 +430,21 @@ namespace OMLSDK
             }
 
             titles.Add(newTitle);
-            BuildResizedMenuImage(newTitle);
             totalRowsAdded++;
         }
-        public bool ValidateTitle(Title title_to_validate)
-        {
-            return true;
-        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="title_to_validate"></param>
+        /// <returns></returns>
+        public bool ValidateTitle(Title title_to_validate) { return true; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file_extension"></param>
+        /// <returns></returns>
         public bool IsSupportedFormat(string file_extension)
         {
             string[] formats = Enum.GetNames(typeof(VideoFormat));
@@ -123,6 +455,11 @@ namespace OMLSDK
             }
             return false;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="t"></param>
         public static void BuildResizedMenuImage(Title t)
         {
             if (t.FrontCoverPath.Length > 0)
@@ -135,7 +472,7 @@ namespace OMLSDK
                         using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(coverArtImage, 200))
                         {
                             string img_path = FileSystemWalker.ImageDirectory +
-                                          "\\MF" + t.InternalItemID + ".jpg";
+                                          @"\MF" + t.InternalItemID + ".jpg";
                             menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
                             t.FrontCoverMenuPath = img_path;
                         }
@@ -143,6 +480,7 @@ namespace OMLSDK
                 }
             }
         }
+
         /*
         public void SetAspectRatio(Title t)
         {
@@ -169,6 +507,13 @@ namespace OMLSDK
              
         }
         */
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="from_location"></param>
+        /// <param name="to_location"></param>
+        /// <returns></returns>
         public static string CopyImage(string from_location, string to_location)
         {
             FileInfo fi = new FileInfo(from_location);
