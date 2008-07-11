@@ -16,6 +16,11 @@ namespace DVDProfilerPlugin
         {
         }
 
+        public override bool IsSingleFileImporter()
+        {
+            return true;
+        }
+
         public override bool Load(string filename)
         {
             XmlDocument xDoc = new XmlDocument();

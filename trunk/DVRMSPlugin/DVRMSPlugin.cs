@@ -21,6 +21,11 @@ namespace DVRMSPlugin
         {
         }
 
+        public override bool IsSingleFileImporter()
+        {
+            return false;
+        }
+
         protected override bool GetCopyImages()
         {
             return false;

@@ -20,6 +20,11 @@ namespace MyMoviesPlugin
             Utilities.DebugLine("[MyMoviesImporter] created");
         }
 
+        public override bool IsSingleFileImporter()
+        {
+            return true;
+        }
+
         public override bool Load(string filename)
         {
             Utilities.DebugLine("[MyMoviesImporter] created[filename("+filename+"), ShouldCopyImages("+CopyImages+")]");

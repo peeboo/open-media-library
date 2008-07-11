@@ -230,6 +230,15 @@ namespace OMLSDK
         /// 
         /// </summary>
         /// <returns></returns>
+        public virtual bool IsSingleFileImporter()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public string GetVersion()
         {
             return String.Format("{0:f}.{1:f}", VersionMajor, VersionMinor);

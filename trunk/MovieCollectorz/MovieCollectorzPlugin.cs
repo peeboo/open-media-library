@@ -21,7 +21,12 @@ namespace MovieCollectorzPlugin
         {
             throw new Exception("OML");
         }
-        
+
+        public override bool IsSingleFileImporter()
+        {
+            return true;
+        }
+
         public MovieCollectorzPlugin() : base()
         {
         }
