@@ -116,7 +116,7 @@
             </Component>
             <Component Id="Toub.MediaCenter.Dvrms.dll" Guid="30A9DD90-2179-427a-AC38-4A306435CCEC" DiskId="1">
                 <File Name="Toub.MediaCenter.Dvrms.dll"
-				      KeyPath="yes" Source="..\bin\$(var.BuildType)\Toub.MediaCenter.Dvrms.dll"
+				      KeyPath="yes" Source="..\..\DVRMSPlugin\\Toub.MediaCenter.Dvrms.dll"
 				      Checksum="yes" Vital="yes" Assembly=".net"/>
             </Component>
             <Component Id="MovieCollectorz.dll" Guid="b3a7750c-5474-4bdf-9926-64e13ed92a97" DiskId="1">
