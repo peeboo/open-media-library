@@ -325,11 +325,21 @@ namespace Library
         {
             OMLApplication.DebugLine("Start loading new titles");
             _plugin = GetPlugin();
-            _filename = "C:\\titles.xml";
+            if (_plugin.IsSingleFileImporter()) {
+                OMLApplication.DebugLine("This importer requires a file, determining file to load.");
+                _filename = determineFileToLoad(_plugin);
+            }
+            //_filename = "C:\\titles.xml";
 
             Application.DeferredInvokeOnWorkerThread(new DeferredHandler(_BeginLoading),
                                                      new DeferredHandler(_LoadingComplete),
                                                      new object[] { });
+        }
+
+        public string determineFileToLoad(OMLPlugin plugin)
+        {
+            OMLApplication.DebugLine("Which file to load?");
+            return string.Empty;
         }
 
         public void _LoadingComplete(object args)
@@ -424,10 +434,13 @@ namespace Library
                     {
                         if (dInfo.DriveType == DriveType.Fixed || dInfo.DriveType == DriveType.Network)
                         {
-                            DirectoryTreeNode node = new DirectoryTreeNode(dInfo.Name + " (" + dInfo.VolumeLabel + ")",
-                                                                           dInfo.RootDirectory.FullName,
-                                                                           _treeView);
-                            _treeView.ChildNodes.Add(node);
+                            if (dInfo.IsReady)
+                            {
+                                DirectoryTreeNode node = new DirectoryTreeNode(dInfo.Name + " (" + dInfo.VolumeLabel + ")",
+                                                                               dInfo.RootDirectory.FullName,
+                                                                               _treeView);
+                                _treeView.ChildNodes.Add(node);
+                            }
                         }
                     }
                 }
@@ -450,15 +463,15 @@ namespace Library
             switch (strChosenImporter)
             {
                 case "DVDID XML Files":
-                    return new MyMoviesImporter();
+                    return new DVDLibraryImporter();
                 case "MyMovies":
                     return new MyMoviesImporter();
                 case "DVD Profiler":
-                    return new MyMoviesImporter();
+                    return new DVDProfilerImporter();
                 case "Movie Collectorz":
-                    return new MyMoviesImporter();
+                    return new MovieCollectorzPlugin.MovieCollectorzPlugin();
                 case "DVR-MS Files":
-                    return new MyMoviesImporter();
+                    return new DVRMSPlugin.DVRMSPlugin();
                 default:
                     return new MyMoviesImporter();
             }

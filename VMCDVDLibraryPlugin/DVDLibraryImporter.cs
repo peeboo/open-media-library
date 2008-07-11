@@ -20,6 +20,11 @@ namespace VMCDVDLibraryPlugin
             Utilities.DebugLine("[DVDLibraryImporter] created");
         }
 
+        public override bool IsSingleFileImporter()
+        {
+            return false;
+        }
+
         protected override bool GetFolderSelect()
         {
             return true;

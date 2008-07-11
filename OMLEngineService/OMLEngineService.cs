@@ -4,7 +4,7 @@ using OMLEngine;
 
 namespace OMLEngineService
 {
-    public class OMLEngineService : ServiceBase
+    public partial class OMLEngineService : ServiceBase
     {
         private TitleCollection tc;
 
