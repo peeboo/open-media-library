@@ -54,16 +54,34 @@ namespace OMLDatabaseEditor
             if (this.tabsMediaPanel.SelectedTab != null)
             {
                 Controls.MediaEditor _currentEditor = (Controls.MediaEditor)this.tabsMediaPanel.SelectedTab.Controls[0];
-                Title _currentTitle = (Title)_titleCollection.MoviesByItemId[int.Parse(this.tabsMediaPanel.SelectedTab.Name)];
+                Title _currentTitle = (Title)_titleCollection.MoviesByItemId[_currentEditor.itemID];
 
                 _currentEditor.SaveToTitle(_currentTitle);
                 SaveTitleChangesToDB(_currentTitle);
             }
         }
 
+        private void SaveAll()
+        {
+            foreach (TabPage page in tabsMediaPanel.TabPages)
+            {
+                Controls.MediaEditor editor = (Controls.MediaEditor)page.Tag;
+                if (editor.Status ==  global::OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges)
+                {
+                    Title _currentTitle = (Title)_titleCollection.MoviesByItemId[editor.itemID];
+
+                    editor.SaveToTitle(_currentTitle);
+                    _titleCollection.Replace(_currentTitle);
+                }
+            }
+            _titleCollection.saveTitleCollection();
+
+        }
+
         private void tsbNewTitle_Click(object sender, EventArgs e)
         {
             Title t = new Title();
+            t.Name = "New Movie";
             _titleCollection.Add(t);
 
             tvSourceList_AddItem("New Movie", t.InternalItemID, "Movies");
@@ -84,7 +102,7 @@ namespace OMLDatabaseEditor
                 }
                 else if (result == DialogResult.Yes)
                 {
-                    Title _currentTitle = (Title)_titleCollection.MoviesByItemId[int.Parse(this.tabsMediaPanel.SelectedTab.Name)];
+                    Title _currentTitle = (Title)_titleCollection.MoviesByItemId[_currentEditor.itemID];
 
                     _currentEditor.SaveToTitle(_currentTitle);
                     SaveTitleChangesToDB(_currentTitle);
@@ -107,7 +125,16 @@ namespace OMLDatabaseEditor
             {
                 if (tvSourceList.SelectedNode.Tag.ToString() == "Movies")
                 {
-                    EditNewTab(int.Parse(tvSourceList.SelectedNode.Name));
+                    int itemId = int.Parse(tvSourceList.SelectedNode.Name);
+                    TabPage existingPage = GetPageForTitle(itemId);
+                    if (existingPage != null)
+                    {
+                        tabsMediaPanel.SelectTab(existingPage);
+                    }
+                    else
+                    {
+                        EditNewTab(itemId);
+                    }
                 }
             }
         }
@@ -131,6 +158,7 @@ namespace OMLDatabaseEditor
             newpage.Size = new System.Drawing.Size(620, 772);
             newpage.Margin = new System.Windows.Forms.Padding(0);
             newpage.Padding = new System.Windows.Forms.Padding(0);
+            newpage.Tag = Editor;
 
             tabsMediaPanel.TabPages.Add(newpage);
             
@@ -138,6 +166,8 @@ namespace OMLDatabaseEditor
             Editor.TitleChanged += new Controls.MediaEditor.TitleChangeEventHandler(this.TitleChanges);
             Editor.TitleNameChanged += new Controls.MediaEditor.TitleNameChangeEventHandler(this.TitleNameChanges);
             Editor.SavedTitle += new Controls.MediaEditor.SavedEventHandler(this.SavedTitle);
+
+            tabsMediaPanel.SelectTab(newpage);
         }
 
         private void tvSourceList_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -174,25 +204,53 @@ namespace OMLDatabaseEditor
             }
         }
 
+        private void MarkChangedItem(Controls.MediaEditor editor, bool changed)
+        {
+            foreach (TabPage page in tabsMediaPanel.TabPages)
+            {
+                if (page.Tag == editor)
+                {
+                    if (changed)
+                        page.Text = "*" + editor.TitleName;
+                    else
+                        page.Text = editor.TitleName;
+                    break;
+                }
+            }
+        }
+
+        private TabPage GetPageForTitle(int itemId)
+        {
+            Controls.MediaEditor editor = null;
+            foreach (TabPage page in tabsMediaPanel.TabPages)
+            {
+                editor = (Controls.MediaEditor)page.Tag;
+                if (editor.itemID == itemId)
+                {
+                    return page;
+                }
+            }
+
+            return null;
+        }
+
+
         private void TitleChanges(object sender, EventArgs e)
         {
             Controls.MediaEditor _currentEditor = (Controls.MediaEditor)sender;
-
-            tabsMediaPanel.TabPages[_currentEditor.itemID.ToString()].Text = "*" + _currentEditor.TitleName;
+            MarkChangedItem(_currentEditor, true);
         }
 
         private void TitleNameChanges(object sender, EventArgs e)
         {
             Controls.MediaEditor _currentEditor = (Controls.MediaEditor)sender;
-
-            tabsMediaPanel.TabPages[_currentEditor.itemID.ToString()].Text = "*" + _currentEditor.TitleName;
+            MarkChangedItem(_currentEditor, true);
         }
 
         private void SavedTitle(object sender, EventArgs e)
         {
             Controls.MediaEditor _currentEditor = (Controls.MediaEditor)sender;
-
-            tabsMediaPanel.TabPages[_currentEditor.itemID.ToString()].Text = _currentEditor.TitleName;
+            MarkChangedItem(_currentEditor, false);
         }
         
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -211,6 +269,21 @@ namespace OMLDatabaseEditor
                     }                   
                 }
             }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveAll();
+        }
+
+        private void tsbSaveAll_Click(object sender, EventArgs e)
+        {
+            SaveAll();
+        }
+
+        private void OMLDatabaseEditor_Load(object sender, EventArgs e)
+        {
+
         }
 
     }
