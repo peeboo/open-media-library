@@ -105,7 +105,11 @@ namespace OMLDatabaseEditor.Controls
             tbUPC.Text = t.UPC;
             tbWebsite.Text = t.OfficialWebsiteURL;
             tbWatchedCount.Text = t.WatchedCount.ToString();
-            dtpDateAdded.Value = t.DateAdded;
+            if( t.DateAdded < DateTimePicker.MinimumDateTime )
+                dtpDateAdded.Value = DateTimePicker.MinimumDateTime;
+            else
+                dtpDateAdded.Value =  t.DateAdded;
+
             tbUserRating.Text = t.UserStarRating.ToString();
             tbSortName.Text = t.SortName;
 
@@ -113,14 +117,12 @@ namespace OMLDatabaseEditor.Controls
             tbName.Text = t.Name;
             _titleName = t.Name;
             tbSummary.Text = t.Synopsis;
-            try
-            {
-                dtpReleaseDate.Value = t.ReleaseDate;
-            }
-            catch
-            {
+
+            if (t.ReleaseDate < DateTimePicker.MinimumDateTime)
                 dtpReleaseDate.Value = DateTimePicker.MinimumDateTime;
-            }
+            else
+                dtpReleaseDate.Value = t.ReleaseDate;
+
             cbRating.Text = t.ParentalRating;
             tbRatingReason.Text = t.ParentalRatingReason;
             tbRunTime.Text = Convert.ToString(t.Runtime);
@@ -528,6 +530,9 @@ namespace OMLDatabaseEditor.Controls
                             true)));
             }
         }
+
+
+
 
     }
 }
