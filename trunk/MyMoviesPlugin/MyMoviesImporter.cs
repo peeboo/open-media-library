@@ -74,6 +74,10 @@ namespace MyMoviesPlugin
         {
             return MinorVersion;
         }
+        protected override bool GetCanCopyImages()
+        {
+            return true;
+        }
         protected override string GetMenu()
         {
             return "MyMovies";

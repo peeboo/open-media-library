@@ -125,8 +125,13 @@ namespace OMLImporter
                 if (iResp < plugins.Count)
                 {
                     plugin = plugins[iResp];
-                    showFolderSelection = plugin.FolderSelect;
-                    if (plugins[iResp].CopyImages) AskIfShouldCopyImages();
+                    plugin.FileFound += new OMLPlugin.FileFoundEventHandler(FileFound);
+                    if (plugin.CanCopyImages) AskIfShouldCopyImages();
+                    plugin.CopyImages = Program._copyImages;
+                    plugin.DoWork(plugin.GetWork());
+                    LoadTitlesIntoDatabase(plugin);
+                    Console.WriteLine("Done!");
+                    Console.ReadLine();
                 } 
                 else if (iResp == (plugins.Count))
                 {               
@@ -136,7 +141,6 @@ namespace OMLImporter
                         isDirty = !mainTitleCollection.saveTitleCollection();
                     }
                     Console.WriteLine("Complete!");
-                    continue;
                 } 
                 else if (iResp == (plugins.Count + 1))
                 {
@@ -171,34 +175,19 @@ namespace OMLImporter
                     {
                         Console.WriteLine("Operation aborted. No titles have been deleted!");
                     }
-                    continue;
                 } 
                 else
                 {
                         Usage();
-                        continue;
                 }
-
-                if (plugin == null) continue;
-                Console.WriteLine();
-
-                if (showFolderSelection)
-                {
-                    if (GetFolder(ref file_to_import, plugin) == DialogResult.OK)
-                    {
-                        ProcessFile(plugin, file_to_import);
-                    }
-                }
-                else
-                {
-                    if (GetFile(ref file_to_import, plugin) == DialogResult.OK)
-                    {
-                        ProcessFile(plugin, file_to_import);
-                    }
-                }
-                Console.ReadLine();
             }
 
+        }
+
+        private static void FileFound(object sender, OMLSDK.PlugInFileEventArgs e)
+        {
+            OMLPlugin plugin = (OMLPlugin) sender;
+            Console.WriteLine("Loading file " + e.FileName + " using " + plugin.Name + " importer");
         }
 
         public static void AskIfShouldCopyImages()
