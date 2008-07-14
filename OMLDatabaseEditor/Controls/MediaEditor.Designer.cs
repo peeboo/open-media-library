@@ -801,7 +801,6 @@
             this.grdVideoDetails.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn13});
             this.grdVideoDetails.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grdVideoDetails.Enabled = false;
             this.grdVideoDetails.Location = new System.Drawing.Point(0, 0);
             this.grdVideoDetails.Name = "grdVideoDetails";
             this.grdVideoDetails.RowHeadersWidth = 26;
