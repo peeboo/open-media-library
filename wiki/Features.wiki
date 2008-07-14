@@ -30,18 +30,17 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (*DONE*) Extender support
 
 
-  * (_IN DEVELOPMENT_) DVD playback (actual discs in a real drive, see mounting/unmounting for images of discs) (0% Complete)
   * (_IN DEVELOPMENT_) Filter by genre, rating, date, runtime, year etc (90% Complete)
   * (_IN DEVELOPMENT_) Triple tap: jumping to movie by using letters on remote control (80% Complete)
-  * (_IN DEVELOPMENT_) Search functionality (0% Complete)
   * (_IN DEVELOPMENT_) UI based setup (importers, daemontools settings, etc) (70% Complete)
   * (_IN DEVELOPMENT_) Metadata editor (Unknown% Complete)
-  * (_IN DEVELOPMENT_) Using 3rd party programs as datasource (10% Complete)
-  * (_IN DEVELOPMENT_) Movie trailer support (80% Complete)
-  * (_IN DEVELOPMENT_) Movie bookmark features (20% Complete)
   * (_IN DEVELOPMENT_) Support for Blu-Ray/HD-DVD (50% Complete)
 
-
+  * (ON HOLD) Movie bookmark features (20% Complete)
+  * (ON HOLD) Movie trailer support (80% Complete)
+  * (ON HOLD) Using 3rd party programs as datasource (10% Complete)
+  * (ON HOLD) Search functionality (0% Complete)
+  * (ON HOLD) DVD playback (actual discs in a real drive, see mounting/unmounting for images of discs) (0% Complete)
   * (ON HOLD) Define OML xml scheme for 3rd party export/import
   * (ON HOLD) Option to omit "The" in movie sorting and displaying
   * (ON HOLD) Native VMC UI controls design
