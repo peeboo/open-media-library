@@ -33,8 +33,8 @@ namespace OMLEngine
         private string _studio = "";
         private string _countryOfOrigin = "";
         private string _officialWebsiteURL = "";
-        private DateTime _releaseDate;
-        private DateTime _dateAdded;
+        private DateTime _releaseDate = DateTime.MinValue;
+        private DateTime _dateAdded = DateTime.MinValue;
         private string _importerSource = "";
         private List<Person> _actors = new List<Person>();
         private List<Person> _directors = new List<Person>();
