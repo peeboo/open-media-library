@@ -199,7 +199,9 @@ namespace OMLDatabaseEditor.Controls
                 grdExtraFeatures.Rows.Add(ef);
             }
 
-            //grdVideoDetails.Rows.Clear();
+            grdVideoDetails.Rows.Clear();
+            grdVideoDetails.Rows.Add(t.VideoDetails);
+
             //foreach (string vd in t.VideoDetails)
             //{
             //    grdVideoDetails.Rows.Add(vd);
@@ -327,7 +329,7 @@ namespace OMLDatabaseEditor.Controls
             t.VideoResolution = tbVideoResolution.Text;
            
             t.AudioTracks.Clear();
-            foreach (DataGridViewRow row in grdSubtitles.Rows)
+            foreach (DataGridViewRow row in grdAudioTracks.Rows)
             {
                 if (row.Cells[0].Value != null)
                 {
@@ -336,7 +338,7 @@ namespace OMLDatabaseEditor.Controls
             }
 
             t.Subtitles.Clear();
-            foreach (DataGridViewRow row in grdAudioTracks.Rows)
+            foreach (DataGridViewRow row in grdSubtitles.Rows)
             {
                 if (row.Cells[0].Value != null)
                 {
@@ -352,15 +354,13 @@ namespace OMLDatabaseEditor.Controls
                     t.ExtraFeatures.Add((string)row.Cells[0].Value);
                 }
             }
-
-            //t.VideoDetails.Clear();
-            //foreach (DataGridViewRow row in grdVideoDetails.Rows)
-            //{
-            //    if (row.Cells[0].Value != null)
-            //    {
-            //        t.VideoDetails.Add((string)row.Cells[0].Value);
-            //    }
-            //}
+            foreach (DataGridViewRow row in grdVideoDetails.Rows)
+            {
+                if (row.Cells[0].Value != null)
+                {
+                    t.VideoDetails = (string)row.Cells[0].Value;
+                }
+            }
         }
 
         // Image.FromFile keeps a lock on the file and it cannot be updated
@@ -529,6 +529,11 @@ namespace OMLDatabaseEditor.Controls
                             Path.GetExtension(dlg.Path).ToUpper().Substring(1),
                             true)));
             }
+        }
+
+        private void grdAudioTracks_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
 
 

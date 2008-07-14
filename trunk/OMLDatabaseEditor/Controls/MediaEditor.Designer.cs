@@ -680,6 +680,7 @@
             this.grdAudioTracks.Size = new System.Drawing.Size(401, 86);
             this.grdAudioTracks.TabIndex = 36;
             this.grdAudioTracks.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grd_CellChanges);
+            this.grdAudioTracks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdAudioTracks_CellContentClick);
             // 
             // dataGridViewTextBoxColumn7
             // 
@@ -791,6 +792,8 @@
             // 
             // grdVideoDetails
             // 
+            this.grdVideoDetails.AllowUserToAddRows = false;
+            this.grdVideoDetails.AllowUserToDeleteRows = false;
             this.grdVideoDetails.BackgroundColor = System.Drawing.SystemColors.ControlLight;
             this.grdVideoDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.grdVideoDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;

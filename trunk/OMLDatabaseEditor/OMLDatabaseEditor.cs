@@ -30,6 +30,7 @@ namespace OMLDatabaseEditor
             {
                 tvSourceList_AddItem(t.Name, t.InternalItemID, "Movies");
             }
+            tvSourceList.Sort();
         }
 
         private void tvSourceList_AddItem(string text, int id, string type)
