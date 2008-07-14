@@ -69,7 +69,7 @@ namespace DVRMSPlugin
             return true;
         }
 
-        private void ProcessDir(string fPath)
+        public override void ProcessDir(string fPath)
         {
             string[] files = Directory.GetFiles(fPath, @"*.dvr-ms");
             ProcessFiles(files);
@@ -82,7 +82,7 @@ namespace DVRMSPlugin
 
         }
 
-        private void ProcessFiles(string[] sFiles)
+        public override void ProcessFiles(string[] sFiles)
         {
             foreach (string file in sFiles)
             {
@@ -90,7 +90,7 @@ namespace DVRMSPlugin
             }
         }
 
-        private void ProcessFile(string file)
+        public override void ProcessFile(string file)
         {
             Title newTitle = new Title();
             String fPath = Path.GetDirectoryName(file);

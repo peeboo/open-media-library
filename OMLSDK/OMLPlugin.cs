@@ -19,6 +19,14 @@ namespace OMLSDK
         /// <summary>
         /// 
         /// </summary>
+        public Boolean CanCopyImages
+        {
+            get { return GetCanCopyImages(); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Boolean CanProcessDir
         {
             get { return GetProcessDir(); }
@@ -208,12 +216,49 @@ namespace OMLSDK
             }
         }
 
+        public delegate void FileFoundEventHandler(object sender, PlugInFileEventArgs e);
+        public delegate void FileNotFoundEventHandler(object sender, System.ArgumentException e);
+        public event FileFoundEventHandler FileFound;
+        public event FileNotFoundEventHandler FileNotFound;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        private void OnFileFound(PlugInFileEventArgs e)
+        {
+            if (FileFound != null)
+                FileFound(this, e);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        private void OnFileNotFound(ArgumentException e)
+        {
+            if (FileNotFound != null)
+                FileNotFound(this, e);
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="thework"></param>
         public virtual void DoWork(string[] thework)
         {
+            foreach (string file in thework)
+            {
+                if (File.Exists(file) || Directory.Exists(file))
+                {
+                    OnFileFound(new PlugInFileEventArgs(file));
+                    ProcessFile(file);
+                }
+                else
+                {
+                    OnFileNotFound(new ArgumentException("File not found", file));
+                }
+            }
         }
 
         /// <summary>
@@ -341,6 +386,12 @@ namespace OMLSDK
         #endregion
 
         #region Overridable Stubs for readonly properties
+
+        /// <summary>
+        /// Returns a boolean if the plugin can copy images
+        /// </summary>
+        /// <returns>Default: false</returns>
+        protected virtual Boolean GetCanCopyImages() { return false; }
 
         /// <summary>
         /// 
@@ -552,4 +603,15 @@ namespace OMLSDK
             catch (Exception e) { Utilities.DebugLine(e.Message); }
         }
     }
+
+    public class PlugInFileEventArgs : System.EventArgs
+    {
+        public string FileName;
+
+        public PlugInFileEventArgs(string filename)
+        {
+            this.FileName = filename;
+        }
+    }
 }
+
