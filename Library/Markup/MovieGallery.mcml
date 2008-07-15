@@ -51,6 +51,7 @@
     <ShortcutHandler Name="PlayHandler" Shortcut="Play" HandlerStage="Bubbled"/>
     <Timer Name="ClearTimer" AutoRepeat="false" Interval="5000" Enabled="false"/>
     <addin:AddInHost Name="AddInHost"/>
+
   </Locals>
 
   <Rules>
@@ -128,7 +129,7 @@
 
                 <!-- For each item, repeat our RepeatedItem UI, passing in-->
                 <!-- the index of the item and the image.                 -->
-                <me:RepeatedItem  Index="[RepeatedItemIndex]" FocusedIndex="[FocusedIndex]" GalleryItem="[RepeatedItem!a:GalleryItem]" Application="[Application]" MovieBrowser="[MovieBrowser]" GalleryView="[GalleryView]" />
+                <me:RepeatedItem  Index="[RepeatedItemIndex]" FocusedIndex="[FocusedIndex]" GalleryItem="[RepeatedItem!a:GalleryItem]" Application="[Application]" MovieBrowser="[MovieBrowser]" GalleryView="[GalleryView]" CoverArtAlpha="[UISettings.Gallery.CoverArtAlpha]" />
               </Content>
             </Repeater>
 
@@ -153,12 +154,14 @@
     <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
     <!-- Update these 2 values everytime we get the focus -->
     <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
+    <cor:Single Name="CoverArtAlpha" Single="0.7"/>
     
     <!-- The index passed down from the repeater.-->
     <Index Name="Index" Index="$Required"/>
     <cor:String Name="GalleryView" String="$Required" />    
     <Image Name="BackgroundImage" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
-
+    <Image Name="BackgroundImageList" Source="resx://Library/Library.Resources/ButtonLeftFocus" NineGrid="4,4,4,4"/>
+    <Image Name="BackgroundImageCoverArt" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
     <Animation Name="LostFocus" />
     <Animation Name="GotFocus" />
     
@@ -182,28 +185,9 @@
         <Set Target="[Caption.Visible]" Value="true" />
         <Set Target="[LostFocus]" Value="animation://me:LostFocusList" />
         <Set Target="[GotFocus]" Value="animation://me:GotFocusList" />
+        <Set Target="[Background.Content]" Value="[BackgroundImageList]" />
       </Actions>
     </Condition>
-
-    <!--<Rule>
-      <Conditions>
-        <Equality Source="[GalleryView]" Value="Cover Art" ConditionOp="Equals" />
-        <Equality Source="[GalleryItem.HasCover]" Value="true" ConditionOp="Equals" />
-      </Conditions>
-      <Actions>
-        <Set Target="[Caption.Visible]" Value="false" />
-      </Actions>
-    </Rule>-->
-
-    <Changed Source="[GalleryItem.MenuCoverArt]" InitialEvaluate="true">
-      <Conditions>
-        <Equality Source="[GalleryView]" Value="Cover Art" ConditionOp="Equals" />
-        <Equality Source="[GalleryItem.HasCover]" Value="true" ConditionOp="Equals" />
-      </Conditions>
-      <Actions>
-        <Set Target="[Caption.Visible]" Value="false" />
-      </Actions>
-    </Changed>
 
     <Changed Source="[GalleryItem.CoverArt]" InitialEvaluate="true">
       <Conditions>
@@ -221,6 +205,8 @@
         <Set Target="[Cover.Visible]" Value="true" />
         <Set Target="[LostFocus]" Value="animation://me:LostFocusCoverArt" />
         <Set Target="[GotFocus]" Value="animation://me:GotFocusCoverArt" />
+        <Set Target="[Background.Content]" Value="[BackgroundImageCoverArt]" />
+        <Set Target="[Caption.Font]" Value="font://s:Normal" />
       </Actions>
     </Condition>
 
@@ -235,8 +221,6 @@
         <Set Target="[FocusedIndex.Value]" Value="[Index.SourceValue]"/>
         <Set Target="[MovieBrowser.FocusedItem]" Value="[GalleryItem]" />
         <!-- Play an animation on the cover target item. -->
-        
-        <!--<PlayAnimation Target="[ItemPanel]" Animation="animation://me:GotFocusCoverArt" />-->
       </Actions>
     </Condition>
 
@@ -256,12 +240,10 @@
       <Children>
         <Panel Name="ImagePanel" Margins="0,0,0,0">
           <Children>
-            <Graphic Name="Cover" Content="[GalleryItem.CoverArt]" Alpha="0.7" SizingPolicy="SizeToConstraint"/>
+            <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:ListFont" Color="White" WordWrap="true" Margins="20,10,20,10" />
+            <Graphic Name="Cover" Content="[GalleryItem.CoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint" />
           </Children>
         </Panel>
-
-        <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:EditText" Color="White"/>
-
 
         <Graphic Name="Background" Content="[BackgroundImage]" Visible="false">
           <LayoutInput>
@@ -290,7 +272,7 @@
   <Animation Name="GotFocusCoverArt" Loop="0" CenterPointPercent=".5,.5,0" >
     <Keyframes>
       <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
-      <ScaleKeyframe Time="0.4" Value="1.5,1.5,1.5" RelativeTo="Final" />
+      <ScaleKeyframe Time="0.4" Value="1.7,1.7,1.7" RelativeTo="Final" />
     </Keyframes>
   </Animation>
 

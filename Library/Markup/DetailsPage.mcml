@@ -315,13 +315,18 @@
     <Content>
       <Panel Layout="VerticalFlow">
         <Children>
-          <Text Name="Actors" Content="Actors" Font ="font://s:LabelFont" Color="color://s:LabelColor" />
+        <Scroller Name="Scroll" Orientation="Vertical" FadeSize="5" ScrollingData="[ScrollingData]" >
+          <Children>
+            <Text Name="Actors" Content="Actors" Font ="font://s:LabelFont" Color="color://s:LabelColor" />
 
-          <Repeater Source="[ActorList]" Layout="VerticalFlow" MaximumSize="200,200">
-            <Content>
-              <Text Content="[RepeatedItem!cor:String]" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor"/>
-            </Content>
-          </Repeater>
+            <Repeater Source="[ActorList]" Layout="VerticalFlow" >
+              <Content>
+                <Text Content="[RepeatedItem!cor:String]" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor"/>
+              </Content>
+            </Repeater>
+          </Children>
+
+        </Scroller>
         </Children>
       </Panel>
     </Content>
