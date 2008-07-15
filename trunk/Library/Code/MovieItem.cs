@@ -91,7 +91,7 @@ namespace Library
             set
             {
                 _menuItemImage = value;
-                FirePropertyChanged("MenuCoverArt");
+                FirePropertyChanged("CoverArt");
             }
         }
 
