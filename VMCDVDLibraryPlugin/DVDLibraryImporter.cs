@@ -62,6 +62,12 @@ namespace VMCDVDLibraryPlugin
             return true;
         }
 
+        public override void DoWork(string[] thework)
+        {
+            GetMovies(thework[0]);
+        }
+
+
         public void GetMovies( string startFolder )
         {
             try
