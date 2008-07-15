@@ -25,7 +25,7 @@ namespace OMLEngine.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\DAEMON Tools Lite\\daemon.exe")]
         public string DaemonTools {
             get {
                 return ((string)(this["DaemonTools"]));
@@ -37,7 +37,7 @@ namespace OMLEngine.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("G")]
         public string VirtualDiscDrive {
             get {
                 return ((string)(this["VirtualDiscDrive"]));

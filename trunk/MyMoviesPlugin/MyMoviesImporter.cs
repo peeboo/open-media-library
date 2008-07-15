@@ -14,17 +14,17 @@ namespace MyMoviesPlugin
 {
     public class MyMoviesImporter : OMLPlugin, IOMLPlugin
     {
+        private static double MajorVersion = 0.9;
+        private static double MinorVersion = 0.0;
 
         public MyMoviesImporter() : base()
         {
             Utilities.DebugLine("[MyMoviesImporter] created");
         }
-
         public override bool IsSingleFileImporter()
         {
             return true;
         }
-
         public override bool Load(string filename)
         {
             Utilities.DebugLine("[MyMoviesImporter] created[filename("+filename+"), ShouldCopyImages("+CopyImages+")]");
@@ -63,13 +63,10 @@ namespace MyMoviesPlugin
             }
             return true;
         }
-        private static double MajorVersion = 0.9;
-        private static double MinorVersion = 0.0;
         protected override double GetVersionMajor()
         {
             return MajorVersion;
         }
-
         protected override double GetVersionMinor()
         {
             return MinorVersion;
@@ -94,24 +91,6 @@ namespace MyMoviesPlugin
         {
             return "MyMovies xml file importer for Open Media Library v" + Version;
         }
-
-/*        public string CopyImage(string from_location, string to_location)
-        {
-            Utilities.DebugLine("[MyMoviesImporter] Copying Image: FROM("+from_location+") TO("+to_location+")");
-            FileInfo fi = new FileInfo(from_location);
-            if (fi.Exists)
-            {
-                Utilities.DebugLine("[MyMoviesImporter] File ("+from_location+") is valid, copying");
-                File.Copy(from_location, to_location, true);
-                return to_location;
-            }
-            else
-            {
-                Utilities.DebugLine("[MyMoviesImporter] File ("+from_location+") is invalid, keeping original location");
-                return from_location;
-            }
-        }
-*/
         private void process_node_switch(Title newTitle, XmlNode node)
         {
             switch (node.Name)
@@ -363,6 +342,10 @@ namespace MyMoviesPlugin
                     }
                     break;
             }
+        }
+        public override void DoWork(string[] thework)
+        {
+            Load(thework[0]);
         }
     }
 }
