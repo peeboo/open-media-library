@@ -320,6 +320,12 @@ namespace Library
         {
             OMLApplication.DebugLine("Start loading new titles");
             plugin = GetPlugin();
+
+            foreach (TreeNode node in _treeView.CheckedNodes)
+            {
+                plugin.ProcessDir(node.FullPath);
+            }
+
             if (plugin.IsSingleFileImporter()) {
                 OMLApplication.DebugLine("This importer requires a file, determining file to load.");
                 _filename = determineFileToLoad(plugin);
@@ -357,10 +363,7 @@ namespace Library
             LoadStarted = true;
             try
             {
-                if (File.Exists(_filename))
-                {
-                    ImportFile(plugin, _filename);
-                }
+                plugin.DoWork(plugin.GetWork());
             }
             catch (Exception e)
             {
@@ -444,12 +447,6 @@ namespace Library
             set { _treeView = value; }
         }
 
-        public bool ImportFile(OMLPlugin plugin, string file_to_import)
-        {
-            plugin.CopyImages = _shouldCopyImages.Value;
-            return plugin.Load(file_to_import);
-        }
-
         public OMLPlugin GetPlugin()
         {
             string strChosenImporter = (string)Setup.Current._ImporterSelection.Chosen;
@@ -465,7 +462,8 @@ namespace Library
         private static void LoadPlugins()
         {
             List<PluginServices.AvailablePlugin> Pluginz = new List<PluginServices.AvailablePlugin>();
-            string path = Path.GetDirectoryName(FileSystemWalker.PluginDirectory);
+            string path = Path.GetDirectoryName(FileSystemWalker.PluginsDirectory + @"\\Plugins");
+            OMLApplication.DebugLine("Path is: " + path);
             Pluginz = PluginServices.FindPlugins(path, "OMLSDK.IOMLPlugin");
             OMLPlugin objPlugin;
             // Loop through available plugins, creating instances and adding them
