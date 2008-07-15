@@ -7,41 +7,64 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using OMLEngine;
+using OMLSDK;
 
 namespace OMLDatabaseEditor
 {
     public partial class OMLDatabaseEditor : Form
     {
-        private TitleCollection _titleCollection;
+        private static TitleCollection _titleCollection = new TitleCollection();
         private TreeNode m_OldSelectNode;
+
+        private static List<OMLPlugin> plugins = new List<OMLPlugin>();
 
         public OMLDatabaseEditor()
         {
             InitializeComponent();
-            _titleCollection = new TitleCollection();
             _titleCollection.loadTitleCollection();
             SetupTitleList();
 
+            LoadPlugins();
+            SetupPluginList();
+        }
+
+        private static void LoadPlugins()
+        {
+            plugins.Add(new MyMoviesPlugin.MyMoviesImporter());
+            plugins.Add(new DVDProfilerPlugin.DVDProfilerImporter());
+            plugins.Add(new MovieCollectorzPlugin.MovieCollectorzPlugin());
+            plugins.Add(new DVRMSPlugin.DVRMSPlugin());
+            plugins.Add(new VMCDVDLibraryPlugin.DVDLibraryImporter());
         }
 
         private void SetupTitleList()
         {
             foreach (Title t in _titleCollection)
             {
-                tvSourceList_AddItem(t.Name, t.InternalItemID, "Movies");
+                tvSourceList_AddItem(t.Name, t.InternalItemID.ToString(), "Movies");
             }
             tvSourceList.Sort();
         }
 
-        private void tvSourceList_AddItem(string text, int id, string type)
+        private void SetupPluginList()
         {
-            TreeNode nod = new TreeNode();
-            nod.Name = id.ToString();
-            nod.Text = text;
-            nod.Tag = "Movies";
-            tvSourceList.Nodes["OML Database"].Nodes[type].Nodes.Add(nod);
+            int i = 0;
+            foreach (OMLPlugin plugin in plugins)
+            {
+                tvSourceList_AddItem(plugin.Menu, i.ToString(), "Importers");
+                i++;
+            }
+        }
+
+        private void tvSourceList_AddItem(string text, string name, string tag)
+        {
+            TreeNode node = new TreeNode();
+            node.Name = name;
+            node.Text = text;
+            node.Tag = tag;
+            tvSourceList.Nodes["OML Database"].Nodes[tag].Nodes.Add(node);
             tvSourceList.Nodes["OML Database"].ExpandAll();
-            tvSourceList.Nodes["OML Database"].Nodes[type].ExpandAll();
+            tvSourceList.Nodes["OML Database"].Nodes[tag].ExpandAll();
         }
 
         private void SaveTitleChangesToDB(Title t)
@@ -85,7 +108,7 @@ namespace OMLDatabaseEditor
             t.Name = "New Movie";
             _titleCollection.Add(t);
 
-            tvSourceList_AddItem("New Movie", t.InternalItemID, "Movies");
+            tvSourceList_AddItem("New Movie", t.InternalItemID.ToString(), "Movies");
         }
 
         
@@ -137,7 +160,99 @@ namespace OMLDatabaseEditor
                         EditNewTab(itemId);
                     }
                 }
+                else if (tvSourceList.SelectedNode.Tag.ToString() == "Importers")
+                {
+                    int pluginID = int.Parse(tvSourceList.SelectedNode.Name);
+
+                    StartImport(pluginID);
+                }
             }
+        }
+
+        private void StartImport(int pluginID)
+        {
+            bool showFolderSelection = false;
+
+            OMLPlugin plugin = new OMLPlugin();
+            plugin = plugins[pluginID];
+            //plugin.FileFound += new OMLPlugin.FileFoundEventHandler(FileFound);
+            //if (plugin.CanCopyImages) AskIfShouldCopyImages();
+            plugin.CopyImages = true;// Program._copyImages;
+            plugin.DoWork(plugin.GetWork());
+            LoadTitlesIntoDatabase(plugin);
+        }
+
+        public static void LoadTitlesIntoDatabase(OMLPlugin plugin)
+        {
+            try
+            {
+                Utilities.DebugLine("[OMLImporter] Titles loaded, beginning Import process");
+                //TitleCollection tc = new TitleCollection();
+                List<Title> titles = plugin.GetTitles();
+                Utilities.DebugLine("[OMLImporter] " + titles.Count + " titles found in input file");
+                //Console.WriteLine("Found " + titles.Count + " titles");
+
+                int numberOfTitlesAdded = 0;
+                int numberOfTitlesSkipped = 0;
+                bool YesToAll = true;// false;
+
+                //if (Console.In.Peek() > 0)
+                //    Console.In.ReadToEnd(); // flush out anything still in there
+
+                foreach (Title t in titles)
+                {
+                    if (_titleCollection.ContainsDisks(t.Disks))
+                    {
+                        //Console.WriteLine("Title {0} skipped because already in the collection", t.Name);
+                        numberOfTitlesSkipped++;
+                        continue;
+                    }
+
+
+                    //Console.WriteLine("Adding: " + t.Name);
+                    if (YesToAll == false)
+                    {
+                        /*Console.WriteLine("Would you like to add this title? (y/n/a)");
+                        string response = Console.ReadLine();
+                        switch (response.ToUpper())
+                        {
+                            case "Y":
+                                mainTitleCollection.Add(t);
+                                numberOfTitlesAdded++;
+                                break;
+                            case "N":
+                                numberOfTitlesSkipped++;
+                                break;
+                            case "A":
+                                YesToAll = true;
+                                mainTitleCollection.Add(t);
+                                numberOfTitlesAdded++;
+                                break;
+                            default:
+                                break;
+                        }*/
+                    }
+                    else
+                    {
+                        _titleCollection.Add(t);
+                        numberOfTitlesAdded++;
+                    }
+                }
+
+                plugin.GetTitles().Clear();
+
+                /*if (numberOfTitlesAdded > 0) isDirty = true;
+                Console.WriteLine();
+                Console.WriteLine("Added " + numberOfTitlesAdded + " titles");
+                Console.WriteLine("Skipped " + numberOfTitlesSkipped + " titles");*/
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Exception in LoadTitlesIntoDatabase: %1", e.Message);
+                //Console.WriteLine("Exception in LoadTitlesIntoDatabase: %1", e.Message);
+            }
+            //tc.saveTitleCollection();
+            //Console.WriteLine("Complete");
         }
 
         private void EditNewTab(int itemID)
@@ -282,11 +397,26 @@ namespace OMLDatabaseEditor
             SaveAll();
         }
 
-        private void OMLDatabaseEditor_Load(object sender, EventArgs e)
+        public static DialogResult GetFile(ref string file_to_import, OMLPlugin plugin)
         {
-
+            OpenFileDialog ofDiag = new OpenFileDialog();
+            ofDiag.InitialDirectory = "c:\\";
+            ofDiag.Filter = "Xml files (*.xml)|*.xml|DVR-MS Files (*.dvr-ms)|*.dvr-ms|All files (*.*)|*.*";
+            ofDiag.FilterIndex = 1;
+            ofDiag.RestoreDirectory = true;
+            ofDiag.AutoUpgradeEnabled = true;
+            ofDiag.CheckFileExists = true;
+            ofDiag.CheckPathExists = true;
+            ofDiag.Multiselect = false;
+            ofDiag.Title = "Select " + plugin.Name + " file to import";
+            DialogResult dlgRslt = ofDiag.ShowDialog();
+            if (dlgRslt == DialogResult.OK)
+            {
+                Utilities.DebugLine("[OMLImporter] Valid file found (" + ofDiag.FileName + ")");
+                file_to_import = ofDiag.FileName;
+            }
+            return dlgRslt;
         }
-
     }
 }
 
