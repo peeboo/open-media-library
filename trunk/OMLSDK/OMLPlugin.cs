@@ -247,16 +247,19 @@ namespace OMLSDK
         /// <param name="thework"></param>
         public virtual void DoWork(string[] thework)
         {
-            foreach (string file in thework)
+            if (thework != null)
             {
-                if (File.Exists(file) || Directory.Exists(file))
+                foreach (string file in thework)
                 {
-                    OnFileFound(new PlugInFileEventArgs(file));
-                    ProcessFile(file);
-                }
-                else
-                {
-                    OnFileNotFound(new ArgumentException("File not found", file));
+                    if (File.Exists(file) || Directory.Exists(file))
+                    {
+                        OnFileFound(new PlugInFileEventArgs(file));
+                        ProcessFile(file);
+                    }
+                    else
+                    {
+                        OnFileNotFound(new ArgumentException("File not found", file));
+                    }
                 }
             }
         }
