@@ -229,7 +229,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
         public int DetailsLeftOffset {
             get {
                 return ((int)(this["DetailsLeftOffset"]));
@@ -301,7 +301,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("150")]
+        [global::System.Configuration.DefaultSettingValueAttribute("141")]
         public int CoverArtWidth {
             get {
                 return ((int)(this["CoverArtWidth"]));
@@ -325,7 +325,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("320")]
+        [global::System.Configuration.DefaultSettingValueAttribute("400")]
         public int ListItemWidth {
             get {
                 return ((int)(this["ListItemWidth"]));
@@ -385,7 +385,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int CoverArtSpacingHorizontal {
             get {
                 return ((int)(this["CoverArtSpacingHorizontal"]));
@@ -397,7 +397,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int CoverArtSpacingVertical {
             get {
                 return ((int)(this["CoverArtSpacingVertical"]));
@@ -440,6 +440,66 @@ namespace Library.Properties {
             }
             set {
                 this["ListSpacingHorizontal"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double CoverArtAlpha {
+            get {
+                return ((double)(this["CoverArtAlpha"]));
+            }
+            set {
+                this["CoverArtAlpha"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowMovieDetails {
+            get {
+                return ((bool)(this["ShowMovieDetails"]));
+            }
+            set {
+                this["ShowMovieDetails"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.38")]
+        public float ScrollingLockPosition {
+            get {
+                return ((float)(this["ScrollingLockPosition"]));
+            }
+            set {
+                this["ScrollingLockPosition"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-15")]
+        public int NowPlayingBottomOffset {
+            get {
+                return ((int)(this["NowPlayingBottomOffset"]));
+            }
+            set {
+                this["NowPlayingBottomOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.8")]
+        public double LeftPanelDetailsAlpha {
+            get {
+                return ((double)(this["LeftPanelDetailsAlpha"]));
+            }
+            set {
+                this["LeftPanelDetailsAlpha"] = value;
             }
         }
     }

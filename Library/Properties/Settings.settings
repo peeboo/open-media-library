@@ -54,7 +54,7 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="DetailsLeftOffset" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">50</Value>
+      <Value Profile="(Default)">30</Value>
     </Setting>
     <Setting Name="DetailsTopOffset" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">30</Value>
@@ -72,13 +72,13 @@
       <Value Profile="(Default)">8</Value>
     </Setting>
     <Setting Name="CoverArtWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">150</Value>
+      <Value Profile="(Default)">141</Value>
     </Setting>
     <Setting Name="CoverArtHeight" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">200</Value>
     </Setting>
     <Setting Name="ListItemWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">320</Value>
+      <Value Profile="(Default)">400</Value>
     </Setting>
     <Setting Name="ListItemHeight" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">50</Value>
@@ -93,10 +93,10 @@
       <Value Profile="(Default)">-30</Value>
     </Setting>
     <Setting Name="CoverArtSpacingHorizontal" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="CoverArtSpacingVertical" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="NameAscendingSort" Type="System.String" Scope="User">
       <Value Profile="(Default)">NameAscending</Value>
@@ -106,6 +106,21 @@
     </Setting>
     <Setting Name="ListSpacingHorizontal" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">80</Value>
+    </Setting>
+    <Setting Name="CoverArtAlpha" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="ShowMovieDetails" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ScrollingLockPosition" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0.38</Value>
+    </Setting>
+    <Setting Name="NowPlayingBottomOffset" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">-15</Value>
+    </Setting>
+    <Setting Name="LeftPanelDetailsAlpha" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.8</Value>
     </Setting>
   </Settings>
 </SettingsFile>
