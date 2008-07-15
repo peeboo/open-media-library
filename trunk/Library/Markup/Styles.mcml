@@ -23,7 +23,8 @@
   <Font Name="TertiaryText"         Font="Calibri,16"/>
   <Font Name="GalleryItemSubText"   Font="Calibri,14"/>
 
-  <Font Name="EditText"             Font="Segoe UI,20"/>
+  <Font Name="ListFont"             Font="Segoe Media Center,22"/>
+  <Font Name="EditText"             Font="Segoe Media Center,16"/>
   <Font Name="KeyboardText"         Font="Segoe UI,18"/>
 
 
@@ -44,10 +45,10 @@
   <Color Name="SelectedColor" Color="White"/>
   <Color Name="BackgroundColor" Color="Black"/>
   <Font Name="BoldFont" FontName="Segoe Media Center" FontSize="16"	FontStyle="Bold"/>
-  <Font Name="Heading" FontName="Segoe Media Center" FontSize="22"	FontStyle="Bold"/>
-  <Font Name="Normal" FontName="Segoe Media Center" FontSize="18" FontStyle="Bold"/>
+  <Font Name="Heading" FontName="Segoe Media Center" FontSize="24"	FontStyle="Bold"/>
+  <Font Name="Normal" FontName="Segoe Media Center" FontSize="16" FontStyle="Bold"/>
   <Font Name="Small" FontName="Segoe Media Center" FontSize="14"/>
-  <Font Name="NormalBold" FontName="Segoe Media Center" FontSize="18" FontStyle="Bold"/>
+  <Font Name="NormalBold" FontName="Segoe Media Center" FontSize="16" FontStyle="Bold"/>
 
   <!-- Animation so we scroll smoothly -->
   <Animation Name="MoveAnimation" Type="Move">

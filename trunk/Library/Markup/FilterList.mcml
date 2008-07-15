@@ -40,7 +40,7 @@
         </Children>
       </Panel>-->
       
-      <Scroller Name="Scroll" Orientation="Horizontal" FadeSize="5" ScrollingData="[ScrollingData]" Navigation="ContainHorizontal" >
+      <Scroller Name="Scroll"  Orientation="Horizontal" FadeSize="5" ScrollingData="[ScrollingData]" Navigation="ContainHorizontal" >
         <Children>
         <Repeater Name="Repeater"  Navigation="RememberFocus" DividerName="Divider" >
           <Layout>
@@ -77,6 +77,7 @@
       <Color Name="LabelHoverColor" Color="DimGray"/>
       <Color Name="LabelPressedColor" Color="Yellow"/>
 
+      <Image Name="BackgroundImageList" Source="resx://Library/Library.Resources/ButtonLeftFocus" NineGrid="4,4,4,4"/>
     </Properties>
 
     <Locals>
@@ -113,6 +114,7 @@
       <Condition Source="[Input.KeyFocus]" SourceValue="true">
         <Actions>
           <!--<Set Target="[Background.Content]" Value="[BackgroundHoverColor]"/>-->
+          <PlayAnimation Target="[Label]" Animation="animation://me:GotFocusList" />
           <Set Target="[Label.Color]" Value="White"/>
         </Actions>
       </Condition>
@@ -121,21 +123,46 @@
       <Condition Source="[Input.MouseFocus]" SourceValue="true">
         <Actions>
           <!--<Set Target="[Background.Content]" Value="[BackgroundHoverColor]"/>-->
+          <PlayAnimation Target="[Background]" Animation="animation://me:GotFocusList" />
           <Set Target="[Label.Color]" Value="White"/>
         </Actions>
       </Condition>
 
+      <Condition Source="[Input.KeyFocus]" SourceValue="false">
+        <Actions>
+          <!-- Play an animation on the cover target item. -->
+          <PlayAnimation Target="[Label]" Animation="animation://me:LostFocusList"/>
+
+        </Actions>
+      </Condition>
+      
     </Rules>
 
     <Content>
       <!-- Solid background color. -->
       <ColorFill Name="Background" Content="[BackgroundColor]" Padding="5,0,5,0">
         <Children>
-          <Text Name="Label" Content="[Category.Caption]" Font="font://styles:NormalBold" Color="color://styles:NormalColor" />
+          <Text Name="Label" Content="[Category.Caption]" Font="font://styles:NormalBold" Color="color://styles:NormalColor"  />
         </Children>
+
       </ColorFill>
     </Content>
 
   </UI>
+
+  <!-- This animation will scale the image. -->
+  <Animation Name="LostFocusList" Loop="0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
+      <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="GotFocusList" Loop="0" CenterPointPercent=".1,.1,0" >
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+      <ScaleKeyframe Time="0.2" Value="1.1,1.1,1.1" RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
   
 </Mcml>
