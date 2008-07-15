@@ -42,7 +42,7 @@ namespace Library
 
         public float DetailsRightAnchor
         {
-            get { return Properties.Settings.Default.DetailsLeftAnchor + 0.30f; }
+            get { return Properties.Settings.Default.DetailsLeftAnchor + Properties.Settings.Default.ScrollingLockPosition - 0.08f; }
         }
 
         public int DetailsLeftOffset
@@ -102,6 +102,10 @@ namespace Library
             get { return Properties.Settings.Default.RightOffset; }
         }
 
+        public int NowPlayingBottomOffset
+        {
+            get { return Properties.Settings.Default.NowPlayingBottomOffset; }
+        }
     }
 
     public class GallerySettings
@@ -136,5 +140,25 @@ namespace Library
             get { return new Size(Properties.Settings.Default.ListSpacingHorizontal, Properties.Settings.Default.ListSpacingVertical); }
         }
 
+
+        public Single CoverArtAlpha
+        {
+            get { return  Convert.ToSingle(Properties.Settings.Default.CoverArtAlpha); }
+        }
+
+        public Single ScrollingLockPosition
+        {
+            get { return Convert.ToSingle(Properties.Settings.Default.ScrollingLockPosition); }
+        }
+
+        public Single LeftPanelDetailsAlpha
+        {
+            get { return Convert.ToSingle(Properties.Settings.Default.LeftPanelDetailsAlpha); }
+        }
+
+        public bool ShowMovieDetails
+        {
+            get { return Properties.Settings.Default.ShowMovieDetails; }
+        }
     }
 }
