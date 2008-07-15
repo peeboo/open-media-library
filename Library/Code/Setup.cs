@@ -8,11 +8,6 @@ using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
 using OMLEngine;
 using OMLSDK;
-using DVRMSPlugin;
-using MovieCollectorzPlugin;
-using DVDProfilerPlugin;
-using MyMoviesPlugin;
-using VMCDVDLibraryPlugin;
 
 namespace Library
 {
@@ -21,7 +16,6 @@ namespace Library
         #region variables
         private Title _currentTitle;
         private string _filename = string.Empty;
-        private OMLPlugin _plugin;
         private int _currentTitleIndex;
         private int _TotalTitlesAdded = 0;
         private int _TotalTitlesFound = 0;
@@ -40,6 +34,7 @@ namespace Library
         private bool _addingAllComplete = false;
 
         private BooleanChoice _shouldCopyImages = new BooleanChoice();
+        private static List<OMLPlugin> availablePlugins = new List<OMLPlugin>();
         private TitleCollection _titleCollection = new TitleCollection();
         #endregion
 
@@ -324,10 +319,10 @@ namespace Library
         public void BeginLoading()
         {
             OMLApplication.DebugLine("Start loading new titles");
-            _plugin = GetPlugin();
-            if (_plugin.IsSingleFileImporter()) {
+            plugin = GetPlugin();
+            if (plugin.IsSingleFileImporter()) {
                 OMLApplication.DebugLine("This importer requires a file, determining file to load.");
-                _filename = determineFileToLoad(_plugin);
+                _filename = determineFileToLoad(plugin);
             }
             //_filename = "C:\\titles.xml";
 
@@ -346,7 +341,7 @@ namespace Library
         {
             OMLApplication.DebugLine("[Setup UI] _LoadingComplete called");
             LoadComplete = true;
-            _titles = _plugin.GetTitles();
+            _titles = plugin.GetTitles();
 
             if (_titles.Count > 0)
             {
@@ -364,7 +359,7 @@ namespace Library
             {
                 if (File.Exists(_filename))
                 {
-                    ImportFile(_plugin, _filename);
+                    ImportFile(plugin, _filename);
                 }
             }
             catch (Exception e)
@@ -392,15 +387,14 @@ namespace Library
 
         public Setup()
         {
+            LoadPlugins();
             current = this;
             _titleCollection.loadTitleCollection();
             _ImporterSelection = new Choice();
             List<string> _Importers = new List<string>();
-            _Importers.Add("DVDID XML Files");
-            _Importers.Add("MyMovies");
-            _Importers.Add("DVD Profiler");
-            _Importers.Add("Movie Collectorz");
-            _Importers.Add("DVR-MS Files");
+            foreach (OMLPlugin _plugin in availablePlugins) {
+                _Importers.Add(_plugin.Name);
+            }
 
             _ImporterSelection.Options = _Importers;
             _ImporterSelection.ChosenChanged += new EventHandler(_ImporterSelection_ChosenChanged);
@@ -460,21 +454,27 @@ namespace Library
         {
             string strChosenImporter = (string)Setup.Current._ImporterSelection.Chosen;
             OMLApplication.DebugLine("Chosen Importer is: " + strChosenImporter);
-            switch (strChosenImporter)
+            for (int i = 0; i < availablePlugins.Count; i++)
             {
-                case "DVDID XML Files":
-                    return new DVDLibraryImporter();
-                case "MyMovies":
-                    return new MyMoviesImporter();
-                case "DVD Profiler":
-                    return new DVDProfilerImporter();
-                case "Movie Collectorz":
-                    return new MovieCollectorzPlugin.MovieCollectorzPlugin();
-                case "DVR-MS Files":
-                    return new DVRMSPlugin.DVRMSPlugin();
-                default:
-                    return new MyMoviesImporter();
+                if (availablePlugins[i].Name.CompareTo(strChosenImporter) == 0)
+                    return availablePlugins[i];
             }
+            return null;
+        }
+
+        private static void LoadPlugins()
+        {
+            List<PluginServices.AvailablePlugin> Pluginz = new List<PluginServices.AvailablePlugin>();
+            string path = Path.GetDirectoryName(FileSystemWalker.PluginDirectory);
+            Pluginz = PluginServices.FindPlugins(path, "OMLSDK.IOMLPlugin");
+            OMLPlugin objPlugin;
+            // Loop through available plugins, creating instances and adding them
+            foreach (PluginServices.AvailablePlugin oPlugin in Pluginz)
+            {
+                objPlugin = (OMLPlugin) PluginServices.CreateInstance(oPlugin);
+                availablePlugins.Add(objPlugin);
+            }
+            Pluginz = null;
         }
     }
 }

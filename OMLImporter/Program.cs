@@ -32,7 +32,7 @@ namespace OMLImporter
         private static void LoadPlugins()
         {
             List<PluginServices.AvailablePlugin> Pluginz = new List<PluginServices.AvailablePlugin>();
-            string path = Path.GetDirectoryName(Application.ExecutablePath) + @"\..\OMLPlugins";
+            string path = Path.GetDirectoryName(FileSystemWalker.PluginDirectory);
             Pluginz = PluginServices.FindPlugins(path, "OMLSDK.IOMLPlugin");
             OMLPlugin objPlugin;
             // Loop through available plugins, creating instances and adding them
