@@ -28,7 +28,7 @@ namespace OMLEngine
         /// <summary>
         /// Location where all plugin dlls should be stored
         /// </summary>
-        public static string PluginDirectory =
+        public static string PluginsDirectory =
             RootDirectory + "\\plugins";
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace OMLEngine
         /// <returns>True on success</returns>
         public static bool PluginsDirExists()
         {
-            if (Directory.Exists(PluginDirectory))
+            if (Directory.Exists(PluginsDirectory))
                 return true;
 
             return false;
@@ -106,7 +106,7 @@ namespace OMLEngine
         /// </summary>
         public static void createPluginsDirectory()
         {
-            Directory.CreateDirectory(PluginDirectory);
+            Directory.CreateDirectory(PluginsDirectory);
         }
 
         /// <summary>
@@ -188,12 +188,6 @@ namespace OMLEngine
         /// 
         /// </summary>
         private DirectoryInfo _baseDir;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private DirectoryInfo _currentDir;
-        private ArrayList _directors_to_scan;
 
         /// <summary>
         /// 

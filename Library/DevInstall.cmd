@@ -72,27 +72,27 @@ goto unregister
     ECHO.
 
     ECHO.Create the path for the binaries and supporting files (silent if successful)
-    md "%ProgramFilesPath%\%CompanyName%\%AssemblyName%"
+    md "%ProgramFilesPath%\%CompanyName%"
     ECHO.
     
     ECHO.Copy the binaries to program files
-    copy /y ".\bin\%ReleaseType%\%AssemblyName%.dll" "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\"
+    copy /y ".\bin\%ReleaseType%\%AssemblyName%.dll" "%ProgramFilesPath%\%CompanyName%\"
     ECHO.
     
     ECHO.Copy the registration XML to program files
-    copy /y ".\%RegistrationName%.xml" "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\"
+    copy /y ".\%RegistrationName%.xml" "%ProgramFilesPath%\%CompanyName%\"
     ECHO.
     
     ECHO.Copy the program image to program files
-    copy /y ".\Images\%ProgramImage%" "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\"
+    copy /y ".\Images\%ProgramImage%" "%ProgramFilesPath%\%CompanyName%\"
     ECHO.
 
     ECHO.Register the DLL with the global assembly cache
-    "%ProgramFilesPath%\Microsoft Visual Studio 8\SDK\v2.0\Bin\gacutil.exe" /if "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\%AssemblyName%.dll"
+    "%ProgramFilesPath%\Microsoft Visual Studio 8\SDK\v2.0\Bin\gacutil.exe" /if "%ProgramFilesPath%\%CompanyName%\%AssemblyName%.dll"
     ECHO.
 
     ECHO.Register the application with Windows Media Center
-    %windir%\ehome\RegisterMCEApp.exe /allusers "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\%RegistrationName%.xml"
+    %windir%\ehome\RegisterMCEApp.exe /allusers "%ProgramFilesPath%\%CompanyName%\%RegistrationName%.xml"
     ECHO.
 
 :exit

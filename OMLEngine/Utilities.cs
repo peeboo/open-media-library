@@ -155,7 +155,7 @@ namespace OMLEngine
             List<string> plugins = new List<string>();
             if (FileSystemWalker.PluginsDirExists())
             {
-                string[] files = Directory.GetFiles(FileSystemWalker.PluginDirectory);
+                string[] files = Directory.GetFiles(FileSystemWalker.PluginsDirectory);
                 foreach (string possible_file in files)
                 {
                     if (!possible_file.Contains("OMLSDK"))
