@@ -14,12 +14,13 @@
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>library.snk</AssemblyOriginatorKeyFile>
+    <ApplicationIcon>ehome.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\OMLImporter\bin\OMLPlugins\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -27,7 +28,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\OMLPlugins\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -37,6 +38,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -45,11 +48,46 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Toub.MediaCenter.Dvrms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b9f134f6a203ab7a, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Conversion\ConversionProgressDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Conversion\Converter.cs" />
+    <Compile Include="Conversion\WavConverter.cs" />
+    <Compile Include="Conversion\WmvConverter.cs" />
+    <Compile Include="DirectShow\AmMediaType.cs" />
+    <Compile Include="DirectShow\ClassId.cs" />
+    <Compile Include="DirectShow\DirectShowException.cs" />
+    <Compile Include="DirectShow\GraphPublisher.cs" />
+    <Compile Include="DirectShow\IBaseFilter.cs" />
+    <Compile Include="DirectShow\IConfigAsfWriter2.cs" />
+    <Compile Include="DirectShow\IEnumFilters.cs" />
+    <Compile Include="DirectShow\IEnumPins.cs" />
+    <Compile Include="DirectShow\IFileSinkFilter.cs" />
+    <Compile Include="DirectShow\IFileSourceFilter.cs" />
+    <Compile Include="DirectShow\IGraphBuilder.cs" />
+    <Compile Include="DirectShow\IMediaControl.cs" />
+    <Compile Include="DirectShow\IMediaEvent.cs" />
+    <Compile Include="DirectShow\IMediaFilter.cs" />
+    <Compile Include="DirectShow\IMediaPosition.cs" />
+    <Compile Include="DirectShow\IMediaSeeking.cs" />
+    <Compile Include="DirectShow\IPersistStream.cs" />
+    <Compile Include="DirectShow\IPin.cs" />
+    <Compile Include="DirectShow\IPropertyBag.cs" />
+    <Compile Include="DirectShow\IReferenceClock.cs" />
+    <Compile Include="DirectShow\IStorage.cs" />
+    <Compile Include="DirectShow\IWmProfileManager.cs" />
     <Compile Include="DVRMSPlugin.cs" />
+    <Compile Include="Editing\DvrmsSplicer.cs" />
+    <Compile Include="Editing\IStreamBufferRecComp.cs" />
+    <Compile Include="Editing\VideoSpan.cs" />
+    <Compile Include="Editing\VideoSpanCollection.cs" />
+    <Compile Include="Metadata\AsfMetadataEditor.cs" />
+    <Compile Include="Metadata\DvrmsMetadataEditor.cs" />
+    <Compile Include="Metadata\MetadataEditor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\DisposalCleanup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
@@ -65,7 +103,12 @@
     <None Include="library.snk" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Toub.MediaCenter.Dvrms.dll" />
+    <EmbeddedResource Include="Conversion\ConversionProgressDialog.resx">
+      <DependentUpon>ConversionProgressDialog.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ehome.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
