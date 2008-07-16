@@ -21,26 +21,39 @@ namespace OMLDatabaseEditor
         public OMLDatabaseEditor()
         {
             InitializeComponent();
+            InitData();
+        }
+
+        private void InitData()
+        {
+            Cursor = Cursors.WaitCursor;
+            _titleCollection = new TitleCollection();
             _titleCollection.loadTitleCollection();
             SetupTitleList();
-
             LoadPlugins();
             SetupPluginList();
+            Cursor = Cursors.Default;
         }
 
         private static void LoadPlugins()
         {
+
+            plugins.Clear();
+
             List<PluginServices.AvailablePlugin> Pluginz = new List<PluginServices.AvailablePlugin>();
             string path = FileSystemWalker.PluginsDirectory;
             Pluginz = PluginServices.FindPlugins(path, "OMLSDK.IOMLPlugin");
             OMLPlugin objPlugin;
             // Loop through available plugins, creating instances and adding them
-            foreach (PluginServices.AvailablePlugin oPlugin in Pluginz)
+            if (Pluginz != null)
             {
-                objPlugin = (OMLPlugin)PluginServices.CreateInstance(oPlugin);
-                plugins.Add(objPlugin);
+                foreach (PluginServices.AvailablePlugin oPlugin in Pluginz)
+                {
+                    objPlugin = (OMLPlugin)PluginServices.CreateInstance(oPlugin);
+                    plugins.Add(objPlugin);
+                }
+                Pluginz = null;
             }
-            Pluginz = null;
         }
 
         private void SetupTitleList()
@@ -83,7 +96,7 @@ namespace OMLDatabaseEditor
         {
             if (this.tabsMediaPanel.SelectedTab != null)
             {
-                Controls.MediaEditor _currentEditor = (Controls.MediaEditor)this.tabsMediaPanel.SelectedTab.Controls[0];
+                Controls.MediaEditor _currentEditor = (Controls.MediaEditor)this.tabsMediaPanel.SelectedTab.Controls[0].Controls[0];
                 Title _currentTitle = (Title)_titleCollection.MoviesByItemId[_currentEditor.itemID];
 
                 _currentEditor.SaveToTitle(_currentTitle);
@@ -120,7 +133,7 @@ namespace OMLDatabaseEditor
         
         private void tsbClose_Click(object sender, EventArgs e)
         {
-            Controls.MediaEditor _currentEditor = (Controls.MediaEditor)tabsMediaPanel.SelectedTab.Controls[0];
+            Controls.MediaEditor _currentEditor = (Controls.MediaEditor)tabsMediaPanel.SelectedTab.Controls[0].Controls[0];
             bool _bClose = true;
 
             if (_currentEditor.Status == global::OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges)
@@ -149,7 +162,7 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private void MenuItemEditTab_Click(object sender, EventArgs e)
+        private void SelectMovieOrImporter()
         {
             if (tvSourceList.SelectedNode.Tag != null)
             {
@@ -175,20 +188,33 @@ namespace OMLDatabaseEditor
             }
         }
 
+        private void MenuItemEditTab_Click(object sender, EventArgs e)
+        {
+            SelectMovieOrImporter();
+        }
+
         private void StartImport(int pluginID)
         {
-            bool showFolderSelection = false;
+            
+            Cursor = Cursors.WaitCursor;
 
             OMLPlugin plugin = new OMLPlugin();
             plugin = plugins[pluginID];
             //plugin.FileFound += new OMLPlugin.FileFoundEventHandler(FileFound);
             //if (plugin.CanCopyImages) AskIfShouldCopyImages();
             plugin.CopyImages = true;// Program._copyImages;
-            plugin.DoWork(plugin.GetWork());
-            LoadTitlesIntoDatabase(plugin);
+
+            string[] work = plugin.GetWork();
+            if (work != null)
+            {
+                plugin.DoWork(work);
+                LoadTitlesIntoDatabase(plugin);
+            }
+
+            Cursor = Cursors.Default;
         }
 
-        public static void LoadTitlesIntoDatabase(OMLPlugin plugin)
+        public void LoadTitlesIntoDatabase(OMLPlugin plugin)
         {
             try
             {
@@ -242,8 +268,13 @@ namespace OMLDatabaseEditor
                     {
                         _titleCollection.Add(t);
                         numberOfTitlesAdded++;
+                        tvSourceList_AddItem(t.Name, t.InternalItemID.ToString(), "Movies");
                     }
                 }
+
+                _titleCollection.saveTitleCollection();
+
+                MessageBox.Show("Added " + numberOfTitlesAdded + " titles\nSkipped " + numberOfTitlesSkipped + " titles\n", "Import Results");
 
                 plugin.GetTitles().Clear();
 
@@ -275,11 +306,19 @@ namespace OMLDatabaseEditor
             Title currentTitle = new Title();
             currentTitle = (Title)_titleCollection.MoviesByItemId[itemID];
 
+            System.Windows.Forms.Panel p = new Panel();
+
+            p.AutoScroll = true;
+            p.AllowDrop = true;
+            p.Size = new System.Drawing.Size(680, 772);
             TabPage newpage = new TabPage(currentTitle.Name);
-            newpage.Controls.Add(Editor);
-            newpage.Size = new System.Drawing.Size(620, 772);
-            newpage.Margin = new System.Windows.Forms.Padding(0);
-            newpage.Padding = new System.Windows.Forms.Padding(0);
+            newpage.AutoScroll = true;
+            p.Controls.Add(Editor);
+
+            newpage.Controls.Add(p);
+            //newpage.Size = new System.Drawing.Size(620, 772);
+            //newpage.Margin = new System.Windows.Forms.Padding(0);
+            //newpage.Padding = new System.Windows.Forms.Padding(0);
             newpage.Tag = Editor;
 
             tabsMediaPanel.TabPages.Add(newpage);
@@ -374,8 +413,8 @@ namespace OMLDatabaseEditor
             Controls.MediaEditor _currentEditor = (Controls.MediaEditor)sender;
             MarkChangedItem(_currentEditor, false);
         }
-        
-        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+
+        void DeleteMovie()
         {
             if (tvSourceList.SelectedNode.Tag != null)
             {
@@ -388,9 +427,15 @@ namespace OMLDatabaseEditor
                         tvSourceList.Nodes.Remove(tvSourceList.SelectedNode);
                         _titleCollection.Remove(titleToRemove);
                         _titleCollection.saveTitleCollection();
-                    }                   
+                    }
                 }
             }
+
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DeleteMovie();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -423,6 +468,32 @@ namespace OMLDatabaseEditor
             }
             return dlgRslt;
         }
+
+        private void tvSourceList_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+                SelectMovieOrImporter();
+            else if (e.KeyData == Keys.Delete)
+                DeleteMovie();
+        }
+
+        private void reloadDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tvSourceList.Nodes["OML Database"].Nodes["Movies"].Nodes.Clear();
+            tvSourceList.Nodes["OML Database"].Nodes["Importers"].Nodes.Clear();
+            InitData();
+        }
+
+        private void tabsMediaPanel_DragOver(object sender, DragEventArgs e)
+        {
+
+        }
+
+        private void OMLDatabaseEditor_DragOver(object sender, DragEventArgs e)
+        {
+
+        }
+
     }
 }
 

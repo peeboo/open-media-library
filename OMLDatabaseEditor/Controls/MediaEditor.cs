@@ -536,6 +536,92 @@ namespace OMLDatabaseEditor.Controls
 
         }
 
+        private void MediaEditor_DragOver(object sender, DragEventArgs e)
+        {
+            string[] formats = e.Data.GetFormats();
+            string debug = "";
+            foreach (string f in formats)
+            {
+                debug = debug + ";" + f;
+            }
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop) || e.Data.GetDataPresent(DataFormats.Html))
+            {
+                e.Effect = DragDropEffects.All;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+
+        }
+
+        public void SetPicture(PictureBox pb, string fileName)
+        {
+            try
+            {
+                if (File.Exists(fileName))
+                {
+                    if (pb.Image != null)
+                    {
+                        pb.Image.Dispose();
+                        pb.Image = null;
+                    }
+
+                    // if we don't do this GDI will still keep the file locked
+                    // and it cannot be deleted unless we close the app
+                    pb.Image = ReadImageFromFile(fileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+
+        private void MediaEditor_DragDrop(object sender, DragEventArgs e)
+        {
+            string fileName = "";
+            try
+            {
+                Array dataArray = (Array)e.Data.GetData(DataFormats.FileDrop);
+                if (dataArray != null)
+                {
+                    fileName = dataArray.GetValue(0).ToString();
+                }
+
+
+                if (e.Data.GetDataPresent(DataFormats.Html))
+                {
+                    // when dropping a file from the webbrowser, the temp image created by the browser has 0 bytes initially
+                    // so run a background thread to wait until the image is fully written by the browser
+                    //backgroundWorkerLoadImage.RunWorkerAsync(fileName);
+                }
+                else
+                {
+                    //MessageBox.Show("x = " + e.X + " y = " + e.Y + "cx = " + pbFrontCover.ClientRectangle.ToString());
+                    Point pointTranslatedToFrontCover = pbFrontCover.PointToClient(new Point(e.X, e.Y));
+                    Point pointTranslatedToBackCover = pbBackCover.PointToClient(new Point(e.X, e.Y));
+                    if (pbBackCover.ClientRectangle.Contains(pointTranslatedToBackCover.X, pointTranslatedToBackCover.Y))
+                    {
+                        SetPicture(pbBackCover, fileName);
+                        tbBackCover.Text = fileName;
+                    }
+                    else //if (pbFrontCover.ClientRectangle.Contains(pointTranslatedToFrontCover.X, pointTranslatedToFrontCover.Y))
+                    {
+                        SetPicture(pbFrontCover, fileName);
+                        tbFrontCover.Text = fileName;
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error saving file. " + ex.Message);
+            }
+        }
+
 
 
 
