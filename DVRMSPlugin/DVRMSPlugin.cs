@@ -43,7 +43,7 @@ namespace DVRMSPlugin
 
         protected override string GetMenu()
         {
-            return "DVRMS Movie Files";
+            return "DVR-MS Movie Files";
         }
 
         protected override string GetName()
@@ -54,12 +54,17 @@ namespace DVRMSPlugin
 
         protected override string GetDescription()
         {
-            return "DVRMS File Extractor Plugin v" + Version;
+            return "DVR-MS File Extractor Plugin v" + Version;
         }
 
         protected override string GetAuthor()
         {
             return "OML Development Team";
+        }
+
+        protected override string GetFilter()
+        {
+            return @"DVR-MS files (*.dvr-ms*)|*.dvr-ms|" + base.GetFilter();
         }
 
         public override bool Load(string filename, bool ShouldCopyImages)
