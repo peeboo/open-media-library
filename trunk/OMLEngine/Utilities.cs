@@ -153,7 +153,7 @@ namespace OMLEngine
         public static List<string> getPossiblePlugins()
         {
             List<string> plugins = new List<string>();
-            if (FileSystemWalker.PluginsDirExists())
+            if (FileSystemWalker.PluginsDirExists)
             {
                 string[] files = Directory.GetFiles(FileSystemWalker.PluginsDirectory);
                 foreach (string possible_file in files)
@@ -234,16 +234,16 @@ namespace OMLEngine
         /// <returns>True on success</returns>
         public static bool RawSetup()
         {
-            if (!FileSystemWalker.RootDirExists())
+            if (!FileSystemWalker.RootDirExists)
                 FileSystemWalker.createRootDirectory();
 
-            if (!FileSystemWalker.ImageDirExists())
+            if (!FileSystemWalker.ImageDirExists)
                 FileSystemWalker.createImageDirectory();
 
-            if (!FileSystemWalker.PluginsDirExists())
+            if (!FileSystemWalker.PluginsDirExists)
                 FileSystemWalker.createPluginsDirectory();
 
-            if (!FileSystemWalker.LogDirExists())
+            if (!FileSystemWalker.LogDirExists)
                 FileSystemWalker.createLogDirectory();
 
             return true;

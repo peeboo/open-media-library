@@ -162,7 +162,7 @@ namespace OMLEngine
         {
             Utilities.DebugLine("[TitleCollection] TitleCollection()");
             _source_database_to_use = SourceDatabase.OML;
-            _database_filename = FileSystemWalker.RootDirectory + "\\oml.dat";
+            _database_filename = FileSystemWalker.RootDirectory + @"\oml.dat";
         }
         /// <summary>
         /// Default destructor

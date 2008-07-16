@@ -16,73 +16,69 @@ namespace OMLEngine
         /// <summary>
         /// Location of Root directory for ALL OML files
         /// </summary>
-        public static string RootDirectory =
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + "\\OpenMediaLibrary";
+        public static string RootDirectory
+        {
+            get { return Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\OpenMediaLibrary"; }
+        }
 
         /// <summary>
         /// Location for cover art and other images to be stored
         /// </summary>
-        public static string ImageDirectory =
-            RootDirectory + "\\Images";
+        public static string ImageDirectory
+        {
+            get { return "" + RootDirectory + @"\Images"; }
+        }
 
         /// <summary>
         /// Location where all plugin dlls should be stored
         /// </summary>
-        public static string PluginsDirectory =
-            RootDirectory + "\\plugins";
+        public static string PluginsDirectory
+        {
+            get { return RootDirectory + @"\plugins"; }
+        }
 
         /// <summary>
         /// Location where all debug and other logs are created
         /// </summary>
-        public static string LogDirectory =
-            RootDirectory + "\\logs";
+        public static string LogDirectory
+        {
+            get { return RootDirectory + @"\logs"; }
+        }
 
         /// <summary>
         /// Checks to ensure that the Root directory exists
         /// </summary>
         /// <returns>True on success</returns>
-        public static bool RootDirExists()
+        public static bool RootDirExists
         {
-            if (Directory.Exists(RootDirectory))
-                return true;
-
-            return false;
+            get { return Directory.Exists(RootDirectory); }
         }
 
         /// <summary>
         /// Checks to ensure that the images directory exists
         /// </summary>
         /// <returns>True on success</returns>
-        public static bool ImageDirExists()
+        public static bool ImageDirExists
         {
-            if (Directory.Exists(ImageDirectory))
-                return true;
-
-            return false;
+            get { return Directory.Exists(ImageDirectory); }
         }
 
         /// <summary>
         /// Checks to ensure that the plugins directory exists
         /// </summary>
         /// <returns>True on success</returns>
-        public static bool PluginsDirExists()
+        public static bool PluginsDirExists
         {
-            if (Directory.Exists(PluginsDirectory))
-                return true;
-
-            return false;
+            get { return Directory.Exists(PluginsDirectory); }
         }
 
         /// <summary>
         /// Checks to ensure that the logs directory exists
         /// </summary>
         /// <returns>True on success</returns>
-        public static bool LogDirExists()
+        public static bool LogDirExists
         {
-            if (Directory.Exists(LogDirectory))
-                return true;
-
-            return false;
+            get { return Directory.Exists(LogDirectory); }
         }
 
         /// <summary>
@@ -122,7 +118,7 @@ namespace OMLEngine
         /// </summary>
         public static void changeToRootDirectory()
         {
-            if (!RootDirExists())
+            if (!RootDirExists)
             {
                 createRootDirectory();
             }
