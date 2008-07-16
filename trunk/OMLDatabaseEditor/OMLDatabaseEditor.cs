@@ -30,11 +30,17 @@ namespace OMLDatabaseEditor
 
         private static void LoadPlugins()
         {
-            plugins.Add(new MyMoviesPlugin.MyMoviesImporter());
-            plugins.Add(new DVDProfilerPlugin.DVDProfilerImporter());
-            plugins.Add(new MovieCollectorzPlugin.MovieCollectorzPlugin());
-            plugins.Add(new DVRMSPlugin.DVRMSPlugin());
-            plugins.Add(new VMCDVDLibraryPlugin.DVDLibraryImporter());
+            List<PluginServices.AvailablePlugin> Pluginz = new List<PluginServices.AvailablePlugin>();
+            string path = FileSystemWalker.PluginsDirectory;
+            Pluginz = PluginServices.FindPlugins(path, "OMLSDK.IOMLPlugin");
+            OMLPlugin objPlugin;
+            // Loop through available plugins, creating instances and adding them
+            foreach (PluginServices.AvailablePlugin oPlugin in Pluginz)
+            {
+                objPlugin = (OMLPlugin)PluginServices.CreateInstance(oPlugin);
+                plugins.Add(objPlugin);
+            }
+            Pluginz = null;
         }
 
         private void SetupTitleList()
