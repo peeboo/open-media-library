@@ -81,9 +81,9 @@ namespace OMLDatabaseEditor.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap SaveAll {
+        internal static System.Drawing.Bitmap SaveAllHS {
             get {
-                object obj = ResourceManager.GetObject("SaveAll", resourceCulture);
+                object obj = ResourceManager.GetObject("SaveAllHS", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
