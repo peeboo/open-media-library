@@ -21,10 +21,38 @@ namespace DVDProfilerPlugin
             return true;
         }
 
-        public override bool Load(string filename)
+        private static double MajorVersion = 0.9;
+        private static double MinorVersion = 0.0;
+        protected override double GetVersionMajor()
+        {
+            return MajorVersion;
+        }
+
+        protected override double GetVersionMinor()
+        {
+            return MinorVersion;
+        }
+        protected override string GetMenu()
+        {
+            return "DVD Profiler";
+        }
+        protected override string GetName()
+        {
+            return "DVDProfilerPlugin";
+        }
+        protected override string GetAuthor()
+        {
+            return "OML Development Team";
+        }
+        protected override string GetDescription()
+        {
+            return "DVDProfiler xml file importer for Open Media Library v" + Version;
+        }
+
+        public override void ProcessFile(string file)
         {
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(filename);
+            xDoc.Load(file);
 
             XmlNodeList nodeList = xDoc.SelectNodes("//Collection/DVD");
             foreach (XmlNode movieNode in nodeList)
@@ -53,35 +81,6 @@ namespace DVDProfilerPlugin
                 }
                 else Trace.WriteLine("Error saving row");
             }
-            return true;
-        }
-
-        private static double MajorVersion = 0.9;
-        private static double MinorVersion = 0.0;
-        protected override double GetVersionMajor()
-        {
-            return MajorVersion;
-        }
-
-        protected override double GetVersionMinor()
-        {
-            return MinorVersion;
-        }
-        protected override string GetMenu()
-        {
-            return "DVD Profiler";
-        }
-        protected override string GetName()
-        {
-            return "DVDProfilerPlugin";
-        }
-        protected override string GetAuthor()
-        {
-            return "OML Development Team";
-        }
-        protected override string GetDescription()
-        {
-            return "DVDProfiler xml file importer for Open Media Library v" + Version;
         }
 
         private static void process_node_switch(Title newTitle, XmlNode node)
