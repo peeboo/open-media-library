@@ -92,27 +92,27 @@
                         <Component Id="DVDProfilerPlugin.dll" Guid="b7f12ef4-e500-4d0e-bfbe-d77eae64176c" DiskId="1">
                             <File Name="DVDProfilerPlugin.dll"
                                   KeyPath="yes" Source="..\..\DVDProfilerPlugin\bin\$(var.BuildType)\DVDProfilerPlugin.dll"
-                                  Checksum="yes" Vital="yes" Assembly=".net"/>
+                                  Checksum="yes" Vital="yes"/>
                         </Component>
                         <Component Id="DVRMSPlugin.dll" Guid="ec74a168-53ae-4bef-a72d-3ff093bb8b0f" DiskId="1">
                             <File Name="DVRMSPlugin.dll"
                                   KeyPath="yes" Source="..\..\DVRMSPlugin\bin\$(var.BuildType)\DVRMSPlugin.dll"
-                                  Checksum="yes" Vital="yes" Assembly=".net"/>
+                                  Checksum="yes" Vital="yes"/>
                         </Component>
                         <Component Id="MovieCollectorz.dll" Guid="b3a7750c-5474-4bdf-9926-64e13ed92a97" DiskId="1">
                             <File Name="MovieCollectorz.dll"
                                   KeyPath="yes" Source="..\..\MovieCollectorz\bin\$(var.BuildType)\MovieCollectorz.dll"
-                                  Checksum="yes" Vital="yes" Assembly=".net"/>
+                                  Checksum="yes" Vital="yes"/>
                         </Component>
                         <Component Id="MyMoviesPlugin.dll" Guid="4102ad78-c010-4367-8454-7317713ccfe6" DiskId="1">
                             <File Name="MyMoviesPlugin.dll"
                                   KeyPath="yes" Source="..\..\MyMoviesPlugin\bin\$(var.BuildType)\MyMoviesPlugin.dll"
-                                  Checksum="yes" Vital="yes" Assembly=".net"/>
+                                  Checksum="yes" Vital="yes"/>
                         </Component>
                         <Component Id="VMCDVDLibraryPlugin.dll" Guid="d8028d8c-a048-46b2-9c27-c64f07c8ab8d" DiskId="1">
                             <File Name="VMCDVDLibraryPlugin.dll"
                                   KeyPath="yes" Source="..\..\VMCDVDLibraryPlugin\bin\$(var.BuildType)\VMCDVDLibraryPlugin.dll"
-                                  Checksum="yes" Vital="yes" Assembly=".net"/>
+                                  Checksum="yes" Vital="yes"/>
                         </Component>
                         <Component Id="OMLSDK.dll" Guid="26097a63-fc55-41d2-a8d5-432809de99fc" DiskId="1">
                             <File Name="OMLSDK.dll"
