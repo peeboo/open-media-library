@@ -484,14 +484,15 @@ namespace OMLDatabaseEditor
             InitData();
         }
 
-        private void tabsMediaPanel_DragOver(object sender, DragEventArgs e)
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            AboutOML about = new AboutOML();
+            about.Show();
         }
 
-        private void OMLDatabaseEditor_DragOver(object sender, DragEventArgs e)
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.Close();
         }
 
     }
