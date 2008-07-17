@@ -32,6 +32,7 @@ namespace Library
         private bool _loadComplete = false;
         private bool _addingAllStarted = false;
         private bool _addingAllComplete = false;
+        private bool _hasCheckedNodes = false;
 
         private BooleanChoice _shouldCopyImages = new BooleanChoice();
         private static List<OMLPlugin> availablePlugins = new List<OMLPlugin>();
@@ -39,6 +40,15 @@ namespace Library
         #endregion
 
         #region Properties
+        public bool HasCheckedNodes
+        {
+            get { return _hasCheckedNodes; }
+            set
+            {
+                _hasCheckedNodes = value;
+                FirePropertyChanged("HasCheckedNodes");
+            }
+        }
         public ArrayListDataSet CheckedNodes
         {
             get { return _treeView.CheckedNodes; }
@@ -321,26 +331,16 @@ namespace Library
             OMLApplication.DebugLine("Start loading new titles");
             plugin = GetPlugin();
 
-            foreach (TreeNode node in _treeView.CheckedNodes)
-            {
-                plugin.ProcessDir(node.FullPath);
-            }
-
-            if (plugin.IsSingleFileImporter()) {
-                OMLApplication.DebugLine("This importer requires a file, determining file to load.");
-                _filename = determineFileToLoad(plugin);
-            }
-            //_filename = "C:\\titles.xml";
-
             Application.DeferredInvokeOnWorkerThread(new DeferredHandler(_BeginLoading),
                                                      new DeferredHandler(_LoadingComplete),
                                                      new object[] { });
         }
 
-        public string determineFileToLoad(OMLPlugin plugin)
+        public IList<string> determinesFileToLoad(OMLPlugin plugin, TreeNode node)
         {
+            List<string> files = new List<string>();
             OMLApplication.DebugLine("Which file to load?");
-            return string.Empty;
+            return files;
         }
 
         public void _LoadingComplete(object args)
@@ -363,7 +363,26 @@ namespace Library
             LoadStarted = true;
             try
             {
-                plugin.DoWork(plugin.GetWork());
+                string[] locations = new string[_treeView.CheckedNodes.Count -1];
+
+                for (int i = 0; i < _treeView.CheckedNodes.Count -1; i++)
+                {
+                    TreeNode node = (TreeNode)_treeView.CheckedNodes[i];
+                    if (node != null)
+                    {
+                        if (plugin.IsSingleFileImporter())
+                        {
+                            OMLApplication.DebugLine("Not adding path, we first need to determine which files to import");
+                        }
+                        else
+                        {
+                            OMLApplication.DebugLine("Adding path: " + node.FullPath + " to the locations list");
+                            locations[i] = node.FullPath;
+                        }
+                    }
+                }
+
+                plugin.DoWork(locations);
             }
             catch (Exception e)
             {
@@ -376,6 +395,7 @@ namespace Library
             OMLApplication.DebugLine("Adding node: " + node.FullPath);
             TreeView.CheckedNodes.Add(node);
             FirePropertyChanged("CheckedNodes");
+            HasCheckedNodes = true;
         }
 
         public void RemoveCheckedNode(TreeNode node)
@@ -386,6 +406,8 @@ namespace Library
                 TreeView.CheckedNodes.Remove(node);
                 FirePropertyChanged("CheckedNodes");
             }
+            if (TreeView.CheckedNodes.Count > 0)
+                HasCheckedNodes = false;
         }
 
         public Setup()
@@ -473,6 +495,15 @@ namespace Library
                 availablePlugins.Add(objPlugin);
             }
             Pluginz = null;
+        }
+
+        public void RequestNodeSelection()
+        {
+            AddInHost.Current.MediaCenterEnvironment.Dialog("Please select one or more directories before clicking begin scan.",
+                                                            "Missing Selection",
+                                                            Microsoft.MediaCenter.DialogButtons.Ok,
+                                                            0,
+                                                            true);
         }
     }
 }

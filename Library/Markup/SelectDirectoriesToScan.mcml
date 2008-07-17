@@ -21,6 +21,9 @@
 
       <Rules>
           <Changed Source="[BeginScanCommand.Invoked]">
+              <Conditions>
+                  <Equality Source="[Setup.HasCheckedNodes]" Value="true" />
+              </Conditions>
               <Actions>
                   <Navigate Source="@resx://Library/Library.Resources/SelectFilesToImport"
                             Setup="[Setup]"
@@ -28,6 +31,14 @@
                             MovieGallery="[MovieBrowser]"
                             UISettings="[UISettings]"/>
 
+              </Actions>
+          </Changed>
+          <Changed Source="[BeginScanCommand.Invoked]">
+              <Conditions>
+                  <Equality Source="[Setup.HasCheckedNodes]" Value="false" />
+              </Conditions>
+              <Actions>
+                  <Invoke Target="[Setup.RequestNodeSelection]" />
               </Actions>
           </Changed>
       </Rules>
