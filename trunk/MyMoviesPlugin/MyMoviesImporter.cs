@@ -25,12 +25,13 @@ namespace MyMoviesPlugin
         {
             return true;
         }
-        public override bool Load(string filename)
+        public override void ProcessFile(string file)
         {
-            Utilities.DebugLine("[MyMoviesImporter] created[filename("+filename+"), ShouldCopyImages("+CopyImages+")]");
+            
+            Utilities.DebugLine("[MyMoviesImporter] created[filename("+file+"), ShouldCopyImages("+CopyImages+")]");
 
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(filename);
+            xDoc.Load(file);
             Utilities.DebugLine("[MyMoviesImporter] file loaded");
 
             XmlNodeList nodeList = xDoc.SelectNodes("//Titles/Title");
@@ -61,7 +62,6 @@ namespace MyMoviesPlugin
                 }
                 else Utilities.DebugLine("[MyMoviesImporter] Error saving row");
             }
-            return true;
         }
         protected override double GetVersionMajor()
         {
@@ -342,10 +342,6 @@ namespace MyMoviesPlugin
                     }
                     break;
             }
-        }
-        public override void DoWork(string[] thework)
-        {
-            Load(thework[0]);
         }
     }
 }

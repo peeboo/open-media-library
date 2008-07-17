@@ -30,10 +30,11 @@ namespace MovieCollectorzPlugin
         public MovieCollectorzPlugin() : base()
         {
         }
-        public override bool Load(string filename)
+
+        public override void ProcessFile(string file)
         {
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(filename);
+            xDoc.Load(file);
 
             XmlNodeList nodeList = xDoc.SelectNodes("//movielist/movie");
             foreach (XmlNode movieNode in nodeList)
@@ -222,8 +223,6 @@ namespace MovieCollectorzPlugin
                 else
                     Utilities.DebugLine("Error saving row");
             }
-
-            return true;
         }
 
         private static double MajorVersion = 0.9;
