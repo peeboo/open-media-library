@@ -107,7 +107,6 @@
     <None Include="Setup\Build.bat" />
     <None Include="Setup\Setup-en-us.wxl" />
     <None Include="Setup\Setup.wxs" />
-    <None Include="Readme.htm" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\Focus_Outline.png" />

@@ -9,6 +9,7 @@ using System.Threading;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
 
 namespace OMLEngine
 {
@@ -481,5 +482,13 @@ namespace OMLEngine
             return size;
         }
         */
+
+        [DllImport("shell32.dll", EntryPoint = "#680", CharSet = CharSet.Unicode)]
+        public static extern bool IsUserAnAdmin();
+
+        public static bool IsUACActive()
+        {
+            return !IsUserAnAdmin();
+        }
     }
 }
