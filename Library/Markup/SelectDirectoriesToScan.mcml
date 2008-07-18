@@ -20,6 +20,17 @@
       </Locals>
 
       <Rules>
+          <Condition ConditionOp="Equals" Source="[Setup.IsSingleFileImporter]" SourceValue="true">
+              <Actions>
+                  <Set Target="[PluginMessage.Content]" Value="NOTICE: The importer you have selected will ONLY import files as they are named by your SOURCE application from the directories you select. (Example: MyMovies creates a titles.xml file)" />
+              </Actions>
+          </Condition>
+          <Condition ConditionOp="Equals" Source="[Setup.IsSingleFileImporter]" SourceValue="false">
+              <Actions>
+                  <Set Target="[PluginMessage.Content]" Value="NOTICE: Select all the directories that you want to search for movies." />
+              </Actions>
+          </Condition>
+
           <Changed Source="[BeginScanCommand.Invoked]">
               <Conditions>
                   <Equality Source="[Setup.HasCheckedNodes]" Value="true" />
@@ -135,6 +146,7 @@
                                       </Children>
                                   </Graphic>
                                   <c:SimpleButton Name="Begin Scan" Command="[BeginScanCommand]" Text="Begin Scan"/>
+                                  <Text Name="PluginMessage" Content="Woohoo!" WordWrap="true" Font="Calibri, 20, Bold" Color="LightBlue" />
 
                               </Children>
                           </Clip>

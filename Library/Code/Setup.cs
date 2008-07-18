@@ -240,6 +240,16 @@ namespace Library
             get { return current; }
             set { current = value; }
         }
+
+        public bool IsSingleFileImporter
+        {
+            get { return GetPlugin().IsSingleFileImporter(); }
+        }
+
+        public string DefaultFileToImport
+        {
+            get { return GetPlugin().DefaultFileToImport(); }
+        }
         #endregion
 
         public void SkipCurrentTitle()
@@ -305,16 +315,14 @@ namespace Library
         {
             OMLApplication.DebugLine("[Setup] AddingAllCurrentTitles Started");
             AddingAllStarted = true;
-            OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.InternalItemID);
-            _titleCollection.Add(CurrentTitle);
-            while (TotalTitlesFound > CurrentTitleIndex + 1)
+            foreach (Title title in _titles)
             {
-                _currentTitle = _titles[CurrentTitleIndex];
+                OMLApplication.DebugLine("[Setup UI] Adding title: " + title.InternalItemID);
+                OMLPlugin.BuildResizedMenuImage(title);
+                _titleCollection.Add(title);
+
+                _currentTitleIndex++;
                 _TotalTitlesAdded++;
-                OMLApplication.DebugLine("[Setup] Adding title: " + _currentTitle.Name);
-                OMLPlugin.BuildResizedMenuImage(_currentTitle);
-                _titleCollection.Add(_currentTitle);
-                _currentTitle = _titles[++CurrentTitleIndex];
             }
         }
 
@@ -334,13 +342,6 @@ namespace Library
             Application.DeferredInvokeOnWorkerThread(new DeferredHandler(_BeginLoading),
                                                      new DeferredHandler(_LoadingComplete),
                                                      new object[] { });
-        }
-
-        public IList<string> determinesFileToLoad(OMLPlugin plugin, TreeNode node)
-        {
-            List<string> files = new List<string>();
-            OMLApplication.DebugLine("Which file to load?");
-            return files;
         }
 
         public void _LoadingComplete(object args)
@@ -363,30 +364,45 @@ namespace Library
             LoadStarted = true;
             try
             {
-                string[] locations = new string[_treeView.CheckedNodes.Count -1];
-
-                for (int i = 0; i < _treeView.CheckedNodes.Count -1; i++)
+                for (int i = 0; i <= _treeView.CheckedNodes.Count -1; i++)
                 {
+                    OMLApplication.DebugLine("[Setup UI] Found a node");
                     TreeNode node = (TreeNode)_treeView.CheckedNodes[i];
                     if (node != null)
                     {
+                        OMLApplication.DebugLine("[Setup UI] Scanning node: " + node.FullPath);
                         if (plugin.IsSingleFileImporter())
                         {
-                            OMLApplication.DebugLine("Not adding path, we first need to determine which files to import");
+                            string fileNameToFind = plugin.DefaultFileToImport();
+                            if (fileNameToFind != null)
+                            {
+                                OMLApplication.DebugLine("[Setup UI] Looking for file: " + fileNameToFind);
+                                if (Directory.Exists(node.FullPath))
+                                {
+                                    DirectoryInfo dirInfo = new DirectoryInfo(node.FullPath);
+                                    if (dirInfo != null)
+                                    {
+                                        FileInfo[] fileInfos = dirInfo.GetFiles(fileNameToFind, SearchOption.TopDirectoryOnly);
+                                        foreach (FileInfo fInfo in fileInfos)
+                                        {
+                                            OMLApplication.DebugLine("[Setup UI] File Found: " + fInfo.Name);
+                                            plugin.DoWork(new string[] { fInfo.FullName });
+                                        }
+                                    }
+                                }
+                            }
                         }
                         else
                         {
-                            OMLApplication.DebugLine("Adding path: " + node.FullPath + " to the locations list");
-                            locations[i] = node.FullPath;
+                            OMLApplication.DebugLine("[Setup UI] Processing path: " + node.FullPath);
+                            plugin.DoWork(new string[] { node.FullPath });
                         }
                     }
                 }
-
-                plugin.DoWork(locations);
             }
             catch (Exception e)
             {
-                OMLApplication.DebugLine("Error finding file: " + e.Message);
+                OMLApplication.DebugLine("[Setup UI] Error finding file: " + e.Message);
             }
         }
 
