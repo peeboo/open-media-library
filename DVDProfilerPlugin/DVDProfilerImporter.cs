@@ -21,6 +21,11 @@ namespace DVDProfilerPlugin
             return true;
         }
 
+        public override string DefaultFileToImport()
+        {
+            return @"Collection.xml";
+        }
+
         private static double MajorVersion = 0.9;
         private static double MinorVersion = 0.0;
         protected override double GetVersionMajor()

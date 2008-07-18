@@ -25,6 +25,10 @@ namespace MyMoviesPlugin
         {
             return true;
         }
+        public override string DefaultFileToImport()
+        {
+            return @"titles.xml";
+        }
         public override void ProcessFile(string file)
         {
             

@@ -15,7 +15,6 @@ namespace OMLSDK
         private Boolean _copyImages = false;
 
         #region Properties
-
         /// <summary>
         /// 
         /// </summary>
@@ -148,6 +147,10 @@ namespace OMLSDK
 
         #endregion
 
+        public virtual string DefaultFileToImport()
+        {
+            return string.Empty;
+        }
         /// <summary>
         /// 
         /// </summary>
