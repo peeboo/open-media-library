@@ -67,6 +67,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap AppIcon1 {
+            get {
+                object obj = ResourceManager.GetObject("AppIcon1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Application {
             get {
                 object obj = ResourceManager.GetObject("Application", resourceCulture);
@@ -109,9 +116,23 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap buttondisabled2 {
+            get {
+                object obj = ResourceManager.GetObject("buttondisabled2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ButtonDormant {
             get {
                 object obj = ResourceManager.GetObject("ButtonDormant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap buttondormant2 {
+            get {
+                object obj = ResourceManager.GetObject("buttondormant2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -165,6 +186,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap buttonpressedhighlight2 {
+            get {
+                object obj = ResourceManager.GetObject("buttonpressedhighlight2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ButtonRadioButtonBullet {
             get {
                 object obj = ResourceManager.GetObject("ButtonRadioButtonBullet", resourceCulture);
@@ -182,6 +210,13 @@ namespace Library {
         internal static System.Drawing.Bitmap ButtonRadioButtonBulletNoFocus {
             get {
                 object obj = ResourceManager.GetObject("ButtonRadioButtonBulletNoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap buttonradiobuttonbulletnofocus2 {
+            get {
+                object obj = ResourceManager.GetObject("buttonradiobuttonbulletnofocus2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -210,6 +245,13 @@ namespace Library {
         internal static System.Drawing.Bitmap ButtonRightFocusOverlay {
             get {
                 object obj = ResourceManager.GetObject("ButtonRightFocusOverlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap buttonrightfocusoverlay1 {
+            get {
+                object obj = ResourceManager.GetObject("buttonrightfocusoverlay1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -283,6 +325,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] ExplandCollapseButton {
+            get {
+                object obj = ResourceManager.GetObject("ExplandCollapseButton", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] FilterList {
             get {
                 object obj = ResourceManager.GetObject("FilterList", resourceCulture);
@@ -297,6 +346,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap findeditbox2 {
+            get {
+                object obj = ResourceManager.GetObject("findeditbox2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap FindEditboxNoFocus {
             get {
                 object obj = ResourceManager.GetObject("FindEditboxNoFocus", resourceCulture);
@@ -304,9 +360,23 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap findeditboxnofocus2 {
+            get {
+                object obj = ResourceManager.GetObject("findeditboxnofocus2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap FirstRunCheckBoxCheckedDisabled {
             get {
                 object obj = ResourceManager.GetObject("FirstRunCheckBoxCheckedDisabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap firstruncheckboxcheckeddisabled2 {
+            get {
+                object obj = ResourceManager.GetObject("firstruncheckboxcheckeddisabled2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -383,6 +453,13 @@ namespace Library {
         internal static byte[] HeaderText {
             get {
                 object obj = ResourceManager.GetObject("HeaderText", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] Images {
+            get {
+                object obj = ResourceManager.GetObject("Images", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -524,6 +601,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] Settings {
+            get {
+                object obj = ResourceManager.GetObject("Settings", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] Setup {
             get {
                 object obj = ResourceManager.GetObject("Setup", resourceCulture);
@@ -538,9 +622,37 @@ namespace Library {
             }
         }
         
+        internal static byte[] SimpleCheckbox {
+            get {
+                object obj = ResourceManager.GetObject("SimpleCheckbox", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] SimpleEditbox {
+            get {
+                object obj = ResourceManager.GetObject("SimpleEditbox", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] SimpleRadioButton {
             get {
                 object obj = ResourceManager.GetObject("SimpleRadioButton", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] SimpleRadioButtonGroup {
+            get {
+                object obj = ResourceManager.GetObject("SimpleRadioButtonGroup", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] SimpleSpinner {
+            get {
+                object obj = ResourceManager.GetObject("SimpleSpinner", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -615,6 +727,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap spinnerarrowforwardfocus2 {
+            get {
+                object obj = ResourceManager.GetObject("spinnerarrowforwardfocus2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap SpinnerArrowForwardFocusoverlay {
             get {
                 object obj = ResourceManager.GetObject("SpinnerArrowForwardFocusoverlay", resourceCulture);
@@ -622,16 +741,16 @@ namespace Library {
             }
         }
         
-        internal static System.Drawing.Bitmap SpinnerArrowForwardNoFocus {
+        internal static System.Drawing.Bitmap spinnerarrowforwardfocusoverlay1 {
             get {
-                object obj = ResourceManager.GetObject("SpinnerArrowForwardNoFocus", resourceCulture);
+                object obj = ResourceManager.GetObject("spinnerarrowforwardfocusoverlay1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap spinnerarrowforwardnofocus1 {
+        internal static System.Drawing.Bitmap SpinnerArrowForwardNoFocus {
             get {
-                object obj = ResourceManager.GetObject("spinnerarrowforwardnofocus1", resourceCulture);
+                object obj = ResourceManager.GetObject("SpinnerArrowForwardNoFocus", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -121,7 +121,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NameAscending")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Name Ascending")]
         public string MovieSort {
             get {
                 return ((string)(this["MovieSort"]));
@@ -133,7 +133,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NameAscending")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Name Ascending")]
         public string ActorSort {
             get {
                 return ((string)(this["ActorSort"]));
@@ -145,7 +145,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NameAscending")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Name Ascending")]
         public string DirectorSort {
             get {
                 return ((string)(this["DirectorSort"]));
@@ -157,7 +157,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NameDescending")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Name Descending")]
         public string YearSort {
             get {
                 return ((string)(this["YearSort"]));
@@ -169,7 +169,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NameDescending")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Name Descending")]
         public string DateAddedSort {
             get {
                 return ((string)(this["DateAddedSort"]));
@@ -193,7 +193,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NameAscending")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Name Ascending")]
         public string GenreSort {
             get {
                 return ((string)(this["GenreSort"]));
@@ -349,7 +349,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NameDescending")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Name Descending")]
         public string UserRatingSort {
             get {
                 return ((string)(this["UserRatingSort"]));
@@ -409,7 +409,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NameAscending")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Name Ascending")]
         public string NameAscendingSort {
             get {
                 return ((string)(this["NameAscendingSort"]));
@@ -445,7 +445,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
         public double CoverArtAlpha {
             get {
                 return ((double)(this["CoverArtAlpha"]));

@@ -272,7 +272,7 @@
   <Animation Name="GotFocusCoverArt" Loop="0" CenterPointPercent=".5,.5,0" >
     <Keyframes>
       <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
-      <ScaleKeyframe Time="0.4" Value="1.7,1.7,1.7" RelativeTo="Final" />
+      <ScaleKeyframe Time="0.4" Value="1.4,1.4,1.4" RelativeTo="Final" />
     </Keyframes>
   </Animation>
 

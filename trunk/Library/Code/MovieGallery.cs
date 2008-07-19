@@ -100,16 +100,16 @@ namespace Library
 
         private void CreateSortLookup()
         {
-            _sortFunctionLookup.Add("NameAscending", SortByNameAscending);
-            _sortFunctionLookup.Add("NameDescending", SortByNameDescending);
-            _sortFunctionLookup.Add("YearAscending", SortByYearAscending);
-            _sortFunctionLookup.Add("YearDescending", SortByYearDescending);
-            _sortFunctionLookup.Add("RuntimeAscending", SortByRuntimeAscending);
-            _sortFunctionLookup.Add("RuntimeDescending", SortByRuntimeDescending);
-            _sortFunctionLookup.Add("UserRatingAscending", SortByUserRatingAscending);
-            _sortFunctionLookup.Add("UserRatingDescending", SortByUserRatingDescending);
-            _sortFunctionLookup.Add("DateAddedAscending", SortByDateAddedAscending);
-            _sortFunctionLookup.Add("DateAddedAscending", SortByDateAddedDescending);
+            _sortFunctionLookup.Add("Name Ascending", SortByNameAscending);
+            _sortFunctionLookup.Add("Name Descending", SortByNameDescending);
+            _sortFunctionLookup.Add("Year Ascending", SortByYearAscending);
+            _sortFunctionLookup.Add("Year Descending", SortByYearDescending);
+            _sortFunctionLookup.Add("Date Added Ascending", SortByDateAddedAscending);
+            _sortFunctionLookup.Add("Date Added Descending", SortByDateAddedDescending);
+            _sortFunctionLookup.Add("Runtime Ascending", SortByRuntimeAscending);
+            _sortFunctionLookup.Add("Runtime Descending", SortByRuntimeDescending);
+            _sortFunctionLookup.Add("User Rating Ascending", SortByUserRatingAscending);
+            _sortFunctionLookup.Add("User Rating Descending", SortByUserRatingDescending);
         }
 
         private void CreateVirtualList()
@@ -235,19 +235,21 @@ namespace Library
 
         private void CreateCategories()
         {
+            _categories.Add(new FilterCommand(Filters[Filter.Settings]));
             _categories.Add(new FilterCommand(Filters[Filter.Genres]));
             _categories.Add(new FilterCommand(Filters[Filter.Director]));
             _categories.Add(new FilterCommand(Filters[Filter.Actor]));
             _categories.Add(new FilterCommand(Filters[Filter.DateAdded]));
             _categories.Add(new FilterCommand(Filters[Filter.Year]));
             _categories.Add(new FilterCommand(Filters[Filter.Runtime]));
-            _categories.Add(new FilterCommand(Filters[Filter.UserRating]));
             _categories.Add(new FilterCommand(Filters[Filter.VideoFormat]));
+            _categories.Add(new FilterCommand(Filters[Filter.UserRating]));
             _categoryChoice = new Choice(this, "Categories", _categories);
         }
 
         private void Initialize(TitleCollection col)
         {
+            _filters.Add(Filter.Settings, new Filter(Filter.Settings, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
             _filters.Add(Filter.Actor, new Filter(Filter.Actor,this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
             _filters.Add(Filter.Director, new Filter(Filter.Director, this, Properties.Settings.Default.DirectorView, true, Properties.Settings.Default.DirectorSort));
             _filters.Add(Filter.Genres, new Filter(Filter.Genres, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.GenreSort));
@@ -263,6 +265,8 @@ namespace Library
             _categoryChoice = new Choice(this, "Categories");
             CreateCategories();
             _moviesVirtualList = new VirtualList(this, null);
+
+            CreateSortLookup();
 
             if (_sortFunctionLookup.ContainsKey(Properties.Settings.Default.MovieSort))
                 _currentSort = _sortFunctionLookup[Properties.Settings.Default.MovieSort];

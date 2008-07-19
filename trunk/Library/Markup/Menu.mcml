@@ -206,7 +206,7 @@
                             <c:SimpleButton Name="NowPlaying" Text="No movie is playing" Command="[GoToNowPlaying]" Size="400,51" Font="font://s:Normal"/>
                           </Children>
                           <LayoutInput>
-                            <FormLayoutInput Left="Parent,0.50,20" Bottom="[NowPlayingBottomAnchor]"/>
+                            <FormLayoutInput Left="Parent,0.35" Bottom="[NowPlayingBottomAnchor]"/>
                           </LayoutInput>
                         </Panel>
                   
@@ -242,11 +242,11 @@
                     <!-- Filters -->
                     <Panel Name="Filters" >
                         <Children>
-                            <filter:FilterList Page="[MovieBrowser]" Margins="0,-4,100,0" MinimumSize="0,32"/>
+                            <filter:FilterList Page="[MovieBrowser]" Margins="0,-4,20,0" MinimumSize="0,32"/>
                         </Children>
 
                         <LayoutInput>
-                            <FormLayoutInput Left="Parent,0.50,20" Right="Parent,1,-5" Top="[FiltersTopAnchor]"/>
+                            <FormLayoutInput Left="Parent,0.35" Right="Parent,1,-5" Top="[FiltersTopAnchor]"/>
                         </LayoutInput>
                     </Panel>
 
@@ -258,7 +258,7 @@
                         </Children>
 
                         <LayoutInput>
-                            <FormLayoutInput Left="Parent,0.05,20" Right="Parent,1,-20" Top="Filters,1,15" Bottom="[GalleryBottomAnchor]"/>
+                            <FormLayoutInput Left="Parent,0.05,20" Right="Parent,1,-20" Top="Filters,1,35" Bottom="[GalleryBottomAnchor]"/>
                         </LayoutInput>
                     </Panel>
 
