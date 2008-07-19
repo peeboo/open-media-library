@@ -46,7 +46,7 @@ namespace VMCDVDLibraryPlugin
         }
         protected override string GetName()
         {
-            return "VMCDVDLibraryPlugin";
+            return "Scan Folders For DVDs and Videos";
         }
         protected override string GetAuthor()
         {
@@ -54,7 +54,7 @@ namespace VMCDVDLibraryPlugin
         }
         protected override string GetDescription()
         {
-            return "VMC DVD Library importer for Open Media Library v" + Version;
+            return "DVD Library and Video importer for Open Media Library v" + Version;
         }
         public override bool Load(string filename)
         {
