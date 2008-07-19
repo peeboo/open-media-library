@@ -27,25 +27,25 @@
       <Value Profile="(Default)">Menu</Value>
     </Setting>
     <Setting Name="MovieSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameAscending</Value>
+      <Value Profile="(Default)">Name Ascending</Value>
     </Setting>
     <Setting Name="ActorSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameAscending</Value>
+      <Value Profile="(Default)">Name Ascending</Value>
     </Setting>
     <Setting Name="DirectorSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameAscending</Value>
+      <Value Profile="(Default)">Name Ascending</Value>
     </Setting>
     <Setting Name="YearSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameDescending</Value>
+      <Value Profile="(Default)">Name Descending</Value>
     </Setting>
     <Setting Name="DateAddedSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameDescending</Value>
+      <Value Profile="(Default)">Name Descending</Value>
     </Setting>
     <Setting Name="SortFullString" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="GenreSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameAscending</Value>
+      <Value Profile="(Default)">Name Ascending</Value>
     </Setting>
     <Setting Name="DetailsLeftAnchor" Type="System.Single" Scope="User">
       <Value Profile="(Default)">0</Value>
@@ -84,7 +84,7 @@
       <Value Profile="(Default)">50</Value>
     </Setting>
     <Setting Name="UserRatingSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameDescending</Value>
+      <Value Profile="(Default)">Name Descending</Value>
     </Setting>
     <Setting Name="RightAnchor" Type="System.Single" Scope="User">
       <Value Profile="(Default)">1</Value>
@@ -99,7 +99,7 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="NameAscendingSort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NameAscending</Value>
+      <Value Profile="(Default)">Name Ascending</Value>
     </Setting>
     <Setting Name="ListSpacingVertical" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
@@ -108,7 +108,7 @@
       <Value Profile="(Default)">80</Value>
     </Setting>
     <Setting Name="CoverArtAlpha" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">1</Value>
+      <Value Profile="(Default)">0.5</Value>
     </Setting>
     <Setting Name="ShowMovieDetails" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

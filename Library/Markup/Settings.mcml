@@ -1,0 +1,162 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
+      xmlns:coll="assembly://MsCorLib/System.Collections"
+      xmlns:s="resx://Library/Library.Resources/Styles"
+      xmlns:cor="assembly://MsCorLib/System"
+      xmlns:a="assembly://Library/Library"
+      xmlns:controls="resx://Library/Library.Resources/CoreControls"
+      xmlns:c="resx://Library/Library.Resources/Controls"
+      xmlns:me="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/Base" />
+
+  <UI Name="Settings">
+
+    <Locals>
+      <Command Name="BeginSetupCommand"
+               Description="Begin Setup"/>
+      <Command Name="SaveSettings"
+               Description="Save Settings"/>
+
+    </Locals>
+
+    <Properties>
+      <a:Settings Name="Settings" Settings="$Required" />
+      <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+      <a:UISettings Name="UISettings" UISettings="$Required" />
+    </Properties>
+
+    <Rules>
+      <Changed Source="[BeginSetupCommand.Invoked]">
+        <Actions>
+          <Navigate Source="@resx://Library/Library.Resources/Setup"
+                    OMLApplication="[Application]"
+                    MovieGallery="[MovieBrowser]"
+                    UISettings="[UISettings]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[SaveSettings.Invoked]">
+        <Actions>
+          <Invoke Target="[Settings.SaveSettings]" />
+        </Actions>
+      </Changed>
+
+    </Rules>
+
+    <Content>
+      <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
+        <Children>
+
+          <Panel Name="Bottom" >
+            <Children>
+              <Panel Layout="Fill" Margins="50,0,0,0">
+                <Children>
+                  <Panel Layout="VerticalFlow">
+                    <Children>
+                      <Clip Layout="HorizontalFlow">
+                        <Children>
+                          <Clip Layout="Grid">
+                            <Children>
+                              <Text Name="SelectedImporterLabel" Content="" Font="Calibri, 20, Bold" Color="LightBlue"/>
+                            </Children>
+                          </Clip>
+                        </Children>
+                      </Clip>
+                    </Children>
+                  </Panel>
+                </Children>
+              </Panel>
+              <Clip Orientation="Vertical">
+                <Children>
+                  <ColorFill Content="Black" Alpha="0.5"/>
+                </Children>
+              </Clip>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
+            </LayoutInput>
+          </Panel>
+
+          <Panel Name="Top">
+            <Children>
+              <Text Content="Open Media Library Settings" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0">
+              </Text>
+              <Clip Orientation="Vertical">
+                <Children>
+                  <ColorFill Content="Black" Alpha="0.5"/>
+                </Children>
+              </Clip>
+
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
+            </LayoutInput>
+          </Panel>
+
+          <Panel Name="Content" >
+            <Children>
+              <Clip Layout="VerticalFlow">
+                <Children>
+                  <Panel Name="DaemonToolsSettings" Layout="HorizontalFlow">
+                    <Children>
+                      
+                      <Panel Layout="VerticalFlow" Margins="0,0,50,0">
+                        <Children>
+                          <Text  Content="Daemon Tools Path" Color="White" Font="font://me:Font" Margins="0,20,0,0" />
+                          <c:SimpleEditbox Name="DTEditbox" Size="700,51" EditableText="[Settings.DaemonToolsPath]" Label="" LabelSize="0,0"/>
+                        </Children>
+                      </Panel>
+
+                      <Panel Layout="VerticalFlow">
+                        <Children>
+                          <Text  Content="Virtual Drive" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <c:SimpleSpinner Name="VirtualDrive" Model="[Settings.VirtualDrive]" Size="51,51" />
+                        </Children>
+                      </Panel>
+                    </Children>
+                    
+                  </Panel>
+
+
+                  <Panel Name="MovieGallerySettings" Layout="HorizontalFlow">
+                    <Children>
+
+                      <Panel Layout="VerticalFlow" Margins="0,0,50,0">
+                        <Children>
+                          <Text  Content="Movie Gallery View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <c:SimpleSpinner Name="MovieView" Model="[Settings.MovieView]" Size="151,51" />
+                        </Children>
+                      </Panel>
+
+                      <Panel Layout="VerticalFlow">
+                        <Children>
+                          <Text  Content="Movie Sort" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" />
+                        </Children>
+                      </Panel>
+                    </Children>
+
+                  </Panel>
+
+                  <c:SimpleButton Name="Import Movies" Command="[BeginSetupCommand]" Text="> Import Movies" Margins="0,50,0,50"/>
+                  <c:SimpleButton Name="Save Settings" Command="[SaveSettings]" Text="> Save Settings"/>
+
+
+                </Children>
+              </Clip>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0.05,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
+            </LayoutInput>
+          </Panel>
+
+        </Children>
+      </ColorFill>
+    </Content>
+
+  </UI>
+
+  <Font Name="Font"                 FontName="global://me:RegularFontName" FontSize="20" />
+</Mcml>

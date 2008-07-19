@@ -38,7 +38,7 @@ namespace Library
             get
             {
                 if (this.MovieDetails.Disks.Count == 1)
-                    return "Play Movie";
+                    return "> Play Movie";
                 else if (this.MovieDetails.Disks.Count == 0)
                     return "No Discs!";
                 else

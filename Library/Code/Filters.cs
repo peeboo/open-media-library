@@ -49,6 +49,7 @@ namespace Library
     public class Filter
     {
 
+        public const string Settings = "Settings";
         public const string Genres = "Genres";
         public const string Director = "Directors";
         public const string Actor = "Actors";
@@ -174,7 +175,14 @@ namespace Library
         {
             Trace.TraceInformation("MovieGallery.OnFilterSelected");
             FilterCommand cmd = (FilterCommand)sender;
-            OMLApplication.Current.GoToSelectionList(_gallery, Items, _gallery.Title + " > " + Name, _galleryView);
+            if (cmd.Filter.Name == Filter.Settings)
+            {
+                OMLApplication.Current.GoToSettingsPage( _gallery );
+            }
+            else
+            {
+                OMLApplication.Current.GoToSelectionList(_gallery, Items, _gallery.Title + " > " + Name, _galleryView);
+            }
         }
 
         private static int SortByItemCountAscending(GalleryItem m1, GalleryItem m2)

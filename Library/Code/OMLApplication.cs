@@ -69,7 +69,21 @@ namespace Library
             }
         }
 
-    
+        public void GoToSettingsPage(MovieGallery gallery)
+        {
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+            properties["Application"] = this;
+            properties["MovieBrowser"] = gallery;
+            properties["UISettings"] = new UISettings();
+            properties["Settings"] = new Settings();
+
+            OMLApplication.DebugLine("OMLApplication.GoToSettingsPage");
+            if (_session != null)
+            {
+                _session.GoToPage("resx://Library/Library.Resources/Settings", properties);
+            }
+        }    
+
         public void GoToMenu(MovieGallery gallery)
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();

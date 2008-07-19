@@ -68,7 +68,7 @@ namespace Library
 
         public int FiltersTopOffset
         {
-            get { return Properties.Settings.Default.DetailsTopOffset + 50; }
+            get { return Properties.Settings.Default.DetailsTopOffset + 30; }
         }
 
         public float BottomAnchor
