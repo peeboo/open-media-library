@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
 using System.Data;
+using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
 using OMLEngine;
@@ -407,6 +408,29 @@ namespace Library
                 OMLApplication.DebugLine("[Setup UI] Error finding file: " + e.Message);
             }
         }
+
+        public void NoTitlesFoundNotice()
+        {
+            OMLApplication.Current.MediaCenterEnvironment.Dialog("No titles were found, would you like to try again?",
+                                                                 "Notice",
+                                                                 new object[] {
+                                                                    DialogButtons.Yes,
+                                                                    DialogButtons.No,
+                                                                 },
+                                                                 0, true, null,
+                                                                 new DialogClosedCallback(_NoTitlesFoundNoticeCallback));
+        }
+
+        public void _NoTitlesFoundNoticeCallback(DialogResult result)
+        {
+            OMLApplication.DebugLine("[Setup UI] _NoTitlesFoundNoticeCallback called");
+            if (result.CompareTo(DialogButtons.Yes) == 0)
+            {
+                OMLApplication.Current.MediaCenterEnvironment.Dialog("This functionality has not been completed",
+                                                                     "Notice", DialogButtons.Ok, 0, false);
+            }
+        }
+
 
         public void AddCheckedNode(TreeNode node)
         {

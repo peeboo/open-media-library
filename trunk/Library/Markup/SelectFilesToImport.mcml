@@ -97,16 +97,38 @@
             </Changed>
             <Changed Source="[Setup.LoadStarted]" InitialEvaluate="false">
                 <Actions>
+                    <Set Target="[loadingTitlesButton.Visible]" Value="false"/>
+                    <Set Target="[CurrentTitlePanel.Visible]" Value="false" />
+                    <Set Target="[SkipTitleButton.Visible]" Value="false"/>
+                    <Set Target="[AddTitleButton.Visible]" Value="false"/>
+                    <Set Target="[AddAllTitleButton.Visible]" Value="false"/>
+                    <Set Target="[NoTitlesFoundPanel.Visible]" Value="false" />
                     <Set Target="[waitCursor.Visible]" Value="true"/>
                 </Actions>
             </Changed>
+
             <Changed Source="[Setup.LoadComplete]" InitialEvaluate="false">
+                <Conditions>
+                    <Equality ConditionOp="GreaterThan" Source="[Setup.TotalTitlesFound]" Value="1" />
+                </Conditions>
                 <Actions>
                     <Set Target="[waitCursor.Visible]" Value="false"/>
                     <Set Target="[loadingTitlesButton.Visible]" Value="false"/>
+                    <Set Target="[CurrentTitlePanel.Visible]" Value="true" />
                     <Set Target="[SkipTitleButton.Visible]" Value="true"/>
                     <Set Target="[AddTitleButton.Visible]" Value="true"/>
                     <Set Target="[AddAllTitleButton.Visible]" Value="true"/>
+                </Actions>
+            </Changed>
+
+            <Changed Source="[Setup.LoadComplete]" InitialEvaluate="false">
+                <Conditions>
+                    <Equality ConditionOp="LessThanOrEquals" Source="[Setup.TotalTitlesFound]" Value="0" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[waitCursor.Visible]" Value="false"/>
+                    <Set Target="[loadingTitlesButton.Visible]" Value="false"/>
+                    <Set Target="[NoTitlesFoundPanel.Visible]" Value="true" />
                 </Actions>
             </Changed>
 
@@ -215,7 +237,7 @@
                                                     <me:ShouldCopyImages Setup="[Setup]"/>
                                                 </Children>
                                             </Panel>
-                                            <Panel Layout="VerticalFlow">
+                                            <Panel Layout="VerticalFlow" Name="CurrentTitlePanel" Visible="false">
                                                 <Children>
                                                     <Clip Layout="VerticalFlow">
                                                         <Children>
@@ -250,6 +272,11 @@
 
                                                 </Children>
                                             </Panel>
+                                        </Children>
+                                    </Panel>
+                                    <Panel Layout="HorizontalFlow" Name="NoTitlesFoundPanel" Visible="false">
+                                        <Children>
+                                            <Text Content="No titles were found, please go back and try again." WordWrap="true" Font="Calibri, 20" Color="LightBlue" />
                                         </Children>
                                     </Panel>
                                     <Panel Layout="HorizontalFlow">
