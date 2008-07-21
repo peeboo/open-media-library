@@ -127,7 +127,7 @@ namespace MyMoviesPlugin
                             }
                             newTitle.BackCoverPath = imagePath;
                         }
-                        catch (Exception e) { Utilities.DebugLine(e.Message); }
+                        catch (Exception e) { Utilities.DebugLine("[MyMoviesImporter] " + e.Message); }
                     }
                     break;
                 case "Description":
@@ -340,7 +340,7 @@ namespace MyMoviesPlugin
                                     }
                                 }
                                 catch (Exception e)
-                                { Utilities.DebugLine("Error: " + e.Message); }
+                                { Utilities.DebugLine("[MyMoviesImporter] Error: " + e.Message + " from " + e.Source); }
                             }
                         }
                     }

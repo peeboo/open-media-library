@@ -390,7 +390,7 @@ namespace OMLDatabaseEditor.Controls
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine(ex.ToString());
+                Utilities.DebugLine("[MediaEditor] " + ex.ToString());
             }
 
             return null;
@@ -420,7 +420,7 @@ namespace OMLDatabaseEditor.Controls
                 } 
                 catch (Exception ex) 
                 {
-                    Utilities.DebugLine(ex.ToString());
+                    Utilities.DebugLine("[MediaEditor] " + ex.ToString());
                 } 
             }
         }

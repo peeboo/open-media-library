@@ -501,13 +501,13 @@ namespace OMLSDK
         {
             if (string.IsNullOrEmpty(newTitle.AspectRatio))
             {
-                Utilities.DebugLine("Setting AspectRatio for Title: " + newTitle.Name);
+                Utilities.DebugLine("[OMLPlugin] Setting AspectRatio for Title: " + newTitle.Name);
                 //SetAspectRatio(newTitle);
             }
 
             if (newTitle.DateAdded.CompareTo(new DateTime(0001, 1, 1)) == 0)
             {
-                Utilities.DebugLine("Setting Date Added for title: " + newTitle.Name);
+                Utilities.DebugLine("[OMLPlugin] Setting Date Added for title: " + newTitle.Name);
                 newTitle.DateAdded = DateTime.Now;
             }
 
@@ -620,7 +620,7 @@ namespace OMLSDK
 
                 newTitle.FrontCoverPath = imagePath;
             }
-            catch (Exception e) { Utilities.DebugLine(e.Message); }
+            catch (Exception e) { Utilities.DebugLine("[OMLPlugin]" + e.Message); }
         }
     }
 

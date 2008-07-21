@@ -178,7 +178,7 @@ namespace OMLEngine
         /// <returns>True on success</returns>
         public bool saveTitleCollection()
         {
-            Utilities.DebugLine("saveTitleCollection()");
+            Utilities.DebugLine("[TitleCollection] saveTitleCollection()");
             return _saveTitleCollectionForOML();
         }
 
@@ -191,7 +191,7 @@ namespace OMLEngine
             }
             catch (Exception e)
             {
-                Utilities.DebugLine("Error reading file: " + e.Message);
+                Utilities.DebugLine("[TitleCollection] Error reading file: " + e.Message);
                 return false;
             }
 

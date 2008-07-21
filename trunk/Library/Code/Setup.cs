@@ -386,6 +386,7 @@ namespace Library
                                         foreach (FileInfo fInfo in fileInfos)
                                         {
                                             OMLApplication.DebugLine("[Setup UI] File Found: " + fInfo.Name);
+                                            plugin.CopyImages = ShouldCopyImages.Value;
                                             plugin.DoWork(new string[] { fInfo.FullName });
                                         }
                                     }
@@ -395,6 +396,7 @@ namespace Library
                         else
                         {
                             OMLApplication.DebugLine("[Setup UI] Processing path: " + node.FullPath);
+                            plugin.CopyImages = ShouldCopyImages.Value;
                             plugin.DoWork(new string[] { node.FullPath });
                         }
                     }
@@ -499,18 +501,21 @@ namespace Library
 
         private static void LoadPlugins()
         {
-            List<PluginServices.AvailablePlugin> Pluginz = new List<PluginServices.AvailablePlugin>();
-            string path = Path.GetDirectoryName(FileSystemWalker.PluginsDirectory + @"\\Plugins");
-            OMLApplication.DebugLine("Path is: " + path);
-            Pluginz = PluginServices.FindPlugins(path, "OMLSDK.IOMLPlugin");
-            OMLPlugin objPlugin;
-            // Loop through available plugins, creating instances and adding them
-            foreach (PluginServices.AvailablePlugin oPlugin in Pluginz)
+            if (availablePlugins.Count == 0)
             {
-                objPlugin = (OMLPlugin) PluginServices.CreateInstance(oPlugin);
-                availablePlugins.Add(objPlugin);
+                List<PluginServices.AvailablePlugin> Pluginz = new List<PluginServices.AvailablePlugin>();
+                string path = Path.GetDirectoryName(FileSystemWalker.PluginsDirectory + @"\\Plugins");
+                OMLApplication.DebugLine("Path is: " + path);
+                Pluginz = PluginServices.FindPlugins(path, "OMLSDK.IOMLPlugin");
+                OMLPlugin objPlugin;
+                // Loop through available plugins, creating instances and adding them
+                foreach (PluginServices.AvailablePlugin oPlugin in Pluginz)
+                {
+                    objPlugin = (OMLPlugin)PluginServices.CreateInstance(oPlugin);
+                    availablePlugins.Add(objPlugin);
+                }
+                Pluginz = null;
             }
-            Pluginz = null;
         }
 
         public void RequestNodeSelection()

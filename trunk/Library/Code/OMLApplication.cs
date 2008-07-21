@@ -19,11 +19,12 @@ namespace Library
         public OMLApplication()
             : this(null, null)
         {
+            DebugLine("[OMLApplication] Empty Constructor called");
         }
 
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
         {
-            OMLApplication.DebugLine("OMLApplication.OMLApplication");
+            OMLApplication.DebugLine("[OMLApplication] constructor called");
             this._session = session;
             this._isExtender = !host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
             this._host = host;
@@ -35,6 +36,7 @@ namespace Library
 
         public void Startup()
         {
+            DebugLine("[OMLApplication] Startup()");
             if ( _titles.Count > 0 )
                 GoToMenu(new MovieGallery(_titles, Filter.Home));
             else
@@ -57,6 +59,7 @@ namespace Library
 
         public void GoToSetup( MovieGallery gallery )
         {
+            DebugLine("[OMLApplication] GoToSetup()");
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
             properties["MovieBrowser"] = gallery;
@@ -71,6 +74,7 @@ namespace Library
 
         public void GoToSettingsPage(MovieGallery gallery)
         {
+            DebugLine("[OMLApplication] GoToSettingsPage()");
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
             properties["MovieBrowser"] = gallery;
@@ -86,6 +90,7 @@ namespace Library
 
         public void GoToMenu(MovieGallery gallery)
         {
+            DebugLine("[OMLApplication] GoToMenu()");
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
             properties["MovieBrowser"] = gallery;
@@ -101,6 +106,7 @@ namespace Library
 
         public void GoToSelectionList(MovieGallery gallery, IList list, string listName, string galleryView)
         {
+            DebugLine("[OMLApplication] GoToSelectionList()");
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
             properties["MovieBrowser"] = gallery;
@@ -119,6 +125,7 @@ namespace Library
 
         public void GoToDetails(MovieDetailsPage page)
         {
+            DebugLine("[OMLApplication] GoToDetails()");
             if (page == null)
                 throw new System.Exception("The method or operation is not implemented.");
 
@@ -142,7 +149,6 @@ namespace Library
         public static void DebugLine(string msg, params object[] paramArray)
         {
             Trace.TraceInformation(DateTime.Now.ToString() +" "+ msg, paramArray);
-            Trace.Flush();
         }
 
         // properties
@@ -156,7 +162,7 @@ namespace Library
             get { return _nowPlayingMovieName; }
             set
             {
-                Utilities.DebugLine("OMLApplication.NowPlayingMovieName {0}", value);
+                Utilities.DebugLine("[OMLApplication] NowPlayingMovieName {0}", value);
                 _nowPlayingMovieName = value;
                 FirePropertyChanged("NowPlaying");
             }
@@ -167,7 +173,7 @@ namespace Library
             get { return _nowPlayingStatus; }
             set 
             {
-                Utilities.DebugLine("OMLApplication.NowPlayingStatus {0}", value);
+                Utilities.DebugLine("[OMLApplication] NowPlayingStatus {0}", value);
                 FirePropertyChanged("NowPlaying");  
                 _nowPlayingStatus = value; 
             }
@@ -180,6 +186,7 @@ namespace Library
 
         public TitleCollection ReloadTitleCollection()
         {
+            DebugLine("[OMLApplication] ReloadTitleCollection()");
             _titles.loadTitleCollection();
             return _titles;
         }

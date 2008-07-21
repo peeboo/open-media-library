@@ -131,7 +131,7 @@ namespace OMLEngine
                         {
                             foreach (Title title in titles)
                             {
-                                Utilities.DebugLine("Would add title" + title.Name);
+                                Utilities.DebugLine("[Utilities] Would add title" + title.Name);
                             }
                         }
                         return titles;
@@ -139,7 +139,7 @@ namespace OMLEngine
                 }
                 catch (Exception e)
                 {
-                    Utilities.DebugLine("Importer Error: " + e.Message);
+                    Utilities.DebugLine("[Utilities] Importer Error: " + e.Message);
                 }
             }
             return null;
@@ -218,7 +218,7 @@ namespace OMLEngine
                 }
                 catch (Exception e)
                 {
-                    Utilities.DebugLine("Failed to validate Importer: " +
+                    Utilities.DebugLine("[Utilities] Failed to validate Importer: " +
                                     type +
                                     " with error: " +
                                     e.Message);
@@ -278,7 +278,7 @@ namespace OMLEngine
             }
             catch (Exception)
             {
-                Utilities.DebugLine("Transcode360.Interface.dll not found");
+                Utilities.DebugLine("[Utilities] Transcode360.Interface.dll not found");
                 return false;
             }
         }
@@ -301,7 +301,7 @@ namespace OMLEngine
             }
             catch (Exception e)
             {
-                Utilities.DebugLine("Error loading Transcode360: " + e.Message);
+                Utilities.DebugLine("[Utilities] Error loading Transcode360: " + e.Message);
                 return null;
             }
         }
@@ -376,13 +376,12 @@ namespace OMLEngine
 
                         Trace.Listeners.Add(new TextWriterTraceListener(Log));
                     }
-                    catch (IOException)
+                    catch (Exception e)
                     { }
                 }
                 Trace.TraceInformation(DateTime.Now.ToString() + " " + msg, paramArray);
-                Trace.Flush();
             }
-            catch
+            catch (Exception e)
             {
             }
         }
@@ -406,7 +405,9 @@ namespace OMLEngine
 
             using (Graphics graphics = Graphics.FromImage(outputImage))
             {
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.CompositingQuality = CompositingQuality.HighSpeed;
+                graphics.InterpolationMode = InterpolationMode.Low;
+                graphics.SmoothingMode = SmoothingMode.HighSpeed;
                 graphics.DrawImage(img,
                                    new Rectangle(0, 0, outputWidth, outputHeight),
                                    new Rectangle(0, 0, img.Width, img.Height),
