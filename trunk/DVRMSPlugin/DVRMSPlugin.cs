@@ -67,6 +67,11 @@ namespace DVRMSPlugin
             return @"DVR-MS files (*.dvr-ms*)|*.dvr-ms|" + base.GetFilter();
         }
 
+        protected override bool GetMultiselect()
+        {
+            return true;
+        }
+
         public override bool Load(string filename, bool ShouldCopyImages)
         {
             string fPath = System.IO.Path.GetDirectoryName(filename);
