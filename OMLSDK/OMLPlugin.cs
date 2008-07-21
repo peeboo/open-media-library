@@ -203,7 +203,21 @@ namespace OMLSDK
             DialogResult dlgRslt = ofDiag.ShowDialog();
             if (dlgRslt == DialogResult.OK)
             {
+                string sPath = string.Empty;
                 Utilities.DebugLine(String.Format(@"[OMLImporter] Valid file found ({0})", ofDiag.FileName));
+                if (this.MultiSelect)
+                {
+                    sPath = Path.GetDirectoryName(ofDiag.FileNames[0]);
+                }
+                else
+                {
+                    sPath = Path.GetDirectoryName(ofDiag.FileName);
+                }
+                if (!string.IsNullOrEmpty(sPath))
+                {
+                    Properties.Settings.Default.InitialDirectory = sPath;
+                    Properties.Settings.Default.Save();
+                }
                 if (this.MultiSelect)
                 {
                     return ofDiag.FileNames;
