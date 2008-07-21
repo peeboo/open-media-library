@@ -26,11 +26,11 @@ namespace Library
 
         public bool PlayMovie()
         {
-            Utilities.DebugLine("Total Items: "+_wplm.PlayListItems.Count+" Current Item: " + _currentItem);
+            Utilities.DebugLine("[MoviePlayerWPL] Total Items: "+_wplm.PlayListItems.Count+" Current Item: " + _currentItem);
 
             if (_wplm.PlayListItems.Count > _currentItem)
             {
-                Utilities.DebugLine("Loading Video Player: " + _currentItem);
+                Utilities.DebugLine("[MoviePlayerWPL] Loading Video Player: " + _currentItem);
                 try
                 {
                     PlayListItem item = (PlayListItem)_wplm.PlayListItems[_currentItem];
@@ -38,7 +38,7 @@ namespace Library
                     {
                         _mItem.SelectedDisk.Path = item.FileLocation;
                         _mItem.TitleObject.SelectedDisk.Format = VideoFormat.WMV;
-                        Utilities.DebugLine("Playing now: " + _mItem.SelectedDisk.Path);
+                        Utilities.DebugLine("[MoviePlayerWPL] Playing now: " + _mItem.SelectedDisk.Path);
                         IPlayMovie player = MoviePlayerFactory.CreateMoviePlayer(_mItem);
                         if (player != null)
                             player.PlayMovie();
@@ -48,7 +48,7 @@ namespace Library
                 }
                 catch (Exception e)
                 {
-                    Utilities.DebugLine("Error: " + e.Message);
+                    Utilities.DebugLine("[MoviePlayerWPL] Error: " + e.Message);
                     return false;
                 }
             }

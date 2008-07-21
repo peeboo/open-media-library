@@ -48,15 +48,15 @@ namespace Library
                     }
                     catch (UnauthorizedAccessException ex)
                     {
-                        OMLApplication.DebugLine(ex.Message);
+                        OMLApplication.DebugLine("[DirectoryTreeNode] " + ex.Message);
                     }
                     catch (DriveNotFoundException ex)
                     {
-                        OMLApplication.DebugLine(ex.Message);
+                        OMLApplication.DebugLine("[DirectoryTreeNode] " + ex.Message);
                     }
                     catch (IOException ex)
                     {
-                        OMLApplication.DebugLine(ex.Message);
+                        OMLApplication.DebugLine("[DirectoryTreeNode] " + ex.Message);
                     }
                 }
                 HasChildNodes = (ChildNodes.Count > 0);
@@ -71,7 +71,7 @@ namespace Library
 
         private void TreeView_OnCheckedNodeChanged(object sender, TreeNodeEventArgs e)
         {
-            OMLApplication.DebugLine("CheckedNodeChanged: " + e.Node.Title);
+            OMLApplication.DebugLine("[DirectoryTreeNode] CheckedNodeChanged: " + e.Node.Title);
             Checked.Value = (e.Node == this);
         }
 

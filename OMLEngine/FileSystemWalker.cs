@@ -210,7 +210,7 @@ namespace OMLEngine
             }
             catch (Exception e)
             {
-                Utilities.DebugLine(starting_dir + " doesn't exist" + e.InnerException);
+                Utilities.DebugLine("[FileSystemWalker] " + starting_dir + " doesn't exist" + e.InnerException);
             }
         }
 

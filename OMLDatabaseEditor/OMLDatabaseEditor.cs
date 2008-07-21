@@ -197,6 +197,7 @@ namespace OMLDatabaseEditor
         {
             
             Cursor = Cursors.WaitCursor;
+            this.Refresh();
 
             OMLPlugin plugin = new OMLPlugin();
             plugin = plugins[pluginID];
@@ -212,6 +213,7 @@ namespace OMLDatabaseEditor
             }
 
             Cursor = Cursors.Default;
+            this.Refresh();
         }
 
         public void LoadTitlesIntoDatabase(OMLPlugin plugin)

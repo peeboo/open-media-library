@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
-using Microsoft.MediaCenter.Hosting;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
+using Microsoft.MediaCenter.Hosting;
 
 namespace Library
 {
@@ -18,31 +19,37 @@ namespace Library
             try
             {
                 if (File.Exists(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt"))
-                    Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.Truncate);
+                    Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.Append);
                 else
                     Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.OpenOrCreate);
 
                 Trace.Listeners.Add(new TextWriterTraceListener(Log));
-                OMLApplication.DebugLine("Launch:Initialize()");
+                Trace.AutoFlush = true;
+                OMLApplication.DebugLine("[Launch] Initialize()");
             }
-            catch (IOException)
-            { }
+            catch (Exception e)
+            {
+                OMLApplication.DebugLine("[Launch] Error: " + e.Message);
+            }
         }
 
         ~MyAddIn()
         {
+            OMLApplication.DebugLine("[Launch] Destroy");
             Trace.Flush();
             Log.Close();
         }
 
         public void Uninitialize()
         {
+            OMLApplication.DebugLine("[Launch] Uninitialize");
             Trace.Flush();
             Log.Close();
         }
 
         public void Launch(AddInHost host)
         {
+            OMLApplication.DebugLine("[Launch] Launch called");
             s_session = new HistoryOrientedPageSession();
             OMLApplication app = new OMLApplication(s_session, host);
             app.Startup();

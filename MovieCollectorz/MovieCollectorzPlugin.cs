@@ -217,11 +217,11 @@ namespace MovieCollectorzPlugin
                     }
                     catch (Exception e)
                     {
-                        Utilities.DebugLine("Error adding row: " + e.Message);
+                        Utilities.DebugLine("[MovieCollectorzPlugin] Error adding row: " + e.Message);
                     }
                 }
                 else
-                    Utilities.DebugLine("Error saving row");
+                    Utilities.DebugLine("[MovieCollectorzPlugin] Error saving row");
             }
         }
 
