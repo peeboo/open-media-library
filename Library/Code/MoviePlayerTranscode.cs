@@ -97,7 +97,7 @@ namespace Library
                     }
                     catch (Exception e)
                     {
-                        OMLApplication.DebugLine("Error calling transcode360: " + e.Message);
+                        OMLApplication.DebugLine("Error calling transcode360: {0}\n    {1}", e.Message, e.InnerException);
                         return false;
                     }
                 }
@@ -126,7 +126,7 @@ namespace Library
             }
             catch (Exception e)
             {
-                OMLApplication.DebugLine("Error calling transcode360 (MIIsMediaTranscoding): " + e.Message);
+                OMLApplication.DebugLine("Error calling transcode360 (MIIsMediaTranscoding): {0}\n    {1}", e.Message, e.InnerException);
                 foreach (ParameterInfo pInfo in MIIsMediaTranscoding.GetParameters())
                 {
                     OMLApplication.DebugLine("parameter: " + pInfo.Name + " Type: " + pInfo.ParameterType.ToString());
@@ -149,7 +149,7 @@ namespace Library
             }
             catch (Exception e)
             {
-                OMLApplication.DebugLine("Error calling transcode360 (MIIsMediaTranscoding): " + e.Message);
+                OMLApplication.DebugLine("Error calling transcode360 (MIIsMediaTranscoding): {0}\n    {1}", e.Message, e.InnerException);
                 foreach (ParameterInfo pInfo in MIIsMediaTranscoding.GetParameters())
                 {
                     OMLApplication.DebugLine("parameter: " + pInfo.Name + " Type: " + pInfo.ParameterType.ToString());
@@ -168,7 +168,7 @@ namespace Library
             }
             catch (Exception e)
             {
-                OMLApplication.DebugLine("Error calling transcode360 (MIStopTranscoding): " + e.Message);
+                OMLApplication.DebugLine("Error calling transcode360 (MIStopTranscoding): {0}\n    {1}", e.Message, e.InnerException);
                 foreach (ParameterInfo pInfo in MIStopTranscoding.GetParameters())
                 {
                     OMLApplication.DebugLine("parameter: " + pInfo.Name + " Type: " + pInfo.ParameterType.ToString());
@@ -192,7 +192,7 @@ namespace Library
             }
             catch (Exception e)
             {
-                OMLApplication.DebugLine("Error calling transcode360 (MITranscode): " + e.Message);
+                OMLApplication.DebugLine("Error calling transcode360 (MITranscode): {0}\n    {1}", e.Message, e.InnerException);
                 foreach (ParameterInfo pInfo in MITranscode.GetParameters())
                 {
                     OMLApplication.DebugLine("parameter: " + pInfo.Name + " Type: " + pInfo.ParameterType.ToString());
