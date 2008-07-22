@@ -462,14 +462,29 @@ namespace OMLDatabaseEditor.Controls
             dlg.FileName = "Disc " + (lstDisks.Items.Count + 1);
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                lstDisks.Items.Add(
-                    new Disk(
-                        dlg.FileName, 
-                        dlg.Path,
-                        (VideoFormat)Enum.Parse(
-                            typeof(VideoFormat), 
-                            Path.GetExtension(dlg.Path).ToUpper().Substring(1).Replace("-",""),
-                            true)));
+                if (dlg.chkFile.Checked)
+                {
+                    lstDisks.Items.Add(
+                        new Disk(
+                            dlg.FileName, 
+                            dlg.Path,
+                            (VideoFormat)Enum.Parse(
+                                typeof(VideoFormat), 
+                                Path.GetExtension(dlg.Path).ToUpper().Substring(1).Replace("-",""),
+                                true)
+                        )
+                    );
+                }
+                else
+                {
+                    lstDisks.Items.Add(
+                        new Disk(
+                            dlg.FileName,
+                            dlg.Path,
+                            VideoFormat.DVD
+                        )
+                    );
+                }
             }
 
         }
@@ -519,15 +534,26 @@ namespace OMLDatabaseEditor.Controls
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 int currentselection = lstDisks.SelectedIndex;
-                lstDisks.Items.RemoveAt(currentselection);                    
-                lstDisks.Items.Insert(currentselection, 
-                    new Disk(
-                        dlg.FileName,
-                        dlg.Path,
-                        (VideoFormat)Enum.Parse(
-                            typeof(VideoFormat),
-                            Path.GetExtension(dlg.Path).ToUpper().Substring(1),
-                            true)));
+                lstDisks.Items.RemoveAt(currentselection);
+                if (dlg.chkFile.Checked)
+                {
+                    lstDisks.Items.Insert(currentselection, 
+                        new Disk(
+                            dlg.FileName,
+                            dlg.Path,
+                            (VideoFormat)Enum.Parse(
+                                typeof(VideoFormat),
+                                Path.GetExtension(dlg.Path).ToUpper().Substring(1),
+                                true)));
+                }
+                else
+                {
+                    lstDisks.Items.Insert(currentselection,
+                        new Disk(
+                            dlg.FileName,
+                            dlg.Path,
+                            VideoFormat.DVD));
+                }
             }
         }
 
