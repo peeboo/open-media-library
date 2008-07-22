@@ -27,6 +27,11 @@ namespace MovieCollectorzPlugin
             return true;
         }
 
+        public override string DefaultFileToImport()
+        {
+            return @"movies.xml";
+        }
+
         public MovieCollectorzPlugin() : base()
         {
         }
