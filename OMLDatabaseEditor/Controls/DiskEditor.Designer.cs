@@ -140,6 +140,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.CheckBox chkFile;
+        public System.Windows.Forms.CheckBox chkFile;
     }
 }
