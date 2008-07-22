@@ -33,7 +33,7 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (_IN DEVELOPMENT_) Filter by genre, rating, date, runtime, year etc (90% Complete)
   * (_IN DEVELOPMENT_) Triple tap: jumping to movie by using letters on remote control (80% Complete)
   * (_IN DEVELOPMENT_) UI based setup (importers, daemontools settings, etc) (98% Complete)
-  * (_IN DEVELOPMENT_) Metadata editor (Unknown% Complete)
+  * (_IN DEVELOPMENT_) Metadata editor (95% Complete)
 
   * (ON HOLD) Support for Blu-Ray/HD-DVD (50% Complete)
   * (ON HOLD) Movie bookmark features (20% Complete)
