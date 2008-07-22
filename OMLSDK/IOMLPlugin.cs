@@ -17,5 +17,6 @@ namespace OMLSDK
         void ProcessFiles(string[] sFiles);
         void ProcessFile(string file);
         bool IsSingleFileImporter();
+        string SetupDescription();
     }
 }

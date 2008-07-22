@@ -21,6 +21,11 @@ namespace DVRMSPlugin
         {
         }
 
+        public override string SetupDescription()
+        {
+            return GetName() + @" will search for and import all DVR-MS files in the path(s) selected.";
+        }
+
         public override bool IsSingleFileImporter()
         {
             return false;

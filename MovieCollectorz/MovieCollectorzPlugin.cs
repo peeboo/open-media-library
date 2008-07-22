@@ -22,6 +22,11 @@ namespace MovieCollectorzPlugin
             throw new Exception("OML");
         }
 
+        public override string SetupDescription()
+        {
+            return GetName() + @" will search for and import [" + DefaultFileToImport() + @"] files.";
+        }
+
         public override bool IsSingleFileImporter()
         {
             return true;

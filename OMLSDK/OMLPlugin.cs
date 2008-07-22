@@ -310,6 +310,14 @@ namespace OMLSDK
         }
 
         #region Need to be implemented in descendant class
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public virtual string SetupDescription()
+        {
+            throw new Exception(@"You must implement this method in your class.");
+        }
 
         /// <summary>
         /// 
