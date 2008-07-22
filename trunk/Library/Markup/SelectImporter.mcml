@@ -26,6 +26,7 @@
         <Rules>
                 <Binding Source="[Setup.ShouldCopyImages.Value!cor:String]" Target="[ShouldCopyImagesText.Content]" />
                 <Binding Source="[Setup.ImporterSelection.Chosen!cor:String]" Target="[SelectedImporterText.Content]"/>
+                <Binding Source="[Setup.ImporterDescription!cor:String]" Target="[ImporterDescription.Content]"/>
 
             <Changed Source="[NextCommand.Invoked]">
                 <Actions>
@@ -100,9 +101,10 @@
                         <Children>
                             <Clip Layout="VerticalFlow">
                                 <Children>
-                                    <Text Content="Select an Importer" Color="White" Font="Calibri, 26" />
+                                    <Text Content="Select an Importer" Color="LightBlue" Font="Calibri, 26" />
                                     <rbg:RadioButtonGroup Model="[Setup.ImporterSelection]" />
                                     <c:SimpleButton Name="Next" Command="[NextCommand]" Text="Next"/>
+                                    <Text Name="ImporterDescription" Font="Calibri, 20" Color="LightBlue" WordWrap="true" />
                                 </Children>
                             </Clip>
                         </Children>

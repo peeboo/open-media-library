@@ -20,7 +20,10 @@ namespace DVDProfilerPlugin
         {
             return true;
         }
-
+        public override string SetupDescription()
+        {
+            return GetName() + @" will search for and import [" + DefaultFileToImport() + @"] files.";
+        }
         public override string DefaultFileToImport()
         {
             return @"Collection.xml";

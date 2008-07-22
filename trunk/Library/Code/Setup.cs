@@ -34,6 +34,7 @@ namespace Library
         private bool _addingAllStarted = false;
         private bool _addingAllComplete = false;
         private bool _hasCheckedNodes = false;
+        private string _ImporterDescription = string.Empty;
 
         private BooleanChoice _shouldCopyImages = new BooleanChoice();
         private static List<OMLPlugin> availablePlugins = new List<OMLPlugin>();
@@ -41,6 +42,17 @@ namespace Library
         #endregion
 
         #region Properties
+
+        public string ImporterDescription
+        {
+            get { return _ImporterDescription; }
+            set
+            {
+                _ImporterDescription = value;
+                FirePropertyChanged("ImporterDescription");
+            }
+        }
+
         public bool HasCheckedNodes
         {
             get { return _hasCheckedNodes; }
@@ -480,6 +492,7 @@ namespace Library
         public void _ImporterSelection_ChosenChanged(object sender, EventArgs e)
         {
             Choice c = (Choice)sender;
+            ImporterDescription = @"Notice: " + GetPlugin().SetupDescription();
             OMLApplication.DebugLine("Item Chosed: " + c.Options[c.ChosenIndex]);
 
         }
