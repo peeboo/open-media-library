@@ -99,7 +99,7 @@
             <Children>
               <Clip Layout="VerticalFlow">
                 <Children>
-                  <Panel Name="DaemonToolsSettings" Layout="HorizontalFlow">
+                  <Panel Name="DaemonToolsSettings" Layout="VerticalFlow">
                     <Children>
                       
                       <Panel Layout="VerticalFlow" Margins="0,0,50,0">
