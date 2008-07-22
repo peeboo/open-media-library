@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\DaemonTools.cs" />
     <Compile Include="Code\DirectoryTreeNode.cs" />
     <Compile Include="Code\MoviePlayerWPL.cs" />
     <Compile Include="Code\OMLApplication.cs" />

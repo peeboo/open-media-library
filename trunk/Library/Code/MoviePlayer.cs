@@ -36,30 +36,33 @@ namespace Library
         static public IPlayMovie CreateMoviePlayer(MovieItem movieItem)
         {
             // for now play just online titles. add offline capabilities later
-            OMLApplication.DebugLine("[MoviePlayerFactory] Determing MoviePlayer to use for: " + movieItem.SelectedDisk.Path);
+            OMLApplication.DebugLine("[MoviePlayerFactory] Determing MoviePlayer to use for: {0}, {1}",
+                                     movieItem.SelectedDisk.Path,
+                                     movieItem.SelectedDisk.Format);
             if (File.Exists(movieItem.SelectedDisk.Path) || Directory.Exists(movieItem.SelectedDisk.Path))
             {
-                if (OMLApplication.Current.IsExtender && NeedsTranscode(movieItem.TitleObject) )
-                {
-                    OMLApplication.DebugLine("TranscodePlayer created");
-                    return new TranscodePlayer(movieItem);
-                }
-                else if (NeedsMounting(movieItem.TitleObject))
-                {
-                    OMLApplication.DebugLine("MountImageMoviePlayer created");
-                    return new MountImagePlayer(movieItem);
-                }
-                else if (movieItem.TitleObject.SelectedDisk.Format == VideoFormat.DVD)
-                {
-                    OMLApplication.DebugLine("DVDMoviePlayer created");
-                    return new DVDPlayer(movieItem);
-                }
-                else if (movieItem.TitleObject.SelectedDisk.Format == VideoFormat.WPL)
+                
+                if (movieItem.SelectedDisk.Format == VideoFormat.WPL) // if its a playlist, do that first
                 {
                     OMLApplication.DebugLine("WPLMoviePlayer created");
                     return new MoviePlayerWPL(movieItem);
                 }
-                else
+                else if (NeedsMounting(movieItem.SelectedDisk)) // if it needs to be mounted, do that next
+                {
+                    OMLApplication.DebugLine("MountImageMoviePlayer created");
+                    return new MountImagePlayer(movieItem);
+                }
+                else if (OMLApplication.Current.IsExtender && NeedsTranscode(movieItem.SelectedDisk) ) // if it needs to be transcoded
+                {
+                    OMLApplication.DebugLine("TranscodePlayer created");
+                    return new TranscodePlayer(movieItem);
+                }
+                else if (movieItem.SelectedDisk.Format == VideoFormat.DVD) // play the dvd
+                {
+                    OMLApplication.DebugLine("DVDMoviePlayer created");
+                    return new DVDPlayer(movieItem);
+                }
+                else // try to play it (likely is avi/mkv/etc)
                 {
                     OMLApplication.DebugLine("VideoPlayer created");
                     return new VideoPlayer(movieItem);
@@ -86,9 +89,9 @@ namespace Library
 
 
         // keep all the Playing logic here
-        static private bool NeedsMounting( Title title )
+        static private bool NeedsMounting(Disk SelectedDisk)
         {
-            switch (title.SelectedDisk.Format)
+            switch (SelectedDisk.Format)
             {
                 case VideoFormat.BIN:
                     return true;
@@ -106,9 +109,9 @@ namespace Library
         }
 
         // keep all the Playing logic here
-        static private bool NeedsTranscode( Title title)
+        static private bool NeedsTranscode(Disk SelectedDisk)
         {
-            switch (title.SelectedDisk.Format)
+            switch (SelectedDisk.Format)
             {
                 case VideoFormat.DVRMS:
                     return false;
