@@ -552,22 +552,29 @@ namespace OMLSDK
         /// <param name="t"></param>
         public static void BuildResizedMenuImage(Title t)
         {
-            if (t.FrontCoverPath.Length > 0)
+            try
             {
-                using (Image coverArtImage = Image.FromFile(t.FrontCoverPath))
+                if (t.FrontCoverPath.Length > 0)
                 {
-
-                    if (coverArtImage != null)
+                    using (Image coverArtImage = Image.FromFile(t.FrontCoverPath))
                     {
-                        using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(coverArtImage, 200))
+
+                        if (coverArtImage != null)
                         {
-                            string img_path = FileSystemWalker.ImageDirectory +
-                                          @"\MF" + t.InternalItemID + ".jpg";
-                            menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
-                            t.FrontCoverMenuPath = img_path;
+                            using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(coverArtImage, 200))
+                            {
+                                string img_path = FileSystemWalker.ImageDirectory +
+                                              @"\MF" + t.InternalItemID + ".jpg";
+                                menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                t.FrontCoverMenuPath = img_path;
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[OMLPlugin] Exception: " + ex.Message);
             }
         }
 
