@@ -25,7 +25,7 @@ namespace Library
             string mount_location = string.Empty;
             if (_dt.Mount(_title.SelectedDisk.Path, out mount_location))
             {
-                mount_location += @":\video_ts";
+                mount_location += @":\\";
                 OMLApplication.DebugLine("Going to play movie at: " + mount_location);
                 if (mount_location != null)
                 {
