@@ -48,7 +48,7 @@
     <!-- Create an input handler for scrolling. -->
     <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
     <TypingHandler Name="TypingHandler" EditableText="[MovieBrowser.JumpInListText]" TypingPolicy="TripleTap" HandlerStage="Bubbled"/>
-    
+    <ShortcutHandler Name="PlayHandler" Shortcut="Play" HandlerStage="Bubbled"/>
     <Timer Name="ClearTimer" AutoRepeat="false" Interval="5000" Enabled="false"/>
     <addin:AddInHost Name="AddInHost"/>
 
@@ -73,25 +73,34 @@
 
     <Rule>
       <Conditions>
-        <Modified Source="[TypingHandler.DisplayValue]"/>
+        <Modified Source="[TypingHandler.Value]"/>
       </Conditions>
       <Actions>
-        <Set Target="[JumpValue.Value]" Value="[TypingHandler.DisplayValue]"/>
+        <Set Target="[JumpValue.Value]" Value="[TypingHandler.Value]"/>
         <Invoke Target="[MovieBrowser.JumpToMovie]" jumpString="[TypingHandler.DisplayValue]" />
         <Invoke Target="[ClearTimer.Start]" />
       </Actions>
     </Rule>
 
+    <!--<Rule>
+      <Conditions>
+        <Modified Source="[TypingHandler.DisplayValue]"/>
+      </Conditions>
+      <Actions>
+        <Set Target="[JumpValue.Value]" Value="[TypingHandler.DisplayValue]"/>
+      </Actions>
+    </Rule>-->
+
+
+
     <Changed Source="[ClearTimer.Tick]">
       <Actions>
         <Set Target="[MovieBrowser.JumpInListText.Value]" Value="" />
-        <Set Target="[JumpValue.Value]" Value=""/>
       </Actions>
     </Changed>
 
     <Changed Source="[MovieBrowser.JumpToPosition]" >
       <Actions>
-       
         <!--Scroll parameter is the number of items to scroll to, relative to the current position-->
         <Invoke Target ="[ScrollingData.Scroll]" amount="[MovieBrowser.RelativeJumpToPosition]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
         <!--This is the absolute index-->
@@ -146,7 +155,7 @@
     <!-- Update these 2 values everytime we get the focus -->
     <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
     <cor:Single Name="CoverArtAlpha" Single="0.7"/>
-
+    
     <!-- The index passed down from the repeater.-->
     <Index Name="Index" Index="$Required"/>
     <cor:String Name="GalleryView" String="$Required" />    
@@ -168,11 +177,11 @@
     
     <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
 
-    <Binding Source="[GalleryItem.CoverArt]" Target="[Cover.Content]" />
+    <Binding Source="[GalleryItem.MenuCoverArt]" Target="[MenuCover.Content]" />
     
     <Condition Source="[GalleryView]" SourceValue="List" ConditionOp="Equals" >
       <Actions>
-        <Set Target="[Cover.Visible]" Value="false" />
+        <Set Target="[MenuCover.Visible]" Value="false" />
         <Set Target="[Caption.Visible]" Value="true" />
         <Set Target="[LostFocus]" Value="animation://me:LostFocusList" />
         <Set Target="[GotFocus]" Value="animation://me:GotFocusList" />
@@ -180,7 +189,7 @@
       </Actions>
     </Condition>
 
-    <Changed Source="[GalleryItem.CoverArt]" InitialEvaluate="true">
+    <Changed Source="[GalleryItem.MenuCoverArt]" InitialEvaluate="true">
       <Conditions>
         <Equality Source="[GalleryView]" Value="Cover Art" ConditionOp="Equals" />
         <Equality Source="[GalleryItem.HasCover]" Value="true" ConditionOp="Equals" />
@@ -193,7 +202,7 @@
     
     <Condition Source="[GalleryView]" SourceValue="Cover Art" ConditionOp="Equals" >
       <Actions>
-        <Set Target="[Cover.Visible]" Value="true" />
+        <Set Target="[MenuCover.Visible]" Value="true" />
         <Set Target="[LostFocus]" Value="animation://me:LostFocusCoverArt" />
         <Set Target="[GotFocus]" Value="animation://me:GotFocusCoverArt" />
         <Set Target="[Background.Content]" Value="[BackgroundImageCoverArt]" />
@@ -206,7 +215,7 @@
     <Condition Source="[Input.KeyFocus]" SourceValue="true">
       <Actions>
         <PlayAnimation Target="[ItemPanel]" Animation="[GotFocus]" />
-        <Set Target="[Cover.Alpha]" Value="1.0"/>
+        <Set Target="[MenuCover.Alpha]" Value="1.0"/>
         <Set Target="[Caption.Color]" Value="color://s:FocusColor" />
         <Set Target="[Background.Visible]" Value="true"/>
         <Set Target="[FocusedIndex.Value]" Value="[Index.SourceValue]"/>
@@ -232,7 +241,7 @@
         <Panel Name="ImagePanel" Margins="0,0,0,0">
           <Children>
             <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:ListFont" Color="White" WordWrap="true" Margins="20,10,20,10" />
-            <Graphic Name="Cover" Content="[GalleryItem.CoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint" />
+            <Graphic Name="MenuCover" Content="[GalleryItem.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint" />
           </Children>
         </Panel>
 
