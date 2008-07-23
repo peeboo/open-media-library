@@ -38,8 +38,18 @@ namespace Library
         {
             get 
             {
-                bool hasCover = (_itemImage != NoCoverImage);
+                bool hasCover = (_MenuCoverArt != NoCoverImage);
                 return hasCover;
+            }
+        }
+
+        public Image MenuCoverArt
+        {
+            get { return _MenuCoverArt; }
+            set
+            {
+                _MenuCoverArt = value;
+                FirePropertyChanged("MenuCoverArt");
             }
         }
 
@@ -66,33 +76,8 @@ namespace Library
             _caption = caption;
             _owner = owner;
             _category = browseCategory;
-            CoverArt = NoCoverImage;
-            MenuCoverArt = NoCoverImage;
+            MenuCoverArt = NoCoverImage; // default to NoCoverImage
             Invoked += ItemSelected;
-        }
-
-        /// <summary>
-        /// Gets or sets the item image.
-        /// </summary>
-        /// <value>The item image.</value>
-        public Image CoverArt
-        {
-            get { return _itemImage; }
-            set 
-            { 
-                _itemImage = value;
-                FirePropertyChanged("CoverArt");
-            }
-        }
-
-        public Image MenuCoverArt
-        {
-            get { return _menuItemImage; }
-            set
-            {
-                _menuItemImage = value;
-                FirePropertyChanged("CoverArt");
-            }
         }
 
         virtual public int ItemCount
@@ -204,8 +189,7 @@ namespace Library
         private string _caption;
         private string _subCaption;
         private string _details;
-        private Image _itemImage;
-        private Image _menuItemImage;
+        private Image _MenuCoverArt;
         private MovieGallery _owner;
         private Filter _category;
 
@@ -217,7 +201,6 @@ namespace Library
     public class MovieItem : GalleryItem
     {
         private Title _titleObj;
-        private Image _backCoverArtImage;
         private List<string> _actingRoles;
         private List<Disk> _friendlyNamedDisks = new List<Disk>();
 
@@ -248,9 +231,6 @@ namespace Library
         {
             _titleObj = title;
             SortName = title.SortName;
-            _backCoverArtImage = NoCoverImage;
-            CoverArt = NoCoverImage;
-            MenuCoverArt = NoCoverImage;
 
             if (_titleObj.Runtime > 0)
                 SubCaption += "Runtime: " + Convert.ToString(_titleObj.Runtime) + " minutes\n";
@@ -393,32 +373,6 @@ namespace Library
         {
             get { return _friendlyNamedDisks; }
             set { _friendlyNamedDisks = value; }
-        }
-
-
-        /// <summary>
-        /// Gets or sets the front cover.
-        /// </summary>
-        /// <value>The front cover.</value>
-        public Image FrontCover
-        {
-            get { return CoverArt; }
-            set { CoverArt = value; }
-        }
-
-        public Image MenuFrontCover
-        {
-            get { return MenuCoverArt; }
-            set { MenuCoverArt = value; }
-        }
-        /// <summary>
-        /// Gets or sets the back cover.
-        /// </summary>
-        /// <value>The back cover.</value>
-        public Image BackCover
-        {
-            get { return _backCoverArtImage; }
-            set { _backCoverArtImage = value; }
         }
 
         public int itemId

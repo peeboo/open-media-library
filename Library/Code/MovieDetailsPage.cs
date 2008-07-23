@@ -25,10 +25,10 @@ namespace Library
         //private string _playMovieCommandText = "Show Discs";
         private IList _commands;
         private string _metadata;
-        private Image _backgroundImage;
         private Choice _diskChoice = new Choice();
         //private Command _hideDisks;
         //private Command _showDisks;
+        private Image _FullCover;
         #endregion
 
         #region Public Properties
@@ -159,19 +159,17 @@ namespace Library
             }
         }
 
-        /// <summary>
-        /// A fullscreen image to display in the background.
-        /// </summary>
-        public Image Background
+        public Image FullCover
         {
-            get { return _backgroundImage; }
+            get { return _FullCover; }
             set
             {
-                if (_backgroundImage != value)
+                if (_FullCover != value)
                 {
-                    _backgroundImage = value;
-                    FirePropertyChanged("Background");
+                    _FullCover = value;
+                    FirePropertyChanged("FullCover");
                 }
+
             }
         }
 
@@ -368,13 +366,13 @@ namespace Library
             _movieDetails = item;
             //_localMedia = null;
 
-            if (item.FrontCover == null)
+            if (!string.IsNullOrEmpty(item.TitleObject.FrontCoverPath))
             {
-                OMLApplication.DebugLine("Details Page.LoadMovies: front cover is null");
+                if (File.Exists(item.TitleObject.FrontCoverPath))
+                {
+                    _FullCover = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
+                }
             }
-
-            _backgroundImage = item.FrontCover;
-
             _diskChoice = new Choice();
             if (_movieDetails.Disks.Count > 0 )
             {

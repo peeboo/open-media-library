@@ -464,33 +464,17 @@ namespace Library
             try
             {
                 MovieItem item = (MovieItem)list[index];
-                if (item.CoverArt == MovieItem.NoCoverImage)
-                {
-                    // if for some reason we dont have the menu file, use the regular cover for the menu
-                    if (! string.IsNullOrEmpty(item.TitleObject.FrontCoverMenuPath))
+                    if (!string.IsNullOrEmpty(item.TitleObject.FrontCoverMenuPath))
                     {
                         if (File.Exists(item.TitleObject.FrontCoverMenuPath))
                         {
-                            OMLApplication.DebugLine("FrontCoverMenuArt found: " + item.TitleObject.FrontCoverMenuPath);
-                            item.CoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverMenuPath);
-                        }
-                        else
-                        {
-                            OMLApplication.DebugLine("Unable to locate Menu image: " + item.TitleObject.FrontCoverPath);
-                            item.CoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
+                            item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverMenuPath);
                         }
                     }
-
-                    if (File.Exists(item.TitleObject.FrontCoverPath))
-                        item.FrontCover = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
-                    
-                    if( File.Exists(item.TitleObject.BackCoverPath) )
-                        item.BackCover = GalleryItem.LoadImage(item.TitleObject.BackCoverPath);
-                }
             }
-            catch
+            catch (Exception e)
             {
-                
+                OMLApplication.DebugLine("[MovieGallery] Error: {0}\n    {1}", e.Message, e.StackTrace);
             }
         }
         
@@ -527,7 +511,5 @@ namespace Library
     public class GalleryView
     {
         public const string List = "List";
-        public const string MenuCoverArt = "Menu Cover Art";
-        public const string CoverArt = "Cover Art";
     }
 }

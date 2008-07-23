@@ -8,7 +8,7 @@
     xmlns:c="resx://Library/Library.Resources/Controls"
 	  xmlns:me="Me">
 
-  <Aggregate Source="resx://Library/Library.Resources/Base" />
+  <Aggregate Source="resx://Library/Library.Resources/Base" />  
 
   <UI Name="MovieDetails">
     <Properties>
@@ -94,11 +94,11 @@
             </LayoutInput>
 
             <Children>
-              <Graphic Name="Cover" Content="[DetailsPage.Background]" MinimumSize="336,480" MaximumSize="336,480" />
+              <Graphic Name="FullCover" Content="[DetailsPage.FullCover]" MinimumSize="336,480" MaximumSize="336,480" />
               <Clip Orientation="Vertical" FadeSize="40" NearOffset="70" MinimumSize="336,0" MaximumSize="336, 480">
                 <Children>
-                  <Graphic Name="coverflip" CenterPointPercent=".5,.5,.5" Scale="1,-1,1"
-											 Content="[DetailsPage.Background]" Alpha=".4" >
+                  <Graphic Name="FullCoverFlip" CenterPointPercent=".5,.5,.5" Scale="1,-1,1"
+											 Content="[DetailsPage.FullCover]" Alpha=".4" >
                   </Graphic>
                 </Children>
               </Clip>
