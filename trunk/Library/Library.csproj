@@ -187,6 +187,7 @@
     <Content Include="Resources\ButtonNoFocus.png" />
     <None Include="Resources\buttonnofocus1.png" />
     <None Include="Resources\buttonnofocus2.png" />
+    <None Include="Resources\buttonnonfocus1.png" />
     <Content Include="Resources\ButtonPressedAfterGlow.png" />
     <None Include="Resources\buttonpressedafterglow1.png" />
     <None Include="Resources\buttonpressedafterglow2.png" />

@@ -244,6 +244,9 @@ namespace Library
             _categories.Add(new FilterCommand(Filters[Filter.Runtime]));
             _categories.Add(new FilterCommand(Filters[Filter.VideoFormat]));
             _categories.Add(new FilterCommand(Filters[Filter.UserRating]));
+            _categories.Add(new FilterCommand(Filters[Filter.Tags]));
+            _categories.Add(new FilterCommand(Filters[Filter.ParentRating]));
+            _categories.Add(new FilterCommand(Filters[Filter.Country]));
             _categoryChoice = new Choice(this, "Categories", _categories);
         }
 
@@ -259,6 +262,10 @@ namespace Library
             _filters.Add(Filter.UserRating, new Filter(Filter.UserRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.UserRatingSort));
             _filters.Add(Filter.VideoFormat, new Filter(Filter.VideoFormat, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
 
+            _filters.Add(Filter.ParentRating, new Filter(Filter.ParentRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
+            _filters.Add(Filter.Tags, new Filter(Filter.Tags, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
+            _filters.Add(Filter.Country, new Filter(Filter.Country, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
+
             _jumpInListText = new EditableText(this);
             _jumpInListText.Value = String.Empty;
             FocusedItem = new GalleryItem(this, "", "", null);
@@ -272,6 +279,7 @@ namespace Library
                 _currentSort = _sortFunctionLookup[Properties.Settings.Default.MovieSort];
             else
                 _currentSort = SortByNameAscending;
+
             LoadMovies(col);
         }
 
@@ -338,7 +346,15 @@ namespace Library
             Filters[Filter.UserRating].AddMovie(((double)title.UserStarRating/10).ToString("0.0"), movie);
             if (title.Disks.Count > 0)
                 Filters[Filter.VideoFormat].AddMovie(title.Disks[0].Format.ToString(), movie);  //Should really do this independently for each disk, but for now, this should be fine
-            
+
+            foreach (string tag in title.Tags)
+            {
+                Filters[Filter.Tags].AddMovie(tag, movie);
+            }
+
+            Filters[Filter.Country].AddMovie(title.CountryOfOrigin, movie);
+            Filters[Filter.ParentRating].AddMovie(title.ParentalRating, movie);
+
             AddRuntimeFilter(movie);
         }
 
