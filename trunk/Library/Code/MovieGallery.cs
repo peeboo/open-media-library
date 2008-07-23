@@ -464,6 +464,8 @@ namespace Library
             try
             {
                 MovieItem item = (MovieItem)list[index];
+                if (item.MenuCoverArt == MovieItem.NoCoverImage)
+                {
                     if (!string.IsNullOrEmpty(item.TitleObject.FrontCoverMenuPath))
                     {
                         if (File.Exists(item.TitleObject.FrontCoverMenuPath))
@@ -471,6 +473,7 @@ namespace Library
                             item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverMenuPath);
                         }
                     }
+                }
             }
             catch (Exception e)
             {
