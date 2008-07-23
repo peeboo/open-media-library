@@ -268,6 +268,7 @@ namespace Library
 
             _jumpInListText = new EditableText(this);
             _jumpInListText.Value = String.Empty;
+
             FocusedItem = new GalleryItem(this, "", "", null);
             _categoryChoice = new Choice(this, "Categories");
             CreateCategories();
@@ -283,6 +284,17 @@ namespace Library
             LoadMovies(col);
         }
 
+        public bool ClearJumpValue
+        {
+            get 
+            { 
+                return true; 
+            }
+            set 
+            { 
+                FirePropertyChanged("ClearJumpValue"); 
+            }
+        }
 
         public int RelativeJumpToPosition
         {
@@ -301,9 +313,10 @@ namespace Library
             Utilities.DebugLine("MovieGallery.JumpToMovie: {0}", jumpString);
             foreach (MovieItem m in _moviesVirtualList)
             {
-                if (m.Name.StartsWith(_jumpInListText.Value, true, null))
+                if (m.Name.StartsWith(jumpString, true, null))
                 {
                     int focusedItemIndex = _moviesVirtualList.IndexOf(FocusedItem);
+
                     if (focusedItemIndex < 0)
                     {
                         focusedItemIndex = 0;

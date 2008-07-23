@@ -48,7 +48,7 @@
     <!-- Create an input handler for scrolling. -->
     <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
     <TypingHandler Name="TypingHandler" EditableText="[MovieBrowser.JumpInListText]" TypingPolicy="TripleTap" HandlerStage="Bubbled"/>
-    <ShortcutHandler Name="PlayHandler" Shortcut="Play" HandlerStage="Bubbled"/>
+    
     <Timer Name="ClearTimer" AutoRepeat="false" Interval="5000" Enabled="false"/>
     <addin:AddInHost Name="AddInHost"/>
 
@@ -73,34 +73,25 @@
 
     <Rule>
       <Conditions>
-        <Modified Source="[TypingHandler.Value]"/>
+        <Modified Source="[TypingHandler.DisplayValue]"/>
       </Conditions>
       <Actions>
-        <Set Target="[JumpValue.Value]" Value="[TypingHandler.Value]"/>
+        <Set Target="[JumpValue.Value]" Value="[TypingHandler.DisplayValue]"/>
         <Invoke Target="[MovieBrowser.JumpToMovie]" jumpString="[TypingHandler.DisplayValue]" />
         <Invoke Target="[ClearTimer.Start]" />
       </Actions>
     </Rule>
 
-    <!--<Rule>
-      <Conditions>
-        <Modified Source="[TypingHandler.DisplayValue]"/>
-      </Conditions>
-      <Actions>
-        <Set Target="[JumpValue.Value]" Value="[TypingHandler.DisplayValue]"/>
-      </Actions>
-    </Rule>-->
-
-
-
     <Changed Source="[ClearTimer.Tick]">
       <Actions>
         <Set Target="[MovieBrowser.JumpInListText.Value]" Value="" />
+        <Set Target="[JumpValue.Value]" Value=""/>
       </Actions>
     </Changed>
 
     <Changed Source="[MovieBrowser.JumpToPosition]" >
       <Actions>
+       
         <!--Scroll parameter is the number of items to scroll to, relative to the current position-->
         <Invoke Target ="[ScrollingData.Scroll]" amount="[MovieBrowser.RelativeJumpToPosition]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
         <!--This is the absolute index-->
@@ -155,7 +146,7 @@
     <!-- Update these 2 values everytime we get the focus -->
     <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
     <cor:Single Name="CoverArtAlpha" Single="0.7"/>
-    
+
     <!-- The index passed down from the repeater.-->
     <Index Name="Index" Index="$Required"/>
     <cor:String Name="GalleryView" String="$Required" />    
