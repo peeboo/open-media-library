@@ -19,36 +19,36 @@ namespace Library
 
         #region Private Variables
         /// <summary>The URI of the media at its locally cached location.</summary>
-        private FileInfo _localMedia = null;
+        //private FileInfo _localMedia = null;
         private MovieItem _movieDetails = null;
-        private bool _isShowingDisks = false;
-        private string _playMovieCommandText = "Show Discs";
+        //private bool _isShowingDisks = false;
+        //private string _playMovieCommandText = "Show Discs";
         private IList _commands;
         private string _metadata;
         private Image _backgroundImage;
-        private Choice _diskChoice;
-        private Command _hideDisks;
-        private Command _showDisks;
+        private Choice _diskChoice = new Choice();
+        //private Command _hideDisks;
+        //private Command _showDisks;
         #endregion
 
         #region Public Properties
 
-        public string PlayMovieCommandText
-        {
-            get
-            {
-                if (this.MovieDetails.Disks.Count == 1)
-                    return "Play Movie";
-                else if (this.MovieDetails.Disks.Count == 0)
-                    return "No Discs!";
-                else
-                    return _playMovieCommandText;
-            }
-            set
-            {
-                _playMovieCommandText = value;
-            }
-        }
+        //public string PlayMovieCommandText
+        //{
+        //    get
+        //    {
+        //        if (this.MovieDetails.Disks.Count == 1)
+        //            return "Play Movie";
+        //        else if (this.MovieDetails.Disks.Count == 0)
+        //            return "No Discs!";
+        //        else
+        //            return _playMovieCommandText;
+        //    }
+        //    set
+        //    {
+        //        _playMovieCommandText = value;
+        //    }
+        //}
 
         public string DirectorsAsString
         {
@@ -83,11 +83,11 @@ namespace Library
             set { _movieDetails = value; }
         }
         /// <summary>Gets or sets the URI of the media at its locally cached location.</summary>
-        public FileInfo LocalMedia
-        {
-            get { return _localMedia; }
-            set { _localMedia = value; }
-        }
+        //public FileInfo LocalMedia
+        //{
+        //    get { return _localMedia; }
+        //    set { _localMedia = value; }
+        //}
 
         public string UserRating
         {
@@ -346,15 +346,15 @@ namespace Library
             get { return _diskChoice; }
         }
 
-        public Command ShowDisks
-        {
-            get { return _showDisks; }
-        }
+        //public Command ShowDisks
+        //{
+        //    get { return _showDisks; }
+        //}
 
-        public Command HideDisks
-        {
-            get { return _hideDisks; }
-        }
+        //public Command HideDisks
+        //{
+        //    get { return _hideDisks; }
+        //}
 
         #endregion
 
@@ -366,7 +366,7 @@ namespace Library
         private void LoadDetails(MovieItem item)
         {
             _movieDetails = item;
-            _localMedia = null;
+            //_localMedia = null;
 
             if (item.FrontCover == null)
             {
@@ -376,17 +376,20 @@ namespace Library
             _backgroundImage = item.FrontCover;
 
             _diskChoice = new Choice();
-            if (_movieDetails.Disks.Count > 0)
+            if (_movieDetails.Disks.Count > 0 )
             {
-                _diskChoice.Options = _movieDetails.Disks;
+                _diskChoice.Options = _movieDetails.FriendlyNamedDisks;
             }
             else
             {
                 Disk[] temp = { new Disk() };
                 _diskChoice.Options = temp; // MCE barfs if Options is bound to empty List.
+                OMLApplication.DebugLine("Details Page.LoadMovies: no disks");
             }
-            _showDisks = new Command();
-            _hideDisks = new Command();
+            //_showDisks = new Command();
+            //_hideDisks = new Command();
+
+
 
             //try
             //{
@@ -402,33 +405,33 @@ namespace Library
         
         
 
-        public void PlayMovie()
-        {
-            if (_movieDetails.Disks.Count == 0)
-            {
-                Utilities.DebugLine("Movie has no disks!");
-            }
-            else if (_movieDetails.Disks.Count > 1)
-            {
-                if (_isShowingDisks)  // disk page is currently shown, so we should change to Hide Details
-                {
-                    HideDisks.Invoke();
-                    FirePropertyChanged("HideDisks");
-                    _isShowingDisks = false;
-                }
-                else  // Otherwise show the disk list and change the text to Show Discs
-                {
-                    ShowDisks.Invoke();
-                    FirePropertyChanged("ShowDisks");
-                    _isShowingDisks = true;
-                }
-            }
-            else  //only one disk, play it
-            {
-                _movieDetails.SelectedDisk = _movieDetails.Disks[0];
-                _movieDetails.PlayMovie();
-            }
-        }
+        //public void PlayMovie()
+        //{
+        //    if (_movieDetails.Disks.Count == 0)
+        //    {
+        //        Utilities.DebugLine("Movie has no disks!");
+        //    }
+        //    else if (_movieDetails.Disks.Count > 1)
+        //    {
+        //        if (_isShowingDisks)  // disk page is currently shown, so we should change to Hide Details
+        //        {
+        //            HideDisks.Invoke();
+        //            FirePropertyChanged("HideDisks");
+        //            _isShowingDisks = false;
+        //        }
+        //        else  // Otherwise show the disk list and change the text to Show Discs
+        //        {
+        //            ShowDisks.Invoke();
+        //            FirePropertyChanged("ShowDisks");
+        //            _isShowingDisks = true;
+        //        }
+        //    }
+        //    else  //only one disk, play it
+        //    {
+        //        _movieDetails.SelectedDisk = _movieDetails.Disks[0];
+        //        _movieDetails.PlayMovie();
+        //    }
+        //}
         
         public void PlayDisk(int SelectedDisk)
         {
@@ -444,6 +447,15 @@ namespace Library
     // By creating this wrapper, I can do the cast successfully. 
     public class DiskWrapper : Disk
     {
+
+        public DiskWrapper() : base()
+        {
+        }
+
+        public DiskWrapper(string name, string path, VideoFormat format)
+            : base(name, path, format)
+            {}
+
 
     }
 }

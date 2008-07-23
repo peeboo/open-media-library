@@ -219,6 +219,7 @@ namespace Library
         private Title _titleObj;
         private Image _backCoverArtImage;
         private List<string> _actingRoles;
+        private List<Disk> _friendlyNamedDisks = new List<Disk>();
 
         public Disk SelectedDisk
         {
@@ -312,6 +313,14 @@ namespace Library
                     _actingRoles.Add(actor.full_name);
                 }
             }
+
+            foreach (Disk d in title.Disks)
+            {
+                if (title.Disks.Count == 1)
+                    _friendlyNamedDisks.Add(new Disk("Play Movie", d.Path, d.Format));
+                else
+                    _friendlyNamedDisks.Add(new Disk("Play " + d.Name, d.Path, d.Format));
+            }
         }
 
         /// <summary>
@@ -325,6 +334,8 @@ namespace Library
 
             // Navigate to a details page for this item.
             MovieDetailsPage page = CreateDetailsPage(galleryItem);
+            Gallery.JumpInListText.Value = "";
+            Gallery.ClearJumpValue = true;
             OMLApplication.Current.GoToDetails(page);
         }
 
@@ -377,6 +388,13 @@ namespace Library
             get { return _titleObj.Disks; }
             set { _titleObj.Disks = value; }
         }
+
+        public List<Disk> FriendlyNamedDisks
+        {
+            get { return _friendlyNamedDisks; }
+            set { _friendlyNamedDisks = value; }
+        }
+
 
         /// <summary>
         /// Gets or sets the front cover.

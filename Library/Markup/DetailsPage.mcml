@@ -21,24 +21,24 @@
     </Properties>
 
     <Locals>
-      <ShortcutHandler Name="PlayHandler" Shortcut="Play"/>
+      <!--<ShortcutHandler Name="PlayHandler" Shortcut="Play"/>-->
 
       <!-- AddInHost is where all Windows Media Center-specific services start -->
       <!-- from. It must appear in the Locals section of a markup file.        -->
-      <addin:AddInHost Name="AddInHost"/>
+      <!--<addin:AddInHost Name="AddInHost"/>-->
       <!-- The ScrollingHandler which reacts to user keyboard input. -->
       <!-- Turn on handing of arrow keys for scrolling (not on by    -->
       <!-- default).                                                 -->
       <!-- NOTE: HandlerStage must be "Direct" (which is default).   -->
-      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true"/>
+      <!--<ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true"/>-->
 
       <!-- ScrollingData contains many ways to customize how scrolling -->
       <!-- should behave. It has methods to change the current scroll  -->
       <!-- position and it also reports the position. In this case,    -->
       <!-- the default values are used for the sample.                 -->
-      <ScrollingData Name="ScrollingData"/>
+      <!--<ScrollingData Name="ScrollingData"/>-->
 
-      <Command Name="PlayMovieCommand" Description="Play Movie"/>
+      <!--<Command Name="PlayMovieCommand" Description="Play Movie"/>-->
 
       <AnchorEdge Name="ImageLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "[UISettings.Anchor.DetailsLeftOffset]" Id="Parent"/>
       <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "400" Id="Parent"/>
@@ -52,16 +52,16 @@
 
     <Rules>
       <!-- Give ScrollingData to ScrollingHandler. -->
-      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <!--<Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>-->
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
-      <Changed Source="[PlayMovieCommand.Invoked]">
+      <!--<Changed Source="[PlayMovieCommand.Invoked]">
         <Actions>
           <Invoke Target ="[DetailsPage.PlayMovie]"/>
         </Actions>
-      </Changed>
+      </Changed>-->
 
-      <Changed Source="[DetailsPage.ShowDisks]">
+      <!--<Changed Source="[DetailsPage.ShowDisks]">
         <Actions>
           <DebugTrace Message="Got Show Disks Event, Changing Visibility and Play Movie Text."/>
           <Set Target="[DVDButtons.Visible]" Value="true"></Set>
@@ -79,18 +79,8 @@
           <Set Target="[DetailsPage.PlayMovieCommandText]" Value="Show Discs"></Set>
           <Set Target="[PlayMovie.Text]" Value="Show Discs"></Set>
         </Actions>
-      </Changed>
+      </Changed>-->
 
-
-      <!-- Handle the Play on remote -->
-      <Rule>
-        <Conditions>
-          <Modified Source="[PlayHandler.Invoked]"/>
-        </Conditions>
-        <Actions>
-          <Invoke Target ="[DetailsPage.PlayMovie]"/>
-        </Actions>
-      </Rule>
 
     </Rules>
 
@@ -114,34 +104,32 @@
               </Clip>
             </Children>
           </Panel>
-          <c:SimpleButton Name="PlayMovie" Command="[PlayMovieCommand]" Text="[DetailsPage.PlayMovieCommandText]" >
+          <!--<c:SimpleButton Name="PlayMovie" Command="[PlayMovieCommand]" Text="[DetailsPage.PlayMovieCommandText]" >
             <LayoutInput>
               <FormLayoutInput Left = "Image,1.02" Top="[TitleTopAnchor]"/>
             </LayoutInput>
-          </c:SimpleButton>
+          </c:SimpleButton>-->
+
+
+          <Panel Name ="DVDButtons">
+            <Layout>
+              <FlowLayout Orientation="Horizontal" />
+            </Layout>
+            <LayoutInput>
+              <FormLayoutInput Left="Image,1.02" Top="[TitleTopAnchor]"/>
+            </LayoutInput>
+            <Children>
+              <me:DVDDisks Name="DiscList" DetailsPage="[DetailsPage]" DiskListChoice="[DetailsPage.DiskChoice]" />
+            </Children>
+          </Panel>
+
 
           <Text Name="Title" Content="[DetailsPage.Title]" Font="font://s:Heading" Color="color://s:HeadingColor" >
             <LayoutInput>
-              <FormLayoutInput Left="Image,1.02" Top="PlayMovie,1.05" Right="Parent,0.95"/>
+              <FormLayoutInput Left="Image,1.02" Top="DVDButtons,1.05" Right="Parent,0.95"/>
             </LayoutInput>
           </Text>
 
-          <Panel Name ="DVDButtons" Visible="false">
-            <Layout>
-              <FlowLayout Orientation="Vertical" />
-            </Layout>
-            <LayoutInput>
-              <FormLayoutInput Left="Image,1.05" Top="Title,1.0"/>
-            </LayoutInput>
-            <Children>
-              <me:DVDDisks Name="DiscList" DetailsPage="[DetailsPage]" DiskListChoice="[DetailsPage.DiskChoice]" >
-                <LayoutInput>
-                  <FormLayoutInput Left="Parent,.05" Top="Parent,.10" />
-                </LayoutInput>
-              </me:DVDDisks>
-            </Children>
-          </Panel>
-          
           <Panel Name="SubDetails" Visible="true">
             <Layout>
               <FlowLayout Orientation="Vertical" />
@@ -191,7 +179,7 @@
                 </Children>
               </Panel>
 
-              <me:TextWithLabel Label="Path: " Text="[DetailsPage.MovieDetails.TitleObject.FileLocation]" />
+              <!--<me:TextWithLabel Label="Path: " Text="[DetailsPage.MovieDetails.TitleObject.FileLocation]" />-->
               <me:TextWithLabel Label="Sound : " Text="[DetailsPage.LanguagesAsString]" />
               <me:TextWithLabel Label="SubTitles : " Text="[DetailsPage.SubtitlesAsString]" />
               <me:TextWithLabel Label="Synopsis: " Text=" " />
@@ -386,7 +374,7 @@
         <Children>
           <Repeater Name="DiskRepeater" Source="[DiskListChoice.Options]">
             <Layout>
-              <FlowLayout Orientation="Vertical" Spacing="2,0"/>
+              <FlowLayout Orientation="Horizontal" Spacing="2,0"/>
             </Layout>
 
             <Content>
@@ -422,7 +410,7 @@
     </Rules>
 
     <Content>
-      <c:SimpleButton Name="Button" Text="[DiscName]" Command="[PlaySelectedDisk]"/>
+      <c:SimpleButton Name="Button" Text="[DiscName]" Command="[PlaySelectedDisk]" Size="220,51"/>
     </Content>
   </UI>
 

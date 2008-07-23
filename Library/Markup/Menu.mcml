@@ -19,7 +19,6 @@
             <a:UISettings Name="UISettings" UISettings="$Required" />
             <IntRangedValue Name="FocusedIndex"/>
             <cor:String Name="GalleryView" String="$Required" />
-            <!--<cor:String Name="JumpValue" String="" />-->
             <EditableText Name="JumpValue"/>
             <Command Name="GoToNowPlaying" />
         </Properties>
@@ -76,20 +75,13 @@
                     <Set Target="[NowPlayingPanel.Visible]" Value="true" />
                 </Actions>
             </Rule>
-
-          <Changed Source="[UISettings.Gallery.ShowMovieDetails]" >
-            <Actions>
-              <Set Target="[LeftPanel.Visible]" Value="false" />
-            </Actions>
-
-          </Changed>
           
             <Changed Source="[Application.NowPlaying]" >
                 <Actions>
                     <Set Target="[NowPlaying.Text]" Value="[Application.NowPlaying]" />
                 </Actions>
             </Changed>
-          
+
           <Changed Source="[MovieBrowser.FocusedItem]" >
             <Actions>
               <Set Target="[Caption.Content]" Value="[MovieBrowser.FocusedItem.Caption]"/>
