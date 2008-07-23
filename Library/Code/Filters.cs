@@ -54,8 +54,9 @@ namespace Library
         public const string Director = "Directors";
         public const string Actor = "Actors";
         public const string Runtime = "Runtime";
-        //public const string Country = "Country";
-        //public const string ParentRating = "Parental Rating";
+        public const string Country = "Country";
+        public const string ParentRating = "Parental Rating";
+        public const string Tags = "Tags";
         public const string UserRating = "User Rating";
         public const string Year = "Year";
         public const string DateAdded = "Date Added";

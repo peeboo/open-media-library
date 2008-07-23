@@ -140,8 +140,8 @@
 
                   </Panel>
 
-                  <c:SimpleButton Name="Import Movies" Command="[BeginSetupCommand]" Text="> Import Movies" Margins="0,50,0,50"/>
-                  <c:SimpleButton Name="Save Settings" Command="[SaveSettings]" Text="> Save Settings"/>
+                  <c:SimpleButton Name="Import Movies" Command="[BeginSetupCommand]" Text="Import Movies" Margins="0,50,0,50"/>
+                  <c:SimpleButton Name="Save Settings" Command="[SaveSettings]" Text="Save Settings"/>
 
 
                 </Children>

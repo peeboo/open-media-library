@@ -125,7 +125,7 @@
     <Image Name="ButtonDormant"           Source="resx://Library/Library.Resources/ButtonDormant"           NineGrid="7,7,7,7" />
     <Image Name="ButtonLeftFocus"         Source="resx://Library/Library.Resources/ButtonLeftFocus"         NineGrid="7,7,7,7" />
     <Image Name="ButtonLeftFocusOverlay"  Source="resx://Library/Library.Resources/ButtonLeftFocusOverlay"  NineGrid="7,7,7,7" />
-    <Image Name="ButtonNoFocus"           Source="resx://Library/Library.Resources/ButtonNoFocus"           NineGrid="7,7,7,7" />
+    <Image Name="ButtonNoFocus"           Source="resx://Library/Library.Resources/ListboxNoFocus"           NineGrid="7,7,7,7" />
     <Image Name="ButtonPressedAfterGlow"  Source="resx://Library/Library.Resources/ButtonPressedAfterGlow"  NineGrid="7,7,7,7" />
     <Image Name="ButtonPressedHighlight"  Source="resx://Library/Library.Resources/ButtonPressedHighlight"  NineGrid="7,7,7,7" />
 
