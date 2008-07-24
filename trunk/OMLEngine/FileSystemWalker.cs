@@ -18,7 +18,16 @@ namespace OMLEngine
         /// </summary>
         public static string RootDirectory
         {
-            get { return Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\OpenMediaLibrary"; }
+            get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"OpenMediaLibrary"); }
+        }
+
+        public static string PublicRootDirectory
+        {
+            get
+            {
+                return Path.Combine(Environment.GetFolderPath(
+                    Environment.SpecialFolder.CommonApplicationData), @"OpenMediaLibrary");
+            }
         }
 
         /// <summary>
@@ -26,7 +35,7 @@ namespace OMLEngine
         /// </summary>
         public static string ImageDirectory
         {
-            get { return "" + RootDirectory + @"\Images"; }
+            get { return Path.Combine(PublicRootDirectory, @"Images"); }
         }
 
         /// <summary>
@@ -34,7 +43,7 @@ namespace OMLEngine
         /// </summary>
         public static string PluginsDirectory
         {
-            get { return RootDirectory + @"\plugins"; }
+            get { return Path.Combine(RootDirectory, @"Plugins"); }
         }
 
         /// <summary>
@@ -42,7 +51,7 @@ namespace OMLEngine
         /// </summary>
         public static string LogDirectory
         {
-            get { return RootDirectory + @"\logs"; }
+            get { return Path.Combine(PublicRootDirectory, @"Logs"); }
         }
 
         /// <summary>
@@ -52,6 +61,11 @@ namespace OMLEngine
         public static bool RootDirExists
         {
             get { return Directory.Exists(RootDirectory); }
+        }
+
+        public static bool PublicRootDirExists
+        {
+            get { return Directory.Exists(PublicRootDirectory); }
         }
 
         /// <summary>
@@ -89,6 +103,11 @@ namespace OMLEngine
             Directory.CreateDirectory(RootDirectory);
         }
 
+        public static void createPublicRootDirectory()
+        {
+            Directory.CreateDirectory(PublicRootDirectory);
+        }
+
         /// <summary>
         /// Creates the image directory if it doesn't already exist
         /// </summary>
@@ -124,6 +143,14 @@ namespace OMLEngine
             }
 
             Directory.SetCurrentDirectory(RootDirectory);
+        }
+
+        public static void changeToPublicRootDirectory()
+        {
+            if (!PublicRootDirExists)
+                createPublicRootDirectory();
+
+            Directory.SetCurrentDirectory(PublicRootDirectory);
         }
 
         /// <summary>
