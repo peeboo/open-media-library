@@ -238,11 +238,14 @@ namespace OMLEngine
             if (!FileSystemWalker.RootDirExists)
                 FileSystemWalker.createRootDirectory();
 
-            if (!FileSystemWalker.ImageDirExists)
-                FileSystemWalker.createImageDirectory();
-
             if (!FileSystemWalker.PluginsDirExists)
                 FileSystemWalker.createPluginsDirectory();
+
+            if (!FileSystemWalker.PublicRootDirExists)
+                FileSystemWalker.createPublicRootDirectory();
+
+            if (!FileSystemWalker.ImageDirExists)
+                FileSystemWalker.createImageDirectory();
 
             if (!FileSystemWalker.LogDirExists)
                 FileSystemWalker.createLogDirectory();
