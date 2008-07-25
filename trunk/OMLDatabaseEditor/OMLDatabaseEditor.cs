@@ -20,8 +20,10 @@ namespace OMLDatabaseEditor
 
         public OMLDatabaseEditor()
         {
+            OMLEngine.Utilities.RawSetup();
+
             InitializeComponent();
-            InitData();
+            InitData();      
         }
 
         private void InitData()
@@ -29,6 +31,8 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.WaitCursor;
             _titleCollection = new TitleCollection();
             _titleCollection.loadTitleCollection();
+            _titleCollection.Sort();
+
             SetupTitleList();
             LoadPlugins();
             SetupPluginList();
@@ -62,7 +66,6 @@ namespace OMLDatabaseEditor
             {
                 tvSourceList_AddItem(t.Name, t.InternalItemID.ToString(), "Movies");
             }
-            tvSourceList.Sort();
         }
 
         private void SetupPluginList()
@@ -90,6 +93,8 @@ namespace OMLDatabaseEditor
         {
             _titleCollection.Replace(t);
             _titleCollection.saveTitleCollection();
+
+            reloadDatabase();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -481,6 +486,11 @@ namespace OMLDatabaseEditor
 
         private void reloadDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            reloadDatabase();
+        }
+
+        private void reloadDatabase()
+        {
             tvSourceList.Nodes["OML Database"].Nodes["Movies"].Nodes.Clear();
             tvSourceList.Nodes["OML Database"].Nodes["Importers"].Nodes.Clear();
             InitData();
@@ -497,6 +507,63 @@ namespace OMLDatabaseEditor
             this.Close();
         }
 
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        //    TextBoxBase tb = this.ActiveControl as TextBoxBase;
+
+        //    if (tb != null && tb.SelectionLength > 0)  
+        //    {
+        //        tb.Copy();
+        //    }
+        }
+
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        //    TextBoxBase tb = (TextBoxBase)sender;
+        //    tb.Cut();
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        //    TextBoxBase tb = (TextBoxBase)sender;
+        //    if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) == true)
+        //    {
+        //        tb.Paste();
+        //    }
+        }
+
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        //    TextBoxBase tb = (TextBoxBase)sender;
+        //    tb.SelectAll();
+        }
+
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        //    TextBoxBase tb = (TextBoxBase)sender;  
+        //    if (tb.CanUndo == true)
+        //    {
+        //        tb.Undo();
+        //        tb.ClearUndo();
+            }
+
+        //}
+
+        ////private Control GetControl()
+        ////{
+        ////    ContainerControl cControl = ContainerControl;
+        ////    Control aControl = Control;
+
+        ////    aControl = this.ActiveControl;
+        ////    if (aControl.GetType() == TextBoxBase)
+        ////    {
+        ////        return aControl;
+        ////    }
+        ////    else
+        ////    {
+        ////        return null;
+        ////    }
+        ////}
     }
 }
 
