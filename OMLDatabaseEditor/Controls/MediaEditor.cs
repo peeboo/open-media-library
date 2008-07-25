@@ -557,10 +557,6 @@ namespace OMLDatabaseEditor.Controls
             }
         }
 
-        private void grdAudioTracks_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
 
         private void MediaEditor_DragOver(object sender, DragEventArgs e)
         {
@@ -647,6 +643,13 @@ namespace OMLDatabaseEditor.Controls
                 MessageBox.Show("Error saving file. " + ex.Message);
             }
         }
+
+        private void grd_CellChanges(object sender, EventArgs e)
+        {
+            _titleChanged(EventArgs.Empty);
+        }
+
+
 
 
 

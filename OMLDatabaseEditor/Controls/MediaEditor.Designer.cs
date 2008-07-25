@@ -398,8 +398,7 @@
             this.grdAudioTracks.RowsDefaultCellStyle = dataGridViewCellStyle1;
             this.grdAudioTracks.Size = new System.Drawing.Size(454, 86);
             this.grdAudioTracks.TabIndex = 36;
-            this.grdAudioTracks.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grd_CellChanges);
-            this.grdAudioTracks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdAudioTracks_CellContentClick);
+            this.grdAudioTracks.CurrentCellDirtyStateChanged += new System.EventHandler(this.grd_CellChanges);
             // 
             // dataGridViewTextBoxColumn7
             // 
@@ -433,6 +432,7 @@
             this.grdSubtitles.Size = new System.Drawing.Size(454, 86);
             this.grdSubtitles.TabIndex = 34;
             this.grdSubtitles.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grd_CellChanges);
+            this.grdSubtitles.CurrentCellDirtyStateChanged += new System.EventHandler(this.grd_CellChanges);
             // 
             // dataGridViewTextBoxColumn8
             // 
@@ -467,6 +467,7 @@
             this.grdExtraFeatures.Size = new System.Drawing.Size(454, 86);
             this.grdExtraFeatures.TabIndex = 37;
             this.grdExtraFeatures.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grd_CellChanges);
+            this.grdExtraFeatures.CurrentCellDirtyStateChanged += new System.EventHandler(this.grd_CellChanges);
             // 
             // dataGridViewTextBoxColumn12
             // 
@@ -486,8 +487,6 @@
             // 
             // grdVideoDetails
             // 
-            this.grdVideoDetails.AllowUserToAddRows = false;
-            this.grdVideoDetails.AllowUserToDeleteRows = false;
             this.grdVideoDetails.BackgroundColor = System.Drawing.SystemColors.ControlLight;
             this.grdVideoDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.grdVideoDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -581,7 +580,7 @@
             this.grdDirectors.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdDirectors.Size = new System.Drawing.Size(454, 120);
             this.grdDirectors.TabIndex = 23;
-            this.grdDirectors.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grd_CellChanges);
+            this.grdDirectors.CurrentCellDirtyStateChanged += new System.EventHandler(this.grd_CellChanges);
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -617,6 +616,7 @@
             this.grdWriters.Size = new System.Drawing.Size(454, 120);
             this.grdWriters.TabIndex = 32;
             this.grdWriters.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grd_CellChanges);
+            this.grdWriters.CurrentCellDirtyStateChanged += new System.EventHandler(this.grd_CellChanges);
             // 
             // dataGridViewTextBoxColumn2
             // 
@@ -652,6 +652,7 @@
             this.grdProducers.Size = new System.Drawing.Size(454, 120);
             this.grdProducers.TabIndex = 33;
             this.grdProducers.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grd_CellChanges);
+            this.grdProducers.CurrentCellDirtyStateChanged += new System.EventHandler(this.grd_CellChanges);
             // 
             // dataGridViewTextBoxColumn9
             // 
@@ -686,7 +687,7 @@
             this.grdActors.RowsDefaultCellStyle = dataGridViewCellStyle6;
             this.grdActors.Size = new System.Drawing.Size(454, 120);
             this.grdActors.TabIndex = 29;
-            this.grdActors.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grd_CellChanges);
+            this.grdActors.CurrentCellDirtyStateChanged += new System.EventHandler(this.grd_CellChanges);
             // 
             // dataGridViewTextBoxColumn4
             // 
@@ -727,6 +728,7 @@
             this.grdNonActors.Size = new System.Drawing.Size(454, 120);
             this.grdNonActors.TabIndex = 30;
             this.grdNonActors.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grd_CellChanges);
+            this.grdNonActors.CurrentCellDirtyStateChanged += new System.EventHandler(this.grd_CellChanges);
             // 
             // dataGridViewTextBoxColumn10
             // 
@@ -792,7 +794,7 @@
             this.grdTags.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdTags.Size = new System.Drawing.Size(454, 91);
             this.grdTags.TabIndex = 26;
-            this.grdTags.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grd_CellChanges);
+            this.grdTags.CurrentCellDirtyStateChanged += new System.EventHandler(this.grd_CellChanges);
             // 
             // dataGridViewTextBoxColumn6
             // 
@@ -826,7 +828,7 @@
             this.grdGenres.RowsDefaultCellStyle = dataGridViewCellStyle8;
             this.grdGenres.Size = new System.Drawing.Size(454, 91);
             this.grdGenres.TabIndex = 24;
-            this.grdGenres.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grd_CellChanges);
+            this.grdGenres.CurrentCellDirtyStateChanged += new System.EventHandler(this.grd_CellChanges);
             // 
             // dataGridViewTextBoxColumn3
             // 
