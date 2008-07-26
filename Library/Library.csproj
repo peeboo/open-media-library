@@ -112,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\Focus_Outline.png" />
+    <Content Include="Markup\About.mcml" />
     <Content Include="Markup\Base\Animations.mcml" />
     <Content Include="Markup\Base\Base.mcml" />
     <Content Include="Markup\Base\Colors.mcml" />
