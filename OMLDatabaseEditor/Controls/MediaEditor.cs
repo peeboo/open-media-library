@@ -382,7 +382,7 @@ namespace OMLDatabaseEditor.Controls
                             GraphicsUnit pageUnit = new GraphicsUnit();
                             g.DrawImage(bmp1, bmp2.GetBounds(ref pageUnit));
 
-
+                            g.Dispose();
                             return bmp2;
                         }
                     }

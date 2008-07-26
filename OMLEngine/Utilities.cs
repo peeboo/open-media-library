@@ -415,6 +415,8 @@ namespace OMLEngine
                                    new Rectangle(0, 0, outputWidth, outputHeight),
                                    new Rectangle(0, 0, img.Width, img.Height),
                                    GraphicsUnit.Pixel);
+
+                graphics.Dispose();
             }
 
             return outputImage;
