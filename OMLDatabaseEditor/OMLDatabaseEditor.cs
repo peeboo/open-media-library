@@ -323,9 +323,6 @@ namespace OMLDatabaseEditor
             p.Controls.Add(Editor);
 
             newpage.Controls.Add(p);
-            //newpage.Size = new System.Drawing.Size(620, 772);
-            //newpage.Margin = new System.Windows.Forms.Padding(0);
-            //newpage.Padding = new System.Windows.Forms.Padding(0);
             newpage.Tag = Editor;
 
             tabsMediaPanel.TabPages.Add(newpage);
@@ -353,8 +350,6 @@ namespace OMLDatabaseEditor
                 {
 
                     // Select the node the user has clicked.
-                    // The node appears selected until the menu is displayed on the screen.
-                    m_OldSelectNode = tvSourceList.SelectedNode;
                     tvSourceList.SelectedNode = node;
 
                     // Find the appropriate ContextMenu depending on the selected node.
@@ -364,10 +359,6 @@ namespace OMLDatabaseEditor
                             MenuStripTitle.Show(tvSourceList, p);
                             break;
                     }
-
-                    // Highlight the sel`ected node.
-                    tvSourceList.SelectedNode = m_OldSelectNode;
-                    m_OldSelectNode = null;
                 }
             }
         }

@@ -118,6 +118,29 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="textBoxDescription.Text" xml:space="preserve">
-    <value>Finally, an open source solution for viewing and organizing your dvd library with Vista media center. This add-in allows users to browse their movie library all in one location. The titles have associated actor, producers, summaries, runtime displayed. The main layout of the project was designed to work through an extender such as the xbox360. </value>
+    <value>Development Team:
+KingManon - Project Manager
+Translucent - Senior Developer
+Taranu - Senior Developer
+eck brian "dbldown768" - Originator &amp; Developer
+Thom "Bermuda" Lamb - Developer
+docmattman - Developer
+ntlord - Developer
+poweredbyporkers - Developer
+PeteT - Developer
+STReNT - Developer
+Warren - Slacker
+
+Companies and Individuals:
+Microsoft Corporation - For creating the BEST looking Media Center application on the market today.
+Niveus Media, Inc - For creating a cool movie plugin
+Stephen Toub - Thanks for DVR-MS Metadata editor tool
+Invelos Software - Thanks for DVD Profiler license
+Collectorz.com - Thanks for Movie Collectorz license
+Code|Aero Technologies (License of Movie Label 2K9)
+
+Special Thanks to:
+mikinho, jusbo, jafterdark, ppitkin, mjw, Olcay Buyan, Jas Manghera (for their MCML Samples)
+and many others that we have missed, sorry we missed you but thanks for your support</value>
   </data>
 </root>
