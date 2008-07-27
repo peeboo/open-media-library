@@ -257,7 +257,7 @@ namespace Library
             _filters.Add(Filter.Director, new Filter(Filter.Director, this, Properties.Settings.Default.DirectorView, true, Properties.Settings.Default.DirectorSort));
             _filters.Add(Filter.Genres, new Filter(Filter.Genres, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.GenreSort));
             _filters.Add(Filter.Year, new Filter(Filter.Year, this, Properties.Settings.Default.YearView, true, Properties.Settings.Default.YearSort));
-            _filters.Add(Filter.DateAdded, new Filter(Filter.DateAdded, this, Properties.Settings.Default.DateAddedView, true, Properties.Settings.Default.DateAddedSort));
+            _filters.Add(Filter.DateAdded, new Filter(Filter.DateAdded, this, Properties.Settings.Default.DateAddedView, false, Properties.Settings.Default.DateAddedSort));
             _filters.Add(Filter.Runtime, new Filter(Filter.Runtime, this, GalleryView.List, false, String.Empty));
             _filters.Add(Filter.UserRating, new Filter(Filter.UserRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.UserRatingSort));
             _filters.Add(Filter.VideoFormat, new Filter(Filter.VideoFormat, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
@@ -355,7 +355,7 @@ namespace Library
             }
 
             Filters[Filter.Year].AddMovie(Convert.ToString(title.ReleaseDate.Year), movie);
-            Filters[Filter.DateAdded].AddMovie(title.DateAdded.ToShortDateString(), movie);
+            AddDateAddedFilter(movie);
             Filters[Filter.UserRating].AddMovie(((double)title.UserStarRating/10).ToString("0.0"), movie);
             if (title.Disks.Count > 0)
                 Filters[Filter.VideoFormat].AddMovie(title.Disks[0].Format.ToString(), movie);  //Should really do this independently for each disk, but for now, this should be fine
@@ -371,57 +371,83 @@ namespace Library
             AddRuntimeFilter(movie);
         }
 
+        private void AddDateAddedFilter( MovieItem movie )
+        {
+            Filters[Filter.DateAdded].AddItem("Today");
+            Filters[Filter.DateAdded].AddItem("Yesterday");
+            Filters[Filter.DateAdded].AddItem("Within Last Week");
+            Filters[Filter.DateAdded].AddItem("Within Last 2 Weeks");
+            Filters[Filter.DateAdded].AddItem("Within Last Month");
+            Filters[Filter.DateAdded].AddItem("Within Last 3 Months");
+            Filters[Filter.DateAdded].AddItem("Within Last 6 Months");
+            Filters[Filter.DateAdded].AddItem("Within Last Year");
+            Filters[Filter.DateAdded].AddItem("More Than 1 Year");
+
+            DateTime today = DateTime.Today;
+            DateTime d = new DateTime(movie.TitleObject.DateAdded.Year, movie.TitleObject.DateAdded.Month, movie.TitleObject.DateAdded.Day);
+            
+            int days = (today - d).Days;
+
+            if (days == 0) Filters[Filter.DateAdded].AddMovie("Today", movie);
+            if( days == 1) Filters[Filter.DateAdded].AddMovie("Yesterday", movie);
+            if (days <= 7) Filters[Filter.DateAdded].AddMovie("Within Last Week", movie);
+            if (days <= 14) Filters[Filter.DateAdded].AddMovie("Within Last 2 Weeks", movie);
+            if (days <= 31) Filters[Filter.DateAdded].AddMovie("Within Last Month", movie);
+            if (days <= 92) Filters[Filter.DateAdded].AddMovie("Within Last 3 Months", movie);
+            if (days <= 184) Filters[Filter.DateAdded].AddMovie("Within Last 6 Months", movie);
+            if (days <= 365) Filters[Filter.DateAdded].AddMovie("Within Last Year", movie);
+            if (days > 365) Filters[Filter.DateAdded].AddMovie("More Than 1 Year", movie);
+
+        }
+
         private void AddRuntimeFilter( MovieItem movie)
         {
             //TODO: make this configurable
-            Filters[Filter.Runtime].AddItem("1 to 15 minutes");
-            Filters[Filter.Runtime].AddItem("15 to 30 minutes");
-            Filters[Filter.Runtime].AddItem("30 to 45 minutes");
-            Filters[Filter.Runtime].AddItem("45 minutes to 1 hour");
-            Filters[Filter.Runtime].AddItem("1 hour to 1.5 hours");
-            Filters[Filter.Runtime].AddItem("1.5 hours to 2 hours");
-            Filters[Filter.Runtime].AddItem("2 hours to 2.5 hours");
-            Filters[Filter.Runtime].AddItem("2.5 hours to 3 hours");
+            Filters[Filter.Runtime].AddItem("30 minutes or less");
+            Filters[Filter.Runtime].AddItem("1 hour or less");
+            Filters[Filter.Runtime].AddItem("1.5 hours or less");
+            Filters[Filter.Runtime].AddItem("2 hours or less");
+            Filters[Filter.Runtime].AddItem("2.5 hours or less");
+            Filters[Filter.Runtime].AddItem("3 hours or less");
             Filters[Filter.Runtime].AddItem("Over 3 hours");
-            Filters[Filter.Runtime].AddItem("Unavailable");
+            Filters[Filter.Runtime].AddItem("Unknown duration");
 
             Title title = movie.TitleObject;
 
             if (title.Runtime < 1)
             {
-                Filters[Filter.Runtime].AddMovie("Unavailable", movie);
+                Filters[Filter.Runtime].AddMovie("Unknown duration", movie);
+                return;
             }
-            else if (title.Runtime <= 15)
+
+            if (title.Runtime <= 30)
             {
-                Filters[Filter.Runtime].AddMovie("1 to 15 minutes", movie);
+                Filters[Filter.Runtime].AddMovie("30 minutes or less", movie);
             }
-            else if (title.Runtime <= 30)
+
+            if (title.Runtime <= 60)
             {
-                Filters[Filter.Runtime].AddMovie("16 to 30 minutes", movie);
+                Filters[Filter.Runtime].AddMovie("1 hour or less", movie);
             }
-            else if (title.Runtime <= 45)
+            
+            if (title.Runtime <= 90)
             {
-                Filters[Filter.Runtime].AddMovie("30 to 45 minutes", movie);
+                Filters[Filter.Runtime].AddMovie("1.5 hours or less", movie);
             }
-            else if (title.Runtime <= 60)
+            
+            if (title.Runtime <= 120)
             {
-                Filters[Filter.Runtime].AddMovie("45 minutes to 1 hour", movie);
+                Filters[Filter.Runtime].AddMovie("2 hours or less", movie);
             }
-            else if (title.Runtime <= 90)
+            
+            if (title.Runtime <= 150)
             {
-                Filters[Filter.Runtime].AddMovie("1 hour to 1.5 hours", movie);
+                Filters[Filter.Runtime].AddMovie("2.5 hours or less", movie);
             }
-            else if (title.Runtime <= 120)
+            
+            if (title.Runtime <= 180)
             {
-                Filters[Filter.Runtime].AddMovie("1.5 hours to 2 hours", movie);
-            }
-            else if (title.Runtime <= 150)
-            {
-                Filters[Filter.Runtime].AddMovie("2 hours to 2.5 hours", movie);
-            }
-            else if (title.Runtime <= 180)
-            {
-                Filters[Filter.Runtime].AddMovie("2.5 hours to 3 hours", movie);
+                Filters[Filter.Runtime].AddMovie("3 hours or less", movie);
             }
             else
             {
