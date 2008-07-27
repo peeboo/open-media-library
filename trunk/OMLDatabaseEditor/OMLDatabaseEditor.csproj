@@ -12,8 +12,7 @@
     <AssemblyName>OMLDatabaseEditor</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Application.ico</ApplicationIcon>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -148,18 +147,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\document-new.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\document-save.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\document-new1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\document-save1.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\saveHS.bmp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,11 +156,7 @@
     <None Include="Resources\ClosePreviewHS.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Web_Globe.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="library.snk" />
-    <None Include="Resources\1403_Globe.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
@@ -193,6 +176,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Application.ico" />
     <Content Include="Resources\Application.png" />
     <None Include="Resources\SaveAllHS.bmp" />
   </ItemGroup>
