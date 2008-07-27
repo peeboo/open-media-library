@@ -21,25 +21,6 @@
     </Properties>
 
     <Locals>
-      <!--<ShortcutHandler Name="PlayHandler" Shortcut="Play"/>-->
-
-      <!-- AddInHost is where all Windows Media Center-specific services start -->
-      <!-- from. It must appear in the Locals section of a markup file.        -->
-      <!--<addin:AddInHost Name="AddInHost"/>-->
-      <!-- The ScrollingHandler which reacts to user keyboard input. -->
-      <!-- Turn on handing of arrow keys for scrolling (not on by    -->
-      <!-- default).                                                 -->
-      <!-- NOTE: HandlerStage must be "Direct" (which is default).   -->
-      <!--<ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true"/>-->
-
-      <!-- ScrollingData contains many ways to customize how scrolling -->
-      <!-- should behave. It has methods to change the current scroll  -->
-      <!-- position and it also reports the position. In this case,    -->
-      <!-- the default values are used for the sample.                 -->
-      <!--<ScrollingData Name="ScrollingData"/>-->
-
-      <!--<Command Name="PlayMovieCommand" Description="Play Movie"/>-->
-
       <AnchorEdge Name="ImageLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "[UISettings.Anchor.DetailsLeftOffset]" Id="Parent"/>
       <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "400" Id="Parent"/>
       <AnchorEdge Name="DetailsRightAnchor" Percent="[UISettings.Anchor.DetailsRightAnchor]" Id="Parent"/>
@@ -51,36 +32,7 @@
     </Locals>
 
     <Rules>
-      <!-- Give ScrollingData to ScrollingHandler. -->
-      <!--<Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>-->
       <Default Target="[Input.KeyInteractive]" Value="true"/>
-
-      <!--<Changed Source="[PlayMovieCommand.Invoked]">
-        <Actions>
-          <Invoke Target ="[DetailsPage.PlayMovie]"/>
-        </Actions>
-      </Changed>-->
-
-      <!--<Changed Source="[DetailsPage.ShowDisks]">
-        <Actions>
-          <DebugTrace Message="Got Show Disks Event, Changing Visibility and Play Movie Text."/>
-          <Set Target="[DVDButtons.Visible]" Value="true"></Set>
-          <Set Target="[SubDetails.Visible]" Value="false"></Set>
-          <Set Target="[DetailsPage.PlayMovieCommandText]" Value="Show Details"></Set>
-          <Set Target="[PlayMovie.Text]" Value="Show Details"></Set>
-        </Actions>
-      </Changed>
-
-      <Changed Source="[DetailsPage.HideDisks]">
-        <Actions>
-          <DebugTrace Message="Got Hide Disks Event, Changing Visibility and Play Movie Text."/>
-          <Set Target="[DVDButtons.Visible]" Value="false"></Set>
-          <Set Target="[SubDetails.Visible]" Value="true"></Set>
-          <Set Target="[DetailsPage.PlayMovieCommandText]" Value="Show Discs"></Set>
-          <Set Target="[PlayMovie.Text]" Value="Show Discs"></Set>
-        </Actions>
-      </Changed>-->
-
 
     </Rules>
 
@@ -104,11 +56,6 @@
               </Clip>
             </Children>
           </Panel>
-          <!--<c:SimpleButton Name="PlayMovie" Command="[PlayMovieCommand]" Text="[DetailsPage.PlayMovieCommandText]" >
-            <LayoutInput>
-              <FormLayoutInput Left = "Image,1.02" Top="[TitleTopAnchor]"/>
-            </LayoutInput>
-          </c:SimpleButton>-->
 
 
           <Panel Name ="DVDButtons">
@@ -179,7 +126,6 @@
                 </Children>
               </Panel>
 
-              <!--<me:TextWithLabel Label="Path: " Text="[DetailsPage.MovieDetails.TitleObject.FileLocation]" />-->
               <me:TextWithLabel Label="Sound : " Text="[DetailsPage.LanguagesAsString]" />
               <me:TextWithLabel Label="SubTitles : " Text="[DetailsPage.SubtitlesAsString]" />
               <me:TextWithLabel Label="Synopsis: " Text=" " />
@@ -374,7 +320,7 @@
         <Children>
           <Repeater Name="DiskRepeater" Source="[DiskListChoice.Options]">
             <Layout>
-              <FlowLayout Orientation="Horizontal" Spacing="2,0"/>
+              <FlowLayout Orientation="Vertical" Spacing="2,0"/>
             </Layout>
 
             <Content>
