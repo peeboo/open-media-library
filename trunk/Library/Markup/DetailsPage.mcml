@@ -308,6 +308,22 @@
       <ScrollingHandler Name="ScrollingHandler" />
       <ScrollingData Name="ScrollingData" />
       <MouseWheelHandler Name="WheelHandler"/>
+
+      <GridLayout Name="ListLayout" Repeat="WhenTooBig"
+                  AllowWrap="true"
+                  Orientation="Horizontal"
+                  Spacing="10,10"
+                  />
+
+      <!--<GridLayout Name="ListLayout" Repeat="WhenTooBig"
+                  Rows="2"
+                  Orientation="Vertical"
+                  AllowWrap="true"
+                  ReferenceSize="200,40"
+                  Spacing="20,20"
+                  RepeatGap="100"/>-->
+
+
     </Locals>
 
     <Rules>
@@ -318,10 +334,10 @@
     <Content>
       <Panel Layout="VerticalFlow">
         <Children>
-          <Repeater Name="DiskRepeater" Source="[DiskListChoice.Options]">
-            <Layout>
+          <Repeater Name="DiskRepeater" Source="[DiskListChoice.Options]" Layout="[ListLayout]" Navigation="FlowVertical">
+            <!--<Layout>
               <FlowLayout Orientation="Vertical" Spacing="2,0"/>
-            </Layout>
+            </Layout>-->
 
             <Content>
               <me:ShowDisc DetailsPage="[DetailsPage]" Index="[RepeatedItemIndex]" DiscName="[RepeatedItem!a:DiskWrapper.ToString]" />
