@@ -4,14 +4,17 @@
   <Movie IsUpdated="0">
     <Title>12 Monkeys</Title>
     <SortAs>Twelve Monkeys</SortAs>
-    <Location>M:\Videos\12 Monkeys.dvr-ms</Location>
+    <Disks>
+      <Disk id="1">
+        <Location>M:\Videos\12 Monkeys.dvr-ms</Location>
+        <Format IsType="DVRMS" />
+      </Disk>
+    </Disks>
+    <Location></Location>
     <Cover>
       <Front>M:\DVDCovers\12 Monkeys_front.jpg</Front>
       <Back>M:\DVDCovers\12 Monkeys_back.jpg</Back>
     </Cover>
-    <Format>
-      <DVRMS>1</DVRMS>
-    </Format>
     <Aspect>
       <Widescreen>1</Widescreen>
     </Aspect>
@@ -42,16 +45,29 @@
   </Movie>
   <Movie IsUpdated="1">
     <Title>Firefly</Title>
-    <SubTitle>Serenity - Part 1 &amp; 2</SubTitle>
+    <SubTitle>Disk 1</SubTitle>
     <SortAs>Firefly 01</SortAs>
-    <Location>M:\Videos\Firefly\Disk1_01.dvrms</Location>
+    <Disks>
+      <Disk id="1">
+        <Name>Episode 1 - Senerity 1 &amp; 2</Name>
+        <Location>M:\Videos\Firefly\Disk1_01.dvrms</Location>
+        <Format IsType="DVRMS" />
+      </Disk>
+      <Disk id="2">
+        <Name>Episode 2 - The Train Job</Name>
+        <Location>M:\Videos\Firefly\Disk1_02.dvrms</Location>
+        <Format IsType="DVRMS" />
+      </Disk>
+      <Disk id="2">
+        <Name>Episode 3 - Bushwacked</Name>
+        <Location>M:\Videos\Firefly\Disk1_03.dvrms</Location>
+        <Format IsType="DVRMS" />
+      </Disk>
+    </Disks>
     <Cover>
       <Front>M:\DVDCovers\Firefly_Disk1_front.jpg</Front>
       <Back>M:\DVDCovers\Filefly_Disk1_back.jpg</Back>
     </Cover>
-    <Format>
-      <DVRMS>1</DVRMS>
-    </Format>
     <Aspect>
       <Widescreen>1</Widescreen>
     </Aspect>
