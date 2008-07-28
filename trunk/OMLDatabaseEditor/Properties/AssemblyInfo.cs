@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Open Media Library")]
 [assembly: AssemblyDescription("Finally, an open source solution for viewing and organizing your dvd library with Vista media center. This add-in allows users to browse their movie library all in one location. The titles have associated actor, producers, summaries, runtime displayed. The main layout of the project was designed to work through an extender such as the xbox360. ")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("OpenMediaLibrary Development Team")]
 [assembly: AssemblyProduct("Open Media Library")]
 [assembly: AssemblyCopyright("Copyright © 2008, GNU General Public License v3")]
 [assembly: AssemblyTrademark("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.1.*")]
+[assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("OMLTestSuite")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("OpenMediaLibrary Development Team")]
 [assembly: AssemblyProduct("OMLTestSuite")]
-[assembly: AssemblyCopyright("Copyright ©  2008")]
+[assembly: AssemblyCopyright("Copyright © 2008, GNU General Public License v3")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

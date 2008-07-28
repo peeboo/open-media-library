@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("OpenMediaLibrary Development Team")]
 [assembly: AssemblyProduct("Open Media Library")]
-[assembly: AssemblyCopyright("Copyright ©  2008")]
+[assembly: AssemblyCopyright("Copyright © 2008, GNU General Public License v3")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
