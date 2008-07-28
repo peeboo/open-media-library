@@ -281,19 +281,31 @@ namespace Library
 
         public void AddCurrentTitle()
         {
-            TotalTitlesAdded++;
-            OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.InternalItemID);
-            OMLPlugin.BuildResizedMenuImage(CurrentTitle);
-            _titleCollection.Add(CurrentTitle);
-            if (TotalTitlesFound > CurrentTitleIndex + 1)
+            if (_titleCollection.ContainsDisks(CurrentTitle.Disks))
             {
-                CurrentTitleIndex++;
-                CurrentTitle = _titles[CurrentTitleIndex];
+                OMLApplication.DebugLine("[Setup UI] Skipping title: " + CurrentTitle.Name + " because already in the collection");
+                AddInHost.Current.MediaCenterEnvironment.Dialog(CurrentTitle.Name + " was found to already exist in your database and has been skipped.",
+                                                                "Skipped Title",
+                                                                DialogButtons.Ok,
+                                                                2,
+                                                                false);
+                TotalTitlesSkipped++;
             }
             else
             {
-                AllTitlesProcessed = true;
+                OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.InternalItemID);
+                OMLPlugin.BuildResizedMenuImage(CurrentTitle);
+                _titleCollection.Add(CurrentTitle);
+                TotalTitlesAdded++;
             }
+            CurrentTitleIndex++;
+
+            if (TotalTitlesFound > CurrentTitleIndex)
+            {
+                CurrentTitle = _titles[CurrentTitleIndex];
+            }
+            else
+                AllTitlesProcessed = true;
         }
 
         public void Reset()
@@ -328,14 +340,28 @@ namespace Library
         {
             OMLApplication.DebugLine("[Setup] AddingAllCurrentTitles Started");
             AddingAllStarted = true;
-            foreach (Title title in _titles)
+            for (CurrentTitleIndex = CurrentTitleIndex; TotalTitlesFound > CurrentTitleIndex; CurrentTitleIndex++)
             {
-                OMLApplication.DebugLine("[Setup UI] Adding title: " + title.InternalItemID);
-                OMLPlugin.BuildResizedMenuImage(title);
-                _titleCollection.Add(title);
-
-                _currentTitleIndex++;
-                _TotalTitlesAdded++;
+                CurrentTitle = _titles[CurrentTitleIndex];
+                if (_titleCollection.ContainsDisks(CurrentTitle.Disks))
+                {
+                    OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.InternalItemID);
+                    OMLPlugin.BuildResizedMenuImage(CurrentTitle);
+                    _titleCollection.Add(CurrentTitle);
+                    TotalTitlesAdded++;
+                }
+                else
+                {
+                    OMLApplication.DebugLine("[Setup UI] Skipping title: " + CurrentTitle.Name + " because already in the collection");
+                    /*
+                    AddInHost.Current.MediaCenterEnvironment.Dialog(CurrentTitle.Name + " was found to already exist in your database and has been skipped.",
+                                                                    "Skipped Title",
+                                                                    DialogButtons.Ok,
+                                                                    2,
+                                                                    false);
+                    */
+                    TotalTitlesSkipped++;
+                }
             }
         }
 
