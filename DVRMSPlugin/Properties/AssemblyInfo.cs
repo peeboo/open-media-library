@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DVRMSPlugin")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("XML data importer for OML")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DVRMSPlugin")]
-[assembly: AssemblyCopyright("Copyright © 2008")]
+[assembly: AssemblyCompany("OpenMediaLibrary Development Team")]
+[assembly: AssemblyProduct("DVRMSPlugin Importer for OML")]
+[assembly: AssemblyCopyright("Copyright © 2008, GNU General Public License v3")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
