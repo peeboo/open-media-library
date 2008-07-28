@@ -279,12 +279,12 @@
                                             <Text Content="No titles were found, please go back and try again." WordWrap="true" Font="Calibri, 20" Color="LightBlue" />
                                         </Children>
                                     </Panel>
-                                    <Panel Layout="HorizontalFlow">
+                                    <Panel Layout="VerticalFlow">
                                         <Children>
-                                            <c:SimpleButton Name="loadingTitlesButton" Command="[BeginLoadingCommand]" Text="Start Loading"/>
-                                            <c:SimpleButton Name="AddTitleButton" Command="[AddTitleButtonCommand]" Text="Add Movie" Visible="false"/>
-                                            <c:SimpleButton Name="AddAllTitleButton" Command="[AddAllTitleButtonCommand]" Text="Add All Movies" Visible="false"/>
-                                            <c:SimpleButton Name="SkipTitleButton" Command="[SkipTitleButtonCommand]" Text="Skip This Movie" Visible="false"/>
+                                            <c:SimpleButton Name="loadingTitlesButton" Command="[BeginLoadingCommand]" Text="Start Loading" Margins="0,50,0,5"/>
+                                            <c:SimpleButton Name="AddTitleButton" Command="[AddTitleButtonCommand]" Text="Add Movie" Visible="false" Margins="0,0,0,5"/>
+                                            <c:SimpleButton Name="AddAllTitleButton" Command="[AddAllTitleButtonCommand]" Text="Add All Movies" Visible="false" Margins="0,0,0,5"/>
+                                            <c:SimpleButton Name="SkipTitleButton" Command="[SkipTitleButtonCommand]" Text="Skip This Movie" Visible="false" Margins="0,0,0,5"/>
                                         </Children>
                                     </Panel>
                                 </Children>
