@@ -6,7 +6,7 @@
       <Value Profile="(Default)">C:\Program Files\DAEMON Tools Lite\daemon.exe</Value>
     </Setting>
     <Setting Name="VirtualDiscDrive" Type="System.String" Scope="User">
-      <Value Profile="(Default)">G</Value>
+      <Value Profile="(Default)">M</Value>
     </Setting>
     <Setting Name="VirtualDiscDriveNumber" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>

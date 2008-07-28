@@ -5,15 +5,18 @@ using System.Text;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Reflection;
-
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
+using System.IO;
 
 namespace OMLEngine
 {
     [Serializable()]
-    public class Title : IComparable, ISerializable
+    [XmlRootAttribute("OMLTitle", Namespace = "http://www.openmedialibrary.org/", IsNullable = false)]
+    public class Title : IComparable, ISerializable, IXmlSerializable
     {
         #region locals
         private int _watchedCount;
@@ -783,6 +786,163 @@ namespace OMLEngine
             return Name.CompareTo(
                 ((Title)other).Name
                 );
+        }
+
+        public bool SerializeToXMLFile(string fileName)
+        {
+            try
+            {
+                XmlSerializer mySerializer = new XmlSerializer(typeof(Title));
+                StreamWriter myWriter = new StreamWriter(fileName);
+                mySerializer.Serialize(myWriter, this);
+                myWriter.Close();
+                return true;
+            }
+            catch( Exception ex)
+            {
+                return false;
+            }
+        }
+        public void ReadXml(System.Xml.XmlReader reader)
+        {
+        }
+
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+
+        public void WriteXml(System.Xml.XmlWriter writer)
+        {
+            writer.WriteElementString("Name", Name);
+
+            // the reader should verify that this exists and if doesn't it should
+            // just use folder.jpg in the same folder
+            writer.WriteElementString("FrontCoverPath", FrontCoverPath);
+            
+            // this will be created when imported
+            //writer.WriteElementString("FrontCoverMenuPath", FrontCoverMenuPath);
+
+            // should be relative path so it can be loaded on any computer
+            writer.WriteStartElement("Disks");
+            foreach (Disk disk in Disks)
+            {
+                writer.WriteStartElement("Disk");
+                writer.WriteAttributeString("Name", disk.Name);
+
+                // the xml file should be in the same dir as the movie
+                string dirName = Path.GetDirectoryName(disk.Path);
+                string relativeDir = disk.Path.Replace(dirName, ".");
+                writer.WriteElementString("Path", relativeDir);
+                writer.WriteElementString("Format", disk.Format.ToString());
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+         
+            writer.WriteElementString("VideoFormat", _videoFormat.ToString());
+            //writer.WriteElementString("TranscodeToExtender", _needsTranscode.ToString());
+            
+            writer.WriteElementString("Synopsis", _synopsis);
+            writer.WriteElementString("Studio", _studio);
+            writer.WriteElementString("Country", _countryOfOrigin);
+            writer.WriteElementString("OfficialWebSiteURL", _officialWebsiteURL);
+            
+            writer.WriteElementString("Runtime", _runtime.ToString());
+            writer.WriteElementString("ParentalRating", _parentalRating);
+            writer.WriteElementString("ParentalRatingReason", _parentalRatingReason);
+            writer.WriteElementString("ReleaseDate", _releaseDate.ToString());
+            
+            //writer.WriteElementString("producers", _producers);
+            
+            writer.WriteStartElement("Genres");
+            foreach (string genre in Genres)
+            {
+                writer.WriteElementString("Genre", genre);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("Writers");
+            foreach (Person w in Writers)
+            {
+                writer.WriteElementString("Writer", w.full_name);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("Directors");
+            foreach (Person director in Directors)
+            {
+                writer.WriteElementString("Director", director.full_name);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("AudioTracks");
+            foreach (string languageFormat in AudioTracks)
+            {
+                writer.WriteElementString("AudioTrack", languageFormat);
+            }
+            writer.WriteEndElement();
+
+
+            writer.WriteElementString("UserRating", _userStarRating.ToString());
+            writer.WriteElementString("AspectRatio", _aspectRatio.ToString());
+            writer.WriteElementString("VideoStandard", _videoStandard);
+            
+            writer.WriteElementString("OriginalName", _originalName);
+
+            writer.WriteStartElement("ActingRoles");
+            foreach (KeyValuePair<string,string> actingRole in ActingRoles)
+            {
+                writer.WriteStartElement("Actor");
+                writer.WriteAttributeString("Name", actingRole.Key);
+                writer.WriteAttributeString("Role", actingRole.Value);
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("NonActingRoles");
+            foreach (KeyValuePair<string, string> actingRole in NonActingRoles)
+            {
+                writer.WriteStartElement("Person");
+                writer.WriteAttributeString("Name", actingRole.Key);
+                writer.WriteAttributeString("Role", actingRole.Value);
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+
+
+            writer.WriteStartElement("Tags");
+            foreach (string tag in Tags)
+            {
+                writer.WriteElementString("Tag", tag);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("Subtitles");
+            foreach (string sub in Subtitles)
+            {
+                writer.WriteElementString("Subtitle", sub);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("CustomFields");
+            foreach (KeyValuePair<string,string> field in AdditionalFields)
+            {
+                writer.WriteElementString("CustomField", field.Key);
+                writer.WriteAttributeString("Value", field.Key);
+            }
+            writer.WriteEndElement();
+
+            //writer.WriteElementString("photos", _photos);
+            //writer.WriteElementString("trailers", _trailers);
+
+            writer.WriteElementString("SortName", _sortName);
+            
+            writer.WriteElementString("VideoDetails", _videoDetails);
+            
+            writer.WriteElementString("VideoResolution", _videoResolution);
+            //writer.WriteElementString("ExtraFeatures", _extraFeatures);
+
         }
     }
 }
