@@ -538,6 +538,31 @@ namespace OMLDatabaseEditor
         //        tb.ClearUndo();
             }
 
+        private void saveToXMLFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.tabsMediaPanel.SelectedTab != null)
+            {
+                Controls.MediaEditor _currentEditor = (Controls.MediaEditor)this.tabsMediaPanel.SelectedTab.Controls[0].Controls[0];
+                Title _currentTitle = (Title)_titleCollection.MoviesByItemId[_currentEditor.itemID];
+
+                if (_currentTitle.Disks.Count > 0)
+                {
+                    Disk firstDisc = _currentTitle.Disks[0];
+                    string dirName = Path.GetDirectoryName(firstDisc.Path);
+                    string fileName = dirName + "\\" + Path.GetRandomFileName() + ".oml.xml";
+                    _currentTitle.SerializeToXMLFile(fileName);
+                }
+                else
+                {
+                    // prompt where to save the movie information
+                }
+
+                //_currentEditor.SaveToTitle(_currentTitle);
+                //SaveTitleChangesToDB(_currentTitle);
+            }
+
+        }
+
         //}
 
         ////private Control GetControl()
