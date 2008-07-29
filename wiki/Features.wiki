@@ -37,6 +37,7 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
 == Top Requests from 0.1b ==
   * Nicer/Better quality thumbnails on menu page
   * Folder view option
+  * Recursive folder support for mymovies.xml files
 
   * (ON HOLD) Support for Blu-Ray/HD-DVD (50% Complete)
   * (ON HOLD) Movie bookmark features (20% Complete)
