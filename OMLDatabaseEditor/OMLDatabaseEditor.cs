@@ -273,6 +273,7 @@ namespace OMLDatabaseEditor
                     }
                     else
                     {
+                        OMLPlugin.BuildResizedMenuImage(t);
                         _titleCollection.Add(t);
                         numberOfTitlesAdded++;
                         tvSourceList_AddItem(t.Name, t.InternalItemID.ToString(), "Movies");

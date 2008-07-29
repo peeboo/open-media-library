@@ -35,7 +35,10 @@
             this.button1 = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.chkFile = new System.Windows.Forms.CheckBox();
+            this.cbxVideoFormat = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.rbFile = new System.Windows.Forms.RadioButton();
+            this.rbFolder = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // label1
@@ -82,7 +85,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(224, 111);
+            this.btnCancel.Location = new System.Drawing.Point(160, 143);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 5;
@@ -92,7 +95,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(143, 111);
+            this.btnOK.Location = new System.Drawing.Point(79, 143);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 6;
@@ -100,22 +103,55 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // chkFile
+            // cbxVideoFormat
             // 
-            this.chkFile.AutoSize = true;
-            this.chkFile.Location = new System.Drawing.Point(16, 115);
-            this.chkFile.Name = "chkFile";
-            this.chkFile.Size = new System.Drawing.Size(42, 17);
-            this.chkFile.TabIndex = 7;
-            this.chkFile.Text = "File";
-            this.chkFile.UseVisualStyleBackColor = true;
+            this.cbxVideoFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxVideoFormat.FormattingEnabled = true;
+            this.cbxVideoFormat.Location = new System.Drawing.Point(232, 103);
+            this.cbxVideoFormat.Name = "cbxVideoFormat";
+            this.cbxVideoFormat.Size = new System.Drawing.Size(69, 21);
+            this.cbxVideoFormat.TabIndex = 7;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(157, 109);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(72, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Video Format:";
+            // 
+            // rbFile
+            // 
+            this.rbFile.AutoSize = true;
+            this.rbFile.Checked = true;
+            this.rbFile.Location = new System.Drawing.Point(16, 107);
+            this.rbFile.Name = "rbFile";
+            this.rbFile.Size = new System.Drawing.Size(41, 17);
+            this.rbFile.TabIndex = 9;
+            this.rbFile.TabStop = true;
+            this.rbFile.Text = "File";
+            this.rbFile.UseVisualStyleBackColor = true;
+            // 
+            // rbFolder
+            // 
+            this.rbFolder.AutoSize = true;
+            this.rbFolder.Location = new System.Drawing.Point(64, 107);
+            this.rbFolder.Name = "rbFolder";
+            this.rbFolder.Size = new System.Drawing.Size(54, 17);
+            this.rbFolder.TabIndex = 10;
+            this.rbFolder.Text = "Folder";
+            this.rbFolder.UseVisualStyleBackColor = true;
             // 
             // DiskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(311, 146);
-            this.Controls.Add(this.chkFile);
+            this.ClientSize = new System.Drawing.Size(314, 178);
+            this.Controls.Add(this.rbFolder);
+            this.Controls.Add(this.rbFile);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.cbxVideoFormat);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.button1);
@@ -140,6 +176,9 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
-        public System.Windows.Forms.CheckBox chkFile;
+        private System.Windows.Forms.ComboBox cbxVideoFormat;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.RadioButton rbFile;
+        private System.Windows.Forms.RadioButton rbFolder;
     }
 }
