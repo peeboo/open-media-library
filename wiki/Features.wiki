@@ -34,6 +34,10 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (*DONE*) UI based setup (importers, daemontools settings, etc)
   * (*DONE*) Metadata editor
 
+== Top Requests from 0.1b ==
+  * Nicer/Better quality thumbnails on menu page
+  * Folder view option
+
   * (ON HOLD) Support for Blu-Ray/HD-DVD (50% Complete)
   * (ON HOLD) Movie bookmark features (20% Complete)
   * (ON HOLD) Movie trailer support (80% Complete)
