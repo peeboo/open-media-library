@@ -31,9 +31,8 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (*DONE*) Support for Blu-Ray/HD-DVD ISO files
   * (*DONE*) Triple tap: jumping to movie by using letters on remote control
   * (*DONE*) Filter by genre, rating, date, runtime, year etc
-
-  * (_IN DEVELOPMENT_) UI based setup (importers, daemontools settings, etc) (98% Complete)
-  * (_IN DEVELOPMENT_) Metadata editor (95% Complete)
+  * (*DONE*) UI based setup (importers, daemontools settings, etc)
+  * (*DONE*) Metadata editor
 
   * (ON HOLD) Support for Blu-Ray/HD-DVD (50% Complete)
   * (ON HOLD) Movie bookmark features (20% Complete)
