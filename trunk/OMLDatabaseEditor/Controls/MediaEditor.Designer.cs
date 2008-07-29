@@ -356,6 +356,7 @@
             this.label7.Size = new System.Drawing.Size(69, 12);
             this.label7.TabIndex = 45;
             this.label7.Text = "Video Format";
+            this.label7.Visible = false;
             // 
             // tabControl2
             // 
@@ -517,6 +518,7 @@
             this.cbVideoFormat.Name = "cbVideoFormat";
             this.cbVideoFormat.Size = new System.Drawing.Size(111, 20);
             this.cbVideoFormat.TabIndex = 49;
+            this.cbVideoFormat.Visible = false;
             this.cbVideoFormat.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // grpFileDetails
@@ -1162,7 +1164,7 @@
             this.tbBackCover.Name = "tbBackCover";
             this.tbBackCover.Size = new System.Drawing.Size(115, 21);
             this.tbBackCover.TabIndex = 20;
-            this.tbBackCover.TextChanged += new System.EventHandler(this.TitleChanges);
+            this.tbBackCover.TextChanged += new System.EventHandler(this.tbFrontCover_TextChanged);
             // 
             // button2
             // 
@@ -1193,7 +1195,7 @@
             this.tbFrontCover.Name = "tbFrontCover";
             this.tbFrontCover.Size = new System.Drawing.Size(115, 21);
             this.tbFrontCover.TabIndex = 17;
-            this.tbFrontCover.TextChanged += new System.EventHandler(this.TitleChanges);
+            this.tbFrontCover.TextChanged += new System.EventHandler(this.tbFrontCover_TextChanged);
             // 
             // lblBackCover
             // 

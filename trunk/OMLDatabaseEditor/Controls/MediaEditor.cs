@@ -24,6 +24,7 @@ namespace OMLDatabaseEditor.Controls
         private TitleStatus _status;
         private int _itemID = 0;
         private string _titleName = "";
+        private string _FrontCoverMenu = "";
         
         public enum TitleStatus {Initial, UnsavedChanges, Saved}
 
@@ -93,6 +94,7 @@ namespace OMLDatabaseEditor.Controls
             // Movie Locations
             pbFrontCover.Image = ReadImageFromFile(t.FrontCoverPath);
             tbFrontCover.Text = t.FrontCoverPath;
+            _FrontCoverMenu = t.FrontCoverMenuPath;
             pbBackCover.Image = ReadImageFromFile(t.BackCoverPath);
             tbBackCover.Text = t.BackCoverPath;
             foreach (Disk d in t.Disks)
@@ -214,6 +216,7 @@ namespace OMLDatabaseEditor.Controls
 
             // Movie Locations
             t.FrontCoverPath = tbFrontCover.Text;
+            t.FrontCoverMenuPath = _FrontCoverMenu;
             t.BackCoverPath = tbBackCover.Text;
             t.Disks.Clear();
             foreach (Disk d in lstDisks.Items)
@@ -411,11 +414,9 @@ namespace OMLDatabaseEditor.Controls
                 { 
                     if (sender.Equals(button2) || sender.Equals(pbFrontCover)) 
                     { 
-                        tbFrontCover.Text = ofd.FileName; 
-                        //pbFrontCover.ImageLocation = ofd.FileName; 
+                        tbFrontCover.Text = ofd.FileName;
                     } else { 
                         tbBackCover.Text = ofd.FileName; 
-                        //pbBackCover.ImageLocation = ofd.FileName; 
                     } 
                 } 
                 catch (Exception ex) 
@@ -432,61 +433,42 @@ namespace OMLDatabaseEditor.Controls
                 if (sender.Equals(tbFrontCover))
                 {
                     pbFrontCover.ImageLocation = ((TextBox) sender).Text;
+                    // if its a new cover, remake the thumbnail image.
+                    if (pbFrontCover.ImageLocation != _FrontCoverMenu)
+                    {
+                        using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(ReadImageFromFile(pbFrontCover.ImageLocation), 200))
+                        {
+                            string img_path = FileSystemWalker.ImageDirectory +
+                                              @"\MF" + _itemID + ".jpg";
+                            menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            _FrontCoverMenu = img_path;
+                        }
+                    }
                 }
                 else
                 {
                     pbBackCover.ImageLocation = ((TextBox) sender).Text;
                 }
             }
+            _titleChanged(EventArgs.Empty);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            //OpenFileDialog ofd = new OpenFileDialog();
-            //ofd.InitialDirectory = @"C:\";
-            //ofd.CheckPathExists = true;
-            //ofd.CheckFileExists = true;
-            //ofd.RestoreDirectory = true;
-            //if (ofd.ShowDialog() == DialogResult.OK)
-            //{
-            //    try
-            //    {
-            //        tbFileLocation.Text = ofd.FileName;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //    }
-            //}
-
             DiskEditor dlg = new DiskEditor();
             dlg.FileName = "Disc " + (lstDisks.Items.Count + 1);
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                if (dlg.chkFile.Checked)
-                {
-                    lstDisks.Items.Add(
-                        new Disk(
-                            dlg.FileName, 
-                            dlg.Path,
-                            (VideoFormat)Enum.Parse(
-                                typeof(VideoFormat), 
-                                Path.GetExtension(dlg.Path).ToUpper().Substring(1).Replace("-",""),
-                                true)
-                        )
-                    );
-                }
-                else
-                {
-                    lstDisks.Items.Add(
-                        new Disk(
-                            dlg.FileName,
-                            dlg.Path,
-                            VideoFormat.DVD
-                        )
-                    );
-                }
-            }
+                lstDisks.Items.Add(
+                    new Disk(
+                        dlg.FileName, 
+                        dlg.Path,
+                        dlg.Format
+                    )
+                );
 
+                _titleChanged(EventArgs.Empty);
+            }
         }
 
         private void TitleChanges(object sender, EventArgs e)
@@ -506,7 +488,8 @@ namespace OMLDatabaseEditor.Controls
 
         private void lstDisks_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ValidateButtonState();            
+            ValidateButtonState();
+            _titleChanged(EventArgs.Empty);
         }
 
         private void ValidateButtonState()
@@ -531,29 +514,22 @@ namespace OMLDatabaseEditor.Controls
             DiskEditor dlg = new DiskEditor();
             dlg.Path = ((Disk)lstDisks.SelectedItem).Path;
             dlg.FileName = ((Disk)lstDisks.SelectedItem).Name;
+            dlg.Format = ((Disk)lstDisks.SelectedItem).Format;
+
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 int currentselection = lstDisks.SelectedIndex;
                 lstDisks.Items.RemoveAt(currentselection);
-                if (dlg.chkFile.Checked)
-                {
-                    lstDisks.Items.Insert(currentselection, 
-                        new Disk(
-                            dlg.FileName,
-                            dlg.Path,
-                            (VideoFormat)Enum.Parse(
-                                typeof(VideoFormat),
-                                Path.GetExtension(dlg.Path).ToUpper().Substring(1),
-                                true)));
-                }
-                else
-                {
-                    lstDisks.Items.Insert(currentselection,
-                        new Disk(
-                            dlg.FileName,
-                            dlg.Path,
-                            VideoFormat.DVD));
-                }
+                
+                lstDisks.Items.Insert(currentselection, 
+                    new Disk(
+                        dlg.FileName,
+                        dlg.Path,
+                        dlg.Format
+                    )
+                );
+
+                _titleChanged(EventArgs.Empty);
             }
         }
 
@@ -648,11 +624,5 @@ namespace OMLDatabaseEditor.Controls
         {
             _titleChanged(EventArgs.Empty);
         }
-
-
-
-
-
-
     }
 }

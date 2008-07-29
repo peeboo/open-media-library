@@ -5,14 +5,18 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using OMLEngine;
 
 namespace OMLDatabaseEditor.Controls
 {
     public partial class DiskEditor : Form
     {
+        private VideoFormat _videoFormat;
+
         public DiskEditor()
         {
             InitializeComponent();
+            cbxVideoFormat.Items.AddRange(Enum.GetNames(typeof(VideoFormat)));
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -30,7 +34,8 @@ namespace OMLDatabaseEditor.Controls
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (chkFile.Checked)
+            // File?
+            if (rbFile.Checked) 
             {
                 OpenFileDialog dlg = new OpenFileDialog();
                 dlg.CheckPathExists = true;
@@ -39,8 +44,23 @@ namespace OMLDatabaseEditor.Controls
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     txtPath.Text = dlg.FileName;
+                    try
+                    {
+                        Format = (VideoFormat)Enum.Parse(typeof(VideoFormat),
+                            System.IO.Path.GetExtension(dlg.FileName).Replace(".", "").ToUpper(), true);
+                    }
+                    catch (System.ArgumentException ae)
+                    {
+                        Format = (VideoFormat)Enum.Parse(typeof(VideoFormat),
+                            "DVD", true);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString(), "Error");
+                    }
                 }
-            }
+                
+            } //Folder
             else
             {
                 FolderBrowserDialog dlg = new FolderBrowserDialog();
@@ -62,6 +82,16 @@ namespace OMLDatabaseEditor.Controls
         {
             get { return txtPath.Text; }
             set { txtPath.Text = value; }
+        }
+
+        public VideoFormat Format
+        {
+            get { return _videoFormat; }
+            set
+            {
+                _videoFormat = value;
+                cbxVideoFormat.SelectedItem = _videoFormat.ToString();
+            }
         }
 
     }
