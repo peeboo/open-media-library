@@ -307,7 +307,6 @@ namespace Library
             else
                 AllTitlesProcessed = true;
         }
-
         public void Reset()
         {
             OMLApplication.DebugLine("Resetting the Setup object");
@@ -321,13 +320,11 @@ namespace Library
             _titleCollection.loadTitleCollection();
             _treeView.CheckedNodes.Clear();
         }
-
         public void gotoMenu()
         {
             TitleCollection tc = OMLApplication.Current.ReloadTitleCollection();
             OMLApplication.Current.GoToMenu(new MovieGallery(tc, Filter.Home));
         }
-
         public void AddAllCurrentTitles()
         {
             OMLApplication.DebugLine("[Setup] Starting deferred all titles import");
@@ -335,7 +332,6 @@ namespace Library
                                                      new DeferredHandler(_DoneAddingAllCurrentTitles),
                                                      new object[] { });
         }
-
         public void _AddAllCurrentTitles(object args)
         {
             OMLApplication.DebugLine("[Setup] AddingAllCurrentTitles Started");
@@ -345,22 +341,15 @@ namespace Library
                 CurrentTitle = _titles[CurrentTitleIndex];
                 if (_titleCollection.ContainsDisks(CurrentTitle.Disks))
                 {
+                    OMLApplication.DebugLine("[Setup UI] Skipping title: " + CurrentTitle.Name + " because already in the collection");
+                    TotalTitlesSkipped++;
+                }
+                else
+                {
                     OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.InternalItemID);
                     OMLPlugin.BuildResizedMenuImage(CurrentTitle);
                     _titleCollection.Add(CurrentTitle);
                     TotalTitlesAdded++;
-                }
-                else
-                {
-                    OMLApplication.DebugLine("[Setup UI] Skipping title: " + CurrentTitle.Name + " because already in the collection");
-                    /*
-                    AddInHost.Current.MediaCenterEnvironment.Dialog(CurrentTitle.Name + " was found to already exist in your database and has been skipped.",
-                                                                    "Skipped Title",
-                                                                    DialogButtons.Ok,
-                                                                    2,
-                                                                    false);
-                    */
-                    TotalTitlesSkipped++;
                 }
             }
         }
