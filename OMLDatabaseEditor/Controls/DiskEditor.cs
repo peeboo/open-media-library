@@ -44,19 +44,27 @@ namespace OMLDatabaseEditor.Controls
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     txtPath.Text = dlg.FileName;
+                    string cleanedExtension = System.IO.Path.GetExtension(dlg.FileName).ToUpper();
+                    // remove the . from extension
+                    cleanedExtension = cleanedExtension.Replace(".", "");
+                    cleanedExtension = cleanedExtension.Replace("-", "");
                     try
                     {
                         Format = (VideoFormat)Enum.Parse(typeof(VideoFormat),
-                            System.IO.Path.GetExtension(dlg.FileName).Replace(".", "").ToUpper(), true);
+                            cleanedExtension, true);
                     }
                     catch (System.ArgumentException ae)
                     {
                         Format = (VideoFormat)Enum.Parse(typeof(VideoFormat),
                             "DVD", true);
+                        Utilities.DebugLine("Error trying to match file extension " + cleanedExtension +
+                            " to video format", ae);
                     }
                     catch (System.Exception ex)
                     {
                         MessageBox.Show(ex.ToString(), "Error");
+                        Utilities.DebugLine("Error trying to match file extension " + cleanedExtension +
+                            " to video format", ex);
                     }
                 }
                 
