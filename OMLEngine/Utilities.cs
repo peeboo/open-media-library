@@ -373,7 +373,7 @@ namespace OMLEngine
                     try
                     {
                         if (File.Exists(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt"))
-                            Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.Truncate);
+                            Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.Append);
                         else
                             Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.OpenOrCreate);
 
