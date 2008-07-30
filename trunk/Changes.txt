@@ -3,3 +3,4 @@ Changes in version 1.0.1 ()
 - MountImagePlayer modified to return a DVDPlayer instead of passing the stream back through the Factory
 - Append instead of truncate the logfile when restarting
 - Updated DVRMSPlugin to force use of full paths for both files and cover art
+- Fixed bug in Setup UI where selecting add all titles actually skipped all titles
