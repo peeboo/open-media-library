@@ -549,8 +549,7 @@ namespace OMLDatabaseEditor
                 if (_currentTitle.Disks.Count > 0)
                 {
                     Disk firstDisc = _currentTitle.Disks[0];
-                    string dirName = Path.GetDirectoryName(firstDisc.Path);
-                    string fileName = dirName + "\\" + Path.GetRandomFileName() + ".oml.xml";
+                    string fileName = firstDisc.Path + ".oml.xml";
                     _currentTitle.SerializeToXMLFile(fileName);
                 }
                 else
