@@ -31,8 +31,7 @@ namespace Library
                 {
                     _title.SelectedDisk.Path = mount_location;
                     _title.SelectedDisk.Format = VideoFormat.DVD;
-                    IPlayMovie player = MoviePlayerFactory.CreateMoviePlayer(_title);
-                    //IPlayMovie player = new DVDPlayer(_title);
+                    IPlayMovie player = new DVDPlayer(_title);
                     OMLApplication.DebugLine("[MoviePlayerMountImage] Playing now");
                     return player.PlayMovie();
                 }
