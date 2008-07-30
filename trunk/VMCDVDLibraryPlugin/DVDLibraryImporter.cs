@@ -80,8 +80,13 @@ namespace VMCDVDLibraryPlugin
                 List<string> dirList = new List<string>();
                 List<string> fileList = new List<string>();
                 GetSubFolders(startFolder, dirList);
-                dirList.Add(startFolder);
 
+                // the share or link may not exist nowbb
+                if (Directory.Exists(startFolder))
+                {
+                    dirList.Add(startFolder);
+                }
+ 
                 foreach (string currentFolder in dirList)
                 {
                     Utilities.DebugLine("DVDImporter: folder " + currentFolder);
