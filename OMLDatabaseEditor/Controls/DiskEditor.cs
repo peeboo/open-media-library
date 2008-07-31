@@ -16,7 +16,6 @@ namespace OMLDatabaseEditor.Controls
         public DiskEditor()
         {
             InitializeComponent();
-            cbxVideoFormat.Items.AddRange(Enum.GetNames(typeof(VideoFormat)));
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -55,10 +54,13 @@ namespace OMLDatabaseEditor.Controls
                     }
                     catch (System.ArgumentException ae)
                     {
-                        Format = (VideoFormat)Enum.Parse(typeof(VideoFormat),
-                            "DVD", true);
+                        MessageBox.Show("Unable to match extension " + cleanedExtension + " defaulting to MPG, " +
+                            " if this is a valid video extension please post about it in our forusm.", 
+                            "Error Matching File Extension");
                         Utilities.DebugLine("Error trying to match file extension " + cleanedExtension +
                             " to video format", ae);
+                        Format = (VideoFormat)Enum.Parse(typeof(VideoFormat),
+                            "MPG", true);
                     }
                     catch (System.Exception ex)
                     {
@@ -67,8 +69,8 @@ namespace OMLDatabaseEditor.Controls
                             " to video format", ex);
                     }
                 }
-                
-            } //Folder
+            } 
+            // DVD - Folder
             else
             {
                 FolderBrowserDialog dlg = new FolderBrowserDialog();
@@ -76,6 +78,8 @@ namespace OMLDatabaseEditor.Controls
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     txtPath.Text = dlg.SelectedPath;
+                    Format = (VideoFormat)Enum.Parse(typeof(VideoFormat),
+                        "DVD", true);
                 }
             }
         }
@@ -95,10 +99,19 @@ namespace OMLDatabaseEditor.Controls
         public VideoFormat Format
         {
             get { return _videoFormat; }
-            set
-            {
+            set 
+            { 
                 _videoFormat = value;
-                cbxVideoFormat.SelectedItem = _videoFormat.ToString();
+                if (_videoFormat.ToString() == "DVD")
+                {
+                    rbFolder.Checked = true;
+                    rbFile.Checked = false;
+                }
+                else
+                {
+                    rbFolder.Checked = false;
+                    rbFile.Checked = true;
+                }
             }
         }
 
