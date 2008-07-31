@@ -496,49 +496,10 @@ namespace OMLDatabaseEditor
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            CheckForChanges();
             this.Close();
         }
-
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        //    TextBoxBase tb = this.ActiveControl as TextBoxBase;
-
-        //    if (tb != null && tb.SelectionLength > 0)  
-        //    {
-        //        tb.Copy();
-        //    }
-        }
-
-        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        //    TextBoxBase tb = (TextBoxBase)sender;
-        //    tb.Cut();
-        }
-
-        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        //    TextBoxBase tb = (TextBoxBase)sender;
-        //    if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) == true)
-        //    {
-        //        tb.Paste();
-        //    }
-        }
-
-        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        //    TextBoxBase tb = (TextBoxBase)sender;
-        //    tb.SelectAll();
-        }
-
-        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        //    TextBoxBase tb = (TextBoxBase)sender;  
-        //    if (tb.CanUndo == true)
-        //    {
-        //        tb.Undo();
-        //        tb.ClearUndo();
-            }
-
+    
         private void saveToXMLFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (this.tabsMediaPanel.SelectedTab != null)
@@ -561,6 +522,49 @@ namespace OMLDatabaseEditor
                 //SaveTitleChangesToDB(_currentTitle);
             }
 
+        }
+
+        private void OMLDatabaseEditor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            CheckForChanges();
+        }
+
+        private void CheckForChanges()
+        {
+            bool acceptedSaved = false;
+            
+            foreach (TabPage page in tabsMediaPanel.TabPages)
+            {
+                Controls.MediaEditor editor = (Controls.MediaEditor)page.Tag;
+                if (editor.Status ==  global::OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges)
+                {
+                    // First run through if they accept the save this will only show once, if they deny then finish exit
+                    if (acceptedSaved == false)
+                    {
+                        if (MessageBox.Show("Would you like to save your changes?"
+                            , "Unsaved Changes"
+                            ,MessageBoxButtons.YesNo
+                            ,MessageBoxIcon.Question
+                            ,MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                        {
+                            acceptedSaved = true;
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                    Title _currentTitle = (Title)_titleCollection.MoviesByItemId[editor.itemID];
+
+                    editor.SaveToTitle(_currentTitle);
+                    _titleCollection.Replace(_currentTitle);
+                }
+            }
+
+            if (acceptedSaved == true)
+            {
+                _titleCollection.saveTitleCollection();
+            }
         }
 
         //}

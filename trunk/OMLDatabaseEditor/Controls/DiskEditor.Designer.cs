@@ -35,8 +35,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.cbxVideoFormat = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.rbFile = new System.Windows.Forms.RadioButton();
             this.rbFolder = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
@@ -103,24 +101,6 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // cbxVideoFormat
-            // 
-            this.cbxVideoFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxVideoFormat.FormattingEnabled = true;
-            this.cbxVideoFormat.Location = new System.Drawing.Point(232, 103);
-            this.cbxVideoFormat.Name = "cbxVideoFormat";
-            this.cbxVideoFormat.Size = new System.Drawing.Size(69, 21);
-            this.cbxVideoFormat.TabIndex = 7;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(157, 109);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(72, 13);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Video Format:";
-            // 
             // rbFile
             // 
             this.rbFile.AutoSize = true;
@@ -138,9 +118,9 @@
             this.rbFolder.AutoSize = true;
             this.rbFolder.Location = new System.Drawing.Point(64, 107);
             this.rbFolder.Name = "rbFolder";
-            this.rbFolder.Size = new System.Drawing.Size(54, 17);
+            this.rbFolder.Size = new System.Drawing.Size(48, 17);
             this.rbFolder.TabIndex = 10;
-            this.rbFolder.Text = "Folder";
+            this.rbFolder.Text = "DVD";
             this.rbFolder.UseVisualStyleBackColor = true;
             // 
             // DiskEditor
@@ -150,8 +130,6 @@
             this.ClientSize = new System.Drawing.Size(314, 178);
             this.Controls.Add(this.rbFolder);
             this.Controls.Add(this.rbFile);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.cbxVideoFormat);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.button1);
@@ -176,8 +154,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.ComboBox cbxVideoFormat;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RadioButton rbFile;
         private System.Windows.Forms.RadioButton rbFolder;
     }

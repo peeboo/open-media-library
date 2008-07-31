@@ -434,6 +434,7 @@ namespace OMLDatabaseEditor.Controls
                 {
                     pbFrontCover.ImageLocation = ((TextBox) sender).Text;
                     // if its a new cover, remake the thumbnail image.
+                    Utilities.DebugLine("DBEditor: Front Cover text changed, checking if thumbnail location is different"); 
                     if (pbFrontCover.ImageLocation != _FrontCoverMenu)
                     {
                         using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(ReadImageFromFile(pbFrontCover.ImageLocation), 200))
@@ -441,6 +442,7 @@ namespace OMLDatabaseEditor.Controls
                             string img_path = FileSystemWalker.ImageDirectory +
                                               @"\MF" + _itemID + ".jpg";
                             menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            Utilities.DebugLine("DBEditor: Cover Image Thumbnail created filename: " + img_path);
                             _FrontCoverMenu = img_path;
                         }
                     }
