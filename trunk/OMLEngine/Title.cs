@@ -703,7 +703,8 @@ namespace OMLEngine
         /// </summary>
         ~Title()
         {
-            Utilities.DebugLine("[Title] Title destroyed");
+            // Unless this becomes a problem, it just clutters the log
+            //Utilities.DebugLine("[Title] Title destroyed");
         }
 
         /// <summary>

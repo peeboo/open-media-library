@@ -310,7 +310,7 @@ namespace Library
         {
             if (jumpString.Length == 0) return;
 
-            Utilities.DebugLine("MovieGallery.JumpToMovie: {0}", jumpString);
+            Utilities.DebugLine("[MovieGallery] JumpToMovie: {0}", jumpString);
             foreach (MovieItem m in _moviesVirtualList)
             {
                 if (m.Name.StartsWith(jumpString, true, null))
@@ -325,7 +325,7 @@ namespace Library
                     _jumpToPosition = _moviesVirtualList.IndexOf(m);
                     _relativeJumpToPosition = _jumpToPosition - focusedItemIndex;
 
-                    Utilities.DebugLine("MovieGallery.JumpToString: Found movie {0} pos {1} relpos {2}", m.Name, _jumpToPosition, _relativeJumpToPosition);
+                    Utilities.DebugLine("[MovieGallery] JumpToString: Found movie {0} pos {1} relpos {2}", m.Name, _jumpToPosition, _relativeJumpToPosition);
                     FirePropertyChanged("JumpToPosition");
                     break;
                 }

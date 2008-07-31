@@ -211,7 +211,7 @@ namespace OMLEngine
             }
             catch (Exception e)
             {
-                Utilities.DebugLine("Error writing file: " + e.Message);
+                Utilities.DebugLine("[TitleCollection] Error writing file: " + e.Message);
                 return false;
             }
         }

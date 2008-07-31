@@ -57,7 +57,7 @@ namespace OMLDatabaseEditor.Controls
                         MessageBox.Show("Unable to match extension " + cleanedExtension + " defaulting to MPG, " +
                             " if this is a valid video extension please post about it in our forusm.", 
                             "Error Matching File Extension");
-                        Utilities.DebugLine("Error trying to match file extension " + cleanedExtension +
+                        Utilities.DebugLine("[DiskEditor] Error trying to match file extension " + cleanedExtension +
                             " to video format", ae);
                         Format = (VideoFormat)Enum.Parse(typeof(VideoFormat),
                             "MPG", true);
@@ -65,7 +65,7 @@ namespace OMLDatabaseEditor.Controls
                     catch (System.Exception ex)
                     {
                         MessageBox.Show(ex.ToString(), "Error");
-                        Utilities.DebugLine("Error trying to match file extension " + cleanedExtension +
+                        Utilities.DebugLine("[DiskEditor] Error trying to match file extension " + cleanedExtension +
                             " to video format", ex);
                     }
                 }
