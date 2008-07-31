@@ -48,7 +48,7 @@ namespace DVRMSPlugin
 
         protected override string GetMenu()
         {
-            return "DVR-MS Movie Files";
+            return @"DVR-MS Movie Files";
         }
 
         protected override string GetName()
@@ -59,12 +59,12 @@ namespace DVRMSPlugin
 
         protected override string GetDescription()
         {
-            return "DVR-MS File Extractor Plugin v" + Version;
+            return @"DVR-MS File Extractor Plugin v" + Version;
         }
 
         protected override string GetAuthor()
         {
-            return "OML Development Team";
+            return @"OML Development Team";
         }
 
         protected override string GetFilter()
@@ -130,8 +130,9 @@ namespace DVRMSPlugin
                         Disk disk = new Disk();
                         string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
                         disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                        disk.Path = file;
-                        disk.Name = "Disk 1";
+                        Utilities.DebugLine("[DVRMSPlugin] Adding file: " + Path.GetFullPath(file));
+                        disk.Path = Path.GetFullPath(file);
+                        disk.Name = @"Disk 1";
                         newTitle.Disks.Add(disk);
                         //newTitle.FileLocation = file;
                         if (!String.IsNullOrEmpty(newTitle.AspectRatio))
@@ -143,8 +144,13 @@ namespace DVRMSPlugin
                         string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
                         if (File.Exists(cover))
                         {
-                            SetFrontCoverImage(ref newTitle, cover);
+                            Utilities.DebugLine("[DVRMSPlugin] Setting CoverArt: " + Path.GetFullPath(cover));
+                            SetFrontCoverImage(ref newTitle, Path.GetFullPath(cover));
                             //newTitle.FrontCoverPath = cover;
+                        }
+                        else
+                        {
+                            Utilities.DebugLine("[DVRMSPlugin] No coverart found");
                         }
                         break;
                     case DvrmsMetadataEditor.MediaOriginalBroadcastDateTime:
@@ -222,7 +228,7 @@ namespace DVRMSPlugin
                         newTitle.ImporterSource = @"DVRMSImporter";
                         newTitle.MetadataSourceName = @"DVR-MS";
                         Disk disk = new Disk();
-                        disk.Name = "Disk 1";
+                        disk.Name = @"Disk 1";
                         disk.Path = file;
                         //newTitle.FileLocation = file;
                         string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
@@ -230,9 +236,14 @@ namespace DVRMSPlugin
                         disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
                         newTitle.Disks.Add(disk);
                         string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
-                        if (File.Exists(cover))
+                        if (File.Exists(Path.GetFullPath(cover)))
                         {
+                            Utilities.DebugLine("[DVRMSPlugin] Setting CoverArt: " + Path.GetFullPath(cover));
                             newTitle.FrontCoverPath = cover;
+                        }
+                        else
+                        {
+                            Utilities.DebugLine("[DVRMSPlugin] No coverart found");
                         }
                     }
                     if (String.IsNullOrEmpty(newTitle.AspectRatio))
@@ -247,12 +258,12 @@ namespace DVRMSPlugin
                 }
                 catch (Exception e)
                 {
-                    Trace.WriteLine("Error adding row: " + e.Message);
+                    Trace.WriteLine("[DVRMSPlugin] Error adding row: " + e.Message);
                 }
             }
             else
             {
-                Trace.WriteLine("Error saving row");
+                Trace.WriteLine("[DVRMSPlugin] Error saving row");
             }
         }
     }

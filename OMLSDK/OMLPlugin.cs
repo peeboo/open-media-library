@@ -204,7 +204,7 @@ namespace OMLSDK
             if (dlgRslt == DialogResult.OK)
             {
                 string sPath = string.Empty;
-                Utilities.DebugLine(String.Format(@"[OMLImporter] Valid file found ({0})", ofDiag.FileName));
+                Utilities.DebugLine("[OMLPlugin] " + String.Format(@"[OMLImporter] Valid file found ({0})", ofDiag.FileName));
                 if (this.MultiSelect)
                 {
                     sPath = Path.GetDirectoryName(ofDiag.FileNames[0]);
@@ -635,7 +635,7 @@ namespace OMLSDK
 
                 newTitle.FrontCoverPath = imagePath;
             }
-            catch (Exception e) { Utilities.DebugLine("[OMLPlugin]" + e.Message); }
+            catch (Exception e) { Utilities.DebugLine("[OMLPlugin] " + e.Message); }
         }
     }
 

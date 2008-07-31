@@ -382,7 +382,7 @@ namespace Library
             {
                 Disk[] temp = { new Disk() };
                 _diskChoice.Options = temp; // MCE barfs if Options is bound to empty List.
-                OMLApplication.DebugLine("Details Page.LoadMovies: no disks");
+                OMLApplication.DebugLine("[MovieDetailsPage] Details Page.LoadMovies: no disks");
             }
             //_showDisks = new Command();
             //_hideDisks = new Command();

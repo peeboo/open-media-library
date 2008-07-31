@@ -326,7 +326,7 @@ namespace Library
         /// <returns></returns>
         public MovieDetailsPage CreateDetailsPage(MovieItem item)
         {
-            OMLApplication.DebugLine("Creating a detailspage");
+            OMLApplication.DebugLine("[MovieItem] Creating a detailspage");
             MovieDetailsPage page = new MovieDetailsPage(item);
             return page;
         }

@@ -44,33 +44,33 @@ namespace Library
                 
                 if (movieItem.SelectedDisk.Format == VideoFormat.WPL) // if its a playlist, do that first
                 {
-                    OMLApplication.DebugLine("WPLMoviePlayer created");
+                    OMLApplication.DebugLine("[MoviePlayerFactory] WPLMoviePlayer created");
                     return new MoviePlayerWPL(movieItem);
                 }
                 else if (NeedsMounting(movieItem.SelectedDisk)) // if it needs to be mounted, do that next
                 {
-                    OMLApplication.DebugLine("MountImageMoviePlayer created");
+                    OMLApplication.DebugLine("[MoviePlayerFactory] MountImageMoviePlayer created");
                     return new MountImagePlayer(movieItem);
                 }
                 else if (OMLApplication.Current.IsExtender && NeedsTranscode(movieItem.SelectedDisk) ) // if it needs to be transcoded
                 {
-                    OMLApplication.DebugLine("TranscodePlayer created");
+                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created");
                     return new TranscodePlayer(movieItem);
                 }
                 else if (movieItem.SelectedDisk.Format == VideoFormat.DVD) // play the dvd
                 {
-                    OMLApplication.DebugLine("DVDMoviePlayer created");
+                    OMLApplication.DebugLine("[MoviePlayerFactory] DVDMoviePlayer created");
                     return new DVDPlayer(movieItem);
                 }
                 else // try to play it (likely is avi/mkv/etc)
                 {
-                    OMLApplication.DebugLine("VideoPlayer created");
+                    OMLApplication.DebugLine("[MoviePlayerFactory] VideoPlayer created");
                     return new VideoPlayer(movieItem);
                 }
             }
             else
             {
-                OMLApplication.DebugLine("UnavailableMoviePlayer created");
+                OMLApplication.DebugLine("[MoviePlayerFactory] UnavailableMoviePlayer created");
                 return new UnavailableMoviePlayer(movieItem);
             }
         }
@@ -79,11 +79,11 @@ namespace Library
         static public void Transport_PropertyChanged(IPropertyObject sender, string property)
         {
             MediaTransport t = (MediaTransport)sender;
-            Utilities.DebugLine("MoviePlayerFactory.Transport_PropertyChanged: movie {0} property {1} playrate {2} state {3} pos {4}", OMLApplication.Current.NowPlayingMovieName, property, t.PlayRate, t.PlayState.ToString(), t.Position.ToString());
+            Utilities.DebugLine("[MoviePlayerFactory] Transport_PropertyChanged: movie {0} property {1} playrate {2} state {3} pos {4}", OMLApplication.Current.NowPlayingMovieName, property, t.PlayRate, t.PlayState.ToString(), t.Position.ToString());
             if (property == "PlayState")
             {
                 OMLApplication.Current.NowPlayingStatus = t.PlayState;
-                Utilities.DebugLine("MoviePlayerFactory.Transport_PropertyChanged: movie {0} state {1}", OMLApplication.Current.NowPlayingMovieName, t.PlayState.ToString());
+                Utilities.DebugLine("[MoviePlayerFactory] MoviePlayerFactory.Transport_PropertyChanged: movie {0} state {1}", OMLApplication.Current.NowPlayingMovieName, t.PlayState.ToString());
             }
         }
 
