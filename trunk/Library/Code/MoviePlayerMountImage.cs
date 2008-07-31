@@ -31,7 +31,17 @@ namespace Library
                 {
                     _title.SelectedDisk.Path = mount_location;
                     _title.SelectedDisk.Format = VideoFormat.DVD;
-                    IPlayMovie player = new DVDPlayer(_title);
+                    IPlayMovie player;
+                    if (OMLApplication.Current.IsExtender)
+                    {
+                        OMLApplication.DebugLine("[MoviePlayerMountImage] Extender detected, using TranscodePlayer to play Image file");
+                        player = new TranscodePlayer(_title);
+                    }
+                    else
+                    {
+                        OMLApplication.DebugLine("[MoviePlayerMountImage] Extender NOT detected, using DVDPlayer to play Image file");
+                        player = new DVDPlayer(_title);
+                    }
                     OMLApplication.DebugLine("[MoviePlayerMountImage] Playing now");
                     return player.PlayMovie();
                 }
