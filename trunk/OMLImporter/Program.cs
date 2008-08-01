@@ -39,6 +39,7 @@ namespace OMLImporter
             foreach (PluginServices.AvailablePlugin oPlugin in Pluginz)
             {
                 objPlugin = (OMLPlugin) PluginServices.CreateInstance(oPlugin);
+                objPlugin.FileFound += new OMLPlugin.FileFoundEventHandler(FileFound);
                 plugins.Add(objPlugin);
             }
             Pluginz = null;
@@ -86,7 +87,6 @@ namespace OMLImporter
                 if (iResp < plugins.Count)
                 {
                     plugin = plugins[iResp];
-                    plugin.FileFound += new OMLPlugin.FileFoundEventHandler(FileFound);
                     if (plugin.CanCopyImages) AskIfShouldCopyImages();
                     plugin.CopyImages = Program._copyImages;
                     plugin.DoWork(plugin.GetWork());
