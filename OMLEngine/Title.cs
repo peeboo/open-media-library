@@ -338,12 +338,18 @@ namespace OMLEngine
             }
         }
         /// <summary>
-        /// Pull path to the cover art image
+        /// Pull path to the cover art image, 
+        /// default the the front cover menu art image to this as well
         /// </summary>
         public string FrontCoverPath
         {
             get { return _frontCoverPath; }
-            set { _frontCoverPath = value; }
+            set 
+            { 
+                _frontCoverPath = value;
+                if (string.IsNullOrEmpty(_frontCoverMenuPath))
+                    _frontCoverMenuPath = value;
+            }
         }
 
         public string FrontCoverMenuPath
