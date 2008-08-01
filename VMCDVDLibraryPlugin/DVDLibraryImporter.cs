@@ -35,7 +35,7 @@ namespace VMCDVDLibraryPlugin
             return true;
         }
         private static double MajorVersion = 0.9;
-        private static double MinorVersion = 0.0;
+        private static double MinorVersion = 0.1;
         protected override double GetVersionMajor()
         {
             return MajorVersion;
@@ -59,7 +59,7 @@ namespace VMCDVDLibraryPlugin
         }
         protected override string GetDescription()
         {
-            return "DVD Library and Video importer for Open Media Library v" + Version;
+            return @"DVD Library and Video importer v" + Version;
         }
         public override bool Load(string filename)
         {

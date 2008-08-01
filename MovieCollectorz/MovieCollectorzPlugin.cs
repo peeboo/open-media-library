@@ -236,7 +236,7 @@ namespace MovieCollectorzPlugin
         }
 
         private static double MajorVersion = 0.9;
-        private static double MinorVersion = 0.0;
+        private static double MinorVersion = 0.1;
         protected override double GetVersionMajor()
         {
             return MajorVersion;
@@ -257,7 +257,7 @@ namespace MovieCollectorzPlugin
         }
         protected override string GetDescription()
         {
-            return "Movie Collectorz";
+            return @"Movie Collectorz xml file importer v" + Version;
         }
 
         private string StripHTML(string inputString)

@@ -15,7 +15,7 @@ namespace MyMoviesPlugin
     public class MyMoviesImporter : OMLPlugin, IOMLPlugin
     {
         private static double MajorVersion = 0.9;
-        private static double MinorVersion = 0.0;
+        private static double MinorVersion = 0.1;
 
         public MyMoviesImporter() : base()
         {
@@ -99,7 +99,7 @@ namespace MyMoviesPlugin
         }
         protected override string GetDescription()
         {
-            return "MyMovies xml file importer for Open Media Library v" + Version;
+            return "MyMovies xml file importer v" + Version;
         }
         private void process_node_switch(Title newTitle, XmlNode node)
         {
