@@ -94,7 +94,7 @@
           <Graphic Name="Box"
                    Content="image://me:ButtonRadioButtonOutlineNoFocus" />
           <Text Name="Label"
-                Color="White" />
+                Color="White" Font="Calibri, 16" />
 
         </Children>
       </Panel>

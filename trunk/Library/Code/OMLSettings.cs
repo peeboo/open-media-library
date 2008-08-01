@@ -60,6 +60,16 @@ namespace Library
                 FirePropertyChanged("ShowFileLocation");
             }
         }
+        public bool ShowMovieDetails
+        {
+            get { return Properties.Settings.Default.ShowMovieDetails; }
+            set
+            {
+                Properties.Settings.Default.ShowMovieDetails = value;
+                Properties.Settings.Default.Save();
+                FirePropertyChanged("ShowMovieDetails");
+            }
+        }
         public string MovieView
         {
             get { return Properties.Settings.Default.MovieView; }

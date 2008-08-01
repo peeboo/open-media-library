@@ -487,7 +487,7 @@ namespace Library
             _ImporterSelection = new Choice();
             List<string> _Importers = new List<string>();
             foreach (OMLPlugin _plugin in availablePlugins) {
-                _Importers.Add(_plugin.Name);
+                _Importers.Add(_plugin.Description);
             }
 
             _ImporterSelection.Options = _Importers;

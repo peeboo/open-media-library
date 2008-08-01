@@ -48,10 +48,10 @@
         <Rules>
             <Binding Source="[JumpValue.Value]" Target="[JumpInText.Content]" />
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanel.Visible]" />
-          <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelTitle.Visible]" />
-          <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRuntime.Visible]" />
-          <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRating.Visible]" />
-          <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelSummary.Visible]" />
+            <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelTitle.Visible]" />
+            <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRuntime.Visible]" />
+            <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRating.Visible]" />
+            <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelSummary.Visible]" />
           
 
             <Rule>
@@ -108,7 +108,7 @@
                       <Children>-->
 
                         <!-- TitlePanel -->
-                        <Panel Name="TitlePanel" >
+                        <Panel Name="TitlePanel">
                           <!-- TitlePanel -->
                           <Children>
                             <c:HeaderText Name="GalleryTitle" Text="[MovieBrowser.Title]" />
@@ -120,7 +120,7 @@
                         </Panel>
 
                         <!-- LeftPanelTitle -->
-                        <Panel Name="LeftPanelTitle" >
+                        <Panel Name="LeftPanelTitle">
                           <!-- LeftPanelTitle -->
                           <Children>
                             <Text Name="Caption" Content="" WordWrap="true" Font="font://s:Heading" Color="color://s:HeadingColor">
@@ -245,8 +245,7 @@
                     <!-- GalleryPanel -->
                     <Panel Name="GalleryPanel" MouseInteractive="true" FocusOrder="0">
                         <Children>
-                            <gallery:Gallery Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]">
-                            </gallery:Gallery>
+                            <gallery:Gallery Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" />
                         </Children>
 
                         <LayoutInput>

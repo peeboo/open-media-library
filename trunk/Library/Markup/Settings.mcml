@@ -117,12 +117,22 @@
                         </Children>
                       </Panel>
 
-                      <Panel Layout="VerticalFlow">
-                        <Children>
-                          <Text  Content="Virtual Drive" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <c:SimpleSpinner Name="VirtualDrive" Model="[Settings.VirtualDrive]" Size="51,51" />
-                        </Children>
-                      </Panel>
+                        <Panel Layout="HorizontalFlow">
+                            <Children>
+                                <Panel Layout="VerticalFlow" Margins="0,0,50,0">
+                                    <Children>
+                                        <Text  Content="Virtual Drive" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                                        <c:SimpleSpinner Name="VirtualDrive" Model="[Settings.VirtualDrive]" Size="51,51" />
+                                    </Children>
+                                </Panel>
+                                <Panel Layout="VerticalFlow">
+                                    <Children>
+                                        <Text Content="Display Meta Data Overlay" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                                        <c:SimpleCheckbox Name="ShowMovieDetails" Checked="[Settings.ShowMovieDetails]" Margins="0,7,4,0" />
+                                    </Children>
+                                </Panel>
+                            </Children>
+                        </Panel>
                     </Children>
                     
                   </Panel>

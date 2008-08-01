@@ -24,6 +24,7 @@ namespace Library
             _omlSettings.DaemonTools = _daemonToolsPath.Value;
             _omlSettings.MovieSort = _movieSort.Chosen as string;
             _omlSettings.MovieView = _movieView.Chosen as string;
+            _omlSettings.ShowMovieDetails = (bool)_ShowMovieDetails.Chosen;
             _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
             OMLApplication.Current.Startup();
         }
@@ -66,6 +67,13 @@ namespace Library
 
             _movieSort.Options = items;
             _movieSort.Chosen = _omlSettings.MovieSort;
+
+            _ShowMovieDetails.Chosen = _omlSettings.ShowMovieDetails;
+        }
+
+        public BooleanChoice ShowMovieDetails
+        {
+            get { return _ShowMovieDetails; }
         }
 
         public Choice VirtualDrive
@@ -116,6 +124,7 @@ namespace Library
         Choice _virtualDrive = new Choice();
         Choice _movieView = new Choice();
         Choice _movieSort = new Choice();
+        BooleanChoice _ShowMovieDetails = new BooleanChoice();
 
     }
 }

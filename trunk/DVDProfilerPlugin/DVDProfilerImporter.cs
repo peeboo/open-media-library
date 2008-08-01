@@ -30,7 +30,7 @@ namespace DVDProfilerPlugin
         }
 
         private static double MajorVersion = 0.9;
-        private static double MinorVersion = 0.0;
+        private static double MinorVersion = 0.1;
         protected override double GetVersionMajor()
         {
             return MajorVersion;
@@ -54,7 +54,7 @@ namespace DVDProfilerPlugin
         }
         protected override string GetDescription()
         {
-            return "DVDProfiler xml file importer for Open Media Library v" + Version;
+            return @"DVDProfiler xml file importer v" + Version;
         }
 
         public override void ProcessFile(string file)
