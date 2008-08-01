@@ -306,7 +306,7 @@ namespace OMLSDK
         /// <returns></returns>
         public string GetVersion()
         {
-            return String.Format("{0:f}.{1:f}", VersionMajor, VersionMinor);
+            return String.Format("{0:00.00}.{1:00.00}", VersionMajor, VersionMinor);
         }
 
         #region Need to be implemented in descendant class
