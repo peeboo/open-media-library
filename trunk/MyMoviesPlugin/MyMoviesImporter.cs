@@ -141,9 +141,9 @@ namespace MyMoviesPlugin
                     break;
                 case "ProductionYear":
                     string year = node.InnerText;
-                    if (year.length > 0)
+                    if (!string.IsNullOrEmpty(year))
                     {
-                        DateTime rls_date = new DateTime(year, 01, 01);
+                        DateTime rls_date = new DateTime(int.Parse(year), 1, 1);
                         newTitle.ReleaseDate = rls_date;
                     }
                     break;
