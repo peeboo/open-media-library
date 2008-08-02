@@ -8,3 +8,6 @@ Changes in version 1.0.1 ()
 - Change settings screen to use pivots. Added pivots for View Settings and Daemon Tools
 - Expose option to Dim Unselected Covers. Default is false (ie. show full cover art, no dimming)
 - Show movie name even when the details are not shown while browsing.
+
+- Play a sound when selecting items on the screen
+- JIL uses the sortname instead of name
