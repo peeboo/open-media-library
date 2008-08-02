@@ -143,7 +143,7 @@ namespace Library
 
         public Single CoverArtAlpha
         {
-            get { return  Convert.ToSingle(Properties.Settings.Default.CoverArtAlpha); }
+            get { if (Properties.Settings.Default.DimUnselectedCovers) return 0.5F; else return 1F; }
         }
 
         public Single ScrollingLockPosition
@@ -159,6 +159,11 @@ namespace Library
         public bool ShowMovieDetails
         {
             get { return Properties.Settings.Default.ShowMovieDetails; }
+        }
+
+        public bool DimUnselectedCovers
+        {
+            get { return Properties.Settings.Default.DimUnselectedCovers; }
         }
     }
 }

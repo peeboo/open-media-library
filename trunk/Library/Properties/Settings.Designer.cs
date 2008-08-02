@@ -445,18 +445,6 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
-        public double CoverArtAlpha {
-            get {
-                return ((double)(this["CoverArtAlpha"]));
-            }
-            set {
-                this["CoverArtAlpha"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ShowMovieDetails {
             get {
@@ -500,6 +488,18 @@ namespace Library.Properties {
             }
             set {
                 this["LeftPanelDetailsAlpha"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DimUnselectedCovers {
+            get {
+                return ((bool)(this["DimUnselectedCovers"]));
+            }
+            set {
+                this["DimUnselectedCovers"] = value;
             }
         }
     }

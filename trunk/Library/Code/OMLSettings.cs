@@ -60,6 +60,16 @@ namespace Library
                 FirePropertyChanged("ShowFileLocation");
             }
         }
+        public bool DimUnselectedCovers
+        {
+            get { return Properties.Settings.Default.DimUnselectedCovers; }
+            set
+            {
+                Properties.Settings.Default.DimUnselectedCovers = value;
+                Properties.Settings.Default.Save();
+                FirePropertyChanged("DimUnselectedCovers");
+            }
+        }
         public bool ShowMovieDetails
         {
             get { return Properties.Settings.Default.ShowMovieDetails; }

@@ -40,7 +40,7 @@
             <AnchorEdge Name="RightAnchor" Percent="[UISettings.Anchor.RightAnchor]" Offset ="[UISettings.Anchor.RightOffset]" Id="Parent"/>
 
             <ShortcutHandler Name="MoreInfo" />
-            <cor:Single Name="AlphaCoverArt" Single="0.7"/>
+            <cor:Single Name="AlphaCoverArt" Single="0.5"/>
             <cor:Single Name="AlphaList" Single="1"/>
             <cor:Single Name="DefaultAlpha" />          
         </Locals>
@@ -48,7 +48,7 @@
         <Rules>
             <Binding Source="[JumpValue.Value]" Target="[JumpInText.Content]" />
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanel.Visible]" />
-            <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelTitle.Visible]" />
+            <!--<Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelTitle.Visible]" />-->
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRuntime.Visible]" />
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRating.Visible]" />
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelSummary.Visible]" />
@@ -123,7 +123,7 @@
                         <Panel Name="LeftPanelTitle">
                           <!-- LeftPanelTitle -->
                           <Children>
-                            <Text Name="Caption" Content="" WordWrap="true" Font="font://s:Heading" Color="color://s:HeadingColor">
+                            <Text Name="Caption" Content="" WordWrap="true" Font="font://s:Heading" Color="color://s:HeadingColor" >
                               <Animations>
                                 <TransformAnimation Source="animation://s:ChangeHide"/>
                                 <TransformAnimation Source="animation://s:ChangeShow"/>
@@ -131,7 +131,7 @@
                             </Text>
                           </Children>
                           <LayoutInput>
-                            <FormLayoutInput Left="[DetailsLeftAnchor]" Right="[DetailsRightAnchor]" Top="[DetailsTopAnchor]" />
+                            <FormLayoutInput Left="[DetailsLeftAnchor]" Right="[DetailsRightAnchor]" Top="[TitleTopAnchor]" />
                           </LayoutInput>
                         </Panel>
 
