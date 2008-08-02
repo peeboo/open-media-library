@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
@@ -139,15 +139,11 @@ namespace MyMoviesPlugin
                 case "Description":
                     newTitle.Synopsis = node.InnerText;
                     break;
-                case "ReleaseDate":
-                    string rls_date_str = node.InnerText;
-                    string[] parts = rls_date_str.Split(new char[] { '/' });
-                    if (parts.Length == 3)
+                case "ProductionYear":
+                    string year = node.InnerText;
+                    if (year.length > 0)
                     {
-                        int year = Int32.Parse(parts[2]);
-                        int month = Int32.Parse(parts[0]);
-                        int day = Int32.Parse(parts[1]);
-                        DateTime rls_date = new DateTime(year, month, day);
+                        DateTime rls_date = new DateTime(year, 01, 01);
                         newTitle.ReleaseDate = rls_date;
                     }
                     break;
