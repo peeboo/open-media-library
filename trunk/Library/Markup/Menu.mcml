@@ -9,8 +9,9 @@
 	  xmlns:me="Me">
 
     <Aggregate Source="resx://Library/Library.Resources/FilterList"/>
+    <Aggregate Source="resx://Library/Library.Resources/Base" />
 
-    <UI Name="MainMenu">
+  <UI Name="MainMenu">
 
         <Properties>
             <a:OMLApplication Name="Application" OMLApplication="$Required"/>

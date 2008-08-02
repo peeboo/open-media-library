@@ -2,7 +2,7 @@
       >
 
   <Sound Name="Select"          Source="resx://Library/Library.Resources/Select" />
-  <Sound Name="Miniselect"      Source="resx://Library/Library.Resources/Miniselect" />
+  <Sound Name="MiniSelect"      Source="resx://Library/Library.Resources/MiniSelect" />
   <Sound Name="Focus"           Source="resx://Library/Library.Resources/Focus" />
   <Sound Name="Error"           Source="resx://Library/Library.Resources/Error" />
   <Sound Name="PageTransition"  Source="resx://Library/Library.Resources/PageTransition" />
