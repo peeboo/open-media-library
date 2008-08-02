@@ -313,7 +313,7 @@ namespace Library
             Utilities.DebugLine("[MovieGallery] JumpToMovie: {0}", jumpString);
             foreach (MovieItem m in _moviesVirtualList)
             {
-                if (m.Name.StartsWith(jumpString, true, null))
+                if (m.SortName.StartsWith(jumpString, true, null))
                 {
                     int focusedItemIndex = _moviesVirtualList.IndexOf(FocusedItem);
 

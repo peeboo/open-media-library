@@ -7,6 +7,8 @@
     xmlns:col="assembly://MSCorLib/System.Collections"
 	  xmlns:me="Me">
 
+  <Aggregate Source="resx://Library/Library.Resources/Base" />
+  
   <UI Name="Gallery">
   <Properties>
     <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
@@ -210,9 +212,11 @@
         <Set Target="[FocusedIndex.Value]" Value="[Index.SourceValue]"/>
         <Set Target="[MovieBrowser.FocusedItem]" Value="[GalleryItem]" />
         <!-- Play an animation on the cover target item. -->
+        <PlaySound Sound="sound://me:Focus" />
       </Actions>
     </Condition>
 
+    
     <!-- when we loose focus -->
     <Condition Source="[Input.KeyFocus]" SourceValue="false">
       <Actions>

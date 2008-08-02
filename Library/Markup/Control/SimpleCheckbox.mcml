@@ -25,6 +25,8 @@
 
       <Changed Source="[Clicker.Invoked]">
         <Actions>
+          <PlaySound Sound="sound://me:Select" />
+
           <Set Target="[Checked.Value]" Value="[Checked.Value]" Transformer="[BooleanInverseTransformer]" />
         </Actions>
       </Changed>
@@ -53,6 +55,8 @@
         </Conditions>
         <Actions>
           <Set Target="[Background.Content]" Value="image://me:FirstRunCheckBoxCheckedFocus" />
+          <PlaySound Sound="sound://me:Focus" />
+
         </Actions>
       </Condition>
 
@@ -62,6 +66,8 @@
         </Conditions>
         <Actions>
           <Set Target="[Background.Content]" Value="image://me:FirstRunCheckBoxUncheckedFocus" />
+          <PlaySound Sound="sound://me:Focus" />
+
         </Actions>
       </Condition>
 

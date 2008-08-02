@@ -51,7 +51,7 @@
                     <Equality Source="[IsNavigatingCommand]" Value="false"/>
                 </Conditions>
                 <Actions>
-                    <PlaySound Sound="sound://me:Miniselect" />
+                    <PlaySound Sound="sound://me:MiniSelect" />
                 </Actions>
             </Rule>
 
