@@ -143,7 +143,7 @@
     <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
     <!-- Update these 2 values everytime we get the focus -->
     <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
-    <cor:Single Name="CoverArtAlpha" Single="0.7"/>
+    <cor:Single Name="CoverArtAlpha" Single="0.5"/>
     
     <!-- The index passed down from the repeater.-->
     <Index Name="Index" Index="$Required"/>

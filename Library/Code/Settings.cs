@@ -24,7 +24,8 @@ namespace Library
             _omlSettings.DaemonTools = _daemonToolsPath.Value;
             _omlSettings.MovieSort = _movieSort.Chosen as string;
             _omlSettings.MovieView = _movieView.Chosen as string;
-            _omlSettings.ShowMovieDetails = (bool)_ShowMovieDetails.Chosen;
+            _omlSettings.ShowMovieDetails = (bool)_showMovieDetails.Chosen;
+            _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
             _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
             OMLApplication.Current.Startup();
         }
@@ -68,12 +69,18 @@ namespace Library
             _movieSort.Options = items;
             _movieSort.Chosen = _omlSettings.MovieSort;
 
-            _ShowMovieDetails.Chosen = _omlSettings.ShowMovieDetails;
+            _showMovieDetails.Chosen = _omlSettings.ShowMovieDetails;
+            _dimUnselectedCovers.Chosen = _omlSettings.DimUnselectedCovers;
         }
 
         public BooleanChoice ShowMovieDetails
         {
-            get { return _ShowMovieDetails; }
+            get { return _showMovieDetails; }
+        }
+
+        public BooleanChoice DimUnselectedCovers
+        {
+            get { return _dimUnselectedCovers; }
         }
 
         public Choice VirtualDrive
@@ -124,7 +131,8 @@ namespace Library
         Choice _virtualDrive = new Choice();
         Choice _movieView = new Choice();
         Choice _movieSort = new Choice();
-        BooleanChoice _ShowMovieDetails = new BooleanChoice();
+        BooleanChoice _showMovieDetails = new BooleanChoice();
+        BooleanChoice _dimUnselectedCovers = new BooleanChoice();
 
     }
 }

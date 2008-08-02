@@ -107,9 +107,6 @@
     <Setting Name="ListSpacingHorizontal" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">80</Value>
     </Setting>
-    <Setting Name="CoverArtAlpha" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0.5</Value>
-    </Setting>
     <Setting Name="ShowMovieDetails" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -121,6 +118,9 @@
     </Setting>
     <Setting Name="LeftPanelDetailsAlpha" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.8</Value>
+    </Setting>
+    <Setting Name="DimUnselectedCovers" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>
