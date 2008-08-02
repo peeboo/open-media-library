@@ -6,6 +6,9 @@
     xmlns:c="resx://Library/Library.Resources/Controls"
 	  xmlns:me="Me">
 
+  <Aggregate Source="resx://Library/Library.Resources/Base" />
+
+
   <!-- A list of filters on a filtered content page -->
   <UI Name="FilterList">
     <Properties>
@@ -15,6 +18,7 @@
     <Locals>
       <ScrollingData Name="ScrollingData"/>
       <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true" HandlePageCommands="true" HandlePageKeys="true"/>
+      <Timer Name="ClearTimer" AutoRepeat="false" Interval="5000" Enabled="false"/>      
     </Locals>
 
     <Rules>
@@ -30,8 +34,10 @@
           <Set Target="[Repeater.Source]" Value="[Page.Categories.Options]"/>
         </Actions>
       </Rule>
+
     </Rules>
 
+    
     <Content>
       <!--<Panel>
         <Children>
@@ -106,6 +112,7 @@
       <Condition Source="[Clicker.Clicking]" SourceValue="true">
         <Actions>
           <!--<Set Target="[Background.Content]" Value="[BackgroundPressedColor]"/>-->
+          <PlaySound Sound="sound://me:MiniSelect" />
           <Set Target="[Label.Color]" Value="[LabelPressedColor]"/>
         </Actions>
       </Condition>
@@ -116,6 +123,7 @@
           <!--<Set Target="[Background.Content]" Value="[BackgroundHoverColor]"/>-->
           <PlayAnimation Target="[Label]" Animation="animation://me:GotFocusList" />
           <Set Target="[Label.Color]" Value="White"/>
+          <PlaySound Sound="sound://me:Focus" />
         </Actions>
       </Condition>
       
