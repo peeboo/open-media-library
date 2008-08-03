@@ -9,6 +9,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Xml;
 using System.Xml.XPath;
+using System.Text.RegularExpressions;
 
 namespace VMCDVDLibraryPlugin
 {
@@ -401,10 +402,11 @@ namespace VMCDVDLibraryPlugin
         {
             string xmlFileName = "";
 
-            // dvd id should be of the format x|y where x is 8 char long and y is 8 char long
-            if (dvdid.Length == 17 && dvdid[8] == '|')
+            // fix from MostlyHarmless on TGB
+            Regex match = new Regex("^[a-fA-F0-9]{6,8}\\|{1}[a-fA-F0-9]{8}");
+            if (match.IsMatch(dvdid))
             {
-                xmlFileName = dvdid.Substring(0, 8) + "-" + dvdid.Substring(9) + ".xml";
+                xmlFileName = dvdid.Replace("|", "-") + ".xml";
             }
             else
             {
