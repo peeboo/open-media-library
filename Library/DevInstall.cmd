@@ -33,7 +33,7 @@ goto unregister
     ECHO.
 
     ECHO.Unregister the application entry points
-    %windir%\ehome\RegisterMCEApp.exe /allusers "%ProgramFilesPath%\%CompanyName%\%AssemblyName%\%RegistrationName%.xml" /u
+    %windir%\ehome\RegisterMCEApp.exe /allusers "%ProgramFilesPath%\%CompanyName%\%RegistrationName%.xml" /u
     ECHO.
 
     ECHO.Remove the DLL from the Global Assembly cache
