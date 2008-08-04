@@ -144,6 +144,10 @@ namespace VMCDVDLibraryPlugin
                                     {
                                         SetFrontCoverImage(ref newVideo, pathWithNoExtension + ".jpg");
                                     }
+                                    else if (File.Exists(video + ".jpg"))
+                                    {
+                                        SetFrontCoverImage(ref newVideo, video + ".jpg");
+                                    }
 
                                     if (File.Exists(pathWithNoExtension + ".OML.XML"))
                                     {
