@@ -5,6 +5,8 @@ using System.Text;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Reflection;
+using System.Xml;
+using System.Xml.XPath;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Runtime.Remoting;
@@ -66,6 +68,8 @@ namespace OMLEngine
         private List<string> _extraFeatures = new List<string>();
         private List<Disk> _disks = new List<Disk>();
         private Disk _selectedDisk = null;
+
+        private static string XmlNameSpace = "http://www.openmedialibrary.org/";
 
         #endregion
 
@@ -812,24 +816,695 @@ namespace OMLEngine
         }
         public void ReadXml(System.Xml.XmlReader reader)
         {
+            string str;
+            if(reader.MoveToContent() == XmlNodeType.Element && reader.Name == "OMLTitle") 
+            {
+                while(reader.Read())
+                {
+                    if(reader.MoveToContent() == XmlNodeType.Element)
+                    {
+                        if( !reader.IsEmptyElement )
+                        {
+                            if (reader.Name == "Name")
+                            {
+                                Name = reader.ReadString();
+                            }
+                            else if (reader.Name == "SortName")
+                            {
+                                SortName = reader.ReadString();
+                            }
+                            else if (reader.Name == "OriginalName")
+                            {
+                                OriginalName = reader.ReadString();
+                            }
+
+                        }
+                    }
+
+
+                    //if (reader.IsStartElement())
+                    //{
+                    //    if (reader.IsEmptyElement)
+                    //        Console.WriteLine("<{0}/>", reader.Name);
+                    //}
+                    //else
+                    //{
+                    //    Console.Write("<{0}> ", reader.Name);
+                    //    reader.Read(); // Read the start tag.
+                    //    if (reader.IsStartElement())  // Handle nested elements.
+                    //        Console.Write("\r\n<{0}>", reader.Name);
+                    //    Console.WriteLine(reader.ReadString());  //Read the text content of the element.
+                    //}
+                } 
+
+            } // we have an OMLTitle
         }
+
 
         public XmlSchema GetSchema()
         {
             return null;
         }
 
+        static public Title CreateFromXML(string fileName)
+        {
+            Title t = new Title();
 
+            try
+            {
+                if (File.Exists(fileName))
+                {
+                    XPathDocument document = new XPathDocument(fileName);
+                    XPathNavigator navigator = document.CreateNavigator();
+
+                    if (navigator.MoveToChild("OMLTitle", XmlNameSpace))
+                    {
+                        if (navigator.MoveToChild("Name", XmlNameSpace))
+                        {
+                            t.Name = navigator.Value;
+                            navigator.MoveToParent();
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                        
+                        if (navigator.MoveToChild("OriginalName", XmlNameSpace))
+                        {
+                            if (String.IsNullOrEmpty(navigator.Value))
+                                t.OriginalName = t.Name;
+                            else
+                                t.OriginalName = navigator.Value;
+                            navigator.MoveToParent();
+                        }
+                        
+                        if (navigator.MoveToChild("SortName", XmlNameSpace))
+                        {
+                            if (String.IsNullOrEmpty(navigator.Value))
+                                t.SortName = t.Name;
+                            else
+                                t.SortName = navigator.Value;
+                            navigator.MoveToParent();
+                        }
+                        
+                        if (navigator.MoveToChild("FrontCoverPath", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value)) t.FrontCoverPath = navigator.Value;
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("FrontCoverMenuPath", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value)) t.FrontCoverMenuPath = navigator.Value;
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("Disks", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "Disk")
+                                    {
+                                        string diskName = "Movie";
+                                        if (navigator.MoveToFirstAttribute() && navigator.Name == "Name")
+                                        {
+                                            diskName = navigator.Value;
+                                            navigator.MoveToParent();
+                                        }
+
+                                        string path = "";
+                                        VideoFormat format = VideoFormat.DVD;
+
+                                        if (navigator.MoveToChild("Path", XmlNameSpace))
+                                        {
+                                            path = navigator.Value;
+                                        }
+                                        navigator.MoveToParent();
+                                        if (navigator.MoveToChild("Format", XmlNameSpace))
+                                        {
+                                            try
+                                            {
+                                                format = (VideoFormat)Enum.Parse(typeof(VideoFormat), navigator.Value, true);
+                                            }
+                                            catch
+                                            {
+                                                format = VideoFormat.DVD;
+                                            }
+
+                                        }
+                                        navigator.MoveToParent();
+
+                                        t.Disks.Add(new Disk(diskName, path, format));
+
+                                        if (!navigator.MoveToNext()) break;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                navigator.MoveToParent(); // move up to disks
+                            }
+                            
+                            navigator.MoveToParent(); // move up to root
+                        }
+
+                        if (navigator.MoveToChild("Synopsis", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                t.Synopsis = navigator.Value;
+                            }
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("Studio", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                t.Studio = navigator.Value;
+                            }
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("Country", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                t.CountryOfOrigin = navigator.Value;
+                            }
+                            navigator.MoveToParent();
+                        }
+
+
+                        
+                        if (navigator.MoveToChild("OfficialWebSiteURL", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                t.OfficialWebsiteURL = navigator.Value;
+                            }
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("Runtime", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                int runtime = 0;
+                                if (Int32.TryParse(navigator.Value, out runtime))
+                                {
+                                    t.Runtime = runtime;
+                                }
+                            }
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("ParentalRating", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                t.ParentalRating = navigator.Value;
+                            }
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("ParentalRatingReason", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                t.ParentalRatingReason = navigator.Value;
+                            }
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("ReleaseDate", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                DateTime releaseDate;
+                                if (DateTime.TryParse(navigator.Value, out releaseDate))
+                                {
+                                    t.ReleaseDate = releaseDate;
+                                }
+                            }
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("Genres", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "Genre")
+                                    {
+                                        t.AddGenre(navigator.Value);
+                                        if (!navigator.MoveToNext()) break;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                navigator.MoveToParent();
+                            }
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("Tags", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "Tag")
+                                    {
+                                        t.Tags.Add(navigator.Value);
+                                        if (!navigator.MoveToNext()) break;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+
+                                }
+                                navigator.MoveToParent();
+                            }
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("Trailers", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "Trailer")
+                                    {
+                                        t.Trailers.Add(navigator.Value);
+                                        if (!navigator.MoveToNext()) break;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                navigator.MoveToParent();
+                            }
+                            
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("Photos", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "Photo")
+                                    {
+                                        t.Photos.Add(navigator.Value);
+                                        if (!navigator.MoveToNext()) break;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                navigator.MoveToParent();
+                            }
+                            navigator.MoveToParent();
+                            
+                        }
+
+
+                        if (navigator.MoveToChild("Subtitles", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "Subtitle")
+                                    {
+                                        t.Subtitles.Add(navigator.Value);
+                                        if (!navigator.MoveToNext()) break;
+                                    }
+                                    else break;
+                                }
+                                navigator.MoveToParent();
+                            }
+                            navigator.MoveToParent();
+
+                        }
+
+
+                        if (navigator.MoveToChild("AudioTracks", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "AudioTrack")
+                                    {
+                                        t.AudioTracks.Add(navigator.Value);
+                                        if (!navigator.MoveToNext()) break;
+                                    }
+                                    else break;
+                                }
+                                navigator.MoveToParent();
+
+                            }
+                            navigator.MoveToParent();
+
+                        }
+
+                        if (navigator.MoveToChild("ExtraFeatures", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "ExtraFeature")
+                                    {
+                                        t.ExtraFeatures.Add(navigator.Value);
+                                        if (!navigator.MoveToNext()) break;
+                                    }
+                                    else break;
+                                }
+                                navigator.MoveToParent();
+                            }
+                            navigator.MoveToParent();
+
+                        }
+
+                        if (navigator.MoveToChild("Writers", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "Writer")
+                                    {
+                                        t.AddWriter(new Person(navigator.Value));
+                                        if (!navigator.MoveToNext()) break;
+                                    }
+                                    else break;
+                                }
+                                navigator.MoveToParent();
+                            }
+                            navigator.MoveToParent();
+                        }
+
+                        if (navigator.MoveToChild("Directors", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "Director")
+                                    {
+                                        t.AddDirector(new Person(navigator.Value));
+                                        if (!navigator.MoveToNext()) break;
+                                    }
+                                    else break;
+                                }
+                                navigator.MoveToParent();
+                            }
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("AspectRatio", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                t.AspectRatio = navigator.Value;
+                            }
+                            navigator.MoveToParent();
+                        }
+
+                        
+                        if (navigator.MoveToChild("VideoStandard", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                t.VideoStandard = navigator.Value;
+                            }
+                            navigator.MoveToParent();
+                        }
+
+
+                        if (navigator.MoveToChild("VideoResolution", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                t.VideoResolution = navigator.Value;
+                            }
+                            navigator.MoveToParent();
+                        }
+
+
+                        if (navigator.MoveToChild("VideoDetails", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                t.VideoDetails = navigator.Value;
+                            }
+                            navigator.MoveToParent();
+
+                        }
+
+
+                        if (navigator.MoveToChild("UserRating", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                int rating = 0;
+                                if (Int32.TryParse(navigator.Value, out rating))
+                                {
+                                    t.UserStarRating = rating;
+                                }
+                            }
+                            navigator.MoveToParent();
+                        }
+
+
+                        if (navigator.MoveToChild("ActingRoles", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "Actor")
+                                    {
+                                        string name = "";
+                                        string role = "";
+
+                                        if (navigator.MoveToFirstAttribute())
+                                        {
+                                            for (; ; )
+                                            {
+                                                if (navigator.Name == "Name")
+                                                    name = navigator.Value;
+                                                else if (navigator.Name == "Role")
+                                                    role = navigator.Value;
+                                                if (!navigator.MoveToNextAttribute()) break;
+                                            }
+                                            navigator.MoveToParent();
+                                        }
+                                        //navigator.MoveToParent();
+
+                                        if( name.Length > 0 )
+                                            t.AddActingRole(name, role);
+
+                                        if (!navigator.MoveToNext())
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                navigator.MoveToParent();
+                            }
+                            navigator.MoveToParent();
+
+                        }
+
+
+                        if (navigator.MoveToChild("NonActingRoles", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "Person")
+                                    {
+                                        string name = "";
+                                        string role = "";
+
+                                        if (navigator.MoveToFirstAttribute())
+                                        {
+                                            for (; ; )
+                                            {
+                                                if (navigator.Name == "Name")
+                                                    name = navigator.Value;
+                                                else if (navigator.Name == "Role")
+                                                    role = navigator.Value;
+                                                if (!navigator.MoveToNextAttribute()) break;
+                                            }
+                                            navigator.MoveToParent();
+                                        }
+                                        //navigator.MoveToParent();
+
+                                        if (name.Length > 0)
+                                            t.AddNonActingRole(name, role);
+
+                                        if (!navigator.MoveToNext())
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                navigator.MoveToParent();
+                            }
+                            navigator.MoveToParent();
+
+                        }
+
+                        if (navigator.MoveToChild("CustomFields", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "CustomField")
+                                    {
+                                        string name = "";
+                                        string value = "";
+
+                                        if (navigator.MoveToFirstAttribute())
+                                        {
+                                            for (; ; )
+                                            {
+                                                if (navigator.Name == "Name")
+                                                    name = navigator.Value;
+                                                else if (navigator.Name == "Value")
+                                                    value = navigator.Value;
+                                                if (!navigator.MoveToNextAttribute()) break;
+                                            }
+                                            navigator.MoveToParent();
+                                        }
+
+                                        if (name.Length > 0)
+                                            t.AdditionalFields.Add(name, value);
+
+                                        if (!navigator.MoveToNext())
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                navigator.MoveToParent();
+                            }
+                            navigator.MoveToParent();
+
+                        }
+
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+            // oml.xml should be int the same folder as the media
+            // for an avi file c:\movies\test.avi the oml file is c:\movies\test.avi.oml.xml
+            // for a dvd c:\movies\300\video_ts is c:\movies\300\video_ts.oml.xml
+
+            // if we import to a different computer try to look up the information in
+            // the current folder where the oml.xml is found
+
+            if (t.Disks != null && t.Disks.Count > 0)
+            {
+                if (!File.Exists(t.Disks[0].Path) && !Directory.Exists(t.Disks[0].Path))
+                {
+                    string mediaName = fileName.ToUpper().Replace(".OML.XML", "");
+                    string folder = Path.GetDirectoryName(mediaName);
+                    if (folder != null )
+                    {
+                        // update the location
+                        t.Disks[0].Path = mediaName;
+
+                        if (!File.Exists(t.FrontCoverPath))
+                        {
+                            string newCover = folder + "\\folder.jpg";
+                            if (File.Exists(newCover))
+                            {
+                                t.FrontCoverPath = newCover;
+                            }
+                            else
+                            {
+                                newCover = folder + "\\" + Path.GetFileNameWithoutExtension(mediaName) + ".jpg";
+                                if (File.Exists(newCover))
+                                    t.FrontCoverPath = newCover;
+                                else
+                                {
+                                    newCover = folder + "\\" + Path.GetFileName(mediaName) + ".jpg";
+                                    if (File.Exists(newCover))
+                                        t.FrontCoverPath = newCover;
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }            
+
+            return t;
+        }
+
+        
+        
+        // <CustomFields />
         public void WriteXml(System.Xml.XmlWriter writer)
         {
             writer.WriteElementString("Name", Name);
+            writer.WriteElementString("SortName", _sortName);
+            writer.WriteElementString("OriginalName", _originalName);
 
             // the reader should verify that this exists and if doesn't it should
             // just use folder.jpg in the same folder
             writer.WriteElementString("FrontCoverPath", FrontCoverPath);
             
             // this will be created when imported
-            //writer.WriteElementString("FrontCoverMenuPath", FrontCoverMenuPath);
+            writer.WriteElementString("FrontCoverMenuPath", FrontCoverMenuPath);
 
             // should be relative path so it can be loaded on any computer
             writer.WriteStartElement("Disks");
@@ -839,16 +1514,14 @@ namespace OMLEngine
                 writer.WriteAttributeString("Name", disk.Name);
 
                 // the xml file should be in the same dir as the movie
-                string dirName = Path.GetDirectoryName(disk.Path);
-                string relativeDir = disk.Path.Replace(dirName, ".");
-                writer.WriteElementString("Path", relativeDir);
+                writer.WriteElementString("Path",disk.Path);
                 writer.WriteElementString("Format", disk.Format.ToString());
                 writer.WriteEndElement();
             }
             writer.WriteEndElement();
          
-            writer.WriteElementString("VideoFormat", _videoFormat.ToString());
-            //writer.WriteElementString("TranscodeToExtender", _needsTranscode.ToString());
+            ////writer.WriteElementString("VideoFormat", _videoFormat.ToString());
+            writer.WriteElementString("TranscodeToExtender", _needsTranscode.ToString());
             
             writer.WriteElementString("Synopsis", _synopsis);
             writer.WriteElementString("Studio", _studio);
@@ -860,7 +1533,7 @@ namespace OMLEngine
             writer.WriteElementString("ParentalRatingReason", _parentalRatingReason);
             writer.WriteElementString("ReleaseDate", _releaseDate.ToString());
             
-            //writer.WriteElementString("producers", _producers);
+            
             
             writer.WriteStartElement("Genres");
             foreach (string genre in Genres)
@@ -895,7 +1568,6 @@ namespace OMLEngine
             writer.WriteElementString("AspectRatio", _aspectRatio.ToString());
             writer.WriteElementString("VideoStandard", _videoStandard);
             
-            writer.WriteElementString("OriginalName", _originalName);
 
             writer.WriteStartElement("ActingRoles");
             foreach (KeyValuePair<string,string> actingRole in ActingRoles)
@@ -935,21 +1607,38 @@ namespace OMLEngine
             writer.WriteStartElement("CustomFields");
             foreach (KeyValuePair<string,string> field in AdditionalFields)
             {
-                writer.WriteElementString("CustomField", field.Key);
+                writer.WriteStartElement("CustomField");
+                writer.WriteAttributeString("Name", field.Key);
                 writer.WriteAttributeString("Value", field.Key);
             }
             writer.WriteEndElement();
 
-            //writer.WriteElementString("photos", _photos);
-            //writer.WriteElementString("trailers", _trailers);
 
-            writer.WriteElementString("SortName", _sortName);
-            
+            writer.WriteStartElement("Photos");
+            foreach (string photo in Photos)
+            {
+                writer.WriteElementString("Photo", photo);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("Trailers");
+            foreach (string trailer in Trailers)
+            {
+                writer.WriteElementString("Trailer", trailer);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("ExtraFeatures");
+            foreach (string feature in ExtraFeatures)
+            {
+                writer.WriteElementString("ExtraFeature", feature);
+            }
+            writer.WriteEndElement();
+                        
+
             writer.WriteElementString("VideoDetails", _videoDetails);
             
             writer.WriteElementString("VideoResolution", _videoResolution);
-            //writer.WriteElementString("ExtraFeatures", _extraFeatures);
-
         }
     }
 }
