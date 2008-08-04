@@ -205,7 +205,12 @@ namespace VMCDVDLibraryPlugin
                         // for DVDs with no dvdid.xml add a stripped down title with just a suggested name
                         t = new Title();
                         t.Name = GetSuggestedMovieName(folderName);
-                        return t;
+                    }
+
+                    if (!File.Exists(t.FrontCoverPath))
+                    {
+                        if( File.Exists( folderName + "\\folder.jpg") )
+                            t.FrontCoverPath = folderName + "\\folder.jpg";
                     }
 
                     t.ImporterSource = "VMCDVDLibraryPlugin";
