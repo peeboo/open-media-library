@@ -31,8 +31,8 @@
                 Rows="[UISettings.Gallery.CoverArtRows]"
                 Orientation="Vertical"
                 AllowWrap="true"
-                ReferenceSize="[UISettings.Gallery.CoverArtSize]"
                 Spacing="[UISettings.Gallery.CoverArtSpacing]"
+                ReferenceSize="[UISettings.Gallery.CoverArtSize]"
                 MajorAlignment="Fill"
                 MinorAlignment="Center"
                 RepeatGap="100"/>
@@ -78,7 +78,7 @@
       </Conditions>
       <Actions>
         <Set Target="[JumpValue.Value]" Value="[TypingHandler.DisplayValue]"/>
-        <Invoke Target="[MovieBrowser.JumpToMovie]" jumpString="[TypingHandler.DisplayValue]" />
+        <Invoke Target="[MovieBrowser.JumpToMovie]" jumpString="[TypingHandler.DisplayValue]" list="[List]"/>
         <Invoke Target="[ClearTimer.Start]" />
       </Actions>
     </Rule>
@@ -120,7 +120,7 @@
 
                 <!-- For each item, repeat our RepeatedItem UI, passing in-->
                 <!-- the index of the item and the image.                 -->
-                <me:RepeatedItem  Index="[RepeatedItemIndex]" FocusedIndex="[FocusedIndex]" GalleryItem="[RepeatedItem!a:GalleryItem]" Application="[Application]" MovieBrowser="[MovieBrowser]" GalleryView="[GalleryView]" CoverArtAlpha="[UISettings.Gallery.CoverArtAlpha]" />
+                <me:RepeatedItem  Index="[RepeatedItemIndex]" FocusedIndex="[FocusedIndex]" GalleryItem="[RepeatedItem!a:GalleryItem]" Application="[Application]" MovieBrowser="[MovieBrowser]" GalleryView="[GalleryView]" CoverArtAlpha="[UISettings.Gallery.CoverArtAlpha]" UISettings="[UISettings]" />
               </Content>
             </Repeater>
 
@@ -146,6 +146,7 @@
     <!-- Update these 2 values everytime we get the focus -->
     <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
     <cor:Single Name="CoverArtAlpha" Single="0.5"/>
+    <a:UISettings Name="UISettings" UISettings="$Required" />
     
     <!-- The index passed down from the repeater.-->
     <Index Name="Index" Index="$Required"/>
@@ -160,6 +161,37 @@
 
   <Locals>
     <ClickHandler Name="Clicker" Command="[GalleryItem]"/>
+
+
+    <!-- This animation will scale the image. -->
+    <Animation Name="LostFocusCoverArt" Loop="0">
+      <Keyframes>
+        <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
+        <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
+      </Keyframes>
+    </Animation>
+
+    <Animation Name="GotFocusCoverArt" Loop="0" CenterPointPercent=".5,.5,0" >
+      <Keyframes>
+        <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+        <ScaleKeyframe Time="0.4" Value="[UISettings.Gallery.FocusCoverArtScale]" RelativeTo="Final" />
+      </Keyframes>
+    </Animation>
+
+    <!-- This animation will scale the image. -->
+    <Animation Name="LostFocusList" Loop="0">
+      <Keyframes>
+        <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
+        <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
+      </Keyframes>
+    </Animation>
+
+    <Animation Name="GotFocusList" Loop="0" CenterPointPercent=".1,.1,0" >
+      <Keyframes>
+        <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+        <ScaleKeyframe Time="0.2" Value="[UISettings.Gallery.FocusListScale]" RelativeTo="Final" />
+      </Keyframes>
+    </Animation>
   </Locals>
 
   <Rules>
@@ -174,8 +206,8 @@
       <Actions>
         <Set Target="[MenuCover.Visible]" Value="false" />
         <Set Target="[Caption.Visible]" Value="true" />
-        <Set Target="[LostFocus]" Value="animation://me:LostFocusList" />
-        <Set Target="[GotFocus]" Value="animation://me:GotFocusList" />
+        <Set Target="[LostFocus]" Value="[LostFocusList]" />
+        <Set Target="[GotFocus]" Value="[GotFocusList]" />
         <Set Target="[Background.Content]" Value="[BackgroundImageList]" />
       </Actions>
     </Condition>
@@ -194,8 +226,8 @@
     <Condition Source="[GalleryView]" SourceValue="Cover Art" ConditionOp="Equals" >
       <Actions>
         <Set Target="[MenuCover.Visible]" Value="true" />
-        <Set Target="[LostFocus]" Value="animation://me:LostFocusCoverArt" />
-        <Set Target="[GotFocus]" Value="animation://me:GotFocusCoverArt" />
+        <Set Target="[LostFocus]" Value="[LostFocusCoverArt]" />
+        <Set Target="[GotFocus]" Value="[GotFocusCoverArt]" />
         <Set Target="[Background.Content]" Value="[BackgroundImageCoverArt]" />
         <Set Target="[Caption.Font]" Value="font://s:Normal" />
       </Actions>
@@ -254,35 +286,6 @@
   </Content>
 </UI>
 
-  <!-- This animation will scale the image. -->
-  <Animation Name="LostFocusCoverArt" Loop="0">
-    <Keyframes>
-      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
-      <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
-    </Keyframes>
-  </Animation>
-  
-  <Animation Name="GotFocusCoverArt" Loop="0" CenterPointPercent=".5,.5,0" >
-    <Keyframes>
-      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
-      <ScaleKeyframe Time="0.4" Value="1.4,1.4,1.4" RelativeTo="Final" />
-    </Keyframes>
-  </Animation>
-
-  <!-- This animation will scale the image. -->
-  <Animation Name="LostFocusList" Loop="0">
-    <Keyframes>
-      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
-      <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
-    </Keyframes>
-  </Animation>
-
-  <Animation Name="GotFocusList" Loop="0" CenterPointPercent=".1,.1,0" >
-    <Keyframes>
-      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
-      <ScaleKeyframe Time="0.2" Value="1.2,1.2,1.2" RelativeTo="Final" />
-    </Keyframes>
-  </Animation>
 
 
 </Mcml>

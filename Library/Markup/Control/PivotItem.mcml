@@ -19,7 +19,7 @@
 
       <Default Target="[Input.KeyInteractive]" Value="true"/>
       <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false"/>
-
+      
       <Rule ConditionLogicalOp="Or">
         <Conditions>
           <Equality Source="[Input.MouseFocus]" Value="true"/>

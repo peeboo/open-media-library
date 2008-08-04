@@ -373,12 +373,12 @@ namespace Library
         public int CoverArtSpacingHorizontal
         {
             get { return Properties.Settings.Default.CoverArtSpacingHorizontal; }
-        set
-        {
-            Properties.Settings.Default.CoverArtSpacingHorizontal = value;
-            Properties.Settings.Default.Save();
-            FirePropertyChanged("GallerySpacingHorizontal");
-        }
+            set
+            {
+                Properties.Settings.Default.CoverArtSpacingHorizontal = value;
+                Properties.Settings.Default.Save();
+                FirePropertyChanged("GallerySpacingHorizontal");
+            }
         }
         public int CoverArtSpacingVertical
         {
@@ -398,6 +398,17 @@ namespace Library
                 Properties.Settings.Default.NameAscendingSort = value;
                 Properties.Settings.Default.Save();
                 FirePropertyChanged("NameAscendingSort");
+            }
+        }
+
+        public bool UseOriginalCoverArt
+        {
+            get { return Properties.Settings.Default.UseOriginalCoverArt; }
+            set
+            {
+                Properties.Settings.Default.UseOriginalCoverArt = value;
+                Properties.Settings.Default.Save();
+                FirePropertyChanged("UseOriginalCoverArt");
             }
         }
         #endregion
