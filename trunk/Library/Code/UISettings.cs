@@ -122,7 +122,18 @@ namespace Library
 
         public Size CoverArtSize
         {
-            get { return new Size(Properties.Settings.Default.CoverArtWidth, Properties.Settings.Default.CoverArtHeight); }
+            //TODO: get the 600 out of here into a setting. just experimenting for now
+            get
+            {
+                int rows = Properties.Settings.Default.GalleryCoverArtRows;
+                int height = (600 - rows * 2 * Properties.Settings.Default.CoverArtSpacingVertical) / rows;
+                int width = (int)(height * 0.705);
+
+                Properties.Settings.Default.FocusCoverArtScale = 1.4f - 0.16f * (3-rows);
+
+                return new Size(width, height);
+            }
+            //get { return new Size(Properties.Settings.Default.CoverArtWidth, Properties.Settings.Default.CoverArtHeight); }
         }
 
         public Size ListItemSize
@@ -165,5 +176,16 @@ namespace Library
         {
             get { return Properties.Settings.Default.DimUnselectedCovers; }
         }
+
+        public Vector3 FocusCoverArtScale
+        {
+            get { return new Vector3(Properties.Settings.Default.FocusCoverArtScale, Properties.Settings.Default.FocusCoverArtScale, Properties.Settings.Default.FocusCoverArtScale); }
+        }
+
+        public Vector3 FocusListScale
+        {
+            get { return new Vector3(Properties.Settings.Default.FocusListScale, Properties.Settings.Default.FocusListScale, Properties.Settings.Default.FocusListScale); }
+        }
+
     }
 }

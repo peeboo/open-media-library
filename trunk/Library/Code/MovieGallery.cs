@@ -42,29 +42,6 @@ namespace Library
             get { return _filters; }
         }
 
-
-
-        public Size MenuImageSize
-        {
-            get { return _MenuImageSize; }
-            set
-            {
-                _MenuImageSize = value;
-                FirePropertyChanged("MenuImageSize");
-            }
-        }
-
-        public int NumberOfMenuRows
-        {
-            get { return _NumberOfMenuRows; }
-            set
-            {
-                _NumberOfMenuRows = value;
-                FirePropertyChanged("NumberOfMenuRows");
-            }
-        }
-
-
         public EditableText JumpInListText
         {
             get { return _jumpInListText; }
@@ -306,7 +283,7 @@ namespace Library
             get { return _jumpToPosition; }
         }
 
-        public void JumpToMovie(string jumpString)
+        public void JumpToMovie(string jumpString, IList list)
         {
             if (jumpString.Length == 0) return;
 
@@ -492,13 +469,28 @@ namespace Library
                 MovieItem item = (MovieItem)list[index];
                 if (item.MenuCoverArt == MovieItem.NoCoverImage)
                 {
-                    if (!string.IsNullOrEmpty(item.TitleObject.FrontCoverMenuPath))
+                    if (Properties.Settings.Default.UseOriginalCoverArt)
                     {
-                        if (File.Exists(item.TitleObject.FrontCoverMenuPath))
+                        if (!string.IsNullOrEmpty(item.TitleObject.FrontCoverPath))
                         {
-                            item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverMenuPath);
+                            if (File.Exists(item.TitleObject.FrontCoverPath))
+                            {
+                                item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(item.TitleObject.FrontCoverMenuPath))
+                        {
+                            if (File.Exists(item.TitleObject.FrontCoverMenuPath))
+                            {
+                                item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverMenuPath);
+                            }
                         }
                     }
+
                 }
             }
             catch (Exception e)
@@ -525,9 +517,6 @@ namespace Library
 
         private GalleryItem _focusedItem;
         private string _title;
-
-        private int _NumberOfMenuRows = 2;
-        private Size _MenuImageSize = new Size(150, 200);
 
         EditableText _jumpInListText;
         private int _jumpToPosition = -1;           // the ScrollData jump is relative (Scroll # of items)

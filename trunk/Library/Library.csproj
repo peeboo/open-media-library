@@ -136,6 +136,7 @@
     <Content Include="Markup\DetailsPage.mcml" />
     <Content Include="Markup\FilterList.mcml" />
     <Content Include="Markup\Menu.mcml" />
+    <Content Include="Markup\MovieDetails.mcml" />
     <Content Include="Markup\MovieGallery.mcml" />
     <Content Include="Markup\RadioButtonGroup.mcml" />
     <Content Include="Markup\SelectDirectoriesToScan.mcml" />

@@ -23,9 +23,13 @@ namespace Library
         {
             _omlSettings.DaemonTools = _daemonToolsPath.Value;
             _omlSettings.MovieSort = _movieSort.Chosen as string;
+            _omlSettings.GalleryCoverArtRows = System.Convert.ToInt32(_coverArtRows.Chosen as string);
+            _omlSettings.CoverArtSpacingVertical = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
+            _omlSettings.CoverArtSpacingHorizontal = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
             _omlSettings.MovieView = _movieView.Chosen as string;
             _omlSettings.ShowMovieDetails = (bool)_showMovieDetails.Chosen;
             _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
+            _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
             _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
             OMLApplication.Current.Startup();
         }
@@ -69,13 +73,50 @@ namespace Library
             _movieSort.Options = items;
             _movieSort.Chosen = _omlSettings.MovieSort;
 
+            List<string> rowItems = new List<string>();
+            rowItems.Add("1");
+            rowItems.Add("2");
+            rowItems.Add("3");
+            rowItems.Add("4");
+            rowItems.Add("5");
+            rowItems.Add("6");
+            rowItems.Add("7");
+            rowItems.Add("8");
+            rowItems.Add("8");
+            rowItems.Add("10");
+
+            _coverArtRows.Options = rowItems;
+            _coverArtRows.Chosen = _omlSettings.GalleryCoverArtRows.ToString();
+
+            List<string> spaceItems = new List<string>();
+            spaceItems.Add("0");
+            spaceItems.Add("2");
+            spaceItems.Add("4");
+            spaceItems.Add("6");
+            spaceItems.Add("8");
+            spaceItems.Add("12");
+            spaceItems.Add("14");
+            spaceItems.Add("16");
+            spaceItems.Add("18");
+            spaceItems.Add("20");
+
+            _coverArtSpacing.Options = spaceItems;
+            _coverArtSpacing.Chosen = _omlSettings.CoverArtSpacingVertical.ToString();
+
+
             _showMovieDetails.Chosen = _omlSettings.ShowMovieDetails;
             _dimUnselectedCovers.Chosen = _omlSettings.DimUnselectedCovers;
+            _useOriginalCoverArt.Chosen = _omlSettings.UseOriginalCoverArt;
         }
 
         public BooleanChoice ShowMovieDetails
         {
             get { return _showMovieDetails; }
+        }
+
+        public BooleanChoice UseOriginalCoverArt
+        {
+            get { return _useOriginalCoverArt; }
         }
 
         public BooleanChoice DimUnselectedCovers
@@ -108,6 +149,22 @@ namespace Library
             }
         }
 
+        public Choice CoverArtRows
+        {
+            get
+            {
+                return _coverArtRows;
+            }
+        }
+
+        public Choice CoverArtSpacing
+        {
+            get
+            {
+                return _coverArtSpacing;
+            }
+        }
+
         public EditableText DaemonToolsPath
         {
             get
@@ -131,8 +188,11 @@ namespace Library
         Choice _virtualDrive = new Choice();
         Choice _movieView = new Choice();
         Choice _movieSort = new Choice();
+        Choice _coverArtRows = new Choice();
+        Choice _coverArtSpacing = new Choice();
         BooleanChoice _showMovieDetails = new BooleanChoice();
         BooleanChoice _dimUnselectedCovers = new BooleanChoice();
+        BooleanChoice _useOriginalCoverArt = new BooleanChoice();
 
     }
 }

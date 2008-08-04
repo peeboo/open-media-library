@@ -25,6 +25,7 @@
         <Options>
           <cor:String cor:String="View Options"/>
           <cor:String cor:String="Daemon Tools"/>
+          <cor:String cor:String="Customize UI"/>
         </Options>
       </Choice>
     </Locals>
@@ -66,6 +67,7 @@
         </Conditions>
         <Actions>
           <Set Target="[ViewOptionsPanel.Visible]" Value="true"/>
+          <Set Target="[CustomizeUI.Visible]" Value="false"/>
           <Set Target="[DTPanel.Visible]" Value="false"/>
         </Actions>  
       </Changed>
@@ -76,10 +78,22 @@
         </Conditions>
         <Actions>
           <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+          <Set Target="[CustomizeUI.Visible]" Value="false"/>
           <Set Target="[DTPanel.Visible]" Value="true"/>
         </Actions>
-      </Changed>      
-      
+      </Changed>
+
+      <Changed Source="[Tabs.Chosen]">
+        <Conditions>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="Customize UI"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+          <Set Target="[CustomizeUI.Visible]" Value="true"/>
+          <Set Target="[DTPanel.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+
     </Rules>
 
     <Content>
@@ -88,6 +102,7 @@
 
           <Panel Name="BottomPanel" >
             <Children>
+              
               <Panel Layout="Fill" Margins="50,0,0,0">
                 <Children>
                   <Panel Layout="HorizontalFlow">
@@ -99,12 +114,15 @@
                   </Panel>
                 </Children>
               </Panel>
+              
               <Clip Orientation="Vertical">
                 <Children>
                   <ColorFill Content="Black" Alpha="0.5"/>
                 </Children>
               </Clip>
+              
             </Children>
+            
             <LayoutInput>
               <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
             </LayoutInput>
@@ -126,33 +144,60 @@
             </LayoutInput>
           </Panel>
           
-          <!--<Panel Name="UISettings" Layout="VerticalFlow" Visible="false">
-            <Children>
-              <Text Content="Display Meta Data Overlay" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-              <c:SimpleCheckbox Name="ShowMovieDetails" Checked="[Settings.ShowMovieDetails]" Margins="0,7,4,0" />
-
-              <Text Content="Dim Unselected Covers" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-              <c:SimpleCheckbox Name="DimUnselectedCovers" Checked="[Settings.DimUnselectedCovers]" Margins="0,7,4,0" />
-            </Children>
-          </Panel>-->
-
-          <Panel Name="TabsPanel">
+          <Panel Name="TabsPanel" FocusOrder="0">
             <Children>
               <me:Pivot Model="[Tabs]"/>
             </Children>
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05" Top="TopPanel,1" />
+              <FormLayoutInput Left="Parent,0.3" Top="TopPanel,1" />
             </LayoutInput>
 
           </Panel>
 
-          <Panel Name="ViewOptionsPanel" Layout="VerticalFlow">
+          <Panel Name="ViewOptionsPanel" Layout="VerticalFlow" >
+            <Children>
+                  <Panel Layout="VerticalFlow">
+                    <Children>
+                      
+                      <Panel Layout="VerticalFlow" Margins="0,0,50,0">
+                        <Children>
+                          <Text  Content="Movie Gallery View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <c:SimpleSpinner Name="MovieView" Model="[Settings.MovieView]" />
+                        </Children>
+                      </Panel>
+
+                      <Panel Layout="VerticalFlow">
+                        <Children>
+                          <Text  Content="Movie Sort" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" />
+                        </Children>
+                      </Panel>
+                      
+                  </Children>
+                  </Panel>
+              
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0.05" />
+            </LayoutInput>
+          </Panel>
+
+
+
+          <Panel Name="CustomizeUI" Layout="VerticalFlow" Visible="false">
             <Children>
               <Panel Layout="HorizontalFlow">
                 <Children>
                   <Panel Layout="VerticalFlow">
                     <Children>
-                      
+
+                      <Panel Layout="HorizontalFlow">
+                        <Children>
+                          <c:SimpleCheckbox Name="UseOriginalCoverArt" Checked="[Settings.UseOriginalCoverArt]" Margins="0,12,10,0" />
+                          <Text Content="Don't Resize Cover Art (may slow down browsing)" Color="White" Font="font://me:Font" Margins="0,0,0,0"/>
+                        </Children>
+                      </Panel>
+
                       <Panel Layout="HorizontalFlow">
                         <Children>
                           <c:SimpleCheckbox Name="ShowMovieDetails" Checked="[Settings.ShowMovieDetails]" Margins="0,12,10,0" />
@@ -167,21 +212,21 @@
                         </Children>
                       </Panel>
 
+                      <Panel Layout="VerticalFlow" Margins="0,0,50,0">
+                        <Children>
+                          <Text  Content="Cover Art Rows" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <c:SimpleSpinner Name="CoverArtRows" Model="[Settings.CoverArtRows]" Size="151,51" />
+                        </Children>
+                      </Panel>
 
                       <Panel Layout="VerticalFlow" Margins="0,0,50,0">
                         <Children>
-                          <Text  Content="Movie Gallery View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <c:SimpleSpinner Name="MovieView" Model="[Settings.MovieView]" Size="151,51" />
+                          <Text  Content="Cover Art Spacing" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <c:SimpleSpinner Name="CoverArtSpacing" Model="[Settings.CoverArtSpacing]" Size="151,51" />
                         </Children>
                       </Panel>
 
-                      <Panel Layout="VerticalFlow">
-                        <Children>
-                          <Text  Content="Movie Sort" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" />
-                        </Children>
-                      </Panel>
-                  </Children>
+                    </Children>
                   </Panel>
                 </Children>
               </Panel>
@@ -190,7 +235,6 @@
               <FormLayoutInput Left="Parent,0.05" />
             </LayoutInput>
           </Panel>
-
 
           <Panel Name="DTPanel" Layout="VerticalFlow" Visible="false">
             <Children>
@@ -218,77 +262,11 @@
 
           </Panel>
 
-
-          <!--<Panel Name="Content" >
-            <Children>
-              <Clip Layout="VerticalFlow">
-                <Children>
-                  <Panel Name="DaemonToolsSettings" Layout="VerticalFlow">
-                    <Children>
-                      
-                      <Panel Layout="VerticalFlow" Margins="0,0,50,0">
-                        <Children>
-                          <Text  Content="Daemon Tools Path" Color="White" Font="font://me:Font" Margins="0,20,0,0" />
-                          <c:SimpleEditbox Name="DTEditbox" Size="700,51" EditableText="[Settings.DaemonToolsPath]" Label="" LabelSize="0,0"/>
-                        </Children>
-                      </Panel>
-
-                      <Panel Layout="HorizontalFlow">
-                          <Children>
-                              <Panel Layout="VerticalFlow" Margins="0,0,50,0">
-                                  <Children>
-                                      <Text  Content="Virtual Drive" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                                      <c:SimpleSpinner Name="VirtualDrive" Model="[Settings.VirtualDrive]" Size="51,51" />
-                                  </Children>
-                              </Panel>
-                              <Panel Layout="VerticalFlow">
-                                  <Children>
-                                      <Text Content="Display Meta Data Overlay" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                                      <c:SimpleCheckbox Name="ShowMovieDetails" Checked="[Settings.ShowMovieDetails]" Margins="0,7,4,0" />
-                                    
-                                      <Text Content="Dim Unselected Covers" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                                      <c:SimpleCheckbox Name="DimUnselectedCovers" Checked="[Settings.DimUnselectedCovers]" Margins="0,7,4,0" />                                      
-                                  </Children>
-                              </Panel>
-                          </Children>
-                      </Panel>
-                    </Children>
-                    
-                  </Panel>
-
-
-                  <Panel Name="MovieGallerySettings" Layout="HorizontalFlow">
-                    <Children>
-
-                      <Panel Layout="VerticalFlow" Margins="0,0,50,0">
-                        <Children>
-                          <Text  Content="Movie Gallery View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <c:SimpleSpinner Name="MovieView" Model="[Settings.MovieView]" Size="151,51" />
-                        </Children>
-                      </Panel>
-
-                      <Panel Layout="VerticalFlow">
-                        <Children>
-                          <Text  Content="Movie Sort" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" />
-                        </Children>
-                      </Panel>
-                    </Children>
-
-                  </Panel>
-                </Children>
-              </Clip>
-            </Children>
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
-            </LayoutInput>
-          </Panel>-->
-
         </Children>
       </ColorFill>
     </Content>
 
   </UI>
 
-  <Font Name="Font"                 FontName="global://me:RegularFontName" FontSize="20" />
+  <Font Name="Font"                 FontName="global://me:RegularFontName" FontSize="16" />
 </Mcml>

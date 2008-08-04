@@ -502,5 +502,41 @@ namespace Library.Properties {
                 this["DimUnselectedCovers"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseOriginalCoverArt {
+            get {
+                return ((bool)(this["UseOriginalCoverArt"]));
+            }
+            set {
+                this["UseOriginalCoverArt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.4")]
+        public float FocusCoverArtScale {
+            get {
+                return ((float)(this["FocusCoverArtScale"]));
+            }
+            set {
+                this["FocusCoverArtScale"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.2")]
+        public float FocusListScale {
+            get {
+                return ((float)(this["FocusListScale"]));
+            }
+            set {
+                this["FocusListScale"] = value;
+            }
+        }
     }
 }

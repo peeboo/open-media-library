@@ -36,9 +36,12 @@
       <AnchorEdge Name="GalleryBottomAnchor" Percent="[UISettings.Anchor.GalleryBottomAnchor]" Offset ="[UISettings.Anchor.GalleryBottomOffset]" Id="Parent"/>
       <AnchorEdge Name="BottomAnchor" Percent="[UISettings.Anchor.BottomAnchor]" Offset ="[UISettings.Anchor.BottomOffset]" Id="Parent"/>
       <AnchorEdge Name="RightAnchor" Percent="[UISettings.Anchor.RightAnchor]" Offset ="[UISettings.Anchor.RightOffset]" Id="Parent"/>
-
     </Locals>
 
+    <!--<Rules>
+      <Binding Source="[JumpValue.Value]" Target="[JumpInText.Content]" />
+    </Rules>-->
+    
     <Content>
       <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
         <Children>
