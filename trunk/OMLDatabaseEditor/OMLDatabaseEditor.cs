@@ -14,9 +14,8 @@ namespace OMLDatabaseEditor
     public partial class OMLDatabaseEditor : Form
     {
         private static TitleCollection _titleCollection = new TitleCollection();
-        private TreeNode m_OldSelectNode;
-
-        private static List<OMLPlugin> plugins = new List<OMLPlugin>();
+        private TreeNode _oldSelectedNode;
+        private static List<OMLPlugin> _plugins = new List<OMLPlugin>();
 
         public OMLDatabaseEditor()
         {
@@ -42,7 +41,7 @@ namespace OMLDatabaseEditor
         private static void LoadPlugins()
         {
 
-            plugins.Clear();
+            _plugins.Clear();
 
             List<PluginServices.AvailablePlugin> Pluginz = new List<PluginServices.AvailablePlugin>();
             string path = FileSystemWalker.PluginsDirectory;
@@ -54,7 +53,7 @@ namespace OMLDatabaseEditor
                 foreach (PluginServices.AvailablePlugin oPlugin in Pluginz)
                 {
                     objPlugin = (OMLPlugin)PluginServices.CreateInstance(oPlugin);
-                    plugins.Add(objPlugin);
+                    _plugins.Add(objPlugin);
                 }
                 Pluginz = null;
             }
@@ -71,7 +70,7 @@ namespace OMLDatabaseEditor
         private void SetupPluginList()
         {
             int i = 0;
-            foreach (OMLPlugin plugin in plugins)
+            foreach (OMLPlugin plugin in _plugins)
             {
                 tvSourceList_AddItem(plugin.Menu, i.ToString(), "Importers");
                 i++;
@@ -205,7 +204,7 @@ namespace OMLDatabaseEditor
             this.Refresh();
 
             OMLPlugin plugin = new OMLPlugin();
-            plugin = plugins[pluginID];
+            plugin = _plugins[pluginID];
             //plugin.FileFound += new OMLPlugin.FileFoundEventHandler(FileFound);
             //if (plugin.CanCopyImages) AskIfShouldCopyImages();
             plugin.CopyImages = true;// Program._copyImages;
@@ -524,6 +523,57 @@ namespace OMLDatabaseEditor
 
         }
 
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofDiag = new OpenFileDialog();
+            ofDiag.InitialDirectory = "c:\\";
+            ofDiag.Filter = "Xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            ofDiag.FilterIndex = 1;
+            ofDiag.RestoreDirectory = true;
+            ofDiag.AutoUpgradeEnabled = true;
+            ofDiag.CheckFileExists = true;
+            ofDiag.CheckPathExists = true;
+            ofDiag.Multiselect = false;
+            ofDiag.Title = "Select file to import";
+            DialogResult dlgRslt = ofDiag.ShowDialog();
+            if (dlgRslt == DialogResult.OK)
+            {
+                Title t = Title.CreateFromXML(ofDiag.FileName);
+                bool bAdded = false;
+                if (_titleCollection.ContainsDisks(t.Disks))
+                {
+                    if (MessageBox.Show("This movie is already on the list!\n\n Do you want to overwrite it?", "Confirm" ,MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes )
+                    {
+                        Title oldTitle = _titleCollection.FindByDisks(t.Disks);
+                        tvSourceList.Nodes["OML Database"].Nodes["Movies"].Nodes.RemoveByKey(oldTitle.InternalItemID.ToString());
+                        _titleCollection.Replace(t, oldTitle);
+                        tvSourceList_AddItem(t.Name, t.InternalItemID.ToString(), "Movies");
+                        bAdded = true;
+                    }
+                }
+                else
+                {
+                    _titleCollection.Add(t);
+                    tvSourceList_AddItem(t.Name, t.InternalItemID.ToString(), "Movies");
+                 
+                    bAdded = true;
+                }
+                //Cursor = Cursors.WaitCursor;
+                //_titleCollection.saveTitleCollection();
+                //Cursor = Cursors.Default;
+
+                if (bAdded)
+                {
+                    EditNewTab(t.InternalItemID);
+                    Controls.MediaEditor _currentEditor = (Controls.MediaEditor)this.tabsMediaPanel.SelectedTab.Controls[0].Controls[0];
+                    _currentEditor.Status = global::OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges;
+                    MarkChangedItem(_currentEditor, true);
+                }
+            }
+        }
+
+
         private void OMLDatabaseEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
             CheckForChanges();
@@ -566,6 +616,37 @@ namespace OMLDatabaseEditor
                 _titleCollection.saveTitleCollection();
             }
         }
+
+        private void tvSourceList_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            foreach (Title t in _titleCollection)
+            {
+                if (t.Disks.Count > 0)
+                {
+                    t.SerializeToXMLFile(t.Disks[0].Path + ".oml.xml");
+                }
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void clearDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to delete all the movies?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                _titleCollection = new TitleCollection();
+                _titleCollection.saveTitleCollection();
+                reloadDatabase();
+            }
+        }
+
 
         //}
 

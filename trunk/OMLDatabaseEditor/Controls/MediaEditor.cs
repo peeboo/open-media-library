@@ -36,6 +36,7 @@ namespace OMLDatabaseEditor.Controls
         public TitleStatus Status 
         {
             get { return _status; }
+            set { _status = value; }
         }
 
         public string TitleName
