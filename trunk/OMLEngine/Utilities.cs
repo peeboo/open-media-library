@@ -408,9 +408,9 @@ namespace OMLEngine
 
             using (Graphics graphics = Graphics.FromImage(outputImage))
             {
-                graphics.CompositingQuality = CompositingQuality.HighSpeed;
-                graphics.InterpolationMode = InterpolationMode.Low;
-                graphics.SmoothingMode = SmoothingMode.HighSpeed;
+                graphics.CompositingQuality = CompositingQuality.Default;
+                graphics.InterpolationMode = InterpolationMode.High;
+                graphics.SmoothingMode = SmoothingMode.Default;
                 graphics.DrawImage(img,
                                    new Rectangle(0, 0, outputWidth, outputHeight),
                                    new Rectangle(0, 0, img.Width, img.Height),
