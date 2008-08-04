@@ -24,6 +24,16 @@ namespace OMLEngine
             get { return _moviesByItemId; }
         }
 
+        public Title FindByDisks(List<Disk> disks)
+        {
+            string hash = GetDiskHash(disks);
+            if (_moviesByFilename.ContainsKey(hash))
+            {
+                return _moviesByFilename[hash];
+            }
+            return null;
+        }
+
         public bool ContainsDisks(List<Disk> disks)
         {
             if (disks.Count == 0) return false;
@@ -91,7 +101,11 @@ namespace OMLEngine
             {
                 // we will concatonate the path + name for each disk and take the MD5 hash of that to determine if
                 // the disk collection changed
-                temp += d.Name + d.Path;
+                //temp += d.Name + d.Path;
+                
+
+                // don't care about the disk name
+                temp += d.Path.ToUpper();
             }
             return CalculateMD5Hash(temp);
         }
