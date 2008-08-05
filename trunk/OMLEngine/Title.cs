@@ -579,7 +579,7 @@ namespace OMLEngine
         /// <param name="ctxt">StreamingContext object</param>
         public Title(SerializationInfo info, StreamingContext ctxt)
         {
-            Utilities.DebugLine("[Title] Loading Title from Serialization");
+            //Utilities.DebugLine("[Title] Loading Title from Serialization");
             _fileLocation = GetSerializedString(info, "file_location");
             _videoFormat = GetSerializedVideoFormat(info, "video_format");
             _needsTranscode = GetSerializedBoolean(info, "transcode_to_extender");
