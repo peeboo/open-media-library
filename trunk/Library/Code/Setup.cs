@@ -305,7 +305,10 @@ namespace Library
                 CurrentTitle = _titles[CurrentTitleIndex];
             }
             else
+            {
                 AllTitlesProcessed = true;
+                Reset();
+            }
         }
         public void Reset()
         {
@@ -360,6 +363,7 @@ namespace Library
             AddingAllComplete = true;
             AllTitlesProcessed = true;
             FirePropertyChanged("TotalTitlesAdded");
+            Reset();
         }
 
         public void BeginLoading()
@@ -458,7 +462,6 @@ namespace Library
             }
         }
 
-
         public void AddCheckedNode(TreeNode node)
         {
             OMLApplication.DebugLine("Adding node: " + node.FullPath);
@@ -482,11 +485,15 @@ namespace Library
         public Setup()
         {
             LoadPlugins();
+            AllTitlesProcessed = false;
+            CurrentTitle = null;
+            CurrentTitleIndex = 0;
             current = this;
             _titleCollection.loadTitleCollection();
             _ImporterSelection = new Choice();
             List<string> _Importers = new List<string>();
             foreach (OMLPlugin _plugin in availablePlugins) {
+                OMLApplication.DebugLine("[Setup] Adding " + _plugin.Name + " to the list of Importers");
                 _Importers.Add(_plugin.Description);
             }
 
@@ -509,7 +516,6 @@ namespace Library
             Choice c = (Choice)sender;
             ImporterDescription = @"Notice: " + GetPlugin().SetupDescription();
             OMLApplication.DebugLine("Item Chosed: " + c.Options[c.ChosenIndex]);
-
         }
 
         public TreeView TreeView
@@ -545,7 +551,7 @@ namespace Library
             OMLApplication.DebugLine("Chosen Importer is: " + strChosenImporter);
             for (int i = 0; i < availablePlugins.Count; i++)
             {
-                if (availablePlugins[i].Name.CompareTo(strChosenImporter) == 0)
+                if (availablePlugins[i].Description.CompareTo(strChosenImporter) == 0)
                     return availablePlugins[i];
             }
             return null;
