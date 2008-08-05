@@ -1,22 +1,28 @@
 Changes in version 1.0.1 ()
+
 - Relax MCEPRODUCTVERSION checks in WiX to allow installs on systems with the TV Pack RTM installed
 - MountImagePlayer modified to return a DVDPlayer instead of passing the stream back through the Factory
 - Append instead of truncate the logfile when restarting
 - Updated DVRMSPlugin to force use of full paths for both files and cover art
 - Fixed bug in Setup UI where selecting add all titles actually skipped all titles
-
 - Change settings screen to use pivots. Added pivots for View Settings and Daemon Tools
 - Expose option to Dim Unselected Covers. Default is false (ie. show full cover art, no dimming)
 - Show movie name even when the details are not shown while browsing.
-
 - Play a sound when selecting items on the screen
 - JIL uses the sortname instead of name
-
 - Added new settings tab, Customize UI
+
 - added option to
 	 - Don't Resize Cover Art (may slow down brosing) - should bring the quality way up for people with faster machines
-	 default is still to resize - personally I select don't resize and I have no problem with performance
+	               default is still to resize - personally I select don't resize and I have no problem with performance
 	 - Cover Art Rows (1 to 10)
-	 - Cover Art Spacing (0 to 20, incremented by 2 as to not create a big list)
-	 
-Cover art size and scaling up when focused are based on a simple formula now, we'll see how it goes.
+	 - Cover Art Spacing (0 to 20, incremented by 2 as to not create a big list)	 
+
+- Cover art size and scaling up when focused are based on a simple formula now, we'll see how it goes.
+- Initial XSLT to convert mymovies.xml files to OML.xml files created
+- Setup UI screens now refer to plugins by their description rather then by name
+- You can now turn on/off the Black Overlay bar from the settings screen
+- Patch provided by user "fonager" to fix paths in Title objects
+- quality of thumbnails created (from now no, not current thumbnails) will be higher/better
+- added ability to NOT use thumbnails but instead use "sized" full-def images from settings screen'
+- Patch provided by user "MostlyHarmless" to the DVD Library XML importer
