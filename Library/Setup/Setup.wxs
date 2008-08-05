@@ -2,7 +2,7 @@
 
 <!-- These variables define the Windows Installer product version, product code and upgrade code. They   -->
 <!-- will be used later on in this file.                                                                 -->
-<?define Property_ProductVersion = "1.0.1.0" ?>
+<?define Property_ProductVersion = "1.0.2" ?>
 <?define Property_ProductCode = "282ffe47-5856-4f07-a5e1-617a24a9b4a5" ?>
 <?define Property_UpgradeCode = "0921ec75-fddc-46f8-bdf4-a5d697351567" ?>
 
@@ -25,10 +25,14 @@
 		<!-- the scenes. See the following topic in the MSDN Library for additional information:             -->
 		<!-- http://msdn.microsoft.com/library/default.asp?url=/library/en-us/msi/setup/major_upgrades.asp   -->
 		<Upgrade Id="$(var.Property_UpgradeCode)">
+            <UpgradeVersion OnlyDetect="yes"
+		                    Property="PATCHFOUND"
+		                    IncludeMinimum="yes"
+		                    Minimum="1.0.1.0" />
 			<UpgradeVersion Minimum="$(var.Property_ProductVersion)" 
 			                OnlyDetect="yes" 
 			                Property="NEWERVERSIONDETECTED" />
-			<UpgradeVersion Minimum="1.0.0.0" 
+			<UpgradeVersion Minimum="1.0.0" 
 			                IncludeMinimum="yes" 
 			                Maximum="$(var.Property_ProductVersion)" 
 			                IncludeMaximum="no" 

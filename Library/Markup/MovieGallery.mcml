@@ -1,10 +1,10 @@
 ﻿<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
 	  xmlns:a="assembly://Library/Library"
 	  xmlns:s="resx://Library/Library.Resources/Styles"
-    xmlns:filter="resx://Library/Library.Resources/FilterList"
+      xmlns:filter="resx://Library/Library.Resources/FilterList"
 	  xmlns:cor="assembly://MSCorLib/System"
-    xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
-    xmlns:col="assembly://MSCorLib/System.Collections"
+      xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
+      xmlns:col="assembly://MSCorLib/System.Collections"
 	  xmlns:me="Me">
 
   <Aggregate Source="resx://Library/Library.Resources/Base" />
@@ -46,8 +46,16 @@
                 MajorAlignment="Fill"
                 MinorAlignment="Fill"
                 RepeatGap="100"/>
-    
-    <!-- Create an input handler for scrolling. -->
+
+      <GridLayout Name="CoverFlowLayout" Repeat="WhenTooBig"
+                  Rows="1"
+                  Orientation="Horizontal"
+                  AllowWrap="true"
+                  MajorAlignment="Fill"
+                  MinorAlignment="Fill"
+                  RepeatGap="100"/>
+
+      <!-- Create an input handler for scrolling. -->
     <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
     <TypingHandler Name="TypingHandler" EditableText="[MovieBrowser.JumpInListText]" TypingPolicy="TripleTap" HandlerStage="Bubbled"/>
     <Timer Name="ClearTimer" AutoRepeat="false" Interval="5000" Enabled="false"/>
@@ -72,6 +80,11 @@
       </Actions>
     </Condition>
 
+      <Condition Source="[GalleryView]" SourceValue="CoverFlow" ConditionOp="Equals">
+          <Actions>
+              <Set Target="[GalleryRepeater.Layout]" Value="[CoverFlowLayout]"/>
+          </Actions>
+      </Condition>
     <Rule>
       <Conditions>
         <Modified Source="[TypingHandler.DisplayValue]"/>
@@ -133,7 +146,6 @@
 
 </UI>
 
-
 <!-- The RepeatedItem UI is what gets repeated for each image in our list -->
 <!-- from the ScrollingSample UI.  It displays the image itself, the      -->
 <!-- item's index and "Real" indexes, and a background color fill that    -->
@@ -147,7 +159,8 @@
     <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
     <cor:Single Name="CoverArtAlpha" Single="0.5"/>
     <a:UISettings Name="UISettings" UISettings="$Required" />
-    
+    <cor:Int32 Name="AngleDelta" Int32="40"/>
+          
     <!-- The index passed down from the repeater.-->
     <Index Name="Index" Index="$Required"/>
     <cor:String Name="GalleryView" String="$Required" />    
@@ -161,7 +174,9 @@
 
   <Locals>
     <ClickHandler Name="Clicker" Command="[GalleryItem]"/>
-
+      <MathTransformer Name="ComputeNormalizedIndex"/>
+      <MathTransformer Name="ComputeRotation" Type="Int32"/>
+      <Rotation Name="Rotation" AngleDegrees="0" Axis="0,1,0"/>
 
     <!-- This animation will scale the image. -->
     <Animation Name="LostFocusCoverArt" Loop="0">
@@ -192,6 +207,22 @@
         <ScaleKeyframe Time="0.2" Value="[UISettings.Gallery.FocusListScale]" RelativeTo="Final" />
       </Keyframes>
     </Animation>
+
+      <!-- This animation will scale the image. -->
+      <Animation Name="LostFocusCoverFlow" Loop="0">
+          <Keyframes>
+              <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
+              <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
+          </Keyframes>
+      </Animation>
+
+      <Animation Name="GotFocusCoverFlow" Loop="0" CenterPointPercent=".5,.5,0" >
+          <Keyframes>
+              <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+              <ScaleKeyframe Time="0.4" Value="[UISettings.Gallery.FocusCoverArtScale]" RelativeTo="Final" />
+          </Keyframes>
+      </Animation>
+
   </Locals>
 
   <Rules>
@@ -221,7 +252,6 @@
         <Set Target="[Caption.Visible]" Value="false" />
       </Actions>
     </Changed>
-
     
     <Condition Source="[GalleryView]" SourceValue="Cover Art" ConditionOp="Equals" >
       <Actions>
@@ -233,6 +263,15 @@
       </Actions>
     </Condition>
 
+      <Condition Source="[GalleryView]" SourceValue="Cover Flow" ConditionOp="Equals" >
+          <Actions>
+              <Set Target="[MenuCover.Visible]" Value="true" />
+              <Set Target="[LostFocus]" Value="[LostFocusCoverArt]" />
+              <Set Target="[GotFocus]" Value="[GotFocusCoverArt]" />
+              <Set Target="[Background.Content]" Value="[BackgroundImageCoverArt]" />
+              <Set Target="[Caption.Font]" Value="font://s:Normal" />
+          </Actions>
+      </Condition>
       
     <!-- If we get key focus, change our background color to indicate it. -->
     <Condition Source="[Input.KeyFocus]" SourceValue="true">
@@ -281,11 +320,24 @@
 
       </Children>
 
+        <Animations>
+            <Animation Type="Rotate">
+                <Keyframes>
+                    <RotateKeyframe Time="0" Value="0deg;0,1,0" RelativeTo="Current" Interpolation="Log"/>
+                    <RotateKeyframe Time=".5" Value="0deg;0,1,0" RelativeTo="Final"/>
+                </Keyframes>
+            </Animation>
+            <Animation Type="Scale">
+                <Keyframes>
+                    <ScaleKeyframe Time="0" RelativeTo="Current" Interpolation="Log"/>
+                    <ScaleKeyframe Time=".5" RelativeTo="Final"/>
+                </Keyframes>
+            </Animation>
+        </Animations>
+        
     </Panel>
 
   </Content>
 </UI>
-
-
 
 </Mcml>
