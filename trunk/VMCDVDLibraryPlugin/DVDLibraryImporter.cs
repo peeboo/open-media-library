@@ -133,13 +133,13 @@ namespace VMCDVDLibraryPlugin
                                 if (SupportedVideoExtensions.Contains(extension))
                                 {
                                     Title newVideo = new Title();
-                                    newVideo.Name = GetSuggestedMovieName(video);
+                                    newVideo.Name = GetSuggestedMovieName(Path.GetFileNameWithoutExtension(video));
                                     Disk disk = new Disk();
                                     disk.Path = video;
                                     disk.Name = "Disk 1";
                                     disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
 
-                                    string pathWithNoExtension = Path.GetFileNameWithoutExtension(video);
+                                    string pathWithNoExtension = Path.GetDirectoryName(video) + "\\" + Path.GetFileNameWithoutExtension(video);
                                     if (File.Exists(pathWithNoExtension + ".jpg"))
                                     {
                                         SetFrontCoverImage(ref newVideo, pathWithNoExtension + ".jpg");
@@ -148,12 +148,11 @@ namespace VMCDVDLibraryPlugin
                                     {
                                         SetFrontCoverImage(ref newVideo, video + ".jpg");
                                     }
-
-                                    if (File.Exists(pathWithNoExtension + ".OML.XML"))
+                                    else if (File.Exists(Path.GetDirectoryName(video) + "\\folder.jpg"))
                                     {
-                                        // fore the future
-                                        UpdateTitleFromOMLXML(newVideo);
+                                        SetFrontCoverImage(ref newVideo, Path.GetDirectoryName(video) + "\\folder.jpg");
                                     }
+
                                     newVideo.Disks.Add(disk);
                                     AddTitle(newVideo);
                                 }
