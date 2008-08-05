@@ -36,8 +36,7 @@ namespace MyMoviesPlugin
             return @"titles.xml";
         }
         public override void ProcessFile(string file)
-        {
-            
+        {            
             Utilities.DebugLine("[MyMoviesImporter] created[filename("+file+"), ShouldCopyImages("+CopyImages+")]");
 
             XmlDocument xDoc = new XmlDocument();
