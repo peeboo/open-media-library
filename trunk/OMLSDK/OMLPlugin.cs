@@ -14,6 +14,7 @@ namespace OMLSDK
         private int totalRowsAdded = 0;
         private Boolean _copyImages = false;
 
+        public enum PluginTypes { ImportPlugin, MetadataPlugin };
         #region Properties
         /// <summary>
         /// 
@@ -478,7 +479,7 @@ namespace OMLSDK
         /// 
         /// </summary>
         /// <returns></returns>
-        public List<Title> GetTitles()
+        public IList<Title> GetTitles()
         {
             titles.Sort();
             return titles;
