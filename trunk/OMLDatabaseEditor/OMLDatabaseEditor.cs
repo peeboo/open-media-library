@@ -15,7 +15,8 @@ namespace OMLDatabaseEditor
     {
         private static TitleCollection _titleCollection = new TitleCollection();
         private TreeNode _oldSelectedNode;
-        private static List<OMLPlugin> _plugins = new List<OMLPlugin>();
+        private static List<OMLPlugin> _importPlugins = new List<OMLPlugin>();
+        private static List<OMLPlugin> _metadataPlugins = new List<OMLPlugin>();
 
         public OMLDatabaseEditor()
         {
@@ -33,29 +34,30 @@ namespace OMLDatabaseEditor
             _titleCollection.Sort();
 
             SetupTitleList();
-            LoadPlugins();
+            LoadPlugins( PluginTypes.ImportPlugin, _importPlugins);
+            LoadPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
             SetupPluginList();
             Cursor = Cursors.Default;
         }
 
-        private static void LoadPlugins()
+
+        private static void LoadPlugins(string pluginType, List<OMLPlugin> pluginList)
         {
+            pluginList.Clear();
 
-            _plugins.Clear();
-
-            List<PluginServices.AvailablePlugin> Pluginz = new List<PluginServices.AvailablePlugin>();
+            List<PluginServices.AvailablePlugin> plugins = new List<PluginServices.AvailablePlugin>();
             string path = FileSystemWalker.PluginsDirectory;
-            Pluginz = PluginServices.FindPlugins(path, "OMLSDK.IOMLPlugin");
+            plugins = PluginServices.FindPlugins(path, pluginType);
             OMLPlugin objPlugin;
             // Loop through available plugins, creating instances and adding them
-            if (Pluginz != null)
+            if (plugins != null)
             {
-                foreach (PluginServices.AvailablePlugin oPlugin in Pluginz)
+                foreach (PluginServices.AvailablePlugin oPlugin in plugins)
                 {
                     objPlugin = (OMLPlugin)PluginServices.CreateInstance(oPlugin);
-                    _plugins.Add(objPlugin);
+                    pluginList.Add(objPlugin);
                 }
-                Pluginz = null;
+                plugins = null;
             }
         }
 
@@ -70,7 +72,7 @@ namespace OMLDatabaseEditor
         private void SetupPluginList()
         {
             int i = 0;
-            foreach (OMLPlugin plugin in _plugins)
+            foreach (OMLPlugin plugin in _importPlugins)
             {
                 tvSourceList_AddItem(plugin.Menu, i.ToString(), "Importers");
                 i++;
@@ -137,32 +139,38 @@ namespace OMLDatabaseEditor
         
         private void tsbClose_Click(object sender, EventArgs e)
         {
-            Controls.MediaEditor _currentEditor = (Controls.MediaEditor)tabsMediaPanel.SelectedTab.Controls[0].Controls[0];
-            bool _bClose = true;
-
-            if (_currentEditor.Status == global::OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges)
+            if (tabsMediaPanel.SelectedTab != null && tabsMediaPanel.SelectedTab.Controls != null && tabsMediaPanel.SelectedTab.Controls[0].Controls != null)
             {
-                DialogResult result = MessageBox.Show("Do you want to save the changes to the current movie?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-                if (result == DialogResult.Cancel)
-                {
-                    _bClose = false;
-                }
-                else if (result == DialogResult.Yes)
-                {
-                    Title _currentTitle = (Title)_titleCollection.MoviesByItemId[_currentEditor.itemID];
+                Controls.MediaEditor _currentEditor = (Controls.MediaEditor)tabsMediaPanel.SelectedTab.Controls[0].Controls[0];
 
-                    _currentEditor.SaveToTitle(_currentTitle);
-                    SaveTitleChangesToDB(_currentTitle);
-                }
-                else
-                {
-                }
-            }
+                if (_currentEditor == null) return;
 
-            if (_bClose)
-            {
-                TabPage _currentTab = tabsMediaPanel.SelectedTab;
-                tabsMediaPanel.TabPages.Remove(_currentTab);
+                bool _bClose = true;
+
+                if (_currentEditor.Status == global::OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges)
+                {
+                    DialogResult result = MessageBox.Show("Do you want to save the changes to the current movie?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                    if (result == DialogResult.Cancel)
+                    {
+                        _bClose = false;
+                    }
+                    else if (result == DialogResult.Yes)
+                    {
+                        Title _currentTitle = (Title)_titleCollection.MoviesByItemId[_currentEditor.itemID];
+
+                        _currentEditor.SaveToTitle(_currentTitle);
+                        SaveTitleChangesToDB(_currentTitle);
+                    }
+                    else
+                    {
+                    }
+                }
+
+                if (_bClose)
+                {
+                    TabPage _currentTab = tabsMediaPanel.SelectedTab;
+                    tabsMediaPanel.TabPages.Remove(_currentTab);
+                }
             }
         }
 
@@ -204,7 +212,7 @@ namespace OMLDatabaseEditor
             this.Refresh();
 
             OMLPlugin plugin = new OMLPlugin();
-            plugin = _plugins[pluginID];
+            plugin = _importPlugins[pluginID];
             //plugin.FileFound += new OMLPlugin.FileFoundEventHandler(FileFound);
             //if (plugin.CanCopyImages) AskIfShouldCopyImages();
             plugin.CopyImages = true;// Program._copyImages;
