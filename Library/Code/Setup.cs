@@ -307,7 +307,6 @@ namespace Library
             else
             {
                 AllTitlesProcessed = true;
-                Reset();
             }
         }
         public void Reset()
@@ -363,7 +362,6 @@ namespace Library
             AddingAllComplete = true;
             AllTitlesProcessed = true;
             FirePropertyChanged("TotalTitlesAdded");
-            Reset();
         }
 
         public void BeginLoading()
