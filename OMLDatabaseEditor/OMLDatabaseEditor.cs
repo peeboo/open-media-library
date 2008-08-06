@@ -234,7 +234,7 @@ namespace OMLDatabaseEditor
             {
                 Utilities.DebugLine("[OMLImporter] Titles loaded, beginning Import process");
                 //TitleCollection tc = new TitleCollection();
-                List<Title> titles = plugin.GetTitles();
+                IList<Title> titles = plugin.GetTitles();
                 Utilities.DebugLine("[OMLImporter] " + titles.Count + " titles found in input file");
                 //Console.WriteLine("Found " + titles.Count + " titles");
 

@@ -6,7 +6,7 @@ namespace OMLSDK
 {
     public interface IOMLPlugin
     {
-        List<Title> GetTitles();
+        IList<Title> GetTitles();
         Title newTitle();
         void AddTitle(Title newTitle);
         bool ValidateTitle(Title title_to_validate);

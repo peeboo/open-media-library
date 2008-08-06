@@ -28,7 +28,7 @@ namespace Library
         private bool _isDirty = false;
         private OMLPlugin plugin = null;
         private string file_to_import = string.Empty;
-        private List<Title> _titles;
+        private IList<Title> _titles;
         private bool _loadStarted = false;
         private bool _loadComplete = false;
         private bool _addingAllStarted = false;
