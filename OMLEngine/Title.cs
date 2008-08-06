@@ -920,6 +920,12 @@ namespace OMLEngine
                             navigator.MoveToParent();
                         }
 
+                        if (navigator.MoveToChild("BackCoverPath", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value)) t.BackCoverPath = navigator.Value;
+                            navigator.MoveToParent();
+                        }
+
                         
                         if (navigator.MoveToChild("Disks", XmlNameSpace))
                         {
@@ -1209,8 +1215,27 @@ namespace OMLEngine
                                 navigator.MoveToParent();
                             }
                             navigator.MoveToParent();
+                        }
+
+                        if (navigator.MoveToChild("Producers", XmlNameSpace))
+                        {
+                            if (navigator.MoveToFirstChild())
+                            {
+                                for (; ; )
+                                {
+                                    if (navigator.Name == "Producer")
+                                    {
+                                        t.AddProducer(navigator.Value);
+                                        if (!navigator.MoveToNext()) break;
+                                    }
+                                    else break;
+                                }
+                                navigator.MoveToParent();
+                            }
+                            navigator.MoveToParent();
 
                         }
+
 
                         if (navigator.MoveToChild("Writers", XmlNameSpace))
                         {
@@ -1482,6 +1507,20 @@ namespace OMLEngine
                                 }
                             }
                         }
+
+                        if (!File.Exists(t.BackCoverPath))
+                        {
+                            string newCover = folder + "\\" + Path.GetFileNameWithoutExtension(mediaName) + ".back.jpg";
+                            if (File.Exists(newCover))
+                                t.FrontCoverPath = newCover;
+                            else
+                            {
+                                newCover = folder + "\\" + Path.GetFileName(mediaName) + ".back.jpg";
+                                if (File.Exists(newCover))
+                                    t.FrontCoverPath = newCover;
+                            }
+                         
+                        }
                     }
                 }
 
@@ -1502,7 +1541,9 @@ namespace OMLEngine
             // the reader should verify that this exists and if doesn't it should
             // just use folder.jpg in the same folder
             writer.WriteElementString("FrontCoverPath", FrontCoverPath);
-            
+
+            writer.WriteElementString("BackCoverPath", BackCoverPath);
+
             // this will be created when imported
             writer.WriteElementString("FrontCoverMenuPath", FrontCoverMenuPath);
 
@@ -1603,6 +1644,14 @@ namespace OMLEngine
                 writer.WriteElementString("Subtitle", sub);
             }
             writer.WriteEndElement();
+
+            writer.WriteStartElement("Producers");
+            foreach (string sub in Subtitles)
+            {
+                writer.WriteElementString("Producer", sub);
+            }
+            writer.WriteEndElement();
+
 
             writer.WriteStartElement("CustomFields");
             foreach (KeyValuePair<string,string> field in AdditionalFields)
