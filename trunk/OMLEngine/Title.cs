@@ -1476,60 +1476,77 @@ namespace OMLEngine
             // if we import to a different computer try to look up the information in
             // the current folder where the oml.xml is found
 
-            if (t.Disks != null && t.Disks.Count > 0)
+            foreach (Disk d in t.Disks)
             {
-                if (!File.Exists(t.Disks[0].Path) && !Directory.Exists(t.Disks[0].Path))
-                {
-                    string mediaName = fileName.ToUpper().Replace(".OML.XML", "");
-                    string folder = Path.GetDirectoryName(mediaName);
-                    if (folder != null )
-                    {
-                        // update the location
-                        t.Disks[0].Path = mediaName;
+                d.Path = FixupDiskPath(d.Path.ToUpper(), fileName.ToUpper());
+            }
 
-                        if (!File.Exists(t.FrontCoverPath))
-                        {
-                            string newCover = folder + "\\folder.jpg";
-                            if (File.Exists(newCover))
-                            {
-                                t.FrontCoverPath = newCover;
-                            }
-                            else
-                            {
-                                newCover = folder + "\\" + Path.GetFileNameWithoutExtension(mediaName) + ".jpg";
-                                if (File.Exists(newCover))
-                                    t.FrontCoverPath = newCover;
-                                else
-                                {
-                                    newCover = folder + "\\" + Path.GetFileName(mediaName) + ".jpg";
-                                    if (File.Exists(newCover))
-                                        t.FrontCoverPath = newCover;
-                                }
-                            }
-                        }
-
-                        if (!File.Exists(t.BackCoverPath))
-                        {
-                            string newCover = folder + "\\" + Path.GetFileNameWithoutExtension(mediaName) + ".back.jpg";
-                            if (File.Exists(newCover))
-                                t.FrontCoverPath = newCover;
-                            else
-                            {
-                                newCover = folder + "\\" + Path.GetFileName(mediaName) + ".back.jpg";
-                                if (File.Exists(newCover))
-                                    t.FrontCoverPath = newCover;
-                            }
-                         
-                        }
-                    }
-                }
-
-            }            
+            t.FrontCoverPath = FixupImagePath(t.FrontCoverPath.ToUpper(), fileName.ToUpper(), ".JPG");
+            t.BackCoverPath = FixupImagePath(t.BackCoverPath.ToUpper(), fileName.ToUpper(), ".BACK.JPG");
 
             return t;
         }
 
-        
+        // for paths that don't exist, try to guess
+        // replace the folder for the path with the folder where oml.xml file was found
+        private static string FixupDiskPath(string path, string omlXmlFile)
+        {
+            path = path.Trim();
+            if (File.Exists(path) || Directory.Exists(path))
+                return path;
+
+            string omlxmlFileFolder = Path.GetDirectoryName(omlXmlFile);
+            string omlxmlFileStripped = omlXmlFile.Replace(".OML.XML", "");
+
+            if (path.Length > 0)
+            {
+                string pathFilename = Path.GetFileName(path);
+
+                string fixedPath = omlxmlFileFolder + "\\" + pathFilename;
+                if (File.Exists(fixedPath) || Directory.Exists(fixedPath))
+                {
+                    return fixedPath;
+                }
+            }
+
+            return path;
+        }
+
+        // for paths that don't exist, try to guess
+        // replace the folder for the path with the folder where oml.xml file was found
+        private static string FixupImagePath(string path, string omlXmlFile, string suffix)
+        {
+            path = path.Trim();
+            if (File.Exists(path)) return path;
+
+            string omlxmlFileFolder = Path.GetDirectoryName(omlXmlFile);
+            string omlxmlFileStripped = omlXmlFile.Replace(".OML.XML", "");
+            string omlxmlFileStrippedTwice = omlxmlFileFolder + "\\" + Path.GetFileNameWithoutExtension(omlxmlFileStripped);
+
+            // try just the filename + the folder of the oml.xml file
+            if (path.Length > 0)
+            {
+                string pathFilename = Path.GetFileName(path);
+
+                string fixedPath = omlxmlFileFolder + "\\" + pathFilename;
+                if (File.Exists(fixedPath))
+                {
+                    return fixedPath;
+                }
+            }
+
+            // now try the standard folder.jpg, moviename.jpg, moviename.extension.jpg
+            // in the oml.xml file directory. The moviename is everything before .oml.xml
+            if (File.Exists(omlxmlFileStripped + suffix))
+                return omlxmlFileStripped + suffix;
+            else if (File.Exists(omlxmlFileStrippedTwice + suffix))
+                return omlxmlFileStrippedTwice + suffix;
+            else if (File.Exists(omlxmlFileFolder + "\\folder" + suffix))
+                return omlxmlFileFolder + "\\folder" + suffix;
+
+
+            return path;
+        }
         
         // <CustomFields />
         public void WriteXml(System.Xml.XmlWriter writer)
