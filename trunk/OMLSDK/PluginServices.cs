@@ -5,9 +5,14 @@ using System;
 
 namespace OMLSDK
 {
+    public class PluginTypes
+    {
+        public const string ImportPlugin = "OMLSDK.IOMLPlugin";
+        public const string MetadataPlugin = "OMLSDK.IOMLMetadataPlugin";
+    }
+
     public class PluginServices
     {
-
         public static List<AvailablePlugin> FindPlugins(string strPath, string strInterface) {
             List<AvailablePlugin> Plugins = new List<AvailablePlugin>();
             string[] strDLLs;
