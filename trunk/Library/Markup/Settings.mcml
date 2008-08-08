@@ -108,7 +108,7 @@
                   <Panel Layout="HorizontalFlow">
                     <Children>
                         <c:SimpleButton Name="Save Settings" Command="[SaveSettings]" Text="Save Settings" Margins="0,20,10,0"/>
-                        <c:SimpleButton Name="Import Movies" Command="[BeginSetupCommand]" Text="Import Movies" Margins="0,20,10,0"/>
+                        <!-- <c:SimpleButton Name="Import Movies" Command="[BeginSetupCommand]" Text="Import Movies" Margins="0,20,10,0"/> -->
                         <c:SimpleButton Name="About OML"     Command="[AboutOML]" Text="About OML" Margins="0,20,10,0"/>
                     </Children>
                   </Panel>
