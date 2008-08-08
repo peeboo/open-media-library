@@ -28,18 +28,21 @@
       <AnchorEdge Name="TitleTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset = "[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
       <AnchorEdge Name="FiltersTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.FiltersTopOffset]" Id="Parent"/>
       <AnchorEdge Name="GalleryBottomAnchor" Percent="[UISettings.Anchor.BottomAnchor]" Offset ="[UISettings.Anchor.BottomOffset]" Id="Parent"/>
-
     </Locals>
 
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
-
+      <Changed Source="[DetailsPage.PlayClicked]" InitialEvaluate="false">
+        <Actions>
+          <Set Target="[waitCursor.Visible]" Value="true" />
+        </Actions>
+      </Changed>
     </Rules>
 
     <Content>
       <ColorFill Content="Transparent" Layout="Form">
         <Children>
-
+          <controls:WaitCursor Name="waitCursor" Visible="false"/>
           <Panel Name="Image" Layout="VerticalFlow">
             <LayoutInput>
               <FormLayoutInput Left="[ImageLeftAnchor]" Top="[TitleTopAnchor]" Bottom="Parent,1"/>
@@ -157,7 +160,6 @@
       <Text Content="/" Font="font://s:Normal" WordWrap="false" Color="color://s:NormalColor" />
     </Content>
   </UI>
-
 
   <UI Name="SynopsisPanel" >
     <Properties>
@@ -375,6 +377,5 @@
       <c:SimpleButton Name="Button" Text="[DiscName]" Command="[PlaySelectedDisk]" Size="220,51"/>
     </Content>
   </UI>
-
 
 </Mcml>

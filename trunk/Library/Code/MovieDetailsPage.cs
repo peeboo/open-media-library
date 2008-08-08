@@ -29,10 +29,20 @@ namespace Library
         //private Command _hideDisks;
         //private Command _showDisks;
         private Image _FullCover;
+        private bool _PlayClicked = false;
         #endregion
 
         #region Public Properties
 
+        public bool PlayClicked
+        {
+            get { return _PlayClicked; }
+            set
+            {
+                _PlayClicked = value;
+                FirePropertyChanged("PlayClicked");
+            }
+        }
         //public string PlayMovieCommandText
         //{
         //    get
@@ -434,8 +444,10 @@ namespace Library
         public void PlayDisk(int SelectedDisk)
         {
             // Play the Selected Disk
+            PlayClicked = true;
             _movieDetails.SelectedDisk = _movieDetails.Disks[SelectedDisk];
             _movieDetails.PlayMovie();
+            _PlayClicked = false; // I use the private variable because I don't want to send an event to the MCML page
         }
     }
 
