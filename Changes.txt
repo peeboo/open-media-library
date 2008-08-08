@@ -1,4 +1,4 @@
-Changes in version 1.0.1 ()
+Changes in version 1.0.1 (2008-08-08)
 
 - Relax MCEPRODUCTVERSION checks in WiX to allow installs on systems with the TV Pack RTM installed
 - MountImagePlayer modified to return a DVDPlayer instead of passing the stream back through the Factory
@@ -26,3 +26,9 @@ Changes in version 1.0.1 ()
 - quality of thumbnails created (from now no, not current thumbnails) will be higher/better
 - added ability to NOT use thumbnails but instead use "sized" full-def images from settings screen'
 - Patch provided by user "MostlyHarmless" to the DVD Library XML importer
+- Disabled the setup UI screen(s) until further testing and bug fixes can be completed... they will be back
+- Added support for WTV files (new dvr-ms files with TV Pack 2008 aka Fiji)
+- Initial support for plugins of different types (metadata, import, etc)
+- Updated importing of oml.xml files
+- Pressing the (x) close tab in dbeditor doesn't crash the app anymore
+
