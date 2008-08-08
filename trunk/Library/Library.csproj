@@ -149,6 +149,7 @@
     <Content Include="Markup\SetupTop.mcml" />
     <Content Include="Markup\SimpleRadioButton.mcml" />
     <Content Include="Markup\Styles.mcml" />
+    <Content Include="Markup\VeronicasRadio.mcml" />
     <Content Include="Registration.xml" />
     <Content Include="Images\Application.png" />
     <None Include="app.config" />

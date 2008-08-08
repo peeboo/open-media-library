@@ -790,6 +790,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] VeronicasRadio {
+            get {
+                object obj = ResourceManager.GetObject("VeronicasRadio", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] WaitCursor {
             get {
                 object obj = ResourceManager.GetObject("WaitCursor", resourceCulture);

@@ -1,0 +1,175 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:me="Me"
+	  xmlns:mce="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting">
+	
+	<Image Name="DefaultImage" Source="http://play.mediacentersandbox.com/Mcml/RC1/Globe.png" />
+	<Image Name="BackgroundImage" Source="http://play.mediacentersandbox.com/Mcml/RC1/VeronicasBackground.png" />
+
+	<UI Name="Main">
+		<Locals>
+			<Choice Name="TestDataSource">
+				<Options>
+					<PropertySet>
+						<Entries>
+							<cor:String Name="Title" String="KEXP" />
+							<cor:String Name="Description" String="http://www.kexp.org/audio/kexp-uncomp.asx" />
+							<Image Name="Picture" Source="http://play.mediacentersandbox.com/Mcml/RC1/VeronicasRadio.KEXP.png" />
+						</Entries>
+					</PropertySet>
+					<PropertySet>
+						<Entries>
+							<cor:String Name="Title" String="NPR" />
+							<cor:String Name="Description" String="http://www.npr.org/dmg/dmg.php?getProgramStream=true&amp;NPRMediaPref=WM" />
+							<Image Name="Picture" Source="http://play.mediacentersandbox.com/Mcml/RC1/VeronicasRadio.NPR.png" />
+						</Entries>
+					</PropertySet>
+					<PropertySet>
+						<Entries>
+							<cor:String Name="Title" String="KJazz" />
+							<cor:String Name="Description" String="http://www.jazzandblues.org/programming/listen/links/kkjz1.asx" />
+							<Image Name="Picture" Source="http://play.mediacentersandbox.com/Mcml/RC1/VeronicasRadio.KJazz.png" />
+						</Entries>
+					</PropertySet>
+					<PropertySet>
+						<Entries>
+							<cor:String Name="Title" String="102.1 The Edge" />
+							<cor:String Name="Description" String="http://provisioning.streamtheworld.com/asx/CFNYFM.asx" />
+							<Image Name="Picture" Source="http://play.mediacentersandbox.com/Mcml/RC1/VeronicasRadio.TheEdge.png" />
+						</Entries>
+					</PropertySet>
+					<PropertySet>
+						<Entries>
+							<cor:String Name="Title" String="ABC Radio Australia" />
+							<cor:String Name="Description" String="http://www.abc.net.au/streaming/newsradio.asx" />
+							<Image Name="Picture" Source="http://play.mediacentersandbox.com/Mcml/RC1/VeronicasRadio.ABCAustrailia.png" />
+						</Entries>
+					</PropertySet>
+					<PropertySet>
+						<Entries>
+							<cor:String Name="Title" String="Radio Canada International" />
+							<cor:String Name="Description" String="http://www.rcinet.ca/rci/includes/rciEn.asx" />
+							<Image Name="Picture" Source="http://play.mediacentersandbox.com/Mcml/RC1/VeronicasRadio.RadioCanada.png" />
+						</Entries>
+					</PropertySet>
+					<PropertySet>
+						<Entries>
+							<cor:String Name="Title" String="BBC World Live News" />
+							<cor:String Name="Description" String="http://www.bbc.co.uk/worldservice/meta/tx/nb/live_news_au_nb.asx" />
+							<Image Name="Picture" Source="http://play.mediacentersandbox.com/Mcml/RC1/VeronicasRadio.BBC.png" />
+						</Entries>
+					</PropertySet>
+					<PropertySet>
+						<Entries>
+							<cor:String Name="Title" String="KUOW" />
+							<cor:String Name="Description" String="http://www.kuow.org/multi.asx" />
+							<Image Name="Picture" Image="image://me:DefaultImage" />
+						</Entries>
+					</PropertySet>
+					<PropertySet>
+						<Entries>
+							<cor:String Name="Title" String="KOMO 1000 News" />
+							<cor:String Name="Description" String="http://komonews.com/streaming/KOMO-1000.asx" />
+							<Image Name="Picture" Image="image://me:DefaultImage" />
+						</Entries>
+					</PropertySet>
+					<PropertySet>
+						<Entries>
+							<cor:String Name="Title" String="Radio Paradise" />
+							<cor:String Name="Description" String="http://www.changeip.com/radio/rp_128.asx" />
+							<Image Name="Picture" Image="http://play.mediacentersandbox.com/Mcml/RC1/RadioParadise.png" />
+						</Entries>
+					</PropertySet>
+				</Options>
+			</Choice>
+			<Command Name="SelectionNotify" />
+			<mce:AddInHost Name="MCEHost"/>
+		</Locals>
+		<Content>
+            <Panel>
+                <Children>
+                    <me:Helix Name="Helix" Choice="[TestDataSource]" Selection="[SelectionNotify]">
+                        <LayoutInput>
+                            <FormLayoutInput Top="Parent,0" Bottom="Parent,1" />
+                        </LayoutInput>
+                    </me:Helix>
+                </Children>
+            </Panel>
+		</Content>
+	</UI>
+	
+	<UI Name="Helix">
+		<Properties>
+			<Choice Name="Choice" Choice="$Required" />
+			<Command Name="Selection" />
+		</Properties>
+		<Locals>
+			<ScrollingHandler Name="ScrollingHandler" />
+			<ScrollingData Name="ScrollingData" LockedPosition=".5" LockedAlignment=".5" />
+			<IntRangedValue Name="SelectedIndex" Value="0" />
+			<EditableText Name="SelectedTitle" />
+			<EditableText Name="SelectedDescription" />
+		</Locals>
+		<Rules>
+			<Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
+			<Default Target="[ScrollingData.Repeater]" Value="[ListRepeater]" />
+		</Rules>
+		<Content>
+			<Scroller Name="ItemList" ScrollingData="[ScrollingData]" Orientation="Horizontal">
+				<Children>
+					<Repeater Name="ListRepeater" Source="[Choice.Options]">
+						<Layout>
+							<GridLayout Orientation="Horizontal" ReferenceSize="150,150" />
+						</Layout>
+						<Content>
+							<me:HelixItem Choice="[Choice]" Option="[RepeatedItem!PropertySet]" OptionIndex="[RepeatedItemIndex]" Selection="[Selection]" />
+						</Content>
+					</Repeater>
+				</Children>
+			</Scroller>
+		</Content>
+	</UI>
+	
+	<UI Name="HelixItem">
+		<Properties>
+			<Choice Name="Choice" Choice="$Required" />
+			<PropertySet Name="Option" PropertySet="$Required" />
+			<Index Name="OptionIndex" Index="$Required" />
+			<Command Name="Selection" Command="$Required" />
+			<cor:Int32 Name="AngleDelta" Int32="20" />
+		</Properties>
+		<Locals>
+			<ClickHandler Name="Clicker" Command="[Selection]" />
+			<MathTransformer Name="ComputeNormalizedIndex" />
+			<MathTransformer Name="ComputeRotation" Type="Int32" />
+			<Rotation Name="Rotation" AngleDegrees="45" Axis="0,1,0" />
+		</Locals>
+		<Rules>
+			<Default Target="[Input.MakeTopmostOnFocus]" Value="true" />
+			<Binding Source="[Option.#Picture!Image]" Target="[PictureDisplay.Content]" />
+			<Changed Source="[Choice.ChosenIndex]" InitialEvaluate="true">
+				<Actions>
+					<Set Target="[ComputeNormalizedIndex.SubtractInt]" Value="[Choice.ChosenIndex]" />
+					<Set Target="[ComputeRotation.MultiplyInt]" Value="[OptionIndex.Value]" Transformer="[ComputeNormalizedIndex]" />
+					<Set Target="[Rotation.AngleDegrees]" Value="[AngleDelta]" Transformer="[ComputeRotation]" />
+					<Set Target="[PictureDisplay.Rotation]" Value="[Rotation]" />
+				</Actions>
+			</Changed>
+			<Condition Source="[Input.KeyFocus]" ConditionOp="ChangedTo" SourceValue="true">
+				<Actions>
+					<Set Target="[Choice.ChosenIndex]" Value="[OptionIndex.SourceValue]" />
+					<Set Target="[Background.Scale]" Value="2,2,1" />
+				</Actions>
+			</Condition>
+		</Rules>
+		<Content>
+			<Panel Name="Background" MouseInteractive="true" Scale="1,1,1" Layout="Anchor" CenterPointPercent="1,.5,0">
+				<Children>
+					<Graphic Name="PictureDisplay" MinimumSize="150,150"
+					         SizingPolicy="SizeToConstraint"
+					         HorizontalAlignment="Fill" VerticalAlignment="Fill"/>
+				</Children>
+			</Panel>
+		</Content>
+	</UI>
+</Mcml>
