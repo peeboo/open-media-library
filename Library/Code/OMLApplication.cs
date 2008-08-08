@@ -37,10 +37,10 @@ namespace Library
         public void Startup()
         {
             DebugLine("[OMLApplication] Startup()");
-            if ( _titles.Count > 0 )
+            //if ( _titles.Count > 0 )
                 GoToMenu(new MovieGallery(_titles, Filter.Home));
-            else
-                GoToSetup(null);
+            //else
+            //    GoToSetup(null);
         }
 
         public static OMLApplication Current
