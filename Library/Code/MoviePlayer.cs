@@ -121,6 +121,8 @@ namespace Library
                     return false;
                 case VideoFormat.WMV:
                     return false;
+                case VideoFormat.WTV:
+                    return false;
                 default:
                     return true;
             }
