@@ -33,11 +33,12 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (*DONE*) Filter by genre, rating, date, runtime, year etc
   * (*DONE*) UI based setup (importers, daemontools settings, etc)
   * (*DONE*) Metadata editor
+  * (*DONE*) Nicer/Better quality thumbnails on menu page (you will have to reimport movies for this)
+  * (*DONE*) Define OML xml scheme for 3rd party export/import
 
 == Top Requests from 0.1b ==
-  * Nicer/Better quality thumbnails on menu page
   * Folder view option
-  * Recursive folder support for mymovies.xml files
+  * Recursive folder support for mymovies.xml files (50% complete)
 
   * (ON HOLD) Support for Blu-Ray/HD-DVD (50% Complete)
   * (ON HOLD) Movie bookmark features (20% Complete)
@@ -45,7 +46,6 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (ON HOLD) Using 3rd party programs as datasource (10% Complete)
   * (ON HOLD) Search functionality (0% Complete)
   * (ON HOLD) DVD playback (actual discs in a real drive, see mounting/unmounting for images of discs) (0% Complete)
-  * (ON HOLD) Define OML xml scheme for 3rd party export/import
   * (ON HOLD) Option to omit "The" in movie sorting and displaying
   * (ON HOLD) Native VMC UI controls design
   * (ON HOLD) Movie Label 2009 Xml support
