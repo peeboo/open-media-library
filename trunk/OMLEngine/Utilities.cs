@@ -77,7 +77,8 @@ namespace OMLEngine
         VOB, // MPEG2
         WVX, // wtf is this?
         ASX, // wtf is this?
-        WPL // playlist file?
+        WPL, // playlist file?
+        WTV // new dvr format in vista (introduced in the tv pack 2008)
     };
 
     /// <summary>
@@ -169,7 +170,7 @@ namespace OMLEngine
         public static string FileSearchPattern()
         {
             return "*.asf,*.avc,*.avi,*.bin,*.cue,*.dvr-ms,*.h264,*.img,*.iso,*.mdf,*.mkv" +
-                   "*.mov,*.mpg,*.mpeg,*.mp4,*.ogm,*.ts,*.wmv,*.vob,video_ts";
+                   "*.mov,*.mpg,*.mpeg,*.mp4,*.ogm,*.ts,*.wmv,*.vob,video_ts,*.wtv";
         }
         /// <summary>
         /// Loads all valid plugins into memory
