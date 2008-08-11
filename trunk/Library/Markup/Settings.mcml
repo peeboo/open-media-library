@@ -31,7 +31,7 @@
     </Locals>
 
     <Properties>
-      <a:Setup Name="Setup" />
+      <!-- <a:Setup Name="Setup" /> -->
       <a:Settings Name="Settings" Settings="$Required" />
       <a:OMLApplication Name="Application" OMLApplication="$Required"/>
       <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
@@ -39,6 +39,7 @@
     </Properties>
 
     <Rules>
+    <!--
       <Changed Source="[BeginSetupCommand.Invoked]">
         <Actions>
           <Navigate Source="@resx://Library/Library.Resources/SelectImporter"
@@ -48,7 +49,7 @@
                     Setup="[Setup]" />
         </Actions>
       </Changed>
-
+     -->
       <Changed Source="[SaveSettings.Invoked]">
         <Actions>
           <Invoke Target="[Settings.SaveSettings]" />

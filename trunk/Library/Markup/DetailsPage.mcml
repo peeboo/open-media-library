@@ -32,17 +32,11 @@
 
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
-      <Changed Source="[DetailsPage.PlayClicked]" InitialEvaluate="false">
-        <Actions>
-          <Set Target="[waitCursor.Visible]" Value="true" />
-        </Actions>
-      </Changed>
     </Rules>
 
     <Content>
       <ColorFill Content="Transparent" Layout="Form">
         <Children>
-          <controls:WaitCursor Name="waitCursor" Visible="false"/>
           <Panel Name="Image" Layout="VerticalFlow">
             <LayoutInput>
               <FormLayoutInput Left="[ImageLeftAnchor]" Top="[TitleTopAnchor]" Bottom="Parent,1"/>
