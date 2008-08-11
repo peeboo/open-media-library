@@ -189,7 +189,7 @@ namespace Library
             set
             {
                 _AllTitlesProcessed = true;
-                _titleCollection.saveTitleCollection();
+                //_titleCollection.saveTitleCollection();
                 FirePropertyChanged("AllTitlesProcessed");
             }
         }
