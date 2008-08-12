@@ -425,20 +425,34 @@ namespace OMLEngine
 
         public static Image ScaleImageByHeight(Image img, int height)
         {
-            double fractionalPercentage = ((double)height / (double)img.Height);
-            int outputWidth = (int)(img.Width * fractionalPercentage);
-            int outputHeight = height;
+            if (img != null)
+            {
+                double fractionalPercentage = ((double)height / (double)img.Height);
+                int outputWidth = (int)(img.Width * fractionalPercentage);
+                int outputHeight = height;
 
-            return ScaleImage(img, outputWidth, outputHeight);
+                return ScaleImage(img, outputWidth, outputHeight);
+            }
+            else
+            {
+                return img;
+            }
         }
 
         public static Image ScaleImageByWidth(Image img, int width)
         {
-            double fractionalPercentage = ((double)width / (double)img.Width);
-            int outputWidth = width;
-            int outputHeight = (int)(img.Height * fractionalPercentage);
+            if (img != null)
+            {
+                double fractionalPercentage = ((double)width / (double)img.Width);
+                int outputWidth = width;
+                int outputHeight = (int)(img.Height * fractionalPercentage);
 
-            return ScaleImage(img, outputWidth, outputHeight);
+                return ScaleImage(img, outputWidth, outputHeight);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static Image ScaleImageDownTillFits(Image img, Size size)
@@ -446,7 +460,7 @@ namespace OMLEngine
             Image ret = img;
             bool bFound = false;
 
-            if ((img.Width > size.Width) || (img.Height > size.Height))
+            if (img != null && (img.Width > size.Width) || (img.Height > size.Height))
             {
                 for (double percent = 100; percent > 0; percent--)
                 {
