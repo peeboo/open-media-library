@@ -95,7 +95,7 @@ namespace OMLDatabaseEditor
 
                         if (t.FrontCoverPath != null && File.Exists(t.FrontCoverPath))
                         {
-                            coverArt = Image.FromFile(t.FrontCoverPath);
+                            coverArt = Utilities.ReadImageFromFile(t.FrontCoverPath);
                         }
                         grdTitles.Rows.Add(i.ToString(), coverArt, t.Name, t.Synopsis, t.ReleaseDate.ToShortDateString(), MakeStringFromList(t.Genres), MakeStringFromPersonList(t.Directors), MakeStringFromDictionary(t.ActingRoles));
                         i++;
