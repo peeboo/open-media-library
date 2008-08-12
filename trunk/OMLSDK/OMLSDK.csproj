@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IOMLMetaData.cs" />
     <Compile Include="IOMLPlugin.cs" />
     <Compile Include="OMLPlugin.cs" />
     <Compile Include="PluginServices.cs" />
