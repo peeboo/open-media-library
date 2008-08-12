@@ -1,0 +1,69 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AmazonMetadata.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="AmazonSubscriptionId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1B9Q0Y02W3RCF0ZKQ9R2</Value>
+    </Setting>
+    <Setting Name="AmazonMetadata_com_amazon_webservices_AWSECommerceService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://soap.amazon.com/onca/soap?Service=AWSECommerceService</Value>
+    </Setting>
+    <Setting Name="AmazonSearchMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DVD</Value>
+    </Setting>
+    <Setting Name="AmazonUrlEN" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://soap.amazon.com/onca/soap?Service=AWSECommerceService</Value>
+    </Setting>
+    <Setting Name="AmazonUrlUK" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://soap.amazon.co.uk/onca/soap?Service=AWSECommerceService</Value>
+    </Setting>
+    <Setting Name="AmazonUrlDE" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://soap.amazon.de/onca/soap?Service=AWSECommerceService</Value>
+    </Setting>
+    <Setting Name="AmazonUrlJP" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://soap.amazon.co.jp/onca/soap?Service=AWSECommerceService</Value>
+    </Setting>
+    <Setting Name="AmazonUrlFR" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://soap.amazon.fr/onca/soap?Service=AWSECommerceService</Value>
+    </Setting>
+    <Setting Name="AmazonUrlCA" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://soap.amazon.ca/onca/soap?Service=AWSECommerceService</Value>
+    </Setting>
+    <Setting Name="Genres" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;Action&lt;/string&gt;
+  &lt;string&gt;Adventure&lt;/string&gt;
+  &lt;string&gt;Animated&lt;/string&gt;
+  &lt;string&gt;Animation&lt;/string&gt;
+  &lt;string&gt;Biography&lt;/string&gt;
+  &lt;string&gt;Comedy&lt;/string&gt;
+  &lt;string&gt;Crime&lt;/string&gt;
+  &lt;string&gt;Documentary&lt;/string&gt;
+  &lt;string&gt;Drama&lt;/string&gt;
+  &lt;string&gt;Family&lt;/string&gt;
+  &lt;string&gt;Fantasy&lt;/string&gt;
+  &lt;string&gt;Film-Noir&lt;/string&gt;
+  &lt;string&gt;Game-Show&lt;/string&gt;
+  &lt;string&gt;History&lt;/string&gt;
+  &lt;string&gt;Horror&lt;/string&gt;
+  &lt;string&gt;Music&lt;/string&gt;
+  &lt;string&gt;Musical&lt;/string&gt;
+  &lt;string&gt;Mystery&lt;/string&gt;
+  &lt;string&gt;News&lt;/string&gt;
+  &lt;string&gt;Reality-TV&lt;/string&gt;
+  &lt;string&gt;Romance&lt;/string&gt;
+  &lt;string&gt;Sci-Fi&lt;/string&gt;
+  &lt;string&gt;Short&lt;/string&gt;
+  &lt;string&gt;Sport&lt;/string&gt;
+  &lt;string&gt;Talk-Show&lt;/string&gt;
+  &lt;string&gt;Thriller&lt;/string&gt;
+  &lt;string&gt;War&lt;/string&gt;
+  &lt;string&gt;Western&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="AmazonLocale" Type="System.String" Scope="User">
+      <Value Profile="(Default)">EN</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
