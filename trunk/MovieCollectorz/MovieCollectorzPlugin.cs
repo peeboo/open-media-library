@@ -136,7 +136,7 @@ namespace MovieCollectorzPlugin
                             {
                                 XmlNode disNameNode = person.SelectSingleNode("displayname");
                                 if (disNameNode != null)
-                                    newTitle.AddActor( new Person(disNameNode.InnerText));
+                                    newTitle.AddActingRole(disNameNode.InnerText, "");
                             }
                             break;
                         case "crew":
