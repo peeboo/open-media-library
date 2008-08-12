@@ -15,7 +15,7 @@ namespace MyMoviesPlugin
     public class MyMoviesImporter : OMLPlugin, IOMLPlugin
     {
         private static double MajorVersion = 0.9;
-        private static double MinorVersion = 0.1;
+        private static double MinorVersion = 0.2;
 
         public MyMoviesImporter() : base()
         {
