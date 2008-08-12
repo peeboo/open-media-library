@@ -266,7 +266,6 @@ namespace VMCDVDLibraryPlugin
                             string[] actors = leadPerformer.Split(new char[] { ';', ',', '|' });
                             foreach (string actor in actors)
                             {
-                                t.AddActor(new Person(actor.Trim()));
                                 t.AddActingRole(actor.Trim(), "");
                             }
                         }
