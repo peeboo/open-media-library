@@ -221,7 +221,6 @@ namespace DVDProfilerPlugin
                         }
                         if (first_name.Length > 0 && last_name.Length > 0)
                         {
-                            newTitle.AddActor(new Person(first_name + " " + last_name));
                             newTitle.AddActingRole(first_name + last_name, role);
                         }
                     }
