@@ -1955,8 +1955,8 @@ namespace OMLEngine
         {
             try
             {
-                File.Copy(sourceFile, destinationFile, true);
-                File.Delete(sourceFile);
+                File.Delete(destinationFile);
+                File.Move(sourceFile, destinationFile);
                 return true;
             }
             catch (Exception ex)
@@ -1971,7 +1971,7 @@ namespace OMLEngine
             {
                 if ( !String.IsNullOrEmpty(FrontCoverPath) && File.Exists(FrontCoverPath) )
                 {
-                    using (Image coverArtImage = Image.FromFile(FrontCoverPath))
+                    using (Image coverArtImage = Utilities.ReadImageFromFile(FrontCoverPath))
                     {
                         if (coverArtImage != null)
                         {
