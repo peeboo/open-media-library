@@ -250,15 +250,15 @@ namespace Library
                 SubCaption += "Actors: ";
             }
 
-            ICollection<string> actors = _titleObj.ActingRoles.Keys;
-            foreach (string actor in actors)
+            foreach (KeyValuePair<string,string> actor in _titleObj.ActingRoles)
             {
-                if (actor.Trim().Length > 0)
+                if (actor.Key.Trim().Length > 0)
                 {
                     if (actorCount > 0)
                         SubCaption += ", ";
 
-                    SubCaption += actor;
+
+                    SubCaption += actor.Key.Trim();
                     actorCount++;
 
                     if (actorCount == 6)
@@ -268,6 +268,8 @@ namespace Library
                     }
                 }
             }
+
+
             if (_titleObj.ActingRoles.Count > 0)
             {
                 SubCaption += "\n";
@@ -286,13 +288,6 @@ namespace Library
                         _actingRoles.Add(kvp.Key + " as " + kvp.Value);
                     else
                         _actingRoles.Add(kvp.Key);
-                }
-            }
-            else
-            {
-                foreach (string actor_name in title.ActingRoles.Keys)
-                {
-                    _actingRoles.Add(actor_name);
                 }
             }
 
@@ -479,9 +474,9 @@ namespace Library
             get
             {
                 List<string> actor_names = new List<string>();
-                foreach (string actorName in _titleObj.ActingRoles.Keys)
+                foreach (KeyValuePair<string,string> kvp  in _titleObj.ActingRoles)
                 {
-                    actor_names.Add(actorName);
+                    actor_names.Add(kvp.Key);
                 }
                 return actor_names;
             }
