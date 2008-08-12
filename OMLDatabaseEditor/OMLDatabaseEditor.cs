@@ -16,7 +16,7 @@ namespace OMLDatabaseEditor
         private static TitleCollection _titleCollection = new TitleCollection();
         private TreeNode _oldSelectedNode;
         private static List<OMLPlugin> _importPlugins = new List<OMLPlugin>();
-        private static List<OMLPlugin> _metadataPlugins = new List<OMLPlugin>();
+        private static List<IOMLMetadataPlugin> _metadataPlugins = new List<IOMLMetadataPlugin>();
 
         public OMLDatabaseEditor()
         {
@@ -34,14 +34,14 @@ namespace OMLDatabaseEditor
             _titleCollection.Sort();
 
             SetupTitleList();
-            LoadPlugins( PluginTypes.ImportPlugin, _importPlugins);
-            LoadPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
+            LoadImportPlugins( PluginTypes.ImportPlugin, _importPlugins);
+            LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
             SetupPluginList();
             Cursor = Cursors.Default;
         }
 
 
-        private static void LoadPlugins(string pluginType, List<OMLPlugin> pluginList)
+        private static void LoadImportPlugins(string pluginType, List<OMLPlugin> pluginList)
         {
             pluginList.Clear();
 
@@ -61,11 +61,74 @@ namespace OMLDatabaseEditor
             }
         }
 
+        private static void LoadMetadataPlugins(string pluginType, List<IOMLMetadataPlugin> pluginList)
+        {
+            pluginList.Clear();
+
+            List<PluginServices.AvailablePlugin> plugins = new List<PluginServices.AvailablePlugin>();
+            string path = FileSystemWalker.PluginsDirectory;
+            plugins = PluginServices.FindPlugins(path, pluginType);
+            IOMLMetadataPlugin objPlugin;
+            // Loop through available plugins, creating instances and adding them
+            if (plugins != null)
+            {
+                foreach (PluginServices.AvailablePlugin oPlugin in plugins)
+                {
+                    objPlugin = (IOMLMetadataPlugin)PluginServices.CreateInstance(oPlugin);
+                    pluginList.Add(objPlugin);
+                    objPlugin.Initialize(new Dictionary<string, string>());
+                }
+                plugins = null;
+            }
+        }
+
+
         private void SetupTitleList()
         {
             foreach (Title t in _titleCollection)
             {
                 tvSourceList_AddItem(t.Name, t.InternalItemID.ToString(), "Movies");
+            }
+        }
+
+        public void HandleImportMenuItem(Object sender, EventArgs e)
+        {
+            ToolStripDropDownItem item = sender as ToolStripDropDownItem;
+            StartImport(Convert.ToInt32(item.Name));            
+        }
+
+        public void HandleMetadataMenuItem(Object sender, EventArgs e)
+        {
+            ToolStripDropDownItem item = sender as ToolStripDropDownItem;
+            StartMetadataImport(Convert.ToInt32(item.Name));
+        }
+
+        void StartMetadataImport(int pluginId)
+        {
+            try
+            {
+                Controls.MediaEditor e = GetCurrentEditor();
+                if (e != null)
+                {
+                    Cursor = Cursors.WaitCursor;
+                    _metadataPlugins[pluginId].SearchForMovie(e.TitleName);
+                    frmSearchResult searchResultForm = new frmSearchResult();
+                    Cursor = Cursors.Default;
+                    DialogResult result = searchResultForm.ShowResults(_metadataPlugins[pluginId].GetAvailableTitles());
+                    if (result == DialogResult.OK)
+                    {
+                        Title t = searchResultForm.SelectedTitle;
+                        if (t != null)
+                        {
+                            e.CurrentTitle.CopyMetadata(t, searchResultForm.OverwriteMetadata);
+                            e.LoadTitle(e.CurrentTitle);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Cursor = Cursors.Default;
             }
         }
 
@@ -75,6 +138,16 @@ namespace OMLDatabaseEditor
             foreach (OMLPlugin plugin in _importPlugins)
             {
                 tvSourceList_AddItem(plugin.Menu, i.ToString(), "Importers");
+                ToolStripMenuItem item = new ToolStripMenuItem(plugin.Menu, null, HandleImportMenuItem, i.ToString());
+                importToolStripMenuItem.DropDownItems.Add(item);
+                i++;
+            }
+
+            i = 0;
+            foreach (IOMLMetadataPlugin metadataPlugin in _metadataPlugins)
+            {
+                ToolStripMenuItem item = new ToolStripMenuItem(metadataPlugin.GetPluginName(), null, HandleMetadataMenuItem, i.ToString());
+                metadataToolStripMenuItem.DropDownItems.Add(item);
                 i++;
             }
         }
@@ -506,7 +579,19 @@ namespace OMLDatabaseEditor
             CheckForChanges();
             this.Close();
         }
-    
+
+        Controls.MediaEditor GetCurrentEditor()
+        {
+            if (tabsMediaPanel.SelectedTab != null)
+            {
+                return (Controls.MediaEditor)this.tabsMediaPanel.SelectedTab.Controls[0].Controls[0];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         private void saveToXMLFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (this.tabsMediaPanel.SelectedTab != null)
@@ -653,6 +738,18 @@ namespace OMLDatabaseEditor
                 _titleCollection.saveTitleCollection();
                 reloadDatabase();
             }
+        }
+
+        private void btnAmazon_Click(object sender, EventArgs e)
+        {
+            if (this.tabsMediaPanel.SelectedTab != null)
+            {
+                Controls.MediaEditor _currentEditor = (Controls.MediaEditor)this.tabsMediaPanel.SelectedTab.Controls[0].Controls[0];
+                Title _currentTitle = (Title)_titleCollection.MoviesByItemId[_currentEditor.itemID];
+
+
+            }
+
         }
 
 

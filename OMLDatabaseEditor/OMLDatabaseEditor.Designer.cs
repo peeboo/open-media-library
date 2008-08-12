@@ -30,11 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OMLDatabaseEditor));
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Movies");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Import");
-            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("OML Database", new System.Windows.Forms.TreeNode[] {
-            treeNode7,
-            treeNode8});
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Movies");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Import");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("OML Database", new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode2});
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,8 +44,10 @@
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToXMLFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.reloadDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,8 +79,8 @@
             this.MenuItemEditNewTab = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.metadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -97,6 +99,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
+            this.importToolStripMenuItem,
+            this.metadataToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -180,6 +184,15 @@
             this.saveToXMLFileToolStripMenuItem.Text = "Save To OML XML File";
             this.saveToXMLFileToolStripMenuItem.Click += new System.EventHandler(this.saveToXMLFileToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Image = global::OMLDatabaseEditor.Properties.Resources.SaveAllHS;
+            this.toolStripMenuItem2.ImageTransparentColor = System.Drawing.Color.Black;
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(223, 22);
+            this.toolStripMenuItem2.Text = "Save &All To OML.XML Files";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -191,6 +204,13 @@
             this.reloadDatabaseToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
             this.reloadDatabaseToolStripMenuItem.Text = "Reload Database";
             this.reloadDatabaseToolStripMenuItem.Click += new System.EventHandler(this.reloadDatabaseToolStripMenuItem_Click);
+            // 
+            // clearDatabaseToolStripMenuItem
+            // 
+            this.clearDatabaseToolStripMenuItem.Name = "clearDatabaseToolStripMenuItem";
+            this.clearDatabaseToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.clearDatabaseToolStripMenuItem.Text = "Clear Database";
+            this.clearDatabaseToolStripMenuItem.Click += new System.EventHandler(this.clearDatabaseToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -381,14 +401,14 @@
             this.tvSourceList.FullRowSelect = true;
             this.tvSourceList.Location = new System.Drawing.Point(0, 0);
             this.tvSourceList.Name = "tvSourceList";
-            treeNode7.Name = "Movies";
-            treeNode7.Text = "Movies";
-            treeNode8.Name = "Importers";
-            treeNode8.Text = "Import";
-            treeNode9.Name = "OML Database";
-            treeNode9.Text = "OML Database";
+            treeNode1.Name = "Movies";
+            treeNode1.Text = "Movies";
+            treeNode2.Name = "Importers";
+            treeNode2.Text = "Import";
+            treeNode3.Name = "OML Database";
+            treeNode3.Text = "OML Database";
             this.tvSourceList.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode9});
+            treeNode3});
             this.tvSourceList.Size = new System.Drawing.Size(194, 553);
             this.tvSourceList.TabIndex = 1;
             this.tvSourceList.DoubleClick += new System.EventHandler(this.MenuItemEditTab_Click);
@@ -492,21 +512,17 @@
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem2
+            // importToolStripMenuItem
             // 
-            this.toolStripMenuItem2.Image = global::OMLDatabaseEditor.Properties.Resources.SaveAllHS;
-            this.toolStripMenuItem2.ImageTransparentColor = System.Drawing.Color.Black;
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(223, 22);
-            this.toolStripMenuItem2.Text = "Save &All To OML.XML Files";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.importToolStripMenuItem.Text = "Import";
             // 
-            // clearDatabaseToolStripMenuItem
+            // metadataToolStripMenuItem
             // 
-            this.clearDatabaseToolStripMenuItem.Name = "clearDatabaseToolStripMenuItem";
-            this.clearDatabaseToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.clearDatabaseToolStripMenuItem.Text = "Clear Database";
-            this.clearDatabaseToolStripMenuItem.Click += new System.EventHandler(this.clearDatabaseToolStripMenuItem_Click);
+            this.metadataToolStripMenuItem.Name = "metadataToolStripMenuItem";
+            this.metadataToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
+            this.metadataToolStripMenuItem.Text = "Metadata";
             // 
             // OMLDatabaseEditor
             // 
@@ -589,6 +605,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem clearDatabaseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem metadataToolStripMenuItem;
     }
 }
 
