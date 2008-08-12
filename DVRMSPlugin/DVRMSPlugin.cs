@@ -198,7 +198,7 @@ namespace DVRMSPlugin
                         string[] cast = credits[0].Split('/');
                         foreach (string nm in cast)
                         {
-                            if (!String.IsNullOrEmpty(nm)) newTitle.AddActor(new Person(nm));
+                            if (!String.IsNullOrEmpty(nm)) newTitle.AddActingRole(nm, "");
                         }
                         string[] dirs = credits[1].Split('/');
                         if (dirs.Length > 0)
