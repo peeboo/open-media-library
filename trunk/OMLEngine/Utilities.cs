@@ -511,5 +511,37 @@ namespace OMLEngine
         {
             return !IsUserAnAdmin();
         }
+
+        public static Image ReadImageFromFile(string fileName)
+        {
+            try
+            {
+                if (File.Exists(fileName))
+                {
+                    using (FileStream fs = new FileStream(fileName, FileMode.Open))
+                    {
+                        byte[] buffer = new byte[fs.Length];
+                        fs.Read(buffer, 0, (int)fs.Length);
+                        using (MemoryStream ms = new MemoryStream(buffer))
+                        {
+                            Bitmap bmp1 = new Bitmap(ms);
+                            Bitmap bmp2 = new Bitmap(bmp1.Width, bmp1.Height, bmp1.PixelFormat);
+                            Graphics g = Graphics.FromImage(bmp2);
+                            GraphicsUnit pageUnit = new GraphicsUnit();
+                            g.DrawImage(bmp1, bmp2.GetBounds(ref pageUnit));
+
+
+                            return bmp2;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+
+            return null;
+        }
     }
 }
