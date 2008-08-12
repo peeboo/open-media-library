@@ -13,6 +13,7 @@ using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.IO;
+using System.Drawing;
 
 namespace OMLEngine
 {
@@ -448,42 +449,42 @@ namespace OMLEngine
         /// <summary>
         /// List of languages (English, Spanish, French, DTS, DD5.1, DD2.0, etc)
         /// </summary>
-        public IList AudioTracks
+        public List<string> AudioTracks
         {
             get { return _audioTracks; }
         }
         /// <summary>
         /// List of Genres
         /// </summary>
-        public IList Genres
+        public List<string> Genres
         {
             get { return _genres; }
         }
-        /// <summary>
-        /// List of actors (Person objects)
-        /// </summary>
-        public IList Actors
-        {
-            get { return _actors; }
-        }
+        ///// <summary>
+        ///// List of actors (Person objects)
+        ///// </summary>
+        //public List<Person> Actors
+        //{
+        //    get { return _actors; }
+        //}
         /// <summary>
         /// List of Person objects that directed the title (usually one Person)
         /// </summary>
-        public IList Directors
+        public List<Person> Directors
         {
             get { return _directors; }
         }
         /// <summary>
         /// List of Person objects that wrote the title
         /// </summary>
-        public IList Writers
+        public List<Person> Writers
         {
             get { return _writers; }
         }
         /// <summary>
         /// List of people/companies that produced the title
         /// </summary>
-        public IList Producers
+        public List<string> Producers
         {
             get { return _producers; }
         }
@@ -717,16 +718,16 @@ namespace OMLEngine
             //Utilities.DebugLine("[Title] Title destroyed");
         }
 
-        /// <summary>
-        /// Add a Person object to the actors list
-        /// </summary>
-        /// <param name="actor">Person object to add</param>
-        public void AddActor(Person actor)
-        {
-            if (actor == null) return;
-            if (!_actors.Contains(actor))
-                _actors.Add(actor);
-        }
+        ///// <summary>
+        ///// Add a Person object to the actors list
+        ///// </summary>
+        ///// <param name="actor">Person object to add</param>
+        //public void AddActor(Person actor)
+        //{
+        //    if (actor == null) return;
+        //    if (!_actors.Contains(actor))
+        //        _actors.Add(actor);
+        //}
 
         /// <summary>
         /// Add a Person object to the directors list
@@ -1705,6 +1706,289 @@ namespace OMLEngine
             writer.WriteElementString("VideoDetails", _videoDetails);
             
             writer.WriteElementString("VideoResolution", _videoResolution);
+        }
+
+        private string CopyStringValue(string src, string dest, bool overWrite)
+        {
+            if (overWrite)
+            {
+                // only copy data if available
+                if (!String.IsNullOrEmpty(src))
+                    return src;
+                else
+                    return dest;
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(src) && String.IsNullOrEmpty(dest))
+                    return src;
+                else
+                    return dest;
+            }
+        }
+
+        public void CopyMetadata(Title t, bool overWrite)
+        {
+            _name = CopyStringValue(t._name, _name, overWrite);
+            _metadataSourceId = CopyStringValue(t._metadataSourceId, _metadataSourceId, overWrite);
+
+            _parentalRating = CopyStringValue(t._parentalRating, _parentalRating, overWrite);
+            _synopsis = CopyStringValue(t._synopsis, _synopsis, overWrite);
+            _studio = CopyStringValue(t._studio, _studio, overWrite);
+            _countryOfOrigin = CopyStringValue(t._countryOfOrigin, _countryOfOrigin, overWrite);
+            _officialWebsiteURL = CopyStringValue(t._officialWebsiteURL, _officialWebsiteURL, overWrite);
+            _aspectRatio = CopyStringValue(t._aspectRatio, _aspectRatio, overWrite);
+            _videoStandard = CopyStringValue(t._videoStandard, _videoStandard, overWrite);
+            _UPC = CopyStringValue(t._UPC, _UPC, overWrite);
+            _originalName = CopyStringValue(t._originalName, _originalName, overWrite);
+            _sortName = CopyStringValue(t._sortName, _sortName, overWrite);
+            _parentalRatingReason = CopyStringValue(t._parentalRatingReason, _parentalRatingReason, overWrite);
+            _videoDetails = CopyStringValue(t._videoDetails, _videoDetails, overWrite);
+            
+            if ( t.Runtime > 0) Runtime = t.Runtime;
+            if (t.ReleaseDate != null) ReleaseDate = t.ReleaseDate;
+            if (t.UserStarRating > 0) UserStarRating = t.UserStarRating;
+
+            if (t._directors != null && t._directors.Count > 0)
+            {
+                if (_directors == null) _directors = new List<Person>();
+                if (overWrite || _directors.Count == 0)
+                {
+                    _directors.Clear();
+                    foreach (Person p in t._directors)
+                    {
+                        AddDirector(new Person(p.full_name));
+                    }
+                }
+            }
+
+
+            if (t._writers != null && t._writers.Count > 0)
+            {
+                if (_writers == null) _writers = new List<Person>();
+                if (overWrite || _writers.Count == 0)
+                {
+                    _writers.Clear();
+                    foreach (Person p in t._writers)
+                    {
+                        AddWriter(new Person(p.full_name));
+                    }
+                }
+
+            }
+
+            if (t._producers != null && t._producers.Count > 0)
+            {
+                if (_producers == null) _producers = new List<string>();
+                if (overWrite || _producers.Count == 0)
+                {
+                    _producers.Clear();
+                    foreach (string p in t._producers)
+                    {
+                        AddProducer(p);
+                    }
+                }
+            }
+
+            if (t._audioTracks != null && t._audioTracks.Count > 0)
+            {
+                if (_audioTracks == null) _audioTracks = new List<string>();
+                if (overWrite || _audioTracks.Count == 0)
+                {
+                    _audioTracks.Clear();
+                    foreach (string p in t._audioTracks)
+                    {
+                        _audioTracks.Add(p);
+                    }
+                }
+            }
+
+            if (t._genres != null && t._genres.Count > 0)
+            {
+                if (_genres == null) _genres = new List<string>();
+                if (overWrite || _genres.Count == 0)
+                {
+
+                    _genres.Clear();
+                    foreach (string p in t._genres)
+                    {
+                        _genres.Add(p);
+                    }
+                }
+            }
+
+            if (t._tags != null && t._tags.Count > 0)
+            {
+                if (_tags == null) _tags = new List<string>();
+                if (overWrite || _tags.Count == 0)
+                {
+
+                    _tags.Clear();
+                    foreach (string p in t._tags)
+                    {
+                        _tags.Add(p);
+                    }
+                }
+            }
+
+
+            if (t._actingRoles != null && t._actingRoles.Count > 0)
+            {
+                if (_actingRoles == null) _actingRoles = new Dictionary<string, string>();
+                if (overWrite || _actingRoles.Count == 0)
+                {
+                    _actingRoles.Clear();
+                    foreach (KeyValuePair<string, string> p in t._actingRoles)
+                    {
+                        _actingRoles.Add(p.Key, p.Value);
+                    }
+                }
+            }
+
+            if (t._nonActingRoles != null && t._nonActingRoles.Count > 0)
+            {
+                if (_nonActingRoles == null) _nonActingRoles = new Dictionary<string, string>();
+                if (overWrite || _nonActingRoles.Count == 0)
+                {
+
+                    _nonActingRoles.Clear();
+                    foreach (KeyValuePair<string, string> p in t._nonActingRoles)
+                    {
+                        _nonActingRoles.Add(p.Key, p.Value);
+                    }
+                }
+            }
+
+            if (t._additionalFields != null && t._additionalFields.Count > 0)
+            {
+                if (_additionalFields == null) _additionalFields = new Dictionary<string, string>();
+                if (overWrite || _additionalFields.Count == 0)
+                {
+
+                    _additionalFields.Clear();
+                    foreach (KeyValuePair<string, string> p in t._additionalFields)
+                    {
+                        _additionalFields.Add(p.Key, p.Value);
+                    }
+                }
+            }
+
+            if (t._photos != null && t._photos.Count > 0)
+            {
+                if (_photos == null) _photos = new List<string>();
+                if (overWrite || _photos.Count == 0)
+                {
+
+                    _photos.Clear();
+                    foreach (string p in t._photos)
+                    {
+                        _photos.Add(p);
+                    }
+                }
+            }
+
+            if (t._trailers != null && t._trailers.Count > 0)
+            {
+                if (_trailers == null) _trailers = new List<string>();
+                if (overWrite || _trailers.Count == 0)
+                {
+
+                    _trailers.Clear();
+                    foreach (string p in t._trailers)
+                    {
+                        _trailers.Add(p);
+                    }
+                }
+            }
+
+            if (t._subtitles != null && t._subtitles.Count > 0)
+            {
+                if (_subtitles == null) _subtitles = new List<string>();
+                if (overWrite || _subtitles.Count == 0)
+                {
+
+                    _subtitles.Clear();
+                    foreach (string p in t._subtitles)
+                    {
+                        _subtitles.Add(p);
+                    }
+                }
+            }
+
+            if (t._extraFeatures != null && t._extraFeatures.Count > 0)
+            {
+                if (_extraFeatures == null) _extraFeatures = new List<string>();
+                if (overWrite || _extraFeatures.Count == 0)
+                {
+
+                    _extraFeatures.Clear();
+                    foreach (string p in t._extraFeatures)
+                    {
+                        _extraFeatures.Add(p);
+                    }
+                }
+            }
+
+            if (!String.IsNullOrEmpty(t.FrontCoverPath))
+            {
+                if (overWrite || String.IsNullOrEmpty(FrontCoverPath))
+                {
+
+                    string frontCoverArt = GetDefaultFrontCoverName();
+
+                    if (MoveFile(t._frontCoverMenuPath, frontCoverArt))
+                    {
+                        FrontCoverPath = frontCoverArt;
+                    }
+                    BuildResizedMenuImage();
+                }
+            }
+        
+        }
+
+        public string GetDefaultFrontCoverName()
+        {
+            return OMLEngine.FileSystemWalker.ImageDirectory + "\\F" + InternalItemID + ".jpg";
+        }
+
+        public static bool MoveFile(string sourceFile, string destinationFile)
+        {
+            try
+            {
+                File.Copy(sourceFile, destinationFile, true);
+                File.Delete(sourceFile);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public void BuildResizedMenuImage()
+        {
+            try
+            {
+                if ( !String.IsNullOrEmpty(FrontCoverPath) && File.Exists(FrontCoverPath) )
+                {
+                    using (Image coverArtImage = Image.FromFile(FrontCoverPath))
+                    {
+                        if (coverArtImage != null)
+                        {
+                            using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(coverArtImage, 200))
+                            {
+                                string img_path = FileSystemWalker.ImageDirectory + @"\MF" + InternalItemID + ".jpg";
+                                menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                FrontCoverMenuPath = img_path;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[Title.BuildResizedMenuImage] Exception: " + ex.Message);
+            }
         }
     }
 }
