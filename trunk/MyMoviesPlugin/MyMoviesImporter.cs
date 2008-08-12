@@ -139,11 +139,18 @@ namespace MyMoviesPlugin
                     newTitle.Synopsis = node.InnerText;
                     break;
                 case "ProductionYear":
-                    string year = node.InnerText;
-                    if (!string.IsNullOrEmpty(year))
+                    try
                     {
-                        DateTime rls_date = new DateTime(int.Parse(year), 1, 1);
-                        newTitle.ReleaseDate = rls_date;
+                        string year = node.InnerText;
+                        if (!string.IsNullOrEmpty(year))
+                        {
+                            DateTime rls_date = new DateTime(int.Parse(year), 1, 1);
+                            newTitle.ReleaseDate = rls_date;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Utilities.DebugLine("[MyMoviesImporter] error reading ProductionYear, we got >>" + node.InnerText);
                     }
                     break;
                 case "ParentalRating":
