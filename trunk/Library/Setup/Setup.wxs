@@ -118,6 +118,14 @@
                                   KeyPath="yes" Source="..\..\VMCDVDLibraryPlugin\bin\$(var.BuildType)\VMCDVDLibraryPlugin.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
+                        
+                        <Component Id="OMLXMLImporter.dll" Guid="9F418F85-3F7B-4adb-991A-EC2831AD177C" DiskId="1">
+                            <File Name="OMLXMLImporter.dll"
+                                  KeyPath="yes" Source="..\..\OMLXMLImporter\bin\$(var.BuildType)\OMLXMLImporter.dll"
+                                  Checksum="yes" Vital="yes"/>
+                        </Component>
+
+
                         <Component Id="AmazonMetadata.dll" Guid="4972EC63-E804-41b3-9EA3-D844CD230C89" DiskId="1">
                             <File Name="AmazonMetadata.dll"
                                   KeyPath="yes" Source="..\..\AmazonMetadata\bin\$(var.BuildType)\AmazonMetadata.dll"
@@ -178,6 +186,7 @@
             <ComponentRef Id="MyMoviesPlugin.dll" />
             <ComponentRef Id="OMLSDK.dll" />
             <ComponentRef Id="VMCDVDLibraryPlugin.dll" />
+            <ComponentRef Id="OMLXMLImporter.dll" />
             <ComponentRef Id="AmazonMetadata.dll" />
             
             <!-- Windows programs -->
