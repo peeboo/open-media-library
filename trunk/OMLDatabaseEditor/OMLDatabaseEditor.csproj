@@ -88,6 +88,12 @@
     <Compile Include="Controls\MediaList.Designer.cs">
       <DependentUpon>MediaList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
     <Compile Include="OMLDatabaseEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +116,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\MediaList.resx">
       <DependentUpon>MediaList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="OMLDatabaseEditor.resx">
@@ -178,6 +188,7 @@
   <ItemGroup>
     <Content Include="Application.ico" />
     <Content Include="Resources\Application.png" />
+    <None Include="app.config" />
     <None Include="Resources\SaveAllHS.bmp" />
   </ItemGroup>
   <ItemGroup>

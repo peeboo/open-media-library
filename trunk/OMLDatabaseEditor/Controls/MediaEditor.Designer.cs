@@ -1134,6 +1134,7 @@
             this.pbFrontCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbFrontCover.TabIndex = 4;
             this.pbFrontCover.TabStop = false;
+            this.pbFrontCover.Click += new System.EventHandler(this.pbFrontCover_Click);
             // 
             // btnDiskAdd
             // 

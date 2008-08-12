@@ -25,7 +25,14 @@ namespace OMLDatabaseEditor.Controls
         private int _itemID = 0;
         private string _titleName = "";
         private string _FrontCoverMenu = "";
-        
+
+        private Title _currentTitle;
+
+        public Title CurrentTitle
+        {
+            get { return _currentTitle; }
+        }
+
         public enum TitleStatus {Initial, UnsavedChanges, Saved}
 
         public int itemID 
@@ -80,6 +87,7 @@ namespace OMLDatabaseEditor.Controls
         public void LoadTitle(Title t)
         {
             UpdateUIFromTitle(t);
+            _currentTitle = t;
         }
 
         public void SaveToTitle(Title t)
@@ -98,6 +106,8 @@ namespace OMLDatabaseEditor.Controls
             _FrontCoverMenu = t.FrontCoverMenuPath;
             pbBackCover.Image = ReadImageFromFile(t.BackCoverPath);
             tbBackCover.Text = t.BackCoverPath;
+
+            lstDisks.Items.Clear();
             foreach (Disk d in t.Disks)
             {
                 lstDisks.Items.Add(d);
@@ -301,7 +311,7 @@ namespace OMLDatabaseEditor.Controls
             {
                 if (row.Cells[0].Value != null)
                 {
-                    t.Producers.Add(row.Cells[0].Value);
+                    t.Producers.Add((string)row.Cells[0].Value);
                 }
             }
 
@@ -626,6 +636,11 @@ namespace OMLDatabaseEditor.Controls
         private void grd_CellChanges(object sender, EventArgs e)
         {
             _titleChanged(EventArgs.Empty);
+        }
+
+        private void pbFrontCover_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
