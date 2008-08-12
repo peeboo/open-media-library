@@ -207,6 +207,7 @@ namespace OMLDatabaseEditor
             _titleCollection.Add(t);
 
             tvSourceList_AddItem("New Movie", t.InternalItemID.ToString(), "Movies");
+            EditNewTab(t.InternalItemID);
         }
 
         
