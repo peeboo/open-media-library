@@ -321,11 +321,10 @@ namespace Library
                 Filters[Filter.Director].AddMovie(p.full_name, movie);
             }
 
-            foreach (string actorName in title.ActingRoles.Keys)
+            foreach ( KeyValuePair<string, string> kvp in title.ActingRoles)
             {
-                Filters[Filter.Actor].AddMovie(actorName, movie);
+                Filters[Filter.Actor].AddMovie(kvp.Key, movie);
             }
-
             foreach (string genre in title.Genres)
             {
                 Filters[Filter.Genres].AddMovie(genre, movie);
