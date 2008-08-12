@@ -24,6 +24,9 @@ namespace OMLDatabaseEditor
 
             InitializeComponent();
             InitData();      
+            LoadImportPlugins( PluginTypes.ImportPlugin, _importPlugins);
+            LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
+            SetupPluginList();
         }
 
         private void InitData()
@@ -34,9 +37,6 @@ namespace OMLDatabaseEditor
             _titleCollection.Sort();
 
             SetupTitleList();
-            LoadImportPlugins( PluginTypes.ImportPlugin, _importPlugins);
-            LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
-            SetupPluginList();
             Cursor = Cursors.Default;
         }
 
