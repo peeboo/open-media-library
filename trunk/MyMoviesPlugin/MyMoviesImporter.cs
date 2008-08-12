@@ -205,7 +205,6 @@ namespace MyMoviesPlugin
                         switch (typeNode.InnerText)
                         {
                             case "Actor":
-                                newTitle.AddActor(p);
                                 newTitle.AddActingRole(nameNode.InnerText, role);
                                 break;
                             case "Director":
