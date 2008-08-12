@@ -118,13 +118,11 @@
                                   KeyPath="yes" Source="..\..\VMCDVDLibraryPlugin\bin\$(var.BuildType)\VMCDVDLibraryPlugin.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
-
                         <Component Id="AmazonMetadata.dll" Guid="4972EC63-E804-41b3-9EA3-D844CD230C89" DiskId="1">
                             <File Name="AmazonMetadata.dll"
                                   KeyPath="yes" Source="..\..\AmazonMetadata\bin\$(var.BuildType)\AmazonMetadata.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
-
                         <Component Id="OMLSDK.dll" Guid="26097a63-fc55-41d2-a8d5-432809de99fc" DiskId="1">
                             <File Name="OMLSDK.dll"
                                   KeyPath="yes" Source="..\..\OMLSDK\bin\$(var.BuildType)\OMLSDK.dll"
