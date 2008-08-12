@@ -321,9 +321,9 @@ namespace Library
                 Filters[Filter.Director].AddMovie(p.full_name, movie);
             }
 
-            foreach (Person p in title.Actors)
+            foreach (string actorName in title.ActingRoles.Keys)
             {
-                Filters[Filter.Actor].AddMovie(p.full_name, movie);
+                Filters[Filter.Actor].AddMovie(actorName, movie);
             }
 
             foreach (string genre in title.Genres)

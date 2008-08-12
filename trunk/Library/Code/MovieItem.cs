@@ -245,28 +245,30 @@ namespace Library
                 SubCaption += "Directed by: " + ((Person)_titleObj.Directors[0]).full_name + "\n";
 
             int actorCount = 0;
-            if (_titleObj.Actors.Count > 0)
+            if (_titleObj.ActingRoles.Count > 0)
             {
                 SubCaption += "Actors: ";
             }
-            foreach (Person actor in _titleObj.Actors)
+
+            ICollection<string> actors = _titleObj.ActingRoles.Keys;
+            foreach (string actor in actors)
             {
-                if (actor.full_name.Trim().Length > 0)
+                if (actor.Trim().Length > 0)
                 {
                     if (actorCount > 0)
                         SubCaption += ", ";
 
-                    SubCaption += actor.full_name;
+                    SubCaption += actor;
                     actorCount++;
+
                     if (actorCount == 6)
                     {
-                        SubCaption += " ...";
+                        SubCaption += "...";
                         break;
                     }
                 }
             }
-
-            if (_titleObj.Actors.Count > 0)
+            if (_titleObj.ActingRoles.Count > 0)
             {
                 SubCaption += "\n";
             }
@@ -288,9 +290,9 @@ namespace Library
             }
             else
             {
-                foreach (Person actor in title.Actors)
+                foreach (string actor_name in title.ActingRoles.Keys)
                 {
-                    _actingRoles.Add(actor.full_name);
+                    _actingRoles.Add(actor_name);
                 }
             }
 
@@ -477,9 +479,9 @@ namespace Library
             get
             {
                 List<string> actor_names = new List<string>();
-                foreach (Person p in _titleObj.Actors)
+                foreach (string actorName in _titleObj.ActingRoles.Keys)
                 {
-                    actor_names.Add(p.full_name);
+                    actor_names.Add(actorName);
                 }
                 return actor_names;
             }
