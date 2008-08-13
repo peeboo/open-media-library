@@ -92,7 +92,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_LOAD_FROM_XML()
         {
-            string xml_file = @"..\..\..\Sample Files\oml.xml";
+            string xml_file = @"..\..\..\Sample Files\sample-oml.xml";
 
             Title t = Title.CreateFromXML(xml_file);
 
