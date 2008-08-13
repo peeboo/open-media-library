@@ -412,8 +412,18 @@ namespace OMLDatabaseEditor.Controls
 
         private void CoverButton_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog(); 
-            ofd.InitialDirectory = @"C:\"; 
+            string initialDirectory = ""; 
+            if (CurrentTitle != null)
+            {
+                if (CurrentTitle.Disks != null && CurrentTitle.Disks.Count > 0 && !String.IsNullOrEmpty(CurrentTitle.Disks[0].Path))
+                {
+                    initialDirectory = Path.GetDirectoryName(CurrentTitle.Disks[0].Path);
+                    if (initialDirectory == null) initialDirectory = "";
+                }
+            }
+
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.InitialDirectory = initialDirectory;
             ofd.Filter = @"JPG files (*.jpg)|*.jpg|All Files (*.*)|*.*"; 
             ofd.FilterIndex = 1; 
             ofd.CheckPathExists = true; 

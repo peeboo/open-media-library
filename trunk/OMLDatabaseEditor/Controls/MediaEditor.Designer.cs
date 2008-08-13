@@ -760,8 +760,8 @@
             // 
             // tbcCategories
             // 
-            this.tbcCategories.Controls.Add(this.tabPage1);
             this.tbcCategories.Controls.Add(this.tabPage2);
+            this.tbcCategories.Controls.Add(this.tabPage1);
             this.tbcCategories.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcCategories.Location = new System.Drawing.Point(3, 16);
             this.tbcCategories.Multiline = true;
