@@ -127,6 +127,7 @@ namespace OMLXMLPlugin
                         {
                             if (filename.ToLower().EndsWith(@"oml.xml"))
                             {
+                                Utilities.DebugLine("[OMLXMLPlugin] oml.xml found, loading title");
                                 Title t = Title.CreateFromXML(filename);
                                 if (t != null)
                                     AddTitle(t);
@@ -134,8 +135,10 @@ namespace OMLXMLPlugin
 
                             if (filename.ToLower().EndsWith(@"mymovies.xml"))
                             {
+                                Utilities.DebugLine("[OMLXMLPlugin] Found mymovies.xml, attempting to convert");
                                 if (ConvertMyMoviesXMLToOMLXML(filename))
                                 {
+                                    Utilities.DebugLine("[OMLXMLPlugin] Conversion successful, moving to load new oml.xml");
                                     string newFileName = Path.Combine(Directory.GetParent(filename).FullName,
                                                                       @"oml.xml");
                                     if (File.Exists(newFileName))
@@ -145,6 +148,10 @@ namespace OMLXMLPlugin
                                         if (t != null)
                                             AddTitle(t);
                                     }
+                                }
+                                else
+                                {
+                                    Utilities.DebugLine("[OMLXMLPlugin] Conversion failed, skipping title");
                                 }
                             }
                         }
