@@ -12,6 +12,7 @@
     <AssemblyName>OMLTestSuite</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <StartupObject>OMLTestSuite.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MyMoviesPluginTest.cs" />
+    <Compile Include="OMLXMLImporterTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TitleCollectionTest.cs" />
@@ -71,6 +73,10 @@
     <ProjectReference Include="..\OMLSDK\OMLSDK.csproj">
       <Project>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</Project>
       <Name>OMLSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OMLXMLImporter\OMLXMLImporter.csproj">
+      <Project>{3F757A9F-BA85-4B16-AD94-334D332F3DEB}</Project>
+      <Name>OMLXMLImporter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

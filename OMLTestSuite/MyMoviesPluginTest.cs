@@ -3,6 +3,7 @@ using OMLEngine;
 using OMLSDK;
 using MyMoviesPlugin;
 using System.IO;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace OMLTestSuite
@@ -26,7 +27,7 @@ namespace OMLTestSuite
             MyMoviesImporter importer = new MyMoviesImporter();
             bool ShouldCopyImages = false;
             importer.CopyImages = ShouldCopyImages;
-            importer.Load("C:\\mymovies.xml");
+            importer.ProcessFile(@"..\..\..\Sample Files\MyMovies.xml");
 
             foreach (Title t in importer.GetTitles())
                 tc.Add(t);
@@ -38,7 +39,18 @@ namespace OMLTestSuite
             tc.loadTitleCollection();
             Assert.IsNotNull(tc);
 
-            Assert.AreEqual(58, tc.Count);
+            Assert.AreEqual(2, tc.Count);
+        }
+
+        public void TEST_MULTIPLE_DISCS_FAIL_TO_IMPORT()
+        {
+            TitleCollection tc = new TitleCollection("\\testOML.dat");
+            MyMoviesImporter importer = new MyMoviesImporter();
+            importer.ProcessFile(@"..\..\..\Sample Files\mymovies-multiple-avi-files-bug.xml");
+
+            IList<Title> titles = importer.GetTitles();
+
+            Assert.AreEqual(1, titles.Count);
         }
     }
 }

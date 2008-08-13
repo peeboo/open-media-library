@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Files", "Sample File
 		Sample Files\Movie_Collectorz.xml = Sample Files\Movie_Collectorz.xml
 		Sample Files\MyMovies.xml = Sample Files\MyMovies.xml
 		Sample Files\oml.dat = Sample Files\oml.dat
+		Sample Files\oml.xml = Sample Files\oml.xml
 		Sample Files\oml_menu.jpg = Sample Files\oml_menu.jpg
 		Sample Files\oml_title.jpg = Sample Files\oml_title.jpg
 		Sample Files\test.wpl = Sample Files\test.wpl

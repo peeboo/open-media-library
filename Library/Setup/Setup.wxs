@@ -113,19 +113,21 @@
                                   KeyPath="yes" Source="..\..\MyMoviesPlugin\bin\$(var.BuildType)\MyMoviesPlugin.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
+                        <Component Id="MyMoviesToOML.xsl" Guid="0CC7C503-DA16-45a4-AD1E-60C638B40FAC" DiskId="1">
+                            <File Name="MyMoviesToOML.xsl"
+                                  KeyPath="yes" Source="..\..\MyMoviesPlugin\MyMoviesToOML.xsl"
+                                  Vital="yes"/>
+                        </Component>
                         <Component Id="VMCDVDLibraryPlugin.dll" Guid="d8028d8c-a048-46b2-9c27-c64f07c8ab8d" DiskId="1">
                             <File Name="VMCDVDLibraryPlugin.dll"
                                   KeyPath="yes" Source="..\..\VMCDVDLibraryPlugin\bin\$(var.BuildType)\VMCDVDLibraryPlugin.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
-                        
-                        <Component Id="OMLXMLImporter.dll" Guid="9F418F85-3F7B-4adb-991A-EC2831AD177C" DiskId="1">
+                        <Component Id="OMLXMLImporter.dll" Guid="F7DC8CE0-7C53-438e-A3CC-5D155DB4CDD3" DiskId="1">
                             <File Name="OMLXMLImporter.dll"
                                   KeyPath="yes" Source="..\..\OMLXMLImporter\bin\$(var.BuildType)\OMLXMLImporter.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
-
-
                         <Component Id="AmazonMetadata.dll" Guid="4972EC63-E804-41b3-9EA3-D844CD230C89" DiskId="1">
                             <File Name="AmazonMetadata.dll"
                                   KeyPath="yes" Source="..\..\AmazonMetadata\bin\$(var.BuildType)\AmazonMetadata.dll"
@@ -184,6 +186,7 @@
             <ComponentRef Id="DVRMSPlugin.dll" />
             <ComponentRef Id="MovieCollectorz.dll" />
             <ComponentRef Id="MyMoviesPlugin.dll" />
+            <ComponentRef Id="MyMoviesToOML.xsl" />
             <ComponentRef Id="OMLSDK.dll" />
             <ComponentRef Id="VMCDVDLibraryPlugin.dll" />
             <ComponentRef Id="OMLXMLImporter.dll" />

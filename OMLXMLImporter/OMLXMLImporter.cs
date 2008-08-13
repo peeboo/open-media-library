@@ -73,6 +73,25 @@ namespace OMLXMLPlugin
             GetMovies(thework[0]);
         }
 
+        public void ConvertMyMoviesXMLToOMLXML(string directory)
+        {
+            if (Directory.Exists(directory))
+            {
+                string filename = Path.Combine(directory, @"mymovies.xml");
+                if (File.Exists(filename))
+                {
+                    string currentDir = Directory.GetCurrentDirectory();
+                    Directory.SetCurrentDirectory(directory);
+                    if (OMLEngine.XMLTransformer.QuickTransform(filename,
+                                                                @"..\..\..\MyMoviesPlugin\MyMoviesToOML.xsl",
+                                                                @"mymovies-converted-oml.xml"))
+                    {
+                        Utilities.DebugLine(@"[OMLXMLImporter] Failed to convert mymovies to oml xml file");
+                    }
+                    Directory.SetCurrentDirectory(currentDir);
+                }
+            }
+        }
 
         public void GetMovies(string startFolder)
         {

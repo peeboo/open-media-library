@@ -1,102 +1,64 @@
-<?xml version="1.0" encoding="Windows-1252"?>
-<!--Open Media Library XML-->
-<OML>
-  <Movie IsUpdated="0">
-    <Title>12 Monkeys</Title>
-    <SortAs>Twelve Monkeys</SortAs>
+<?xml version="1.0" encoding="utf-8"?>
+<OMLTitle xmlns="http://www.openmedialibrary.org/">
+    <Name>GoldenEye</Name>
+    <SortName />
+    <OriginalName />
+    <FrontCoverPath>C:\ProgramData\OpenMediaLibrary\Images\F714962152.jpg</FrontCoverPath>
+    <FrontCoverMenuPath>C:\ProgramData\OpenMediaLibrary\Images\MF714962152.jpg</FrontCoverMenuPath>
     <Disks>
-      <Disk id="1">
-        <Location>M:\Videos\12 Monkeys.dvr-ms</Location>
-        <Format IsType="DVRMS" />
-      </Disk>
+        <Disk Name="Disk 1">
+            <Path>C:\Users\fbirsan\Movies\Movies on D\Goldeneye\VIDEO_TS</Path>
+            <Format>DVD</Format>
+        </Disk>
     </Disks>
-    <Location></Location>
-    <Cover>
-      <Front>M:\DVDCovers\12 Monkeys_front.jpg</Front>
-      <Back>M:\DVDCovers\12 Monkeys_back.jpg</Back>
-    </Cover>
-    <Aspect>
-      <Widescreen>1</Widescreen>
-    </Aspect>
+    <TranscodeToExtender>False</TranscodeToExtender>
+    <Synopsis>IMDB Rating: 7.1   James Bond has a mission to recover the 'Goldeneye' access key. A Russian computer programmer called Natalya Siminova survives a murder spree by Xenia Onatopp and General Ourumov. Bond must work with Natalya to find this key and uncovers a sinister secret. His fellow agent, Alec Trevelyan who was believed to have been shot and killed 9 years ago re-surfaces. Bond soon realizes that Trevelyan is behind everything. Bond must now battle his former friend, in order to stop him from destroying London with the Goldeneye satellite. Written by simon</Synopsis>
+    <Studio>Danjaq</Studio>
+    <Country />
+    <OfficialWebSiteURL />
     <Runtime>130</Runtime>
-    <MCAA>
-      <NR>1</NR>
-    </MCAA>
-    <Synopsis><![CDATA[Inspired by Chris Marker's acclaimed short film La Jetée (which is included on the DVD Short 2: Dreams), 12 Monkeys combines intricate, intelligent storytelling with the uniquely imaginative vision of director Terry Gilliam. The story opens in the wintry wasteland of the year 2035, where a virulent plague has forced humans to live in a squalid, oppressively regimented underground. Bruce Willis plays a societal outcast who is given the opportunity to erase his criminal record by "volunteering" to time-travel into the past to obtain a pure sample of the deadly virus that will help future scientists to develop a cure. But in bouncing from 1918 to the early and mid-1990s, he undergoes an ordeal that forces him to question his own perceptions of reality. Caught between the dangers of the past and the devastation of the future, he encounters a psychiatrist (Madeleine Stowe) who is initially convinced he's insane, and a wacky mental patient (Brad Pitt in a twitchy Oscar-nominated role) with links to a radical group that may have unleashed the deadly virus. Equal parts mystery, tragedy, psychological thriller, and apocalyptic drama, 12 Monkeys ranks as one of the best science fiction films of the '90s, boosted by Gilliam's visual ingenuity and one of the finest performances of Willis's career. --Jeff Shannon]]></Synopsis>
-    <Categories></Categories>
+    <ParentalRating>Rated PG-13 for a number of sequences of action/violence, and for some sexuality.</ParentalRating>
+    <ParentalRatingReason />
+    <ReleaseDate>1/1/1995 12:00:00 AM</ReleaseDate>
     <Genres>
-      <Genre>Science-Fiction</Genre>
-      <Genre>Suspense/Thriller</Genre>
-      <Genre>Drama</Genre>
+        <Genre>Action</Genre>
+        <Genre>Adventure</Genre>
     </Genres>
-    <Persons>
-      <Person IsActor="1" IsDirector="0" IsProducer="0" IsWriter="0" Gender="M" Birthdate="" Uncredited="0">
-        <Name>Frank Gorshin</Name>
-        <Role>Dr. Fletcher</Role>
-      </Person>
-      <Person IsActor="1" IsDirector="0" IsProducer="0" IsWriter="0" Gender="M" Birthdate="" Uncredited="0">
-        <Name>Brad Pitt</Name>
-        <Role>Jeffrey Goines</Role>
-      </Person>
-      <Person IsActor="0" IsDirector="1" IsProducer="0" IsWriter="0" Gender="M" Birthdate="" Uncredited="0">
-        <Name>Terry Gilliam</Name>
-      </Person>
-    </Persons>
-  </Movie>
-  <Movie IsUpdated="1">
-    <Title>Firefly</Title>
-    <SubTitle>Disk 1</SubTitle>
-    <SortAs>Firefly 01</SortAs>
-    <Disks>
-      <Disk id="1">
-        <Name>Episode 1 - Senerity 1 &amp; 2</Name>
-        <Location>M:\Videos\Firefly\Disk1_01.dvrms</Location>
-        <Format IsType="DVRMS" />
-      </Disk>
-      <Disk id="2">
-        <Name>Episode 2 - The Train Job</Name>
-        <Location>M:\Videos\Firefly\Disk1_02.dvrms</Location>
-        <Format IsType="DVRMS" />
-      </Disk>
-      <Disk id="2">
-        <Name>Episode 3 - Bushwacked</Name>
-        <Location>M:\Videos\Firefly\Disk1_03.dvrms</Location>
-        <Format IsType="DVRMS" />
-      </Disk>
-    </Disks>
-    <Cover>
-      <Front>M:\DVDCovers\Firefly_Disk1_front.jpg</Front>
-      <Back>M:\DVDCovers\Filefly_Disk1_back.jpg</Back>
-    </Cover>
-    <Aspect>
-      <Widescreen>1</Widescreen>
-    </Aspect>
-    <Runtime>130</Runtime>
-    <MCAA>
-      <NR>1</NR>
-    </MCAA>
-    <Synopsis>
-      <![CDATA[Five hundred years in the future there&apos;s a whole new frontier, and the crew of the Firefly-class spaceship &apos;Serenity&apos; is eager to stake a claim on the action. They&apos;ll take any job, legal or illegal, to keep fuel in the tanks and food on the table. But things get a bit more complicated after they take on a passenger wanted by the new totalitarian Alliance regime. Now they find themselves on the run, desperate to steer clear of Alliance ships and the flesh-eating Reavers who live on the fringes of space.]]>
-    </Synopsis>
-    <Categories>Firefly</Categories>
-    <Genres>
-      <Genre>Science-Fiction</Genre>
-      <Genre>Suspense/Thriller</Genre>
-      <Genre>Drama</Genre>
-    </Genres>
-    <Persons>
-      <Person IsActor="1" IsDirector="0" IsProducer="0" IsWriter="0" Gender="M" Birthdate="" Uncredited="0">
-        <Name>Nathan Fillion</Name>
-        <Role>Mal</Role>
-      </Person>
-      <Person IsActor="1" IsDirector="0" IsProducer="0" IsWriter="0" Gender="F" Birthdate="" Uncredited="0">
-        <Name>Gina Torres</Name>
-        <Role>Zoe</Role>
-      </Person>
-      <Person IsActor="0" IsDirector="1" IsProducer="0" IsWriter="0" Gender="M" Birthdate="" Uncredited="0">
-        <Name>Alan Tudyk</Name>
-        <Type>Wash</Type>
-      </Person>
-    </Persons>
-  </Movie>
-</OML>
+    <Writers />
+    <Directors>
+        <Director>Martin Campbell</Director>
+    </Directors>
+    <AudioTracks>
+        <AudioTrack />
+    </AudioTracks>
+    <UserRating>0</UserRating>
+    <AspectRatio />
+    <VideoStandard />
+    <ActingRoles>
+        <Actor Name="Pierce Brosnan" Role="" />
+        <Actor Name="Sean Bean" Role="" />
+        <Actor Name="Izabella Scorupco" Role="" />
+        <Actor Name="Famke Janssen" Role="" />
+        <Actor Name="Joe Don Baker" Role="" />
+        <Actor Name="Judi Dench" Role="" />
+        <Actor Name="Gottfried John" Role="" />
+        <Actor Name="Robbie Coltrane" Role="" />
+        <Actor Name="Alan Cumming" Role="" />
+        <Actor Name="TchÃ©ky Karyo" Role="" />
+        <Actor Name="Desmond Llewelyn" Role="" />
+        <Actor Name="Samantha Bond" Role="" />
+        <Actor Name="Michael Kitchen" Role="" />
+        <Actor Name="Serena Gordon" Role="" />
+        <Actor Name="Simon Kunz" Role="" />
+        <Actor Name="" Role="" />
+    </ActingRoles>
+    <NonActingRoles />
+    <Tags />
+    <Subtitles />
+    <CustomFields />
+    <Photos />
+    <Trailers />
+    <ExtraFeatures />
+    <VideoDetails />
+    <VideoResolution />
+</OMLTitle>

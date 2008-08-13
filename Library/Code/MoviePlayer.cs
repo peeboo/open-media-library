@@ -62,6 +62,16 @@ namespace Library
                     OMLApplication.DebugLine("[MoviePlayerFactory] DVDMoviePlayer created");
                     return new DVDPlayer(movieItem);
                 }
+                else if (movieItem.SelectedDisk.Format == VideoFormat.HDDVD)
+                {
+                    OMLApplication.DebugLine("[MoviePlayerFactory] HDDVDPlayer created");
+                    return new HDDVDPlayer(movieItem);
+                }
+                else if (movieItem.SelectedDisk.Format == VideoFormat.BLURAY)
+                {
+                    OMLApplication.DebugLine("[MoviePlayerFactory] BluRayPlayer created");
+                    return new BluRayPlayer(movieItem);
+                }
                 else // try to play it (likely is avi/mkv/etc)
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] VideoPlayer created");
