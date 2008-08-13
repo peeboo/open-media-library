@@ -63,6 +63,7 @@
     <Compile Include="Utilities.cs" />
     <Compile Include="VistaTools.cs" />
     <Compile Include="WindowsPlayListManager.cs" />
+    <Compile Include="XMLTransformer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

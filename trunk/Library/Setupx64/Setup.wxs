@@ -111,6 +111,11 @@
                                   KeyPath="yes" Source="..\..\MyMoviesPlugin\bin\$(var.BuildType)\MyMoviesPlugin.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
+                        <Component Id="MyMoviesToOML.xsl" Guid="A449CC9C-7E60-49bf-982B-CE389FBE7D40" Win64="yes" DiskId="1">
+                            <File Name="MyMoviesToOML.xsl"
+                                  KeyPath="yes" Source="..\..\MyMoviesPlugin\MyMoviesToOML.xsl"
+                                  Vital="yes"/>
+                        </Component>
                         <Component Id="VMCDVDLibraryPlugin.dll" Guid="d8028d8c-a048-46b2-9c27-c64f07c8ab8d" Win64="yes" DiskId="1">
                             <File Name="VMCDVDLibraryPlugin.dll"
                                   KeyPath="yes" Source="..\..\VMCDVDLibraryPlugin\bin\$(var.BuildType)\VMCDVDLibraryPlugin.dll"
@@ -121,7 +126,7 @@
                                   KeyPath="yes" Source="..\..\AmazonMetadata\bin\$(var.BuildType)\AmazonMetadata.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
-                        <Component Id="OMLXMLImporter.dll" Guid="F354EB9F-F175-4074-8B32-F791986ABB34" Win64="yes" DiskId="1">
+                        <Component Id="OMLXMLImporter.dll" Guid="5BE2002C-EF0D-4358-93EF-5C495492AB0D" Win64="yes" DiskId="1">
                             <File Name="OMLXMLImporter.dll"
                                   KeyPath="yes" Source="..\..\OMLXMLImporter\bin\$(var.BuildType)\OMLXMLImporter.dll"
                                   Checksum="yes" Vital="yes"/>
@@ -181,6 +186,7 @@
             <ComponentRef Id="DVRMSPlugin.dll" />
             <ComponentRef Id="MovieCollectorz.dll" />
             <ComponentRef Id="MyMoviesPlugin.dll" />
+            <ComponentRef Id="MyMoviesToOML.xsl" />
             <ComponentRef Id="OMLSDK.dll" />
             <ComponentRef Id="VMCDVDLibraryPlugin.dll" />
             <ComponentRef Id="OMLXMLImporter.dll" />

@@ -10,15 +10,23 @@ namespace OMLTestSuite
         static void Main(string[] args)
         {
             MyMoviesPluginTest mmpt = new MyMoviesPluginTest();
+            Console.WriteLine("Testing: MyMoviesPlugin");
+            mmpt.TEST_MULTIPLE_DISCS_FAIL_TO_IMPORT();
             mmpt.TEST_BASE_CASE();
 
             TitleTest tt = new TitleTest();
+            Console.WriteLine("Testing: Title");
             tt.TEST_BASE_CASE();
 
             TitleCollectionTest tct = new TitleCollectionTest();
+            Console.WriteLine("Testing: TitleCollection");
             tct.TEST_BASE_CASE();
             tct.TEST_FIND_FOR_ID();
             tct.TEST_SOURCE_DATABASE_TO_USE();
+
+            OMLXMLImporterTest oxit = new OMLXMLImporterTest();
+            Console.WriteLine("Testing: OMLXMLPlugin");
+            oxit.TEST_CONVERT_MYMOVIES_XML_TO_OML_XML();
         }
     }
 }
