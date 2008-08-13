@@ -175,21 +175,21 @@ namespace VMCDVDLibraryPlugin
                 string xmlFile = "";
                 if (Directory.Exists(folderName + "\\VIDEO_TS") || File.Exists(folderName + "\\VIDEO_TS.IFO") || File.Exists(folderName + "\\VTS_01_1.VOB"))
                 {
-                    string[] xmlFiles = Directory.GetFiles(folderName, "*dvdid*xml");
+                    string[] xmlFiles = Directory.GetFiles(folderName, "*dvdid.xml");
                     if (xmlFiles.Length > 0)
                     {
                         //xmlFile = Path.GetFileName(xmlFiles[0]); // get the first one
                         xmlFile = xmlFiles[0];
                     }
-                    else
-                    {
-                        xmlFiles = Directory.GetFiles(folderName, "*xml");
-                        if (xmlFiles.Length > 0)
-                            //xmlFile = Path.GetFileName(xmlFiles[0]); // get the first one
-                            xmlFile = xmlFiles[0]; // get the first one
-                        else
-                            xmlFile = "";
-                    }
+                    //else
+                    //{
+                    //    xmlFiles = Directory.GetFiles(folderName, "*xml");
+                    //    if (xmlFiles.Length > 0)
+                    //        //xmlFile = Path.GetFileName(xmlFiles[0]); // get the first one
+                    //        xmlFile = xmlFiles[0]; // get the first one
+                    //    else
+                    //        xmlFile = "";
+                    //}
 
                     Title t = null;
                     // xmlFile contains the dvdid - then we need to lookup in the cache folder based on this id
@@ -204,6 +204,7 @@ namespace VMCDVDLibraryPlugin
                         // for DVDs with no dvdid.xml add a stripped down title with just a suggested name
                         t = new Title();
                         t.Name = GetSuggestedMovieName(folderName);
+
                     }
 
                     if (!File.Exists(t.FrontCoverPath))
