@@ -73,24 +73,24 @@ namespace OMLXMLPlugin
             GetMovies(thework[0]);
         }
 
-        public void ConvertMyMoviesXMLToOMLXML(string directory)
+        public bool ConvertMyMoviesXMLToOMLXML(string filename)
         {
-            if (Directory.Exists(directory))
+            string full_filename = Path.GetFullPath(filename);
+            string new_filename = Path.Combine(Directory.GetParent(full_filename).FullName, @"oml.xml");
+
+            if (File.Exists(full_filename))
             {
-                string filename = Path.Combine(directory, @"mymovies.xml");
-                if (File.Exists(filename))
+                if (XMLTransformer.QuickTransform(filename, OMLPlugin.MyMoviesXslTransform, new_filename))
                 {
-                    string currentDir = Directory.GetCurrentDirectory();
-                    Directory.SetCurrentDirectory(directory);
-                    if (OMLEngine.XMLTransformer.QuickTransform(filename,
-                                                                @"..\..\..\MyMoviesPlugin\MyMoviesToOML.xsl",
-                                                                @"mymovies-converted-oml.xml"))
-                    {
-                        Utilities.DebugLine(@"[OMLXMLImporter] Failed to convert mymovies to oml xml file");
-                    }
-                    Directory.SetCurrentDirectory(currentDir);
+                    if (File.Exists(new_filename))
+                        return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
+            return false;
         }
 
         public void GetMovies(string startFolder)
@@ -114,7 +114,7 @@ namespace OMLXMLPlugin
                     string[] fileNames = null;
                     try
                     {
-                        fileNames = Directory.GetFiles(currentFolder, "*.oml.xml");
+                        fileNames = Directory.GetFiles(currentFolder, "*.xml");
                     }
                     catch
                     {
@@ -123,12 +123,29 @@ namespace OMLXMLPlugin
 
                     if (fileNames != null)
                     {
-                        foreach (string omlxml in fileNames)
+                        foreach (string filename in fileNames)
                         {
-                            Title t = Title.CreateFromXML(omlxml);
-                            if (t != null)
+                            if (filename.ToLower().EndsWith(@"oml.xml"))
                             {
-                                AddTitle(t);
+                                Title t = Title.CreateFromXML(filename);
+                                if (t != null)
+                                    AddTitle(t);
+                            }
+
+                            if (filename.ToLower().EndsWith(@"mymovies.xml"))
+                            {
+                                if (ConvertMyMoviesXMLToOMLXML(filename))
+                                {
+                                    string newFileName = Path.Combine(Directory.GetParent(filename).FullName,
+                                                                      @"oml.xml");
+                                    if (File.Exists(newFileName))
+                                    {
+                                        Title t = Title.CreateFromXML(newFileName);
+
+                                        if (t != null)
+                                            AddTitle(t);
+                                    }
+                                }
                             }
                         }
                     }

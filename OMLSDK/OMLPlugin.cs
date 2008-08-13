@@ -13,6 +13,8 @@ namespace OMLSDK
         List<Title> titles;
         private int totalRowsAdded = 0;
         private Boolean _copyImages = false;
+        public static string MyMoviesXslTransform =
+            Path.Combine(FileSystemWalker.PluginsDirectory, @"MyMoviesToOML.xsl");
 
         public enum PluginTypes { ImportPlugin, MetadataPlugin };
         #region Properties
