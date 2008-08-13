@@ -557,7 +557,7 @@ namespace OMLSDK
             {
                 if (t.FrontCoverPath.Length > 0)
                 {
-                    using (Image coverArtImage = Image.FromFile(t.FrontCoverPath))
+                    using (Image coverArtImage = Utilities.ReadImageFromFile(t.FrontCoverPath))
                     {
 
                         if (coverArtImage != null)
