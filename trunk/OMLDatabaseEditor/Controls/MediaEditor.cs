@@ -649,6 +649,7 @@ namespace OMLDatabaseEditor.Controls
             WebClient web = new WebClient();
             try
             {
+                if (File.Exists(fileName)) File.Delete(fileName);
                 web.DownloadFile(url, fileName);
                 return true;
             }
@@ -706,6 +707,9 @@ namespace OMLDatabaseEditor.Controls
                         if (pbBackCover.ClientRectangle.Contains(pointTranslatedToBackCover.X, pointTranslatedToBackCover.Y))
                         {
                             string coverArtFile = CurrentTitle.GetDefaultBackCoverName();
+                            if (!String.IsNullOrEmpty(CurrentTitle.BackCoverPath))
+                                coverArtFile = CurrentTitle.BackCoverPath;
+                            
                             if (DownloadImage(url, coverArtFile))
                             {
                                 CurrentTitle.BackCoverPath = coverArtFile;
@@ -716,6 +720,10 @@ namespace OMLDatabaseEditor.Controls
                         else
                         {
                             string coverArtFile = CurrentTitle.GetDefaultFrontCoverName();
+                            
+                            if (!String.IsNullOrEmpty(CurrentTitle.FrontCoverPath))
+                                coverArtFile = CurrentTitle.FrontCoverPath;
+
                             if (DownloadImage(url, coverArtFile))
                             {
                                 CurrentTitle.FrontCoverPath = coverArtFile;
