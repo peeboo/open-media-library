@@ -137,7 +137,7 @@ namespace OMLDatabaseEditor
             int i = 0;
             foreach (OMLPlugin plugin in _importPlugins)
             {
-                tvSourceList_AddItem(plugin.Menu, i.ToString(), "Importers");
+                //tvSourceList_AddItem(plugin.Menu, i.ToString(), "Importers");
                 ToolStripMenuItem item = new ToolStripMenuItem(plugin.Menu, null, HandleImportMenuItem, i.ToString());
                 importToolStripMenuItem.DropDownItems.Add(item);
                 i++;
@@ -565,7 +565,7 @@ namespace OMLDatabaseEditor
         private void reloadDatabase()
         {
             tvSourceList.Nodes["OML Database"].Nodes["Movies"].Nodes.Clear();
-            tvSourceList.Nodes["OML Database"].Nodes["Importers"].Nodes.Clear();
+            //tvSourceList.Nodes["OML Database"].Nodes["Importers"].Nodes.Clear();
             InitData();
         }
 

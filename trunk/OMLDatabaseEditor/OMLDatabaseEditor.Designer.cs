@@ -31,10 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OMLDatabaseEditor));
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Movies");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Import");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("OML Database", new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("OML Database", new System.Windows.Forms.TreeNode[] {
+            treeNode1});
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,6 +57,8 @@
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.metadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.indexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,8 +79,6 @@
             this.MenuItemEditNewTab = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.metadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -292,6 +290,18 @@
             this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.selectAllToolStripMenuItem.Text = "Select &All";
             // 
+            // importToolStripMenuItem
+            // 
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.importToolStripMenuItem.Text = "Import";
+            // 
+            // metadataToolStripMenuItem
+            // 
+            this.metadataToolStripMenuItem.Name = "metadataToolStripMenuItem";
+            this.metadataToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
+            this.metadataToolStripMenuItem.Text = "Metadata";
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -403,12 +413,10 @@
             this.tvSourceList.Name = "tvSourceList";
             treeNode1.Name = "Movies";
             treeNode1.Text = "Movies";
-            treeNode2.Name = "Importers";
-            treeNode2.Text = "Import";
-            treeNode3.Name = "OML Database";
-            treeNode3.Text = "OML Database";
+            treeNode2.Name = "OML Database";
+            treeNode2.Text = "OML Database";
             this.tvSourceList.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3});
+            treeNode2});
             this.tvSourceList.Size = new System.Drawing.Size(194, 553);
             this.tvSourceList.TabIndex = 1;
             this.tvSourceList.DoubleClick += new System.EventHandler(this.MenuItemEditTab_Click);
@@ -511,18 +519,6 @@
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
-            // 
-            // importToolStripMenuItem
-            // 
-            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
-            this.importToolStripMenuItem.Text = "Import";
-            // 
-            // metadataToolStripMenuItem
-            // 
-            this.metadataToolStripMenuItem.Name = "metadataToolStripMenuItem";
-            this.metadataToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
-            this.metadataToolStripMenuItem.Text = "Metadata";
             // 
             // OMLDatabaseEditor
             // 

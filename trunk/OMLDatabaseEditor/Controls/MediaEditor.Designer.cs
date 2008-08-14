@@ -89,12 +89,12 @@
             this.dataGridViewTextBoxColumn11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tbcCategories = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.grdTags = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.grdGenres = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.grdTags = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.grpCategories = new System.Windows.Forms.GroupBox();
             this.tbRunTime = new System.Windows.Forms.TextBox();
             this.cbRating = new System.Windows.Forms.ComboBox();
@@ -157,10 +157,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.grdNonActors)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tbcCategories.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.grdTags)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdGenres)).BeginInit();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdTags)).BeginInit();
             this.grpCategories.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).BeginInit();
@@ -771,39 +771,6 @@
             this.tbcCategories.Size = new System.Drawing.Size(462, 116);
             this.tbcCategories.TabIndex = 0;
             // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.grdTags);
-            this.tabPage1.Location = new System.Drawing.Point(4, 21);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(454, 91);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Tags";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // grdTags
-            // 
-            this.grdTags.BackgroundColor = System.Drawing.SystemColors.ControlLight;
-            this.grdTags.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.grdTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grdTags.ColumnHeadersVisible = false;
-            this.grdTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn6});
-            this.grdTags.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grdTags.Location = new System.Drawing.Point(0, 0);
-            this.grdTags.Name = "grdTags";
-            this.grdTags.RowHeadersWidth = 26;
-            this.grdTags.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdTags.Size = new System.Drawing.Size(454, 91);
-            this.grdTags.TabIndex = 26;
-            this.grdTags.CurrentCellDirtyStateChanged += new System.EventHandler(this.grd_CellChanges);
-            // 
-            // dataGridViewTextBoxColumn6
-            // 
-            this.dataGridViewTextBoxColumn6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn6.HeaderText = "Name";
-            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.grdGenres);
@@ -837,6 +804,39 @@
             this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn3.HeaderText = "Name";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.grdTags);
+            this.tabPage1.Location = new System.Drawing.Point(4, 21);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Size = new System.Drawing.Size(454, 91);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Tags";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // grdTags
+            // 
+            this.grdTags.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            this.grdTags.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.grdTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grdTags.ColumnHeadersVisible = false;
+            this.grdTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn6});
+            this.grdTags.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grdTags.Location = new System.Drawing.Point(0, 0);
+            this.grdTags.Name = "grdTags";
+            this.grdTags.RowHeadersWidth = 26;
+            this.grdTags.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdTags.Size = new System.Drawing.Size(454, 91);
+            this.grdTags.TabIndex = 26;
+            this.grdTags.CurrentCellDirtyStateChanged += new System.EventHandler(this.grd_CellChanges);
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            this.dataGridViewTextBoxColumn6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn6.HeaderText = "Name";
+            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
             // 
             // grpCategories
             // 
@@ -1249,6 +1249,7 @@
             this.lstDisks.Size = new System.Drawing.Size(115, 76);
             this.lstDisks.TabIndex = 58;
             this.lstDisks.SelectedIndexChanged += new System.EventHandler(this.lstDisks_SelectedIndexChanged);
+            this.lstDisks.DoubleClick += new System.EventHandler(this.lstDisks_DoubleClick);
             // 
             // groupBox1
             // 
@@ -1272,6 +1273,7 @@
             this.groupBox1.TabIndex = 57;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Movie Locations";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // MediaEditor
             // 
@@ -1318,10 +1320,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.grdNonActors)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.tbcCategories.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.grdTags)).EndInit();
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdGenres)).EndInit();
+            this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.grdTags)).EndInit();
             this.grpCategories.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();

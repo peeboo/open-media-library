@@ -97,7 +97,11 @@ namespace OMLDatabaseEditor
                         {
                             coverArt = Utilities.ReadImageFromFile(t.FrontCoverPath);
                         }
-                        grdTitles.Rows.Add(i.ToString(), coverArt, t.Name, t.Synopsis, t.ReleaseDate.ToShortDateString(), MakeStringFromList(t.Genres), MakeStringFromPersonList(t.Directors), MakeStringFromDictionary(t.ActingRoles));
+                        string releaseDate = "";
+                        if (t.ReleaseDate.Year > 1900)
+                            releaseDate = t.ReleaseDate.Year.ToString();
+
+                        grdTitles.Rows.Add(i.ToString(), coverArt, t.Name, t.Synopsis, releaseDate, MakeStringFromList(t.Genres), MakeStringFromPersonList(t.Directors), MakeStringFromDictionary(t.ActingRoles));
                         i++;
                     }
                 }

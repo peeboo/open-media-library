@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using OMLEngine;
 using System.IO;
+using System.Diagnostics;
+using System.Net;
 
 namespace OMLDatabaseEditor.Controls
 {
@@ -449,31 +451,37 @@ namespace OMLDatabaseEditor.Controls
 
         private void tbFrontCover_TextChanged(object sender, EventArgs e)
         {
-            if (System.IO.File.Exists(((TextBox) sender).Text))
+            try
             {
-                if (sender.Equals(tbFrontCover))
+                if (System.IO.File.Exists(((TextBox)sender).Text))
                 {
-                    pbFrontCover.ImageLocation = ((TextBox) sender).Text;
-                    // if its a new cover, remake the thumbnail image.
-                    Utilities.DebugLine("DBEditor: Front Cover text changed, checking if thumbnail location is different"); 
-                    if (pbFrontCover.ImageLocation != _FrontCoverMenu)
+                    if (sender.Equals(tbFrontCover))
                     {
-                        using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(ReadImageFromFile(pbFrontCover.ImageLocation), 200))
+                        pbFrontCover.ImageLocation = ((TextBox)sender).Text;
+                        // if its a new cover, remake the thumbnail image.
+                        Utilities.DebugLine("DBEditor: Front Cover text changed, checking if thumbnail location is different");
+                        if (pbFrontCover.ImageLocation != _FrontCoverMenu)
                         {
-                            string img_path = FileSystemWalker.ImageDirectory +
-                                              @"\MF" + _itemID + ".jpg";
-                            menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
-                            Utilities.DebugLine("DBEditor: Cover Image Thumbnail created filename: " + img_path);
-                            _FrontCoverMenu = img_path;
+                            using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(ReadImageFromFile(pbFrontCover.ImageLocation), 200))
+                            {
+                                string img_path = FileSystemWalker.ImageDirectory +
+                                                  @"\MF" + _itemID + ".jpg";
+                                menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                Utilities.DebugLine("DBEditor: Cover Image Thumbnail created filename: " + img_path);
+                                _FrontCoverMenu = img_path;
+                            }
                         }
                     }
+                    else
+                    {
+                        pbBackCover.ImageLocation = ((TextBox)sender).Text;
+                    }
                 }
-                else
-                {
-                    pbBackCover.ImageLocation = ((TextBox) sender).Text;
-                }
+                _titleChanged(EventArgs.Empty);
             }
-            _titleChanged(EventArgs.Empty);
+            catch (Exception ex)
+            {
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -534,25 +542,34 @@ namespace OMLDatabaseEditor.Controls
 
         private void btnDiskEdit_Click(object sender, EventArgs e)
         {
-            DiskEditor dlg = new DiskEditor();
-            dlg.Path = ((Disk)lstDisks.SelectedItem).Path;
-            dlg.FileName = ((Disk)lstDisks.SelectedItem).Name;
-            dlg.Format = ((Disk)lstDisks.SelectedItem).Format;
-
-            if (dlg.ShowDialog() == DialogResult.OK)
+            try
             {
-                int currentselection = lstDisks.SelectedIndex;
-                lstDisks.Items.RemoveAt(currentselection);
-                
-                lstDisks.Items.Insert(currentselection, 
-                    new Disk(
-                        dlg.FileName,
-                        dlg.Path,
-                        dlg.Format
-                    )
-                );
+                if (lstDisks.SelectedItem != null)
+                {
+                    DiskEditor dlg = new DiskEditor();
+                    dlg.Path = ((Disk)lstDisks.SelectedItem).Path;
+                    dlg.FileName = ((Disk)lstDisks.SelectedItem).Name;
+                    dlg.Format = ((Disk)lstDisks.SelectedItem).Format;
 
-                _titleChanged(EventArgs.Empty);
+                    if (dlg.ShowDialog() == DialogResult.OK)
+                    {
+                        int currentselection = lstDisks.SelectedIndex;
+                        lstDisks.Items.RemoveAt(currentselection);
+
+                        lstDisks.Items.Insert(currentselection,
+                            new Disk(
+                                dlg.FileName,
+                                dlg.Path,
+                                dlg.Format
+                            )
+                        );
+
+                        _titleChanged(EventArgs.Empty);
+                    }
+                }
+            }
+            catch
+            {
             }
         }
 
@@ -600,39 +617,125 @@ namespace OMLDatabaseEditor.Controls
             }
         }
 
+        private string GetStringFromDragDropData(IDataObject data, string format)
+        {
+            string value = "";
+            if (data.GetDataPresent(format))
+            {
+                object param = data.GetData(format);
+                if (param.GetType() == typeof(MemoryStream))
+                {
+                    MemoryStream ms = param as MemoryStream;
+                    StreamReader sr = new StreamReader(ms);
+                    value = sr.ReadToEnd();
+
+                    // remove the '/0' at the end
+                    if (value.EndsWith("\0"))
+                    {
+                        value = value.Replace("\0", "");
+                    }
+                }
+                else if (param.GetType() == typeof(string))
+                {
+                    value = param as string;
+                }
+            }
+
+            return value;
+        }
+
+        static private bool DownloadImage(string url, string fileName)
+        {
+            WebClient web = new WebClient();
+            try
+            {
+                web.DownloadFile(url, fileName);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
         private void MediaEditor_DragDrop(object sender, DragEventArgs e)
         {
             string fileName = "";
             try
             {
+                Point pointTranslatedToFrontCover = pbFrontCover.PointToClient(new Point(e.X, e.Y));
+                Point pointTranslatedToBackCover = pbBackCover.PointToClient(new Point(e.X, e.Y));
+
+
                 Array dataArray = (Array)e.Data.GetData(DataFormats.FileDrop);
+                String[] strs = e.Data.GetData(DataFormats.FileDrop) as String[];
                 if (dataArray != null)
                 {
                     fileName = dataArray.GetValue(0).ToString();
-                }
-
-
-                if (e.Data.GetDataPresent(DataFormats.Html))
-                {
-                    // when dropping a file from the webbrowser, the temp image created by the browser has 0 bytes initially
-                    // so run a background thread to wait until the image is fully written by the browser
-                    //backgroundWorkerLoadImage.RunWorkerAsync(fileName);
-                }
-                else
-                {
-                    //MessageBox.Show("x = " + e.X + " y = " + e.Y + "cx = " + pbFrontCover.ClientRectangle.ToString());
-                    Point pointTranslatedToFrontCover = pbFrontCover.PointToClient(new Point(e.X, e.Y));
-                    Point pointTranslatedToBackCover = pbBackCover.PointToClient(new Point(e.X, e.Y));
-                    if (pbBackCover.ClientRectangle.Contains(pointTranslatedToBackCover.X, pointTranslatedToBackCover.Y))
+                    if (File.Exists(fileName))
                     {
-                        SetPicture(pbBackCover, fileName);
-                        tbBackCover.Text = fileName;
+                        //MessageBox.Show("x = " + e.X + " y = " + e.Y + "cx = " + pbFrontCover.ClientRectangle.ToString());
+                        if (pbBackCover.ClientRectangle.Contains(pointTranslatedToBackCover.X, pointTranslatedToBackCover.Y))
+                        {
+                            if (CurrentTitle != null)
+                            {
+                                CurrentTitle.CopyBackCoverFromFile(fileName, false);
+
+                                SetPicture(pbBackCover, CurrentTitle.BackCoverPath);
+                                tbBackCover.Text = CurrentTitle.BackCoverPath;
+                            }
+                        }
+                        else //if (pbFrontCover.ClientRectangle.Contains(pointTranslatedToFrontCover.X, pointTranslatedToFrontCover.Y))
+                        {
+                            if (CurrentTitle != null)
+                            {
+                                CurrentTitle.CopyFrontCoverFromFile(fileName, false);
+
+                                SetPicture(pbFrontCover, CurrentTitle.FrontCoverPath);
+                                tbFrontCover.Text = CurrentTitle.FrontCoverPath;
+                            }
+                        }
                     }
-                    else //if (pbFrontCover.ClientRectangle.Contains(pointTranslatedToFrontCover.X, pointTranslatedToFrontCover.Y))
+                }
+                else if (e.Data.GetDataPresent(DataFormats.Html))
+                {
+                    string url = GetStringFromDragDropData(e.Data, "UniformResourceLocator");
+                    if (!String.IsNullOrEmpty(url))
                     {
-                        SetPicture(pbFrontCover, fileName);
-                        tbFrontCover.Text = fileName;
+                        if (pbBackCover.ClientRectangle.Contains(pointTranslatedToBackCover.X, pointTranslatedToBackCover.Y))
+                        {
+                            string coverArtFile = CurrentTitle.GetDefaultBackCoverName();
+                            if (DownloadImage(url, coverArtFile))
+                            {
+                                CurrentTitle.BackCoverPath = coverArtFile;
+                                SetPicture(pbBackCover, CurrentTitle.BackCoverPath);
+                                tbBackCover.Text = CurrentTitle.BackCoverPath;
+                            }
+                        }
+                        else
+                        {
+                            string coverArtFile = CurrentTitle.GetDefaultFrontCoverName();
+                            if (DownloadImage(url, coverArtFile))
+                            {
+                                CurrentTitle.FrontCoverPath = coverArtFile;
+                                CurrentTitle.BuildResizedMenuImage();
+                                SetPicture(pbFrontCover, CurrentTitle.FrontCoverPath);
+                                tbFrontCover.Text = CurrentTitle.FrontCoverPath;
+                            }
+
+                        }
                     }
+
+                    //foreach (string f in formats)
+                    //{
+                    //    Debug.Print("");
+                    //    Debug.Print(f);
+                    //    if (e.Data.GetData(f) != null)
+                    //        Debug.Print(e.Data.GetData(f).ToString());
+                    //    else
+                    //        Debug.Print("null");
+                    //}
 
                 }
 
@@ -649,6 +752,16 @@ namespace OMLDatabaseEditor.Controls
         }
 
         private void pbFrontCover_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lstDisks_DoubleClick(object sender, EventArgs e)
+        {
+            btnDiskEdit_Click(sender, e);
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
         {
 
         }
