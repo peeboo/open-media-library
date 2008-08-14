@@ -14,7 +14,6 @@ namespace OMLDatabaseEditor
     public partial class OMLDatabaseEditor : Form
     {
         private static TitleCollection _titleCollection = new TitleCollection();
-        private TreeNode _oldSelectedNode;
         private static List<OMLPlugin> _importPlugins = new List<OMLPlugin>();
         private static List<IOMLMetadataPlugin> _metadataPlugins = new List<IOMLMetadataPlugin>();
 
@@ -126,7 +125,7 @@ namespace OMLDatabaseEditor
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 Cursor = Cursors.Default;
             }

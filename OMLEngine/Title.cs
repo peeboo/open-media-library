@@ -496,8 +496,7 @@ namespace OMLEngine
         {
             try
             {
-                DateTime dt = info.GetDateTime(id);
-                return (dt == null ? new DateTime(0) : dt);
+                return info.GetDateTime(id);
             }
             catch (Exception e)
             {
@@ -810,14 +809,13 @@ namespace OMLEngine
                 myWriter.Close();
                 return true;
             }
-            catch( Exception ex)
+            catch
             {
                 return false;
             }
         }
         public void ReadXml(System.Xml.XmlReader reader)
         {
-            string str;
             if(reader.MoveToContent() == XmlNodeType.Element && reader.Name == "OMLTitle") 
             {
                 while(reader.Read())
@@ -1465,7 +1463,7 @@ namespace OMLEngine
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return null;
             }
@@ -1950,7 +1948,7 @@ namespace OMLEngine
                 BuildResizedMenuImage();
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
@@ -1966,7 +1964,7 @@ namespace OMLEngine
                 
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }

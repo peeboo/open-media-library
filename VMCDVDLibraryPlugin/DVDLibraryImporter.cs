@@ -93,7 +93,7 @@ namespace VMCDVDLibraryPlugin
                     Utilities.DebugLine("DVDImporter: folder " + currentFolder);
                     if (currentFolder.Contains("MSDVR"))
                     {
-                        bool b = true;
+                        // bool b = true;
                     }
                     Title dvd = GetDVDMetaData(currentFolder);
                     string[] fileNames = null;

@@ -3,6 +3,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Toub.MediaCenter.Dvrms.DirectShow
 {
@@ -29,7 +30,7 @@ namespace Toub.MediaCenter.Dvrms.DirectShow
 
 		/// <summary>This method initializes an object from the stream where it was previously saved.</summary>
 		/// <param name="pStm">IStream pointer to the stream from which the object should be loaded.</param>
-		void Load([In] UCOMIStream pStm);
+		void Load([In] IStream pStm);
 
 		/// <summary>This method saves an object to the specified stream.</summary>
 		/// <param name="pStm">IStream pointer to the stream into which the object should be saved.</param>
@@ -37,7 +38,7 @@ namespace Toub.MediaCenter.Dvrms.DirectShow
 		/// Indicates whether to clear the dirty flag after the save is complete. If TRUE, the flag should be cleared. 
 		/// If FALSE, the flag should be left unchanged.
 		/// </param>
-		void Save([In] UCOMIStream pStm, [In, MarshalAs(UnmanagedType.Bool)] bool fClearDirty);
+		void Save([In] IStream pStm, [In, MarshalAs(UnmanagedType.Bool)] bool fClearDirty);
 		
 		/// <summary>This method returns the size in bytes of the stream needed to save the object.</summary>
 		/// <returns>64-bit unsigned integer value indicating the size in bytes of the stream needed to save this object.</returns>

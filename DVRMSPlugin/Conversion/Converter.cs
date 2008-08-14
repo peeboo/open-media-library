@@ -78,11 +78,6 @@ namespace Toub.MediaCenter.Dvrms.Conversion
 				OnConversionComplete(exc, null);
 				throw exc;
 			}
-			catch
-			{
-				OnConversionComplete(new DirectShowException(), null);
-				throw;
-			}
 		}
 
 		/// <summary>Allows for easy cleanup of COM resources.</summary>

@@ -29,7 +29,7 @@ namespace AppleTrailers
                 appleTitles = ser.ReadObject(ms) as List<AppleTitle>;
                 ms.Close();
             }
-            catch (Exception e) { }
+            catch { }
 
             return appleTitles;
         }
