@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace DVDProfilerPlugin
 {
-    [CLSCompliant(true)]
+    // [CLSCompliant(true)] // this requires CLSCompliant assemby attribute
     public class DVDProfilerImporter : OMLPlugin, IOMLPlugin
     {
 

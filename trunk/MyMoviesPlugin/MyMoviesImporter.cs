@@ -148,7 +148,7 @@ namespace MyMoviesPlugin
                             newTitle.ReleaseDate = rls_date;
                         }
                     }
-                    catch (Exception e)
+                    catch
                     {
                         Utilities.DebugLine("[MyMoviesImporter] error reading ProductionYear, we got >>" + node.InnerText);
                     }

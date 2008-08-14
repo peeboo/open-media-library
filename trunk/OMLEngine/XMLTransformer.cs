@@ -9,12 +9,12 @@ namespace OMLEngine
         {
             try
             {
-                XslTransform xslt = new XslTransform();
+                XslCompiledTransform xslt = new XslCompiledTransform();
                 xslt.Load(stylesheet);
                 xslt.Transform(source, output);
                 return true;
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }

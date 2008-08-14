@@ -2,9 +2,10 @@
 // stoub@microsoft.com
 
 using System;
-using System.IO;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
+
 using Toub.MediaCenter.Dvrms.Utilities;
 
 namespace Toub.MediaCenter.Dvrms.DirectShow
@@ -97,8 +98,8 @@ namespace Toub.MediaCenter.Dvrms.DirectShow
 		private static RunningObjectTableCookie AddGraphToRot(IGraphBuilder graph)
 		{
 			if (graph == null) throw new ArgumentNullException("graph");
-			UCOMIRunningObjectTable rot = null;
-			UCOMIMoniker moniker = null;
+			IRunningObjectTable rot = null;
+			IMoniker moniker = null;
 			try 
 			{
 				// Get the ROT.
@@ -116,8 +117,7 @@ namespace Toub.MediaCenter.Dvrms.DirectShow
 				moniker = CreateItemMoniker("!", item);
 				
 				// Registers the graph in the running object table
-				int cookieValue;
-				rot.Register(ROTFLAGS_REGISTRATIONKEEPSALIVE, graph, moniker, out cookieValue);
+				int cookieValue = rot.Register(ROTFLAGS_REGISTRATIONKEEPSALIVE, graph, moniker);
 				return new RunningObjectTableCookie(cookieValue);
 			}
 			finally
@@ -133,7 +133,7 @@ namespace Toub.MediaCenter.Dvrms.DirectShow
 		private static void RemoveGraphFromRot(RunningObjectTableCookie cookie)
 		{
 			if (!cookie.IsValid) throw new ArgumentException("cookie");
-			UCOMIRunningObjectTable rot = null;
+			IRunningObjectTable rot = null;
 			try 
 			{
 				// Get the running object table and revoke the cookie
@@ -155,7 +155,7 @@ namespace Toub.MediaCenter.Dvrms.DirectShow
 		/// <param name="reserved">Reserved for future use; must be zero.</param>
 		/// <returns>Address of IRunningObjectTable* pointer variable that receives the interface pointer to the local ROT.</returns>
 		[DllImport("ole32.dll", ExactSpelling=true, PreserveSig=false)]
-		private static extern UCOMIRunningObjectTable GetRunningObjectTable([In] uint reserved);
+		private static extern IRunningObjectTable GetRunningObjectTable([In] uint reserved);
 
 		/// <summary>Creates an item moniker that identifies an object within a containing object.</summary>
 		/// <param name="lpszDelim">
@@ -171,7 +171,7 @@ namespace Toub.MediaCenter.Dvrms.DirectShow
 		/// Address of IMoniker* pointer variable that receives the interface pointer to the item moniker.
 		/// </returns>
 		[DllImport("ole32.dll", CharSet=CharSet.Unicode, ExactSpelling=true, PreserveSig=false)]
-		private static extern UCOMIMoniker CreateItemMoniker([In] string lpszDelim, [In] string lpszItem);
+		private static extern IMoniker CreateItemMoniker([In] string lpszDelim, [In] string lpszItem);
 
 		/// <summary>
 		/// This function creates a new compound file storage object using the OLE-provided 
@@ -218,7 +218,7 @@ namespace Toub.MediaCenter.Dvrms.DirectShow
 				dc.Add(graphStorage);
 
 				// Create the movie graph stream
-				UCOMIStream stream = graphStorage.CreateStream("ActiveMovieGraph", (int)(STGM_WRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE), 0, 0);
+				IStream stream = graphStorage.CreateStream("ActiveMovieGraph", (int)(STGM_WRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE), 0, 0);
 				dc.Add(stream);
 
 				// Save out the graph and commit it

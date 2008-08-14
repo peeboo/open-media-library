@@ -380,12 +380,12 @@ namespace OMLEngine
 
                         Trace.Listeners.Add(new TextWriterTraceListener(Log));
                     }
-                    catch (Exception e)
+                    catch
                     { }
                 }
                 Trace.TraceInformation(DateTime.Now.ToString() + " " + msg, paramArray);
             }
-            catch (Exception e)
+            catch
             {
             }
         }
@@ -536,9 +536,8 @@ namespace OMLEngine
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                
             }
 
             return null;

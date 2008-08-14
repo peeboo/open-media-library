@@ -182,7 +182,7 @@ namespace AmazonMetadata
                         return (new AmazonSearchResult(null, 0, 0));
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     return (new AmazonSearchResult(null, 0, 0));
                 }
@@ -250,7 +250,7 @@ namespace AmazonMetadata
 
                     return t;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return null;
                 }
@@ -299,7 +299,7 @@ namespace AmazonMetadata
 
                     return myDate;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return new DateTime();
                 }
@@ -351,9 +351,8 @@ namespace AmazonMetadata
 
                     return myDate.ToString("yyyy mm dd");
                 }
-                catch (Exception ex)
+                catch
                 {
-
                     return "";
                 }
             }
@@ -401,9 +400,8 @@ namespace AmazonMetadata
                     }
                     return runningTime;
                 }
-                catch (Exception ex)
+                catch
                 {
-
                     return "";
                 }
             }
@@ -424,7 +422,7 @@ namespace AmazonMetadata
                     }
                     return description;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return "";
                 }
@@ -447,9 +445,8 @@ namespace AmazonMetadata
                     }
                     return largeImageUrl;
                 }
-                catch (Exception ex)
+                catch
                 {
-
                     return "";
                 }
 

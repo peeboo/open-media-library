@@ -47,8 +47,6 @@ namespace OMLLogging
                     eLog = new EventLog(zsModule, LogMachine, zsSource);
                     eLog.WriteEntry(zsMsg, eType, 100);
                 }
-                catch (ArgumentException argex) { }
-                catch (Exception ex) { }
                 finally
                 {
                     if (eLog != null)
@@ -57,7 +55,7 @@ namespace OMLLogging
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 if (!EventLog.SourceExists(LogPrefix, LogMachine))
                 {

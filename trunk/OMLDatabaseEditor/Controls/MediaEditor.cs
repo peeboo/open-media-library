@@ -479,7 +479,7 @@ namespace OMLDatabaseEditor.Controls
                 }
                 _titleChanged(EventArgs.Empty);
             }
-            catch (Exception ex)
+            catch
             {
             }
         }
@@ -611,9 +611,8 @@ namespace OMLDatabaseEditor.Controls
                     pb.Image = ReadImageFromFile(fileName);
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                
             }
         }
 

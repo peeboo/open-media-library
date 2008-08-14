@@ -26,7 +26,7 @@ namespace OMLSDK
                     objDLL = Assembly.LoadFrom(strDLLs[intIndex]);
                     ExamineAssembly(objDLL, strInterface, Plugins);
                 }
-                catch (Exception e) {
+                catch {
                     // Error loading DLL, we don't need to do anything special
                 }
             }
@@ -74,7 +74,7 @@ namespace OMLSDK
                 // Create and return class instance
                 objPlugin = objDLL.CreateInstance(Plugin.ClassName);
             }
-            catch (Exception e) {
+            catch {
                 return null;
             }
             return objPlugin;
