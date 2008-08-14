@@ -256,10 +256,8 @@ namespace AmazonMetadata
                 }
             }
 
-            // store just the URL
             static private void DownloadImage( Title t, Item amazonItem )
             {
-                string imageName = OMLEngine.FileSystemWalker.ImageDirectory + "\\F" + t.InternalItemID.ToString() + ".JPG";
                 if (amazonItem.LargeImage != null)
                 {
                     if (amazonItem.LargeImage != null && amazonItem.LargeImage.URL != null)
