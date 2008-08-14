@@ -36,6 +36,8 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (*DONE*) Nicer/Better quality thumbnails on menu page (you will have to reimport movies for this)
   * (*DONE*) Define OML xml scheme for 3rd party export/import
 
+  * (_IN DEVELOPMENT_) Mymovies Xml support (one file per folder) (80% complete)
+
 == Top Requests from 0.1b ==
   * Folder view option
   * Recursive folder support for mymovies.xml files (50% complete)
@@ -50,11 +52,10 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (ON HOLD) Native VMC UI controls design
   * (ON HOLD) Movie Label 2009 Xml support
   * (ON HOLD) Ant Movie Catalog Xml support
-  * (ON HOLD) Mymovies Xml support (one file per folder)
   * (ON HOLD) DVD Profiler Xml support (one file per folder)
   * (ON HOLD) Movie Collectorz Xml support (one file per folder)
   * (ON HOLD) Boxset and season support (group multiple titles on the main menu into a single boxart/season shown)
-  * (ON HOLD) Releated movies on the movie detail page
+  * (ON HOLD) Related movies on the movie detail page
   * (ON HOLD) Parental filter with password
   * (ON HOLD) Selection of audio track from eg. dvd and mkv
   * (ON HOLD) Selection of subtitle track from eg. dvd and mkv
