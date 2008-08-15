@@ -64,6 +64,10 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml" />
+    <Reference Include="Transcode360.Interface, Version=1.6.0.0, Culture=neutral, PublicKeyToken=33c91c6bf8125883, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Transcode360.Interface.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\DaemonTools.cs" />

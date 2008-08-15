@@ -49,6 +49,7 @@ namespace Library
     public class Filter
     {
 
+        public const string About = "About";
         public const string Settings = "Settings";
         public const string Genres = "Genres";
         public const string Director = "Directors";
