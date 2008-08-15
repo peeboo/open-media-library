@@ -69,6 +69,7 @@
     <Compile Include="Code\DaemonTools.cs" />
     <Compile Include="Code\DirectoryTreeNode.cs" />
     <Compile Include="Code\MoviePlayerBluRay.cs" />
+    <Compile Include="Code\MoviePlayerExtenderDVD.cs" />
     <Compile Include="Code\MoviePlayerHDDVD.cs" />
     <Compile Include="Code\MoviePlayerWPL.cs" />
     <Compile Include="Code\OMLApplication.cs" />

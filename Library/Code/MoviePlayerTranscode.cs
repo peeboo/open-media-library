@@ -63,8 +63,7 @@ namespace Library
             if (Utilities.IsTranscode360LibraryAvailable())
             {
                 ITranscode360Type =
-                    Utilities.LoadTranscode360Assembly(
-                        @"c:\\program files\\transcode360\\Transcode360.Interface.dll");
+                    Utilities.LoadTranscode360Assembly();
 
                 if (ITranscode360Type != null)
                 {
@@ -79,7 +78,6 @@ namespace Library
                             "tcp://localhost:1401/RemotingServices/Transcode360");
 
                         assignMethodInfoObjects();
-
 
                         if (MIIsMediaTranscodeComplete != null &&
                             MIIsMediaTranscoding != null &&

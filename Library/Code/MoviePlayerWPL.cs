@@ -70,7 +70,7 @@ namespace Library
                     //Utilities.DebugLine("MoviePlayerWPL.Transport_PropertyChanged: movie {0} Finished", OMLApplication.Current.NowPlayingMovieName);
                     OMLApplication.Current.NowPlayingStatus = PlayState.Finished;
                     if (t.Position.Seconds == 0)
-                    PlayMovie();
+                        PlayMovie();
                 }
             }
         }

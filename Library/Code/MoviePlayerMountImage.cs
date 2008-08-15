@@ -34,8 +34,16 @@ namespace Library
                     IPlayMovie player;
                     if (OMLApplication.Current.IsExtender)
                     {
-                        OMLApplication.DebugLine("[MoviePlayerMountImage] Extender detected, using TranscodePlayer to play Image file");
-                        player = new TranscodePlayer(_title);
+                        if (Utilities.IsTranscode360LibraryAvailable())
+                        {
+                            OMLApplication.DebugLine("[MoviePlayerMountImage] Extender detected, using TranscodePlayer to play Image file");
+                            player = new TranscodePlayer(_title);
+                        }
+                        else
+                        {
+                            OMLApplication.DebugLine("[MoviePlayerMountImage] Extender detected, using ExtenderDVDPlayer to play Image file");
+                            player = new ExtenderDVDPlayer(_title);
+                        }
                     }
                     else
                     {

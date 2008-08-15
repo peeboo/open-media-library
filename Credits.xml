@@ -12,6 +12,7 @@
         <Person>PeteT - Developer</Person>
         <Person>STReNT - Developer</Person>
         <Person>Warren - Slacker</Person>
+        <Person>TheSeeker - Developer</Person>
     </Developers>
     <Contributors>
         <Person>Invelos Software (License of DVD Profiler)</Person>
@@ -29,7 +30,7 @@
         <Person>mjw</Person>
         <Person>fonager</Person>
         <Person>Olcay Buyan and Jas Manghera for their MCML Samples</Person>
-	<Person>MostlyHarmless</Person>
+        <Person>MostlyHarmless</Person>
         <Person>fonager</Person>
     </Special>
 </Credits>
