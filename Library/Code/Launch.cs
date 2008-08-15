@@ -10,9 +10,12 @@ namespace Library
     {
         private static HistoryOrientedPageSession s_session;
         public TextWriterTraceListener tl;
+        OMLApplication app;
+        private string _id;
 
         public void Initialize(Dictionary<string, object> appInfo, Dictionary<string, object> entryPointInfo)
         {
+            _id = entryPointInfo["id"].ToString();
             OMLEngine.Utilities.RawSetup();
             OMLApplication.DebugLine("[Launch] Initialize()");
         }
@@ -31,8 +34,14 @@ namespace Library
         {
             OMLApplication.DebugLine("[Launch] Launch called");
             s_session = new HistoryOrientedPageSession();
-            OMLApplication app = new OMLApplication(s_session, host);
-            app.Startup();
+
+            if (app == null)
+            {
+                OMLApplication.DebugLine("[Launch] No Application found, creating...");
+                app = new OMLApplication(s_session, host);
+            }
+
+            app.Startup(_id);
         }
     }
 }

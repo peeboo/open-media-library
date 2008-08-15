@@ -31,7 +31,7 @@ namespace Library
             _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
             _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
             _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
-            OMLApplication.Current.Startup();
+            OMLApplication.Current.Startup(null);
         }
 
         private void SetupDaemonTools()

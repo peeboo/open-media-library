@@ -32,13 +32,29 @@ namespace Library
             _nowPlayingMovieName = "Playing an unknown movie";
         }
 
-        public void Startup()
+        public void Startup(string guid)
         {
-            DebugLine("[OMLApplication] Startup()");
-            //if ( _titles.Count > 0 )
-                GoToMenu(new MovieGallery(_titles, Filter.Home));
-            //else
-            //    GoToSetup(null);
+            OMLApplication.DebugLine("[OMLApplication] Startup(" + guid + ")");
+
+            switch (guid)
+            {
+                case "{7533724D-C7CB-4ac2-8AEE-1B0B91ADD393}":
+                    OMLApplication.DebugLine("[OMLApplication] going to Menu Page");
+                    GoToMenu(new MovieGallery(_titles, Filter.Home));
+                    return;
+                case "{543d0438-b10d-43d8-a20d-f0c96db4e6bd}":
+                    OMLApplication.DebugLine("[OMLApplication] going to Settings Page");
+                    GoToSettingsPage(new MovieGallery(_titles, Filter.Settings));
+                    return;
+                case "{4D5BE22A-27B1-49e3-BF5E-0CC75D32A787}":
+                    OMLApplication.DebugLine("[OMLApplication] going to About Page");
+                    GoToAboutPage(new MovieGallery(_titles, Filter.About));
+                    return;
+                default:
+                    OMLApplication.DebugLine("[OMLApplication] going to Default (Menu) Page");
+                    GoToMenu(new MovieGallery(_titles, Filter.Home));
+                    return;
+            }
         }
 
         public static OMLApplication Current
@@ -78,7 +94,17 @@ namespace Library
             {
                 _session.GoToPage("resx://Library/Library.Resources/Settings", properties);
             }
-        }    
+        }
+
+        public void GoToAboutPage(MovieGallery gallery)
+        {
+            DebugLine("[OMLApplication] GotoAboutPage()");
+            Dictionary<string, object> properties = CreateProperties(true, false);
+            properties["MovieBrowser"] = gallery;
+
+            if (_session != null)
+                _session.GoToPage("resx://Library/Library.Resources/About", properties);
+        }
 
         public void GoToMenu(MovieGallery gallery)
         {
