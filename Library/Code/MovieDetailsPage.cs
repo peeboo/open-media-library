@@ -371,6 +371,11 @@ namespace Library
             LoadDetails(item);
         }
 
+        public override string ToString()
+        {
+            return "MovieDetailsPage:" + this._movieDetails;
+        }
+
         private void LoadDetails(MovieItem item)
         {
             _movieDetails = item;
@@ -409,9 +414,6 @@ namespace Library
             //    OMLApplication.DebugLine("Details Page.LoadMovies exception: " + e.Message);
             //}
         }
-
-        
-        
 
         //public void PlayMovie()
         //{

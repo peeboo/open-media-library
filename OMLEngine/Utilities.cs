@@ -364,18 +364,17 @@ namespace OMLEngine
                 {
                     try
                     {
-                        if (File.Exists(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt"))
-                            Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.Append);
-                        else
-                            Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.OpenOrCreate);
-
-                        Trace.Listeners.Add(new TextWriterTraceListener(Log));
+                        string file = Path.Combine(OMLEngine.FileSystemWalker.LogDirectory, "debug.txt");
+                        Log = new FileStream(file, File.Exists(file) ? FileMode.Append : FileMode.OpenOrCreate);
+                        Trace.Listeners.Add(new TextWriterTraceListener(Log, "debug.txt"));
+                        Trace.AutoFlush = true;
+                        Trace.WriteLine(new string('=', 80));
+                        Trace.TraceInformation(DateTime.Now.ToString() + " OML Version: 0.21b ({0}, PID:{1})", File.GetLastWriteTime(typeof(Utilities).Assembly.Location), Process.GetCurrentProcess().Id);
                     }
                     catch
                     { }
                 }
                 Trace.TraceInformation(DateTime.Now.ToString() + " " + msg, paramArray);
-                Trace.Flush();
             }
             catch
             {

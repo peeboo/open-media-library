@@ -1,13 +1,11 @@
+using System.Collections;
 using System.Collections.Generic;
+
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
-using System.IO;
-using System.Diagnostics;
+
 using OMLEngine;
-using System.Collections;
-using System;
-using System.Data;
 
 namespace Library
 {
@@ -60,10 +58,8 @@ namespace Library
         public void GoToSetup( MovieGallery gallery )
         {
             DebugLine("[OMLApplication] GoToSetup()");
-            Dictionary<string, object> properties = new Dictionary<string, object>();
-            properties["Application"] = this;
+            Dictionary<string, object> properties = CreateProperties(true, false);
             properties["MovieBrowser"] = gallery;
-            properties["UISettings"] = new UISettings();
 
             OMLApplication.DebugLine("OMLApplication.GoToSetup");
             if (_session != null)
@@ -75,13 +71,9 @@ namespace Library
         public void GoToSettingsPage(MovieGallery gallery)
         {
             DebugLine("[OMLApplication] GoToSettingsPage()");
-            Dictionary<string, object> properties = new Dictionary<string, object>();
-            properties["Application"] = this;
+            Dictionary<string, object> properties = CreateProperties(true, true);
             properties["MovieBrowser"] = gallery;
-            properties["UISettings"] = new UISettings();
-            properties["Settings"] = new Settings();
 
-            OMLApplication.DebugLine("OMLApplication.GoToSettingsPage");
             if (_session != null)
             {
                 _session.GoToPage("resx://Library/Library.Resources/Settings", properties);
@@ -90,14 +82,11 @@ namespace Library
 
         public void GoToMenu(MovieGallery gallery)
         {
-            DebugLine("[OMLApplication] GoToMenu()");
-            Dictionary<string, object> properties = new Dictionary<string, object>();
-            properties["Application"] = this;
+            DebugLine("[OMLApplication] GoToMenu(Gallery, #{0} Movies)", gallery.Movies.Count);
+            Dictionary<string, object> properties = CreateProperties(true, false);
             properties["MovieBrowser"] = gallery;
             properties["GalleryView"] = Properties.Settings.Default.MovieView;
-            properties["UISettings"] = new UISettings();
 
-            OMLApplication.DebugLine("OMLApplication.GoToMenu");
             if (_session != null)
             {
                 _session.GoToPage("resx://Library/Library.Resources/Menu", properties);
@@ -106,16 +95,13 @@ namespace Library
 
         public void GoToSelectionList(MovieGallery gallery, IList list, string listName, string galleryView)
         {
-            DebugLine("[OMLApplication] GoToSelectionList()");
-            Dictionary<string, object> properties = new Dictionary<string, object>();
-            properties["Application"] = this;
+            DebugLine("[OMLApplication] GoToSelectionList(#{0} items, list name: {1}, gallery: {2})", list.Count, listName, galleryView);
+            Dictionary<string, object> properties = CreateProperties(true, false);
             properties["MovieBrowser"] = gallery;
             properties["List"] = list;
             properties["ListName"] = listName;
             properties["GalleryView"] = galleryView;
-            properties["UISettings"] = new UISettings();
 
-            OMLApplication.DebugLine("OMLApplication.GoToMenu");
             if (_session != null)
             {
                 _session.GoToPage("resx://Library/Library.Resources/SelectionList", properties);
@@ -125,7 +111,7 @@ namespace Library
 
         public void GoToDetails(MovieDetailsPage page)
         {
-            DebugLine("[OMLApplication] GoToDetails()");
+            DebugLine("[OMLApplication] GoToDetails({0})", page);
             if (page == null)
                 throw new System.Exception("The method or operation is not implemented.");
 
@@ -133,12 +119,9 @@ namespace Library
             // Construct the arguments dictionary and then navigate to the
             // details page template.
             //
-            Dictionary<string, object> properties = new Dictionary<string, object>();
+            Dictionary<string, object> properties = CreateProperties(true, false);
             properties["DetailsPage"] = page;
-            properties["Application"] = this;
-            properties["UISettings"] = new UISettings();
 
-            OMLApplication.DebugLine("OMLApplication.GoToDetails");
             // If we have no page session, just spit out a trace statement.
             if (_session != null)
             {
@@ -148,7 +131,7 @@ namespace Library
 
         public static void DebugLine(string msg, params object[] paramArray)
         {
-            Trace.TraceInformation(DateTime.Now.ToString() +" "+ msg, paramArray);
+            Utilities.DebugLine(msg, paramArray);
         }
 
         // properties
@@ -162,6 +145,8 @@ namespace Library
             get { return _nowPlayingMovieName; }
             set
             {
+                if (_nowPlayingMovieName == value)
+                    return;
                 Utilities.DebugLine("[OMLApplication] NowPlayingMovieName {0}", value);
                 _nowPlayingMovieName = value;
                 FirePropertyChanged("NowPlaying");
@@ -173,6 +158,8 @@ namespace Library
             get { return _nowPlayingStatus; }
             set 
             {
+                if (_nowPlayingStatus == value)
+                    return;
                 Utilities.DebugLine("[OMLApplication] NowPlayingStatus {0}", value);
                 FirePropertyChanged("NowPlaying");  
                 _nowPlayingStatus = value; 
@@ -192,9 +179,21 @@ namespace Library
         }
 
 
+        private Dictionary<string, object> CreateProperties(bool uiSettings, bool settings)
+        {
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+            properties["Application"] = this;
+            if (uiSettings)
+                properties["UISettings"] = new UISettings();
+            if (settings)
+                properties["Settings"] = new Settings();
+            return properties;
+        }
+
+
         // private data
-        private  string _nowPlayingMovieName;
-        private  PlayState _nowPlayingStatus;
+        private string _nowPlayingMovieName;
+        private PlayState _nowPlayingStatus;
 
         private static OMLApplication _singleApplicationInstance;
         private AddInHost _host;

@@ -10,41 +10,21 @@ namespace Library
     {
         private static HistoryOrientedPageSession s_session;
         public TextWriterTraceListener tl;
-        public FileStream Log;
 
         public void Initialize(Dictionary<string, object> appInfo, Dictionary<string, object> entryPointInfo)
         {
             OMLEngine.Utilities.RawSetup();
-
-            try
-            {
-                if (File.Exists(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt"))
-                    Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.Append);
-                else
-                    Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.OpenOrCreate);
-
-                Trace.Listeners.Add(new TextWriterTraceListener(Log));
-                Trace.AutoFlush = true;
-                OMLApplication.DebugLine("[Launch] Initialize()");
-            }
-            catch (Exception e)
-            {
-                OMLApplication.DebugLine("[Launch] Error: " + e.Message);
-            }
+            OMLApplication.DebugLine("[Launch] Initialize()");
         }
 
         ~MyAddIn()
         {
             OMLApplication.DebugLine("[Launch] Destroy");
-            Trace.Flush();
-            Log.Close();
         }
 
         public void Uninitialize()
         {
             OMLApplication.DebugLine("[Launch] Uninitialize");
-            Trace.Flush();
-            Log.Close();
         }
 
         public void Launch(AddInHost host)
