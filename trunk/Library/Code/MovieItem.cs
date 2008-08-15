@@ -240,7 +240,6 @@ namespace Library
 
             SubCaption += _titleObj.ParentalRating + "\n";
 
-
             if( _titleObj.Directors.Count > 0 )
                 SubCaption += "Directed by: " + ((Person)_titleObj.Directors[0]).full_name + "\n";
 
@@ -256,7 +255,6 @@ namespace Library
                 {
                     if (actorCount > 0)
                         SubCaption += ", ";
-
 
                     SubCaption += actor.Key.Trim();
                     actorCount++;
@@ -274,7 +272,6 @@ namespace Library
             {
                 SubCaption += "\n";
             }
-
 
             Details = _titleObj.Synopsis;
             _actingRoles = new List<string>();

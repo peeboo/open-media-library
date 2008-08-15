@@ -814,6 +814,7 @@ namespace OMLEngine
                 return false;
             }
         }
+
         public void ReadXml(System.Xml.XmlReader reader)
         {
             if(reader.MoveToContent() == XmlNodeType.Element && reader.Name == "OMLTitle") 
@@ -839,7 +840,6 @@ namespace OMLEngine
 
                         }
                     }
-
 
                     //if (reader.IsStartElement())
                     //{

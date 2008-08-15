@@ -41,7 +41,6 @@ namespace Library
                                      movieItem.SelectedDisk.Format);
             if (File.Exists(movieItem.SelectedDisk.Path) || Directory.Exists(movieItem.SelectedDisk.Path))
             {
-                
                 if (movieItem.SelectedDisk.Format == VideoFormat.WPL) // if its a playlist, do that first
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] WPLMoviePlayer created");
@@ -56,6 +55,11 @@ namespace Library
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created");
                     return new TranscodePlayer(movieItem);
+                }
+                else if (OMLApplication.Current.IsExtender && movieItem.SelectedDisk.Format == VideoFormat.DVD) // play the dvd
+                {
+                    OMLApplication.DebugLine("[MoviePlayerFactory] ExtenderDVDPlayer created");
+                    return new ExtenderDVDPlayer(movieItem);
                 }
                 else if (movieItem.SelectedDisk.Format == VideoFormat.DVD) // play the dvd
                 {
@@ -104,13 +108,9 @@ namespace Library
             switch (SelectedDisk.Format)
             {
                 case VideoFormat.BIN:
-                    return true;
                 case VideoFormat.CUE:
-                    return true;
                 case VideoFormat.IMG:
-                    return true;
                 case VideoFormat.ISO:
-                    return true;
                 case VideoFormat.MDF:
                     return true;
                 default:
@@ -121,17 +121,17 @@ namespace Library
         // keep all the Playing logic here
         static private bool NeedsTranscode(Disk SelectedDisk)
         {
+            if (Utilities.IsTranscode360LibraryAvailable() == false)
+                return false;
+
             switch (SelectedDisk.Format)
             {
                 case VideoFormat.DVRMS:
-                    return false;
                 case VideoFormat.MPEG:
-                    return false;
                 case VideoFormat.MPG:
-                    return false;
                 case VideoFormat.WMV:
-                    return false;
                 case VideoFormat.WTV:
+                case VideoFormat.ASX:
                     return false;
                 default:
                     return true;

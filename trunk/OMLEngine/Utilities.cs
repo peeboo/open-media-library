@@ -76,7 +76,7 @@ namespace OMLEngine
         WMV,
         VOB, // MPEG2
         WVX, // wtf is this?
-        ASX, // wtf is this?
+        ASX, // like WPL
         WPL, // playlist file?
         WTV // new dvr format in vista (introduced in the tv pack 2008)
     };
@@ -272,28 +272,19 @@ namespace OMLEngine
             return false;
         }
 
+        static string Transcode360InterfacePath = @"c:\program files\transcode360\Transcode360.Interface.dll";
         public static bool IsTranscode360LibraryAvailable()
         {
-            FileInfo fi;
-            try
-            {
-                fi = new FileInfo(@"c:\\program files\\transcode360\\Transcode360.Interface.dll");
-                return true;
-            }
-            catch (Exception)
-            {
-                Utilities.DebugLine("[Utilities] Transcode360.Interface.dll not found");
-                return false;
-            }
+            return File.Exists(Transcode360InterfacePath);
         }
 
-        public static Type LoadTranscode360Assembly(string path_to_transcode360_dll)
+        public static Type LoadTranscode360Assembly()
         {
             Assembly asm = null;
 
             try
             {
-                asm = Assembly.LoadFile(path_to_transcode360_dll);
+                asm = Assembly.LoadFile(Transcode360InterfacePath);
                 AppDomain.CurrentDomain.Load(asm.GetName());
 
                 Type ITranscode360 = asm.GetType("Transcode360.Interface.ITranscode360");
@@ -384,6 +375,7 @@ namespace OMLEngine
                     { }
                 }
                 Trace.TraceInformation(DateTime.Now.ToString() + " " + msg, paramArray);
+                Trace.Flush();
             }
             catch
             {
