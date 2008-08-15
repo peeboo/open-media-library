@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
+using OMLEngine;
 
 namespace OMLFileWatcher
 {
@@ -44,6 +45,7 @@ namespace OMLFileWatcher
         /// <param name="subdirectories">Include Subdirectories within the specified path to be monitored</param>
         public void AddWatch(string path, string filter, bool subdirectories)
         {
+            Utilities.DebugLine("[OMLFileWatcher] AddWatch (Path:{0}, Filter:{1}, Sub:{2})", path, filter, subdirectories);
             FileSystemWatcher lFSW = new FileSystemWatcher(path, filter);
             lFSW.IncludeSubdirectories = subdirectories;
             lFSW.Renamed += new RenamedEventHandler(this.fsw_Renamed);
@@ -167,14 +169,18 @@ namespace OMLFileWatcher
                         {
                             oTitle.Filename = xAttr.Value;
                             oTitle.Title = xTitle.InnerText;
+                            Titles.Add(oTitle);
                         }
                     }
                 }
             }
+            Utilities.DebugLine("[OMLFileWatcher] LoadTitles (#{0} titles)", Titles.Count);
         }
 
         private void SaveTitles()
         {
+            Utilities.DebugLine("[OMLFileWatcher] SaveTitles (#{0} titles)", Titles.Count);
+
             XmlDocument xDoc = new XmlDocument();
             XmlElement xTitle;
             xDoc.LoadXml(@"<xml/>");

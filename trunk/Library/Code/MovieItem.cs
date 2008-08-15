@@ -324,8 +324,6 @@ namespace Library
             MovieDetailsPage page = new MovieDetailsPage(item);
             return page;
         }
-     
-        
 
         /// <summary>
         /// Plays the movie.
@@ -344,8 +342,6 @@ namespace Library
         {
             get { return _titleObj; }
         }
-
-        
 
         /// <summary>
         /// Gets or sets the file location.
@@ -480,8 +476,6 @@ namespace Library
             //set { _titleObj.Actors = value; }
         }
 
-
-
         /// <summary>
         /// Gets the directors.
         /// </summary>
@@ -519,8 +513,10 @@ namespace Library
             get { return _titleObj.Writers; }
             //set { _titleObj.Writers = value; }
         }
+
+        public override string ToString()
+        {
+            return "MovieItem:" + this._titleObj;
+        }
     }
-
-
-
 }

@@ -2010,5 +2010,10 @@ namespace OMLEngine
                 Utilities.DebugLine("[Title.BuildResizedMenuImage] Exception: " + ex.Message);
             }
         }
+
+        public override string ToString()
+        {
+            return "Title:" + this._name + " (" + this._itemId + ")";
+        }
     }
 }

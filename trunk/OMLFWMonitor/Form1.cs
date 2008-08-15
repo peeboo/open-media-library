@@ -16,33 +16,33 @@ namespace OMLFWMonitor
     public partial class Form1 : Form
     {
         OMLFileWatcher.OMLFileWatcher fw;
-        RegistryKey rkOML;
-        List<String> watches = new List<String>();
-        String[] watch;
-        Boolean _logging = false;
-        Boolean subdirs;
+        bool _logging = false;
+        bool subdirs;
 
         public Form1()
         {
             InitializeComponent();
-            if (!InitFileWatch()) { SetMsg("Nothing to watch"); };
+            if (!InitFileWatch())
+                SetMsg("Nothing to watch");
         }
 
-        public Boolean InitFileWatch()
+        public bool InitFileWatch()
         {
+            List<string> watches = new List<string>();
+
             fw = new OMLFileWatcher.OMLFileWatcher();
-            rkOML = Registry.CurrentUser.OpenSubKey(@"Software");
-            watches.AddRange(rkOML.GetSubKeyNames());
-            rkOML.Close();
-            if (!watches.Contains(@"OMLz")) { return false; }
+            using (RegistryKey rkOML = Registry.CurrentUser.OpenSubKey(@"Software"))
+                watches.AddRange(rkOML.GetSubKeyNames());
+            if (!watches.Contains(@"OMLz"))
+                return false;
+
             watches.Clear();
-            rkOML = Registry.CurrentUser.OpenSubKey(@"Software\OML");
-            watch = (String[]) rkOML.GetValue("Watch");
-            watches.AddRange(watch);
-            rkOML.Close();
+            using (RegistryKey rkOML = Registry.CurrentUser.OpenSubKey(@"Software\OML"))
+                watches.AddRange((string[])rkOML.GetValue("Watch"));
+
             foreach (string set in watches)
             {
-                watch = set.Split(';');
+                string[] watch = set.Split(';');
                 switch (watch.Length)
                 {
                     case 1:
@@ -50,7 +50,7 @@ namespace OMLFWMonitor
                         fw.AddWatch(watch[0], watch[1]);
                         break;
                     case 3:
-                        if (!Boolean.TryParse(watch[2], out subdirs))
+                        if (!bool.TryParse(watch[2], out subdirs))
                         {
                             subdirs = false;
                         }
@@ -67,14 +67,16 @@ namespace OMLFWMonitor
             return true;
         }
 
-        public Boolean logging
+        public bool logging
         {
             get
             {
-                rkOML = Registry.CurrentUser.OpenSubKey(@"Software\OML");
-                if (!Boolean.TryParse((string)rkOML.GetValue("logging", _logging), out _logging))
+                using (RegistryKey rkOML = Registry.CurrentUser.OpenSubKey(@"Software\OML"))
                 {
-                    _logging = false;
+                    if (rkOML != null && bool.TryParse((string)rkOML.GetValue("logging", _logging), out _logging) == false)
+                    {
+                        _logging = false;
+                    }
                 }
                 return _logging;
             }
@@ -84,24 +86,27 @@ namespace OMLFWMonitor
         {
             fw.EnableRaisingEvents = true;
         }
+
         private delegate void SetText(string sMsg);
 
         private void SetMsg(string sMsg)
         {
             this.textBox1.Text += sMsg + System.Environment.NewLine;
-            if (logging) { LogInfo.WriteStatusLog(sMsg); }
+            if (logging) 
+                LogInfo.WriteStatusLog(sMsg);
         }
 
         private void fw_Changed(object sender, System.IO.FileSystemEventArgs e)
         {
             SetText wryt = new SetText(SetMsg);
-            string msg = String.Format("{0}: {1}", e.ChangeType.ToString(), e.FullPath);
+            string msg = string.Format("{0}: {1}", e.ChangeType.ToString(), e.FullPath);
             this.Invoke(wryt, msg);
         }
+
         private void fw_Renamed(object sender, System.IO.RenamedEventArgs e)
         {
             SetText wryt = new SetText(SetMsg);
-            string msg = String.Format("{0}: {1} to {2}", e.ChangeType.ToString(), e.OldFullPath, e.FullPath);
+            string msg = string.Format("{0}: {1} to {2}", e.ChangeType.ToString(), e.OldFullPath, e.FullPath);
             this.Invoke(wryt, msg);
         }
 
