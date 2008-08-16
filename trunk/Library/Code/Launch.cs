@@ -11,11 +11,13 @@ namespace Library
         private static HistoryOrientedPageSession s_session;
         public TextWriterTraceListener tl;
         OMLApplication app;
-        private string _id;
+        string _id;
 
         public void Initialize(Dictionary<string, object> appInfo, Dictionary<string, object> entryPointInfo)
         {
-            _id = entryPointInfo["id"].ToString();
+            if (entryPointInfo.ContainsKey("Context"))
+                _id = (string)entryPointInfo["Context"];
+
             OMLEngine.Utilities.RawSetup();
             OMLApplication.DebugLine("[Launch] Initialize()");
         }
