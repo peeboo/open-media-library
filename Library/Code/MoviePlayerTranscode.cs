@@ -10,239 +10,20 @@ using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Diagnostics;
+using Transcode360.Interface;
+using Microsoft.Win32;
 
 namespace Library
 {
     public class TranscodePlayer : IPlayMovie
     {
-        object _server = null;
         string path_to_buffer = string.Empty;
-        Type ITranscode360Type = null;
-        MethodInfo MIIsMediaTranscodeComplete = null;
-        MethodInfo MIIsMediaTranscoding = null;
-        MethodInfo MIIsMediaTranscodingWithParams = null;
-        MethodInfo MITranscode = null;
-        MethodInfo MITranscodeWithParams = null;
-        MethodInfo MIStopTranscoding = null;
+        long timeStamp = 0L;
+        MovieItem _title;
 
         public TranscodePlayer(MovieItem title)
         {
             _title = title;
-        }
-
-        public bool PlayMovie()
-        {
-            if (PlayTranscodedMedia(_title, ref path_to_buffer))
-            {
-                OMLApplication.DebugLine("PathToBuffer: " + path_to_buffer);
-                if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, path_to_buffer, false))
-                {
-                    if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
-                    {
-                        AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += Transport_PropertyChanged;
-                        AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
-                    }
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return false;
-            /*
-            // mount the file, then figure out which other player we want to create
-            AddInHost.Current.MediaCenterEnvironment.Dialog("Transcoding not implemented yet. File " + _title.FileLocation, "Error", DialogButtons.Cancel, 0, true);
-            return false;
-            */
-        }
-        MovieItem _title;
-
-        public bool PlayTranscodedMedia(MovieItem title, ref string path_to_buffer)
-        {
-            if (Utilities.IsTranscode360LibraryAvailable())
-            {
-                ITranscode360Type =
-                    Utilities.LoadTranscode360Assembly();
-
-                if (ITranscode360Type != null)
-                {
-                    try
-                    {
-                        Hashtable properties = new Hashtable();
-                        properties.Add("name", "");
-                        TcpClientChannel channel = new TcpClientChannel(properties, null);
-                        ChannelServices.RegisterChannel(channel, false);
-
-                        _server = Activator.GetObject(ITranscode360Type,
-                            "tcp://localhost:1401/RemotingServices/Transcode360");
-
-                        assignMethodInfoObjects();
-
-                        if (MIIsMediaTranscodeComplete != null &&
-                            MIIsMediaTranscoding != null &&
-                            MIIsMediaTranscodingWithParams != null &&
-                            MITranscode != null &&
-                            MITranscodeWithParams != null &&
-                            MIStopTranscoding != null)
-                        {
-                            if (isAlreadyTranscoding())
-                                setCurrentBufferPath();
-                            else
-                                startTranscode();
-                        }
-                        return true;
-                    }
-                    catch (Exception e)
-                    {
-                        OMLApplication.DebugLine("Error calling transcode360: {0}\n    {1}", e.Message, e.InnerException);
-                        return false;
-                    }
-                }
-                else
-                {
-                    OMLApplication.DebugLine("Didn't locate ITranscode360 interface");
-                    return false;
-                }
-            }
-            else
-            {
-                OMLApplication.DebugLine("Transcode360 isn't available");
-                return false;
-            }
-        }
-
-        private bool isAlreadyTranscoding()
-        {
-            OMLApplication.DebugLine("Checking if file is already being transcoded");
-            bool retVal = false;
-            try
-            {
-                retVal = (bool)MIIsMediaTranscoding.Invoke(_server, new object[] {
-                _title.SelectedDisk.Path
-            });
-            }
-            catch (Exception e)
-            {
-                OMLApplication.DebugLine("Error calling transcode360 (MIIsMediaTranscoding): {0}\n    {1}", e.Message, e.InnerException);
-                foreach (ParameterInfo pInfo in MIIsMediaTranscoding.GetParameters())
-                {
-                    OMLApplication.DebugLine("parameter: " + pInfo.Name + " Type: " + pInfo.ParameterType.ToString());
-                }
-            }
-
-            return retVal;
-        }
-
-        private void setCurrentBufferPath()
-        {
-            OMLApplication.DebugLine("Setting the current path for a currently transcoding/ed file");
-            object[] paramArray = new object[] { _title.SelectedDisk.Path };
-
-            try
-            {
-                MIIsMediaTranscoding.Invoke(_server, paramArray);
-                path_to_buffer = (string)paramArray[0];
-                OMLApplication.DebugLine("Setting transcoded path to: " + path_to_buffer);
-            }
-            catch (Exception e)
-            {
-                OMLApplication.DebugLine("Error calling transcode360 (MIIsMediaTranscoding): {0}\n    {1}", e.Message, e.InnerException);
-                foreach (ParameterInfo pInfo in MIIsMediaTranscoding.GetParameters())
-                {
-                    OMLApplication.DebugLine("parameter: " + pInfo.Name + " Type: " + pInfo.ParameterType.ToString());
-                }
-            }
-        }
-
-        private void stopTranscode()
-        {
-            OMLApplication.DebugLine("Stopping a transcode job");
-            object[] paramArary = new object[3];
-
-            try
-            {
-                MIStopTranscoding.Invoke(_server, paramArary);
-            }
-            catch (Exception e)
-            {
-                OMLApplication.DebugLine("Error calling transcode360 (MIStopTranscoding): {0}\n    {1}", e.Message, e.InnerException);
-                foreach (ParameterInfo pInfo in MIStopTranscoding.GetParameters())
-                {
-                    OMLApplication.DebugLine("parameter: " + pInfo.Name + " Type: " + pInfo.ParameterType.ToString());
-                }
-            }
-        }
-
-        private void startTranscode()
-        {
-            OMLApplication.DebugLine("Starting a transcode job");
-            object[] paramArray = new object[3];
-            paramArray[0] = _title.SelectedDisk.Path;
-            paramArray[1] = path_to_buffer;
-            paramArray[2] = 0;
-            try
-            {
-                MITranscode.Invoke(_server, paramArray);
-
-                path_to_buffer = (string)paramArray[1];
-                OMLApplication.DebugLine("Setting transcode path to: " + path_to_buffer);
-            }
-            catch (Exception e)
-            {
-                OMLApplication.DebugLine("Error calling transcode360 (MITranscode): {0}\n    {1}", e.Message, e.InnerException);
-                foreach (ParameterInfo pInfo in MITranscode.GetParameters())
-                {
-                    OMLApplication.DebugLine("parameter: " + pInfo.Name + " Type: " + pInfo.ParameterType.ToString());
-                }
-            }
-        }
-
-        private void assignMethodInfoObjects()
-        {
-            OMLApplication.DebugLine("Locating and assigning Remote library methods");
-            MethodInfo[] methodInfos = ITranscode360Type.GetMethods();
-
-            foreach (MethodInfo mi in methodInfos)
-            {
-                switch (mi.Name)
-                {
-                    case "IsMediaTranscodeComplete":
-                        MIIsMediaTranscodeComplete = mi;
-                        break;
-                    case "IsMediaTranscoding":
-                        switch (mi.GetParameters().Length)
-                        {
-                            case 1:
-                                MIIsMediaTranscoding = mi;
-                                break;
-                            case 3:
-                                MIIsMediaTranscodingWithParams = mi;
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case "Transcode":
-                        switch (mi.GetParameters().Length)
-                        {
-                            case 3:
-                                MITranscode = mi;
-                                break;
-                            case 6:
-                                MITranscodeWithParams = mi;
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case "StopTranscoding":
-                        MIStopTranscoding = mi;
-                        break;
-                    default:
-                        break;
-                }
-            }
         }
 
         public void Transport_PropertyChanged(IPropertyObject sender, string property)
@@ -255,9 +36,116 @@ namespace Library
                 {
                     Utilities.DebugLine("MoviePlayerTranscode.Transport_PropertyChanged: movie {0} Finished", OMLApplication.Current.NowPlayingMovieName);
                     OMLApplication.Current.NowPlayingStatus = PlayState.Finished;
-                    stopTranscode();
+                    //                    stopTranscode();
                 }
             }
+        }
+
+        void PlayDirect(string logMsg, TcpClientChannel channel)
+        {
+            Utilities.DebugLine("[TranscodePlayer] " + logMsg);
+            Utilities.DebugLine("Playing transcode buffer: " + path_to_buffer);
+            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, path_to_buffer, false))
+            {
+                if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
+                {
+                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += this.Transport_PropertyChanged;
+                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
+                }
+            }
+            Utilities.DebugLine("[TranscodePlayer] Unregistering channel");
+            ChannelServices.UnregisterChannel(channel);
+        }
+
+        public bool PlayMovie()
+        {
+            long timeStamp = 0L;
+            string path_to_buffer = string.Empty;
+            RegistryKey transcoderKey;
+            ITranscode360 transcode;
+            TcpClientChannel channel;
+
+            try
+            {
+                if (File.Exists(_title.SelectedDisk.Path) | Directory.Exists(_title.SelectedDisk.Path))
+                {
+                    try
+                    {
+                        Utilities.DebugLine("[TrancodePlayer] Creating Transcode360 channel");
+                        Hashtable properties = new Hashtable();
+                        properties.Add("name", "");
+                        channel = new TcpClientChannel(properties, null);
+                        ChannelServices.RegisterChannel(channel, false);
+                    }
+                    catch (Exception e)
+                    {
+                        AddInHost.Current.MediaCenterEnvironment.Dialog("Transcode360 is either not installed or not running",
+                            "Transcode Error", DialogButtons.Ok, 5, true);
+                        Utilities.DebugLine("[TranscodePlayer] Failed to create Transcode360 channel: " + e.Message);
+                        return false;
+                    }
+
+                    transcoderKey = Registry.LocalMachine.OpenSubKey(@"Software\Transcode360");
+                    string serverAddress = (string)(transcoderKey.GetValue(@"ServerAddress"));
+                    string portNumber = (string)transcoderKey.GetValue(@"InterfacePort");
+                    int timeout = int.Parse((string)transcoderKey.GetValue(@"ConnectionTimeout"));
+                    transcoderKey.Close();
+
+                    transcode = (ITranscode360)Activator.GetObject(typeof(ITranscode360),
+                                                                   "tcp://" + serverAddress +
+                                                                   ":" + portNumber + "/RemotingServices/Transcode360");
+
+                    if (transcode.IsMediaTranscoding(_title.SelectedDisk.Path))
+                    {
+                        Utilities.DebugLine("[TranscodePlayer] This item was already being transcoded, stopping transcode job");
+                        transcode.StopTranscoding(_title.SelectedDisk.Path);
+                    }
+
+                    // if the item is currently being transcoded.. just play it
+                    string bufferPath;
+                    if (transcode.IsMediaTranscoding(_title.SelectedDisk.Path, timeStamp, out bufferPath))
+                    {
+                        this.path_to_buffer = bufferPath;
+                        PlayDirect("Transcoding " + _title.SelectedDisk.Path, channel);
+                    }
+                    else // its not transcoding, start it up and play it
+                    {
+                        Utilities.DebugLine("[TranscodePlayer] Starting transcode job for " + _title.SelectedDisk.Path);
+                        AddInHost.Current.MediaCenterEnvironment.Dialog("Beginning Transcode360 job", "Start Transcode",
+                            DialogButtons.Ok, 1, false);
+
+                        if (transcode.Transcode(_title.SelectedDisk.Path, out bufferPath, timeStamp))
+                        {
+                            this.path_to_buffer = bufferPath;
+                            PlayDirect("Transcode job started for " + _title.SelectedDisk.Path, channel);
+                        }
+                        else
+                        {
+                            AddInHost.Current.MediaCenterEnvironment.Dialog("Failed to begin Transcode360 process", "Transcode Failure",
+                                DialogButtons.Ok, 5, true);
+                            Utilities.DebugLine("[TranscodePlayer] Failed to transcode " + _title.SelectedDisk.Path);
+                            Utilities.DebugLine("[TranscodePlayer] Unregistering channel");
+                            ChannelServices.UnregisterChannel(channel);
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    AddInHost.Current.MediaCenterEnvironment.Dialog("Transcode360 does not appear to be installed",
+                        "Failed to locate Transcode360", DialogButtons.Ok, 5, true);
+                    Utilities.DebugLine("[TranscodePlayer] Unable to location media to transcode: " + _title.SelectedDisk.Path);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                AddInHost.Current.MediaCenterEnvironment.Dialog("An error ocurred while trying to play Transcode360",
+                    "Transcode360 Error", DialogButtons.Ok, 5, true);
+                Utilities.DebugLine("[TranscodePlayer] Error with Transcode360: " + e.Message);
+                return false;
+            }
+            return true;
         }
     }
 }
