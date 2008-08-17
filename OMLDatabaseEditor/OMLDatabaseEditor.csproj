@@ -94,11 +94,23 @@
     <Compile Include="MetaDataSearch.Designer.cs">
       <DependentUpon>MetaDataSearch.cs</DependentUpon>
     </Compile>
+    <Compile Include="MetaDataSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MetaDataSettings.Designer.cs">
+      <DependentUpon>MetaDataSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="OMLDatabaseEditor.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="OMLDatabaseEditor.Designer.cs">
       <DependentUpon>OMLDatabaseEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OptionList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionList.Designer.cs">
+      <DependentUpon>OptionList.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -122,8 +134,16 @@
       <DependentUpon>MetaDataSearch.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="MetaDataSettings.resx">
+      <DependentUpon>MetaDataSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="OMLDatabaseEditor.resx">
       <DependentUpon>OMLDatabaseEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionList.resx">
+      <DependentUpon>OptionList.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

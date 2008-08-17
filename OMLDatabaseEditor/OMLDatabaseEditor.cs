@@ -145,7 +145,7 @@ namespace OMLDatabaseEditor
             i = 0;
             foreach (IOMLMetadataPlugin metadataPlugin in _metadataPlugins)
             {
-                ToolStripMenuItem item = new ToolStripMenuItem(metadataPlugin.GetPluginName(), null, HandleMetadataMenuItem, i.ToString());
+                ToolStripMenuItem item = new ToolStripMenuItem(metadataPlugin.PluginName, null, HandleMetadataMenuItem, i.ToString());
                 metadataToolStripMenuItem.DropDownItems.Add(item);
                 i++;
             }
@@ -759,7 +759,8 @@ namespace OMLDatabaseEditor
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            MetaDataSettings settings = new MetaDataSettings();
+            settings.Show(_metadataPlugins);
         }
 
 
