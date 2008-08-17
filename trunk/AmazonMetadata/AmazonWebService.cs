@@ -34,11 +34,22 @@ namespace AmazonMetadata
 
         public class AmazonLocale
         {
-            private string m_URL;
+            private string m_URL = "";
+            private string m_FriendlyName = "";
+
+            public string FriendlyName
+            {
+                get { return m_FriendlyName; }
+            }
 
             public string URL
             {
                 get { return m_URL; }
+            }
+
+            public override string ToString()
+            {
+                return base.ToString();
             }
 
             private AmazonLocale()
@@ -46,35 +57,26 @@ namespace AmazonMetadata
                 m_URL = "";
             }
             
-            private AmazonLocale( string url )
+            private AmazonLocale( string friendlyName, string url )
             {
+                m_FriendlyName = friendlyName;
                 m_URL = url;
             }
 
-            public static AmazonLocale US = new AmazonLocale(Properties.Settings.Default.AmazonUrlEN);
-            public static AmazonLocale UK = new AmazonLocale(Properties.Settings.Default.AmazonUrlUK);
-            public static AmazonLocale Canada = new AmazonLocale(Properties.Settings.Default.AmazonUrlCA);
-            public static AmazonLocale Germany = new AmazonLocale(Properties.Settings.Default.AmazonUrlDE);
-            public static AmazonLocale Japan = new AmazonLocale(Properties.Settings.Default.AmazonUrlJP);
-            public static AmazonLocale France = new AmazonLocale(Properties.Settings.Default.AmazonUrlFR);
-            public static AmazonLocale Default = AmazonLocale.US;
+            public static AmazonLocale US = new AmazonLocale("US", Properties.Settings.Default.AmazonUrlEN);
+            public static AmazonLocale UK = new AmazonLocale("UK", Properties.Settings.Default.AmazonUrlUK);
+            public static AmazonLocale Canada = new AmazonLocale("CANADA", Properties.Settings.Default.AmazonUrlCA);
+            public static AmazonLocale Germany = new AmazonLocale("GERMANY", Properties.Settings.Default.AmazonUrlDE);
+            public static AmazonLocale Japan = new AmazonLocale("JAPAN", Properties.Settings.Default.AmazonUrlJP);
+            public static AmazonLocale France = new AmazonLocale( "FRANCE", Properties.Settings.Default.AmazonUrlFR);
+            public static AmazonLocale Default = AmazonLocale.FromString(Properties.Settings.Default.AmazonLocale);
 
             public static AmazonLocale FromString(string locale)
             {
                 switch (locale.ToUpper())
                 {
-                    case "EN":
-                        return AmazonLocale.US;
                     case "UK":
                         return AmazonLocale.UK;
-                    case "DE":
-                        return AmazonLocale.Germany;
-                    case "JP":
-                        return AmazonLocale.Japan;
-                    case "FR":
-                        return AmazonLocale.France;
-                    case "CA":
-                        return AmazonLocale.Canada;
                     case "US":
                         return AmazonLocale.US;
                     case "GERMANY":
@@ -86,7 +88,7 @@ namespace AmazonMetadata
                     case "CANADA":
                         return AmazonLocale.Canada;
                     default:
-                        return AmazonLocale.Default;
+                        return AmazonLocale.US;
                 }
             }
         }
@@ -112,7 +114,7 @@ namespace AmazonMetadata
             /// <remarks>Several search criterial values can be altered in the Settings designer</remarks>
             public AmazonSearchResult SearchDVDs(string searchString,  int pageNumber, AmazonLocale locale)
             {
-                string searchType = "Title";
+                string searchType = "Keywords";
                 try
                 {
                     // objects needed to define search and search criteria
@@ -136,7 +138,7 @@ namespace AmazonMetadata
                         itemSearchRequest.Keywords = searchString;
 
                     itemSearchRequest.ItemPage = Convert.ToString(pageNumber);
-                    itemSearchRequest.BrowseNode = "130";
+                    //itemSearchRequest.BrowseNode = "130";
 
                     // set the SearchIndex or search mode, e.g. "DVD"
                     itemSearchRequest.SearchIndex = Properties.Settings.Default.AmazonSearchMode;

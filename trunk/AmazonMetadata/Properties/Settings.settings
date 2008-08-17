@@ -2,34 +2,34 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AmazonMetadata.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="AmazonSubscriptionId" Type="System.String" Scope="User">
+    <Setting Name="AmazonSubscriptionId" Type="System.String" Scope="Application">
       <Value Profile="(Default)">1B9Q0Y02W3RCF0ZKQ9R2</Value>
     </Setting>
     <Setting Name="AmazonMetadata_com_amazon_webservices_AWSECommerceService" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://soap.amazon.com/onca/soap?Service=AWSECommerceService</Value>
     </Setting>
-    <Setting Name="AmazonSearchMode" Type="System.String" Scope="User">
+    <Setting Name="AmazonSearchMode" Type="System.String" Scope="Application">
       <Value Profile="(Default)">DVD</Value>
     </Setting>
-    <Setting Name="AmazonUrlEN" Type="System.String" Scope="User">
+    <Setting Name="AmazonUrlEN" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://soap.amazon.com/onca/soap?Service=AWSECommerceService</Value>
     </Setting>
-    <Setting Name="AmazonUrlUK" Type="System.String" Scope="User">
+    <Setting Name="AmazonUrlUK" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://soap.amazon.co.uk/onca/soap?Service=AWSECommerceService</Value>
     </Setting>
-    <Setting Name="AmazonUrlDE" Type="System.String" Scope="User">
+    <Setting Name="AmazonUrlDE" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://soap.amazon.de/onca/soap?Service=AWSECommerceService</Value>
     </Setting>
-    <Setting Name="AmazonUrlJP" Type="System.String" Scope="User">
+    <Setting Name="AmazonUrlJP" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://soap.amazon.co.jp/onca/soap?Service=AWSECommerceService</Value>
     </Setting>
-    <Setting Name="AmazonUrlFR" Type="System.String" Scope="User">
+    <Setting Name="AmazonUrlFR" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://soap.amazon.fr/onca/soap?Service=AWSECommerceService</Value>
     </Setting>
-    <Setting Name="AmazonUrlCA" Type="System.String" Scope="User">
+    <Setting Name="AmazonUrlCA" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://soap.amazon.ca/onca/soap?Service=AWSECommerceService</Value>
     </Setting>
-    <Setting Name="Genres" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="Genres" Type="System.Collections.Specialized.StringCollection" Scope="Application">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;string&gt;Action&lt;/string&gt;
@@ -63,7 +63,7 @@
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
     <Setting Name="AmazonLocale" Type="System.String" Scope="User">
-      <Value Profile="(Default)">EN</Value>
+      <Value Profile="(Default)">US</Value>
     </Setting>
   </Settings>
 </SettingsFile>

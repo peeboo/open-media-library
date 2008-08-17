@@ -14,9 +14,9 @@ namespace AmazonMetadata
         AmazonLocale _locale = AmazonLocale.Default;
         AmazonSearchResult _searchResult = null;
 
-        public string GetPluginName()
+        public string PluginName
         {
-            return "Amazon";
+            get { return "Amazon"; }
         }
 
         // these 2 methods must be called in sequence
@@ -25,7 +25,7 @@ namespace AmazonMetadata
             try
             {
                 _amazon = new AmazonWebService();
-                _locale = AmazonLocale.Default;
+                _locale = AmazonLocale.FromString(Properties.Settings.Default.AmazonLocale);
 
                 if (parameters != null)
                 {
@@ -117,6 +117,41 @@ namespace AmazonMetadata
             {
                 return null;
             }
+        }
+
+        public List<OMLMetadataOption> GetOptions()
+        {
+            List<OMLMetadataOption> settings = new List<OMLMetadataOption>();
+            Dictionary<string, string> possibleValues = new Dictionary<string, string>();
+            possibleValues.Add(AmazonLocale.US.FriendlyName, "Connect to Amazon.com (US)");
+            possibleValues.Add(AmazonLocale.Canada.FriendlyName, "Connect to Amazon.ca (Canada)");
+            possibleValues.Add(AmazonLocale.UK.FriendlyName, "Connect to Amazon.co.uk (UK)");
+            possibleValues.Add(AmazonLocale.France.FriendlyName, "Connect to Amazon.fr (France)");
+            possibleValues.Add(AmazonLocale.Germany.FriendlyName, "Connect to Amazon.de (Germany)");
+            possibleValues.Add(AmazonLocale.Japan.FriendlyName, "Connect to Amazon.co.jp (Japan)");
+            settings.Add(new OMLMetadataOption("Locale", _locale.FriendlyName, possibleValues, true));
+
+            return settings;
+        }
+
+        public bool SetOptionValue(string option, string value)
+        {
+            if (option.Equals("Locale", StringComparison.CurrentCultureIgnoreCase))
+            {
+                _locale = AmazonLocale.FromString(value.ToUpper());
+                Properties.Settings.Default.AmazonLocale = _locale.FriendlyName;
+                Properties.Settings.Default.Save();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override string ToString()
+        {
+            return PluginName;
         }
 
         
