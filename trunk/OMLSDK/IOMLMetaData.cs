@@ -8,7 +8,7 @@ namespace OMLSDK
 {
     public interface IOMLMetadataPlugin
     {
-        string GetPluginName();
+        string PluginName { get; }
 
         // these 2 methods must be called in sequence
         bool Initialize( Dictionary<string,string> parameters );
@@ -25,6 +25,46 @@ namespace OMLSDK
 
         // can do additional searches
         bool AdditonalSearchForMovie(string movieName);
+
+        List<OMLMetadataOption> GetOptions();
+        bool SetOptionValue(string option, string value);
     }
 
+    public class OMLMetadataOption
+    {
+
+        public string Name
+        {
+            get { return _optionName; }
+            set { _optionName = value; }
+        }
+
+        public string Value
+        {
+            get { return _optionValue.Key; }
+        }
+
+        public Dictionary<string, string> PossibleValues
+        {
+            get { return _optionValue.Value; }
+        }
+
+        public bool AllowOnlyPossibleValues
+        {
+            get { return _allowOnlyPossibleValues; }
+            set { _allowOnlyPossibleValues = value; }
+        }
+
+        public OMLMetadataOption(string optionName, string value, Dictionary<string, string> possibleValuesWithDescription, bool allowOnlyPossibleValues)
+        {
+            _optionValue = new KeyValuePair<string, Dictionary<string, string>>(value, possibleValuesWithDescription);
+            _allowOnlyPossibleValues = allowOnlyPossibleValues;
+            _optionName = optionName;
+        }
+
+        string _optionName;
+        KeyValuePair<string, Dictionary<string,string>> _optionValue;
+        bool _allowOnlyPossibleValues = true;
+
+    }
 }
