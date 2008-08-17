@@ -19,7 +19,7 @@ namespace OMLEngine
 {
     [Serializable()]
     [XmlRootAttribute("OMLTitle", Namespace = "http://www.openmedialibrary.org/", IsNullable = false)]
-    public class Title : IComparable, ISerializable, IXmlSerializable
+    public class Title : IComparable, ISerializable
     {
         #region locals
         private int _watchedCount;
@@ -799,72 +799,6 @@ namespace OMLEngine
                 );
         }
 
-        public bool SerializeToXMLFile(string fileName)
-        {
-            try
-            {
-                XmlSerializer mySerializer = new XmlSerializer(typeof(Title));
-                StreamWriter myWriter = new StreamWriter(fileName);
-                mySerializer.Serialize(myWriter, this);
-                myWriter.Close();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public void ReadXml(System.Xml.XmlReader reader)
-        {
-            if(reader.MoveToContent() == XmlNodeType.Element && reader.Name == "OMLTitle") 
-            {
-                while(reader.Read())
-                {
-                    if(reader.MoveToContent() == XmlNodeType.Element)
-                    {
-                        if( !reader.IsEmptyElement )
-                        {
-                            if (reader.Name == "Name")
-                            {
-                                Name = reader.ReadString();
-                            }
-                            else if (reader.Name == "SortName")
-                            {
-                                SortName = reader.ReadString();
-                            }
-                            else if (reader.Name == "OriginalName")
-                            {
-                                OriginalName = reader.ReadString();
-                            }
-
-                        }
-                    }
-
-                    //if (reader.IsStartElement())
-                    //{
-                    //    if (reader.IsEmptyElement)
-                    //        Console.WriteLine("<{0}/>", reader.Name);
-                    //}
-                    //else
-                    //{
-                    //    Console.Write("<{0}> ", reader.Name);
-                    //    reader.Read(); // Read the start tag.
-                    //    if (reader.IsStartElement())  // Handle nested elements.
-                    //        Console.Write("\r\n<{0}>", reader.Name);
-                    //    Console.WriteLine(reader.ReadString());  //Read the text content of the element.
-                    //}
-                } 
-
-            } // we have an OMLTitle
-        }
-
-
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
         static public Title CreateFromXML(string fileName)
         {
             Title t = new Title();
@@ -1547,163 +1481,211 @@ namespace OMLEngine
             return path;
         }
         
-        // <CustomFields />
-        public void WriteXml(System.Xml.XmlWriter writer)
+//<?xml version="1.0" encoding="utf-8"?>
+//<OMLTitle xmlns="http://www.openmedialibrary.org/">
+        
+        public bool SerializeToXMLFile(string fileName)
         {
-            writer.WriteElementString("Name", Name);
-            writer.WriteElementString("SortName", _sortName);
-            writer.WriteElementString("OriginalName", _originalName);
-
-            // the reader should verify that this exists and if doesn't it should
-            // just use folder.jpg in the same folder
-            writer.WriteElementString("FrontCoverPath", FrontCoverPath);
-
-            writer.WriteElementString("BackCoverPath", BackCoverPath);
-
-            // this will be created when imported
-            writer.WriteElementString("FrontCoverMenuPath", FrontCoverMenuPath);
-
-            // should be relative path so it can be loaded on any computer
-            writer.WriteStartElement("Disks");
-            foreach (Disk disk in Disks)
+            fileName = fileName.ToUpper();
+            try
             {
-                writer.WriteStartElement("Disk");
-                writer.WriteAttributeString("Name", disk.Name);
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                }
 
-                // the xml file should be in the same dir as the movie
-                writer.WriteElementString("Path",disk.Path);
-                writer.WriteElementString("Format", disk.Format.ToString());
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.ConformanceLevel = ConformanceLevel.Document;
+                XmlWriter writer = XmlWriter.Create(fileName, settings);
+                writer.WriteStartDocument();
+                writer.WriteStartElement("OMLTitle");
+
+                writer.WriteElementString("Name", Name);
+                writer.WriteElementString("SortName", _sortName);
+                writer.WriteElementString("OriginalName", _originalName);
+
+                string newFrontCoverPath = fileName.Replace(".OML.XML", ".JPG");
+                string newBackCoverPath = fileName.Replace(".OML.XML", ".BACK.JPG");
+
+                if (newFrontCoverPath.EndsWith(@"\VIDEO_TS.JPG"))
+                {
+                    newFrontCoverPath = newFrontCoverPath.Replace(@"VIDEO_TS.JPG", "FOLDER.JPG");
+                    newBackCoverPath = newBackCoverPath.Replace("@VIDEO_TS.BACK.JPG", "FOLDER.BACK.JPG");
+                }
+
+                if (!SaveFrontCoverToFile(newFrontCoverPath))
+                {
+                    newFrontCoverPath = FrontCoverPath;
+                }
+
+                if (!SaveBackCoverToFile(newBackCoverPath))
+                {
+                    newBackCoverPath = BackCoverPath;
+                }
+
+                // the reader should verify that this exists and if doesn't it should
+                // just use folder.jpg in the same folder
+                writer.WriteElementString("FrontCoverPath", newFrontCoverPath);
+
+                writer.WriteElementString("BackCoverPath", newBackCoverPath);
+
+                // this will be created when imported
+                //writer.WriteElementString("FrontCoverMenuPath", FrontCoverMenuPath);
+                writer.WriteElementString("FrontCoverMenuPath", "");
+
+
+                // should be relative path so it can be loaded on any computer
+                writer.WriteStartElement("Disks");
+                foreach (Disk disk in Disks)
+                {
+                    writer.WriteStartElement("Disk");
+                    writer.WriteAttributeString("Name", disk.Name);
+
+                    // the xml file should be in the same dir as the movie
+                    writer.WriteElementString("Path", disk.Path);
+                    writer.WriteElementString("Format", disk.Format.ToString());
+                    writer.WriteEndElement();
+                }
                 writer.WriteEndElement();
-            }
-            writer.WriteEndElement();
-         
-            ////writer.WriteElementString("VideoFormat", _videoFormat.ToString());
-            writer.WriteElementString("TranscodeToExtender", _needsTranscode.ToString());
-            
-            writer.WriteElementString("Synopsis", _synopsis);
-            writer.WriteElementString("Studio", _studio);
-            writer.WriteElementString("Country", _countryOfOrigin);
-            writer.WriteElementString("OfficialWebSiteURL", _officialWebsiteURL);
-            
-            writer.WriteElementString("Runtime", _runtime.ToString());
-            writer.WriteElementString("ParentalRating", _parentalRating);
-            writer.WriteElementString("ParentalRatingReason", _parentalRatingReason);
-            writer.WriteElementString("ReleaseDate", _releaseDate.ToString());
-            
-            
-            
-            writer.WriteStartElement("Genres");
-            foreach (string genre in Genres)
-            {
-                writer.WriteElementString("Genre", genre);
-            }
-            writer.WriteEndElement();
 
-            writer.WriteStartElement("Writers");
-            foreach (Person w in Writers)
-            {
-                writer.WriteElementString("Writer", w.full_name);
-            }
-            writer.WriteEndElement();
+                ////writer.WriteElementString("VideoFormat", _videoFormat.ToString());
+                writer.WriteElementString("TranscodeToExtender", _needsTranscode.ToString());
 
-            writer.WriteStartElement("Directors");
-            foreach (Person director in Directors)
-            {
-                writer.WriteElementString("Director", director.full_name);
-            }
-            writer.WriteEndElement();
+                writer.WriteElementString("Synopsis", _synopsis);
+                writer.WriteElementString("Studio", _studio);
+                writer.WriteElementString("Country", _countryOfOrigin);
+                writer.WriteElementString("OfficialWebSiteURL", _officialWebsiteURL);
 
-            writer.WriteStartElement("AudioTracks");
-            foreach (string languageFormat in AudioTracks)
-            {
-                writer.WriteElementString("AudioTrack", languageFormat);
-            }
-            writer.WriteEndElement();
+                writer.WriteElementString("Runtime", _runtime.ToString());
+                writer.WriteElementString("ParentalRating", _parentalRating);
+                writer.WriteElementString("ParentalRatingReason", _parentalRatingReason);
+                writer.WriteElementString("ReleaseDate", _releaseDate.ToString());
 
 
-            writer.WriteElementString("UserRating", _userStarRating.ToString());
-            writer.WriteElementString("AspectRatio", _aspectRatio.ToString());
-            writer.WriteElementString("VideoStandard", _videoStandard);
-            
 
-            writer.WriteStartElement("ActingRoles");
-            foreach (KeyValuePair<string,string> actingRole in ActingRoles)
-            {
-                writer.WriteStartElement("Actor");
-                writer.WriteAttributeString("Name", actingRole.Key);
-                writer.WriteAttributeString("Role", actingRole.Value);
+                writer.WriteStartElement("Genres");
+                foreach (string genre in Genres)
+                {
+                    writer.WriteElementString("Genre", genre);
+                }
                 writer.WriteEndElement();
-            }
-            writer.WriteEndElement();
 
-            writer.WriteStartElement("NonActingRoles");
-            foreach (KeyValuePair<string, string> actingRole in NonActingRoles)
-            {
-                writer.WriteStartElement("Person");
-                writer.WriteAttributeString("Name", actingRole.Key);
-                writer.WriteAttributeString("Role", actingRole.Value);
+                writer.WriteStartElement("Writers");
+                foreach (Person w in Writers)
+                {
+                    writer.WriteElementString("Writer", w.full_name);
+                }
                 writer.WriteEndElement();
+
+                writer.WriteStartElement("Directors");
+                foreach (Person director in Directors)
+                {
+                    writer.WriteElementString("Director", director.full_name);
+                }
+                writer.WriteEndElement();
+
+                writer.WriteStartElement("AudioTracks");
+                foreach (string languageFormat in AudioTracks)
+                {
+                    writer.WriteElementString("AudioTrack", languageFormat);
+                }
+                writer.WriteEndElement();
+
+
+                writer.WriteElementString("UserRating", _userStarRating.ToString());
+                writer.WriteElementString("AspectRatio", _aspectRatio.ToString());
+                writer.WriteElementString("VideoStandard", _videoStandard);
+
+
+                writer.WriteStartElement("ActingRoles");
+                foreach (KeyValuePair<string, string> actingRole in ActingRoles)
+                {
+                    writer.WriteStartElement("Actor");
+                    writer.WriteAttributeString("Name", actingRole.Key);
+                    writer.WriteAttributeString("Role", actingRole.Value);
+                    writer.WriteEndElement();
+                }
+                writer.WriteEndElement();
+
+                writer.WriteStartElement("NonActingRoles");
+                foreach (KeyValuePair<string, string> actingRole in NonActingRoles)
+                {
+                    writer.WriteStartElement("Person");
+                    writer.WriteAttributeString("Name", actingRole.Key);
+                    writer.WriteAttributeString("Role", actingRole.Value);
+                    writer.WriteEndElement();
+                }
+                writer.WriteEndElement();
+
+
+                writer.WriteStartElement("Tags");
+                foreach (string tag in Tags)
+                {
+                    writer.WriteElementString("Tag", tag);
+                }
+                writer.WriteEndElement();
+
+                writer.WriteStartElement("Subtitles");
+                foreach (string sub in Subtitles)
+                {
+                    writer.WriteElementString("Subtitle", sub);
+                }
+                writer.WriteEndElement();
+
+                writer.WriteStartElement("Producers");
+                foreach (string sub in Subtitles)
+                {
+                    writer.WriteElementString("Producer", sub);
+                }
+                writer.WriteEndElement();
+
+
+                writer.WriteStartElement("CustomFields");
+                foreach (KeyValuePair<string, string> field in AdditionalFields)
+                {
+                    writer.WriteStartElement("CustomField");
+                    writer.WriteAttributeString("Name", field.Key);
+                    writer.WriteAttributeString("Value", field.Key);
+                }
+                writer.WriteEndElement();
+
+
+                writer.WriteStartElement("Photos");
+                foreach (string photo in Photos)
+                {
+                    writer.WriteElementString("Photo", photo);
+                }
+                writer.WriteEndElement();
+
+                writer.WriteStartElement("Trailers");
+                foreach (string trailer in Trailers)
+                {
+                    writer.WriteElementString("Trailer", trailer);
+                }
+                writer.WriteEndElement();
+
+                writer.WriteStartElement("ExtraFeatures");
+                foreach (string feature in ExtraFeatures)
+                {
+                    writer.WriteElementString("ExtraFeature", feature);
+                }
+                writer.WriteEndElement();
+
+
+                writer.WriteElementString("VideoDetails", _videoDetails);
+
+                writer.WriteElementString("VideoResolution", _videoResolution);
+
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
+                writer.Flush();
+                writer.Close();
+                return true;
             }
-            writer.WriteEndElement();
-
-
-            writer.WriteStartElement("Tags");
-            foreach (string tag in Tags)
+            catch (Exception ex)
             {
-                writer.WriteElementString("Tag", tag);
+                return false;
             }
-            writer.WriteEndElement();
-
-            writer.WriteStartElement("Subtitles");
-            foreach (string sub in Subtitles)
-            {
-                writer.WriteElementString("Subtitle", sub);
-            }
-            writer.WriteEndElement();
-
-            writer.WriteStartElement("Producers");
-            foreach (string sub in Subtitles)
-            {
-                writer.WriteElementString("Producer", sub);
-            }
-            writer.WriteEndElement();
-
-
-            writer.WriteStartElement("CustomFields");
-            foreach (KeyValuePair<string,string> field in AdditionalFields)
-            {
-                writer.WriteStartElement("CustomField");
-                writer.WriteAttributeString("Name", field.Key);
-                writer.WriteAttributeString("Value", field.Key);
-            }
-            writer.WriteEndElement();
-
-
-            writer.WriteStartElement("Photos");
-            foreach (string photo in Photos)
-            {
-                writer.WriteElementString("Photo", photo);
-            }
-            writer.WriteEndElement();
-
-            writer.WriteStartElement("Trailers");
-            foreach (string trailer in Trailers)
-            {
-                writer.WriteElementString("Trailer", trailer);
-            }
-            writer.WriteEndElement();
-
-            writer.WriteStartElement("ExtraFeatures");
-            foreach (string feature in ExtraFeatures)
-            {
-                writer.WriteElementString("ExtraFeature", feature);
-            }
-            writer.WriteEndElement();
-                        
-
-            writer.WriteElementString("VideoDetails", _videoDetails);
-            
-            writer.WriteElementString("VideoResolution", _videoResolution);
         }
 
         private string CopyStringValue(string src, string dest, bool overWrite)
@@ -1937,12 +1919,68 @@ namespace OMLEngine
         
         }
 
+        public bool SaveFrontCoverToFile(string dest)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(FrontCoverPath) && File.Exists(FrontCoverPath))
+                {
+                    if (!FrontCoverPath.Equals(dest, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        File.Copy(FrontCoverPath, dest, true);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool SaveBackCoverToFile(string dest)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(BackCoverPath) && File.Exists(BackCoverPath))
+                {
+                    if (!BackCoverPath.Equals(dest, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        File.Copy(BackCoverPath, dest, true);
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
         // copy front cover image and set the menu cover too (resized version)
         public bool CopyFrontCoverFromFile(string source, bool deleteSource)
         {
             try
             {
-                File.Copy(source, GetDefaultFrontCoverName());
+                File.Copy(source, GetDefaultFrontCoverName(), true);
                 if (deleteSource) File.Delete(source);
                 FrontCoverPath = GetDefaultFrontCoverName();
                 BuildResizedMenuImage();
@@ -1958,7 +1996,7 @@ namespace OMLEngine
         {
             try
             {
-                File.Copy(source, GetDefaultBackCoverName());
+                File.Copy(source, GetDefaultBackCoverName(), true);
                 if (deleteSource) File.Delete(source);
                 BackCoverPath = GetDefaultBackCoverName();
                 
