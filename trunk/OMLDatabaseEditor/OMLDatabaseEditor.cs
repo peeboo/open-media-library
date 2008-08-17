@@ -752,6 +752,16 @@ namespace OMLDatabaseEditor
 
         }
 
+        private void tabsMediaPanel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
 
         //}
 
