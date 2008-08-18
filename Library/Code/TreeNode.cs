@@ -80,12 +80,15 @@ namespace Library
         {
             Title = title;
             FullPath = fullPath;
-            Checked.ChosenChanged += new EventHandler(delegate(object sender, EventArgs e)
+            Checked.ChosenChanged += delegate(object sender, EventArgs e)
             {
-                // this is the one that works
-                OMLApplication.DebugLine("Changed: " + this.GetType().ToString());
-                Setup.Current.AddCheckedNode(this);
-            });
+                OMLApplication.ExecuteSafe(delegate
+                {
+                    // this is the one that works
+                    OMLApplication.DebugLine("Changed: " + this.GetType().ToString());
+                    Setup.Current.AddCheckedNode(this);
+                });
+            };
         }
 
         public virtual void OnCollapsed()

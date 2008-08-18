@@ -496,7 +496,16 @@ namespace Library
             }
 
             _ImporterSelection.Options = _Importers;
-            _ImporterSelection.ChosenChanged += new EventHandler(_ImporterSelection_ChosenChanged);
+            _ImporterSelection.ChosenChanged += delegate(object sender, EventArgs e)
+            {
+                OMLApplication.ExecuteSafe(delegate
+                {
+                    Choice c = (Choice)sender;
+                    ImporterDescription = @"Notice: " + GetPlugin().SetupDescription();
+                    OMLApplication.DebugLine("Item Chosed: " + c.Options[c.ChosenIndex]);
+                });
+            };
+
         }
 
         public Choice ImporterSelection
@@ -507,13 +516,6 @@ namespace Library
                 _ImporterSelection = value;
                 FirePropertyChanged("ImporterSelection");
             }
-        }
-
-        public void _ImporterSelection_ChosenChanged(object sender, EventArgs e)
-        {
-            Choice c = (Choice)sender;
-            ImporterDescription = @"Notice: " + GetPlugin().SetupDescription();
-            OMLApplication.DebugLine("Item Chosed: " + c.Options[c.ChosenIndex]);
         }
 
         public TreeView TreeView

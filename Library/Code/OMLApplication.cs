@@ -6,6 +6,7 @@ using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
 
 using OMLEngine;
+using System;
 
 namespace Library
 {
@@ -202,6 +203,22 @@ namespace Library
             DebugLine("[OMLApplication] ReloadTitleCollection()");
             _titles.loadTitleCollection();
             return _titles;
+        }
+
+        public delegate void VoidDelegate();
+        public static void ExecuteSafe(VoidDelegate action)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                DebugLine("Unhandled Exception: {0}", ex);
+                DialogResult res = Current.MediaCenterEnvironment.Dialog("To rethrow exception select yes\n" + ex.ToString(), "Unhandled Exception logged in debug.txt", DialogButtons.Yes | DialogButtons.No, 10, true);
+                if (res == DialogResult.Yes)
+                    throw;
+            }
         }
 
 

@@ -28,17 +28,20 @@ namespace Library
 
         public void Transport_PropertyChanged(IPropertyObject sender, string property)
         {
-            MediaTransport t = (MediaTransport)sender;
-            Utilities.DebugLine("MoviePlayerTranscode.Transport_PropertyChanged: movie {0} property {1} playrate {2} state {3} pos {4}", OMLApplication.Current.NowPlayingMovieName, property, t.PlayRate, t.PlayState.ToString(), t.Position.ToString());
-            if (property == "PlayState")
+            OMLApplication.ExecuteSafe(delegate
             {
-                if (t.PlayState == PlayState.Finished || t.PlayState == PlayState.Stopped)
+                MediaTransport t = (MediaTransport)sender;
+                Utilities.DebugLine("MoviePlayerTranscode.Transport_PropertyChanged: movie {0} property {1} playrate {2} state {3} pos {4}", OMLApplication.Current.NowPlayingMovieName, property, t.PlayRate, t.PlayState.ToString(), t.Position.ToString());
+                if (property == "PlayState")
                 {
-                    Utilities.DebugLine("MoviePlayerTranscode.Transport_PropertyChanged: movie {0} Finished", OMLApplication.Current.NowPlayingMovieName);
-                    OMLApplication.Current.NowPlayingStatus = PlayState.Finished;
-                    //                    stopTranscode();
+                    if (t.PlayState == PlayState.Finished || t.PlayState == PlayState.Stopped)
+                    {
+                        Utilities.DebugLine("MoviePlayerTranscode.Transport_PropertyChanged: movie {0} Finished", OMLApplication.Current.NowPlayingMovieName);
+                        OMLApplication.Current.NowPlayingStatus = PlayState.Finished;
+                        //                    stopTranscode();
+                    }
                 }
-            }
+            });
         }
 
         void PlayDirect(string logMsg, TcpClientChannel channel)

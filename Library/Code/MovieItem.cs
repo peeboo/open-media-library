@@ -161,8 +161,12 @@ namespace Library
         /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         public virtual void ItemSelected(object sender, EventArgs args)
         {
-            GalleryItem galleryItem = (GalleryItem)sender;
-            if (Gallery != null) OMLApplication.Current.GoToMenu( Category.CreateGallery(galleryItem.Name) );
+            OMLApplication.ExecuteSafe(delegate
+            {
+                GalleryItem galleryItem = (GalleryItem)sender;
+                if (Gallery != null)
+                    OMLApplication.Current.GoToMenu(Category.CreateGallery(galleryItem.Name));
+            });
         }
 
         public virtual GalleryItem Clone(MovieGallery newOwner)
@@ -304,13 +308,16 @@ namespace Library
         /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         public override void ItemSelected(object sender, EventArgs args)
         {
-            MovieItem galleryItem = (MovieItem)sender;
+            OMLApplication.ExecuteSafe(delegate
+            {
+                MovieItem galleryItem = (MovieItem)sender;
 
-            // Navigate to a details page for this item.
-            MovieDetailsPage page = CreateDetailsPage(galleryItem);
-            Gallery.JumpInListText.Value = "";
-            Gallery.ClearJumpValue = true;
-            OMLApplication.Current.GoToDetails(page);
+                // Navigate to a details page for this item.
+                MovieDetailsPage page = CreateDetailsPage(galleryItem);
+                Gallery.JumpInListText.Value = "";
+                Gallery.ClearJumpValue = true;
+                OMLApplication.Current.GoToDetails(page);
+            });
         }
 
         /// <summary>
@@ -320,9 +327,8 @@ namespace Library
         /// <returns></returns>
         public MovieDetailsPage CreateDetailsPage(MovieItem item)
         {
-            OMLApplication.DebugLine("[MovieItem] Creating a detailspage");
-            MovieDetailsPage page = new MovieDetailsPage(item);
-            return page;
+            OMLApplication.DebugLine("[MovieItem] Creating a detailspage for {0}", item);
+            return new MovieDetailsPage(item);
         }
 
         /// <summary>
