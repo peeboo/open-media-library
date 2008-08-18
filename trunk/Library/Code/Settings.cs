@@ -21,17 +21,20 @@ namespace Library
 
         public void SaveSettings()
         {
-            _omlSettings.DaemonTools = _daemonToolsPath.Value;
-            _omlSettings.MovieSort = _movieSort.Chosen as string;
-            _omlSettings.GalleryCoverArtRows = System.Convert.ToInt32(_coverArtRows.Chosen as string);
-            _omlSettings.CoverArtSpacingVertical = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
-            _omlSettings.CoverArtSpacingHorizontal = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
-            _omlSettings.MovieView = _movieView.Chosen as string;
-            _omlSettings.ShowMovieDetails = (bool)_showMovieDetails.Chosen;
-            _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
-            _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
-            _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
-            OMLApplication.Current.Startup(null);
+            OMLApplication.ExecuteSafe(delegate
+            {
+                _omlSettings.DaemonTools = _daemonToolsPath.Value;
+                _omlSettings.MovieSort = _movieSort.Chosen as string;
+                _omlSettings.GalleryCoverArtRows = System.Convert.ToInt32(_coverArtRows.Chosen as string);
+                _omlSettings.CoverArtSpacingVertical = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
+                _omlSettings.CoverArtSpacingHorizontal = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
+                _omlSettings.MovieView = _movieView.Chosen as string;
+                _omlSettings.ShowMovieDetails = (bool)_showMovieDetails.Chosen;
+                _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
+                _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
+                _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
+                OMLApplication.Current.Startup(null);
+            });
         }
 
         private void SetupDaemonTools()

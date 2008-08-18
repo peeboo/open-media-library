@@ -445,11 +445,14 @@ namespace Library
         
         public void PlayDisk(int SelectedDisk)
         {
-            // Play the Selected Disk
-            PlayClicked = true;
-            _movieDetails.SelectedDisk = _movieDetails.Disks[SelectedDisk];
-            _movieDetails.PlayMovie();
-            _PlayClicked = false; // I use the private variable because I don't want to send an event to the MCML page
+            OMLApplication.ExecuteSafe(delegate
+            {
+                // Play the Selected Disk
+                PlayClicked = true;
+                _movieDetails.SelectedDisk = _movieDetails.Disks[SelectedDisk];
+                _movieDetails.PlayMovie();
+                _PlayClicked = false; // I use the private variable because I don't want to send an event to the MCML page
+            });
         }
     }
 

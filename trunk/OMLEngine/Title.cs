@@ -1682,7 +1682,7 @@ namespace OMLEngine
                 writer.Close();
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
@@ -1941,7 +1941,7 @@ namespace OMLEngine
                 }
                
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
@@ -1968,7 +1968,7 @@ namespace OMLEngine
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }

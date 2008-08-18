@@ -92,13 +92,16 @@ namespace Library
 
         static public void Transport_PropertyChanged(IPropertyObject sender, string property)
         {
-            MediaTransport t = (MediaTransport)sender;
-            Utilities.DebugLine("[MoviePlayerFactory] Transport_PropertyChanged: movie {0} property {1} playrate {2} state {3} pos {4}", OMLApplication.Current.NowPlayingMovieName, property, t.PlayRate, t.PlayState.ToString(), t.Position.ToString());
-            if (property == "PlayState")
+            OMLApplication.ExecuteSafe(delegate
             {
-                OMLApplication.Current.NowPlayingStatus = t.PlayState;
-                Utilities.DebugLine("[MoviePlayerFactory] MoviePlayerFactory.Transport_PropertyChanged: movie {0} state {1}", OMLApplication.Current.NowPlayingMovieName, t.PlayState.ToString());
-            }
+                MediaTransport t = (MediaTransport)sender;
+                Utilities.DebugLine("[MoviePlayerFactory] Transport_PropertyChanged: movie {0} property {1} playrate {2} state {3} pos {4}", OMLApplication.Current.NowPlayingMovieName, property, t.PlayRate, t.PlayState.ToString(), t.Position.ToString());
+                if (property == "PlayState")
+                {
+                    OMLApplication.Current.NowPlayingStatus = t.PlayState;
+                    Utilities.DebugLine("[MoviePlayerFactory] MoviePlayerFactory.Transport_PropertyChanged: movie {0} state {1}", OMLApplication.Current.NowPlayingMovieName, t.PlayState.ToString());
+                }
+            });
         }
 
 

@@ -278,29 +278,6 @@ namespace OMLEngine
             return File.Exists(Transcode360InterfacePath);
         }
 
-        public static Type LoadTranscode360Assembly()
-        {
-            Assembly asm = null;
-
-            try
-            {
-                asm = Assembly.LoadFile(Transcode360InterfacePath);
-                AppDomain.CurrentDomain.Load(asm.GetName());
-
-                Type ITranscode360 = asm.GetType("Transcode360.Interface.ITranscode360");
-
-                if (ITranscode360 != null)
-                    return ITranscode360;
-
-                return null;
-            }
-            catch (Exception e)
-            {
-                Utilities.DebugLine("[Utilities] Error loading Transcode360: " + e.Message);
-                return null;
-            }
-        }
-
         public static int NewRandomNumber()
         {
             if (Utilities.random == null)

@@ -285,28 +285,32 @@ namespace Library
 
         public void JumpToMovie(string jumpString, IList list)
         {
-            if (jumpString.Length == 0) return;
-
-            Utilities.DebugLine("[MovieGallery] JumpToMovie: {0}", jumpString);
-            foreach (MovieItem m in _moviesVirtualList)
+            OMLApplication.ExecuteSafe(delegate
             {
-                if (m.SortName.StartsWith(jumpString, true, null))
+                if (jumpString.Length == 0)
+                    return;
+
+                Utilities.DebugLine("[MovieGallery] JumpToMovie: {0}", jumpString);
+                foreach (MovieItem m in _moviesVirtualList)
                 {
-                    int focusedItemIndex = _moviesVirtualList.IndexOf(FocusedItem);
-
-                    if (focusedItemIndex < 0)
+                    if (m.SortName.StartsWith(jumpString, true, null))
                     {
-                        focusedItemIndex = 0;
+                        int focusedItemIndex = _moviesVirtualList.IndexOf(FocusedItem);
+
+                        if (focusedItemIndex < 0)
+                        {
+                            focusedItemIndex = 0;
+                        }
+
+                        _jumpToPosition = _moviesVirtualList.IndexOf(m);
+                        _relativeJumpToPosition = _jumpToPosition - focusedItemIndex;
+
+                        Utilities.DebugLine("[MovieGallery] JumpToString: Found movie {0} pos {1} relpos {2}", m.Name, _jumpToPosition, _relativeJumpToPosition);
+                        FirePropertyChanged("JumpToPosition");
+                        break;
                     }
-
-                    _jumpToPosition = _moviesVirtualList.IndexOf(m);
-                    _relativeJumpToPosition = _jumpToPosition - focusedItemIndex;
-
-                    Utilities.DebugLine("[MovieGallery] JumpToString: Found movie {0} pos {1} relpos {2}", m.Name, _jumpToPosition, _relativeJumpToPosition);
-                    FirePropertyChanged("JumpToPosition");
-                    break;
                 }
-            }
+            });
         }
 
         public void AddMovie(MovieItem movie)

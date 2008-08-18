@@ -175,16 +175,19 @@ namespace Library
 
         public void OnFilterSelected(object sender, EventArgs args)
         {
-            Trace.TraceInformation("MovieGallery.OnFilterSelected");
-            FilterCommand cmd = (FilterCommand)sender;
-            if (cmd.Filter.Name == Filter.Settings)
+            OMLApplication.ExecuteSafe(delegate
             {
-                OMLApplication.Current.GoToSettingsPage( _gallery );
-            }
-            else
-            {
-                OMLApplication.Current.GoToSelectionList(_gallery, Items, _gallery.Title + " > " + Name, _galleryView);
-            }
+                Trace.TraceInformation("MovieGallery.OnFilterSelected");
+                FilterCommand cmd = (FilterCommand)sender;
+                if (cmd.Filter.Name == Filter.Settings)
+                {
+                    OMLApplication.Current.GoToSettingsPage(_gallery);
+                }
+                else
+                {
+                    OMLApplication.Current.GoToSelectionList(_gallery, Items, _gallery.Title + " > " + Name, _galleryView);
+                }
+            });
         }
 
         private static int SortByItemCountAscending(GalleryItem m1, GalleryItem m2)
