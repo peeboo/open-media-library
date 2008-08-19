@@ -121,5 +121,10 @@ namespace OMLDatabaseEditor
                 _selectedTitle = null;
             }
         }
+
+        private void grdTitles_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

@@ -42,19 +42,22 @@ namespace OMLDatabaseEditor
                 IOMLMetadataPlugin plugin = lbMetadataPlugins.SelectedItem as IOMLMetadataPlugin;
                 _selectdPlugin = plugin;
                 List<OMLMetadataOption> options = plugin.GetOptions();
-                foreach (OMLMetadataOption option in options)
+                if (options != null)
                 {
-                    DataGridViewRow row = new DataGridViewRow();
-                   // foreach (string possibleValue in option.PossibleValues)
-                   // {
-                   //     colOptionValue.Items.Add(possibleValue);
-                   // }
-                    string currentValueDescription = "";
-                    if (option.PossibleValues.ContainsKey(option.Value))
-                        currentValueDescription = option.PossibleValues[option.Value];
-                    row.CreateCells(grdOptions, option.Name, option.Value, currentValueDescription);
-                    row.Tag = option;
-                    grdOptions.Rows.Add(row);
+                    foreach (OMLMetadataOption option in options)
+                    {
+                        DataGridViewRow row = new DataGridViewRow();
+                        // foreach (string possibleValue in option.PossibleValues)
+                        // {
+                        //     colOptionValue.Items.Add(possibleValue);
+                        // }
+                        string currentValueDescription = "";
+                        if (option.PossibleValues.ContainsKey(option.Value))
+                            currentValueDescription = option.PossibleValues[option.Value];
+                        row.CreateCells(grdOptions, option.Name, option.Value, currentValueDescription);
+                        row.Tag = option;
+                        grdOptions.Rows.Add(row);
+                    }
                 }
             }
         }

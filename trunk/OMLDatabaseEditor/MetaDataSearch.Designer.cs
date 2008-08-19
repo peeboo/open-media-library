@@ -77,6 +77,7 @@
             this.grdTitles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.grdTitles.Size = new System.Drawing.Size(888, 479);
             this.grdTitles.TabIndex = 0;
+            this.grdTitles.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdTitles_CellContentClick);
             // 
             // colIndex
             // 
