@@ -14,6 +14,8 @@ namespace OMLTranscoder
         private string outputFile;
         private MEncoder.AudioFormat audioFormat;
         private MEncoder.VideoFormat videoFormat;
+        private SubtitleStream subStream;
+        private AudioStream audioStream;
 
         public MEncoderCommandBuilder()
         {
@@ -44,23 +46,40 @@ namespace OMLTranscoder
             string cmdString = string.Empty;
             cmdString = Path.Combine(FileSystemWalker.RootDirectory, @"mencoder.exe");
 
-            //audio
+            //audio format
             if (audioFormat == MEncoder.AudioFormat.NoAudio)
                 cmdString += @" -nosound";
             else
-                cmdString += @" -oac " + (string)Enum.GetName(typeof(MEncoder.AudioFormat), audioFormat);
+                cmdString += string.Format(@" -oac {0}", (string)Enum.GetName(typeof(MEncoder.AudioFormat), audioFormat));
+
+            //audio stream
+            if ((audioStream != null) && (audioFormat != MEncoder.AudioFormat.NoAudio))
+            {
+                cmdString += @"";
+            }
 
             //video
-            cmdString += @" -ovc " + (string)Enum.GetName(typeof(MEncoder.VideoFormat), videoFormat);
+            cmdString += string.Format(@" -ovc {0}", (string)Enum.GetName(typeof(MEncoder.VideoFormat), videoFormat));
 
             //subtitles
+            if (subStream != null)
+            {
+                cmdString += string.Format(@" -sub {0}", subStream.SubtitleChannel);
+            }
 
             //chapters
 
+            // output format
+            cmdString += @" -of mpeg"; // always set the output format to mpeg for extenders
+
             //output
-            cmdString += @" -o " + outputFile;
+            cmdString += string.Format(@" -o {0}", outputFile);
 
             return cmdString;
+        }
+
+        public void SetSubtitleStream(SubtitleStream stream)
+        {
         }
 
         public void PresetSubtitleDetailsComamnd()
