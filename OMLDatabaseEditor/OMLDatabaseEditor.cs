@@ -99,10 +99,16 @@ namespace OMLDatabaseEditor
         public void HandleMetadataMenuItem(Object sender, EventArgs e)
         {
             ToolStripDropDownItem item = sender as ToolStripDropDownItem;
-            StartMetadataImport(Convert.ToInt32(item.Name));
+            StartMetadataImport(Convert.ToInt32(item.Name), false);
         }
 
-        void StartMetadataImport(int pluginId)
+        public void HandleMetadataCoverArtMenuItem(Object sender, EventArgs e)
+        {
+            ToolStripDropDownItem item = sender as ToolStripDropDownItem;
+            StartMetadataImport(Convert.ToInt32(item.Name), true);
+        }
+
+        void StartMetadataImport(int pluginId, bool coverArtOnly)
         {
             try
             {
@@ -119,8 +125,20 @@ namespace OMLDatabaseEditor
                         Title t = searchResultForm.SelectedTitle;
                         if (t != null)
                         {
-                            e.CurrentTitle.CopyMetadata(t, searchResultForm.OverwriteMetadata);
-                            e.LoadTitle(e.CurrentTitle);
+                            if (coverArtOnly)
+                            {
+                                if (!String.IsNullOrEmpty(t.FrontCoverPath))
+                                {
+                                    e.CurrentTitle.CopyFrontCoverFromFile( t.FrontCoverPath, true );
+                                    e.LoadTitle(e.CurrentTitle);
+                                }
+
+                            }
+                            else
+                            {
+                                e.CurrentTitle.CopyMetadata(t, searchResultForm.OverwriteMetadata);
+                                e.LoadTitle(e.CurrentTitle);
+                            }
                         }
                     }
                 }
@@ -146,7 +164,10 @@ namespace OMLDatabaseEditor
             foreach (IOMLMetadataPlugin metadataPlugin in _metadataPlugins)
             {
                 ToolStripMenuItem item = new ToolStripMenuItem(metadataPlugin.PluginName, null, HandleMetadataMenuItem, i.ToString());
-                metadataToolStripMenuItem.DropDownItems.Add(item);
+                metadataToolStripMenuItem.DropDownItems.Insert(i, item);
+
+                item = new ToolStripMenuItem(metadataPlugin.PluginName, null, HandleMetadataCoverArtMenuItem, i.ToString());
+                coverArtOnlyToolStripMenuItem.DropDownItems.Insert(i, item);
                 i++;
             }
         }
@@ -761,6 +782,58 @@ namespace OMLDatabaseEditor
         {
             MetaDataSettings settings = new MetaDataSettings();
             settings.Show(_metadataPlugins);
+        }
+
+        private void fixupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Title t in _titleCollection)
+            {
+                if (t.Name.StartsWith("Drama:"))
+                {
+                    t.Name = t.Name.Replace("Drama:", "");
+                }
+                else if (t.Name.StartsWith("Music:"))
+                {
+                    t.Name = t.Name.Replace("Music:", "");
+                }
+                else if (t.Name.StartsWith("Western:"))
+                {
+                    t.Name = t.Name.Replace("Western:", "");
+                }
+                else if (t.Name.StartsWith("War:"))
+                {
+                    t.Name = t.Name.Replace("War:", "");
+                }
+                else if (t.Name.StartsWith("Thriller:"))
+                {
+                    t.Name = t.Name.Replace("Thriller:", "");
+                }
+                else if (t.Name.StartsWith("Standup:"))
+                {
+                    t.Name = t.Name.Replace("Standup:", "");
+                }
+
+                if (t.Synopsis.StartsWith("IMDB Rating:"))
+                {
+                    double rating;
+                    string x = t.Synopsis.Substring(13,3);
+                    if( Double.TryParse(x,out rating) )
+                    {
+                        t.UserStarRating = (int)(rating * 10);
+                        t.Synopsis = t.Synopsis.Substring(16);
+                        t.Synopsis = t.Synopsis.Trim();
+                    }
+                }
+
+                t.Name = t.Name.Trim();
+                t.SortName = t.Name;
+            }
+            _titleCollection.saveTitleCollection();
+        }
+
+        private void metadataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 
 
