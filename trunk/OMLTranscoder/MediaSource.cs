@@ -4,11 +4,13 @@
  *******************************************************/
 
 using System;
+using System.Collections.Generic;
 
 namespace OMLTranscoder
 {
     public class MediaSource
     {
+        # region variables
         int numAudioChannels = 0;
         int audioId = -1;
         int audioType = 0;
@@ -22,7 +24,9 @@ namespace OMLTranscoder
         long timestampOffset = 0L;
         int videoType = 0;
         string volume = string.Empty;
+        # endregion
 
+        # region properties
         public string Volume
         {
             get { return volume; }
@@ -100,9 +104,20 @@ namespace OMLTranscoder
             get { return width; }
             set { width = value; }
         }
+        # endregion
 
         public MediaSource()
         {
+        }
+
+        public IList<SubtitleStream> AvailableSubtitleStreams()
+        {
+            return null;
+        }
+
+        public IList<AudioStream> AvailableAudioStreams()
+        {
+            return null;
         }
     }
 }

@@ -31,5 +31,12 @@ namespace OMLTranscoder
         ~Transcode()
         {
         }
+
+        public MediaSource MediaSourceFromTitle(Title title)
+        {
+            MediaSource source = new MediaSource();
+
+            return source;
+        }
     }
 }
