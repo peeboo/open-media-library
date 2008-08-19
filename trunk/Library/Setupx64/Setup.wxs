@@ -172,6 +172,7 @@
                     <Registry Id="reg2" Type="string" Value="OML\Movie Library" Name="Category"/>
                     <Registry Id="reg3" Type="string" Value="True" Name="OnStartMenu"/>
                 </Registry>
+                <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey" Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\Services\Movies\{543d0438-b10d-43d8-a20d-f0c96db4e6bd}" />
             </Component>
         </DirectoryRef>
 
