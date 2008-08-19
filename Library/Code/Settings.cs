@@ -83,7 +83,7 @@ namespace Library
             _coverArtRows.Chosen = _omlSettings.GalleryCoverArtRows.ToString();
 
             List<string> spaceItems = new List<string>();
-            for (int ndx = 1; ndx <= 20; ndx += 2)
+            for (int ndx = 0; ndx <= 20; ndx += 2)
                 spaceItems.Add(ndx.ToString());
 
             _coverArtSpacing.Options = spaceItems;
