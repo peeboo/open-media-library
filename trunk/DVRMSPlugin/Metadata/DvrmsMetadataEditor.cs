@@ -2,12 +2,10 @@
 // stoub@microsoft.com
 
 using System;
-using System.IO;
-using System.Data;
-using System.Text;
 using System.Collections;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
+
 using Toub.MediaCenter.Dvrms.DirectShow;
 
 namespace Toub.MediaCenter.Dvrms.Metadata

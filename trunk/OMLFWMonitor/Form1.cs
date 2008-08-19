@@ -1,15 +1,10 @@
-using OMLFileWatcher;
-using OMLLogging;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Data.Linq;
-using System.Text;
 using System.Windows.Forms;
+
 using Microsoft.Win32;
+
+using OMLLogging;
 
 namespace OMLFWMonitor
 {
