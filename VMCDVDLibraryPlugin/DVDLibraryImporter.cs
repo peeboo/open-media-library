@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Data;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Xml;
+
 using OMLEngine;
 using OMLSDK;
-using System.IO;
-using System.Diagnostics;
-using System.Xml;
-using System.Xml.XPath;
-using System.Text.RegularExpressions;
 
 namespace VMCDVDLibraryPlugin
 {
