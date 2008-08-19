@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.MediaCenter.UI;
 using System.Diagnostics;
 using OMLEngine;
+using System.Threading;
 
 namespace Library
 {
@@ -229,6 +230,8 @@ namespace Library
 
         private void Initialize(TitleCollection col)
         {
+            DateTime start = DateTime.Now;
+
             _filters.Add(Filter.Settings, new Filter(Filter.Settings, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
             _filters.Add(Filter.Actor, new Filter(Filter.Actor,this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
             _filters.Add(Filter.Director, new Filter(Filter.Director, this, Properties.Settings.Default.DirectorView, true, Properties.Settings.Default.DirectorSort));
@@ -259,6 +262,7 @@ namespace Library
                 _currentSort = SortByNameAscending;
 
             LoadMovies(col);
+            OMLApplication.DebugLine("[MovieGallery] Initialize: time: {0}, items: {1}", DateTime.Now - start, col.Count);
         }
 
         public bool ClearJumpValue
@@ -467,39 +471,34 @@ namespace Library
         /// </summary>
         private void CompleteGalleryItem(VirtualList list, int index)
         {
-            try
+            MovieItem item = (MovieItem)list[index];
+            if (item.MenuCoverArt != MovieItem.NoCoverImage)
+                return;
+
+            Image image = null;
+            Microsoft.MediaCenter.UI.Application.DeferredInvokeOnWorkerThread(delegate
             {
-                MovieItem item = (MovieItem)list[index];
-                if (item.MenuCoverArt == MovieItem.NoCoverImage)
+                try
                 {
-                    if (Properties.Settings.Default.UseOriginalCoverArt)
-                    {
-                        if (!string.IsNullOrEmpty(item.TitleObject.FrontCoverPath))
-                        {
-                            if (File.Exists(item.TitleObject.FrontCoverPath))
-                            {
-                                item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(item.TitleObject.FrontCoverMenuPath))
-                        {
-                            if (File.Exists(item.TitleObject.FrontCoverMenuPath))
-                            {
-                                item.MenuCoverArt = GalleryItem.LoadImage(item.TitleObject.FrontCoverMenuPath);
-                            }
-                        }
-                    }
-
+                    // OMLApplication.DebugLine("[MovieGallery] CompleteGalleryItem [index: {0}, name: {1}], load menu art", index, item.Name);
+                    string imageFile = Properties.Settings.Default.UseOriginalCoverArt
+                        ? item.TitleObject.FrontCoverPath
+                        : item.TitleObject.FrontCoverMenuPath;
+                    if (!string.IsNullOrEmpty(imageFile) && File.Exists(imageFile))
+                        image = GalleryItem.LoadImage(imageFile);
                 }
-            }
-            catch (Exception e)
+                catch (Exception e)
+                {
+                    OMLApplication.DebugLine("[MovieGallery] Error: {0}\n    {1}", e.Message, e.StackTrace);
+                }
+            }, delegate
             {
-                OMLApplication.DebugLine("[MovieGallery] Error: {0}\n    {1}", e.Message, e.StackTrace);
-            }
+                if (image != null)
+                {
+                    // OMLApplication.DebugLine("[MovieGallery] CompleteGalleryItem [index: {0}, name: {1}], set menu art", index, item.Name);
+                    item.MenuCoverArt = image;
+                }
+            }, null);
         }
         
         #endregion  

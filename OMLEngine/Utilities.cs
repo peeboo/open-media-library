@@ -351,7 +351,8 @@ namespace OMLEngine
                     catch
                     { }
                 }
-                Trace.TraceInformation(DateTime.Now.ToString() + " " + msg, paramArray);
+                string prefix = string.Format("{0} [{1}#{2}], ", DateTime.Now, Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.Name);
+                Trace.TraceInformation(prefix + msg, paramArray);
             }
             catch
             {
