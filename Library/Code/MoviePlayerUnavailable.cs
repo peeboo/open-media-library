@@ -19,8 +19,8 @@ namespace Library
         public bool PlayMovie()
         {
             // show a popup or a page explaining the error
-            //return false;
-            AddInHost.Current.MediaCenterEnvironment.Dialog("Could not find file [" + _title.SelectedDisk.Path + "] or don't know how to play this file type", "Error", DialogButtons.Ok, 0, true);
+            AddInHost.Current.MediaCenterEnvironment.Dialog("Could not find file [" + _title.SelectedDisk.Path + "] or don't know how to play this file type", 
+                "Error", DialogButtons.Ok, 0, true);
             return false;
         }
 
