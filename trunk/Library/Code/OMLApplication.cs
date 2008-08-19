@@ -215,7 +215,8 @@ namespace Library
             catch (Exception ex)
             {
                 DebugLine("Unhandled Exception: {0}", ex);
-                DialogResult res = Current.MediaCenterEnvironment.Dialog("To rethrow exception select yes\n" + ex.ToString(), "Unhandled Exception logged in debug.txt", DialogButtons.Yes | DialogButtons.No, 10, true);
+                DialogResult res = Current.MediaCenterEnvironment.Dialog("To rethrow exception select yes\n" + ex.ToString(), 
+                    "Unhandled Exception logged in debug.txt", DialogButtons.Yes | DialogButtons.No, 10, true);
                 if (res == DialogResult.Yes)
                     throw;
             }

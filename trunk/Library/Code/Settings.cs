@@ -43,9 +43,8 @@ namespace Library
 
             List<string> items = new List<string>();
             for (char c = 'A'; c <= 'Z'; c++)
-            {
                 items.Add(new string(c, 1));
-            }
+
             _virtualDrive.Options = items;
             _virtualDrive.Chosen = _omlSettings.VirtualDiscDrive;
         }
@@ -58,7 +57,6 @@ namespace Library
             // viewItems.Add("Cover Flow"); /* its not ready yet */
             _movieView.Options = viewItems;
             _movieView.Chosen = _omlSettings.MovieView;
-
 
             List<string> items = new List<string>();
             items.Add("Name Ascending");
@@ -78,35 +76,18 @@ namespace Library
             _movieSort.Chosen = _omlSettings.MovieSort;
 
             List<string> rowItems = new List<string>();
-            rowItems.Add("1");
-            rowItems.Add("2");
-            rowItems.Add("3");
-            rowItems.Add("4");
-            rowItems.Add("5");
-            rowItems.Add("6");
-            rowItems.Add("7");
-            rowItems.Add("8");
-            rowItems.Add("8");
-            rowItems.Add("10");
+            for (int ndx = 1; ndx <= 10; ++ndx)
+                rowItems.Add(ndx.ToString());
 
             _coverArtRows.Options = rowItems;
             _coverArtRows.Chosen = _omlSettings.GalleryCoverArtRows.ToString();
 
             List<string> spaceItems = new List<string>();
-            spaceItems.Add("0");
-            spaceItems.Add("2");
-            spaceItems.Add("4");
-            spaceItems.Add("6");
-            spaceItems.Add("8");
-            spaceItems.Add("12");
-            spaceItems.Add("14");
-            spaceItems.Add("16");
-            spaceItems.Add("18");
-            spaceItems.Add("20");
+            for (int ndx = 1; ndx <= 20; ndx += 2)
+                spaceItems.Add(ndx.ToString());
 
             _coverArtSpacing.Options = spaceItems;
             _coverArtSpacing.Chosen = _omlSettings.CoverArtSpacingVertical.ToString();
-
 
             _showMovieDetails.Chosen = _omlSettings.ShowMovieDetails;
             _dimUnselectedCovers.Chosen = _omlSettings.DimUnselectedCovers;
@@ -130,43 +111,28 @@ namespace Library
 
         public Choice VirtualDrive
         {
-            get
-            {
-                return _virtualDrive;
-            }
+            get { return _virtualDrive; }
         }
 
         public Choice MovieView
         {
-            get 
-            {
-                return _movieView; 
-            }
+            get { return _movieView; }
 
         }
 
         public Choice MovieSort
         {
-            get 
-            {
-                return _movieSort; 
-            }
+            get { return _movieSort; }
         }
 
         public Choice CoverArtRows
         {
-            get
-            {
-                return _coverArtRows;
-            }
+            get { return _coverArtRows; }
         }
 
         public Choice CoverArtSpacing
         {
-            get
-            {
-                return _coverArtSpacing;
-            }
+            get { return _coverArtSpacing; }
         }
 
         public EditableText DaemonToolsPath
@@ -179,12 +145,7 @@ namespace Library
                 }
                 return _daemonToolsPath;
             }
-            set
-            {
-                _daemonToolsPath = value;
-                
-
-            }
+            set { _daemonToolsPath = value; }
         }
 
         EditableText _daemonToolsPath = new EditableText();
