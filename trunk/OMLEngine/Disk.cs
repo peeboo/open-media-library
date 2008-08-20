@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
+using OMLGetDVDInfo;
 
 namespace OMLEngine
 {
@@ -10,18 +11,15 @@ namespace OMLEngine
         private string _name = "";
         private string _path = "";
         private VideoFormat _format;
+        private DVDDiskInfo _dvdDiskInfo;
 
-        public Disk()
-        {
-
-        }
+        public Disk() { }
 
         public Disk(string name, string path, VideoFormat format)
         {
             _name = name;
             _path = path;
             _format = format;
-
         }
 
         public string Name
@@ -47,6 +45,18 @@ namespace OMLEngine
             return _name;
         }
 
+        public DVDDiskInfo DVDDiskInfo
+        {
+            get
+            {
+                if (this._format != VideoFormat.DVD)
+                    return null;
+                if (this._dvdDiskInfo == null)
+                    this._dvdDiskInfo = DVDDiskInfo.ParseDVD(this._path);
+                return this._dvdDiskInfo;
+            }
+        }
+
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             info.AddValue("name", _name);
@@ -69,7 +79,7 @@ namespace OMLEngine
             }
             catch (Exception e)
             {
-                Trace.WriteLine("Exception in GetSerializedVideoFormat: " + e.Message);
+                Utilities.DebugLine("Exception in GetSerializedVideoFormat: " + e.Message);
                 return VideoFormat.DVD;
             }
         }
