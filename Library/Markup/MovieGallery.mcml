@@ -121,7 +121,7 @@
       <Children>
 
         <!-- Put in a scroller so that if we repeat, the row will scroll. -->
-        <Scroller Name="GalleryScroller" Orientation="Horizontal"  ScrollingData="[ScrollingData]" >
+        <Scroller Name="GalleryScroller" Orientation="Horizontal" ScrollingData="[ScrollingData]">
           <Children>
 
             <!-- Hook up our list to the repeater.  -->
@@ -307,7 +307,7 @@
             <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:ListFont" Color="White" WordWrap="true" Margins="20,10,20,10" />
               <Graphic Name="MenuCover" Content="[GalleryItem.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint">
                   <Animations>
-                      <Animation Type="ContentChangeShow" CenterPointOffset="0.5,1,0.5">
+                      <Animation Type="ContentChangeShow" CenterPointOffset="0.5,0.5,0">
                           <Keyframes>
                               <RotateKeyframe Time="0" Value="0deg;0,0,0"/>
                               <RotateKeyframe Time="0.2" Value="360deg;0,1,0"/>
