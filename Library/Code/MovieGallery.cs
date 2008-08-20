@@ -262,7 +262,7 @@ namespace Library
                 _currentSort = SortByNameAscending;
 
             LoadMovies(col);
-            OMLApplication.DebugLine("[MovieGallery] Initialize: time: {0}, items: {1}", DateTime.Now - start, col.Count);
+            OMLApplication.DebugLine("[MovieGallery] Initialize: time: {0}, items: {1}", DateTime.Now - start, this._movies.Count);
         }
 
         public bool ClearJumpValue
