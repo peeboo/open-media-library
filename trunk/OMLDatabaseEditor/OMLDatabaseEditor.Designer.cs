@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OMLDatabaseEditor));
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Movies");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("OML Database", new System.Windows.Forms.TreeNode[] {
-            treeNode5});
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Movies");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("OML Database", new System.Windows.Forms.TreeNode[] {
+            treeNode1});
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,7 +48,6 @@
             this.clearDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fixupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.redoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,8 +59,10 @@
             this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.metadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.coverArtOnlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.indexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,8 +83,6 @@
             this.MenuItemEditNewTab = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.coverArtOnlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -126,8 +125,7 @@
             this.reloadDatabaseToolStripMenuItem,
             this.clearDatabaseToolStripMenuItem,
             this.toolStripMenuItem1,
-            this.exitToolStripMenuItem,
-            this.fixupToolStripMenuItem});
+            this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
@@ -228,13 +226,6 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // fixupToolStripMenuItem
-            // 
-            this.fixupToolStripMenuItem.Name = "fixupToolStripMenuItem";
-            this.fixupToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.fixupToolStripMenuItem.Text = "Fixup";
-            this.fixupToolStripMenuItem.Click += new System.EventHandler(this.fixupToolStripMenuItem_Click);
-            // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -321,17 +312,28 @@
             this.metadataToolStripMenuItem.Text = "Metadata";
             this.metadataToolStripMenuItem.Click += new System.EventHandler(this.metadataToolStripMenuItem_Click);
             // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(187, 6);
+            // 
+            // coverArtOnlyToolStripMenuItem
+            // 
+            this.coverArtOnlyToolStripMenuItem.Name = "coverArtOnlyToolStripMenuItem";
+            this.coverArtOnlyToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.coverArtOnlyToolStripMenuItem.Text = "Cover Art Only Search";
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(187, 6);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -442,12 +444,12 @@
             this.tvSourceList.FullRowSelect = true;
             this.tvSourceList.Location = new System.Drawing.Point(0, 0);
             this.tvSourceList.Name = "tvSourceList";
-            treeNode5.Name = "Movies";
-            treeNode5.Text = "Movies";
-            treeNode6.Name = "OML Database";
-            treeNode6.Text = "OML Database";
+            treeNode1.Name = "Movies";
+            treeNode1.Text = "Movies";
+            treeNode2.Name = "OML Database";
+            treeNode2.Text = "OML Database";
             this.tvSourceList.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode6});
+            treeNode2});
             this.tvSourceList.Size = new System.Drawing.Size(194, 553);
             this.tvSourceList.TabIndex = 1;
             this.tvSourceList.DoubleClick += new System.EventHandler(this.MenuItemEditTab_Click);
@@ -552,17 +554,6 @@
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
-            // coverArtOnlyToolStripMenuItem
-            // 
-            this.coverArtOnlyToolStripMenuItem.Name = "coverArtOnlyToolStripMenuItem";
-            this.coverArtOnlyToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.coverArtOnlyToolStripMenuItem.Text = "Cover Art Only Search";
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(149, 6);
-            // 
             // OMLDatabaseEditor
             // 
             this.AllowDrop = true;
@@ -648,7 +639,6 @@
         private System.Windows.Forms.ToolStripMenuItem metadataToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fixupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem coverArtOnlyToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
     }
