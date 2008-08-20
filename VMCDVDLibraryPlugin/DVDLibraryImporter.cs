@@ -195,7 +195,8 @@ namespace VMCDVDLibraryPlugin
                         string xmlDetailsFile = GetDVDCacheFileName(dvdid);
                         t = ReadMetaData(folderName, xmlDetailsFile);
                     }
-                    else
+
+                    if( t == null )
                     {
                         // for DVDs with no dvdid.xml add a stripped down title with just a suggested name
                         t = new Title();
