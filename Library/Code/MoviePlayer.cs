@@ -100,6 +100,12 @@ namespace Library
                 {
                     OMLApplication.Current.NowPlayingStatus = t.PlayState;
                     Utilities.DebugLine("[MoviePlayerFactory] MoviePlayerFactory.Transport_PropertyChanged: movie {0} state {1}", OMLApplication.Current.NowPlayingMovieName, t.PlayState.ToString());
+
+                    if (t.PlayState == PlayState.Finished || t.PlayState == PlayState.Stopped)
+                    {
+                        OMLApplication.DebugLine("[MoviePlayer] Playstate is stopped, moving to previous page");
+                        OMLApplication.Current.Session.BackPage();
+                    }
                 }
             });
         }

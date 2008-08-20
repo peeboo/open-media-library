@@ -70,6 +70,11 @@ namespace Library
             get { return _singleApplicationInstance; }
         }
 
+        public HistoryOrientedPageSession Session
+        {
+            get { return _session; }
+        }
+
         public MediaCenterEnvironment MediaCenterEnvironment
         {
             get
