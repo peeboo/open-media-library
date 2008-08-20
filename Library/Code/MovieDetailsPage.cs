@@ -1,12 +1,10 @@
 using System;
 using System.Collections;
-using Microsoft.MediaCenter.UI;
 using System.IO;
-using System.Xml;
-using Microsoft.MediaCenter;
-using Microsoft.MediaCenter.Hosting;
-using System.Diagnostics;
+using Microsoft.MediaCenter.UI;
+
 using OMLEngine;
+using OMLGetDVDInfo;
 
 namespace Library
 {
@@ -380,6 +378,12 @@ namespace Library
         {
             _movieDetails = item;
             //_localMedia = null;
+
+            //DVDDiskInfo debug code
+            //if (item.TitleObject.Disks.Count > 0)
+            //{
+            //    DVDDiskInfo info = item.TitleObject.Disks[0].DVDDiskInfo;
+            //}
 
             if (!string.IsNullOrEmpty(item.TitleObject.FrontCoverPath))
             {
