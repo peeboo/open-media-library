@@ -23,9 +23,16 @@ namespace Library
 
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
         {
-            OMLApplication.DebugLine("[OMLApplication] constructor called");
             this._session = session;
             this._isExtender = !host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
+#if DEBUG
+            OMLApplication.DebugLine("[OMLApplication] MediaCenterEnvironment.Capabilities:");
+            foreach (KeyValuePair<string, object> cap in host.MediaCenterEnvironment.Capabilities)
+                try { DebugLine("  ['{0}'] = '{1}'", cap.Key, cap.Value); }
+                catch { }
+#else
+            OMLApplication.DebugLine("[OMLApplication] constructor called");
+#endif
             this._host = host;
             _singleApplicationInstance = this;
             _titles = new TitleCollection();
@@ -35,7 +42,7 @@ namespace Library
 
         public void Startup(string context)
         {
-            OMLApplication.DebugLine("[OMLApplication] Startup(" + context + ")");
+            OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
 
             switch (context)
             {
@@ -72,46 +79,35 @@ namespace Library
             }
         }
 
-        public void GoToSetup( MovieGallery gallery )
+        public void GoToSetup(MovieGallery gallery)
         {
             DebugLine("[OMLApplication] GoToSetup()");
-            Dictionary<string, object> properties = CreateProperties(true, false);
-            properties["MovieBrowser"] = gallery;
-
-            OMLApplication.DebugLine("OMLApplication.GoToSetup");
             if (_session != null)
             {
-                _session.GoToPage("resx://Library/Library.Resources/Setup", properties);
+                _session.GoToPage("resx://Library/Library.Resources/Setup", CreateProperties(true, false, gallery));
             }
         }
 
         public void GoToSettingsPage(MovieGallery gallery)
         {
             DebugLine("[OMLApplication] GoToSettingsPage()");
-            Dictionary<string, object> properties = CreateProperties(true, true);
-            properties["MovieBrowser"] = gallery;
-
             if (_session != null)
             {
-                _session.GoToPage("resx://Library/Library.Resources/Settings", properties);
+                _session.GoToPage("resx://Library/Library.Resources/Settings", CreateProperties(true, true, gallery));
             }
         }
 
         public void GoToAboutPage(MovieGallery gallery)
         {
             DebugLine("[OMLApplication] GotoAboutPage()");
-            Dictionary<string, object> properties = CreateProperties(true, false);
-            properties["MovieBrowser"] = gallery;
-
             if (_session != null)
-                _session.GoToPage("resx://Library/Library.Resources/About", properties);
+                _session.GoToPage("resx://Library/Library.Resources/About", CreateProperties(true, false, gallery));
         }
 
         public void GoToMenu(MovieGallery gallery)
         {
             DebugLine("[OMLApplication] GoToMenu(Gallery, #{0} Movies)", gallery.Movies.Count);
-            Dictionary<string, object> properties = CreateProperties(true, false);
-            properties["MovieBrowser"] = gallery;
+            Dictionary<string, object> properties = CreateProperties(true, false, gallery);
             properties["GalleryView"] = Properties.Settings.Default.MovieView;
 
             if (_session != null)
@@ -123,8 +119,7 @@ namespace Library
         public void GoToSelectionList(MovieGallery gallery, IList list, string listName, string galleryView)
         {
             DebugLine("[OMLApplication] GoToSelectionList(#{0} items, list name: {1}, gallery: {2})", list.Count, listName, galleryView);
-            Dictionary<string, object> properties = CreateProperties(true, false);
-            properties["MovieBrowser"] = gallery;
+            Dictionary<string, object> properties = CreateProperties(true, false, gallery);
             properties["List"] = list;
             properties["ListName"] = listName;
             properties["GalleryView"] = galleryView;
@@ -146,7 +141,7 @@ namespace Library
             // Construct the arguments dictionary and then navigate to the
             // details page template.
             //
-            Dictionary<string, object> properties = CreateProperties(true, false);
+            Dictionary<string, object> properties = CreateProperties(true, false, null);
             properties["DetailsPage"] = page;
 
             // If we have no page session, just spit out a trace statement.
@@ -223,7 +218,7 @@ namespace Library
         }
 
 
-        private Dictionary<string, object> CreateProperties(bool uiSettings, bool settings)
+        private Dictionary<string, object> CreateProperties(bool uiSettings, bool settings, MovieGallery gallery)
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
@@ -231,6 +226,8 @@ namespace Library
                 properties["UISettings"] = new UISettings();
             if (settings)
                 properties["Settings"] = new Settings();
+            if (gallery != null)
+                properties["MovieBrowser"] = gallery;
             return properties;
         }
 
