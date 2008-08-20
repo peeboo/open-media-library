@@ -810,6 +810,8 @@ namespace OMLEngine
                     XPathDocument document = new XPathDocument(fileName);
                     XPathNavigator navigator = document.CreateNavigator();
 
+                    navigator.MoveToParent();
+
                     if (navigator.MoveToChild("OMLTitle", XmlNameSpace))
                     {
                         if (navigator.MoveToChild("Name", XmlNameSpace))
@@ -1496,9 +1498,12 @@ namespace OMLEngine
 
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.ConformanceLevel = ConformanceLevel.Document;
+
                 XmlWriter writer = XmlWriter.Create(fileName, settings);
+
                 writer.WriteStartDocument();
-                writer.WriteStartElement("OMLTitle");
+
+                writer.WriteStartElement("OMLTitle", XmlNameSpace);
 
                 writer.WriteElementString("Name", Name);
                 writer.WriteElementString("SortName", _sortName);
