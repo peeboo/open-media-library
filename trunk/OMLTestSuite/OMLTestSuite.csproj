@@ -37,9 +37,11 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MEncoderCommandBuilderTest.cs" />
     <Compile Include="MyMoviesPluginTest.cs" />
     <Compile Include="OMLXMLImporterTest.cs" />
     <Compile Include="Program.cs" />
@@ -67,6 +69,10 @@
     <ProjectReference Include="..\OMLSDK\OMLSDK.csproj">
       <Project>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</Project>
       <Name>OMLSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OMLTranscoder\OMLTranscoder.csproj">
+      <Project>{A924F59C-1AF8-4B18-B3E4-E0EECB4CE225}</Project>
+      <Name>OMLTranscoder</Name>
     </ProjectReference>
     <ProjectReference Include="..\OMLXMLImporter\OMLXMLImporter.csproj">
       <Project>{3F757A9F-BA85-4B16-AD94-334D332F3DEB}</Project>

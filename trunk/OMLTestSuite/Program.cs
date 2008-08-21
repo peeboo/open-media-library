@@ -26,6 +26,9 @@ namespace OMLTestSuite
             Console.WriteLine("Testing: OMLXMLPlugin");
             oxit.TEST_CONVERT_MYMOVIES_XML_TO_OML_XML();
             oxit.TEST_AUTO_LOCATE_CONVERT_AND_LOAD_A_MYMOVIES_XML_INTO_AN_OML_XML();
+
+            MEncoderCommandBuilderTest mecbt = new MEncoderCommandBuilderTest();
+            mecbt.TEST_PRESET_COMMAND_TO_DETERMINE_SUBTITLE_STREAMS();
         }
     }
 }
