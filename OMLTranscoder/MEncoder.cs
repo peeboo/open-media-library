@@ -29,5 +29,7 @@ namespace OMLTranscoder
           XviD,      // -ovc xvid
           X264       // -ovc x264 H.264 encoding
         };
+
+        public enum InputType { File, Drive };
     }
 }

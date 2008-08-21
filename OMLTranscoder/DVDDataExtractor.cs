@@ -22,12 +22,6 @@ namespace OMLTranscoder
             }
 
             MEncoderCommandBuilder cmdBuilder = new MEncoderCommandBuilder();
-            cmdBuilder.PresetSubtitleDetailsComamnd();
-            string command = cmdBuilder.GetCommand();
-
-            cmdBuilder.SetAudioOutputFormat(MEncoder.AudioFormat.NoAudio);
-            cmdBuilder.SetVideoOutputFormat(MEncoder.VideoFormat.Copy);
-            cmdBuilder.SetOutputFile(@"nul");
         }
     }
 }
