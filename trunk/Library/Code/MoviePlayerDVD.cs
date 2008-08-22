@@ -19,25 +19,27 @@ namespace Library
 
         public bool PlayMovie()
         {
-            string media = "DVD://" + _title.SelectedDisk.Path;
-            media.Replace('\\', '/');
-            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, media, false))
+            if (MediaData.IsDVD(_title.SelectedDisk.Path))
             {
-                if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
+                string play_string = MediaData.GetPlayStringForPath(_title.SelectedDisk.Path);
+//                play_string = "DVD://" + play_string;
+//                play_string.Replace('\\', '/');
+                if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, play_string, false))
                 {
-                    Utilities.DebugLine("DVDPlayer.PlayMovie: movie {0} Playing", _title.Name);
-                    OMLApplication.Current.NowPlayingMovieName = _title.Name;
-                    OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
-                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
-                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
+                    if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
+                    {
+                        Utilities.DebugLine("DVDPlayer.PlayMovie: movie {0} Playing", _title.Name);
+                        OMLApplication.Current.NowPlayingMovieName = _title.Name;
+                        OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
+                        AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
+                        AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
+                    }
+                    return true;
                 }
-                return true;
+                else
+                    return false;
             }
-            else
-            {
-                return false;
-            }
-
+            return false;
         }
 
         MovieItem _title;
