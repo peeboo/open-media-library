@@ -40,6 +40,7 @@ namespace Library
             _nowPlayingMovieName = "Playing an unknown movie";
         }
 
+        // this is the context from the Media Center menu
         public void Startup(string context)
         {
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
@@ -47,8 +48,17 @@ namespace Library
             switch (context)
             {
                 case "Menu":
-                    OMLApplication.DebugLine("[OMLApplication] going to Menu Page");
-                    GoToMenu(new MovieGallery(_titles, Filter.Home));
+                    // we want the movie library - check the startup page
+                    if (Properties.Settings.Default.StartPage == Filter.Home)
+                    {
+                        OMLApplication.DebugLine("[OMLApplication] going to Menu Page");
+                        GoToMenu(new MovieGallery(_titles, Filter.Home));
+                    }
+                    else
+                    {
+                        // assume it's a filter page (Genre, Actor, etc)
+                        GoToSelectionList(new MovieGallery(_titles, Filter.Home), Properties.Settings.Default.StartPage);
+                    }
                     return;
                 case "Settings":
                     OMLApplication.DebugLine("[OMLApplication] going to Settings Page");
@@ -121,20 +131,33 @@ namespace Library
             }
         }
 
-        public void GoToSelectionList(MovieGallery gallery, IList list, string listName, string galleryView)
+        public void GoToSelectionList(MovieGallery gallery, string filterName)
         {
-            DebugLine("[OMLApplication] GoToSelectionList(#{0} items, list name: {1}, gallery: {2})", list.Count, listName, galleryView);
-            Dictionary<string, object> properties = CreateProperties(true, false, gallery);
-            properties["List"] = list;
-            properties["ListName"] = listName;
-            properties["GalleryView"] = galleryView;
-
-            if (_session != null)
+            if (gallery != null && gallery.Filters.ContainsKey(filterName))
             {
-                _session.GoToPage("resx://Library/Library.Resources/SelectionList", properties);
+                Filter filter = gallery.Filters[filterName];
+                string listName = gallery.Title + " > " + filter.Name;
+                IList list = filter.Items;
+                string galleryView = filter.GalleryView;
+
+                DebugLine("[OMLApplication] GoToSelectionList(#{0} items, list name: {1}, gallery: {2})", list.Count, listName, galleryView);
+                Dictionary<string, object> properties = CreateProperties(true, false, gallery);
+                properties["MovieBrowser"] = gallery;
+                properties["List"] = list;
+                properties["ListName"] = listName;
+                properties["GalleryView"] = galleryView;
+
+                if (_session != null)
+                {
+                    _session.GoToPage("resx://Library/Library.Resources/SelectionList", properties);
+                }
+            }
+            else
+            {
+                OMLApplication.DebugLine("[OMLApplication] GoToSelectionList - filter {0} not found - going to Menu Page", filterName);
+                GoToMenu(new MovieGallery(_titles, Filter.Home));
             }
         }
-
 
         public void GoToDetails(MovieDetailsPage page)
         {

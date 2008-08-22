@@ -64,6 +64,8 @@ namespace Library
         public const string Home = "OML Home";
         public const string VideoFormat = "Format";
 
+        public const string AllItems = " All ";
+
         public string Name
         {
             get { return _name; }
@@ -96,6 +98,7 @@ namespace Library
             _galleryView = galleryView;
             _currentSort = SortByNameAscending;
             Initialize(sortFunction);
+            AddItem(AllItems);
         }
 
         private void Initialize(string sortFunction)
@@ -125,12 +128,16 @@ namespace Library
             }
         }
 
+        public void AddMovie(string item, MovieItem movie)
+        {
+            AddMovieToFilter(item, movie);
+        }
         /// <summary>
         /// Adds the movie corresponding to the item.
         /// </summary>
         /// <param name="item">The item.</param>
         /// <param name="movie">The movie.</param>
-        public void AddMovie(string item, MovieItem movie)
+        private void AddMovieToFilter(string item, MovieItem movie)
         {
             if (_itemMovieRelation.ContainsKey(item))
             {
@@ -185,7 +192,8 @@ namespace Library
                 }
                 else
                 {
-                    OMLApplication.Current.GoToSelectionList(_gallery, Items, _gallery.Title + " > " + Name, _galleryView);
+                    OMLApplication.Current.GoToSelectionList(_gallery, Name);
+                    //OMLApplication.Current.GoToSelectionList(_gallery, Items, _gallery.Title + " > " + Name, _galleryView);
                 }
             });
         }

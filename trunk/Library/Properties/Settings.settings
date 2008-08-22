@@ -24,7 +24,7 @@
       <Value Profile="(Default)">List</Value>
     </Setting>
     <Setting Name="StartPage" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Menu</Value>
+      <Value Profile="(Default)">OML Home</Value>
     </Setting>
     <Setting Name="MovieSort" Type="System.String" Scope="User">
       <Value Profile="(Default)">Name Ascending</Value>
