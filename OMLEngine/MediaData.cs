@@ -9,7 +9,7 @@ using System.Globalization;
 
 namespace OMLEngine
 {
-    public class MediaData
+    static public class MediaData
     {
         static string BluRayFileName     = @"BDMV";
         static string DVDDirectoryName   = @"VIDEO_TS";
@@ -17,7 +17,7 @@ namespace OMLEngine
         static string DVDFileName2       = @"VIDEO_TS\VIDEO_TS.IFO";
         static string HDDVDDirectoryName = @"HVDVD_TS";
 
-        static bool IsBluRay(string path)
+        static public bool IsBluRay(string path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
@@ -31,7 +31,7 @@ namespace OMLEngine
 
             return DoesDirectoryExist(path, HDDVDDirectoryName);
         }
-        static bool IsDVD(string path)
+        static public bool IsDVD(string path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
@@ -55,6 +55,50 @@ namespace OMLEngine
                 return false;
             }
         }
+        static public string GetPlayStringForPath(string path)
+        {
+            Utilities.DebugLine("[MediaData] GetPlayStringForPath called");
+            if (IsBluRay(path))
+            {
+                Utilities.DebugLine("[MediaData] Media detected is BluRay");
+                if (Directory.Exists(Path.Combine(path, BluRayFileName)))
+                {
+                    Utilities.DebugLine("[MediaData] Returning BluRay path as: " +
+                                        Path.Combine(path, BluRayFileName));
+                    return Path.Combine(path, BluRayFileName);
+                }
+            }
 
+            if (IsHDDVD(path))
+            {
+                Utilities.DebugLine("[MediaData] Media detected is HDDVD");
+                if (Directory.Exists(Path.Combine(path, HDDVDDirectoryName)))
+                {
+                    Utilities.DebugLine("[MediaData] Returning HDDVD path as: " +
+                                        Path.Combine(path, HDDVDDirectoryName));
+                    return Path.Combine(path, HDDVDDirectoryName);
+                }
+            }
+
+            if (IsDVD(path))
+            {
+                Utilities.DebugLine("[MediaData] Media detected is DVD");
+                if (File.Exists(Path.Combine(path, DVDFileName)))
+                {
+                    Utilities.DebugLine("[MediaData] Returning DVD path as: " +
+                                        Path.Combine(path, DVDFileName));
+                    return Path.Combine(path, DVDFileName);
+                }
+
+                if (File.Exists(Path.Combine(path, DVDFileName2)))
+                {
+                    Utilities.DebugLine("[MediaData] Returning DVD path as: " +
+                                        Path.Combine(path, DVDFileName2));
+                    return Path.Combine(path, DVDFileName2);
+                }
+            }
+
+            return null;
+        }
     }
 }
