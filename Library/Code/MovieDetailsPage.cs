@@ -4,7 +4,7 @@ using System.IO;
 using Microsoft.MediaCenter.UI;
 
 using OMLEngine;
-using OMLGetDVDInfo;
+//using OMLGetDVDInfo;
 
 namespace Library
 {

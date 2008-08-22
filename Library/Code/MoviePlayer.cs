@@ -76,6 +76,11 @@ namespace Library
                     OMLApplication.DebugLine("[MoviePlayerFactory] BluRayPlayer created");
                     return new BluRayPlayer(movieItem);
                 }
+                else if (movieItem.SelectedDisk.Format == VideoFormat.FOLDER)
+                {
+                    OMLApplication.DebugLine("[MoviePlayerFactory] FolderPlayer created");
+                    return new FolderPlayer(movieItem);
+                }
                 else // try to play it (likely is avi/mkv/etc)
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] VideoPlayer created");

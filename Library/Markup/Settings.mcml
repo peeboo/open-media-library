@@ -173,8 +173,16 @@
                           <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" />
                         </Children>
                       </Panel>
-                      
-                  </Children>
+
+                      <Panel Layout="VerticalFlow">
+                        <Children>
+                          <Text  Content="Start Page" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <c:SimpleSpinner Name="StartPage" Model="[Settings.StartPage]" />
+                        </Children>
+                      </Panel>
+
+
+                    </Children>
                   </Panel>
               
             </Children>

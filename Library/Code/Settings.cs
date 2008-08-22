@@ -25,6 +25,7 @@ namespace Library
             {
                 _omlSettings.DaemonTools = _daemonToolsPath.Value;
                 _omlSettings.MovieSort = _movieSort.Chosen as string;
+                _omlSettings.StartPage = _startPage.Chosen as string;
                 _omlSettings.GalleryCoverArtRows = System.Convert.ToInt32(_coverArtRows.Chosen as string);
                 _omlSettings.CoverArtSpacingVertical = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
                 _omlSettings.CoverArtSpacingHorizontal = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
@@ -74,6 +75,17 @@ namespace Library
 
             _movieSort.Options = items;
             _movieSort.Chosen = _omlSettings.MovieSort;
+
+            List<string> starPageItems = new List<string>();
+            starPageItems.Add(Filter.Home);
+            starPageItems.Add(Filter.Genres);
+            starPageItems.Add(Filter.Tags);
+            starPageItems.Add(Filter.UserRating);
+
+
+            _startPage.Options = starPageItems;
+            _startPage.Chosen = _omlSettings.StartPage;
+
 
             List<string> rowItems = new List<string>();
             for (int ndx = 1; ndx <= 10; ++ndx)
@@ -125,6 +137,11 @@ namespace Library
             get { return _movieSort; }
         }
 
+        public Choice StartPage
+        {
+            get { return _startPage; }
+        }
+
         public Choice CoverArtRows
         {
             get { return _coverArtRows; }
@@ -158,6 +175,6 @@ namespace Library
         BooleanChoice _showMovieDetails = new BooleanChoice();
         BooleanChoice _dimUnselectedCovers = new BooleanChoice();
         BooleanChoice _useOriginalCoverArt = new BooleanChoice();
-
+        Choice _startPage = new Choice();
     }
 }

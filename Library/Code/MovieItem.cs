@@ -162,8 +162,18 @@ namespace Library
             OMLApplication.ExecuteSafe(delegate
             {
                 GalleryItem galleryItem = (GalleryItem)sender;
+
                 if (Gallery != null)
-                    OMLApplication.Current.GoToMenu(Category.CreateGallery(galleryItem.Name));
+                {
+                    if (galleryItem.Name == Filter.AllItems)
+                    {
+                        OMLApplication.Current.GoToMenu(Gallery);
+                    }
+                    else
+                    {
+                        OMLApplication.Current.GoToMenu(Category.CreateGallery(galleryItem.Name));
+                    }
+                }
             });
         }
 

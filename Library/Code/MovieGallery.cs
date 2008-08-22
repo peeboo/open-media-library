@@ -245,7 +245,7 @@ namespace Library
             _filters.Add(Filter.ParentRating, new Filter(Filter.ParentRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
             _filters.Add(Filter.Tags, new Filter(Filter.Tags, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
             _filters.Add(Filter.Country, new Filter(Filter.Country, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
-
+            
             _jumpInListText = new EditableText(this);
             _jumpInListText.Value = String.Empty;
 
@@ -326,31 +326,57 @@ namespace Library
             Title title = movie.TitleObject;
             foreach (Person p in title.Directors)
             {
-                Filters[Filter.Director].AddMovie(p.full_name, movie);
+                if( p.full_name.Trim().Length == 0 )
+                    Filters[Filter.Director].AddMovie("Unknown director", movie);
+                else
+                    Filters[Filter.Director].AddMovie(p.full_name, movie);
             }
 
             foreach ( KeyValuePair<string, string> kvp in title.ActingRoles)
             {
-                Filters[Filter.Actor].AddMovie(kvp.Key, movie);
+                if( kvp.Key.Trim().Length == 0 )
+                    Filters[Filter.Actor].AddMovie("Unknown actor", movie);
+                else
+                    Filters[Filter.Actor].AddMovie(kvp.Key, movie);
             }
+            
+            
             foreach (string genre in title.Genres)
             {
-                Filters[Filter.Genres].AddMovie(genre, movie);
+                if( genre.Trim().Length == 0)
+                    Filters[Filter.Genres].AddMovie("Not Classified", movie);
+                else
+                    Filters[Filter.Genres].AddMovie(genre, movie);
             }
 
             Filters[Filter.Year].AddMovie(Convert.ToString(title.ReleaseDate.Year), movie);
             AddDateAddedFilter(movie);
-            Filters[Filter.UserRating].AddMovie(((double)title.UserStarRating/10).ToString("0.0"), movie);
+
+            if( title.UserStarRating == 0 )
+                Filters[Filter.UserRating].AddMovie("Not Rated", movie);
+            else
+                Filters[Filter.UserRating].AddMovie(((double)title.UserStarRating/10).ToString("0.0"), movie);
+            
             if (title.Disks.Count > 0)
                 Filters[Filter.VideoFormat].AddMovie(title.Disks[0].Format.ToString(), movie);  //Should really do this independently for each disk, but for now, this should be fine
 
             foreach (string tag in title.Tags)
             {
-                Filters[Filter.Tags].AddMovie(tag, movie);
+                if (tag.Trim().Length == 0)
+                    Filters[Filter.Tags].AddMovie("Not Tagged", movie);
+                else
+                    Filters[Filter.Tags].AddMovie(tag, movie);
             }
 
-            Filters[Filter.Country].AddMovie(title.CountryOfOrigin, movie);
-            Filters[Filter.ParentRating].AddMovie(title.ParentalRating, movie);
+            if( title.CountryOfOrigin.Trim().Length == 0 )
+                Filters[Filter.Country].AddMovie("Not Specified", movie);
+            else
+                Filters[Filter.Country].AddMovie(title.CountryOfOrigin, movie);
+            
+            if( title.ParentalRating.Trim().Length == 0 )
+                Filters[Filter.ParentRating].AddMovie("Unspecified", movie);
+            else
+                Filters[Filter.ParentRating].AddMovie(title.ParentalRating, movie);
 
             AddRuntimeFilter(movie);
         }
