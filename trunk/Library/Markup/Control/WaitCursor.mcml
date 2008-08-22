@@ -1,7 +1,6 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
-	    xmlns:cor="assembly://MSCorLib/System"
-      xmlns:me="Me"
-      >
+	  xmlns:cor="assembly://MSCorLib/System"
+      xmlns:me="Me">
   
   <Image Name="WaitCursor.Front" Image="resx://Library/Library.Resources/BusyFront"/>
   <Image Name="WaitCursor.Back" Image="resx://Library/Library.Resources/BusyBack"/>

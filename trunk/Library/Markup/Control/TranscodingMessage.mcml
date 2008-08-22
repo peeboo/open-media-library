@@ -1,0 +1,46 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+      xmlns:me="Me">
+
+    <UI Name="TranscodingMessage">
+        <Content>
+            <Graphic Content="image://me:Border" MaintainAspectRatio="false" Layout="Center" MaximumSize="260,120" MinimumSize="260,120">
+                <Animations>
+                    <Animation Type="Show" CenterPointPercent="0.5,0.5,0.0">
+                        <Keyframes>
+                            <AlphaKeyframe Time="0.0" Value="0" RelativeTo="Absolute"/>
+                            <ScaleKeyframe Time="0.0" Value="0, 0, 0" RelativeTo="Absolute"/>
+                            <AlphaKeyframe Time="0.5" Value="0" Interpolation="SCurve" RelativeTo="Absolute"/>
+                            <ScaleKeyframe Time="0.5" Value="0, 0, 0" RelativeTo="Absolute"/>
+                            <ScaleKeyframe Time="0.7" Value="1.3, 1.3, 1.3" RelativeTo="Absolute"/>
+                            <AlphaKeyframe Time="0.9" Value="1" RelativeTo="Absolute"/>
+                            <ScaleKeyframe Time="0.9" Value="1, 1, 1" RelativeTo="Absolute"/>
+                        </Keyframes>
+                    </Animation>
+
+                    <Animation Type="Hide">
+                        <Keyframes>
+                            <ScaleKeyframe Time="0.0" RelativeTo="Current"/>
+                            <ScaleKeyframe Time="1.0" RelativeTo="Current" Interpolation="Exp"/>
+                            <ScaleKeyframe Time="1.5" Value="0.0, 0.0, 0.0"/>
+                            <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+                            <AlphaKeyframe Time="1.0" RelativeTo="Current" Interpolation="Log"/>
+                            <AlphaKeyframe Time="1.5" Value="0.0"/>
+                        </Keyframes>
+                    </Animation>
+                </Animations>
+
+                <Children>
+                    <Clip Layout="VerticalFlow">
+                        <Children>
+                            <Text Content="Transcoding is beginning" Color="Blue" Font="Calibri, 16"/>
+                            <Text Content="Status: " Color="Blue" Font="Calibri, 16" />
+                        </Children>
+                    </Clip>
+                </Children>
+            </Graphic>
+        </Content>
+    </UI>
+    <Image Name="Border" Source="resx://Library/Library.Resources/FindEditbox"/>
+
+</Mcml>
