@@ -24,6 +24,7 @@ namespace Library
 
         public bool PlayMovie()
         {
+            return false;
         }
 
     }
