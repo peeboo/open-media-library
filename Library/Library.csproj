@@ -76,6 +76,7 @@
     <Compile Include="Code\MoviePlayerExtenderDVD.cs" />
     <Compile Include="Code\MoviePlayerHDDVD.cs" />
     <Compile Include="Code\MoviePlayerTranscodeBluRay.cs" />
+    <Compile Include="Code\MoviePlayerTranscodeHDDVD.cs" />
     <Compile Include="Code\MoviePlayerWPL.cs" />
     <Compile Include="Code\OMLApplication.cs" />
     <Compile Include="Code\MovieDetailsPage.cs" />
@@ -121,6 +122,7 @@
   <ItemGroup>
     <Content Include="Images\Focus_Outline.png" />
     <Content Include="Markup\About.mcml" />
+    <Content Include="Markup\BaseTemplate.mcml" />
     <Content Include="Markup\Base\Animations.mcml" />
     <Content Include="Markup\Base\Base.mcml" />
     <Content Include="Markup\Base\Colors.mcml" />
@@ -139,6 +141,7 @@
     <Content Include="Markup\Control\SimpleRadioButton.mcml" />
     <Content Include="Markup\Control\SimpleRadioButtonGroup.mcml" />
     <Content Include="Markup\Control\SimpleSpinner.mcml" />
+    <Content Include="Markup\Control\TranscodingMessage.mcml" />
     <Content Include="Markup\Control\WaitCursor.mcml" />
     <Content Include="Markup\CoreControls.mcml" />
     <Content Include="Markup\DetailsPage.mcml" />
