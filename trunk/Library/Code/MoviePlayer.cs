@@ -36,54 +36,52 @@ namespace Library
         static public IPlayMovie CreateMoviePlayer(MovieItem movieItem)
         {
             // for now play just online titles. add offline capabilities later
-            OMLApplication.DebugLine("[MoviePlayerFactory] Determing MoviePlayer to use for: {0}, {1}",
-                                     movieItem.SelectedDisk.Path,
-                                     movieItem.SelectedDisk.Format);
+            OMLApplication.DebugLine("[MoviePlayerFactory] Determing MoviePlayer to use for: {0}", movieItem.SelectedDisk);
             if (File.Exists(movieItem.SelectedDisk.Path) || Directory.Exists(movieItem.SelectedDisk.Path))
             {
                 if (movieItem.SelectedDisk.Format == VideoFormat.WPL) // if its a playlist, do that first
                 {
-                    OMLApplication.DebugLine("[MoviePlayerFactory] WPLMoviePlayer created");
+                    OMLApplication.DebugLine("[MoviePlayerFactory] WPLMoviePlayer created: {0}", movieItem.SelectedDisk);
                     return new MoviePlayerWPL(movieItem);
                 }
                 else if (NeedsMounting(movieItem.SelectedDisk)) // if it needs to be mounted, do that next
                 {
-                    OMLApplication.DebugLine("[MoviePlayerFactory] MountImageMoviePlayer created");
+                    OMLApplication.DebugLine("[MoviePlayerFactory] MountImageMoviePlayer created: {0}", movieItem.SelectedDisk);
                     return new MountImagePlayer(movieItem);
                 }
                 else if (OMLApplication.Current.IsExtender && NeedsTranscode(movieItem.SelectedDisk) ) // if it needs to be transcoded
                 {
-                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created");
+                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created: {0}", movieItem.SelectedDisk);
                     return new TranscodePlayer(movieItem);
                 }
                 else if (OMLApplication.Current.IsExtender && movieItem.SelectedDisk.Format == VideoFormat.DVD && MediaData.IsDVD(movieItem.SelectedDisk.Path)) // play the dvd
                 {
-                    OMLApplication.DebugLine("[MoviePlayerFactory] ExtenderDVDPlayer created");
+                    OMLApplication.DebugLine("[MoviePlayerFactory] ExtenderDVDPlayer created: {0}", movieItem.SelectedDisk);
                     return new ExtenderDVDPlayer(movieItem);
                 }
                 else if (movieItem.SelectedDisk.Format == VideoFormat.DVD && MediaData.IsBluRay(movieItem.SelectedDisk.Path))
                 {
-                    OMLApplication.DebugLine("[MoviePlayerFactory] BluRayPlayer created");
+                    OMLApplication.DebugLine("[MoviePlayerFactory] BluRayPlayer created: {0}", movieItem.SelectedDisk);
                     return new BluRayPlayer(movieItem);
                 }
                 else if (movieItem.SelectedDisk.Format == VideoFormat.DVD && MediaData.IsHDDVD(movieItem.SelectedDisk.Path))
                 {
-                    OMLApplication.DebugLine("[MoviePlayerFactory] HDDVDPlayer created");
+                    OMLApplication.DebugLine("[MoviePlayerFactory] HDDVDPlayer created: {0}", movieItem.SelectedDisk);
                     return new HDDVDPlayer(movieItem);
                 }
                 else if (movieItem.SelectedDisk.Format == VideoFormat.DVD && MediaData.IsDVD(movieItem.SelectedDisk.Path)) // play the dvd
                 {
-                    OMLApplication.DebugLine("[MoviePlayerFactory] DVDMoviePlayer created");
+                    OMLApplication.DebugLine("[MoviePlayerFactory] DVDMoviePlayer created: {0}", movieItem.SelectedDisk);
                     return new DVDPlayer(movieItem);
                 }
 //                else if (movieItem.SelectedDisk.Format == VideoFormat.FOLDER)
 //                {
-//                    OMLApplication.DebugLine("[MoviePlayerFactory] FolderPlayer created");
+//                    OMLApplication.DebugLine("[MoviePlayerFactory] FolderPlayer created: {0}", movieItem.SelectedDisk.Path);
 //                    return new FolderPlayer(movieItem);
 //                }
                 else // try to play it (likely is avi/mkv/etc)
                 {
-                    OMLApplication.DebugLine("[MoviePlayerFactory] VideoPlayer created");
+                    OMLApplication.DebugLine("[MoviePlayerFactory] VideoPlayer created: {0}", movieItem.SelectedDisk.Path);
                     return new VideoPlayer(movieItem);
                 }
             }

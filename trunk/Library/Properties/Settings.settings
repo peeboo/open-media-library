@@ -117,7 +117,7 @@
       <Value Profile="(Default)">-15</Value>
     </Setting>
     <Setting Name="LeftPanelDetailsAlpha" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0.8</Value>
+      <Value Profile="(Default)">0.7</Value>
     </Setting>
     <Setting Name="DimUnselectedCovers" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -133,6 +133,12 @@
     </Setting>
     <Setting Name="GalleryCoverFlowRows" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="Extender_UseAsx" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Extender_MergeVOB" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -9,17 +9,9 @@ namespace OMLTranscoder
 {
     public class AudioStream
     {
-        private int audioId;
-        private bool isSurroundSound;
-        private string languageId;
-        private string audioChannel;
-
-        public AudioStream()
-        {
-            audioId = -1;
-            isSurroundSound = false;
-            languageId = string.Empty;
-            audioChannel = string.Empty;
-        }
+        private int audioId = -1;
+        private bool isSurroundSound = false;
+        private string languageId = string.Empty;
+        private string audioChannel = string.Empty;
     }
 }

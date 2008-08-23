@@ -47,13 +47,13 @@ namespace OMLTranscoder
 
         public void SetInputLocation(FileInfo fInfo)
         {
-            if (inputType == MEncoder.InputType.File || inputType == null)
+            if (inputType == MEncoder.InputType.File)
                 inputFile = fInfo;
         }
 
         public void SetInputLocation(DriveInfo dInfo)
         {
-            if (inputType == MEncoder.InputType.Drive || inputType == null)
+            if (inputType == MEncoder.InputType.Drive)
                 inputDrive = dInfo;
         }
 
@@ -89,22 +89,10 @@ namespace OMLTranscoder
 
         public string GetCommand()
         {
-            if (audioFormat == null)
-            {
-                Utilities.DebugLine("[MEncoderCommandBuilder] Missing audio format selection");
-                throw new Exception("Missing audio format selection");
-            }
-
             if (inputDrive == null && inputFile == null)
             {
                 Utilities.DebugLine("[MEncoderCommandBuilder] Missing input drive or filename");
                 throw new Exception("Must define either an input drive or an input device");
-            }
-
-            if (videoFormat == null)
-            {
-                Utilities.DebugLine("[MEncoderCommandBuilder] Missing video format selection");
-                throw new Exception("Missing video format selection");
             }
 
             string cmdString = string.Empty;

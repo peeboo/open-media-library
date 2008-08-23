@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 
 namespace OMLGetDVDInfo
 {
@@ -22,6 +23,11 @@ namespace OMLGetDVDInfo
                     output.ReadLine();
             }
             return thisDVD;
+        }
+
+        public override string ToString()
+        {
+            return string.Join(", ", new List<DVDTitle>(Titles).ConvertAll<string>(delegate (DVDTitle t) { return "[" + t + "]"; }).ToArray());
         }
 
         static string handbrakePath = null;
@@ -74,6 +80,16 @@ namespace OMLGetDVDInfo
             Console.WriteLine(outStr.ToString());
         }
 
+        public DVDTitle GetMainTitle()
+        {
+            if (this.Titles == null || this.Titles.Length == 0)
+                return null;
+            if (this.Titles.Length == 1)
+                return this.Titles[0];
+            List<DVDTitle> list = new List<DVDTitle>(this.Titles);
+            list.Sort(delegate(DVDTitle a, DVDTitle b) { return -a.m_Duration.CompareTo(b.m_Duration); });
+            return list[0];
+        }
     }
 
 }

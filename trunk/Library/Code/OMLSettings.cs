@@ -411,6 +411,28 @@ namespace Library
                 FirePropertyChanged("UseOriginalCoverArt");
             }
         }
+
+        public bool Extender_UseAsx
+        {
+            get { return Properties.Settings.Default.Extender_UseAsx; }
+            set
+            {
+                Properties.Settings.Default.Extender_UseAsx = value;
+                Properties.Settings.Default.Save();
+                FirePropertyChanged("Extender_UseAsx");
+            }
+        }
+
+        public bool Extender_MergeVOB
+        {
+            get { return Properties.Settings.Default.Extender_MergeVOB; }
+            set
+            {
+                Properties.Settings.Default.Extender_MergeVOB = value;
+                Properties.Settings.Default.Save();
+                FirePropertyChanged("Extender_MergeVOB");
+            }
+        }
         #endregion
     }
 }

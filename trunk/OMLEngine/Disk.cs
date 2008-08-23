@@ -11,6 +11,7 @@ namespace OMLEngine
         private string _name = "";
         private string _path = "";
         private VideoFormat _format;
+        [NonSerialized]
         private DVDDiskInfo _dvdDiskInfo;
 
         public Disk() { }
@@ -42,7 +43,7 @@ namespace OMLEngine
 
         public override string ToString()
         {
-            return _name;
+            return _name + ", " + _format + ", @ " + _path;
         }
 
         public DVDDiskInfo DVDDiskInfo

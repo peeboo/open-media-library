@@ -21,7 +21,8 @@ namespace OMLGetDVDInfo
         [XmlAttribute]
         public int TitleNumber;
 
-        TimeSpan m_Duration;
+        [XmlIgnore]
+        public TimeSpan m_Duration;
         [XmlAttribute]
         public string Duration { get { return m_Duration.ToString(); } set { m_Duration = TimeSpan.Parse(value); } }
 
@@ -35,8 +36,8 @@ namespace OMLGetDVDInfo
 
         public override string ToString()
         {
-            return string.Format("{0} ({1:00}:{2:00}:{3:00})", this.TitleNumber, this.m_Duration.Hours,
-             this.m_Duration.Minutes, this.m_Duration.Seconds);
+            return string.Format("{0}, {1}, ({2:00}:{3:00}:{4:00}) {5}, {6}", this.File, this.TitleNumber, this.m_Duration.Hours,
+                this.m_Duration.Minutes, this.m_Duration.Seconds, this.Resolution, this.AspectRatio);
         }
 
         #region -- Parsing --
