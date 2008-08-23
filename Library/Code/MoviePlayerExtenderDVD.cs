@@ -1,14 +1,16 @@
 ﻿using System;
-using OMLEngine;
-using Microsoft.MediaCenter.Hosting;
-using Microsoft.MediaCenter;
-using Microsoft.MediaCenter.UI;
+using System.Collections.Generic;
 using System.IO;
-using OMLGetDVDInfo;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Collections.Generic;
+using System.Threading;
 using System.Web;
+
+using Microsoft.MediaCenter;
+using Microsoft.MediaCenter.Hosting;
+
+using OMLEngine;
+using OMLGetDVDInfo;
 
 namespace Library
 {
@@ -80,7 +82,7 @@ namespace Library
                         videoFile = mpegFile;
 
                         FileStream writter = File.Open(vobs[0], FileMode.Append, FileAccess.Write, FileShare.Read);
-                        Application.DeferredInvoke(delegate
+                        ThreadPool.QueueUserWorkItem(delegate
                         {
                             try
                             {
