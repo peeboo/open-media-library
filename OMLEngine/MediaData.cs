@@ -11,11 +11,11 @@ namespace OMLEngine
 {
     static public class MediaData
     {
-        static string BluRayFileName     = @"BDMV";
-        static string DVDDirectoryName   = @"VIDEO_TS";
-        static string DVDFileName        = @"VIDEO_TS.IFO";
-        static string DVDFileName2       = @"VIDEO_TS\VIDEO_TS.IFO";
-        static string HDDVDDirectoryName = @"HVDVD_TS";
+        const string BluRayFileName     = @"BDMV";
+        const string DVDDirectoryName = @"VIDEO_TS";
+        const string DVDFileName = @"VIDEO_TS.IFO";
+        const string DVDFileName2 = @"VIDEO_TS\VIDEO_TS.IFO";
+        const string HDDVDDirectoryName = @"HVDVD_TS";
 
         static public bool IsBluRay(string path)
         {
@@ -24,6 +24,7 @@ namespace OMLEngine
 
             return DoesDirectoryExist(path, BluRayFileName);
         }
+
         static public bool IsHDDVD(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -31,6 +32,7 @@ namespace OMLEngine
 
             return DoesDirectoryExist(path, HDDVDDirectoryName);
         }
+
         static public bool IsDVD(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -42,6 +44,7 @@ namespace OMLEngine
 
             return flag;
         }
+
         static private bool DoesDirectoryExist(string basePath, string path)
         {
             DirectoryInfo info = new DirectoryInfo(Path.Combine(basePath, path));
@@ -50,11 +53,12 @@ namespace OMLEngine
             {
                 return info.Exists;
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }
         }
+
         static public string GetPlayStringForPath(string path)
         {
             Utilities.DebugLine("[MediaData] GetPlayStringForPath called");

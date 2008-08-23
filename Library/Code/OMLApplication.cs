@@ -1,3 +1,5 @@
+//#define DEBUG_EXT
+
 using System.Collections;
 using System.Collections.Generic;
 
@@ -25,6 +27,9 @@ namespace Library
         {
             this._session = session;
             this._isExtender = !host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
+#if DEBUG_EXT
+            this._isExtender = true;
+#endif
 #if DEBUG
             OMLApplication.DebugLine("[OMLApplication] MediaCenterEnvironment.Capabilities:");
             foreach (KeyValuePair<string, object> cap in host.MediaCenterEnvironment.Capabilities)

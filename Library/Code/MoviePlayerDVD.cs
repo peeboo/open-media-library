@@ -21,8 +21,7 @@ namespace Library
         {
             if (MediaData.IsDVD(_title.SelectedDisk.Path))
             {
-                string play_string = MediaData.GetPlayStringForPath(_title.SelectedDisk.Path);
-//                play_string = "DVD://" + play_string;
+                string play_string = "DVD://" + MediaData.GetPlayStringForPath(_title.SelectedDisk.Path);
 //                play_string.Replace('\\', '/');
                 if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, play_string, false))
                 {

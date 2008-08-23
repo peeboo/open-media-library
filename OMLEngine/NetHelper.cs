@@ -99,7 +99,7 @@ namespace OMLEngine
                 success = true;
 
             }
-            catch (Exception e)
+            catch //(Exception e)
             {
                 //lib.Echo("Error: " + e.Message, myLib.MsgType.FAIL);
             }
@@ -120,7 +120,7 @@ namespace OMLEngine
                 success = true;
 
             }
-            catch (Exception e)
+            catch //(Exception e)
             {
                 //lib.Echo("Error:" + e.Message, myLib.MsgType.FAIL);
             }
