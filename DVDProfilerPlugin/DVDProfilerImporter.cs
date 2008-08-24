@@ -81,6 +81,8 @@ namespace DVDProfilerPlugin
                     process_node_switch(newTitle, node);
                 }
 
+                GetImagesForNewTitle(newTitle);
+
                 // attempt to validate the new title before we add it to the stack
                 if (ValidateTitle(newTitle))
                 {
@@ -89,6 +91,31 @@ namespace DVDProfilerPlugin
                 }
                 else Trace.WriteLine("Error saving row");
             }
+        }
+
+        private void GetImagesForNewTitle(Title newTitle)
+        {
+            string id = newTitle.MetadataSourceID;
+            if (!string.IsNullOrEmpty(id))
+            {
+                string possibleImagesPath =
+                    Path.Combine(Environment.SpecialFolder.MyDocuments.ToString(),
+                                 @"DVD Profiler\Databases\Default\Images");
+
+                if (Directory.Exists(possibleImagesPath))
+                {
+                    if (File.Exists(Path.Combine(possibleImagesPath, string.Format("{0}f.{1}", id, @"jpg"))))
+                    {
+                        newTitle.FrontCoverPath = Path.Combine(possibleImagesPath, string.Format("{0}f.{1}", id, @"jpg"));
+                    }
+
+                    if (File.Exists(Path.Combine(possibleImagesPath, string.Format("{0}b.{1}", id, @"jpg"))))
+                    {
+                        newTitle.BackCoverPath = Path.Combine(possibleImagesPath, string.Format("{0}b.{1}", id, @"jpg"));
+                    }
+                }
+            }
+
         }
 
         private static void process_node_switch(Title newTitle, XmlNode node)
@@ -193,6 +220,9 @@ namespace DVDProfilerPlugin
                     }
                     newTitle.AddLanguageFormat(audioTrack);
                     break;
+                case "Overview":
+                    newTitle.Synopsis = node.InnerText;
+                    break;
                 case "Actors":
                     XmlNodeList actors = node.SelectNodes("Actor");
                     foreach (XmlNode actorNode in actors)
@@ -219,9 +249,11 @@ namespace DVDProfilerPlugin
                                     break;
                             }
                         }
-                        if (first_name.Length > 0 && last_name.Length > 0)
+                        if (first_name.Length > 0 || last_name.Length > 0)
                         {
-                            newTitle.AddActingRole(first_name + last_name, role);
+                            newTitle.AddActingRole(
+                                string.Format("{0} {1}", first_name, last_name), role
+                                );
                         }
                     }
                     break;
@@ -251,7 +283,7 @@ namespace DVDProfilerPlugin
                                     break;
                             }
                         }
-                        if (first_name.Length > 0 && last_name.Length > 0)
+                        if (first_name.Length > 0 || last_name.Length > 0)
                         {
                             switch (type_name)
                             {

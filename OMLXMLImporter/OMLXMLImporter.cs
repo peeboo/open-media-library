@@ -74,7 +74,7 @@ namespace OMLXMLPlugin
 
             if (File.Exists(full_filename))
             {
-                if (XMLTransformer.QuickTransform(filename, OMLPlugin.MyMoviesXslTransform, new_filename))
+                if (XMLTransformer.QuickTransform(filename, @"..\..\..\MyMoviesPlugin\MyMoviesToOML.xsl", new_filename))
                 {
                     if (File.Exists(new_filename))
                         return true;

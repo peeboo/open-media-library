@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DVDProfilerTest.cs" />
     <Compile Include="MEncoderCommandBuilderTest.cs" />
     <Compile Include="MyMoviesPluginTest.cs" />
     <Compile Include="OMLXMLImporterTest.cs" />
