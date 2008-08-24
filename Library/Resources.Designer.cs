@@ -95,13 +95,6 @@ namespace Library {
             }
         }
         
-        internal static byte[] BaseTemplate {
-            get {
-                object obj = ResourceManager.GetObject("BaseTemplate", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap BusyBack {
             get {
                 object obj = ResourceManager.GetObject("BusyBack", resourceCulture);
