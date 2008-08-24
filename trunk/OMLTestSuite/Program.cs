@@ -11,6 +11,11 @@ namespace OMLTestSuite
             //mmpt.TEST_MULTIPLE_DISCS_FAIL_TO_IMPORT();
             mmpt.TEST_BASE_CASE();
 
+            DVDProfilerTest dpt = new DVDProfilerTest();
+            Console.WriteLine("Testing: DVDProfilerPlugin");
+            dpt.TEST_SPACING_IS_CORRECT_FOR_ACTOR_NAMES();
+            dpt.TEST_SYNOPSIS_IS_CORRECTLY_SET_FROM_OVERVIEW();
+
             TitleTest tt = new TitleTest();
             Console.WriteLine("Testing: Title");
             tt.TEST_BASE_CASE();

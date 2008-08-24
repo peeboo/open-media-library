@@ -29,8 +29,8 @@ namespace OMLTestSuite
 
             Assert.AreEqual(plugin.TotalTitlesAdded, 1);
 
-            if (File.Exists(@"..\..\..\Sample Files\oml.xml"))
-                File.Delete(@"..\..\..\Sample Files\oml.xml");
+            if (File.Exists(@"..\..\..\Sample Files\MMTOMLTEST\oml.xml"))
+                File.Delete(@"..\..\..\Sample Files\MMTOMLTEST\oml.xml");
         }
     }
 }
