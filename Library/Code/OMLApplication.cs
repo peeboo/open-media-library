@@ -17,6 +17,29 @@ namespace Library
     /// </summary>
     public class OMLApplication : ModelItem
     {
+        private bool isBusy = false;
+        private bool isStartingTranscodingJob = false;
+
+        public Boolean IsBusy
+        {
+            get { return isBusy; }
+            set
+            {
+                isBusy = value;
+                FirePropertyChanged("IsBusy");
+            }
+        }
+
+        public Boolean IsStartingTranscodingJob
+        {
+            get { return isStartingTranscodingJob; }
+            set
+            {
+                isStartingTranscodingJob = value;
+                FirePropertyChanged("IsStartingTranscodingJob");
+            }
+        }
+
         public OMLApplication()
             : this(null, null)
         {
@@ -49,6 +72,8 @@ namespace Library
         public void Startup(string context)
         {
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
+            _session.GoToPage("resx://Library/Library.Resources/BaseTemplate", CreateProperties(false, false, null));
+            return;
 
             switch (context)
             {
@@ -134,6 +159,7 @@ namespace Library
             {
                 _session.GoToPage("resx://Library/Library.Resources/Menu", properties);
             }
+            IsBusy = true;
         }
 
         public void GoToSelectionList(MovieGallery gallery, string filterName)

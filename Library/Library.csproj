@@ -150,6 +150,7 @@
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\MovieDetails.mcml" />
     <Content Include="Markup\MovieGallery.mcml" />
+    <Content Include="Markup\NewMenu.mcml" />
     <Content Include="Markup\RadioButtonGroup.mcml" />
     <Content Include="Markup\SelectDirectoriesToScan.mcml" />
     <Content Include="Markup\SelectFilesToImport.mcml" />
