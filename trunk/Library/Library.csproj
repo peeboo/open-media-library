@@ -123,7 +123,6 @@
   <ItemGroup>
     <Content Include="Images\Focus_Outline.png" />
     <Content Include="Markup\About.mcml" />
-    <Content Include="Markup\BaseTemplate.mcml" />
     <Content Include="Markup\Base\Animations.mcml" />
     <Content Include="Markup\Base\Base.mcml" />
     <Content Include="Markup\Base\Colors.mcml" />
@@ -150,7 +149,6 @@
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\MovieDetails.mcml" />
     <Content Include="Markup\MovieGallery.mcml" />
-    <Content Include="Markup\NewMenu.mcml" />
     <Content Include="Markup\RadioButtonGroup.mcml" />
     <Content Include="Markup\SelectDirectoriesToScan.mcml" />
     <Content Include="Markup\SelectFilesToImport.mcml" />
