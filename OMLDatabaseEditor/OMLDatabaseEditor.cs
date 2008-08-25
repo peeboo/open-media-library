@@ -122,7 +122,7 @@ namespace OMLDatabaseEditor
                     DialogResult result = searchResultForm.ShowResults(_metadataPlugins[pluginId].GetAvailableTitles());
                     if (result == DialogResult.OK)
                     {
-                        Title t = searchResultForm.SelectedTitle;
+                        Title t = _metadataPlugins[pluginId].GetTitle(searchResultForm.SelectedTitleIndex);
                         if (t != null)
                         {
                             if (coverArtOnly)
@@ -785,6 +785,11 @@ namespace OMLDatabaseEditor
         }
 
         private void metadataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void coverArtOnlyToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }

@@ -322,6 +322,7 @@
             this.coverArtOnlyToolStripMenuItem.Name = "coverArtOnlyToolStripMenuItem";
             this.coverArtOnlyToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.coverArtOnlyToolStripMenuItem.Text = "Cover Art Only Search";
+            this.coverArtOnlyToolStripMenuItem.Click += new System.EventHandler(this.coverArtOnlyToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
             // 

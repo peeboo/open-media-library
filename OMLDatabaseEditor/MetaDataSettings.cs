@@ -39,6 +39,7 @@ namespace OMLDatabaseEditor
         {
             if (lbMetadataPlugins.SelectedItem != null)
             {
+                grdOptions.Rows.Clear();
                 IOMLMetadataPlugin plugin = lbMetadataPlugins.SelectedItem as IOMLMetadataPlugin;
                 _selectdPlugin = plugin;
                 List<OMLMetadataOption> options = plugin.GetOptions();

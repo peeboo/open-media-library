@@ -11,7 +11,7 @@ namespace OMLDatabaseEditor
     public partial class frmSearchResult : Form
     {
         Title[] _titles = null;
-        Title _selectedTitle = null;
+        int _selectedTitle = -1;
         bool _overwriteMetadata;
 
         public bool OverwriteMetadata
@@ -20,7 +20,7 @@ namespace OMLDatabaseEditor
             set { _overwriteMetadata = value; }
         }
 
-        public Title SelectedTitle
+        public int SelectedTitleIndex
         {
             get { return _selectedTitle; }
         }
@@ -114,11 +114,11 @@ namespace OMLDatabaseEditor
                 else
                     _overwriteMetadata = true;
 
-                _selectedTitle = _titles[grdTitles.SelectedRows[0].Index];
+                _selectedTitle = grdTitles.SelectedRows[0].Index;
             }
             else
             {
-                _selectedTitle = null;
+                _selectedTitle = -1;
             }
         }
 
