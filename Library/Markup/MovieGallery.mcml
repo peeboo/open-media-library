@@ -55,6 +55,16 @@
                   MinorAlignment="Fill"
                   RepeatGap="100"/>
 
+      <GridLayout Name="FolderViewLayout" Repeat="WhenTooBig"
+                  Rows="[UISettings.Gallery.ListRows]"
+                  Orientation="Horizontal"
+                  AllowWrap="true"
+                  Spacing="[UISettings.Gallery.CoverArtSpacing]"
+                  ReferenceSize="[UISettings.Gallery.CoverArtSize]"
+                  MajorAlignment="Fill"
+                  MinorAlignment="Center"
+                  RepeatGap="100"/>
+
       <!-- Create an input handler for scrolling. -->
     <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
     <TypingHandler Name="TypingHandler" EditableText="[MovieBrowser.JumpInListText]" TypingPolicy="TripleTap" HandlerStage="Bubbled"/>
@@ -83,6 +93,12 @@
       <Condition Source="[GalleryView]" SourceValue="CoverFlow" ConditionOp="Equals">
           <Actions>
               <Set Target="[GalleryRepeater.Layout]" Value="[CoverFlowLayout]"/>
+          </Actions>
+      </Condition>
+
+      <Condition Source="[GalleryView]" SourceValue="FolderView" ConditionOp="Equals">
+          <Actions>
+              <Set Target="[GalleryRepeater.Layout]" Value="[FolderViewLayout]" />
           </Actions>
       </Condition>
     <Rule>
@@ -272,8 +288,18 @@
               <Set Target="[Caption.Font]" Value="font://s:Normal" />
           </Actions>
       </Condition>
-      
-    <!-- If we get key focus, change our background color to indicate it. -->
+
+      <Condition Source="[GalleryView]" SourceValue="Folder View" ConditionOp="Equals" >
+          <Actions>
+              <Set Target="[MenuCover.Visible]" Value="true" />
+              <Set Target="[LostFocus]" Value="[LostFocusCoverArt]" />
+              <Set Target="[GotFocus]" Value="[GotFocusCoverArt]" />
+              <Set Target="[Background.Content]" Value="[BackgroundImageCoverArt]" />
+              <Set Target="[Caption.Font]" Value="font://s:Normal" />
+          </Actions>
+      </Condition>
+
+      <!-- If we get key focus, change our background color to indicate it. -->
     <Condition Source="[Input.KeyFocus]" SourceValue="true">
       <Actions>
         <PlayAnimation Target="[ItemPanel]" Animation="[GotFocus]" />

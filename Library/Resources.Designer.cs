@@ -95,6 +95,20 @@ namespace Library {
             }
         }
         
+        internal static byte[] BasePage {
+            get {
+                object obj = ResourceManager.GetObject("BasePage", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Blu_RayMovieDisk {
+            get {
+                object obj = ResourceManager.GetObject("Blu_RayMovieDisk", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap BusyBack {
             get {
                 object obj = ResourceManager.GetObject("BusyBack", resourceCulture);
@@ -326,6 +340,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap EnhancedDVD {
+            get {
+                object obj = ResourceManager.GetObject("EnhancedDVD", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.IO.UnmanagedMemoryStream Error {
             get {
                 return ResourceManager.GetStream("Error", resourceCulture);
@@ -450,10 +471,24 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap Folder_Closed {
+            get {
+                object obj = ResourceManager.GetObject("Folder_Closed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static byte[] FontNames {
             get {
                 object obj = ResourceManager.GetObject("FontNames", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap hddvdmovie {
+            get {
+                object obj = ResourceManager.GetObject("hddvdmovie", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
