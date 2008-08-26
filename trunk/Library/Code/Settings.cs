@@ -82,6 +82,7 @@ namespace Library
             starPageItems.Add(Filter.Genres);
             starPageItems.Add(Filter.Tags);
             starPageItems.Add(Filter.UserRating);
+            starPageItems.Add(Filter.ParentRating);
 
 
             _startPage.Options = starPageItems;
