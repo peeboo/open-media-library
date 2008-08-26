@@ -129,14 +129,15 @@ namespace OMLDatabaseEditor
                             {
                                 if (!String.IsNullOrEmpty(t.FrontCoverPath))
                                 {
+                                    SaveCurrentTab();
                                     e.CurrentTitle.CopyFrontCoverFromFile( t.FrontCoverPath, true );
                                     e.LoadTitle(e.CurrentTitle);
                                 }
-
                             }
                             else
                             {
                                 e.CurrentTitle.CopyMetadata(t, searchResultForm.OverwriteMetadata);
+
                                 e.LoadTitle(e.CurrentTitle);
                             }
                         }
@@ -188,19 +189,43 @@ namespace OMLDatabaseEditor
             _titleCollection.Replace(t);
             _titleCollection.saveTitleCollection();
 
-            reloadDatabase();
+            //reloadDatabase();
+        }
+
+        private void UpdateMovieName(Title t)
+        {
+            if (t != null)
+            {
+               TreeNode[] nodes = tvSourceList.Nodes["OML Database"].Nodes["Movies"].Nodes.Find( t.InternalItemID.ToString(), true );
+               if (nodes != null && nodes.Length > 0)
+               {
+                   TreeNode foundNode = nodes[0];
+                   foundNode.Text = t.Name;
+               }
+                
+            }
+        }
+
+        private void SaveCurrentTab()
+        {
+
+            if (this.tabsMediaPanel.SelectedTab != null)
+            {
+                Controls.MediaEditor editor = (Controls.MediaEditor)tabsMediaPanel.SelectedTab.Controls[0].Controls[0];
+                if (editor.Status == global::OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges)
+                {
+                    Title _currentTitle = (Title)_titleCollection.MoviesByItemId[editor.itemID];
+                    editor.SaveToTitle(_currentTitle);
+                    UpdateMovieName(_currentTitle);
+                    SaveTitleChangesToDB(_currentTitle);
+                }
+            }
+        
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.tabsMediaPanel.SelectedTab != null)
-            {
-                Controls.MediaEditor _currentEditor = (Controls.MediaEditor)this.tabsMediaPanel.SelectedTab.Controls[0].Controls[0];
-                Title _currentTitle = (Title)_titleCollection.MoviesByItemId[_currentEditor.itemID];
-
-                _currentEditor.SaveToTitle(_currentTitle);
-                SaveTitleChangesToDB(_currentTitle);
-            }
+            SaveCurrentTab();
         }
 
         private void SaveAll()
@@ -214,6 +239,7 @@ namespace OMLDatabaseEditor
 
                     editor.SaveToTitle(_currentTitle);
                     _titleCollection.Replace(_currentTitle);
+                    UpdateMovieName(_currentTitle);
                 }
             }
             _titleCollection.saveTitleCollection();
@@ -224,6 +250,7 @@ namespace OMLDatabaseEditor
         {
             Title t = new Title();
             t.Name = "New Movie";
+            t.DateAdded = DateTime.Now;
             _titleCollection.Add(t);
 
             tvSourceList_AddItem("New Movie", t.InternalItemID.ToString(), "Movies");
