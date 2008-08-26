@@ -251,6 +251,9 @@ namespace OMLEngine
             if (!FileSystemWalker.LogDirExists)
                 FileSystemWalker.createLogDirectory();
 
+            if (!FileSystemWalker.TranscodeBufferDirExists)
+                FileSystemWalker.createTranscodeBufferDirectory();
+
             return true;
         }
 
