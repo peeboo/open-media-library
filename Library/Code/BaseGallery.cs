@@ -7,12 +7,25 @@ namespace Library
 {
     public class BaseGallery : ModelItem
     {
-        Choice menuTabs;
-        IList<Filter> tabFilters;
+        OMLChoice menuTabs;
+
+        public OMLChoice MenuTabs
+        {
+            get { return menuTabs; }
+            set
+            {
+                menuTabs = value;
+                FirePropertyChanged("MenuTabs");
+            }
+        }
 
         public BaseGallery()
         {
-            tabFilters = new List<Filter>();
+            menuTabs = new OMLChoice();
+            ArrayListDataSet tabs = new ArrayListDataSet();
+            tabs.Add("By Genre");
+            tabs.Add("By Year");
+            menuTabs.Options = tabs;
         }
     }
 }

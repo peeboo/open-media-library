@@ -8,7 +8,10 @@
   <UI Name="PivotItem">
 
     <Properties>
-
+      <Font Name="OMLFont"/>
+      <Font Name="OMLFocusFont"/>
+      <Color Name="OMLColor"/>
+      <Color Name="OMLFocusColor"/>
       <cor:String Name="Label" cor:String="$Required"/>
       <Choice Name="Model" Choice="$Required"/>
       <Index Name="Index" Index="$Required"/>
@@ -44,8 +47,8 @@
           <Set Target="[ArrowRight.Content]" Value="image://me:PivotArrowRightNoFocus"/>
           <Set Target="[ArrowLeft.Visible]" Value="true" />
           <Set Target="[ArrowRight.Visible]" Value="true" />
-          <Set Target="[Name.Font]" Value="Segoe UI,20" />
-          <Set Target="[Name.Color]" Value="color://me:MediumBlue"/>
+          <Set Target="[Name.Font]" Value="[OMLFocusFont]" />
+          <Set Target="[Name.Color]" Value="[OMLFocusColor]"/>
           <Set Target="[PivotPanel.Scale]" Value="1.1,1.1,1.1" />
           <Set Target="[PivotPanel.Alpha]" Value="1" />
         </Actions>
@@ -74,7 +77,7 @@
         <Children>
 
           <Graphic Name="ArrowLeft" Content="image://me:PivotArrowLeftNoFocus" Margins="0,15,6,0" />
-          <Text Name="Name" Font="font://me:Font" Color="color://me:MediumBlue" Content="[Label]" />
+          <Text Name="Name" Font="[OMLFont]" Color="[OMLColor]" Content="[Label]" />
           <Graphic Name="ArrowRight" Content="image://me:PivotArrowRightNoFocus" Margins="6,15,0,0" />
 
         </Children>
@@ -85,7 +88,6 @@
 
   </UI>
 
-  <Font Name="Font"                     FontName="global://me:RegularFontName" FontSize="19" />
   <Image Name="PivotArrowLeft"          Source="resx://Library/Library.Resources/PivotArrowLeft"/>
   <Image Name="PivotArrowLeftNoFocus"   Source="resx://Library/Library.Resources/PivotArrowLeftNoFocus"/>
   <Image Name="PivotArrowRight"         Source="resx://Library/Library.Resources/PivotArrowRight"/>

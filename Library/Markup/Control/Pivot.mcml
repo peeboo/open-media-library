@@ -8,20 +8,19 @@
   <UI Name="Pivot">
 
     <Properties>
-
       <Choice Name="Model" Choice="$Required"/>
-
+      <Font Name="OMLFont"/>
+      <Font Name="OMLFocusFont"/>
+      <Color Name="OMLColor"/>
+      <Color Name="OMLFocusColor"/>
     </Properties>
 
     <Locals>
-
       <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled" />
       <ScrollingData Name="ScrollingData" LockedPosition="0.1" />
-
     </Locals>
 
     <Rules>
-
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
       <Default Target="[ScrollingData.Repeater]" Value="[ButtonRepeater]" />
 
@@ -59,11 +58,9 @@
           <PlayAnimation Animation="animation://me:PivotItemFocusOff" Target="[Scroller]" />
         </Actions>
       </Rule>
-
     </Rules>
 
     <Content>
-
       <Scroller Name="Scroller"
                 Orientation="Horizontal"
                 FocusPadding="100"
@@ -88,6 +85,10 @@
               <me:PivotItem Label="[RepeatedItem.ToString]"
                             Index="[RepeatedItemIndex]"
                             Model="[Model]"
+                            OMLFont="[OMLFont]"
+                            OMLFocusFont="[OMLFocusFont]"
+                            OMLColor="[OMLColor]"
+                            OMLFocusColor="[OMLFocusColor]"
                             />
             </Content>
 
@@ -95,7 +96,6 @@
 
         </Children>
       </Scroller>
-
     </Content>
   </UI>
 

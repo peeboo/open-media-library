@@ -1,5 +1,5 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
-	  xmlns:cor="assembly://MSCorLib/System"
+	    xmlns:cor="assembly://MSCorLib/System"
       xmlns:a="assembly://Library/Library"
       xmlns:controls="resx://Library/Library.Resources/CoreControls"
       xmlns:me="Me">
@@ -7,23 +7,63 @@
     <Aggregate Source="resx://Library/Library.Resources/BasePage"/>
 
     <UI Name="NewMenu" BaseUI="me:BasePage">
+      <Properties>
+        <a:BaseGallery Name="Gallery" BaseGallery="$Required"/>
+      </Properties>
 
-		<Properties>
-			<Color Name="MyColor" Color="White"/>
-		</Properties>
+		  <Content>
+        <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
+          <Children>
+            <controls:WaitCursor Name="waitCursor" Visible="false"/>
+            <controls:TranscodingMessage Name="transcodingMessage" Visible="false"/>
 
-		<Locals>
-			<cor:String Name="MyString" String="Hello"/>
-		</Locals>
+            <Panel Name="TopPanel">
+            <Children>
+              <Panel>
+                <Children>
+                  <ColorFill Content="Black" Alpha="0.5">
+                    <Children>
+                      <Text Name="PageDescription" Content="PageName" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0"/>
+                      <controls:Pivot Model="[Gallery.MenuTabs]" OMLFont="Calibri, 16" OMLFocusFont="Calibri, 20" OMLColor="LightBlue" OMLFocusColor="White">
+                        <LayoutInput>
+                          <FormLayoutInput Right="Parent,.1" Bottom="Parent,.1"/>
+                        </LayoutInput>
+                      </controls:Pivot>
+                    </Children>
+                  </ColorFill>
+                </Children>
+              </Panel>
 
-		<Rules>
-			<Default Target="[MyText.Content]" Value="[MyString]"/>
-		</Rules>
 
-		<Content>
-			<Text Name="MyText" Color="[MyColor]" Font="Calibri, 24"/>
-		</Content>
+              </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
+            </LayoutInput>
+          </Panel>
 
+            <Panel Name="MainPanel">
+              <Children>
+                <Text Content="testing"/>
+              </Children>
+            </Panel>
+            
+            <Panel Name="BottomPanel">
+            <Children>
+              <Clip Orientation="Vertical">
+                <Children>
+                  <ColorFill Content="Black" Alpha="0.5"/>
+                </Children>
+              </Clip>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
+            </LayoutInput>
+          </Panel>
+
+          </Children>
+        </ColorFill>
+
+      </Content>
 	</UI>
 
 </Mcml>

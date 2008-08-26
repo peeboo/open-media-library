@@ -1,8 +1,8 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
-	  xmlns:cor="assembly://MSCorLib/System"
+  	  xmlns:cor="assembly://MSCorLib/System"
       xmlns:a="assembly://Library/Library"
       xmlns:controls="resx://Library/Library.Resources/CoreControls"
-	  xmlns:me="Me">
+	    xmlns:me="Me">
 
     <UI Name="BasePage">
 		<Properties>
@@ -11,8 +11,26 @@
         </Properties>
 
         <Rules>
-            <Binding Source="[Application.IsBusy]" Target="[waitCursor.Visible]"/>
-            <Binding Source="[Application.IsStartingTranscodingJob]" Target="[transcodingMessage.Visible]"/>
+          <Changed Source="[Application.IsBusy]" InitialEvaluate="false">
+            <Actions>
+              <Set Target="[waitCursor.Visible]" Value="true"/>
+            </Actions>
+          </Changed>
+          <Changed Source="[Application.IsBusy]" InitialEvaluate="true">
+            <Actions>
+              <Set Target="[waitCursor.Visible]" Value="false"/>
+            </Actions>
+          </Changed>
+          <Changed Source="[Application.IsStartingTranscodingJob]" InitialEvaluate="false">
+            <Actions>
+              <Set Target="[transcodingMessage.Visible]" Value="true"/>
+            </Actions>
+          </Changed>
+          <Changed Source="[Application.IsStartingTranscodingJob]" InitialEvaluate="true">
+            <Actions>
+              <Set Target="[transcodingMessage.Visible]" Value="false"/>
+            </Actions>
+          </Changed>
         </Rules>
 		<Content>
             <Panel>
