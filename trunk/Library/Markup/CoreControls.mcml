@@ -6,5 +6,13 @@
   <Aggregate Source="resx://Library/Library.Resources/RadioButtonGroup" />
   <Aggregate Source="resx://Library/Library.Resources/WaitCursor" />
   <Aggregate Source="resx://Library/Library.Resources/TranscodingMessage" />
+  <Aggregate Source="resx://Library/Library.Resources/HeaderText" />
+  <Aggregate Source="resx://Library/Library.Resources/SimpleButton" />
+  <Aggregate Source="resx://Library/Library.Resources/SimpleCheckbox" />
+  <Aggregate Source="resx://Library/Library.Resources/SimpleEditbox" />
+  <Aggregate Source="resx://Library/Library.Resources/SimpleRadioButton" />
+  <Aggregate Source="resx://Library/Library.Resources/SimpleRadioButtonGroup" />
+  <Aggregate Source="resx://Library/Library.Resources/SimpleSpinner" />
+  <Aggregate Source="resx://Library/Library.Resources/Pivot" />
 
 </Mcml>

@@ -72,6 +72,16 @@ namespace Library
         public void Startup(string context)
         {
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
+            /*
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+            properties["Application"] = this;
+            properties["UISettings"] = new UISettings();
+            properties["Settings"] = new Settings();
+            properties["Gallery"] = new BaseGallery();
+
+            _session.GoToPage(@"resx://Library/Library.Resources/NewMenu", properties);
+            return;
+            */
 
             switch (context)
             {

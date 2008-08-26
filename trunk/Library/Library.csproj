@@ -92,6 +92,8 @@
     <Compile Include="Code\MoviePlayerTranscode.cs" />
     <Compile Include="Code\MoviePlayerUnavailable.cs" />
     <Compile Include="Code\MoviePlayerVideo.cs" />
+    <Compile Include="Code\OMLChoice.cs" />
+    <Compile Include="Code\OMLCommand.cs" />
     <Compile Include="Code\OMLSettings.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\Setup.cs" />
