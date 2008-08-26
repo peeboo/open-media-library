@@ -33,7 +33,13 @@ namespace OMLTestSuite
             oxit.TEST_AUTO_LOCATE_CONVERT_AND_LOAD_A_MYMOVIES_XML_INTO_AN_OML_XML();
 
             MEncoderCommandBuilderTest mecbt = new MEncoderCommandBuilderTest();
+            Console.WriteLine("Testing: MEncoderCommandBuilder");
             mecbt.TEST_PRESET_COMMAND_TO_DETERMINE_SUBTITLE_STREAMS();
+
+            VirtualDirectoryTest vdt = new VirtualDirectoryTest();
+            Console.WriteLine("Testing: VirtualDirectory");
+            vdt.TEST_CREATE_VIRTUAL_FOLDER();
+            vdt.TEST_MULTIPLE_BASE_FOLDERS_WORK();
         }
     }
 }
