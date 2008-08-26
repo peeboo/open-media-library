@@ -55,6 +55,14 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Location where all transcoded files are created
+        /// </summary>
+        public static string TranscodeBufferDirectory
+        {
+            get { return Path.Combine(PublicRootDirectory, @"TranscodeBuffers"); }
+        }
+
+        /// <summary>
         /// Checks to ensure that the Root directory exists
         /// </summary>
         /// <returns>True on success</returns>
@@ -96,6 +104,15 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Checks to ensure that the transcode buffer directory exists
+        /// </summary>
+        /// <returns>True on success</returns>
+        public static bool TranscodeBufferDirExists
+        {
+            get { return Directory.Exists(TranscodeBufferDirectory); }
+        }
+
+        /// <summary>
         /// Creates the root directory if it doesn't already exist
         /// </summary>
         public static void createRootDirectory()
@@ -130,6 +147,14 @@ namespace OMLEngine
         public static void createLogDirectory()
         {
             Directory.CreateDirectory(LogDirectory);
+        }
+
+        /// <summary>
+        /// Creates the transcode buffer directory if it doesn't already exist
+        /// </summary>
+        public static void createTranscodeBufferDirectory()
+        {
+            Directory.CreateDirectory(TranscodeBufferDirectory);
         }
 
         /// <summary>
