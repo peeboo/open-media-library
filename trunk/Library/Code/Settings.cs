@@ -55,6 +55,7 @@ namespace Library
             List<string> viewItems = new List<string>();
             viewItems.Add("Cover Art");
             viewItems.Add("List");
+            viewItems.Add("Folder View");
             // viewItems.Add("Cover Flow"); /* its not ready yet */
             _movieView.Options = viewItems;
             _movieView.Chosen = _omlSettings.MovieView;

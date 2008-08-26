@@ -1,0 +1,26 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+      xmlns:a="assembly://Library/Library"
+      xmlns:controls="resx://Library/Library.Resources/CoreControls"
+	  xmlns:me="Me">
+
+    <UI Name="BasePage">
+		<Properties>
+            <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+            <a:UISettings Name="UISettings" UISettings="$Required" />
+        </Properties>
+
+        <Rules>
+            <Binding Source="[Application.IsBusy]" Target="[waitCursor.Visible]"/>
+            <Binding Source="[Application.IsStartingTranscodingJob]" Target="[transcodingMessage.Visible]"/>
+        </Rules>
+		<Content>
+            <Panel>
+                <Children>
+                    <controls:WaitCursor Name="waitCursor" Visible="false"/>
+                    <controls:TranscodingMessage Name="transcodingMessage" Visible="false"/>
+                </Children>
+            </Panel>
+        </Content>
+	</UI>
+</Mcml>

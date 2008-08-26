@@ -71,8 +71,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\BaseGallery.cs" />
     <Compile Include="Code\DaemonTools.cs" />
     <Compile Include="Code\DirectoryTreeNode.cs" />
+    <Compile Include="Code\FolderView.cs" />
     <Compile Include="Code\MoviePlayerBluRay.cs" />
     <Compile Include="Code\MoviePlayerExtenderDVD.cs" />
     <Compile Include="Code\MoviePlayerHDDVD.cs" />
@@ -122,8 +124,13 @@
     <None Include="Setup\Setup.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\Blu-RayMovieDisk.png" />
+    <Content Include="Images\EnhancedDVD.png" />
     <Content Include="Images\Focus_Outline.png" />
+    <Content Include="Images\Folder_Closed.png" />
+    <Content Include="Images\hddvdmovie.png" />
     <Content Include="Markup\About.mcml" />
+    <Content Include="Markup\BasePage.mcml" />
     <Content Include="Markup\Base\Animations.mcml" />
     <Content Include="Markup\Base\Base.mcml" />
     <Content Include="Markup\Base\Colors.mcml" />
@@ -150,6 +157,7 @@
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\MovieDetails.mcml" />
     <Content Include="Markup\MovieGallery.mcml" />
+    <Content Include="Markup\NewMenu.mcml" />
     <Content Include="Markup\RadioButtonGroup.mcml" />
     <Content Include="Markup\SelectDirectoriesToScan.mcml" />
     <Content Include="Markup\SelectFilesToImport.mcml" />

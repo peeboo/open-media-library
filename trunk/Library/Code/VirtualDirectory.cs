@@ -76,12 +76,14 @@ namespace Library
         public void AddChildDirectory(string path)
         {
             VirtualDirectory vd = new VirtualDirectory(path);
-            childDirectories.Add(vd);
+            if (vd.IsValid())
+                childDirectories.Add(vd);
         }
 
         public void RemoveChildDirectory(VirtualDirectory dir)
         {
-            childDirectories.Remove(dir);
+            if (childDirectories.Contains(dir))
+                childDirectories.Remove(dir);
         }
 
         public string[] GetFiles()
@@ -92,6 +94,19 @@ namespace Library
         public IList<VirtualDirectory> GetDirectories()
         {
             return childDirectories;
+        }
+
+        public bool IsValid()
+        {
+            // directory name must NOT start with a period or an underscore
+            if (dirInfo.Name.StartsWith(".") || dirInfo.Name.StartsWith("_"))
+                return false;
+
+            // directory must NOT be flagged as hidden
+            if ((dirInfo.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
+                return false;
+
+            return true;
         }
     }
 }

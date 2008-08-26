@@ -442,4 +442,19 @@
   <data name="TranscodingMessage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Markup\Control\TranscodingMessage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Blu_RayMovieDisk" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Blu-RayMovieDisk.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EnhancedDVD" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\EnhancedDVD.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hddvdmovie" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\hddvdmovie.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Folder_Closed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Folder_Closed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BasePage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Markup\BasePage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
