@@ -72,8 +72,6 @@ namespace Library
         public void Startup(string context)
         {
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
-            _session.GoToPage("resx://Library/Library.Resources/BaseTemplate", CreateProperties(false, false, null));
-            return;
 
             switch (context)
             {
