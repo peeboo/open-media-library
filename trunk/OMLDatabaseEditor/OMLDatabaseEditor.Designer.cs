@@ -310,7 +310,6 @@
             this.metadataToolStripMenuItem.Name = "metadataToolStripMenuItem";
             this.metadataToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
             this.metadataToolStripMenuItem.Text = "Metadata";
-            this.metadataToolStripMenuItem.Click += new System.EventHandler(this.metadataToolStripMenuItem_Click);
             // 
             // toolStripSeparator6
             // 
@@ -322,7 +321,6 @@
             this.coverArtOnlyToolStripMenuItem.Name = "coverArtOnlyToolStripMenuItem";
             this.coverArtOnlyToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.coverArtOnlyToolStripMenuItem.Text = "Cover Art Only Search";
-            this.coverArtOnlyToolStripMenuItem.Click += new System.EventHandler(this.coverArtOnlyToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
             // 
@@ -472,7 +470,6 @@
             this.tabsMediaPanel.Size = new System.Drawing.Size(713, 553);
             this.tabsMediaPanel.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.tabsMediaPanel.TabIndex = 0;
-            this.tabsMediaPanel.SelectedIndexChanged += new System.EventHandler(this.tabsMediaPanel_SelectedIndexChanged);
             // 
             // toolStrip1
             // 
