@@ -42,6 +42,7 @@ namespace OMLTestSuite
             Assert.AreEqual(2, tc.Count);
         }
 
+        [Test]
         public void TEST_MULTIPLE_DISCS_FAIL_TO_IMPORT()
         {
             TitleCollection tc = new TitleCollection("\\testOML.dat");

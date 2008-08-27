@@ -8,7 +8,7 @@ using OMLEngine;
 
 namespace OMLSDK
 {
-    public class OMLPlugin :IOMLPlugin
+    public class OMLPlugin : IOMLPlugin
     {
         List<Title> titles;
         private int totalRowsAdded = 0;
@@ -96,7 +96,7 @@ namespace OMLSDK
         /// </summary>
         public string Menu
         {
-            get { return GetMenu();  }
+            get { return GetMenu(); }
         }
 
         /// <summary>
@@ -625,7 +625,8 @@ namespace OMLSDK
             if (!File.Exists(imagePath)) return;
 
             FileInfo fi;
-            try {
+            try
+            {
                 fi = new FileInfo(imagePath);
                 string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
                                                    "\\F" + newTitle.InternalItemID +
@@ -637,6 +638,28 @@ namespace OMLSDK
                 }
 
                 newTitle.FrontCoverPath = imagePath;
+            }
+            catch (Exception e) { Utilities.DebugLine("[OMLPlugin] " + e.Message); }
+        }
+
+        public void SetBackCoverImage(ref Title newTitle, string imagePath)
+        {
+            if (!File.Exists(imagePath)) return;
+
+            FileInfo fi;
+            try
+            {
+                fi = new FileInfo(imagePath);
+                string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
+                                                   "\\B" + newTitle.InternalItemID +
+                                                   fi.Extension;
+                if (CopyImages)
+                {
+                    CopyImage(imagePath, new_full_name);
+                    imagePath = new_full_name;
+                }
+
+                newTitle.BackCoverPath = imagePath;
             }
             catch (Exception e) { Utilities.DebugLine("[OMLPlugin] " + e.Message); }
         }
