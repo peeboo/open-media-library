@@ -8,7 +8,7 @@ namespace OMLTestSuite
         {
             MyMoviesPluginTest mmpt = new MyMoviesPluginTest();
             Console.WriteLine("Testing: MyMoviesPlugin");
-            //mmpt.TEST_MULTIPLE_DISCS_FAIL_TO_IMPORT();
+            mmpt.TEST_MULTIPLE_DISCS_FAIL_TO_IMPORT();
             mmpt.TEST_BASE_CASE();
 
             DVDProfilerTest dpt = new DVDProfilerTest();

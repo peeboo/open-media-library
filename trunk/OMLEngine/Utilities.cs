@@ -73,6 +73,7 @@ namespace OMLEngine
         PDI, // Instant CD/DVD image
         TS, // MPEG2
         UIF,
+        UNKNOWN,
         WMV,
         VOB, // MPEG2
         WVX, // wtf is this?
