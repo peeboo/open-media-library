@@ -758,39 +758,31 @@ namespace OMLDatabaseEditor.Controls
             _titleChanged(EventArgs.Empty);
         }
 
-        private void pbFrontCover_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void lstDisks_DoubleClick(object sender, EventArgs e)
         {
             btnDiskEdit_Click(sender, e);
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
+        private void grd_MouseUp(object sender, MouseEventArgs e)
         {
-
+            // Show menu only if the right mouse button is clicked.
+            if (e.Button == MouseButtons.Right)
+            {
+                // Point where the mouse is clicked.
+                Point p = new Point(e.X, e.Y);
+               
+                cmsDatagrid.Show((DataGridView)sender, p);
+            }
         }
 
-        private void label15_Click(object sender, EventArgs e)
+        private void cmsDatagrid_Click(object sender, EventArgs e)
         {
+            DataGridView _grid = (DataGridView)cmsDatagrid.SourceControl;
 
-        }
-
-        private void tbSortName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label12_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
+            foreach (DataGridViewRow row in _grid.SelectedRows)
+            {
+                _grid.Rows.Remove(row);
+            }
         }
     }
 }

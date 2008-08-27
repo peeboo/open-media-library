@@ -794,14 +794,7 @@ namespace OMLDatabaseEditor
             {
                 Controls.MediaEditor _currentEditor = (Controls.MediaEditor)this.tabsMediaPanel.SelectedTab.Controls[0].Controls[0];
                 Title _currentTitle = (Title)_titleCollection.MoviesByItemId[_currentEditor.itemID];
-
-
             }
-
-        }
-
-        private void tabsMediaPanel_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
         }
 
@@ -809,16 +802,6 @@ namespace OMLDatabaseEditor
         {
             MetaDataSettings settings = new MetaDataSettings();
             settings.Show(_metadataPlugins);
-        }
-
-        private void metadataToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void coverArtOnlyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
         }
 
 
