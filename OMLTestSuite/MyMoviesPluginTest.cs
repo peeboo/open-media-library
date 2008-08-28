@@ -84,5 +84,15 @@ namespace OMLTestSuite
             Assert.AreEqual(@"Butterfly.wmv", Path.GetFileName(title.Disks[1].Path));
             Assert.AreEqual(@"Lake.wmv", Path.GetFileName(title.Disks[2].Path));
         }
+
+        [Test]
+        public void TEST_WHEN_GIVEN_A_FOLDER_SCAN_EACH_FOLDER_LOOKING_FOR_MYMOVIES_XML_FILES()
+        {
+            MyMoviesImporter importer = new MyMoviesImporter();
+            importer.ProcessDir(@"..\..\..\Sample Files\MyMoviesTestFiles\TestNestedDirectory");
+
+            IList<Title> titles = importer.GetTitles();
+            Assert.AreEqual(8, titles.Count);
+        }
     }
 }
