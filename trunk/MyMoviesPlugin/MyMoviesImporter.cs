@@ -29,11 +29,11 @@ namespace MyMoviesPlugin
 
         public override bool IsSingleFileImporter()
         {
-            return true;
+            return false;
         }
-        public override string DefaultFileToImport()
+        protected override bool GetFolderSelect()
         {
-            return @"titles.xml";
+            return true;
         }
         public override void ProcessFile(string file)
         {            
@@ -101,6 +101,60 @@ namespace MyMoviesPlugin
         protected override string GetDescription()
         {
             return "MyMovies xml file importer v" + Version;
+        }
+        public override bool Load(string dirName)
+        {
+            ProcessDir(dirName);
+            return true;
+        }
+        public override void DoWork(string[] thework)
+        {
+            ProcessDir(thework[0]);
+        }
+        public override void ProcessDir(string startFolder)
+        {
+            try
+            {
+                List<string> dirList = new List<string>();
+                List<string> fileList = new List<string>();
+                GetSubFolders(startFolder, dirList);
+
+                // the share or link may not exist nowbb
+                if (Directory.Exists(startFolder))
+                {
+                    dirList.Add(startFolder);
+                }
+
+                foreach (string currentFolder in dirList)
+                {
+                    Utilities.DebugLine("[MyMoviesImporter] folder " + currentFolder);
+                 
+                    string[] fileNames = null;
+                    try
+                    {
+                        fileNames = Directory.GetFiles(currentFolder, "mymovies.xml");
+                    }
+                    catch
+                    {
+                        fileNames = null;
+                    }
+
+                    if (fileNames != null)
+                    {
+                        foreach (string filename in fileNames)
+                        {
+                            if (filename.ToLower().EndsWith(@"mymovies.xml"))
+                            {
+                                ProcessFile(filename);
+                            }
+                        }
+                    }
+                } // loop through the sub folders
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[MyMoviesImporter] An error occured: " + ex.Message);
+            }
         }
 
         private void loadDataFromNavigatorToTitle(ref XPathNavigator navigator, ref Title newTitle)
@@ -435,22 +489,34 @@ namespace MyMoviesPlugin
 
                     if (!string.IsNullOrEmpty(sideALocation))
                     {
-                        VideoFormat format = GetVideoFormatForLocation(sideALocation, sideALocationType);
-                        newTitle.Disks.Add(new Disk(
-                            discName,
-                            sideALocation,
-                            format)
-                        );
+                        if (Directory.Exists(Path.GetFullPath(sideALocation)) || File.Exists(Path.GetFullPath(sideALocation)))
+                        {
+                            VideoFormat format = GetVideoFormatForLocation(sideALocation, sideALocationType);
+                            if (format != VideoFormat.UNKNOWN)
+                            {
+                                newTitle.Disks.Add(new Disk(
+                                    discName,
+                                    sideALocation,
+                                    format)
+                                );
+                            }
+                        }
                     }
 
                     if (!string.IsNullOrEmpty(sideBLocation))
                     {
-                        VideoFormat format = GetVideoFormatForLocation(sideBLocation, sideBLocationType);
-                        newTitle.Disks.Add(new Disk(
-                            discName,
-                            sideBLocation,
-                            format)
-                            );
+                        if (Directory.Exists(Path.GetFullPath(sideBLocation)) || File.Exists(Path.GetFullPath(sideBLocation)))
+                        {
+                            VideoFormat format = GetVideoFormatForLocation(sideBLocation, sideBLocationType);
+                            if (format != VideoFormat.UNKNOWN)
+                            {
+                                newTitle.Disks.Add(new Disk(
+                                    discName,
+                                    sideBLocation,
+                                    format)
+                                    );
+                            }
+                        }
                     }
                     localNav.MoveToNext("Disc", "");
                 }
@@ -458,6 +524,8 @@ namespace MyMoviesPlugin
             }
 
         }
+
+        public enum MyMoviesLocationType { Folder = 1, File };
 
         private VideoFormat GetVideoFormatForLocation(string location, string locationType)
         {
@@ -500,7 +568,6 @@ namespace MyMoviesPlugin
 
             return VideoFormat.UNKNOWN;
         }
-
         public bool ValidateTitle(Title title_to_validate, string file)
         {
             if (title_to_validate.Disks.Count == 0)
@@ -545,6 +612,26 @@ namespace MyMoviesPlugin
                 }
             }
             return true;
+        }
+        private void GetSubFolders(string startFolder, List<string> folderList)
+        {
+            DirectoryInfo[] diArr = null;
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo(startFolder);
+                diArr = di.GetDirectories();
+                foreach (DirectoryInfo folder in diArr)
+                {
+                    folderList.Add(folder.FullName);
+                    GetSubFolders(folder.FullName, folderList);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[MyMoviesImporter] An error occured: " + ex.Message);
+                // ignore any permission errors
+            }
         }
     }
 }
