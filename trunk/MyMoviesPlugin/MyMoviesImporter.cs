@@ -44,6 +44,9 @@ namespace MyMoviesPlugin
             Utilities.DebugLine("[MyMoviesImporter] file loaded");
 
             XmlNodeList nodeList = xDoc.SelectNodes("//Titles/Title");
+            if (nodeList.Count == 0)
+                nodeList = xDoc.SelectNodes("//Title");
+
             foreach (XmlNode movieNode in nodeList)
             {
                 Utilities.DebugLine("[MyMoviesImporter] Found base Title node");
@@ -62,7 +65,7 @@ namespace MyMoviesPlugin
                     break;
                 }
 
-                if (ValidateTitle(newTitle))
+                if (ValidateTitle(newTitle, file))
                 {
                     Utilities.DebugLine("[MyMoviesImporter] Validating title");
                     try { AddTitle(newTitle); }
@@ -496,6 +499,52 @@ namespace MyMoviesPlugin
             }
 
             return VideoFormat.UNKNOWN;
+        }
+
+        public bool ValidateTitle(Title title_to_validate, string file)
+        {
+            if (title_to_validate.Disks.Count == 0)
+            {
+                string directoryName = Path.GetDirectoryName(file);
+                if (Directory.Exists(directoryName))
+                {
+                    if (MediaData.IsBluRay(directoryName))
+                    {
+                        title_to_validate.Disks.Add(new Disk("Disk1", directoryName, VideoFormat.BLURAY));
+                        return true;
+                    }
+
+                    if (MediaData.IsHDDVD(directoryName))
+                    {
+                        title_to_validate.Disks.Add(new Disk("Disk1", directoryName, VideoFormat.HDDVD));
+                        return true;
+                    }
+
+                    if (MediaData.IsDVD(directoryName))
+                    {
+                        title_to_validate.Disks.Add(new Disk("Disk1", directoryName, VideoFormat.DVD));
+                        return true;
+                    }
+
+                    string[] files = Directory.GetFiles(directoryName);
+                    Array.Sort(files);
+                    for (int i = 0; i < files.GetLength(0); i++)
+                    {
+
+                        string ext = Path.GetExtension(files[i]).Substring(1);
+                        try
+                        {
+                            VideoFormat format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                            title_to_validate.Disks.Add(new Disk(string.Format("Disk{0}", i+1), Path.Combine(directoryName, files[i]), format));
+                        }
+                        catch (Exception e)
+                        {
+                            // didnt get the extension, its not a valid file, skip it
+                        }
+                    }
+                }
+            }
+            return true;
         }
     }
 }

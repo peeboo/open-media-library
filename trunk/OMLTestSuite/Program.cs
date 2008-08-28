@@ -8,8 +8,10 @@ namespace OMLTestSuite
         {
             MyMoviesPluginTest mmpt = new MyMoviesPluginTest();
             Console.WriteLine("Testing: MyMoviesPlugin");
-            mmpt.TEST_MULTIPLE_DISCS_FAIL_TO_IMPORT();
             mmpt.TEST_BASE_CASE();
+            mmpt.TEST_MULTIPLE_DISCS_FAIL_TO_IMPORT();
+            mmpt.TEST_WHEN_NO_DISCS_ARE_DEFINED__LOOK_IN_THE_SAME_DIRECTORY_AS_THE_MYMOVIES_XML_FILE_FOR_ANY_VALID_FILES_TO_ADD_AS_DISCS();
+            mmpt.TEST_WHEN_NO_DISCS_ARE_DEFINED__LOOK_IN_THE_SAME_DIRECTORY_AS_THE_MYMOVIES_XML_FILE_FOR_ANY_VALID_FILES_TO_ADD_AS_DISCS__MULTIPLE_FILES();
 
             DVDProfilerTest dpt = new DVDProfilerTest();
             Console.WriteLine("Testing: DVDProfilerPlugin");
