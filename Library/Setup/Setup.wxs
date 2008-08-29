@@ -172,14 +172,14 @@
 
         <DirectoryRef Id="TARGETDIR">
             <Component Id="registry" Guid="FDDE2AF7-995E-4b84-B8B7-2E150E7C7101" DiskId="1">
-                <RegistryKey Id="registry0" Root="HKLM"
+                <Registry Id="registry0" Root="HKLM"
                           Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}"
-                          Action="create">
-                    <RegistryValue Id="reg1" Type="string" Value="Movie Library" Name="Title"/>
-                    <RegistryValue Id="reg2" Type="string" Value="OML\Movie Library" Name="Category"/>
-                    <RegistryValue Id="reg3" Type="string" Value="True" Name="OnStartMenu"/>
-                </RegistryKey>
-              <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey" Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\Services\Movies\{543d0438-b10d-43d8-a20d-f0c96db4e6bd}" />
+                          Action="createKey">
+                    <Registry Id="reg1" Type="string" Value="Movie Library" Name="Title"/>
+                    <Registry Id="reg2" Type="string" Value="OML\Movie Library" Name="Category"/>
+                    <Registry Id="reg3" Type="string" Value="True" Name="OnStartMenu"/>
+                </Registry>
+                <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey" Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\Services\Movies\{543d0438-b10d-43d8-a20d-f0c96db4e6bd}" />
             </Component>
         </DirectoryRef>
 
