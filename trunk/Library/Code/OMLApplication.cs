@@ -1,4 +1,5 @@
 //#define DEBUG_EXT
+//#define NEWMENU
 
 using System.Collections;
 using System.Collections.Generic;
@@ -72,17 +73,16 @@ namespace Library
         public void Startup(string context)
         {
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
-            /*
+#if NEWMENU
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
             properties["UISettings"] = new UISettings();
             properties["Settings"] = new Settings();
-            properties["Gallery"] = new BaseGallery();
+            properties["Gallery"] = new BaseGallery(this, _host, _titles);
 
             _session.GoToPage(@"resx://Library/Library.Resources/NewMenu", properties);
             return;
-            */
-
+#endif
             switch (context)
             {
                 case "Menu":

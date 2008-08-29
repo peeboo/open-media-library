@@ -1,0 +1,21 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:me="Me">
+
+	<UI Name="GroupLabel">
+
+		<Properties>
+            <Choice Name="Model" Choice="$Required"/>
+		</Properties>
+
+		<Rules>
+            <Binding Source="[Model.Description]" Target="[Label.Content]"/>
+		</Rules>
+
+		<Content>
+			<Text Name="Label" Color="LightBlue" Font="Calibri, 16" />
+		</Content>
+
+	</UI>
+
+</Mcml>

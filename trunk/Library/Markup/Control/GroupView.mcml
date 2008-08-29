@@ -1,0 +1,21 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:me="Me">
+
+    <Aggregate Source="resx://Library/Library.Resources/ListBox"/>
+    
+	<UI Name="GroupView">
+        <Properties>
+            <Choice Name="Model" Choice="$Required"/>
+        </Properties>
+
+        <Content>
+            <ColorFill Content="Green" Layout="HorizontalFlow">
+                <Children>
+                    <me:ListBox Model="[Model]" />
+                </Children>
+            </ColorFill>
+        </Content>
+    </UI>
+
+</Mcml>
