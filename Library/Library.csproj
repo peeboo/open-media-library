@@ -75,6 +75,7 @@
     <Compile Include="Code\DaemonTools.cs" />
     <Compile Include="Code\DirectoryTreeNode.cs" />
     <Compile Include="Code\FolderView.cs" />
+    <Compile Include="Code\GroupingView.cs" />
     <Compile Include="Code\MoviePlayerBluRay.cs" />
     <Compile Include="Code\MoviePlayerExtenderDVD.cs" />
     <Compile Include="Code\MoviePlayerHDDVD.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Code\MoviePlayerVideo.cs" />
     <Compile Include="Code\OMLChoice.cs" />
     <Compile Include="Code\OMLCommand.cs" />
+    <Compile Include="Code\OMLPage.cs" />
     <Compile Include="Code\OMLSettings.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\Setup.cs" />
@@ -142,7 +144,13 @@
     <Content Include="Markup\Button.mcml" />
     <Content Include="Markup\Control\Controls.mcml" />
     <Content Include="Markup\Control\ExplandCollapseButton.mcml" />
+    <Content Include="Markup\Control\GroupItem.mcml" />
+    <Content Include="Markup\Control\GroupLabel.mcml" />
+    <Content Include="Markup\Control\GroupView.mcml" />
     <Content Include="Markup\Control\HeaderText.mcml" />
+    <Content Include="Markup\Control\ListBox.mcml" />
+    <Content Include="Markup\Control\ListBoxItem.mcml" />
+    <Content Include="Markup\Control\GalleryItem.mcml" />
     <Content Include="Markup\Control\Pivot.mcml" />
     <Content Include="Markup\Control\PivotItem.mcml" />
     <Content Include="Markup\Control\SimpleButton.mcml" />
@@ -171,6 +179,7 @@
     <Content Include="Markup\SetupTop.mcml" />
     <Content Include="Markup\SimpleRadioButton.mcml" />
     <Content Include="Markup\Styles.mcml" />
+    <Content Include="Markup\TestBackground.mcml" />
     <Content Include="Markup\VeronicasRadio.mcml" />
     <Content Include="Registration.xml" />
     <Content Include="Images\Application.png" />
@@ -282,6 +291,7 @@
     <None Include="Resources\PivotArrowLeft1.png" />
     <None Include="Resources\PivotArrowRight1.png" />
     <None Include="Resources\spinnerarrowbackdisabled1.png" />
+    <None Include="Resources\SampleBackground_1024_768.jpg" />
     <Content Include="Resources\SpinnerArrowBackDormant.png" />
     <None Include="Resources\spinnerarrowbackdormant1.png" />
     <None Include="Resources\spinnerarrowbackdormant2.png" />

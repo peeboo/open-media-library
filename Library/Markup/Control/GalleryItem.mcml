@@ -1,0 +1,64 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:a="assembly://Library/Library"
+	  xmlns:s="resx://Library/Library.Resources/Styles"
+	  xmlns:me="Me">
+
+	<UI Name="GalleryItem">
+
+		<Properties>
+            <a:GalleryItem Name="Item" GalleryItem="$Required"/>
+            <cor:Single Name="CoverArtAlpha" Single="0.5"/>
+            <Image Name="BackgroundImage" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
+		</Properties>
+
+        <Content>
+            <Panel Name="ItemPanel" Layout="Anchor" Scale="1.0,1.0,1.0" CenterPointPercent="0.5,0.75,0.0">
+                <Children>
+                    <Panel Name="ImagePanel" Margins="0,0,0,0">
+                        <Children>
+                            <Text Name="Caption" Content="[Item.Caption]" Font="font://s:ListFont" Color="White" WordWrap="true" Margins="20,10,20,10" />
+                            <Graphic Name="MenuCover" Content="[Item.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint">
+                                <Animations>
+                                    <Animation Type="ContentChangeShow" CenterPointOffset="0.5,0.5,0">
+                                        <Keyframes>
+                                            <RotateKeyframe Time="0" Value="0deg;0,0,0"/>
+                                            <RotateKeyframe Time="0.2" Value="360deg;0,1,0"/>
+                                        </Keyframes>
+                                    </Animation>
+                                </Animations>
+                            </Graphic>
+                        </Children>
+                    </Panel>
+
+                    <Graphic Name="Background" Content="[BackgroundImage]" Visible="false">
+                        <LayoutInput>
+                            <AnchorLayoutInput Left="ImagePanel,-0.03" Right="ImagePanel,1.03" Top="ImagePanel,-0.02" Bottom="ImagePanel,1.02"/>
+                        </LayoutInput>
+                        <Animations>
+                            <Animation Animation="animation://s:OverlayIdle"/>
+                        </Animations>
+                    </Graphic>
+
+                </Children>
+
+                <Animations>
+                    <Animation Type="Rotate">
+                        <Keyframes>
+                            <RotateKeyframe Time="0" Value="0deg;0,1,0" RelativeTo="Current" Interpolation="Log"/>
+                            <RotateKeyframe Time=".5" Value="0deg;0,1,0" RelativeTo="Final"/>
+                        </Keyframes>
+                    </Animation>
+                    <Animation Type="Scale">
+                        <Keyframes>
+                            <ScaleKeyframe Time="0" RelativeTo="Current" Interpolation="Log"/>
+                            <ScaleKeyframe Time=".5" RelativeTo="Final"/>
+                        </Keyframes>
+                    </Animation>
+                </Animations>
+            </Panel>
+        </Content>
+
+	</UI>
+
+</Mcml>

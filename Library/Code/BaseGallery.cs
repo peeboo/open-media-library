@@ -1,31 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
+using OMLEngine;
 
 namespace Library
 {
-    public class BaseGallery : ModelItem
+    public class BaseGallery : OMLPage
     {
-        OMLChoice menuTabs;
+        GroupingView gView;
+        TitleCollection titleCollection;
 
-        public OMLChoice MenuTabs
+        public BaseGallery(OMLApplication app, AddInHost host, TitleCollection tc) : base(app, host)
         {
-            get { return menuTabs; }
-            set
-            {
-                menuTabs = value;
-                FirePropertyChanged("MenuTabs");
-            }
+            PageName = "Main";
+            titleCollection = tc;
+            gView = new GroupingView(tc, Filter.Genres);
+            FirePropertyChanged("View");
         }
 
-        public BaseGallery()
+        public OMLChoice View
         {
-            menuTabs = new OMLChoice();
-            ArrayListDataSet tabs = new ArrayListDataSet();
-            tabs.Add("By Genre");
-            tabs.Add("By Year");
-            menuTabs.Options = tabs;
+            get { return gView.Data; }
         }
     }
 }

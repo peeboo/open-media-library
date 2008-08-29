@@ -18,13 +18,22 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Files", "Sample Files", "{1AC49F02-A28A-48B9-A7B6-AC7A82CC7645}"
 	ProjectSection(SolutionItems) = preProject
 		Sample Files\2001.jpg = Sample Files\2001.jpg
+		Sample Files\BluRay.jpg = Sample Files\BluRay.jpg
 		Sample Files\dvd_profiler.xml = Sample Files\dvd_profiler.xml
+		Sample Files\DVDProfiler-SampleBymuskie.xml = Sample Files\DVDProfiler-SampleBymuskie.xml
+		Sample Files\firefly.jpg = Sample Files\firefly.jpg
+		Sample Files\firefly.oml.xml = Sample Files\firefly.oml.xml
+		Sample Files\HDDVD.jpg = Sample Files\HDDVD.jpg
 		Sample Files\main_menu.jpg = Sample Files\main_menu.jpg
 		Sample Files\Movie_Collectorz.xml = Sample Files\Movie_Collectorz.xml
+		Sample Files\mymovies-multiple-avi-files-bug.xml = Sample Files\mymovies-multiple-avi-files-bug.xml
+		Sample Files\mymovies-single-multiple-files.xml = Sample Files\mymovies-single-multiple-files.xml
 		Sample Files\MyMovies.xml = Sample Files\MyMovies.xml
 		Sample Files\oml.dat = Sample Files\oml.dat
+		Sample Files\oml.xsd = Sample Files\oml.xsd
 		Sample Files\oml_menu.jpg = Sample Files\oml_menu.jpg
 		Sample Files\oml_title.jpg = Sample Files\oml_title.jpg
+		Sample Files\sample-oml.xml = Sample Files\sample-oml.xml
 		Sample Files\test.wpl = Sample Files\test.wpl
 	EndProjectSection
 EndProject
