@@ -35,11 +35,12 @@ ON HOLD FOR FUTURE DEVELOPMENT: these items are normal
   * (*DONE*) Metadata editor
   * (*DONE*) Nicer/Better quality thumbnails on menu page (you will have to reimport movies for this)
   * (*DONE*) Define OML xml scheme for 3rd party export/import
+  * (*DONE*) Mymovies Xml support (one file per folder)
 
-  * (_IN DEVELOPMENT_) Mymovies Xml support (one file per folder) (80% complete)
+  * (_IN DEVELOPMENT_) Folder view option 
 
 == Top Requests from 0.1b ==
-  * Folder view option
+  * Folder view option 
   * Recursive folder support for mymovies.xml files (50% complete)
 
   * (ON HOLD) Support for Blu-Ray/HD-DVD (50% Complete)
