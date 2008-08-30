@@ -14,6 +14,25 @@
 
         <Rules>
             <Binding Source="[Gallery.PageName]" Target="[PageDescription.Content]"/>
+            <Changed Source="[Gallery.MenuTabs.Chosen]">
+                <Conditions>
+                    <Equality Source="[Gallery.MenuTabs.Chosen.ToString]" Value="OML Home"/>
+                </Conditions>
+                <Actions>
+                    <Set Target="[ViewHome.Visible]" Value="true"/>
+                    <Set Target="[ViewGenre.Visible]" Value="false"/>
+                </Actions>
+            </Changed>
+
+            <Changed Source="[Gallery.MenuTabs.Chosen]">
+                <Conditions>
+                    <Equality Source="[Gallery.MenuTabs.Chosen.ToString]" Value="Genre"/>
+                </Conditions>
+                <Actions>
+                    <Set Target="[ViewHome.Visible]" Value="false"/>
+                    <Set Target="[ViewGenre.Visible]" Value="true"/>
+                </Actions>
+            </Changed>
         </Rules>
         <Content>
             <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
@@ -49,7 +68,8 @@
 
                     <Panel Name="MainPanel" MouseInteractive="true" FocusOrder="0">
                         <Children>
-                            <me:GroupView Model="[Gallery.View]"/>
+                            <me:ViewByHome Gallery="[Gallery]" Name="ViewHome" Visible="true"/>
+                            <me:ViewByGenre Gallery="[Gallery]" Name="ViewGenre" Visible="false"/>
                         </Children>
                         <LayoutInput>
                             <FormLayoutInput Left="Parent, 0.005, 20" Right="Parent,1,-20" Top="Parent,0.15" Bottom="Parent,.850"/>
@@ -73,5 +93,23 @@
             </ColorFill>
         </Content>
 	</UI>
+
+    <UI Name="ViewByHome">
+        <Properties>
+            <a:BaseGallery Name="Gallery" BaseGallery="$Required"/>
+        </Properties>
+        <Content>
+            <me:GroupView Model="[Gallery.View]"/>
+        </Content>
+    </UI>
+
+    <UI Name="ViewByGenre">
+        <Properties>
+            <a:BaseGallery Name="Gallery" BaseGallery="$Required"/>
+        </Properties>
+        <Content>
+            <Text Content="this would be the genre view"/>
+        </Content>
+    </UI>
 
 </Mcml>

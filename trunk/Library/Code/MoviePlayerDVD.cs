@@ -17,17 +17,14 @@ namespace Library
             _title = title;
         }
 
-        public bool PlayMovie()
+        public bool PlayMovie(string playString)
         {
             if (MediaData.IsDVD(_title.SelectedDisk.Path))
             {
-                string play_string = "DVD://" + MediaData.GetPlayStringForPath(_title.SelectedDisk.Path);
-//                play_string.Replace('\\', '/');
-                if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, play_string, false))
+                if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, playString, false))
                 {
                     if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                     {
-                        Utilities.DebugLine("DVDPlayer.PlayMovie: movie {0} Playing", _title.Name);
                         OMLApplication.Current.NowPlayingMovieName = _title.Name;
                         OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
                         AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
@@ -35,12 +32,61 @@ namespace Library
                     }
                     return true;
                 }
-                else
-                    return false;
+                return false;
             }
             return false;
         }
 
+        public bool PlayMovie()
+        {
+            if (MediaData.IsDVD(_title.SelectedDisk.Path))
+            {
+                string play_string = "DVD://" + MediaData.GetPlayStringForPath(_title.SelectedDisk.Path);
+                return PlayMovie(play_string);
+            }
+            return false;
+        }
+
+        public bool PlayMovie(int titleNumber, int chapterNumber, DateTime startTime)
+        {
+            if (MediaData.IsDVD(_title.SelectedDisk.Path))
+            {
+                return false;
+            }
+            return false;
+        }
+
+        public static string GeneratePlayString(string path, int titleNumber, int chapterNumber)
+        {
+            string playString = string.Empty;
+            playString = string.Format("DVD://{0}", MediaData.GetPlayStringForPath(path));
+            playString = playString.Replace('\\', '/');
+
+            if (titleNumber > 0)
+            {
+                if (chapterNumber > 0)
+                    playString += string.Format("?{0}/{1}", titleNumber, chapterNumber);
+                else
+                    playString += string.Format("?{0}", titleNumber);
+            }
+            return playString;
+        }
+
+        public static string GeneratePlayString(string path, int titleNumber, DateTime startTime)
+        {
+            string playString = string.Empty;
+            playString = string.Format("DVD://{0}", MediaData.GetPlayStringForPath(path));
+            playString = playString.Replace('\\', '/');
+
+            if (titleNumber < 1)
+                titleNumber = 1;
+
+            playString += string.Format("?{0}/{1}:{2}:{3}",
+                                        titleNumber, startTime.Hour,
+                                        startTime.Minute, startTime.Second);
+
+            return playString;
+        }
         MovieItem _title;
     }
 
