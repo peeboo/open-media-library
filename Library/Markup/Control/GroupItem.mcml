@@ -33,6 +33,7 @@
 		</Content>
 
         <Content Name="Item">
+            <!--<Text Content="This is a test"/>-->
             <me:ListBoxItem GalleryItem="[RepeatedItem!a:GalleryItem]"/>
         </Content>
 

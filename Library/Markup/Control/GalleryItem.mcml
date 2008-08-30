@@ -18,16 +18,7 @@
                     <Panel Name="ImagePanel" Margins="0,0,0,0">
                         <Children>
                             <Text Name="Caption" Content="[Item.Caption]" Font="font://s:ListFont" Color="White" WordWrap="true" Margins="20,10,20,10" />
-                            <Graphic Name="MenuCover" Content="[Item.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint">
-                                <Animations>
-                                    <Animation Type="ContentChangeShow" CenterPointOffset="0.5,0.5,0">
-                                        <Keyframes>
-                                            <RotateKeyframe Time="0" Value="0deg;0,0,0"/>
-                                            <RotateKeyframe Time="0.2" Value="360deg;0,1,0"/>
-                                        </Keyframes>
-                                    </Animation>
-                                </Animations>
-                            </Graphic>
+                            <!--<Graphic Name="MenuCover" Content="[Item.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint" AcquiringImage="resx://Library/Library.Resources/nocover"/>-->
                         </Children>
                     </Panel>
 

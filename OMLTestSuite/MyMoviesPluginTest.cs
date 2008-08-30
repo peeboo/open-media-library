@@ -94,5 +94,20 @@ namespace OMLTestSuite
             IList<Title> titles = importer.GetTitles();
             Assert.AreEqual(8, titles.Count);
         }
+
+        [Test]
+        public void TEST_FOLDER_JPG_FILES_ARE_USED_IF_COVER_PATHS_DONT_APPEAR_TO_EXIST()
+        {
+            MyMoviesImporter importer = new MyMoviesImporter();
+            importer.ProcessDir(@"..\..\..\Sample Files\MyMoviesTestFiles\TestNestedDirectory\dir1");
+
+            IList<Title> titles = importer.GetTitles();
+            Assert.AreEqual(4, titles.Count);
+
+            Assert.IsNotNull(titles[0].FrontCoverPath);
+            string imagePath = titles[0].FrontCoverPath;
+            Assert.IsTrue(File.Exists(imagePath));
+            Assert.IsTrue(imagePath.EndsWith("folder.jpg", StringComparison.CurrentCultureIgnoreCase));
+        }
     }
 }

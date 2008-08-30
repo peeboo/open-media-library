@@ -87,6 +87,18 @@ namespace OMLEngine
             if (IsDVD(path))
             {
                 Utilities.DebugLine("[MediaData] Media detected is DVD");
+                if (Directory.Exists(path) && path.EndsWith("VIDEO_TS", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    Utilities.DebugLine("[MediaData] Returning DVD path as: " + path);
+                    return path;
+                }
+
+                if (Directory.Exists(Path.Combine(path, DVDDirectoryName)))
+                {
+                    Utilities.DebugLine("[MediaData] Returning DVD path as: " +
+                                        Path.Combine(path, DVDDirectoryName));
+                    return Path.Combine(path, DVDDirectoryName);
+                }
                 if (File.Exists(Path.Combine(path, DVDFileName)))
                 {
                     Utilities.DebugLine("[MediaData] Returning DVD path as: " +

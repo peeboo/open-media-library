@@ -10,7 +10,7 @@
         </Properties>
 
         <Content>
-            <ColorFill Content="Green" Layout="HorizontalFlow">
+            <ColorFill Content="Transparent" Layout="HorizontalFlow">
                 <Children>
                     <me:ListBox Model="[Model]" />
                 </Children>
