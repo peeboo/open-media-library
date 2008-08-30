@@ -16,6 +16,7 @@ namespace MyMoviesPlugin
     {
         private static double MajorVersion = 0.9;
         private static double MinorVersion = 0.2;
+        private string currentFile = string.Empty;
 
         public MyMoviesImporter() : base()
         {
@@ -39,6 +40,7 @@ namespace MyMoviesPlugin
         {            
             Utilities.DebugLine("[MyMoviesImporter] created[filename("+file+"), ShouldCopyImages("+CopyImages+")]");
 
+            currentFile = file;
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(file);
             Utilities.DebugLine("[MyMoviesImporter] file loaded");
@@ -156,7 +158,6 @@ namespace MyMoviesPlugin
                 Utilities.DebugLine("[MyMoviesImporter] An error occured: " + ex.Message);
             }
         }
-
         private void loadDataFromNavigatorToTitle(ref XPathNavigator navigator, ref Title newTitle)
         {
             if (navigator.MoveToChild("WebServiceId", ""))
@@ -169,7 +170,22 @@ namespace MyMoviesPlugin
             {
                 if (navigator.MoveToChild("Front", ""))
                 {
-                    SetFrontCoverImage(ref newTitle, navigator.Value);
+                    string imagePath = navigator.Value;
+                    if (File.Exists(imagePath))
+                    {
+                        SetFrontCoverImage(ref newTitle, navigator.Value);
+                    }
+                    else
+                    {
+                        string possibleImagePath = Path.Combine(
+                                                        Path.GetDirectoryName(currentFile),
+                                                        "folder.jpg");
+
+                        if (File.Exists(possibleImagePath))
+                        {
+                            SetFrontCoverImage(ref newTitle, possibleImagePath);
+                        }
+                    }
                     navigator.MoveToParent();
                 }
 
@@ -524,9 +540,7 @@ namespace MyMoviesPlugin
             }
 
         }
-
         public enum MyMoviesLocationType { Folder = 1, File };
-
         private VideoFormat GetVideoFormatForLocation(string location, string locationType)
         {
             int type = Int32.Parse(locationType);
