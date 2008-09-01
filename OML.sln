@@ -28,12 +28,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Files", "Sample File
 		Sample Files\Movie_Collectorz.xml = Sample Files\Movie_Collectorz.xml
 		Sample Files\mymovies-multiple-avi-files-bug.xml = Sample Files\mymovies-multiple-avi-files-bug.xml
 		Sample Files\mymovies-single-multiple-files.xml = Sample Files\mymovies-single-multiple-files.xml
+		Sample Files\mymovies-single.xml = Sample Files\mymovies-single.xml
 		Sample Files\MyMovies.xml = Sample Files\MyMovies.xml
 		Sample Files\oml.dat = Sample Files\oml.dat
 		Sample Files\oml.xsd = Sample Files\oml.xsd
 		Sample Files\oml_menu.jpg = Sample Files\oml_menu.jpg
 		Sample Files\oml_title.jpg = Sample Files\oml_title.jpg
 		Sample Files\sample-oml.xml = Sample Files\sample-oml.xml
+		Sample Files\SampleBackground_1024_768.jpg = Sample Files\SampleBackground_1024_768.jpg
 		Sample Files\test.wpl = Sample Files\test.wpl
 	EndProjectSection
 EndProject

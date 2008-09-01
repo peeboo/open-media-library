@@ -19,8 +19,8 @@ namespace OMLTestSuite
             builder.SetOutputFile(@"mymovie");
 
             Assert.IsNotNull(builder.GetCommand());
-            Assert.AreEqual(@"C:\Program Files\OpenMediaLibrary\mencoder.exe -oac copy -ovc copy " +
-                            @"dvd://1 -dvd-device R:\ -of mpeg -o C:\ProgramData\OpenMediaLibrary\mymovie.mpg",
+            Assert.AreEqual(@"C:\Program Files\OpenMediaLibrary\mencoder.exe -alang en -oac copy -ovc copy " +
+                            @"-dvd-device ""R:\"" dvd:// -of mpeg -mpegopts format=dvd:tsaf -vf harddup -quiet -o ""C:\ProgramData\OpenMediaLibrary\mymovie.mpg""",
                             builder.GetCommand());
         }
     }
