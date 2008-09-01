@@ -5,6 +5,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 using OMLEngine;
 
 namespace OMLTranscoder
@@ -36,7 +37,7 @@ namespace OMLTranscoder
             audioFormat = format;
         }
 
-        public void SetSubtitleOutputLanguage()
+        public void SetSubtitleOutputLanguage(string languageId)
         {
         }
 
@@ -95,6 +96,7 @@ namespace OMLTranscoder
                 throw new Exception("Must define either an input drive or an input device");
             }
 
+            StringBuilder strBuilder = new StringBuilder(Path.Combine(FileSystemWalker.RootDirectory, @"mencoder.exe"));
             string cmdString = string.Empty;
             cmdString = Path.Combine(FileSystemWalker.RootDirectory, @"mencoder.exe");
 
@@ -102,7 +104,14 @@ namespace OMLTranscoder
             if (audioFormat == MEncoder.AudioFormat.NoAudio)
                 cmdString += @" -nosound";
             else
+            {
+                if (audioStream != null)
+                    cmdString += string.Format(" -alang {0}", audioStream.languageId);
+                else
+                    cmdString += @" -alang en";
+
                 cmdString += string.Format(@" -oac {0}", ((string)Enum.GetName(typeof(MEncoder.AudioFormat), audioFormat)).ToLower());
+            }
 
             //audio stream
             if ((audioStream != null) && (audioFormat != MEncoder.AudioFormat.NoAudio))
@@ -122,21 +131,24 @@ namespace OMLTranscoder
             //chapters
 
 
-            //input device or file
-            cmdString += @" dvd://1";
-
             // input location
             if (inputType == MEncoder.InputType.Drive)
-                cmdString += string.Format(@" -dvd-device {0}", inputDrive.RootDirectory);
+                cmdString += string.Format(@" -dvd-device ""{0}""", inputDrive.RootDirectory);
 
             if (inputType == MEncoder.InputType.File)
-                cmdString += string.Format(@" -dvd-device {0}", inputFile.FullName);
+                cmdString += string.Format(@" -dvd-device ""{0}""", inputFile.FullName);
+
+            //input device or file
+            cmdString += @" dvd://";
 
             // output format
-            cmdString += @" -of mpeg"; // always set the output format to mpeg for extenders
+            cmdString += @" -of mpeg -mpegopts format=dvd:tsaf -vf harddup"; // always set the output format to mpeg for extenders
+
+            // set quiet mode on
+            cmdString += @" -quiet";
 
             //output
-            cmdString += string.Format(@" -o {0}.mpg", Path.Combine(FileSystemWalker.PublicRootDirectory, outputFile));
+            cmdString += string.Format(@" -o ""{0}.mpg""", Path.Combine(FileSystemWalker.PublicRootDirectory, outputFile));
 
             return cmdString;
         }
