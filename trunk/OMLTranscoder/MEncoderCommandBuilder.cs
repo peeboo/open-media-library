@@ -17,7 +17,7 @@ namespace OMLTranscoder
         private MEncoder.VideoFormat videoFormat;
         private SubtitleStream subStream;
         private AudioStream audioStream;
-        private string subtitleBaseFileName;
+        //private string subtitleBaseFileName;
         private DriveInfo inputDrive;
         private FileInfo inputFile;
         private MEncoder.InputType inputType;

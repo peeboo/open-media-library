@@ -101,18 +101,19 @@ namespace DVDProfilerPlugin
                 string imagesPath = null;
                 XmlTextReader DvdProfilerSettings = new XmlTextReader("Plugins\\DVDProfilerSettings.xml");
 
-                while (DvdProfilerSettings.Read())
-                {
-                    if (DvdProfilerSettings.NodeType == XmlNodeType.Element &&
-                    DvdProfilerSettings.Name == "imagesPath")
+                if (File.Exists("Plugins\\DVDProfilerSettings.xml"))
+                    while (DvdProfilerSettings.Read())
                     {
-                        imagesPath = (DvdProfilerSettings.ReadInnerXml());
+                        if (DvdProfilerSettings.NodeType == XmlNodeType.Element &&
+                        DvdProfilerSettings.Name == "imagesPath")
+                        {
+                            imagesPath = (DvdProfilerSettings.ReadInnerXml());
+                        }
+                        else
+                            Console.WriteLine("Missing Database location variable in DvdProfilerSettings.xml file, as a result images will not be imported");
                     }
-                    else
-                        Console.WriteLine("Missing Database location variable in DvdProfilerSettings.xml file, as a result images will not be imported");
-                }
 
-                if (Directory.Exists(imagesPath))
+                if (imagesPath != null && Directory.Exists(imagesPath))
                 {
                     if (File.Exists(Path.Combine(imagesPath, string.Format("{0}f.{1}", id, @"jpg"))))
                     {
