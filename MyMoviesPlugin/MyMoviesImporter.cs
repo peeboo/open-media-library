@@ -146,9 +146,10 @@ namespace MyMoviesPlugin
                         foreach (string filename in fileNames)
                         {
                             if (filename.ToLower().EndsWith(@"mymovies.xml"))
-                            {
                                 ProcessFile(filename);
-                            }
+
+                            if (filename.ToLower().EndsWith(@"titles.xml"))
+                                ProcessFile(filename);
                         }
                     }
                 } // loop through the sub folders
