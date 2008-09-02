@@ -250,6 +250,8 @@ namespace OMLEngine
             Stream stm;
             try
             {
+                if (File.Exists(_database_filename) == false)
+                    return false;
                 stm = File.OpenRead(_database_filename);
             }
             catch (Exception ex)

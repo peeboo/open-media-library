@@ -55,17 +55,64 @@ namespace Library
                     {
                         OMLApplication.DebugLine("Single VOB file, trying to use a hard-link approach and direct playback");
                         string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);
-                        if (mpegFile != null && File.Exists(mpegFile))
+                        if (File.Exists(mpegFile))
                         {
                             OMLApplication.DebugLine("directly use MPEG");
                             videoFile = mpegFile;
                         }
                     }
                     else if (Properties.Settings.Default.Extender_UseAsx)
-                        videoFile = Extender_UseAsx(mpegFolder, vts, vobs);
+                    {
+                        OMLApplication.DebugLine("Multiple VOB files, and Extender_UseAsx == true, trying to use a hard-link and asx playlist approach ");
+                        foreach (string vob in vobs)
+                            MakeMPEGLink(mpegFolder, vob);
+
+                        if (File.Exists(GetMPEGName(mpegFolder, vobs[0])))
+                            videoFile = CreateASX(mpegFolder, vts, vobs);
+                    }
                     else if (Properties.Settings.Default.Extender_MergeVOB)
-                        if (Extender_MergeVOB(mpegFolder, vobs, out videoFile) == false)
+                    {
+                        OMLApplication.DebugLine("Multiple VOB files, and Extender_MergeVOB == true, trying to use a hard-link and auto-merge into single large .VOB file approach ");
+                        string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);
+                        OMLApplication.DebugLine("Merge VOB's, use first VOB to play and merge into");
+
+                        if (File.Exists(mpegFile) == false)
                             return false;
+
+                        videoFile = mpegFile;
+
+                        FileStream writter = File.Open(vobs[0], FileMode.Append, FileAccess.Write, FileShare.Read);
+                        ThreadPool.QueueUserWorkItem(delegate
+                        {
+                            try
+                            {
+                                for (int i = 1; i < vobs.Count; ++i)
+                                {
+                                    byte[] buffer = new byte[128 * 1024 * 1024];
+                                    OMLApplication.DebugLine("Appending '{0}' to '{1}'", vobs[i], vobs[0]);
+                                    using (FileStream reader = File.OpenRead(vobs[i]))
+                                        for (; ; )
+                                        {
+                                            int read = reader.Read(buffer, 0, buffer.Length);
+                                            if (read == 0)
+                                                break;
+                                            writter.Write(buffer, 0, read);
+                                        }
+                                }
+
+                                for (int i = 1; i < vobs.Count; ++i)
+                                {
+                                    OMLApplication.DebugLine("Deleting '{0}'", vobs[i]);
+                                    File.Delete(vobs[i]);
+                                }
+                            }
+                            finally
+                            {
+                                OMLApplication.DebugLine("Done merging into '{0}'", vobs[0]);
+                                writter.Close();
+                            }
+                        });
+                    }
                 }
                 else
                     OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: no main title found for {0}", _title.SelectedDisk);
@@ -89,103 +136,12 @@ namespace Library
                 return true;
             }
             else
-                return false;
-        }
-
-        string Extender_UseAsx(string mpegFolder, string vts, List<string> vobs)
-        {
-            OMLApplication.DebugLine("Multiple VOB files, and Extender_UseAsx == true, trying to use a hard-link and asx playlist approach ");
-            foreach (string vob in vobs)
-                MakeMPEGLink(mpegFolder, vob);
-
-            if (File.Exists(GetMPEGName(mpegFolder, vobs[0])))
-                return CreateASX(mpegFolder, vts, vobs);
-
-            return null;
-        }
-
-        bool Extender_MergeVOB(string mpegFolder, List<string> vobs, out string videoFile)
-        {
-            OMLApplication.DebugLine("Multiple VOB files, and Extender_MergeVOB == true, trying to use a hard-link and auto-merge into single large .VOB file approach ");
-            string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);
-            if (mpegFile == null || File.Exists(mpegFile) == false)
             {
-                videoFile = null;
-                return false;
-            }
-
-            OMLApplication.DebugLine("Merge VOB's, use first VOB to play and merge into");
-            videoFile = mpegFile;
-
-            if (SetVob1Limit(vobs[0]) == false)
-                return false;
-
-            FileStream writter = File.Open(vobs[0], FileMode.Append, FileAccess.Write, FileShare.Read);
-            ThreadPool.QueueUserWorkItem(delegate
-            {
-                try
-                {
-                    for (int i = 1; i < vobs.Count; ++i)
-                    {
-                        byte[] buffer = new byte[128 * 1024 * 1024];
-                        OMLApplication.DebugLine("Appending '{0}' to '{1}'", vobs[i], vobs[0]);
-                        using (FileStream reader = File.OpenRead(vobs[i]))
-                            for (; ; )
-                            {
-                                int read = reader.Read(buffer, 0, buffer.Length);
-                                if (read == 0)
-                                    break;
-                                writter.Write(buffer, 0, read);
-                            }
-                    }
-                    writter.Close();
-                    writter = null;
-
-                    for (int i = 1; i < vobs.Count; ++i)
-                    {
-                        OMLApplication.DebugLine("Deleting '{0}'", vobs[i]);
-                        File.Delete(vobs[i]);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    OMLApplication.DebugLine("Exception during merging into '{0}', exception: {1}", vobs[0], ex);
-                    if (writter != null)
-                        writter.Close();
-                    writter = null;
-                    SetVob1Limit(vobs[0]);
-                }
-                finally
-                {
-                    OMLApplication.DebugLine("Done merging into '{0}'", vobs[0]);
-                }
-            });
-            return true;
-        }
-
-        static bool SetVob1Limit(string vob1)
-        {
-            try
-            {
-                const int limit = 1073739776;
-                FileInfo vob1Info = new FileInfo(vob1);
-                if (vob1Info.Length != limit)
-                {
-                    OMLApplication.DebugLine("Setting new limit to '{0}', old size: {1}, new limit: {2}", vob1, vob1Info.Length, limit);
-                    using (FileStream writter = File.OpenWrite(vob1))
-                        writter.SetLength(limit);
-                    OMLApplication.DebugLine("  new size: {0}", new FileInfo(vob1).Length);
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                OMLApplication.DebugLine("[SetVob1Limit] File: '{0}' Exception: {1}", vob1, ex);
                 return false;
             }
         }
 
-        static string MakeMPEGLink(string mpegFolder, string vob)
+        private static string MakeMPEGLink(string mpegFolder, string vob)
         {
             string mpegFile = GetMPEGName(mpegFolder, vob);
             if (File.Exists(mpegFile) == false)
@@ -193,12 +149,12 @@ namespace Library
                 if (IsNTFS(mpegFolder) == false)
                 {
                     OMLApplication.DebugLine("File system not NTFS: can't create hard-links: {0}", mpegFolder);
-                    return null;
+                    //break;
                 }
                 if (CreateHardLinkAPI(mpegFile, vob, IntPtr.Zero) == false)
                 {
                     OMLApplication.DebugLine("Failed to create a hard-link {0} -> {1}", vob, mpegFile);
-                    return null;
+                    //break;
                 }
                 OMLApplication.DebugLine("created a hard-link {0} -> {1}, Success:{2}", vob, mpegFile, File.Exists(mpegFile));
             }

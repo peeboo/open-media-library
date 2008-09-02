@@ -229,9 +229,8 @@ namespace MyMoviesPlugin
                 string ratingId = navigator.Value;
                 if (!string.IsNullOrEmpty(ratingId))
                 {
-                    try
-                    {
-                        int mmRatingId = Int32.Parse(ratingId);
+                    int mmRatingId;
+                    if (int.TryParse(ratingId, out mmRatingId))
                         switch (mmRatingId)
                         {
                             case 0:
@@ -254,11 +253,8 @@ namespace MyMoviesPlugin
                                 newTitle.ParentalRating = "R";
                                 break;
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        Utilities.DebugLine("[MyMoviesImporter] Error parsing rating");
-                    }
+                    else
+                        Utilities.DebugLine("[MyMoviesImporter] Error parsing rating: {0} not a number", ratingId);
                 }
                 navigator.MoveToParent();
             }
@@ -568,7 +564,6 @@ namespace MyMoviesPlugin
                     string extension = Path.GetExtension(location);
                     extension = extension.Substring(1);
                     return (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
-                    break;
                 case 3:
                     // offline dvd
                     break;
@@ -616,10 +611,13 @@ namespace MyMoviesPlugin
                         string ext = Path.GetExtension(files[i]).Substring(1);
                         try
                         {
-                            VideoFormat format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                            title_to_validate.Disks.Add(new Disk(string.Format("Disk{0}", i+1), Path.Combine(directoryName, files[i]), format));
+                            if (new List<string>(Enum.GetNames(typeof(VideoFormat))).Contains(ext.ToUpper()))
+                            {
+                                VideoFormat format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                                title_to_validate.Disks.Add(new Disk(string.Format("Disk{0}", i + 1), Path.Combine(directoryName, files[i]), format));
+                            }
                         }
-                        catch (Exception e)
+                        catch
                         {
                             // didnt get the extension, its not a valid file, skip it
                         }

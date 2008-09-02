@@ -18,7 +18,7 @@ namespace Library
     public class TranscodePlayer : IPlayMovie
     {
         string path_to_buffer = string.Empty;
-        long timeStamp = 0L;
+        //long timeStamp = 0L;
         MovieItem _title;
 
         public TranscodePlayer(MovieItem title)

@@ -11,7 +11,7 @@ namespace Library
         const int ITEMSINGROUP = 50;
 
         private List<OMLChoice> groupList;
-        private VirtualList movieItems;
+        //private VirtualList movieItems;
 
         public GroupingView(TitleCollection tc, string filterString)
         {
@@ -31,7 +31,7 @@ namespace Library
             }
         }
 
-        public OMLChoice Data
+        public new OMLChoice Data
         {
             get
             {

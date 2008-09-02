@@ -346,6 +346,8 @@ namespace OMLEngine
                     try
                     {
                         string file = Path.Combine(OMLEngine.FileSystemWalker.LogDirectory, "debug.txt");
+                        if (Directory.Exists(OMLEngine.FileSystemWalker.LogDirectory) == false)
+                            Directory.CreateDirectory(OMLEngine.FileSystemWalker.LogDirectory);
                         Log = new FileStream(file, File.Exists(file) ? FileMode.Append : FileMode.OpenOrCreate);
                         Trace.Listeners.Add(new TextWriterTraceListener(Log, "debug.txt"));
                         Trace.AutoFlush = true;
