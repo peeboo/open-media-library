@@ -98,20 +98,30 @@ namespace DVDProfilerPlugin
             string id = newTitle.MetadataSourceID;
             if (!string.IsNullOrEmpty(id))
             {
-                string possibleImagesPath =
-                    Path.Combine(Environment.SpecialFolder.MyDocuments.ToString(),
-                                 @"DVD Profiler\Databases\Default\Images");
+                string imagesPath = null;
+                XmlTextReader DvdProfilerSettings = new XmlTextReader("Plugins\\DVDProfilerSettings.xml");
 
-                if (Directory.Exists(possibleImagesPath))
+                while (DvdProfilerSettings.Read())
                 {
-                    if (File.Exists(Path.Combine(possibleImagesPath, string.Format("{0}f.{1}", id, @"jpg"))))
+                    if (DvdProfilerSettings.NodeType == XmlNodeType.Element &&
+                    DvdProfilerSettings.Name == "imagesPath")
                     {
-                        newTitle.FrontCoverPath = Path.Combine(possibleImagesPath, string.Format("{0}f.{1}", id, @"jpg"));
+                        imagesPath = (DvdProfilerSettings.ReadInnerXml());
+                    }
+                    else
+                        Console.WriteLine("Missing Database location variable in DvdProfilerSettings.xml file, as a result images will not be imported");
+                }
+
+                if (Directory.Exists(imagesPath))
+                {
+                    if (File.Exists(Path.Combine(imagesPath, string.Format("{0}f.{1}", id, @"jpg"))))
+                    {
+                        newTitle.FrontCoverPath = Path.Combine(imagesPath, string.Format("{0}f.{1}", id, @"jpg"));
                     }
 
-                    if (File.Exists(Path.Combine(possibleImagesPath, string.Format("{0}b.{1}", id, @"jpg"))))
+                    if (File.Exists(Path.Combine(imagesPath, string.Format("{0}b.{1}", id, @"jpg"))))
                     {
-                        newTitle.BackCoverPath = Path.Combine(possibleImagesPath, string.Format("{0}b.{1}", id, @"jpg"));
+                        newTitle.BackCoverPath = Path.Combine(imagesPath, string.Format("{0}b.{1}", id, @"jpg"));
                     }
                 }
             }
