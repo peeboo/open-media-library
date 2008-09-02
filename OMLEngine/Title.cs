@@ -799,7 +799,7 @@ namespace OMLEngine
                 );
         }
 
-        static public Title CreateFromXML(string fileName)
+        static public Title CreateFromXML(string fileName, bool copyImages)
         {
             Title t = new Title();
 
@@ -1416,8 +1416,15 @@ namespace OMLEngine
                 d.Path = FixupDiskPath(d.Path.ToUpper(), fileName.ToUpper());
             }
 
+            // tries to guess the right file names if file not found. Try several alternatives
             t.FrontCoverPath = FixupImagePath(t.FrontCoverPath.ToUpper(), fileName.ToUpper(), ".JPG");
             t.BackCoverPath = FixupImagePath(t.BackCoverPath.ToUpper(), fileName.ToUpper(), ".BACK.JPG");
+
+            if (copyImages)
+            {
+                t.CopyFrontCoverFromFile(t.FrontCoverPath, false);
+                t.CopyBackCoverFromFile(t.BackCoverPath, false);
+            }
 
             return t;
         }
