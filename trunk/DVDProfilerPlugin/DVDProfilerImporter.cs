@@ -99,20 +99,28 @@ namespace DVDProfilerPlugin
             if (!string.IsNullOrEmpty(id))
             {
                 string imagesPath = null;
-                XmlTextReader DvdProfilerSettings = new XmlTextReader("Plugins\\DVDProfilerSettings.xml");
-
-                if (File.Exists("Plugins\\DVDProfilerSettings.xml"))
-                    while (DvdProfilerSettings.Read())
+                XmlTextReader DvdProfilerSettings;
+                if (File.Exists(Path.Combine(FileSystemWalker.PluginsDirectory, "DVDProfilerSettings.xml")))
+                {
+                    try
                     {
-                        if (DvdProfilerSettings.NodeType == XmlNodeType.Element &&
-                        DvdProfilerSettings.Name == "imagesPath")
-                        {
-                            imagesPath = (DvdProfilerSettings.ReadInnerXml());
-                        }
-                        else
-                            Console.WriteLine("Missing Database location variable in DvdProfilerSettings.xml file, as a result images will not be imported");
-                    }
+                        DvdProfilerSettings = new XmlTextReader(Path.Combine(FileSystemWalker.PluginsDirectory, "DVDProfilerSettings.xml"));
 
+                        while (DvdProfilerSettings.Read())
+                        {
+                            if (DvdProfilerSettings.NodeType == XmlNodeType.Element &&
+                            DvdProfilerSettings.Name == "imagesPath")
+                            {
+                                imagesPath = (DvdProfilerSettings.ReadInnerXml());
+                            }
+                            else
+                                Console.WriteLine("Missing Database location variable in DvdProfilerSettings.xml file, as a result images will not be imported");
+                        }
+                    } catch (Exception e)
+                    {
+                        Utilities.DebugLine("[DVDProfilerImporter] Unable to open DVDProfilerSettings.xml file: {0}", e.Message);
+                    }
+                }
                 if (imagesPath != null && Directory.Exists(imagesPath))
                 {
                     if (File.Exists(Path.Combine(imagesPath, string.Format("{0}f.{1}", id, @"jpg"))))
@@ -126,7 +134,6 @@ namespace DVDProfilerPlugin
                     }
                 }
             }
-
         }
 
         private static void process_node_switch(Title newTitle, XmlNode node)
