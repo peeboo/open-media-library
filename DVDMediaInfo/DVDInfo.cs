@@ -7,7 +7,6 @@ namespace DVDMediaInfo
 {
     public class DVDInfo
     {
-        IDvdGraphBuilder dvdGraph;
         IDvdInfo2 dvdInfo;
         string dirName;
         int hr = 0;
@@ -31,7 +30,7 @@ namespace DVDMediaInfo
             return null;
         }
 
-        public int DefaultMenuLanguage()
+        public int DefaultMenuLanguageId()
         {
             int languageId = 0;
             hr = dvdInfo.GetDefaultMenuLanguage(out languageId);
@@ -114,32 +113,127 @@ namespace DVDMediaInfo
             }
         }
 
-        public void GetTotalTitleLength(int titleNumber)
+        public DvdHMSFTimeCode GetTotalTitleLength(int titleNumber)
         {
+            DvdHMSFTimeCode tCode = new DvdHMSFTimeCode();
+            DvdTimeCodeFlags flag;
+            hr = dvdInfo.GetTotalTitleTime(tCode, out flag);
+            DsError.ThrowExceptionForHR(hr);
+
+            if (hr == 0)
+                return tCode;
+
+            return null;
         }
 
-        public void GetAudioAttributes(int audioStreamId)
+        public AudioStream GetAudioAttributes(int audioStreamId)
         {
+            DvdAudioAttributes attributes = new DvdAudioAttributes();
+            hr = dvdInfo.GetAudioAttributes(audioStreamId, out attributes);
+            DsError.ThrowExceptionForHR(hr);
+
+            if (hr == 0)
+            {
+                DvdAudioFormat format = attributes.AudioFormat;
+                byte numChannels = attributes.bNumberOfChannels;
+                int languageId = attributes.Language;
+                DvdAudioLangExt ext = attributes.LanguageExtension;
+
+                AudioStream aStream = new AudioStream();
+                aStream.Format = format.ToString();
+                aStream.NumberOfChannels = numChannels;
+                aStream.LanguageId = languageId;
+                aStream.LanguageExtension = ext.ToString();
+
+                return aStream;
+            }
+            return null;
         }
 
-        public void GetAudioLanguage(int audioStreamId)
+        public string GetAudioLanguageName(int audioStreamId)
         {
+            int lcid = 0;
+            hr = dvdInfo.GetAudioLanguage(audioStreamId, out lcid);
+            DsError.ThrowExceptionForHR(hr);
+
+            if (hr == 0)
+            {
+                CultureInfo cInfo = new CultureInfo(lcid);
+                if (cInfo != null)
+                    return cInfo.Name;
+            }
+            return null;
         }
 
-        public void GetDefaultAudioLanguage()
+        public string GetDefaultAudioLanguage()
         {
+            int lcid = 0;
+            DvdAudioLangExt ext = new DvdAudioLangExt();
+            hr = dvdInfo.GetDefaultAudioLanguage(out lcid, out ext);
+            DsError.ThrowExceptionForHR(hr);
+
+            if (hr == 0)
+            {
+                CultureInfo cInfo = new CultureInfo(lcid);
+                if (cInfo != null)
+                    return cInfo.Name;
+            }
+            return null;
         }
 
-        public void GetDefaultSubpictureLanguage()
+        public string GetDefaultSubpictureLanguage()
         {
+            int lcid = 0;
+            DvdSubPictureLangExt ext = new DvdSubPictureLangExt();
+            hr = dvdInfo.GetDefaultSubpictureLanguage(out lcid, out ext);
+            DsError.ThrowExceptionForHR(hr);
+
+            if (hr == 0)
+            {
+                CultureInfo cInfo = new CultureInfo(lcid);
+                if (cInfo != null)
+                    return cInfo.Name;
+            }
+            return null;
         }
 
-        public void GetSubpictureAttributes(int subpictureStreamId)
+        public SubpictureStream GetSubpictureAttributes(int subpictureStreamId)
         {
+            DvdSubpictureAttributes attrs = new DvdSubpictureAttributes();
+            hr = dvdInfo.GetSubpictureAttributes(subpictureStreamId, out attrs);
+            DsError.ThrowExceptionForHR(hr);
+
+            if (hr == 0)
+            {
+                DvdSubPictureCoding coding = attrs.CodingMode;
+                int languageLCID = attrs.Language;
+                DvdSubPictureLangExt langExt = attrs.LanguageExtension;
+                DvdSubPictureType type = attrs.Type;
+
+                SubpictureStream sStream = new SubpictureStream();
+                sStream.Coding = coding.ToString();
+                sStream.LanguageId = languageLCID;
+                sStream.LanguageExtension = langExt.ToString();
+                sStream.Type = type.ToString();
+
+                return sStream;
+            }
+            return null;
         }
 
-        public void GetSubpictureLanguage(int subpictureStreamId)
+        public string GetSubpictureLanguageName(int subpictureStreamId)
         {
+            int lcid = 0;
+            hr = dvdInfo.GetSubpictureLanguage(subpictureStreamId, out lcid);
+            DsError.ThrowExceptionForHR(hr);
+
+            if (hr == 0)
+            {
+                CultureInfo cInfo = new CultureInfo(lcid);
+                if (cInfo != null)
+                    return cInfo.Name;
+            }
+            return null;
         }
 
         public DvdParentalLevel GetTitleParentalLevel(int titleNumber)
