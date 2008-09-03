@@ -31,7 +31,7 @@ namespace Library
             }
         }
 
-        public new OMLChoice Data
+        public OMLChoice myData
         {
             get
             {

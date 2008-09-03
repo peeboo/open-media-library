@@ -22,7 +22,7 @@ namespace Library
 
         public OMLChoice View
         {
-            get { return gView.Data; }
+            get { return gView.myData; }
         }
     }
 }
