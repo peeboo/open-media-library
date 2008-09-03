@@ -213,7 +213,7 @@ namespace Library
 
         private void CreateCategories()
         {
-            _categories.Add(new FilterCommand(Filters[Filter.Settings]));
+            //_categories.Add(new FilterCommand(Filters[Filter.Settings]));
             _categories.Add(new FilterCommand(Filters[Filter.Genres]));
             _categories.Add(new FilterCommand(Filters[Filter.Director]));
             _categories.Add(new FilterCommand(Filters[Filter.Actor]));
