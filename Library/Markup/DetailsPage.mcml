@@ -336,7 +336,7 @@
             </Layout>-->
 
             <Content>
-              <me:ShowDisc DetailsPage="[DetailsPage]" Index="[RepeatedItemIndex]" DiscName="[RepeatedItem!a:DiskWrapper.ToString]" />
+              <me:ShowDisc DetailsPage="[DetailsPage]" Index="[RepeatedItemIndex]" DiscName="[RepeatedItem!a:DiskWrapper.Name]" />
             </Content>
           </Repeater>
         </Children>
@@ -368,7 +368,7 @@
     </Rules>
 
     <Content>
-      <c:SimpleButton Name="Button" Text="[DiscName]" Command="[PlaySelectedDisk]" Size="220,51"/>
+      <c:SimpleButton Name="Button" Text="[DiscName]" Command="[PlaySelectedDisk]" Size="0,0"/>
     </Content>
   </UI>
 
