@@ -97,60 +97,59 @@ namespace OMLTranscoder
             }
 
             StringBuilder strBuilder = new StringBuilder(Path.Combine(FileSystemWalker.RootDirectory, @"mencoder.exe"));
-            string cmdString = string.Empty;
-            cmdString = Path.Combine(FileSystemWalker.RootDirectory, @"mencoder.exe");
 
             //audio format
             if (audioFormat == MEncoder.AudioFormat.NoAudio)
-                cmdString += @" -nosound";
+                strBuilder.Append(@" -nosound");
             else
             {
                 if (audioStream != null)
-                    cmdString += string.Format(" -alang {0}", audioStream.languageId);
+                    strBuilder.AppendFormat(@" -alang {0}", audioStream.AudioID);
                 else
-                    cmdString += @" -alang en";
+                    strBuilder.Append(@" -alang en");
 
-                cmdString += string.Format(@" -oac {0}", ((string)Enum.GetName(typeof(MEncoder.AudioFormat), audioFormat)).ToLower());
+                strBuilder.AppendFormat(@" -oac {0}",
+                                        ((string)Enum.GetName(typeof(MEncoder.AudioFormat), audioFormat)).ToLower());
             }
 
             //audio stream
             if ((audioStream != null) && (audioFormat != MEncoder.AudioFormat.NoAudio))
             {
-                cmdString += @"";
+                strBuilder.Append(@"");
             }
 
             //video
-            cmdString += string.Format(@" -ovc {0}", ((string)Enum.GetName(typeof(MEncoder.VideoFormat), videoFormat)).ToLower());
+            strBuilder.AppendFormat(@" -ovc {0}",
+                                    ((string)Enum.GetName(typeof(MEncoder.VideoFormat), videoFormat)).ToLower());
 
             //subtitles
             if (subStream != null)
-            {
-                cmdString += string.Format(@" -sub {0}", subStream.SubtitleChannel);
-            }
+                strBuilder.AppendFormat(@" -sub {0}", subStream.SubtitleChannel);
 
             //chapters
 
 
             // input location
             if (inputType == MEncoder.InputType.Drive)
-                cmdString += string.Format(@" -dvd-device ""{0}""", inputDrive.RootDirectory);
+                strBuilder.AppendFormat(@" -dvd-device ""{0}""", inputDrive.RootDirectory);
 
             if (inputType == MEncoder.InputType.File)
-                cmdString += string.Format(@" -dvd-device ""{0}""", inputFile.FullName);
+                strBuilder.AppendFormat(@" -dvd-device ""{0}""", inputFile.FullName);
 
             //input device or file
-            cmdString += @" dvd://";
+            strBuilder.Append(@" dvd://");
 
             // output format
-            cmdString += @" -of mpeg -mpegopts format=dvd:tsaf -vf harddup"; // always set the output format to mpeg for extenders
+            // always set the output format to mpeg for extenders
+            strBuilder.Append(@" -of mpeg -mpegopts format=dvd:tsaf -vf harddup");
 
             // set quiet mode on
-            cmdString += @" -quiet";
+            strBuilder.Append(@" -quiet");
 
             //output
-            cmdString += string.Format(@" -o ""{0}.mpg""", Path.Combine(FileSystemWalker.PublicRootDirectory, outputFile));
+            strBuilder.AppendFormat(@" -o ""{0}.mpg""", Path.Combine(FileSystemWalker.PublicRootDirectory, outputFile));
 
-            return cmdString;
+            return strBuilder.ToString();
         }
     }
 }
