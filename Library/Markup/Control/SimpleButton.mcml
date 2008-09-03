@@ -93,12 +93,12 @@
                              MouseInteractive="true"
                              MinimumSize="[Size]"
                              MaximumSize="[Size]"
-                             SizingPolicy="SizeToContent"
+                             SizingPolicy="SizeToChildren"
                              HorizontalAlignment="Fill"
                              VerticalAlignment="Fill"
                    >
                         <Children>
-                            <Text Name="Label" Color="White" Margins="0,0,0,0" Font="[Font]" />
+                            <Text Name="Label" Color="White" Margins="10,5,10,0" Font="[Font]" />
                         </Children>
                     </Graphic>
 
@@ -106,7 +106,7 @@
                              Content="image://me:ButtonLeftFocusOverlay"
                              MinimumSize="[Size]"
                              MaximumSize="[Size]"
-                             SizingPolicy="SizeToContent"
+                             SizingPolicy="SizeToChildren"
                              HorizontalAlignment="Fill"
                              VerticalAlignment="Fill"
                    >
