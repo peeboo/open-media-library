@@ -680,7 +680,7 @@ namespace OMLDatabaseEditor
             DialogResult dlgRslt = ofDiag.ShowDialog();
             if (dlgRslt == DialogResult.OK)
             {
-                Title t = Title.CreateFromXML(ofDiag.FileName);
+                Title t = Title.CreateFromXML(ofDiag.FileName, true);
                 bool bAdded = false;
                 if (_titleCollection.ContainsDisks(t.Disks))
                 {
