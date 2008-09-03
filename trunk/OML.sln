@@ -80,6 +80,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLTranscoder", "OMLTransco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLGetDVDInfo", "OMLGetDVDInfo\OMLGetDVDInfo.csproj", "{A1FB9365-38BD-496F-92AE-CEC015888200}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVDMediaInfo", "DVDMediaInfo\DVDMediaInfo.csproj", "{C3614B12-69A8-4ED5-8AC5-FB7940E70806}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -344,6 +346,18 @@ Global
 		{A1FB9365-38BD-496F-92AE-CEC015888200}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A1FB9365-38BD-496F-92AE-CEC015888200}.Release|x64.ActiveCfg = Release|Any CPU
 		{A1FB9365-38BD-496F-92AE-CEC015888200}.Release|x86.ActiveCfg = Release|Any CPU
+		{C3614B12-69A8-4ED5-8AC5-FB7940E70806}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3614B12-69A8-4ED5-8AC5-FB7940E70806}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3614B12-69A8-4ED5-8AC5-FB7940E70806}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C3614B12-69A8-4ED5-8AC5-FB7940E70806}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C3614B12-69A8-4ED5-8AC5-FB7940E70806}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C3614B12-69A8-4ED5-8AC5-FB7940E70806}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C3614B12-69A8-4ED5-8AC5-FB7940E70806}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3614B12-69A8-4ED5-8AC5-FB7940E70806}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3614B12-69A8-4ED5-8AC5-FB7940E70806}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C3614B12-69A8-4ED5-8AC5-FB7940E70806}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C3614B12-69A8-4ED5-8AC5-FB7940E70806}.Release|x64.ActiveCfg = Release|Any CPU
+		{C3614B12-69A8-4ED5-8AC5-FB7940E70806}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
