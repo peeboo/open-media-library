@@ -94,7 +94,7 @@ namespace OMLTestSuite
         {
             string xml_file = @"..\..\..\Sample Files\sample-oml.xml";
 
-            Title t = Title.CreateFromXML(xml_file);
+            Title t = Title.CreateFromXML(xml_file, false);
 
             Assert.IsInstanceOfType(typeof(Title), t);
             Assert.AreEqual("GoldenEye", t.OriginalName);
