@@ -2,7 +2,7 @@
 
 <!-- These variables define the Windows Installer product version, product code and upgrade code. They   -->
 <!-- will be used later on in this file.                                                                 -->
-<?define Property_ProductVersion = "1.0.1.0" ?>
+<?define Property_ProductVersion = "1.0.3.0" ?>
 <?define Property_ProductCode = "282ffe47-5856-4f07-a5e1-617a24a9b4a5" ?>
 <?define Property_UpgradeCode = "0921ec75-fddc-46f8-bdf4-a5d697351567" ?>
 
@@ -26,14 +26,11 @@
 		<!-- the scenes. See the following topic in the MSDN Library for additional information:             -->
 		<!-- http://msdn.microsoft.com/library/default.asp?url=/library/en-us/msi/setup/major_upgrades.asp   -->
 		<Upgrade Id="$(var.Property_UpgradeCode)">
-			<UpgradeVersion Minimum="$(var.Property_ProductVersion)"
-                            OnlyDetect="yes" 
-                            Property="NEWERVERSIONDETECTED" />
-			<UpgradeVersion Minimum="1.0.0.0" 
-                            IncludeMinimum="yes" 
-                            Maximum="$(var.Property_ProductVersion)" 
-                            IncludeMaximum="no" 
-                            Property="OLDERVERSIONBEINGUPGRADED" />
+            <UpgradeVersion OnlyDetect="yes" Property="PATCHVERSIONDETECTED"
+                            Minimum="$(var.Property_ProductVersion)" IncludeMinimum="yes"
+                            Maximum="$(var.Property_ProductVersion)" IncludeMaximum="yes"/>
+            <UpgradeVersion OnlyDetect="yes" Property="NEWERVERSIONDETECTED"
+			                Minimum="$(var.Property_ProductVersion)" IncludeMinimum="no" />
 		</Upgrade>
 
 		<!-- This custom action prevents users from installing if a newer version of this product is already -->
@@ -89,6 +86,10 @@
                     <Component Id="OMLImporter.exe" Guid="5405ac5c-69ba-49c0-8854-bb766ffe44bb" Win64="yes" DiskId="1">
                         <File Name="OMLImporter.exe"
                               Source="..\..\OMLImporter\bin\$(var.BuildType)\OMLImporter.exe" Checksum="no" />
+                    </Component>
+                    <Component Id="MEncoder.exe" Guid="1A3587C9-7219-4298-9351-C1ED480E430F" Win64="yes" DiskId="1">
+                        <File Name="MEncoder.exe"
+                              Source="..\..\OMLTranscoder\mencoder-1.0rc2-4.2.1.exe" Checksum="no" />
                     </Component>
                     <Directory Id="PLUGINSDIRECTORY" Name="Plugins">
                         <Component Id="DVDProfilerPlugin.dll" Guid="b7f12ef4-e500-4d0e-bfbe-d77eae64176c" Win64="yes" DiskId="1">
@@ -212,6 +213,7 @@
             <!-- Windows programs -->
             <ComponentRef Id="OMLDatabaseEditor.exe" />
             <ComponentRef Id="OMLImporter.exe" />
+            <ComponentRef Id="MEncoder.exe"/>
 
             <!-- Start Menu Shortcuts -->
             <ComponentRef Id="DatabaseEditorShortcut" />
