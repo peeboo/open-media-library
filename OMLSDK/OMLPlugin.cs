@@ -522,8 +522,11 @@ namespace OMLSDK
                 newTitle.DateAdded = DateTime.Now;
             }
 
-            titles.Add(newTitle);
-            totalRowsAdded++;
+            if( !String.IsNullOrEmpty(newTitle.Name.Trim()) )
+            {
+                titles.Add(newTitle);
+                totalRowsAdded++;
+            }
         }
 
         /// <summary>
@@ -631,7 +634,7 @@ namespace OMLSDK
                 string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
                                                    "\\F" + newTitle.InternalItemID +
                                                    fi.Extension;
-                if (CopyImages)
+                if (CopyImages && String.Compare(new_full_name,imagePath, true) != 0 )
                 {
                     CopyImage(imagePath, new_full_name);
                     imagePath = new_full_name;
