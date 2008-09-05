@@ -498,12 +498,20 @@ namespace Library
         private void CompleteGalleryItem(VirtualList list, int index)
         {
             MovieItem item = (MovieItem)list[index];
-            if (item.MenuCoverArt != MovieItem.NoCoverImage)
-                return;
+
+            if (item.LoadedCover) return;
+
+            //if (item.MenuCoverArt != MovieItem.NoCoverImage)
+              //  return;
+
+            
 
             Image image = null;
-            Microsoft.MediaCenter.UI.Application.DeferredInvokeOnWorkerThread(delegate
-            {
+
+            // too many threads started, kills the system
+
+            //Microsoft.MediaCenter.UI.Application.DeferredInvokeOnWorkerThread(delegate
+            //{
                 try
                 {
                     // OMLApplication.DebugLine("[MovieGallery] CompleteGalleryItem [index: {0}, name: {1}], load menu art", index, item.Name);
@@ -517,14 +525,15 @@ namespace Library
                 {
                     OMLApplication.DebugLine("[MovieGallery] Error: {0}\n    {1}", e.Message, e.StackTrace);
                 }
-            }, delegate
-            {
+            //}, delegate
+            //{
                 if (image != null)
                 {
                     // OMLApplication.DebugLine("[MovieGallery] CompleteGalleryItem [index: {0}, name: {1}], set menu art", index, item.Name);
                     item.MenuCoverArt = image;
+                    item.LoadedCover = true;
                 }
-            }, null);
+            //}, null);
         }
         
         #endregion  

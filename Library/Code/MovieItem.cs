@@ -18,7 +18,13 @@ namespace Library
         /// Default Image for no cover
         /// </summary>
         public static Image NoCoverImage = new Image("resx://Library/Library.Resources/nocover");
+        private bool _loadedCover = false;
 
+        public bool LoadedCover
+        {
+            get { return _loadedCover; }
+            set { _loadedCover = value; }
+        }
 
         public Filter Category
         {
@@ -50,6 +56,8 @@ namespace Library
                 FirePropertyChanged("MenuCoverArt");
             }
         }
+
+
 
         virtual public string SortName
         {
