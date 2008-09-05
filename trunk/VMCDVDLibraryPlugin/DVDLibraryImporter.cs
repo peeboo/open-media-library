@@ -405,20 +405,8 @@ namespace VMCDVDLibraryPlugin
 
         private string GetDVDCacheFileName(string dvdid)
         {
-            string xmlFileName = "";
-
-            // fix from MostlyHarmless on TGB
-            Regex match = new Regex("^[a-fA-F0-9]{6,8}\\|{1}[a-fA-F0-9]{8}");
-            if (match.IsMatch(dvdid))
-            {
-                xmlFileName = dvdid.Replace("|", "-") + ".xml";
-            }
-            else
-            {
-                // can be custom id
-                xmlFileName = dvdid + ".xml";
-            }
-            return DVDCacheFolder + "\\" + xmlFileName; ;
+            string xmlFileName = dvdid.Replace("|", "-") + ".xml";
+            return DVDCacheFolder + "\\" + xmlFileName;
         }
 
         // gets the local machine's VMC DVD cache folder
