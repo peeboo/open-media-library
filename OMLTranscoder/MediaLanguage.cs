@@ -1,172 +1,164 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace OMLTranscoder
 {
-    public class MediaLanguage
+    public static class MediaLanguage
     {
-        Hashtable languageMap;
-        string currentLanguage;
-
-        public MediaLanguage()
+        public static string LanguageNameForId(string id)
         {
-            currentLanguage = string.Empty;
-
-            languageMap = new Hashtable();
-            languageMap.Add("AB", "Abkhazian");
-            languageMap.Add("AA", "Afar");
-            languageMap.Add("AF", "Afrikaans");
-            languageMap.Add("SQ", "Albanian");
-            languageMap.Add("AM", "Amharic, Ameharic");
-            languageMap.Add("AR", "Arabic");
-            languageMap.Add("HY", "Armenian");
-            languageMap.Add("AS", "Assamese");
-            languageMap.Add("AY", "Aymara");
-            languageMap.Add("AZ", "Azerbaijani");
-            languageMap.Add("BA", "Bashkir");
-            languageMap.Add("EU", "Basque");
-            languageMap.Add("BN", "Bihari");
-            languageMap.Add("BI", "Bislama");
-            languageMap.Add("BR", "Breton");
-            languageMap.Add("BG", "Bulgarian");
-            languageMap.Add("MY", "Burmese");
-            languageMap.Add("BE", "Byelorussian");
-            languageMap.Add("KM", "Cambodian");
-            languageMap.Add("CA", "Catalan");
-            languageMap.Add("ZH", "Chinese");
-            languageMap.Add("CO", "Corsican");
-            languageMap.Add("HR", "Hrvatski (Croatian)");
-            languageMap.Add("CS", "Czech (Ceske)");
-            languageMap.Add("DA", "Dansk (Danish)");
-            languageMap.Add("NL", "Dutch (Nederlands)");
-            languageMap.Add("EN", "English");
-            languageMap.Add("EO", "Esperanto");
-            languageMap.Add("ET", "Estonian");
-            languageMap.Add("FO", "Faroese");
-            languageMap.Add("FJ", "Fiji");
-            languageMap.Add("FI", "Finnish");
-            languageMap.Add("FR", "French");
-            languageMap.Add("FY", "Frisian");
-            languageMap.Add("GL", "Galician");
-            languageMap.Add("KA", "Georgian");
-            languageMap.Add("DE", "Deutsch (German)");
-            languageMap.Add("EL", "Greek");
-            languageMap.Add("KL", "Greenlandic");
-            languageMap.Add("GN", "Guarani");
-            languageMap.Add("GU", "Gujarati");
-            languageMap.Add("HA", "Hausa");
-            languageMap.Add("IW", "Hebrew");
-            languageMap.Add("HI", "Hindi");
-            languageMap.Add("HU", "Hungarian");
-            languageMap.Add("IS", "Islenka (Icelandic)");
-            languageMap.Add("IN", "Indonesian");
-            languageMap.Add("IA", "Interlingua");
-            languageMap.Add("IE", "Interlingue");
-            languageMap.Add("IK", "Inupiak");
-            languageMap.Add("GA", "Irish");
-            languageMap.Add("IT", "Italian");
-            languageMap.Add("JA", "Japanese");
-            languageMap.Add("JW", "Javanese");
-            languageMap.Add("KN", "Kannada");
-            languageMap.Add("KS", "Kashmiri");
-            languageMap.Add("KK", "Kazakh");
-            languageMap.Add("RW", "Kinyarwanda");
-            languageMap.Add("KY", "Kirghiz");
-            languageMap.Add("RN", "Kirundi");
-            languageMap.Add("KO", "Korean");
-            languageMap.Add("KU", "Kurdish");
-            languageMap.Add("LO", "Laothian");
-            languageMap.Add("LA", "Latin");
-            languageMap.Add("LV", "Latvian, Lettish");
-            languageMap.Add("LN", "Lingala");
-            languageMap.Add("LT", "Lithuanian");
-            languageMap.Add("MK", "Macedonian");
-            languageMap.Add("MG", "Malagasy");
-            languageMap.Add("MS", "Malay");
-            languageMap.Add("ML", "Malayalam");
-            languageMap.Add("MT", "Maltese");
-            languageMap.Add("MI", "Maori");
-            languageMap.Add("MR", "Marathi");
-            languageMap.Add("MO", "Moldavian");
-            languageMap.Add("MN", "Mongolian");
-            languageMap.Add("NA", "Nauru");
-            languageMap.Add("NE", "Nepali");
-            languageMap.Add("NO", "Norwegian (Norsk)");
-            languageMap.Add("OC", "Occitan");
-            languageMap.Add("OR", "Oriya");
-            languageMap.Add("OM", "Afan (Oromo)");
-            languageMap.Add("PA", "Panjabi");
-            languageMap.Add("PS", "Pashto, Pushto");
-            languageMap.Add("FA", "Persian");
-            languageMap.Add("PL", "Polish");
-            languageMap.Add("PT", "Portuguese");
-            languageMap.Add("QU", "Quechua");
-            languageMap.Add("RM", "Rhaeto-Romance");
-            languageMap.Add("RO", "Romanian");
-            languageMap.Add("RU", "Russian");
-            languageMap.Add("SM", "Samoan");
-            languageMap.Add("SG", "Sangho");
-            languageMap.Add("SA", "Sanskrit");
-            languageMap.Add("GD", "Scots Gaelic");
-            languageMap.Add("SH", "Serbo-Crotain");
-            languageMap.Add("ST", "Sesotho");
-            languageMap.Add("SR", "Serbian");
-            languageMap.Add("TN", "Setswana");
-            languageMap.Add("SN", "Shona");
-            languageMap.Add("SD", "Sindhi");
-            languageMap.Add("SI", "Singhalese");
-            languageMap.Add("SS", "Siswati");
-            languageMap.Add("SK", "Slovak");
-            languageMap.Add("SL", "Slovenian");
-            languageMap.Add("SO", "Somali");
-            languageMap.Add("ES", "Spanish (Espanol)");
-            languageMap.Add("SU", "Sundanese");
-            languageMap.Add("SW", "Swahili");
-            languageMap.Add("SV", "Svenska (Swedish)");
-            languageMap.Add("TL", "Tagalog");
-            languageMap.Add("TG", "Tajik");
-            languageMap.Add("TT", "Tatar");
-            languageMap.Add("TA", "Tamil");
-            languageMap.Add("TE", "Telugu");
-            languageMap.Add("TH", "Thai");
-            languageMap.Add("BO", "Tibetian");
-            languageMap.Add("TI", "Tigrinya");
-            languageMap.Add("TO", "Tonga");
-            languageMap.Add("TS", "Tsonga");
-            languageMap.Add("TR", "Turkish");
-            languageMap.Add("TK", "Turkmen");
-            languageMap.Add("TW", "Twi");
-            languageMap.Add("UK", "Ukranian");
-            languageMap.Add("UR", "Urdu");
-            languageMap.Add("UZ", "Uzbek");
-            languageMap.Add("VI", "Vietnamese");
-            languageMap.Add("VO", "Volapuk");
-            languageMap.Add("CY", "Welsh");
-            languageMap.Add("WO", "Wolof");
-            languageMap.Add("JI", "Yiddish");
-            languageMap.Add("YO", "Yoruba");
-            languageMap.Add("XH", "Xhosa");
-            languageMap.Add("ZU", "Zulu");
-
-            //set currentlang to the default lang
+            return sLanguageMap.ContainsKey(id.ToUpper()) ? sLanguageMap[id] : null;
         }
 
-        public string LanguageNameForId(string id)
+        public static string LanguageIdForName(string name)
         {
-            if (languageMap.Contains(id.ToUpper()))
-                return (string)languageMap[id];
+            foreach (KeyValuePair<string, string> kvPair in sLanguageMap)
+                if (string.Compare(kvPair.Value, name, true) == 0)
+                    return kvPair.Key;
 
             return null;
         }
+        
+        static IDictionary<string, string> sLanguageMap;
 
-        public string LanguageIdForName(string name)
+        static MediaLanguage()
         {
-            foreach (DictionaryEntry kvPair in languageMap)
-            {
-                if (kvPair.Value.ToString().ToUpper().CompareTo(name.ToUpper()) == 0)
-                    return kvPair.Key.ToString();
-            }
-            return null;
+            sLanguageMap = new Dictionary<string, string>();
+            sLanguageMap.Add("AB", "Abkhazian");
+            sLanguageMap.Add("AA", "Afar");
+            sLanguageMap.Add("AF", "Afrikaans");
+            sLanguageMap.Add("SQ", "Albanian");
+            sLanguageMap.Add("AM", "Amharic, Ameharic");
+            sLanguageMap.Add("AR", "Arabic");
+            sLanguageMap.Add("HY", "Armenian");
+            sLanguageMap.Add("AS", "Assamese");
+            sLanguageMap.Add("AY", "Aymara");
+            sLanguageMap.Add("AZ", "Azerbaijani");
+            sLanguageMap.Add("BA", "Bashkir");
+            sLanguageMap.Add("EU", "Basque");
+            sLanguageMap.Add("BN", "Bihari");
+            sLanguageMap.Add("BI", "Bislama");
+            sLanguageMap.Add("BR", "Breton");
+            sLanguageMap.Add("BG", "Bulgarian");
+            sLanguageMap.Add("MY", "Burmese");
+            sLanguageMap.Add("BE", "Byelorussian");
+            sLanguageMap.Add("KM", "Cambodian");
+            sLanguageMap.Add("CA", "Catalan");
+            sLanguageMap.Add("ZH", "Chinese");
+            sLanguageMap.Add("CO", "Corsican");
+            sLanguageMap.Add("HR", "Hrvatski (Croatian)");
+            sLanguageMap.Add("CS", "Czech (Ceske)");
+            sLanguageMap.Add("DA", "Dansk (Danish)");
+            sLanguageMap.Add("NL", "Dutch (Nederlands)");
+            sLanguageMap.Add("EN", "English");
+            sLanguageMap.Add("EO", "Esperanto");
+            sLanguageMap.Add("ET", "Estonian");
+            sLanguageMap.Add("FO", "Faroese");
+            sLanguageMap.Add("FJ", "Fiji");
+            sLanguageMap.Add("FI", "Finnish");
+            sLanguageMap.Add("FR", "French");
+            sLanguageMap.Add("FY", "Frisian");
+            sLanguageMap.Add("GL", "Galician");
+            sLanguageMap.Add("KA", "Georgian");
+            sLanguageMap.Add("DE", "Deutsch (German)");
+            sLanguageMap.Add("EL", "Greek");
+            sLanguageMap.Add("KL", "Greenlandic");
+            sLanguageMap.Add("GN", "Guarani");
+            sLanguageMap.Add("GU", "Gujarati");
+            sLanguageMap.Add("HA", "Hausa");
+            sLanguageMap.Add("IW", "Hebrew");
+            sLanguageMap.Add("HI", "Hindi");
+            sLanguageMap.Add("HU", "Hungarian");
+            sLanguageMap.Add("IS", "Islenka (Icelandic)");
+            sLanguageMap.Add("IN", "Indonesian");
+            sLanguageMap.Add("IA", "Interlingua");
+            sLanguageMap.Add("IE", "Interlingue");
+            sLanguageMap.Add("IK", "Inupiak");
+            sLanguageMap.Add("GA", "Irish");
+            sLanguageMap.Add("IT", "Italian");
+            sLanguageMap.Add("JA", "Japanese");
+            sLanguageMap.Add("JW", "Javanese");
+            sLanguageMap.Add("KN", "Kannada");
+            sLanguageMap.Add("KS", "Kashmiri");
+            sLanguageMap.Add("KK", "Kazakh");
+            sLanguageMap.Add("RW", "Kinyarwanda");
+            sLanguageMap.Add("KY", "Kirghiz");
+            sLanguageMap.Add("RN", "Kirundi");
+            sLanguageMap.Add("KO", "Korean");
+            sLanguageMap.Add("KU", "Kurdish");
+            sLanguageMap.Add("LO", "Laothian");
+            sLanguageMap.Add("LA", "Latin");
+            sLanguageMap.Add("LV", "Latvian, Lettish");
+            sLanguageMap.Add("LN", "Lingala");
+            sLanguageMap.Add("LT", "Lithuanian");
+            sLanguageMap.Add("MK", "Macedonian");
+            sLanguageMap.Add("MG", "Malagasy");
+            sLanguageMap.Add("MS", "Malay");
+            sLanguageMap.Add("ML", "Malayalam");
+            sLanguageMap.Add("MT", "Maltese");
+            sLanguageMap.Add("MI", "Maori");
+            sLanguageMap.Add("MR", "Marathi");
+            sLanguageMap.Add("MO", "Moldavian");
+            sLanguageMap.Add("MN", "Mongolian");
+            sLanguageMap.Add("NA", "Nauru");
+            sLanguageMap.Add("NE", "Nepali");
+            sLanguageMap.Add("NO", "Norwegian (Norsk)");
+            sLanguageMap.Add("OC", "Occitan");
+            sLanguageMap.Add("OR", "Oriya");
+            sLanguageMap.Add("OM", "Afan (Oromo)");
+            sLanguageMap.Add("PA", "Panjabi");
+            sLanguageMap.Add("PS", "Pashto, Pushto");
+            sLanguageMap.Add("FA", "Persian");
+            sLanguageMap.Add("PL", "Polish");
+            sLanguageMap.Add("PT", "Portuguese");
+            sLanguageMap.Add("QU", "Quechua");
+            sLanguageMap.Add("RM", "Rhaeto-Romance");
+            sLanguageMap.Add("RO", "Romanian");
+            sLanguageMap.Add("RU", "Russian");
+            sLanguageMap.Add("SM", "Samoan");
+            sLanguageMap.Add("SG", "Sangho");
+            sLanguageMap.Add("SA", "Sanskrit");
+            sLanguageMap.Add("GD", "Scots Gaelic");
+            sLanguageMap.Add("SH", "Serbo-Crotain");
+            sLanguageMap.Add("ST", "Sesotho");
+            sLanguageMap.Add("SR", "Serbian");
+            sLanguageMap.Add("TN", "Setswana");
+            sLanguageMap.Add("SN", "Shona");
+            sLanguageMap.Add("SD", "Sindhi");
+            sLanguageMap.Add("SI", "Singhalese");
+            sLanguageMap.Add("SS", "Siswati");
+            sLanguageMap.Add("SK", "Slovak");
+            sLanguageMap.Add("SL", "Slovenian");
+            sLanguageMap.Add("SO", "Somali");
+            sLanguageMap.Add("ES", "Spanish (Espanol)");
+            sLanguageMap.Add("SU", "Sundanese");
+            sLanguageMap.Add("SW", "Swahili");
+            sLanguageMap.Add("SV", "Svenska (Swedish)");
+            sLanguageMap.Add("TL", "Tagalog");
+            sLanguageMap.Add("TG", "Tajik");
+            sLanguageMap.Add("TT", "Tatar");
+            sLanguageMap.Add("TA", "Tamil");
+            sLanguageMap.Add("TE", "Telugu");
+            sLanguageMap.Add("TH", "Thai");
+            sLanguageMap.Add("BO", "Tibetian");
+            sLanguageMap.Add("TI", "Tigrinya");
+            sLanguageMap.Add("TO", "Tonga");
+            sLanguageMap.Add("TS", "Tsonga");
+            sLanguageMap.Add("TR", "Turkish");
+            sLanguageMap.Add("TK", "Turkmen");
+            sLanguageMap.Add("TW", "Twi");
+            sLanguageMap.Add("UK", "Ukranian");
+            sLanguageMap.Add("UR", "Urdu");
+            sLanguageMap.Add("UZ", "Uzbek");
+            sLanguageMap.Add("VI", "Vietnamese");
+            sLanguageMap.Add("VO", "Volapuk");
+            sLanguageMap.Add("CY", "Welsh");
+            sLanguageMap.Add("WO", "Wolof");
+            sLanguageMap.Add("JI", "Yiddish");
+            sLanguageMap.Add("YO", "Yoruba");
+            sLanguageMap.Add("XH", "Xhosa");
+            sLanguageMap.Add("ZU", "Zulu");
         }
+
     }
 }

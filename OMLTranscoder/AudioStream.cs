@@ -9,45 +9,23 @@ namespace OMLTranscoder
 {
     public class AudioStream
     {
-        private int audioId = -1;
-        private bool isSurroundSound = false;
-        private string languageName;
-        private string languageShortName;
-
-        public string LanguageName
-        {
-            get
-            {
-                return null;
-            }
-        }
-
-        public string LanguageShortName
-        {
-            get
-            {
-                return null;
-            }
-        }
-
-        public int AudioID
-        {
-            get { return audioId; }
-        }
+        public bool IsSurroundSound { get; private set; }
+        public string LanguageName { get; private set; }
+        public string LanguageShortName { get; private set; }
+        public int AudioID { get; private set; }
 
         public AudioStream()
         {
-            audioId = -1;
-            isSurroundSound = false;
+            this.AudioID = -1;
+            this.IsSurroundSound = false;
         }
 
-        public AudioStream(int AudioID, bool IsSurround, string languageShortName)
+        public AudioStream(int audioID, bool isSurround, string languageShortName)
         {
-            audioId = AudioID;
-            isSurroundSound = IsSurround;
-            MediaLanguage ml = new MediaLanguage();
-            languageName = ml.LanguageNameForId(LanguageShortName);
-            languageShortName = languageShortName;
+            this.AudioID = audioID;
+            this.IsSurroundSound = isSurround;
+            this.LanguageName = MediaLanguage.LanguageNameForId(languageShortName);
+            this.LanguageShortName = languageShortName;
         }
     }
 }
