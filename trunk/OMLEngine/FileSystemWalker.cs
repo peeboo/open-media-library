@@ -63,6 +63,14 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Location where all translation files are stored.
+        /// </summary>
+        public static string TranslationsDirectory
+        {
+            get { return Path.Combine(RootDirectory, @"Translations"); }
+        }
+
+        /// <summary>
         /// Checks to ensure that the Root directory exists
         /// </summary>
         /// <returns>True on success</returns>
@@ -111,6 +119,16 @@ namespace OMLEngine
         {
             get { return Directory.Exists(TranscodeBufferDirectory); }
         }
+
+        /// <summary>
+        /// Checks to ensure that the translations directory exists
+        /// </summary>
+        /// <returns>True on success</returns>
+        public static bool TranslationsDirExists
+        {
+            get { return Directory.Exists(TranslationsDirectory); }
+        }
+
 
         /// <summary>
         /// Creates the root directory if it doesn't already exist
