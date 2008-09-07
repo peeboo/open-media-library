@@ -291,6 +291,7 @@ namespace Library
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();
             properties["Application"] = this;
+            properties["I18n"] = I18n.Instance;
             if (uiSettings)
                 properties["UISettings"] = new UISettings();
             if (settings)

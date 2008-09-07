@@ -15,6 +15,7 @@
       <a:OMLApplication Name="Application" OMLApplication="$Required"/>
       <a:MovieDetailsPage Name="DetailsPage" MovieDetailsPage="$Required"/>
       <a:UISettings Name="UISettings" UISettings="$Required" />
+      <a:I18n Name="I18n" I18n="$Required"/>
       <!-- The layout we will use to display the headings. -->
       <GridLayout Name="GridLayout" Orientation="Horizontal" Columns="2" AllowWrap="false"
 						Spacing="10,10" MajorAlignment="Fill" MinorAlignment="Fill"/>
@@ -86,14 +87,14 @@
                 </Layout>
 
                 <Children>
-                  <me:TextWithLabel Label="Runtime: " Text="[DetailsPage.Length]" />
-                  <me:TextWithLabel Label="User Rating: " Text="[DetailsPage.UserRating]" />
-                  <me:TextWithLabel Label="Release Date: " Text="[DetailsPage.ReleaseDate]" />
+                  <me:TextWithLabel Label="[I18n.LabelRuntime]" Text="[DetailsPage.Length]" />
+                  <me:TextWithLabel Label="[I18n.LabelUserRating]" Text="[DetailsPage.UserRating]" />
+                  <me:TextWithLabel Label="[I18n.LabelReleaseDate]" Text="[DetailsPage.ReleaseDate]" />
                 </Children>
               </Panel>
 
-              <me:TextWithLabel Label="Genres: " Text="[DetailsPage.GenresAsString]" />
-              <me:TextWithLabel Label="Tags: " Text="[DetailsPage.TagsAsString]" />
+              <me:TextWithLabel Label="[I18n.LabelGenres]" Text="[DetailsPage.GenresAsString]" />
+              <me:TextWithLabel Label="[I18n.LabelTags]" Text="[DetailsPage.TagsAsString]" />
 
               <Panel Name="DirectorsWRiters" >
                 <Layout>
@@ -101,13 +102,13 @@
                 </Layout>
 
                 <Children>
-                  <me:TextWithLabel Label="Directors: " Text="[DetailsPage.DirectorsAsString]" />
-                  <me:TextWithLabel Label="Writers: " Text="[DetailsPage.WritersAsString]" />
+                  <me:TextWithLabel Label="[I18n.LabelDirectors]" Text="[DetailsPage.DirectorsAsString]" />
+                  <me:TextWithLabel Label="[I18n.LabelWriters]" Text="[DetailsPage.WritersAsString]" />
                 </Children>
               </Panel>
 
 
-              <me:TextWithLabel Label="Parental Rating: " Text="[DetailsPage.Rating]" />
+              <me:TextWithLabel Label="[I18n.LabelParentalRating]" Text="[DetailsPage.Rating]" />
 
               <Panel Name="VideoDetails" >
                 <Layout>
@@ -115,17 +116,17 @@
                 </Layout>
 
                 <Children>
-                  <me:TextWithLabel Label="Format: " Text="[DetailsPage.MovieDetails.TitleObject.VideoFormat.ToString]" />
-                  <me:TextWithLabel Label="Resolution: " Text="[DetailsPage.MovieDetails.TitleObject.VideoResolution]" />
-                  <me:TextWithLabel Label="Aspect Ratio: " Text="[DetailsPage.MovieDetails.TitleObject.AspectRatio]" />
-                  <me:TextWithLabel Label="System: " Text="[DetailsPage.MovieDetails.TitleObject.VideoStandard]" />
-                  <me:TextWithLabel Label="Video Details: " Text="[DetailsPage.MovieDetails.TitleObject.VideoDetails]" />
+                  <me:TextWithLabel Label="[I18n.LabelFormat]" Text="[DetailsPage.MovieDetails.TitleObject.VideoFormat.ToString]" />
+                  <me:TextWithLabel Label="[I18n.LabelResolution]" Text="[DetailsPage.MovieDetails.TitleObject.VideoResolution]" />
+                  <me:TextWithLabel Label="[I18n.LabelAspectRatio]" Text="[DetailsPage.MovieDetails.TitleObject.AspectRatio]" />
+                  <me:TextWithLabel Label="[I18n.LabelSystem]" Text="[DetailsPage.MovieDetails.TitleObject.VideoStandard]" />
+                  <me:TextWithLabel Label="[I18n.LabelVideoDetails]" Text="[DetailsPage.MovieDetails.TitleObject.VideoDetails]" />
                 </Children>
               </Panel>
 
-              <me:TextWithLabel Label="Sound : " Text="[DetailsPage.LanguagesAsString]" />
-              <me:TextWithLabel Label="SubTitles : " Text="[DetailsPage.SubtitlesAsString]" />
-              <me:TextWithLabel Label="Synopsis: " Text=" " />
+              <me:TextWithLabel Label="[I18n.LabelSound]" Text="[DetailsPage.LanguagesAsString]" />
+              <me:TextWithLabel Label="[I18n.LabelSubtitles]" Text="[DetailsPage.SubtitlesAsString]" />
+              <me:TextWithLabel Label="[I18n.LabelSynopsis]" Text=" " />
               <me:SynopsisPanel Synopsis="[DetailsPage.Summary]"/>
 
               <Panel Layout="[GridLayout]">
@@ -133,7 +134,7 @@
                   <FormLayoutInput Left="Parent, 1"/>
                 </LayoutInput>
                 <Children>
-                  <me:ActorsPanel Name="Actors" ActorList="[DetailsPage.ActingRoles]">
+                  <me:ActorsPanel Name="Actors" ActorList="[DetailsPage.ActingRoles]" I18n="[I18n]">
 
                   </me:ActorsPanel>
                 </Children>
@@ -225,6 +226,7 @@
   <UI Name="ActorsPanel">
     <Properties>
       <coll:IList Name="ActorList" IList="$Required" />
+      <a:I18n Name="I18n" I18n="$Required"/>
     </Properties>
 
     <Locals>
@@ -247,7 +249,7 @@
         <Children>
         <Scroller Name="Scroll" Orientation="Vertical" FadeSize="5" ScrollingData="[ScrollingData]" >
           <Children>
-            <Text Name="Actors" Content="Actors" Font ="font://s:LabelFont" Color="color://s:LabelColor" />
+            <Text Name="Actors" Content="[I18n.LabelActors]" Font ="font://s:LabelFont" Color="color://s:LabelColor" />
 
             <Repeater Source="[ActorList]" Layout="VerticalFlow" >
               <Content>
