@@ -76,6 +76,7 @@
     <Compile Include="Code\DirectoryTreeNode.cs" />
     <Compile Include="Code\FolderView.cs" />
     <Compile Include="Code\GroupingView.cs" />
+    <Compile Include="Code\I18n.cs" />
     <Compile Include="Code\MoviePlayerBluRay.cs" />
     <Compile Include="Code\MoviePlayerExtenderDVD.cs" />
     <Compile Include="Code\MoviePlayerHDDVD.cs" />
@@ -105,6 +106,11 @@
     <Compile Include="Code\UISettings.cs" />
     <Compile Include="Code\Filters.cs" />
     <Compile Include="Code\VirtualDirectory.cs" />
+    <Compile Include="I18nResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>I18nResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -330,6 +336,10 @@
     <Content Include="Sounds\Select.wav" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="I18nResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>I18nResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
