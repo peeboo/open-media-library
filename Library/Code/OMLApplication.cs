@@ -64,6 +64,7 @@ namespace Library
 #endif
             this._host = host;
             _singleApplicationInstance = this;
+            I18n.InitializeResourceManager();
             _titles = new TitleCollection();
             _titles.loadTitleCollection();
             _nowPlayingMovieName = "Playing an unknown movie";
