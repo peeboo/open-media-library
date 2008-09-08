@@ -665,6 +665,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap SampleBackground2_1024_768 {
+            get {
+                object obj = ResourceManager.GetObject("SampleBackground2_1024_768", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.IO.UnmanagedMemoryStream Select {
             get {
                 return ResourceManager.GetStream("Select", resourceCulture);
