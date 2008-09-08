@@ -299,6 +299,7 @@
     <None Include="Resources\PivotArrowRight1.png" />
     <None Include="Resources\spinnerarrowbackdisabled1.png" />
     <None Include="Resources\SampleBackground_1024_768.jpg" />
+    <None Include="Resources\nightmare_wp_05_1024.jpg" />
     <Content Include="Resources\SpinnerArrowBackDormant.png" />
     <None Include="Resources\spinnerarrowbackdormant1.png" />
     <None Include="Resources\spinnerarrowbackdormant2.png" />

@@ -88,7 +88,7 @@
                             <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
                         </LayoutInput>
                     </Panel>
-                    <Graphic Content="resx://Library/Library.Resources/SampleBackground_1024_768" Layout="Fill" Navigation="None" SizingPolicy="SizeToContent"/>
+                    <Graphic Content="resx://Library/Library.Resources/SampleBackground2_1024_768" Layout="Fill" Navigation="None" SizingPolicy="SizeToContent"/>
                 </Children>
             </ColorFill>
         </Content>

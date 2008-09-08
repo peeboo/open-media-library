@@ -8,7 +8,7 @@
         <Properties>
             <Choice Name="Model" Choice="$Required"/>
         </Properties>
-
+<!--
         <Content>
             <ColorFill Content="Transparent" Layout="HorizontalFlow">
                 <Children>
@@ -16,6 +16,7 @@
                 </Children>
             </ColorFill>
         </Content>
+-->
     </UI>
 
 </Mcml>
