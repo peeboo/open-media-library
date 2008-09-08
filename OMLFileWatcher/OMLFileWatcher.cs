@@ -20,12 +20,6 @@ namespace OMLFileWatcher
             LoadTitles();
         }
 
-        ~OMLFileWatcher()
-        {
-            Titles.Clear();
-            Titles = null;
-        }
-
         /// <summary>
         /// 
         /// </summary>
