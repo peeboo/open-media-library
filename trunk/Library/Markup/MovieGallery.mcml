@@ -75,8 +75,8 @@
 
   <Rules>
     <Default Target="[Input.KeyInteractive]" Value="true" />
-    <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
-    <Default Target="[ScrollingData.Repeater]" Value="[GalleryRepeater]"/>
+    <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
+    <Default Target="[ScrollingData.Repeater]" Value="[GalleryRepeater]" />
 
     <Condition Source="[GalleryView]" SourceValue="List" ConditionOp="Equals" >
       <Actions>
@@ -251,11 +251,13 @@
     
     <Condition Source="[GalleryView]" SourceValue="List" ConditionOp="Equals" >
       <Actions>
+        <!--<Set Target="[Caption.Font]" Value="font://s:ListFontSelected" />-->
         <Set Target="[MenuCover.Visible]" Value="false" />
         <Set Target="[Caption.Visible]" Value="true" />
         <Set Target="[LostFocus]" Value="[LostFocusList]" />
         <Set Target="[GotFocus]" Value="[GotFocusList]" />
-        <Set Target="[Background.Content]" Value="[BackgroundImageList]" />
+        <!--<Set Target="[Background.Content]" Value="[BackgroundImageList]" />-->
+        <Set Target="[Background.Content]" Value="null" />
       </Actions>
     </Condition>
 
@@ -330,7 +332,7 @@
       <Children>
         <Panel Name="ImagePanel" Margins="0,0,0,0">
           <Children>
-            <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:ListFont" Color="White" WordWrap="true" Margins="20,10,20,10" />
+            <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:ListFont" Color="White"  WordWrap="true" Margins="20,10,20,10" />
               <Graphic Name="MenuCover" Content="[GalleryItem.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint">
                   <Animations>
                       <Animation Type="ContentChangeShow" CenterPointOffset="0.5,0.5,0">

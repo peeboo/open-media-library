@@ -1,6 +1,4 @@
-<!--Not being used. It's the same as the details page for now but will change to make it look better-->
-
-<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+﻿<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
 	  xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
 	  xmlns:cor="assembly://MsCorLib/System"
 	  xmlns:a="assembly://Library/Library"
@@ -30,18 +28,15 @@
       <AnchorEdge Name="TitleTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset = "[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
       <AnchorEdge Name="FiltersTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.FiltersTopOffset]" Id="Parent"/>
       <AnchorEdge Name="GalleryBottomAnchor" Percent="[UISettings.Anchor.BottomAnchor]" Offset ="[UISettings.Anchor.BottomOffset]" Id="Parent"/>
-
     </Locals>
 
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
-
     </Rules>
 
     <Content>
       <ColorFill Content="Transparent" Layout="Form">
         <Children>
-
           <Panel Name="Image" Layout="VerticalFlow">
             <LayoutInput>
               <FormLayoutInput Left="[ImageLeftAnchor]" Top="[TitleTopAnchor]" Bottom="Parent,1"/>
@@ -159,7 +154,6 @@
       <Text Content="/" Font="font://s:Normal" WordWrap="false" Color="color://s:NormalColor" />
     </Content>
   </UI>
-
 
   <UI Name="SynopsisPanel" >
     <Properties>
@@ -374,9 +368,8 @@
     </Rules>
 
     <Content>
-      <c:SimpleButton Name="Button" Text="[DiscName]" Command="[PlaySelectedDisk]" Size="400,51"/>
+      <c:SimpleButton Name="Button" Text="[DiscName]" Command="[PlaySelectedDisk]" Size="220,51"/>
     </Content>
   </UI>
-
 
 </Mcml>
