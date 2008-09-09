@@ -1,5 +1,6 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
 	    xmlns:cor="assembly://MSCorLib/System"
+      xmlns:styles="resx://Library/Library.Resources/Styles"
       xmlns:me="Me"
       >
 
@@ -9,10 +10,10 @@
 
     <Properties>
       <Choice Name="Model" Choice="$Required"/>
-      <Font Name="OMLFont"/>
-      <Font Name="OMLFocusFont"/>
-      <Color Name="OMLColor"/>
-      <Color Name="OMLFocusColor"/>
+      <Font Name="OMLFont" Font="font://styles:ListFont"/>
+      <Font Name="OMLFocusFont" Font="font://styles:ListFont"/>
+      <Color Name="OMLColor" Color="color://styles:LabelColor"/>
+      <Color Name="OMLFocusColor" Color="color://styles:NormalColor"/>
     </Properties>
 
     <Locals>
