@@ -71,13 +71,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\BaseGallery.cs" />
+    <Compile Include="Code\LayoutV2\BaseGallery.cs" />
     <Compile Include="Code\DaemonTools.cs" />
     <Compile Include="Code\DirectoryTreeNode.cs" />
     <Compile Include="Code\FolderView.cs" />
-    <Compile Include="Code\GroupingView.cs" />
+    <Compile Include="Code\LayoutV2\GroupingView.cs" />
     <Compile Include="Code\I18n.cs" />
     <Compile Include="Code\LayoutV2\BasePage.cs" />
+    <Compile Include="Code\LayoutV2\GalleryV2.cs" />
+    <Compile Include="Code\LayoutV2\MovieItemV2.cs" />
+    <Compile Include="Code\LayoutV2\OMLProperties.cs" />
     <Compile Include="Code\MoviePlayerBluRay.cs" />
     <Compile Include="Code\MoviePlayerExtenderDVD.cs" />
     <Compile Include="Code\MoviePlayerHDDVD.cs" />
@@ -95,9 +98,9 @@
     <Compile Include="Code\MoviePlayerTranscode.cs" />
     <Compile Include="Code\MoviePlayerUnavailable.cs" />
     <Compile Include="Code\MoviePlayerVideo.cs" />
-    <Compile Include="Code\OMLChoice.cs" />
-    <Compile Include="Code\OMLCommand.cs" />
-    <Compile Include="Code\OMLPage.cs" />
+    <Compile Include="Code\LayoutV2\OMLChoice.cs" />
+    <Compile Include="Code\LayoutV2\OMLCommand.cs" />
+    <Compile Include="Code\LayoutV2\OMLPage.cs" />
     <Compile Include="Code\OMLSettings.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\Setup.cs" />
@@ -171,6 +174,8 @@
     <Content Include="Markup\CoreControls.mcml" />
     <Content Include="Markup\DetailsPage.mcml" />
     <Content Include="Markup\FilterList.mcml" />
+    <Content Include="Markup\LayoutV2\GalleryV2.mcml" />
+    <Content Include="Markup\LayoutV2\ImageItem.mcml" />
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\MovieDetails.mcml" />
     <Content Include="Markup\MovieGallery.mcml" />
@@ -361,6 +366,10 @@
     <ProjectReference Include="..\OMLSDK\OMLSDK.csproj">
       <Project>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</Project>
       <Name>OMLSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OMLTranscoder\OMLTranscoder.csproj">
+      <Project>{A924F59C-1AF8-4B18-B3E4-E0EECB4CE225}</Project>
+      <Name>OMLTranscoder</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

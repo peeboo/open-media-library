@@ -12,7 +12,7 @@ namespace Library
         GroupingView gView;
         TitleCollection titleCollection;
 
-        public BaseGallery(OMLApplication app, AddInHost host, TitleCollection tc) : base(app, host)
+        public BaseGallery(OMLProperties props, TitleCollection tc) : base(props)
         {
             PageName = "Main";
             titleCollection = tc;

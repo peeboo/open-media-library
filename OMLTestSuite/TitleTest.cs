@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace OMLTestSuite
 {
     [TestFixture]
-    public class TitleTest
+    public class TitleTest : TestBase
     {
         [Test]
         public void TEST_BASE_CASE()

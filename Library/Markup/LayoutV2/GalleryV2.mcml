@@ -1,0 +1,21 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:a="assembly://Library/Library"
+	  xmlns:me="Me">
+
+    <Aggregate Source="resx://Library/Library.Resources/Controls"/>
+    
+	<UI Name="GalleryV2">
+
+		<Properties>
+            <a:GalleryV2 Name="Gallery" GalleryV2="$Required"/>
+            <cor:String Name="caption" String="$Required"/>
+		</Properties>
+
+		<Content>
+            <me:GroupView Model="[Gallery.GroupViewModel]" />
+		</Content>
+
+	</UI>
+
+</Mcml>

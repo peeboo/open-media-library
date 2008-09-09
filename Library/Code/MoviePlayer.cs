@@ -39,6 +39,10 @@ namespace Library
             OMLApplication.DebugLine("[MoviePlayerFactory] Determing MoviePlayer to use for: {0}", movieItem.SelectedDisk);
             if (File.Exists(movieItem.SelectedDisk.Path) || Directory.Exists(movieItem.SelectedDisk.Path))
             {
+                OMLApplication.Current.IsStartingTranscodingJob = true;
+                OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created: {0}", movieItem.SelectedDisk);
+                return new TranscodePlayer(movieItem);
+
                 if (movieItem.SelectedDisk.Format == VideoFormat.WPL) // if its a playlist, do that first
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] WPLMoviePlayer created: {0}", movieItem.SelectedDisk);
@@ -49,11 +53,6 @@ namespace Library
                     OMLApplication.DebugLine("[MoviePlayerFactory] MountImageMoviePlayer created: {0}", movieItem.SelectedDisk);
                     return new MountImagePlayer(movieItem);
                 }
-//                else if (OMLApplication.Current.IsExtender && NeedsTranscode(movieItem.SelectedDisk) ) // if it needs to be transcoded
-//                {
-//                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created: {0}", movieItem.SelectedDisk);
-//                    return new TranscodePlayer(movieItem);
-//                }
                 else if (OMLApplication.Current.IsExtender && movieItem.SelectedDisk.Format == VideoFormat.DVD && MediaData.IsDVD(movieItem.SelectedDisk.Path)) // play the dvd
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] ExtenderDVDPlayer created: {0}", movieItem.SelectedDisk);
@@ -68,6 +67,11 @@ namespace Library
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] ExtenderHDDVDPlayer created: {0}", movieItem.SelectedDisk);
                     return new TranscodeHDDVDPlayer(movieItem);
+                }
+                else if (OMLApplication.Current.IsExtender && NeedsTranscode(movieItem.SelectedDisk) ) // if it needs to be transcoded
+                {
+                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created: {0}", movieItem.SelectedDisk);
+                    return new TranscodePlayer(movieItem);
                 }
                 else if (movieItem.SelectedDisk.Format == VideoFormat.DVD && MediaData.IsDVD(movieItem.SelectedDisk.Path)) // play the dvd
                 {

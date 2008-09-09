@@ -17,9 +17,6 @@ namespace OMLTranscoder
     {
         Process _process;
         MediaSource mediaSource;
-        
-        static string MENCODER_PATH = Path.Combine(FileSystemWalker.RootDirectory, @"mencoder.exe");
-        static string BUFFER_DIRECTORY = FileSystemWalker.TranscodeBufferDirectory;
 
         public Process CurrentTranscodeProcess
         {
@@ -33,6 +30,8 @@ namespace OMLTranscoder
 
         ~Transcode()
         {
+            if ((_process != null) && (!_process.HasExited))
+                _process.Kill();
         }
 
         public string BeginTranscodeJob(MediaSource ms)
@@ -41,28 +40,42 @@ namespace OMLTranscoder
             string outputFilename = string.Empty;
 
             MEncoderCommandBuilder cmdBuilder = new MEncoderCommandBuilder();
-            cmdBuilder.SetAudioOutputFormat(MEncoder.AudioFormat.COPY);
-            IList<AudioStream> aStreams = mediaSource.AvailableAudioStreams();
-            cmdBuilder.SetAudioStream(aStreams[0]);
+            cmdBuilder.SetAudioOutputFormat(MEncoder.AudioFormat.LAVC);
+            cmdBuilder.SetVideoOutputFormat(MEncoder.VideoFormat.LAVC);
+            cmdBuilder.SetInputType(MEncoder.InputType.File);
+            FileInfo fInfo = new FileInfo(ms.MediaPath);
+            if (fInfo == null)
+            {
+                Utilities.DebugLine("[Transcode] FileInfo doesn't exist");
+                return null;
+            }
+            else
+            {
+                outputFilename = Path.Combine(FileSystemWalker.TranscodeBufferDirectory, string.Format("{0}.buffer", fInfo.Name));
+                Utilities.DebugLine("[Transcode] Output file will be: {0}", outputFilename);
+            }
 
-            IList<SubtitleStream> sStreams = mediaSource.AvailableSubtitleStreams();
-            cmdBuilder.SetSubtitleStream(sStreams[0]);
+            cmdBuilder.SetInputLocation(fInfo);
+            cmdBuilder.SetOutputFile(outputFilename);
 
+            Utilities.DebugLine("[Transcode] Starting transcode job");
             _process = new Process();
-            _process.StartInfo.FileName = @"";
-            _process.StartInfo.Arguments = @"";
+            _process.StartInfo.FileName = cmdBuilder.GetCommand();
+            _process.StartInfo.Arguments = cmdBuilder.GetArguments();
             _process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             _process.StartInfo.ErrorDialog = false;
             _process.EnableRaisingEvents = true;
             _process.Exited += new EventHandler(this.HandleTranscodeExited);
             _process.Start();
-            _process.WaitForExit(1);
+            Utilities.DebugLine("[Transcode] Transcode job started, returning with buffer location");
+//            _process.WaitForExit(1);
 
             return outputFilename;
         }
 
         private void HandleTranscodeExited(object sender, EventArgs e)
         {
+            Utilities.DebugLine("[Transcode] Transcode Job Exited, Exit Code {0}", _process.ExitCode);
             if (_process.ExitCode != 0)
             {
                 Utilities.DebugLine("[Transcode] An error occured");
@@ -72,7 +85,7 @@ namespace OMLTranscoder
         public MediaSource MediaSourceFromTitle(Title title)
         {
             MediaSource source = new MediaSource();
-
+            source.MediaPath = title.SelectedDisk.Path;
             return source;
         }
     }

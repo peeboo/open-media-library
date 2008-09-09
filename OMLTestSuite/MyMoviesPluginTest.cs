@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace OMLTestSuite
 {
     [TestFixture]
-    public class MyMoviesPluginTest
+    public class MyMoviesPluginTest : TestBase
     {
         [TearDown]
         public void TearDownTest()

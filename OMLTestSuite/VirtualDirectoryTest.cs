@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace OMLTestSuite
 {
     [TestFixture]
-    public class VirtualDirectoryTest
+    public class VirtualDirectoryTest : TestBase
     {
         [Test]
         public void TEST_CREATE_VIRTUAL_FOLDER()

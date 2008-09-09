@@ -15,7 +15,7 @@ namespace OMLTranscoder
           PCM,     // -oac pcm
           MP2,     // -oac twolame
           MP3,     // -oac mp3lame
-          COPY,    // -oac copy
+          Copy,    // -oac copy
           LAVC     // FFmpeg audio encoding (mp2, ac3)
         };
 

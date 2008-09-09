@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace OMLTestSuite
 {
     [TestFixture]
-    public class TranscodeTest
+    public class TranscodeTest : TestBase
     {
     }
 }
