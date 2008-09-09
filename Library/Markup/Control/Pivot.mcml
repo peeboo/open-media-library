@@ -18,7 +18,8 @@
 
     <Locals>
       <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled" />
-      <ScrollingData Name="ScrollingData" LockedPosition="0.1" />
+      <!--<ScrollingData Name="ScrollingData" LockedPosition="0.1" />-->
+      <ScrollingData Name="ScrollingData" />
     </Locals>
 
     <Rules>
