@@ -56,7 +56,7 @@ namespace Library
         public const string Actor = "Actors";
         public const string Runtime = "Runtime";
         public const string Country = "Country";
-        public const string ParentRating = "Rating";
+        public const string ParentRating = "Parental Rating";
         public const string Tags = "Tags";
         public const string UserRating = "User Rating";
         public const string Year = "Year";
