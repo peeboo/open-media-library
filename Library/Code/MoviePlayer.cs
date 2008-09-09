@@ -39,9 +39,9 @@ namespace Library
             OMLApplication.DebugLine("[MoviePlayerFactory] Determing MoviePlayer to use for: {0}", movieItem.SelectedDisk);
             if (File.Exists(movieItem.SelectedDisk.Path) || Directory.Exists(movieItem.SelectedDisk.Path))
             {
-                OMLApplication.Current.IsStartingTranscodingJob = true;
-                OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created: {0}", movieItem.SelectedDisk);
-                return new TranscodePlayer(movieItem);
+                //OMLApplication.Current.IsStartingTranscodingJob = true;
+                //OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created: {0}", movieItem.SelectedDisk);
+                //return new TranscodePlayer(movieItem);
 
                 if (movieItem.SelectedDisk.Format == VideoFormat.WPL) // if its a playlist, do that first
                 {
