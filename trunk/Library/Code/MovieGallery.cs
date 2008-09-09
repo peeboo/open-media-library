@@ -7,6 +7,7 @@ using Microsoft.MediaCenter.UI;
 using System.Diagnostics;
 using OMLEngine;
 using System.Threading;
+using System.Linq;
 
 namespace Library
 {

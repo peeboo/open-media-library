@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace OMLTestSuite
 {
     [TestFixture]
-    public class MoviePlayerDVDTest
+    public class MoviePlayerDVDTest : TestBase
     {
         [Test]
         public void TEST_GENERATE_STRING_FOR_A_STANDARD_DVD()

@@ -7,7 +7,7 @@ using OMLEngine;
 namespace OMLTestSuite
 {
     [TestFixture]
-    public class TitleCollectionTest
+    public class TitleCollectionTest : TestBase
     {
         [Test]
         public void TEST_BASE_CASE()

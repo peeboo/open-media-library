@@ -67,26 +67,6 @@ namespace OMLXMLPlugin
             GetMovies(thework[0]);
         }
 
-        public bool ConvertMyMoviesXMLToOMLXML(string filename)
-        {
-            string full_filename = Path.GetFullPath(filename);
-            string new_filename = Path.Combine(Directory.GetParent(full_filename).FullName, @"oml.xml");
-
-            if (File.Exists(full_filename))
-            {
-                if (XMLTransformer.QuickTransform(filename, @"..\..\..\MyMoviesPlugin\MyMoviesToOML.xsl", new_filename))
-                {
-                    if (File.Exists(new_filename))
-                        return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return false;
-        }
-
         public void GetMovies(string startFolder)
         {
             try
@@ -125,28 +105,6 @@ namespace OMLXMLPlugin
                                 Title t = Title.CreateFromXML(filename, CopyImages);
                                 if (t != null)
                                     AddTitle(t);
-                            }
-
-                            if (filename.ToLower().EndsWith(@"mymovies.xml"))
-                            {
-                                Utilities.DebugLine("[OMLXMLPlugin] Found mymovies.xml, attempting to convert");
-                                if (ConvertMyMoviesXMLToOMLXML(filename))
-                                {
-                                    Utilities.DebugLine("[OMLXMLPlugin] Conversion successful, moving to load new oml.xml");
-                                    string newFileName = Path.Combine(Directory.GetParent(filename).FullName,
-                                                                      @"oml.xml");
-                                    if (File.Exists(newFileName))
-                                    {
-                                        Title t = Title.CreateFromXML(newFileName, CopyImages);
-
-                                        if (t != null)
-                                            AddTitle(t);
-                                    }
-                                }
-                                else
-                                {
-                                    Utilities.DebugLine("[OMLXMLPlugin] Conversion failed, skipping title");
-                                }
                             }
                         }
                     }

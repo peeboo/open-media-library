@@ -37,14 +37,9 @@ namespace OMLTestSuite
             tct.TEST_FIND_FOR_ID();
             tct.TEST_SOURCE_DATABASE_TO_USE();
 
-            OMLXMLImporterTest oxit = new OMLXMLImporterTest();
-            Console.WriteLine("Testing: OMLXMLPlugin");
-            oxit.TEST_CONVERT_MYMOVIES_XML_TO_OML_XML();
-            oxit.TEST_AUTO_LOCATE_CONVERT_AND_LOAD_A_MYMOVIES_XML_INTO_AN_OML_XML();
-
             MEncoderCommandBuilderTest mecbt = new MEncoderCommandBuilderTest();
             Console.WriteLine("Testing: MEncoderCommandBuilder");
-            mecbt.TEST_PRESET_COMMAND_TO_DETERMINE_SUBTITLE_STREAMS();
+            mecbt.TEST_BASIC_COMMAND_BUILDER();
 
             VirtualDirectoryTest vdt = new VirtualDirectoryTest();
             Console.WriteLine("Testing: VirtualDirectory");

@@ -12,6 +12,8 @@
     <AssemblyName>OMLTranscoder</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>library.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,6 +63,9 @@
       <Name>OMLEngine</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="library.snk" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -69,4 +74,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>"$(DevEnvDir)..\..\..\Microsoft SDKs\Windows\v6.0\Bin\GacUtil.exe" /i "$(TargetPath)" /f</PostBuildEvent>
+  </PropertyGroup>
 </Project>

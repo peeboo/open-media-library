@@ -1,22 +1,24 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
-	    xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:cor="assembly://MSCorLib/System"
       xmlns:a="assembly://Library/Library"
       xmlns:controls="resx://Library/Library.Resources/CoreControls"
       xmlns:me="Me">
 
     <Aggregate Source="resx://Library/Library.Resources/BasePage"/>
     <Aggregate Source="resx://Library/Library.Resources/Controls"/>
+    <Aggregate Source="resx://Library/Library.Resources/GalleryV2"/>
 
     <UI Name="NewMenu" BaseUI="me:BasePage">
-      <Properties>
-        <a:BaseGallery Name="Gallery" BaseGallery="$Required"/>
-      </Properties>
+        <Properties>
+            <a:OMLPage Name="Page" OMLPage="$Required"/>
+            <a:GalleryV2 Name="Gallery" GalleryV2="$Required"/>
+        </Properties>
 
         <Rules>
             <Binding Source="[Gallery.PageName]" Target="[PageDescription.Content]"/>
             <Changed Source="[Gallery.MenuTabs.Chosen]">
                 <Conditions>
-                    <Equality Source="[Gallery.MenuTabs.Chosen.ToString]" Value="OML Home"/>
+                    <Equality Source="[Gallery.MenuTabs.Chosen.ToString]" Value="All Movies" ConditionOp="Equals"/>
                 </Conditions>
                 <Actions>
                     <Set Target="[ViewHome.Visible]" Value="true"/>
@@ -26,7 +28,7 @@
 
             <Changed Source="[Gallery.MenuTabs.Chosen]">
                 <Conditions>
-                    <Equality Source="[Gallery.MenuTabs.Chosen.ToString]" Value="Genre"/>
+                    <Equality Source="[Gallery.MenuTabs.Chosen.ToString]" Value="Genres" ConditionOp="Equals"/>
                 </Conditions>
                 <Actions>
                     <Set Target="[ViewHome.Visible]" Value="false"/>
@@ -88,7 +90,7 @@
                             <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
                         </LayoutInput>
                     </Panel>
-                    <Graphic Content="resx://Library/Library.Resources/SampleBackground2_1024_768" Layout="Fill" Navigation="None" SizingPolicy="SizeToContent"/>
+                    <!--<Graphic Content="resx://Library/Library.Resources/SampleBackground2_1024_768" Layout="Fill" Navigation="None" SizingPolicy="SizeToContent"/>-->
                 </Children>
             </ColorFill>
         </Content>
@@ -96,19 +98,20 @@
 
     <UI Name="ViewByHome">
         <Properties>
-            <a:BaseGallery Name="Gallery" BaseGallery="$Required"/>
+            <a:GalleryV2 Name="Gallery" GalleryV2="$Required"/>
         </Properties>
         <Content>
-            <me:GroupView Model="[Gallery.View]"/>
+            <me:GalleryV2 Gallery="[Gallery]" caption="ViewAll"/>
         </Content>
     </UI>
 
     <UI Name="ViewByGenre">
         <Properties>
-            <a:BaseGallery Name="Gallery" BaseGallery="$Required"/>
+            <a:GalleryV2 Name="Gallery" GalleryV2="$Required"/>
         </Properties>
         <Content>
-            <Text Content="this would be the genre view"/>
+            <Text Content="By Genre goes here"/>
+            <!--<me:GalleryV2 Gallery="[Gallery]" caption="ViewByGenre"/>-->
         </Content>
     </UI>
 

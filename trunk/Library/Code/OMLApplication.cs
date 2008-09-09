@@ -74,16 +74,17 @@ namespace Library
         public void Startup(string context)
         {
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
-            #if LAYOUT_V2
-                        Dictionary<string, object> properties = new Dictionary<string, object>();
-                        properties["Application"] = this;
-                        properties["UISettings"] = new UISettings();
-                        properties["Settings"] = new Settings();
-                        properties["Gallery"] = new BaseGallery(this, _host, _titles);
-
-                        _session.GoToPage(@"resx://Library/Library.Resources/NewMenu", properties);
-                        return;
-            #endif
+#if LAYOUT_V2
+            OMLProperties properties = new OMLProperties();
+            properties.Add("Application", this);
+            properties.Add("UISettings", new UISettings());
+            properties.Add("Settings", new Settings());
+            properties.Add("I18n", I18n.Instance);
+            properties.Add("Gallery", new GalleryV2(properties, _titles));
+            //properties.Add("Gallery", new BaseGallery(properties, _titles));
+            _session.GoToPage(@"resx://Library/Library.Resources/NewMenu", properties);
+            return;
+#endif
             switch (context)
             {
                 case "Menu":

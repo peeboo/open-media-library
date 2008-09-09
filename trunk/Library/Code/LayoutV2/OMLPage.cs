@@ -8,9 +8,7 @@ namespace Library
     public class OMLPage : ModelItem
     {
         OMLChoice menuTabs;
-        PropertySet pageProperties;
-        OMLApplication app;
-        AddInHost addin;
+        OMLProperties pageProperties;
         string pageName;
 
         public string PageName
@@ -33,22 +31,19 @@ namespace Library
             }
         }
 
-        public OMLPage(OMLApplication application, AddInHost addinHost)
+        public OMLPage(OMLProperties props)
         {
-            app = application;
-            addin = addinHost;
+            pageProperties = props;
 
             menuTabs = new OMLChoice();
             ArrayListDataSet tabs = new ArrayListDataSet();
-            tabs.Add(Filter.Home);
+            tabs.Add("All Movies");
             tabs.Add(Filter.Genres);
             tabs.Add(Filter.ParentRating);
             tabs.Add(Filter.Runtime);
             tabs.Add(Filter.UserRating);
             tabs.Add(Filter.Year);
             menuTabs.Options = tabs;
-
-            pageProperties = new PropertySet(this);
         }
     }
 }

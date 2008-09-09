@@ -7,7 +7,7 @@
 	<UI Name="GalleryItem">
 
 		<Properties>
-            <a:GalleryItem Name="Item" GalleryItem="$Required"/>
+            <a:MovieItemV2 Name="Item" MovieItemV2="$Required"/>
             <cor:Single Name="CoverArtAlpha" Single="0.5"/>
             <Image Name="BackgroundImage" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
 		</Properties>
@@ -17,8 +17,7 @@
                 <Children>
                     <Panel Name="ImagePanel" Margins="0,0,0,0">
                         <Children>
-                            <Text Name="Caption" Content="[Item.Caption]" Font="font://s:ListFont" Color="White" WordWrap="true" Margins="20,10,20,10" />
-                            <!--<Graphic Name="MenuCover" Content="[Item.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint" AcquiringImage="resx://Library/Library.Resources/nocover"/>-->
+                            <Graphic Name="MenuCover" Content="[Item.FrontCoverImage]" SizingPolicy="SizeToConstraint" AcquiringImage="resx://Library/Library.Resources/nocover"/>
                         </Children>
                     </Panel>
 

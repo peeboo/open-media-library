@@ -3,16 +3,16 @@
 	  xmlns:a="assembly://Library/Library"
 	  xmlns:me="Me">
 
-    <Aggregate Source="resx://Library/Library.Resources/GalleryItem"/>
+    <Aggregate Source="resx://Library/Library.Resources/ImageItem"/>
     
 	<UI Name="ListBoxItem">
 
 		<Properties>
-            <a:GalleryItem Name="GalleryItem" GalleryItem="$Required"/>
+            <a:MovieItemV2 Name="MovieItem" MovieItemV2="$Required"/>
 		</Properties>
 
 		<Content>
-            <me:GalleryItem Item="[GalleryItem]" />
+            <me:ImageItem Item="[MovieItem]" />
 		</Content>
 
 	</UI>

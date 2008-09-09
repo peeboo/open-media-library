@@ -25,7 +25,7 @@
                     <Repeater Name="Repeater" Source="[Model.Options]" ContentName="Item"
                               Margins="50,0,0,0" MaximumSize="0,500">
                         <Layout>
-                            <GridLayout Orientation="Vertical" AllowWrap="true" Spacing="50,10"/>
+                            <GridLayout />
                         </Layout>
                     </Repeater>
                 </Children>
@@ -34,7 +34,7 @@
 
         <Content Name="Item">
             <!--<Text Content="This is a test"/>-->
-            <me:ListBoxItem GalleryItem="[RepeatedItem!a:GalleryItem]"/>
+            <me:ListBoxItem MovieItem="[RepeatedItem!a:MovieItemV2]"/>
         </Content>
 
 	</UI>

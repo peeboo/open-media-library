@@ -7,7 +7,7 @@ using DVDProfilerPlugin;
 namespace OMLTestSuite
 {
     [TestFixture]
-    public class DVDProfilerTest
+    public class DVDProfilerTest : TestBase
     {
         [Test]
         public void TEST_SPACING_IS_CORRECT_FOR_ACTOR_NAMES()

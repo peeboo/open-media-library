@@ -8,15 +8,16 @@
         <Properties>
             <Choice Name="Model" Choice="$Required"/>
         </Properties>
-<!--
         <Content>
             <ColorFill Content="Transparent" Layout="HorizontalFlow">
+                <LayoutInput>
+                    <FormLayoutInput Left="Parent,0" Top="Parent,.22" Right="Parent,1" Bottom="Parent,.75"/>
+                </LayoutInput>
                 <Children>
                     <me:ListBox Model="[Model]" />
                 </Children>
             </ColorFill>
         </Content>
--->
     </UI>
 
 </Mcml>
