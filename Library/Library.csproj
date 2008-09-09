@@ -173,6 +173,7 @@
     <Content Include="Markup\Control\WaitCursor.mcml" />
     <Content Include="Markup\CoreControls.mcml" />
     <Content Include="Markup\DetailsPage.mcml" />
+    <Content Include="Markup\DetailsPage2.mcml" />
     <Content Include="Markup\FilterList.mcml" />
     <Content Include="Markup\LayoutV2\GalleryV2.mcml" />
     <Content Include="Markup\LayoutV2\ImageItem.mcml" />

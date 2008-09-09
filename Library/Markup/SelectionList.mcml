@@ -6,6 +6,7 @@
 	  xmlns:cor="assembly://MSCorLib/System"
     xmlns:col="assembly://MSCorLib/System.Collections"
     xmlns:c="resx://Library/Library.Resources/Controls"
+    xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
 	  xmlns:me="Me">
 
   <Aggregate Source="resx://Library/Library.Resources/FilterList"/>
@@ -22,6 +23,7 @@
       <cor:String Name="GalleryView" String="$Required" />
       <IntRangedValue Name="FocusedIndex"/>
       <EditableText Name="JumpValue"/>
+      <Command Name="GoToNowPlaying" />
     </Properties>
 
     <Locals>
@@ -36,8 +38,28 @@
       <AnchorEdge Name="GalleryBottomAnchor" Percent="[UISettings.Anchor.GalleryBottomAnchor]" Offset ="[UISettings.Anchor.GalleryBottomOffset]" Id="Parent"/>
       <AnchorEdge Name="BottomAnchor" Percent="[UISettings.Anchor.BottomAnchor]" Offset ="[UISettings.Anchor.BottomOffset]" Id="Parent"/>
       <AnchorEdge Name="RightAnchor" Percent="[UISettings.Anchor.RightAnchor]" Offset ="[UISettings.Anchor.RightOffset]" Id="Parent"/>
+      <addin:AddInHost Name="AddInHost"/>
     </Locals>
 
+    <Rules>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[AddInHost.Current.MediaCenterEnvironment.MediaExperience]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NowPlaying.Text]" Value="[Application.NowPlaying]" />
+          <Set Target="[NowPlayingPanel.Visible]" Value="true" />
+        </Actions>
+      </Rule>
+
+      <Changed Source="[Application.NowPlaying]" >
+        <Actions>
+          <Set Target="[NowPlaying.Text]" Value="[Application.NowPlaying]" />
+        </Actions>
+      </Changed>
+
+    </Rules>
+    
     <!--<Rules>
       <Binding Source="[JumpValue.Value]" Target="[JumpInText.Content]" />
     </Rules>-->
@@ -53,9 +75,11 @@
             </Children>
 
             <LayoutInput>
-              <FormLayoutInput Left="Parent, 0.04" Top="Parent,0.04" Right="Parent,0.95" />
+              <FormLayoutInput Left="Parent,0.02"  Top="Parent,0,5"/>
             </LayoutInput>
           </Panel>
+
+
           <!--<LayoutInput>
               <FormLayoutInput Left="Parent,0.35,20" Right="Parent,1,-20" Top="Parent,0.07"/>
             </LayoutInput>
@@ -82,6 +106,18 @@
             </LayoutInput>
           </Panel>
 
+
+          <!-- NowPlayingPanel -->
+          <Panel Name="NowPlayingPanel" Layout="HorizontalFlow" Visible="true">
+            <Children>
+              <c:SimpleButton Name="NowPlaying" Text="No movie is playing" Command="[GoToNowPlaying]" Size="0,0" Font="font://s:Normal"/>
+            </Children>
+
+            <LayoutInput>
+              <FormLayoutInput  Top="Parent, 0, 5" Right="Parent, 1, -10" />
+            </LayoutInput>
+
+          </Panel>
         </Children>
 
       </ColorFill>

@@ -251,47 +251,69 @@ namespace Library
         {
             _titleObj = title;
             SortName = title.SortName;
-
+            SubCaption = "";
             if (_titleObj.Runtime > 0)
-                SubCaption += "Runtime: " + Convert.ToString(_titleObj.Runtime) + " minutes\n";
+                SubCaption += Convert.ToString(_titleObj.Runtime) + " minutes";
 
             if (_titleObj.UserStarRating > 0)
-                SubCaption += "User Rating: " + ((double)(_titleObj.UserStarRating / 10)).ToString("0.0") + "\n";
-
-            SubCaption += _titleObj.ParentalRating + "\n";
-
-            if( _titleObj.Directors.Count > 0 )
-                SubCaption += "Directed by: " + ((Person)_titleObj.Directors[0]).full_name + "\n";
-
-            int actorCount = 0;
-            if (_titleObj.ActingRoles.Count > 0)
             {
-                SubCaption += "Actors: ";
+                if (SubCaption.Length > 0) SubCaption += " / ";
+                SubCaption += ((double)(_titleObj.UserStarRating / 10)).ToString("0.0");
             }
 
-            foreach (KeyValuePair<string,string> actor in _titleObj.ActingRoles)
+//            if (_titleObj.Directors.Count > 0 && ((Person)_titleObj.Directors[0]).full_name.Trim().Length > 0)
+  //          {
+    //            if (SubCaption.Length > 0) SubCaption += " / ";
+      //          SubCaption += "Directed by: " + ((Person)_titleObj.Directors[0]).full_name;
+        //    }
+
+            if (_titleObj.ParentalRating.Trim().Length > 0)
             {
-                if (actor.Key.Trim().Length > 0)
+                if (SubCaption.Length > 0) SubCaption += " / ";
+                SubCaption += _titleObj.ParentalRating;
+            }
+
+            int genreCount = 0;
+            if (_titleObj.Genres.Count > 0)
+            {
+                foreach (string g in _titleObj.Genres)
                 {
-                    if (actorCount > 0)
-                        SubCaption += ", ";
-
-                    SubCaption += actor.Key.Trim();
-                    actorCount++;
-
-                    if (actorCount == 6)
-                    {
-                        SubCaption += "...";
-                        break;
-                    }
+                    if (SubCaption.Length > 0) SubCaption += " / ";
+                    SubCaption += g;
+                    genreCount++;
+                    if (genreCount > 3) break;
                 }
             }
 
+            //int actorCount = 0;
+            //if (_titleObj.ActingRoles.Count > 0)
+            //{
+            //    SubCaption += "Actors: ";
+            //}
 
-            if (_titleObj.ActingRoles.Count > 0)
-            {
-                SubCaption += "\n";
-            }
+            //foreach (KeyValuePair<string,string> actor in _titleObj.ActingRoles)
+            //{
+            //    if (actor.Key.Trim().Length > 0)
+            //    {
+            //        if (actorCount > 0)
+            //            SubCaption += ", ";
+
+            //        SubCaption += actor.Key.Trim();
+            //        actorCount++;
+
+            //        if (actorCount == 6)
+            //        {
+            //            SubCaption += "...";
+            //            break;
+            //        }
+            //    }
+            //}
+
+
+            //if (_titleObj.ActingRoles.Count > 0)
+            //{
+            //    SubCaption += "\n";
+            //}
 
             Details = _titleObj.Synopsis;
             _actingRoles = new List<string>();

@@ -178,5 +178,17 @@ namespace Library
         BooleanChoice _dimUnselectedCovers = new BooleanChoice();
         BooleanChoice _useOriginalCoverArt = new BooleanChoice();
         Choice _startPage = new Choice();
+
+        BooleanChoice _showGenres = new BooleanChoice();
+        BooleanChoice _showActors = new BooleanChoice();
+        BooleanChoice _showDirectors = new BooleanChoice();
+        BooleanChoice _showDateAdded = new BooleanChoice();
+        BooleanChoice _showYear = new BooleanChoice();
+        BooleanChoice _showRuntime = new BooleanChoice();
+        BooleanChoice _showFormat = new BooleanChoice();
+        BooleanChoice _showUserRating = new BooleanChoice();
+        BooleanChoice _showTags = new BooleanChoice();
+        BooleanChoice _showParentalRating = new BooleanChoice();
+        BooleanChoice _showCountry = new BooleanChoice();
     }
 }

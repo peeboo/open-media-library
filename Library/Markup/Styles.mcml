@@ -23,7 +23,8 @@
   <Font Name="TertiaryText"         Font="Calibri,16"/>
   <Font Name="GalleryItemSubText"   Font="Calibri,14"/>
 
-  <Font Name="ListFont"             Font="Segoe Media Center,22"/>
+  <Font Name="ListFontSelected"             Font="Segoe Media Center,28" FontStyle="Bold"/>
+  <Font Name="ListFont"             Font="Segoe Media Center,22" FontStyle="None"/>
   <Font Name="EditText"             Font="Segoe Media Center,16"/>
   <Font Name="KeyboardText"         Font="Segoe UI,18"/>
 
@@ -44,6 +45,8 @@
   <Color Name="HeadingColor" Color="White"/>
   <Color Name="SelectedColor" Color="White"/>
   <Color Name="BackgroundColor" Color="Black"/>
+  <Font Name="MovieNameFont" FontName="Segoe Media Center" FontSize="18" FontStyle="Bold"/>
+  <Font Name="NormalPlain" FontName="Segoe Media Center" FontSize="16"/>
   <Font Name="BoldFont" FontName="Segoe Media Center" FontSize="16"	FontStyle="Bold"/>
   <Font Name="Heading" FontName="Segoe Media Center" FontSize="24"	FontStyle="Bold"/>
   <Font Name="Normal" FontName="Segoe Media Center" FontSize="16" FontStyle="Bold"/>

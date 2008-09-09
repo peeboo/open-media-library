@@ -253,7 +253,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.85")]
         public float BottomAnchor {
             get {
                 return ((float)(this["BottomAnchor"]));
@@ -265,7 +265,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-30")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int BottomOffset {
             get {
                 return ((int)(this["BottomOffset"]));
@@ -529,7 +529,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.3")]
         public float FocusListScale {
             get {
                 return ((float)(this["FocusListScale"]));
@@ -583,6 +583,56 @@ namespace Library.Properties {
             }
             set {
                 this["BaseFolders"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>Genres</string>
+  <string>Directors</string>
+  <string>Actors</string>
+  <string>Runtime</string>
+  <string>Country</string>
+  <string>Parental Rating</string>
+  <string>Tags</string>
+  <string>User Rating</string>
+  <string>Year</string>
+  <string>Date Added</string>
+  <string>Format</string>
+</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection Filters {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Filters"]));
+            }
+            set {
+                this["Filters"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>Genres</string>
+  <string>Directors</string>
+  <string>Actors</string>
+  <string>Runtime</string>
+  <string>Country</string>
+  <string>Parental Rating</string>
+  <string>Tags</string>
+  <string>User Rating</string>
+  <string>Year</string>
+  <string>Date Added</string>
+  <string>Format</string>
+</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection AllFilters {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["AllFilters"]));
+            }
+            set {
+                this["AllFilters"] = value;
             }
         }
     }

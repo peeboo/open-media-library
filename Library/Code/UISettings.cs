@@ -126,10 +126,10 @@ namespace Library
             get
             {
                 int rows = Properties.Settings.Default.GalleryCoverArtRows;
-                int height = (600 - rows * 2 * Properties.Settings.Default.CoverArtSpacingVertical) / rows;
+                int height = (520 - rows * 2 * Properties.Settings.Default.CoverArtSpacingVertical) / rows;
                 int width = (int)(height * 0.705);
 
-                Properties.Settings.Default.FocusCoverArtScale = 1.4f - 0.16f * (3-rows);
+                Properties.Settings.Default.FocusCoverArtScale = 1.3f - 0.16f * (3-rows);
 
                 return new Size(width, height);
             }
