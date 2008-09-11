@@ -109,5 +109,19 @@ namespace OMLTestSuite
             Assert.IsTrue(File.Exists(imagePath));
             Assert.IsTrue(imagePath.EndsWith("folder.jpg", StringComparison.CurrentCultureIgnoreCase));
         }
+
+        [Test]
+        public void TEST_CORRECTLY_IMPORTS_DVRMS_FILES()
+        {
+            MyMoviesImporter importer = new MyMoviesImporter();
+            importer.ProcessFile(@"..\..\..\Sample Files\MyMoviesTestFiles\DVR-MS\mymovies.xml");
+
+            IList<Title> titles = importer.GetTitles();
+
+            Assert.AreEqual(1, titles.Count);
+            Title t = titles[0];
+            Assert.AreEqual(1, t.Disks.Count);
+            Assert.IsNotEmpty(t.Disks[0].Path);
+        }
     }
 }

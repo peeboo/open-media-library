@@ -15,9 +15,18 @@ namespace OMLSDK
         private Boolean _copyImages = false;
         public static string MyMoviesXslTransform =
             Path.Combine(FileSystemWalker.PluginsDirectory, @"MyMoviesToOML.xsl");
+        List<string> errors;
 
         public enum PluginTypes { ImportPlugin, MetadataPlugin };
         #region Properties
+        public string[] GetErrors
+        {
+            get { return errors.ToArray(); }
+        }
+        public void AddError(string errStr, params object[] paramArray)
+        {
+            errors.Add(string.Format(errStr, paramArray));
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -493,6 +502,7 @@ namespace OMLSDK
         public OMLPlugin()
         {
             titles = new List<Title>();
+            errors = new List<string>();
         }
 
         /// <summary>

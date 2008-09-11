@@ -22,12 +22,10 @@ namespace MyMoviesPlugin
         {
             Utilities.DebugLine("[MyMoviesImporter] created");
         }
-
         public override string SetupDescription()
         {
             return GetName() + @" will search for and import [" + DefaultFileToImport() + @"] files.";
         }
-
         public override bool IsSingleFileImporter()
         {
             return false;
@@ -41,39 +39,38 @@ namespace MyMoviesPlugin
             Utilities.DebugLine("[MyMoviesImporter] created[filename("+file+"), ShouldCopyImages("+CopyImages+")]");
 
             currentFile = file;
-            XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(file);
-            Utilities.DebugLine("[MyMoviesImporter] file loaded");
-
-            XmlNodeList nodeList = xDoc.SelectNodes("//Titles/Title");
-            if (nodeList.Count == 0)
-                nodeList = xDoc.SelectNodes("//Title");
-
-            foreach (XmlNode movieNode in nodeList)
+            if (File.Exists(currentFile))
             {
-                Utilities.DebugLine("[MyMoviesImporter] Found base Title node");
+                XmlDocument xDoc = new XmlDocument();
+                xDoc.Load(file);
+                Utilities.DebugLine("[MyMoviesImporter] file loaded");
 
-                Title newTitle = new Title();
+                XmlNodeList nodeList = xDoc.SelectNodes("//Titles/Title");
+                if (nodeList.Count == 0)
+                    nodeList = xDoc.SelectNodes("//Title");
 
-                XPathNavigator navigator = movieNode.CreateNavigator();
-                if (navigator.MoveToChild("LocalTitle", ""))
+                foreach (XmlNode movieNode in nodeList)
                 {
-                    newTitle.Name = navigator.Value;
-                    navigator.MoveToParent();
+                    Utilities.DebugLine("[MyMoviesImporter] Found base Title node");
+
+                    Title newTitle = new Title();
+
+                    XPathNavigator navigator = movieNode.CreateNavigator();
+                    newTitle.Name = GetChildNodesValue(navigator, "LocalTitle");
                     loadDataFromNavigatorToTitle(ref navigator, ref newTitle);
-                }
-                else
-                {
-                    break;
-                }
 
-                if (ValidateTitle(newTitle, file))
-                {
-                    Utilities.DebugLine("[MyMoviesImporter] Validating title");
-                    try { AddTitle(newTitle); }
-                    catch (Exception e) { Utilities.DebugLine("[MyMoviesImporter] Error adding row: " + e.Message); }
+                    if (ValidateTitle(newTitle, file))
+                    {
+                        Utilities.DebugLine("[MyMoviesImporter] Validating title");
+                        try { AddTitle(newTitle); }
+                        catch (Exception e) { Utilities.DebugLine("[MyMoviesImporter] Error adding row: " + e.Message); }
+                    }
+                    else Utilities.DebugLine("[MyMoviesImporter] Error saving row");
                 }
-                else Utilities.DebugLine("[MyMoviesImporter] Error saving row");
+            }
+            else
+            {
+                AddError("File not found when trying to load file: {0}", currentFile);
             }
         }
         protected override double GetVersionMajor()
@@ -161,11 +158,7 @@ namespace MyMoviesPlugin
         }
         private void loadDataFromNavigatorToTitle(ref XPathNavigator navigator, ref Title newTitle)
         {
-            if (navigator.MoveToChild("WebServiceId", ""))
-            {
-                newTitle.MetadataSourceID = navigator.Value;
-                navigator.MoveToParent();
-            }
+            newTitle.MetadataSourceID = GetChildNodesValue(navigator, "WebServiceId");
 
             if (navigator.MoveToChild("Covers", ""))
             {
@@ -192,18 +185,18 @@ namespace MyMoviesPlugin
 
                 if (navigator.MoveToChild("Back", ""))
                 {
-                    SetBackCoverImage(ref newTitle, navigator.Value);
+                    string imagePath = navigator.Value;
+                    if (File.Exists(imagePath))
+                    {
+                        SetBackCoverImage(ref newTitle, imagePath);
+                    }
                     navigator.MoveToParent();
                 }
 
                 navigator.MoveToParent();
             }
 
-            if (navigator.MoveToChild("Description", ""))
-            {
-                newTitle.Synopsis = navigator.Value;
-                navigator.MoveToParent();
-            }
+            newTitle.Synopsis = GetChildNodesValue(navigator, "Description");
 
             if (navigator.MoveToChild("ProductionYear", ""))
             {
@@ -220,6 +213,7 @@ namespace MyMoviesPlugin
                 }
                 catch (Exception e)
                 {
+                    navigator.MoveToParent();
                     Utilities.DebugLine("[MyMoviesImporter] error reading ProductionYear: " + e.Message);
                 }
             }
@@ -259,11 +253,7 @@ namespace MyMoviesPlugin
                 navigator.MoveToParent();
             }
 
-            if (navigator.MoveToChild("RunningTime", ""))
-            {
-                newTitle.Runtime = Int32.Parse(navigator.Value);
-                navigator.MoveToParent();
-            }
+            newTitle.Runtime = Int32.Parse(GetChildNodesValue(navigator, "RunningTime"));
 
             if (navigator.MoveToChild("Persons", ""))
             {
@@ -275,27 +265,9 @@ namespace MyMoviesPlugin
                     navigator.MoveToParent();
                     for (int i = 0; i < nIter.Count; i++)
                     {
-                        string name = string.Empty;
-                        string role = string.Empty;
-                        string type = string.Empty;
-
-                        if (localNav.MoveToChild("Name", ""))
-                        {
-                            name = localNav.Value;
-                            localNav.MoveToParent();
-                        }
-
-                        if (localNav.MoveToChild("Role", ""))
-                        {
-                            role = localNav.Value;
-                            localNav.MoveToParent();
-                        }
-
-                        if (localNav.MoveToChild("Type", ""))
-                        {
-                            type = localNav.Value;
-                            localNav.MoveToParent();
-                        }
+                        string name = GetChildNodesValue(localNav, "Name");
+                        string role = GetChildNodesValue(localNav, "Role");
+                        string type = GetChildNodesValue(localNav, "Type");
 
                         if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(role) && !string.IsNullOrEmpty(type))
                         {
@@ -328,36 +300,16 @@ namespace MyMoviesPlugin
                     navigator.MoveToParent();
                     for (int i = 0; i < nIter.Count; i++)
                     {
-                        newTitle.Studio = localNav.Value;
-                        localNav.MoveToNext("Studio", "");
+                        newTitle.Studio = GetChildNodesValue(localNav, "Studio");
                     }
                 }
                 navigator.MoveToParent();
             }
 
-            if (navigator.MoveToChild("Country", ""))
-            {
-                newTitle.CountryOfOrigin = navigator.Value;
-                navigator.MoveToParent();
-            }
-
-            if (navigator.MoveToChild("AspectRatio", ""))
-            {
-                newTitle.AspectRatio = navigator.Value;
-                navigator.MoveToParent();
-            }
-
-            if (navigator.MoveToChild("OriginalTitle", ""))
-            {
-                newTitle.OriginalName = navigator.Value;
-                navigator.MoveToParent();
-            }
-
-            if (navigator.MoveToChild("SortTitle", ""))
-            {
-                newTitle.SortName = navigator.Value;
-                navigator.MoveToParent();
-            }
+            newTitle.CountryOfOrigin = GetChildNodesValue(navigator, "Country");
+            newTitle.AspectRatio = GetChildNodesValue(navigator, "AspectRatio");
+            newTitle.OriginalName = GetChildNodesValue(navigator, "OriginalTitle");
+            newTitle.SortName = GetChildNodesValue(navigator, "SortTitle");
 
             if (navigator.MoveToChild("Genres", ""))
             {
@@ -368,7 +320,6 @@ namespace MyMoviesPlugin
                 for (int i = 0; i < nIter.Count; i++)
                 {
                     newTitle.AddGenre(localNav.Value);
-                    localNav.MoveToNext("Genre", "");
                 }
                 navigator.MoveToParent();
             }
@@ -381,13 +332,9 @@ namespace MyMoviesPlugin
                 navigator.MoveToParent();
                 for (int i = 0; i < nIter.Count ; i++)
                 {
-                    string audioLanguage = string.Empty;
-                    string audioType = string.Empty;
-                    string audioChannels = string.Empty;
-
-                    audioLanguage = localNav.GetAttribute("Language", "");
-                    audioType = localNav.GetAttribute("Type", "");
-                    audioChannels = localNav.GetAttribute("Channels", "");
+                    string audioLanguage = localNav.GetAttribute("Language", "");
+                    string audioType = localNav.GetAttribute("Type", "");
+                    string audioChannels = localNav.GetAttribute("Channels", "");
 
                     if (!string.IsNullOrEmpty(audioLanguage))
                     {
@@ -431,111 +378,196 @@ namespace MyMoviesPlugin
                 navigator.MoveToFirstChild();
                 XPathNavigator localNav = navigator.CreateNavigator();
                 navigator.MoveToParent();
-                for (int i = 0; i < nIter.Count; i++)
-                {
-                    bool isDoubleSided = false;
-                    string discName = string.Empty;
-                    string sideAId = string.Empty;
-                    string sideBId = string.Empty;
-                    string sideALocation = string.Empty;
-                    string sideBLocation = string.Empty;
-                    string sideALocationType = string.Empty;
-                    string sideBLocationType = string.Empty;
-                    string changerSlot = string.Empty;
-
-                    if (localNav.MoveToChild("DoubleSided", ""))
-                    {
-                        isDoubleSided = (localNav.Value.CompareTo("False") == 0) ? false : true;
-                        localNav.MoveToParent();
-                    }
-
-                    if (localNav.MoveToChild("Name", ""))
-                    {
-                        discName = localNav.Value;
-                        localNav.MoveToParent();
-                    }
-
-                    if (localNav.MoveToChild("DiscIdSideA", ""))
-                    {
-                        sideAId = localNav.Value;
-                        localNav.MoveToParent();
-                    }
-
-                    if (localNav.MoveToChild("LocationSideA", ""))
-                    {
-                        sideALocation = localNav.Value;
-                        localNav.MoveToParent();
-                    }
-
-                    if (localNav.MoveToChild("LocationTypeSideA", ""))
-                    {
-                        sideALocationType = localNav.Value;
-                        localNav.MoveToParent();
-                    }
-
-                    if (localNav.MoveToChild("ChangerSlot", ""))
-                    {
-                        changerSlot = localNav.Value;
-                        localNav.MoveToParent();
-                    }
-
-                    if (isDoubleSided)
-                    {
-                        if (localNav.MoveToChild("DiscIdSideB", ""))
-                        {
-                            sideBId = localNav.Value;
-                            localNav.MoveToParent();
-                        }
-
-                        if (localNav.MoveToChild("LocationSideB", ""))
-                        {
-                            sideBLocation = localNav.Value;
-                            localNav.MoveToParent();
-                        }
-
-                        if (localNav.MoveToChild("LocationTypeSideB", ""))
-                        {
-                            sideBLocationType = localNav.Value;
-                            localNav.MoveToParent();
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(sideALocation))
-                    {
-                        if (Directory.Exists(Path.GetFullPath(sideALocation)) || File.Exists(Path.GetFullPath(sideALocation)))
-                        {
-                            VideoFormat format = GetVideoFormatForLocation(sideALocation, sideALocationType);
-                            if (format != VideoFormat.UNKNOWN)
-                            {
-                                newTitle.Disks.Add(new Disk(
-                                    discName,
-                                    sideALocation,
-                                    format)
-                                );
-                            }
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(sideBLocation))
-                    {
-                        if (Directory.Exists(Path.GetFullPath(sideBLocation)) || File.Exists(Path.GetFullPath(sideBLocation)))
-                        {
-                            VideoFormat format = GetVideoFormatForLocation(sideBLocation, sideBLocationType);
-                            if (format != VideoFormat.UNKNOWN)
-                            {
-                                newTitle.Disks.Add(new Disk(
-                                    discName,
-                                    sideBLocation,
-                                    format)
-                                    );
-                            }
-                        }
-                    }
-                    localNav.MoveToNext("Disc", "");
-                }
-                navigator.MoveToParent();
+                extractDisksFromXML(nIter, localNav, newTitle);
             }
+        }
+        private void extractDisksFromXML(XPathNodeIterator nIter, XPathNavigator localNav, Title newTitle)
+        {
+            Utilities.DebugLine("[MyMoviesImporter] Scanning for Discs...");
+            for (int i = 0; i < nIter.Count; i++)
+            {
+                bool isDoubleSided = (((string)GetChildNodesValue(localNav, "DoubleSided")).CompareTo("False") == 0)
+                                     ? false : true;
 
+                string discName = (string)GetChildNodesValue(localNav, "Name");
+                string sideAId = (string)GetChildNodesValue(localNav, "DiscIdSideA");
+                string sideALocation = (string)GetChildNodesValue(localNav, "LocationSideA");
+                string sideALocationType = (string)GetChildNodesValue(localNav, "LocationTypeSideA");
+                string changerSlot = (string)GetChildNodesValue(localNav, "ChangerSlot");
+
+                string sideBId = string.Empty;
+                string sideBLocation = string.Empty;
+                string sideBLocationType = string.Empty;
+                if (isDoubleSided)
+                {
+                    sideBId = (string)GetChildNodesValue(localNav, "DiscIdSideB");
+                    sideBLocation = (string)GetChildNodesValue(localNav, "LocationSideB");
+                    sideBLocationType = (string)GetChildNodesValue(localNav, "LocationTypeSideB");
+                }
+
+                IList<Disk> sideAdisks = GetDisksForLocation(sideALocation, sideALocationType);
+
+                int j = 1;
+                foreach (Disk disk in sideAdisks)
+                {
+                    disk.Name = string.Format(@"Disk{0}", j++);
+                    newTitle.Disks.Add(disk);
+                }
+
+                if (isDoubleSided)
+                {
+                    IList<Disk> sideBdisks = GetDisksForLocation(sideBLocation, sideBLocationType);
+                    foreach (Disk disk in sideBdisks)
+                    {
+                        disk.Name = string.Format(@"Disk{0}", j++);
+                        newTitle.Disks.Add(disk);
+                    }
+                }
+
+                localNav.MoveToNext("Disc", "");
+            }
+        }
+        private IList<Disk> GetDisksForLocation(string location, string locationType)
+        {
+            List<Disk> disks = new List<Disk>();
+            if (!string.IsNullOrEmpty(location))
+            {
+                if (location.CompareTo(".") == 0)
+                {
+                    location = Path.GetDirectoryName(currentFile);
+                }
+
+                string fullPath = Path.GetFullPath(location);
+
+                int iLocationType = int.Parse(locationType);
+                switch (iLocationType)
+                {
+                    case 1:
+                        // online folder
+                        if (Directory.Exists(fullPath))
+                        {
+                            if (MediaData.IsDVD(fullPath))
+                            {
+                                Disk disk = new Disk();
+                                disk.Format = VideoFormat.DVD;
+                                disk.Path = fullPath;
+                                disks.Add(disk);
+                                break;
+                            }
+
+                            if (MediaData.IsBluRay(fullPath))
+                            {
+                                Disk disk = new Disk();
+                                disk.Format = VideoFormat.BLURAY;
+                                disk.Path = fullPath;
+                                disks.Add(disk);
+                                break;
+                            }
+
+                            if (MediaData.IsHDDVD(fullPath))
+                            {
+                                Disk disk = new Disk();
+                                disk.Format = VideoFormat.HDDVD;
+                                disk.Path = fullPath;
+                                disks.Add(disk);
+                                break;
+                            }
+
+                            IList<string> files = GetVideoFilesForFolder(location);
+                            foreach (string fileName in files)
+                            {
+                                string ext = Path.GetExtension(fileName);
+                                ext = ext.Substring(1);
+                                ext = ext.Replace("-", string.Empty);
+                                VideoFormat format;
+                                try
+                                {
+                                    format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                                    if (format != null && format != VideoFormat.UNKNOWN)
+                                    {
+                                        Disk disk = new Disk();
+                                        disk.Format = format;
+                                        disk.Path = fileName;
+                                        disks.Add(disk);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    AddError("Error parsing extention: {0}", ext);
+                                }
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            AddError("Location {0} is of type folder but the folder doesn't appear to exist", fullPath);
+                        }
+                        break;
+                    case 2:
+                        // online file
+                        if (File.Exists(fullPath))
+                        {
+                            string ext = Path.GetExtension(fullPath);
+                            ext = ext.Substring(1);
+                            ext.Replace("-", string.Empty);
+                            VideoFormat format;
+                            try
+                            {
+                                format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                                if (format != null && format != VideoFormat.UNKNOWN)
+                                {
+                                    Disk disk = new Disk();
+                                    disk.Format = format;
+                                    disk.Path = fullPath;
+                                    disks.Add(disk);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                AddError("Unable to parse format for ext: {0}", ext);
+                            }
+                        }
+                        else
+                        {
+                            AddError("Location {0} is of type file but the file doesn't appear to exist", fullPath);
+                        }
+                        break;
+                    case 3:
+                        Disk t3disk = new Disk();
+                        t3disk.Format = VideoFormat.OFFLINEDVD;
+                        disks.Add(t3disk);
+                        // offline dvd
+                        break;
+                    case 4:
+                        // dvd changer
+                        Disk t4disk = new Disk();
+                        t4disk.Format = VideoFormat.OFFLINEDVD;
+                        disks.Add(t4disk);
+                        break;
+
+                    case 5:
+                        // media changer of some kind, treat as 4
+                        Disk t5disk = new Disk();
+                        t5disk.Format = VideoFormat.OFFLINEDVD;
+                        disks.Add(t5disk);
+                        break;
+                    default:
+                        // no idea...
+                        AddError("I have NO idea what type of video is available at {0}", location);
+                        break;
+                }
+            }
+            return disks;
+        }
+        private string GetChildNodesValue(XPathNavigator nav, string nodeName)
+        {
+            string value = string.Empty;
+            if (nav.MoveToChild(nodeName, ""))
+            {
+                value = nav.Value;
+                nav.MoveToParent();
+            }
+            return value;
         }
         public enum MyMoviesLocationType { Folder = 1, File };
         private VideoFormat GetVideoFormatForLocation(string location, string locationType)
@@ -544,9 +576,8 @@ namespace MyMoviesPlugin
 
             switch (type)
             {
-                case -1:
-                    return VideoFormat.UNKNOWN;
                 case 1:
+                    //online folder
                     if (Directory.Exists(location))
                     {
                         if (MediaData.IsBluRay(location))
@@ -557,13 +588,26 @@ namespace MyMoviesPlugin
 
                         if (MediaData.IsDVD(location))
                             return VideoFormat.DVD;
+                        // unable to determine disc, there must be a file flagged as a folder... go check for files
                     }
-                    // folder
                     break;
                 case 2:
+                    // online file
                     string extension = Path.GetExtension(location);
                     extension = extension.Substring(1);
-                    return (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
+                    extension.Replace("-", string.Empty);
+                    VideoFormat format;
+                    try
+                    {
+                        format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        AddError("Error parsing format for extension: {0}", extension);
+                        format = VideoFormat.UNKNOWN;
+                    }
+
+                    return format;
                 case 3:
                     // offline dvd
                     break;
@@ -605,7 +649,7 @@ namespace MyMoviesPlugin
 
                     string[] files = Directory.GetFiles(directoryName);
                     Array.Sort(files);
-                    for (int i = 0; i < files.GetLength(0); i++)
+                    for (int i = 0; i < files.Length; i++)
                     {
 
                         string ext = Path.GetExtension(files[i]).Substring(1);
@@ -613,8 +657,20 @@ namespace MyMoviesPlugin
                         {
                             if (new List<string>(Enum.GetNames(typeof(VideoFormat))).Contains(ext.ToUpper()))
                             {
-                                VideoFormat format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                                title_to_validate.Disks.Add(new Disk(string.Format("Disk{0}", i + 1), Path.Combine(directoryName, files[i]), format));
+                                VideoFormat format;
+                                try
+                                {
+                                    format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                                    Disk disk = new Disk();
+                                    disk.Name = string.Format("Disk{0}", i + 1);
+                                    disk.Path = Path.Combine(directoryName, files[i]);
+                                    disk.Format = format;
+                                    title_to_validate.Disks.Add(disk);
+                                }
+                                catch (Exception)
+                                {
+                                    AddError("Unable to determine format for extension: {0}", ext);
+                                }
                             }
                         }
                         catch
@@ -645,6 +701,25 @@ namespace MyMoviesPlugin
                 Utilities.DebugLine("[MyMoviesImporter] An error occured: " + ex.Message);
                 // ignore any permission errors
             }
+        }
+        private IList<string> GetVideoFilesForFolder(string folder)
+        {
+            List<string> fileNames = new List<string>();
+
+            if (Directory.Exists(folder))
+            {
+                string[] files = Directory.GetFiles(folder);
+                Array.Sort(files);
+                foreach (string fName in files)
+                {
+                    fileNames.Add(Path.GetFullPath(fName));
+                }
+            }
+            else
+            {
+                AddError("Disc entry specified folder ({0}) but that folder doesn't appear to exist", folder);
+            }
+            return fileNames;
         }
     }
 }
