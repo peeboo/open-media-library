@@ -88,6 +88,12 @@
     <Compile Include="Controls\MediaList.Designer.cs">
       <DependentUpon>MediaList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NonFatalErrors.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\NonFatalErrors.Designer.cs">
+      <DependentUpon>NonFatalErrors.cs</DependentUpon>
+    </Compile>
     <Compile Include="MetaDataSearch.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,6 +134,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\MediaList.resx">
       <DependentUpon>MediaList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\NonFatalErrors.resx">
+      <DependentUpon>NonFatalErrors.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MetaDataSearch.resx">

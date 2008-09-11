@@ -347,6 +347,17 @@ namespace OMLDatabaseEditor
 
             Cursor = Cursors.Default;
             this.Refresh();
+            string[] nonFatalErrors = plugin.GetErrors;
+            if (nonFatalErrors.Length > 0)
+                ShowNonFatalErrors(nonFatalErrors);
+        }
+
+        void ShowNonFatalErrors(string[] errors)
+        {
+//HERE
+            Controls.NonFatalErrors nfe = new Controls.NonFatalErrors();
+            nfe.LoadErrors(errors);
+            nfe.Show();
         }
 
         public void LoadTitlesIntoDatabase(OMLPlugin plugin)
