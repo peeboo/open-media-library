@@ -214,7 +214,7 @@ namespace Library
 
         private void CreateCategories()
         {
-            //_categories.Add(new FilterCommand(Filters[Filter.Settings]));
+            _categories.Add(new FilterCommand(Filters[Filter.Settings]));
             _categories.Add(new FilterCommand(Filters[Filter.Genres]));
             _categories.Add(new FilterCommand(Filters[Filter.Director]));
             _categories.Add(new FilterCommand(Filters[Filter.Actor]));
@@ -233,7 +233,7 @@ namespace Library
         {
             DateTime start = DateTime.Now;
 
-            //_filters.Add(Filter.Settings, new Filter(Filter.Settings, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
+            _filters.Add(Filter.Settings, new Filter(Filter.Settings, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
             _filters.Add(Filter.Actor, new Filter(Filter.Actor,this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
             _filters.Add(Filter.Director, new Filter(Filter.Director, this, Properties.Settings.Default.DirectorView, true, Properties.Settings.Default.DirectorSort));
             _filters.Add(Filter.Genres, new Filter(Filter.Genres, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.GenreSort));
