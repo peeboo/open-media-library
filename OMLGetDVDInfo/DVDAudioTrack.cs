@@ -29,6 +29,9 @@ namespace OMLGetDVDInfo
         /// </summary>
         [XmlAttribute]
         public string SubFormat;
+
+        [XmlAttribute]
+        public string Extension;
         /// <summary>
         /// The frequency (in MHz) of this Audio Track
         /// </summary>
@@ -49,6 +52,28 @@ namespace OMLGetDVDInfo
         {
             return string.Format("{0} {1} ({2}) ({3})", this.TrackNumber, this.Language, this.Format, this.SubFormat);
         }
+
+        public override bool Equals(object obj) { return this == (DVDAudioTrack)obj; }
+        public override int GetHashCode() { return base.GetHashCode(); }
+
+        public static bool operator ==(DVDAudioTrack a, DVDAudioTrack b)
+        {
+            if ((object)a == (object)b) return true;
+            if ((object)b == null) return false;
+            if (a.TrackNumber != b.TrackNumber)
+                return false;
+            if (a.Language != b.Language)
+                return false;
+            if (a.Frequency != b.Frequency)
+                return false;
+            if (a.Format != b.Format)
+                return false;
+            if (a.SubFormat != b.SubFormat)
+                return false;
+            return true;
+        }
+
+        public static bool operator !=(DVDAudioTrack a, DVDAudioTrack b) { return !(a == b); }
 
         #region -- Parsing --
         internal static DVDAudioTrack Parse(TextReader output)

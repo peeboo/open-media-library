@@ -50,6 +50,7 @@
     <Compile Include="DVDChapter.cs" />
     <Compile Include="DVDTitle.cs" />
     <Compile Include="DVDDisk.cs" />
+    <Compile Include="IFOUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

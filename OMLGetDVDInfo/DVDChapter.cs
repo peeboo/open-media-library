@@ -11,10 +11,38 @@ namespace OMLGetDVDInfo
         #region -- Members --
         [XmlAttribute]
         public int ChapterNumber;
-        TimeSpan m_Duration;
+
         [XmlAttribute]
-        public string Duration { get { return m_Duration.ToString(); } set { m_Duration = TimeSpan.Parse(value); } }
+        public int FPS;
+
+        [XmlIgnore]
+        public TimeSpan Duration;
+        [XmlAttribute("Duration")]
+        public string _Duration { get { return Duration.ToString(); } set { Duration = TimeSpan.Parse(value); } }
         #endregion
+
+        public long TotalFrames { get { return IFOUtilities.GetTotalFrames(Duration, FPS); } }
+        public int Frames { get { return IFOUtilities.GetFrames(Duration, FPS); } }
+
+        public override bool Equals(object obj) { return this == (DVDChapter)obj; }
+        public override int GetHashCode() { return base.GetHashCode(); }
+
+        public static bool operator ==(DVDChapter a, DVDChapter b)
+        {
+            if ((object)a == (object)b) return true;
+            if ((object)b == null) return false;
+            if (a.ChapterNumber != b.ChapterNumber)
+                return false;
+            if (Math.Abs((a.Duration - b.Duration).TotalSeconds) > 1)
+                return false;
+            return true;
+        }
+        public static bool operator !=(DVDChapter a, DVDChapter b) { return !(a == b); }
+
+        public override string ToString()
+        {
+            return string.Format("{0} - {1} / {2} fps", ChapterNumber, Duration, FPS);
+        }
 
         #region -- Parsing --
         internal static DVDChapter Parse(TextReader output)
@@ -22,10 +50,11 @@ namespace OMLGetDVDInfo
             Match m = Regex.Match(output.ReadLine(), @"^    \+ ([0-9]*): cells ([0-9]*)->([0-9]*), ([0-9]*) blocks, duration ([0-9]{2}:[0-9]{2}:[0-9]{2})");
             if (m.Success)
             {
-                DVDChapter thisChapter = new DVDChapter();
-                thisChapter.ChapterNumber = int.Parse(m.Groups[1].Value.Trim().ToString());
-                thisChapter.m_Duration = TimeSpan.Parse(m.Groups[5].Value);
-                return thisChapter;
+                return new DVDChapter()
+                {
+                    ChapterNumber = int.Parse(m.Groups[1].Value.Trim().ToString()),
+                    Duration = TimeSpan.Parse(m.Groups[5].Value),
+                };
             }
             else
                 return null;

@@ -32,6 +32,21 @@ namespace OMLGetDVDInfo
             return string.Format("{0} {1}", this.TrackNumber, this.Language);
         }
 
+        public override bool Equals(object obj) { return this == (DVDSubtitle)obj; }
+        public override int GetHashCode() { return base.GetHashCode(); }
+
+        public static bool operator ==(DVDSubtitle a, DVDSubtitle b)
+        {
+            if ((object)a == (object)b) return true;
+            if ((object)b == null) return false;
+            if (a.TrackNumber != b.TrackNumber)
+                return false;
+            if (a.Language != b.Language)
+                return false;
+            return true;
+        }
+        public static bool operator !=(DVDSubtitle a, DVDSubtitle b) { return !(a == b); }
+
         #region -- Parsing --
         internal static DVDSubtitle Parse(TextReader output)
         {
