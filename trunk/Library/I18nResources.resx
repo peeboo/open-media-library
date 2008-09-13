@@ -163,7 +163,7 @@
     <value>User Rating: </value>
   </data>
   <data name="LabelVideoDetails" xml:space="preserve">
-    <value>Video Details:</value>
+    <value>Video Details: </value>
   </data>
   <data name="LabelWriters" xml:space="preserve">
     <value>Writers: </value>
