@@ -3,7 +3,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Globalization;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
@@ -65,6 +65,8 @@ namespace Library
             this._host = host;
             _singleApplicationInstance = this;
             I18n.InitializeResourceManager();
+            string uiCulture = Properties.Settings.Default.UILanguage;
+            if (!string.IsNullOrEmpty(uiCulture)) I18n.SetCulture(new CultureInfo(uiCulture));
             _titles = new TitleCollection();
             _titles.loadTitleCollection();
             _nowPlayingMovieName = "Playing an unknown movie";

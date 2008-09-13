@@ -26,6 +26,7 @@
           <cor:String cor:String="View Options"/>
           <cor:String cor:String="Daemon Tools"/>
           <cor:String cor:String="Customize UI"/>
+          <cor:String cor:String="Language"/>
         </Options>
       </Choice>
     </Locals>
@@ -70,6 +71,7 @@
           <Set Target="[ViewOptionsPanel.Visible]" Value="true"/>
           <Set Target="[CustomizeUI.Visible]" Value="false"/>
           <Set Target="[DTPanel.Visible]" Value="false"/>
+          <Set Target="[LanguagePanel.Visible]" Value="false"/>
         </Actions>  
       </Changed>
 
@@ -81,6 +83,7 @@
           <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
           <Set Target="[CustomizeUI.Visible]" Value="false"/>
           <Set Target="[DTPanel.Visible]" Value="true"/>
+          <Set Target="[LanguagePanel.Visible]" Value="false"/>
         </Actions>
       </Changed>
 
@@ -92,6 +95,19 @@
           <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
           <Set Target="[CustomizeUI.Visible]" Value="true"/>
           <Set Target="[DTPanel.Visible]" Value="false"/>
+          <Set Target="[LanguagePanel.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Tabs.Chosen]">
+        <Conditions>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="Language"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+          <Set Target="[CustomizeUI.Visible]" Value="false"/>
+          <Set Target="[DTPanel.Visible]" Value="false"/>
+          <Set Target="[LanguagePanel.Visible]" Value="true"/>
         </Actions>
       </Changed>
 
@@ -243,6 +259,16 @@
             <LayoutInput>
               <FormLayoutInput Left="Parent,0.05" />
             </LayoutInput>
+          </Panel>
+
+          <Panel Name="LanguagePanel" Layout="VerticalFlow" Visible="false">
+            <Children>
+              <Panel Layout="VerticalFlow" Margins="0,0,50,0" Padding="0,130,0,100">
+                <Children>
+                  <controls:RadioButtonGroup Model="[Settings.UILanguage]"/>
+                </Children>
+              </Panel>
+            </Children>
           </Panel>
 
           <Panel Name="DTPanel" Layout="VerticalFlow" Visible="false">
