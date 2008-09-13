@@ -21,7 +21,9 @@ namespace OMLEngine
         {
             get
             {
-                yield return new CultureInfo("en-US");
+                // First make a list of all available resource sets
+                Dictionary<string, CultureInfo> availableResourceSets = new Dictionary<string, CultureInfo>();
+
                 if (FileSystemWalker.TranslationsDirExists)
                 {
                     foreach (string file in Directory.GetFiles(FileSystemWalker.TranslationsDirectory, BaseName + ".*.xml"))
@@ -40,7 +42,25 @@ namespace OMLEngine
                                 Utilities.DebugLine("[I18nResourceManager] Unknown resource language '{0}': {1}", 
                                                     file, ex.GetBaseException().Message);
                             }
-                            if (culture != null) yield return culture;
+                            if (culture != null) availableResourceSets.Add(culture.Name, culture);
+                        }
+                    }
+                }
+                // English is always available though the build in resources
+                CultureInfo enDefault = new CultureInfo("en");
+                if (!availableResourceSets.ContainsKey(enDefault.Name)) availableResourceSets.Add(enDefault.Name, enDefault);
+
+                // Now loop though all possible resources on the system yielding anything that has an available culture
+
+                foreach (CultureInfo culture in CultureInfo.GetCultures(CultureTypes.FrameworkCultures))
+                {
+                    if (culture.IsNeutralCulture) continue;
+                    for (CultureInfo parent = culture; !parent.Equals(CultureInfo.InvariantCulture); parent = parent.Parent)
+                    {
+                        if (availableResourceSets.ContainsKey(parent.Name))
+                        {
+                            yield return culture;
+                            break;
                         }
                     }
                 }
