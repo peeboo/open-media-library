@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Diagnostics;
 using System.Data;
+using System.Threading;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
 using OMLEngine;
@@ -17,6 +19,7 @@ namespace Library
         {
             SetupDaemonTools();
             SetupMovieSettings();
+            SetupUILanguage();
         }
 
         public void SaveSettings()
@@ -34,6 +37,7 @@ namespace Library
                 _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
                 _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
                 _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
+                _omlSettings.UILanguage = CultureIdFromDisplayName(_uiLanguage.Chosen as string);
                 OMLApplication.Current.Startup(null);
             });
         }
@@ -108,6 +112,43 @@ namespace Library
             _useOriginalCoverArt.Chosen = _omlSettings.UseOriginalCoverArt;
         }
 
+        private void SetupUILanguage()
+        {
+            string selected = null;
+            List<string> list = new List<string>();
+            string configuredLangId = _omlSettings.UILanguage;
+
+            foreach (var availableCulture in I18n.AvailableCultures)
+            {
+                string name = availableCulture.TextInfo.ToTitleCase(availableCulture.NativeName);
+                if (string.CompareOrdinal(availableCulture.Name, configuredLangId) == 0)
+                {
+                    selected = name;
+                }
+                list.Add(name);
+            }
+
+            list.Sort((a, b) => string.Compare(a, b, true, Thread.CurrentThread.CurrentCulture));
+
+            list.Insert(0, "Use system language");
+            if (string.IsNullOrEmpty(selected)) selected = list[0];
+
+            _uiLanguage.Options = list;
+            _uiLanguage.Chosen = selected;
+        }
+
+        private static String CultureIdFromDisplayName(string displayName)
+        {
+            foreach (var availableCulture in I18n.AvailableCultures)
+            {
+                if (string.CompareOrdinal(availableCulture.TextInfo.ToTitleCase(availableCulture.NativeName), displayName) == 0)
+                {
+                    return availableCulture.Name;
+                }
+            }
+            return null;
+        }
+
         public BooleanChoice ShowMovieDetails
         {
             get { return _showMovieDetails; }
@@ -167,6 +208,11 @@ namespace Library
             set { _daemonToolsPath = value; }
         }
 
+        public Choice UILanguage
+        {
+            get { return _uiLanguage;  }
+        }
+
         EditableText _daemonToolsPath = new EditableText();
         OMLSettings _omlSettings = new OMLSettings();
         Choice _virtualDrive = new Choice();
@@ -178,6 +224,7 @@ namespace Library
         BooleanChoice _dimUnselectedCovers = new BooleanChoice();
         BooleanChoice _useOriginalCoverArt = new BooleanChoice();
         Choice _startPage = new Choice();
+        Choice _uiLanguage = new Choice();
 
         BooleanChoice _showGenres = new BooleanChoice();
         BooleanChoice _showActors = new BooleanChoice();
@@ -190,5 +237,6 @@ namespace Library
         BooleanChoice _showTags = new BooleanChoice();
         BooleanChoice _showParentalRating = new BooleanChoice();
         BooleanChoice _showCountry = new BooleanChoice();
+
     }
 }

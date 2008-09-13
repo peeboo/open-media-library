@@ -433,6 +433,21 @@ namespace Library
                 FirePropertyChanged("Extender_MergeVOB");
             }
         }
+
+        /// <summary>
+        /// Gets or sets the id (CultureInfo.Name) of the selected UI language. If not set the system's UI culture should be used.
+        /// </summary>
+        public string UILanguage
+        {
+            get { return Properties.Settings.Default.UILanguage; }
+            set
+            {
+                Properties.Settings.Default.UILanguage = value;
+                Properties.Settings.Default.Save();
+                FirePropertyChanged("UILanguage");
+            }
+        }
+
         #endregion
     }
 }
