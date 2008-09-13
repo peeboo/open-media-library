@@ -196,7 +196,7 @@ namespace Library {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Video Details:.
+        ///   Looks up a localized string similar to Video Details: .
         /// </summary>
         public static string LabelVideoDetails {
             get {
