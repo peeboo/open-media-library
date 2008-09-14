@@ -220,35 +220,38 @@ namespace MyMoviesPlugin
 
             if (navigator.MoveToChild("ParentalRating", ""))
             {
-                string ratingId = navigator.Value;
-                if (!string.IsNullOrEmpty(ratingId))
+                if (navigator.HasChildren)
                 {
-                    int mmRatingId;
-                    if (int.TryParse(ratingId, out mmRatingId))
-                        switch (mmRatingId)
-                        {
-                            case 0:
-                                newTitle.ParentalRating = "Unrated";
-                                break;
-                            case 1:
-                                newTitle.ParentalRating = "G";
-                                break;
-                            case 2:
-                                break;
-                            case 3:
-                                newTitle.ParentalRating = "PG";
-                                break;
-                            case 4:
-                                newTitle.ParentalRating = "PG13";
-                                break;
-                            case 5:
-                                break;
-                            case 6:
-                                newTitle.ParentalRating = "R";
-                                break;
-                        }
-                    else
-                        Utilities.DebugLine("[MyMoviesImporter] Error parsing rating: {0} not a number", ratingId);
+                    string ratingId = GetChildNodesValue(navigator, "Value");
+                    if (!string.IsNullOrEmpty(ratingId))
+                    {
+                        int mmRatingId;
+                        if (int.TryParse(ratingId, out mmRatingId))
+                            switch (mmRatingId)
+                            {
+                                case 0:
+                                    newTitle.ParentalRating = "Unrated";
+                                    break;
+                                case 1:
+                                    newTitle.ParentalRating = "G";
+                                    break;
+                                case 2:
+                                    break;
+                                case 3:
+                                    newTitle.ParentalRating = "PG";
+                                    break;
+                                case 4:
+                                    newTitle.ParentalRating = "PG13";
+                                    break;
+                                case 5:
+                                    break;
+                                case 6:
+                                    newTitle.ParentalRating = "R";
+                                    break;
+                            }
+                        else
+                            Utilities.DebugLine("[MyMoviesImporter] Error parsing rating: {0} not a number", ratingId);
+                    }
                 }
                 navigator.MoveToParent();
             }
