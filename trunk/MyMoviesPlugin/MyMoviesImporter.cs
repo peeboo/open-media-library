@@ -320,6 +320,7 @@ namespace MyMoviesPlugin
                 for (int i = 0; i < nIter.Count; i++)
                 {
                     newTitle.AddGenre(localNav.Value);
+                    localNav.MoveToNext("Genre", "");
                 }
                 navigator.MoveToParent();
             }
