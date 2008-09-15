@@ -35,16 +35,22 @@ namespace Library
                 DVDTitle dvdTitle = _info.GetMainTitle();
                 if (dvdTitle != null)
                 {
+                    string videoTSDir = _title.SelectedDisk.Path;
+                    if (string.Compare(new DirectoryInfo(videoTSDir).Name, "VIDEO_TS", true) != 0)
+                        videoTSDir = Path.Combine(videoTSDir, "VIDEO_TS");
                     int fileID = int.Parse(dvdTitle.File.Substring(4));
                     OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: main title fileID={1} found for '{0}'", _title.SelectedDisk, fileID);
                     string vts = string.Format("VTS_{0:D2}_", fileID);
-                    List<string> vobs = new List<string>(Directory.GetFiles(_title.SelectedDisk.Path, vts + "*.VOB"));
-                    vobs.Remove(Path.Combine(_title.SelectedDisk.Path, vts + "0.VOB"));
+                    List<string> vobs = new List<string>(Directory.GetFiles(videoTSDir, vts + "*.VOB"));
+                    vobs.Remove(Path.Combine(videoTSDir, vts + "0.VOB"));
 
                     if (vobs.Count < 1)
+                    {
+                        OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: no VOB files found for '{0}'", _title.SelectedDisk);
                         return false;
+                    }
 
-                    string mpegFolder = Path.Combine(_title.SelectedDisk.Path, "Extender-MyMovies");
+                    string mpegFolder = Path.Combine(videoTSDir, "Extender-MyMovies");
                     if (Directory.Exists(mpegFolder) == false)
                     {
                         OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: creating folder '{0}'", mpegFolder);

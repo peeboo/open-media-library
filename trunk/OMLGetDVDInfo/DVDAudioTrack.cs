@@ -75,6 +75,7 @@ namespace OMLGetDVDInfo
 
         public static bool operator !=(DVDAudioTrack a, DVDAudioTrack b) { return !(a == b); }
 
+#if HANDBRAKE
         #region -- Parsing --
         internal static DVDAudioTrack Parse(TextReader output)
         {
@@ -108,6 +109,7 @@ namespace OMLGetDVDInfo
             return tracks;
         }
         #endregion
+#endif
     }
 
 }

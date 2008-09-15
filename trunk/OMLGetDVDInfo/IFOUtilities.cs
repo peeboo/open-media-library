@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Diagnostics;
 
 namespace OMLGetDVDInfo
 {
@@ -285,10 +286,14 @@ namespace OMLGetDVDInfo
                         title.Subtitles = SubTitleTracks(vtsIFO);
                         title.Duration = DVDTitle.GetTotalTimeSpan(title.Chapters);
                     }
+                    else
+                        Trace.WriteLine(string.Format("IFOUtilities.Titles: Missing file {0}", vtsIFO));
                     if (title.Duration.TotalSeconds > 10)
                         ret.Add(title);
                 }
             }
+            else
+                Trace.WriteLine(string.Format("IFOUtilities.Titles: Cannot analyze DVD, file {0} not found", videoIFO));
             return ret;
         }
 

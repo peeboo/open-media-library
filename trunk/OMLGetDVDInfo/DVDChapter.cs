@@ -44,6 +44,7 @@ namespace OMLGetDVDInfo
             return string.Format("{0} - {1} / {2} fps", ChapterNumber, Duration, FPS);
         }
 
+#if HANDBRAKE
         #region -- Parsing --
         internal static DVDChapter Parse(TextReader output)
         {
@@ -81,5 +82,6 @@ namespace OMLGetDVDInfo
             return chapters;
         }
         #endregion
+#endif
     }
 }
