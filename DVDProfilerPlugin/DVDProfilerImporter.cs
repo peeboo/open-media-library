@@ -18,7 +18,11 @@ namespace DVDProfilerPlugin
         private VideoFormat currentVideoFormat;
         private readonly List<List<string>> currentDiscTitles = new List<List<string>>(); // List of discs with a list of sides
         private string currentNotes;
+        private readonly List<string> currentWritersAlreadyAdded = new List<string>();
+        private readonly List<string> currentProducersAlreadyAdded = new List<string>();
         private static readonly Regex filepathRegex = new Regex(@"\[filepath((\s+disc\s*=\s*(?'discNumber'\d+)(?'side'[ab])?))?\s*\](?'path'[^\[]+)\[\s*\/\s*filepath\s*\]", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex removeFormattingRegex = new Regex(@"<\/?(i|b)>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        private static readonly Regex removeExtraLinebreaksRegex = new Regex(@"(\r|\n)+", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         string imagesPath;
 
         public DVDProfilerImporter()
@@ -142,12 +146,11 @@ namespace DVDProfilerPlugin
                 case "Rating":
                     CurrentTitle.ParentalRating = reader.ReadElementString();
                     break;
+                case "RatingDetails":
+                    CurrentTitle.ParentalRatingReason = reader.ReadElementString();
+                    break;
                 case "Genres":
-                    ReadChildElements(reader,
-                        delegate
-                        {
-                            if (reader.LocalName == "Genre") CurrentTitle.Genres.Add(reader.ReadElementString());
-                        });
+                    ReadChildElements(reader, HandleGenres);
                     break;
                 case "Format":
                     ReadChildElements(reader, HandleFormat);
@@ -179,7 +182,8 @@ namespace DVDProfilerPlugin
                     ReadFilmReview(reader);
                     break;
                 case "Overview":
-                    CurrentTitle.Synopsis = reader.ReadElementString();
+                    string synopsis = removeFormattingRegex.Replace(reader.ReadElementString(), "");
+                    CurrentTitle.Synopsis = removeExtraLinebreaksRegex.Replace(synopsis, "\r\n");
                     break;
                 case "Discs":
                     ReadChildElements(reader, HandleDiscs);
@@ -190,7 +194,17 @@ namespace DVDProfilerPlugin
             }
         }
 
-        private void ReadFilmReview(XmlTextReader reader)
+        //Collection/DVD/Genres/*
+        private void HandleGenres(XmlReader reader)
+        {
+            if (reader.LocalName == "Genre")
+            {
+                string genre = reader.ReadElementString();
+                if (!string.IsNullOrEmpty(genre)) CurrentTitle.Genres.Add(genre);
+            }
+        }
+
+        private void ReadFilmReview(XmlReader reader)
         {
             if (reader.MoveToAttribute("Film"))
             {
@@ -280,16 +294,21 @@ namespace DVDProfilerPlugin
                 switch (creditType)
                 {
                     case "Direction":
-                        if (!CurrentTitle.Directors.Contains(person))
-                            CurrentTitle.Directors.Add(new Person(ReadFullName(reader)));
+                        CurrentTitle.Directors.Add(person);
                         break;
                     case "Writing":
-                        if (!CurrentTitle.Writers.Contains(person))
-                            CurrentTitle.Writers.Add(new Person(ReadFullName(reader)));
+                        if (!currentWritersAlreadyAdded.Contains(person.full_name))
+                        {
+                            CurrentTitle.Writers.Add(person);
+                            currentWritersAlreadyAdded.Add(person.full_name);
+                        }
                         break;
                     case "Production":
-                        if (!CurrentTitle.Producers.Contains(person.full_name))
-                            CurrentTitle.Producers.Add(ReadFullName(reader));
+                        if (!currentProducersAlreadyAdded.Contains(person.full_name))
+                        {
+                            CurrentTitle.Producers.Add(person.full_name);
+                            currentProducersAlreadyAdded.Add(person.full_name);
+                        }
                         break;
                 }
             }
@@ -528,6 +547,8 @@ namespace DVDProfilerPlugin
             currentVideoFormat = VideoFormat.DVD;
             currentDiscTitles.Clear();
             currentNotes = null;
+            currentWritersAlreadyAdded.Clear();
+            currentProducersAlreadyAdded.Clear();
         }
 
 
