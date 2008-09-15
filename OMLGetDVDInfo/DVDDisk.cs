@@ -33,6 +33,7 @@ namespace OMLGetDVDInfo
         }
         public static bool operator !=(DVDDiskInfo a, DVDDiskInfo b) { return !(a == b); }
 
+#if HANDBRAKE
         internal static DVDDiskInfo Parse(StreamReader output)
         {
             DVDDiskInfo thisDVD = new DVDDiskInfo();
@@ -45,7 +46,9 @@ namespace OMLGetDVDInfo
             }
             return thisDVD;
         }
+#endif
 
+#if HANDBRAKE
         static string handbrakePath = null;
         static DVDDiskInfo()
         {
@@ -57,15 +60,18 @@ namespace OMLGetDVDInfo
                     handbrakePath = null;
             }
         }
+#endif
 
-        public static DVDDiskInfo ParseDVD(string inputFile)
+        public static DVDDiskInfo ParseDVD(string videoTSDir)
         {
+            return FromIFO(videoTSDir);
+#if HANDBRAKE
             if (handbrakePath == null)
                 return null;
             using (Process proc = new Process())
             {
                 proc.StartInfo.FileName = Path.Combine(handbrakePath, "HandBrakeCLI.exe");
-                proc.StartInfo.Arguments = string.Format(@"-i ""{0}"" -t0 -v", inputFile);
+                proc.StartInfo.Arguments = string.Format(@"-i ""{0}"" -t0 -v", videoTSDir);
                 proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 proc.StartInfo.CreateNoWindow = true;
                 proc.StartInfo.UseShellExecute = false;
@@ -85,6 +91,7 @@ namespace OMLGetDVDInfo
                 wait.WaitOne();
                 return ret;
             }
+#endif
         }
 
         public static void Test(string videoTS_Folder)
@@ -107,9 +114,11 @@ namespace OMLGetDVDInfo
             return list[0];
         }
 
-        public static DVDDiskInfo FromIFO(string dir)
+        public static DVDDiskInfo FromIFO(string videoTSDir)
         {
-            return new DVDDiskInfo() { Titles = IFOUtilities.Titles(dir).ToArray() };
+            if (string.Compare(new DirectoryInfo(videoTSDir).Name, "VIDEO_TS", true) != 0)
+                videoTSDir = Path.Combine(videoTSDir, "VIDEO_TS");
+            return new DVDDiskInfo() { Titles = IFOUtilities.Titles(videoTSDir).ToArray() };
         }
     }
 

@@ -47,6 +47,7 @@ namespace OMLGetDVDInfo
         }
         public static bool operator !=(DVDSubtitle a, DVDSubtitle b) { return !(a == b); }
 
+#if HANDBRAKE
         #region -- Parsing --
         internal static DVDSubtitle Parse(TextReader output)
         {
@@ -79,6 +80,7 @@ namespace OMLGetDVDInfo
             return subtitles;
         }
         #endregion
+#endif
     }
 
 }

@@ -97,6 +97,7 @@ namespace OMLGetDVDInfo
                 this.Duration.Minutes, this.Duration.Seconds, this.Resolution, this.AspectRatio);
         }
 
+#if HANDBRAKE
         #region -- Parsing --
         internal static DVDTitle Parse(TextReader output)
         {
@@ -148,6 +149,7 @@ namespace OMLGetDVDInfo
             }
         }
         #endregion
+#endif
     }
 
     #region -- Enums --
