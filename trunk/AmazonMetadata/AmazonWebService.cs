@@ -114,7 +114,7 @@ namespace AmazonMetadata
             /// <remarks>Several search criterial values can be altered in the Settings designer</remarks>
             public AmazonSearchResult SearchDVDs(string searchString,  int pageNumber, AmazonLocale locale)
             {
-                string searchType = "Keywords";
+                string searchType = "Title";
                 try
                 {
                     // objects needed to define search and search criteria
