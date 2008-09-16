@@ -87,24 +87,14 @@ namespace Library
 
                         videoFile = mpegFile;
 
-                        FileStream writter = File.Open(vobs[0], FileMode.Append, FileAccess.Write, FileShare.Read);
-                        ThreadPool.QueueUserWorkItem(delegate
+                        Microsoft.MediaCenter.UI.Application.DeferredInvokeOnWorkerThread(delegate
                         {
+                            FileStream writer = null;
                             try
                             {
+                                writer = File.Open(vobs[0], FileMode.Append, FileAccess.Write, FileShare.Read);
                                 for (int i = 1; i < vobs.Count; ++i)
-                                {
-                                    byte[] buffer = new byte[128 * 1024 * 1024];
-                                    OMLApplication.DebugLine("Appending '{0}' to '{1}'", vobs[i], vobs[0]);
-                                    using (FileStream reader = File.OpenRead(vobs[i]))
-                                        for (; ; )
-                                        {
-                                            int read = reader.Read(buffer, 0, buffer.Length);
-                                            if (read == 0)
-                                                break;
-                                            writter.Write(buffer, 0, read);
-                                        }
-                                }
+                                    MergeFile(writer, vobs[0], vobs[i]);
 
                                 for (int i = 1; i < vobs.Count; ++i)
                                 {
@@ -114,10 +104,26 @@ namespace Library
                             }
                             finally
                             {
-                                OMLApplication.DebugLine("Done merging into '{0}'", vobs[0]);
-                                writter.Close();
+                                if (writer != null)
+                                {
+                                    OMLApplication.DebugLine("Done merging into '{0}'", vobs[0]);
+                                    writer.Close();
+                                }
                             }
-                        });
+                        }, delegate
+                        {
+                            Utilities.DebugLine("Merging done, restart play, and reset posision");
+                            if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
+                            {
+                                TimeSpan cur = AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.Position;
+                                Utilities.DebugLine("Current position: {0}", cur);
+                                if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, videoFile, false))
+                                {
+                                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.Position = cur;
+                                    Utilities.DebugLine("Done starting over, resetting position: {0}", cur);
+                                }
+                            }
+                        }, null);
                     }
                 }
                 else
@@ -145,6 +151,20 @@ namespace Library
             {
                 return false;
             }
+        }
+
+        static void MergeFile(FileStream writter, string vob0, string vobx)
+        {
+            byte[] buffer = new byte[128 * 1024 * 1024];
+            OMLApplication.DebugLine("Appending '{0}' to '{1}'", vobx, vob0);
+            using (FileStream reader = File.OpenRead(vobx))
+                for (; ; )
+                {
+                    int read = reader.Read(buffer, 0, buffer.Length);
+                    if (read == 0)
+                        break;
+                    writter.Write(buffer, 0, read);
+                }
         }
 
         private static string MakeMPEGLink(string mpegFolder, string vob)

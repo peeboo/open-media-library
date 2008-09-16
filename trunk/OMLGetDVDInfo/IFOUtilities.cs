@@ -273,23 +273,25 @@ namespace OMLGetDVDInfo
                     int titleSetNumber = GetFileBlock(videoIFO, (VMG_PTT_STPT_Position + titleInfoStart) + 6L, 1)[0];
                     int titleSetTitleNumber = IFOUtilities.GetFileBlock(videoIFO, (VMG_PTT_STPT_Position + titleInfoStart) + 7L, 1)[0];
                     string vtsIFO = Path.Combine(videoTSDir, string.Format("VTS_{0:D2}_0.IFO", titleSetNumber));
+                    if (File.Exists(vtsIFO) == false)
+                    {
+                        Trace.WriteLine(string.Format("IFOUtils.Titles: VTS IFO file missing: {0}", Path.GetFileName(vtsIFO)));
+                        continue;
+                    }
                     byte[] b = IFOUtilities.GetFileBlock(vtsIFO, 0x200, 2);
                     VideoValues video = VideoValues.ReadVideoSpecs(b[0], b[1]);
-                    if (File.Exists(vtsIFO))
-                    {
-                        title.Main = longestIfo == Path.GetFileName(vtsIFO);
-                        title.File = "vts " + titleSetNumber;
-                        title.AspectRatio = video.AspectRatio;
-                        title.Resolution = video.Resolution;
-                        title.Chapters = Chapters(vtsIFO, titleSetTitleNumber);
-                        title.AudioTracks = AudioTracks(vtsIFO);
-                        title.Subtitles = SubTitleTracks(vtsIFO);
-                        title.Duration = DVDTitle.GetTotalTimeSpan(title.Chapters);
-                    }
-                    else
-                        Trace.WriteLine(string.Format("IFOUtilities.Titles: Missing file {0}", vtsIFO));
+                    title.Main = longestIfo == Path.GetFileName(vtsIFO);
+                    title.File = "vts " + titleSetNumber;
+                    title.AspectRatio = video.AspectRatio;
+                    title.Resolution = video.Resolution;
+                    title.Chapters = Chapters(vtsIFO, titleSetTitleNumber);
+                    title.AudioTracks = AudioTracks(vtsIFO);
+                    title.Subtitles = SubTitleTracks(vtsIFO);
+                    title.Duration = DVDTitle.GetTotalTimeSpan(title.Chapters);
                     if (title.Duration.TotalSeconds > 10)
                         ret.Add(title);
+                    else
+                        Trace.WriteLine(string.Format("IFOUtils.Titles: Duration < 10s, ignoring: {0}", Path.GetFileName(vtsIFO)));
                 }
             }
             else
