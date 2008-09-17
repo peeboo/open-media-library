@@ -12,13 +12,14 @@ namespace OML.MceState
     [RunInstaller(true)]
     public partial class ComInstaller : Installer
     {
-        public ComInstaller()
+        public ComInstaller() : base()
         {
             InitializeComponent();
         }
 
         public override void Install(IDictionary stateSaver)
         {
+            base.Install(stateSaver);
             RegistrationServices regsrv = new RegistrationServices();
             if (!regsrv.RegisterAssembly(typeof(ComInstaller).Assembly, AssemblyRegistrationFlags.SetCodeBase))
                 throw new Exception("Failed to register for COM interop.");
