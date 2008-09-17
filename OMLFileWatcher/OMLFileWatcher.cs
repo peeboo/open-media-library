@@ -26,6 +26,19 @@ namespace OMLFileWatcher
         /// <param name="path">The path to be monitored</param>
         /// <param name="filter">The type of files to watch.  For example, "*.txt" watches text files.</param>
         /// <remarks>Does not monitor subdirectories</remarks>
+        public void AddWatch(string filename)
+        {
+            string path = Path.GetDirectoryName(filename);
+            string filter = Path.GetFileName(filename);
+            AddWatch(path, filter, false);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path">The path to be monitored</param>
+        /// <param name="filter">The type of files to watch.  For example, "*.txt" watches text files.</param>
+        /// <remarks>Does not monitor subdirectories</remarks>
         public void AddWatch(string path, string filter)
         {
             AddWatch(path, filter, false);
