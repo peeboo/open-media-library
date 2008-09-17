@@ -124,7 +124,8 @@ namespace OMLTranscoder
                 strBuilder.AppendFormat(@" -dvd-device ""{0}""", inputDrive.Name);
 
             //input device or file
-            //strBuilder.Append(@" dvd://");
+            if (inputType == MEncoder.InputType.Drive)
+                strBuilder.Append(@" dvd://");
 
             //audio format
             /* DISABLED UNTIL AUDIO STREAM CLASSES ARE FINALIZED
@@ -164,8 +165,11 @@ namespace OMLTranscoder
 
             // output format
             // always set the output format to mpeg for extenders
-            //strBuilder.Append(@" -of mpeg -mpegopts format=dvd:tsaf -vf harddup");
-            //strBuilder.Append(@" -lavcopts vcodec=msmpeg4v2:vpass=1");
+            if (inputType == MEncoder.InputType.Drive)
+            {
+                strBuilder.Append(@" -of mpeg -mpegopts format=dvd:tsaf -vf harddup");
+                strBuilder.Append(@" -lavcopts vcodec=msmpeg4v2:vpass=1");
+            }
 
             // set quiet mode on
             strBuilder.Append(@" -quiet");
