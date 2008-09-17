@@ -34,28 +34,36 @@ namespace OMLTranscoder
                 _process.Kill();
         }
 
-        public string BeginTranscodeJob(MediaSource ms)
+        public int BeginTranscodeJob(MediaSource ms, out string outputFilename)
         {
             mediaSource = ms;
-            string outputFilename = string.Empty;
-
+            outputFilename = string.Empty;
             MEncoderCommandBuilder cmdBuilder = new MEncoderCommandBuilder();
             cmdBuilder.SetAudioOutputFormat(MEncoder.AudioFormat.LAVC);
             cmdBuilder.SetVideoOutputFormat(MEncoder.VideoFormat.LAVC);
-            cmdBuilder.SetInputType(MEncoder.InputType.File);
-            FileInfo fInfo = new FileInfo(ms.MediaPath);
-            if (fInfo == null)
+            if (File.Exists(ms.MediaPath))
             {
-                Utilities.DebugLine("[Transcode] FileInfo doesn't exist");
-                return null;
-            }
-            else
-            {
-                outputFilename = Path.Combine(FileSystemWalker.TranscodeBufferDirectory, string.Format("{0}.buffer", fInfo.Name));
-                Utilities.DebugLine("[Transcode] Output file will be: {0}", outputFilename);
+                FileInfo fInfo = new FileInfo(ms.MediaPath);
+                if (fInfo != null)
+                {
+                    cmdBuilder.SetInputLocation(fInfo);
+                    cmdBuilder.SetInputType(MEncoder.InputType.File);
+                    outputFilename = Path.Combine(FileSystemWalker.TranscodeBufferDirectory, Path.GetFileName(ms.MediaPath));
+                }
             }
 
-            cmdBuilder.SetInputLocation(fInfo);
+            if (Directory.Exists(ms.MediaPath))
+            {
+                DriveInfo dInfo = new DriveInfo("R:");
+                if (dInfo != null)
+                {
+                    cmdBuilder.SetInputType(MEncoder.InputType.Drive);
+                    outputFilename = Path.Combine(FileSystemWalker.TranscodeBufferDirectory, Path.GetDirectoryName(ms.MediaPath));
+                }
+            }
+
+            Utilities.DebugLine("[Transcode] Output file will be: {0}", outputFilename);
+
             cmdBuilder.SetOutputFile(outputFilename);
 
             Utilities.DebugLine("[Transcode] Starting transcode job");
@@ -68,9 +76,10 @@ namespace OMLTranscoder
             _process.Exited += new EventHandler(this.HandleTranscodeExited);
             _process.Start();
             Utilities.DebugLine("[Transcode] Transcode job started, returning with buffer location");
-//            _process.WaitForExit(1);
+            if (_process.HasExited)
+                return _process.ExitCode;
 
-            return outputFilename;
+            return 0;
         }
 
         private void HandleTranscodeExited(object sender, EventArgs e)
