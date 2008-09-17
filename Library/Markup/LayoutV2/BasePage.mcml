@@ -43,7 +43,7 @@
           <Children>
             <!-- Make sure these next 2 are ALWAYS the first 2 items -->
             <controls:WaitCursor Name="waitCursor" Visible="false"/>
-            <controls:TranscodingMessage Name="transcodingMessage" Visible="false"/>
+            <controls:TranscodingMessage Name="transcodingMessage" Visible="false" Application="[Application]"/>
 
             <Panel Name="TopPanel">
               <Animations>

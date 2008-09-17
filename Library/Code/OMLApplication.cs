@@ -1,5 +1,6 @@
 //#define DEBUG_EXT
 //#define LAYOUT_V2
+//#define CAROUSEL
 
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +21,55 @@ namespace Library
     {
         private bool isBusy = false;
         private bool isStartingTranscodingJob = false;
+        private string transcodeStatus = string.Empty;
+        private int currentFocusedItemIndex = 0;
+        private int currentItemIndexPosition = 0;
+        private int currentAngleDegrees;
+
+        public int DistanceToMoveCloserBasedOnAngleOrRotation
+        {
+            get
+            {
+                int originalHeight = Properties.Settings.Default.CarouselItemWidth;
+                double newWidth = originalHeight * Math.Cos(Convert.ToDouble(currentAngleDegrees));
+                int distanceToMove = originalHeight - Convert.ToInt32(newWidth);
+
+                return distanceToMove;
+            }
+        }
+
+        public Inset MoveToInset
+        {
+            get { return new Inset(0, 0, DistanceToMoveCloserBasedOnAngleOrRotation, 0); }
+        }
+
+        public int CurrentAngleDegrees
+        {
+            get { return currentAngleDegrees; }
+            set { currentAngleDegrees = value; }
+        }
+
+        public int CurrentFocusedItemIndex
+        {
+            get { return currentFocusedItemIndex; }
+            set { currentFocusedItemIndex = value; }
+        }
+
+        public int CurrentItemIndexPosition
+        {
+            get { return currentItemIndexPosition; }
+            set { currentItemIndexPosition = value; }
+        }
+
+        public string TranscodeStatus
+        {
+            get { return transcodeStatus; }
+            set
+            {
+                transcodeStatus = value;
+                FirePropertyChanged("TranscodeStatus");
+            }
+        }
 
         public Boolean IsBusy
         {
@@ -76,6 +126,12 @@ namespace Library
         public void Startup(string context)
         {
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
+#if CAROUSEL
+            OMLProperties properties = new OMLProperties();
+            properties.Add("App", this);
+            _session.GoToPage(@"resx://Library/Library.Resources/VeronicasRadio", properties);
+            return;
+#endif
 #if LAYOUT_V2
             OMLProperties properties = new OMLProperties();
             properties.Add("Application", this);
@@ -302,7 +358,6 @@ namespace Library
                 properties["MovieBrowser"] = gallery;
             return properties;
         }
-
 
         // private data
         private string _nowPlayingMovieName;

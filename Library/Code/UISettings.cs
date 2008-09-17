@@ -115,6 +115,11 @@ namespace Library
             get { return Properties.Settings.Default.GalleryCoverArtRows; }
         }
 
+        public int CarouselRows
+        {
+            get { return Properties.Settings.Default.CarouselRows; }
+        }
+
         public int ListRows
         {
             get { return Properties.Settings.Default.GalleryListRows; }
@@ -141,6 +146,11 @@ namespace Library
             get { return new Size(Properties.Settings.Default.ListItemWidth, Properties.Settings.Default.ListItemHeight); }
         }
 
+        public Size CarouselArtSize
+        {
+            get { return new Size(Properties.Settings.Default.CarouselItemWidth, Properties.Settings.Default.CarouselItemHeight); }
+        }
+
         public Size CoverArtSpacing
         {
             get { return new Size(Properties.Settings.Default.CoverArtSpacingHorizontal, Properties.Settings.Default.CoverArtSpacingVertical); }
@@ -151,6 +161,10 @@ namespace Library
             get { return new Size(Properties.Settings.Default.ListSpacingHorizontal, Properties.Settings.Default.ListSpacingVertical); }
         }
 
+        public Size CarouselArtSpacing
+        {
+            get { return new Size(Properties.Settings.Default.CarouselItemSpacingHorizontal, Properties.Settings.Default.CarouselItemSpacingVertical); }
+        }
 
         public Single CoverArtAlpha
         {
@@ -180,6 +194,11 @@ namespace Library
         public Vector3 FocusCoverArtScale
         {
             get { return new Vector3(Properties.Settings.Default.FocusCoverArtScale, Properties.Settings.Default.FocusCoverArtScale, Properties.Settings.Default.FocusCoverArtScale); }
+        }
+
+        public Vector3 FocusCarouselScale
+        {
+            get { return new Vector3(Properties.Settings.Default.FocusCarouselScale, Properties.Settings.Default.FocusCarouselScale, Properties.Settings.Default.FocusCarouselScale); }
         }
 
         public Vector3 FocusListScale

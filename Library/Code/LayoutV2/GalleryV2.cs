@@ -16,8 +16,7 @@ namespace Library
         private VirtualList moviesByGenreVL;
         private Choice groupView;
         private List<Choice> groupList;
-        const int GROUPS = 20;
-        const int ITEMSINGROUP = 50;
+        const int GROUPS = 1;
 
 
         public Choice GroupViewModel
