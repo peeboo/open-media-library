@@ -77,6 +77,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
+      <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
+      <Name>OMLEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OMLFileWatcher\OMLFileWatcher.csproj">
       <Project>{94FD8015-16D8-442E-8BD8-C2A63D1232D4}</Project>
       <Name>OMLFileWatcher</Name>
