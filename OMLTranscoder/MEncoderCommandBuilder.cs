@@ -116,16 +116,19 @@ namespace OMLTranscoder
             StringBuilder strBuilder = new StringBuilder();
 
             // input location
-            //strBuilder.AppendFormat(@" -dvd-device ""{0}""", ((inputType == MEncoder.InputType.Drive) ? inputDrive.RootDirectory.FullName : inputFile.FullName));
-            if (inputType == MEncoder.InputType.File)
-                strBuilder.AppendFormat(@"""{0}""", inputFile.FullName);
-
-            if (inputType == MEncoder.InputType.Drive)
-                strBuilder.AppendFormat(@" -dvd-device ""{0}""", inputDrive.Name);
-
-            //input device or file
-            if (inputType == MEncoder.InputType.Drive)
-                strBuilder.Append(@" dvd://");
+            switch (inputType)
+            {
+                case MEncoder.InputType.File:
+                    strBuilder.AppendFormat(@"""{0}""", inputFile.FullName);
+                    break;
+                case MEncoder.InputType.Drive:
+                    strBuilder.Append(@" dvd://");
+                    strBuilder.AppendFormat(@" -dvd-device ""{0}:\""", OMLEngine.Properties.Settings.Default.VirtualDiscDrive);
+                    break;
+                default:
+                    Utilities.DebugLine("No idea what format the file is");
+                    throw new Exception("Can't determine input format (file or drive)");
+            }
 
             //audio format
             /* DISABLED UNTIL AUDIO STREAM CLASSES ARE FINALIZED
@@ -165,17 +168,25 @@ namespace OMLTranscoder
 
             // output format
             // always set the output format to mpeg for extenders
-            if (inputType == MEncoder.InputType.Drive)
+            switch (inputType)
             {
-                strBuilder.Append(@" -of mpeg -mpegopts format=dvd:tsaf -vf harddup");
-                strBuilder.Append(@" -lavcopts vcodec=msmpeg4v2:vpass=1");
+                case MEncoder.InputType.Drive:
+                    strBuilder.Append(@" -of mpeg -mpegopts format=dvd:tsaf -vf harddup");
+                    break;
+                case MEncoder.InputType.File:
+                    strBuilder.Append(@" -lavcopts vcodec=msmpeg4v2:vpass=1");
+                    break;
+                default:
+                    Utilities.DebugLine("I have no idea format output format to use");
+                    throw new Exception("Unable to determine what output format to use");
             }
 
             // set quiet mode on
             strBuilder.Append(@" -quiet");
 
             //output
-            strBuilder.AppendFormat(@" -o ""{0}""", Path.Combine(FileSystemWalker.PublicRootDirectory, outputFile));
+            string outputExtension = (inputType == MEncoder.InputType.Drive) ? @"mpg" : @"wmv";
+            strBuilder.AppendFormat(@" -o ""{0}.{1}""", Path.Combine(FileSystemWalker.PublicRootDirectory, outputFile), outputExtension);
 
             string completedArguments = strBuilder.ToString();
             Utilities.DebugLine("[MEncoderCommandBuilder] Arguments: {0}", completedArguments);
