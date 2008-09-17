@@ -48,23 +48,55 @@ namespace Library
             });
         }
 
+        private void updateTranscodeStatus(object obj)
+        {
+            OMLApplication.Current.TranscodeStatus = (string)obj;
+        }
+
         public bool PlayMovie()
         {
+            OMLApplication.Current.IsStartingTranscodingJob = true;
             Utilities.DebugLine("Starting job");
-            path_to_play = transcode.BeginTranscodeJob(ms);
-            //OMLApplication.Current.IsStartingTranscodingJob = false;
-
-            Utilities.DebugLine("[TranscodePlayer] Playing transcode buffer: " + path_to_play);
-            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, path_to_play, false))
-            {
-                if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
+            bool retVal = false;
+            int status = -1;
+            OMLApplication.Current.TranscodeStatus = @"Starting Transcode Job";
+            Application.DeferredInvokeOnWorkerThread(
+                delegate
                 {
-                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += this.Transport_PropertyChanged;
-                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
-                    return true;
-                }
-            }
-            return false;
+                    status = transcode.BeginTranscodeJob(ms, out path_to_play);
+                },
+                delegate
+                {
+                    switch (status)
+                    {
+                        case 0:
+                            Application.DeferredInvoke(updateTranscodeStatus, "Started, buffering...");
+                            System.Threading.Thread.Sleep(7 * 1000);
+                            OMLApplication.Current.IsStartingTranscodingJob = false;
+                            System.Threading.Thread.Sleep(1000);
+                            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, path_to_play, false))
+                            {
+                                if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
+                                {
+                                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += this.Transport_PropertyChanged;
+                                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
+                                    retVal = true;
+                                }
+                            }
+                            break;
+                        case 1:
+                            Application.DeferredInvoke(updateTranscodeStatus, "An Error Occured");
+                            Utilities.DebugLine("[TranscodePlayer] And error occured");
+                            break;
+                        default:
+                            AddInHost.Current.MediaCenterEnvironment.Dialog(string.Format("Error Code: {0}", status), "Transcode Error", DialogButtons.Ok, 0, true);
+                            Utilities.DebugLine("[TranscodePlayer] Error while attempting to transcode {0}", status);
+                            break;
+                    }
+                }, null);
+
+            OMLApplication.Current.IsStartingTranscodingJob = false;
+            return retVal;
         }
     }
 }
