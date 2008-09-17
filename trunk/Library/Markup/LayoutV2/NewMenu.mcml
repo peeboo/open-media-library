@@ -40,7 +40,7 @@
             <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
                 <Children>
                     <controls:WaitCursor Name="waitCursor" Visible="false"/>
-                    <controls:TranscodingMessage Name="transcodingMessage" Visible="false"/>
+                    <controls:TranscodingMessage Name="transcodingMessage" Visible="false" Application="[Page.App]"/>
 
                     <Panel Name="TopPanel">
                         <Children>
