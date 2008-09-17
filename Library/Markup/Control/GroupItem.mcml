@@ -25,7 +25,7 @@
                     <Repeater Name="Repeater" Source="[Model.Options]" ContentName="Item"
                               Margins="50,0,0,0" MaximumSize="0,500">
                         <Layout>
-                            <GridLayout />
+                            <GridLayout AllowWrap="true" Rows="3"/>
                         </Layout>
                     </Repeater>
                 </Children>
