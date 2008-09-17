@@ -9,16 +9,11 @@ namespace AppleTrailers
 {
     public class AppleTrailers
     {
-        private List<AppleTrailer> trailers;
-
-        public List<AppleTrailer> Trailers
-        {
-            get { return trailers; }
-        }
+        public List<AppleTrailer> Trailers { get; private set; }
 
         public AppleTrailers()
         {
-            trailers = new List<AppleTrailer>();
+            Trailers = new List<AppleTrailer>();
         }
 
         public void LoadTrailers()
@@ -32,7 +27,7 @@ namespace AppleTrailers
                 List<AppleTrailer> newTrailers = GetTrailersForUrl(url);
                 foreach (AppleTrailer trailer in newTrailers)
                 {
-                    trailers.Add(trailer);
+                    Trailers.Add(trailer);
                 }
             }
         }
@@ -128,45 +123,20 @@ namespace AppleTrailers
                 List<AppleTrailer> trailers = ParseDocument(xDoc);
                 return trailers;
             }
-            catch (Exception e)
-            {
-            }
+            catch { }
             return null;
         }
     }
 
     public class AppleTrailer
     {
-        private string appleId;
-        private string fandangoId;
-        private string movieTitle;
-        private string runtime;
-        private List<ApplePoster> posters;
-        private List<ApplePreview> previews;
+        List<ApplePoster> posters = new List<ApplePoster>();
+        List<ApplePreview> previews = new List<ApplePreview>();
 
-        public string AppleId
-        {
-            get { return appleId;}
-            set { appleId = value;}
-        }
-
-        public string FandangoId
-        {
-            get { return fandangoId;}
-            set { fandangoId = value;}
-        }
-
-        public string MovieTitle
-        {
-            get { return movieTitle;}
-            set { movieTitle = value;}
-        }
-
-        public string Runtime
-        {
-            get { return runtime;}
-            set { runtime = value;}
-        }
+        public string AppleId { get; set; }
+        public string FandangoId { get; set; }
+        public string MovieTitle { get; set; }
+        public string Runtime { get; set; }
 
         public void AddPoster(ApplePoster poster)
         {
@@ -177,47 +147,17 @@ namespace AppleTrailers
         {
             previews.Add(preview);
         }
-
-        public AppleTrailer()
-        {
-            posters = new List<ApplePoster>();
-            previews = new List<ApplePreview>();
-        }
     }
 
     public class ApplePoster
     {
-        string type;
-        string url;
-
-        public string Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
-
-        public string Url
-        {
-            get { return url; }
-            set { url = value; }
-        }
+        public string Type { get; set; }
+        public string Url { get; set; }
     }
 
     public class ApplePreview
     {
-        string type;
-        string url;
-
-        public string Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
-
-        public string Url
-        {
-            get { return type; }
-            set { type = value; }
-        }
+        public string Type { get; set; }
+        public string Url { get; set; }
     }
 }
