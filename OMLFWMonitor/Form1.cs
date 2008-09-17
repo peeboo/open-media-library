@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 using Microsoft.Win32;
 
+using OMLEngine;
 using OMLLogging;
 
 namespace OMLFWMonitor
@@ -13,6 +14,7 @@ namespace OMLFWMonitor
         OMLFileWatcher.OMLFileWatcher fw;
         bool _logging = false;
         bool subdirs;
+        List<String> DiskDirs = new List<string>();
 
         public Form1()
         {
@@ -28,12 +30,15 @@ namespace OMLFWMonitor
             fw = new OMLFileWatcher.OMLFileWatcher();
             using (RegistryKey rkOML = Registry.CurrentUser.OpenSubKey(@"Software"))
                 watches.AddRange(rkOML.GetSubKeyNames());
-            if (!watches.Contains(@"OMLz"))
+            if (!watches.Contains(@"OpenMediaLibrary"))
                 return false;
 
             watches.Clear();
-            using (RegistryKey rkOML = Registry.CurrentUser.OpenSubKey(@"Software\OML"))
+            watches.Add((string)"@OML.DAT");
+            using (RegistryKey rkOML = Registry.CurrentUser.OpenSubKey(@"Software\OpenMediaLibrary"))
+            {
                 watches.AddRange((string[])rkOML.GetValue("Watch"));
+            }
 
             foreach (string set in watches)
             {
@@ -41,6 +46,12 @@ namespace OMLFWMonitor
                 switch (watch.Length)
                 {
                     case 1:
+                        if (watch[0] == "@OML.DAT")
+                        {
+                            WatchOMLdat();
+                            Utilities.DebugLine(String.Format("Dirs: {0}", DiskDirs.Count));
+                        }
+                        break;
                     case 2:
                         fw.AddWatch(watch[0], watch[1]);
                         break;
@@ -60,6 +71,25 @@ namespace OMLFWMonitor
             fw.Deleted += new OMLFileWatcher.OMLFileWatcher.eDeleted(fw_Changed);
             fw.Renamed += new OMLFileWatcher.OMLFileWatcher.eRenamed(fw_Renamed);
             return true;
+        }
+
+        private void WatchOMLdat()
+        {
+            TitleCollection tc;
+            tc = new TitleCollection();
+            fw.AddWatch(tc.DBFilename);
+            tc.loadTitleCollection();
+            foreach (Title t in tc)
+            {
+                foreach (Disk d in t.Disks)
+                {
+                    String sDiskPath = System.IO.Path.GetDirectoryName(d.Path);
+                    if (!DiskDirs.Contains(sDiskPath))
+                    {
+                        DiskDirs.Add(sDiskPath);
+                    }
+                }
+            }
         }
 
         public bool logging
