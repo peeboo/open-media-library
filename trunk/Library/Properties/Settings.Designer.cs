@@ -542,12 +542,12 @@ namespace Library.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int GalleryCoverFlowRows {
+        public int GalleryCarouselRows {
             get {
-                return ((int)(this["GalleryCoverFlowRows"]));
+                return ((int)(this["GalleryCarouselRows"]));
             }
             set {
-                this["GalleryCoverFlowRows"] = value;
+                this["GalleryCarouselRows"] = value;
             }
         }
         
@@ -645,6 +645,78 @@ namespace Library.Properties {
             }
             set {
                 this["UILanguage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.3")]
+        public float FocusCarouselScale {
+            get {
+                return ((float)(this["FocusCarouselScale"]));
+            }
+            set {
+                this["FocusCarouselScale"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int CarouselRows {
+            get {
+                return ((int)(this["CarouselRows"]));
+            }
+            set {
+                this["CarouselRows"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("141")]
+        public int CarouselItemWidth {
+            get {
+                return ((int)(this["CarouselItemWidth"]));
+            }
+            set {
+                this["CarouselItemWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("180")]
+        public int CarouselItemHeight {
+            get {
+                return ((int)(this["CarouselItemHeight"]));
+            }
+            set {
+                this["CarouselItemHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int CarouselItemSpacingVertical {
+            get {
+                return ((int)(this["CarouselItemSpacingVertical"]));
+            }
+            set {
+                this["CarouselItemSpacingVertical"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int CarouselItemSpacingHorizontal {
+            get {
+                return ((int)(this["CarouselItemSpacingHorizontal"]));
+            }
+            set {
+                this["CarouselItemSpacingHorizontal"] = value;
             }
         }
     }

@@ -131,7 +131,7 @@
     <Setting Name="FocusListScale" Type="System.Single" Scope="User">
       <Value Profile="(Default)">1.3</Value>
     </Setting>
-    <Setting Name="GalleryCoverFlowRows" Type="System.Int32" Scope="User">
+    <Setting Name="GalleryCarouselRows" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="Extender_UseAsx" Type="System.Boolean" Scope="User">
@@ -177,6 +177,24 @@
     </Setting>
     <Setting Name="UILanguage" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="FocusCarouselScale" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">1.3</Value>
+    </Setting>
+    <Setting Name="CarouselRows" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="CarouselItemWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">141</Value>
+    </Setting>
+    <Setting Name="CarouselItemHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">180</Value>
+    </Setting>
+    <Setting Name="CarouselItemSpacingVertical" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="CarouselItemSpacingHorizontal" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>
