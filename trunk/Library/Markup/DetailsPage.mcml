@@ -2,15 +2,16 @@
 	  xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
 	  xmlns:cor="assembly://MsCorLib/System"
 	  xmlns:a="assembly://Library/Library"
-    xmlns:coll="assembly://MsCorLib/System.Collections"
-    xmlns:s="resx://Library/Library.Resources/Styles"
-    xmlns:controls="resx://Library/Library.Resources/CoreControls"
-    xmlns:c="resx://Library/Library.Resources/Controls"
+      xmlns:coll="assembly://MsCorLib/System.Collections"
+      xmlns:s="resx://Library/Library.Resources/Styles"
+      xmlns:controls="resx://Library/Library.Resources/CoreControls"
+      xmlns:c="resx://Library/Library.Resources/Controls"
 	  xmlns:me="Me">
 
-  <Aggregate Source="resx://Library/Library.Resources/Base" />  
+    <Aggregate Source="resx://Library/Library.Resources/Base" />
+    <Aggregate Source="resx://Library/Library.Resources/Controls"/>
 
-  <UI Name="MovieDetails">
+    <UI Name="MovieDetails">
     <Properties>
       <a:OMLApplication Name="Application" OMLApplication="$Required"/>
       <a:MovieDetailsPage Name="DetailsPage" MovieDetailsPage="$Required"/>
@@ -32,13 +33,35 @@
     </Locals>
 
     <Rules>
-      <Default Target="[Input.KeyInteractive]" Value="true"/>
+        <Default Target="[Input.KeyInteractive]" Value="true"/>
+        <Changed Source="[Application.IsBusy]" InitialEvaluate="false">
+            <Actions>
+                <Set Target="[waitCursor.Visible]" Value="true"/>
+            </Actions>
+        </Changed>
+        <Changed Source="[Application.IsBusy]" InitialEvaluate="true">
+            <Actions>
+                <Set Target="[waitCursor.Visible]" Value="false"/>
+            </Actions>
+        </Changed>
+        <Changed Source="[Application.IsStartingTranscodingJob]" InitialEvaluate="false">
+            <Actions>
+                <Set Target="[transcodingMessage.Visible]" Value="true"/>
+            </Actions>
+        </Changed>
+        <Changed Source="[Application.IsStartingTranscodingJob]" InitialEvaluate="true">
+            <Actions>
+                <Set Target="[transcodingMessage.Visible]" Value="false"/>
+            </Actions>
+        </Changed>
     </Rules>
 
     <Content>
       <ColorFill Content="Transparent" Layout="Form">
         <Children>
-          <Panel Name="Image" Layout="VerticalFlow">
+            <controls:WaitCursor Name="waitCursor" Visible="false"/>
+            <controls:TranscodingMessage Name="transcodingMessage" Visible="false" Application="[Application]"/>
+            <Panel Name="Image" Layout="VerticalFlow">
             <LayoutInput>
               <FormLayoutInput Left="[ImageLeftAnchor]" Top="[TitleTopAnchor]" Bottom="Parent,1"/>
             </LayoutInput>
