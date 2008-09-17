@@ -10,7 +10,6 @@ using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Diagnostics;
-using Transcode360.Interface;
 using Microsoft.Win32;
 using OMLTranscoder;
 
