@@ -487,7 +487,7 @@ namespace MyMoviesPlugin
                                 try
                                 {
                                     format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                                    if (format != null && format != VideoFormat.UNKNOWN)
+                                    if (format != VideoFormat.UNKNOWN)
                                     {
                                         Disk disk = new Disk();
                                         disk.Format = format;
@@ -497,7 +497,7 @@ namespace MyMoviesPlugin
                                 }
                                 catch (Exception ex)
                                 {
-                                    AddError("Error parsing extention: {0}", ext);
+                                    AddError("Error parsing extention: {0}, {1}", ext, ex);
                                 }
                             }
                             break;
@@ -518,7 +518,7 @@ namespace MyMoviesPlugin
                             try
                             {
                                 format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                                if (format != null && format != VideoFormat.UNKNOWN)
+                                if (format != VideoFormat.UNKNOWN)
                                 {
                                     Disk disk = new Disk();
                                     disk.Format = format;
@@ -528,7 +528,7 @@ namespace MyMoviesPlugin
                             }
                             catch (Exception ex)
                             {
-                                AddError("Unable to parse format for ext: {0}", ext);
+                                AddError("Unable to parse format for ext: {0}, {1}", ext, ex);
                             }
                         }
                         else
@@ -607,7 +607,7 @@ namespace MyMoviesPlugin
                     }
                     catch (Exception ex)
                     {
-                        AddError("Error parsing format for extension: {0}", extension);
+                        AddError("Error parsing format for extension: {0}, {1}", extension, ex);
                         format = VideoFormat.UNKNOWN;
                     }
 
