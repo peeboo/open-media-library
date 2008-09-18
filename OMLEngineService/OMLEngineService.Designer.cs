@@ -28,8 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            this.ServiceName = "Service1";
+            // 
+            // OMLEngineService
+            // 
+            this.CanPauseAndContinue = true;
+            this.CanShutdown = true;
+            this.ServiceName = "OMLEngineService";
+
         }
 
         #endregion
