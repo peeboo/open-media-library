@@ -11,7 +11,7 @@ using OMLEngine;
 namespace OML.MceState
 {
     #region -- Com Interfaces --
-    [ComImport, Guid("ECCED884-19CF-4179-0000-879756E3BC46"), InterfaceType(ComInterfaceType.InterfaceIsDual)]
+    [ComImport, Guid("075FC453-F236-41DA-B90D-9FBB8BBDC101"), InterfaceType(ComInterfaceType.InterfaceIsDual)]
     public interface IMediaStatusSink
     {
         [DispId(1)]
@@ -20,7 +20,7 @@ namespace OML.MceState
         IMediaStatusSession CreateSession();
     }
 
-    [ComImport, Guid("ECCED884-19CF-4179-0001-879756E3BC46"), InterfaceType(ComInterfaceType.InterfaceIsDual)]
+    [ComImport, Guid("A70D81F2-C9D2-4053-AF0E-CDEA39BDD1AD"), InterfaceType(ComInterfaceType.InterfaceIsDual)]
     public interface IMediaStatusSession
     {
         [DispId(1)]
@@ -294,20 +294,40 @@ namespace OML.MceState
         [ComRegisterFunction]
         public static void RegistrationMethod(Type type)
         {
-            Utilities.DebugLine("[MsasSink] ComRegisterMethod: " + type);
-            if (type == typeof(MsasSink))
+            Utilities.DebugLine("[MsasSink] ComRegisterMethod: {0}, {1}, I: {2}", type, type.Assembly.GetName().Version, type == typeof(MsasSink));
+            try
             {
-                RegistryKey rk = Registry.ClassesRoot.CreateSubKey(@"CLSID\{ECCED884-19CF-4179-0002-879756E3BC46}\Implemented Categories\{FCB0C2A3-9747-4c95-9d02-820AFEDEF13F}");
-                rk.Close();
+
+                if (type == typeof(MsasSink))
+                {
+                    using (Registry.ClassesRoot.CreateSubKey(@"CLSID\{ECCED884-19CF-4179-0002-879756E3BC46}\Implemented Categories\{62C8FE65-4EBB-45E7-B440-6E39B2CDBF29}"))
+                    { }
+                    using (Registry.ClassesRoot.CreateSubKey(@"CLSID\{ECCED884-19CF-4179-0002-879756E3BC46}\Implemented Categories\{FCB0C2A3-9747-4c95-9d02-820AFEDEF13F}"))
+                    { }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[MsasSink] ComRegisterMethod: Exception: {0}", ex);
             }
         }
 
         [ComUnregisterFunction]
         public static void UnRegistrationMethod(Type type)
         {
-            Utilities.DebugLine("[MsasSink] UnRegistrationMethod: " + type);
-            if (type == typeof(MsasSink))
-                Registry.ClassesRoot.DeleteSubKey(@"CLSID\{ECCED884-19CF-4179-0002-879756E3BC46}\Implemented Categories\{FCB0C2A3-9747-4c95-9d02-820AFEDEF13F}");
+            try
+            {
+                Utilities.DebugLine("[MsasSink] UnRegistrationMethod: {0}, I: {1}", type, type == typeof(MsasSink));
+                if (type == typeof(MsasSink))
+                {
+                    Registry.ClassesRoot.DeleteSubKey(@"CLSID\{ECCED884-19CF-4179-0002-879756E3BC46}\Implemented Categories\{62C8FE65-4EBB-45E7-B440-6E39B2CDBF29}");
+                    Registry.ClassesRoot.DeleteSubKey(@"CLSID\{ECCED884-19CF-4179-0002-879756E3BC46}\Implemented Categories\{FCB0C2A3-9747-4c95-9d02-820AFEDEF13F}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[MsasSink] UnRegistrationMethod: Exception: {0}", ex);
+            }
         }
         #endregion
 
