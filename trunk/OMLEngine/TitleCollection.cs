@@ -19,6 +19,11 @@ namespace OMLEngine
         private Dictionary<string, Title> _moviesByFilename = new Dictionary<string, Title>();
         private Dictionary<int, Title> _moviesByItemId = new Dictionary<int, Title>();
 
+        public string DBFilename
+        {
+            get { return _database_filename; }
+        }
+
         public Dictionary<int, Title> MoviesByItemId
         {
             get { return _moviesByItemId; }
