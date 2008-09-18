@@ -415,5 +415,5 @@
         </Content>
     </UI>
 
-    <Image Name="myImage" Image="file://c:\\nocover.png"/>
+    <Image Name="myImage" Image="resx://Library/Library.Resources/nocover"/>
 </Mcml>
