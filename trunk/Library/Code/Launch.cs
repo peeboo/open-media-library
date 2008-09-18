@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.ServiceProcess;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.Win32;
 
@@ -12,10 +13,30 @@ namespace Library
         private static HistoryOrientedPageSession s_session;
         public TextWriterTraceListener tl;
         OMLApplication app;
+        ServiceController sc;
         string _id;
 
         public void Initialize(Dictionary<string, object> appInfo, Dictionary<string, object> entryPointInfo)
         {
+            sc = new ServiceController("OMLEngineService");
+            if (sc.Status != ServiceControllerStatus.Running)
+            {
+                Microsoft.MediaCenter.UI.Application.DeferredInvokeOnWorkerThread(
+                    delegate {
+                        sc.Start();
+                        sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 20));
+                },  delegate {
+                    if (sc.Status == ServiceControllerStatus.Running)
+                    {
+                        sc.Refresh();
+                    }
+                    else
+                    {
+                        OMLEngine.Utilities.DebugLine("Error starting OMLEngine Service");
+                    }
+                }, null);
+            }
+
             if (entryPointInfo.ContainsKey("Context"))
                 _id = (string)entryPointInfo["Context"];
 
