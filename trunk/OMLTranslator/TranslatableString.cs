@@ -7,10 +7,10 @@ namespace OMLTranslator
     {
         private readonly string key;
         private readonly string source;
+        private string inheritedTarget;
         private readonly TranslatableResXFile resxFile;
         private string target;
         private string persistedTarget;
-        private bool isDirty;
         private static readonly Regex trailingSpacesRegex = new Regex(@"\s*$");
         private static readonly Regex prefixSpacesRegex = new Regex(@"^\s*");
         private string statusText = "";
@@ -30,17 +30,54 @@ namespace OMLTranslator
 
         public string Target
         {
+            get
+            {
+                if (string.IsNullOrEmpty(target)) return inheritedTarget;
+                return target;
+            }
+            set
+            {
+                bool currentIsDirty = IsDirty;
+                if (value == inheritedTarget) value = null;
+                if (value != target)
+                {
+                    bool currentIsInherited = IsInherited;
+                    target = value;
+                    RaisePropertyChanged("Target");
+                    if (currentIsInherited != IsInherited) RaisePropertyChanged("IsInherited");
+                }
+                
+                UpdateStatus();
+                if (currentIsDirty != IsDirty) RaisePropertyChanged("IsDirty");
+            }
+        }
+
+        public string InheritedTarget
+        {
             get { return target; }
             set
             {
-                if (value != target)
+                bool currentIsDirty = IsDirty;
+                if (inheritedTarget != value)
                 {
-                    target = value;
-                    RaisePropertyChanged("Target");
-                    IsDirty = target != persistedTarget;
-                    UpdateStatus();
-
+                    string currentTarget = Target;
+                    bool currentIsInherited = IsInherited;
+                    inheritedTarget = value;
+                    if (target == inheritedTarget) target = null;
+                    RaisePropertyChanged("InheritedTarget");
+                    if (currentTarget != Target) RaisePropertyChanged("Target");
+                    if (currentIsInherited != IsInherited) RaisePropertyChanged("IsInherited");
                 }
+                UpdateStatus();
+                if (currentIsDirty != IsDirty) RaisePropertyChanged("IsDirty");
+            }
+        }
+
+        public bool IsInherited
+        {
+            get
+            {
+                return (string.IsNullOrEmpty(target) && !string.IsNullOrEmpty(inheritedTarget));
             }
         }
 
@@ -51,16 +88,16 @@ namespace OMLTranslator
 
         public bool IsDirty
         {
-            get { return isDirty; }
-            internal set
+            get
             {
-                if (isDirty != value)
-                {
-                    isDirty = value;
-                    if (!isDirty) persistedTarget = target;
-                    RaisePropertyChanged("IsDirty");
-                }
+                return persistedTarget != Target;
             }
+        }
+
+        public void ClearDirty()
+        {
+            persistedTarget = Target;
+            RaisePropertyChanged("IsDirty");
         }
 
 
@@ -85,7 +122,7 @@ namespace OMLTranslator
             TranslationStatus newStatus = TranslationStatus.Ok;
             string newStatusText = "";
 
-            if (string.IsNullOrEmpty(target))
+            if (string.IsNullOrEmpty(Target)) // Includes inherited text
             {
                 if (!string.IsNullOrEmpty(source))
                 {
@@ -93,7 +130,7 @@ namespace OMLTranslator
                     newStatus = TranslationStatus.Error;
                 }
             }
-            else
+            else if (!string.IsNullOrEmpty(target)) // Only translations at this level.
             {
 
                 if (!StringIsMultiline(source) && StringIsMultiline(target))

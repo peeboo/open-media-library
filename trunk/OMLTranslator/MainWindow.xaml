@@ -6,6 +6,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="boolToVisibilityConverter" />
         <local:TranslationStatusToBrushConverter x:Key="statusToBrushConverter" />
+        <local:IsTranslatableToTextBrushConverter x:Key="isInheritedToBrushConverter" />
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="Save" CanExecute="CanSaveExecute" Executed="SaveExecuted" />
@@ -82,6 +83,7 @@
                                                      TextWrapping="Wrap"
                                                      AcceptsReturn="True" 
                                                      Background="{Binding Path=Status, Converter={StaticResource statusToBrushConverter}}"
+                                                     Foreground="{Binding Path=IsInherited, Converter={StaticResource isInheritedToBrushConverter}}"
                                                      TextChanged="TargetTextChanged"/>
                                             <TextBlock Grid.Column="2"
                                                        Text="*"

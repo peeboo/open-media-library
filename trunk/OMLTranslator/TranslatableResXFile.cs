@@ -75,9 +75,14 @@ namespace OMLTranslator
         {
             get
             {
-                return Path.Combine(FileSystemWalker.TranslationsDirectory,
-                                    BaseName + "." + currentLanguage.Name + ".xml");
+                return GetResXFileName(currentLanguage);
             }
+        }
+
+        private string GetResXFileName(CultureInfo cultureInfo)
+        {
+            return Path.Combine(FileSystemWalker.TranslationsDirectory,
+                                BaseName + "." + cultureInfo.Name + ".xml");
         }
 
         public ObservableCollection<TranslatableString> TranslatableStrings
@@ -85,13 +90,13 @@ namespace OMLTranslator
             get { return translatableStrings; }
         }
 
-        public IEnumerable<TranslatableString> NonEmptyTranslatableStrings
+        private IEnumerable<TranslatableString> NonEmptyTranslatableStrings
         {
             get
             {
                 return
                     from str in translatableStrings
-                    where !string.IsNullOrEmpty(str.Target)
+                    where !string.IsNullOrEmpty(str.Target) && !str.IsInherited
                     select str;
             }
         }
@@ -105,21 +110,54 @@ namespace OMLTranslator
                 {
                     currentLanguage = value;
                     ResourceSet resourceSet = null;
+                    bool isEnglish = false;
+                    for (CultureInfo culture = currentLanguage; !isEnglish && !string.IsNullOrEmpty(culture.Name); culture = culture.Parent)
+                    {
+                        if (culture.Name == "en") isEnglish = true;
+                    }
 
                     if (File.Exists(TargetResXFileName))
                     {
                         resourceSet = new ResXResourceSet(TargetResXFileName);
                     }
 
+                    var inheritedResources = InheritedResourceSets;
                     foreach (var str in TranslatableStrings)
                     {
+                        string inheritedTarget = null;
+                        foreach (var inheritedResourceSet in inheritedResources)
+                        {
+                            inheritedTarget = inheritedResourceSet.GetString(str.Key);
+                            if (!string.IsNullOrEmpty(inheritedTarget)) break;
+                        }
+
+                        // Special rule - as the program default resources are en English, always use them as the ultimate
+                        // fallback for any English language culture
+                        if (isEnglish && string.IsNullOrEmpty(inheritedTarget)) inheritedTarget = str.Source;
+                        
                         string newTarget = "";
                         if (resourceSet != null)
                         {
                             newTarget = resourceSet.GetString(str.Key);
                         }
+                        str.InheritedTarget = inheritedTarget;
                         str.Target = newTarget;
-                        str.IsDirty = false;
+                        str.ClearDirty();
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<ResourceSet> InheritedResourceSets
+        {
+            get
+            {
+                for (CultureInfo culture = currentLanguage.Parent; !string.IsNullOrEmpty(culture.Name); culture = culture.Parent)
+                {
+                    string path = GetResXFileName(culture);
+                    if (File.Exists(path))
+                    {
+                        yield return new ResXResourceSet(path);
                     }
                 }
             }
@@ -203,7 +241,7 @@ namespace OMLTranslator
             // Clear dirty flag
             foreach (var str in translatableStrings)
             {
-                str.IsDirty = false;
+                str.ClearDirty();
             }
         }
 
