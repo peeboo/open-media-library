@@ -12,20 +12,22 @@ namespace Library
     /// </summary>
     public class DVDPlayer : IPlayMovie
     {
-        public DVDPlayer(MovieItem title)
+        MediaSource _source;
+
+        public DVDPlayer(MediaSource source)
         {
-            _title = title;
+            _source = source;
         }
 
         public bool PlayMovie(string playString)
         {
-            if (MediaData.IsDVD(_title.SelectedDisk.Path))
+            if (MediaData.IsDVD(_source.MediaPath))
             {
                 if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, playString, false))
                 {
                     if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                     {
-                        OMLApplication.Current.NowPlayingMovieName = _title.Name;
+                        OMLApplication.Current.NowPlayingMovieName = _source.Name;
                         OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
                         AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
                         AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
@@ -39,21 +41,16 @@ namespace Library
 
         public bool PlayMovie()
         {
-            if (MediaData.IsDVD(_title.SelectedDisk.Path))
+            if (MediaData.IsDVD(_source.MediaPath))
             {
-                string play_string = "DVD://" + MediaData.GetPlayStringForPath(_title.SelectedDisk.Path);
-                return PlayMovie(play_string);
+                return PlayMovie("DVD://" + MediaData.GetPlayStringForPath(_source.MediaPath));
             }
             return false;
         }
 
         public bool PlayMovie(int titleNumber, int chapterNumber, DateTime startTime)
         {
-            if (MediaData.IsDVD(_title.SelectedDisk.Path))
-            {
-                return false;
-            }
-            return false;
+            return MediaData.IsDVD(_source.MediaPath) == false;
         }
 
         public static string GeneratePlayString(string path, int titleNumber, int chapterNumber)
@@ -87,7 +84,6 @@ namespace Library
 
             return playString;
         }
-        MovieItem _title;
     }
 
 }

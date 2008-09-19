@@ -19,14 +19,17 @@ namespace Library
     /// </summary>
     public class ExtenderDVDPlayer : IPlayMovie
     {
-        public ExtenderDVDPlayer(MovieItem title)
+        MediaSource _source;
+        DVDDiskInfo _info;
+
+        public ExtenderDVDPlayer(MediaSource source)
         {
-            _title = title;
+            _source = source;
         }
 
         public bool PlayMovie()
         {
-            _info = _title.SelectedDisk.DVDDiskInfo;
+            _info = _source.Disk.DVDDiskInfo;
 
             string videoFile = null;
             if (_info != null)
@@ -35,18 +38,18 @@ namespace Library
                 DVDTitle dvdTitle = _info.GetMainTitle();
                 if (dvdTitle != null)
                 {
-                    string videoTSDir = _title.SelectedDisk.Path;
+                    string videoTSDir = _source.MediaPath;
                     if (string.Compare(new DirectoryInfo(videoTSDir).Name, "VIDEO_TS", true) != 0)
                         videoTSDir = Path.Combine(videoTSDir, "VIDEO_TS");
                     int fileID = int.Parse(dvdTitle.File.Substring(4));
-                    OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: main title fileID={1} found for '{0}'", _title.SelectedDisk, fileID);
+                    OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: main title fileID={1} found for '{0}'", _source, fileID);
                     string vts = string.Format("VTS_{0:D2}_", fileID);
                     List<string> vobs = new List<string>(Directory.GetFiles(videoTSDir, vts + "*.VOB"));
                     vobs.Remove(Path.Combine(videoTSDir, vts + "0.VOB"));
 
                     if (vobs.Count < 1)
                     {
-                        OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: no VOB files found for '{0}'", _title.SelectedDisk);
+                        OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: no VOB files found for '{0}'", _source);
                         return false;
                     }
 
@@ -127,10 +130,10 @@ namespace Library
                     }
                 }
                 else
-                    OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: no main title found for {0}", _title.SelectedDisk);
+                    OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: no main title found for {0}", _source);
             }
             else
-                OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: no DVD-DiskInfo found for {0}", _title.SelectedDisk);
+                OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: no DVD-DiskInfo found for {0}", _source);
             
             if (videoFile == null)
                 videoFile = GetAsxFile();
@@ -139,8 +142,8 @@ namespace Library
             {
                 if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                 {
-                    Utilities.DebugLine("ExtenderDVDPlayer.PlayMovie: movie '{0}', Playing file '{1}'", _title.Name, videoFile);
-                    OMLApplication.Current.NowPlayingMovieName = _title.Name;
+                    Utilities.DebugLine("ExtenderDVDPlayer.PlayMovie: movie '{0}', Playing file '{1}'", _source.Name, videoFile);
+                    OMLApplication.Current.NowPlayingMovieName = _source.Name;
                     OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
@@ -194,11 +197,11 @@ namespace Library
                 return videoFile;
 
             Utilities.DebugLine("ExtenderDVDPlayer.PlayMovie: creating .asx playlist for extender for '{0}'/'{1}' " +
-                "containing multiple .VOB files", _title.Name, vts);
+                "containing multiple .VOB files", _source.Name, vts);
             using (StreamWriter writer = File.CreateText(videoFile))
             {
                 writer.WriteLine("<asx version=\"3.0\">");
-                writer.WriteLine("\t<title>" + HttpUtility.HtmlEncode(_title.Name) + "</title>");
+                writer.WriteLine("\t<title>" + HttpUtility.HtmlEncode(_source.Name) + "</title>");
                 writer.WriteLine("\t<param name=\"AllowShuffle\" value=\"no\" />");
                 writer.WriteLine("\t<param name=\"CanPause\" value=\"yes\" />");
                 writer.WriteLine("\t<param name=\"CanSeek\" value=\"yes\" />");
@@ -224,12 +227,12 @@ namespace Library
 
         string GetAsxFile()
         {
-            foreach (string fileName in Directory.GetFiles(Path.Combine(_title.SelectedDisk.Path, ".."), "*.asx"))
+            foreach (string fileName in Directory.GetFiles(Path.Combine(_source.MediaPath, ".."), "*.asx"))
             {
                 Utilities.DebugLine("ExtenderDVDPlayer.GetAsxFile: found asx {0}", fileName);
                 return fileName;
             }
-            Utilities.DebugLine("ExtenderDVDPlayer.GetAsxFile: no asx file found {0}", _title.SelectedDisk.Path);
+            Utilities.DebugLine("ExtenderDVDPlayer.GetAsxFile: no asx file found {0}", _source.MediaPath);
             return null;
         }
 
@@ -261,8 +264,6 @@ namespace Library
         }
         #endregion
 
-        MovieItem _title;
-        DVDDiskInfo _info;
     }
 
 }

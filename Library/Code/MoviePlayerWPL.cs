@@ -11,16 +11,16 @@ namespace Library
     {
         int _currentItem = 0;
         WindowsPlayListManager _wplm;
-        MovieItem _mItem;
+        MediaSource _mItem;
 
-        public MoviePlayerWPL(MovieItem mItem)
+        public MoviePlayerWPL(MediaSource source)
         {
-            _mItem = mItem;
+            _mItem = source;
             AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
             AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += Transport_PropertyChanged;
 
-            OMLApplication.DebugLine("[MoviePlayerWPL] Loading for playlist: " + _mItem.SelectedDisk.Path);
-            _wplm = new WindowsPlayListManager(_mItem.SelectedDisk.Path);
+            OMLApplication.DebugLine("[MoviePlayerWPL] Loading for playlist: " + _mItem.MediaPath);
+            _wplm = new WindowsPlayListManager(_mItem.MediaPath);
             _currentItem = 0;
         }
 
@@ -36,9 +36,9 @@ namespace Library
                     PlayListItem item = (PlayListItem)_wplm.PlayListItems[_currentItem];
                     if (item != null)
                     {
-                        _mItem.SelectedDisk.Path = item.FileLocation;
-                        _mItem.TitleObject.SelectedDisk.Format = VideoFormat.WMV;
-                        Utilities.DebugLine("[MoviePlayerWPL] Playing now: " + _mItem.SelectedDisk.Path);
+                        _mItem.MediaPath = item.FileLocation;
+                        _mItem.Format = VideoFormat.WMV;
+                        Utilities.DebugLine("[MoviePlayerWPL] Playing now: " + _mItem.MediaPath);
                         IPlayMovie player = MoviePlayerFactory.CreateMoviePlayer(_mItem);
                         if (player != null)
                             player.PlayMovie();

@@ -15,11 +15,11 @@ namespace Library
 // The audio streams will have to be reviewed for NON HD/TRU audio channels, we need either DTSHD, DTS, DD, or something else useful.
 // NOTE: DTSHD is completely compatible with DTS, while Dolby Digital HD is NOT compatible with Dolby Digital
 
-        private MovieItem _title;
+        private MediaSource _source;
 
-        public TranscodeBluRayPlayer(MovieItem title)
+        public TranscodeBluRayPlayer(MediaSource source)
         {
-            _title = title;
+            _source = source;
         }
 
         public bool PlayMovie()

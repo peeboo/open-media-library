@@ -18,15 +18,13 @@ namespace Library
     public class TranscodePlayer : IPlayMovie
     {
         string path_to_play = string.Empty;
-        MovieItem _title;
+        MediaSource _source;
         Transcode transcode;
-        MediaSource ms;
 
-        public TranscodePlayer(MovieItem title)
+        public TranscodePlayer(MediaSource source)
         {
-            _title = title;
+            _source = source;
             transcode = new Transcode();
-            ms = Transcode.MediaSourceFromTitle(_title.TitleObject);
         }
 
         public void Transport_PropertyChanged(IPropertyObject sender, string property)
@@ -41,7 +39,7 @@ namespace Library
                     {
                         Utilities.DebugLine("MoviePlayerTranscode.Transport_PropertyChanged: movie {0} Finished", OMLApplication.Current.NowPlayingMovieName);
                         OMLApplication.Current.NowPlayingStatus = PlayState.Finished;
-                        //                    stopTranscode();
+//                      stopTranscode();
                     }
                 }
             });
@@ -63,7 +61,7 @@ namespace Library
             Application.DeferredInvokeOnWorkerThread(
                 delegate
                 {
-                    status = transcode.BeginTranscodeJob(ms, out path_to_play);
+                    status = transcode.BeginTranscodeJob(_source, out path_to_play);
                 },
                 delegate
                 {

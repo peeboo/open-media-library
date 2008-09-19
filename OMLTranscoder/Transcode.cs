@@ -65,13 +65,5 @@ namespace OMLTranscoder
                 Utilities.DebugLine("[Transcode] An error occured");
             }
         }
-
-        public static MediaSource MediaSourceFromTitle(Title title)
-        {
-            return new MediaSource()
-            {
-                MediaPath = title.SelectedDisk.Path
-            };
-        }
     }
 }

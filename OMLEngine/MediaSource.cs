@@ -9,14 +9,17 @@ namespace OMLEngine
 {
     public class MediaSource
     {
-        public MediaSource()
+        public MediaSource(Disk disk)
         {
-            MediaPath = string.Empty;
+            Disk = disk;
             Subtitle = new SubtitleStream();
             AudioStream = new AudioStream();
         }
 
-        public string MediaPath { get; set; }
+        public Disk Disk { get; private set; }
+        public string Name { get { return Disk.Name; } }
+        public string MediaPath { get { return Disk.Path; } set { Disk.Path = value; } }
+        public VideoFormat Format { get { return Disk.Format; } set { Disk.Format = value; } }
         public SubtitleStream Subtitle { get; set; }
         public AudioStream AudioStream { get; set; }
 
@@ -30,5 +33,10 @@ namespace OMLEngine
         public float Framerate { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
+
+        public override string ToString()
+        {
+            return Disk.ToString();
+        }
     }
 }
