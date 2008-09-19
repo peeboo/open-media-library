@@ -4,9 +4,8 @@
  *******************************************************/
 
 using System;
-using System.Collections.Generic;
 
-namespace OMLTranscoder
+namespace OMLEngine
 {
     public class MediaSource
     {

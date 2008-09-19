@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OMLTranscoder
+namespace OMLEngine
 {
     public static class MediaLanguage
     {

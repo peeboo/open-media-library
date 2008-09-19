@@ -5,7 +5,7 @@
 
 using System;
 
-namespace OMLTranscoder
+namespace OMLEngine
 {
     public class SubtitleStream
     {
