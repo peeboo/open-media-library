@@ -47,13 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioStream.cs" />
-    <Compile Include="DVDDataExtractor.cs" />
-    <Compile Include="MediaLanguage.cs" />
-    <Compile Include="MediaSource.cs" />
     <Compile Include="MEncoder.cs" />
     <Compile Include="MEncoderCommandBuilder.cs" />
-    <Compile Include="SubtitleStream.cs" />
     <Compile Include="Transcode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

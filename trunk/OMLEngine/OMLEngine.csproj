@@ -48,11 +48,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioStream.cs" />
     <Compile Include="I18nResourceManager.cs" />
     <Compile Include="Disk.cs" />
     <Compile Include="FileSystemWalker.cs" />
     <Compile Include="Genres.cs" />
     <Compile Include="MediaData.cs" />
+    <Compile Include="MediaLanguage.cs" />
+    <Compile Include="MediaSource.cs" />
     <Compile Include="NetHelper.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,6 +67,7 @@
     <Compile Include="RegexUtils.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SortedArrayList.cs" />
+    <Compile Include="SubtitleStream.cs" />
     <Compile Include="Title.cs" />
     <Compile Include="TitleCollection.cs" />
     <Compile Include="Utilities.cs" />
