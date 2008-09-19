@@ -9,25 +9,26 @@ namespace Library
 {
     public class HDDVDPlayer : IPlayMovie
     {
-        MovieItem _title;
-        public HDDVDPlayer(MovieItem title)
+        MediaSource _source;
+
+        public HDDVDPlayer(MediaSource source)
         {
-            _title = title;
+            _source = source;
         }
 
         public bool PlayMovie()
         {
-            if (MediaData.IsHDDVD(_title.SelectedDisk.Path))
+            if (MediaData.IsHDDVD(_source.MediaPath))
             {
-                string media = MediaData.GetPlayStringForPath(_title.SelectedDisk.Path);
+                string media = MediaData.GetPlayStringForPath(_source.MediaPath);
                 media = "HDDVD://" + media;
                 media.Replace('\\', '/');
                 if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, media, false))
                 {
                     if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                     {
-                        Utilities.DebugLine("HDDVDPlayer.PlayMovie: movie {0} Playing", _title.Name);
-                        OMLApplication.Current.NowPlayingMovieName = _title.Name;
+                        Utilities.DebugLine("HDDVDPlayer.PlayMovie: movie {0} Playing", _source);
+                        OMLApplication.Current.NowPlayingMovieName = _source.Name;
                         OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
                         AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
                         AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();

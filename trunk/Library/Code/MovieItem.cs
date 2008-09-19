@@ -224,12 +224,6 @@ namespace Library
         private List<string> _actingRoles;
         private List<Disk> _friendlyNamedDisks = new List<Disk>();
 
-        public Disk SelectedDisk
-        {
-            get { return _titleObj.SelectedDisk; }
-            set { _titleObj.SelectedDisk = value; }
-        }
-
         public List<string> ActingRoles
         {
             get { return _actingRoles; }
@@ -262,10 +256,10 @@ namespace Library
             }
 
 //            if (_titleObj.Directors.Count > 0 && ((Person)_titleObj.Directors[0]).full_name.Trim().Length > 0)
-  //          {
-    //            if (SubCaption.Length > 0) SubCaption += " / ";
-      //          SubCaption += "Directed by: " + ((Person)_titleObj.Directors[0]).full_name;
-        //    }
+//            {
+//                if (SubCaption.Length > 0) SubCaption += " / ";
+//                SubCaption += "Directed by: " + ((Person)_titleObj.Directors[0]).full_name;
+//            }
 
             if (_titleObj.ParentalRating.Trim().Length > 0)
             {
@@ -374,7 +368,7 @@ namespace Library
         /// </summary>
         public void PlayMovie()
         {
-            IPlayMovie moviePlayer = MoviePlayerFactory.CreateMoviePlayer(this);
+            IPlayMovie moviePlayer = MoviePlayerFactory.CreateMoviePlayer(new MediaSource(this.TitleObject.SelectedDisk));
             moviePlayer.PlayMovie();
         }
 
@@ -382,20 +376,7 @@ namespace Library
         /// Gets the Title object.
         /// </summary>
         /// <value>The title object.</value>
-        public Title TitleObject
-        {
-            get { return _titleObj; }
-        }
-
-        /// <summary>
-        /// Gets or sets the file location.
-        /// </summary>
-        /// <value>The file location.</value>
-        //public string FileLocation
-        //{
-        //    get { return _titleObj.SelectedDisk.Path; }
-        //    set { _titleObj.SelectedDisk.Path = value; }
-        //}
+        public Title TitleObject { get { return _titleObj; } }
 
         public List<Disk> Disks
         {
@@ -422,16 +403,6 @@ namespace Library
         {
             get { return _titleObj.UserStarRating; }
         }
-
-        ///// <summary>
-        ///// Gets or sets the name.
-        ///// </summary>
-        ///// <value>The name.</value>
-        //override public string Name
-        //{
-        //    get { return _titleObj.Name; }
-        //    set { _titleObj.Name = value; }
-        //}
 
         /// <summary>
         /// Gets or sets the runtime.
