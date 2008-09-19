@@ -11,30 +11,37 @@ namespace Library
     public class MyAddIn : IAddInModule, IAddInEntryPoint
     {
         private static HistoryOrientedPageSession s_session;
-        public TextWriterTraceListener tl;
         OMLApplication app;
-        ServiceController sc;
         string _id;
 
         public void Initialize(Dictionary<string, object> appInfo, Dictionary<string, object> entryPointInfo)
         {
-            sc = new ServiceController("OMLEngineService");
-            if (sc.Status != ServiceControllerStatus.Running)
+            try
             {
-                Microsoft.MediaCenter.UI.Application.DeferredInvokeOnWorkerThread(
-                    delegate {
-                        sc.Start();
-                        sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 20));
-                },  delegate {
-                    if (sc.Status == ServiceControllerStatus.Running)
+                ServiceController sc = new ServiceController("OMLEngineService");
+                if (sc.Status != ServiceControllerStatus.Running)
+                {
+                    Microsoft.MediaCenter.UI.Application.DeferredInvokeOnWorkerThread(
+                        delegate
+                        {
+                            sc.Start();
+                            sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 20));
+                        }, delegate
                     {
-                        sc.Refresh();
-                    }
-                    else
-                    {
-                        OMLEngine.Utilities.DebugLine("Error starting OMLEngine Service");
-                    }
-                }, null);
+                        if (sc.Status == ServiceControllerStatus.Running)
+                        {
+                            sc.Refresh();
+                        }
+                        else
+                        {
+                            OMLEngine.Utilities.DebugLine("Error starting OMLEngine Service");
+                        }
+                    }, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                OMLEngine.Utilities.DebugLine("Exception during service-controller status request for 'OMLEngineService': {0}", ex);
             }
 
             if (entryPointInfo.ContainsKey("Context"))
