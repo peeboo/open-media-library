@@ -29,7 +29,7 @@ namespace Library
 
         public bool PlayMovie()
         {
-            _info = _source.Disk.DVDDiskInfo;
+            _info = _source.DVDDiskInfo;
 
             string videoFile = null;
             if (_info != null)

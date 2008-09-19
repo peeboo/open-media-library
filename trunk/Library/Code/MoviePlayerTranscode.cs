@@ -24,7 +24,7 @@ namespace Library
         public TranscodePlayer(MediaSource source)
         {
             _source = source;
-            transcode = new Transcode();
+            transcode = new Transcode(_source);
         }
 
         public void Transport_PropertyChanged(IPropertyObject sender, string property)
@@ -61,7 +61,7 @@ namespace Library
             Application.DeferredInvokeOnWorkerThread(
                 delegate
                 {
-                    status = transcode.BeginTranscodeJob(_source, out path_to_play);
+                    status = transcode.BeginTranscodeJob(out path_to_play);
                 },
                 delegate
                 {
