@@ -10,6 +10,8 @@ namespace OMLTranslator
         private string inheritedTarget;
         private readonly TranslatableResXFile resxFile;
         private string target;
+        private string translatedSource; // The source at the time the translation was done.
+        private bool translatedSourceUpdated;
         private string persistedTarget;
         private static readonly Regex trailingSpacesRegex = new Regex(@"\s*$");
         private static readonly Regex prefixSpacesRegex = new Regex(@"^\s*");
@@ -45,6 +47,7 @@ namespace OMLTranslator
                     target = value;
                     RaisePropertyChanged("Target");
                     if (currentIsInherited != IsInherited) RaisePropertyChanged("IsInherited");
+                    TranslatedSource = Source;
                 }
                 
                 UpdateStatus();
@@ -73,6 +76,24 @@ namespace OMLTranslator
             }
         }
 
+        public string TranslatedSource
+        {
+            get { return translatedSource; }
+            set
+            {
+                if (translatedSource != value)
+                {
+                    bool isDirty = IsDirty;
+                    translatedSource = value;
+                    translatedSourceUpdated = true;
+                    RaisePropertyChanged("TranslatedSource");
+                    if (IsDirty != isDirty) RaisePropertyChanged("IsDirty");
+                    UpdateStatus();
+                }
+            }
+        }
+
+
         public bool IsInherited
         {
             get
@@ -90,15 +111,17 @@ namespace OMLTranslator
         {
             get
             {
-                return persistedTarget != Target;
+                return persistedTarget != Target || translatedSourceUpdated;
             }
         }
 
         public void ClearDirty()
         {
             persistedTarget = Target;
+            translatedSourceUpdated = false;
             RaisePropertyChanged("IsDirty");
         }
+
 
 
         public TranslatableResXFile ResxFile
@@ -146,6 +169,11 @@ namespace OMLTranslator
                 if (prefixSpacesRegex.Match(source).Value != prefixSpacesRegex.Match(target).Value)
                 {
                     newStatusText = "Initial spaces do not match.";
+                    newStatus = TranslationStatus.Warning;
+                }
+                if (!string.IsNullOrEmpty(translatedSource) && translatedSource != Source)
+                {
+                    newStatusText = "Source text has changed after translation.";
                     newStatus = TranslationStatus.Warning;
                 }
             }

@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
+using System.Text;
+using System.Xml;
 using OMLEngine;
 
 namespace OMLTranslator
@@ -19,6 +21,8 @@ namespace OMLTranslator
 
         private bool? cachedIsDirty;
         private TranslationStatus? cachedStatus;
+
+        private const string OrgSourceMetadataKeyPrefix = "OML_org_source¤";
 
 
         public TranslatableResXFile(Assembly assembly, string resourceName)
@@ -90,7 +94,7 @@ namespace OMLTranslator
             get { return translatableStrings; }
         }
 
-        private IEnumerable<TranslatableString> NonEmptyTranslatableStrings
+        private IEnumerable<TranslatableString> StringsWithTranslations
         {
             get
             {
@@ -109,8 +113,13 @@ namespace OMLTranslator
                 if (currentLanguage != value)
                 {
                     currentLanguage = value;
-                    ResourceSet resourceSet = null;
                     bool isEnglish = false;
+                    ResourceSet resourceSet = null;
+
+                    // Hmm, I must be blind, I can't find the way to access metadata strings though the ResourceSet,
+                    // so for now I'll load the XML document. :(
+                    XmlDocument resourceSetXml = new XmlDocument();
+                    
                     for (CultureInfo culture = currentLanguage; !isEnglish && !string.IsNullOrEmpty(culture.Name); culture = culture.Parent)
                     {
                         if (culture.Name == "en") isEnglish = true;
@@ -119,6 +128,7 @@ namespace OMLTranslator
                     if (File.Exists(TargetResXFileName))
                     {
                         resourceSet = new ResXResourceSet(TargetResXFileName);
+                        resourceSetXml.Load(TargetResXFileName);
                     }
 
                     var inheritedResources = InheritedResourceSets;
@@ -136,16 +146,43 @@ namespace OMLTranslator
                         if (isEnglish && string.IsNullOrEmpty(inheritedTarget)) inheritedTarget = str.Source;
                         
                         string newTarget = "";
+                        string newTranslatedSource = "";
                         if (resourceSet != null)
                         {
                             newTarget = resourceSet.GetString(str.Key);
+                            string xpathParm = EscapeXPathParameter(OrgSourceMetadataKeyPrefix + str.Key);
+
+                            XmlNode metaDataValueNode = resourceSetXml.SelectSingleNode(string.Format("/root/metadata[@name={0}]/value", xpathParm));
+                            if (metaDataValueNode != null) newTranslatedSource = metaDataValueNode.InnerText;
                         }
+
                         str.InheritedTarget = inheritedTarget;
                         str.Target = newTarget;
+                        str.TranslatedSource = newTranslatedSource;
                         str.ClearDirty();
                     }
                 }
             }
+        }
+
+        private static string EscapeXPathParameter(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return "''";
+            
+            string[] singleQuoteSplit = input.Split('\'');
+
+            if (singleQuoteSplit.Length == 1) return "'" + input + "'";
+
+            StringBuilder result = new StringBuilder("concat(", input.Length + 16 + singleQuoteSplit.Length * 7);
+            for (int i = 0; i < singleQuoteSplit.Length; i++)
+            {
+                if (i > 0) result.Append(",\"'\",");
+                result.Append("'");
+                result.Append(singleQuoteSplit[i]);
+                result.Append("'");
+            }
+            result.Append(")");
+            return result.ToString();
         }
 
         private IEnumerable<ResourceSet> InheritedResourceSets
@@ -213,7 +250,7 @@ namespace OMLTranslator
             if (File.Exists(TargetResXFileName)) File.Delete(TargetResXFileName);
 
             bool containsTranslation = false;
-            foreach (var str in NonEmptyTranslatableStrings)
+            foreach (var str in StringsWithTranslations)
             {
                 containsTranslation = true;
                 break;
@@ -226,9 +263,10 @@ namespace OMLTranslator
 
                 using (ResXResourceWriter writer = new ResXResourceWriter(TargetResXFileName))
                 {
-                    foreach (var str in NonEmptyTranslatableStrings)
+                    foreach (var str in StringsWithTranslations)
                     {
                         writer.AddResource(str.Key, str.Target);
+                        writer.AddMetadata(OrgSourceMetadataKeyPrefix + str.Key, str.TranslatedSource);
                     }
                 }
             }
