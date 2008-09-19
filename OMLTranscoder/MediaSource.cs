@@ -10,114 +10,27 @@ namespace OMLTranscoder
 {
     public class MediaSource
     {
-        # region variables
-        int numAudioChannels = 0;
-        int audioId = -1;
-        int audioType = 0;
-        float framerate = 0f;
-        int height = 0;
-        int width = 0;
-        string path = string.Empty;
-        float ratio = 0f;
-        int subtitleId = -1;
-        string subtitles = string.Empty;
-        long timestampOffset = 0L;
-        int videoType = 0;
-        string volume = string.Empty;
-        # endregion
-
-        # region properties
-        public string Volume
-        {
-            get { return volume; }
-            set { volume = value; }
-        }
-
-        public int VideoType
-        {
-            get { return videoType; }
-            set { videoType = value; }
-        }
-
-        public long TimestampOffset
-        {
-            get { return timestampOffset; }
-            set { timestampOffset = value; }
-        }
-
-        public string Subtitles
-        {
-            get { return subtitles; }
-            set { subtitles = value; }
-        }
-
-        public int SubtitleID
-        {
-            get { return subtitleId; }
-            set { subtitleId = value; }
-        }
-
-        public float Ratio
-        {
-            get { return ratio; }
-            set { ratio = value; }
-        }
-
-        public string MediaPath
-        {
-            get { return path; }
-            set { path = value; }
-        }
-
-        public int NumberOfAudioChannels
-        {
-            get { return numAudioChannels; }
-            set { numAudioChannels = value; }
-        }
-
-        public int AudioID
-        {
-            get { return audioId; }
-            set { audioId = value; }
-        }
-
-        public int AudioType
-        {
-            get { return audioType; }
-            set { audioType = value; }
-        }
-
-        public float Framerate
-        {
-            get { return framerate; }
-            set { framerate = value; }
-        }
-
-        public int Height
-        {
-            get { return height; }
-            set { height = value; }
-        }
-
-        public int Width
-        {
-            get { return width; }
-            set { width = value; }
-        }
-        # endregion
-
         public MediaSource()
         {
+            AudioID = -1;
+            MediaPath = string.Empty;
+            SubtitleID = -1;
+            Subtitles = string.Empty;
+            Volume = string.Empty;
         }
 
-        public IList<SubtitleStream> AvailableSubtitleStreams()
-        {
-            return null;
-        }
-
-        public IList<AudioStream> AvailableAudioStreams()
-        {
-            return null;
-        }
+        public string Volume { get; set; }
+        public int VideoType { get; set; }
+        public long TimestampOffset { get; set; }
+        public string Subtitles { get; set; }
+        public int SubtitleID { get; set; }
+        public float Ratio { get; set; }
+        public string MediaPath { get; set; }
+        public int NumberOfAudioChannels { get; set; }
+        public int AudioID { get; set; }
+        public int AudioType { get; set; }
+        public float Framerate { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
     }
 }

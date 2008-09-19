@@ -612,7 +612,7 @@ namespace MyMoviesPlugin
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("[MyMoviesImporter] Format is Unknown.. this means its useless");
+                Utilities.DebugLine("[MyMoviesImporter] Format is Unknown.. this means its useless: {0}", ex);
             }
             return VideoFormat.UNKNOWN;
         }
