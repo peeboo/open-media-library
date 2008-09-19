@@ -16,7 +16,12 @@ namespace OMLTranscoder
     public class Transcode
     {
         public Process CurrentTranscodeProcess { get; private set; }
-        MediaSource mediaSource;
+        MediaSource _source;
+
+        public Transcode(MediaSource source)
+        {
+            _source = source;
+        }
 
         ~Transcode()
         {
@@ -27,18 +32,10 @@ namespace OMLTranscoder
             }
         }
 
-        public int BeginTranscodeJob(MediaSource ms, out string outputFilename)
+        public int BeginTranscodeJob(out string outputFilename)
         {
-            mediaSource = ms;
-            outputFilename = string.Empty;
-
-            MEncoderCommandBuilder cmdBuilder = new MEncoderCommandBuilder()
-            {
-                AudioFormat = MEncoder.AudioFormat.LAVC,
-                VideoFormat = MEncoder.VideoFormat.LAVC,
-                OutputPath = FileSystemWalker.TranscodeBufferDirectory,
-                InputLocation = ms.MediaPath,
-            };
+            MEncoderCommandBuilder cmdBuilder = new MEncoderCommandBuilder(_source, FileSystemWalker.TranscodeBufferDirectory);
+            outputFilename = cmdBuilder.OutputFile;
 
             Utilities.DebugLine("[Transcode] Output file will be: {0}", outputFilename);
             Utilities.DebugLine("[Transcode] Starting transcode job");
