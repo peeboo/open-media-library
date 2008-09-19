@@ -9,15 +9,21 @@ namespace OMLTranscoder
 {
     public class SubtitleStream
     {
-        public string Language { get; set; }
-        public int SubtitleId { get; set; }
-        public string SubtitleChannel { get; set; }
+        public string LanguageName { get; private set; }
+        public string LanguageShortName { get; private set; }
+        public int? SubtitleID { get; private set; }
 
         public SubtitleStream()
         {
-            this.Language = string.Empty;
-            this.SubtitleId = -1;
-            this.SubtitleChannel = string.Empty;
+            this.LanguageName = this.LanguageShortName = string.Empty;
+            this.SubtitleID = null;
+        }
+
+        public SubtitleStream(int subtitleID, string languageShortName)
+        {
+            this.SubtitleID = subtitleID;
+            this.LanguageName = MediaLanguage.LanguageNameForId(languageShortName);
+            this.LanguageShortName = languageShortName;
         }
     }
 }

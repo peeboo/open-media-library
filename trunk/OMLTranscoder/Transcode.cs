@@ -15,77 +15,63 @@ namespace OMLTranscoder
 {
     public class Transcode
     {
-        Process _process;
+        public Process CurrentTranscodeProcess { get; private set; }
         MediaSource mediaSource;
-
-        public Process CurrentTranscodeProcess
-        {
-            get { return _process; }
-            set { _process = value; }
-        }
-
-        public Transcode()
-        {
-        }
 
         ~Transcode()
         {
-            if ((_process != null) && (!_process.HasExited))
-                _process.Kill();
+            if (CurrentTranscodeProcess != null && !CurrentTranscodeProcess.HasExited)
+            {
+                OMLEngine.Utilities.DebugLine("Transcode process not finished: kill {0}", CurrentTranscodeProcess.Id);
+                CurrentTranscodeProcess.Kill();
+            }
         }
 
         public int BeginTranscodeJob(MediaSource ms, out string outputFilename)
         {
             mediaSource = ms;
             outputFilename = string.Empty;
-            MEncoderCommandBuilder cmdBuilder = new MEncoderCommandBuilder();
-            cmdBuilder.AudioFormat = MEncoder.AudioFormat.LAVC;
-            cmdBuilder.VideoFormat = MEncoder.VideoFormat.LAVC;
-            if (File.Exists(ms.MediaPath))
+
+            MEncoderCommandBuilder cmdBuilder = new MEncoderCommandBuilder()
             {
-                cmdBuilder.SetInputLocation(MEncoder.InputType.File, ms.MediaPath);
-                outputFilename = Path.Combine(FileSystemWalker.TranscodeBufferDirectory, Path.GetFileName(ms.MediaPath));
-            }
-            else if (Directory.Exists(ms.MediaPath))
-            {
-                cmdBuilder.SetInputLocation(MEncoder.InputType.Drive, ms.MediaPath);
-                outputFilename = Path.Combine(FileSystemWalker.TranscodeBufferDirectory, Path.GetDirectoryName(ms.MediaPath));
-            }
+                AudioFormat = MEncoder.AudioFormat.LAVC,
+                VideoFormat = MEncoder.VideoFormat.LAVC,
+                OutputPath = FileSystemWalker.TranscodeBufferDirectory,
+                InputLocation = ms.MediaPath,
+            };
 
             Utilities.DebugLine("[Transcode] Output file will be: {0}", outputFilename);
-
-            cmdBuilder.OutputFile = outputFilename;
-
             Utilities.DebugLine("[Transcode] Starting transcode job");
-            _process = new Process();
-            _process.StartInfo.FileName = cmdBuilder.GetCommand();
-            _process.StartInfo.Arguments = cmdBuilder.GetArguments();
-            _process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            _process.StartInfo.ErrorDialog = false;
-            _process.EnableRaisingEvents = true;
-            _process.Exited += new EventHandler(this.HandleTranscodeExited);
-            _process.Start();
+            CurrentTranscodeProcess = new Process();
+            CurrentTranscodeProcess.StartInfo.FileName = cmdBuilder.GetCommand();
+            CurrentTranscodeProcess.StartInfo.Arguments = cmdBuilder.GetArguments();
+            CurrentTranscodeProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            CurrentTranscodeProcess.StartInfo.ErrorDialog = false;
+            CurrentTranscodeProcess.EnableRaisingEvents = true;
+            CurrentTranscodeProcess.Exited += new EventHandler(this.HandleTranscodeExited);
+            CurrentTranscodeProcess.Start();
             Utilities.DebugLine("[Transcode] Transcode job started, returning with buffer location");
-            if (_process.HasExited)
-                return _process.ExitCode;
+            if (CurrentTranscodeProcess.HasExited)
+                return CurrentTranscodeProcess.ExitCode;
 
             return 0;
         }
 
         private void HandleTranscodeExited(object sender, EventArgs e)
         {
-            Utilities.DebugLine("[Transcode] Transcode Job Exited, Exit Code {0}", _process.ExitCode);
-            if (_process.ExitCode != 0)
+            Utilities.DebugLine("[Transcode] Transcode Job Exited, Exit Code {0}", CurrentTranscodeProcess.ExitCode);
+            if (CurrentTranscodeProcess.ExitCode != 0)
             {
                 Utilities.DebugLine("[Transcode] An error occured");
             }
         }
 
-        public MediaSource MediaSourceFromTitle(Title title)
+        public static MediaSource MediaSourceFromTitle(Title title)
         {
-            MediaSource source = new MediaSource();
-            source.MediaPath = title.SelectedDisk.Path;
-            return source;
+            return new MediaSource()
+            {
+                MediaPath = title.SelectedDisk.Path
+            };
         }
     }
 }

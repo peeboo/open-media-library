@@ -12,6 +12,7 @@ namespace OMLTranscoder
 {
     public class MEncoderCommandBuilder
     {
+        public string OutputPath { get; set; }
         public string OutputFile { get; set; }
         public MEncoder.AudioFormat AudioFormat { get; set; }
         public MEncoder.VideoFormat VideoFormat { get; set; }
@@ -24,45 +25,55 @@ namespace OMLTranscoder
         private FileInfo inputFile;
         private MEncoder.InputType inputType;
 
-        public void SetInputLocation(MEncoder.InputType type, string location)
+        public string InputLocation
         {
-            inputType = type;
-            if (inputType == MEncoder.InputType.File)
+            get { return null; }
+            set
             {
-                if (File.Exists(location))
-                    inputFile = new FileInfo(location);
-            }
-
-            if (inputType == MEncoder.InputType.Drive)
-            {
-                inputDrive = new DriveInfo(location);
-                try
+                if (File.Exists(value))
                 {
-                    if (inputDrive.IsReady == false)
-                        inputDrive = null;
+                    inputType = MEncoder.InputType.File;
+                    inputFile = new FileInfo(value);
+                    OutputFile = Path.Combine(OutputPath, Path.GetFileName(value));
                 }
-                catch
+                else if (Directory.Exists(value))
                 {
-                    inputDrive = null;
+                    inputType = MEncoder.InputType.Drive;
+                    inputDrive = new DriveInfo(value.Substring(0, 1));
+                    try
+                    {
+                        if (inputDrive.IsReady == false)
+                            inputDrive = null;
+                        else
+                            OutputFile = Path.Combine(OutputPath, inputDrive.VolumeLabel);
+                    }
+                    catch
+                    {
+                        inputDrive = null;
+                    }
                 }
             }
         }
 
+        static string _command = null;
         public string GetCommand()
         {
-            string basePath = FileSystemWalker.RootDirectory;
-            if (Directory.Exists(basePath))
+            if (_command == null)
             {
-                string[] fileNames = Directory.GetFiles(basePath, "*mencoder*.exe", SearchOption.TopDirectoryOnly);
-                if (fileNames.Length > 0)
+                string basePath = FileSystemWalker.RootDirectory;
+                if (Directory.Exists(basePath))
                 {
-                    Array.Sort(fileNames);
-                    string completedCommand = Path.Combine(basePath, fileNames[0]);
-                    Utilities.DebugLine("[MEncoderCommandBuilder] Command: {0}", completedCommand);
-                    return completedCommand;
+                    string[] fileNames = Directory.GetFiles(basePath, "*mencoder*.exe", SearchOption.TopDirectoryOnly);
+                    if (fileNames.Length > 0)
+                    {
+                        Array.Sort(fileNames);
+                        string completedCommand = Path.Combine(basePath, fileNames[0]);
+                        Utilities.DebugLine("[MEncoderCommandBuilder] Command: {0}", completedCommand);
+                        _command = completedCommand;
+                    }
                 }
             }
-            return null;
+            return _command;
         }
 
         public string GetArguments()
@@ -83,7 +94,7 @@ namespace OMLTranscoder
                     break;
                 case MEncoder.InputType.Drive:
                     strBuilder.Append(@" dvd://");
-                    strBuilder.AppendFormat(@" -dvd-device ""{0}:\""", OMLEngine.Properties.Settings.Default.VirtualDiscDrive);
+                    strBuilder.AppendFormat(@" -dvd-device ""{0}:\""", inputDrive.RootDirectory);
                     break;
                 default:
                     Utilities.DebugLine("No idea what format the file is");

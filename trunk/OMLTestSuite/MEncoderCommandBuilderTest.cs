@@ -11,18 +11,20 @@ namespace OMLTestSuite
         [Test]
         public void TEST_BASIC_COMMAND_BUILDER()
         {
+            string drive = OMLEngine.Properties.Settings.Default.VirtualDiscDrive.ToLower();
             MEncoderCommandBuilder builder = new MEncoderCommandBuilder()
             {
                 AudioFormat = MEncoder.AudioFormat.Copy,
                 VideoFormat = MEncoder.VideoFormat.Copy,
-                OutputFile = @"mymovie",
+                OutputPath  = ".",
+                OutputFile  = @"mymovie",
+                InputLocation = drive + ":",
             };
-            builder.SetInputLocation(MEncoder.InputType.Drive, "R");
 
             Assert.IsNotNull(builder.GetCommand());
             Assert.AreEqual(@"c:\program files\openmedialibrary\mencoder.exe", builder.GetCommand().ToLower());
             Assert.IsNotNull(builder.GetArguments());
-            Assert.AreEqual(@" dvd:// -dvd-device """ + OMLEngine.Properties.Settings.Default.VirtualDiscDrive.ToLower() +
+            Assert.AreEqual(@" dvd:// -dvd-device """ + drive +
                             @":\"" -oac copy -ovc copy -of mpeg -mpegopts format=dvd:tsaf " +
                             @"-vf harddup -quiet -o ""c:\programdata\openmedialibrary\mymovie.mpg""", builder.GetArguments().ToLower());
 

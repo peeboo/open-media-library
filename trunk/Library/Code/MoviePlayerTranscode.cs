@@ -26,7 +26,7 @@ namespace Library
         {
             _title = title;
             transcode = new Transcode();
-            ms = transcode.MediaSourceFromTitle(_title.TitleObject);
+            ms = Transcode.MediaSourceFromTitle(_title.TitleObject);
         }
 
         public void Transport_PropertyChanged(IPropertyObject sender, string property)
@@ -59,6 +59,7 @@ namespace Library
             bool retVal = false;
             int status = -1;
             OMLApplication.Current.TranscodeStatus = @"Starting Transcode Job";
+
             Application.DeferredInvokeOnWorkerThread(
                 delegate
                 {
@@ -69,7 +70,9 @@ namespace Library
                     switch (status)
                     {
                         case 0:
+                            // TheSeeker: Application.DeferredInvoke is not needed, since this delegate is executed on the main UI thread
                             Application.DeferredInvoke(updateTranscodeStatus, "Started, buffering...");
+                            // TheSeeker: this is blocking the main UI thread, maybe not the best synchronization method
                             System.Threading.Thread.Sleep(7 * 1000);
                             OMLApplication.Current.IsStartingTranscodingJob = false;
                             System.Threading.Thread.Sleep(1000);
@@ -95,6 +98,9 @@ namespace Library
                 }, null);
 
             OMLApplication.Current.IsStartingTranscodingJob = false;
+            // TODO: note this will always be false, since Application.DeferredInvokeOnWorkerThread returns immediatly, and the delegates will executed
+            // asynchron on a background thread
+            // TheSeeker: I think this needs to be redesigned a bit..., I will start writing test cases and such
             return retVal;
         }
     }

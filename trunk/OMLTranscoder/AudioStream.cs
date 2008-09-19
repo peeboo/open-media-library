@@ -12,11 +12,12 @@ namespace OMLTranscoder
         public bool IsSurroundSound { get; private set; }
         public string LanguageName { get; private set; }
         public string LanguageShortName { get; private set; }
-        public int AudioID { get; private set; }
+        public int? AudioID { get; private set; }
+        public int? Channels { get; private set; }
 
         public AudioStream()
         {
-            this.AudioID = -1;
+            this.AudioID = null;
             this.IsSurroundSound = false;
         }
 
