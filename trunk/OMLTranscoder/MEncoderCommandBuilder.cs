@@ -12,53 +12,19 @@ namespace OMLTranscoder
 {
     public class MEncoderCommandBuilder
     {
-        private string outputFile;
-        private MEncoder.AudioFormat audioFormat;
-        private MEncoder.VideoFormat videoFormat;
-        private SubtitleStream subStream;
-        private AudioStream audioStream;
+        public string OutputFile { get; set; }
+        public MEncoder.AudioFormat AudioFormat { get; set; }
+        public MEncoder.VideoFormat VideoFormat { get; set; }
+        public SubtitleStream SubtitleStream { get; set; }
+        public AudioStream AudioStream { get; set; }
+
         //private string subtitleBaseFileName;
+
         private DriveInfo inputDrive;
         private FileInfo inputFile;
         private MEncoder.InputType inputType;
 
-        public MEncoderCommandBuilder()
-        {
-            outputFile = string.Empty;
-        }
-
-        public void SetVideoOutputFormat(MEncoder.VideoFormat format)
-        {
-            videoFormat = format;
-        }
-
-        public void SetAudioOutputFormat(MEncoder.AudioFormat format)
-        {
-            audioFormat = format;
-        }
-
-        public void SetSubtitleOutputLanguage(string languageId)
-        {
-        }
-
-        public void SetInputType(MEncoder.InputType type)
-        {
-            inputType = type;
-        }
-
-        public void SetInputLocation(FileInfo fInfo)
-        {
-            if (inputType == MEncoder.InputType.File)
-                inputFile = fInfo;
-        }
-
-        public void SetInputLocation(DriveInfo dInfo)
-        {
-            if (inputType == MEncoder.InputType.Drive)
-                inputDrive = dInfo;
-        }
-
-        public void SetInputTypeAndLocation(MEncoder.InputType type, string location)
+        public void SetInputLocation(MEncoder.InputType type, string location)
         {
             inputType = type;
             if (inputType == MEncoder.InputType.File)
@@ -69,23 +35,17 @@ namespace OMLTranscoder
 
             if (inputType == MEncoder.InputType.Drive)
             {
-
+                inputDrive = new DriveInfo(location);
+                try
+                {
+                    if (inputDrive.IsReady == false)
+                        inputDrive = null;
+                }
+                catch
+                {
+                    inputDrive = null;
+                }
             }
-        }
-
-        public void SetOutputFile(string output)
-        {
-            outputFile = output;
-        }
-
-        public void SetSubtitleStream(SubtitleStream stream)
-        {
-            subStream = stream;
-        }
-
-        public void SetAudioStream(AudioStream stream)
-        {
-            audioStream = stream;
         }
 
         public string GetCommand()
@@ -132,7 +92,7 @@ namespace OMLTranscoder
 
             //audio format
             /* DISABLED UNTIL AUDIO STREAM CLASSES ARE FINALIZED
-            if (audioFormat == MEncoder.AudioFormat.NoAudio)
+            if (AudioFormat == MEncoder.AudioFormat.NoAudio)
                 strBuilder.Append(@" -nosound");
             else
             {
@@ -140,31 +100,30 @@ namespace OMLTranscoder
                     strBuilder.AppendFormat(@" -alang {0}", audioStream.AudioID);
                 else
                     strBuilder.Append(@" -alang en");
-
-                strBuilder.AppendFormat(@" -oac {0}",
-                                        ((string)Enum.GetName(typeof(MEncoder.AudioFormat), audioFormat)).ToLower());
             }
 
             //audio stream
-            if ((audioStream != null) && (audioFormat != MEncoder.AudioFormat.NoAudio))
+            if ((audioStream != null) && (AudioFormat != MEncoder.AudioFormat.NoAudio))
             {
                 strBuilder.Append(@"");
             }
             */
 
             strBuilder.AppendFormat(@" -oac {0}",
-                                    ((string)Enum.GetName(typeof(MEncoder.AudioFormat), audioFormat)).ToLower());
+                                    ((string)Enum.GetName(typeof(MEncoder.AudioFormat), AudioFormat)).ToLower());
 
             //video
             strBuilder.AppendFormat(@" -ovc {0}",
-                                    ((string)Enum.GetName(typeof(MEncoder.VideoFormat), videoFormat)).ToLower());
+                                    ((string)Enum.GetName(typeof(MEncoder.VideoFormat), VideoFormat)).ToLower());
 
             //subtitles
             /* DISABLED UNTIL SUBPICTURE STREAM CLASSES ARE FINALIZED
             if (subStream != null)
-                strBuilder.AppendFormat(@" -sub {0}", subStream.SubtitleChannel);
+                strBuilder.AppendFormat(@" -font C:\windows\fonts\arial.ttf -slang {0}", subStream.SubtitleChannel);
             */
+
             //chapters
+            // strBuilder.AppendFormat(@" -chapter {0}-{1}", fromChapter, toChapter);
 
             // output format
             // always set the output format to mpeg for extenders
@@ -182,11 +141,11 @@ namespace OMLTranscoder
             }
 
             // set quiet mode on
-            strBuilder.Append(@" -quiet");
+            strBuilder.Append(@" -really-quiet");
 
             //output
             string outputExtension = (inputType == MEncoder.InputType.Drive) ? @"mpg" : @"wmv";
-            strBuilder.AppendFormat(@" -o ""{0}.{1}""", Path.Combine(FileSystemWalker.PublicRootDirectory, outputFile), outputExtension);
+            strBuilder.AppendFormat(@" -o ""{0}.{1}""", Path.Combine(FileSystemWalker.PublicRootDirectory, OutputFile), outputExtension);
 
             string completedArguments = strBuilder.ToString();
             Utilities.DebugLine("[MEncoderCommandBuilder] Arguments: {0}", completedArguments);

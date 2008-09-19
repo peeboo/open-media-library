@@ -11,12 +11,13 @@ namespace OMLTestSuite
         [Test]
         public void TEST_BASIC_COMMAND_BUILDER()
         {
-            MEncoderCommandBuilder builder = new MEncoderCommandBuilder();
-            builder.SetAudioOutputFormat(MEncoder.AudioFormat.Copy);
-            builder.SetVideoOutputFormat(MEncoder.VideoFormat.Copy);
-            builder.SetInputType(MEncoder.InputType.Drive);
-            builder.SetInputLocation(new DriveInfo("R"));
-            builder.SetOutputFile(@"mymovie");
+            MEncoderCommandBuilder builder = new MEncoderCommandBuilder()
+            {
+                AudioFormat = MEncoder.AudioFormat.Copy,
+                VideoFormat = MEncoder.VideoFormat.Copy,
+                OutputFile = @"mymovie",
+            };
+            builder.SetInputLocation(MEncoder.InputType.Drive, "R");
 
             Assert.IsNotNull(builder.GetCommand());
             Assert.AreEqual(@"c:\program files\openmedialibrary\mencoder.exe", builder.GetCommand().ToLower());

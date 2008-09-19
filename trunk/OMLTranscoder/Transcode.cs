@@ -39,32 +39,22 @@ namespace OMLTranscoder
             mediaSource = ms;
             outputFilename = string.Empty;
             MEncoderCommandBuilder cmdBuilder = new MEncoderCommandBuilder();
-            cmdBuilder.SetAudioOutputFormat(MEncoder.AudioFormat.LAVC);
-            cmdBuilder.SetVideoOutputFormat(MEncoder.VideoFormat.LAVC);
+            cmdBuilder.AudioFormat = MEncoder.AudioFormat.LAVC;
+            cmdBuilder.VideoFormat = MEncoder.VideoFormat.LAVC;
             if (File.Exists(ms.MediaPath))
             {
-                FileInfo fInfo = new FileInfo(ms.MediaPath);
-                if (fInfo != null)
-                {
-                    cmdBuilder.SetInputLocation(fInfo);
-                    cmdBuilder.SetInputType(MEncoder.InputType.File);
-                    outputFilename = Path.Combine(FileSystemWalker.TranscodeBufferDirectory, Path.GetFileName(ms.MediaPath));
-                }
+                cmdBuilder.SetInputLocation(MEncoder.InputType.File, ms.MediaPath);
+                outputFilename = Path.Combine(FileSystemWalker.TranscodeBufferDirectory, Path.GetFileName(ms.MediaPath));
             }
-
-            if (Directory.Exists(ms.MediaPath))
+            else if (Directory.Exists(ms.MediaPath))
             {
-                DriveInfo dInfo = new DriveInfo("R:");
-                if (dInfo != null)
-                {
-                    cmdBuilder.SetInputType(MEncoder.InputType.Drive);
-                    outputFilename = Path.Combine(FileSystemWalker.TranscodeBufferDirectory, Path.GetDirectoryName(ms.MediaPath));
-                }
+                cmdBuilder.SetInputLocation(MEncoder.InputType.Drive, ms.MediaPath);
+                outputFilename = Path.Combine(FileSystemWalker.TranscodeBufferDirectory, Path.GetDirectoryName(ms.MediaPath));
             }
 
             Utilities.DebugLine("[Transcode] Output file will be: {0}", outputFilename);
 
-            cmdBuilder.SetOutputFile(outputFilename);
+            cmdBuilder.OutputFile = outputFilename;
 
             Utilities.DebugLine("[Transcode] Starting transcode job");
             _process = new Process();
