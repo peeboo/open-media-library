@@ -20,6 +20,8 @@
             base.Dispose(disposing);
         }
 
+#pragma warning disable 436 // Remove warning from ResourceManager substitution
+
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -28,14 +30,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MetaDataSettings));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.lbMetadataPlugins = new System.Windows.Forms.ListBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.btnOk = new System.Windows.Forms.Button();
             this.grdOptions = new System.Windows.Forms.DataGridView();
             this.colOptionName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colOptionValue = new System.Windows.Forms.DataGridViewButtonColumn();
             this.colDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button1 = new System.Windows.Forms.Button();
-            this.btnOk = new System.Windows.Forms.Button();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -44,8 +47,7 @@
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.splitContainer1, "splitContainer1");
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -57,90 +59,67 @@
             this.splitContainer1.Panel2.Controls.Add(this.button1);
             this.splitContainer1.Panel2.Controls.Add(this.btnOk);
             this.splitContainer1.Panel2.Controls.Add(this.grdOptions);
-            this.splitContainer1.Size = new System.Drawing.Size(788, 426);
-            this.splitContainer1.SplitterDistance = 163;
-            this.splitContainer1.TabIndex = 0;
             // 
             // lbMetadataPlugins
             // 
-            this.lbMetadataPlugins.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.lbMetadataPlugins, "lbMetadataPlugins");
             this.lbMetadataPlugins.FormattingEnabled = true;
-            this.lbMetadataPlugins.Location = new System.Drawing.Point(0, 0);
             this.lbMetadataPlugins.Name = "lbMetadataPlugins";
-            this.lbMetadataPlugins.Size = new System.Drawing.Size(160, 381);
-            this.lbMetadataPlugins.TabIndex = 0;
             this.lbMetadataPlugins.SelectedIndexChanged += new System.EventHandler(this.lbMetadataPlugins_SelectedIndexChanged);
-            // 
-            // grdOptions
-            // 
-            this.grdOptions.AllowUserToAddRows = false;
-            this.grdOptions.AllowUserToDeleteRows = false;
-            this.grdOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.grdOptions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grdOptions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colOptionName,
-            this.colOptionValue,
-            this.colDescription});
-            this.grdOptions.Location = new System.Drawing.Point(3, 3);
-            this.grdOptions.MultiSelect = false;
-            this.grdOptions.Name = "grdOptions";
-            this.grdOptions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grdOptions.Size = new System.Drawing.Size(618, 379);
-            this.grdOptions.TabIndex = 0;
-            this.grdOptions.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdOptions_CellContentClick);
-            // 
-            // colOptionName
-            // 
-            this.colOptionName.HeaderText = "Option";
-            this.colOptionName.Name = "colOptionName";
-            this.colOptionName.Width = 120;
-            // 
-            // colOptionValue
-            // 
-            this.colOptionValue.HeaderText = "Value";
-            this.colOptionValue.Name = "colOptionValue";
-            this.colOptionValue.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.colOptionValue.Width = 120;
-            // 
-            // colDescription
-            // 
-            this.colDescription.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colDescription.HeaderText = "Description";
-            this.colDescription.Name = "colDescription";
             // 
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.Location = new System.Drawing.Point(234, 391);
+            resources.ApplyResources(this.button1, "button1");
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Cancel";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // btnOk
             // 
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOk.Location = new System.Drawing.Point(153, 391);
+            resources.ApplyResources(this.btnOk, "btnOk");
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(75, 23);
-            this.btnOk.TabIndex = 3;
-            this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
+            // grdOptions
+            // 
+            this.grdOptions.AllowUserToAddRows = false;
+            this.grdOptions.AllowUserToDeleteRows = false;
+            resources.ApplyResources(this.grdOptions, "grdOptions");
+            this.grdOptions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grdOptions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colOptionName,
+            this.colOptionValue,
+            this.colDescription});
+            this.grdOptions.MultiSelect = false;
+            this.grdOptions.Name = "grdOptions";
+            this.grdOptions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.grdOptions.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdOptions_CellContentClick);
+            // 
+            // colOptionName
+            // 
+            resources.ApplyResources(this.colOptionName, "colOptionName");
+            this.colOptionName.Name = "colOptionName";
+            // 
+            // colOptionValue
+            // 
+            resources.ApplyResources(this.colOptionValue, "colOptionValue");
+            this.colOptionValue.Name = "colOptionValue";
+            this.colOptionValue.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // colDescription
+            // 
+            this.colDescription.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            resources.ApplyResources(this.colDescription, "colDescription");
+            this.colDescription.Name = "colDescription";
+            // 
             // MetaDataSettings
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(788, 426);
             this.Controls.Add(this.splitContainer1);
             this.Name = "MetaDataSettings";
-            this.Text = "Metadata Settings";
             this.Load += new System.EventHandler(this.MetaDataSettings_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -151,6 +130,8 @@
         }
 
         #endregion
+
+#pragma warning restore 436
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListBox lbMetadataPlugins;

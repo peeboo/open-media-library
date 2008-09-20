@@ -52,7 +52,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <Reference Include="System">
+      <Aliases>global,system</Aliases>
+    </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -70,6 +72,7 @@
     <Compile Include="AboutOML.Designer.cs">
       <DependentUpon>AboutOML.cs</DependentUpon>
     </Compile>
+    <Compile Include="ComponentResourceManager.cs" />
     <Compile Include="Controls\DiskEditor.cs">
       <SubType>Form</SubType>
     </Compile>
