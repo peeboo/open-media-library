@@ -276,12 +276,6 @@ namespace OMLEngine
             return false;
         }
 
-        static string Transcode360InterfacePath = @"c:\program files\transcode360\Transcode360.Interface.dll";
-        public static bool IsTranscode360LibraryAvailable()
-        {
-            return File.Exists(Transcode360InterfacePath);
-        }
-
         public static int NewRandomNumber()
         {
             if (Utilities.random == null)
