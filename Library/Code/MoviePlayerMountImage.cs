@@ -14,12 +14,12 @@ namespace Library
     public class MountImagePlayer : IPlayMovie
     {
         MediaSource _source;
-        DaemonTools _dt;
+        MountingTool _dt;
 
         public MountImagePlayer(MediaSource source)
         {
             _source = source;
-            _dt = new DaemonTools();
+            _dt = new MountingTool();
         }
 
         public bool PlayMovie()

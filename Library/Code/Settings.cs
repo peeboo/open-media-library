@@ -17,7 +17,7 @@ namespace Library
     {
         public Settings()
         {
-            SetupDaemonTools();
+            SetupMountingTools();
             SetupMovieSettings();
             SetupUILanguage();
         }
@@ -26,7 +26,7 @@ namespace Library
         {
             OMLApplication.ExecuteSafe(delegate
             {
-                _omlSettings.DaemonTools = _daemonToolsPath.Value;
+                _omlSettings.MountingTool = _mountingToolPath.Value;
                 _omlSettings.MovieSort = _movieSort.Chosen as string;
                 _omlSettings.StartPage = _startPage.Chosen as string;
                 _omlSettings.GalleryCoverArtRows = System.Convert.ToInt32(_coverArtRows.Chosen as string);
@@ -42,9 +42,23 @@ namespace Library
             });
         }
 
-        private void SetupDaemonTools()
+        private void SetupMountingTools()
         {
-            _daemonToolsPath.Value = _omlSettings.DaemonTools;
+            List<string> _MountingTools = new List<string>();
+            _MountingTools.Add("Daemon Tools");
+            _MountingTools.Add("Virtual CloneDrive");
+            _ImageMountingSelection.Options = _MountingTools;
+            _ImageMountingSelection.ChosenChanged += delegate(object sender, EventArgs e)
+            {
+                OMLApplication.ExecuteSafe(delegate
+                {
+                    Choice c = (Choice)sender;
+                    OMLEngine.Properties.Settings.Default.MountingTool = c.Options[c.ChosenIndex].ToString();
+                    OMLEngine.Properties.Settings.Default.Save();
+                });
+            };
+
+            _mountingToolPath.Value = _omlSettings.MountingTool;
 
             List<string> items = new List<string>();
             for (char c = 'A'; c <= 'Z'; c++)
@@ -195,17 +209,21 @@ namespace Library
             get { return _coverArtSpacing; }
         }
 
-        public EditableText DaemonToolsPath
+        public EditableText MountingToolPath
         {
             get
             {
-                if (_daemonToolsPath == null)
+                if (_mountingToolPath == null)
                 {
-                    _daemonToolsPath = new EditableText();
+                    _mountingToolPath = new EditableText();
                 }
-                return _daemonToolsPath;
+                return _mountingToolPath;
             }
-            set { _daemonToolsPath = value; }
+            set
+            {
+                _mountingToolPath = value;
+                FirePropertyChanged("MountingToolPath");
+            }
         }
 
         public Choice UILanguage
@@ -213,7 +231,17 @@ namespace Library
             get { return _uiLanguage;  }
         }
 
-        EditableText _daemonToolsPath = new EditableText();
+        public Choice ImageMountingSelection
+        {
+            get { return _ImageMountingSelection; }
+            set
+            {
+                _ImageMountingSelection = value;
+                FirePropertyChanged("ImageMountingSelection");
+            }
+        }
+
+        EditableText _mountingToolPath = new EditableText();
         OMLSettings _omlSettings = new OMLSettings();
         Choice _virtualDrive = new Choice();
         Choice _movieView = new Choice();
@@ -225,6 +253,7 @@ namespace Library
         BooleanChoice _useOriginalCoverArt = new BooleanChoice();
         Choice _startPage = new Choice();
         Choice _uiLanguage = new Choice();
+        Choice _ImageMountingSelection = new Choice();
 
         BooleanChoice _showGenres = new BooleanChoice();
         BooleanChoice _showActors = new BooleanChoice();

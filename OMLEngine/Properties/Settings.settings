@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="OMLEngine.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="DaemonTools" Type="System.String" Scope="User">
+    <Setting Name="MountingTool" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Program Files\DAEMON Tools Lite\daemon.exe</Value>
     </Setting>
     <Setting Name="VirtualDiscDrive" Type="System.String" Scope="User">

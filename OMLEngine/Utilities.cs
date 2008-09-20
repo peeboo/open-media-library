@@ -291,7 +291,7 @@ namespace OMLEngine
 
         public static bool HasDaemonTools()
         {
-            string daemontools_path = OMLEngine.Properties.Settings.Default.DaemonTools;
+            string daemontools_path = OMLEngine.Properties.Settings.Default.MountingTool;
             if (daemontools_path != null && daemontools_path.Length > 0)
                 return true;
 
@@ -317,7 +317,7 @@ namespace OMLEngine
 
         public static void UnmountVirtualDrive(int VirtualDiscDriveNumber)
         {
-            string mount_util_path = OMLEngine.Properties.Settings.Default.DaemonTools;
+            string mount_util_path = OMLEngine.Properties.Settings.Default.MountingTool;
 
             Process cmd = new Process();
             cmd.StartInfo.FileName = "\"" + mount_util_path + "\"";
