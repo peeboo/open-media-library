@@ -6,6 +6,7 @@
 using System;
 
 using OMLGetDVDInfo;
+using System.IO;
 
 namespace OMLEngine
 {
@@ -21,7 +22,10 @@ namespace OMLEngine
         public Disk Disk { get; private set; }
         public string Name { get { return Disk.Name; } }
         public string MediaPath { get { return Disk.Path; } set { Disk.Path = value; } }
-        public VideoFormat Format { get { return Disk.Format; } set { Disk.Format = value; } }
+
+        #region -- DVD Members --
+        public string VIDEO_TS { get { return Disk.VIDEO_TS; } }
+        public string VIDEO_TS_Parent { get { return Disk.VIDEO_TS_Parent; } }
         public DVDDiskInfo DVDDiskInfo { get { return Disk.DVDDiskInfo; } }
 
         // DVD playback options
@@ -30,6 +34,9 @@ namespace OMLEngine
         public int? Title { get; set; }
         public int? StartChapter { get; set; }
         public int? EndChapter { get; set; }
+        #endregion
+
+        public VideoFormat Format { get { return Disk.Format; } set { Disk.Format = value; } }
 
         public TimeSpan? StartTime { get; set; }
         public TimeSpan? EndTime { get; set; }

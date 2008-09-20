@@ -35,7 +35,7 @@ namespace OMLGetDVDInfo
 
         public static DVDDiskInfo ParseDVD(string videoTSDir)
         {
-            return FromIFO(videoTSDir);
+            return new DVDDiskInfo() { Titles = IFOUtilities.Titles(videoTSDir).ToArray() };
         }
 
         public static void Test(string videoTS_Folder)
@@ -56,13 +56,6 @@ namespace OMLGetDVDInfo
             List<DVDTitle> list = new List<DVDTitle>(this.Titles);
             list.Sort(delegate(DVDTitle a, DVDTitle b) { return -a.Duration.CompareTo(b.Duration); });
             return list[0];
-        }
-
-        public static DVDDiskInfo FromIFO(string videoTSDir)
-        {
-            if (string.Compare(new DirectoryInfo(videoTSDir).Name, "VIDEO_TS", true) != 0)
-                videoTSDir = Path.Combine(videoTSDir, "VIDEO_TS");
-            return new DVDDiskInfo() { Titles = IFOUtilities.Titles(videoTSDir).ToArray() };
         }
     }
 
