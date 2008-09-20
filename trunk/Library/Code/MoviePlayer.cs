@@ -7,6 +7,7 @@ using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Diagnostics;
+using OMLGetDVDInfo;
 
 namespace Library
 {
@@ -53,7 +54,7 @@ namespace Library
                     OMLApplication.DebugLine("[MoviePlayerFactory] MountImageMoviePlayer created: {0}", source);
                     return new MountImagePlayer(source);
                 }
-                else if (OMLApplication.Current.IsExtender && source.Format == VideoFormat.DVD && MediaData.IsDVD(source.MediaPath)) // play the dvd
+                else if (IsExtenderDVD_NoTranscoding(source)) // play the dvd
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] ExtenderDVDPlayer created: {0}", source);
                     return new ExtenderDVDPlayer(source);
@@ -106,7 +107,6 @@ namespace Library
             }
         }
 
-
         static public void Transport_PropertyChanged(IPropertyObject sender, string property)
         {
             OMLApplication.ExecuteSafe(delegate
@@ -129,7 +129,37 @@ namespace Library
 
 
         // keep all the Playing logic here
-        static private bool NeedsMounting(VideoFormat videoFormat)
+        static bool IsExtenderDVD_NoTranscoding(MediaSource source)
+        {
+            if (OMLApplication.Current.IsExtender == false || source.Format != VideoFormat.DVD || MediaData.IsDVD(source.MediaPath) == false)
+                return false;
+            // non-default audio/subtitle/chapter start: needs transcoding
+            if (source.AudioStream != null || source.Subtitle != null || source.StartChapter != null)
+            {
+                Utilities.DebugLine("Source has custom audio/subtitle/startchapter: {0}", source);
+                return false;
+            }
+            if (source.DVDDiskInfo == null)
+            {
+                Utilities.DebugLine("Source has no DVDDiskInfo: {0}", source);
+                return true;
+            }
+            string languageCode = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            DVDTitle title = source.Title != null ? source.DVDDiskInfo.Titles[source.Title.Value] : source.DVDDiskInfo.GetMainTitle();
+            if (title.AudioTracks.Count != 0 && string.Compare(title.AudioTracks[0].LanguageID, languageCode, true) != 0)
+            {
+                DVDSubtitle st = title.Subtitles.Count != 0 ? title.FindSubTitle(languageCode) : null;
+                if (st != null)
+                {
+                    source.Subtitle = new SubtitleStream(st);
+                    Utilities.DebugLine("Autoselect subtitle, since default audio stream is not native: {0}", source);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        static bool NeedsMounting(VideoFormat videoFormat)
         {
             switch (videoFormat)
             {
@@ -144,8 +174,7 @@ namespace Library
             }
         }
 
-        // keep all the Playing logic here
-        static private bool NeedsTranscode(VideoFormat videoFormat)
+        static bool NeedsTranscode(VideoFormat videoFormat)
         {
             switch (videoFormat)
             {
