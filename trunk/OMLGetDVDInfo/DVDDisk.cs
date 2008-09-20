@@ -33,65 +33,9 @@ namespace OMLGetDVDInfo
         }
         public static bool operator !=(DVDDiskInfo a, DVDDiskInfo b) { return !(a == b); }
 
-#if HANDBRAKE
-        internal static DVDDiskInfo Parse(StreamReader output)
-        {
-            DVDDiskInfo thisDVD = new DVDDiskInfo();
-            while (output.EndOfStream == false)
-            {
-                if ((char)output.Peek() == '+')
-                    thisDVD.Titles = DVDTitle.ParseList(output.ReadToEnd()).ToArray();
-                else
-                    output.ReadLine();
-            }
-            return thisDVD;
-        }
-#endif
-
-#if HANDBRAKE
-        static string handbrakePath = null;
-        static DVDDiskInfo()
-        {
-            handbrakePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Handbrake");
-            if (Directory.Exists(handbrakePath) == false)
-            {
-                handbrakePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + " (x86)", "Handbrake");
-                if (Directory.Exists(handbrakePath) == false)
-                    handbrakePath = null;
-            }
-        }
-#endif
-
         public static DVDDiskInfo ParseDVD(string videoTSDir)
         {
             return FromIFO(videoTSDir);
-#if HANDBRAKE
-            if (handbrakePath == null)
-                return null;
-            using (Process proc = new Process())
-            {
-                proc.StartInfo.FileName = Path.Combine(handbrakePath, "HandBrakeCLI.exe");
-                proc.StartInfo.Arguments = string.Format(@"-i ""{0}"" -t0 -v", videoTSDir);
-                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                proc.StartInfo.CreateNoWindow = true;
-                proc.StartInfo.UseShellExecute = false;
-                proc.StartInfo.RedirectStandardError = true;
-
-                proc.Start();
-
-                ManualResetEvent wait = new ManualResetEvent(false);
-                DVDDiskInfo ret = null;
-                ThreadPool.QueueUserWorkItem(delegate
-                {
-                    ret = DVDDiskInfo.Parse(proc.StandardError);
-                    wait.Set();
-                });
-
-                proc.WaitForExit();
-                wait.WaitOne();
-                return ret;
-            }
-#endif
         }
 
         public static void Test(string videoTS_Folder)

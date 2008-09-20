@@ -202,9 +202,11 @@ namespace OMLGetDVDInfo
                 {
                     Frequency = audioValues.SampleRate * 1000, 
                     Language = Language(languageCode), 
+                    LanguageID = languageCode,
                     TrackNumber = currentAudioStream,
                     SubFormat = SubFormat(audioValues.Channels),
-                    Format = audioValues.Encoding.ToString(),
+                    Channels = audioValues.Channels,
+                    Format = audioValues.Encoding,
                     Extension = audioValues.Extension,
                     // Bitrate = ,
                 });
@@ -250,7 +252,12 @@ namespace OMLGetDVDInfo
                     continue;
 
                 string languageCode = "" + (char)bytes[2] + (char)bytes[3];
-                ret.Add(new DVDSubtitle() { Language = Language(languageCode), TrackNumber = currentSubPictureStream });
+                ret.Add(new DVDSubtitle()
+                {
+                    Language = Language(languageCode),
+                    LanguageID = languageCode,
+                    TrackNumber = currentSubPictureStream
+                });
             }
             return ret;
         }
@@ -280,7 +287,7 @@ namespace OMLGetDVDInfo
                     }
                     byte[] b = IFOUtilities.GetFileBlock(vtsIFO, 0x200, 2);
                     VideoValues video = VideoValues.ReadVideoSpecs(b[0], b[1]);
-                    title.Main = longestIfo == Path.GetFileName(vtsIFO);
+                    title.Main = Path.GetFileName(longestIfo) == Path.GetFileName(vtsIFO);
                     title.File = "vts " + titleSetNumber;
                     title.AspectRatio = video.AspectRatio;
                     title.Resolution = video.Resolution;
