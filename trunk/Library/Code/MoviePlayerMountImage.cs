@@ -37,7 +37,7 @@ namespace Library
                     IPlayMovie player;
                     if (OMLApplication.Current.IsExtender)
                     {
-                        if (Utilities.IsTranscode360LibraryAvailable())
+                        if (MediaData.IsDVD(_source.MediaPath) == false)
                         {
                             OMLApplication.DebugLine("[MoviePlayerMountImage] Extender detected, using TranscodePlayer to play Image file");
                             player = new TranscodePlayer(_source);

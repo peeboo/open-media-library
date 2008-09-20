@@ -147,9 +147,6 @@ namespace Library
         // keep all the Playing logic here
         static private bool NeedsTranscode(VideoFormat videoFormat)
         {
-            if (Utilities.IsTranscode360LibraryAvailable() == false)
-                return false;
-
             switch (videoFormat)
             {
                 case VideoFormat.DVRMS:
