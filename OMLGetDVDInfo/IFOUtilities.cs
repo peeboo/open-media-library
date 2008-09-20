@@ -200,11 +200,23 @@ namespace OMLGetDVDInfo
                 if (audioValues.LanguageTypePresent)
                     languageCode = "" + (char)bytes[2] + (char)bytes[3];
 
+                // audio channel
+                // - MPEG: 0-31
+                // - VOB(AC3): 128-159
+                // - VOB(LPCM): 160-191
+                int id = currentAudioStream - 1;
+                if (audioValues.Encoding == AudioEncoding.AC3)
+                    id = 127 + currentAudioStream;
+                else if (audioValues.Encoding == AudioEncoding.DTS)
+                    id = 135 + currentAudioStream;
+                else if (audioValues.Encoding == AudioEncoding.LPCM)
+                    id = 159 + currentAudioStream;
                 ret.Add(new DVDAudioTrack()
                 {
                     Frequency = audioValues.SampleRate * 1000, 
                     LanguageID = languageCode,
                     TrackNumber = currentAudioStream,
+                    ID = id,
                     Channels = audioValues.Channels,
                     Format = audioValues.Encoding,
                     Extension = audioValues.Extension,
@@ -267,10 +279,10 @@ namespace OMLGetDVDInfo
                     title.AudioTracks = AudioTracks(vtsIFO);
                     title.Subtitles = SubTitleTracks(vtsIFO);
                     title.Duration = DVDTitle.GetTotalTimeSpan(title.Chapters);
-                    if (title.Duration.TotalSeconds > 10)
+                    //if (title.Duration.TotalSeconds > 10)
                         ret.Add(title);
-                    else
-                        Trace.WriteLine(string.Format("IFOUtils.Titles: Duration < 10s, ignoring: {0}", Path.GetFileName(vtsIFO)));
+                    //else
+                    //    Trace.WriteLine(string.Format("IFOUtils.Titles: Duration < 10s, ignoring: {0}", Path.GetFileName(vtsIFO)));
                 }
             }
             else

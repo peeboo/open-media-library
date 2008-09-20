@@ -85,6 +85,8 @@ namespace OMLTranscoder
                 strBuilder.Append(@" dvd://");
                 if (_source.Title != null)
                     strBuilder.Append(_source.Title.Value.ToString());
+                else
+                    strBuilder.Append(_source.DVDDiskInfo.GetMainTitle().TitleNumber);
                 strBuilder.AppendFormat(@" -dvd-device ""{0}""", _source.VIDEO_TS_Parent);
             }
             else
@@ -103,13 +105,8 @@ namespace OMLTranscoder
                 strBuilder.Append(@" -nosound");
             else
             {
-                if (_source.AudioStream != null)
-                {
-                    if (string.IsNullOrEmpty(_source.AudioStream.LanguageID) == false)
-                        strBuilder.AppendFormat(@" -alang {0}", _source.AudioStream.LanguageID);
-                    else
-                        strBuilder.AppendFormat(@" -aid {0}", _source.AudioStream.AudioID);
-                }
+                if (_source.AudioStream != null && _source.AudioStream.AudioID != null)
+                    strBuilder.AppendFormat(@" -aid {0}", _source.AudioStream.AudioID);
             }
 
             strBuilder.AppendFormat(@" -oac {0}", AudioEncoderFormat.ToString().ToLower());
@@ -118,8 +115,8 @@ namespace OMLTranscoder
             strBuilder.AppendFormat(@" -ovc {0}", VideoEncoderFormat.ToString().ToLower());
 
             //subtitles
-            if (_source.Subtitle != null && string.IsNullOrEmpty(_source.Subtitle.LanguageID) == false)
-                strBuilder.AppendFormat(@" -font c:\windows\fonts\arial.ttf -slang {0}", _source.Subtitle.LanguageID);
+            if (_source.Subtitle != null && _source.Subtitle.SubtitleID != null)
+                strBuilder.AppendFormat(@" -font c:\windows\fonts\arial.ttf -sid {0}", _source.Subtitle.SubtitleID.Value - 1);
 
             // output format
             // always set the output format to mpeg for extenders

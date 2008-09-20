@@ -24,7 +24,7 @@ namespace OMLEngine
 
         public AudioStream(DVDAudioTrack audioTrack)
         {
-            this.AudioID = audioTrack.TrackNumber;
+            this.AudioID = audioTrack.ID;
             this.LanguageID = audioTrack.LanguageID;
             this.Channels = audioTrack.Channels;
             this.Format = audioTrack.Format;
