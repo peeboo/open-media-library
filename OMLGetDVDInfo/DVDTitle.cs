@@ -97,59 +97,6 @@ namespace OMLGetDVDInfo
                 this.Duration.Minutes, this.Duration.Seconds, this.Resolution, this.AspectRatio);
         }
 
-#if HANDBRAKE
-        #region -- Parsing --
-        internal static DVDTitle Parse(TextReader output)
-        {
-            DVDTitle thisTitle = new DVDTitle();
-            Match m = Regex.Match(output.ReadLine(), @"^\+ title ([0-9]*):");
-            // Match track number for this title
-            if (m.Success)
-                thisTitle.TitleNumber = int.Parse(m.Groups[1].Value.Trim().ToString());
-
-            m = Regex.Match(output.ReadLine(), @"^  \+ (vts [0-9]+), ttn [0-9]+, cells ([0-9]+)->([0-9]+) \(([0-9]+) blocks\)");
-            // Match track number for this title
-            if (m.Success)
-                thisTitle.File = m.Groups[1].Value.Trim();
-
-            // Get duration for this title
-
-            m = Regex.Match(output.ReadLine(), @"^  \+ duration: ([0-9]{2}:[0-9]{2}:[0-9]{2})");
-            if (m.Success)
-                thisTitle.Duration = TimeSpan.Parse(m.Groups[1].Value);
-
-            // Get resolution, aspect ratio and FPS for this title
-            m = Regex.Match(output.ReadLine(), @"^  \+ size: ([0-9]*)x([0-9]*), aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
-            if (m.Success)
-            {
-                thisTitle.Resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-                thisTitle.AspectRatio = float.Parse(m.Groups[3].Value);
-            }
-
-            // Get autocrop region for this title
-            m = Regex.Match(output.ReadLine(), @"^  \+ autocrop: ([0-9]*)/([0-9]*)/([0-9]*)/([0-9]*)");
-            if (m.Success)
-                thisTitle.AutoCrop = new int[4] { int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value), int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value) };
-
-            thisTitle.Chapters = DVDChapter.ParseList(output);
-            thisTitle.AudioTracks = DVDAudioTrack.ParseList(output);
-            thisTitle.Subtitles = DVDSubtitle.ParseList(output);
-
-            return thisTitle;
-        }
-
-        internal static List<DVDTitle> ParseList(string output)
-        {
-            List<DVDTitle> titles = new List<DVDTitle>();
-            using (StringReader sr = new StringReader(output))
-            {
-                while ((char)sr.Peek() == '+')
-                    titles.Add(DVDTitle.Parse(sr));
-                return titles;
-            }
-        }
-        #endregion
-#endif
     }
 
     #region -- Enums --

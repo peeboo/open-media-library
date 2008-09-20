@@ -21,6 +21,8 @@ namespace OMLGetDVDInfo
         /// </summary>
         [XmlAttribute]
         public string Language;
+        [XmlAttribute]
+        public string LanguageID;
         #endregion
 
         /// <summary>
@@ -46,41 +48,6 @@ namespace OMLGetDVDInfo
             return true;
         }
         public static bool operator !=(DVDSubtitle a, DVDSubtitle b) { return !(a == b); }
-
-#if HANDBRAKE
-        #region -- Parsing --
-        internal static DVDSubtitle Parse(TextReader output)
-        {
-            string curLine = output.ReadLine();
-
-            Match m = Regex.Match(curLine, @"^    \+ ([0-9]*), ([A-Za-z, ]*) \((.*)\)");
-            if (m.Success && !curLine.Contains("HandBrake has exited."))
-            {
-                DVDSubtitle thisSubtitle = new DVDSubtitle();
-                thisSubtitle.TrackNumber = int.Parse(m.Groups[1].Value.Trim().ToString());
-                thisSubtitle.Language = m.Groups[2].Value;
-                return thisSubtitle;
-            }
-            else
-                return null;
-        }
-
-        internal static List<DVDSubtitle> ParseList(TextReader output)
-        {
-            List<DVDSubtitle> subtitles = new List<DVDSubtitle>();
-            while ((char)output.Peek() != '+')
-            {
-                DVDSubtitle thisSubtitle = DVDSubtitle.Parse(output);
-
-                if (thisSubtitle != null)
-                    subtitles.Add(thisSubtitle);
-                else
-                    break;
-            }
-            return subtitles;
-        }
-        #endregion
-#endif
     }
 
 }
