@@ -70,7 +70,7 @@ namespace MyMoviesPlugin
             }
             else
             {
-                AddError("File not found when trying to load file: {0}", currentFile);
+                AddError("[MyMoviesImporter] File not found when trying to load file: {0}", currentFile);
             }
         }
         protected override double GetVersionMajor()
@@ -131,10 +131,11 @@ namespace MyMoviesPlugin
                     string[] fileNames = null;
                     try
                     {
-                        fileNames = Directory.GetFiles(currentFolder, "mymovies.xml");
+                        fileNames = Directory.GetFiles(currentFolder, "*.xml");
                     }
                     catch
                     {
+                        Utilities.DebugLine("[MyMoviesImporter] We didn't find any xml files in {0}, we will skip this folder", currentFolder);
                         fileNames = null;
                     }
 
@@ -142,11 +143,18 @@ namespace MyMoviesPlugin
                     {
                         foreach (string filename in fileNames)
                         {
+                            Utilities.DebugLine("Checking xml file {0}", filename);
                             if (filename.ToLower().EndsWith(@"mymovies.xml"))
+                            {
+                                Utilities.DebugLine("We found a mymovies.xml file in {0}", currentFolder);
                                 ProcessFile(filename);
+                            }
 
                             if (filename.ToLower().EndsWith(@"titles.xml"))
+                            {
+                                Utilities.DebugLine("We found a titles.xml file in {0}", currentFolder);
                                 ProcessFile(filename);
+                            }
                         }
                     }
                 } // loop through the sub folders
@@ -161,33 +169,24 @@ namespace MyMoviesPlugin
             Utilities.DebugLine("[MyMoviesImporter] Loading data for a new title");
             newTitle.MetadataSourceID = GetChildNodesValue(navigator, "WebServiceId");
 
+            Utilities.DebugLine("[MyMoviesImporter] Scanning for {0} node", "Covers");
             if (navigator.MoveToChild("Covers", ""))
             {
                 Utilities.DebugLine("[MyMoviesImporter] Covers found, processing");
+                Utilities.DebugLine("[MyMoviesImporter] Scanning for {0} node", "Front");
                 if (navigator.MoveToChild("Front", ""))
                 {
                     string imagePath = navigator.Value;
-                    if (File.Exists(imagePath))
+                    string finalImagePath = FindFinalImagePath(imagePath);
+                    Utilities.DebugLine("[MyMoviesImporter] Final image path is: {0}", finalImagePath);
+                    if (File.Exists(finalImagePath))
                     {
-                        Utilities.DebugLine("[MyMoviesImporter] Front Cover: {0}", navigator.Value);
-                        SetFrontCoverImage(ref newTitle, navigator.Value);
-                    }
-                    else
-                    {
-                        Utilities.DebugLine("[MyMoviesImporter] Front cover not found, looking for folder.jpg file");
-                        string possibleImagePath = Path.Combine(
-                                                        Path.GetDirectoryName(currentFile),
-                                                        "folder.jpg");
-
-                        if (File.Exists(possibleImagePath))
-                        {
-                            Utilities.DebugLine("[MyMoviesImporter] Found folder.jpg file, we'll use that");
-                            SetFrontCoverImage(ref newTitle, possibleImagePath);
-                        }
+                        Utilities.DebugLine("[MyMoviesImporter] This file appears to be valid, we'll set it on the title");
+                        SetFrontCoverImage(ref newTitle, finalImagePath);
                     }
                     navigator.MoveToParent();
                 }
-
+                Utilities.DebugLine("[MyMoviesImporter] Scanning for {0} node", "Back");
                 if (navigator.MoveToChild("Back", ""))
                 {
                     string imagePath = navigator.Value;
@@ -282,33 +281,35 @@ namespace MyMoviesPlugin
                 if (navigator.HasChildren)
                 {
                     XPathNodeIterator nIter = navigator.SelectChildren("Person", "");
-                    navigator.MoveToFirstChild();
-                    XPathNavigator localNav = navigator.CreateNavigator();
-                    navigator.MoveToParent();
-                    for (int i = 0; i < nIter.Count; i++)
+                    if (navigator.MoveToFirstChild())
                     {
-                        string name = GetChildNodesValue(localNav, "Name");
-                        string role = GetChildNodesValue(localNav, "Role");
-                        string type = GetChildNodesValue(localNav, "Type");
-
-                        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(role) && !string.IsNullOrEmpty(type))
+                        XPathNavigator localNav = navigator.CreateNavigator();
+                        navigator.MoveToParent();
+                        for (int i = 0; i < nIter.Count; i++)
                         {
-                            switch (type)
+                            string name = GetChildNodesValue(localNav, "Name");
+                            string role = GetChildNodesValue(localNav, "Role");
+                            string type = GetChildNodesValue(localNav, "Type");
+
+                            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(role) && !string.IsNullOrEmpty(type))
                             {
-                                case "Actor":
-                                    Utilities.DebugLine("[MyMoviesImporter] actor {0}, {1}", name, role);
-                                    newTitle.AddActingRole(name, role);
-                                    break;
-                                case "Director":
-                                    Person p = new Person(name);
-                                    Utilities.DebugLine("[MyMoviesImporter] director {0}", name);
-                                    newTitle.AddDirector(p);
-                                    break;
-                                default:
-                                    break;
+                                switch (type)
+                                {
+                                    case "Actor":
+                                        Utilities.DebugLine("[MyMoviesImporter] actor {0}, {1}", name, role);
+                                        newTitle.AddActingRole(name, role);
+                                        break;
+                                    case "Director":
+                                        Person p = new Person(name);
+                                        Utilities.DebugLine("[MyMoviesImporter] director {0}", name);
+                                        newTitle.AddDirector(p);
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
+                            localNav.MoveToNext("Person", "");
                         }
-                        localNav.MoveToNext("Person", "");
                     }
                 }
                 navigator.MoveToParent();
@@ -320,12 +321,14 @@ namespace MyMoviesPlugin
                 if (navigator.HasChildren)
                 {
                     XPathNodeIterator nIter = navigator.SelectChildren("Studio", "");
-                    navigator.MoveToFirstChild();
-                    XPathNavigator localNav = navigator.CreateNavigator();
-                    navigator.MoveToParent();
-                    for (int i = 0; i < nIter.Count; i++)
+                    if (navigator.MoveToFirstChild())
                     {
-                        newTitle.Studio = GetChildNodesValue(localNav, "Studio");
+                        XPathNavigator localNav = navigator.CreateNavigator();
+                        navigator.MoveToParent();
+                        for (int i = 0; i < nIter.Count; i++)
+                        {
+                            newTitle.Studio = GetChildNodesValue(localNav, "Studio");
+                        }
                     }
                 }
                 navigator.MoveToParent();
@@ -340,13 +343,15 @@ namespace MyMoviesPlugin
             {
                 Utilities.DebugLine("[MyMoviesImporter] Genres... good old genres");
                 XPathNodeIterator nIter = navigator.SelectChildren("Genre", "");
-                navigator.MoveToFirstChild();
-                XPathNavigator localNav = navigator.CreateNavigator();
-                navigator.MoveToParent();
-                for (int i = 0; i < nIter.Count; i++)
+                if (navigator.MoveToFirstChild())
                 {
-                    newTitle.AddGenre(localNav.Value);
-                    localNav.MoveToNext("Genre", "");
+                    XPathNavigator localNav = navigator.CreateNavigator();
+                    navigator.MoveToParent();
+                    for (int i = 0; i < nIter.Count; i++)
+                    {
+                        newTitle.AddGenre(localNav.Value);
+                        localNav.MoveToNext("Genre", "");
+                    }
                 }
                 navigator.MoveToParent();
             }
@@ -355,28 +360,30 @@ namespace MyMoviesPlugin
             {
                 Utilities.DebugLine("[MyMoviesImporter] AudioTracks.. yeah, like you can even change them anyway");
                 XPathNodeIterator nIter = navigator.SelectChildren("AudioTrack", "");
-                navigator.MoveToFirstChild();
-                XPathNavigator localNav = navigator.CreateNavigator();
-                navigator.MoveToParent();
-                for (int i = 0; i < nIter.Count ; i++)
+                if (navigator.MoveToFirstChild())
                 {
-                    string audioLanguage = localNav.GetAttribute("Language", "");
-                    string audioType = localNav.GetAttribute("Type", "");
-                    string audioChannels = localNav.GetAttribute("Channels", "");
-
-                    if (!string.IsNullOrEmpty(audioLanguage))
+                    XPathNavigator localNav = navigator.CreateNavigator();
+                    navigator.MoveToParent();
+                    for (int i = 0; i < nIter.Count; i++)
                     {
-                        string audioTrackString = audioLanguage;
-                        if (!string.IsNullOrEmpty(audioType))
-                            audioTrackString += string.Format(", {0}", audioType);
+                        string audioLanguage = localNav.GetAttribute("Language", "");
+                        string audioType = localNav.GetAttribute("Type", "");
+                        string audioChannels = localNav.GetAttribute("Channels", "");
 
-                        if (!string.IsNullOrEmpty(audioChannels))
-                            audioTrackString += string.Format(", {0}", audioChannels);
+                        if (!string.IsNullOrEmpty(audioLanguage))
+                        {
+                            string audioTrackString = audioLanguage;
+                            if (!string.IsNullOrEmpty(audioType))
+                                audioTrackString += string.Format(", {0}", audioType);
 
-                        Utilities.DebugLine("[MyMoviesImporter] Got one: {0}, {1}, {2}", audioLanguage, audioType, audioChannels);
-                        newTitle.AddLanguageFormat(audioTrackString);
+                            if (!string.IsNullOrEmpty(audioChannels))
+                                audioTrackString += string.Format(", {0}", audioChannels);
+
+                            Utilities.DebugLine("[MyMoviesImporter] Got one: {0}, {1}, {2}", audioLanguage, audioType, audioChannels);
+                            newTitle.AddLanguageFormat(audioTrackString);
+                        }
+                        localNav.MoveToNext("AudioTrack", "");
                     }
-                    localNav.MoveToNext("AudioTrack", "");
                 }
                 navigator.MoveToParent();
             }
@@ -387,19 +394,21 @@ namespace MyMoviesPlugin
                 if (navigator.GetAttribute("NotPresent", "").CompareTo("False") == 0)
                 {
                     XPathNodeIterator nIter = navigator.SelectChildren("Subtitle", "");
-                    navigator.MoveToFirstChild();
-                    XPathNavigator localNav = navigator.CreateNavigator();
-                    navigator.MoveToParent();
-                    for (int i = 0; i < nIter.Count; i++)
+                    if (navigator.MoveToFirstChild())
                     {
-                        string subtitleLanguage = localNav.GetAttribute("Language", "");
-                        if (!string.IsNullOrEmpty(subtitleLanguage))
+                        XPathNavigator localNav = navigator.CreateNavigator();
+                        navigator.MoveToParent();
+                        for (int i = 0; i < nIter.Count; i++)
                         {
-                            Utilities.DebugLine("[MyMoviesImporter] Subtitle {0}", subtitleLanguage);
-                            newTitle.AddSubtitle(subtitleLanguage);
-                        }
+                            string subtitleLanguage = localNav.GetAttribute("Language", "");
+                            if (!string.IsNullOrEmpty(subtitleLanguage))
+                            {
+                                Utilities.DebugLine("[MyMoviesImporter] Subtitle {0}", subtitleLanguage);
+                                newTitle.AddSubtitle(subtitleLanguage);
+                            }
 
-                        localNav.MoveToNext("Subtitle", "");
+                            localNav.MoveToNext("Subtitle", "");
+                        }
                     }
                 }
                 navigator.MoveToParent();
@@ -409,10 +418,13 @@ namespace MyMoviesPlugin
             {
                 Utilities.DebugLine("[MyMoviesImporter] Discs... ok here is the good one, we'll passing this off to some other method to handle.");
                 XPathNodeIterator nIter = navigator.SelectChildren("Disc", "");
-                navigator.MoveToFirstChild();
-                XPathNavigator localNav = navigator.CreateNavigator();
+                if (navigator.MoveToFirstChild())
+                {
+                    XPathNavigator localNav = navigator.CreateNavigator();
+                    extractDisksFromXML(nIter, localNav, newTitle);
+                    navigator.MoveToParent();
+                }
                 navigator.MoveToParent();
-                extractDisksFromXML(nIter, localNav, newTitle);
             }
         }
         private void extractDisksFromXML(XPathNodeIterator nIter, XPathNavigator localNav, Title newTitle)
@@ -533,7 +545,7 @@ namespace MyMoviesPlugin
                         }
                         else
                         {
-                            AddError("Location {0} is of type folder but the folder doesn't appear to exist", fullPath);
+                            AddError("[MyMoviesImporter] Location {0} is of type folder but the folder doesn't appear to exist", fullPath);
                         }
                         break;
                     case 2:
@@ -555,7 +567,7 @@ namespace MyMoviesPlugin
                         }
                         else
                         {
-                            AddError("Location {0} is of type file but the file doesn't appear to exist", fullPath);
+                            AddError("[MyMoviesImporter] Location {0} is of type file but the file doesn't appear to exist", fullPath);
                         }
                         break;
                     case 3:
@@ -582,7 +594,7 @@ namespace MyMoviesPlugin
                         break;
                     default:
                         // no idea...
-                        AddError("I have NO idea what type of video is available at {0}", location);
+                        AddError("[MyMoviesImporter] I have NO idea what type of video is available at {0}", location);
                         break;
                 }
             }
@@ -672,7 +684,7 @@ namespace MyMoviesPlugin
                     }
                     catch (Exception ex)
                     {
-                        AddError("Error parsing format for extension: {0}, {1}", extension, ex);
+                        AddError("[MyMoviesImporter] Error parsing format for extension: {0}, {1}", extension, ex);
                         format = VideoFormat.UNKNOWN;
                     }
 
@@ -745,7 +757,7 @@ namespace MyMoviesPlugin
                                 }
                                 catch (Exception)
                                 {
-                                    AddError("Unable to determine format for extension: {0}", ext);
+                                    AddError("[MyMoviesImporter] Unable to determine format for extension: {0}", ext);
                                 }
                             }
                         }
@@ -801,9 +813,72 @@ namespace MyMoviesPlugin
             }
             else
             {
-                AddError("Disc entry specified folder ({0}) but that folder doesn't appear to exist", folder);
+                AddError("[MyMoviesImporter] Disc entry specified folder ({0}) but that folder doesn't appear to exist", folder);
             }
             return fileNames;
+        }
+
+        private string FindFinalImagePath(string imagePath)
+        {
+            Utilities.DebugLine("[MyMoviesImporter] Attempting to determine cover image based on path {0}", imagePath);
+            if (File.Exists(imagePath))
+            {
+                Utilities.DebugLine("[MyMoviesImporter] Imagepath {0} appears to be valid", imagePath);
+                return imagePath;
+            }
+
+            string possibleImagePath = Path.Combine(Path.GetDirectoryName(currentFile),
+                                                    imagePath);
+
+            Utilities.DebugLine("[MyMoviesImporter] Checking for {0} as a possible image", possibleImagePath);
+            if (File.Exists(possibleImagePath))
+            {
+                Utilities.DebugLine("[MyMoviesImporter] {0} appears correct, well use it", possibleImagePath);
+                return possibleImagePath;
+            }
+
+            string possibleDefaultImagePath = Path.Combine(Path.GetDirectoryName(currentFile),
+                                                           "folder.jpg");
+
+            Utilities.DebugLine("[MyMoviesImporter] Checking for {0} as a possible image", possibleDefaultImagePath);
+            if (File.Exists(possibleDefaultImagePath))
+            {
+                Utilities.DebugLine("[MyMoviesImporter] {0} appears correct, well use it", possibleDefaultImagePath);
+                return possibleDefaultImagePath;
+            }
+
+            string[] imageFiles = Directory.GetFiles(Path.GetDirectoryName(currentFile), "*.jpg");
+            Utilities.DebugLine("[MyMoviesImporter] We found {0} jpg files to check", imageFiles.Length);
+            if (imageFiles.Length > 0)
+            {
+                if (imageFiles.Length == 1)
+                {
+                    Utilities.DebugLine("[MyMoviesImporter] Only 1 file was found, we'll assume it is the cover file {0}",
+                                        Path.Combine(Path.GetDirectoryName(currentFile), imageFiles[0]));
+                    return Path.Combine(Path.GetDirectoryName(currentFile), imageFiles[0]);
+                }
+
+                Utilities.DebugLine("[MyMoviesImporter] Looping through each file to check it for possible cover art");
+                foreach (string imageFilename in imageFiles)
+                {
+                    Utilities.DebugLine("[MyMoviesImporter] Found file: {0}", imageFilename);
+                    if (imageFilename.ToLower().Contains("front"))
+                    {
+                        Utilities.DebugLine("[MyMoviesImporter] This file appears to contain the word front in it, we'll use it {0}",
+                                            Path.Combine(Path.GetDirectoryName(currentFile), imageFilename));
+                        return Path.Combine(Path.GetDirectoryName(currentFile), imageFilename);
+                    }
+
+                    if (imageFilename.ToLower().CompareTo(currentFile.ToLower()) == 0)
+                    {
+                        Utilities.DebugLine("[MyMoviesImporter] This file appears to have the same name as the video file, we'll use it {0}",
+                                            Path.Combine(Path.GetDirectoryName(currentFile), imageFilename));
+                        return Path.Combine(Path.GetDirectoryName(currentFile), imageFilename);
+                    }
+                }
+            }
+            Utilities.DebugLine("[MyMoviesImporter] No image files found, I guess this title doesn't have any cover art files");
+            return string.Empty;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace OMLTestSuite
         public void TearDownTest()
         {
             FileInfo fi;
-            fi = new FileInfo("\\testOML.dat");
+            fi = new FileInfo(@"..\..\..\Sample Files\testOML.dat");
             if (fi != null)
                 fi.Delete();
         }
@@ -23,7 +23,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_BASE_CASE()
         {
-            TitleCollection tc = new TitleCollection("\\testOML.dat");
+            TitleCollection tc = new TitleCollection(@"..\..\..\Sample Files\testOML.dat");
             MyMoviesImporter importer = new MyMoviesImporter();
             bool ShouldCopyImages = false;
             importer.CopyImages = ShouldCopyImages;
@@ -35,7 +35,7 @@ namespace OMLTestSuite
             tc.saveTitleCollection();
             tc = null;
 
-            tc = new TitleCollection("\\testOML.dat");
+            tc = new TitleCollection(@"..\..\..\Sample Files\testOML.dat");
             tc.loadTitleCollection();
             Assert.IsNotNull(tc);
 
@@ -122,6 +122,19 @@ namespace OMLTestSuite
             Title t = titles[0];
             Assert.AreEqual(1, t.Disks.Count);
             Assert.IsNotEmpty(t.Disks[0].Path);
+        }
+
+        [Test]
+        public void TEST_FILE_APPEARS_TO_FAIL_COMPLETE_PARSING__SUPPLIED_BY_USER_SAXNIX()
+        {
+            MyMoviesImporter importer = new MyMoviesImporter();
+            importer.ProcessDir(@"..\..\..\Sample Files\MyMoviesTestFiles\ParseFailureFileFrom-saxnix");
+
+            IList<Title> titles = importer.GetTitles();
+
+            Assert.AreEqual(1, titles.Count);
+            Title t = titles[0];
+            Assert.AreEqual(1, t.Disks.Count);
         }
     }
 }

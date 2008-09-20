@@ -22,12 +22,12 @@ namespace OMLTestSuite
 
             MyMoviesPluginTest mmpt = new MyMoviesPluginTest();
             Console.WriteLine("Testing: MyMoviesPlugin");
+            mmpt.TEST_FILE_APPEARS_TO_FAIL_COMPLETE_PARSING__SUPPLIED_BY_USER_SAXNIX();
             mmpt.TEST_BASE_CASE();
             mmpt.TEST_MULTIPLE_DISCS_FAIL_TO_IMPORT();
             mmpt.TEST_WHEN_NO_DISCS_ARE_DEFINED__LOOK_IN_THE_SAME_DIRECTORY_AS_THE_MYMOVIES_XML_FILE_FOR_ANY_VALID_FILES_TO_ADD_AS_DISCS();
             mmpt.TEST_WHEN_NO_DISCS_ARE_DEFINED__LOOK_IN_THE_SAME_DIRECTORY_AS_THE_MYMOVIES_XML_FILE_FOR_ANY_VALID_FILES_TO_ADD_AS_DISCS__MULTIPLE_FILES();
             mmpt.TEST_FOLDER_JPG_FILES_ARE_USED_IF_COVER_PATHS_DONT_APPEAR_TO_EXIST();
-            
             mmpt.TEST_CORRECTLY_IMPORTS_DVRMS_FILES();
 
             DVDProfilerTest dpt = new DVDProfilerTest();
