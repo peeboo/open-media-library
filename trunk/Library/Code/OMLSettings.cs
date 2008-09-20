@@ -10,14 +10,14 @@ namespace Library
         public OMLSettings() { }
 
         #region properties
-        public string DaemonTools
+        public string MountingTool
         {
-            get { return OMLEngine.Properties.Settings.Default.DaemonTools; }
+            get { return OMLEngine.Properties.Settings.Default.MountingTool; }
             set
             {
-                OMLEngine.Properties.Settings.Default.DaemonTools = value;
+                OMLEngine.Properties.Settings.Default.MountingTool = value;
                 OMLEngine.Properties.Settings.Default.Save();
-                FirePropertyChanged("DaemonTools");
+                FirePropertyChanged("MountingTool");
             }
         }
         public string VirtualDiscDrive

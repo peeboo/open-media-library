@@ -6,6 +6,7 @@
       xmlns:a="assembly://Library/Library"
       xmlns:controls="resx://Library/Library.Resources/CoreControls"
       xmlns:c="resx://Library/Library.Resources/Controls"
+      xmlns:rbg="resx://Library/Library.Resources/RadioButtonGroup"
       xmlns:me="Me">
 
   <Aggregate Source="resx://Library/Library.Resources/Base" />
@@ -24,7 +25,7 @@
       <Choice Name="Tabs">
         <Options>
           <cor:String cor:String="View Options"/>
-          <cor:String cor:String="Daemon Tools"/>
+          <cor:String cor:String="Image Mounting Tool"/>
           <cor:String cor:String="Customize UI"/>
           <cor:String cor:String="Language"/>
         </Options>
@@ -77,7 +78,7 @@
 
       <Changed Source="[Tabs.Chosen]">
         <Conditions>
-          <Equality Source="[Tabs.Chosen.ToString]" Value="Daemon Tools"/>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="Image Mounting Tool"/>
         </Conditions>
         <Actions>
           <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
@@ -273,10 +274,16 @@
 
           <Panel Name="DTPanel" Layout="VerticalFlow" Visible="false">
             <Children>
+              <Panel Name="WhichTool" Layout="VerticalFlow" Margins="0,0,50,0">
+                <Children>
+                  <Text Content="Which Mounting Tool" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                  <rbg:RadioButtonGroup Model="[Settings.ImageMountingSelection]" />
+                </Children>
+              </Panel>
               <Panel Name="DTPath" Layout="VerticalFlow" Margins="0,0,50,0">
                 <Children>
-                  <Text  Content="Daemon Tools Path" Color="White" Font="font://me:Font" Margins="0,20,0,0" />
-                  <c:SimpleEditbox Name="DTEditbox" Size="700,51" EditableText="[Settings.DaemonToolsPath]" Label="" LabelSize="0,0"/>
+                  <Text  Content="Mounting Tool Path" Color="White" Font="font://me:Font" Margins="0,20,0,0" />
+                  <c:SimpleEditbox Name="DTEditbox" Size="700,51" EditableText="[Settings.MountingToolPath]" Label="" LabelSize="0,0"/>
                 </Children>
               </Panel>
 

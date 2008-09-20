@@ -7,20 +7,20 @@ using System.Diagnostics;
 
 namespace Library
 {
-    public class DaemonTools
+    public class MountingTool
     {
         static string _Path;
         static string _Drive;
         static int _DriveNo;
         static string _MountedIsoFile = string.Empty;
 
-        static DaemonTools()
+        static MountingTool()
         {
-            OMLApplication.DebugLine("[DaemonTools] DaemonTools()");
-            _Path = OMLEngine.Properties.Settings.Default.DaemonTools;
+            OMLApplication.DebugLine("[MountingTool] MountingTool()");
+            _Path = OMLEngine.Properties.Settings.Default.MountingTool;
             _Drive = OMLEngine.Properties.Settings.Default.VirtualDiscDrive;
             _DriveNo = OMLEngine.Properties.Settings.Default.VirtualDiscDriveNumber;
-            OMLApplication.DebugLine("[DaemonTools] All Daemontools params loaded");
+            OMLApplication.DebugLine("[MountingTool] All MountingTool params loaded");
         }
 
         public bool Enabled
@@ -30,7 +30,7 @@ namespace Library
 
         public bool Mount(string IsoFile, out string VirtualDrive)
         {
-            OMLApplication.DebugLine("[DaemonTools] Mount called for file {0}", IsoFile);
+            OMLApplication.DebugLine("[MountingTool] Mount called for file {0}", IsoFile);
             VirtualDrive = string.Empty;
             if (IsoFile == null) return false;
             if (IsoFile == string.Empty) return false;
@@ -39,12 +39,20 @@ namespace Library
 
             UnMount();
 
-            string strParams = String.Format("-mount {0}, \"{1}\"", _DriveNo, IsoFile);
+            string strParams;
+            if (OMLEngine.Properties.Settings.Default.MountingTool.ToLower().Contains("virtual"))
+            {
+                strParams = string.Format("/l={0} {1}", _DriveNo, IsoFile);
+            }
+            else
+            {
+                strParams = string.Format("-mount {0}, \"{1}\"", _DriveNo, IsoFile);
+            }
             Process p = StartProcess(_Path, strParams, true, true);
             int timeout = 0;
             while (!p.HasExited && (timeout < 10000))
             {
-                OMLApplication.DebugLine("[DaemonTools] Mount waiting for 100 milliseconds");
+                OMLApplication.DebugLine("[MountingTool] Mount waiting for 100 milliseconds");
                 System.Threading.Thread.Sleep(100);
                 timeout += 100;
             }
@@ -55,16 +63,26 @@ namespace Library
 
         public void UnMount()
         {
-            OMLApplication.DebugLine("[DaemonTools] UnMount called");
+            OMLApplication.DebugLine("[MountingTool] UnMount called");
             if (!Enabled) return;
             if (!System.IO.File.Exists(_Path)) return;
 
-            string strParams = string.Format("-unmount {0}", _DriveNo);
+            string strParams;
+            if (OMLEngine.Properties.Settings.Default.MountingTool.ToLower().Contains("virtual"))
+            {
+                // its virtual clonedrive
+                strParams = "/u";
+            }
+            else
+            {
+                // its daemon tools
+                strParams = string.Format("-unmount {0}", _DriveNo);
+            }
             Process p = StartProcess(_Path, strParams, true, true);
             int timeout = 0;
             while (!p.HasExited && (timeout < 10000))
             {
-                OMLApplication.DebugLine("[DaemonTools] Unmount waiting for 100 milliseconds");
+                OMLApplication.DebugLine("[MountingTool] Unmount waiting for 100 milliseconds");
                 System.Threading.Thread.Sleep(100);
                 timeout += 100;
             }
@@ -80,7 +98,7 @@ namespace Library
 
         public bool IsMounted(string IsoFile)
         {
-            OMLApplication.DebugLine("[DaemonTools] IsMounted called for file {0}", IsoFile);
+            OMLApplication.DebugLine("[MountingTool] IsMounted called for file {0}", IsoFile);
             if (IsoFile == null) return false;
             if (IsoFile == string.Empty) return false;
             if (_MountedIsoFile.Equals(IsoFile))
@@ -99,7 +117,7 @@ namespace Library
 
         Process StartProcess(ProcessStartInfo procStartInfo, bool bWaitForExit)
         {
-            OMLApplication.DebugLine("[DaemonTools] StartProcess beginning with {0}, {1}, {2}",
+            OMLApplication.DebugLine("[MountingTool] StartProcess beginning with {0}, {1}, {2}",
                                       procStartInfo.FileName,
                                       procStartInfo.Arguments,
                                       procStartInfo.WorkingDirectory);
@@ -116,14 +134,14 @@ namespace Library
             }
             catch (Exception e)
             {
-                string ErrorString = String.Format("Error starting process!\n  filename: {0}  arguments: {1}\n  WorkingDirectory: {2}\n  stack: {3} {4} {5}",
+                string ErrorString = String.Format("[MountingTool] Error starting process!\n  filename: {0}  arguments: {1}\n  WorkingDirectory: {2}\n  stack: {3} {4} {5}",
                     proc.StartInfo.FileName,
                     proc.StartInfo.Arguments,
                     proc.StartInfo.WorkingDirectory,
                     e.Message,
                     e.Source,
                     e.StackTrace);
-                OMLApplication.DebugLine("[DaemonTools] " + ErrorString);
+                OMLApplication.DebugLine("[MountingTool] " + ErrorString);
             }
             return proc;
         }
