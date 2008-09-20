@@ -3,6 +3,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
+using OMLEngine;
+
 namespace OMLGetDVDInfo
 {
     /// <summary>
@@ -19,8 +21,7 @@ namespace OMLGetDVDInfo
         /// <summary>
         /// The language (if detected) of this Subtitle
         /// </summary>
-        [XmlAttribute]
-        public string Language;
+        public string Language { get { return MediaLanguage.LanguageNameForId(LanguageID); } }
         [XmlAttribute]
         public string LanguageID;
         #endregion

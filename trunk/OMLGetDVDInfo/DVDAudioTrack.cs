@@ -4,6 +4,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
+using OMLEngine;
+
 namespace OMLGetDVDInfo
 {
     public class DVDAudioTrack
@@ -17,8 +19,7 @@ namespace OMLGetDVDInfo
         /// <summary>
         /// The language (if detected) of this Audio Track
         /// </summary>
-        [XmlAttribute]
-        public string Language;
+        public string Language { get { return MediaLanguage.LanguageNameForId(LanguageID); } }
 
         [XmlAttribute]
         public string LanguageID;
@@ -31,8 +32,22 @@ namespace OMLGetDVDInfo
         /// <summary>
         /// Additional format info for this Audio Track
         /// </summary>
-        [XmlAttribute]
-        public string SubFormat;
+        public string SubFormat
+        {
+            get
+            {
+                switch (Channels)
+                {
+                    case 1: return "1.0 ch";
+                    case 2: return "2.0 ch";
+                    case 6: return "5.1 ch";
+                    case 7: return "6.1 ch";
+                    case 8: return "7.1 ch";
+                }
+                return null;
+            }
+        }
+
         [XmlAttribute]
         public int Channels;
 

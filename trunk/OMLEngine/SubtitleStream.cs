@@ -5,25 +5,26 @@
 
 using System;
 
+using OMLGetDVDInfo;
+
 namespace OMLEngine
 {
     public class SubtitleStream
     {
-        public string LanguageName { get; private set; }
-        public string LanguageShortName { get; private set; }
+        public string Language { get { return MediaLanguage.LanguageNameForId(LanguageID); } }
+        public string LanguageID { get; private set; }
         public int? SubtitleID { get; private set; }
 
         public SubtitleStream()
         {
-            this.LanguageName = this.LanguageShortName = string.Empty;
+            this.LanguageID = string.Empty;
             this.SubtitleID = null;
         }
 
-        public SubtitleStream(int subtitleID, string languageShortName)
+        public SubtitleStream(DVDSubtitle subTitle)
         {
-            this.SubtitleID = subtitleID;
-            this.LanguageName = MediaLanguage.LanguageNameForId(languageShortName);
-            this.LanguageShortName = languageShortName;
+            this.SubtitleID = subTitle.TrackNumber;
+            this.LanguageID = subTitle.LanguageID;
         }
     }
 }

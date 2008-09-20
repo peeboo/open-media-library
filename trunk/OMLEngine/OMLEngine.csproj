@@ -54,7 +54,6 @@
     <Compile Include="FileSystemWalker.cs" />
     <Compile Include="Genres.cs" />
     <Compile Include="MediaData.cs" />
-    <Compile Include="MediaLanguage.cs" />
     <Compile Include="MediaSource.cs" />
     <Compile Include="NetHelper.cs" />
     <Compile Include="Person.cs" />
