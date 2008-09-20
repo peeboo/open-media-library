@@ -57,6 +57,10 @@
       <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
       <Name>OMLEngine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OMLGetDVDInfo\OMLGetDVDInfo.csproj">
+      <Project>{A1FB9365-38BD-496F-92AE-CEC015888200}</Project>
+      <Name>OMLGetDVDInfo</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="library.snk" />

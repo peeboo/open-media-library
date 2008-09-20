@@ -24,6 +24,9 @@ namespace OMLGetDVDInfo
         [XmlAttribute]
         public string LanguageID;
 
+        [XmlAttribute]
+        public int ID;
+
         /// <summary>
         /// The primary format of this Audio Track
         /// </summary>
