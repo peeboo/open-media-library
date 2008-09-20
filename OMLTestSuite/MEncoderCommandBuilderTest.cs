@@ -14,7 +14,6 @@ namespace OMLTestSuite
         public void TEST_BASIC_COMMAND_BUILDER()
         {
             string drive = OMLEngine.Properties.Settings.Default.VirtualDiscDrive.ToLower();
-            drive = "E";
             MediaSource ms = new MediaSource(new Disk("", drive + ":", VideoFormat.DVD));
             MEncoderCommandBuilder builder = new MEncoderCommandBuilder(ms, ".")
             {
