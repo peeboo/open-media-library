@@ -18,7 +18,7 @@ namespace OMLTestSuite
             {
                 AudioFormat = MEncoder.AudioFormat.Copy,
                 VideoFormat = MEncoder.VideoFormat.Copy,
-                OutputFile  = @"mymovie",
+                OutputFile  = @".\mymovie",
             };
 
             Assert.IsNotNull(builder.GetArguments());
