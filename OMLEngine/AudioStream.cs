@@ -4,29 +4,30 @@
  *******************************************************/
 
 using System;
+using OMLGetDVDInfo;
 
 namespace OMLEngine
 {
     public class AudioStream
     {
-        public bool IsSurroundSound { get; private set; }
-        public string LanguageName { get; private set; }
-        public string LanguageShortName { get; private set; }
+        public bool IsSurroundSound { get { return (Channels ?? 0) > 2; } }
+        public string Language { get { return MediaLanguage.LanguageNameForId(LanguageID); } }
+        public string LanguageID { get; private set; }
         public int? AudioID { get; private set; }
         public int? Channels { get; private set; }
+        public AudioEncoding Format { get; private set; }
 
         public AudioStream()
         {
             this.AudioID = null;
-            this.IsSurroundSound = false;
         }
 
-        public AudioStream(int audioID, bool isSurround, string languageShortName)
+        public AudioStream(DVDAudioTrack audioTrack)
         {
-            this.AudioID = audioID;
-            this.IsSurroundSound = isSurround;
-            this.LanguageName = MediaLanguage.LanguageNameForId(languageShortName);
-            this.LanguageShortName = languageShortName;
+            this.AudioID = audioTrack.TrackNumber;
+            this.LanguageID = audioTrack.LanguageID;
+            this.Channels = audioTrack.Channels;
+            this.Format = audioTrack.Format;
         }
     }
 }

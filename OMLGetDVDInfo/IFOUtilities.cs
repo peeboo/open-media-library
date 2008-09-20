@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
 
+using OMLEngine;
+
 namespace OMLGetDVDInfo
 {
     public static class IFOUtilities
@@ -201,10 +203,8 @@ namespace OMLGetDVDInfo
                 ret.Add(new DVDAudioTrack()
                 {
                     Frequency = audioValues.SampleRate * 1000, 
-                    Language = Language(languageCode), 
                     LanguageID = languageCode,
                     TrackNumber = currentAudioStream,
-                    SubFormat = SubFormat(audioValues.Channels),
                     Channels = audioValues.Channels,
                     Format = audioValues.Encoding,
                     Extension = audioValues.Extension,
@@ -212,33 +212,6 @@ namespace OMLGetDVDInfo
                 });
             }
             return ret;
-        }
-
-        static string Language(string languageCode)
-        {
-            switch (languageCode)
-            {
-                case "en": return "English";
-                case "es": return "Espanol";
-                case "fr": return "Francais";
-                case "de": return "Deutsch";
-                case "ru": return "Россия";
-                case "": return "Unknown";
-            }
-            return null;
-        }
-
-        static string SubFormat(int channels)
-        {
-            switch (channels)
-            {
-                case 1: return "1.0 ch";
-                case 2: return "2.0 ch";
-                case 6: return "5.1 ch";
-                case 7: return "6.1 ch";
-                case 8: return "7.1 ch";
-            }
-            return null;
         }
 
         internal static List<DVDSubtitle> SubTitleTracks(string ifoFile)
@@ -254,7 +227,6 @@ namespace OMLGetDVDInfo
                 string languageCode = "" + (char)bytes[2] + (char)bytes[3];
                 ret.Add(new DVDSubtitle()
                 {
-                    Language = Language(languageCode),
                     LanguageID = languageCode,
                     TrackNumber = currentSubPictureStream
                 });

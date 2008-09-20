@@ -115,8 +115,8 @@ namespace OMLTranscoder
                 strBuilder.Append(@" -nosound");
             else
             {
-                if (_source.AudioStream != null && string.IsNullOrEmpty(_source.AudioStream.LanguageShortName) == false)
-                    strBuilder.AppendFormat(@" -alang {0}", _source.AudioStream.LanguageShortName);
+                if (_source.AudioStream != null && string.IsNullOrEmpty(_source.AudioStream.LanguageID) == false)
+                    strBuilder.AppendFormat(@" -alang {0}", _source.AudioStream.LanguageID);
             }
 
             strBuilder.AppendFormat(@" -oac {0}",
@@ -127,8 +127,8 @@ namespace OMLTranscoder
                                     ((string)Enum.GetName(typeof(MEncoder.VideoFormat), VideoFormat)).ToLower());
 
             //subtitles
-            if (_source.Subtitle != null && string.IsNullOrEmpty(_source.Subtitle.LanguageShortName) == false)
-                strBuilder.AppendFormat(@" -font C:\windows\fonts\arial.ttf -slang {0}", _source.Subtitle.LanguageShortName);
+            if (_source.Subtitle != null && string.IsNullOrEmpty(_source.Subtitle.LanguageID) == false)
+                strBuilder.AppendFormat(@" -font C:\windows\fonts\arial.ttf -slang {0}", _source.Subtitle.LanguageID);
 
             // output format
             // always set the output format to mpeg for extenders
