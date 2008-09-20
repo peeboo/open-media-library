@@ -13,8 +13,8 @@ namespace OMLTranscoder
         { 
           NoAudio, // -nosound
           PCM,     // -oac pcm
-          MP2,     // -oac twolame
-          MP3,     // -oac mp3lame
+          TWOLAME, // -oac twolame (MP2)
+          MP3LAME, // -oac mp3lame (MP3)
           Copy,    // -oac copy
           LAVC     // FFmpeg audio encoding (mp2, ac3)
         };
@@ -25,7 +25,7 @@ namespace OMLTranscoder
           RAW,       // -ovc raw
           LAVC,      // -ovc lavc libavcodec - best quality (this is usually divx)
           VideoForWindows, // -ovc video for windows
-          Quicktime, // -ovc qtvideo - svq1/3 are supported
+          qtvideo,   // -ovc qtvideo - svq1/3 are supported
           XviD,      // -ovc xvid
           X264       // -ovc x264 H.264 encoding
         };

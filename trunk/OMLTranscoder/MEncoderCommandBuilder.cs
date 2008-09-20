@@ -19,13 +19,12 @@ namespace OMLTranscoder
             _source = ms;
             this.AudioFormat = MEncoder.AudioFormat.LAVC;
             this.VideoFormat = MEncoder.VideoFormat.LAVC;
-            this.OutputPath = path;
 
             if (File.Exists(ms.MediaPath))
             {
                 inputType = MEncoder.InputType.File;
                 inputFile = new FileInfo(_source.MediaPath);
-                OutputFile = Path.Combine(OutputPath, Path.GetFileName(_source.MediaPath));
+                OutputFile = Path.Combine(path, Path.GetFileName(_source.MediaPath));
             }
             else if (Directory.Exists(_source.MediaPath))
             {
@@ -36,7 +35,7 @@ namespace OMLTranscoder
                     if (inputDrive.IsReady == false)
                         inputDrive = null;
                     else
-                        OutputFile = Path.Combine(OutputPath, inputDrive.VolumeLabel);
+                        OutputFile = Path.Combine(path, inputDrive.VolumeLabel);
                 }
                 catch
                 {
@@ -45,12 +44,11 @@ namespace OMLTranscoder
             }
         }
 
-        public string OutputPath { get; set; }
         public string OutputFile { get; set; }
         public MEncoder.AudioFormat AudioFormat { get; set; }
         public MEncoder.VideoFormat VideoFormat { get; set; }
-        public SubtitleStream SubtitleStream { get { return _source.Subtitle; } }
-        public AudioStream AudioStream { get { return _source.AudioStream; } }
+        public SubtitleStream SubtitleStream { get { return _source.Subtitle; } set { _source.Subtitle = value; } }
+        public AudioStream AudioStream { get { return _source.AudioStream; } set { _source.AudioStream = value; } }
 
         private DriveInfo inputDrive;
         private FileInfo inputFile;
@@ -151,8 +149,8 @@ namespace OMLTranscoder
             strBuilder.Append(@" -really-quiet");
 
             //output
-            string outputExtension = (inputType == MEncoder.InputType.Drive) ? @"mpg" : @"wmv";
-            strBuilder.AppendFormat(@" -o ""{0}.{1}""", Path.Combine(OutputPath, OutputFile), outputExtension);
+            strBuilder.AppendFormat(@" -o ""{0}""", 
+                Path.ChangeExtension(OutputFile, (inputType == MEncoder.InputType.Drive) ? @".mpg" : @".wmv"));
 
             string completedArguments = strBuilder.ToString();
             Utilities.DebugLine("[MEncoderCommandBuilder] Arguments: {0}", completedArguments);
