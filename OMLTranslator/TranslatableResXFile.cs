@@ -10,6 +10,7 @@ using System.Resources;
 using System.Text;
 using System.Xml;
 using OMLEngine;
+using System.Text.RegularExpressions;
 
 namespace OMLTranslator
 {
@@ -18,6 +19,10 @@ namespace OMLTranslator
         private readonly ObservableCollection<TranslatableString> translatableStrings = new ObservableCollection<TranslatableString>();
         private readonly string baseName;
         private CultureInfo currentLanguage;
+        private static readonly Regex defaultControlTextRegex = new Regex(@"^\w+\d+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        
+        // This is not very precise, but will at least skip pure numberfields etc.
+        private static readonly Regex translatableTextRegex = new Regex(@"[a-zA-Z]", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         private bool? cachedIsDirty;
         private TranslationStatus? cachedStatus;
@@ -37,7 +42,38 @@ namespace OMLTranslator
                     {
                         if (entry.Value is string)
                         {
-                            var translatableString = new TranslatableString((string)entry.Key, (string)entry.Value, this);
+                            // Sort out keys used by WinForms for something that should not be translated 
+                            // - it's a mess as the WinForm designer mix everything leaving it to translation programs to sort it out :(
+                            string key = (string) entry.Key;
+                            string val = (string) entry.Value;
+                            if (key.StartsWith(">>", StringComparison.InvariantCulture))
+                            {
+                                if (key.EndsWith(".Name", StringComparison.InvariantCulture) ||
+                                    key.EndsWith(".Type", StringComparison.InvariantCulture) ||
+                                    key.EndsWith(".Parent", StringComparison.InvariantCulture) ||
+                                    key.EndsWith(".ZOrder", StringComparison.InvariantCulture))
+                                    // More are probably needed, add them as they are found :(
+                                {
+                                    continue;
+                                }
+                            }
+
+                            // Skip the Text field for controls if they look like a default control name
+                            if (key.EndsWith(".Text", StringComparison.InvariantCulture) &&
+                                defaultControlTextRegex.IsMatch(val))
+                            {
+                                continue;
+                            }
+
+                            // Check it at least have one English letter (a-z). If not, assume non translatable number etc.
+                            if (!translatableTextRegex.IsMatch(val))
+                            {
+                                continue;
+                            }
+
+                            if (key == "$this.Localizable") continue;
+
+                            var translatableString = new TranslatableString(key, val, this);
                             translatableStrings.Add(translatableString);
                             translatableString.PropertyChanged += TranslatableStringPropertyChangedHandler;
                         }
@@ -86,7 +122,7 @@ namespace OMLTranslator
         private string GetResXFileName(CultureInfo cultureInfo)
         {
             return Path.Combine(FileSystemWalker.TranslationsDirectory,
-                                BaseName + "." + cultureInfo.Name + ".xml");
+                                BaseName + "." + cultureInfo.Name + ".resx");
         }
 
         public ObservableCollection<TranslatableString> TranslatableStrings
@@ -113,55 +149,61 @@ namespace OMLTranslator
                 if (currentLanguage != value)
                 {
                     currentLanguage = value;
-                    bool isEnglish = false;
-                    ResourceSet resourceSet = null;
-
-                    // Hmm, I must be blind, I can't find the way to access metadata strings though the ResourceSet,
-                    // so for now I'll load the XML document. :(
-                    XmlDocument resourceSetXml = new XmlDocument();
-                    
-                    for (CultureInfo culture = currentLanguage; !isEnglish && !string.IsNullOrEmpty(culture.Name); culture = culture.Parent)
-                    {
-                        if (culture.Name == "en") isEnglish = true;
-                    }
-
-                    if (File.Exists(TargetResXFileName))
-                    {
-                        resourceSet = new ResXResourceSet(TargetResXFileName);
-                        resourceSetXml.Load(TargetResXFileName);
-                    }
-
-                    var inheritedResources = InheritedResourceSets;
-                    foreach (var str in TranslatableStrings)
-                    {
-                        string inheritedTarget = null;
-                        foreach (var inheritedResourceSet in inheritedResources)
-                        {
-                            inheritedTarget = inheritedResourceSet.GetString(str.Key);
-                            if (!string.IsNullOrEmpty(inheritedTarget)) break;
-                        }
-
-                        // Special rule - as the program default resources are en English, always use them as the ultimate
-                        // fallback for any English language culture
-                        if (isEnglish && string.IsNullOrEmpty(inheritedTarget)) inheritedTarget = str.Source;
-                        
-                        string newTarget = "";
-                        string newTranslatedSource = "";
-                        if (resourceSet != null)
-                        {
-                            newTarget = resourceSet.GetString(str.Key);
-                            string xpathParm = EscapeXPathParameter(OrgSourceMetadataKeyPrefix + str.Key);
-
-                            XmlNode metaDataValueNode = resourceSetXml.SelectSingleNode(string.Format("/root/metadata[@name={0}]/value", xpathParm));
-                            if (metaDataValueNode != null) newTranslatedSource = metaDataValueNode.InnerText;
-                        }
-
-                        str.InheritedTarget = inheritedTarget;
-                        str.Target = newTarget;
-                        str.TranslatedSource = newTranslatedSource;
-                        str.ClearDirty();
-                    }
+                    LoadCurrentLanguage();
+                    RaisePropertyChanged("CurrentLanguage");
                 }
+            }
+        }
+
+        private void LoadCurrentLanguage()
+        {
+            bool isEnglish = false;
+            ResourceSet resourceSet = null;
+
+            // Hmm, I must be blind, I can't find the way to access metadata strings though the ResourceSet,
+            // so for now I'll load the XML document. :(
+            XmlDocument resourceSetXml = new XmlDocument();
+                    
+            for (CultureInfo culture = currentLanguage; !isEnglish && !string.IsNullOrEmpty(culture.Name); culture = culture.Parent)
+            {
+                if (culture.Name == "en") isEnglish = true;
+            }
+
+            if (File.Exists(TargetResXFileName))
+            {
+                resourceSet = new ResXResourceSet(TargetResXFileName);
+                resourceSetXml.Load(TargetResXFileName);
+            }
+
+            var inheritedResources = InheritedResourceSets;
+            foreach (var str in TranslatableStrings)
+            {
+                string inheritedTarget = null;
+                foreach (var inheritedResourceSet in inheritedResources)
+                {
+                    inheritedTarget = inheritedResourceSet.GetString(str.Key);
+                    if (!string.IsNullOrEmpty(inheritedTarget)) break;
+                }
+
+                // Special rule - as the program default resources are en English, always use them as the ultimate
+                // fallback for any English language culture
+                if (isEnglish && string.IsNullOrEmpty(inheritedTarget)) inheritedTarget = str.Source;
+                        
+                string newTarget = "";
+                string newTranslatedSource = "";
+                if (resourceSet != null)
+                {
+                    newTarget = resourceSet.GetString(str.Key);
+                    string xpathParm = EscapeXPathParameter(OrgSourceMetadataKeyPrefix + str.Key);
+
+                    XmlNode metaDataValueNode = resourceSetXml.SelectSingleNode(string.Format("/root/metadata[@name={0}]/value", xpathParm));
+                    if (metaDataValueNode != null) newTranslatedSource = metaDataValueNode.InnerText;
+                }
+
+                str.InheritedTarget = inheritedTarget;
+                str.Target = newTarget;
+                str.TranslatedSource = newTranslatedSource;
+                str.ClearDirty();
             }
         }
 

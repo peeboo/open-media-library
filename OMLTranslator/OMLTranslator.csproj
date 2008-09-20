@@ -94,6 +94,21 @@
     <EmbeddedResource Include="..\Library\I18nResources.resx">
       <Link>TranslatableResources\Library\I18nResources.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\OMLDatabaseEditor\AboutOML.resx">
+      <Link>TranslatableResources\OMLDatabaseEditor\AboutOML.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\OMLDatabaseEditor\MetaDataSearch.resx">
+      <Link>TranslatableResources\OMLDatabaseEditor\MetaDataSearch.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\OMLDatabaseEditor\MetaDataSettings.resx">
+      <Link>TranslatableResources\OMLDatabaseEditor\MetaDataSettings.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\OMLDatabaseEditor\OMLDatabaseEditor.resx">
+      <Link>TranslatableResources\OMLDatabaseEditor\OMLDatabaseEditor.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\OMLDatabaseEditor\OptionList.resx">
+      <Link>TranslatableResources\OMLDatabaseEditor\OptionList.resx</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">

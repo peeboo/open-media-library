@@ -10,13 +10,21 @@ namespace OMLEngine
 {
     public class I18nResourceManager : ResourceManager
     {
-
         public I18nResourceManager(string baseName, Assembly assembly)
             : base(baseName, assembly)
         {
             
         }
 
+        public I18nResourceManager(Type type)
+            : this(type.FullName, type.Assembly)
+        {
+
+        }
+
+        /// <summary>
+        /// Gets an enumeration of all non-neutral cultures with an available resource set available either directly or inherited from a parent culture.
+        /// </summary>
         public IEnumerable<CultureInfo> AvailableCultures
         {
             get
@@ -26,9 +34,9 @@ namespace OMLEngine
 
                 if (FileSystemWalker.TranslationsDirExists)
                 {
-                    foreach (string file in Directory.GetFiles(FileSystemWalker.TranslationsDirectory, BaseName + ".*.xml"))
+                    foreach (string file in Directory.GetFiles(FileSystemWalker.TranslationsDirectory, BaseName + ".*.resx"))
                     {
-                        Match m = Regex.Match(file, @"\\(?'name'[^\\]+)\.(?'culture'[^\.\\]+)\.xml$", RegexOptions.IgnoreCase);
+                        Match m = Regex.Match(file, @"\\(?'name'[^\\]+)\.(?'culture'[^\.\\]+)\.resx$", RegexOptions.IgnoreCase);
                         if (m.Success && CultureInfo.InvariantCulture.CompareInfo.Compare(m.Groups["name"].Value, BaseName, CompareOptions.IgnoreCase) == 0)
                         {
                             CultureInfo culture = null;
@@ -67,13 +75,20 @@ namespace OMLEngine
             }   
         }
 
+        /// <summary>
+        /// Loads the resource set for the specified culture.
+        /// </summary>
+        /// <param name="culture">The culture to load the resource set for.</param>
+        /// <param name="createIfNotExists">Set to true to load the resource set if it has not yet been loaded.</param>
+        /// <param name="tryParents">Try loading the parent culture resource set if the specific resource set can't be loaded.</param>
+        /// <returns>The resource set for the specified culture if available, else null.</returns>
         protected override ResourceSet InternalGetResourceSet(CultureInfo culture, bool createIfNotExists, bool tryParents)
         {
             string fileName = null;
             try
             {
                 fileName = Path.Combine(FileSystemWalker.TranslationsDirectory, GetResourceFileName(culture));
-                fileName = Path.ChangeExtension(fileName, ".xml");
+                fileName = Path.ChangeExtension(fileName, ".resx");
 
                 if (File.Exists(fileName))
                 {
@@ -87,6 +102,18 @@ namespace OMLEngine
             }
             
             return base.InternalGetResourceSet(culture, createIfNotExists, tryParents);
+        }
+
+        /// <summary>
+        /// Loads the resource set for the specified culture.
+        /// </summary>
+        /// <param name="culture">The culture to load the resource set for.</param>
+        /// <param name="createIfNotExists">Set to true to load the resource set if it has not yet been loaded.</param>
+        /// <param name="tryParents">Try loading the parent culture resource set if the specific resource set can't be loaded.</param>
+        /// <returns>The resource set for the specified culture if available, else null.</returns>
+        public ResourceSet PublicGetResourceSet(CultureInfo culture, bool createIfNotExists, bool tryParents)
+        {
+            return InternalGetResourceSet(culture, createIfNotExists, tryParents);
         }
     }
 }
