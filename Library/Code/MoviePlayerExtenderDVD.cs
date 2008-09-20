@@ -38,9 +38,7 @@ namespace Library
                 DVDTitle dvdTitle = _info.GetMainTitle();
                 if (dvdTitle != null)
                 {
-                    string videoTSDir = _source.MediaPath;
-                    if (string.Compare(new DirectoryInfo(videoTSDir).Name, "VIDEO_TS", true) != 0)
-                        videoTSDir = Path.Combine(videoTSDir, "VIDEO_TS");
+                    string videoTSDir = _source.VIDEO_TS;
                     int fileID = int.Parse(dvdTitle.File.Substring(4));
                     OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: main title fileID={1} found for '{0}'", _source, fileID);
                     string vts = string.Format("VTS_{0:D2}_", fileID);

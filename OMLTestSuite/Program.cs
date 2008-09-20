@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define CUSTOM
+
+using System;
 
 namespace OMLTestSuite
 {
@@ -6,6 +8,7 @@ namespace OMLTestSuite
     {
         static void Main(string[] args)
         {
+#if !CUSTOM
             AppleTrailersTest att = new AppleTrailersTest();
             Console.WriteLine("Testing: AppleTrailers");
             att.TEST_APPLE_TRAILERS_GET_TITLES();
@@ -42,15 +45,20 @@ namespace OMLTestSuite
             tct.TEST_BASE_CASE();
             tct.TEST_FIND_FOR_ID();
             tct.TEST_SOURCE_DATABASE_TO_USE();
+#endif
 
             MEncoderCommandBuilderTest mecbt = new MEncoderCommandBuilderTest();
             Console.WriteLine("Testing: MEncoderCommandBuilder");
+            mecbt.TEST_DVD_IFO_PARSING();
+            mecbt.TEST_COMMAND_BUILDER_A_S();
             mecbt.TEST_BASIC_COMMAND_BUILDER();
+#if !CUSTOM
 
             VirtualDirectoryTest vdt = new VirtualDirectoryTest();
             Console.WriteLine("Testing: VirtualDirectory");
             vdt.TEST_CREATE_VIRTUAL_FOLDER();
             vdt.TEST_MULTIPLE_BASE_FOLDERS_WORK();
+#endif
         }
     }
 }

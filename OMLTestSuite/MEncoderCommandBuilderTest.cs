@@ -14,16 +14,17 @@ namespace OMLTestSuite
         public void TEST_BASIC_COMMAND_BUILDER()
         {
             string drive = OMLEngine.Properties.Settings.Default.VirtualDiscDrive.ToLower();
+            drive = "E";
             MediaSource ms = new MediaSource(new Disk("", drive + ":", VideoFormat.DVD));
             MEncoderCommandBuilder builder = new MEncoderCommandBuilder(ms, ".")
             {
-                AudioFormat = MEncoder.AudioFormat.Copy,
-                VideoFormat = MEncoder.VideoFormat.Copy,
+                AudioEncoderFormat = MEncoder.AudioFormat.Copy,
+                VideoEncoderFormat = MEncoder.VideoFormat.Copy,
                 OutputFile  = @".\mymovie",
             };
 
             Assert.IsNotNull(builder.GetArguments());
-            Assert.AreEqual(@" dvd:// -dvd-device """ + drive +
+            Assert.AreEqual(@" dvd:// -dvd-device """ + drive.ToLower() +
                             @":\"" -oac copy -ovc copy -of mpeg -mpegopts format=dvd:tsaf " +
                             @"-vf harddup -really-quiet -o "".\mymovie.mpg""", builder.GetArguments().ToLower());
             Assert.IsNotNull(builder.GetCommand());
@@ -67,9 +68,11 @@ namespace OMLTestSuite
             MEncoderCommandBuilder builder = new MEncoderCommandBuilder(ms, ".");
 
             Assert.IsNotNull(builder.GetArguments());
-            Assert.AreEqual(@" dvd:// -dvd-device """ + ms.MediaPath +
-                            @":\"" -oac copy -ovc copy -of mpeg -mpegopts format=dvd:tsaf " +
-                            @"-vf harddup -really-quiet -o "".\mymovie.mpg""", builder.GetArguments().ToLower());
+            Assert.AreEqual(@" dvd:// -dvd-device """ + Path.GetFullPath(ms.MediaPath).ToLower() + @"""" +
+                            @" -alang fr -oac lavc -ovc lavc" +
+                            @" -font c:\windows\fonts\arial.ttf -slang en" +
+                            @" -of mpeg -mpegopts format=dvd:tsaf" +
+                            @" -vf harddup -really-quiet -o "".\testdvd.mpg""", builder.GetArguments().ToLower());
         }
 
         static MediaSource TestDVD_A_FR_S_EN()

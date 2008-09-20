@@ -17,42 +17,39 @@ namespace OMLTranscoder
         public MEncoderCommandBuilder(MediaSource ms, string path)
         {
             _source = ms;
-            this.AudioFormat = MEncoder.AudioFormat.LAVC;
-            this.VideoFormat = MEncoder.VideoFormat.LAVC;
+            this.AudioEncoderFormat = MEncoder.AudioFormat.LAVC;
+            this.VideoEncoderFormat = MEncoder.VideoFormat.LAVC;
 
-            if (File.Exists(ms.MediaPath))
+            if (_source.Format != VideoFormat.DVD)
             {
-                inputType = MEncoder.InputType.File;
-                inputFile = new FileInfo(_source.MediaPath);
                 OutputFile = Path.Combine(path, Path.GetFileName(_source.MediaPath));
             }
-            else if (Directory.Exists(_source.MediaPath))
+            else
             {
-                inputType = MEncoder.InputType.Drive;
-                inputDrive = new DriveInfo(_source.MediaPath.Substring(0, 1));
-                try
+                string root = _source.VIDEO_TS_Parent;
+                if (root == Path.GetPathRoot(root))
                 {
-                    if (inputDrive.IsReady == false)
-                        inputDrive = null;
-                    else
-                        OutputFile = Path.Combine(path, inputDrive.VolumeLabel);
+                    DriveInfo inputDrive = new DriveInfo(root.Substring(0, 1));
+                    try
+                    {
+                        if (inputDrive.IsReady == false)
+                            inputDrive = null;
+                        else
+                            OutputFile = Path.Combine(path, inputDrive.VolumeLabel);
+                    }
+                    catch { }
                 }
-                catch
-                {
-                    inputDrive = null;
-                }
+                else
+                    OutputFile = Path.Combine(path, new DirectoryInfo(root).Name);
             }
         }
 
         public string OutputFile { get; set; }
-        public MEncoder.AudioFormat AudioFormat { get; set; }
-        public MEncoder.VideoFormat VideoFormat { get; set; }
+        public bool IsDVD { get { return _source.Format == VideoFormat.DVD; } }
+        public MEncoder.AudioFormat AudioEncoderFormat { get; set; }
+        public MEncoder.VideoFormat VideoEncoderFormat { get; set; }
         public SubtitleStream SubtitleStream { get { return _source.Subtitle; } set { _source.Subtitle = value; } }
         public AudioStream AudioStream { get { return _source.AudioStream; } set { _source.AudioStream = value; } }
-
-        private DriveInfo inputDrive;
-        private FileInfo inputFile;
-        private MEncoder.InputType inputType;
 
         static string _command = null;
         public string GetCommand()
@@ -77,30 +74,21 @@ namespace OMLTranscoder
 
         public string GetArguments()
         {
-            if (inputDrive == null && inputFile == null)
-            {
-                Utilities.DebugLine("[MEncoderCommandBuilder] Missing input drive or filename");
-                throw new Exception("Must define either an input drive or an input device");
-            }
+            if (OutputFile == null)
+                throw new Exception(string.Format("OutputFile not set for {0}", _source));
 
             StringBuilder strBuilder = new StringBuilder();
 
             // input location
-            switch (inputType)
+            if (IsDVD)
             {
-                case MEncoder.InputType.File:
-                    strBuilder.AppendFormat(@"""{0}""", inputFile.FullName);
-                    break;
-                case MEncoder.InputType.Drive:
-                    strBuilder.Append(@" dvd://");
-                    if (_source.Title != null)
-                        strBuilder.Append(_source.Title.Value.ToString());
-                    strBuilder.AppendFormat(@" -dvd-device ""{0}""", inputDrive.RootDirectory);
-                    break;
-                default:
-                    Utilities.DebugLine("No idea what format the file is");
-                    throw new Exception("Can't determine input format (file or drive)");
+                strBuilder.Append(@" dvd://");
+                if (_source.Title != null)
+                    strBuilder.Append(_source.Title.Value.ToString());
+                strBuilder.AppendFormat(@" -dvd-device ""{0}""", _source.VIDEO_TS_Parent);
             }
+            else
+                strBuilder.AppendFormat(@"""{0}""", _source.MediaPath);
 
             if (_source.StartChapter != null)
             {
@@ -111,46 +99,41 @@ namespace OMLTranscoder
             }
 
             //audio format
-            if (AudioFormat == MEncoder.AudioFormat.NoAudio)
+            if (AudioEncoderFormat == MEncoder.AudioFormat.NoAudio)
                 strBuilder.Append(@" -nosound");
             else
             {
-                if (_source.AudioStream != null && string.IsNullOrEmpty(_source.AudioStream.LanguageID) == false)
-                    strBuilder.AppendFormat(@" -alang {0}", _source.AudioStream.LanguageID);
+                if (_source.AudioStream != null)
+                {
+                    if (string.IsNullOrEmpty(_source.AudioStream.LanguageID) == false)
+                        strBuilder.AppendFormat(@" -alang {0}", _source.AudioStream.LanguageID);
+                    else
+                        strBuilder.AppendFormat(@" -aid {0}", _source.AudioStream.AudioID);
+                }
             }
 
-            strBuilder.AppendFormat(@" -oac {0}",
-                                    ((string)Enum.GetName(typeof(MEncoder.AudioFormat), AudioFormat)).ToLower());
+            strBuilder.AppendFormat(@" -oac {0}", AudioEncoderFormat.ToString().ToLower());
 
             //video
-            strBuilder.AppendFormat(@" -ovc {0}",
-                                    ((string)Enum.GetName(typeof(MEncoder.VideoFormat), VideoFormat)).ToLower());
+            strBuilder.AppendFormat(@" -ovc {0}", VideoEncoderFormat.ToString().ToLower());
 
             //subtitles
             if (_source.Subtitle != null && string.IsNullOrEmpty(_source.Subtitle.LanguageID) == false)
-                strBuilder.AppendFormat(@" -font C:\windows\fonts\arial.ttf -slang {0}", _source.Subtitle.LanguageID);
+                strBuilder.AppendFormat(@" -font c:\windows\fonts\arial.ttf -slang {0}", _source.Subtitle.LanguageID);
 
             // output format
             // always set the output format to mpeg for extenders
-            switch (inputType)
-            {
-                case MEncoder.InputType.Drive:
-                    strBuilder.Append(@" -of mpeg -mpegopts format=dvd:tsaf -vf harddup");
-                    break;
-                case MEncoder.InputType.File:
-                    strBuilder.Append(@" -lavcopts vcodec=msmpeg4v2:vpass=1");
-                    break;
-                default:
-                    Utilities.DebugLine("I have no idea format output format to use");
-                    throw new Exception("Unable to determine what output format to use");
-            }
+            if (IsDVD)
+                strBuilder.Append(@" -of mpeg -mpegopts format=dvd:tsaf -vf harddup");
+            else
+                strBuilder.Append(@" -lavcopts vcodec=msmpeg4v2:vpass=1");
 
             // set quiet mode on
             strBuilder.Append(@" -really-quiet");
 
             //output
             strBuilder.AppendFormat(@" -o ""{0}""", 
-                Path.ChangeExtension(OutputFile, (inputType == MEncoder.InputType.Drive) ? @".mpg" : @".wmv"));
+                Path.ChangeExtension(OutputFile, IsDVD ? @".mpg" : @".wmv"));
 
             string completedArguments = strBuilder.ToString();
             Utilities.DebugLine("[MEncoderCommandBuilder] Arguments: {0}", completedArguments);
