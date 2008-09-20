@@ -91,12 +91,19 @@ namespace OMLGetDVDInfo
 
         public int? FPS { get { return this.Chapters.Count > 0 ? (int?)this.Chapters[0].FPS : null; } }
 
+        public DVDSubtitle FindSubTitle(string languageCode)
+        {
+            foreach (DVDSubtitle st in this.Subtitles)
+                if (string.Compare(languageCode, st.LanguageID, true) == 0)
+                    return st;
+            return null;
+        }
+
         public override string ToString()
         {
             return string.Format("{0}, {1}, ({2:00}:{3:00}:{4:00}) {5}, {6}", this.File, this.TitleNumber, this.Duration.Hours,
                 this.Duration.Minutes, this.Duration.Seconds, this.Resolution, this.AspectRatio);
         }
-
     }
 
     #region -- Enums --
