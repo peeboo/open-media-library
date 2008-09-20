@@ -49,7 +49,7 @@ namespace OMLTestSuite
 
             MEncoderCommandBuilderTest mecbt = new MEncoderCommandBuilderTest();
             Console.WriteLine("Testing: MEncoderCommandBuilder");
-            mecbt.TEST_DVD_IFO_PARSING_2();
+            //mecbt.TEST_DVD_IFO_PARSING_2();
             mecbt.TEST_DVD_IFO_PARSING();
             mecbt.TEST_COMMAND_BUILDER_A_S();
             //mecbt.EXECUTE_COMMAND_BUILDER_A_S();
