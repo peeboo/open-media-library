@@ -100,7 +100,26 @@ namespace Library
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
         {
             this._session = session;
-            this._isExtender = !host.MediaCenterEnvironment.Capabilities.ContainsKey("Console");
+            try { // borrowed from vmcNetFlix project on google-code
+                bool isConsole = false;
+                if (host.MediaCenterEnvironment.Capabilities.ContainsKey("Console"))
+                {
+                    isConsole = (bool)host.MediaCenterEnvironment.Capabilities["Console"];
+                }
+                bool isVideo = false;
+                if (host.MediaCenterEnvironment.Capabilities.ContainsKey("Video"))
+                {
+                    isVideo = (bool)host.MediaCenterEnvironment.Capabilities["Video"];
+                }
+                if (isConsole == false)
+                {
+                    if (isVideo == true)
+                        _isExtender = true;
+                }
+            } catch (Exception)
+            {
+                _isExtender = false;
+            }
 #if DEBUG_EXT
             this._isExtender = true;
 #endif
