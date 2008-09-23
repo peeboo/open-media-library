@@ -98,6 +98,7 @@
               <Set Target="[ScrollingHandler.HandlerStage]" Value="Bubbled"/>
               <Set Target="[ScrollingData.LockedPosition]" Value=".5"/>
               <Set Target="[ScrollingData.LockedAlignment]" Value="0"/>
+              <Set Target="[GalleryRepeater.Padding]" Value="50,0,0,0"/>
           </Actions>
       </Condition>
 
@@ -152,15 +153,22 @@
                       Navigation="FlowVertical"
                       Source="[List]"
                       DiscardOffscreenVisuals="true"
-                      Layout="[GridLayout]" >
+                      Layout="[GridLayout]">
               <Animations>
                 <Animation Animation="animation://s:MoveAnimation"/>
+                <Animation Type="Move">
+                    <Keyframes>
+                        <PositionKeyframe Time="0" RelativeTo="Current" />
+                        <PositionKeyframe Time=".2" RelativeTo="Final" />
+                    </Keyframes>
+                </Animation>
               </Animations>
               <Content>
 
                 <!-- For each item, repeat our RepeatedItem UI, passing in-->
                 <!-- the index of the item and the image.                 -->
                 <me:RepeatedItem  Index="[RepeatedItemIndex]"
+                                  List="[List]"
                                   FocusedIndex="[FocusedIndex]"
                                   GalleryItem="[RepeatedItem!a:GalleryItem]"
                                   Application="[Application]"
@@ -193,7 +201,8 @@
     <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
     <cor:Single Name="CoverArtAlpha" Single="0.5"/>
     <a:UISettings Name="UISettings" UISettings="$Required" />
-    <cor:Int32 Name="AngleDelta" Int32="-15"/>
+    <cor:Int32 Name="AngleDelta" Int32="-25"/>
+    <col:IList Name="List" IList="$Required"/>
           
     <!-- The index passed down from the repeater.-->
     <Index Name="Index" Index="$Required"/>
@@ -208,6 +217,7 @@
 
   <Locals>
       <ClickHandler Name="Clicker" Command="[GalleryItem]"/>
+      <cor:Int32 Name="CurrentIndex" />
       <MathTransformer Name="ComputeNormalizedIndex"/>
       <MathTransformer Name="ComputeRotation" Type="Int32"/>
       <MathTransformer Name="ComputeHeightofbFromAngleofA" Type="Int32"/>
@@ -334,7 +344,7 @@
       <!-- Items to the LEFT of the focus item -->
       <Changed Source="[FocusedIndex]" InitialEvaluate="true">
           <Conditions>
-              <!--<Equality Source="[GalleryView]" ConditionOp="Equals" Value="Carousel"/>-->
+              <Equality Source="[GalleryView]" ConditionOp="Equals" Value="Carousel"/>
               <Equality Source="[FocusedIndex.Value]" ConditionOp="LessThan" Value="[Index.Value]"/>
           </Conditions>
           <Actions>
@@ -350,7 +360,7 @@
       <!-- The focus item -->
       <Changed Source="[FocusedIndex]" InitialEvaluate="true">
           <Conditions>
-              <!--<Equality Source="[GalleryView]" ConditionOp="Equals" Value="Carousel"/>-->
+              <Equality Source="[GalleryView]" ConditionOp="Equals" Value="Carousel"/>
               <Equality Source="[FocusedIndex.Value]" ConditionOp="Equals" Value="[Index.Value]"/>
           </Conditions>
           <Actions>
@@ -365,7 +375,7 @@
       <!-- Items to the RIGHT of the focus item -->
       <Changed Source="[FocusedIndex]" InitialEvaluate="true">
           <Conditions>
-              <!--<Equality Source="[GalleryView]" ConditionOp="Equals" Value="Carousel"/>-->
+              <Equality Source="[GalleryView]" ConditionOp="Equals" Value="Carousel"/>
               <Equality Source="[FocusedIndex.Value]" ConditionOp="GreaterThan" Value="[Index.Value]"/>
           </Conditions>
           <Actions>
@@ -448,29 +458,24 @@
           <LayoutInput>
             <AnchorLayoutInput Left="ImagePanel,-0.03" Right="ImagePanel,1.03" Top="ImagePanel,-0.02" Bottom="ImagePanel,1.02"/>
           </LayoutInput>
-          <Animations>
-            <Animation Animation="animation://s:OverlayIdle"/>
-          </Animations>
         </Graphic>
 
       </Children>
-
-        <Animations>
-            <Animation Type="Rotate">
-                <Keyframes>
-                    <RotateKeyframe Time="0" Value="0deg;0,1,0" RelativeTo="Current" Interpolation="Log"/>
-                    <RotateKeyframe Time=".5" Value="0deg;0,1,0" RelativeTo="Final"/>
-                </Keyframes>
-            </Animation>
-            <Animation Type="Scale">
-                <Keyframes>
-                    <ScaleKeyframe Time="0" RelativeTo="Current" Interpolation="Log"/>
-                    <ScaleKeyframe Time=".5" RelativeTo="Final"/>
-                </Keyframes>
-            </Animation>
-        </Animations>
-        
-    </Panel>
+      <Animations>
+          <Animation Type="Rotate">
+              <Keyframes>
+                  <RotateKeyframe Time="0" Value="0deg;0,1,0" RelativeTo="Current" Interpolation="Log" />
+                  <RotateKeyframe Time=".5" Value="0deg;0,1,0" RelativeTo="Final" />
+              </Keyframes>
+          </Animation>
+          <Animation Type="ContentChangeShow">
+              <Keyframes>
+                  <AlphaKeyframe Time="0" Value="0" RelativeTo="Absolute" />
+                  <AlphaKeyframe Time=".3" RelativeTo="Final" />
+              </Keyframes>
+          </Animation>
+      </Animations>
+  </Panel>
 
   </Content>
 </UI>
