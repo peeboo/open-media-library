@@ -16,7 +16,6 @@ namespace Library
 
         public void Initialize(Dictionary<string, object> appInfo, Dictionary<string, object> entryPointInfo)
         {
-            Debug.Assert(false);
             try
             {
                 ServiceController sc = new ServiceController("OMLEngineService");
