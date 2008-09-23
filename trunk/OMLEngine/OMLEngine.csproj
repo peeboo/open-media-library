@@ -55,12 +55,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioStream.cs" />
+    <Compile Include="DVDAudioTrack.cs" />
+    <Compile Include="DVDChapter.cs" />
+    <Compile Include="DVDDisk.cs" />
+    <Compile Include="DVDSubTitle.cs" />
+    <Compile Include="DVDTitle.cs" />
     <Compile Include="I18nResourceManager.cs" />
     <Compile Include="Disk.cs" />
     <Compile Include="FileSystemWalker.cs" />
     <Compile Include="Genres.cs" />
+    <Compile Include="IFOUtilities.cs" />
     <Compile Include="ITranscodingService.cs" />
     <Compile Include="MediaData.cs" />
+    <Compile Include="MediaLanguage.cs" />
     <Compile Include="MediaSource.cs" />
     <Compile Include="NetHelper.cs" />
     <Compile Include="Person.cs" />
@@ -88,12 +95,6 @@
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OMLGetDVDInfo\OMLGetDVDInfo.csproj">
-      <Project>{A1FB9365-38BD-496F-92AE-CEC015888200}</Project>
-      <Name>OMLGetDVDInfo</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
