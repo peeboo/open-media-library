@@ -2,12 +2,24 @@
 
 using System;
 
+using OMLEngine;
+using OMLEngineService;
+
 namespace OMLTestSuite
 {
     class Program
     {
         static void Main(string[] args)
         {
+#if WCF_TEST
+            using (var host = new MyClientBase<ITranscodingService>())
+            {
+                var service = host.Channel;
+                service.Transcode(new MediaSource(new Disk("name", "path", VideoFormat.DVD)));
+                service.Cancel("key");
+            }
+            return;
+#endif
 #if !CUSTOM
             AppleTrailersTest att = new AppleTrailersTest();
             Console.WriteLine("Testing: AppleTrailers");

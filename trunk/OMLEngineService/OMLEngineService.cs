@@ -3,6 +3,7 @@ using System.ServiceProcess;
 using System.Timers;
 using System.Diagnostics;
 using OMLEngine;
+using System.ServiceModel;
 
 namespace OMLEngineService
 {
@@ -10,6 +11,7 @@ namespace OMLEngineService
     {
         private TitleCollection tc;
         private Timer _timer;
+        private ServiceHost _serviceHost;
 
         public enum Commands
         {
@@ -57,6 +59,16 @@ namespace OMLEngineService
         {
             WriteToLog(EventLogEntryType.Information, "OMLEngineService Start");
             _timer.Start();
+
+            try
+            {
+                _serviceHost = new ServiceHost(typeof(TranscodingService));
+                _serviceHost.Open();
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[ERROR] OnStart: {0}", ex);
+            }
         }
 
         protected override void OnContinue()
@@ -74,6 +86,18 @@ namespace OMLEngineService
         protected override void OnStop()
         {
             _timer.Stop();
+            try
+            {
+                if (_serviceHost != null)
+                {
+                    _serviceHost.Close();
+                    _serviceHost = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[ERROR] OnStop: {0}", ex);
+            }
             WriteToLog(EventLogEntryType.Information, "OMLEngineService Stop");
         }
 
@@ -98,6 +122,7 @@ namespace OMLEngineService
                                    DateTime.Now.ToLongTimeString();
             evt.Source = sSource;
             evt.WriteEntry(message, EventLogEntryType.Information);
+            Utilities.DebugLine(message);
         }
 
         protected void _timer_Elapsed(object sender, ElapsedEventArgs e)

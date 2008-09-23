@@ -4,15 +4,19 @@
  *******************************************************/
 
 using System;
+using System.Runtime.Serialization;
 
 using OMLGetDVDInfo;
 
 namespace OMLEngine
 {
+    [DataContract]
     public class SubtitleStream
     {
         public string Language { get { return MediaLanguage.LanguageNameForId(LanguageID); } }
+        [DataMember]
         public string LanguageID { get; private set; }
+        [DataMember]
         public int? SubtitleID { get; private set; }
 
         public SubtitleStream()
