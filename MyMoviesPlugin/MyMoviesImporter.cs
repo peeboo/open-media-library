@@ -116,26 +116,24 @@ namespace MyMoviesPlugin
             {
                 List<string> dirList = new List<string>();
                 List<string> fileList = new List<string>();
-                GetSubFolders(startFolder, dirList);
+                GetSubFolders(startFolder, ref dirList);
 
                 // the share or link may not exist nowbb
                 if (Directory.Exists(startFolder))
-                {
                     dirList.Add(startFolder);
-                }
 
                 foreach (string currentFolder in dirList)
                 {
-                    Utilities.DebugLine("[MyMoviesImporter] folder " + currentFolder);
+                    Utilities.DebugLine("[MyMoviesImporter] Checking Folder " + currentFolder);
                  
                     string[] fileNames = null;
                     try
                     {
-                        fileNames = Directory.GetFiles(currentFolder, "*.xml");
+                        fileNames = Directory.GetFiles(currentFolder, @"*.xml");
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        Utilities.DebugLine("[MyMoviesImporter] We didn't find any xml files in {0}, we will skip this folder", currentFolder);
+                        Utilities.DebugLine("Failed to locate files for dir ({0}): {1}", currentFolder, ex.Message);
                         fileNames = null;
                     }
 
@@ -146,13 +144,13 @@ namespace MyMoviesPlugin
                             Utilities.DebugLine("Checking xml file {0}", filename);
                             if (filename.ToLower().EndsWith(@"mymovies.xml"))
                             {
-                                Utilities.DebugLine("We found a mymovies.xml file in {0}", currentFolder);
+                                Utilities.DebugLine("ProcessFile called on: {0} in folder {1}", filename, currentFolder);
                                 ProcessFile(filename);
                             }
 
                             if (filename.ToLower().EndsWith(@"titles.xml"))
                             {
-                                Utilities.DebugLine("We found a titles.xml file in {0}", currentFolder);
+                                Utilities.DebugLine("ProcessFile called on {0} in folder {1}", filename, currentFolder);
                                 ProcessFile(filename);
                             }
                         }
@@ -601,8 +599,6 @@ namespace MyMoviesPlugin
             Utilities.DebugLine("[MyMoviesImporter] Ok, I got nothing... hopefully the double-check in the validate method will find something");
             return disks;
         }
-
-
         private Disk DiskForFormatAndLocation(VideoFormat format, string location)
         {
             Disk disk = new Disk();
@@ -611,7 +607,6 @@ namespace MyMoviesPlugin
 
             return disk;
         }
-
         private VideoFormat FormatForExtension(string ext)
         {
             VideoFormat format;
@@ -776,7 +771,7 @@ namespace MyMoviesPlugin
             }
             return true;
         }
-        private void GetSubFolders(string startFolder, List<string> folderList)
+        private void GetSubFolders(string startFolder, ref List<string> folderList)
         {
             DirectoryInfo[] diArr = null;
             try
@@ -785,15 +780,15 @@ namespace MyMoviesPlugin
                 diArr = di.GetDirectories();
                 foreach (DirectoryInfo folder in diArr)
                 {
+                    Utilities.DebugLine("Got a child Folder {0}", folder.Name);
                     folderList.Add(folder.FullName);
-                    GetSubFolders(folder.FullName, folderList);
+                    GetSubFolders(folder.FullName, ref folderList);
                 }
 
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("[MyMoviesImporter] An error occured: " + ex.Message);
-                // ignore any permission errors
+                Utilities.DebugLine("[MyMoviesImporter] An error occured getting folder info for folder ({0}): {1}", startFolder, ex.Message);
             }
         }
         private IList<string> GetVideoFilesForFolder(string folder)
@@ -817,7 +812,6 @@ namespace MyMoviesPlugin
             }
             return fileNames;
         }
-
         private string FindFinalImagePath(string imagePath)
         {
             Utilities.DebugLine("[MyMoviesImporter] Attempting to determine cover image based on path {0}", imagePath);
