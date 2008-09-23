@@ -9,39 +9,39 @@
       xmlns:rbg="resx://Library/Library.Resources/RadioButtonGroup"
       xmlns:me="Me">
 
-  <Aggregate Source="resx://Library/Library.Resources/Base" />
-  <Aggregate Source="resx://Library/Library.Resources/Controls" />
-  
-  <UI Name="Settings">
+    <Aggregate Source="resx://Library/Library.Resources/Base" />
+    <Aggregate Source="resx://Library/Library.Resources/Controls" />
 
-    <Locals>
-      <Command Name="BeginSetupCommand"
-               Description="Begin Setup"/>
-      <Command Name="SaveSettings"
-               Description="Save Settings"/>
-      <Command Name="AboutOML"
-               Description="About OML"/>
+    <UI Name="Settings">
 
-      <Choice Name="Tabs">
-        <Options>
-          <cor:String cor:String="View Options"/>
-          <cor:String cor:String="Image Mounting Tool"/>
-          <cor:String cor:String="Customize UI"/>
-          <cor:String cor:String="Language"/>
-        </Options>
-      </Choice>
-    </Locals>
+        <Locals>
+            <Command Name="BeginSetupCommand"
+                     Description="Begin Setup"/>
+            <Command Name="SaveSettings"
+                     Description="Save Settings"/>
+            <Command Name="AboutOML"
+                     Description="About OML"/>
 
-    <Properties>
-      <!-- <a:Setup Name="Setup" /> -->
-      <a:Settings Name="Settings" Settings="$Required" />
-      <a:OMLApplication Name="Application" OMLApplication="$Required"/>
-      <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
-      <a:UISettings Name="UISettings" UISettings="$Required" />
-    </Properties>
+            <Choice Name="Tabs">
+                <Options>
+                    <cor:String cor:String="View Options"/>
+                    <cor:String cor:String="Image Mounting Tool"/>
+                    <cor:String cor:String="Customize UI"/>
+                    <cor:String cor:String="Language"/>
+                </Options>
+            </Choice>
+        </Locals>
 
-    <Rules>
-    <!--
+        <Properties>
+            <!-- <a:Setup Name="Setup" /> -->
+            <a:Settings Name="Settings" Settings="$Required" />
+            <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+            <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+            <a:UISettings Name="UISettings" UISettings="$Required" />
+        </Properties>
+
+        <Rules>
+            <!--
       <Changed Source="[BeginSetupCommand.Invoked]">
         <Actions>
           <Navigate Source="@resx://Library/Library.Resources/SelectImporter"
@@ -52,263 +52,268 @@
         </Actions>
       </Changed>
      -->
-      <Changed Source="[SaveSettings.Invoked]">
-        <Actions>
-          <Invoke Target="[Settings.SaveSettings]" />
-        </Actions>
-      </Changed>
+            <Changed Source="[SaveSettings.Invoked]">
+                <Actions>
+                    <Invoke Target="[Settings.SaveSettings]" />
+                </Actions>
+            </Changed>
 
-        <Changed Source="[AboutOML.Invoked]">
-            <Actions>
-                <Navigate Source="@resx://Library/Library.Resources/About" />
-            </Actions>
-        </Changed>
+            <Changed Source="[AboutOML.Invoked]">
+                <Actions>
+                    <Navigate Source="@resx://Library/Library.Resources/About" />
+                </Actions>
+            </Changed>
 
-      <Changed Source="[Tabs.Chosen]">
-        <Conditions>
-          <Equality Source="[Tabs.Chosen.ToString]" Value="View Options"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[ViewOptionsPanel.Visible]" Value="true"/>
-          <Set Target="[CustomizeUI.Visible]" Value="false"/>
-          <Set Target="[DTPanel.Visible]" Value="false"/>
-          <Set Target="[LanguagePanel.Visible]" Value="false"/>
-        </Actions>  
-      </Changed>
+            <Changed Source="[Tabs.Chosen]">
+                <Conditions>
+                    <Equality Source="[Tabs.Chosen.ToString]" Value="View Options"/>
+                </Conditions>
+                <Actions>
+                    <Set Target="[ViewOptionsPanel.Visible]" Value="true"/>
+                    <Set Target="[CustomizeUI.Visible]" Value="false"/>
+                    <Set Target="[DTPanel.Visible]" Value="false"/>
+                    <Set Target="[LanguagePanel.Visible]" Value="false"/>
+                </Actions>
+            </Changed>
 
-      <Changed Source="[Tabs.Chosen]">
-        <Conditions>
-          <Equality Source="[Tabs.Chosen.ToString]" Value="Image Mounting Tool"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
-          <Set Target="[CustomizeUI.Visible]" Value="false"/>
-          <Set Target="[DTPanel.Visible]" Value="true"/>
-          <Set Target="[LanguagePanel.Visible]" Value="false"/>
-        </Actions>
-      </Changed>
+            <Changed Source="[Tabs.Chosen]">
+                <Conditions>
+                    <Equality Source="[Tabs.Chosen.ToString]" Value="Image Mounting Tool"/>
+                </Conditions>
+                <Actions>
+                    <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+                    <Set Target="[CustomizeUI.Visible]" Value="false"/>
+                    <Set Target="[DTPanel.Visible]" Value="true"/>
+                    <Set Target="[LanguagePanel.Visible]" Value="false"/>
+                </Actions>
+            </Changed>
 
-      <Changed Source="[Tabs.Chosen]">
-        <Conditions>
-          <Equality Source="[Tabs.Chosen.ToString]" Value="Customize UI"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
-          <Set Target="[CustomizeUI.Visible]" Value="true"/>
-          <Set Target="[DTPanel.Visible]" Value="false"/>
-          <Set Target="[LanguagePanel.Visible]" Value="false"/>
-        </Actions>
-      </Changed>
+            <Changed Source="[Tabs.Chosen]">
+                <Conditions>
+                    <Equality Source="[Tabs.Chosen.ToString]" Value="Customize UI"/>
+                </Conditions>
+                <Actions>
+                    <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+                    <Set Target="[CustomizeUI.Visible]" Value="true"/>
+                    <Set Target="[DTPanel.Visible]" Value="false"/>
+                    <Set Target="[LanguagePanel.Visible]" Value="false"/>
+                </Actions>
+            </Changed>
 
-      <Changed Source="[Tabs.Chosen]">
-        <Conditions>
-          <Equality Source="[Tabs.Chosen.ToString]" Value="Language"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
-          <Set Target="[CustomizeUI.Visible]" Value="false"/>
-          <Set Target="[DTPanel.Visible]" Value="false"/>
-          <Set Target="[LanguagePanel.Visible]" Value="true"/>
-        </Actions>
-      </Changed>
+            <Changed Source="[Tabs.Chosen]">
+                <Conditions>
+                    <Equality Source="[Tabs.Chosen.ToString]" Value="Language"/>
+                </Conditions>
+                <Actions>
+                    <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+                    <Set Target="[CustomizeUI.Visible]" Value="false"/>
+                    <Set Target="[DTPanel.Visible]" Value="false"/>
+                    <Set Target="[LanguagePanel.Visible]" Value="true"/>
+                </Actions>
+            </Changed>
 
-    </Rules>
+        </Rules>
 
-    <Content>
-      <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
-        <Children>
-
-          <Panel Name="BottomPanel" >
-            <Children>
-              
-              <Panel Layout="Fill" Margins="50,0,0,0">
+        <Content>
+            <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
                 <Children>
-                  <Panel Layout="HorizontalFlow">
-                    <Children>
-                        <c:SimpleButton Name="Save Settings" Command="[SaveSettings]" Text="Save Settings" Margins="0,20,10,0"/>
-                        <!-- <c:SimpleButton Name="Import Movies" Command="[BeginSetupCommand]" Text="Import Movies" Margins="0,20,10,0"/> -->
-                        <c:SimpleButton Name="About OML"     Command="[AboutOML]" Text="About OML" Margins="0,20,10,0"/>
-                    </Children>
-                  </Panel>
-                </Children>
-              </Panel>
-              
-              <Clip Orientation="Vertical">
-                <Children>
-                  <ColorFill Content="Black" Alpha="0.5"/>
-                </Children>
-              </Clip>
-              
-            </Children>
-            
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
-            </LayoutInput>
-          </Panel>
 
-          <Panel Name="TopPanel">
-            <Children>
-              <Text Content="Open Media Library Settings" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0">
-              </Text>
-              <Clip Orientation="Vertical">
-                <Children>
-                  <ColorFill Content="Black" Alpha="0.5"/>
-                </Children>
-              </Clip>
-
-            </Children>
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
-            </LayoutInput>
-          </Panel>
-          
-          <Panel Name="TabsPanel" FocusOrder="0">
-            <Children>
-              <me:Pivot Model="[Tabs]"/>
-            </Children>
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0.3" Top="TopPanel,1" />
-            </LayoutInput>
-
-          </Panel>
-
-          <Panel Name="ViewOptionsPanel" Layout="VerticalFlow" >
-            <Children>
-                  <Panel Layout="VerticalFlow">
-                    <Children>
-                      
-                      <Panel Layout="VerticalFlow" Margins="0,0,50,0">
+                    <Panel Name="BottomPanel" >
                         <Children>
-                          <Text  Content="Movie Gallery View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <c:SimpleSpinner Name="MovieView" Model="[Settings.MovieView]" />
-                        </Children>
-                      </Panel>
 
-                      <Panel Layout="VerticalFlow">
+                            <Panel Layout="Fill" Margins="50,0,0,0">
+                                <Children>
+                                    <Panel Layout="HorizontalFlow">
+                                        <Children>
+                                            <c:SimpleButton Name="Save Settings" Command="[SaveSettings]" Text="Save Settings" Margins="0,20,10,0"/>
+                                            <!-- <c:SimpleButton Name="Import Movies" Command="[BeginSetupCommand]" Text="Import Movies" Margins="0,20,10,0"/> -->
+                                            <c:SimpleButton Name="About OML"     Command="[AboutOML]" Text="About OML" Margins="0,20,10,0"/>
+                                        </Children>
+                                    </Panel>
+                                </Children>
+                            </Panel>
+
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
+
+                        </Children>
+
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                    <Panel Name="TopPanel">
                         <Children>
-                          <Text  Content="Movie Sort" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" />
-                        </Children>
-                      </Panel>
+                            <Text Content="Open Media Library Settings" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0">
+                            </Text>
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
 
-                      <Panel Layout="VerticalFlow">
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                    <Panel Name="TabsPanel" FocusOrder="0">
                         <Children>
-                          <Text  Content="Start Page" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <c:SimpleSpinner Name="StartPage" Model="[Settings.StartPage]" />
+                            <me:Pivot Model="[Tabs]"/>
                         </Children>
-                      </Panel>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0.3" Top="TopPanel,1" />
+                        </LayoutInput>
 
+                    </Panel>
 
-                    </Children>
-                  </Panel>
-              
-            </Children>
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05" />
-            </LayoutInput>
-          </Panel>
-
-
-
-          <Panel Name="CustomizeUI" Layout="VerticalFlow" Visible="false">
-            <Children>
-              <Panel Layout="HorizontalFlow">
-                <Children>
-                  <Panel Layout="VerticalFlow">
-                    <Children>
-
-                      <Panel Layout="HorizontalFlow">
+                    <Panel Name="ViewOptionsPanel" Layout="VerticalFlow" >
                         <Children>
-                          <c:SimpleCheckbox Name="UseOriginalCoverArt" Checked="[Settings.UseOriginalCoverArt]" Margins="0,12,10,0" />
-                          <Text Content="Don't Resize Cover Art (may slow down browsing)" Color="White" Font="font://me:Font" Margins="0,0,0,0"/>
-                        </Children>
-                      </Panel>
+                            <Panel Layout="VerticalFlow">
+                                <Children>
 
-                      <Panel Layout="HorizontalFlow">
+                                    <Panel Layout="VerticalFlow" Margins="0,0,50,0">
+                                        <Children>
+                                            <Text  Content="Movie Gallery View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                                            <c:SimpleSpinner Name="MovieView" Model="[Settings.MovieView]" />
+                                        </Children>
+                                    </Panel>
+
+                                    <Panel Layout="VerticalFlow">
+                                        <Children>
+                                            <Text  Content="Movie Sort" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                                            <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" />
+                                        </Children>
+                                    </Panel>
+
+                                    <Panel Layout="VerticalFlow">
+                                        <Children>
+                                            <Text  Content="Start Page" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                                            <c:SimpleSpinner Name="StartPage" Model="[Settings.StartPage]" />
+                                        </Children>
+                                    </Panel>
+
+
+                                </Children>
+                            </Panel>
+
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0.05" />
+                        </LayoutInput>
+                    </Panel>
+
+
+
+                    <Panel Name="CustomizeUI" Layout="VerticalFlow" Visible="false">
                         <Children>
-                          <c:SimpleCheckbox Name="ShowMovieDetails" Checked="[Settings.ShowMovieDetails]" Margins="0,12,10,0" />
-                          <Text Content="Show Movie Details While Browsing" Color="White" Font="font://me:Font" Margins="0,0,0,0"/>
-                        </Children>
-                      </Panel>
+                            <Panel Layout="HorizontalFlow">
+                                <Children>
+                                    <Panel Layout="VerticalFlow">
+                                        <Children>
 
-                      <Panel Layout="HorizontalFlow">
+                                            <Panel Layout="HorizontalFlow">
+                                                <Children>
+                                                    <c:SimpleCheckbox Name="UseOriginalCoverArt" Checked="[Settings.UseOriginalCoverArt]" Margins="0,12,10,0" />
+                                                    <Text Content="Don't Resize Cover Art (may slow down browsing)" Color="White" Font="font://me:Font" Margins="0,0,0,0"/>
+                                                </Children>
+                                            </Panel>
+
+                                            <Panel Layout="HorizontalFlow">
+                                                <Children>
+                                                    <c:SimpleCheckbox Name="ShowMovieDetails" Checked="[Settings.ShowMovieDetails]" Margins="0,12,10,0" />
+                                                    <Text Content="Show Movie Details While Browsing" Color="White" Font="font://me:Font" Margins="0,0,0,0"/>
+                                                </Children>
+                                            </Panel>
+
+                                            <Panel Layout="HorizontalFlow">
+                                                <Children>
+                                                    <c:SimpleCheckbox Name="DimUnselectedCovers" Checked="[Settings.DimUnselectedCovers]" Margins="0,12,10,0" />
+                                                    <Text Content="Dim Unselected Covers" Color="White" Font="font://me:Font" Margins="0,0,0,0"/>
+                                                </Children>
+                                            </Panel>
+
+                                            <Panel Layout="VerticalFlow" Margins="0,0,50,0">
+                                                <Children>
+                                                    <Text  Content="Cover Art Rows" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                                                    <c:SimpleSpinner Name="CoverArtRows" Model="[Settings.CoverArtRows]" Size="151,51" />
+                                                </Children>
+                                            </Panel>
+
+                                            <Panel Layout="VerticalFlow" Margins="0,0,50,0">
+                                                <Children>
+                                                    <Text  Content="Cover Art Spacing" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                                                    <c:SimpleSpinner Name="CoverArtSpacing" Model="[Settings.CoverArtSpacing]" Size="151,51" />
+                                                </Children>
+                                            </Panel>
+
+                                        </Children>
+                                    </Panel>
+                                </Children>
+                            </Panel>
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0.05" />
+                        </LayoutInput>
+                    </Panel>
+
+                    <Panel Name="LanguagePanel" Layout="VerticalFlow" Visible="false">
                         <Children>
-                          <c:SimpleCheckbox Name="DimUnselectedCovers" Checked="[Settings.DimUnselectedCovers]" Margins="0,12,10,0" />
-                          <Text Content="Dim Unselected Covers" Color="White" Font="font://me:Font" Margins="0,0,0,0"/>
-                        </Children>
-                      </Panel>
+                            <Graphic Content="image://me:ListboxNoFocus" Margins="0,0,0,20">
+                                <Children>
+                                    <Scroller Orientation="Vertical"
+                                              FadeSize="10"
+                                              Padding="15,15,15,15">
+                                        <Children>
+                                            <controls:RadioButtonGroup Model="[Settings.UILanguage]"/>
+                                        </Children>
+                                    </Scroller>
 
-                      <Panel Layout="VerticalFlow" Margins="0,0,50,0">
+                                </Children>
+                            </Graphic>
+                        </Children>
+                    </Panel>
+                    <Panel Name="DTPanel" Layout="VerticalFlow" Visible="false">
                         <Children>
-                          <Text  Content="Cover Art Rows" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <c:SimpleSpinner Name="CoverArtRows" Model="[Settings.CoverArtRows]" Size="151,51" />
-                        </Children>
-                      </Panel>
+                            <Panel Name="WhichTool" Layout="VerticalFlow" Margins="0,0,50,0">
+                                <Children>
+                                    <Text Content="Which Mounting Tool" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                                    <rbg:RadioButtonGroup Model="[Settings.ImageMountingSelection]" />
+                                </Children>
+                            </Panel>
+                            <Panel Name="DTPath" Layout="VerticalFlow" Margins="0,0,50,0">
+                                <Children>
+                                    <Text  Content="Mounting Tool Path" Color="White" Font="font://me:Font" Margins="0,20,0,0" />
+                                    <c:SimpleEditbox Name="DTEditbox" Size="700,51" EditableText="[Settings.MountingToolPath]" Label="" LabelSize="0,0"/>
+                                </Children>
+                            </Panel>
 
-                      <Panel Layout="VerticalFlow" Margins="0,0,50,0">
-                        <Children>
-                          <Text  Content="Cover Art Spacing" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <c:SimpleSpinner Name="CoverArtSpacing" Model="[Settings.CoverArtSpacing]" Size="151,51" />
+                            <Panel Name="DTVirtualDrive" Layout="HorizontalFlow">
+                                <Children>
+                                    <Panel Layout="VerticalFlow" Margins="0,0,50,0">
+                                        <Children>
+                                            <Text  Content="Virtual Drive" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                                            <c:SimpleSpinner Name="VirtualDrive" Model="[Settings.VirtualDrive]" Size="51,51" />
+                                        </Children>
+                                    </Panel>
+                                </Children>
+                            </Panel>
                         </Children>
-                      </Panel>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0.05" />
+                        </LayoutInput>
 
-                    </Children>
-                  </Panel>
+                    </Panel>
                 </Children>
-              </Panel>
-            </Children>
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05" />
-            </LayoutInput>
-          </Panel>
+            </ColorFill>
+        </Content>
+    </UI>
 
-          <Panel Name="LanguagePanel" Layout="VerticalFlow" Visible="false">
-            <Children>
-              <Panel Layout="VerticalFlow" Margins="0,0,50,0" Padding="0,130,0,100">
-                <Children>
-                  <controls:RadioButtonGroup Model="[Settings.UILanguage]"/>
-                </Children>
-              </Panel>
-            </Children>
-          </Panel>
-
-          <Panel Name="DTPanel" Layout="VerticalFlow" Visible="false">
-            <Children>
-              <Panel Name="WhichTool" Layout="VerticalFlow" Margins="0,0,50,0">
-                <Children>
-                  <Text Content="Which Mounting Tool" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                  <rbg:RadioButtonGroup Model="[Settings.ImageMountingSelection]" />
-                </Children>
-              </Panel>
-              <Panel Name="DTPath" Layout="VerticalFlow" Margins="0,0,50,0">
-                <Children>
-                  <Text  Content="Mounting Tool Path" Color="White" Font="font://me:Font" Margins="0,20,0,0" />
-                  <c:SimpleEditbox Name="DTEditbox" Size="700,51" EditableText="[Settings.MountingToolPath]" Label="" LabelSize="0,0"/>
-                </Children>
-              </Panel>
-
-              <Panel Name="DTVirtualDrive" Layout="HorizontalFlow">
-                <Children>
-                  <Panel Layout="VerticalFlow" Margins="0,0,50,0">
-                    <Children>
-                      <Text  Content="Virtual Drive" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                      <c:SimpleSpinner Name="VirtualDrive" Model="[Settings.VirtualDrive]" Size="51,51" />
-                    </Children>
-                  </Panel>
-                </Children>
-              </Panel>
-            </Children>
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05" />
-            </LayoutInput>
-
-          </Panel>
-
-        </Children>
-      </ColorFill>
-    </Content>
-
-  </UI>
-
-  <Font Name="Font"                 FontName="global://me:RegularFontName" FontSize="16" />
+    <Font Name="Font" FontName="global://me:RegularFontName" FontSize="16" />
+    <Image Name="ListboxNoFocus" Source="resx://Library/Library.Resources/ListboxNoFocus" />
 </Mcml>
