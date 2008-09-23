@@ -193,291 +193,289 @@
 <!-- item's index and "Real" indexes, and a background color fill that    -->
 <!-- changes color when it receives key focus.                            -->
 <UI Name="RepeatedItem">
-  <Properties>
-    <a:OMLApplication Name="Application" OMLApplication="$Required"/>
-    <a:GalleryItem Name="GalleryItem" GalleryItem="$Required"/>
-    <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
-    <!-- Update these 2 values everytime we get the focus -->
-    <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
-    <cor:Single Name="CoverArtAlpha" Single="0.5"/>
-    <a:UISettings Name="UISettings" UISettings="$Required" />
-    <cor:Int32 Name="AngleDelta" Int32="-25"/>
-    <col:IList Name="List" IList="$Required"/>
-          
-    <!-- The index passed down from the repeater.-->
-    <Index Name="Index" Index="$Required"/>
-    <cor:String Name="GalleryView" String="$Required" />    
-    <Image Name="BackgroundImage" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
-    <Image Name="BackgroundImageList" Source="resx://Library/Library.Resources/ButtonLeftFocus" NineGrid="4,4,4,4"/>
-    <Image Name="BackgroundImageCoverArt" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
-    <Animation Name="LostFocus" />
-    <Animation Name="GotFocus" />
-    
-  </Properties>
+    <Properties>
+        <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+        <a:GalleryItem Name="GalleryItem" GalleryItem="$Required"/>
+        <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+        <!-- Update these 2 values everytime we get the focus -->
+        <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
+        <cor:Single Name="CoverArtAlpha" Single="0.5"/>
+        <a:UISettings Name="UISettings" UISettings="$Required" />
+        <cor:Int32 Name="AngleDelta"/>
+        <col:IList Name="List" IList="$Required"/>
 
-  <Locals>
-      <ClickHandler Name="Clicker" Command="[GalleryItem]"/>
-      <cor:Int32 Name="CurrentIndex" />
-      <MathTransformer Name="ComputeNormalizedIndex"/>
-      <MathTransformer Name="ComputeRotation" Type="Int32"/>
-      <MathTransformer Name="ComputeHeightofbFromAngleofA" Type="Int32"/>
-      <Rotation Name="Rotation" AngleDegrees="0" Axis="0,1,0"/>
-      <cor:Int32 Name="NewHeight"/>
+        <!-- The index passed down from the repeater.-->
+        <Index Name="Index" Index="$Required"/>
+        <cor:String Name="GalleryView" String="$Required" />
+        <Image Name="BackgroundImage" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
+        <Image Name="BackgroundImageList" Source="resx://Library/Library.Resources/ButtonLeftFocus" NineGrid="4,4,4,4"/>
+        <Image Name="BackgroundImageCoverArt" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
+        <Animation Name="LostFocus" />
+        <Animation Name="GotFocus" />
 
-    <!-- This animation will scale the image. -->
-    <Animation Name="LostFocusCoverArt" Loop="0">
-      <Keyframes>
-        <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
-        <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
-      </Keyframes>
-    </Animation>
+    </Properties>
 
-    <Animation Name="GotFocusCoverArt" Loop="0" CenterPointPercent=".5,.5,0" >
-      <Keyframes>
-        <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
-        <ScaleKeyframe Time="0.4" Value="[UISettings.Gallery.FocusCoverArtScale]" RelativeTo="Final" />
-      </Keyframes>
-    </Animation>
+    <Locals>
+        <ClickHandler Name="Clicker" Command="[GalleryItem]"/>
+        <cor:Int32 Name="CurrentIndex" />
+        <MathTransformer Name="ComputeNormalizedIndex"/>
+        <MathTransformer Name="ComputeRotation" Type="Int32"/>
+        <MathTransformer Name="ComputeHeightofbFromAngleofA" Type="Int32"/>
+        <Rotation Name="Rotation" AngleDegrees="0" Axis="0,1,0"/>
+        <cor:Int32 Name="NewHeight"/>
 
-      <Animation Name="LostFocusCarousel" Loop="0">
-          <Keyframes>
-              <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
-              <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
-          </Keyframes>
-      </Animation>
+        <!-- This animation will scale the image. -->
+        <Animation Name="LostFocusCoverArt" Loop="0">
+            <Keyframes>
+                <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
+                <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
+            </Keyframes>
+        </Animation>
 
-      <Animation Name="GotFocusCarousel" Loop="0" CenterPointPercent=".5,.5,0" >
-          <Keyframes>
-              <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
-              <ScaleKeyframe Time="0.4" Value="[UISettings.Gallery.FocusCarouselScale]" RelativeTo="Final" />
-          </Keyframes>
-      </Animation>
+        <Animation Name="GotFocusCoverArt" Loop="0" CenterPointPercent=".5,.5,0" >
+            <Keyframes>
+                <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+                <ScaleKeyframe Time="0.4" Value="[UISettings.Gallery.FocusCoverArtScale]" RelativeTo="Final" />
+            </Keyframes>
+        </Animation>
 
-      <Animation Name="ContentChangeShowCarousel">
-          <Keyframes>
-              <AlphaKeyframe Time="0" Value="0" RelativeTo="Absolute" />
-              <AlphaKeyframe Time=".3" RelativeTo="Final" />
-          </Keyframes>
-      </Animation>
+        <Animation Name="LostFocusCarousel" Loop="0">
+            <Keyframes>
+                <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
+                <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
+            </Keyframes>
+        </Animation>
 
-      <Animation Name="RotateCarousel">
-          <Keyframes>
-              <RotateKeyframe Time="0" Value="0deg;0,1,0" RelativeTo="Current" Interpolation="Log" />
-              <RotateKeyframe Time=".5" Value="0deg;0,1,0" RelativeTo="Final" />
-          </Keyframes>
-      </Animation>
+        <Animation Name="GotFocusCarousel" Loop="0" CenterPointPercent=".5,.5,0" >
+            <Keyframes>
+                <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+                <ScaleKeyframe Time="0.4" Value="[UISettings.Gallery.FocusCarouselScale]" RelativeTo="Final" />
+            </Keyframes>
+        </Animation>
+
+        <Animation Name="ContentChangeShowCarousel">
+            <Keyframes>
+                <AlphaKeyframe Time="0" Value="0" RelativeTo="Absolute" />
+                <AlphaKeyframe Time=".3" RelativeTo="Final" />
+            </Keyframes>
+        </Animation>
+
+        <Animation Name="RotateCarousel">
+            <Keyframes>
+                <RotateKeyframe Time="0" Value="0deg;0,1,0" RelativeTo="Current" Interpolation="Log" />
+                <RotateKeyframe Time=".5" Value="0deg;0,1,0" RelativeTo="Final" />
+            </Keyframes>
+        </Animation>
 
 
-      <!-- This animation will scale the image. -->
-    <Animation Name="LostFocusList" Loop="0">
-      <Keyframes>
-        <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
-        <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
-      </Keyframes>
-    </Animation>
+        <!-- This animation will scale the image. -->
+        <Animation Name="LostFocusList" Loop="0">
+            <Keyframes>
+                <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
+                <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
+            </Keyframes>
+        </Animation>
 
-    <Animation Name="GotFocusList" Loop="0" CenterPointPercent=".1,.1,0" >
-      <Keyframes>
-        <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
-        <ScaleKeyframe Time="0.2" Value="[UISettings.Gallery.FocusListScale]" RelativeTo="Final" />
-      </Keyframes>
-    </Animation>
+        <Animation Name="GotFocusList" Loop="0" CenterPointPercent=".1,.1,0" >
+            <Keyframes>
+                <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+                <ScaleKeyframe Time="0.2" Value="[UISettings.Gallery.FocusListScale]" RelativeTo="Final" />
+            </Keyframes>
+        </Animation>
+    </Locals>
 
-  </Locals>
+    <Rules>
+        <!-- Mark ourselves as KeyInteractive so we can receive key focus.    -->
+        <!--<Binding Source="[MovieBrowser.AngleDelta]" Target="[AngleDelta]"/>
+        <Binding Source="[FocusedIndex.Value!cor:String]" Target="[FocusedIndexLabel.Content]"/>
+        <Binding Source="[Index.Value!cor:String]" Target="[OptionIndexLabel.Content]"/>
+        <Binding Source="[Index.Value]" Target="[Application.CurrentItemIndexPosition]"/>
+        <Binding Source="[FocusedIndex.Value]" Target="[Application.CurrentFocusedItemIndex]"/>
+        <Binding Source="[Rotation.AngleDegrees]" Target="[Application.CurrentAngleDegrees]"/>-->
+        <Default Target="[Input.KeyInteractive]" Value="true"/>
 
-  <Rules>
-    <!-- Mark ourselves as KeyInteractive so we can receive key focus.    -->
-    <Binding Source="[FocusedIndex.Value!cor:String]" Target="[FocusedIndexLabel.Content]"/>
-    <Binding Source="[Index.Value!cor:String]" Target="[OptionIndexLabel.Content]"/>
-    <Binding Source="[Index.Value]" Target="[Application.CurrentItemIndexPosition]"/>
-    <Binding Source="[FocusedIndex.Value]" Target="[Application.CurrentFocusedItemIndex]"/>
-    <Binding Source="[Rotation.AngleDegrees]" Target="[Application.CurrentAngleDegrees]"/>
-    <Default Target="[Input.KeyInteractive]" Value="true"/>
-    
-    <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+        <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
 
-    <Binding Source="[GalleryItem.MenuCoverArt]" Target="[MenuCover.Content]" />
-    
-    <Condition Source="[GalleryView]" SourceValue="List" ConditionOp="Equals" >
-      <Actions>
-        <!--<Set Target="[Caption.Font]" Value="font://s:ListFontSelected" />-->
-        <Set Target="[MenuCover.Visible]" Value="false" />
-        <Set Target="[Caption.Visible]" Value="true" />
-        <Set Target="[LostFocus]" Value="[LostFocusList]" />
-        <Set Target="[GotFocus]" Value="[GotFocusList]" />
-        <!--<Set Target="[Background.Content]" Value="[BackgroundImageList]" />-->
-        <Set Target="[Background.Content]" Value="null" />
-      </Actions>
-    </Condition>
+        <Binding Source="[GalleryItem.MenuCoverArt]" Target="[MenuCover.Content]" />
 
-    <Changed Source="[GalleryItem.MenuCoverArt]" InitialEvaluate="true">
-      <Conditions>
-        <Equality Source="[GalleryView]" Value="Cover Art" ConditionOp="Equals" />
-        <Equality Source="[GalleryItem.HasCover]" Value="true" ConditionOp="Equals" />
-      </Conditions>
-      <Actions>
-        <Set Target="[Caption.Visible]" Value="false" />
-      </Actions>
-    </Changed>
-    
-    <Condition Source="[GalleryView]" SourceValue="Cover Art" ConditionOp="Equals" >
-      <Actions>
-        <Set Target="[MenuCover.Visible]" Value="true" />
-        <Set Target="[LostFocus]" Value="[LostFocusCoverArt]" />
-        <Set Target="[GotFocus]" Value="[GotFocusCoverArt]" />
-        <!--<Set Target="[Background.Content]" Value="[BackgroundImageCoverArt]" />-->
-        <Set Target="[Caption.Font]" Value="font://s:Normal" />
-      </Actions>
-    </Condition>
+        <Condition Source="[GalleryView]" SourceValue="List" ConditionOp="Equals" >
+            <Actions>
+                <!--<Set Target="[Caption.Font]" Value="font://s:ListFontSelected" />-->
+                <Set Target="[MenuCover.Visible]" Value="false" />
+                <Set Target="[Caption.Visible]" Value="true" />
+                <Set Target="[LostFocus]" Value="[LostFocusList]" />
+                <Set Target="[GotFocus]" Value="[GotFocusList]" />
+                <!--<Set Target="[Background.Content]" Value="[BackgroundImageList]" />-->
+                <Set Target="[Background.Content]" Value="null" />
+            </Actions>
+        </Condition>
 
-      <Condition Source="[GalleryView]" SourceValue="Carousel" ConditionOp="Equals">
-          <Actions>
-              <Set Target="[MenuCover.Visible]" Value="true" />
-              <Set Target="[LostFocus]" Value="[LostFocusCarousel]" />
-              <Set Target="[GotFocus]" Value="[GotFocusCarousel]" />
-              <!--<Set Target="[Background.Content]" Value="[BackgroundImageCoverArt]" />-->
-              <Set Target="[Caption.Font]" Value="font://s:Normal" />
-          </Actions>
-      </Condition>
+        <Changed Source="[GalleryItem.MenuCoverArt]" InitialEvaluate="true">
+            <Conditions>
+                <Equality Source="[GalleryView]" Value="Cover Art" ConditionOp="Equals" />
+                <Equality Source="[GalleryItem.HasCover]" Value="true" ConditionOp="Equals" />
+            </Conditions>
+            <Actions>
+                <Set Target="[Caption.Visible]" Value="false" />
+            </Actions>
+        </Changed>
 
-<!-- BEGINNING OF CAROUSEL CONDITIONS -->
-      <!-- Items to the LEFT of the focus item -->
-      <Changed Source="[FocusedIndex]" InitialEvaluate="true">
-          <Conditions>
-              <Equality Source="[GalleryView]" ConditionOp="Equals" Value="Carousel"/>
-              <Equality Source="[FocusedIndex.Value]" ConditionOp="LessThan" Value="[Index.Value]"/>
-          </Conditions>
-          <Actions>
-              <Set Target="[ItemPanel.CenterPointPercent]" Value="0,.5,0"/>
-              <Set Target="[ComputeNormalizedIndex.SubtractInt]" Value="[FocusedIndex.Value]" />
-              <Set Target="[ComputeRotation.MultiplyInt]" Value="[Index.Value]" Transformer="[ComputeNormalizedIndex]" />
-              <Set Target="[Rotation.AngleDegrees]" Value="[AngleDelta]" Transformer="[ComputeRotation]" />
-              <Set Target="[ItemPanel.Rotation]" Value="[Rotation]" />
-              <Set Target="[ItemPanel.Padding]" Value="[Application.MoveToInset]"/>
-          </Actions>
-      </Changed>
+        <Condition Source="[GalleryView]" SourceValue="Cover Art" ConditionOp="Equals" >
+            <Actions>
+                <Set Target="[MenuCover.Visible]" Value="true" />
+                <Set Target="[LostFocus]" Value="[LostFocusCoverArt]" />
+                <Set Target="[GotFocus]" Value="[GotFocusCoverArt]" />
+                <!--<Set Target="[Background.Content]" Value="[BackgroundImageCoverArt]" />-->
+                <Set Target="[Caption.Font]" Value="font://s:Normal" />
+            </Actions>
+        </Condition>
 
-      <!-- The focus item -->
-      <Changed Source="[FocusedIndex]" InitialEvaluate="true">
-          <Conditions>
-              <Equality Source="[GalleryView]" ConditionOp="Equals" Value="Carousel"/>
-              <Equality Source="[FocusedIndex.Value]" ConditionOp="Equals" Value="[Index.Value]"/>
-          </Conditions>
-          <Actions>
-              <Set Target="[ItemPanel.CenterPointPercent]" Value="1,.5,0"/>
-              <Set Target="[ComputeNormalizedIndex.SubtractInt]" Value="[FocusedIndex.Value]" />
-              <Set Target="[ComputeRotation.MultiplyInt]" Value="[Index.Value]" Transformer="[ComputeNormalizedIndex]" />
-              <Set Target="[Rotation.AngleDegrees]" Value="[AngleDelta]" Transformer="[ComputeRotation]" />
-              <Set Target="[ItemPanel.Rotation]" Value="[Rotation]" />
-          </Actions>
-      </Changed>
+        <!--<Condition Source="[GalleryView]" SourceValue="Carousel" ConditionOp="Equals">
+            <Actions>
+                <Set Target="[MenuCover.Visible]" Value="true" />
+                <Set Target="[LostFocus]" Value="[LostFocusCarousel]" />
+                <Set Target="[GotFocus]" Value="[GotFocusCarousel]" />
+                <Set Target="[Background.Content]" Value="[BackgroundImageCoverArt]" />
+                <Set Target="[Caption.Font]" Value="font://s:Normal" />
+            </Actions>
+        </Condition>
 
-      <!-- Items to the RIGHT of the focus item -->
-      <Changed Source="[FocusedIndex]" InitialEvaluate="true">
-          <Conditions>
-              <Equality Source="[GalleryView]" ConditionOp="Equals" Value="Carousel"/>
-              <Equality Source="[FocusedIndex.Value]" ConditionOp="GreaterThan" Value="[Index.Value]"/>
-          </Conditions>
-          <Actions>
-              <Set Target="[ItemPanel.CenterPointPercent]" Value="1,.5,0"/>
-              <Set Target="[ComputeNormalizedIndex.SubtractInt]" Value="[FocusedIndex.Value]" />
-              <Set Target="[ComputeRotation.MultiplyInt]" Value="[Index.Value]" Transformer="[ComputeNormalizedIndex]" />
-              <Set Target="[Rotation.AngleDegrees]" Value="[AngleDelta]" Transformer="[ComputeRotation]" />
-              <Set Target="[ItemPanel.Rotation]" Value="[Rotation]" />
-              <Set Target="[ItemPanel.Padding]" Value="[Application.MoveToInset]"/>
-          </Actions>
-      </Changed>
-<!-- END OF CAROUSEL CONDITIONS -->
+        --><!-- BEGINNING OF CAROUSEL CONDITIONS --><!--
+        --><!-- Items to the LEFT of the focus item --><!--
+        <Changed Source="[FocusedIndex]" InitialEvaluate="true">
+            <Conditions>
+                <Equality Source="[GalleryView]" ConditionOp="Equals" Value="Carousel"/>
+                <Equality Source="[FocusedIndex.Value]" ConditionOp="LessThan" Value="[Index.Value]"/>
+            </Conditions>
+            <Actions>
+                <Set Target="[ItemPanel.CenterPointPercent]" Value="0,.5,0"/>
+                <Set Target="[ComputeNormalizedIndex.SubtractInt]" Value="[FocusedIndex.Value]" />
+                <Set Target="[ComputeRotation.MultiplyInt]" Value="[Index.Value]" Transformer="[ComputeNormalizedIndex]" />
+                <Set Target="[Rotation.AngleDegrees]" Value="[AngleDelta]" Transformer="[ComputeRotation]" />
+                <Set Target="[ItemPanel.Rotation]" Value="[Rotation]" />
+                <Set Target="[ItemPanel.Padding]" Value="[Application.MoveToInset]"/>
+            </Actions>
+        </Changed>
 
-      <Condition Source="[GalleryView]" SourceValue="Folder View" ConditionOp="Equals" >
-          <Actions>
-              <Set Target="[MenuCover.Visible]" Value="true" />
-              <Set Target="[LostFocus]" Value="[LostFocusCoverArt]" />
-              <Set Target="[GotFocus]" Value="[GotFocusCoverArt]" />
-              <!--<Set Target="[Background.Content]" Value="[BackgroundImageCoverArt]" />-->
-              <Set Target="[Caption.Font]" Value="font://s:Normal" />
-          </Actions>
-      </Condition>
+        --><!-- The focus item --><!--
+        <Changed Source="[FocusedIndex]" InitialEvaluate="true">
+            <Conditions>
+                <Equality Source="[GalleryView]" ConditionOp="Equals" Value="Carousel"/>
+                <Equality Source="[FocusedIndex.Value]" ConditionOp="Equals" Value="[Index.Value]"/>
+            </Conditions>
+            <Actions>
+                <Set Target="[ItemPanel.CenterPointPercent]" Value="1,.5,0"/>
+                <Set Target="[ComputeNormalizedIndex.SubtractInt]" Value="[FocusedIndex.Value]" />
+                <Set Target="[ComputeRotation.MultiplyInt]" Value="[Index.Value]" Transformer="[ComputeNormalizedIndex]" />
+                <Set Target="[Rotation.AngleDegrees]" Value="[AngleDelta]" Transformer="[ComputeRotation]" />
+                <Set Target="[ItemPanel.Rotation]" Value="[Rotation]" />
+            </Actions>
+        </Changed>
 
-      <!-- If we get key focus, change our background color to indicate it. -->
-    <Condition Source="[Input.KeyFocus]" SourceValue="true">
-      <Actions>
-        <PlayAnimation Target="[ItemPanel]" Animation="[GotFocus]" />
-        <Set Target="[MenuCover.Alpha]" Value="1.0"/>
-        <Set Target="[Caption.Color]" Value="color://s:FocusColor" />
-        <Set Target="[Background.Visible]" Value="true"/>
-        <Set Target="[FocusedIndex.Value]" Value="[Index.SourceValue]"/>
-        <Set Target="[MovieBrowser.FocusedItem]" Value="[GalleryItem]" />
-        <!-- Play an animation on the cover target item. -->
-        <PlaySound Sound="sound://me:Focus" />
-      </Actions>
-    </Condition>
+        --><!-- Items to the RIGHT of the focus item --><!--
+        <Changed Source="[FocusedIndex]" InitialEvaluate="true">
+            <Conditions>
+                <Equality Source="[GalleryView]" ConditionOp="Equals" Value="Carousel"/>
+                <Equality Source="[FocusedIndex.Value]" ConditionOp="GreaterThan" Value="[Index.Value]"/>
+            </Conditions>
+            <Actions>
+                <Set Target="[ItemPanel.CenterPointPercent]" Value="1,.5,0"/>
+                <Set Target="[ComputeNormalizedIndex.SubtractInt]" Value="[FocusedIndex.Value]" />
+                <Set Target="[ComputeRotation.MultiplyInt]" Value="[Index.Value]" Transformer="[ComputeNormalizedIndex]" />
+                <Set Target="[Rotation.AngleDegrees]" Value="[AngleDelta]" Transformer="[ComputeRotation]" />
+                <Set Target="[ItemPanel.Rotation]" Value="[Rotation]" />
+                <Set Target="[ItemPanel.Padding]" Value="[Application.MoveToInset]"/>
+            </Actions>
+        </Changed>
+        --><!-- END OF CAROUSEL CONDITIONS -->
 
-    
-    <!-- when we loose focus -->
-    <Condition Source="[Input.KeyFocus]" SourceValue="false">
-      <Actions>
-        <!-- Play an animation on the cover target item. -->
-        <PlayAnimation Target="[ItemPanel]" Animation="[LostFocus]"/>
+        <Condition Source="[GalleryView]" SourceValue="Folder View" ConditionOp="Equals" >
+            <Actions>
+                <Set Target="[MenuCover.Visible]" Value="true" />
+                <Set Target="[LostFocus]" Value="[LostFocusCoverArt]" />
+                <Set Target="[GotFocus]" Value="[GotFocusCoverArt]" />
+                <!--<Set Target="[Background.Content]" Value="[BackgroundImageCoverArt]" />-->
+                <Set Target="[Caption.Font]" Value="font://s:Normal" />
+            </Actions>
+        </Condition>
 
-      </Actions>
-    </Condition>
+        <!-- If we get key focus, change our background color to indicate it. -->
+        <Condition Source="[Input.KeyFocus]" SourceValue="true">
+            <Actions>
+                <PlayAnimation Target="[ItemPanel]" Animation="[GotFocus]" />
+                <Set Target="[MenuCover.Alpha]" Value="1.0"/>
+                <Set Target="[Caption.Color]" Value="color://s:FocusColor" />
+                <Set Target="[Background.Visible]" Value="true"/>
+                <Set Target="[FocusedIndex.Value]" Value="[Index.SourceValue]"/>
+                <Set Target="[MovieBrowser.FocusedItem]" Value="[GalleryItem]" />
+                <!-- Play an animation on the cover target item. -->
+                <PlaySound Sound="sound://me:Focus" />
+            </Actions>
+        </Condition>
 
-  </Rules>
 
-  <Content>
-    <Panel Name="ItemPanel" Layout="Anchor" Scale="1.0,1.0,1.0" CenterPointPercent="0.5,0.75,0.0">
-      <Children>
-        <Panel Name="ImagePanel" Margins="0,0,0,0">
-          <Children>
-            <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:ListFont" Color="White"  WordWrap="true" Margins="20,10,20,10" />
-              <Graphic Name="MenuCover" Content="[GalleryItem.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint">
-                  <Children>
-                      <Panel Layout="VerticalFlow">
-                          <Children>
-                              <Panel Layout="HorizontalFlow">
-                                  <Children>
-                                      <Text Content="FocusedIndex" Font="Calibri, 14" Color="Yellow"/>
-                                      <Text Name="FocusedIndexLabel" Font="Calibri, 14" Color="Yellow"/>
-                                  </Children>
-                              </Panel>
-                              <Panel Layout="HorizontalFlow">
-                                  <Children>
-                                      <Text Content="OptionIndex" Font="Calibri, 14" Color="Yellow"/>
-                                      <Text Name="OptionIndexLabel" Font="Calibri, 14" Color="Yellow"/>
-                                  </Children>
-                              </Panel>
-                          </Children>
-                      </Panel>
-                  </Children>
-              </Graphic>
-          </Children>
+        <!-- when we loose focus -->
+        <Condition Source="[Input.KeyFocus]" SourceValue="false">
+            <Actions>
+                <!-- Play an animation on the cover target item. -->
+                <PlayAnimation Target="[ItemPanel]" Animation="[LostFocus]"/>
+
+            </Actions>
+        </Condition>
+    </Rules>
+
+    <Content>
+        <Panel Name="ItemPanel" Layout="Anchor" Scale="1.0,1.0,1.0" CenterPointPercent="0.5,0.75,0.0">
+            <Children>
+                <Panel Name="ImagePanel" Margins="0,0,0,0">
+                    <Children>
+                        <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:ListFont" Color="White"  WordWrap="true" Margins="20,10,20,10" />
+                        <Graphic Name="MenuCover" Content="[GalleryItem.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint">
+                            <!--<Children>
+                                <Panel Layout="VerticalFlow">
+                                    <Children>
+                                        <Panel Layout="HorizontalFlow">
+                                            <Children>
+                                                <Text Content="FocusedIndex" Font="Calibri, 14" Color="Yellow"/>
+                                                <Text Name="FocusedIndexLabel" Font="Calibri, 14" Color="Yellow"/>
+                                            </Children>
+                                        </Panel>
+                                        <Panel Layout="HorizontalFlow">
+                                            <Children>
+                                                <Text Content="OptionIndex" Font="Calibri, 14" Color="Yellow"/>
+                                                <Text Name="OptionIndexLabel" Font="Calibri, 14" Color="Yellow"/>
+                                            </Children>
+                                        </Panel>
+                                    </Children>
+                                </Panel>
+                            </Children>-->
+                        </Graphic>
+                    </Children>
+                </Panel>
+
+                <Graphic Name="Background" Content="[BackgroundImage]" Visible="false">
+                    <LayoutInput>
+                        <AnchorLayoutInput Left="ImagePanel,-0.03" Right="ImagePanel,1.03" Top="ImagePanel,-0.02" Bottom="ImagePanel,1.02"/>
+                    </LayoutInput>
+                </Graphic>
+
+            </Children>
+            <Animations>
+                <Animation Type="Rotate">
+                    <Keyframes>
+                        <RotateKeyframe Time="0" Value="0deg;0,1,0" RelativeTo="Current" Interpolation="Log" />
+                        <RotateKeyframe Time=".5" Value="0deg;0,1,0" RelativeTo="Final" />
+                    </Keyframes>
+                </Animation>
+                <Animation Type="ContentChangeShow">
+                    <Keyframes>
+                        <AlphaKeyframe Time="0" Value="0" RelativeTo="Absolute" />
+                        <AlphaKeyframe Time=".3" RelativeTo="Final" />
+                    </Keyframes>
+                </Animation>
+            </Animations>
         </Panel>
-
-        <Graphic Name="Background" Content="[BackgroundImage]" Visible="false">
-          <LayoutInput>
-            <AnchorLayoutInput Left="ImagePanel,-0.03" Right="ImagePanel,1.03" Top="ImagePanel,-0.02" Bottom="ImagePanel,1.02"/>
-          </LayoutInput>
-        </Graphic>
-
-      </Children>
-      <Animations>
-          <Animation Type="Rotate">
-              <Keyframes>
-                  <RotateKeyframe Time="0" Value="0deg;0,1,0" RelativeTo="Current" Interpolation="Log" />
-                  <RotateKeyframe Time=".5" Value="0deg;0,1,0" RelativeTo="Final" />
-              </Keyframes>
-          </Animation>
-          <Animation Type="ContentChangeShow">
-              <Keyframes>
-                  <AlphaKeyframe Time="0" Value="0" RelativeTo="Absolute" />
-                  <AlphaKeyframe Time=".3" RelativeTo="Final" />
-              </Keyframes>
-          </Animation>
-      </Animations>
-  </Panel>
-
-  </Content>
+    </Content>
 </UI>
 
 </Mcml>

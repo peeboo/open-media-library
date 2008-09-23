@@ -17,6 +17,22 @@ namespace Library
     {
         #region Public Properties
 
+        public Int32 AngleDelta
+        {
+            get
+            {
+                if (Movies.Count == 0)
+                    return 0;
+
+                return -(Movies.Count / 360);
+
+            }
+            set
+            {
+                FirePropertyChanged("ListCount");
+            }
+        }
+
         public Choice Categories
         {
             get { return _categoryChoice; }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define CAROUSEL
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -73,8 +75,12 @@ namespace Library
             List<string> viewItems = new List<string>();
             viewItems.Add("Cover Art");
             viewItems.Add("List");
-            //viewItems.Add("Folder View");
-            //viewItems.Add("Carousel");
+#if LAYOUT_V2
+            viewItems.Add("Folder View");
+#endif
+#if CAROUSEL
+            viewItems.Add("Carousel");
+#endif
             _movieView.Options = viewItems;
             _movieView.Chosen = _omlSettings.MovieView;
 
