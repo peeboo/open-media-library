@@ -339,7 +339,7 @@ namespace OMLEngine
                 {
                     try
                     {
-                        string file = Path.Combine(OMLEngine.FileSystemWalker.LogDirectory, "debug.txt");
+                        string file = Path.Combine(OMLEngine.FileSystemWalker.LogDirectory, string.Format("{0}-debug.txt", Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName)));
                         if (Directory.Exists(OMLEngine.FileSystemWalker.LogDirectory) == false)
                             Directory.CreateDirectory(OMLEngine.FileSystemWalker.LogDirectory);
                         Log = new FileStream(file, File.Exists(file) ? FileMode.Append : FileMode.OpenOrCreate);

@@ -12,6 +12,7 @@ using OMLGetDVDInfo;
 namespace OMLEngine
 {
     [DataContract]
+    [KnownType(typeof(VideoFormat))]
     public class MediaSource
     {
         public MediaSource(Disk disk)

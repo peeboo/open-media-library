@@ -16,32 +16,33 @@ namespace Library
 
         public void Initialize(Dictionary<string, object> appInfo, Dictionary<string, object> entryPointInfo)
         {
+            Debug.Assert(false);
             try
             {
                 ServiceController sc = new ServiceController("OMLEngineService");
                 if (sc.Status != ServiceControllerStatus.Running)
                 {
-                    Microsoft.MediaCenter.UI.Application.DeferredInvokeOnWorkerThread(
-                        delegate
+                    Microsoft.MediaCenter.UI.Application.DeferredInvoke(
+                    delegate
+                    {
+                        try
                         {
                             sc.Start();
                             sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 20));
-                        }, delegate
-                    {
-                        if (sc.Status == ServiceControllerStatus.Running)
-                        {
-                            sc.Refresh();
+                            if (sc.Status == ServiceControllerStatus.Running)
+                                sc.Refresh();
+                            OMLApplication.DebugLine("'OMLEngineService': {0}", sc.Status);
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            OMLEngine.Utilities.DebugLine("Error starting OMLEngine Service");
+                            OMLApplication.DebugLine("Exception during service-controller status request for 'OMLEngineService': {0}", ex);
                         }
-                    }, null);
+                    });
                 }
             }
             catch (Exception ex)
             {
-                OMLEngine.Utilities.DebugLine("Exception during service-controller status request for 'OMLEngineService': {0}", ex);
+                OMLApplication.DebugLine("Exception during service-controller status request for 'OMLEngineService': {0}", ex);
             }
 
             if (entryPointInfo.ContainsKey("Context"))

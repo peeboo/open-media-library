@@ -67,7 +67,7 @@ namespace OMLEngineService
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("[ERROR] OnStart: {0}", ex);
+                WriteToLog(EventLogEntryType.Error, "OnStart: {0}", ex);
             }
         }
 
@@ -96,7 +96,7 @@ namespace OMLEngineService
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("[ERROR] OnStop: {0}", ex);
+                WriteToLog(EventLogEntryType.Error, "OnStop: {0}", ex);
             }
             WriteToLog(EventLogEntryType.Information, "OMLEngineService Stop");
         }
@@ -108,21 +108,17 @@ namespace OMLEngineService
         }
         #endregion
 
-        private void WriteToLog(EventLogEntryType type, string msg)
+        internal static void WriteToLog(EventLogEntryType type, string msg, params object[] args)
         {
-            string sSource = @"OMLEngineService";
-            string sLog = string.Empty;
+            const string source = @"OMLEngineService";
 
-            if (!EventLog.SourceExists(sSource))
-                EventLog.CreateEventSource(sSource, sLog);
+            if (!EventLog.SourceExists(source))
+                EventLog.CreateEventSource(source, string.Empty);
 
-            EventLog evt = new EventLog(sLog);
-            string message = msg + ": " +
-                                   DateTime.Now.ToShortDateString() + " " +
-                                   DateTime.Now.ToLongTimeString();
-            evt.Source = sSource;
-            evt.WriteEntry(message, EventLogEntryType.Information);
-            Utilities.DebugLine(message);
+            msg = string.Format(msg, args);
+            EventLog evt = new EventLog(string.Empty) { Source = source };
+            evt.WriteEntry(msg + ": " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString(), type);
+            Utilities.DebugLine(msg);
         }
 
         protected void _timer_Elapsed(object sender, ElapsedEventArgs e)

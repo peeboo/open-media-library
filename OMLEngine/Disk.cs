@@ -7,14 +7,11 @@ using OMLGetDVDInfo;
 
 namespace OMLEngine
 {
-    [DataContract]
-    public class Disk
+    [Serializable]
+    public class Disk : ISerializable
     {
-        [DataMember]
         public string Name { get; set; }
-        [DataMember]
         public string Path { get; set; }
-        [DataMember]
         public VideoFormat Format { get; set; }
 
         #region -- DVD Members --
@@ -68,6 +65,33 @@ namespace OMLEngine
         public override string ToString()
         {
             return Name + ", " + Format + ", @ " + Path;
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+        {
+            info.AddValue("name", Name);
+            info.AddValue("path", Path);
+            info.AddValue("format", Format);
+        }
+
+        public Disk(SerializationInfo info, StreamingContext ctxt)
+        {
+            Name = info.GetString("name");
+            Path = info.GetString("path");
+            Format = GetSerializedVideoFormat(info, "format");
+        }
+
+        static VideoFormat GetSerializedVideoFormat(SerializationInfo info, string id)
+        {
+            try
+            {
+                return (VideoFormat)info.GetValue(id, typeof(VideoFormat));
+            }
+            catch (Exception e)
+            {
+                Utilities.DebugLine("Exception in GetSerializedVideoFormat: " + e.Message);
+                return VideoFormat.DVD;
+            }
         }
     }
 }

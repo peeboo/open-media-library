@@ -1,4 +1,5 @@
 ﻿//#define CUSTOM
+//#define WCF_TEST
 
 using System;
 

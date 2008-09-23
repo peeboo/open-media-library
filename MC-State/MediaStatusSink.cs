@@ -7,6 +7,7 @@ using System.Text;
 using Microsoft.Win32;
 
 using OMLEngine;
+using System.Diagnostics;
 
 namespace OML.MceState
 {
@@ -294,7 +295,7 @@ namespace OML.MceState
         [ComRegisterFunction]
         public static void RegistrationMethod(Type type)
         {
-            Utilities.DebugLine("[MsasSink] ComRegisterMethod: {0}, {1}, I: {2}", type, type.Assembly.GetName().Version, type == typeof(MsasSink));
+            WriteToLog(EventLogEntryType.Information, "[MsasSink] ComRegisterMethod: {0}, {1}, I: {2}", type, type.Assembly.GetName().Version, type == typeof(MsasSink));
             try
             {
 
@@ -302,13 +303,13 @@ namespace OML.MceState
                 {
                     using (Registry.ClassesRoot.CreateSubKey(@"CLSID\{ECCED884-19CF-4179-0002-879756E3BC46}\Implemented Categories\{62C8FE65-4EBB-45E7-B440-6E39B2CDBF29}"))
                     { }
-                    using (Registry.ClassesRoot.CreateSubKey(@"CLSID\{ECCED884-19CF-4179-0002-879756E3BC46}\Implemented Categories\{FCB0C2A3-9747-4c95-9d02-820AFEDEF13F}"))
-                    { }
+                    using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(@"CLSID\{ECCED884-19CF-4179-0002-879756E3BC46}\Implemented Categories\{FCB0C2A3-9747-4c95-9d02-820AFEDEF13F}"))
+                        key.SetValue(null, "OML Media Status Sink", RegistryValueKind.String);
                 }
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("[MsasSink] ComRegisterMethod: Exception: {0}", ex);
+                WriteToLog(EventLogEntryType.Error, "[MsasSink] ComRegisterMethod: Exception: {0}", ex);
             }
         }
 
@@ -317,7 +318,7 @@ namespace OML.MceState
         {
             try
             {
-                Utilities.DebugLine("[MsasSink] UnRegistrationMethod: {0}, I: {1}", type, type == typeof(MsasSink));
+                WriteToLog(EventLogEntryType.Information, "[MsasSink] UnRegistrationMethod: {0}, I: {1}", type, type == typeof(MsasSink));
                 if (type == typeof(MsasSink))
                 {
                     Registry.ClassesRoot.DeleteSubKey(@"CLSID\{ECCED884-19CF-4179-0002-879756E3BC46}\Implemented Categories\{62C8FE65-4EBB-45E7-B440-6E39B2CDBF29}");
@@ -326,14 +327,27 @@ namespace OML.MceState
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("[MsasSink] UnRegistrationMethod: Exception: {0}", ex);
+                WriteToLog(EventLogEntryType.Error, "[MsasSink] UnRegistrationMethod: Exception: {0}", ex);
             }
         }
         #endregion
 
+        internal static void WriteToLog(EventLogEntryType type, string msg, params object[] args)
+        {
+            const string source = @"OMLMCState";
+
+            if (!EventLog.SourceExists(source))
+                EventLog.CreateEventSource(source, string.Empty);
+
+            msg = string.Format(msg, args);
+            EventLog evt = new EventLog(string.Empty) { Source = source };
+            evt.WriteEntry(msg + ": " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString(), type);
+            Utilities.DebugLine(msg);
+        }
+
         public void Initialize()
         {
-            Utilities.DebugLine("[MsasSink] Initialize");
+            WriteToLog(EventLogEntryType.Information, "[MsasSink] Initialize");
             try
             {
                 //mmf = new MemoryFile("MceStateFile", 16384);
@@ -349,7 +363,7 @@ namespace OML.MceState
 
         public IMediaStatusSession CreateSession()
         {
-            Utilities.DebugLine("[MsasSink] CreateSession({0})", _nextID);
+            WriteToLog(EventLogEntryType.Information, "[MsasSink] CreateSession({0})", _nextID);
             Session newSession = new Session(_nextID);
             lock (sSessionsByID)
             {
@@ -438,21 +452,21 @@ namespace OML.MceState
 
         public Session(int id)
         {
-            Utilities.DebugLine("[Session] Session({0})", id);
+            MsasSink.WriteToLog(EventLogEntryType.Information, "[Session] Session({0})", id);
             _session = new MceSession(id);
             _id = id;
         }
 
         public void MediaStatusChange(MEDIASTATUSPROPERTYTAG[] tags, object[] properties)
         {
-            Utilities.DebugLine("[Session] MediaStatusChange({0})", _id);
+            MsasSink.WriteToLog(EventLogEntryType.Information, "[Session] MediaStatusChange({0})", _id);
             _session.MediaStatusChange(tags, properties);
             MsasSink.WriteFile();
         }
 
         public void Close()
         {
-            Utilities.DebugLine("[Session] Close({0})", _id);
+            MsasSink.WriteToLog(EventLogEntryType.Information, "[Session] Close({0})", _id);
             MsasSink.RemoveSession(_id);
         }
 
