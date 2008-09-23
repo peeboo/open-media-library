@@ -4,12 +4,14 @@
  *******************************************************/
 
 using System;
+using System.IO;
+using System.Runtime.Serialization;
 
 using OMLGetDVDInfo;
-using System.IO;
 
 namespace OMLEngine
 {
+    [DataContract]
     public class MediaSource
     {
         public MediaSource(Disk disk)
@@ -19,9 +21,12 @@ namespace OMLEngine
             AudioStream = null;
         }
 
+        [DataMember]
         public Disk Disk { get; private set; }
         public string Name { get { return Disk.Name; } }
         public string MediaPath { get { return Disk.Path; } set { Disk.Path = value; } }
+
+        public string Key { get { throw new NotImplementedException(); } }
 
         #region -- DVD Members --
         public string VIDEO_TS { get { return Disk.VIDEO_TS; } }
@@ -29,16 +34,23 @@ namespace OMLEngine
         public DVDDiskInfo DVDDiskInfo { get { return Disk.DVDDiskInfo; } }
 
         // DVD playback options
+        [DataMember]
         public SubtitleStream Subtitle { get; set; }
+        [DataMember]
         public AudioStream AudioStream { get; set; }
+        [DataMember]
         public int? Title { get; set; }
+        [DataMember]
         public int? StartChapter { get; set; }
+        [DataMember]
         public int? EndChapter { get; set; }
         #endregion
 
         public VideoFormat Format { get { return Disk.Format; } set { Disk.Format = value; } }
 
+        [DataMember]
         public TimeSpan? StartTime { get; set; }
+        [DataMember]
         public TimeSpan? EndTime { get; set; }
 
         /* not used

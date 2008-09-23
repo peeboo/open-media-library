@@ -44,6 +44,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -53,6 +59,7 @@
     <Compile Include="Disk.cs" />
     <Compile Include="FileSystemWalker.cs" />
     <Compile Include="Genres.cs" />
+    <Compile Include="ITranscodingService.cs" />
     <Compile Include="MediaData.cs" />
     <Compile Include="MediaSource.cs" />
     <Compile Include="NetHelper.cs" />
