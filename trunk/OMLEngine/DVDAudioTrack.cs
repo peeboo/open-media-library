@@ -35,27 +35,13 @@ namespace OMLGetDVDInfo
         /// <summary>
         /// Additional format info for this Audio Track
         /// </summary>
-        public string SubFormat
-        {
-            get
-            {
-                switch (Channels)
-                {
-                    case 1: return "1.0 ch";
-                    case 2: return "2.0 ch";
-                    case 6: return "5.1 ch";
-                    case 7: return "6.1 ch";
-                    case 8: return "7.1 ch";
-                }
-                return null;
-            }
-        }
+        public string SubFormat { get { return GetSubFormat(Channels); } }
 
         [XmlAttribute]
         public int Channels;
 
         [XmlAttribute]
-        public string Extension;
+        public AudioExtension Extension;
         /// <summary>
         /// The frequency (in MHz) of this Audio Track
         /// </summary>
@@ -68,13 +54,43 @@ namespace OMLGetDVDInfo
         public int Bitrate;
         #endregion
 
+        public static string GetExtension(AudioExtension extension)
+        {
+            switch (extension)
+            {
+                case AudioExtension.For_visually_impaired:
+                    return "For visually impaired";
+                case AudioExtension.Director_s_comments:
+                    return "Director's comments";
+                case AudioExtension.Alternate_director_s_comments:
+                    return "Alternate director's comments";
+                case AudioExtension.Unspecified:
+                case AudioExtension.Normal:
+                default:
+                    return string.Empty;
+            }
+        }
+
+        public static string GetSubFormat(int channels)
+        {
+            switch (channels)
+            {
+                case 1: return "1.0 ch";
+                case 2: return "2.0 ch";
+                case 6: return "5.1 ch";
+                case 7: return "6.1 ch";
+                case 8: return "7.1 ch";
+            }
+            return null;
+        }
+
         /// <summary>
         /// Override of the ToString method to make this object easier to use in the UI
         /// </summary>
         /// <returns>A string formatted as: {track #} {language} ({format}) ({sub-format})</returns>
         public override string ToString()
         {
-            return string.Format("{0} {1} ({2}) ({3})", this.TrackNumber, this.Language, this.Format, this.SubFormat);
+            return string.Format("{0} {1} ({2}) ({3}) {4}", this.TrackNumber, this.Language, this.Format, this.SubFormat, GetExtension(this.Extension)).TrimEnd();
         }
 
         public override bool Equals(object obj) { return this == (DVDAudioTrack)obj; }

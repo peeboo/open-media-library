@@ -4,6 +4,7 @@
  *******************************************************/
 
 using System;
+using System.Linq;
 using System.IO;
 using System.Runtime.Serialization;
 
@@ -20,7 +21,37 @@ namespace OMLEngine
             Disk = disk;
             Subtitle = null;
             AudioStream = null;
+            if (string.IsNullOrEmpty(disk.ExtraOptions) == false)
+            {
+                foreach (string kv in disk.ExtraOptions.Split(';'))
+                {
+                    var kvA = kv.Split('=');
+                    var kvRec = new { key = kvA[0], val = kvA[1] };
+                    switch (kvRec.key)
+                    {
+                        case "T": this.Title = int.Parse(kvRec.val); break;
+                        case "CS": this.StartChapter = int.Parse(kvRec.val); break;
+                        case "CE": this.EndChapter = int.Parse(kvRec.val); break;
+                        case "S": this.Subtitle = GetSubTitle(this.DVDTitle.GetSubTitle(int.Parse(kvRec.val))); break;
+                        case "A": this.AudioStream = GetAudioSteam(this.DVDTitle.GetAudio(int.Parse(kvRec.val))); break;
+                        case "TS": this.StartTime = TimeSpan.Parse(kvRec.val); break;
+                        case "TE": this.EndTime = TimeSpan.Parse(kvRec.val); break;
+                    }
+                }
+            }
         }
+
+        public bool HasAudioSteam(AudioExtension extension) { return GetAudioSteam(extension) != null; }
+        public AudioStream GetAudioSteam(AudioExtension extension)
+        {
+            DVDTitle title = DVDTitle;
+            if (title == null)
+                return null;
+            return GetAudioSteam((from a in title.AudioTracks where a.Extension == extension select a).FirstOrDefault());
+        }
+
+        static AudioStream GetAudioSteam(DVDAudioTrack at) { return at == null ? null : new AudioStream(at); }
+        static SubtitleStream GetSubTitle(DVDSubtitle st) { return st == null ? null : new SubtitleStream(st); }
 
         [DataMember]
         public Disk Disk { get; private set; }
@@ -33,6 +64,15 @@ namespace OMLEngine
         public string VIDEO_TS { get { return Disk.VIDEO_TS; } }
         public string VIDEO_TS_Parent { get { return Disk.VIDEO_TS_Parent; } }
         public DVDDiskInfo DVDDiskInfo { get { return Disk.DVDDiskInfo; } }
+        public DVDTitle DVDTitle
+        {
+            get
+            {
+                if (Disk.DVDDiskInfo == null)
+                    return null;
+                return Disk.DVDDiskInfo.GetTitle(this.Title);
+            }
+        }
 
         // DVD playback options
         [DataMember]
@@ -64,7 +104,30 @@ namespace OMLEngine
 
         public override string ToString()
         {
-            return Disk.ToString();
+            string ret = Disk.ToString();
+            if (Format == VideoFormat.DVD)
+            {
+                if (this.Title != null)
+                    ret += " T:" + this.Title;
+                if (this.StartChapter != null)
+                {
+                    ret += " C:" + this.StartChapter;
+                    if (this.EndChapter != null)
+                        ret += "-" + this.EndChapter;
+                }
+                if (this.AudioStream != null)
+                    ret += " A:" + this.AudioStream;
+                if (this.Subtitle != null)
+                    ret += " Sub:" + this.Subtitle;
+            }
+            else
+            {
+                if (this.StartTime != null)
+                    ret += " ST:" + this.StartTime;
+                if (this.EndTime != null)
+                    ret += " ET:" + this.EndTime;
+            }
+            return ret;
         }
     }
 }

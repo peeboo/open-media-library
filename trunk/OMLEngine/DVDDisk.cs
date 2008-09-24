@@ -57,6 +57,11 @@ namespace OMLGetDVDInfo
             list.Sort(delegate(DVDTitle a, DVDTitle b) { return -a.Duration.CompareTo(b.Duration); });
             return list[0];
         }
+
+        public DVDTitle GetTitle(int? title)
+        {
+            return title == null ? GetMainTitle() : Titles[title.Value];
+        }
     }
 
 }

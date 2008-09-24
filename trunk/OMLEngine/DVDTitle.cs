@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
@@ -104,6 +105,16 @@ namespace OMLGetDVDInfo
             return string.Format("{0}, {1}, ({2:00}:{3:00}:{4:00}) {5}, {6}", this.File, this.TitleNumber, this.Duration.Hours,
                 this.Duration.Minutes, this.Duration.Seconds, this.Resolution, this.AspectRatio);
         }
+
+        public DVDSubtitle GetSubTitle(int id)
+        {
+            return (from s in this.Subtitles where s.TrackNumber == id select s).FirstOrDefault();
+        }
+
+        public DVDAudioTrack GetAudio(int id)
+        {
+            return (from a in this.AudioTracks where a.ID == id select a).FirstOrDefault();
+        }
     }
 
     #region -- Enums --
@@ -124,6 +135,15 @@ namespace OMLGetDVDInfo
         DTS,
         Undefined
     }
+
+    public enum AudioExtension
+    {
+        Unspecified = 0,
+        Normal = 1,
+        For_visually_impaired = 2,
+        Director_s_comments = 3,
+        Alternate_director_s_comments = 4,
+    }
     #endregion
 
     #region -- Audio/Video Values --
@@ -133,7 +153,7 @@ namespace OMLGetDVDInfo
         public AudioEncoding Encoding { get; private set; }
         public int Channels { get; private set; }
         public int SampleRate { get; private set; }
-        public string Extension { get; private set; }
+        public AudioExtension Extension { get; private set; }
 
         public override string ToString()
         {
@@ -157,11 +177,11 @@ namespace OMLGetDVDInfo
 
             switch (b5)
             {
-                case 0: result.Extension = "Unspecified"; break;
-                case 1: result.Extension = "Normal"; break;
-                case 2: result.Extension = "For visually impaired"; break;
-                case 3: result.Extension = "Director's comments"; break;
-                case 4: result.Extension = "Alternate director's comments"; break;
+                case 0: result.Extension = AudioExtension.Unspecified; break;
+                case 1: result.Extension = AudioExtension.Normal; break;
+                case 2: result.Extension = AudioExtension.For_visually_impaired; break;
+                case 3: result.Extension = AudioExtension.Director_s_comments; break;
+                case 4: result.Extension = AudioExtension.Alternate_director_s_comments; break;
             }
 
             result.LanguageTypePresent = (byte0_low & 0x04) == 0x04;
