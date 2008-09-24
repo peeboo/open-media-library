@@ -16,7 +16,19 @@ namespace OMLTestSuite
             using (var host = new MyClientBase<ITranscodingService>())
             {
                 var service = host.Channel;
-                service.Transcode(new MediaSource(new Disk("name", "path", VideoFormat.DVD)));
+                var disk = new Disk("test", @"C:\Users\Public\Videos\DVDs\Apocalypto", VideoFormat.DVD);
+                var mediaSource = new MediaSource(disk);
+                mediaSource.AudioStream = mediaSource.GetAudioSteam(OMLGetDVDInfo.AudioExtension.Director_s_comments);
+                mediaSource.Subtitle = mediaSource.GetSubTitle("en");
+                mediaSource.Title = disk.DVDDiskInfo.GetMainTitle().TitleNumber;
+                mediaSource.StartChapter = 2;
+                mediaSource.EndChapter = 3;
+                Utilities.DebugLine("MediaSource: {0}", mediaSource);
+
+                disk.ExtraOptions = mediaSource.ExtraOptions;
+                mediaSource = new MediaSource(disk);
+                Utilities.DebugLine("MediaSource: {0}", mediaSource);
+                service.Transcode(mediaSource);
                 service.Cancel("key");
             }
             return;
