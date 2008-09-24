@@ -13,6 +13,7 @@ namespace OMLEngine
         public string Name { get; set; }
         public string Path { get; set; }
         public VideoFormat Format { get; set; }
+        public string ExtraOptions { get; set; }
 
         #region -- DVD Members --
         [NonSerialized]
@@ -38,7 +39,8 @@ namespace OMLEngine
                     return null;
                 if (string.Compare(new DirectoryInfo(Path).Name, "VIDEO_TS", true) == 0)
                     return Path;
-                return System.IO.Path.Combine(Path, "VIDEO_TS");
+                string path = System.IO.Path.Combine(Path, "VIDEO_TS");
+                return Directory.Exists(path) ? path : null;
             }
         }
         public string VIDEO_TS_Parent
@@ -72,6 +74,7 @@ namespace OMLEngine
             info.AddValue("name", Name);
             info.AddValue("path", Path);
             info.AddValue("format", Format);
+            info.AddValue("extraOptions", ExtraOptions);
         }
 
         public Disk(SerializationInfo info, StreamingContext ctxt)
@@ -79,6 +82,8 @@ namespace OMLEngine
             Name = info.GetString("name");
             Path = info.GetString("path");
             Format = GetSerializedVideoFormat(info, "format");
+            if (info.MemberCount > 3)
+                ExtraOptions = info.GetString("extraOptions");
         }
 
         static VideoFormat GetSerializedVideoFormat(SerializationInfo info, string id)
@@ -87,9 +92,8 @@ namespace OMLEngine
             {
                 return (VideoFormat)info.GetValue(id, typeof(VideoFormat));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Utilities.DebugLine("Exception in GetSerializedVideoFormat: " + e.Message);
                 return VideoFormat.DVD;
             }
         }

@@ -19,6 +19,11 @@ namespace OMLEngine
         [DataMember]
         public int? SubtitleID { get; private set; }
 
+        public override string ToString()
+        {
+            return string.Format("{0}[{1}]", this.LanguageID, this.SubtitleID);
+        }
+
         public SubtitleStream()
         {
             this.LanguageID = string.Empty;

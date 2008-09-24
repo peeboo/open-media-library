@@ -58,7 +58,7 @@ namespace OMLTestSuite
             Assert.AreEqual(AudioEncoding.AC3, title.AudioTracks[0].Format);
             Assert.AreEqual("fr", title.AudioTracks[1].LanguageID);
             Assert.AreEqual("en", title.AudioTracks[2].LanguageID);
-            Assert.AreEqual("Director's comments", title.AudioTracks[2].Extension);
+            Assert.AreEqual(AudioExtension.Director_s_comments, title.AudioTracks[2].Extension);
         }
 
         [Test]

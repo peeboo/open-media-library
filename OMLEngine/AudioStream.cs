@@ -23,6 +23,16 @@ namespace OMLEngine
         public int? Channels { get; private set; }
         [DataMember]
         public AudioEncoding Format { get; private set; }
+        [DataMember]
+        public AudioExtension Extension { get; private set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}[{1}]", this.LanguageID, 
+                string.Format("{0}, {1}, {2}, {3}", this.AudioID, this.Format, 
+                    DVDAudioTrack.GetSubFormat(this.Channels ?? 0), 
+                    DVDAudioTrack.GetExtension(this.Extension)).TrimEnd(' ', ','));
+        }
 
         public AudioStream()
         {
@@ -35,6 +45,7 @@ namespace OMLEngine
             this.LanguageID = audioTrack.LanguageID;
             this.Channels = audioTrack.Channels;
             this.Format = audioTrack.Format;
+            this.Extension = audioTrack.Extension;
         }
     }
 }
