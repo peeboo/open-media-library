@@ -52,13 +52,51 @@ namespace OMLEngine
 
         static AudioStream GetAudioSteam(DVDAudioTrack at) { return at == null ? null : new AudioStream(at); }
         static SubtitleStream GetSubTitle(DVDSubtitle st) { return st == null ? null : new SubtitleStream(st); }
+        public SubtitleStream GetSubTitle(string languageID)
+        {
+            DVDTitle title = DVDTitle;
+            if (title == null)
+                return null;
+            return GetSubTitle(title.GetSubTitle(languageID));
+        }
 
         [DataMember]
         public Disk Disk { get; private set; }
         public string Name { get { return Disk.Name; } }
         public string MediaPath { get { return Disk.Path; } set { Disk.Path = value; } }
 
-        public string Key { get { throw new NotImplementedException(); } }
+        public string ExtraOptions
+        {
+            get
+            {
+                string key = string.Empty;
+                if (this.Title != null)
+                    key += ";T=" + this.Title;
+                if (this.StartChapter != null)
+                    key += ";CS=" + this.StartChapter;
+                if (this.EndChapter != null)
+                    key += ";CE=" + this.EndChapter;
+                if (this.Subtitle != null && this.Subtitle.SubtitleID != null)
+                    key += ";S=" + this.Subtitle.SubtitleID;
+                if (this.AudioStream != null && this.AudioStream.AudioID != null)
+                    key += ";A=" + this.AudioStream.AudioID;
+                if (this.StartTime != null)
+                    key += ";TS=" + this.StartTime;
+                if (this.EndTime != null)
+                    key += ";TE=" + this.EndTime;
+                return key.TrimStart(';');
+            }
+        }
+
+        public string Key
+        {
+            get
+            {
+                string key = this.Disk.Name;
+                key += "-" + ExtraOptions.Replace(";", "-").Replace("=", "").Replace(":", "-");
+                return key.TrimEnd('-');
+            }
+        }
 
         #region -- DVD Members --
         public string VIDEO_TS { get { return Disk.VIDEO_TS; } }

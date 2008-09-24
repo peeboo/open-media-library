@@ -111,10 +111,16 @@ namespace OMLGetDVDInfo
             return (from s in this.Subtitles where s.TrackNumber == id select s).FirstOrDefault();
         }
 
+        public DVDSubtitle GetSubTitle(string languageID)
+        {
+            return (from s in this.Subtitles where string.Compare(s.LanguageID, languageID, true) == 0 select s).FirstOrDefault();
+        }
+
         public DVDAudioTrack GetAudio(int id)
         {
             return (from a in this.AudioTracks where a.ID == id select a).FirstOrDefault();
         }
+
     }
 
     #region -- Enums --
