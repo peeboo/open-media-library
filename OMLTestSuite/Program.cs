@@ -42,10 +42,6 @@ namespace OMLTestSuite
             return;
 #endif
 #if !CUSTOM
-            AppleTrailersTest att = new AppleTrailersTest();
-            Console.WriteLine("Testing: AppleTrailers");
-            att.TEST_APPLE_TRAILERS_GET_TITLES();
-
             MoviePlayerDVDTest mpdt = new MoviePlayerDVDTest();
             Console.WriteLine("Testing: MoviePlayerDVD");
             mpdt.TEST_GENERATE_STRING_FOR_A_STANDARD_DVD();

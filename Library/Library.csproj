@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\AppleTrailer.cs" />
     <Compile Include="Code\LayoutV2\BaseGallery.cs" />
     <Compile Include="Code\MountingTool.cs" />
     <Compile Include="Code\DirectoryTreeNode.cs" />

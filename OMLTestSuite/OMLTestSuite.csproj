@@ -56,7 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppleTrailersTest.cs" />
     <Compile Include="DVDProfilerTest.cs" />
     <Compile Include="MEncoderCommandBuilderTest.cs" />
     <Compile Include="MoviePlayerDVDTest.cs" />
@@ -71,10 +70,6 @@
     <Compile Include="VirtualDirectoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AppleTrailers\AppleTrailers.csproj">
-      <Project>{A0DBC533-7A27-4D24-BB1D-636A2B1A78E7}</Project>
-      <Name>AppleTrailers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DVDProfilerPlugin\DVDProfilerPlugin.csproj">
       <Project>{8D8056BC-5D9B-4FAD-AD05-CB11D059B511}</Project>
       <Name>DVDProfilerPlugin</Name>

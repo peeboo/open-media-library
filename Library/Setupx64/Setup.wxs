@@ -71,6 +71,11 @@
                               KeyPath="yes" Source="..\..\OMLEngine\bin\$(var.BuildType)\OMLEngine.dll"
                               Checksum="yes" Vital="yes" Assembly=".net"/>
                     </Component>
+                    <Component Id="OMLTranscoder.dll" Guid="AF99C403-9114-4809-A9AF-BA8038D47EA7" Win64="yes" DiskId="1">
+                        <File Name="OMLTranscoder.dll"
+                              KeyPath="yes" Source="..\..\OMLTranscoder\bin\$(var.BuildType)\OMLTranscoder.dll"
+                              Checksum="yes" Vital="yes" Assembly=".net"/>
+                    </Component>
                     <Component Id="Registration.xml" Guid="68b08279-69c0-42fb-b087-30a20ee12608" Win64="yes" DiskId="1">
                         <File Name="Registration.xml"
                               Source="..\Registration.xml" Checksum="no" />
@@ -195,6 +200,7 @@
 		<Feature Id="APPLICATIONROOTFEATURE" Title="Open Media Library" Level="1">
             <ComponentRef Id="Library.dll" />
             <ComponentRef Id="OMLEngine.dll" />
+            <ComponentRef Id="OMLTranscoder.dll"/>
             <ComponentRef Id="Registration.xml" />
             <ComponentRef Id="Application.png" />
 
