@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Reflection;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Tcp;
-using OMLEngine;
-using Microsoft.MediaCenter.Hosting;
+
 using Microsoft.MediaCenter;
+using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
-using System.IO;
-using System.Diagnostics;
-using Microsoft.Win32;
+
+using OMLEngine;
 using OMLTranscoder;
 
 namespace Library

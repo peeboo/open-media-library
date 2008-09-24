@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Xml.Serialization;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace OMLGetDVDInfo
 
         public static DVDDiskInfo ParseDVD(string videoTSDir)
         {
-            return new DVDDiskInfo() { Titles = IFOUtilities.Titles(videoTSDir).ToArray() };
+            return videoTSDir != null ? new DVDDiskInfo() { Titles = IFOUtilities.Titles(videoTSDir).ToArray() } : null;
         }
 
         public static void Test(string videoTS_Folder)
@@ -60,7 +61,7 @@ namespace OMLGetDVDInfo
 
         public DVDTitle GetTitle(int? title)
         {
-            return title == null ? GetMainTitle() : Titles[title.Value];
+            return title == null ? GetMainTitle() : (from t in Titles where t.TitleNumber == title.Value select t).FirstOrDefault();
         }
     }
 

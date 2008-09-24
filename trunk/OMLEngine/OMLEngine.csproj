@@ -88,6 +88,7 @@
     <Compile Include="SubtitleStream.cs" />
     <Compile Include="Title.cs" />
     <Compile Include="TitleCollection.cs" />
+    <Compile Include="TranscodingService.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="VistaTools.cs" />
     <Compile Include="WindowsPlayListManager.cs" />

@@ -16,6 +16,9 @@ namespace OMLEngineService
 
         [OperationContract]
         TranscodingStatus GetStatus(string key);
+
+        [OperationContract(IsOneWay = true)]
+        void RegisterNotifyer(string url, bool register);
     }
 
     public enum TranscodingStatus
@@ -37,9 +40,8 @@ namespace OMLEngineService
     public class MyClientBase<T> : ClientBase<T>, IDisposable
       where T : class
     {
-        public MyClientBase()
-        {
-        }
+        public MyClientBase() : base() { }
+        public MyClientBase(string endPoint, string uri) : base(endPoint, uri) { }
 
         public void Dispose()
         {

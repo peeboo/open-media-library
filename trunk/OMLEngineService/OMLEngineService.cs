@@ -123,7 +123,7 @@ namespace OMLEngineService
 
         protected void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            WriteToLog(EventLogEntryType.Information, "OMLEngineService Timer triggered");
+            // WriteToLog(EventLogEntryType.Information, "OMLEngineService Timer triggered");
         }
 
         private void StartOMLFWService()
