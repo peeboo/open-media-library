@@ -5,6 +5,7 @@ using System;
 
 using OMLEngine;
 using OMLEngineService;
+using System.Threading;
 
 namespace OMLTestSuite
 {
@@ -13,10 +14,14 @@ namespace OMLTestSuite
         static void Main(string[] args)
         {
 #if WCF_TEST
+            //const string path = @"C:\Users\Public\Videos\DVDs\Apocalypto";
+            const string path = @"C:\Users\Public\Videos\DVDs\Rambo";
+            TranscodingNotifyingService.Start();
+
             using (var host = new MyClientBase<ITranscodingService>())
             {
                 var service = host.Channel;
-                var disk = new Disk("test", @"C:\Users\Public\Videos\DVDs\Apocalypto", VideoFormat.DVD);
+                var disk = new Disk("test", path, VideoFormat.DVD);
                 var mediaSource = new MediaSource(disk);
                 mediaSource.AudioStream = mediaSource.GetAudioSteam(OMLGetDVDInfo.AudioExtension.Director_s_comments);
                 mediaSource.Subtitle = mediaSource.GetSubTitle("en");
@@ -31,6 +36,9 @@ namespace OMLTestSuite
                 service.Transcode(mediaSource);
                 service.Cancel("key");
             }
+            Thread.Sleep(5000);
+            TranscodingNotifyingService.Stop();
+
             return;
 #endif
 #if !CUSTOM
