@@ -909,16 +909,16 @@ namespace Library {
             }
         }
         
-        internal static byte[] TranscodingMessage {
+        internal static byte[] Trailers {
             get {
-                object obj = ResourceManager.GetObject("TranscodingMessage", resourceCulture);
+                object obj = ResourceManager.GetObject("Trailers", resourceCulture);
                 return ((byte[])(obj));
             }
         }
         
-        internal static byte[] VeronicasRadio {
+        internal static byte[] TranscodingMessage {
             get {
-                object obj = ResourceManager.GetObject("VeronicasRadio", resourceCulture);
+                object obj = ResourceManager.GetObject("TranscodingMessage", resourceCulture);
                 return ((byte[])(obj));
             }
         }

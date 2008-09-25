@@ -68,7 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\AppleTrailer.cs" />
+    <Compile Include="Code\AppleTrailers.cs" />
     <Compile Include="Code\LayoutV2\BaseGallery.cs" />
     <Compile Include="Code\MountingTool.cs" />
     <Compile Include="Code\DirectoryTreeNode.cs" />
@@ -191,7 +191,7 @@
     <Content Include="Markup\SimpleRadioButton.mcml" />
     <Content Include="Markup\Styles.mcml" />
     <Content Include="Markup\TestBackground.mcml" />
-    <Content Include="Markup\VeronicasRadio.mcml" />
+    <Content Include="Markup\Trailers.mcml" />
     <Content Include="Registration.xml" />
     <Content Include="Images\Application.png" />
     <None Include="app.config" />

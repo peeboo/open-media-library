@@ -242,6 +242,7 @@ namespace Library
             _categories.Add(new FilterCommand(Filters[Filter.Tags]));
             _categories.Add(new FilterCommand(Filters[Filter.ParentRating]));
             _categories.Add(new FilterCommand(Filters[Filter.Country]));
+            _categories.Add(new FilterCommand(Filters[Filter.Trailers]));
             _categoryChoice = new Choice(this, "Categories", _categories);
         }
 
@@ -262,6 +263,7 @@ namespace Library
             _filters.Add(Filter.ParentRating, new Filter(Filter.ParentRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
             _filters.Add(Filter.Tags, new Filter(Filter.Tags, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
             _filters.Add(Filter.Country, new Filter(Filter.Country, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
+            _filters.Add(Filter.Trailers, new Filter(Filter.Trailers, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
             
             _jumpInListText = new EditableText(this);
             _jumpInListText.Value = String.Empty;

@@ -63,6 +63,7 @@ namespace Library
         public const string DateAdded = "Date Added";
         public const string Home = "OML Home";
         public const string VideoFormat = "Format";
+        public const string Trailers = "Trailers";
 
         public const string AllItems = " All ";
 
@@ -189,6 +190,10 @@ namespace Library
                 if (cmd.Filter.Name == Filter.Settings)
                 {
                     OMLApplication.Current.GoToSettingsPage(_gallery);
+                }
+                else if (cmd.Filter.Name == Filter.Trailers)
+                {
+                    OMLApplication.Current.GoToTrailersPage();
                 }
                 else
                 {
