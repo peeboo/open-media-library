@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.ServiceModel;
 
 using OMLEngine;
 using OMLTranscoder;
-using System.IO;
 
 namespace OMLEngineService
 {
@@ -17,7 +18,10 @@ namespace OMLEngineService
             string key = source.Key;
             lock (sTranscoders)
                 if (sTranscoders.ContainsKey(key))
+                {
                     Utilities.DebugLine("Transcode [Already Processing]: {0}", source);
+                    NotifyAll(key, sTranscoders[key].Status);
+                }
                 else
                     sTranscoders[key] = new Transcoder(source);
         }
@@ -53,7 +57,7 @@ namespace OMLEngineService
                 if (register)
                 {
                     if (sProxies.ContainsKey(url) == false)
-                        sProxies[url] = new MyClientBase<ITranscodingNotifyingService>("TranscodingNetNotifyingService", url);
+                        sProxies[url] = true;
                 }
                 else
                     sProxies.Remove(url);
@@ -65,26 +69,40 @@ namespace OMLEngineService
         {
             Utilities.DebugLine("NotifyAll({0}, {1})", key, status);
             lock (sProxies)
-                foreach (var proxyHost in sProxies.Values)
+                foreach (var uri in new List<string>(sProxies.Keys))
                 {
-                    Utilities.DebugLine("NotifyAll({0}, {1}, {2})", proxyHost.Endpoint.Address, key, status);
-                    var proxy = proxyHost.Channel;
+                    Utilities.DebugLine("NotifyAll({0}, {1}, {2})", uri, key, status);
                     ThreadPool.QueueUserWorkItem(delegate
                     {
+                        var proxyHost = new MyClientBase<ITranscodingNotifyingService>("TranscodingNetNotifyingService", uri);
                         try
                         {
-                            proxy.StatusChanged(key, status);
+                            proxyHost.Channel.StatusChanged(key, status);
+                        }
+                        catch (CommunicationException ex)
+                        {
+                            lock (sProxies)
+                                sProxies.Remove(uri);
+                            Utilities.DebugLine("NotifyAll({0}, {1}, {2}) Removing from registration: {3}", proxyHost.Endpoint.Address, key, status, ex.Message);
                         }
                         catch (Exception ex)
                         {
                             Utilities.DebugLine("NotifyAll({0}, {1}, {2}) {3}", proxyHost.Endpoint.Address, key, status, ex);
+                        }
+                        finally
+                        {
+                            try
+                            {
+                                proxyHost.Close();
+                            }
+                            catch { }
                         }
                     });
                 }
         }
 
         static IDictionary<string, Transcoder> sTranscoders = new Dictionary<string, Transcoder>();
-        static IDictionary<string, MyClientBase<ITranscodingNotifyingService>> sProxies = new Dictionary<string, MyClientBase<ITranscodingNotifyingService>>();
+        static IDictionary<string, bool> sProxies = new Dictionary<string, bool>();
         #endregion
     }
 
@@ -103,15 +121,26 @@ namespace OMLEngineService
             TranscodingService.NotifyAll(source.Key, Status);
         }
 
+        static int BufferSize = 5 * 1024 * 1024;
+
+        static Transcoder()
+        {
+            int buffer;
+            if (int.TryParse(ConfigurationManager.AppSettings["Transcode.BufferSize"], out buffer))
+                BufferSize = buffer;
+        }
+
         void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
+            FileInfo file = new FileInfo(Source.GetTranscodingFileName(FileSystemWalker.TranscodeBufferDirectory));
+
             if (Status != TranscodingStatus.Initializing)
             {
+                Utilities.DebugLine("Timer: stopping timer, file={0}, status={1}", file.Name, Status);
                 Timer.Stop();
                 return;
             }
 
-            FileInfo file = new FileInfo(Source.GetTranscodingFileName(FileSystemWalker.TranscodeBufferDirectory));
             Utilities.DebugLine("Timer: outfile {0}, exists: {1}, size: {2}", file.Name, file.Exists, file.Exists ? file.Length : -1);
             if (file.Exists && file.Length > 5 * 1024 * 1024)
             {

@@ -92,7 +92,7 @@ namespace OMLEngine
         {
             get
             {
-                string key = this.Disk.Name;
+                string key = TranscodingName;
                 key += "-" + ExtraOptions.Replace(";", "-").Replace("=", "").Replace(":", "-");
                 return key.TrimEnd('-');
             }
@@ -168,23 +168,38 @@ namespace OMLEngine
             return ret;
         }
 
+        public string TranscodingName
+        {
+            get
+            {
+                if (this.Format != VideoFormat.DVD)
+                    return Path.GetFileNameWithoutExtension(this.MediaPath);
+
+                string root = this.VIDEO_TS_Parent;
+                if (root != Path.GetPathRoot(root))
+                    return new DirectoryInfo(root).Name;
+
+                DriveInfo inputDrive = new DriveInfo(root.Substring(0, 1));
+                try
+                {
+                    if (inputDrive.IsReady)
+                        return inputDrive.VolumeLabel;
+                }
+                catch { }
+                return null;
+            }
+        }
+
         public string GetTranscodingFileName(string path)
         {
             if (this.Format != VideoFormat.DVD)
-                return Path.Combine(path, Path.GetFileName(this.MediaPath));
+                return Path.ChangeExtension(Path.Combine(path, TranscodingName), ".wmv");
 
-            string root = this.VIDEO_TS_Parent;
-            if (root != Path.GetPathRoot(root))
-                return Path.Combine(path, new DirectoryInfo(root).Name);
+            string transcodingName = TranscodingName;
+            if (transcodingName == null)
+                return null;
 
-            DriveInfo inputDrive = new DriveInfo(root.Substring(0, 1));
-            try
-            {
-                if (inputDrive.IsReady)
-                    return Path.Combine(path, inputDrive.VolumeLabel);
-            }
-            catch { }
-            return null;
+            return Path.ChangeExtension(Path.Combine(path, transcodingName), ".mpg");
         }
     }
 }
