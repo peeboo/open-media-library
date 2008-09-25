@@ -12,38 +12,37 @@ namespace OMLTestSuite
 {
     class Program
     {
+        static MediaSource GetTestMediaSource()
+        {
+            const string path = @"C:\Users\Public\Videos\DVDs\Apocalypto";
+            //const string path = @"C:\Users\Public\Videos\DVDs\Rambo";
+
+            var disk = new Disk("test", path, VideoFormat.DVD);
+            var mediaSource = new MediaSource(disk);
+            mediaSource.AudioStream = mediaSource.GetAudioSteam(OMLGetDVDInfo.AudioExtension.Director_s_comments);
+            mediaSource.Subtitle = mediaSource.GetSubTitle("en");
+            mediaSource.Title = disk.DVDDiskInfo.GetMainTitle().TitleNumber;
+            mediaSource.StartChapter = 2;
+            mediaSource.EndChapter = 3;
+            return mediaSource;
+        }
+
         static void Main(string[] args)
         {
-            Program.TEST_APPLETRAILERS();
 #if WCF_TEST
-            //const string path = @"C:\Users\Public\Videos\DVDs\Apocalypto";
-            const string path = @"C:\Users\Public\Videos\DVDs\Rambo";
-            TranscodingNotifyingService.Start();
-
-            using (var host = new MyClientBase<ITranscodingService>())
+            TranscodingAPI tAPI = new TranscodingAPI(GetTestMediaSource(), delegate(MediaSource source, TranscodingStatus status)
             {
-                var service = host.Channel;
-                var disk = new Disk("test", path, VideoFormat.DVD);
-                var mediaSource = new MediaSource(disk);
-                mediaSource.AudioStream = mediaSource.GetAudioSteam(OMLGetDVDInfo.AudioExtension.Director_s_comments);
-                mediaSource.Subtitle = mediaSource.GetSubTitle("en");
-                mediaSource.Title = disk.DVDDiskInfo.GetMainTitle().TitleNumber;
-                mediaSource.StartChapter = 2;
-                mediaSource.EndChapter = 3;
-                Utilities.DebugLine("MediaSource: {0}", mediaSource);
-
-                disk.ExtraOptions = mediaSource.ExtraOptions;
-                mediaSource = new MediaSource(disk);
-                Utilities.DebugLine("MediaSource: {0}", mediaSource);
-                service.Transcode(mediaSource);
-                service.Cancel("key");
-            }
-            Thread.Sleep(5000);
-            TranscodingNotifyingService.Stop();
+                Console.WriteLine(string.Format("StatusChanged: {0}, {1}", source, status));
+            });
+            tAPI.Transcode();
+            tAPI.Stop();
 
             return;
 #endif
 #if !CUSTOM
+            Program.TEST_MEDIASOURCE_FROM_DISK_WITH_EXTRA_OPTIONS();
+            Program.TEST_APPLETRAILERS();
+
             MoviePlayerDVDTest mpdt = new MoviePlayerDVDTest();
             Console.WriteLine("Testing: MoviePlayerDVD");
             mpdt.TEST_GENERATE_STRING_FOR_A_STANDARD_DVD();
@@ -92,6 +91,17 @@ namespace OMLTestSuite
             vdt.TEST_CREATE_VIRTUAL_FOLDER();
             vdt.TEST_MULTIPLE_BASE_FOLDERS_WORK();
 #endif
+        }
+
+        [Test]
+        public static void TEST_MEDIASOURCE_FROM_DISK_WITH_EXTRA_OPTIONS()
+        {
+            var mediaSource = GetTestMediaSource();
+            Utilities.DebugLine("MediaSource: {0}", mediaSource);
+            mediaSource.Disk.ExtraOptions = mediaSource.ExtraOptions;
+            var ms = new MediaSource(mediaSource.Disk);
+            Utilities.DebugLine("MediaSource: {0}", ms);
+            Assert.AreEqual(mediaSource.ToString(), ms.ToString());
         }
 
         [Test]

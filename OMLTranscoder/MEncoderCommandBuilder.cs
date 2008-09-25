@@ -106,8 +106,7 @@ namespace OMLTranscoder
             strBuilder.Append(@" -really-quiet");
 
             //output
-            strBuilder.AppendFormat(@" -o ""{0}""",
-                Path.ChangeExtension(outputFile, IsDVD ? @".mpg" : @".wmv"));
+            strBuilder.AppendFormat(@" -o ""{0}""", outputFile);
 
             string completedArguments = strBuilder.ToString();
             Utilities.DebugLine("[MEncoderCommandBuilder] Arguments: {0}", completedArguments);
