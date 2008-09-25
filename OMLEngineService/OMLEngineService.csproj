@@ -88,6 +88,10 @@
       <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
       <Name>OMLEngine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OMLTranscoder\OMLTranscoder.csproj">
+      <Project>{A924F59C-1AF8-4B18-B3E4-E0EECB4CE225}</Project>
+      <Name>OMLTranscoder</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
