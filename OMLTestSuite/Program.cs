@@ -6,6 +6,7 @@ using System;
 using OMLEngine;
 using OMLEngineService;
 using System.Threading;
+using NUnit.Framework;
 
 namespace OMLTestSuite
 {
@@ -13,6 +14,7 @@ namespace OMLTestSuite
     {
         static void Main(string[] args)
         {
+            Program.TEST_APPLETRAILERS();
 #if WCF_TEST
             //const string path = @"C:\Users\Public\Videos\DVDs\Apocalypto";
             const string path = @"C:\Users\Public\Videos\DVDs\Rambo";
@@ -90,6 +92,15 @@ namespace OMLTestSuite
             vdt.TEST_CREATE_VIRTUAL_FOLDER();
             vdt.TEST_MULTIPLE_BASE_FOLDERS_WORK();
 #endif
+        }
+
+        [Test]
+        public static void TEST_APPLETRAILERS()
+        {
+            Console.WriteLine("Testing: AppleTrailer");
+            Library.AppleTrailers trailers = new Library.AppleTrailers();
+            trailers.LoadTrailers();
+            Assert.Greater(trailers.trailers.Options.Count, 0);
         }
     }
 }

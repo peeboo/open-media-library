@@ -146,9 +146,7 @@ namespace Library
         {
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
 #if CAROUSEL
-            OMLProperties properties = new OMLProperties();
-            properties.Add("App", this);
-            _session.GoToPage(@"resx://Library/Library.Resources/VeronicasRadio", properties);
+            _session.GoToPage(@"resx://Library/Library.Resources/Trailers");
             return;
 #endif
 #if LAYOUT_V2
@@ -180,6 +178,10 @@ namespace Library
                 case "Settings":
                     OMLApplication.DebugLine("[OMLApplication] going to Settings Page");
                     GoToSettingsPage(new MovieGallery(_titles, Filter.Settings));
+                    return;
+                case "Trailers":
+                    OMLApplication.DebugLine("[OMLApplication] going to Trailers Page");
+                    GoToTrailersPage();
                     return;
                 case "About":
                     OMLApplication.DebugLine("[OMLApplication] going to About Page");
@@ -226,6 +228,15 @@ namespace Library
             if (_session != null)
             {
                 _session.GoToPage("resx://Library/Library.Resources/Settings", CreateProperties(true, true, gallery));
+            }
+        }
+
+        public void GoToTrailersPage()
+        {
+            DebugLine("[OMLApplication] GoToTrailersPage()");
+            if (_session != null)
+            {
+                _session.GoToPage("resx://Library/Library.Resources/Trailers", CreateProperties(true, true, null));
             }
         }
 

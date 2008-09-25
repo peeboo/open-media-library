@@ -719,5 +719,17 @@ namespace Library.Properties {
                 this["CarouselItemSpacingHorizontal"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Hi")]
+        public string AppleTrailerFidelity {
+            get {
+                return ((string)(this["AppleTrailerFidelity"]));
+            }
+            set {
+                this["AppleTrailerFidelity"] = value;
+            }
+        }
     }
 }
