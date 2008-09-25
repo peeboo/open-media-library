@@ -27,7 +27,7 @@ namespace OMLEngineService
             return TranscodingStatus.Error;
         }
 
-        void NotifyAll(string key, TranscodingStatus status)
+        static void NotifyAll(string key, TranscodingStatus status)
         {
             Utilities.DebugLine("NotifyAll({0}, {1})", key, status);
             lock (sProxies)

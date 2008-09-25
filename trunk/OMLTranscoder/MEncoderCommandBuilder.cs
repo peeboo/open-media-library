@@ -14,37 +14,13 @@ namespace OMLTranscoder
     {
         MediaSource _source;
 
-        public MEncoderCommandBuilder(MediaSource ms, string path)
+        public MEncoderCommandBuilder(MediaSource ms)
         {
             _source = ms;
             this.AudioEncoderFormat = MEncoder.AudioFormat.LAVC;
             this.VideoEncoderFormat = MEncoder.VideoFormat.LAVC;
-
-            if (_source.Format != VideoFormat.DVD)
-            {
-                OutputFile = Path.Combine(path, Path.GetFileName(_source.MediaPath));
-            }
-            else
-            {
-                string root = _source.VIDEO_TS_Parent;
-                if (root == Path.GetPathRoot(root))
-                {
-                    DriveInfo inputDrive = new DriveInfo(root.Substring(0, 1));
-                    try
-                    {
-                        if (inputDrive.IsReady == false)
-                            inputDrive = null;
-                        else
-                            OutputFile = Path.Combine(path, inputDrive.VolumeLabel);
-                    }
-                    catch { }
-                }
-                else
-                    OutputFile = Path.Combine(path, new DirectoryInfo(root).Name);
-            }
         }
 
-        public string OutputFile { get; set; }
         public bool IsDVD { get { return _source.Format == VideoFormat.DVD; } }
         public MEncoder.AudioFormat AudioEncoderFormat { get; set; }
         public MEncoder.VideoFormat VideoEncoderFormat { get; set; }
@@ -72,9 +48,10 @@ namespace OMLTranscoder
             return _command;
         }
 
-        public string GetArguments()
+        public string GetArguments(string path)
         {
-            if (OutputFile == null)
+            string outputFile = _source.GetTranscodingFileName(path);
+            if (outputFile == null)
                 throw new Exception(string.Format("OutputFile not set for {0}", _source));
 
             StringBuilder strBuilder = new StringBuilder();
@@ -129,8 +106,8 @@ namespace OMLTranscoder
             strBuilder.Append(@" -really-quiet");
 
             //output
-            strBuilder.AppendFormat(@" -o ""{0}""", 
-                Path.ChangeExtension(OutputFile, IsDVD ? @".mpg" : @".wmv"));
+            strBuilder.AppendFormat(@" -o ""{0}""",
+                Path.ChangeExtension(outputFile, IsDVD ? @".mpg" : @".wmv"));
 
             string completedArguments = strBuilder.ToString();
             Utilities.DebugLine("[MEncoderCommandBuilder] Arguments: {0}", completedArguments);

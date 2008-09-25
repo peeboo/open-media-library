@@ -167,5 +167,24 @@ namespace OMLEngine
             }
             return ret;
         }
+
+        public string GetTranscodingFileName(string path)
+        {
+            if (this.Format != VideoFormat.DVD)
+                return Path.Combine(path, Path.GetFileName(this.MediaPath));
+
+            string root = this.VIDEO_TS_Parent;
+            if (root != Path.GetPathRoot(root))
+                return Path.Combine(path, new DirectoryInfo(root).Name);
+
+            DriveInfo inputDrive = new DriveInfo(root.Substring(0, 1));
+            try
+            {
+                if (inputDrive.IsReady)
+                    return Path.Combine(path, inputDrive.VolumeLabel);
+            }
+            catch { }
+            return null;
+        }
     }
 }

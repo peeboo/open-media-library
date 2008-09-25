@@ -34,14 +34,14 @@ namespace OMLTranscoder
 
         public int BeginTranscodeJob(out string outputFilename)
         {
-            MEncoderCommandBuilder cmdBuilder = new MEncoderCommandBuilder(_source, FileSystemWalker.TranscodeBufferDirectory);
-            outputFilename = cmdBuilder.OutputFile;
+            MEncoderCommandBuilder cmdBuilder = new MEncoderCommandBuilder(_source);
+            outputFilename = _source.GetTranscodingFileName(FileSystemWalker.TranscodeBufferDirectory);
 
             Utilities.DebugLine("[Transcode] Output file will be: {0}", outputFilename);
             Utilities.DebugLine("[Transcode] Starting transcode job");
             CurrentTranscodeProcess = new Process();
             CurrentTranscodeProcess.StartInfo.FileName = cmdBuilder.GetCommand();
-            CurrentTranscodeProcess.StartInfo.Arguments = cmdBuilder.GetArguments();
+            CurrentTranscodeProcess.StartInfo.Arguments = cmdBuilder.GetArguments(FileSystemWalker.TranscodeBufferDirectory);
             CurrentTranscodeProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             CurrentTranscodeProcess.StartInfo.ErrorDialog = false;
             CurrentTranscodeProcess.EnableRaisingEvents = true;
