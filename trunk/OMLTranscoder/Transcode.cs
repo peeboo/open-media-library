@@ -15,52 +15,53 @@ namespace OMLTranscoder
 {
     public class Transcode
     {
-        public Process CurrentTranscodeProcess { get; private set; }
-        MediaSource _source;
+        public Process Process { get; private set; }
+        public MediaSource Source { get; private set; }
+        public event EventHandler Exited;
 
         public Transcode(MediaSource source)
         {
-            _source = source;
+            Source = source;
         }
 
         ~Transcode()
         {
-            if (CurrentTranscodeProcess != null && !CurrentTranscodeProcess.HasExited)
+            if (Process != null && !Process.HasExited)
             {
-                OMLEngine.Utilities.DebugLine("Transcode process not finished: kill {0}", CurrentTranscodeProcess.Id);
-                CurrentTranscodeProcess.Kill();
+                OMLEngine.Utilities.DebugLine("Transcode process not finished: kill {0}", Process.Id);
+                Process.Kill();
             }
         }
 
-        public int BeginTranscodeJob(out string outputFilename)
+        public int BeginTranscodeJob()
         {
-            MEncoderCommandBuilder cmdBuilder = new MEncoderCommandBuilder(_source);
-            outputFilename = _source.GetTranscodingFileName(FileSystemWalker.TranscodeBufferDirectory);
+            MEncoderCommandBuilder cmdBuilder = new MEncoderCommandBuilder(Source);
 
-            Utilities.DebugLine("[Transcode] Output file will be: {0}", outputFilename);
             Utilities.DebugLine("[Transcode] Starting transcode job");
-            CurrentTranscodeProcess = new Process();
-            CurrentTranscodeProcess.StartInfo.FileName = cmdBuilder.GetCommand();
-            CurrentTranscodeProcess.StartInfo.Arguments = cmdBuilder.GetArguments(FileSystemWalker.TranscodeBufferDirectory);
-            CurrentTranscodeProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            CurrentTranscodeProcess.StartInfo.ErrorDialog = false;
-            CurrentTranscodeProcess.EnableRaisingEvents = true;
-            CurrentTranscodeProcess.Exited += new EventHandler(this.HandleTranscodeExited);
-            CurrentTranscodeProcess.Start();
+            Process = new Process();
+            Process.StartInfo.FileName = cmdBuilder.GetCommand();
+            Process.StartInfo.Arguments = cmdBuilder.GetArguments(FileSystemWalker.TranscodeBufferDirectory);
+            Process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            Process.StartInfo.ErrorDialog = false;
+            Process.EnableRaisingEvents = true;
+            Process.Exited += new EventHandler(this.HandleTranscodeExited);
+            Process.Start();
             Utilities.DebugLine("[Transcode] Transcode job started, returning with buffer location");
-            if (CurrentTranscodeProcess.HasExited)
-                return CurrentTranscodeProcess.ExitCode;
+            if (Process.HasExited)
+                return Process.ExitCode;
 
             return 0;
         }
 
-        private void HandleTranscodeExited(object sender, EventArgs e)
+        void HandleTranscodeExited(object sender, EventArgs e)
         {
-            Utilities.DebugLine("[Transcode] Transcode Job Exited, Exit Code {0}", CurrentTranscodeProcess.ExitCode);
-            if (CurrentTranscodeProcess.ExitCode != 0)
-            {
+            Utilities.DebugLine("[Transcode] Transcode Job Exited, Exit Code {0}", Process.ExitCode);
+
+            if (Exited != null)
+                Exited(sender, e);
+
+            if (Process.ExitCode != 0)
                 Utilities.DebugLine("[Transcode] An error occured");
-            }
         }
     }
 }

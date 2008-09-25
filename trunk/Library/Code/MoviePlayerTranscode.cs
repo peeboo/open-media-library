@@ -55,7 +55,8 @@ namespace Library
             Application.DeferredInvokeOnWorkerThread(
                 delegate
                 {
-                    status = transcode.BeginTranscodeJob(out path_to_play);
+                    status = transcode.BeginTranscodeJob();
+                    path_to_play = this._source.GetTranscodingFileName(FileSystemWalker.TranscodeBufferDirectory);
                 },
                 delegate
                 {
