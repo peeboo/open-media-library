@@ -16,34 +16,6 @@ namespace Library
 
         public void Initialize(Dictionary<string, object> appInfo, Dictionary<string, object> entryPointInfo)
         {
-            try
-            {
-                ServiceController sc = new ServiceController("OMLEngineService");
-                if (sc.Status != ServiceControllerStatus.Running)
-                {
-                    Microsoft.MediaCenter.UI.Application.DeferredInvoke(
-                    delegate
-                    {
-                        try
-                        {
-                            sc.Start();
-                            sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 20));
-                            if (sc.Status == ServiceControllerStatus.Running)
-                                sc.Refresh();
-                            OMLApplication.DebugLine("'OMLEngineService': {0}", sc.Status);
-                        }
-                        catch (Exception ex)
-                        {
-                            OMLApplication.DebugLine("Exception during service-controller status request for 'OMLEngineService': {0}", ex);
-                        }
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                OMLApplication.DebugLine("Exception during service-controller status request for 'OMLEngineService': {0}", ex);
-            }
-
             if (entryPointInfo.ContainsKey("Context"))
                 _id = (string)entryPointInfo["Context"];
 

@@ -9,6 +9,13 @@ namespace Library
 {
     public class MountingTool
     {
+        public enum Tool
+        {
+            None,
+            DaemonTools,
+            VirtualCloneDrive
+        };
+
         static string _Path;
         static string _Drive;
         static int _DriveNo;
@@ -17,7 +24,7 @@ namespace Library
         static MountingTool()
         {
             OMLApplication.DebugLine("[MountingTool] MountingTool()");
-            _Path = OMLEngine.Properties.Settings.Default.MountingTool;
+            _Path = OMLEngine.Properties.Settings.Default.MountingToolPath;
             _Drive = OMLEngine.Properties.Settings.Default.VirtualDiscDrive;
             _DriveNo = OMLEngine.Properties.Settings.Default.VirtualDiscDriveNumber;
             OMLApplication.DebugLine("[MountingTool] All MountingTool params loaded");
@@ -40,7 +47,7 @@ namespace Library
             UnMount();
 
             string strParams;
-            if (OMLEngine.Properties.Settings.Default.MountingTool.ToLower().Contains("virtual"))
+            if (OMLEngine.Properties.Settings.Default.MountingToolPath.ToLower().Contains("virtual"))
             {
                 strParams = string.Format("/l={0} {1}", _DriveNo, IsoFile);
             }
@@ -68,7 +75,7 @@ namespace Library
             if (!System.IO.File.Exists(_Path)) return;
 
             string strParams;
-            if (OMLEngine.Properties.Settings.Default.MountingTool.ToLower().Contains("virtual"))
+            if (OMLEngine.Properties.Settings.Default.MountingToolPath.ToLower().Contains("virtual"))
             {
                 // its virtual clonedrive
                 strParams = "/u";

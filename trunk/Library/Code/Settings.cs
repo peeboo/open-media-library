@@ -19,8 +19,11 @@ namespace Library
     {
         public Settings()
         {
+            Utilities.DebugLine("[Settings] Loading MountingTools Settings");
             SetupMountingTools();
+            Utilities.DebugLine("[Settings] Loading UI Settings");
             SetupMovieSettings();
+            Utilities.DebugLine("[Settings] Loading Language Settings");
             SetupUILanguage();
         }
 
@@ -28,7 +31,18 @@ namespace Library
         {
             OMLApplication.ExecuteSafe(delegate
             {
-                _omlSettings.MountingTool = _mountingToolPath.Value;
+                _omlSettings.MountingToolPath = _mountingToolPath.Value;
+                try
+                {
+                    MountingTool.Tool tool;
+                    string ChosenMountingSelection = _ImageMountingSelection.Chosen as string;
+                    tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), ChosenMountingSelection);
+                    _omlSettings.MountingToolSelection = (int)tool;
+                }
+                catch (Exception ex)
+                {
+                }
+
                 _omlSettings.MovieSort = _movieSort.Chosen as string;
                 _omlSettings.StartPage = _startPage.Chosen as string;
                 _omlSettings.GalleryCoverArtRows = System.Convert.ToInt32(_coverArtRows.Chosen as string);
@@ -40,27 +54,21 @@ namespace Library
                 _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
                 _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
                 _omlSettings.UILanguage = CultureIdFromDisplayName(_uiLanguage.Chosen as string);
+                _omlSettings.TrailersDefinition = _trailersDefinition.Chosen as string;
                 OMLApplication.Current.Startup(null);
             });
         }
 
         private void SetupMountingTools()
         {
-            List<string> _MountingTools = new List<string>();
-            _MountingTools.Add("Daemon Tools");
-            _MountingTools.Add("Virtual CloneDrive");
-            _ImageMountingSelection.Options = _MountingTools;
-            _ImageMountingSelection.ChosenChanged += delegate(object sender, EventArgs e)
+            List<string> _MountingToolSelection = new List<string>();
+            foreach (string toolName in Enum.GetNames(typeof(MountingTool.Tool)))
             {
-                OMLApplication.ExecuteSafe(delegate
-                {
-                    Choice c = (Choice)sender;
-                    OMLEngine.Properties.Settings.Default.MountingTool = c.Options[c.ChosenIndex].ToString();
-                    OMLEngine.Properties.Settings.Default.Save();
-                });
-            };
+                _MountingToolSelection.Add(toolName);
+            }
+            _ImageMountingSelection.Options = _MountingToolSelection;
 
-            _mountingToolPath.Value = _omlSettings.MountingTool;
+            _mountingToolPath.Value = _omlSettings.MountingToolPath;
 
             List<string> items = new List<string>();
             for (char c = 'A'; c <= 'Z'; c++)
@@ -130,6 +138,15 @@ namespace Library
             _showMovieDetails.Chosen = _omlSettings.ShowMovieDetails;
             _dimUnselectedCovers.Chosen = _omlSettings.DimUnselectedCovers;
             _useOriginalCoverArt.Chosen = _omlSettings.UseOriginalCoverArt;
+
+            //_mountingToolPath.Value = _omlSettings.MountingTool;
+
+            List<string> trailerDefinitionOptions = new List<string>();
+            trailerDefinitionOptions.Add("Std");
+            trailerDefinitionOptions.Add("Hi");
+
+            _trailersDefinition.Options = trailerDefinitionOptions;
+            _trailersDefinition.Chosen = _omlSettings.TrailersDefinition.ToString();
         }
 
         private void SetupUILanguage()
@@ -215,6 +232,11 @@ namespace Library
             get { return _coverArtSpacing; }
         }
 
+        public Choice TrailersDefinition
+        {
+            get { return _trailersDefinition; }
+        }
+
         public EditableText MountingToolPath
         {
             get
@@ -272,6 +294,7 @@ namespace Library
         BooleanChoice _showTags = new BooleanChoice();
         BooleanChoice _showParentalRating = new BooleanChoice();
         BooleanChoice _showCountry = new BooleanChoice();
+        Choice _trailersDefinition = new Choice();
 
     }
 }

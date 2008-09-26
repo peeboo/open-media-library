@@ -626,6 +626,7 @@ namespace Library.Properties {
   <string>Year</string>
   <string>Date Added</string>
   <string>Format</string>
+  <string>Trailers</string>
 </ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection AllFilters {
             get {
@@ -729,6 +730,32 @@ namespace Library.Properties {
             }
             set {
                 this["AppleTrailerFidelity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>Genres</string>
+  <string>Directors</string>
+  <string>Actors</string>
+  <string>Runtime</string>
+  <string>Country</string>
+  <string>Parental Rating</string>
+  <string>Tags</string>
+  <string>User Rating</string>
+  <string>Year</string>
+  <string>Date Added</string>
+  <string>Format</string>
+  <string>Trailers</string>
+</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection MainFiltersToShow {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["MainFiltersToShow"]));
+            }
+            set {
+                this["MainFiltersToShow"] = value;
             }
         }
     }

@@ -3,6 +3,7 @@ using System.IO;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using Microsoft.MediaCenter.UI;
 using System.Diagnostics;
 using OMLEngine;
@@ -230,19 +231,16 @@ namespace Library
 
         private void CreateCategories()
         {
+            // Always add the settings first
             _categories.Add(new FilterCommand(Filters[Filter.Settings]));
-            _categories.Add(new FilterCommand(Filters[Filter.Genres]));
-            _categories.Add(new FilterCommand(Filters[Filter.Director]));
-            _categories.Add(new FilterCommand(Filters[Filter.Actor]));
-            _categories.Add(new FilterCommand(Filters[Filter.DateAdded]));
-            _categories.Add(new FilterCommand(Filters[Filter.Year]));
-            _categories.Add(new FilterCommand(Filters[Filter.Runtime]));
-            _categories.Add(new FilterCommand(Filters[Filter.VideoFormat]));
-            _categories.Add(new FilterCommand(Filters[Filter.UserRating]));
-            _categories.Add(new FilterCommand(Filters[Filter.Tags]));
-            _categories.Add(new FilterCommand(Filters[Filter.ParentRating]));
-            _categories.Add(new FilterCommand(Filters[Filter.Country]));
-            _categories.Add(new FilterCommand(Filters[Filter.Trailers]));
+
+            System.Collections.Specialized.StringCollection filtersToShow =
+                Properties.Settings.Default.MainFiltersToShow;
+
+            foreach (string filterName in filtersToShow)
+            {
+                _categories.Add(new FilterCommand(Filters[filterName]));
+            }
             _categoryChoice = new Choice(this, "Categories", _categories);
         }
 
