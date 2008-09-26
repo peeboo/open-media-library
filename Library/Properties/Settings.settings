@@ -173,6 +173,7 @@
   &lt;string&gt;Year&lt;/string&gt;
   &lt;string&gt;Date Added&lt;/string&gt;
   &lt;string&gt;Format&lt;/string&gt;
+  &lt;string&gt;Trailers&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
     <Setting Name="UILanguage" Type="System.String" Scope="User">
@@ -198,6 +199,23 @@
     </Setting>
     <Setting Name="AppleTrailerFidelity" Type="System.String" Scope="User">
       <Value Profile="(Default)">Hi</Value>
+    </Setting>
+    <Setting Name="MainFiltersToShow" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;Genres&lt;/string&gt;
+  &lt;string&gt;Directors&lt;/string&gt;
+  &lt;string&gt;Actors&lt;/string&gt;
+  &lt;string&gt;Runtime&lt;/string&gt;
+  &lt;string&gt;Country&lt;/string&gt;
+  &lt;string&gt;Parental Rating&lt;/string&gt;
+  &lt;string&gt;Tags&lt;/string&gt;
+  &lt;string&gt;User Rating&lt;/string&gt;
+  &lt;string&gt;Year&lt;/string&gt;
+  &lt;string&gt;Date Added&lt;/string&gt;
+  &lt;string&gt;Format&lt;/string&gt;
+  &lt;string&gt;Trailers&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
     </Setting>
   </Settings>
 </SettingsFile>

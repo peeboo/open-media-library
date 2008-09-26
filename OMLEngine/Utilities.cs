@@ -74,6 +74,7 @@ namespace OMLEngine
         TS, // MPEG2
         UIF,
         UNKNOWN,
+        URL, // this is used for online content (such as streaming trailers)
         WMV,
         VOB, // MPEG2
         WVX, // wtf is this?
@@ -291,7 +292,7 @@ namespace OMLEngine
 
         public static bool HasDaemonTools()
         {
-            string daemontools_path = OMLEngine.Properties.Settings.Default.MountingTool;
+            string daemontools_path = OMLEngine.Properties.Settings.Default.MountingToolPath;
             if (daemontools_path != null && daemontools_path.Length > 0)
                 return true;
 
@@ -317,7 +318,7 @@ namespace OMLEngine
 
         public static void UnmountVirtualDrive(int VirtualDiscDriveNumber)
         {
-            string mount_util_path = OMLEngine.Properties.Settings.Default.MountingTool;
+            string mount_util_path = OMLEngine.Properties.Settings.Default.MountingToolPath;
 
             Process cmd = new Process();
             cmd.StartInfo.FileName = "\"" + mount_util_path + "\"";

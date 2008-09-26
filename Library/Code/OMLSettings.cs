@@ -1,23 +1,37 @@
 ﻿using System;
+using System.Collections.Specialized;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
 using OMLEngine;
 
 namespace Library
 {
-    public class OMLSettings : ModelItem
+    public class OMLSettings
     {
-        public OMLSettings() { }
+        public OMLSettings()
+        {
+            Utilities.DebugLine("[OMLSettings] OMLSettings created");
+        }
 
         #region properties
-        public string MountingTool
+
+        #region OMLEngine Settings
+        public string MountingToolPath
         {
-            get { return OMLEngine.Properties.Settings.Default.MountingTool; }
+            get { return OMLEngine.Properties.Settings.Default.MountingToolPath; }
             set
             {
-                OMLEngine.Properties.Settings.Default.MountingTool = value;
+                OMLEngine.Properties.Settings.Default.MountingToolPath = value;
                 OMLEngine.Properties.Settings.Default.Save();
-                FirePropertyChanged("MountingTool");
+            }
+        }
+        public int MountingToolSelection
+        {
+            get { return OMLEngine.Properties.Settings.Default.MountingToolSelection;  }
+            set
+            {
+                OMLEngine.Properties.Settings.Default.MountingToolSelection = value;
+                OMLEngine.Properties.Settings.Default.Save();
             }
         }
         public string VirtualDiscDrive
@@ -27,7 +41,6 @@ namespace Library
             {
                 OMLEngine.Properties.Settings.Default.VirtualDiscDrive = value;
                 OMLEngine.Properties.Settings.Default.Save();
-                FirePropertyChanged("VirtualDiscDrive");
             }
         }
         public int VirtualDiscDriveNumber
@@ -37,7 +50,6 @@ namespace Library
             {
                 OMLEngine.Properties.Settings.Default.VirtualDiscDriveNumber = value;
                 OMLEngine.Properties.Settings.Default.Save();
-                FirePropertyChanged("VirtualDiscDriveNumber");
             }
         }
         public bool CopyImages
@@ -47,7 +59,19 @@ namespace Library
             {
                 OMLEngine.Properties.Settings.Default.CopyImages = value;
                 OMLEngine.Properties.Settings.Default.Save();
-                FirePropertyChanged("CopyImages");
+            }
+        }
+        #endregion
+
+        #region Library Settings
+
+        public StringCollection MainFiltersToShow
+        {
+            get { return Properties.Settings.Default.MainFiltersToShow; }
+            set
+            {
+                Properties.Settings.Default.MainFiltersToShow = value;
+                Properties.Settings.Default.Save();
             }
         }
         public bool ShowFileLocation
@@ -57,7 +81,6 @@ namespace Library
             {
                 Properties.Settings.Default.ShowFileLocation = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("ShowFileLocation");
             }
         }
         public bool DimUnselectedCovers
@@ -67,7 +90,6 @@ namespace Library
             {
                 Properties.Settings.Default.DimUnselectedCovers = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("DimUnselectedCovers");
             }
         }
         public bool ShowMovieDetails
@@ -77,7 +99,6 @@ namespace Library
             {
                 Properties.Settings.Default.ShowMovieDetails = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("ShowMovieDetails");
             }
         }
         public string MovieView
@@ -87,7 +108,6 @@ namespace Library
             {
                 Properties.Settings.Default.MovieView = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("MovieView");
             }
         }
         public string ActorView
@@ -97,7 +117,6 @@ namespace Library
             {
                 Properties.Settings.Default.ActorView = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("ActorView");
             }
         }
         public string DirectorView
@@ -107,7 +126,6 @@ namespace Library
             {
                 Properties.Settings.Default.DirectorView = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("DirectorView");
             }
         }
         public string GenreView
@@ -117,7 +135,6 @@ namespace Library
             {
                 Properties.Settings.Default.GenreView = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("GenreView");
             }
         }
         public string DateAddedView
@@ -127,7 +144,6 @@ namespace Library
             {
                 Properties.Settings.Default.DateAddedView = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("DateAddedView");
             }
         }
         public string YearView
@@ -137,7 +153,6 @@ namespace Library
             {
                 Properties.Settings.Default.YearView = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("YearView");
             }
         }
         public string StartPage
@@ -147,7 +162,6 @@ namespace Library
             {
                 Properties.Settings.Default.StartPage = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("StartPage");
             }
         }
         public string MovieSort
@@ -157,7 +171,6 @@ namespace Library
             {
                 Properties.Settings.Default.MovieSort = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("MovieSort");
             }
         }
         public string ActorSort
@@ -167,7 +180,6 @@ namespace Library
             {
                 Properties.Settings.Default.ActorSort = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("ActorSort");
             }
         }
         public string DirectorSort
@@ -177,7 +189,6 @@ namespace Library
             {
                 Properties.Settings.Default.DirectorSort = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("DirectorSort");
             }
         }
         public string YearSort
@@ -187,7 +198,6 @@ namespace Library
             {
                 Properties.Settings.Default.YearSort = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("YearSort");
             }
         }
         public string DateAddedSort
@@ -197,7 +207,6 @@ namespace Library
             {
                 Properties.Settings.Default.DateAddedSort = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("DateAddedSort");
             }
         }
         public bool SortFullString
@@ -207,7 +216,6 @@ namespace Library
             {
                 Properties.Settings.Default.SortFullString = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("SortFullString");
             }
         }
         public string GenreSort
@@ -217,7 +225,6 @@ namespace Library
             {
                 Properties.Settings.Default.GenreSort = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("GenreSort");
             }
         }
         public float DetailsLeftAnchor
@@ -227,7 +234,6 @@ namespace Library
             {
                 Properties.Settings.Default.DetailsLeftAnchor = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("DetailsLeftAnchor");
             }
         }
         public float DetailsTopAnchor
@@ -237,7 +243,6 @@ namespace Library
             {
                 Properties.Settings.Default.DetailsTopAnchor = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("DetailsTopAnchor");
             }
         }
         public int DetailsLeftOffset
@@ -247,7 +252,6 @@ namespace Library
             {
                 Properties.Settings.Default.DetailsLeftOffset = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("DetailsLeftOffset");
             }
         }
         public int DetailsTopOffset
@@ -257,7 +261,6 @@ namespace Library
             {
                 Properties.Settings.Default.DetailsTopOffset = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("DetailsTopOffset");
             }
         }
         public float BottomAnchor
@@ -267,7 +270,6 @@ namespace Library
             {
                 Properties.Settings.Default.BottomAnchor = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("BottomAnchor");
             }
         }
         public int BottomOffset
@@ -277,7 +279,6 @@ namespace Library
             {
                 Properties.Settings.Default.BottomOffset = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("BottomOffset");
             }
         }
         public int GalleryCoverArtRows
@@ -287,7 +288,6 @@ namespace Library
             {
                 Properties.Settings.Default.GalleryCoverArtRows = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("GalleryCoverArtRows");
             }
         }
         public int GalleryListRows
@@ -297,7 +297,6 @@ namespace Library
             {
                 Properties.Settings.Default.GalleryListRows = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("GalleryListRows");
             }
         }
         public int CoverArtWidth
@@ -307,7 +306,6 @@ namespace Library
             {
                 Properties.Settings.Default.CoverArtWidth = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("CoverArtWidth");
             }
         }
         public int CoverArtHeight
@@ -317,7 +315,6 @@ namespace Library
             {
                 Properties.Settings.Default.CoverArtHeight = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("CoverArtHeight");
             }
         }
         public int ListItemWidth
@@ -327,7 +324,6 @@ namespace Library
             {
                 Properties.Settings.Default.ListItemWidth = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("ListItemWidth");
             }
         }
         public int ListItemHeight
@@ -337,7 +333,6 @@ namespace Library
             {
                 Properties.Settings.Default.ListItemHeight = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("ListItemHeight");
             }
         }
         public string UserRatingSort
@@ -347,7 +342,6 @@ namespace Library
             {
                 Properties.Settings.Default.UserRatingSort = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("UserRatingSort");
             }
         }
         public float RightAnchor
@@ -357,7 +351,6 @@ namespace Library
             {
                 Properties.Settings.Default.RightAnchor = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("RightAnchor");
             }
         }
         public int RightOffset
@@ -367,7 +360,6 @@ namespace Library
             {
                 Properties.Settings.Default.RightOffset = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("RightOffset");
             }
         }
         public int CoverArtSpacingHorizontal
@@ -377,7 +369,6 @@ namespace Library
             {
                 Properties.Settings.Default.CoverArtSpacingHorizontal = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("GallerySpacingHorizontal");
             }
         }
         public int CoverArtSpacingVertical
@@ -387,7 +378,6 @@ namespace Library
             {
                 Properties.Settings.Default.CoverArtSpacingVertical = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("GallerySpacingVertical");
             }
         }
         public string NameAscendingSort
@@ -397,7 +387,6 @@ namespace Library
             {
                 Properties.Settings.Default.NameAscendingSort = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("NameAscendingSort");
             }
         }
 
@@ -408,7 +397,6 @@ namespace Library
             {
                 Properties.Settings.Default.UseOriginalCoverArt = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("UseOriginalCoverArt");
             }
         }
 
@@ -419,7 +407,6 @@ namespace Library
             {
                 Properties.Settings.Default.Extender_UseAsx = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("Extender_UseAsx");
             }
         }
 
@@ -430,10 +417,8 @@ namespace Library
             {
                 Properties.Settings.Default.Extender_MergeVOB = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("Extender_MergeVOB");
             }
         }
-
         /// <summary>
         /// Gets or sets the id (CultureInfo.Name) of the selected UI language. If not set the system's UI culture should be used.
         /// </summary>
@@ -444,9 +429,19 @@ namespace Library
             {
                 Properties.Settings.Default.UILanguage = value;
                 Properties.Settings.Default.Save();
-                FirePropertyChanged("UILanguage");
             }
         }
+        public string TrailersDefinition
+        {
+            get { return Properties.Settings.Default.AppleTrailerFidelity; }
+            set
+            {
+                Properties.Settings.Default.AppleTrailerFidelity = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        #endregion
 
         #endregion
     }
