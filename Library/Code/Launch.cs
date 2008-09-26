@@ -30,6 +30,7 @@ namespace Library
 
         public void Uninitialize()
         {
+            OMLApplication.Current.Uninitialize();
             OMLApplication.DebugLine("[Launch] Uninitialize");
         }
 
