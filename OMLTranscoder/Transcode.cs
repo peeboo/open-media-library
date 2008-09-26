@@ -18,17 +18,26 @@ namespace OMLTranscoder
         public Process Process { get; private set; }
         public MediaSource Source { get; private set; }
         public event EventHandler Exited;
+        FileStream _stream;
 
         public Transcode(MediaSource source)
         {
             Source = source;
+            FileInfo file = new FileInfo(source.GetTranscodingFileName());
+            if (file.Exists)
+            {
+                file.Delete();
+                _stream = File.Open(file.FullName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+            }
         }
 
         ~Transcode()
         {
+            if (_stream != null)
+                _stream.Close();
             if (Process != null && !Process.HasExited)
             {
-                OMLEngine.Utilities.DebugLine("Transcode process not finished: kill {0}", Process.Id);
+                OMLEngine.Utilities.DebugLine("[Transcode] Transcoding process not finished: kill {0}", Process.Id);
                 Process.Kill();
             }
         }
@@ -37,16 +46,17 @@ namespace OMLTranscoder
         {
             MEncoderCommandBuilder cmdBuilder = new MEncoderCommandBuilder(Source);
 
-            Utilities.DebugLine("[Transcode] Starting transcode job");
             Process = new Process();
             Process.StartInfo.FileName = cmdBuilder.GetCommand();
-            Process.StartInfo.Arguments = cmdBuilder.GetArguments(FileSystemWalker.TranscodeBufferDirectory);
+            Process.StartInfo.Arguments = cmdBuilder.GetArguments();
             Process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             Process.StartInfo.ErrorDialog = false;
             Process.EnableRaisingEvents = true;
             Process.Exited += new EventHandler(this.HandleTranscodeExited);
             Process.Start();
-            Utilities.DebugLine("[Transcode] Transcode job started, returning with buffer location");
+
+            Utilities.DebugLine("[Transcode] Transcoding job started" + (Process.HasExited ? ", exit-code=" + Process.ExitCode : ""));
+            
             if (Process.HasExited)
                 return Process.ExitCode;
 
@@ -55,13 +65,13 @@ namespace OMLTranscoder
 
         void HandleTranscodeExited(object sender, EventArgs e)
         {
-            Utilities.DebugLine("[Transcode] Transcode Job Exited, Exit Code {0}", Process.ExitCode);
+            if (_stream != null)
+                _stream.Close();
+            _stream = null;
+            Utilities.DebugLine("[Transcode] Transcoding Job Exited, Exit Code {0}", Process.ExitCode);
 
             if (Exited != null)
                 Exited(sender, e);
-
-            if (Process.ExitCode != 0)
-                Utilities.DebugLine("[Transcode] An error occured");
         }
     }
 }

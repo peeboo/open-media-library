@@ -19,8 +19,11 @@ namespace OMLEngineService
             lock (sTranscoders)
                 if (sTranscoders.ContainsKey(key))
                 {
-                    Utilities.DebugLine("Transcode [Already Processing]: {0}", source);
-                    NotifyAll(key, sTranscoders[key].Status);
+                    Utilities.DebugLine("Transcode [Already Processing]: {0}, status={1}", source, sTranscoders[key].Status);
+                    if (sTranscoders[key].Status == TranscodingStatus.Stopped)
+                        sTranscoders[key] = new Transcoder(source);
+                    else
+                        NotifyAll(key, sTranscoders[key].Status);
                 }
                 else
                     sTranscoders[key] = new Transcoder(source);
@@ -74,7 +77,7 @@ namespace OMLEngineService
                     Utilities.DebugLine("NotifyAll({0}, {1}, {2})", uri, key, status);
                     ThreadPool.QueueUserWorkItem(delegate
                     {
-                        var proxyHost = new MyClientBase<ITranscodingNotifyingService>("TranscodingNetNotifyingService", uri);
+                        var proxyHost = TranscodingNotifyingService.NewTranscodingNotifyingServiceProxy(uri);
                         try
                         {
                             proxyHost.Channel.StatusChanged(key, status);
@@ -132,7 +135,7 @@ namespace OMLEngineService
 
         void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            FileInfo file = new FileInfo(Source.GetTranscodingFileName(FileSystemWalker.TranscodeBufferDirectory));
+            FileInfo file = new FileInfo(Source.GetTranscodingFileName());
 
             if (Status != TranscodingStatus.Initializing)
             {

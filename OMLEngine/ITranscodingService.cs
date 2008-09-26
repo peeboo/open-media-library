@@ -23,6 +23,7 @@ namespace OMLEngineService
 
     public enum TranscodingStatus
     {
+        Unknown,
         Initializing,
         BufferReady,
         Stopped,
@@ -40,7 +41,8 @@ namespace OMLEngineService
     public class MyClientBase<T> : ClientBase<T>, IDisposable
       where T : class
     {
-        public MyClientBase() : base() { }
+        //public MyClientBase() : base() { }
+        public MyClientBase(System.ServiceModel.Channels.Binding binding, EndpointAddress endPointAddress) : base(binding, endPointAddress) { }
         public MyClientBase(string endPoint, string uri) : base(endPoint, uri) { }
 
         public void Dispose()
@@ -51,9 +53,9 @@ namespace OMLEngineService
 
         public new T Channel { get { return base.Channel; } }
 
-        public static T GetProxy()
+        public static T GetProxy(System.ServiceModel.Channels.Binding binding, EndpointAddress endPointAddress)
         {
-            return new MyClientBase<T>().Channel;
+            return new MyClientBase<T>(binding, endPointAddress).Channel;
         }
     }
 }

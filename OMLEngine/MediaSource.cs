@@ -92,7 +92,9 @@ namespace OMLEngine
         {
             get
             {
-                string key = TranscodingName;
+                string key = TranscodingBaseName;
+                if (key == null)
+                    return null;
                 key += "-" + ExtraOptions.Replace(";", "-").Replace("=", "").Replace(":", "-");
                 return key.TrimEnd('-');
             }
@@ -168,7 +170,7 @@ namespace OMLEngine
             return ret;
         }
 
-        public string TranscodingName
+        string TranscodingBaseName
         {
             get
             {
@@ -190,16 +192,16 @@ namespace OMLEngine
             }
         }
 
-        public string GetTranscodingFileName(string path)
+        public string GetTranscodingFileName()
         {
-            if (this.Format != VideoFormat.DVD)
-                return Path.ChangeExtension(Path.Combine(path, TranscodingName), ".wmv");
-
-            string transcodingName = TranscodingName;
+            string transcodingName = Key;
             if (transcodingName == null)
                 return null;
 
-            return Path.ChangeExtension(Path.Combine(path, transcodingName), ".mpg");
+            if (this.Format != VideoFormat.DVD)
+                return Path.ChangeExtension(Path.Combine(FileSystemWalker.TranscodeBufferDirectory, transcodingName), ".wmv");
+
+            return Path.ChangeExtension(Path.Combine(FileSystemWalker.TranscodeBufferDirectory, transcodingName), ".mpg");
         }
     }
 }

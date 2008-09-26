@@ -30,7 +30,9 @@ namespace OMLTestSuite
         static void Main(string[] args)
         {
 #if WCF_TEST
-            TranscodingAPI tAPI = new TranscodingAPI(GetTestMediaSource(), delegate(MediaSource source, TranscodingStatus status)
+            var ms = GetTestMediaSource();
+            Console.WriteLine("Transcoding output: " + ms.GetTranscodingFileName());
+            TranscodingAPI tAPI = new TranscodingAPI(ms, delegate(MediaSource source, TranscodingStatus status)
             {
                 Console.WriteLine(string.Format("StatusChanged: {0}, {1}", source, status));
             });
