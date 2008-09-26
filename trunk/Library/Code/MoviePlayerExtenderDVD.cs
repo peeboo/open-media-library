@@ -35,7 +35,7 @@ namespace Library
             if (_info != null)
             {
                 OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: DVD Disk info: '{0}'", _info);
-                DVDTitle dvdTitle = _info.GetMainTitle();
+                DVDTitle dvdTitle = _source.DVDTitle;
                 if (dvdTitle != null)
                 {
                     string videoTSDir = _source.VIDEO_TS;
@@ -254,7 +254,7 @@ namespace Library
             int nFileSystemNameSize
         );
 
-        static bool IsNTFS(string rootPath)
+        internal static bool IsNTFS(string rootPath)
         {
             StringBuilder sb = new StringBuilder(255);
             GetVolumeInformation(Directory.GetDirectoryRoot(rootPath), IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, sb, 255);
@@ -262,6 +262,30 @@ namespace Library
         }
         #endregion
 
+        public static void Uninitialize(MediaSource ms)
+        {
+            if (ms.Format != VideoFormat.DVD)
+                return;
+
+            string videoTSDir = ms.VIDEO_TS;
+            if (videoTSDir == null || IsNTFS(videoTSDir) == false)
+                return;
+
+            string mpegFolder = Path.Combine(videoTSDir, "Extender-MyMovies");
+            if (Directory.Exists(mpegFolder))
+            {
+                OMLApplication.DebugLine("ExtenderDVDPlayer.Uninitialize: deleting folder '{0}'", mpegFolder);
+                try { Directory.Delete(mpegFolder); }
+                catch { }
+            }
+        }
+
+        public static void Uninitialize(TitleCollection titles)
+        {
+            foreach (Title title in titles)
+                foreach (Disk disk in title.Disks)
+                    Uninitialize(new MediaSource(disk));
+        }
     }
 
 }

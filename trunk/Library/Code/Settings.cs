@@ -41,6 +41,7 @@ namespace Library
                 }
                 catch (Exception ex)
                 {
+                    Utilities.DebugLine("[Settings] Mounting selection: {0}", ex);
                 }
 
                 _omlSettings.MovieSort = _movieSort.Chosen as string;

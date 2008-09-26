@@ -194,6 +194,11 @@ namespace Library
             }
         }
 
+        public void Uninitialize()
+        {
+            ExtenderDVDPlayer.Uninitialize(_titles);
+        }
+
         public static OMLApplication Current
         {
             get { return _singleApplicationInstance; }
@@ -357,8 +362,7 @@ namespace Library
             return _titles;
         }
 
-        public delegate void VoidDelegate();
-        public static void ExecuteSafe(VoidDelegate action)
+        public static void ExecuteSafe(Action action)
         {
             try
             {
@@ -373,7 +377,6 @@ namespace Library
                     throw;
             }
         }
-
 
         private Dictionary<string, object> CreateProperties(bool uiSettings, bool settings, MovieGallery gallery)
         {
@@ -399,6 +402,5 @@ namespace Library
         private TitleCollection _titles;
 
         private bool _isExtender;
-
     }
 }
