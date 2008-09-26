@@ -8,8 +8,8 @@
   <UI Name="PivotItem">
 
     <Properties>
-      <Font Name="OMLFont"/>
-      <Font Name="OMLFocusFont"/>
+      <Font Name="OMLFont" FontSize="12"/>
+      <Font Name="OMLFocusFont" FontSize="16"/>
       <Color Name="OMLColor"/>
       <Color Name="OMLFocusColor"/>
       <cor:String Name="Label" cor:String="$Required"/>
@@ -76,9 +76,9 @@
 
         <Children>
 
-          <Graphic Name="ArrowLeft" Content="image://me:PivotArrowLeftNoFocus" Margins="0,15,6,0" />
-          <Text Name="Name" Font="[OMLFont]" Color="[OMLColor]" Content="[Label]" />
-          <Graphic Name="ArrowRight" Content="image://me:PivotArrowRightNoFocus" Margins="6,15,0,0" />
+          <Graphic Name="ArrowLeft" Content="image://me:PivotArrowLeftNoFocus" Margins="0,10,6,0" Scale=".75,.75,.75"/>
+          <Text Name="Name"  Font="[OMLFont]" Color="[OMLColor]" Content="[Label]" />
+          <Graphic Name="ArrowRight" Content="image://me:PivotArrowRightNoFocus" Margins="6,10,0,0" Scale=".75,.75,.75"/>
 
         </Children>
 
