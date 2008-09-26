@@ -22,10 +22,10 @@ namespace OMLTestSuite
                 VideoEncoderFormat = MEncoder.VideoFormat.Copy,
             };
 
-            Assert.IsNotNull(builder.GetArguments("."));
+            Assert.IsNotNull(builder.GetArguments());
             Assert.AreEqual(@" dvd:// -dvd-device """ + drive.ToLower() +
                             @":\"" -oac copy -ovc copy -of mpeg -mpegopts format=dvd:tsaf " +
-                            @"-vf harddup -really-quiet -o "".\mymovie.mpg""", builder.GetArguments(".").ToLower());
+                            @"-vf harddup -really-quiet -o """ + FileSystemWalker.TranscodeBufferDirectory.ToLower() + @"\mymovie.mpg""", builder.GetArguments().ToLower());
             Assert.IsNotNull(builder.GetCommand());
             Assert.AreEqual(@"c:\program files\openmedialibrary\mencoder.exe", builder.GetCommand().ToLower());
         }
@@ -98,12 +98,12 @@ namespace OMLTestSuite
             MediaSource ms = TestDVD_A_S(TestDVD_Dir, 1, 0);
             MEncoderCommandBuilder builder = new MEncoderCommandBuilder(ms);
 
-            Assert.IsNotNull(builder.GetArguments("."));
+            Assert.IsNotNull(builder.GetArguments());
             Assert.AreEqual(@" dvd://1 -dvd-device """ + Path.GetFullPath(ms.MediaPath).ToLower() + @"""" +
                             @" -aid 129 -oac lavc -ovc lavc" +
                             @" -font c:\windows\fonts\arial.ttf -sid 0" +
                             @" -of mpeg -mpegopts format=dvd:tsaf" +
-                            @" -vf harddup -really-quiet -o "".\testdvd.mpg""", builder.GetArguments(".").ToLower());
+                            @" -vf harddup -really-quiet -o """ + FileSystemWalker.TranscodeBufferDirectory.ToLower() + @"\testdvd.mpg""", builder.GetArguments().ToLower());
         }
 
         static MediaSource TestDVD_A_S(string dir, int at, int st)
@@ -133,7 +133,7 @@ namespace OMLTestSuite
             MEncoderCommandBuilder builder = new MEncoderCommandBuilder(ms);
             Process process = new Process();
             process.StartInfo.FileName = builder.GetCommand();
-            process.StartInfo.Arguments = builder.GetArguments(".").Replace("-really-quiet", "");
+            process.StartInfo.Arguments = builder.GetArguments().Replace("-really-quiet", "");
             process.StartInfo.ErrorDialog = true;
             process.Start();
             process.WaitForExit();

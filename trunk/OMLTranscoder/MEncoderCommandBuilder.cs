@@ -17,8 +17,9 @@ namespace OMLTranscoder
         public MEncoderCommandBuilder(MediaSource ms)
         {
             _source = ms;
-            this.AudioEncoderFormat = MEncoder.AudioFormat.LAVC;
-            this.VideoEncoderFormat = MEncoder.VideoFormat.LAVC;
+            //this.AudioEncoderFormat = MEncoder.AudioFormat.LAVC;
+            this.AudioEncoderFormat = MEncoder.AudioFormat.Copy;
+            this.VideoEncoderFormat = ms.Subtitle == null ? MEncoder.VideoFormat.Copy : MEncoder.VideoFormat.LAVC;
         }
 
         public bool IsDVD { get { return _source.Format == VideoFormat.DVD; } }
@@ -48,9 +49,9 @@ namespace OMLTranscoder
             return _command;
         }
 
-        public string GetArguments(string path)
+        public string GetArguments()
         {
-            string outputFile = _source.GetTranscodingFileName(path);
+            string outputFile = _source.GetTranscodingFileName();
             if (outputFile == null)
                 throw new Exception(string.Format("OutputFile not set for {0}", _source));
 

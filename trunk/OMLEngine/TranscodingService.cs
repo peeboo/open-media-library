@@ -21,6 +21,7 @@ namespace OMLEngineService
         {
             Source = source;
             _Action = action;
+            Status = TranscodingStatus.Unknown;
 
             TranscodingNotifyingService.Start();
             TranscodingNotifyingService.OnMediaSourceStatusChanged += TranscodingNotifyingService_OnMediaSourceStatusChanged;
@@ -28,11 +29,14 @@ namespace OMLEngineService
 
         void TranscodingNotifyingService_OnMediaSourceStatusChanged(string key, TranscodingStatus status)
         {
-            Utilities.DebugLine("Key: {0}, Status: {1}", key, status);
+            Utilities.DebugLine("[TranscodingAPI] MediaSourceStatusChanged [Key: {0}, Status: {1}]", key, status);
             if (Source.Key == key)
             {
-                Status = status;
-                _Action(Source, status);
+                if (Status != status)
+                {
+                    Status = status;
+                    _Action(Source, status);
+                }
                 if (IsRunning == false)
                     TranscodingNotifyingService.Stop();
             }
@@ -40,13 +44,15 @@ namespace OMLEngineService
 
         public void Transcode()
         {
-            using (var host = new MyClientBase<ITranscodingService>())
+            Utilities.DebugLine("[TranscodingAPI] Transcode", Source);
+            using (var host = TranscodingNotifyingService.NewTranscodingServiceProxy())
                 host.Channel.Transcode(Source);
         }
 
         public void Cancel()
         {
-            using (var host = new MyClientBase<ITranscodingService>())
+            Utilities.DebugLine("[TranscodingAPI] Cancel", Source);
+            using (var host = TranscodingNotifyingService.NewTranscodingServiceProxy())
                 host.Channel.Cancel(Source.Key);
         }
 
@@ -54,6 +60,7 @@ namespace OMLEngineService
 
         public void Stop()
         {
+            Utilities.DebugLine("[TranscodingAPI] Stop", Source);
             while (IsRunning)
                 Thread.Sleep(500);
             TranscodingNotifyingService.Stop();
@@ -68,7 +75,9 @@ namespace OMLEngineService
 
         public static string GetNotifierUri()
         {
-            return string.Format("net.pipe://localhost/OMLTNS{0}", Process.GetCurrentProcess().Id);
+            // TODO: use next free TCP port instead
+            int port = Process.GetCurrentProcess().Id;
+            return string.Format("net.tcp://localhost:{0}/OMLTNS", port);
         }
 
         public static void Start()
@@ -79,13 +88,37 @@ namespace OMLEngineService
             string uri = GetNotifierUri();
             sHost = new ServiceHost(typeof(TranscodingNotifyingService), new Uri(uri));
             sHost.Description.Endpoints.Clear();
+            sHost.AddServiceEndpoint(typeof(ITranscodingNotifyingService), NetTcpBinding(), uri);
+            sHost.Open();
+            Utilities.DebugLine("[TranscodingNotifier] Starting WCF notifying service: {0}", GetNotifierUri());
+
+            using (var host = NewTranscodingServiceProxy())
+                host.Channel.RegisterNotifyer(uri, true);
+        }
+
+        public static NetNamedPipeBinding NetNamedPipeBinding()
+        {
             var binding = new NetNamedPipeBinding(NetNamedPipeSecurityMode.None);
             binding.Security.Transport.ProtectionLevel = System.Net.Security.ProtectionLevel.None;
-            sHost.AddServiceEndpoint(typeof(ITranscodingNotifyingService), binding, "");
-            sHost.Open();
+            return binding;
+        }
 
-            using (var host = new MyClientBase<ITranscodingService>())
-                host.Channel.RegisterNotifyer(uri, true);
+        public static NetTcpBinding NetTcpBinding()
+        {
+            var binding = new NetTcpBinding(SecurityMode.None);
+            binding.Security.Transport.ProtectionLevel = System.Net.Security.ProtectionLevel.None;
+            return binding;
+        }
+
+        public static MyClientBase<ITranscodingService> NewTranscodingServiceProxy()
+        {
+            //return new MyClientBase<ITranscodingService>(NetNamedPipeBinding(), new EndpointAddress("net.pipe://localhost/OMLTS"));
+            return new MyClientBase<ITranscodingService>(NetTcpBinding(), new EndpointAddress("net.tcp://localhost:4321/OMLTS"));
+        }
+
+        public static MyClientBase<ITranscodingNotifyingService> NewTranscodingNotifyingServiceProxy(string uri)
+        {
+            return new MyClientBase<ITranscodingNotifyingService>(NetTcpBinding(), new EndpointAddress(uri));
         }
 
         public static void Stop()
@@ -93,9 +126,10 @@ namespace OMLEngineService
             if (sHost == null)
                 return;
 
-            using (var host = new MyClientBase<ITranscodingService>())
+            using (var host = NewTranscodingServiceProxy())
                 host.Channel.RegisterNotifyer(GetNotifierUri(), false);
 
+            Utilities.DebugLine("[TranscodingNotifier] Stopping WCF notifying service: {0}", GetNotifierUri());
             sHost.Close();
             sHost = null;
         }
@@ -104,7 +138,7 @@ namespace OMLEngineService
 
         public void StatusChanged(string key, TranscodingStatus status)
         {
-            Utilities.DebugLine("StatusChanged: {0}, status={1}", key, status);
+            Utilities.DebugLine("[TranscodingNotifier] WCF event: StatusChanged: {0}, status={1}", key, status);
             if (OnMediaSourceStatusChanged != null)
                 OnMediaSourceStatusChanged(key, status);
         }
