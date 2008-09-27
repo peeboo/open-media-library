@@ -275,7 +275,7 @@ namespace Library
             if (Directory.Exists(mpegFolder))
             {
                 OMLApplication.DebugLine("ExtenderDVDPlayer.Uninitialize: deleting folder '{0}'", mpegFolder);
-                try { Directory.Delete(mpegFolder); }
+                try { Directory.Delete(mpegFolder, true); }
                 catch { }
             }
         }
