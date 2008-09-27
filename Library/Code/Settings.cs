@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Diagnostics;
@@ -25,13 +26,16 @@ namespace Library
             SetupMovieSettings();
             Utilities.DebugLine("[Settings] Loading Language Settings");
             SetupUILanguage();
+            Utilities.DebugLine("[Settings] Loading Trailers Settings");
+            SetupTrailers();
         }
 
-        public void SaveSettings()
+        private void SaveMountingTools()
         {
             OMLApplication.ExecuteSafe(delegate
             {
                 _omlSettings.MountingToolPath = _mountingToolPath.Value;
+
                 try
                 {
                     MountingTool.Tool tool;
@@ -41,9 +45,16 @@ namespace Library
                 }
                 catch (Exception ex)
                 {
-                    Utilities.DebugLine("[Settings] Mounting selection: {0}", ex);
+                    Utilities.DebugLine("[Settings] Error saving Mounting selection: {0}", ex);
                 }
 
+                _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
+            });
+        }
+        private void SaveMovieSettings()
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
                 _omlSettings.MovieSort = _movieSort.Chosen as string;
                 _omlSettings.StartPage = _startPage.Chosen as string;
                 _omlSettings.GalleryCoverArtRows = System.Convert.ToInt32(_coverArtRows.Chosen as string);
@@ -53,9 +64,31 @@ namespace Library
                 _omlSettings.ShowMovieDetails = (bool)_showMovieDetails.Chosen;
                 _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
                 _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
-                _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
+            });
+        }
+        private void SaveUILanguage()
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
                 _omlSettings.UILanguage = CultureIdFromDisplayName(_uiLanguage.Chosen as string);
+            });
+        }
+        private void SaveTrailers()
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
                 _omlSettings.TrailersDefinition = _trailersDefinition.Chosen as string;
+            });
+        }
+        public void SaveSettings()
+        {
+            SaveMountingTools();
+            SaveMovieSettings();
+            SaveUILanguage();
+            SaveTrailers();
+
+            OMLApplication.ExecuteSafe(delegate
+            {
                 OMLApplication.Current.Startup(null);
             });
         }
@@ -78,7 +111,6 @@ namespace Library
             _virtualDrive.Options = items;
             _virtualDrive.Chosen = _omlSettings.VirtualDiscDrive;
         }
-
         private void SetupMovieSettings()
         {
             List<string> viewItems = new List<string>();
@@ -149,7 +181,6 @@ namespace Library
             _trailersDefinition.Options = trailerDefinitionOptions;
             _trailersDefinition.Chosen = _omlSettings.TrailersDefinition.ToString();
         }
-
         private void SetupUILanguage()
         {
             string selected = null;
@@ -173,6 +204,14 @@ namespace Library
 
             _uiLanguage.Options = list;
             _uiLanguage.Chosen = selected;
+        }
+        private void SetupTrailers()
+        {
+            List<string> trailerFormats = new List<string>();
+            trailerFormats.Add("Hi");
+            trailerFormats.Add("Std");
+            _trailersDefinition.Options = trailerFormats;
+            _trailersDefinition.Chosen = _omlSettings.TrailersDefinition;
         }
 
         private static String CultureIdFromDisplayName(string displayName)
@@ -260,6 +299,11 @@ namespace Library
             get { return _uiLanguage;  }
         }
 
+        public Choice FiltersToShow
+        {
+            get { return _filtersToShow; }
+        }
+
         public Choice ImageMountingSelection
         {
             get { return _ImageMountingSelection; }
@@ -283,19 +327,7 @@ namespace Library
         Choice _startPage = new Choice();
         Choice _uiLanguage = new Choice();
         Choice _ImageMountingSelection = new Choice();
-
-        BooleanChoice _showGenres = new BooleanChoice();
-        BooleanChoice _showActors = new BooleanChoice();
-        BooleanChoice _showDirectors = new BooleanChoice();
-        BooleanChoice _showDateAdded = new BooleanChoice();
-        BooleanChoice _showYear = new BooleanChoice();
-        BooleanChoice _showRuntime = new BooleanChoice();
-        BooleanChoice _showFormat = new BooleanChoice();
-        BooleanChoice _showUserRating = new BooleanChoice();
-        BooleanChoice _showTags = new BooleanChoice();
-        BooleanChoice _showParentalRating = new BooleanChoice();
-        BooleanChoice _showCountry = new BooleanChoice();
         Choice _trailersDefinition = new Choice();
-
+        Choice _filtersToShow = new Choice();
     }
 }
