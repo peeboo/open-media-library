@@ -80,6 +80,7 @@ namespace OMLTranscoder
             }
 
             //audio format
+            strBuilder.AppendFormat(@" -oac {0}", AudioEncoderFormat.ToString().ToLower());
             if (AudioEncoderFormat == MEncoder.AudioFormat.NoAudio)
                 strBuilder.Append(@" -nosound");
             else
@@ -88,19 +89,17 @@ namespace OMLTranscoder
                     strBuilder.AppendFormat(@" -aid {0}", _source.AudioStream.AudioID);
             }
 
-            strBuilder.AppendFormat(@" -oac {0}", AudioEncoderFormat.ToString().ToLower());
-
-            //video
-            strBuilder.AppendFormat(@" -ovc {0}", VideoEncoderFormat.ToString().ToLower());
-
             //subtitles
             if (_source.Subtitle != null && _source.Subtitle.SubtitleID != null)
                 strBuilder.AppendFormat(@" -font c:\windows\fonts\arial.ttf -sid {0}", _source.Subtitle.SubtitleID.Value - 1);
 
+            //video
+            strBuilder.AppendFormat(@" -ovc {0}", VideoEncoderFormat.ToString().ToLower());
+
             // output format
             // always set the output format to mpeg for extenders
             if (IsDVD)
-                strBuilder.Append(@" -of mpeg -mpegopts format=dvd:tsaf -vf harddup");
+                strBuilder.Append(@" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0:autoaspect=1, harddup -of mpeg -mpegopts format=dvd:tsaf");
             else
                 strBuilder.Append(@" -lavcopts vcodec=msmpeg4v2:vpass=1");
 

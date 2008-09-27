@@ -22,8 +22,8 @@ namespace OMLTestSuite
             mediaSource.AudioStream = mediaSource.GetAudioSteam(OMLGetDVDInfo.AudioExtension.Director_s_comments);
             mediaSource.Subtitle = mediaSource.GetSubTitle("en");
             mediaSource.Title = disk.DVDDiskInfo.GetMainTitle().TitleNumber;
-            mediaSource.StartChapter = 2;
-            mediaSource.EndChapter = 3;
+            mediaSource.StartChapter = 1;
+            mediaSource.EndChapter = 1;
             return mediaSource;
         }
 
