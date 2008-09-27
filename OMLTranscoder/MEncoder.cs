@@ -23,13 +23,11 @@ namespace OMLTranscoder
         { 
           Copy,      // -ovc copy
           RAW,       // -ovc raw
-          LAVC,      // -ovc lavc libavcodec - best quality (this is usually divx)
+          LAVC,      // -ovc lavc (libavcodec, best quality (this is usually divx)
           VideoForWindows, // -ovc video for windows
           qtvideo,   // -ovc qtvideo - svq1/3 are supported
           XviD,      // -ovc xvid
           X264       // -ovc x264 H.264 encoding
         };
-
-        public enum InputType { File, Drive };
     }
 }
