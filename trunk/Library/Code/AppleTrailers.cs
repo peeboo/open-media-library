@@ -4,6 +4,7 @@ using System.Net;
 using System.Collections.Generic;
 using System.Xml;
 using System.Xml.XPath;
+using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
 
@@ -231,6 +232,27 @@ namespace Library
         {
             AddInHost.Current.MediaCenterEnvironment.PlayMedia(Microsoft.MediaCenter.MediaType.Video, this.TrailerUrl, false);
             AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
+            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged +=new PropertyChangedEventHandler(Transport_PropertyChanged);
+        }
+
+        static public void Transport_PropertyChanged(IPropertyObject sender, string property)
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                MediaTransport t = (MediaTransport)sender;
+                OMLApplication.DebugLine("[AppleTrailers] Transport_PropertyChanged: movie {0} property {1} playrate {2} state {3} pos {4}", OMLApplication.Current.NowPlayingMovieName, property, t.PlayRate, t.PlayState.ToString(), t.Position.ToString());
+                if (property == "PlayState")
+                {
+                    OMLApplication.Current.NowPlayingStatus = t.PlayState;
+                    OMLApplication.DebugLine("[AppleTrailers] MoviePlayerFactory.Transport_PropertyChanged: movie {0} state {1}", OMLApplication.Current.NowPlayingMovieName, t.PlayState.ToString());
+
+                    if (t.PlayState == PlayState.Finished || t.PlayState == PlayState.Stopped)
+                    {
+                        OMLApplication.DebugLine("[AppleTrailers] Playstate is stopped, moving to previous page");
+                        OMLApplication.Current.Session.BackPage();
+                    }
+                }
+            });
         }
     }
 }
