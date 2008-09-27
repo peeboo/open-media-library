@@ -58,10 +58,10 @@ namespace OMLEngineService
 
         public bool IsRunning { get { return Status != TranscodingStatus.Done && Status != TranscodingStatus.Error && Status != TranscodingStatus.Stopped; } }
 
-        public void Stop()
+        public void Stop(bool wait)
         {
             Utilities.DebugLine("[TranscodingAPI] Stop", Source);
-            while (IsRunning)
+            while (wait && IsRunning)
                 Thread.Sleep(500);
             TranscodingNotifyingService.Stop();
         }

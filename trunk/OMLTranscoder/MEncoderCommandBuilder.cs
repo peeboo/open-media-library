@@ -17,8 +17,8 @@ namespace OMLTranscoder
         public MEncoderCommandBuilder(MediaSource ms)
         {
             _source = ms;
-            //this.AudioEncoderFormat = MEncoder.AudioFormat.LAVC;
-            this.AudioEncoderFormat = MEncoder.AudioFormat.Copy;
+            this.AudioEncoderFormat = MEncoder.AudioFormat.LAVC;
+            //this.AudioEncoderFormat = MEncoder.AudioFormat.Copy;
             this.VideoEncoderFormat = ms.Subtitle == null ? MEncoder.VideoFormat.Copy : MEncoder.VideoFormat.LAVC;
         }
 
@@ -57,6 +57,7 @@ namespace OMLTranscoder
 
             StringBuilder strBuilder = new StringBuilder();
 
+            // from TGB: -oac copy -ovc lavc -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0:autoaspect=1, harddup -of mpeg -mpegopts format=dvd:tsaf
             // input location
             if (IsDVD)
             {

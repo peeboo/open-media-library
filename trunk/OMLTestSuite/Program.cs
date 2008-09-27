@@ -37,7 +37,7 @@ namespace OMLTestSuite
                 Console.WriteLine(string.Format("StatusChanged: {0}, {1}", source, status));
             });
             tAPI.Transcode();
-            tAPI.Stop();
+            tAPI.Stop(true);
 
             return;
 #endif

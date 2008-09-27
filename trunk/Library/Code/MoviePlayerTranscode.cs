@@ -31,28 +31,28 @@ namespace Library
                 {
                     case TranscodingStatus.Initializing:
                         OMLApplication.Current.IsStartingTranscodingJob = true;
-                        OMLApplication.Current.TranscodeStatus = @"Starting Transcoding Job";
+                        OMLApplication.Current.TranscodeStatus = @"Starting Job";
                         break;
                     case TranscodingStatus.BufferReady:
                         OMLApplication.Current.IsStartingTranscodingJob = true;
-                        OMLApplication.Current.TranscodeStatus = @"Transcoding Buffer Ready";
+                        OMLApplication.Current.TranscodeStatus = @"Buffer Ready";
                         break;
                     case TranscodingStatus.Done:
                         OMLApplication.Current.IsStartingTranscodingJob = false;
-                        OMLApplication.Current.TranscodeStatus = @"Transcoding Done";
+                        OMLApplication.Current.TranscodeStatus = @"Done";
                         break;
                     case TranscodingStatus.Error:
                         OMLApplication.Current.IsStartingTranscodingJob = false;
-                        OMLApplication.Current.TranscodeStatus = @"Transcoding Error";
+                        OMLApplication.Current.TranscodeStatus = @"Error";
                         break;
                     case TranscodingStatus.Stopped:
                         OMLApplication.Current.IsStartingTranscodingJob = false;
-                        OMLApplication.Current.TranscodeStatus = @"Transcoding Stopped";
+                        OMLApplication.Current.TranscodeStatus = @"Stopped";
                         break;
                 }
             });
 
-            if (OMLApplication.Current.NowPlayingMovieName == _source.Name)
+            if (OMLApplication.Current.NowPlayingMovieName == _source.Name && OMLApplication.Current.NowPlayingStatus == PlayState.Playing)
             {
                 Utilities.DebugLine("[TranscodePlayer] Already started playing: {0}", _source);
                 return;
@@ -87,7 +87,7 @@ namespace Library
                 {
                     if (t.PlayState == PlayState.Finished || t.PlayState == PlayState.Stopped)
                     {
-                        //transcoder.Cancel();
+                        transcoder.Stop(false);
                         Utilities.DebugLine("MoviePlayerTranscode.Transport_PropertyChanged: movie {0} Finished", OMLApplication.Current.NowPlayingMovieName);
                         OMLApplication.Current.NowPlayingStatus = PlayState.Finished;
                     }
