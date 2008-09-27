@@ -25,6 +25,7 @@ namespace Library
 
         ~MyAddIn()
         {
+            OMLApplication.Current.Uninitialize();
             OMLApplication.DebugLine("[Launch] Destroy");
         }
 
