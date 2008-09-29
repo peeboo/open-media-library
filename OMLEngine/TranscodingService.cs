@@ -75,9 +75,16 @@ namespace OMLEngineService
 
         public static string GetNotifierUri()
         {
-            // TODO: use next free TCP port instead
-            int port = Process.GetCurrentProcess().Id;
-            return string.Format("net.tcp://localhost:{0}/OMLTNS", port);
+            return string.Format("net.tcp://localhost:{0}/OMLTNS", FreeTcpPort());
+        }
+
+        static int FreeTcpPort()
+        {
+            TcpListener l = new TcpListener(IPAddress.Parse("127.0.0.1"), 0);
+            l.Start();
+            int port = ((IPEndPoint)l.LocalEndpoint).Port;
+            l.Stop();
+            return port;
         }
 
         public static void Start()
