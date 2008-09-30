@@ -47,7 +47,7 @@ namespace MyMoviesPlugin
 
                 XmlNodeList nodeList = xDoc.SelectNodes("//Titles/Title");
                 if (nodeList.Count == 0)
-                    nodeList = xDoc.SelectNodes("//Title");
+                    nodeList = xDoc.SelectNodes("Title");
 
                 foreach (XmlNode movieNode in nodeList)
                 {
@@ -730,6 +730,19 @@ namespace MyMoviesPlugin
 
                     string[] files = Directory.GetFiles(directoryName);
                     Utilities.DebugLine("[MyMoviesImporter] You have {0} files in the current location {1}", files.Length, directoryName);
+
+                    /* patch from KingManon to limit files only to those of valid file types */
+                    string localExt;
+                    List<string> newFiles = new List<string>();
+                    List<string> allowedExtensions = new List<string>(Enum.GetNames(typeof(VideoFormat)));
+                    foreach (string singleFile in files)
+                    {
+                        localExt = Path.GetExtension(singleFile).Substring(1);
+                        if (allowedExtensions.Contains(localExt.ToUpper()))
+                            newFiles.Add(singleFile);
+                    }
+                    files = newFiles.ToArray();
+
                     Array.Sort(files);
                     for (int i = 0; i < files.Length; i++)
                     {

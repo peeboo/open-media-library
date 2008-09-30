@@ -12,21 +12,6 @@ namespace OMLTestSuite
 {
     class Program
     {
-        static MediaSource GetTestMediaSource()
-        {
-            const string path = @"C:\Users\Public\Videos\DVDs\Apocalypto";
-            //const string path = @"C:\Users\Public\Videos\DVDs\Rambo";
-
-            var disk = new Disk("test", path, VideoFormat.DVD);
-            var mediaSource = new MediaSource(disk);
-            mediaSource.AudioStream = mediaSource.GetAudioSteam(OMLGetDVDInfo.AudioExtension.Director_s_comments);
-            mediaSource.Subtitle = mediaSource.GetSubTitle("en");
-            mediaSource.Title = disk.DVDDiskInfo.GetMainTitle().TitleNumber;
-            mediaSource.StartChapter = 1;
-            mediaSource.EndChapter = 1;
-            return mediaSource;
-        }
-
         static void Main(string[] args)
         {
 #if WCF_TEST
@@ -42,9 +27,6 @@ namespace OMLTestSuite
             return;
 #endif
 #if !CUSTOM
-            Program.TEST_MEDIASOURCE_FROM_DISK_WITH_EXTRA_OPTIONS();
-            Program.TEST_APPLETRAILERS();
-
             MoviePlayerDVDTest mpdt = new MoviePlayerDVDTest();
             Console.WriteLine("Testing: MoviePlayerDVD");
             mpdt.TEST_GENERATE_STRING_FOR_A_STANDARD_DVD();
@@ -61,6 +43,7 @@ namespace OMLTestSuite
             mmpt.TEST_WHEN_NO_DISCS_ARE_DEFINED__LOOK_IN_THE_SAME_DIRECTORY_AS_THE_MYMOVIES_XML_FILE_FOR_ANY_VALID_FILES_TO_ADD_AS_DISCS__MULTIPLE_FILES();
             mmpt.TEST_FOLDER_JPG_FILES_ARE_USED_IF_COVER_PATHS_DONT_APPEAR_TO_EXIST();
             mmpt.TEST_CORRECTLY_IMPORTS_DVRMS_FILES();
+            mmpt.TEST_FILES_WITH_MULTIPLE_DISCS_APPEAR_TO_FAIL();
 
             DVDProfilerTest dpt = new DVDProfilerTest();
             Console.WriteLine("Testing: DVDProfilerPlugin");
@@ -93,26 +76,6 @@ namespace OMLTestSuite
             vdt.TEST_CREATE_VIRTUAL_FOLDER();
             vdt.TEST_MULTIPLE_BASE_FOLDERS_WORK();
 #endif
-        }
-
-        [Test]
-        public static void TEST_MEDIASOURCE_FROM_DISK_WITH_EXTRA_OPTIONS()
-        {
-            var mediaSource = GetTestMediaSource();
-            Utilities.DebugLine("MediaSource: {0}", mediaSource);
-            mediaSource.Disk.ExtraOptions = mediaSource.ExtraOptions;
-            var ms = new MediaSource(mediaSource.Disk);
-            Utilities.DebugLine("MediaSource: {0}", ms);
-            Assert.AreEqual(mediaSource.ToString(), ms.ToString());
-        }
-
-        [Test]
-        public static void TEST_APPLETRAILERS()
-        {
-            Console.WriteLine("Testing: AppleTrailer");
-            Library.AppleTrailers trailers = new Library.AppleTrailers();
-            trailers.LoadTrailers();
-            Assert.Greater(trailers.trailers.Options.Count, 0);
         }
     }
 }
