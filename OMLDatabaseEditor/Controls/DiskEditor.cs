@@ -59,8 +59,7 @@ namespace OMLDatabaseEditor.Controls
                             "Error Matching File Extension");
                         Utilities.DebugLine("[DiskEditor] Error trying to match file extension " + cleanedExtension +
                             " to video format", ae);
-                        Format = (VideoFormat)Enum.Parse(typeof(VideoFormat),
-                            "MPG", true);
+                        Format = VideoFormat.MPG;
                     }
                     catch (System.Exception ex)
                     {
@@ -78,8 +77,7 @@ namespace OMLDatabaseEditor.Controls
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     txtPath.Text = dlg.SelectedPath;
-                    Format = (VideoFormat)Enum.Parse(typeof(VideoFormat),
-                        "DVD", true);
+                    Format = VideoFormat.DVD;
                 }
             }
         }
@@ -94,6 +92,12 @@ namespace OMLDatabaseEditor.Controls
         {
             get { return txtPath.Text; }
             set { txtPath.Text = value; }
+        }
+
+        public string ExtraOptions
+        {
+            get { return txtExtraOptions.Text; }
+            set { txtExtraOptions.Text = string.IsNullOrEmpty(value) ? string.Empty : value; }
         }
 
         public VideoFormat Format
@@ -112,6 +116,26 @@ namespace OMLDatabaseEditor.Controls
                     rbFolder.Checked = false;
                     rbFile.Checked = true;
                 }
+            }
+        }
+
+        private void rbFolder_CheckedChanged(object sender, EventArgs e)
+        {
+            btnExtraOptions.Enabled = txtExtraOptions.Enabled = rbFolder.Checked;
+            if (rbFolder.Checked == false)
+                txtExtraOptions.Text = "";
+        }
+
+        private void btnExtraOptions_Click(object sender, EventArgs e)
+        {
+            ExtenderExtraOptions dlg = new ExtenderExtraOptions();
+            dlg.Disk = new Disk(this.FileName, this.Path, this.Format, this.ExtraOptions);
+            if (dlg.Disk.DVDDiskInfo == null)
+                return;
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                this.ExtraOptions = dlg.MediaSource.ExtraOptions;
             }
         }
 

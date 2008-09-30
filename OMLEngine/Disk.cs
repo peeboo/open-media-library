@@ -57,11 +57,16 @@ namespace OMLEngine
 
         public Disk() { }
 
-        public Disk(string name, string path, VideoFormat format)
+        public Disk(string name, string path, VideoFormat format) 
+            : this(name, path, format, null)
+        { }
+
+        public Disk(string name, string path, VideoFormat format, string extraOptions)
         {
             Name = name;
             Path = path;
             Format = format;
+            ExtraOptions = string.IsNullOrEmpty(extraOptions) ? null : extraOptions;
         }
 
         public override string ToString()

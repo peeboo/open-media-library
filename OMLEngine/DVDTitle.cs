@@ -45,7 +45,12 @@ namespace OMLGetDVDInfo
         public bool Main;
         #endregion
 
-        public override bool Equals(object obj) { return this == (DVDTitle)obj; }
+        public override bool Equals(object obj)
+        {
+            if (obj != null && (obj is DVDTitle) == false)
+                return false;
+            return this == (DVDTitle)obj;
+        }
         public override int GetHashCode() { return base.GetHashCode(); }
 
         public static bool operator ==(DVDTitle a, DVDTitle b)
@@ -102,8 +107,8 @@ namespace OMLGetDVDInfo
 
         public override string ToString()
         {
-            return string.Format("{0}, {1}, ({2:00}:{3:00}:{4:00}) {5}, {6}", this.File, this.TitleNumber, this.Duration.Hours,
-                this.Duration.Minutes, this.Duration.Seconds, this.Resolution, this.AspectRatio);
+            return string.Format("{0}, ({1:00}:{2:00}:{3:00}), Chapters:{4}", this.TitleNumber, this.Duration.Hours,
+                this.Duration.Minutes, this.Duration.Seconds, this.Chapters.Count);
         }
 
         public DVDSubtitle GetSubTitle(int id)

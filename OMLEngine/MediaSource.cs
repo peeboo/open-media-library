@@ -50,8 +50,8 @@ namespace OMLEngine
             return GetAudioSteam((from a in title.AudioTracks where a.Extension == extension select a).FirstOrDefault());
         }
 
-        static AudioStream GetAudioSteam(DVDAudioTrack at) { return at == null ? null : new AudioStream(at); }
-        static SubtitleStream GetSubTitle(DVDSubtitle st) { return st == null ? null : new SubtitleStream(st); }
+        public static AudioStream GetAudioSteam(DVDAudioTrack at) { return at == null ? null : new AudioStream(at); }
+        public static SubtitleStream GetSubTitle(DVDSubtitle st) { return st == null ? null : new SubtitleStream(st); }
         public SubtitleStream GetSubTitle(string languageID)
         {
             DVDTitle title = DVDTitle;

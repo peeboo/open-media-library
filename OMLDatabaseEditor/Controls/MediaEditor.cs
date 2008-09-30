@@ -494,7 +494,8 @@ namespace OMLDatabaseEditor.Controls
                     new Disk(
                         dlg.FileName, 
                         dlg.Path,
-                        dlg.Format
+                        dlg.Format,
+                        dlg.ExtraOptions
                     )
                 );
 
@@ -547,9 +548,11 @@ namespace OMLDatabaseEditor.Controls
                 if (lstDisks.SelectedItem != null)
                 {
                     DiskEditor dlg = new DiskEditor();
-                    dlg.Path = ((Disk)lstDisks.SelectedItem).Path;
-                    dlg.FileName = ((Disk)lstDisks.SelectedItem).Name;
-                    dlg.Format = ((Disk)lstDisks.SelectedItem).Format;
+                    Disk dsk = (Disk)lstDisks.SelectedItem;
+                    dlg.Path = dsk.Path;
+                    dlg.FileName = dsk.Name;
+                    dlg.Format = dsk.Format;
+                    dlg.ExtraOptions = dsk.ExtraOptions;
 
                     if (dlg.ShowDialog() == DialogResult.OK)
                     {
@@ -560,7 +563,8 @@ namespace OMLDatabaseEditor.Controls
                             new Disk(
                                 dlg.FileName,
                                 dlg.Path,
-                                dlg.Format
+                                dlg.Format,
+                                dlg.ExtraOptions
                             )
                         );
 
