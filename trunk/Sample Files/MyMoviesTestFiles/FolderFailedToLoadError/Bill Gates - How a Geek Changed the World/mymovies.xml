@@ -1,0 +1,78 @@
+<Title>
+  <ID>171</ID>
+  <WebServiceID>4c197f2c-cd72-4600-a97c-d61438043d51</WebServiceID>
+  <CollectionNumber>170</CollectionNumber>
+  <Type>DVD</Type>
+  <Barcode>783722274057</Barcode>
+  <Country>United States</Country>
+  <LocalTitle>How Bill Gates Changed the World</LocalTitle>
+  <OriginalTitle>How Bill Gates Changed the World</OriginalTitle>
+  <SortTitle>How Bill Gates Changed the World</SortTitle>
+  <Edition>
+  </Edition>
+  <AspectRatio>1.33:1</AspectRatio>
+  <VideoStandard>
+  </VideoStandard>
+  <ProductionYear>2005</ProductionYear>
+  <ReleaseDate>4/10/2007</ReleaseDate>
+  <RunningTime>86</RunningTime>
+  <TagLine />
+  <Description><![CDATA[]]></Description>
+  <ExtraFeatures NotPresent="False"><![CDATA[]]></ExtraFeatures>
+  <ParentalRating>
+    <Value>-1</Value>
+    <Description>
+    </Description>
+  </ParentalRating>
+  <DataProvider>
+  </DataProvider>
+  <DataProviderId>
+  </DataProviderId>
+  <ImportSource />
+  <ImportId />
+  <LocalTrailer>
+    <URL>
+    </URL>
+    <Type>-1</Type>
+  </LocalTrailer>
+  <Covers>
+    <Front>mymovies-front.jpg</Front>
+    <Back />
+  </Covers>
+  <DataChanged>5/7/2008 6:12:30 AM</DataChanged>
+  <CoversChanged>5/7/2008 6:12:32 AM</CoversChanged>
+  <LockData>False</LockData>
+  <LockCovers>False</LockCovers>
+  <Added>7/30/2008 10:29:00 AM</Added>
+  <RecordChanged>8/15/2008 7:42:17 AM</RecordChanged>
+  <Categories />
+  <Genres />
+  <AudioTracks />
+  <Subtitles NotPresent="False" />
+  <Studios />
+  <Discs>
+    <Disc TitleMode="False">
+      <DiscIdStored>
+      </DiscIdStored>
+      <DoubleSided>False</DoubleSided>
+      <Name>Disc 1</Name>
+      <DiscIdSideA>
+      </DiscIdSideA>
+      <DiscIdSideB>
+      </DiscIdSideB>
+      <LocationSideA>.</LocationSideA>
+      <LocationTypeSideA>1</LocationTypeSideA>
+      <LocationSideB>
+      </LocationSideB>
+      <LocationTypeSideB>-1</LocationTypeSideB>
+      <ChangerSlot>
+      </ChangerSlot>
+    </Disc>
+  </Discs>
+  <Persons ActorsComplete="False">
+    <Person>
+      <Name>Julian Jones</Name>
+      <Type>Director</Type>
+    </Person>
+  </Persons>
+</Title>
