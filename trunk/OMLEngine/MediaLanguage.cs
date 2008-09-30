@@ -7,7 +7,7 @@ namespace OMLEngine
     {
         public static string LanguageNameForId(string id)
         {
-            return sLanguageMap.ContainsKey(id.ToUpper()) ? sLanguageMap[id.ToUpper()] : null;
+            return sLanguageMap.ContainsKey(id.ToUpper()) ? sLanguageMap[id.ToUpper()] : "Unknown";
         }
 
         public static string LanguageIdForName(string name)

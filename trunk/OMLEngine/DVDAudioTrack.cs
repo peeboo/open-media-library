@@ -75,8 +75,8 @@ namespace OMLGetDVDInfo
         {
             switch (channels)
             {
-                case 1: return "1.0 ch";
-                case 2: return "2.0 ch";
+                case 1: return "mono";
+                case 2: return "stereo";
                 case 6: return "5.1 ch";
                 case 7: return "6.1 ch";
                 case 8: return "7.1 ch";
@@ -90,10 +90,16 @@ namespace OMLGetDVDInfo
         /// <returns>A string formatted as: {track #} {language} ({format}) ({sub-format})</returns>
         public override string ToString()
         {
-            return string.Format("{0} {1} ({2}) ({3}) {4}", this.TrackNumber, this.Language, this.Format, this.SubFormat, GetExtension(this.Extension)).TrimEnd();
+            return string.Format("{0} # {1} in {2}, {3}", this.Language, 
+                this.Format, this.SubFormat, GetExtension(this.Extension)).TrimEnd(' ', ',');
         }
 
-        public override bool Equals(object obj) { return this == (DVDAudioTrack)obj; }
+        public override bool Equals(object obj)
+        {
+            if (obj != null && (obj is DVDAudioTrack) == false)
+                return false;
+            return this == (DVDAudioTrack)obj;
+        }
         public override int GetHashCode() { return base.GetHashCode(); }
 
         public static bool operator ==(DVDAudioTrack a, DVDAudioTrack b)
