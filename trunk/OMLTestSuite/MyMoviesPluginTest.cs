@@ -136,5 +136,16 @@ namespace OMLTestSuite
             Title t = titles[0];
             Assert.AreEqual(1, t.Disks.Count);
         }
+
+        [Test]
+        public void TEST_FILES_WITH_MULTIPLE_DISCS_APPEAR_TO_FAIL()
+        {
+            MyMoviesImporter importer = new MyMoviesImporter();
+            importer.ProcessDir(@"..\..\..\Sample Files\MyMoviesTestFiles\MultiDisk Issues");
+
+            IList<Title> titles = importer.GetTitles();
+
+            Assert.AreEqual(1, titles.Count);
+        }
     }
 }
