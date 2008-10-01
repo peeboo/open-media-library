@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="DVDProfilerTest.cs" />
     <Compile Include="MEncoderCommandBuilderTest.cs" />
+    <Compile Include="MovieCollectorzTest.cs" />
     <Compile Include="MoviePlayerDVDTest.cs" />
     <Compile Include="MyMoviesPluginTest.cs" />
     <Compile Include="OMLXMLImporterTest.cs" />

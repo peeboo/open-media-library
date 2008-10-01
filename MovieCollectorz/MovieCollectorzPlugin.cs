@@ -50,175 +50,258 @@ namespace MovieCollectorzPlugin
             foreach (XmlNode movieNode in nodeList)
             {
                 Title newTitle = new Title();
-                foreach (XmlNode node in movieNode.ChildNodes)
+                XPathNavigator nav = movieNode.CreateNavigator();
+
+                newTitle.MetadataSourceID = GetChildNodesValue(nav, "id");
+                if (nav.MoveToChild("coverfront", ""))
                 {
-                    switch (node.Name)
-                    {
-                        case "id":
-                            newTitle.MetadataSourceID = node.InnerText;
-                            break;
-                        case "coverfront":
-                            SetFrontCoverImage(ref newTitle, node.InnerText);
-                            break;
-                        // this case just represents if the disc is a DVD or blu ray move.
-                        // can use this to put a little ICON on the screen to notify the user
-                        //
-                        //case "format":
-                        //    XmlNode formatNode = node.SelectSingleNode("displayname");
-                        //    if (formatNode != null)
-                        //    {
-                        //        switch (formatNode.InnerText.ToUpper())
-                        //        {
-                        //            case "DVD":
-                        //                newTitle.VideoFormat = VideoFormat.DVD;
-                        //                break;
-                        //            default:
-                        //                break;
-                        //        }
-                        //    }
-                        //    break;
-                        case "language":
-                            XmlNodeList langNodes = node.SelectNodes("displayname");
-                            foreach (XmlNode languageNode in langNodes)
-                            {
-                                newTitle.AddLanguageFormat(languageNode.InnerText);
-                            }
-                            break;
-                        case "title":
-                            newTitle.Name = node.InnerText;
-                            break;
-                        case "plot":
-                            newTitle.Synopsis = StripHTML(node.InnerText);
-                            break;
-                        case "releasedate":
-                            XmlNode rdYear = node.SelectSingleNode("year");
-                            XmlNode rdMonth = node.SelectSingleNode("month");
-                            XmlNode rdDay = node.SelectSingleNode("day");
-
-                            if (rdYear != null && rdMonth != null && rdDay != null)
-                            {
-                                DateTime rd = new DateTime(Int32.Parse(rdYear.InnerText),
-                                                           Int32.Parse(rdMonth.InnerText),
-                                                           Int32.Parse(rdDay.InnerText));
-                                if (rd != null)
-                                    newTitle.ReleaseDate = rd;
-                            }
-                            break;
-                        case "mpaarating":
-                            XmlNode ratingNode = node.SelectSingleNode("displayname");
-                            if (ratingNode != null)
-                                newTitle.ParentalRating = ratingNode.InnerText;
-                            break;
-                        case "genres":
-                            XmlNode genreNode = node.SelectSingleNode("genre");
-                            if (genreNode != null)
-                            {
-                                XmlNode disNameNode = genreNode.SelectSingleNode("displayname");
-                                if (disNameNode != null)
-                                    newTitle.AddGenre(disNameNode.InnerText);
-                            }
-                            break;
-                        case "subtitles":
-                            XmlNode subtitleNode = node.SelectSingleNode("subtitle");
-                            if (subtitleNode != null)
-                            {
-                                XmlNode disNameNode = subtitleNode.SelectSingleNode("displayname");
-                                if (disNameNode != null)
-                                    newTitle.AddSubtitle(disNameNode.InnerText);
-                            }
-                            break;
-                        case "runtimeminutes":
-                            newTitle.Runtime = Int32.Parse(node.InnerText);
-                            break;
-                        case "cast":
-                            XmlNodeList persons = node.SelectNodes("person");
-                            foreach (XmlNode person in persons)
-                            {
-                                XmlNode disNameNode = person.SelectSingleNode("displayname");
-                                if (disNameNode != null)
-                                    newTitle.AddActingRole(disNameNode.InnerText, "");
-                            }
-                            break;
-                        case "crew":
-                            XmlNodeList crewMembers = node.SelectNodes("crewmember");
-                            foreach (XmlNode crewMember in crewMembers)
-                            {
-                                XmlNode roleId = crewMember.SelectSingleNode("roleid");
-                                if (roleId != null)
-                                {
-                                    if (roleId.InnerText.ToUpper().CompareTo("DFDIRECTOR") == 0)
-                                    {
-                                        XmlNode person = crewMember.SelectSingleNode("person");
-                                        if (person != null)
-                                        {
-                                            XmlNode displayName = person.SelectSingleNode("displayname");
-                                            if (displayName != null)
-                                                newTitle.AddDirector(new Person(displayName.InnerText));
-                                        }
-                                    }
-                                    else
-                                    {
-                                        XmlNode crewMemberName = crewMember.SelectSingleNode("displayname");
-                                        if (crewMemberName != null)
-                                            newTitle.AddNonActingRole(crewMemberName.InnerText, "crew");
-                                    }
-                                }
-                            }
-                            break;
-                        case "studios":
-                            XmlNodeList studioNodes = node.SelectNodes("displayname");
-                            foreach (XmlNode studioNode in studioNodes)
-                                newTitle.Studio = studioNode.InnerText; // currently we only hold one studio (in this case the last one)
-                            break;
-                        case "distributor":
-                            XmlNode distNode = node.SelectSingleNode("displayname");
-                            if (distNode != null)
-                                newTitle.Studio = distNode.InnerText;
-                            break;
-                        case "country":
-                            XmlNode countryNode = node.SelectSingleNode("displayname");
-                            if (countryNode != null)
-                                newTitle.CountryOfOrigin = countryNode.InnerText;
-                            break;
-                        case "upc":
-                            newTitle.UPC = node.InnerText;
-                            break;
-
-                        case "links":
-                            XmlNodeList links = node.SelectNodes("link");
-                            foreach (XmlNode link in links)
-                            {
-                                XmlNode urlType = link.SelectSingleNode("urltype");
-                                if (urlType != null)
-                                {
-                                    if (urlType.InnerText.ToUpper().CompareTo("MOVIE") == 0)
-                                    {
-                                        XmlNode url = link.SelectSingleNode("url");
-                                        if (url != null)
-                                        {
-                                            FileInfo fi = new FileInfo(url.InnerText);
-                                            string ext = fi.Extension.Substring(1);
-                                            
-                                            if (IsSupportedFormat(ext))
-                                            {
-                                                Disk disk = new Disk();
-                                                disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                                                disk.Path = url.InnerText;
-                                                disk.Name = "Disk 1";
-                                                newTitle.Disks.Add(disk);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
+                    SetFrontCoverImage(ref newTitle, nav.Value);
+                    nav.MoveToParent();
                 }
 
+                if (nav.MoveToChild("coverback", ""))
+                {
+                    SetBackCoverImage(ref newTitle, nav.Value);
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("country", ""))
+                {
+                    if (nav.MoveToChild("displayname", ""))
+                    {
+                        newTitle.CountryOfOrigin = nav.Value;
+                        nav.MoveToParent();
+                    }
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("title", ""))
+                {
+                    newTitle.Name = nav.Value;
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("plot", ""))
+                {
+                    newTitle.Synopsis = nav.Value;
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("releasedate", ""))
+                {
+                    XPathNavigator localNav = nav.CreateNavigator();
+                    //XmlNode rdYear = nav.SelectSingleNode("year");
+                    //XmlNode rdMonth = nav.SelectSingleNode("month");
+                    //XmlNode rdDay = nav.SelectSingleNode("day");
+
+                    //if (rdYear != null && rdMonth != null && rdDay != null)
+                    //{
+                    //    DateTime rd = new DateTime(Int32.Parse(rdYear.InnerText),
+                    //                               Int32.Parse(rdMonth.InnerText),
+                    //                               Int32.Parse(rdDay.InnerText));
+
+                    //    if (rd != null)
+                    //        newTitle.ReleaseDate = rd;
+                    //}
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("mpaarating", ""))
+                {
+                    newTitle.ParentalRating = GetChildNodesValue(nav, "displayname");
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("upc", ""))
+                {
+                    newTitle.UPC = nav.Value;
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("runtimeminutes", ""))
+                {
+                    newTitle.Runtime = nav.ValueAsInt;
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("genres", ""))
+                {
+                    XPathNodeIterator genreIter = nav.SelectChildren("genre", "");
+                    if (nav.MoveToFirstChild())
+                    {
+                        XPathNavigator localNav = nav.CreateNavigator();
+                        nav.MoveToParent();
+
+                        for (int i = 0; i < genreIter.Count; i++)
+                        {
+                            newTitle.Genres.Add(GetChildNodesValue(localNav, "displayname"));
+                            localNav.MoveToNext("genre", "");
+                        }
+                    }
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("cast", ""))
+                {
+                    XPathNodeIterator starIter = nav.SelectChildren("star", "");
+                    if (nav.MoveToFirstChild())
+                    {
+                        XPathNavigator localNav = nav.CreateNavigator();
+                        nav.MoveToParent();
+
+                        for (int i = 0; i < starIter.Count; i++)
+                        {
+                            string role = GetChildNodesValue(localNav, "role");
+                            XPathNavigator personNav = localNav.SelectSingleNode("person");
+                            if (personNav != null)
+                            {
+                                string name = GetChildNodesValue(personNav, "displayname");
+                                if (!string.IsNullOrEmpty(role) && !string.IsNullOrEmpty(name))
+                                {
+                                    newTitle.AddActingRole(name, role);
+                                }
+                            }
+                            localNav.MoveToNext("star", "");
+                        }
+                    }
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("crew", ""))
+                {
+                    XPathNodeIterator crewMemberIter = nav.SelectChildren("crewmember", "");
+                    if (nav.MoveToFirstChild())
+                    {
+                        XPathNavigator localNav = nav.CreateNavigator();
+                        nav.MoveToParent();
+
+                        for (int i = 0; i < crewMemberIter.Count; i++)
+                        {
+                            string role = GetChildNodesValue(localNav, "role");
+                            XPathNavigator cmNav = localNav.SelectSingleNode("person");
+                            if (cmNav != null)
+                            {
+                                string name = GetChildNodesValue(cmNav, "displayname");
+                                if (!string.IsNullOrEmpty(role) && !string.IsNullOrEmpty(name))
+                                {
+                                    switch (role.ToLower())
+                                    {
+                                        case "director":
+                                            newTitle.AddDirector(new Person(name));
+                                            break;
+                                        case "writer":
+                                            newTitle.AddWriter(new Person(name));
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                            }
+                            localNav.MoveToNext("crewmember", "");
+                        }
+                    }
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("subtitles", ""))
+                {
+                    XPathNodeIterator subtitleIter = nav.SelectChildren("subtitle", "");
+                    if (nav.MoveToFirstChild())
+                    {
+                        XPathNavigator localNav = nav.CreateNavigator();
+                        nav.MoveToParent();
+
+                        for (int i = 0; i < subtitleIter.Count; i++)
+                        {
+                            newTitle.Subtitles.Add(GetChildNodesValue(localNav, "displayname"));
+                            localNav.MoveToNext("subtitle", "");
+                        }
+                    }
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("audios", ""))
+                {
+                    XPathNodeIterator audioIter = nav.SelectChildren("audio", "");
+                    if (nav.MoveToFirstChild())
+                    {
+                        XPathNavigator localNav = nav.CreateNavigator();
+                        nav.MoveToParent();
+
+                        for (int i = 0; i < audioIter.Count; i++)
+                        {
+                            newTitle.AudioTracks.Add(GetChildNodesValue(localNav, "displayname"));
+                            localNav.MoveToNext("audio", "");
+                        }
+                    }
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("studios", ""))
+                {
+                    XPathNodeIterator studioIter = nav.SelectChildren("studio", "");
+                    if (nav.MoveToFirstChild())
+                    {
+                        XPathNavigator localNav = nav.CreateNavigator();
+                        nav.MoveToParent();
+
+                        for (int i = 0; i < studioIter.Count; i++)
+                        {
+                            newTitle.Studio = GetChildNodesValue(localNav, "displayname");
+                            localNav.MoveToNext("studio", "");
+                        }
+                    }
+                    nav.MoveToParent();
+                }
+
+                if (nav.MoveToChild("links", ""))
+                {
+                    XPathNodeIterator linkIter = nav.SelectChildren("link", "");
+                    if (nav.MoveToFirstChild())
+                    {
+                        XPathNavigator localNav = nav.CreateNavigator();
+                        nav.MoveToParent();
+
+                        for (int i = 0; i < linkIter.Count; i++)
+                        {
+                            string type = GetChildNodesValue(localNav, "urltype");
+                            if (!string.IsNullOrEmpty(type))
+                            {
+                                if (type.ToUpper().CompareTo("MOVIE") == 0)
+                                {
+                                    string path = GetChildNodesValue(localNav, "url");
+                                    if (!string.IsNullOrEmpty(path))
+                                    {
+                                        try
+                                        {
+                                            FileInfo fi = new FileInfo(path);
+                                            if (fi.Exists)
+                                            {
+                                                string ext = fi.Extension.Substring(1);
+                                                if (!string.IsNullOrEmpty(ext))
+                                                {
+                                                    if (IsSupportedFormat(ext))
+                                                    {
+                                                        Disk disk = new Disk();
+                                                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                                                        disk.Path = path;
+                                                        disk.Name = GetChildNodesValue(localNav, "description");
+                                                        newTitle.Disks.Add(disk);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                        }
+                                    }
+                                }
+                            }
+                            localNav.MoveToNext("link", "");
+                        }
+                    }
+                }
+                
                 if (ValidateTitle(newTitle))
                 {
                     try
@@ -235,7 +318,7 @@ namespace MovieCollectorzPlugin
             }
         }
 
-        private static double MajorVersion = 0.9;
+        private static double MajorVersion = 1.0;
         private static double MinorVersion = 0.1;
         protected override double GetVersionMajor()
         {
@@ -264,6 +347,15 @@ namespace MovieCollectorzPlugin
         {
             return Regex.Replace(inputString, HTML_TAG_PATTERN, string.Empty);
         }
-
+        private string GetChildNodesValue(XPathNavigator nav, string nodeName)
+        {
+            string value = string.Empty;
+            if (nav.MoveToChild(nodeName, ""))
+            {
+                value = nav.Value;
+                nav.MoveToParent();
+            }
+            return value;
+        }
     }
 }
