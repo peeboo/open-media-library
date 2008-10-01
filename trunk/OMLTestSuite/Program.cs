@@ -27,6 +27,11 @@ namespace OMLTestSuite
             return;
 #endif
 #if !CUSTOM
+
+            MovieCollectorzTest mcpt = new MovieCollectorzTest();
+            Console.WriteLine("Testing: MovieCollectorzPlugin");
+            mcpt.TEST_MOVIE_COLLECTORZ_MISSING_BOXART();
+
             MoviePlayerDVDTest mpdt = new MoviePlayerDVDTest();
             Console.WriteLine("Testing: MoviePlayerDVD");
             mpdt.TEST_GENERATE_STRING_FOR_A_STANDARD_DVD();
