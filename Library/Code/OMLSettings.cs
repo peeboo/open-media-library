@@ -441,6 +441,130 @@ namespace Library
             }
         }
 
+        public bool ShowFilterGenres
+        {
+            get { return Properties.Settings.Default.ShowFilterGenres; }
+            set
+            {
+                Properties.Settings.Default.ShowFilterGenres = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public bool ShowFilterDirectors
+        {
+            get { return Properties.Settings.Default.ShowFilterDirectors; }
+            set
+            {
+                Properties.Settings.Default.ShowFilterDirectors = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+
+        public bool ShowFilterActors
+        {
+            get { return Properties.Settings.Default.ShowFilterActors; }
+            set
+            {
+                Properties.Settings.Default.ShowFilterActors = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+
+        public bool ShowFilterRuntime
+        {
+            get { return Properties.Settings.Default.ShowFilterRuntime; }
+            set
+            {
+                Properties.Settings.Default.ShowFilterRuntime = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+
+        public bool ShowFilterCountry
+        {
+            get { return Properties.Settings.Default.ShowFilterCountry; }
+            set
+            {
+                Properties.Settings.Default.ShowFilterCountry = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+
+        public bool ShowFilterParentalRating
+        {
+            get { return Properties.Settings.Default.ShowFilterParentalRating; }
+            set
+            {
+                Properties.Settings.Default.ShowFilterParentalRating = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public bool ShowFilterTags
+        {
+            get { return Properties.Settings.Default.ShowFilterTags; }
+            set
+            {
+                Properties.Settings.Default.ShowFilterTags = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public bool ShowFilterUserRating
+        {
+            get { return Properties.Settings.Default.ShowFilterUserRating; }
+            set
+            {
+                Properties.Settings.Default.ShowFilterUserRating = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public bool ShowFilterYear
+        {
+            get { return Properties.Settings.Default.ShowFilterYear; }
+            set
+            {
+                Properties.Settings.Default.ShowFilterYear = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public bool ShowFilterDateAdded
+        {
+            get { return Properties.Settings.Default.ShowFilterDateAdded; }
+            set
+            {
+                Properties.Settings.Default.ShowFilterDateAdded = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public bool ShowFilterFormat
+        {
+            get { return Properties.Settings.Default.ShowFilterFormat; }
+            set
+            {
+                Properties.Settings.Default.ShowFilterFormat = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public bool ShowFilterTrailers
+        {
+            get { return Properties.Settings.Default.ShowFilterTrailers; }
+            set
+            {
+                Properties.Settings.Default.ShowFilterTrailers = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         #endregion
 
         #endregion

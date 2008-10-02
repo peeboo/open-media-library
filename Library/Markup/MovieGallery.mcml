@@ -68,7 +68,7 @@
                   RepeatGap="100"/>
 
       <!-- Create an input handler for scrolling. -->
-    <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
+    <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled" />
     <TypingHandler Name="TypingHandler" EditableText="[MovieBrowser.JumpInListText]" TypingPolicy="TripleTap" HandlerStage="Bubbled"/>
     <Timer Name="ClearTimer" AutoRepeat="false" Interval="5000" Enabled="false"/>
     <addin:AddInHost Name="AddInHost"/>

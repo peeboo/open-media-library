@@ -26,7 +26,7 @@
 
         <Locals>
             <addin:AddInHost Name="AddInHost"/>
-            <ScrollingData Name="ScrollingData" />
+            <ScrollingData Name="ScrollingData" LockedPosition="0.5" />
 
             <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "[UISettings.Anchor.DetailsLeftOffset]" Id="Parent"/>
             <AnchorEdge Name="DetailsLeftBackgroundAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "[UISettings.Anchor.DetailsLeftBackgroundOffset]" Id="Parent"/>
