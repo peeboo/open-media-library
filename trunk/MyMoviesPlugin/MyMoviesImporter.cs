@@ -165,8 +165,9 @@ namespace MyMoviesPlugin
         private void loadDataFromNavigatorToTitle(ref XPathNavigator navigator, ref Title newTitle)
         {
             Utilities.DebugLine("[MyMoviesImporter] Loading data for a new title");
-            newTitle.MetadataSourceID = GetChildNodesValue(navigator, "WebServiceId");
+            newTitle.MetadataSourceID = GetChildNodesValue(navigator, "WebServiceID");
 
+            #region covers
             Utilities.DebugLine("[MyMoviesImporter] Scanning for {0} node", "Covers");
             if (navigator.MoveToChild("Covers", ""))
             {
@@ -198,9 +199,11 @@ namespace MyMoviesPlugin
 
                 navigator.MoveToParent();
             }
+            #endregion
 
             newTitle.Synopsis = GetChildNodesValue(navigator, "Description");
 
+            #region production year
             if (navigator.MoveToChild("ProductionYear", ""))
             {
                 Utilities.DebugLine("[MyMoviesImporter] Found production year, I hope the format is something we can read");
@@ -224,7 +227,9 @@ namespace MyMoviesPlugin
                     Utilities.DebugLine("[MyMoviesImporter] error reading ProductionYear: " + e.Message);
                 }
             }
+            #endregion
 
+            #region parental rating (mpaa rating)
             if (navigator.MoveToChild("ParentalRating", ""))
             {
                 Utilities.DebugLine("[MyMoviesImporter] Scanning for the ParentalRating");
@@ -270,9 +275,11 @@ namespace MyMoviesPlugin
                 }
                 navigator.MoveToParent();
             }
+            #endregion
 
             newTitle.Runtime = Int32.Parse(GetChildNodesValue(navigator, "RunningTime"));
 
+            #region persons
             if (navigator.MoveToChild("Persons", ""))
             {
                 Utilities.DebugLine("[MyMoviesImporter] Beginning the long, painful process of scanning people");
@@ -312,7 +319,9 @@ namespace MyMoviesPlugin
                 }
                 navigator.MoveToParent();
             }
+            #endregion
 
+            #region studio (s)
             if (navigator.MoveToChild("Studios", ""))
             {
                 Utilities.DebugLine("[MyMoviesImporter] Ahh... Studios (pssst.. we only copy the last entry from here... dont tell anyone)");
@@ -325,18 +334,20 @@ namespace MyMoviesPlugin
                         navigator.MoveToParent();
                         for (int i = 0; i < nIter.Count; i++)
                         {
-                            newTitle.Studio = GetChildNodesValue(localNav, "Studio");
+                            newTitle.Studio = localNav.Value;
                         }
                     }
                 }
                 navigator.MoveToParent();
             }
+            #endregion
 
             newTitle.CountryOfOrigin = GetChildNodesValue(navigator, "Country");
             newTitle.AspectRatio = GetChildNodesValue(navigator, "AspectRatio");
             newTitle.OriginalName = GetChildNodesValue(navigator, "OriginalTitle");
             newTitle.SortName = GetChildNodesValue(navigator, "SortTitle");
 
+            #region genres
             if (navigator.MoveToChild("Genres", ""))
             {
                 Utilities.DebugLine("[MyMoviesImporter] Genres... good old genres");
@@ -353,7 +364,9 @@ namespace MyMoviesPlugin
                 }
                 navigator.MoveToParent();
             }
+            #endregion
 
+            #region audio tracks
             if (navigator.MoveToChild("AudioTracks", ""))
             {
                 Utilities.DebugLine("[MyMoviesImporter] AudioTracks.. yeah, like you can even change them anyway");
@@ -385,7 +398,9 @@ namespace MyMoviesPlugin
                 }
                 navigator.MoveToParent();
             }
+            #endregion
 
+            #region subtitles
             if (navigator.MoveToChild("Subtitles", ""))
             {
                 Utilities.DebugLine("[MyMoviesImporter] Subtitles here we come!");
@@ -411,7 +426,9 @@ namespace MyMoviesPlugin
                 }
                 navigator.MoveToParent();
             }
+            #endregion
 
+            #region discs
             if (navigator.MoveToChild("Discs", ""))
             {
                 Utilities.DebugLine("[MyMoviesImporter] Discs... ok here is the good one, we'll passing this off to some other method to handle.");
@@ -424,6 +441,7 @@ namespace MyMoviesPlugin
                 }
                 navigator.MoveToParent();
             }
+            #endregion
         }
         private void extractDisksFromXML(XPathNodeIterator nIter, XPathNavigator localNav, Title newTitle)
         {
