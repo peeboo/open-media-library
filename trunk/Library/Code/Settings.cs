@@ -28,6 +28,8 @@ namespace Library
             SetupUILanguage();
             Utilities.DebugLine("[Settings] Loading Trailers Settings");
             SetupTrailers();
+            Utilities.DebugLine("[Settings] Loading Filter Settings");
+            SetupFilters();
         }
 
         private void SaveMountingTools()
@@ -51,6 +53,26 @@ namespace Library
                 _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
             });
         }
+
+        private void SaveFilterSettings()
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                _omlSettings.ShowFilterActors = (bool)_showFilterActors.Chosen;
+                _omlSettings.ShowFilterCountry = (bool)_showFilterCountry.Chosen;
+                _omlSettings.ShowFilterDateAdded = (bool)_showFilterDateAdded.Chosen;
+                _omlSettings.ShowFilterDirectors = (bool)_showFilterDirectors.Chosen;
+                _omlSettings.ShowFilterFormat = (bool)_showFilterFormat.Chosen;
+                _omlSettings.ShowFilterGenres = (bool)_showFilterGenres.Chosen;
+                _omlSettings.ShowFilterParentalRating = (bool)_showFilterParentalRating.Chosen;
+                _omlSettings.ShowFilterRuntime = (bool)_showFilterRuntime.Chosen;
+                _omlSettings.ShowFilterTags = (bool)_showFilterTags.Chosen;
+                _omlSettings.ShowFilterUserRating = (bool)_showFilterUserRating.Chosen;
+                _omlSettings.ShowFilterYear = (bool)_showFilterYear.Chosen;
+                _omlSettings.ShowFilterTrailers = (bool)_showFilterTrailers.Chosen;
+            });
+        }
+        
         private void SaveMovieSettings()
         {
             OMLApplication.ExecuteSafe(delegate
@@ -86,6 +108,7 @@ namespace Library
             SaveMovieSettings();
             SaveUILanguage();
             SaveTrailers();
+            SaveFilterSettings();
 
             OMLApplication.ExecuteSafe(delegate
             {
@@ -181,6 +204,23 @@ namespace Library
             _trailersDefinition.Options = trailerDefinitionOptions;
             _trailersDefinition.Chosen = _omlSettings.TrailersDefinition.ToString();
         }
+
+        private void SetupFilters()
+        {
+             _showFilterActors.Chosen = _omlSettings.ShowFilterActors;
+             _showFilterCountry.Chosen = _omlSettings.ShowFilterCountry;
+             _showFilterDateAdded.Chosen = _omlSettings.ShowFilterDateAdded;
+             _showFilterDirectors.Chosen = _omlSettings.ShowFilterDirectors;
+             _showFilterFormat.Chosen = _omlSettings.ShowFilterFormat;
+             _showFilterGenres.Chosen = _omlSettings.ShowFilterGenres;
+             _showFilterParentalRating.Chosen = _omlSettings.ShowFilterParentalRating;
+             _showFilterRuntime.Chosen = _omlSettings.ShowFilterRuntime;
+             _showFilterTags.Chosen = _omlSettings.ShowFilterTags;
+             _showFilterUserRating.Chosen = _omlSettings.ShowFilterUserRating;
+             _showFilterYear.Chosen = _omlSettings.ShowFilterYear;
+             _showFilterTrailers.Chosen = _omlSettings.ShowFilterTrailers;
+        }
+
         private void SetupUILanguage()
         {
             string selected = null;
@@ -329,5 +369,79 @@ namespace Library
         Choice _ImageMountingSelection = new Choice();
         Choice _trailersDefinition = new Choice();
         Choice _filtersToShow = new Choice();
+
+        BooleanChoice _showFilterGenres = new BooleanChoice();
+
+        public BooleanChoice ShowFilterGenres
+        {
+            get { return _showFilterGenres; }
+        }
+        BooleanChoice _showFilterDirectors = new BooleanChoice();
+
+        public BooleanChoice ShowFilterDirectors
+        {
+            get { return _showFilterDirectors; }
+        }
+        BooleanChoice _showFilterActors = new BooleanChoice();
+
+        public BooleanChoice ShowFilterActors
+        {
+            get { return _showFilterActors; }
+        }
+        BooleanChoice _showFilterRuntime = new BooleanChoice();
+
+        public BooleanChoice ShowFilterRuntime
+        {
+            get { return _showFilterRuntime; }
+        }
+        BooleanChoice _showFilterCountry = new BooleanChoice();
+
+        public BooleanChoice ShowFilterCountry
+        {
+            get { return _showFilterCountry; }
+        }
+        BooleanChoice _showFilterParentalRating = new BooleanChoice();
+
+        public BooleanChoice ShowFilterParentalRating
+        {
+            get { return _showFilterParentalRating; }
+           
+        }
+        BooleanChoice _showFilterTags = new BooleanChoice();
+
+        public BooleanChoice ShowFilterTags
+        {
+            get { return _showFilterTags; }
+        }
+        BooleanChoice _showFilterUserRating = new BooleanChoice();
+
+        public BooleanChoice ShowFilterUserRating
+        {
+            get { return _showFilterUserRating; }
+        }
+        BooleanChoice _showFilterYear = new BooleanChoice();
+
+        public BooleanChoice ShowFilterYear
+        {
+            get { return _showFilterYear; }
+        }
+        BooleanChoice _showFilterDateAdded = new BooleanChoice();
+
+        public BooleanChoice ShowFilterDateAdded
+        {
+            get { return _showFilterDateAdded; }
+        }
+        BooleanChoice _showFilterFormat = new BooleanChoice();
+
+        public BooleanChoice ShowFilterFormat
+        {
+            get { return _showFilterFormat; }
+        }
+        BooleanChoice _showFilterTrailers = new BooleanChoice();
+
+        public BooleanChoice ShowFilterTrailers
+        {
+            get { return _showFilterTrailers; }
+        }
     }
 }

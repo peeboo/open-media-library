@@ -200,10 +200,10 @@
                     <!-- Tabs -->
                     <Panel Name="TabsPanel" Navigation="ContainHorizontal">
                         <Children>
-                            <me:Pivot Model="[Tabs]" OMLFont="Calibri, 14" OMLFocusFont="Calibri, 16"/>
+                            <me:Pivot Model="[Tabs]" OMLFont="Calibri, 18" OMLFocusFont="Calibri, 20"/>
                         </Children>
                         <LayoutInput>
-                            <FormLayoutInput Left="Parent,0.3" Top="TopPanel,1" />
+                            <FormLayoutInput Left="Parent,0.1" Top="TopPanel,1" />
                         </LayoutInput>
 
                     </Panel>
@@ -360,9 +360,93 @@
                             </Panel>
 
                             <!-- Filters -->
-                            <Panel Name="Filters" Visible="false" Navigation="ContainHorizontal" Layout="VerticalFlow">
+                            <Panel Name="Filters" Visible="false" Navigation="PreferFocusOrder" Layout="VerticalFlow" FocusOrder="0" >
                                 <Children>
-                                    <Text Content="Select which filters to show on main menu" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                                 
+                                  <Panel Layout="HorizontalFlow" FocusOrder="1">
+                                    <Children>
+                                      <c:SimpleCheckbox Name="ShowFilterActors" Checked="[Settings.ShowFilterActors]" Margins="0,0,0,0" />
+                                      <Text Content="Actors" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                    </Children>
+                                  </Panel>
+                                  
+                                  <Panel Layout="HorizontalFlow" FocusOrder="2">
+                                    <Children>
+                                      <c:SimpleCheckbox Name="ShowFilterDirectors" Checked="[Settings.ShowFilterDirectors]" Margins="0,0,0,0" />
+                                      <Text Content="Directors" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                    </Children>
+                                  </Panel>
+
+                                  <Panel Layout="HorizontalFlow" FocusOrder="3">
+                                    <Children>
+                                      <c:SimpleCheckbox Name="ShowFilterGenres" Checked="[Settings.ShowFilterGenres]" Margins="0,0,0,0" />
+                                      <Text Content="Genres" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                    </Children>
+                                  </Panel>
+
+                                  <Panel Layout="HorizontalFlow" FocusOrder="4">
+                                    <Children>
+                                      <c:SimpleCheckbox Name="ShowFilterRuntime" Checked="[Settings.ShowFilterRuntime]" Margins="0,0,0,0" />
+                                      <Text Content="Runtime" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                    </Children>
+                                  </Panel>
+
+                                  <Panel Layout="HorizontalFlow" FocusOrder="5">
+                                    <Children>
+                                      <c:SimpleCheckbox Name="ShowFilterCountry" Checked="[Settings.ShowFilterCountry]" Margins="0,0,0,0" />
+                                      <Text Content="Country" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                    </Children>
+                                  </Panel>
+
+                                  <Panel Layout="HorizontalFlow" FocusOrder="6">
+                                    <Children>
+                                      <c:SimpleCheckbox Name="ShowFilterParentalRating" Checked="[Settings.ShowFilterParentalRating]" Margins="0,0,0,0" />
+                                      <Text Content="Parental Rating" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                    </Children>
+                                  </Panel>
+
+                                  <Panel Layout="HorizontalFlow" FocusOrder="7">
+                                    <Children>
+                                      <c:SimpleCheckbox Name="ShowFilterTags" Checked="[Settings.ShowFilterTags]" Margins="0,0,0,0" />
+                                      <Text Content="Tags" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                    </Children>
+                                  </Panel>
+
+                                  <Panel Layout="HorizontalFlow" FocusOrder="8">
+                                    <Children>
+                                      <c:SimpleCheckbox Name="ShowFilterUserRating" Checked="[Settings.ShowFilterUserRating]" Margins="0,0,0,0" />
+                                      <Text Content="User Rating" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                    </Children>
+                                  </Panel>
+
+                                  <Panel Layout="HorizontalFlow" FocusOrder="9">
+                                    <Children>
+                                      <c:SimpleCheckbox Name="ShowFilterYear" Checked="[Settings.ShowFilterYear]" Margins="0,0,0,0" />
+                                      <Text Content="Release Year" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                    </Children>
+                                  </Panel>
+
+                                  <Panel Layout="HorizontalFlow" FocusOrder="10">
+                                    <Children>
+                                      <c:SimpleCheckbox Name="ShowFilterDateAdded" Checked="[Settings.ShowFilterDateAdded]" Margins="0,0,0,0" />
+                                      <Text Content="Date Added" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                    </Children>
+                                  </Panel>
+
+                                  <Panel Layout="HorizontalFlow" FocusOrder="11">
+                                    <Children>
+                                      <c:SimpleCheckbox Name="ShowFilterFormat" Checked="[Settings.ShowFilterFormat]" Margins="0,0,0,0" />
+                                      <Text Content="Video Format" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                    </Children>
+                                  </Panel>
+
+                                  <Panel Layout="HorizontalFlow" FocusOrder="12">
+                                    <Children>
+                                      <c:SimpleCheckbox Name="ShowFilterTrailers" Checked="[Settings.ShowFilterTrailers]" Margins="0,0,0,0" />
+                                      <Text Content="Trailers" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                    </Children>
+                                  </Panel>
+
                                 </Children>
                                 <LayoutInput>
                                     <FormLayoutInput Vertical="Center" Horizontal="Center"/>
@@ -381,5 +465,6 @@
     </UI>
 
     <Font Name="Font" FontName="global://me:RegularFontName" FontSize="16" />
+    <Font Name="SmallFont" FontName="global://me:RegularFontName" FontSize="16" />
     <Image Name="ListboxNoFocus" Source="resx://Library/Library.Resources/ListboxNoFocus" />
 </Mcml>

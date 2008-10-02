@@ -239,7 +239,10 @@ namespace Library
 
             foreach (string filterName in filtersToShow)
             {
-                _categories.Add(new FilterCommand(Filters[filterName]));
+                if (Filters.ContainsKey(filterName))
+                {
+                    _categories.Add(new FilterCommand(Filters[filterName]));
+                }
             }
             _categoryChoice = new Choice(this, "Categories", _categories);
         }
@@ -247,21 +250,21 @@ namespace Library
         private void Initialize(TitleCollection col)
         {
             DateTime start = DateTime.Now;
-
+           
             _filters.Add(Filter.Settings, new Filter(Filter.Settings, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
-            _filters.Add(Filter.Actor, new Filter(Filter.Actor,this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
-            _filters.Add(Filter.Director, new Filter(Filter.Director, this, Properties.Settings.Default.DirectorView, true, Properties.Settings.Default.DirectorSort));
-            _filters.Add(Filter.Genres, new Filter(Filter.Genres, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.GenreSort));
-            _filters.Add(Filter.Year, new Filter(Filter.Year, this, Properties.Settings.Default.YearView, true, Properties.Settings.Default.YearSort));
-            _filters.Add(Filter.DateAdded, new Filter(Filter.DateAdded, this, Properties.Settings.Default.DateAddedView, false, Properties.Settings.Default.DateAddedSort));
-            _filters.Add(Filter.Runtime, new Filter(Filter.Runtime, this, GalleryView.List, false, String.Empty));
-            _filters.Add(Filter.UserRating, new Filter(Filter.UserRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.UserRatingSort));
-            _filters.Add(Filter.VideoFormat, new Filter(Filter.VideoFormat, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
+            if (Properties.Settings.Default.ShowFilterActors) _filters.Add(Filter.Actor, new Filter(Filter.Actor, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
+            if (Properties.Settings.Default.ShowFilterDirectors) _filters.Add(Filter.Director, new Filter(Filter.Director, this, Properties.Settings.Default.DirectorView, true, Properties.Settings.Default.DirectorSort));
+            if (Properties.Settings.Default.ShowFilterGenres) _filters.Add(Filter.Genres, new Filter(Filter.Genres, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.GenreSort));
+            if (Properties.Settings.Default.ShowFilterYear) _filters.Add(Filter.Year, new Filter(Filter.Year, this, Properties.Settings.Default.YearView, true, Properties.Settings.Default.YearSort));
+            if (Properties.Settings.Default.ShowFilterDateAdded) _filters.Add(Filter.DateAdded, new Filter(Filter.DateAdded, this, Properties.Settings.Default.DateAddedView, false, Properties.Settings.Default.DateAddedSort));
+            if (Properties.Settings.Default.ShowFilterRuntime) _filters.Add(Filter.Runtime, new Filter(Filter.Runtime, this, GalleryView.List, false, String.Empty));
+            if (Properties.Settings.Default.ShowFilterUserRating) _filters.Add(Filter.UserRating, new Filter(Filter.UserRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.UserRatingSort));
+            if (Properties.Settings.Default.ShowFilterFormat) _filters.Add(Filter.VideoFormat, new Filter(Filter.VideoFormat, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
 
-            _filters.Add(Filter.ParentRating, new Filter(Filter.ParentRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
-            _filters.Add(Filter.Tags, new Filter(Filter.Tags, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
-            _filters.Add(Filter.Country, new Filter(Filter.Country, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
-            _filters.Add(Filter.Trailers, new Filter(Filter.Trailers, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
+            if (Properties.Settings.Default.ShowFilterParentalRating) _filters.Add(Filter.ParentRating, new Filter(Filter.ParentRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
+            if (Properties.Settings.Default.ShowFilterTags) _filters.Add(Filter.Tags, new Filter(Filter.Tags, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
+            if (Properties.Settings.Default.ShowFilterCountry) _filters.Add(Filter.Country, new Filter(Filter.Country, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
+            if (Properties.Settings.Default.ShowFilterTrailers) _filters.Add(Filter.Trailers, new Filter(Filter.Trailers, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
             
             _jumpInListText = new EditableText(this);
             _jumpInListText.Value = String.Empty;
@@ -341,61 +344,96 @@ namespace Library
 
             // update the filters
             Title title = movie.TitleObject;
-            foreach (Person p in title.Directors)
+
+            if (Filters.ContainsKey(Filter.Director) )
             {
-                if( p.full_name.Trim().Length == 0 )
-                    Filters[Filter.Director].AddMovie("Unknown director", movie);
-                else
-                    Filters[Filter.Director].AddMovie(p.full_name, movie);
+                foreach (Person p in title.Directors)
+                {
+                    if (p.full_name.Trim().Length == 0)
+                        Filters[Filter.Director].AddMovie("Unknown director", movie);
+                    else
+                        Filters[Filter.Director].AddMovie(p.full_name, movie);
+                }
             }
 
-            foreach ( KeyValuePair<string, string> kvp in title.ActingRoles)
+
+            if (Filters.ContainsKey(Filter.Actor))
             {
-                if( kvp.Key.Trim().Length == 0 )
-                    Filters[Filter.Actor].AddMovie("Unknown actor", movie);
-                else
-                    Filters[Filter.Actor].AddMovie(kvp.Key, movie);
-            }
-            
-            
-            foreach (string genre in title.Genres)
-            {
-                if( genre.Trim().Length == 0)
-                    Filters[Filter.Genres].AddMovie("Not Classified", movie);
-                else
-                    Filters[Filter.Genres].AddMovie(genre, movie);
+                foreach (KeyValuePair<string, string> kvp in title.ActingRoles)
+                {
+                    if (kvp.Key.Trim().Length == 0)
+                        Filters[Filter.Actor].AddMovie("Unknown actor", movie);
+                    else
+                        Filters[Filter.Actor].AddMovie(kvp.Key, movie);
+                }
             }
 
-            Filters[Filter.Year].AddMovie(Convert.ToString(title.ReleaseDate.Year), movie);
-            AddDateAddedFilter(movie);
-
-            if( title.UserStarRating == 0 )
-                Filters[Filter.UserRating].AddMovie("Not Rated", movie);
-            else
-                Filters[Filter.UserRating].AddMovie(((double)title.UserStarRating/10).ToString("0.0"), movie);
-            
-            if (title.Disks.Count > 0)
-                Filters[Filter.VideoFormat].AddMovie(title.Disks[0].Format.ToString(), movie);  //Should really do this independently for each disk, but for now, this should be fine
-
-            foreach (string tag in title.Tags)
+            if (Filters.ContainsKey(Filter.Genres))
             {
-                if (tag.Trim().Length == 0)
-                    Filters[Filter.Tags].AddMovie("Not Tagged", movie);
-                else
-                    Filters[Filter.Tags].AddMovie(tag, movie);
+                foreach (string genre in title.Genres)
+                {
+                    if (genre.Trim().Length == 0)
+                        Filters[Filter.Genres].AddMovie("Not Classified", movie);
+                    else
+                        Filters[Filter.Genres].AddMovie(genre, movie);
+                }
             }
 
-            if( title.CountryOfOrigin.Trim().Length == 0 )
-                Filters[Filter.Country].AddMovie("Not Specified", movie);
-            else
-                Filters[Filter.Country].AddMovie(title.CountryOfOrigin, movie);
-            
-            if( title.ParentalRating.Trim().Length == 0 )
-                Filters[Filter.ParentRating].AddMovie("Unspecified", movie);
-            else
-                Filters[Filter.ParentRating].AddMovie(title.ParentalRating, movie);
+            if (Filters.ContainsKey(Filter.Year))
+            {
+                Filters[Filter.Year].AddMovie(Convert.ToString(title.ReleaseDate.Year), movie);
+            }
 
-            AddRuntimeFilter(movie);
+            if (Filters.ContainsKey(Filter.DateAdded))
+            {
+                AddDateAddedFilter(movie);
+            }
+
+            if (Filters.ContainsKey(Filter.UserRating))
+            {
+                if (title.UserStarRating == 0)
+                    Filters[Filter.UserRating].AddMovie("Not Rated", movie);
+                else
+                    Filters[Filter.UserRating].AddMovie(((double)title.UserStarRating / 10).ToString("0.0"), movie);
+            }
+
+            if (Filters.ContainsKey(Filter.VideoFormat))
+            {
+                if (title.Disks.Count > 0)
+                    Filters[Filter.VideoFormat].AddMovie(title.Disks[0].Format.ToString(), movie);  //Should really do this independently for each disk, but for now, this should be fine
+            }
+
+            if (Filters.ContainsKey(Filter.Tags))
+            {
+                foreach (string tag in title.Tags)
+                {
+                    if (tag.Trim().Length == 0)
+                        Filters[Filter.Tags].AddMovie("Not Tagged", movie);
+                    else
+                        Filters[Filter.Tags].AddMovie(tag, movie);
+                }
+            }
+
+            if (Filters.ContainsKey(Filter.Country))
+            {
+                if( title.CountryOfOrigin.Trim().Length == 0 )
+                    Filters[Filter.Country].AddMovie("Not Specified", movie);
+                else
+                    Filters[Filter.Country].AddMovie(title.CountryOfOrigin, movie);
+            }
+
+            if (Filters.ContainsKey(Filter.ParentRating))
+            {
+                if( title.ParentalRating.Trim().Length == 0 )
+                    Filters[Filter.ParentRating].AddMovie("Unspecified", movie);
+                else
+                    Filters[Filter.ParentRating].AddMovie(title.ParentalRating, movie);
+            }
+
+            if (Filters.ContainsKey(Filter.Runtime))
+            {
+                AddRuntimeFilter(movie);
+            }
         }
 
         private void AddDateAddedFilter( MovieItem movie )

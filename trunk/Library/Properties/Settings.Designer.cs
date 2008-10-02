@@ -758,5 +758,149 @@ namespace Library.Properties {
                 this["MainFiltersToShow"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilterGenres {
+            get {
+                return ((bool)(this["ShowFilterGenres"]));
+            }
+            set {
+                this["ShowFilterGenres"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilterDirectors {
+            get {
+                return ((bool)(this["ShowFilterDirectors"]));
+            }
+            set {
+                this["ShowFilterDirectors"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilterActors {
+            get {
+                return ((bool)(this["ShowFilterActors"]));
+            }
+            set {
+                this["ShowFilterActors"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilterRuntime {
+            get {
+                return ((bool)(this["ShowFilterRuntime"]));
+            }
+            set {
+                this["ShowFilterRuntime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilterCountry {
+            get {
+                return ((bool)(this["ShowFilterCountry"]));
+            }
+            set {
+                this["ShowFilterCountry"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilterParentalRating {
+            get {
+                return ((bool)(this["ShowFilterParentalRating"]));
+            }
+            set {
+                this["ShowFilterParentalRating"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilterYear {
+            get {
+                return ((bool)(this["ShowFilterYear"]));
+            }
+            set {
+                this["ShowFilterYear"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilterTags {
+            get {
+                return ((bool)(this["ShowFilterTags"]));
+            }
+            set {
+                this["ShowFilterTags"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilterUserRating {
+            get {
+                return ((bool)(this["ShowFilterUserRating"]));
+            }
+            set {
+                this["ShowFilterUserRating"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilterDateAdded {
+            get {
+                return ((bool)(this["ShowFilterDateAdded"]));
+            }
+            set {
+                this["ShowFilterDateAdded"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilterFormat {
+            get {
+                return ((bool)(this["ShowFilterFormat"]));
+            }
+            set {
+                this["ShowFilterFormat"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilterTrailers {
+            get {
+                return ((bool)(this["ShowFilterTrailers"]));
+            }
+            set {
+                this["ShowFilterTrailers"] = value;
+            }
+        }
     }
 }
