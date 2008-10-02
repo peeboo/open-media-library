@@ -77,7 +77,10 @@ namespace OMLTestSuite
             Assert.AreEqual("Portuguese", t.Subtitles[5]);
             Assert.AreEqual("Apple Films", t.Studio);
             Assert.AreEqual(1, t.Disks.Count); // this is because none of the files exist but it finds a wpl file the original source location
-
+            Assert.AreEqual("Nudity, hahaha", t.ParentalRatingReason);
+            Assert.AreEqual("NTSC", t.VideoStandard);
+            Assert.AreEqual(1, t.Directors.Count);
+            Assert.AreEqual("Geoff Wonfor", ((Person)t.Directors[0]).full_name);
         }
 
         [Test]
