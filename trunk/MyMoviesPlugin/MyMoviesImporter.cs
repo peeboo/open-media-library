@@ -272,6 +272,9 @@ namespace MyMoviesPlugin
                         else
                             Utilities.DebugLine("[MyMoviesImporter] Error parsing rating: {0} not a number", ratingId);
                     }
+                    string ratingReason = GetChildNodesValue(navigator, "Description");
+                    if (!string.IsNullOrEmpty(ratingReason))
+                        newTitle.ParentalRatingReason = ratingReason;
                 }
                 navigator.MoveToParent();
             }
@@ -296,7 +299,7 @@ namespace MyMoviesPlugin
                             string role = GetChildNodesValue(localNav, "Role");
                             string type = GetChildNodesValue(localNav, "Type");
 
-                            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(role) && !string.IsNullOrEmpty(type))
+                            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(type))
                             {
                                 switch (type)
                                 {
@@ -344,6 +347,7 @@ namespace MyMoviesPlugin
 
             newTitle.CountryOfOrigin = GetChildNodesValue(navigator, "Country");
             newTitle.AspectRatio = GetChildNodesValue(navigator, "AspectRatio");
+            newTitle.VideoStandard = GetChildNodesValue(navigator, "VideoStandard");
             newTitle.OriginalName = GetChildNodesValue(navigator, "OriginalTitle");
             newTitle.SortName = GetChildNodesValue(navigator, "SortTitle");
 
