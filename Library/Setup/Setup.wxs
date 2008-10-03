@@ -94,6 +94,15 @@
                         <File Name="MEncoder.exe"
                               Source="..\..\OMLTranscoder\mencoder-1.0rc2-4.2.1.exe" Checksum="no" />
                     </Component>
+                    <Component Id="OMLEngineService.exe" Guid="12988468-3DCC-496a-B0B3-6982FFDE25B9" DiskId="1">
+                        <File Name="OMLEngineService.exe"
+                              Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe" Checksum="yes"/>
+                        <ServiceInstall Id="OMLEngineService" Name="OMLEngineService" DisplayName="OMLEngineService"
+                                        Account="NT AUTHORITY\NetworkService" Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
+                                        ErrorControl="normal"/>
+                        <ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
+                                        Start="install" Stop="both" Wait="yes" Remove="uninstall"/>
+                    </Component>
                     <Directory Id="PLUGINSDIRECTORY" Name="Plugins">
                         <Component Id="DVDProfilerPlugin.dll" Guid="b7f12ef4-e500-4d0e-bfbe-d77eae64176c" DiskId="1">
                             <File Name="DVDProfilerPlugin.dll"
@@ -182,7 +191,7 @@
                 <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey" Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\Services\Movies\{543d0438-b10d-43d8-a20d-f0c96db4e6bd}" />
             </Component>
         </DirectoryRef>
-
+        
         <!-- This is a list of all components installed as a part of this product. A component is the        -->
 		<!-- smallest atomic unit of installation in Windows Installer. Each component must have a unique    -->
 		<!-- GUID. In general, it is recommended that each file be installed by a separate component in      -->
@@ -199,6 +208,7 @@
             <ComponentRef Id="OMLTranscoder.dll"/>
 			<ComponentRef Id="Registration.xml" />
 			<ComponentRef Id="Application.png" />
+            <ComponentRef Id="OMLEngineService.exe"/>
 			
 			<!-- Plugins -->
             <ComponentRef Id="DVDProfilerPlugin.dll" />
