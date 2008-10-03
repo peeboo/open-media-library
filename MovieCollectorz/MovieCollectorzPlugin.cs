@@ -293,6 +293,7 @@ namespace MovieCollectorzPlugin
                                         }
                                         catch (Exception ex)
                                         {
+                                            Utilities.DebugLine("MovieCollectorzPlugin: {0}", ex);
                                         }
                                     }
                                 }
