@@ -96,6 +96,15 @@
                         <File Name="MEncoder.exe"
                               Source="..\..\OMLTranscoder\mencoder-1.0rc2-4.2.1.exe" Checksum="no" />
                     </Component>
+                    <Component Id="OMLEngineService.exe" Guid="931B5A68-01AF-440a-8B1C-503979447A1F" Win64="yes" DiskId="1">
+                        <File Name="OMLEngineService.exe"
+                              Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe" Checksum="yes"/>
+                        <ServiceInstall Id="OMLEngineService" Name="OMLEngineService" DisplayName="OMLEngineService"
+                                        Account="NT AUTHORITY\NetworkService" Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
+                                        ErrorControl="normal"/>
+                        <ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
+                                        Start="install" Stop="both" Wait="yes" Remove="uninstall"/>
+                    </Component>
                     <Directory Id="PLUGINSDIRECTORY" Name="Plugins">
                         <Component Id="DVDProfilerPlugin.dll" Guid="b7f12ef4-e500-4d0e-bfbe-d77eae64176c" Win64="yes" DiskId="1">
                             <File Name="DVDProfilerPlugin.dll"
@@ -203,6 +212,7 @@
             <ComponentRef Id="OMLTranscoder.dll"/>
             <ComponentRef Id="Registration.xml" />
             <ComponentRef Id="Application.png" />
+            <ComponentRef Id="OMLEngineService.exe"/>
 
             <!-- Plugins -->
             <ComponentRef Id="DVDProfilerPlugin.dll" />
