@@ -56,7 +56,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtName.Location = new System.Drawing.Point(16, 30);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(285, 20);
+            this.txtName.Size = new System.Drawing.Size(287, 20);
             this.txtName.TabIndex = 1;
             // 
             // label2
@@ -74,13 +74,13 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPath.Location = new System.Drawing.Point(16, 72);
             this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(226, 20);
+            this.txtPath.Size = new System.Drawing.Size(228, 20);
             this.txtPath.TabIndex = 3;
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(248, 70);
+            this.button1.Location = new System.Drawing.Point(250, 70);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(53, 23);
             this.button1.TabIndex = 4;
@@ -91,7 +91,7 @@
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCancel.Location = new System.Drawing.Point(160, 143);
+            this.btnCancel.Location = new System.Drawing.Point(160, 211);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 5;
@@ -102,7 +102,7 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnOK.Location = new System.Drawing.Point(79, 143);
+            this.btnOK.Location = new System.Drawing.Point(79, 211);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 6;
@@ -135,28 +135,32 @@
             // 
             // btnExtraOptions
             // 
-            this.btnExtraOptions.Location = new System.Drawing.Point(118, 104);
+            this.btnExtraOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExtraOptions.Location = new System.Drawing.Point(191, 104);
             this.btnExtraOptions.Name = "btnExtraOptions";
-            this.btnExtraOptions.Size = new System.Drawing.Size(75, 23);
+            this.btnExtraOptions.Size = new System.Drawing.Size(112, 23);
             this.btnExtraOptions.TabIndex = 11;
-            this.btnExtraOptions.Text = "Options";
+            this.btnExtraOptions.Text = "Extender Menu";
             this.btnExtraOptions.UseVisualStyleBackColor = true;
             this.btnExtraOptions.Click += new System.EventHandler(this.btnExtraOptions_Click);
             // 
             // txtExtraOptions
             // 
-            this.txtExtraOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.txtExtraOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExtraOptions.Location = new System.Drawing.Point(202, 106);
+            this.txtExtraOptions.Enabled = false;
+            this.txtExtraOptions.Location = new System.Drawing.Point(12, 130);
+            this.txtExtraOptions.Multiline = true;
             this.txtExtraOptions.Name = "txtExtraOptions";
-            this.txtExtraOptions.Size = new System.Drawing.Size(99, 20);
+            this.txtExtraOptions.Size = new System.Drawing.Size(291, 75);
             this.txtExtraOptions.TabIndex = 12;
             // 
             // DiskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(314, 178);
+            this.ClientSize = new System.Drawing.Size(316, 246);
             this.Controls.Add(this.txtExtraOptions);
             this.Controls.Add(this.btnExtraOptions);
             this.Controls.Add(this.rbFolder);

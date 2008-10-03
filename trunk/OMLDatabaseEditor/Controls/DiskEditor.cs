@@ -128,14 +128,14 @@ namespace OMLDatabaseEditor.Controls
 
         private void btnExtraOptions_Click(object sender, EventArgs e)
         {
-            ExtenderExtraOptions dlg = new ExtenderExtraOptions();
+            ExtenderDVDMenu dlg = new ExtenderDVDMenu();
             dlg.Disk = new Disk(this.FileName, this.Path, this.Format, this.ExtraOptions);
             if (dlg.Disk.DVDDiskInfo == null)
                 return;
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                this.ExtraOptions = dlg.MediaSource.ExtraOptions;
+                this.ExtraOptions = dlg.Disk.ExtraOptions;
             }
         }
 

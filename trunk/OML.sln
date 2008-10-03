@@ -81,6 +81,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLTranslator", "OMLTransla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MC-State", "MC-State\MC-State.csproj", "{F2C2F50E-CC41-49CE-B8B6-4B633F67F26A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMoviesImport", "MyMoviesImport\MyMoviesImport.csproj", "{3D2B1107-5479-45DC-9493-FE351A3C778A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
