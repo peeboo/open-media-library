@@ -6,6 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.ServiceModel;
 using OMLEngineService;
+using System.Security.AccessControl;
 
 namespace OMLEngine
 {
@@ -186,8 +187,8 @@ namespace OMLEngine
     public class TitleCollection : ISerializable
     {
         private List<Title> _list = new List<Title>();
-        private SourceDatabase _source_database_to_use;
-        private string _database_filename;
+        static SourceDatabase _source_database_to_use;
+        static string _database_filename;
         private Dictionary<string, Title> _moviesByFilename = new Dictionary<string, Title>();
         private Dictionary<int, Title> _moviesByItemId = new Dictionary<int, Title>();
 
@@ -354,9 +355,14 @@ namespace OMLEngine
         public TitleCollection()
         {
             Utilities.DebugLine("[TitleCollection] TitleCollection()");
+        }
+
+        static TitleCollection()
+        {
             _source_database_to_use = SourceDatabase.OML;
             _database_filename = Path.Combine(FileSystemWalker.PublicRootDirectory, @"oml.dat");
         }
+
         /// <summary>
         /// Default destructor
         /// </summary>
@@ -419,6 +425,16 @@ namespace OMLEngine
             return _loadTitleCollectionFromOML();
         }
 
+        public static void checkACL()
+        {
+            if (File.Exists(_database_filename) == false)
+                return;
+
+            var fSecurity = File.GetAccessControl(_database_filename);
+            fSecurity.AddAccessRule(new FileSystemAccessRule("Network Service", FileSystemRights.FullControl, AccessControlType.Allow));
+            File.SetAccessControl(_database_filename, fSecurity);
+        }
+
         /// <summary>
         /// Loads data from OML Database
         /// </summary>
@@ -470,8 +486,6 @@ namespace OMLEngine
             byte[] hash = md5.ComputeHash(inputBytes);
             return (Convert.ToBase64String(hash));            
         }
-
-
 
         #region serialization methods
         public TitleCollection(SerializationInfo info, StreamingContext ctxt)
