@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
+using System.ServiceModel;
 using System.ServiceProcess;
 using System.Timers;
-using System.Diagnostics;
+
 using OMLEngine;
-using System.ServiceModel;
 
 namespace OMLEngineService
 {
@@ -11,7 +12,7 @@ namespace OMLEngineService
     {
         private TitleCollection tc;
         private Timer _timer;
-        private ServiceHost _serviceHost;
+        private ServiceHost _transcodingServiceHost, _titleCollectionServiceHost;
 
         public enum Commands
         {
@@ -57,18 +58,12 @@ namespace OMLEngineService
         #region overridden control methods (start, stop, pause, continue, etc)
         protected override void OnStart(string[] args)
         {
+//            System.Diagnostics.Debugger.Launch();
             WriteToLog(EventLogEntryType.Information, "OMLEngineService Start");
             _timer.Start();
 
-            try
-            {
-                _serviceHost = new ServiceHost(typeof(TranscodingService));
-                _serviceHost.Open();
-            }
-            catch (Exception ex)
-            {
-                WriteToLog(EventLogEntryType.Error, "OnStart: {0}", ex);
-            }
+            _transcodingServiceHost = WCFUtilites.StartService(EventSource, typeof(TranscodingService));
+            _titleCollectionServiceHost = WCFUtilites.StartService(EventSource, typeof(TitleCollectionAPI));
         }
 
         protected override void OnContinue()
@@ -86,18 +81,8 @@ namespace OMLEngineService
         protected override void OnStop()
         {
             _timer.Stop();
-            try
-            {
-                if (_serviceHost != null)
-                {
-                    _serviceHost.Close();
-                    _serviceHost = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                WriteToLog(EventLogEntryType.Error, "OnStop: {0}", ex);
-            }
+            WCFUtilites.StopService(EventSource, ref _transcodingServiceHost);
+            WCFUtilites.StopService(EventSource, ref _titleCollectionServiceHost);
             WriteToLog(EventLogEntryType.Information, "OMLEngineService Stop");
         }
 
@@ -108,17 +93,10 @@ namespace OMLEngineService
         }
         #endregion
 
+        const string EventSource = "OMLEngineService";
         internal static void WriteToLog(EventLogEntryType type, string msg, params object[] args)
         {
-            const string source = @"OMLEngineService";
-
-            if (!EventLog.SourceExists(source))
-                EventLog.CreateEventSource(source, string.Empty);
-
-            msg = string.Format(msg, args);
-            EventLog evt = new EventLog(string.Empty) { Source = source };
-            evt.WriteEntry(msg + ": " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString(), type);
-            Utilities.DebugLine(msg);
+            WCFUtilites.WriteToLog(EventSource, type, msg, args);
         }
 
         protected void _timer_Elapsed(object sender, ElapsedEventArgs e)

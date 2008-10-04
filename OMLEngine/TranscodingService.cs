@@ -75,16 +75,7 @@ namespace OMLEngineService
 
         public static string GetNotifierUri()
         {
-            return string.Format("net.tcp://localhost:{0}/OMLTNS", FreeTcpPort());
-        }
-
-        static int FreeTcpPort()
-        {
-            TcpListener l = new TcpListener(IPAddress.Parse("127.0.0.1"), 0);
-            l.Start();
-            int port = ((IPEndPoint)l.LocalEndpoint).Port;
-            l.Stop();
-            return port;
+            return string.Format("net.tcp://localhost:{0}/OMLTNS", WCFUtilites.FreeTcpPort());
         }
 
         public static void Start()
@@ -94,8 +85,7 @@ namespace OMLEngineService
 
             string uri = GetNotifierUri();
             sHost = new ServiceHost(typeof(TranscodingNotifyingService), new Uri(uri));
-            sHost.Description.Endpoints.Clear();
-            sHost.AddServiceEndpoint(typeof(ITranscodingNotifyingService), NetTcpBinding(), uri);
+            sHost.AddServiceEndpoint(typeof(ITranscodingNotifyingService), WCFUtilites.NetTcpBinding(), uri);
             sHost.Open();
             Utilities.DebugLine("[TranscodingNotifier] Starting WCF notifying service: {0}", GetNotifierUri());
 
@@ -103,29 +93,14 @@ namespace OMLEngineService
                 host.Channel.RegisterNotifyer(uri, true);
         }
 
-        public static NetNamedPipeBinding NetNamedPipeBinding()
-        {
-            var binding = new NetNamedPipeBinding(NetNamedPipeSecurityMode.None);
-            binding.Security.Transport.ProtectionLevel = System.Net.Security.ProtectionLevel.None;
-            return binding;
-        }
-
-        public static NetTcpBinding NetTcpBinding()
-        {
-            var binding = new NetTcpBinding(SecurityMode.None);
-            binding.Security.Transport.ProtectionLevel = System.Net.Security.ProtectionLevel.None;
-            return binding;
-        }
-
         public static MyClientBase<ITranscodingService> NewTranscodingServiceProxy()
         {
-            //return new MyClientBase<ITranscodingService>(NetNamedPipeBinding(), new EndpointAddress("net.pipe://localhost/OMLTS"));
-            return new MyClientBase<ITranscodingService>(NetTcpBinding(), new EndpointAddress("net.tcp://localhost:4321/OMLTS"));
+            return new MyClientBase<ITranscodingService>(WCFUtilites.NetTcpBinding(), new EndpointAddress("net.tcp://localhost:4321/OMLTS"));
         }
 
         public static MyClientBase<ITranscodingNotifyingService> NewTranscodingNotifyingServiceProxy(string uri)
         {
-            return new MyClientBase<ITranscodingNotifyingService>(NetTcpBinding(), new EndpointAddress(uri));
+            return new MyClientBase<ITranscodingNotifyingService>(WCFUtilites.NetTcpBinding(), new EndpointAddress(uri));
         }
 
         public static void Stop()

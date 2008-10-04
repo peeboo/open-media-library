@@ -37,25 +37,4 @@ namespace OMLEngineService
         [OperationContract(IsOneWay = true)]
         void StatusChanged(string key, TranscodingStatus status);
     }
-
-    public class MyClientBase<T> : ClientBase<T>, IDisposable
-      where T : class
-    {
-        //public MyClientBase() : base() { }
-        public MyClientBase(System.ServiceModel.Channels.Binding binding, EndpointAddress endPointAddress) : base(binding, endPointAddress) { }
-        public MyClientBase(string endPoint, string uri) : base(endPoint, uri) { }
-
-        public void Dispose()
-        {
-            if (this.State == CommunicationState.Opened)
-                base.Close();
-        }
-
-        public new T Channel { get { return base.Channel; } }
-
-        public static T GetProxy(System.ServiceModel.Channels.Binding binding, EndpointAddress endPointAddress)
-        {
-            return new MyClientBase<T>(binding, endPointAddress).Channel;
-        }
-    }
 }
