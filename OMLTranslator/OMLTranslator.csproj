@@ -107,10 +107,6 @@
       <Link>TranslatableResources\OMLDatabaseEditor\MetaDataSettings.resx</Link>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\OMLDatabaseEditor\OMLDatabaseEditor.resx">
-      <Link>TranslatableResources\OMLDatabaseEditor\OMLDatabaseEditor.resx</Link>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="..\OMLDatabaseEditor\OptionList.resx">
       <Link>TranslatableResources\OMLDatabaseEditor\OptionList.resx</Link>
       <SubType>Designer</SubType>

@@ -27,6 +27,7 @@ namespace OMLDatabaseEditor.Controls
         private int _itemID = 0;
         private string _titleName = "";
         private string _FrontCoverMenu = "";
+        private bool _notifyChanges = true;
 
         private Title _currentTitle;
 
@@ -55,7 +56,7 @@ namespace OMLDatabaseEditor.Controls
 
         private void _titleChanged(EventArgs e)
         {
-            if (TitleChanged != null && Status != TitleStatus.UnsavedChanges)
+            if (TitleChanged != null && Status != TitleStatus.UnsavedChanges && _notifyChanges)
             {
                 _status = TitleStatus.UnsavedChanges;
                 TitleChanged(this, e);
@@ -64,7 +65,7 @@ namespace OMLDatabaseEditor.Controls
 
         private void _titleNameChanged(EventArgs e)
         {
-            if (TitleNameChanged != null)
+            if (TitleNameChanged != null && _notifyChanges)
             {
                 _titleName = tbName.Text;
                 _status = TitleStatus.UnsavedChanges;
@@ -88,14 +89,89 @@ namespace OMLDatabaseEditor.Controls
 
         public void LoadTitle(Title t)
         {
+            _notifyChanges = false;
             UpdateUIFromTitle(t);
             _currentTitle = t;
+            _status = TitleStatus.Initial;
+            _notifyChanges = true;
         }
 
         public void SaveToTitle(Title t)
         {
             UpdateTitleFromUI(t);
             _savedTitle(EventArgs.Empty);
+        }
+
+        public void ClearTitle()
+        {
+            _notifyChanges = false;
+            _currentTitle = null;
+
+            _itemID = 0;
+
+            // Movie Locations
+            pbFrontCover.Image = null;
+            tbFrontCover.Text = string.Empty;
+            _FrontCoverMenu = string.Empty;
+            pbBackCover.Image = null;
+            tbBackCover.Text = string.Empty;
+
+            lstDisks.Items.Clear();
+
+            // Other
+            tbUPC.Text = string.Empty;
+            tbWebsite.Text = string.Empty;
+            tbWatchedCount.Text = string.Empty;
+            dtpDateAdded.Text = string.Empty;
+
+            tbUserRating.Text = string.Empty;
+            tbSortName.Text = string.Empty;
+
+            // Movie Details
+            tbName.Text = string.Empty;
+            _titleName = string.Empty;
+            tbSummary.Text = string.Empty;
+
+            dtpReleaseDate.Text = string.Empty;
+
+            cbRating.Text = string.Empty;
+            tbRatingReason.Text = string.Empty;
+            tbRunTime.Text = string.Empty;
+            tbOriginalName.Text = string.Empty;
+            tbCountry.Text = string.Empty;
+            tbStudio.Text = string.Empty;
+
+            // Categories
+            grdGenres.Rows.Clear();
+
+            grdTags.Rows.Clear();
+
+            // Credits
+            grdDirectors.Rows.Clear();
+
+            grdWriters.Rows.Clear();
+
+            grdProducers.Rows.Clear();
+
+            grdActors.Rows.Clear();
+
+            grdNonActors.Rows.Clear();
+
+            //File Details
+            cbAspectRatio.Text = string.Empty;
+            cbVideoStandard.Text = string.Empty;
+            //cbVideoFormat.Text = t.VideoFormat;
+            tbVideoResolution.Text = string.Empty;
+
+            grdAudioTracks.Rows.Clear();
+
+            grdSubtitles.Rows.Clear();
+
+            grdExtraFeatures.Rows.Clear();
+
+            grdVideoDetails.Rows.Clear();
+
+            _notifyChanges = true;
         }
 
         private void UpdateUIFromTitle(Title t)

@@ -11,7 +11,8 @@ namespace OMLDatabaseEditor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new OMLDatabaseEditor());
+            Application.Run(new OMLDatabase1Editor());
+            //Application.Run(new MainEditor());
         }
     }
 }
