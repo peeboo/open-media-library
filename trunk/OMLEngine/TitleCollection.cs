@@ -1,15 +1,187 @@
 using System;
-using System.Data;
-using System.IO;
-using System.Diagnostics;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
+using System.ServiceModel;
+using OMLEngineService;
 
 namespace OMLEngine
 {
+    [ServiceContract]
+    public interface ITitleCollectionAPI
+    {
+        [OperationContract]
+        void Add(byte[] t);
+
+        [OperationContract]
+        void Replace(byte[] t);
+
+        [OperationContract]
+        void Remove(int ID);
+
+        [OperationContract]
+        bool ContainsDisks(IEnumerable<Disk> disks);
+
+        [OperationContract]
+        byte[] FindByID(int ID);
+
+        [OperationContract]
+        byte[] FindByDisks(IEnumerable<Disk> disks);
+
+        [OperationContract]
+        IDictionary<int, string> List();
+
+        [OperationContract]
+        void Clean();
+    }
+
+    #region -- ITitleCollectionAPI : Proxy Implementation --
+    public class TitleCollectionAPIProxy
+    {
+        static MyClientBase<ITitleCollectionAPI> ServiceProxy()
+        {
+            return new MyClientBase<ITitleCollectionAPI>(WCFUtilites.NetTcpBinding(), 
+                new EndpointAddress("net.tcp://localhost:4321/OML-TitleCollection"));
+        }
+
+        public void Add(Title t)
+        {
+            using (var host = ServiceProxy())
+                host.Channel.Add(WCFUtilites.Serialize(t));
+        }
+
+        public void Replace(Title t)
+        {
+            using (var host = ServiceProxy())
+                host.Channel.Replace(WCFUtilites.Serialize(t));
+        }
+
+        public void Remove(int ID)
+        {
+            using (var host = ServiceProxy())
+                host.Channel.Remove(ID);
+        }
+
+        public bool ContainsDisks(IEnumerable<Disk> disks)
+        {
+            using (var host = ServiceProxy())
+                return host.Channel.ContainsDisks(disks);
+        }
+
+        public Title FindByID(int ID)
+        {
+            using (var host = ServiceProxy())
+                return WCFUtilites.Deserialize<Title>(host.Channel.FindByID(ID));
+        }
+
+        public Title FindByDisks(IEnumerable<Disk> disks)
+        {
+            using (var host = ServiceProxy())
+                return WCFUtilites.Deserialize<Title>(host.Channel.FindByDisks(disks));
+        }
+
+        public IDictionary<int, string> List()
+        {
+            using (var host = ServiceProxy())
+                return host.Channel.List();
+        }
+
+        public void Clean()
+        {
+            using (var host = ServiceProxy())
+                host.Channel.Clean();
+        }
+    }
+    #endregion
+
+    #region -- ITitleCollectionAPI : Service Host Implementation --
+    public class TitleCollectionAPI : ITitleCollectionAPI
+    {
+        static TitleCollection _list;
+
+        static TitleCollectionAPI()
+        {
+            _list = new TitleCollection();
+            _list.loadTitleCollection();
+            _list.Sort();
+        }
+
+        static void _Save()
+        {
+            _list.saveTitleCollection();
+            _list = new TitleCollection();
+            _list.loadTitleCollection();
+            _list.Sort();
+        }
+
+        public void Add(byte[] _t)
+        {
+            Title t = WCFUtilites.Deserialize<Title>(_t);
+            Utilities.DebugLine("[TitleCollectionAPI] Add({0})", t);
+            _list.Add(t);
+            _Save();
+        }
+
+        public void Replace(byte[] _t)
+        {
+            Title t = WCFUtilites.Deserialize<Title>(_t);
+            Utilities.DebugLine("[TitleCollectionAPI] Replace({0})", t);
+            _list.Replace(t);
+            _Save();
+        }
+
+        public void Remove(int ID)
+        {
+            Utilities.DebugLine("[TitleCollectionAPI] Remove({0})", ID);
+            Title title = WCFUtilites.Deserialize<Title>(FindByID(ID));
+            if (title == null)
+                return;
+
+            _list.Remove(title);
+            _Save();
+        }
+
+        public bool ContainsDisks(IEnumerable<Disk> disks)
+        {
+            Utilities.DebugLine("[TitleCollectionAPI] ContainsDisks({0})", disks);
+            return _list.ContainsDisks(disks);
+        }
+
+        public byte[] FindByID(int ID)
+        {
+            Utilities.DebugLine("[TitleCollectionAPI] FindByID({0}, Found:{1})", ID, _list.MoviesByItemId.ContainsKey(ID));
+            if (_list.MoviesByItemId.ContainsKey(ID) == false)
+                return null;
+
+            return WCFUtilites.Serialize(_list.MoviesByItemId[ID]);
+        }
+
+        public byte[] FindByDisks(IEnumerable<Disk> disks)
+        {
+            Utilities.DebugLine("[TitleCollectionAPI] FindByDisks({0})", disks);
+            return WCFUtilites.Serialize(_list.FindByDisks(disks));
+        }
+
+        public IDictionary<int, string> List()
+        {
+            Utilities.DebugLine("[TitleCollectionAPI] List() -> #{0}", _list.Count);
+            IDictionary<int, string> ret = new Dictionary<int, string>();
+            foreach (Title t in _list)
+                ret[t.InternalItemID] = t.Name;
+            return ret;
+        }
+
+        public void Clean()
+        {
+            Utilities.DebugLine("[TitleCollectionAPI] Clean()");
+            _list = new TitleCollection();
+            _list.saveTitleCollection();
+        }
+    }
+    #endregion
+
     [Serializable()]
     public class TitleCollection : ISerializable
     {
@@ -29,20 +201,20 @@ namespace OMLEngine
             get { return _moviesByItemId; }
         }
 
-        public Title FindByDisks(List<Disk> disks)
+        public Title FindByDisks(IEnumerable<Disk> disks)
         {
             string hash = GetDiskHash(disks);
-            if (_moviesByFilename.ContainsKey(hash))
-            {
+            if (hash != null && _moviesByFilename.ContainsKey(hash))
                 return _moviesByFilename[hash];
-            }
             return null;
         }
 
-        public bool ContainsDisks(List<Disk> disks)
+        public bool ContainsDisks(IEnumerable<Disk> disks)
         {
-            if (disks.Count == 0) return false;
-            return (_moviesByFilename.ContainsKey(GetDiskHash(disks)));
+            string hash = GetDiskHash(disks);
+            if (hash == null)
+                return false;
+            return _moviesByFilename.ContainsKey(hash);
         }
 
         public List<Title>.Enumerator GetEnumerator()
@@ -99,7 +271,7 @@ namespace OMLEngine
 
         }
 
-        private string GetDiskHash(List<Disk> disks)
+        private string GetDiskHash(IEnumerable<Disk> disks)
         {
             string temp = "";
             foreach (Disk d in disks)
@@ -112,6 +284,8 @@ namespace OMLEngine
                 // don't care about the disk name
                 temp += d.Path.ToUpper();
             }
+            if (temp == "")
+                return null;
             return CalculateMD5Hash(temp);
         }
 
