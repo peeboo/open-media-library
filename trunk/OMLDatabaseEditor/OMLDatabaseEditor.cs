@@ -19,6 +19,8 @@ namespace OMLDatabaseEditor
 
         public OMLDatabaseEditor()
         {
+            TitleCollection.checkACL();
+
             OMLEngine.Utilities.RawSetup();
 
             InitializeComponent();
