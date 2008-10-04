@@ -1100,6 +1100,7 @@
             this.tbSortName.Name = "tbSortName";
             this.tbSortName.Size = new System.Drawing.Size(369, 21);
             this.tbSortName.TabIndex = 60;
+            this.tbSortName.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // label2
             // 
@@ -1292,13 +1293,13 @@
             this.cmsDatagrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuItemDelete});
             this.cmsDatagrid.Name = "cmsDatagrid";
-            this.cmsDatagrid.Size = new System.Drawing.Size(153, 48);
+            this.cmsDatagrid.Size = new System.Drawing.Size(108, 26);
             this.cmsDatagrid.Click += new System.EventHandler(this.cmsDatagrid_Click);
             // 
             // MenuItemDelete
             // 
             this.MenuItemDelete.Name = "MenuItemDelete";
-            this.MenuItemDelete.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemDelete.Size = new System.Drawing.Size(107, 22);
             this.MenuItemDelete.Text = "Delete";
             // 
             // MediaEditor

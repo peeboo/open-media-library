@@ -52,6 +52,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ComponentFactory.Krypton.Toolkit, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e" />
+
+
+
+
+
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -118,6 +124,18 @@
     <Compile Include="Controls\NonFatalErrors.Designer.cs">
       <DependentUpon>NonFatalErrors.cs</DependentUpon>
     </Compile>
+    <Compile Include="MainEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainEditor.Designer.cs">
+      <DependentUpon>MainEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MetaDataPluginSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MetaDataPluginSelect.Designer.cs">
+      <DependentUpon>MetaDataPluginSelect.cs</DependentUpon>
+    </Compile>
     <Compile Include="MetaDataSearch.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,11 +148,11 @@
     <Compile Include="MetaDataSettings.Designer.cs">
       <DependentUpon>MetaDataSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="OMLDatabaseEditor.cs">
+    <Compile Include="OMLDatabase1Editor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OMLDatabaseEditor.Designer.cs">
-      <DependentUpon>OMLDatabaseEditor.cs</DependentUpon>
+    <Compile Include="OMLDatabase1Editor.Designer.cs">
+      <DependentUpon>OMLDatabase1Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="OptionList.cs">
       <SubType>Form</SubType>
@@ -168,6 +186,14 @@
       <DependentUpon>NonFatalErrors.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="MainEditor.resx">
+      <DependentUpon>MainEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MetaDataPluginSelect.resx">
+      <DependentUpon>MetaDataPluginSelect.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="MetaDataSearch.resx">
       <DependentUpon>MetaDataSearch.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -176,8 +202,8 @@
       <DependentUpon>MetaDataSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="OMLDatabaseEditor.resx">
-      <DependentUpon>OMLDatabaseEditor.cs</DependentUpon>
+    <EmbeddedResource Include="OMLDatabase1Editor.resx">
+      <DependentUpon>OMLDatabase1Editor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="OptionList.resx">
@@ -246,6 +272,8 @@
   <ItemGroup>
     <Content Include="Application.ico" />
     <Content Include="Resources\Application.png" />
+    <Content Include="Resources\movieheader.jpg" />
+    <None Include="Resources\movieheader1.jpg" />
     <None Include="app.config" />
     <None Include="Resources\SaveAllHS.bmp" />
   </ItemGroup>
