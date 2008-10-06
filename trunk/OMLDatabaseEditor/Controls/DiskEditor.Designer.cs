@@ -94,7 +94,7 @@
             this.btnCancel.Location = new System.Drawing.Point(160, 211);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 5;
+            this.btnCancel.TabIndex = 10;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -105,7 +105,7 @@
             this.btnOK.Location = new System.Drawing.Point(79, 211);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 6;
+            this.btnOK.TabIndex = 9;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -117,7 +117,7 @@
             this.rbFile.Location = new System.Drawing.Point(16, 107);
             this.rbFile.Name = "rbFile";
             this.rbFile.Size = new System.Drawing.Size(41, 17);
-            this.rbFile.TabIndex = 9;
+            this.rbFile.TabIndex = 5;
             this.rbFile.TabStop = true;
             this.rbFile.Text = "File";
             this.rbFile.UseVisualStyleBackColor = true;
@@ -128,7 +128,7 @@
             this.rbFolder.Location = new System.Drawing.Point(64, 107);
             this.rbFolder.Name = "rbFolder";
             this.rbFolder.Size = new System.Drawing.Size(48, 17);
-            this.rbFolder.TabIndex = 10;
+            this.rbFolder.TabIndex = 6;
             this.rbFolder.Text = "DVD";
             this.rbFolder.UseVisualStyleBackColor = true;
             this.rbFolder.CheckedChanged += new System.EventHandler(this.rbFolder_CheckedChanged);
@@ -139,7 +139,7 @@
             this.btnExtraOptions.Location = new System.Drawing.Point(191, 104);
             this.btnExtraOptions.Name = "btnExtraOptions";
             this.btnExtraOptions.Size = new System.Drawing.Size(112, 23);
-            this.btnExtraOptions.TabIndex = 11;
+            this.btnExtraOptions.TabIndex = 7;
             this.btnExtraOptions.Text = "Extender Menu";
             this.btnExtraOptions.UseVisualStyleBackColor = true;
             this.btnExtraOptions.Click += new System.EventHandler(this.btnExtraOptions_Click);
@@ -149,12 +149,13 @@
             this.txtExtraOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExtraOptions.Enabled = false;
             this.txtExtraOptions.Location = new System.Drawing.Point(12, 130);
             this.txtExtraOptions.Multiline = true;
             this.txtExtraOptions.Name = "txtExtraOptions";
+            this.txtExtraOptions.ReadOnly = true;
             this.txtExtraOptions.Size = new System.Drawing.Size(291, 75);
-            this.txtExtraOptions.TabIndex = 12;
+            this.txtExtraOptions.TabIndex = 8;
+            this.txtExtraOptions.WordWrap = false;
             // 
             // DiskEditor
             // 

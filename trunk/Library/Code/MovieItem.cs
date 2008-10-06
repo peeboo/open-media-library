@@ -324,9 +324,14 @@ namespace Library
                 }
             }
 
-            foreach (Disk d in title.Disks)
+            List<Disk> disks = title.Disks;
+            if (OMLApplication.Current.IsExtender)
+                for (int i = 0; i < disks.Count; ++i)
+                    foreach (MediaSource ms in (MediaSource.GetSourcesFromOptions(disks[i].Path, disks[i].ExtraOptions)))
+                        disks.Insert(i + 1, ms.Disk);
+            foreach (Disk d in disks)
             {
-                if (title.Disks.Count == 1)
+                if (disks.Count == 1)
                     _friendlyNamedDisks.Add(new Disk("Play Movie", d.Path, d.Format));
                 else
                     _friendlyNamedDisks.Add(new Disk("Play " + d.Name, d.Path, d.Format));

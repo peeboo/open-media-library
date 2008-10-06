@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtStartChapters = new System.Windows.Forms.TextBox();
@@ -48,6 +49,11 @@
             this.cbEnabled = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lblMenu = new System.Windows.Forms.Label();
+            this.btnPrev = new System.Windows.Forms.Button();
+            this.btnNext = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.lblInfo = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,7 +63,7 @@
             this.label1.Location = new System.Drawing.Point(7, 156);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(68, 13);
-            this.label1.TabIndex = 0;
+            this.label1.TabIndex = 11;
             this.label1.Text = "Audio Track:";
             // 
             // label2
@@ -66,31 +72,31 @@
             this.label2.Location = new System.Drawing.Point(7, 183);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(50, 13);
-            this.label2.TabIndex = 0;
+            this.label2.TabIndex = 13;
             this.label2.Text = "Subtitles:";
             // 
             // txtStartChapters
             // 
             this.txtStartChapters.Location = new System.Drawing.Point(81, 127);
             this.txtStartChapters.Name = "txtStartChapters";
-            this.txtStartChapters.Size = new System.Drawing.Size(70, 20);
-            this.txtStartChapters.TabIndex = 2;
+            this.txtStartChapters.Size = new System.Drawing.Size(43, 20);
+            this.txtStartChapters.TabIndex = 8;
             this.txtStartChapters.TextChanged += new System.EventHandler(this.txtStartChapters_TextChanged);
             // 
             // txtEndChapters
             // 
-            this.txtEndChapters.Location = new System.Drawing.Point(182, 127);
+            this.txtEndChapters.Location = new System.Drawing.Point(145, 127);
             this.txtEndChapters.Name = "txtEndChapters";
-            this.txtEndChapters.Size = new System.Drawing.Size(70, 20);
-            this.txtEndChapters.TabIndex = 2;
+            this.txtEndChapters.Size = new System.Drawing.Size(43, 20);
+            this.txtEndChapters.TabIndex = 10;
             this.txtEndChapters.TextChanged += new System.EventHandler(this.txtEndChapters_TextChanged);
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(157, 127);
+            this.label3.Location = new System.Drawing.Point(120, 126);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(19, 20);
-            this.label3.TabIndex = 3;
+            this.label3.Size = new System.Drawing.Size(24, 20);
+            this.label3.TabIndex = 9;
             this.label3.Text = "-";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -100,16 +106,16 @@
             this.label4.Location = new System.Drawing.Point(7, 130);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(52, 13);
-            this.label4.TabIndex = 0;
+            this.label4.TabIndex = 7;
             this.label4.Text = "Chapters:";
             // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnOK.Location = new System.Drawing.Point(81, 312);
+            this.btnOK.Location = new System.Drawing.Point(10, 312);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 8;
+            this.btnOK.TabIndex = 16;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -118,10 +124,10 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(165, 312);
+            this.btnCancel.Location = new System.Drawing.Point(91, 312);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 7;
+            this.btnCancel.TabIndex = 17;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -132,7 +138,7 @@
             this.label5.Location = new System.Drawing.Point(7, 9);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(33, 13);
-            this.label5.TabIndex = 9;
+            this.label5.TabIndex = 0;
             this.label5.Text = "DVD:";
             // 
             // lblDVDName
@@ -141,7 +147,7 @@
             this.lblDVDName.Location = new System.Drawing.Point(78, 9);
             this.lblDVDName.Name = "lblDVDName";
             this.lblDVDName.Size = new System.Drawing.Size(61, 13);
-            this.lblDVDName.TabIndex = 9;
+            this.lblDVDName.TabIndex = 1;
             this.lblDVDName.Text = "DVD-Name";
             // 
             // label6
@@ -150,27 +156,28 @@
             this.label6.Location = new System.Drawing.Point(7, 43);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(30, 13);
-            this.label6.TabIndex = 0;
+            this.label6.TabIndex = 2;
             this.label6.Text = "Title:";
             // 
             // cbTitle
             // 
             this.cbTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbTitle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbTitle.FormattingEnabled = true;
             this.cbTitle.Location = new System.Drawing.Point(81, 40);
             this.cbTitle.Name = "cbTitle";
             this.cbTitle.Size = new System.Drawing.Size(239, 21);
-            this.cbTitle.TabIndex = 10;
+            this.cbTitle.TabIndex = 3;
             this.cbTitle.SelectedIndexChanged += new System.EventHandler(this.cbTitle_SelectedIndexChanged);
             // 
             // lblChapters
             // 
             this.lblChapters.AutoSize = true;
-            this.lblChapters.Location = new System.Drawing.Point(258, 131);
+            this.lblChapters.Location = new System.Drawing.Point(194, 130);
             this.lblChapters.Name = "lblChapters";
             this.lblChapters.Size = new System.Drawing.Size(26, 13);
-            this.lblChapters.TabIndex = 11;
+            this.lblChapters.TabIndex = 19;
             this.lblChapters.Text = "max";
             // 
             // txtAudioTracks
@@ -191,7 +198,7 @@
             this.txtSubtitles.Location = new System.Drawing.Point(81, 180);
             this.txtSubtitles.Name = "txtSubtitles";
             this.txtSubtitles.Size = new System.Drawing.Size(239, 20);
-            this.txtSubtitles.TabIndex = 12;
+            this.txtSubtitles.TabIndex = 14;
             // 
             // label7
             // 
@@ -199,7 +206,7 @@
             this.label7.Location = new System.Drawing.Point(7, 104);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(38, 13);
-            this.label7.TabIndex = 0;
+            this.label7.TabIndex = 5;
             this.label7.Text = "Name:";
             // 
             // txtName
@@ -209,7 +216,7 @@
             this.txtName.Location = new System.Drawing.Point(81, 101);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(239, 20);
-            this.txtName.TabIndex = 12;
+            this.txtName.TabIndex = 6;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
             // cbEnabled
@@ -218,7 +225,7 @@
             this.cbEnabled.Location = new System.Drawing.Point(81, 78);
             this.cbEnabled.Name = "cbEnabled";
             this.cbEnabled.Size = new System.Drawing.Size(65, 17);
-            this.cbEnabled.TabIndex = 13;
+            this.cbEnabled.TabIndex = 4;
             this.cbEnabled.Text = "Enabled";
             this.cbEnabled.UseVisualStyleBackColor = true;
             // 
@@ -231,7 +238,7 @@
             this.groupBox1.Location = new System.Drawing.Point(10, 206);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(310, 100);
-            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Virtual Menu";
             // 
@@ -246,6 +253,49 @@
             this.lblMenu.TabIndex = 0;
             this.lblMenu.Text = "Main Feature";
             // 
+            // btnPrev
+            // 
+            this.btnPrev.Location = new System.Drawing.Point(253, 125);
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.Size = new System.Drawing.Size(29, 23);
+            this.btnPrev.TabIndex = 21;
+            this.btnPrev.Text = "<=";
+            this.btnPrev.UseVisualStyleBackColor = true;
+            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
+            // 
+            // btnNext
+            // 
+            this.btnNext.Location = new System.Drawing.Point(285, 125);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Size = new System.Drawing.Size(29, 23);
+            this.btnNext.TabIndex = 22;
+            this.btnNext.Text = "=>";
+            this.btnNext.UseVisualStyleBackColor = true;
+            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // lblInfo
+            // 
+            this.lblInfo.AutoSize = true;
+            this.lblInfo.Location = new System.Drawing.Point(172, 317);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(0, 13);
+            this.lblInfo.TabIndex = 18;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(218, 125);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(29, 23);
+            this.button1.TabIndex = 20;
+            this.button1.Text = ">";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // ExtenderDVDMenu
             // 
             this.AcceptButton = this.btnOK;
@@ -253,11 +303,15 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(332, 347);
+            this.Controls.Add(this.btnNext);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnPrev);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbEnabled);
             this.Controls.Add(this.txtSubtitles);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.txtAudioTracks);
+            this.Controls.Add(this.lblInfo);
             this.Controls.Add(this.lblChapters);
             this.Controls.Add(this.cbTitle);
             this.Controls.Add(this.lblDVDName);
@@ -302,5 +356,10 @@
         private System.Windows.Forms.CheckBox cbEnabled;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label lblMenu;
+        private System.Windows.Forms.Button btnPrev;
+        private System.Windows.Forms.Button btnNext;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label lblInfo;
+        private System.Windows.Forms.Button button1;
     }
 }
