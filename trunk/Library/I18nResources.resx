@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FlipFourCCCode" xml:space="preserve">
+    <value>Flip FourCC Code (For HP and Linksys Extenders)</value>
+  </data>
   <data name="LabelActors" xml:space="preserve">
     <value>Actors: </value>
   </data>
@@ -159,6 +162,9 @@
   <data name="LabelTags" xml:space="preserve">
     <value>Tags: </value>
   </data>
+  <data name="LabelTrailers" xml:space="preserve">
+    <value>Trailers:</value>
+  </data>
   <data name="LabelUserRating" xml:space="preserve">
     <value>User Rating: </value>
   </data>
@@ -167,5 +173,8 @@
   </data>
   <data name="LabelWriters" xml:space="preserve">
     <value>Writers: </value>
+  </data>
+  <data name="TranscodeAVIFiles" xml:space="preserve">
+    <value>Transcode AVI Files</value>
   </data>
 </root>
