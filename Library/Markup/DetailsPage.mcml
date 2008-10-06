@@ -119,7 +119,7 @@
               <me:TextWithLabel Label="[I18n.LabelGenres]" Text="[DetailsPage.GenresAsString]" />
               <me:TextWithLabel Label="[I18n.LabelTags]" Text="[DetailsPage.TagsAsString]" />
 
-              <Panel Name="DirectorsWRiters" >
+              <Panel Name="DirectorsWriters" >
                 <Layout>
                   <FlowLayout Orientation="Horizontal" Spacing="15,15" />
                 </Layout>

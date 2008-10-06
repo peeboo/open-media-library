@@ -30,6 +30,8 @@ namespace Library
             SetupTrailers();
             Utilities.DebugLine("[Settings] Loading Filter Settings");
             SetupFilters();
+            Utilities.DebugLine("[Settings] Loading Transcoding Settings");
+            SetupTranscoding();
         }
 
         private void SaveMountingTools()
@@ -53,7 +55,6 @@ namespace Library
                 _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
             });
         }
-
         private void SaveFilterSettings()
         {
             OMLApplication.ExecuteSafe(delegate
@@ -72,7 +73,6 @@ namespace Library
                 _omlSettings.ShowFilterTrailers = (bool)_showFilterTrailers.Chosen;
             });
         }
-        
         private void SaveMovieSettings()
         {
             OMLApplication.ExecuteSafe(delegate
@@ -102,6 +102,14 @@ namespace Library
                 _omlSettings.TrailersDefinition = _trailersDefinition.Chosen as string;
             });
         }
+        private void SaveTranscoding()
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                _omlSettings.TranscodeAVIFiles = (bool)_transcodeAVIFiles.Chosen;
+                _omlSettings.FlipFourCCCode = (bool)_flipFourCCCode.Chosen;
+            });
+        }
         public void SaveSettings()
         {
             SaveMountingTools();
@@ -109,6 +117,7 @@ namespace Library
             SaveUILanguage();
             SaveTrailers();
             SaveFilterSettings();
+            SaveTranscoding();
 
             OMLApplication.ExecuteSafe(delegate
             {
@@ -204,7 +213,6 @@ namespace Library
             _trailersDefinition.Options = trailerDefinitionOptions;
             _trailersDefinition.Chosen = _omlSettings.TrailersDefinition.ToString();
         }
-
         private void SetupFilters()
         {
              _showFilterActors.Chosen = _omlSettings.ShowFilterActors;
@@ -220,7 +228,6 @@ namespace Library
              _showFilterYear.Chosen = _omlSettings.ShowFilterYear;
              _showFilterTrailers.Chosen = _omlSettings.ShowFilterTrailers;
         }
-
         private void SetupUILanguage()
         {
             string selected = null;
@@ -253,6 +260,11 @@ namespace Library
             _trailersDefinition.Options = trailerFormats;
             _trailersDefinition.Chosen = _omlSettings.TrailersDefinition;
         }
+        private void SetupTranscoding()
+        {
+            _transcodeAVIFiles.Chosen = _omlSettings.TranscodeAVIFiles;
+            _flipFourCCCode.Chosen = _omlSettings.FlipFourCCCode;
+        }
 
         private static String CultureIdFromDisplayName(string displayName)
         {
@@ -266,6 +278,63 @@ namespace Library
             return null;
         }
 
+        #region properties
+        public BooleanChoice TranscodeAVIFiles
+        {
+            get { return _transcodeAVIFiles; }
+        }
+        public BooleanChoice FlipFourCCCode
+        {
+            get { return _flipFourCCCode; }
+        }
+        public BooleanChoice ShowFilterGenres
+        {
+            get { return _showFilterGenres; }
+        }
+        public BooleanChoice ShowFilterDirectors
+        {
+            get { return _showFilterDirectors; }
+        }
+        public BooleanChoice ShowFilterActors
+        {
+            get { return _showFilterActors; }
+        }
+        public BooleanChoice ShowFilterRuntime
+        {
+            get { return _showFilterRuntime; }
+        }
+        public BooleanChoice ShowFilterCountry
+        {
+            get { return _showFilterCountry; }
+        }
+        public BooleanChoice ShowFilterParentalRating
+        {
+            get { return _showFilterParentalRating; }
+        }
+        public BooleanChoice ShowFilterTags
+        {
+            get { return _showFilterTags; }
+        }
+        public BooleanChoice ShowFilterUserRating
+        {
+            get { return _showFilterUserRating; }
+        }
+        public BooleanChoice ShowFilterYear
+        {
+            get { return _showFilterYear; }
+        }
+        public BooleanChoice ShowFilterDateAdded
+        {
+            get { return _showFilterDateAdded; }
+        }
+        public BooleanChoice ShowFilterFormat
+        {
+            get { return _showFilterFormat; }
+        }
+        public BooleanChoice ShowFilterTrailers
+        {
+            get { return _showFilterTrailers; }
+        }
         public BooleanChoice ShowMovieDetails
         {
             get { return _showMovieDetails; }
@@ -316,7 +385,7 @@ namespace Library
         {
             get { return _trailersDefinition; }
         }
-
+        #endregion
         public EditableText MountingToolPath
         {
             get
@@ -333,17 +402,14 @@ namespace Library
                 FirePropertyChanged("MountingToolPath");
             }
         }
-
         public Choice UILanguage
         {
             get { return _uiLanguage;  }
         }
-
         public Choice FiltersToShow
         {
             get { return _filtersToShow; }
         }
-
         public Choice ImageMountingSelection
         {
             get { return _ImageMountingSelection; }
@@ -369,79 +435,19 @@ namespace Library
         Choice _ImageMountingSelection = new Choice();
         Choice _trailersDefinition = new Choice();
         Choice _filtersToShow = new Choice();
-
         BooleanChoice _showFilterGenres = new BooleanChoice();
-
-        public BooleanChoice ShowFilterGenres
-        {
-            get { return _showFilterGenres; }
-        }
+        BooleanChoice _transcodeAVIFiles = new BooleanChoice();
+        BooleanChoice _flipFourCCCode = new BooleanChoice();
         BooleanChoice _showFilterDirectors = new BooleanChoice();
-
-        public BooleanChoice ShowFilterDirectors
-        {
-            get { return _showFilterDirectors; }
-        }
         BooleanChoice _showFilterActors = new BooleanChoice();
-
-        public BooleanChoice ShowFilterActors
-        {
-            get { return _showFilterActors; }
-        }
-        BooleanChoice _showFilterRuntime = new BooleanChoice();
-
-        public BooleanChoice ShowFilterRuntime
-        {
-            get { return _showFilterRuntime; }
-        }
-        BooleanChoice _showFilterCountry = new BooleanChoice();
-
-        public BooleanChoice ShowFilterCountry
-        {
-            get { return _showFilterCountry; }
-        }
-        BooleanChoice _showFilterParentalRating = new BooleanChoice();
-
-        public BooleanChoice ShowFilterParentalRating
-        {
-            get { return _showFilterParentalRating; }
-           
-        }
-        BooleanChoice _showFilterTags = new BooleanChoice();
-
-        public BooleanChoice ShowFilterTags
-        {
-            get { return _showFilterTags; }
-        }
-        BooleanChoice _showFilterUserRating = new BooleanChoice();
-
-        public BooleanChoice ShowFilterUserRating
-        {
-            get { return _showFilterUserRating; }
-        }
-        BooleanChoice _showFilterYear = new BooleanChoice();
-
-        public BooleanChoice ShowFilterYear
-        {
-            get { return _showFilterYear; }
-        }
-        BooleanChoice _showFilterDateAdded = new BooleanChoice();
-
-        public BooleanChoice ShowFilterDateAdded
-        {
-            get { return _showFilterDateAdded; }
-        }
         BooleanChoice _showFilterFormat = new BooleanChoice();
-
-        public BooleanChoice ShowFilterFormat
-        {
-            get { return _showFilterFormat; }
-        }
         BooleanChoice _showFilterTrailers = new BooleanChoice();
-
-        public BooleanChoice ShowFilterTrailers
-        {
-            get { return _showFilterTrailers; }
-        }
+        BooleanChoice _showFilterDateAdded = new BooleanChoice();
+        BooleanChoice _showFilterYear = new BooleanChoice();
+        BooleanChoice _showFilterUserRating = new BooleanChoice();
+        BooleanChoice _showFilterTags = new BooleanChoice();
+        BooleanChoice _showFilterParentalRating = new BooleanChoice();
+        BooleanChoice _showFilterCountry = new BooleanChoice();
+        BooleanChoice _showFilterRuntime = new BooleanChoice();
     }
 }

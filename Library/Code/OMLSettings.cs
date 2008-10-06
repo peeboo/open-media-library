@@ -65,6 +65,26 @@ namespace Library
 
         #region Library Settings
 
+        public bool TranscodeAVIFiles
+        {
+            get { return Properties.Settings.Default.TranscodeAVIFiles; }
+            set
+            {
+                Properties.Settings.Default.TranscodeAVIFiles = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public bool FlipFourCCCode
+        {
+            get { return Properties.Settings.Default.FlipFourCCCode; }
+            set
+            {
+                Properties.Settings.Default.FlipFourCCCode = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         public StringCollection MainFiltersToShow
         {
             get { return Properties.Settings.Default.MainFiltersToShow; }
