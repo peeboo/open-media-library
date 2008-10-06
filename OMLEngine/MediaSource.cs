@@ -4,6 +4,7 @@
  *******************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Runtime.Serialization;
@@ -21,25 +22,78 @@ namespace OMLEngine
             Disk = disk;
             Subtitle = null;
             AudioStream = null;
-            if (string.IsNullOrEmpty(disk.ExtraOptions) == false)
+            SetPropertiesFromExtraOptions(disk.ExtraOptions);
+        }
+
+        #region -- ExtraOptions --
+        void SetPropertiesFromExtraOptions(string extraOptions)
+        {
+            if (string.IsNullOrEmpty(extraOptions) || extraOptions.StartsWith("#\n"))
+                return;
+
+            foreach (string kv in extraOptions.Split(';'))
             {
-                foreach (string kv in disk.ExtraOptions.Split(';'))
+                var kvA = kv.Split('=');
+                var kvRec = new { key = kvA[0], val = kvA[1] };
+                switch (kvRec.key)
                 {
-                    var kvA = kv.Split('=');
-                    var kvRec = new { key = kvA[0], val = kvA[1] };
-                    switch (kvRec.key)
-                    {
-                        case "T": this.Title = int.Parse(kvRec.val); break;
-                        case "CS": this.StartChapter = int.Parse(kvRec.val); break;
-                        case "CE": this.EndChapter = int.Parse(kvRec.val); break;
-                        case "S": this.Subtitle = GetSubTitle(this.DVDTitle.GetSubTitle(int.Parse(kvRec.val))); break;
-                        case "A": this.AudioStream = GetAudioSteam(this.DVDTitle.GetAudio(int.Parse(kvRec.val))); break;
-                        case "TS": this.StartTime = TimeSpan.Parse(kvRec.val); break;
-                        case "TE": this.EndTime = TimeSpan.Parse(kvRec.val); break;
-                    }
+                    case "T": this.Title = int.Parse(kvRec.val); break;
+                    case "CS": this.StartChapter = int.Parse(kvRec.val); break;
+                    case "CE": this.EndChapter = int.Parse(kvRec.val); break;
+                    case "S": this.Subtitle = GetSubTitle(this.DVDTitle.GetSubTitle(int.Parse(kvRec.val))); break;
+                    case "A": this.AudioStream = GetAudioSteam(this.DVDTitle.GetAudio(int.Parse(kvRec.val))); break;
+                    case "TS": this.StartTime = TimeSpan.Parse(kvRec.val); break;
+                    case "TE": this.EndTime = TimeSpan.Parse(kvRec.val); break;
                 }
             }
         }
+
+        public string ExtraOptions
+        {
+            get
+            {
+                string key = string.Empty;
+                if (this.Title != null)
+                    key += ";T=" + this.Title;
+                if (this.StartChapter != null)
+                    key += ";CS=" + this.StartChapter;
+                if (this.EndChapter != null)
+                    key += ";CE=" + this.EndChapter;
+                if (this.Subtitle != null && this.Subtitle.SubtitleID != null)
+                    key += ";S=" + this.Subtitle.SubtitleID;
+                if (this.AudioStream != null && this.AudioStream.AudioID != null)
+                    key += ";A=" + this.AudioStream.AudioID;
+                if (this.StartTime != null)
+                    key += ";TS=" + this.StartTime;
+                if (this.EndTime != null)
+                    key += ";TE=" + this.EndTime;
+                return key.TrimStart(';');
+            }
+        }
+
+        public static string ExtraOptionsFromMenu(ICollection<MediaSource> menu)
+        {
+            string ret = "#\n";
+            foreach (MediaSource source in menu)
+                ret += source.ExtraOptions + ";N=" + source.Name + "\n";
+            return ret.TrimEnd();
+        }
+
+        public static IEnumerable<MediaSource> GetSourcesFromOptions(string mediaPath, string extraOptions)
+        {
+            if (extraOptions == null || extraOptions.StartsWith("#\n") == false)
+                return new MediaSource[0];
+
+            List<MediaSource> ret = new List<MediaSource>();
+            foreach (string sourceLine in extraOptions.TrimStart('#', '\n').Split('\n'))
+            {
+                int pos = sourceLine.IndexOf(";N=");
+                string name = sourceLine.Substring(pos + ";N=".Length);
+                ret.Add(new MediaSource(new Disk(name, mediaPath, VideoFormat.DVD) { ExtraOptions = sourceLine.Substring(0, pos) }));
+            }
+            return ret;
+        }
+        #endregion
 
         public bool HasAudioSteam(AudioExtension extension) { return GetAudioSteam(extension) != null; }
         public AudioStream GetAudioSteam(AudioExtension extension)
@@ -64,29 +118,6 @@ namespace OMLEngine
         public Disk Disk { get; private set; }
         public string Name { get { return Disk.Name; } }
         public string MediaPath { get { return Disk.Path; } set { Disk.Path = value; } }
-
-        public string ExtraOptions
-        {
-            get
-            {
-                string key = string.Empty;
-                if (this.Title != null)
-                    key += ";T=" + this.Title;
-                if (this.StartChapter != null)
-                    key += ";CS=" + this.StartChapter;
-                if (this.EndChapter != null)
-                    key += ";CE=" + this.EndChapter;
-                if (this.Subtitle != null && this.Subtitle.SubtitleID != null)
-                    key += ";S=" + this.Subtitle.SubtitleID;
-                if (this.AudioStream != null && this.AudioStream.AudioID != null)
-                    key += ";A=" + this.AudioStream.AudioID;
-                if (this.StartTime != null)
-                    key += ";TS=" + this.StartTime;
-                if (this.EndTime != null)
-                    key += ";TE=" + this.EndTime;
-                return key.TrimStart(';');
-            }
-        }
 
         public string Key
         {
@@ -168,6 +199,28 @@ namespace OMLEngine
                     ret += " ET:" + this.EndTime;
             }
             return ret;
+        }
+
+        public string Description
+        {
+            get
+            {
+                string ret = this.Name;
+
+                if (this.StartChapter != null)
+                {
+                    ret += ", Chapter " + this.StartChapter;
+                    if (this.EndChapter != null)
+                        ret += "-" + this.EndChapter;
+                }
+
+                if (this.AudioStream != null)
+                    ret += ", Audio " + this.AudioStream;
+                if (this.Subtitle != null)
+                    ret += ", Subtitle " + this.Subtitle.LanguageID;
+
+                return ret;
+            }
         }
 
         string TranscodingBaseName

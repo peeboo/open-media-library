@@ -96,8 +96,8 @@ namespace OMLDatabaseEditor.Controls
 
         public string ExtraOptions
         {
-            get { return txtExtraOptions.Text; }
-            set { txtExtraOptions.Text = string.IsNullOrEmpty(value) ? string.Empty : value; }
+            get { return string.Join("\n", txtExtraOptions.Lines); }
+            set { txtExtraOptions.Lines = (string.IsNullOrEmpty(value) ? string.Empty : value).Split('\n'); }
         }
 
         public VideoFormat Format
