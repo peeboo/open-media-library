@@ -33,9 +33,22 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.WaitCursor;
             _titleCollection = new TitleCollection();
             _titleCollection.loadTitleCollection();
+            SetupNewMovieMenu();
 
             cbNav_Click(cbMovies, null);
             Cursor = Cursors.Default;
+        }
+
+        private void SetupNewMovieMenu()
+        {
+            LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
+            foreach (IOMLMetadataPlugin plugin in _metadataPlugins)
+            {
+                ToolStripMenuItem newItem = new ToolStripMenuItem("From " + plugin.PluginName);
+                newItem.Tag = plugin;
+                newItem.Click += new EventHandler(this.fromMetaDataToolStripMenuItem_Click);
+                newToolStripMenuItem.DropDownItems.Add(newItem);
+            }
         }
 
         private static void LoadImportPlugins(string pluginType, List<OMLPlugin> pluginList)
@@ -125,7 +138,6 @@ namespace OMLDatabaseEditor
         private void HandleMovieSelect()
         {
             Cursor = Cursors.WaitCursor;
-            SaveCurrentMovie();
             SaveCurrentMovie();
 
             Title selectedTitle = lbItems.SelectedItem as Title;
@@ -366,16 +378,6 @@ namespace OMLDatabaseEditor
             ToggleSaveState(true);
         }
 
-        private void newToolStripButton_Click(object sender, EventArgs e)
-        {
-            Title newMovie = new Title();
-            newMovie.Name = "New Movie";
-            newMovie.DateAdded = DateTime.Now;
-            mediaEditor1.LoadTitle(newMovie);
-            mediaEditor1.Status = OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges;
-            ToggleSaveState(true);
-        }
-
         private void saveToolStripButton_Click(object sender, EventArgs e)
         {
             SaveChanges();
@@ -426,6 +428,42 @@ namespace OMLDatabaseEditor
         {
             AboutOML about = new AboutOML();
             about.Show();
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Open settings form
+        }
+
+        private void fromScratchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Title newMovie = new Title();
+            newMovie.Name = "New Movie";
+            newMovie.DateAdded = DateTime.Now;
+            mediaEditor1.LoadTitle(newMovie);
+            mediaEditor1.Status = OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges;
+            ToggleSaveState(true);
+        }
+
+        private void fromMetaDataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem selectedItem = sender as ToolStripMenuItem;
+            IOMLMetadataPlugin plugin = selectedItem.Tag as IOMLMetadataPlugin;
+            // Ask for name of movie
+            NewMovieName movieName = new NewMovieName();
+            if (movieName.ShowDialog() == DialogResult.OK)
+            {
+                string name = movieName.MovieName();
+                Title newTitle = new Title();
+                newTitle.DateAdded = DateTime.Now;
+                newTitle.Name = name;
+                mediaEditor1.LoadTitle(newTitle);
+                StartMetadataImport(plugin, false);
+                mediaEditor1.LoadTitle(newTitle);
+                mediaEditor1.Status = OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges;
+                this.Text = APP_TITLE + " - " + newTitle.Name + "*";
+                ToggleSaveState(true);
+            }
         }
     }
 }
