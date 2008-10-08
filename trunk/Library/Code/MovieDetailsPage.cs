@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.MediaCenter.UI;
 
@@ -24,6 +25,8 @@ namespace Library
         private IList _commands;
         private string _metadata;
         private Choice _diskChoice = new Choice();
+        private ContextMenu _dvdContextMenu;
+        private bool _showDVDContextMenu = false;
         //private Command _hideDisks;
         //private Command _showDisks;
         private Image _FullCover;
@@ -31,6 +34,26 @@ namespace Library
         #endregion
 
         #region Public Properties
+
+        public bool ShowDVDContextMenu
+        {
+            get { return _showDVDContextMenu; }
+            set
+            {
+                _showDVDContextMenu = value;
+                FirePropertyChanged("ShowDVDContextMenu");
+            }
+        }
+
+        public ContextMenu DVDContextMenu
+        {
+            get { return _dvdContextMenu; }
+            set
+            {
+                _dvdContextMenu = value;
+                FirePropertyChanged("DVDContextMenu");
+            }
+        }
 
         public bool PlayClicked
         {
@@ -446,7 +469,17 @@ namespace Library
         //        _movieDetails.PlayMovie();
         //    }
         //}
-        
+
+        public void PlayDiskWithOptions()
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                // Play the Selected Disk
+                _movieDetails.PlayMovie();
+                _PlayClicked = false; // I use the private variable because I don't want to send an event to the MCML page
+            });
+        }
+
         public void PlayDisk(int SelectedDisk)
         {
             OMLApplication.ExecuteSafe(delegate
@@ -454,7 +487,74 @@ namespace Library
                 // Play the Selected Disk
                 PlayClicked = true;
                 _movieDetails.TitleObject.SelectedDisk = _movieDetails.Disks[SelectedDisk];
-                _movieDetails.PlayMovie();
+                if (_movieDetails.TitleObject.SelectedDisk.Format == VideoFormat.DVD)
+                {
+                    _dvdContextMenu = new ContextMenu();
+
+                    if (_movieDetails.TitleObject.SelectedDisk.DVDDiskInfo.Titles[0].AudioTracks.Count > 0)
+                    {
+                        
+                        ICommand cmd = new Command();
+                        cmd.Description = "Change Audio";
+                        _dvdContextMenu.AddAudioCommand(cmd);
+
+                        IList audList = new List<string>();
+                        foreach (OMLGetDVDInfo.DVDAudioTrack audio in _movieDetails.TitleObject.SelectedDisk.DVDDiskInfo.Titles[0].AudioTracks)
+                        {
+                            audList.Add(audio.ToString());
+                        }
+                        Choice audChoice = new Choice();
+                        audChoice.Options = audList;
+                        _dvdContextMenu.AudioTracksChoice = audChoice;
+                    }
+
+                    if (_movieDetails.TitleObject.SelectedDisk.DVDDiskInfo.Titles[0].Subtitles.Count > 0)
+                    {
+                        ICommand cmd = new Command();
+                        cmd.Description = "Change Subtitle";
+                        _dvdContextMenu.AddSubtitleCommand(cmd);
+
+                        IList subList = new List<string>();
+                        subList.Add("None");
+                        foreach (OMLGetDVDInfo.DVDSubtitle subtitle in _movieDetails.TitleObject.SelectedDisk.DVDDiskInfo.Titles[0].Subtitles)
+                        {
+                            subList.Add(subtitle.Language);
+                        }
+                        Choice subChoice = new Choice();
+                        subChoice.Options = subList;
+                        _dvdContextMenu.SubtitleTracksChoice = subChoice;
+                    }
+
+                    if (MovieDetails.TitleObject.SelectedDisk.DVDDiskInfo.Titles[0].Chapters.Count > 0)
+                    {
+                        ICommand cmd = new Command();
+                        cmd.Description = "Select Chapter";
+                        _dvdContextMenu.AddChapterCommand(cmd);
+
+                        IList chapList = new List<string>();
+                        chapList.Add("None");
+                        foreach (OMLGetDVDInfo.DVDChapter chapter in _movieDetails.TitleObject.SelectedDisk.DVDDiskInfo.Titles[0].Chapters)
+                        {
+                            chapList.Add(string.Format("Chapter {0}", chapter.ChapterNumber));
+                        }
+                        Choice chapChoice = new Choice();
+                        chapChoice.Options = chapList;
+                        _dvdContextMenu.ChapterSelectionChoice = chapChoice;
+                    }
+
+                    ICommand playCmd = new Command();
+                    playCmd.Description = "Play Now";
+                    _dvdContextMenu.AddPlayCommand(playCmd);
+
+                    if (_dvdContextMenu.LocalItems.Count > 0)
+                    {
+                        ShowDVDContextMenu = true;
+                    }
+                }
+                else
+                {
+                    _movieDetails.PlayMovie();
+                }
                 _PlayClicked = false; // I use the private variable because I don't want to send an event to the MCML page
             });
         }
