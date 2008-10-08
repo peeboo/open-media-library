@@ -21,7 +21,7 @@
         <Children>
 
           <Repeater Name="Repeater"
-                    ContentName="RadioButton" >
+                    ContentName="RadioButton">
             <Layout>
               <FlowLayout Orientation="Vertical"
                           Spacing="5,0"

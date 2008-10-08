@@ -48,7 +48,7 @@
       
       <Scroller Name="Scroll"  Orientation="Horizontal" FadeSize="5" ScrollingData="[ScrollingData]" Navigation="ContainHorizontal" >
         <Children>
-        <Repeater Name="Repeater"  Navigation="RememberFocus" DividerName="Divider" >
+        <Repeater Name="Repeater" Navigation="RememberFocus" DividerName="Divider" DefaultFocusIndex="0">
           <Layout>
             <FlowLayout Orientation="Horizontal" Spacing="8,0"/>
           </Layout>

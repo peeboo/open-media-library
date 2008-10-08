@@ -102,13 +102,6 @@ namespace Library {
             }
         }
         
-        internal static byte[] BasePage1 {
-            get {
-                object obj = ResourceManager.GetObject("BasePage1", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap Blu_RayMovieDisk {
             get {
                 object obj = ResourceManager.GetObject("Blu_RayMovieDisk", resourceCulture);
@@ -309,6 +302,13 @@ namespace Library {
             get {
                 object obj = ResourceManager.GetObject("Container", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static byte[] ContextMenu {
+            get {
+                object obj = ResourceManager.GetObject("ContextMenu", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -617,9 +617,51 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap overlays_divider_horizontal {
+            get {
+                object obj = ResourceManager.GetObject("overlays_divider_horizontal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap overlays_divider_vertical {
+            get {
+                object obj = ResourceManager.GetObject("overlays_divider_vertical", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap OverlaysBackgroundDark {
+            get {
+                object obj = ResourceManager.GetObject("OverlaysBackgroundDark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap OverlaysBackgroundTopLight {
+            get {
+                object obj = ResourceManager.GetObject("OverlaysBackgroundTopLight", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap OverlaysButtonNoFocus {
             get {
                 object obj = ResourceManager.GetObject("OverlaysButtonNoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap OverlaysOutline {
+            get {
+                object obj = ResourceManager.GetObject("OverlaysOutline", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap OverlaysShadow {
+            get {
+                object obj = ResourceManager.GetObject("OverlaysShadow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -676,13 +718,6 @@ namespace Library {
             get {
                 object obj = ResourceManager.GetObject("RadioButtonGroup", resourceCulture);
                 return ((byte[])(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap SampleBackground_1024_768 {
-            get {
-                object obj = ResourceManager.GetObject("SampleBackground_1024_768", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

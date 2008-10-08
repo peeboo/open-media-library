@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\AppleTrailers.cs" />
+    <Compile Include="Code\ContextMenu.cs" />
     <Compile Include="Code\LayoutV2\BaseGallery.cs" />
     <Compile Include="Code\MountingTool.cs" />
     <Compile Include="Code\DirectoryTreeNode.cs" />
@@ -141,7 +142,14 @@
     <Content Include="Images\Focus_Outline.png" />
     <Content Include="Images\Folder_Closed.png" />
     <Content Include="Images\hddvdmovie.png" />
+    <None Include="Images\overlays.background.dark.png" />
+    <None Include="Images\overlays.background.top.light.png" />
+    <None Include="Images\overlays.divider.horizontal.png" />
+    <None Include="Images\overlays.divider.vertical.png" />
+    <None Include="Images\overlays.outline.png" />
+    <None Include="Images\overlays.shadow.png" />
     <Content Include="Markup\About.mcml" />
+    <Content Include="Markup\Control\ContextMenu.mcml" />
     <Content Include="Markup\LayoutV2\BasePage.mcml" />
     <Content Include="Markup\Base\Animations.mcml" />
     <Content Include="Markup\Base\Base.mcml" />
