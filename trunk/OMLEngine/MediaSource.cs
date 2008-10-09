@@ -81,10 +81,25 @@ namespace OMLEngine
 
         public static IEnumerable<MediaSource> GetSourcesFromOptions(string mediaPath, string extraOptions)
         {
-            if (extraOptions == null || extraOptions.StartsWith("#\n") == false)
-                return new MediaSource[0];
+            return GetSourcesFromOptions(mediaPath, extraOptions, false);
+        }
 
+        public static IEnumerable<MediaSource> GetSourcesFromOptions(string mediaPath, string extraOptions, bool returnDefault)
+        {
             List<MediaSource> ret = new List<MediaSource>();
+            if (extraOptions == null && returnDefault)
+            {
+                var ms = new MediaSource(new Disk("Main", mediaPath, VideoFormat.DVD));
+                DVDTitle mt = ms.DVDTitle;
+                if (mt != null)
+                    foreach (DVDTitle t in ms.DVDDiskInfo.Titles)
+                        if (t.TitleNumber != mt.TitleNumber && t.AudioTracks.Count > 0)
+                            ret.Add(new MediaSource(new Disk("Title " + t.TitleNumber, mediaPath, VideoFormat.DVD) { ExtraOptions = "T=" + t.TitleNumber }));
+                return ret;
+            }
+            if (extraOptions == null || extraOptions.StartsWith("#\n") == false)
+                return ret;
+
             foreach (string sourceLine in extraOptions.TrimStart('#', '\n').Split('\n'))
             {
                 int pos = sourceLine.IndexOf(";N=");

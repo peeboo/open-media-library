@@ -327,7 +327,7 @@ namespace Library
             List<Disk> disks = title.Disks;
             if (OMLApplication.Current.IsExtender)
                 for (int i = 0; i < disks.Count; ++i)
-                    foreach (MediaSource ms in (MediaSource.GetSourcesFromOptions(disks[i].Path, disks[i].ExtraOptions)))
+                    foreach (MediaSource ms in (MediaSource.GetSourcesFromOptions(disks[i].Path, disks[i].ExtraOptions, true)))
                         disks.Insert(i + 1, ms.Disk);
             foreach (Disk d in disks)
             {
