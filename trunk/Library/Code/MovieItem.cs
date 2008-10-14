@@ -333,6 +333,8 @@ namespace Library
             {
                 if (disks.Count == 1)
                     _friendlyNamedDisks.Add(new Disk("Play Movie", d.Path, d.Format));
+                else if (d.DVDDiskInfo != null && new MediaSource(d).DVDTitle.Main == false)
+                    _friendlyNamedDisks.Add(new Disk("-> " + d.Name, d.Path, d.Format));
                 else
                     _friendlyNamedDisks.Add(new Disk("Play " + d.Name, d.Path, d.Format));
             }

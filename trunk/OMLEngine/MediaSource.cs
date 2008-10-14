@@ -84,6 +84,15 @@ namespace OMLEngine
             return GetSourcesFromOptions(mediaPath, extraOptions, false);
         }
 
+        static string FormatTime(TimeSpan time)
+        {
+            if (time.TotalHours > 1)
+                return string.Format("{0}h {1}m", time.Hours, time.Minutes + (time.Seconds > 30 ? 1 : 0));
+            if (time.TotalMinutes > 1)
+                return string.Format("{0}m {1}s", time.Minutes, time.Seconds);
+            return string.Format("{0}s", time.Seconds);
+        }
+
         public static IEnumerable<MediaSource> GetSourcesFromOptions(string mediaPath, string extraOptions, bool returnDefault)
         {
             List<MediaSource> ret = new List<MediaSource>();
@@ -92,9 +101,23 @@ namespace OMLEngine
                 var ms = new MediaSource(new Disk("Main", mediaPath, VideoFormat.DVD));
                 DVDTitle mt = ms.DVDTitle;
                 if (mt != null)
-                    foreach (DVDTitle t in ms.DVDDiskInfo.Titles)
-                        if (t.TitleNumber != mt.TitleNumber && t.AudioTracks.Count > 0)
-                            ret.Add(new MediaSource(new Disk("Title " + t.TitleNumber, mediaPath, VideoFormat.DVD) { ExtraOptions = "T=" + t.TitleNumber }));
+                {
+                    TimeSpan minDuration = TimeSpan.FromSeconds(30);
+                    var list = from t in ms.DVDDiskInfo.Titles
+                               where t.TitleNumber != mt.TitleNumber && t.AudioTracks.Count > 0 && t.Duration > minDuration
+                               group t by t.File into t
+                               select new
+                               {
+                                   TitleNumber = t.Last().TitleNumber,
+                                   File = t.Last().File.Substring(4),
+                                   Duration = TimeSpan.FromSeconds(t.Sum(a => a.Duration.TotalSeconds))
+                               };
+
+                    ret.AddRange(from t in list.Take(7)
+                                 orderby t.Duration.TotalSeconds
+                                 select
+                                     new MediaSource(new Disk("" + FormatTime(t.Duration) + ": " + t.File, mediaPath, VideoFormat.DVD) { ExtraOptions = "T=" + t.TitleNumber }));
+                }
                 return ret;
             }
             if (extraOptions == null || extraOptions.StartsWith("#\n") == false)
