@@ -121,7 +121,8 @@ namespace Library
                 _isExtender = false;
             }
 #if DEBUG_EXT
-            this._isExtender = true;
+            System.Diagnostics.Debugger.Launch();
+            _isExtender = true;
 #endif
 #if DEBUG
             OMLApplication.DebugLine("[OMLApplication] MediaCenterEnvironment.Capabilities:");
@@ -360,6 +361,11 @@ namespace Library
             DebugLine("[OMLApplication] ReloadTitleCollection()");
             _titles.loadTitleCollection();
             return _titles;
+        }
+
+        public void SaveTitles()
+        {
+            _titles.saveTitleCollection();
         }
 
         public static void ExecuteSafe(Action action)

@@ -554,17 +554,15 @@ namespace Library
         {
             MovieItem item = (MovieItem)list[index];
 
-            if (item.LoadedCover) return;
+            if (item.LoadedCover)
+                return;
 
             //if (item.MenuCoverArt != MovieItem.NoCoverImage)
               //  return;
 
-            
-
             Image image = null;
 
             // too many threads started, kills the system
-
             //Microsoft.MediaCenter.UI.Application.DeferredInvokeOnWorkerThread(delegate
             //{
                 try

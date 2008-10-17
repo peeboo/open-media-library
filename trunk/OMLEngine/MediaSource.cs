@@ -28,8 +28,26 @@ namespace OMLEngine
         #region -- ExtraOptions --
         void SetPropertiesFromExtraOptions(string extraOptions)
         {
-            if (string.IsNullOrEmpty(extraOptions) || extraOptions.StartsWith("#\n"))
+            if (string.IsNullOrEmpty(extraOptions))
                 return;
+
+            if (extraOptions.StartsWith("#"))
+            {
+                foreach (string kv in extraOptions.TrimStart('#').Split('\n'))
+                {
+                    if (string.IsNullOrEmpty(kv) == false)
+                    {
+                        var kvA = kv.Split('=');
+                        var kvRec = new { key = kvA[0], val = kvA[1] };
+                        switch (kvRec.key)
+                        {
+                            case "RT": this.ResumeTime = TimeSpan.Parse(kvRec.val); break;
+                        }
+                    }
+                    break;
+                }
+                return;
+            }
 
             foreach (string kv in extraOptions.Split(';'))
             {
@@ -44,6 +62,7 @@ namespace OMLEngine
                     case "A": this.AudioStream = GetAudioSteam(this.DVDTitle.GetAudio(int.Parse(kvRec.val))); break;
                     case "TS": this.StartTime = TimeSpan.Parse(kvRec.val); break;
                     case "TE": this.EndTime = TimeSpan.Parse(kvRec.val); break;
+                    case "RT": this.ResumeTime = TimeSpan.Parse(kvRec.val); break;
                 }
             }
         }
@@ -67,6 +86,8 @@ namespace OMLEngine
                     key += ";TS=" + this.StartTime;
                 if (this.EndTime != null)
                     key += ";TE=" + this.EndTime;
+                if (this.ResumeTime != null)
+                    key += ";RT=" + this.ResumeTime;
                 return key.TrimStart(';');
             }
         }
@@ -77,6 +98,36 @@ namespace OMLEngine
             foreach (MediaSource source in menu)
                 ret += source.ExtraOptions + ";N=" + source.Name + "\n";
             return ret.TrimEnd();
+        }
+
+        public string UpdateExtraOptions(string extraOptions)
+        {
+            List<string> lines = new List<string>(string.IsNullOrEmpty(extraOptions) ? new string[0] : extraOptions.Split('\n'));
+            string ret;
+            if (this.Title == null)
+            {
+                if (lines.Count > 0)
+                    lines.RemoveAt(0);
+                ret = "#" + this.ExtraOptions + "\n" + string.Join("\n", lines.ToArray());
+                Utilities.DebugLine("UpdateExtraOptions: {0}, with {1} -> {2}", extraOptions, this, ret);
+                return ret;
+            }
+
+            for (int i = 1; i < lines.Count; ++i)
+            {
+                string line = lines[i];
+                MediaSource tmp = new MediaSource(this.Disk);
+                tmp.SetPropertiesFromExtraOptions(line);
+                if (this.Title == tmp.Title)
+                {
+                    lines[i] = this.ExtraOptions;
+                    break;
+                }
+            }
+
+            ret = "#" + string.Join("\n", lines.ToArray());
+            Utilities.DebugLine("UpdateExtraOptions: {0}, with {1} -> {2}", extraOptions, this, ret);
+            return ret;
         }
 
         public static IEnumerable<MediaSource> GetSourcesFromOptions(string mediaPath, string extraOptions)
@@ -194,6 +245,8 @@ namespace OMLEngine
         public int? StartChapter { get; set; }
         [DataMember]
         public int? EndChapter { get; set; }
+        [DataMember]
+        public TimeSpan? ResumeTime { get; set; }
         #endregion
 
         public VideoFormat Format { get { return Disk.Format; } set { Disk.Format = value; } }
@@ -294,5 +347,23 @@ namespace OMLEngine
 
             return Path.ChangeExtension(Path.Combine(FileSystemWalker.TranscodeBufferDirectory, transcodingName), ".mpg");
         }
+
+        public void ClearResumeTime()
+        {
+            if (this.ResumeTime == null)
+                return;
+            this.ResumeTime = null;
+            if (this.OnSave != null)
+                this.OnSave(this);
+        }
+
+        public void SetResumeTime(TimeSpan timeSpan)
+        {
+            this.ResumeTime = timeSpan;
+            if (this.OnSave != null)
+                this.OnSave(this);
+        }
+
+        public event Action<MediaSource> OnSave;
     }
 }

@@ -15,6 +15,19 @@ namespace OMLEngine
         public VideoFormat Format { get; set; }
         public string ExtraOptions { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            Disk other = obj as Disk;
+            if (other == null)
+                return false;
+            return Name == other.Name && Path == other.Path && Format == other.Format;
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode() + Path.GetHashCode() + Format.GetHashCode();
+        }
+
         #region -- DVD Members --
         [NonSerialized]
         DVDDiskInfo _dvdDiskInfo;
@@ -102,5 +115,6 @@ namespace OMLEngine
                 return VideoFormat.DVD;
             }
         }
+
     }
 }

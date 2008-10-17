@@ -222,7 +222,7 @@ namespace Library
     {
         private Title _titleObj;
         private List<string> _actingRoles;
-        private List<Disk> _friendlyNamedDisks = new List<Disk>();
+        private List<Disk> _friendlyNamedDisks;
 
         public List<string> ActingRoles
         {
@@ -323,21 +323,6 @@ namespace Library
                         _actingRoles.Add(kvp.Key);
                 }
             }
-
-            List<Disk> disks = title.Disks;
-            if (OMLApplication.Current.IsExtender)
-                for (int i = 0; i < disks.Count; ++i)
-                    foreach (MediaSource ms in (MediaSource.GetSourcesFromOptions(disks[i].Path, disks[i].ExtraOptions, true)))
-                        disks.Insert(i + 1, ms.Disk);
-            foreach (Disk d in disks)
-            {
-                if (disks.Count == 1)
-                    _friendlyNamedDisks.Add(new Disk("Play Movie", d.Path, d.Format));
-                else if (d.DVDDiskInfo != null && new MediaSource(d).DVDTitle.Main == false)
-                    _friendlyNamedDisks.Add(new Disk("-> " + d.Name, d.Path, d.Format));
-                else
-                    _friendlyNamedDisks.Add(new Disk("Play " + d.Name, d.Path, d.Format));
-            }
         }
 
         /// <summary>
@@ -375,8 +360,21 @@ namespace Library
         /// </summary>
         public void PlayMovie()
         {
-            IPlayMovie moviePlayer = MoviePlayerFactory.CreateMoviePlayer(new MediaSource(this.TitleObject.SelectedDisk));
+            var ms = new MediaSource(this.TitleObject.SelectedDisk);
+            ms.OnSave += new Action<MediaSource>(ms_OnSave);
+            IPlayMovie moviePlayer = MoviePlayerFactory.CreateMoviePlayer(ms);
             moviePlayer.PlayMovie();
+        }
+
+        void ms_OnSave(MediaSource ms)
+        {
+            foreach (Disk d in this.TitleObject.Disks)
+                if (d == ms.Disk)
+                {
+                    d.ExtraOptions = ms.UpdateExtraOptions(d.ExtraOptions);
+                    OMLApplication.Current.SaveTitles();
+                    break;
+                }
         }
 
         /// <summary>
@@ -393,8 +391,34 @@ namespace Library
 
         public List<Disk> FriendlyNamedDisks
         {
-            get { return _friendlyNamedDisks; }
-            set { _friendlyNamedDisks = value; }
+            get
+            {
+                if (_friendlyNamedDisks == null)
+                {
+                    _friendlyNamedDisks = new List<Disk>();
+                    List<Disk> disks = this._titleObj.Disks;
+                    
+                    if (OMLApplication.Current.IsExtender)
+                        for (int i = 0; i < disks.Count; ++i)
+                            foreach (MediaSource ms in (MediaSource.GetSourcesFromOptions(disks[i].Path, disks[i].ExtraOptions, true)))
+                                disks.Insert(i + 1, ms.Disk);
+
+                    foreach (Disk d in disks)
+                    {
+                        var ms = new MediaSource(d);
+                        string name;
+                        if (disks.Count == 1)
+                            name = ms.ResumeTime != null ? "Resume Movie" : "Play Movie";
+                        else if (d.DVDDiskInfo != null && new MediaSource(d).DVDTitle.Main == false)
+                            name = (ms.ResumeTime != null ? "~> " : "-> ") + d.Name;
+                        else
+                            name = (ms.ResumeTime != null ? "Resume " : "Play ") + d.Name;
+
+                        _friendlyNamedDisks.Add(new Disk(name, d.Path, d.Format, d.ExtraOptions));
+                    }
+                }
+                return _friendlyNamedDisks;
+            }
         }
 
         public int itemId
