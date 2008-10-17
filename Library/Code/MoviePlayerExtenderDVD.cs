@@ -143,7 +143,13 @@ namespace Library
                     Utilities.DebugLine("ExtenderDVDPlayer.PlayMovie: movie '{0}', Playing file '{1}'", _source.Name, videoFile);
                     OMLApplication.Current.NowPlayingMovieName = _source.Name;
                     OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
+                    if (_source.ResumeTime != null)
+                    {
+                        Utilities.DebugLine("ExtenderDVDPlayer.PlayMovie: set resume time to: {0}", _source.ResumeTime);
+                        AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.Position = _source.ResumeTime.Value;
+                    }
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
+                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += this.Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                 }
                 return true;
@@ -152,6 +158,30 @@ namespace Library
             {
                 return false;
             }
+        }
+
+        void Transport_PropertyChanged(Microsoft.MediaCenter.UI.IPropertyObject sender, string property)
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                MediaTransport t = (MediaTransport)sender;
+                Utilities.DebugLine("ExtenderDVDPlayer.Transport_PropertyChanged: movie {0} property {1} playrate {2} state {3} pos {4}", OMLApplication.Current.NowPlayingMovieName, property, t.PlayRate, t.PlayState.ToString(), t.Position.ToString());
+                if (property == "PlayState")
+                {
+                    switch (t.PlayState)
+                    {
+                        case PlayState.Finished:
+                            Utilities.DebugLine("ExtenderDVDPlayer (Finished): clear resume time");
+                            this._source.ClearResumeTime();
+                            break;
+                        case PlayState.Stopped:
+                        case PlayState.Paused:
+                            Utilities.DebugLine("ExtenderDVDPlayer ({0}): set resume time: {1}", t.PlayState, t.Position);
+                            this._source.SetResumeTime(t.Position);
+                            break;
+                    }
+                }
+            });
         }
 
         static void MergeFile(FileStream writter, string vob0, string vobx)
@@ -168,7 +198,7 @@ namespace Library
                 }
         }
 
-        private static string MakeMPEGLink(string mpegFolder, string vob)
+        static string MakeMPEGLink(string mpegFolder, string vob)
         {
             string mpegFile = GetMPEGName(mpegFolder, vob);
             if (File.Exists(mpegFile) == false)

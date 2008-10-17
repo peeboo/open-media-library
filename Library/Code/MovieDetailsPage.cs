@@ -491,7 +491,8 @@ namespace Library
                 {
                     _dvdContextMenu = new ContextMenu();
 
-                    if (_movieDetails.TitleObject.SelectedDisk.DVDDiskInfo.Titles[0].AudioTracks.Count > 0)
+                    MediaSource ms = new MediaSource(_movieDetails.TitleObject.SelectedDisk);
+                    if (ms.DVDTitle != null && ms.DVDTitle.AudioTracks.Count > 0)
                     {
                         
                         ICommand cmd = new Command();
@@ -499,16 +500,15 @@ namespace Library
                         _dvdContextMenu.AddAudioCommand(cmd);
 
                         IList audList = new List<string>();
-                        foreach (OMLGetDVDInfo.DVDAudioTrack audio in _movieDetails.TitleObject.SelectedDisk.DVDDiskInfo.Titles[0].AudioTracks)
-                        {
+                        foreach (var audio in ms.DVDTitle.AudioTracks)
                             audList.Add(audio.ToString());
-                        }
+
                         Choice audChoice = new Choice();
                         audChoice.Options = audList;
                         _dvdContextMenu.AudioTracksChoice = audChoice;
                     }
 
-                    if (_movieDetails.TitleObject.SelectedDisk.DVDDiskInfo.Titles[0].Subtitles.Count > 0)
+                    if (ms.DVDTitle != null && ms.DVDTitle.Subtitles.Count > 0)
                     {
                         ICommand cmd = new Command();
                         cmd.Description = "Change Subtitle";
@@ -516,16 +516,15 @@ namespace Library
 
                         IList subList = new List<string>();
                         subList.Add("None");
-                        foreach (OMLGetDVDInfo.DVDSubtitle subtitle in _movieDetails.TitleObject.SelectedDisk.DVDDiskInfo.Titles[0].Subtitles)
-                        {
+                        foreach (var subtitle in ms.DVDTitle.Subtitles)
                             subList.Add(subtitle.Language);
-                        }
+
                         Choice subChoice = new Choice();
                         subChoice.Options = subList;
                         _dvdContextMenu.SubtitleTracksChoice = subChoice;
                     }
 
-                    if (MovieDetails.TitleObject.SelectedDisk.DVDDiskInfo.Titles[0].Chapters.Count > 0)
+                    if (ms.DVDTitle != null && ms.DVDTitle.Chapters.Count > 0)
                     {
                         ICommand cmd = new Command();
                         cmd.Description = "Select Chapter";
@@ -533,10 +532,9 @@ namespace Library
 
                         IList chapList = new List<string>();
                         chapList.Add("None");
-                        foreach (OMLGetDVDInfo.DVDChapter chapter in _movieDetails.TitleObject.SelectedDisk.DVDDiskInfo.Titles[0].Chapters)
-                        {
+                        foreach (var chapter in ms.DVDTitle.Chapters)
                             chapList.Add(string.Format("Chapter {0}", chapter.ChapterNumber));
-                        }
+
                         Choice chapChoice = new Choice();
                         chapChoice.Options = chapList;
                         _dvdContextMenu.ChapterSelectionChoice = chapChoice;
