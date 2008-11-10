@@ -37,7 +37,7 @@ namespace OMLFWMonitor
             watches.Add((string)"@OML.DAT");
             using (RegistryKey rkOML = Registry.CurrentUser.OpenSubKey(@"Software\OpenMediaLibrary"))
             {
-                watches.AddRange((string[])rkOML.GetValue("Watch"));
+                watches.AddRange((string[])rkOML.GetValue("Watches"));
             }
 
             foreach (string set in watches)
@@ -96,7 +96,7 @@ namespace OMLFWMonitor
         {
             get
             {
-                using (RegistryKey rkOML = Registry.CurrentUser.OpenSubKey(@"Software\OML"))
+                using (RegistryKey rkOML = Registry.CurrentUser.OpenSubKey(@"Software\OpenMediaLibrary"))
                 {
                     if (rkOML != null && bool.TryParse((string)rkOML.GetValue("logging", _logging), out _logging) == false)
                     {

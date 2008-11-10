@@ -71,6 +71,11 @@
                               KeyPath="yes" Source="..\..\OMLEngine\bin\$(var.BuildType)\OMLEngine.dll"
                               Checksum="yes" Vital="yes" Assembly=".net"/>
                     </Component>
+                    <Component Id="OMLFileWatcher.dll" Guid="7EA6B674-1AD6-417a-A184-7F89AA8B1578" Win64="yes" DiskId="1">
+                        <File Name="OMLFileWatcher.dll"
+                              KeyPath="yes" Source="..\..\OMLFileWatcher\bin\$(var.BuildType)\OMLFileWatcher.dll"
+                              Checksum="yes" Vital="yes" Assembly=".net"/>
+                    </Component>
                     <Component Id="OMLTranscoder.dll" Guid="AF99C403-9114-4809-A9AF-BA8038D47EA7" Win64="yes" DiskId="1">
                         <File Name="OMLTranscoder.dll"
                               KeyPath="yes" Source="..\..\OMLTranscoder\bin\$(var.BuildType)\OMLTranscoder.dll"
@@ -103,6 +108,15 @@
                                         Account="NT AUTHORITY\NetworkService" Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
                                         ErrorControl="normal"/>
                         <ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
+                                        Start="install" Stop="both" Wait="yes" Remove="uninstall"/>
+                    </Component>
+                    <Component Id="OMLFWService.exe" Guid="8F57190C-0489-40b4-9C46-5E9B09EC0DEC" Win64="yes" DiskId="1">
+                        <File Name="OMLFWService.exe"
+                              Source="..\..\OMLFWService\bin\$(var.BuildType)\OMLFWService.exe" Checksum="yes"/>
+                        <ServiceInstall Id="OMLFWService" Name="OMLFWService" DisplayName="OMLFWService"
+                                        Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
+                                        ErrorControl="normal"/>
+                        <ServiceControl Id="OMLFWServiceControl" Name="OMLFWService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>
                     </Component>
                     <Directory Id="PLUGINSDIRECTORY" Name="Plugins">
@@ -192,6 +206,12 @@
               </RegistryKey>
               <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey" Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\Services\Movies\{543d0438-b10d-43d8-a20d-f0c96db4e6bd}" />
             </Component>
+            <Component Id="registryFWS" Guid="1A746A98-A8D4-4e5e-B41F-5E6D6B8B5DFD" DiskId="1">
+                <RegistryKey Id="registryFWS0" Root="HKCU" Key="Software\OpenMediaLibrary" Action="createAndRemoveOnUninstall">
+                    <RegistryValue Id="registryFWS1" Type="integer" Name="logging" Value="1"/>
+                    <RegistryValue Id="registryFWS2" Type="multiString" Name="Watches" Value="c:\\users\\public\\recorded tv;*.*" />
+                </RegistryKey>
+            </Component>
         </DirectoryRef>
 
         <!-- This is a list of all components installed as a part of this product. A component is the        -->
@@ -209,10 +229,12 @@
 		<Feature Id="APPLICATIONROOTFEATURE" Title="Open Media Library" Level="1">
             <ComponentRef Id="Library.dll" />
             <ComponentRef Id="OMLEngine.dll" />
+            <ComponentRef Id="OMLFileWatcher.dll"/>
             <ComponentRef Id="OMLTranscoder.dll"/>
             <ComponentRef Id="Registration.xml" />
             <ComponentRef Id="Application.png" />
             <ComponentRef Id="OMLEngineService.exe"/>
+            <ComponentRef Id="OMLFWService.exe"/>
 
             <!-- Plugins -->
             <ComponentRef Id="DVDProfilerPlugin.dll" />
@@ -237,6 +259,7 @@
 
             <!-- Registry Keys -->
             <ComponentRef Id="registry"/>
+            <ComponentRef Id="registryFWS"/>
         </Feature>
 
 		<!-- The media table defines the location that the MSI will look to find source files during         -->
