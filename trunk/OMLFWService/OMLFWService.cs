@@ -14,8 +14,8 @@ namespace OMLFWService
     {
         OMLFileWatcher.OMLFileWatcher fw;
         RegistryKey rkOML;
-        String[] watches;
-        String[] watch;
+        List<string> watches = new List<string>();
+        string[] watch;
         Boolean logging = false;
         Boolean subdirs;
         Timer _timer;
@@ -28,22 +28,31 @@ namespace OMLFWService
 
             RegistryKey rkCU = Registry.CurrentUser;
             RegistryKey rkSoftware = rkCU.OpenSubKey(@"Software");
-            rkOML = rkSoftware.OpenSubKey(@"OML");
-            rkSoftware.Close();
-            rkCU.Close();
+            rkOML = rkSoftware.OpenSubKey(@"OpenMediaLibrary");
 
-            _timer = new Timer(20000);
+            _timer = new Timer(60000); // 1 minute intervals
             _timer.Elapsed +=new ElapsedEventHandler(_timer_Elapsed);
 
             this.CanStop = true;
             this.CanPauseAndContinue = true;
             this.AutoLog = true;
 
-            if (!Boolean.TryParse((string)rkOML.GetValue("logging", logging), out logging))
+            //int shouldLog = (Int32)rkOML.GetValue("logging", 0);
+            //logging = shouldLog == 0 ? false : true;
+            logging = true;
+
+            try
             {
-                logging = false;
+                foreach (string watchitem in ((string[])rkOML.GetValue("Watches")))
+                {
+                    watches.Add(watchitem);
+                }
             }
-            watches = (String[])rkOML.GetValue("Watch");
+            catch (Exception e)
+            {
+                watches.Add("c:\\users\\public\\recorded tv;*.*");
+            }
+
             foreach (string set in watches)
             {
                 watch = set.Split(';');
@@ -64,6 +73,8 @@ namespace OMLFWService
                         break;
                 }
             }
+            rkSoftware.Close();
+            rkCU.Close();
         }
 
         protected override void OnPause()
