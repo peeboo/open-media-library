@@ -31,9 +31,9 @@ namespace OMLDatabaseEditor
             this.components = new System.ComponentModel.Container();
             this.kryptonManager = new ComponentFactory.Krypton.Toolkit.KryptonManager(this.components);
             this.kryptonPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
-            this.btnOK = new ComponentFactory.Krypton.Toolkit.KryptonButton();
-            this.txtNewMovie = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
             this.btnCancel = new ComponentFactory.Krypton.Toolkit.KryptonButton();
+            this.txtNewMovie = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
+            this.btnOK = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel)).BeginInit();
             this.kryptonPanel.SuspendLayout();
             this.SuspendLayout();
@@ -48,6 +48,28 @@ namespace OMLDatabaseEditor
             this.kryptonPanel.Name = "kryptonPanel";
             this.kryptonPanel.Size = new System.Drawing.Size(263, 72);
             this.kryptonPanel.TabIndex = 0;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(161, 38);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(90, 25);
+            this.btnCancel.TabIndex = 2;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.Values.ExtraText = "";
+            this.btnCancel.Values.Image = null;
+            this.btnCancel.Values.ImageStates.ImageCheckedNormal = null;
+            this.btnCancel.Values.ImageStates.ImageCheckedPressed = null;
+            this.btnCancel.Values.ImageStates.ImageCheckedTracking = null;
+            this.btnCancel.Values.Text = "Cancel";
+            // 
+            // txtNewMovie
+            // 
+            this.txtNewMovie.Location = new System.Drawing.Point(12, 12);
+            this.txtNewMovie.Name = "txtNewMovie";
+            this.txtNewMovie.Size = new System.Drawing.Size(239, 20);
+            this.txtNewMovie.TabIndex = 0;
             // 
             // btnOK
             // 
@@ -64,28 +86,6 @@ namespace OMLDatabaseEditor
             this.btnOK.Values.ImageStates.ImageCheckedTracking = null;
             this.btnOK.Values.Text = "OK";
             // 
-            // txtNewMovie
-            // 
-            this.txtNewMovie.Location = new System.Drawing.Point(12, 12);
-            this.txtNewMovie.Name = "txtNewMovie";
-            this.txtNewMovie.Size = new System.Drawing.Size(239, 20);
-            this.txtNewMovie.TabIndex = 2;
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(161, 38);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(90, 25);
-            this.btnCancel.TabIndex = 3;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.Values.ExtraText = "";
-            this.btnCancel.Values.Image = null;
-            this.btnCancel.Values.ImageStates.ImageCheckedNormal = null;
-            this.btnCancel.Values.ImageStates.ImageCheckedPressed = null;
-            this.btnCancel.Values.ImageStates.ImageCheckedTracking = null;
-            this.btnCancel.Values.Text = "Cancel";
-            // 
             // NewMovieName
             // 
             this.AcceptButton = this.btnOK;
@@ -100,8 +100,10 @@ namespace OMLDatabaseEditor
             this.Name = "NewMovieName";
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Provide new movie name";
             this.TopMost = true;
+            this.Load += new System.EventHandler(this.NewMovieName_Load);
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel)).EndInit();
             this.kryptonPanel.ResumeLayout(false);
             this.kryptonPanel.PerformLayout();

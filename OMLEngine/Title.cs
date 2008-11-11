@@ -348,7 +348,12 @@ namespace OMLEngine
         /// </summary>
         public string FrontCoverPath
         {
-            get { return _frontCoverPath; }
+            get 
+            {
+                if (_frontCoverPath == string.Empty)
+                    return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
+                return _frontCoverPath; 
+            }
             set 
             { 
                 _frontCoverPath = value;
@@ -367,7 +372,12 @@ namespace OMLEngine
         /// </summary>
         public string BackCoverPath
         {
-            get { return _backCoverPath; }
+            get 
+            {
+                if (_backCoverPath == string.Empty)
+                    return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
+                return _backCoverPath; 
+            }
             set { _backCoverPath = value; }
         }
         /// <summary>

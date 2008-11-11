@@ -24,5 +24,10 @@ namespace OMLDatabaseEditor
         {
             return txtNewMovie.Text.Trim();
         }
+
+        private void NewMovieName_Load(object sender, EventArgs e)
+        {
+            txtNewMovie.Focus();
+        }
     }
 }

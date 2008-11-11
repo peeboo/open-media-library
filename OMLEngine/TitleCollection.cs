@@ -267,9 +267,8 @@ namespace OMLEngine
         public void Remove(Title newTitle)
         {
             _moviesByItemId.Remove(newTitle.InternalItemID);
-            _moviesByFilename.Remove(GetDiskHash(newTitle.Disks));
+            if (newTitle.Disks.Count > 0) _moviesByFilename.Remove(GetDiskHash(newTitle.Disks));
             _list.Remove(newTitle);
-
         }
 
         private string GetDiskHash(IEnumerable<Disk> disks)

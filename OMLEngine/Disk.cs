@@ -25,7 +25,7 @@ namespace OMLEngine
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode() + Path.GetHashCode() + Format.GetHashCode();
+            return (Name + ":" + Path + ":" + Format.ToString()).GetHashCode();
         }
 
         #region -- DVD Members --

@@ -56,9 +56,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\ComponentFactory.Krypton.Toolkit.DLL</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Data.v8.2, Version=8.2.3.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\DevExpress.Data.v8.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v8.2, Version=8.2.3.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\DevExpress.Utils.v8.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v8.2, Version=8.2.3.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\DevExpress.XtraEditors.v8.2.dll</HintPath>
+    </Reference>
     <Reference Include="DirectShowLib-2005, Version=2.0.0.0, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DVDMediaInfo\DirectShowLib-2005.dll</HintPath>
+    </Reference>
+    <Reference Include="Fireball.Windows.Forms, Version=2.0.0.48, Culture=neutral, PublicKeyToken=f84d0e3f884fb1e4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Downloads\firefx2-rc3-bin\firefx2\Fireball.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -96,11 +112,17 @@
       <DependentUpon>AboutOML.cs</DependentUpon>
     </Compile>
     <Compile Include="ComponentResourceManager.cs" />
-    <Compile Include="Controls\DiskEditor.cs">
+    <Compile Include="Controls\DiskEditorCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DiskEditorCtrl.Designer.cs">
+      <DependentUpon>DiskEditorCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DiskEditorFrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\DiskEditor.Designer.cs">
-      <DependentUpon>DiskEditor.cs</DependentUpon>
+    <Compile Include="Controls\DiskEditorFrm.Designer.cs">
+      <DependentUpon>DiskEditorFrm.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ExtenderDVDMenu.cs">
       <SubType>Form</SubType>
@@ -108,23 +130,23 @@
     <Compile Include="Controls\ExtenderDVDMenu.Designer.cs">
       <DependentUpon>ExtenderDVDMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MediaEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\MediaEditor.Designer.cs">
-      <DependentUpon>MediaEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\MediaList.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\MediaList.Designer.cs">
-      <DependentUpon>MediaList.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\NonFatalErrors.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\NonFatalErrors.Designer.cs">
       <DependentUpon>NonFatalErrors.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TitleEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TitleEditor.Designer.cs">
+      <DependentUpon>TitleEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListEditor.Designer.cs">
+      <DependentUpon>ListEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="NewMovieName.cs">
       <SubType>Form</SubType>
@@ -157,12 +179,6 @@
     <Compile Include="MetaDataSettings.Designer.cs">
       <DependentUpon>MetaDataSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="OMLDatabase1Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OMLDatabase1Editor.Designer.cs">
-      <DependentUpon>OMLDatabase1Editor.cs</DependentUpon>
-    </Compile>
     <Compile Include="OptionList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -175,24 +191,28 @@
       <DependentUpon>AboutOML.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\DiskEditor.resx">
-      <DependentUpon>DiskEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\DiskEditorCtrl.resx">
+      <DependentUpon>DiskEditorCtrl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DiskEditorFrm.resx">
+      <DependentUpon>DiskEditorFrm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ExtenderDVDMenu.resx">
       <DependentUpon>ExtenderDVDMenu.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\MediaEditor.resx">
-      <DependentUpon>MediaEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\MediaList.resx">
-      <DependentUpon>MediaList.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\NonFatalErrors.resx">
       <DependentUpon>NonFatalErrors.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TitleEditor.resx">
+      <DependentUpon>TitleEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ListEditor.resx">
+      <DependentUpon>ListEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="NewMovieName.resx">
@@ -215,14 +235,11 @@
       <DependentUpon>MetaDataSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="OMLDatabase1Editor.resx">
-      <DependentUpon>OMLDatabase1Editor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="OptionList.resx">
       <DependentUpon>OptionList.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -286,12 +303,11 @@
     <Content Include="Application.ico" />
     <Content Include="Resources\Application.png" />
     <Content Include="Resources\movieheader.jpg" />
+    <None Include="Properties\DataSources\OMLEngine.Disk.datasource" />
+    <None Include="Properties\DataSources\OMLEngine.Title.datasource" />
     <None Include="Resources\movieheader1.jpg" />
     <None Include="app.config" />
     <None Include="Resources\SaveAllHS.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

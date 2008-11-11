@@ -66,13 +66,12 @@ namespace OMLDatabaseEditor
             this.cbMovies = new ComponentFactory.Krypton.Toolkit.KryptonCheckButton();
             this.cbMetadata = new ComponentFactory.Krypton.Toolkit.KryptonCheckButton();
             this.cbImport = new ComponentFactory.Krypton.Toolkit.KryptonCheckButton();
-            this.kryptonPanel3 = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
-            this.mediaEditor1 = new OMLDatabaseEditor.Controls.MediaEditor();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.titleEditor = new OMLDatabaseEditor.Controls.TitleEditor();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -94,8 +93,6 @@ namespace OMLDatabaseEditor
             this.kryptonHeaderGroup1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel1)).BeginInit();
             this.kryptonPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel3)).BeginInit();
-            this.kryptonPanel3.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -163,7 +160,7 @@ namespace OMLDatabaseEditor
             // fromScratchToolStripMenuItem
             // 
             this.fromScratchToolStripMenuItem.Name = "fromScratchToolStripMenuItem";
-            this.fromScratchToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.fromScratchToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.fromScratchToolStripMenuItem.Text = "From Scratch";
             this.fromScratchToolStripMenuItem.Click += new System.EventHandler(this.fromScratchToolStripMenuItem_Click);
             // 
@@ -338,7 +335,7 @@ namespace OMLDatabaseEditor
             // 
             // kryptonSplitContainer1.Panel2
             // 
-            this.kryptonSplitContainer1.Panel2.Controls.Add(this.kryptonPanel3);
+            this.kryptonSplitContainer1.Panel2.Controls.Add(this.titleEditor);
             this.kryptonSplitContainer1.Size = new System.Drawing.Size(721, 369);
             this.kryptonSplitContainer1.SplitterDistance = 238;
             this.kryptonSplitContainer1.TabIndex = 0;
@@ -381,6 +378,7 @@ namespace OMLDatabaseEditor
             this.lbItems.Name = "lbItems";
             this.lbItems.Size = new System.Drawing.Size(236, 263);
             this.lbItems.TabIndex = 0;
+            this.lbItems.ValueMember = "InternalItemID";
             this.lbItems.SelectedIndexChanged += new System.EventHandler(this.lbItems_SelectedIndexChanged);
             // 
             // kryptonPanel1
@@ -437,33 +435,6 @@ namespace OMLDatabaseEditor
             this.cbImport.Values.Text = "Import";
             this.cbImport.Click += new System.EventHandler(this.cbNav_Click);
             // 
-            // kryptonPanel3
-            // 
-            this.kryptonPanel3.AutoScroll = true;
-            this.kryptonPanel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.kryptonPanel3.Controls.Add(this.mediaEditor1);
-            this.kryptonPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.kryptonPanel3.Location = new System.Drawing.Point(0, 0);
-            this.kryptonPanel3.Name = "kryptonPanel3";
-            this.kryptonPanel3.Size = new System.Drawing.Size(478, 369);
-            this.kryptonPanel3.TabIndex = 1;
-            // 
-            // mediaEditor1
-            // 
-            this.mediaEditor1.AllowDrop = true;
-            this.mediaEditor1.AutoScroll = true;
-            this.mediaEditor1.AutoSize = true;
-            this.mediaEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mediaEditor1.Location = new System.Drawing.Point(0, 0);
-            this.mediaEditor1.Margin = new System.Windows.Forms.Padding(0);
-            this.mediaEditor1.MinimumSize = new System.Drawing.Size(620, 772);
-            this.mediaEditor1.Name = "mediaEditor1";
-            this.mediaEditor1.Size = new System.Drawing.Size(620, 772);
-            this.mediaEditor1.Status = OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.Initial;
-            this.mediaEditor1.TabIndex = 0;
-            this.mediaEditor1.TitleChanged += new OMLDatabaseEditor.Controls.MediaEditor.TitleChangeEventHandler(this.mediaEditor1_TitleChanged);
-            this.mediaEditor1.TitleNameChanged += new OMLDatabaseEditor.Controls.MediaEditor.TitleNameChangeEventHandler(this.mediaEditor1_TitleChanged);
-            // 
             // toolStrip
             // 
             this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
@@ -511,6 +482,17 @@ namespace OMLDatabaseEditor
             this.helpToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.helpToolStripButton.Text = "He&lp";
             // 
+            // titleEditor
+            // 
+            this.titleEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.titleEditor.Location = new System.Drawing.Point(0, 0);
+            this.titleEditor.Name = "titleEditor";
+            this.titleEditor.Size = new System.Drawing.Size(478, 369);
+            this.titleEditor.Status = OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.Normal;
+            this.titleEditor.TabIndex = 0;
+            this.titleEditor.TitleChanged += new OMLDatabaseEditor.Controls.TitleEditor.TitleChangeEventHandler(this.titleEditor_TitleChanged);
+            this.titleEditor.TitleNameChanged += new OMLDatabaseEditor.Controls.TitleEditor.TitleNameChangeEventHandler(this.titleEditor_TitleNameChanged);
+            // 
             // MainEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -521,6 +503,7 @@ namespace OMLDatabaseEditor
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainEditor";
             this.Text = "OML Movie Manager";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainEditor_FormClosing);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.menuStrip.ResumeLayout(false);
@@ -546,9 +529,6 @@ namespace OMLDatabaseEditor
             this.kryptonHeaderGroup1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel1)).EndInit();
             this.kryptonPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel3)).EndInit();
-            this.kryptonPanel3.ResumeLayout(false);
-            this.kryptonPanel3.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -593,14 +573,13 @@ namespace OMLDatabaseEditor
         private ComponentFactory.Krypton.Toolkit.KryptonPanel kryptonPanel1;
         private ComponentFactory.Krypton.Toolkit.KryptonPanel kryptonPanel2;
         private ComponentFactory.Krypton.Toolkit.KryptonListBox lbItems;
-        private global::OMLDatabaseEditor.Controls.MediaEditor mediaEditor1;
-        private ComponentFactory.Krypton.Toolkit.KryptonPanel kryptonPanel3;
         private System.Windows.Forms.ToolStripStatusLabel lblCurrentStatus;
         private System.Windows.Forms.ToolStripProgressBar pgbProgress;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem metaDataSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteAllMoviesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fromScratchToolStripMenuItem;
+        private OMLDatabaseEditor.Controls.TitleEditor titleEditor;
     }
 }
 

@@ -98,11 +98,12 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.WaitCursor;
             lbItems.Items.Clear();
             lbItems.DisplayMember = "Name";
+            lbItems.ValueMember = "InternalItemID";
             _titleCollection.Sort();
             foreach (Title t in _titleCollection)
             {
                 lbItems.Items.Add(t);
-                if (mediaEditor1.CurrentTitle == t)
+                if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.InternalItemID == t.InternalItemID)
                     lbItems.SelectedItem = t;
             }
             lbItems.Select();
@@ -143,27 +144,32 @@ namespace OMLDatabaseEditor
             Title selectedTitle = lbItems.SelectedItem as Title;
             if (selectedTitle == null) return;
 
-            mediaEditor1.LoadTitle(selectedTitle);
-            mediaEditor1.Status = OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.Initial;
+            titleEditor.LoadDVD(selectedTitle);
             this.Text = APP_TITLE + " - " + selectedTitle.Name;
             ToggleSaveState(false);
             Cursor = Cursors.Default;
         }
 
-        private void SaveCurrentMovie()
+        private DialogResult SaveCurrentMovie()
         {
-            if (mediaEditor1.CurrentTitle != null && mediaEditor1.Status == OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges)
+            DialogResult result;
+            if (titleEditor.EditedTitle != null && titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges)
             {
-                DialogResult result = MessageBox.Show("You have unsaved changes to " + mediaEditor1.CurrentTitle.Name + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
+                result = MessageBox.Show("You have unsaved changes to " + titleEditor.EditedTitle.Name + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
                 if (result == DialogResult.Cancel)
                 {
-                    lbItems.SelectedItem = mediaEditor1.CurrentTitle;
+                    lbItems.SelectedValue = titleEditor.EditedTitle.InternalItemID;
                 }
                 else if (result == DialogResult.Yes)
                 {
                     SaveChanges();
                 }
             }
+            else
+            {
+                result = DialogResult.Yes;
+            }
+            return result;
         }
 
         private void HandleImportSelect()
@@ -276,10 +282,10 @@ namespace OMLDatabaseEditor
         {
             try
             {
-                if (mediaEditor1.CurrentTitle != null)
+                if (titleEditor.EditedTitle != null)
                 {
                     Cursor = Cursors.WaitCursor;
-                    plugin.SearchForMovie(mediaEditor1.TitleName);
+                    plugin.SearchForMovie(titleEditor.EditedTitle.Name);
                     frmSearchResult searchResultForm = new frmSearchResult();
                     Cursor = Cursors.Default;
                     DialogResult result = searchResultForm.ShowResults(plugin.GetAvailableTitles());
@@ -292,14 +298,15 @@ namespace OMLDatabaseEditor
                             {
                                 if (!String.IsNullOrEmpty(t.FrontCoverPath))
                                 {
-                                    mediaEditor1.CurrentTitle.CopyFrontCoverFromFile(t.FrontCoverPath, true);
+                                    titleEditor.EditedTitle.CopyFrontCoverFromFile(t.FrontCoverPath, true);
                                 }
                             }
                             else
                             {
-                                mediaEditor1.CurrentTitle.CopyMetadata(t, searchResultForm.OverwriteMetadata);
+                                titleEditor.EditedTitle.CopyMetadata(t, searchResultForm.OverwriteMetadata);
                             }
                         }
+                        titleEditor.RefreshEditor();
                     }
                 }
             }
@@ -311,25 +318,34 @@ namespace OMLDatabaseEditor
 
         private void SaveChanges()
         {
-            if (mediaEditor1.Status == OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges)
+            if (titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges)
             {
-                Title currentTitle = mediaEditor1.CurrentTitle;
-                mediaEditor1.SaveToTitle(currentTitle);
-                if (_titleCollection.GetTitleById(currentTitle.InternalItemID) == null)
+                Title editedTitle = titleEditor.EditedTitle;
+                Title collectionTitle = _titleCollection.GetTitleById(editedTitle.InternalItemID);
+                if (collectionTitle == null)
                 {
-                    DialogResult result = MessageBox.Show("Would you like to retrieve metadata on this movie?", "Get data", MessageBoxButtons.YesNo);
-                    if (result == DialogResult.Yes)
+                    // Title doesn't exist so we'll add it
+                    if (editedTitle.MetadataSourceID == String.Empty)
                     {
-                        LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
-                        MetaDataPluginSelect selectPlugin = new MetaDataPluginSelect(_metadataPlugins);
-                        selectPlugin.ShowDialog();
-                        IOMLMetadataPlugin plugin = selectPlugin.SelectedPlugin();
-                        StartMetadataImport(plugin, false);
+                        DialogResult result = MessageBox.Show("Would you like to retrieve metadata on this movie?", "Get data", MessageBoxButtons.YesNo);
+                        if (result == DialogResult.Yes)
+                        {
+                            LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
+                            MetaDataPluginSelect selectPlugin = new MetaDataPluginSelect(_metadataPlugins);
+                            selectPlugin.ShowDialog();
+                            IOMLMetadataPlugin plugin = selectPlugin.SelectedPlugin();
+                            StartMetadataImport(plugin, false);
+                        }
                     }
-                    _titleCollection.Add(currentTitle);
+                    _titleCollection.Add(editedTitle);
+                }
+                else
+                {
+                    // Title exists so we need to copy edited data to collection title
+                    _titleCollection.Replace(editedTitle);
                 }
                 _titleCollection.saveTitleCollection();
-                mediaEditor1.Status = OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.Initial;
+                titleEditor.ClearEditor();
                 LoadMovies();
             }
         }
@@ -371,10 +387,15 @@ namespace OMLDatabaseEditor
                 HandleMetadataSelect();
         }
 
-        private void mediaEditor1_TitleChanged(object sender, EventArgs e)
+        private void titleEditor_TitleChanged(object sender, EventArgs e)
         {
-            mediaEditor1.SaveToTitle(mediaEditor1.CurrentTitle);
-            this.Text = APP_TITLE + " - " + mediaEditor1.CurrentTitle.Name + "*";
+            this.Text = APP_TITLE + " - " + titleEditor.EditedTitle.Name + "*";
+            ToggleSaveState(true);
+        }
+
+        private void titleEditor_TitleNameChanged(object sender, OMLDatabaseEditor.Controls.TitleNameChangedEventArgs e)
+        {
+            this.Text = APP_TITLE + " - " + e.NewName + "*";
             ToggleSaveState(true);
         }
 
@@ -385,15 +406,15 @@ namespace OMLDatabaseEditor
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (mediaEditor1.CurrentTitle != null)
+            if (titleEditor.EditedTitle != null)
             {
-                Title titleToRemove = mediaEditor1.CurrentTitle;
+                Title titleToRemove = titleEditor.EditedTitle;
                 DialogResult result = MessageBox.Show("Are you sure you want to delete " + titleToRemove.Name + "?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                 if (result == DialogResult.Yes)
                 {
                     _titleCollection.Remove(titleToRemove);
                     _titleCollection.saveTitleCollection();
-                    mediaEditor1.ClearTitle();
+                    titleEditor.ClearEditor();
                     LoadMovies();
                 }
                 this.Text = APP_TITLE;
@@ -404,6 +425,11 @@ namespace OMLDatabaseEditor
         {
             SaveCurrentMovie();
             Application.Exit();
+        }
+
+        private void MainEditor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = SaveCurrentMovie() == DialogResult.Cancel;
         }
 
         private void metaDataSettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -440,8 +466,7 @@ namespace OMLDatabaseEditor
             Title newMovie = new Title();
             newMovie.Name = "New Movie";
             newMovie.DateAdded = DateTime.Now;
-            mediaEditor1.LoadTitle(newMovie);
-            mediaEditor1.Status = OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges;
+            titleEditor.LoadDVD(newMovie);
             ToggleSaveState(true);
         }
 
@@ -457,11 +482,9 @@ namespace OMLDatabaseEditor
                 Title newTitle = new Title();
                 newTitle.DateAdded = DateTime.Now;
                 newTitle.Name = name;
-                mediaEditor1.LoadTitle(newTitle);
+                titleEditor.LoadDVD(newTitle);
                 StartMetadataImport(plugin, false);
-                mediaEditor1.LoadTitle(newTitle);
-                mediaEditor1.Status = OMLDatabaseEditor.Controls.MediaEditor.TitleStatus.UnsavedChanges;
-                this.Text = APP_TITLE + " - " + newTitle.Name + "*";
+                this.Text = APP_TITLE + " - " + titleEditor.EditedTitle.Name + "*";
                 ToggleSaveState(true);
             }
         }
