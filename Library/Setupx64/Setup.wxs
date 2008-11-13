@@ -107,8 +107,8 @@
                         <ServiceInstall Id="OMLEngineService" Name="OMLEngineService" DisplayName="OMLEngineService"
                                         Account="NT AUTHORITY\NetworkService" Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
                                         ErrorControl="normal"/>
-                        <ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
-                                        Start="install" Stop="both" Wait="yes" Remove="uninstall"/>
+                        <!--<ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
+                                        Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
                     </Component>
                     <Component Id="OMLFWService.exe" Guid="8F57190C-0489-40b4-9C46-5E9B09EC0DEC" Win64="yes" DiskId="1">
                         <File Name="OMLFWService.exe"
@@ -116,8 +116,8 @@
                         <ServiceInstall Id="OMLFWService" Name="OMLFWService" DisplayName="OMLFWService"
                                         Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
                                         ErrorControl="normal"/>
-                        <ServiceControl Id="OMLFWServiceControl" Name="OMLFWService"
-                                        Start="install" Stop="both" Wait="yes" Remove="uninstall"/>
+                        <!--<ServiceControl Id="OMLFWServiceControl" Name="OMLFWService"
+                                        Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
                     </Component>
                     <Directory Id="PLUGINSDIRECTORY" Name="Plugins">
                         <Component Id="DVDProfilerPlugin.dll" Guid="b7f12ef4-e500-4d0e-bfbe-d77eae64176c" Win64="yes" DiskId="1">
@@ -335,7 +335,8 @@
 			<Custom Action="CA_RegisterMceApp_Register" After="CA_RegisterMceApp_Unregister_Install">
 				<![CDATA[NOT REMOVE]]>
 			</Custom>
-		</InstallExecuteSequence>
+            <ScheduleReboot After="InstallFinalize"/>
+        </InstallExecuteSequence>
 
 		<!-- The InstallUISequence table describes the order that actions will be executed when the user     -->
 		<!-- runs setup in full UI mode. Some actions must be scheduled in the UI and the execute sequence   -->
