@@ -14,6 +14,8 @@ namespace OMLTestSuite
     {
         static void Main(string[] args)
         {
+            OMLFileWatcherTest fwt = new OMLFileWatcherTest();
+            fwt.TEST_BASE_CASE();
 #if WCF_TEST
             var ms = GetTestMediaSource();
             Console.WriteLine("Transcoding output: " + ms.GetTranscodingFileName());
