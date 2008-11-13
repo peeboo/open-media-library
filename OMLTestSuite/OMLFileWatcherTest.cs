@@ -23,7 +23,6 @@ namespace OMLTestSuite
             {
                 fstm.Flush();
                 fstm.Close();
-                System.Threading.Thread.Sleep(10 * 1000);
             }
             File.Delete(@"..\..\..\Sample Files\FileWatcherTestData\myfile.avi");
         }
