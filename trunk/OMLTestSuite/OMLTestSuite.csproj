@@ -61,6 +61,7 @@
     <Compile Include="MovieCollectorzTest.cs" />
     <Compile Include="MoviePlayerDVDTest.cs" />
     <Compile Include="MyMoviesPluginTest.cs" />
+    <Compile Include="OMLFileWatcherTest.cs" />
     <Compile Include="OMLXMLImporterTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,6 +91,10 @@
     <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
       <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
       <Name>OMLEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OMLFileWatcher\OMLFileWatcher.csproj">
+      <Project>{94FD8015-16D8-442E-8BD8-C2A63D1232D4}</Project>
+      <Name>OMLFileWatcher</Name>
     </ProjectReference>
     <ProjectReference Include="..\OMLSDK\OMLSDK.csproj">
       <Project>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</Project>

@@ -55,6 +55,7 @@ namespace OMLFileWatcher
             Utilities.DebugLine("[OMLFileWatcher] AddWatch (Path:{0}, Filter:{1}, Sub:{2})", path, filter, subdirectories);
             FileSystemWatcher lFSW = new FileSystemWatcher(path, filter);
             lFSW.IncludeSubdirectories = subdirectories;
+            lFSW.NotifyFilter = NotifyFilters.DirectoryName | NotifyFilters.FileName;
             lFSW.Renamed += new RenamedEventHandler(this.fsw_Renamed);
             lFSW.Deleted += new FileSystemEventHandler(this.fsw_Deleted);
             lFSW.Created += new FileSystemEventHandler(this.fsw_Created);
@@ -218,6 +219,5 @@ namespace OMLFileWatcher
             }
             return oTitle;
         }
-
     }
 }
