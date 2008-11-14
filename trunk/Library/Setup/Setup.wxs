@@ -108,6 +108,10 @@
                         <!--<ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
                     </Component>
+                    <Component Id="OMLEngineService.exe.config" Guid="1958AFFB-76DD-49df-AC83-824320C612C0" DiskId="1">
+                        <File Name="OMLEngineService.exe.config"
+                              Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe.config" Checksum="no"/>
+                    </Component>
                     <Component Id="OMLFWService.exe" Guid="8F57190C-0489-40b4-9C46-5E9B09EC0DEC" DiskId="1">
                         <File Name="OMLFWService.exe"
                               Source="..\..\OMLFWService\bin\$(var.BuildType)\OMLFWService.exe" Checksum="yes"/>
@@ -116,6 +120,10 @@
                                         ErrorControl="normal"/>
                         <!--<ServiceControl Id="OMLFWServiceControl" Name="OMLFWService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
+                    </Component>
+                    <Component Id="OMLFWService.exe.config" Guid="DCC5052C-D2E2-4b98-96FF-6552F91D24DF" DiskId="1">
+                        <File Name="OMLFWService.exe.config"
+                              Source="..\..\OMLFWService\bin\$(var.BuildType)\OMLFWService.exe.config" Checksum="no"/>
                     </Component>
                     <Directory Id="PLUGINSDIRECTORY" Name="Plugins">
                         <Component Id="DVDProfilerPlugin.dll" Guid="b7f12ef4-e500-4d0e-bfbe-d77eae64176c" DiskId="1">
@@ -230,7 +238,9 @@
 			<ComponentRef Id="Registration.xml" />
 			<ComponentRef Id="Application.png" />
             <ComponentRef Id="OMLEngineService.exe"/>
+            <ComponentRef Id="OMLEngineService.exe.config"/>
             <ComponentRef Id="OMLFWService.exe"/>
+            <ComponentRef Id="OMLFWService.exe.config"/>
 			
 			<!-- Plugins -->
             <ComponentRef Id="DVDProfilerPlugin.dll" />
