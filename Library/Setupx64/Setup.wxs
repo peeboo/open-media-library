@@ -110,6 +110,10 @@
                         <!--<ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
                     </Component>
+                    <Component Id="OMLEngineService.exe.config" Guid="0CE5FDDB-08AF-470a-90AA-CA95C1108D91" Win64="yes" DiskId="1">
+                        <File Name="OMLEngineService.exe.config"
+                              Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe.config" Checksum="no"/>
+                    </Component>
                     <Component Id="OMLFWService.exe" Guid="8F57190C-0489-40b4-9C46-5E9B09EC0DEC" Win64="yes" DiskId="1">
                         <File Name="OMLFWService.exe"
                               Source="..\..\OMLFWService\bin\$(var.BuildType)\OMLFWService.exe" Checksum="yes"/>
@@ -118,6 +122,10 @@
                                         ErrorControl="normal"/>
                         <!--<ServiceControl Id="OMLFWServiceControl" Name="OMLFWService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
+                    </Component>
+                    <Component Id="OMLFWService.exe.config" Guid="D767C212-EC20-4b27-ACBC-4FF3F96B6435" Win64="yes" DiskId="1">
+                        <File Name="OMLFWService.exe.config"
+                              Source="..\..\OMLFWService\bin\$(var.BuildType)\OMLFWService.exe.config" Checksum="no"/>
                     </Component>
                     <Directory Id="PLUGINSDIRECTORY" Name="Plugins">
                         <Component Id="DVDProfilerPlugin.dll" Guid="b7f12ef4-e500-4d0e-bfbe-d77eae64176c" Win64="yes" DiskId="1">
@@ -234,7 +242,9 @@
             <ComponentRef Id="Registration.xml" />
             <ComponentRef Id="Application.png" />
             <ComponentRef Id="OMLEngineService.exe"/>
+            <ComponentRef Id="OMLEngineService.exe.config"/>
             <ComponentRef Id="OMLFWService.exe"/>
+            <ComponentRef Id="OMLFWService.exe.config"/>
 
             <!-- Plugins -->
             <ComponentRef Id="DVDProfilerPlugin.dll" />
