@@ -121,10 +121,6 @@
                         <!--<ServiceControl Id="OMLFWServiceControl" Name="OMLFWService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
                     </Component>
-                    <Component Id="OMLFWService.exe.config" Guid="DCC5052C-D2E2-4b98-96FF-6552F91D24DF" DiskId="1">
-                        <File Name="OMLFWService.exe.config"
-                              Source="..\..\OMLFWService\bin\$(var.BuildType)\OMLFWService.exe.config" Checksum="no"/>
-                    </Component>
                     <Directory Id="PLUGINSDIRECTORY" Name="Plugins">
                         <Component Id="DVDProfilerPlugin.dll" Guid="b7f12ef4-e500-4d0e-bfbe-d77eae64176c" DiskId="1">
                             <File Name="DVDProfilerPlugin.dll"
@@ -240,7 +236,6 @@
             <ComponentRef Id="OMLEngineService.exe"/>
             <ComponentRef Id="OMLEngineService.exe.config"/>
             <ComponentRef Id="OMLFWService.exe"/>
-            <ComponentRef Id="OMLFWService.exe.config"/>
 			
 			<!-- Plugins -->
             <ComponentRef Id="DVDProfilerPlugin.dll" />
