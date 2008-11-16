@@ -156,7 +156,7 @@ namespace OMLEngine
                     TimeSpan minDuration = TimeSpan.FromSeconds(30);
                     var list = from t in ms.DVDDiskInfo.Titles
                                where t.TitleNumber != mt.TitleNumber && t.AudioTracks.Count > 0 && t.Duration > minDuration
-                               group t by t.File into t
+                               group t by t.File.Substring(4).ToLower() into t
                                select new
                                {
                                    TitleNumber = t.Last().TitleNumber,

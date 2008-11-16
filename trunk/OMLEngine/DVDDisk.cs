@@ -36,7 +36,9 @@ namespace OMLGetDVDInfo
 
         public static DVDDiskInfo ParseDVD(string videoTSDir)
         {
-            return videoTSDir != null ? new DVDDiskInfo() { Titles = IFOUtilities.Titles(videoTSDir).ToArray() } : null;
+            return videoTSDir != null && Directory.Exists(videoTSDir) 
+                ? new DVDDiskInfo() { Titles = IFOUtilities.Titles(videoTSDir).ToArray() } 
+                : null;
         }
 
         public static void Test(string videoTS_Folder)
