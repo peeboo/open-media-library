@@ -68,6 +68,7 @@
                                                     <Text Content="TheSeeker - Developer" Color="White" Font="Calibri, 12" />
                                                     <Text Content="STReNT - Developer" Color="White" Font="Calibri, 12" />
                                                     <Text Content="Warren - Slacker" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="Dravor - Daily Build Guy" Color="White" Font="Calibri, 12" />
                                                 </Children>
                                             </Clip>
                                             <Clip Layout="VerticalFlow">
