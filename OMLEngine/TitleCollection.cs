@@ -267,7 +267,8 @@ namespace OMLEngine
         public void Remove(Title newTitle)
         {
             _moviesByItemId.Remove(newTitle.InternalItemID);
-            if (newTitle.Disks.Count > 0) _moviesByFilename.Remove(GetDiskHash(newTitle.Disks));
+            if (newTitle.Disks.Count > 0)
+                _moviesByFilename.Remove(GetDiskHash(newTitle.Disks));
             _list.Remove(newTitle);
         }
 
@@ -279,7 +280,6 @@ namespace OMLEngine
                 // we will concatonate the path + name for each disk and take the MD5 hash of that to determine if
                 // the disk collection changed
                 //temp += d.Name + d.Path;
-                
 
                 // don't care about the disk name
                 temp += d.Path.ToUpper();
@@ -297,7 +297,6 @@ namespace OMLEngine
 
         public void Replace(Title title)
         {
-
             Utilities.DebugLine("[TitleCollection] Title ("+title.Name+") has been replaced");
             Title t = GetTitleById(title.InternalItemID);
 

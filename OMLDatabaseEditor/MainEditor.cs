@@ -389,7 +389,10 @@ namespace OMLDatabaseEditor
 
         private void titleEditor_TitleChanged(object sender, EventArgs e)
         {
-            this.Text = APP_TITLE + " - " + titleEditor.EditedTitle.Name + "*";
+            if (titleEditor.EditedTitle != null)
+                this.Text = APP_TITLE + " - " + titleEditor.EditedTitle.Name + "*";
+            else
+                this.Text = APP_TITLE;
             ToggleSaveState(true);
         }
 

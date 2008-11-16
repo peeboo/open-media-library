@@ -636,6 +636,7 @@ namespace OMLEngine
             _videoDetails = GetSerializedString(info, "video_details");
             _subtitles = GetSerializedList<List<string>>(info, "subtitles");
             _disks = GetSerializedList<List<Disk>>(info, "disks");
+            CleanDuplicateDisks();
             if (_videoFormat == VideoFormat.DVD)
             {
                 if (_videoStandard == "PAL")
@@ -645,6 +646,22 @@ namespace OMLEngine
             }
             _videoResolution = GetSerializedString(info, "video_resolution");
             _extraFeatures = GetSerializedList<List<string>>(info, "extra_features");
+        }
+
+        void CleanDuplicateDisks()
+        {
+            foreach (Disk d in new List<Disk>(this._disks))
+            {
+                int i = _disks.IndexOf(d);
+                if (i < 0)
+                    continue;
+                while (true) {
+                    int oi = _disks.IndexOf(d, i+1);
+                    if (oi < 0)
+                        break;
+                    _disks.RemoveAt(oi);
+                }
+            }
         }
 
         /// <summary>
@@ -794,19 +811,29 @@ namespace OMLEngine
             _audioTracks.Add(language_format);
         }
 
-        /*
-        public int CompareTo(object other)
+        public override bool Equals(object obj)
         {
-            return InternalItemID.CompareTo(
-                ((Title)other).InternalItemID
-                );
+            Title otherT = obj as Title;
+            if (otherT == null)
+                return false;
+            if (this.InternalItemID == otherT.InternalItemID)
+                return true;
+            if (this.Name == otherT.Name)
+                return true;
+            return false;
         }
-        */
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
+
         public int CompareTo(object other)
         {
-            return Name.CompareTo(
-                ((Title)other).Name
-                );
+            Title otherT = other as Title;
+            if (otherT == null)
+                return -1;
+            return Name.CompareTo(otherT.Name);
         }
 
         static public Title CreateFromXML(string fileName, bool copyImages)
