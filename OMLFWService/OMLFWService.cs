@@ -48,7 +48,7 @@ namespace OMLFWService
                     watches.Add(watchitem);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 watches.Add("c:\\users\\public\\recorded tv;*.*");
             }

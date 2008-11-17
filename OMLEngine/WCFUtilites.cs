@@ -38,6 +38,8 @@ namespace OMLEngine
         {
             try
             {
+                // *** THIS NEEDS TO BE RUN AS ADMIN, if you see an error/expection indication that the endpoint failed ***
+                // sc.exe config NetTcpPortSharing start=demand
                 var ret = new ServiceHost(serviceType);
                 ret.Open();
                 WriteToLog(source, EventLogEntryType.Information, "StartService({0})", ret.Description.Name);
@@ -45,7 +47,7 @@ namespace OMLEngine
             }
             catch (Exception ex)
             {
-                WriteToLog(source, EventLogEntryType.Error, "OnStart: {0}", ex);
+                WriteToLog(source, EventLogEntryType.Error, "StartService (Source={0}, Type={1}): {2}", source, serviceType, ex);
                 return null;
             }
         }
