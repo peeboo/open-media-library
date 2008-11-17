@@ -288,6 +288,10 @@
 		<CustomAction Id="CA_RegisterMceApp_Register" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
 		<CustomAction Id="CA_RegisterMceApp_Rollback" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="rollback" Return="ignore" Impersonate="no"/>
 
+        <CustomAction Id="ActivateNetTcpPortSharing"
+                      Directory="TARGETDIR"
+                      ExeCommand="sc.exe config NetTcpPortSharing start= demand"
+                      Return="check"/>
 		<!-- The InstallExecuteSequence table describes the order that actions will be executed during       -->
 		<!-- installation, repair and uninstall of this product.                                             -->
 		<InstallExecuteSequence>
@@ -336,6 +340,7 @@
 			<Custom Action="CA_RegisterMceApp_Register" After="CA_RegisterMceApp_Unregister_Install">
 				<![CDATA[NOT REMOVE]]>
 			</Custom>
+            <Custom Action="ActivateNetTcpPortSharing" After="InstallFinalize">Not Installed</Custom>
             <ScheduleReboot After="InstallFinalize"/>
         </InstallExecuteSequence>
 
