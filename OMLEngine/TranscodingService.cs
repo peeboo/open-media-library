@@ -95,7 +95,7 @@ namespace OMLEngineService
 
         public static MyClientBase<ITranscodingService> NewTranscodingServiceProxy()
         {
-            return new MyClientBase<ITranscodingService>(WCFUtilites.NetTcpBinding(), new EndpointAddress("net.tcp://localhost:4321/OMLTS"));
+            return new MyClientBase<ITranscodingService>(WCFUtilites.NetTcpBinding(), new EndpointAddress("net.tcp://localhost:8321/OMLTS"));
         }
 
         public static MyClientBase<ITranscodingNotifyingService> NewTranscodingNotifyingServiceProxy(string uri)

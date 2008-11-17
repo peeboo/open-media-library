@@ -44,7 +44,7 @@ namespace OMLEngine
         static MyClientBase<ITitleCollectionAPI> ServiceProxy()
         {
             return new MyClientBase<ITitleCollectionAPI>(WCFUtilites.NetTcpBinding(), 
-                new EndpointAddress("net.tcp://localhost:4321/OML-TitleCollection"));
+                new EndpointAddress("net.tcp://localhost:8321/OMLTC"));
         }
 
         public void Add(Title t)
