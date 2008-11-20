@@ -85,6 +85,9 @@
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
             this.txtAspectRatio = new DevExpress.XtraEditors.TextEdit();
             this.tpPeople = new DevExpress.XtraTab.XtraTabPage();
+            this.rgPeople = new DevExpress.XtraEditors.RadioGroup();
+            this.lbPeople = new DevExpress.XtraEditors.ListBoxControl();
+            this.directorsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.contextImage = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disksBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -120,6 +123,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.numWatchedCount.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCountryOfOrigin.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAspectRatio.Properties)).BeginInit();
+            this.tpPeople.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.rgPeople.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lbPeople)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.directorsBindingSource)).BeginInit();
             this.contextImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.disksBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -195,11 +202,13 @@
             this.pbFrontCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbFrontCover.TabIndex = 0;
             this.pbFrontCover.TabStop = false;
+            this.pbFrontCover.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pbFrontCover_MouseDoubleClick);
             this.pbFrontCover.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pbCovers_MouseClick);
             // 
             // titleSource
             // 
             this.titleSource.DataSource = typeof(OMLEngine.Title);
+            this.titleSource.CurrentChanged += new System.EventHandler(this.titleSource_CurrentChanged);
             // 
             // pbBackCover
             // 
@@ -215,6 +224,7 @@
             this.pbBackCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbBackCover.TabIndex = 18;
             this.pbBackCover.TabStop = false;
+            this.pbBackCover.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pbFrontCover_MouseDoubleClick);
             this.pbBackCover.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pbCovers_MouseClick);
             // 
             // btnTags
@@ -762,9 +772,39 @@
             // tpPeople
             // 
             this.tpPeople.AutoScroll = true;
+            this.tpPeople.Controls.Add(this.rgPeople);
+            this.tpPeople.Controls.Add(this.lbPeople);
             this.tpPeople.Name = "tpPeople";
             this.tpPeople.Size = new System.Drawing.Size(517, 496);
             this.tpPeople.Text = "People";
+            // 
+            // rgPeople
+            // 
+            this.rgPeople.Location = new System.Drawing.Point(4, 4);
+            this.rgPeople.Name = "rgPeople";
+            this.rgPeople.Properties.Columns = 3;
+            this.rgPeople.Properties.Items.AddRange(new DevExpress.XtraEditors.Controls.RadioGroupItem[] {
+            new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Directors"),
+            new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Writers"),
+            new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Producers")});
+            this.rgPeople.Properties.SelectedIndexChanged += new System.EventHandler(this.rgPeople_Properties_SelectedIndexChanged);
+            this.rgPeople.Size = new System.Drawing.Size(510, 38);
+            this.rgPeople.TabIndex = 1;
+            // 
+            // lbPeople
+            // 
+            this.lbPeople.DataSource = this.directorsBindingSource;
+            this.lbPeople.DisplayMember = "full_name";
+            this.lbPeople.Location = new System.Drawing.Point(4, 48);
+            this.lbPeople.MultiColumn = true;
+            this.lbPeople.Name = "lbPeople";
+            this.lbPeople.Size = new System.Drawing.Size(511, 136);
+            this.lbPeople.TabIndex = 0;
+            // 
+            // directorsBindingSource
+            // 
+            this.directorsBindingSource.DataMember = "Directors";
+            this.directorsBindingSource.DataSource = this.titleSource;
             // 
             // contextImage
             // 
@@ -835,6 +875,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.numWatchedCount.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCountryOfOrigin.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAspectRatio.Properties)).EndInit();
+            this.tpPeople.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.rgPeople.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lbPeople)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.directorsBindingSource)).EndInit();
             this.contextImage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.disksBindingSource)).EndInit();
             this.ResumeLayout(false);
@@ -903,5 +947,8 @@
         private DevExpress.XtraEditors.SimpleButton btnTrailers;
         private System.Windows.Forms.BindingSource disksBindingSource;
         private System.Windows.Forms.OpenFileDialog openCoverFile;
+        private DevExpress.XtraEditors.RadioGroup rgPeople;
+        private DevExpress.XtraEditors.ListBoxControl lbPeople;
+        private System.Windows.Forms.BindingSource directorsBindingSource;
     }
 }
