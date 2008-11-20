@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 using OMLEngine;
 
@@ -111,6 +113,48 @@ namespace OMLDatabaseEditor.Controls
             }
         }
 
+        private void TogglePeople(int selectedPeople)
+        {
+            switch (selectedPeople)
+            {
+                case 0: //Directors
+                    lbPeople.DataSource = EditedTitle.Directors;
+                    break;
+                case 1: //Writers
+                    lbPeople.DataSource = EditedTitle.Writers;
+                    break;
+                case 2: //Producers
+                    lbPeople.DataSource = EditedTitle.Producers;
+                    break;
+            }
+        }
+
+        private void EditPicture(string imagePath)
+        {
+            // Attempt to locate the system's editor for this file type
+            RegistryKey rkey = Registry.ClassesRoot.OpenSubKey(Path.GetExtension(imagePath));
+            if ((rkey != null) &&
+               ((rkey = Registry.ClassesRoot.OpenSubKey(rkey.GetValue("") + @"\shell\edit\command")) != null) &&
+               (rkey.GetValue("").ToString() != String.Empty))
+            {
+                ProcessStartInfo psi = new ProcessStartInfo();
+                // Don't use the system's shell
+                //psi.UseShellExecute = false;
+                psi.UseShellExecute = true;
+                psi.FileName = imagePath;
+                if (psi.Verbs.Contains<string>("edit"))
+                {
+                    psi.Verb = "edit";
+                    // Replace the file parameter with this file
+                    //psi.FileName = rkey.GetValue("").ToString().Replace("%1", imagePath);
+                    // Begin execution
+                    Process.Start(psi);
+                    return;
+                }
+            }
+            MessageBox.Show("No editor found for this image file type", "Edit Image", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
         private void btnDisks_Click(object sender, EventArgs e)
         {
             DiskEditorFrm diskEditor = new DiskEditorFrm(EditedTitle.Disks);
@@ -168,6 +212,22 @@ namespace OMLDatabaseEditor.Controls
         private void btnTrailers_Click(object sender, EventArgs e)
         {
             EditList("Trailers", _dvdTitle.Trailers);
+        }
+
+        private void rgPeople_Properties_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TogglePeople(rgPeople.SelectedIndex);
+        }
+
+        private void titleSource_CurrentChanged(object sender, EventArgs e)
+        {
+            TogglePeople(rgPeople.SelectedIndex);
+        }
+
+        private void pbFrontCover_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            PictureBox pb = sender as PictureBox;
+            EditPicture(pb.ImageLocation);
         }
     }
 
