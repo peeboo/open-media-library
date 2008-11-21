@@ -63,6 +63,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -109,6 +112,7 @@
     <Compile Include="Code\UISettings.cs" />
     <Compile Include="Code\Filters.cs" />
     <Compile Include="Code\VirtualDirectory.cs" />
+    <Compile Include="Code\TitleCollectionAPIProxy.cs" />
     <Compile Include="I18nResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
