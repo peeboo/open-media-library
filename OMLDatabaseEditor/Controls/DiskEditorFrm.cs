@@ -25,6 +25,7 @@ namespace OMLDatabaseEditor.Controls
         private void lbDisks_SelectedIndexChanged(object sender, EventArgs e)
         {
             diskEditor.LoadDisk(lbDisks.SelectedItem as Disk);
+            diskEditor.Visible = true;
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -33,7 +34,10 @@ namespace OMLDatabaseEditor.Controls
             {
                 _disks.Remove(lbDisks.SelectedItem as Disk);
                 if (_disks.Count == 0)
+                {
                     diskEditor.LoadDisk(null);
+                    diskEditor.Visible = false;
+                }
             }
         }
 
@@ -42,6 +46,8 @@ namespace OMLDatabaseEditor.Controls
             Disk newDisk = new Disk("Disk " + (_disks.Count + 1).ToString(), "", VideoFormat.MPG);
             _disks.Add(newDisk);
             lbDisks.SelectedItem = newDisk;
+            diskEditor.LoadDisk(newDisk);
+            diskEditor.Visible = true;
         }
 
         private void DiskEditorFrm_FormClosing(object sender, FormClosingEventArgs e)

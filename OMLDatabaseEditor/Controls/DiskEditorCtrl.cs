@@ -25,7 +25,10 @@ namespace OMLDatabaseEditor.Controls
         public void LoadDisk(Disk disk)
         {
             _currentDisk = disk;
-            diskSource.DataSource = _currentDisk;
+            if (disk == null)
+                diskSource.DataSource = typeof(Disk);
+            else
+                diskSource.DataSource = _currentDisk;
         }
 
         public void SaveChanges()
@@ -100,8 +103,11 @@ namespace OMLDatabaseEditor.Controls
 
         private void diskSource_DataSourceChanged(object sender, EventArgs e)
         {
-            cbDVD.Checked = ((Disk)diskSource.DataSource).Format == VideoFormat.DVD;
-            cbDVD_CheckedChanged(null, null);
+            if (diskSource.DataSource is Disk && diskSource.DataSource != null)
+            {
+                cbDVD.Checked = ((Disk)diskSource.DataSource).Format == VideoFormat.DVD;
+                cbDVD_CheckedChanged(null, null);
+            }
         }
 
         private void txtPath_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)

@@ -133,26 +133,16 @@ namespace OMLDatabaseEditor.Controls
 
         private void EditPicture(string imagePath)
         {
-            // Attempt to locate the system's editor for this file type
-            RegistryKey rkey = Registry.ClassesRoot.OpenSubKey(Path.GetExtension(imagePath));
-            if ((rkey != null) &&
-               ((rkey = Registry.ClassesRoot.OpenSubKey(rkey.GetValue("") + @"\shell\edit\command")) != null) &&
-               (rkey.GetValue("").ToString() != String.Empty))
+            ProcessStartInfo psi = new ProcessStartInfo();
+            // Don't use the system's shell
+            //psi.UseShellExecute = false;
+            psi.UseShellExecute = true;
+            psi.FileName = imagePath;
+            if (psi.Verbs.Contains<string>("edit"))
             {
-                ProcessStartInfo psi = new ProcessStartInfo();
-                // Don't use the system's shell
-                //psi.UseShellExecute = false;
-                psi.UseShellExecute = true;
-                psi.FileName = imagePath;
-                if (psi.Verbs.Contains<string>("edit"))
-                {
-                    psi.Verb = "edit";
-                    // Replace the file parameter with this file
-                    //psi.FileName = rkey.GetValue("").ToString().Replace("%1", imagePath);
-                    // Begin execution
-                    Process.Start(psi);
-                    return;
-                }
+                psi.Verb = "edit";
+                Process.Start(psi);
+                return;
             }
             MessageBox.Show("No editor found for this image file type", "Edit Image", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
@@ -161,6 +151,7 @@ namespace OMLDatabaseEditor.Controls
         {
             DiskEditorFrm diskEditor = new DiskEditorFrm(EditedTitle.Disks);
             diskEditor.ShowDialog();
+            _titleChanged(EventArgs.Empty);
         }
 
         private void pbCovers_MouseClick(object sender, MouseEventArgs e)
