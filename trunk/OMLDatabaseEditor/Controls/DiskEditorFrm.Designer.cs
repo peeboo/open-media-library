@@ -32,10 +32,10 @@ namespace OMLDatabaseEditor.Controls
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DiskEditorFrm));
             this.kryptonManager = new ComponentFactory.Krypton.Toolkit.KryptonManager(this.components);
             this.kryptonPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
-            this.lbDisks = new DevExpress.XtraEditors.ListBoxControl();
-            this.btnAdd = new DevExpress.XtraEditors.SimpleButton();
             this.btnDelete = new DevExpress.XtraEditors.SimpleButton();
+            this.btnAdd = new DevExpress.XtraEditors.SimpleButton();
             this.diskEditor = new OMLDatabaseEditor.Controls.DiskEditorCtrl();
+            this.lbDisks = new DevExpress.XtraEditors.ListBoxControl();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel)).BeginInit();
             this.kryptonPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbDisks)).BeginInit();
@@ -53,16 +53,15 @@ namespace OMLDatabaseEditor.Controls
             this.kryptonPanel.Size = new System.Drawing.Size(359, 221);
             this.kryptonPanel.TabIndex = 0;
             // 
-            // lbDisks
+            // btnDelete
             // 
-            this.lbDisks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbDisks.Location = new System.Drawing.Point(3, 3);
-            this.lbDisks.Name = "lbDisks";
-            this.lbDisks.Size = new System.Drawing.Size(353, 132);
-            this.lbDisks.TabIndex = 2;
-            this.lbDisks.SelectedIndexChanged += new System.EventHandler(this.lbDisks_SelectedIndexChanged);
+            this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnDelete.Location = new System.Drawing.Point(84, 135);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnDelete.TabIndex = 5;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // btnAdd
             // 
@@ -74,16 +73,6 @@ namespace OMLDatabaseEditor.Controls
             this.btnAdd.Text = "Add";
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // btnDelete
-            // 
-            this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnDelete.Location = new System.Drawing.Point(84, 135);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnDelete.TabIndex = 5;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            // 
             // diskEditor
             // 
             this.diskEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
@@ -92,6 +81,18 @@ namespace OMLDatabaseEditor.Controls
             this.diskEditor.Name = "diskEditor";
             this.diskEditor.Size = new System.Drawing.Size(352, 58);
             this.diskEditor.TabIndex = 3;
+            this.diskEditor.Visible = false;
+            // 
+            // lbDisks
+            // 
+            this.lbDisks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbDisks.Location = new System.Drawing.Point(3, 3);
+            this.lbDisks.Name = "lbDisks";
+            this.lbDisks.Size = new System.Drawing.Size(353, 132);
+            this.lbDisks.TabIndex = 2;
+            this.lbDisks.SelectedIndexChanged += new System.EventHandler(this.lbDisks_SelectedIndexChanged);
             // 
             // DiskEditorFrm
             // 
