@@ -59,6 +59,8 @@ namespace OMLDatabaseEditor.Controls
             _isLoading = true;
             titleSource.DataSource = _dvdTitle;
             Status = TitleStatus.Normal;
+            imageWatcherFront.Path = Path.GetDirectoryName(_dvdTitle.FrontCoverPath);
+            imageWatcherFront.Filter = "F*.jpg";
             _isLoading = false;
         }
 
@@ -228,6 +230,13 @@ namespace OMLDatabaseEditor.Controls
         {
             PictureBox pb = sender as PictureBox;
             EditPicture(pb.ImageLocation);
+        }
+
+        private void imageWatcherFront_Changed(object sender, FileSystemEventArgs e)
+        {
+            // Update scaled menu image
+            if (e.ChangeType == WatcherChangeTypes.Changed && e.Name == Path.GetFileName(_dvdTitle.FrontCoverPath))
+                _dvdTitle.BuildResizedMenuImage();
         }
     }
 

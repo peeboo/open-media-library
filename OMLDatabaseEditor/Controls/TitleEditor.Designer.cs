@@ -93,6 +93,8 @@
             this.disksBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.openCoverFile = new System.Windows.Forms.OpenFileDialog();
+            this.imageWatcherFront = new System.IO.FileSystemWatcher();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tpVisual.SuspendLayout();
@@ -129,6 +131,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.directorsBindingSource)).BeginInit();
             this.contextImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.disksBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).BeginInit();
             this.SuspendLayout();
             // 
             // xtraTabControl1
@@ -836,6 +839,19 @@
             this.openCoverFile.Filter = "JPG Files|*.jpg|All Files|*.*";
             this.openCoverFile.Title = "Select Cover Art";
             // 
+            // imageWatcherFront
+            // 
+            this.imageWatcherFront.EnableRaisingEvents = true;
+            this.imageWatcherFront.NotifyFilter = System.IO.NotifyFilters.LastWrite;
+            this.imageWatcherFront.SynchronizingObject = this;
+            this.imageWatcherFront.Changed += new System.IO.FileSystemEventHandler(this.imageWatcherFront_Changed);
+            // 
+            // imageList1
+            // 
+            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            // 
             // TitleEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -881,6 +897,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.directorsBindingSource)).EndInit();
             this.contextImage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.disksBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -950,5 +967,7 @@
         private DevExpress.XtraEditors.RadioGroup rgPeople;
         private DevExpress.XtraEditors.ListBoxControl lbPeople;
         private System.Windows.Forms.BindingSource directorsBindingSource;
+        private System.IO.FileSystemWatcher imageWatcherFront;
+        private System.Windows.Forms.ImageList imageList1;
     }
 }
