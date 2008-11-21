@@ -5,7 +5,7 @@ using OMLEngine;
 
 namespace OMLEngineService
 {
-    [ServiceContract]
+    [ServiceContract(Namespace= "net.tcp://localhost:8321/OMLTS")]
     public interface ITranscodingService
     {
         [OperationContract(IsOneWay = true)]
@@ -31,7 +31,7 @@ namespace OMLEngineService
         Error,
     }
 
-    [ServiceContract]
+    [ServiceContract(Namespace= "net.tcp://localhost:8321/OMLTNS")]
     public interface ITranscodingNotifyingService
     {
         [OperationContract(IsOneWay = true)]
