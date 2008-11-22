@@ -117,17 +117,20 @@ namespace OMLDatabaseEditor.Controls
 
         private void TogglePeople(int selectedPeople)
         {
-            switch (selectedPeople)
+            if (EditedTitle != null)
             {
-                case 0: //Directors
-                    lbPeople.DataSource = EditedTitle.Directors;
-                    break;
-                case 1: //Writers
-                    lbPeople.DataSource = EditedTitle.Writers;
-                    break;
-                case 2: //Producers
-                    lbPeople.DataSource = EditedTitle.Producers;
-                    break;
+                switch (selectedPeople)
+                {
+                    case 0: //Directors
+                        lbPeople.DataSource = EditedTitle.Directors;
+                        break;
+                    case 1: //Writers
+                        lbPeople.DataSource = EditedTitle.Writers;
+                        break;
+                    case 2: //Producers
+                        lbPeople.DataSource = EditedTitle.Producers;
+                        break;
+                }
             }
         }
 
@@ -149,9 +152,12 @@ namespace OMLDatabaseEditor.Controls
 
         private void btnDisks_Click(object sender, EventArgs e)
         {
-            DiskEditorFrm diskEditor = new DiskEditorFrm(EditedTitle.Disks);
-            diskEditor.ShowDialog();
-            _titleChanged(EventArgs.Empty);
+            if (EditedTitle != null)
+            {
+                DiskEditorFrm diskEditor = new DiskEditorFrm(EditedTitle.Disks);
+                diskEditor.ShowDialog();
+                _titleChanged(EventArgs.Empty);
+            }
         }
 
         private void pbCovers_MouseClick(object sender, MouseEventArgs e)
@@ -179,32 +185,38 @@ namespace OMLDatabaseEditor.Controls
 
         private void btnGenres_Click(object sender, EventArgs e)
         {
-            EditList("Genres", _dvdTitle.Genres);
+            if (_dvdTitle != null)
+                EditList("Genres", _dvdTitle.Genres);
         }
 
         private void btnTags_Click(object sender, EventArgs e)
         {
-            EditList("Tags", _dvdTitle.Tags);
+            if (_dvdTitle != null)
+                EditList("Tags", _dvdTitle.Tags);
         }
 
         private void btnExtras_Click(object sender, EventArgs e)
         {
-            EditList("Extra Features", _dvdTitle.ExtraFeatures);
+            if (_dvdTitle != null)
+                EditList("Extra Features", _dvdTitle.ExtraFeatures);
         }
 
         private void btnTracks_Click(object sender, EventArgs e)
         {
-            EditList("Audio Tracks", _dvdTitle.AudioTracks);
+            if (_dvdTitle != null)
+                EditList("Audio Tracks", _dvdTitle.AudioTracks);
         }
 
         private void btnSubtitles_Click(object sender, EventArgs e)
         {
-            EditList("Subtitles", _dvdTitle.Subtitles);
+            if (_dvdTitle != null)
+                EditList("Subtitles", _dvdTitle.Subtitles);
         }
 
         private void btnTrailers_Click(object sender, EventArgs e)
         {
-            EditList("Trailers", _dvdTitle.Trailers);
+            if (_dvdTitle != null)
+                EditList("Trailers", _dvdTitle.Trailers);
         }
 
         private void rgPeople_Properties_SelectedIndexChanged(object sender, EventArgs e)
