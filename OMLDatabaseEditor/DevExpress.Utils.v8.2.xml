@@ -517,7 +517,8 @@
         </member>
         <member name="M:DevExpress.Utils.Menu.DXPopupMenu.GenerateCloseUpEvent">
             <summary>
-                <para> [To be supplied] </para>
+                <para>Fires a specific event that typically occurs after the menu has disappeared.
+</para>
             </summary>
 
 
@@ -700,9 +701,11 @@
         </member>
         <member name="P:DevExpress.Utils.AppearanceOptions.Empty">
             <summary>
-                <para> [To be supplied] </para>
+                <para>Returns an AppearanceOptions object whose settings are not initialized.
+</para>
             </summary>
-            <value> [To be supplied] </value>
+            <value>An AppearanceOptions object whose settings are not initialized.
+</value>
 
 
         </member>
@@ -1457,9 +1460,11 @@
         </member>
         <member name="P:DevExpress.Utils.AppearanceObject.EmptyAppearance">
             <summary>
-                <para> [To be supplied] </para>
+                <para>Returns an empty appearance object.
+</para>
             </summary>
-            <value> [To be supplied] </value>
+            <value>An AppearanceObject object whose settings are not initialized.
+</value>
 
 
         </member>
@@ -4498,11 +4503,32 @@ For the XtraGrid control, this option acts as the <see cref="F:DevExpress.Utils.
         </member>
         <member name="M:DevExpress.XtraPrinting.XlsExportOptions.#ctor(System.Boolean)">
             <summary>
-                <para>Initializes a new instance of the XlsExportOptions class with the specified native format.
+                <para>Initializes a new instance of the XlsExportOptions class with the specified native format setting.
 </para>
             </summary>
             <param name="useNativeFormat">
 		<b>true</b> to use the data format of the exported data fields for the cells in the XLS document; otherwise, <b>false</b>. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.XlsExportOptions.UseNativeFormat"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.XlsExportOptions.#ctor(System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+                <para>Initializes a new instance of the XlsExportOptions class with the specified native format, grid lines and hyperlinks settings.
+
+</para>
+            </summary>
+            <param name="useNativeFormat">
+		<b>true</b> to use the data format of the exported data fields for the cells in the XLS document; otherwise, <b>false</b>. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.XlsExportOptions.UseNativeFormat"/> property.
+
+            </param>
+            <param name="showGridLines">
+		<b>true</b> to show the grid lines in the resulting XLS file; otherwise, <b>false</b>. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.XlsExportOptions.ShowGridLines"/> property.
+
+            </param>
+            <param name="exportHyperlinks">
+		<b>true</b> to export hyperlinks; otherwise, <b>false</b>. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.XlsExportOptions.ExportHyperlinks"/> property.
 
             </param>
 
@@ -4518,6 +4544,16 @@ For the XtraGrid control, this option acts as the <see cref="F:DevExpress.Utils.
 		An XlsExportOptions object (which is the <see cref="T:DevExpress.XtraPrinting.ExportOptionsBase"/> descendant) whose settings are assigned to the current object. If <b>null</b> (<b>Nothing</b> in Visual Basic), then a <see cref="T:System.ArgumentNullException"/> will be thrown.
 
             </param>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.XlsExportOptions.ExportHyperlinks">
+            <summary>
+                <para>Gets or sets a value indicating whether hyperlinks should be exported to XLS.
+</para>
+            </summary>
+            <value><b>true</b> to export hyperlinks; otherwise, <b>false</b>.
+</value>
 
 
         </member>
@@ -6132,10 +6168,12 @@ The following screenshot shows the <b>UltraFlat</b> style applied to a button ed
         </member>
         <member name="M:DevExpress.Utils.ImageCollection.ExportToFile(System.String)">
             <summary>
-                <para> [To be supplied] </para>
+                <para>Saves the contents of the current collection to a file.
+</para>
             </summary>
             <param name="fileName">
-		 [To be supplied] 
+		A string that specifies the name of the file to which the contents of the image collection is saved.
+
             </param>
 
 
@@ -6386,6 +6424,18 @@ The following screenshot shows the <b>UltraFlat</b> style applied to a button ed
             <returns><b>true</b> if the validation is cancelled; otherwise, <b>false</b>.
 
 </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Utils.Controls.ControlBase.ResetValidationCanceled(System.Windows.Forms.Control)">
+            <summary>
+                <para>Resets the control's <b>ValidationCancelled</b> property. This method supports the internal infrastructure and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <param name="control">
+		A control.
+
+            </param>
 
 
         </member>
@@ -7475,18 +7525,23 @@ based on the specified <b>Hashtable</b> object.
         </member>
         <member name="M:DevExpress.XtraPrinting.Accessor.CreateProperty(System.Type,System.ComponentModel.PropertyDescriptor,System.Attribute[])">
             <summary>
-                <para> [To be supplied] </para>
+                <para>This member supports the .NET Framework infrastructure and is not intended to be used directly from your code. 
+</para>
             </summary>
             <param name="type">
-		 [To be supplied] 
+		@nbsp;
+
             </param>
             <param name="oldPropertyDescriptor">
-		 [To be supplied] 
+		@nbsp;
+
             </param>
             <param name="attributes">
-		 [To be supplied] 
+		@nbsp;
+
             </param>
-            <returns> [To be supplied] </returns>
+            <returns>@nbsp;
+</returns>
 
 
         </member>
@@ -7768,11 +7823,19 @@ based on the specified <b>Hashtable</b> object.
         </member>
         <member name="P:DevExpress.Utils.TextOptions.DefaultStringFormat">
             <summary>
-                <para>Gets an object that contains formatting information whose settings are set to default values.
+                <para>Gets an object that contains the default formatting settings.
 </para>
             </summary>
-            <value>A <see cref="T:System.Drawing.StringFormat"/> object whose settings are set to default values.
+            <value>A <see cref="T:System.Drawing.StringFormat"/> object containing the default formatting settings.
 </value>
+
+
+        </member>
+        <member name="M:DevExpress.Utils.TextOptions.ForceUseGenericDefaultStringFormat">
+            <summary>
+                <para>Specifies how the default string format referred to by the <see cref="P:DevExpress.Utils.TextOptions.DefaultStringFormat"/> property is constructed.
+</para>
+            </summary>
 
 
         </member>
@@ -10278,13 +10341,16 @@ based on the specified <b>Hashtable</b> object.
         </member>
         <member name="M:DevExpress.Utils.ToolTipController.AddClientControl(System.Windows.Forms.Control,DevExpress.Utils.IToolTipControlClient)">
             <summary>
-                <para> [To be supplied] </para>
+                <para>Enables the display of tooltips for the specified control implementing the <b>DevExpress.Utils.IToolTipControlClient</b> interface. 
+</para>
             </summary>
             <param name="control">
-		 [To be supplied] 
+		@nbsp;
+
             </param>
             <param name="owner">
-		 [To be supplied] 
+		@nbsp;
+
             </param>
 
 
@@ -11389,6 +11455,14 @@ based on the specified <b>Hashtable</b> object.
             </summary>
             <value>An integer value specifying the splitter's current location in pixels from the side of the fixed panel.
 </value>
+
+
+        </member>
+        <member name="E:DevExpress.XtraEditors.SplitContainerControl.SplitterPositionChanged">
+            <summary>
+                <para>Occurs after the splitter's position has been changed. 
+</para>
+            </summary>
 
 
         </member>

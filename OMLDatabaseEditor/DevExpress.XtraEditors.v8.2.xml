@@ -1018,10 +1018,10 @@ In standalone editors, because of the .NET binding mechanism, the <b>Ignore</b> 
         </member>
         <member name="P:DevExpress.XtraEditors.Repository.RepositoryItemCheckedComboBoxEdit.SynchronizeEditValueWithCheckedItems">
             <summary>
-                <para>Gets or sets whether changing a CheckedComboBoxEdit control's value automatically updates the check states of items in the dropdown, and vice versa.
+                <para>Gets or sets whether changing a CheckedComboBoxEdit control's EditValue automatically updates the check states of items in the dropdown.
 </para>
             </summary>
-            <value><b>true</b> if the editor's value and items in the dropdown are in sync; otherwise, <b>false</b>.
+            <value><b>true</b> if changing the editor's value updates the check states of items in the dropdown; otherwise, <b>false</b>.
 </value>
 
 
@@ -7305,6 +7305,14 @@ The following screenshots show color editors when the <see cref="P:DevExpress.Xt
             </param>
             <returns>A <b>CheckState</b> enumeration member representing the item's check state. <b>CheckState.Unchecked</b> if the item's index is negative or exceeds the last available index.
 </returns>
+
+
+        </member>
+        <member name="E:DevExpress.XtraEditors.BaseCheckedListBoxControl.GetItemEnabled">
+            <summary>
+                <para>Enables you to disable specific items, in bound mode.
+</para>
+            </summary>
 
 
         </member>
@@ -13919,10 +13927,12 @@ In a <see cref="T:DevExpress.XtraEditors.BaseListBoxControl"/> control's descend
         </member>
         <member name="M:DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider.RemoveControlError(System.Windows.Forms.Control)">
             <summary>
-                <para> [To be supplied] </para>
+                <para>Removes an error associated with the specified control.
+</para>
             </summary>
             <param name="control">
-		 [To be supplied] 
+		A control whose error must be removed.
+
             </param>
 
 

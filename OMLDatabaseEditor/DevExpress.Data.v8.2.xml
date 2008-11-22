@@ -76,6 +76,54 @@ The <see cref="E:DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider.GetError
 
 
         </member>
+        <member name="F:DevExpress.XtraEditors.DXErrorProvider.ErrorType.User4">
+            <summary>
+                <para>A user-defined icon to be provided via the <see cref="E:DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider.GetErrorIcon"/> event.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraEditors.DXErrorProvider.ErrorType.User5">
+            <summary>
+                <para>A user-defined icon to be provided via the <see cref="E:DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider.GetErrorIcon"/> event.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraEditors.DXErrorProvider.ErrorType.User6">
+            <summary>
+                <para>A user-defined icon to be provided via the <see cref="E:DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider.GetErrorIcon"/> event.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraEditors.DXErrorProvider.ErrorType.User7">
+            <summary>
+                <para>A user-defined icon to be provided via the <see cref="E:DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider.GetErrorIcon"/> event.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraEditors.DXErrorProvider.ErrorType.User8">
+            <summary>
+                <para>A user-defined icon to be provided via the <see cref="E:DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider.GetErrorIcon"/> event.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraEditors.DXErrorProvider.ErrorType.User9">
+            <summary>
+                <para>A user-defined icon to be provided via the <see cref="E:DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider.GetErrorIcon"/> event.
+</para>
+            </summary>
+
+
+        </member>
         <member name="F:DevExpress.XtraEditors.DXErrorProvider.ErrorType.Warning">
             <summary>
                 <para>The 'Warning' icon: 
@@ -5381,12 +5429,11 @@ Rows are grouped by the year part of their values.
         </member>
         <member name="F:DevExpress.XtraGrid.ColumnGroupInterval.Default">
             <summary>
-                <para>For columns which store date/time values, this option is the same as the <see cref="F:DevExpress.XtraGrid.ColumnGroupInterval.Date"/> option.
+                <para>In regular binding mode, for columns which store date/time values, this option is the same as the <see cref="F:DevExpress.XtraGrid.ColumnGroupInterval.Date"/> option. For non date/time columns this option is the same as the <see cref="F:DevExpress.XtraGrid.ColumnGroupInterval.Value"/> option.
 
 <para>
-For non date/time columns this option is the same as the <see cref="F:DevExpress.XtraGrid.ColumnGroupInterval.Value"/> option.
+In server mode, rows are always grouped by values. See the description of the <see cref="F:DevExpress.XtraGrid.ColumnGroupInterval.Value"/> option.
 </para>
-
 </para>
             </summary>
 
