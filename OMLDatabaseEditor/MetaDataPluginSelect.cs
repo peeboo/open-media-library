@@ -6,19 +6,19 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-using ComponentFactory.Krypton.Toolkit;
+using DevExpress.XtraEditors;
 
 using OMLEngine;
 using OMLSDK;
 
 namespace OMLDatabaseEditor
 {
-    public partial class MetaDataPluginSelect : ComponentFactory.Krypton.Toolkit.KryptonForm
+    public partial class MetaDataPluginSelect : XtraForm
     {
         public MetaDataPluginSelect(List<IOMLMetadataPlugin> metadataPlugins)
         {
             InitializeComponent();
-            cmbPlugins.DataSource = metadataPlugins;
+            cmbPlugins.Properties.Items.AddRange(metadataPlugins);
         }
 
         public IOMLMetadataPlugin SelectedPlugin()

@@ -30,7 +30,6 @@ namespace OMLDatabaseEditor
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainEditor));
-            this.kryptonManager = new ComponentFactory.Krypton.Toolkit.KryptonManager(this.components);
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblCurrentStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.pgbProgress = new System.Windows.Forms.ToolStripProgressBar();
@@ -57,42 +56,40 @@ namespace OMLDatabaseEditor
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.kryptonPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
-            this.kryptonSplitContainer1 = new ComponentFactory.Krypton.Toolkit.KryptonSplitContainer();
-            this.kryptonPanel2 = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
-            this.kryptonHeaderGroup1 = new ComponentFactory.Krypton.Toolkit.KryptonHeaderGroup();
-            this.lbItems = new ComponentFactory.Krypton.Toolkit.KryptonListBox();
-            this.kryptonPanel1 = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
-            this.cbMovies = new ComponentFactory.Krypton.Toolkit.KryptonCheckButton();
-            this.cbMetadata = new ComponentFactory.Krypton.Toolkit.KryptonCheckButton();
-            this.cbImport = new ComponentFactory.Krypton.Toolkit.KryptonCheckButton();
+            this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
+            this.titleEditor = new OMLDatabaseEditor.Controls.TitleEditor();
+            this.splitterControl1 = new DevExpress.XtraEditors.SplitterControl();
+            this.mainNav = new DevExpress.XtraNavBar.NavBarControl();
+            this.groupMovies = new DevExpress.XtraNavBar.NavBarGroup();
+            this.navBarGroupControlContainer1 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
+            this.lbMovies = new DevExpress.XtraEditors.ListBoxControl();
+            this.navBarGroupControlContainer2 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
+            this.lbMetadata = new DevExpress.XtraEditors.ListBoxControl();
+            this.navBarGroupControlContainer3 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
+            this.lbImport = new DevExpress.XtraEditors.ListBoxControl();
+            this.groupMetadata = new DevExpress.XtraNavBar.NavBarGroup();
+            this.groupImport = new DevExpress.XtraNavBar.NavBarGroup();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.titleEditor = new OMLDatabaseEditor.Controls.TitleEditor();
+            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel)).BeginInit();
-            this.kryptonPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonSplitContainer1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonSplitContainer1.Panel1)).BeginInit();
-            this.kryptonSplitContainer1.Panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonSplitContainer1.Panel2)).BeginInit();
-            this.kryptonSplitContainer1.Panel2.SuspendLayout();
-            this.kryptonSplitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel2)).BeginInit();
-            this.kryptonPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonHeaderGroup1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonHeaderGroup1.Panel)).BeginInit();
-            this.kryptonHeaderGroup1.Panel.SuspendLayout();
-            this.kryptonHeaderGroup1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel1)).BeginInit();
-            this.kryptonPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
+            this.panelControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainNav)).BeginInit();
+            this.mainNav.SuspendLayout();
+            this.navBarGroupControlContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lbMovies)).BeginInit();
+            this.navBarGroupControlContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lbMetadata)).BeginInit();
+            this.navBarGroupControlContainer3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lbImport)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -298,7 +295,7 @@ namespace OMLDatabaseEditor
             // 
             // toolStripContainer1.ContentPanel
             // 
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.kryptonPanel);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.panelControl1);
             this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(721, 369);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
@@ -312,128 +309,137 @@ namespace OMLDatabaseEditor
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.menuStrip);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip);
             // 
-            // kryptonPanel
+            // panelControl1
             // 
-            this.kryptonPanel.Controls.Add(this.kryptonSplitContainer1);
-            this.kryptonPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.kryptonPanel.Location = new System.Drawing.Point(0, 0);
-            this.kryptonPanel.Name = "kryptonPanel";
-            this.kryptonPanel.Size = new System.Drawing.Size(721, 369);
-            this.kryptonPanel.TabIndex = 0;
+            this.panelControl1.Controls.Add(this.titleEditor);
+            this.panelControl1.Controls.Add(this.splitterControl1);
+            this.panelControl1.Controls.Add(this.mainNav);
+            this.panelControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelControl1.Location = new System.Drawing.Point(0, 0);
+            this.panelControl1.Name = "panelControl1";
+            this.panelControl1.Size = new System.Drawing.Size(721, 369);
+            this.panelControl1.TabIndex = 5;
             // 
-            // kryptonSplitContainer1
+            // titleEditor
             // 
-            this.kryptonSplitContainer1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.kryptonSplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.kryptonSplitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.kryptonSplitContainer1.Name = "kryptonSplitContainer1";
+            this.titleEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.titleEditor.Location = new System.Drawing.Point(185, 2);
+            this.titleEditor.Name = "titleEditor";
+            this.titleEditor.Size = new System.Drawing.Size(534, 365);
+            this.titleEditor.Status = OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.Normal;
+            this.titleEditor.TabIndex = 2;
+            this.titleEditor.TitleChanged += new OMLDatabaseEditor.Controls.TitleEditor.TitleChangeEventHandler(this.titleEditor_TitleChanged);
+            this.titleEditor.TitleNameChanged += new OMLDatabaseEditor.Controls.TitleEditor.TitleNameChangeEventHandler(this.titleEditor_TitleNameChanged);
             // 
-            // kryptonSplitContainer1.Panel1
+            // splitterControl1
             // 
-            this.kryptonSplitContainer1.Panel1.Controls.Add(this.kryptonPanel2);
-            this.kryptonSplitContainer1.Panel1.Controls.Add(this.kryptonPanel1);
+            this.splitterControl1.Location = new System.Drawing.Point(179, 2);
+            this.splitterControl1.Name = "splitterControl1";
+            this.splitterControl1.Size = new System.Drawing.Size(6, 365);
+            this.splitterControl1.TabIndex = 1;
+            this.splitterControl1.TabStop = false;
             // 
-            // kryptonSplitContainer1.Panel2
+            // mainNav
             // 
-            this.kryptonSplitContainer1.Panel2.Controls.Add(this.titleEditor);
-            this.kryptonSplitContainer1.Size = new System.Drawing.Size(721, 369);
-            this.kryptonSplitContainer1.SplitterDistance = 238;
-            this.kryptonSplitContainer1.TabIndex = 0;
+            this.mainNav.ActiveGroup = this.groupMovies;
+            this.mainNav.ContentButtonHint = null;
+            this.mainNav.Controls.Add(this.navBarGroupControlContainer1);
+            this.mainNav.Controls.Add(this.navBarGroupControlContainer2);
+            this.mainNav.Controls.Add(this.navBarGroupControlContainer3);
+            this.mainNav.Dock = System.Windows.Forms.DockStyle.Left;
+            this.mainNav.Groups.AddRange(new DevExpress.XtraNavBar.NavBarGroup[] {
+            this.groupMovies,
+            this.groupMetadata,
+            this.groupImport});
+            this.mainNav.Location = new System.Drawing.Point(2, 2);
+            this.mainNav.Name = "mainNav";
+            this.mainNav.OptionsNavPane.ExpandedWidth = 140;
+            this.mainNav.Size = new System.Drawing.Size(177, 365);
+            this.mainNav.TabIndex = 0;
+            this.mainNav.Text = "navBarControl1";
+            this.mainNav.View = new DevExpress.XtraNavBar.ViewInfo.SkinNavigationPaneViewInfoRegistrator();
+            this.mainNav.ActiveGroupChanged += new DevExpress.XtraNavBar.NavBarGroupEventHandler(this.mainNav_ActiveGroupChanged);
             // 
-            // kryptonPanel2
+            // groupMovies
             // 
-            this.kryptonPanel2.Controls.Add(this.kryptonHeaderGroup1);
-            this.kryptonPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.kryptonPanel2.Location = new System.Drawing.Point(0, 0);
-            this.kryptonPanel2.Name = "kryptonPanel2";
-            this.kryptonPanel2.Size = new System.Drawing.Size(238, 295);
-            this.kryptonPanel2.TabIndex = 1;
+            this.groupMovies.Caption = "Movies";
+            this.groupMovies.ControlContainer = this.navBarGroupControlContainer1;
+            this.groupMovies.Expanded = true;
+            this.groupMovies.GroupClientHeight = 80;
+            this.groupMovies.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
+            this.groupMovies.Name = "groupMovies";
             // 
-            // kryptonHeaderGroup1
+            // navBarGroupControlContainer1
             // 
-            this.kryptonHeaderGroup1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.kryptonHeaderGroup1.HeaderPositionSecondary = ComponentFactory.Krypton.Toolkit.VisualOrientation.Top;
-            this.kryptonHeaderGroup1.HeaderVisibleSecondary = false;
-            this.kryptonHeaderGroup1.Location = new System.Drawing.Point(0, 0);
-            this.kryptonHeaderGroup1.Name = "kryptonHeaderGroup1";
+            this.navBarGroupControlContainer1.Controls.Add(this.lbMovies);
+            this.navBarGroupControlContainer1.Name = "navBarGroupControlContainer1";
+            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(175, 210);
+            this.navBarGroupControlContainer1.TabIndex = 0;
             // 
-            // kryptonHeaderGroup1.Panel
+            // lbMovies
             // 
-            this.kryptonHeaderGroup1.Panel.Controls.Add(this.lbItems);
-            this.kryptonHeaderGroup1.Size = new System.Drawing.Size(238, 295);
-            this.kryptonHeaderGroup1.TabIndex = 0;
-            this.kryptonHeaderGroup1.Text = "Movies";
-            this.kryptonHeaderGroup1.ValuesPrimary.Description = "";
-            this.kryptonHeaderGroup1.ValuesPrimary.Heading = "Movies";
-            this.kryptonHeaderGroup1.ValuesPrimary.Image = null;
-            this.kryptonHeaderGroup1.ValuesSecondary.Description = "";
-            this.kryptonHeaderGroup1.ValuesSecondary.Heading = "Description";
-            this.kryptonHeaderGroup1.ValuesSecondary.Image = null;
+            this.lbMovies.DisplayMember = "Name";
+            this.lbMovies.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbMovies.Location = new System.Drawing.Point(0, 0);
+            this.lbMovies.Name = "lbMovies";
+            this.lbMovies.Size = new System.Drawing.Size(175, 210);
+            this.lbMovies.TabIndex = 0;
+            this.lbMovies.ValueMember = "InternalItemID";
+            this.lbMovies.SelectedIndexChanged += new System.EventHandler(this.lbMovies_SelectedIndexChanged);
             // 
-            // lbItems
+            // navBarGroupControlContainer2
             // 
-            this.lbItems.DisplayMember = "Name";
-            this.lbItems.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbItems.Location = new System.Drawing.Point(0, 0);
-            this.lbItems.Name = "lbItems";
-            this.lbItems.Size = new System.Drawing.Size(236, 263);
-            this.lbItems.TabIndex = 0;
-            this.lbItems.ValueMember = "InternalItemID";
-            this.lbItems.SelectedIndexChanged += new System.EventHandler(this.lbItems_SelectedIndexChanged);
+            this.navBarGroupControlContainer2.Controls.Add(this.lbMetadata);
+            this.navBarGroupControlContainer2.Name = "navBarGroupControlContainer2";
+            this.navBarGroupControlContainer2.Size = new System.Drawing.Size(138, 210);
+            this.navBarGroupControlContainer2.TabIndex = 1;
             // 
-            // kryptonPanel1
+            // lbMetadata
             // 
-            this.kryptonPanel1.Controls.Add(this.cbMovies);
-            this.kryptonPanel1.Controls.Add(this.cbMetadata);
-            this.kryptonPanel1.Controls.Add(this.cbImport);
-            this.kryptonPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.kryptonPanel1.Location = new System.Drawing.Point(0, 295);
-            this.kryptonPanel1.Name = "kryptonPanel1";
-            this.kryptonPanel1.Size = new System.Drawing.Size(238, 74);
-            this.kryptonPanel1.TabIndex = 0;
+            this.lbMetadata.DisplayMember = "PluginName";
+            this.lbMetadata.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbMetadata.HotTrackItems = true;
+            this.lbMetadata.HotTrackSelectMode = DevExpress.XtraEditors.HotTrackSelectMode.SelectItemOnClick;
+            this.lbMetadata.Location = new System.Drawing.Point(0, 0);
+            this.lbMetadata.Name = "lbMetadata";
+            this.lbMetadata.Size = new System.Drawing.Size(138, 210);
+            this.lbMetadata.TabIndex = 0;
+            this.lbMetadata.SelectedIndexChanged += new System.EventHandler(this.lbMetadata_SelectedIndexChanged);
             // 
-            // cbMovies
+            // navBarGroupControlContainer3
             // 
-            this.cbMovies.ButtonStyle = ComponentFactory.Krypton.Toolkit.ButtonStyle.NavigatorStack;
-            this.cbMovies.Checked = true;
-            this.cbMovies.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.cbMovies.Location = new System.Drawing.Point(0, -1);
-            this.cbMovies.Name = "cbMovies";
-            this.cbMovies.Size = new System.Drawing.Size(238, 25);
-            this.cbMovies.TabIndex = 5;
-            this.cbMovies.Text = "Movies";
-            this.cbMovies.Values.ExtraText = "";
-            this.cbMovies.Values.Image = null;
-            this.cbMovies.Values.Text = "Movies";
-            this.cbMovies.Click += new System.EventHandler(this.cbNav_Click);
+            this.navBarGroupControlContainer3.Controls.Add(this.lbImport);
+            this.navBarGroupControlContainer3.Name = "navBarGroupControlContainer3";
+            this.navBarGroupControlContainer3.Size = new System.Drawing.Size(138, 210);
+            this.navBarGroupControlContainer3.TabIndex = 2;
             // 
-            // cbMetadata
+            // lbImport
             // 
-            this.cbMetadata.ButtonStyle = ComponentFactory.Krypton.Toolkit.ButtonStyle.NavigatorStack;
-            this.cbMetadata.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.cbMetadata.Location = new System.Drawing.Point(0, 24);
-            this.cbMetadata.Name = "cbMetadata";
-            this.cbMetadata.Size = new System.Drawing.Size(238, 25);
-            this.cbMetadata.TabIndex = 2;
-            this.cbMetadata.Text = "Metadata";
-            this.cbMetadata.Values.ExtraText = "";
-            this.cbMetadata.Values.Image = null;
-            this.cbMetadata.Values.Text = "Metadata";
-            this.cbMetadata.Click += new System.EventHandler(this.cbNav_Click);
+            this.lbImport.DisplayMember = "Menu";
+            this.lbImport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbImport.HotTrackItems = true;
+            this.lbImport.HotTrackSelectMode = DevExpress.XtraEditors.HotTrackSelectMode.SelectItemOnClick;
+            this.lbImport.Location = new System.Drawing.Point(0, 0);
+            this.lbImport.Name = "lbImport";
+            this.lbImport.Size = new System.Drawing.Size(138, 210);
+            this.lbImport.TabIndex = 0;
+            this.lbImport.SelectedIndexChanged += new System.EventHandler(this.lbImport_SelectedIndexChanged);
             // 
-            // cbImport
+            // groupMetadata
             // 
-            this.cbImport.ButtonStyle = ComponentFactory.Krypton.Toolkit.ButtonStyle.NavigatorStack;
-            this.cbImport.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.cbImport.Location = new System.Drawing.Point(0, 49);
-            this.cbImport.Name = "cbImport";
-            this.cbImport.Size = new System.Drawing.Size(238, 25);
-            this.cbImport.TabIndex = 1;
-            this.cbImport.Text = "Import";
-            this.cbImport.Values.ExtraText = "";
-            this.cbImport.Values.Image = null;
-            this.cbImport.Values.Text = "Import";
-            this.cbImport.Click += new System.EventHandler(this.cbNav_Click);
+            this.groupMetadata.Caption = "Metadata";
+            this.groupMetadata.ControlContainer = this.navBarGroupControlContainer2;
+            this.groupMetadata.GroupClientHeight = 80;
+            this.groupMetadata.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
+            this.groupMetadata.Name = "groupMetadata";
+            // 
+            // groupImport
+            // 
+            this.groupImport.Caption = "Import";
+            this.groupImport.ControlContainer = this.navBarGroupControlContainer3;
+            this.groupImport.GroupClientHeight = 80;
+            this.groupImport.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
+            this.groupImport.Name = "groupImport";
             // 
             // toolStrip
             // 
@@ -482,16 +488,9 @@ namespace OMLDatabaseEditor
             this.helpToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.helpToolStripButton.Text = "He&lp";
             // 
-            // titleEditor
+            // defaultLookAndFeel1
             // 
-            this.titleEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.titleEditor.Location = new System.Drawing.Point(0, 0);
-            this.titleEditor.Name = "titleEditor";
-            this.titleEditor.Size = new System.Drawing.Size(478, 369);
-            this.titleEditor.Status = OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.Normal;
-            this.titleEditor.TabIndex = 0;
-            this.titleEditor.TitleChanged += new OMLDatabaseEditor.Controls.TitleEditor.TitleChangeEventHandler(this.titleEditor_TitleChanged);
-            this.titleEditor.TitleNameChanged += new OMLDatabaseEditor.Controls.TitleEditor.TitleNameChangeEventHandler(this.titleEditor_TitleNameChanged);
+            this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
             // 
             // MainEditor
             // 
@@ -513,22 +512,16 @@ namespace OMLDatabaseEditor
             this.toolStripContainer1.TopToolStripPanel.PerformLayout();
             this.toolStripContainer1.ResumeLayout(false);
             this.toolStripContainer1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel)).EndInit();
-            this.kryptonPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonSplitContainer1.Panel1)).EndInit();
-            this.kryptonSplitContainer1.Panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonSplitContainer1.Panel2)).EndInit();
-            this.kryptonSplitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonSplitContainer1)).EndInit();
-            this.kryptonSplitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel2)).EndInit();
-            this.kryptonPanel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonHeaderGroup1.Panel)).EndInit();
-            this.kryptonHeaderGroup1.Panel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonHeaderGroup1)).EndInit();
-            this.kryptonHeaderGroup1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel1)).EndInit();
-            this.kryptonPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
+            this.panelControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.mainNav)).EndInit();
+            this.mainNav.ResumeLayout(false);
+            this.navBarGroupControlContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.lbMovies)).EndInit();
+            this.navBarGroupControlContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.lbMetadata)).EndInit();
+            this.navBarGroupControlContainer3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.lbImport)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -538,7 +531,6 @@ namespace OMLDatabaseEditor
 
         #endregion
 
-        private ComponentFactory.Krypton.Toolkit.KryptonManager kryptonManager;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -564,22 +556,26 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripButton saveToolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
         private System.Windows.Forms.ToolStripButton helpToolStripButton;
-        private ComponentFactory.Krypton.Toolkit.KryptonPanel kryptonPanel;
-        private ComponentFactory.Krypton.Toolkit.KryptonSplitContainer kryptonSplitContainer1;
-        private ComponentFactory.Krypton.Toolkit.KryptonHeaderGroup kryptonHeaderGroup1;
-        private ComponentFactory.Krypton.Toolkit.KryptonCheckButton cbMovies;
-        private ComponentFactory.Krypton.Toolkit.KryptonCheckButton cbImport;
-        private ComponentFactory.Krypton.Toolkit.KryptonCheckButton cbMetadata;
-        private ComponentFactory.Krypton.Toolkit.KryptonPanel kryptonPanel1;
-        private ComponentFactory.Krypton.Toolkit.KryptonPanel kryptonPanel2;
-        private ComponentFactory.Krypton.Toolkit.KryptonListBox lbItems;
         private System.Windows.Forms.ToolStripStatusLabel lblCurrentStatus;
         private System.Windows.Forms.ToolStripProgressBar pgbProgress;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem metaDataSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteAllMoviesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fromScratchToolStripMenuItem;
+        private DevExpress.XtraEditors.PanelControl panelControl1;
         private OMLDatabaseEditor.Controls.TitleEditor titleEditor;
+        private DevExpress.XtraEditors.SplitterControl splitterControl1;
+        private DevExpress.XtraNavBar.NavBarControl mainNav;
+        private DevExpress.XtraNavBar.NavBarGroup groupMovies;
+        private DevExpress.XtraNavBar.NavBarGroupControlContainer navBarGroupControlContainer1;
+        private DevExpress.XtraNavBar.NavBarGroupControlContainer navBarGroupControlContainer2;
+        private DevExpress.XtraNavBar.NavBarGroupControlContainer navBarGroupControlContainer3;
+        private DevExpress.XtraNavBar.NavBarGroup groupMetadata;
+        private DevExpress.XtraNavBar.NavBarGroup groupImport;
+        private DevExpress.XtraEditors.ListBoxControl lbMovies;
+        private DevExpress.XtraEditors.ListBoxControl lbMetadata;
+        private DevExpress.XtraEditors.ListBoxControl lbImport;
+        private DevExpress.LookAndFeel.DefaultLookAndFeel defaultLookAndFeel1;
     }
 }
 
