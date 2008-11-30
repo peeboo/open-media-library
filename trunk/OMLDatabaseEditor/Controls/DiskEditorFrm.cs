@@ -5,13 +5,14 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using ComponentFactory.Krypton.Toolkit;
+
+using DevExpress.XtraEditors;
 
 using OMLEngine;
 
 namespace OMLDatabaseEditor.Controls
 {
-    public partial class DiskEditorFrm : ComponentFactory.Krypton.Toolkit.KryptonForm
+    public partial class DiskEditorFrm : XtraForm
     {
         private List<Disk> _disks;
 

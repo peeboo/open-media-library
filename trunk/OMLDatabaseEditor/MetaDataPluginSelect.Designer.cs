@@ -29,75 +29,54 @@ namespace OMLDatabaseEditor
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.kryptonManager = new ComponentFactory.Krypton.Toolkit.KryptonManager(this.components);
-            this.kryptonPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
-            this.cmbPlugins = new ComponentFactory.Krypton.Toolkit.KryptonComboBox();
-            this.btnSelectPlugin = new ComponentFactory.Krypton.Toolkit.KryptonButton();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel)).BeginInit();
-            this.kryptonPanel.SuspendLayout();
+            this.cmbPlugins = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.btnSelectPlugin = new DevExpress.XtraEditors.SimpleButton();
+            ((System.ComponentModel.ISupportInitialize)(this.cmbPlugins.Properties)).BeginInit();
             this.SuspendLayout();
-            // 
-            // kryptonPanel
-            // 
-            this.kryptonPanel.Controls.Add(this.btnSelectPlugin);
-            this.kryptonPanel.Controls.Add(this.cmbPlugins);
-            this.kryptonPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.kryptonPanel.Location = new System.Drawing.Point(0, 0);
-            this.kryptonPanel.Name = "kryptonPanel";
-            this.kryptonPanel.Size = new System.Drawing.Size(263, 72);
-            this.kryptonPanel.TabIndex = 0;
             // 
             // cmbPlugins
             // 
-            this.cmbPlugins.DisplayMember = "PluginName";
-            this.cmbPlugins.DropDownWidth = 241;
-            this.cmbPlugins.FormattingEnabled = false;
             this.cmbPlugins.Location = new System.Drawing.Point(12, 12);
             this.cmbPlugins.Name = "cmbPlugins";
-            this.cmbPlugins.Size = new System.Drawing.Size(241, 21);
-            this.cmbPlugins.TabIndex = 0;
+            this.cmbPlugins.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cmbPlugins.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
+            this.cmbPlugins.Size = new System.Drawing.Size(230, 20);
+            this.cmbPlugins.TabIndex = 1;
             // 
             // btnSelectPlugin
             // 
             this.btnSelectPlugin.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnSelectPlugin.Location = new System.Drawing.Point(161, 39);
+            this.btnSelectPlugin.Location = new System.Drawing.Point(167, 38);
             this.btnSelectPlugin.Name = "btnSelectPlugin";
-            this.btnSelectPlugin.Size = new System.Drawing.Size(90, 25);
-            this.btnSelectPlugin.TabIndex = 1;
+            this.btnSelectPlugin.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectPlugin.TabIndex = 2;
             this.btnSelectPlugin.Text = "Select Plugin";
-            this.btnSelectPlugin.Values.ExtraText = "";
-            this.btnSelectPlugin.Values.Image = null;
-            this.btnSelectPlugin.Values.ImageStates.ImageCheckedNormal = null;
-            this.btnSelectPlugin.Values.ImageStates.ImageCheckedPressed = null;
-            this.btnSelectPlugin.Values.ImageStates.ImageCheckedTracking = null;
-            this.btnSelectPlugin.Values.Text = "Select Plugin";
             // 
-            // MetadataPluginSelect
+            // MetaDataPluginSelect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(263, 72);
+            this.ClientSize = new System.Drawing.Size(252, 73);
             this.ControlBox = false;
-            this.Controls.Add(this.kryptonPanel);
+            this.Controls.Add(this.btnSelectPlugin);
+            this.Controls.Add(this.cmbPlugins);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "MetadataPluginSelect";
+            this.Name = "MetaDataPluginSelect";
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Select the metadata plugin";
             this.TopMost = true;
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel)).EndInit();
-            this.kryptonPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.cmbPlugins.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private ComponentFactory.Krypton.Toolkit.KryptonManager kryptonManager;
-        private ComponentFactory.Krypton.Toolkit.KryptonPanel kryptonPanel;
-        private ComponentFactory.Krypton.Toolkit.KryptonComboBox cmbPlugins;
-        private ComponentFactory.Krypton.Toolkit.KryptonButton btnSelectPlugin;
+        private DevExpress.XtraEditors.ComboBoxEdit cmbPlugins;
+        private DevExpress.XtraEditors.SimpleButton btnSelectPlugin;
     }
 }
 

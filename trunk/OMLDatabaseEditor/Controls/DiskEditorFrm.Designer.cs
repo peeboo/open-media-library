@@ -28,30 +28,13 @@ namespace OMLDatabaseEditor.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DiskEditorFrm));
-            this.kryptonManager = new ComponentFactory.Krypton.Toolkit.KryptonManager(this.components);
-            this.kryptonPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
             this.btnDelete = new DevExpress.XtraEditors.SimpleButton();
             this.btnAdd = new DevExpress.XtraEditors.SimpleButton();
             this.diskEditor = new OMLDatabaseEditor.Controls.DiskEditorCtrl();
             this.lbDisks = new DevExpress.XtraEditors.ListBoxControl();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel)).BeginInit();
-            this.kryptonPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbDisks)).BeginInit();
             this.SuspendLayout();
-            // 
-            // kryptonPanel
-            // 
-            this.kryptonPanel.Controls.Add(this.btnDelete);
-            this.kryptonPanel.Controls.Add(this.btnAdd);
-            this.kryptonPanel.Controls.Add(this.diskEditor);
-            this.kryptonPanel.Controls.Add(this.lbDisks);
-            this.kryptonPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.kryptonPanel.Location = new System.Drawing.Point(0, 0);
-            this.kryptonPanel.Name = "kryptonPanel";
-            this.kryptonPanel.Size = new System.Drawing.Size(359, 221);
-            this.kryptonPanel.TabIndex = 0;
             // 
             // btnDelete
             // 
@@ -59,7 +42,7 @@ namespace OMLDatabaseEditor.Controls
             this.btnDelete.Location = new System.Drawing.Point(84, 135);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnDelete.TabIndex = 5;
+            this.btnDelete.TabIndex = 9;
             this.btnDelete.Text = "Delete";
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
@@ -69,7 +52,7 @@ namespace OMLDatabaseEditor.Controls
             this.btnAdd.Location = new System.Drawing.Point(3, 135);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnAdd.TabIndex = 4;
+            this.btnAdd.TabIndex = 8;
             this.btnAdd.Text = "Add";
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
@@ -80,7 +63,7 @@ namespace OMLDatabaseEditor.Controls
             this.diskEditor.Location = new System.Drawing.Point(3, 159);
             this.diskEditor.Name = "diskEditor";
             this.diskEditor.Size = new System.Drawing.Size(352, 58);
-            this.diskEditor.TabIndex = 3;
+            this.diskEditor.TabIndex = 7;
             this.diskEditor.Visible = false;
             // 
             // lbDisks
@@ -91,15 +74,18 @@ namespace OMLDatabaseEditor.Controls
             this.lbDisks.Location = new System.Drawing.Point(3, 3);
             this.lbDisks.Name = "lbDisks";
             this.lbDisks.Size = new System.Drawing.Size(353, 132);
-            this.lbDisks.TabIndex = 2;
-            this.lbDisks.SelectedIndexChanged += new System.EventHandler(this.lbDisks_SelectedIndexChanged);
+            this.lbDisks.TabIndex = 6;
+            this.lbDisks.Click += new System.EventHandler(this.lbDisks_SelectedIndexChanged);
             // 
             // DiskEditorFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(359, 221);
-            this.Controls.Add(this.kryptonPanel);
+            this.Controls.Add(this.btnDelete);
+            this.Controls.Add(this.btnAdd);
+            this.Controls.Add(this.diskEditor);
+            this.Controls.Add(this.lbDisks);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -107,8 +93,6 @@ namespace OMLDatabaseEditor.Controls
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Disks";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DiskEditorFrm_FormClosing);
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel)).EndInit();
-            this.kryptonPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbDisks)).EndInit();
             this.ResumeLayout(false);
 
@@ -116,12 +100,10 @@ namespace OMLDatabaseEditor.Controls
 
         #endregion
 
-        private ComponentFactory.Krypton.Toolkit.KryptonManager kryptonManager;
-        private ComponentFactory.Krypton.Toolkit.KryptonPanel kryptonPanel;
-        private DiskEditorCtrl diskEditor;
-        private DevExpress.XtraEditors.ListBoxControl lbDisks;
         private DevExpress.XtraEditors.SimpleButton btnDelete;
         private DevExpress.XtraEditors.SimpleButton btnAdd;
+        private DiskEditorCtrl diskEditor;
+        private DevExpress.XtraEditors.ListBoxControl lbDisks;
     }
 }
 

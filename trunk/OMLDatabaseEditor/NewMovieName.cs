@@ -6,14 +6,14 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-using ComponentFactory.Krypton.Toolkit;
+using DevExpress.XtraEditors;
 
 using OMLEngine;
 using OMLSDK;
 
 namespace OMLDatabaseEditor
 {
-    public partial class NewMovieName : ComponentFactory.Krypton.Toolkit.KryptonForm
+    public partial class NewMovieName : XtraForm
     {
         public NewMovieName()
         {

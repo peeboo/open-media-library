@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
@@ -223,6 +225,11 @@ namespace OMLEngine
             return _list.GetEnumerator();
         }
 
+        public List<Title> Source
+        {
+            get { return _list; }
+        }
+
         public Title this[int index]
         {
             get 
@@ -241,6 +248,19 @@ namespace OMLEngine
         public void Sort()
         {
             _list.Sort();
+        }
+
+        public void SortBy(string propertyName, bool sortAscending)
+        {
+            PropertyInfo propInfo = typeof(Title).GetProperty(propertyName);
+            Comparison<Title> compare = delegate(Title a, Title b)
+            {
+                object valueA = sortAscending ? propInfo.GetValue(a, null) : propInfo.GetValue(b, null);
+                object valueB = sortAscending ? propInfo.GetValue(b, null) : propInfo.GetValue(a, null);
+
+                return valueA is IComparable ? ((IComparable)valueA).CompareTo(valueB) : 0;
+            };
+            _list.Sort(compare);
         }
 
         public int Count

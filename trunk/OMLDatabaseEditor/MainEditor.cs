@@ -6,14 +6,14 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-using ComponentFactory.Krypton.Toolkit;
+using DevExpress.XtraEditors;
 
 using OMLEngine;
 using OMLSDK;
 
 namespace OMLDatabaseEditor
 {
-    public partial class MainEditor : ComponentFactory.Krypton.Toolkit.KryptonForm
+    public partial class MainEditor : XtraForm
     {
         private static TitleCollection _titleCollection = new TitleCollection();
         private static List<OMLPlugin> _importPlugins = new List<OMLPlugin>();
@@ -35,7 +35,7 @@ namespace OMLDatabaseEditor
             _titleCollection.loadTitleCollection();
             SetupNewMovieMenu();
 
-            cbNav_Click(cbMovies, null);
+            LoadMovies();
             Cursor = Cursors.Default;
         }
 
@@ -94,59 +94,31 @@ namespace OMLDatabaseEditor
 
         private void LoadMovies()
         {
-            if (!cbMovies.Checked) return;
+            if (mainNav.ActiveGroup != groupMovies) return;
             Cursor = Cursors.WaitCursor;
-            lbItems.Items.Clear();
-            lbItems.DisplayMember = "Name";
-            lbItems.ValueMember = "InternalItemID";
-            _titleCollection.Sort();
-            foreach (Title t in _titleCollection)
-            {
-                lbItems.Items.Add(t);
-                if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.InternalItemID == t.InternalItemID)
-                    lbItems.SelectedItem = t;
-            }
-            lbItems.Select();
+            lbMovies.Items.Clear();
+            _titleCollection.SortBy("SortName", true);
+            lbMovies.DataSource = _titleCollection.Source;
+            if (titleEditor.EditedTitle != null)
+                lbMovies.SelectedItem = _titleCollection.GetTitleById(titleEditor.EditedTitle.InternalItemID);
             Cursor = Cursors.Default;
         }
 
         private void LoadImporters()
         {
             Cursor = Cursors.WaitCursor;
-            lbItems.Items.Clear();
-            lbItems.DisplayMember = "Menu";
+            lbImport.Items.Clear();
             LoadImportPlugins(PluginTypes.ImportPlugin, _importPlugins);
-            foreach (OMLPlugin importer in _importPlugins)
-            {
-                lbItems.Items.Add(importer);
-            }
+            lbImport.DataSource = _importPlugins;
             Cursor = Cursors.Default;
         }
 
         private void LoadMetadata()
         {
             Cursor = Cursors.WaitCursor;
-            lbItems.Items.Clear();
-            lbItems.DisplayMember = "PluginName";
+            lbMetadata.Items.Clear();
             LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
-            foreach (IOMLMetadataPlugin metadata in _metadataPlugins)
-            {
-                lbItems.Items.Add(metadata);
-            }
-            Cursor = Cursors.Default;
-        }
-
-        private void HandleMovieSelect()
-        {
-            Cursor = Cursors.WaitCursor;
-            SaveCurrentMovie();
-
-            Title selectedTitle = lbItems.SelectedItem as Title;
-            if (selectedTitle == null) return;
-
-            titleEditor.LoadDVD(selectedTitle);
-            this.Text = APP_TITLE + " - " + selectedTitle.Name;
-            ToggleSaveState(false);
+            lbMetadata.DataSource = _metadataPlugins;
             Cursor = Cursors.Default;
         }
 
@@ -158,7 +130,7 @@ namespace OMLDatabaseEditor
                 result = MessageBox.Show("You have unsaved changes to " + titleEditor.EditedTitle.Name + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
                 if (result == DialogResult.Cancel)
                 {
-                    lbItems.SelectedValue = titleEditor.EditedTitle.InternalItemID;
+                    lbMovies.SelectedValue = titleEditor.EditedTitle.InternalItemID;
                 }
                 else if (result == DialogResult.Yes)
                 {
@@ -170,38 +142,6 @@ namespace OMLDatabaseEditor
                 result = DialogResult.Yes;
             }
             return result;
-        }
-
-        private void HandleImportSelect()
-        {
-            Cursor = Cursors.WaitCursor;
-            OMLPlugin importer = lbItems.SelectedItem as OMLPlugin;
-            importer.CopyImages = true;
-
-            lblCurrentStatus.Text = "Importing movies";
-            pgbProgress.Visible = true;
-            string[] work = importer.GetWork();
-            if (work != null)
-            {
-                importer.DoWork(work);
-                LoadTitlesIntoDatabase(importer);
-            }
-            pgbProgress.Visible = false;
-            lblCurrentStatus.Text = "";
-
-            Cursor = Cursors.Default;
-            this.Refresh();
-            string[] nonFatalErrors = importer.GetErrors;
-            if (nonFatalErrors.Length > 0)
-                ShowNonFatalErrors(nonFatalErrors);
-        }
-
-        private void HandleMetadataSelect()
-        {
-            Cursor = Cursors.WaitCursor;
-            IOMLMetadataPlugin metadata = lbItems.SelectedItem as IOMLMetadataPlugin;
-            StartMetadataImport(metadata, false);
-            Cursor = Cursors.Default;
         }
 
         public void LoadTitlesIntoDatabase(OMLPlugin plugin)
@@ -356,37 +296,6 @@ namespace OMLDatabaseEditor
             saveToolStripMenuItem.Enabled = enabled;
         }
 
-        private void cbNav_Click(object sender, EventArgs e)
-        {
-            KryptonCheckButton button = sender as KryptonCheckButton;
-            if (button.Checked)
-            {
-                kryptonHeaderGroup1.Text = button.Text;
-            }
-
-            cbMovies.Checked = (button == cbMovies);
-            cbImport.Checked = (button == cbImport);
-            cbMetadata.Checked = (button == cbMetadata);
-
-            ToggleSaveState(false);
-            if (cbMovies.Checked)
-                LoadMovies();
-            else if (cbImport.Checked)
-                LoadImporters();
-            else
-                LoadMetadata();
-        }
-
-        private void lbItems_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cbMovies.Checked)
-                HandleMovieSelect();
-            else if (cbImport.Checked)
-                HandleImportSelect();
-            else
-                HandleMetadataSelect();
-        }
-
         private void titleEditor_TitleChanged(object sender, EventArgs e)
         {
             if (titleEditor.EditedTitle != null)
@@ -411,16 +320,19 @@ namespace OMLDatabaseEditor
         {
             if (titleEditor.EditedTitle != null)
             {
-                Title titleToRemove = titleEditor.EditedTitle;
-                DialogResult result = MessageBox.Show("Are you sure you want to delete " + titleToRemove.Name + "?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-                if (result == DialogResult.Yes)
+                Title titleToRemove = _titleCollection.GetTitleById(titleEditor.EditedTitle.InternalItemID);
+                if (titleToRemove != null)
                 {
-                    _titleCollection.Remove(titleToRemove);
-                    _titleCollection.saveTitleCollection();
-                    titleEditor.ClearEditor();
-                    LoadMovies();
+                    DialogResult result = MessageBox.Show("Are you sure you want to delete " + titleToRemove.Name + "?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                    if (result == DialogResult.Yes)
+                    {
+                        _titleCollection.Remove(titleToRemove);
+                        _titleCollection.saveTitleCollection();
+                        titleEditor.ClearEditor();
+                        LoadMovies();
+                    }
+                    this.Text = APP_TITLE;
                 }
-                this.Text = APP_TITLE;
             }
         }
 
@@ -490,6 +402,63 @@ namespace OMLDatabaseEditor
                 this.Text = APP_TITLE + " - " + titleEditor.EditedTitle.Name + "*";
                 ToggleSaveState(true);
             }
+        }
+
+        private void mainNav_ActiveGroupChanged(object sender, DevExpress.XtraNavBar.NavBarGroupEventArgs e)
+        {
+            ToggleSaveState(false);
+            if (e.Group == groupMovies)
+                LoadMovies();
+            else if (e.Group == groupMetadata)
+                LoadMetadata();
+            else
+                LoadImporters();
+        }
+
+        private void lbMovies_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            SaveCurrentMovie();
+
+            Title selectedTitle = lbMovies.SelectedItem as Title;
+            if (selectedTitle == null) return;
+
+            titleEditor.LoadDVD(selectedTitle);
+            this.Text = APP_TITLE + " - " + selectedTitle.Name;
+            ToggleSaveState(false);
+            Cursor = Cursors.Default;
+        }
+
+        private void lbMetadata_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            IOMLMetadataPlugin metadata = lbMetadata.SelectedItem as IOMLMetadataPlugin;
+            StartMetadataImport(metadata, false);
+            Cursor = Cursors.Default;
+        }
+
+        private void lbImport_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            OMLPlugin importer = lbImport.SelectedItem as OMLPlugin;
+            importer.CopyImages = true;
+
+            lblCurrentStatus.Text = "Importing movies";
+            pgbProgress.Visible = true;
+            string[] work = importer.GetWork();
+            if (work != null)
+            {
+                importer.DoWork(work);
+                LoadTitlesIntoDatabase(importer);
+            }
+            pgbProgress.Visible = false;
+            lblCurrentStatus.Text = "";
+
+            Cursor = Cursors.Default;
+            this.Refresh();
+            string[] nonFatalErrors = importer.GetErrors;
+            if (nonFatalErrors.Length > 0)
+                ShowNonFatalErrors(nonFatalErrors);
         }
     }
 }
