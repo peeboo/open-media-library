@@ -75,6 +75,9 @@ namespace OMLDatabaseEditor
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
+            this.regenerateThumbnailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.currentMovieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allMoviesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -192,7 +195,8 @@ namespace OMLDatabaseEditor
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.deleteToolStripMenuItem,
-            this.deleteAllMoviesToolStripMenuItem});
+            this.deleteAllMoviesToolStripMenuItem,
+            this.regenerateThumbnailToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -492,6 +496,29 @@ namespace OMLDatabaseEditor
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
             // 
+            // regenerateThumbnailToolStripMenuItem
+            // 
+            this.regenerateThumbnailToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.currentMovieToolStripMenuItem,
+            this.allMoviesToolStripMenuItem});
+            this.regenerateThumbnailToolStripMenuItem.Name = "regenerateThumbnailToolStripMenuItem";
+            this.regenerateThumbnailToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.regenerateThumbnailToolStripMenuItem.Text = "Regenerate Thumbnails";
+            // 
+            // currentMovieToolStripMenuItem
+            // 
+            this.currentMovieToolStripMenuItem.Name = "currentMovieToolStripMenuItem";
+            this.currentMovieToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.currentMovieToolStripMenuItem.Text = "Current Movie";
+            this.currentMovieToolStripMenuItem.Click += new System.EventHandler(this.currentMovieToolStripMenuItem_Click);
+            // 
+            // allMoviesToolStripMenuItem
+            // 
+            this.allMoviesToolStripMenuItem.Name = "allMoviesToolStripMenuItem";
+            this.allMoviesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.allMoviesToolStripMenuItem.Text = "All Movies";
+            this.allMoviesToolStripMenuItem.Click += new System.EventHandler(this.allMoviesToolStripMenuItem_Click);
+            // 
             // MainEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -576,6 +603,9 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraEditors.ListBoxControl lbMetadata;
         private DevExpress.XtraEditors.ListBoxControl lbImport;
         private DevExpress.LookAndFeel.DefaultLookAndFeel defaultLookAndFeel1;
+        private System.Windows.Forms.ToolStripMenuItem regenerateThumbnailToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem currentMovieToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allMoviesToolStripMenuItem;
     }
 }
 

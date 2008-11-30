@@ -460,5 +460,21 @@ namespace OMLDatabaseEditor
             if (nonFatalErrors.Length > 0)
                 ShowNonFatalErrors(nonFatalErrors);
         }
+
+        private void currentMovieToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (titleEditor.EditedTitle != null)
+                titleEditor.EditedTitle.BuildResizedMenuImage();
+        }
+
+        private void allMoviesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_titleCollection.Count > 0)
+            {
+                foreach (Title t in _titleCollection)
+                    t.BuildResizedMenuImage();
+                _titleCollection.saveTitleCollection();
+            }
+        }
     }
 }
