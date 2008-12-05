@@ -15,7 +15,7 @@ namespace OMLDatabaseEditor
 {
     public partial class MainEditor : XtraForm
     {
-        private static TitleCollection _titleCollection = new TitleCollection();
+        private static TitleCollection _titleCollection;
         private static List<OMLPlugin> _importPlugins = new List<OMLPlugin>();
         private static List<IOMLMetadataPlugin> _metadataPlugins = new List<IOMLMetadataPlugin>();
         private const string APP_TITLE = "OML Movie Manager";
@@ -31,7 +31,9 @@ namespace OMLDatabaseEditor
         private void InitData()
         {
             Cursor = Cursors.WaitCursor;
+            OMLEngine.Utilities.DebugLine("[MainEditor] InitData() : new TitleCollection()");
             _titleCollection = new TitleCollection();
+            OMLEngine.Utilities.DebugLine("[MainEditor] InitData() : loadTitleCollection()");
             _titleCollection.loadTitleCollection();
             SetupNewMovieMenu();
 
