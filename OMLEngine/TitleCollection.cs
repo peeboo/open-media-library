@@ -378,7 +378,9 @@ namespace OMLEngine
         static TitleCollection()
         {
             _source_database_to_use = SourceDatabase.OML;
+            Utilities.DebugLine("[TitleCollection] set _database_filename");
             _database_filename = Path.Combine(FileSystemWalker.PublicRootDirectory, @"oml.dat");
+            Utilities.DebugLine("[TitleCollection] _database_filename is " + _database_filename);
         }
 
         /// <summary>

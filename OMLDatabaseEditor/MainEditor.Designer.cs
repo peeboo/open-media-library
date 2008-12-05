@@ -44,6 +44,9 @@ namespace OMLDatabaseEditor
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteAllMoviesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.regenerateThumbnailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.currentMovieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allMoviesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,9 +78,6 @@ namespace OMLDatabaseEditor
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
-            this.regenerateThumbnailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.currentMovieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.allMoviesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -215,6 +215,29 @@ namespace OMLDatabaseEditor
             this.deleteAllMoviesToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
             this.deleteAllMoviesToolStripMenuItem.Text = "Delete All Movies";
             this.deleteAllMoviesToolStripMenuItem.Click += new System.EventHandler(this.deleteAllMoviesToolStripMenuItem_Click);
+            // 
+            // regenerateThumbnailToolStripMenuItem
+            // 
+            this.regenerateThumbnailToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.currentMovieToolStripMenuItem,
+            this.allMoviesToolStripMenuItem});
+            this.regenerateThumbnailToolStripMenuItem.Name = "regenerateThumbnailToolStripMenuItem";
+            this.regenerateThumbnailToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.regenerateThumbnailToolStripMenuItem.Text = "Regenerate Thumbnails";
+            // 
+            // currentMovieToolStripMenuItem
+            // 
+            this.currentMovieToolStripMenuItem.Name = "currentMovieToolStripMenuItem";
+            this.currentMovieToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.currentMovieToolStripMenuItem.Text = "Current Movie";
+            this.currentMovieToolStripMenuItem.Click += new System.EventHandler(this.currentMovieToolStripMenuItem_Click);
+            // 
+            // allMoviesToolStripMenuItem
+            // 
+            this.allMoviesToolStripMenuItem.Name = "allMoviesToolStripMenuItem";
+            this.allMoviesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.allMoviesToolStripMenuItem.Text = "All Movies";
+            this.allMoviesToolStripMenuItem.Click += new System.EventHandler(this.allMoviesToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -371,13 +394,14 @@ namespace OMLDatabaseEditor
             this.groupMovies.Expanded = true;
             this.groupMovies.GroupClientHeight = 80;
             this.groupMovies.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
+            this.groupMovies.LargeImage = ((System.Drawing.Image)(resources.GetObject("groupMovies.LargeImage")));
             this.groupMovies.Name = "groupMovies";
             // 
             // navBarGroupControlContainer1
             // 
             this.navBarGroupControlContainer1.Controls.Add(this.lbMovies);
             this.navBarGroupControlContainer1.Name = "navBarGroupControlContainer1";
-            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(175, 210);
+            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(175, 174);
             this.navBarGroupControlContainer1.TabIndex = 0;
             // 
             // lbMovies
@@ -386,7 +410,7 @@ namespace OMLDatabaseEditor
             this.lbMovies.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbMovies.Location = new System.Drawing.Point(0, 0);
             this.lbMovies.Name = "lbMovies";
-            this.lbMovies.Size = new System.Drawing.Size(175, 210);
+            this.lbMovies.Size = new System.Drawing.Size(175, 174);
             this.lbMovies.TabIndex = 0;
             this.lbMovies.ValueMember = "InternalItemID";
             this.lbMovies.SelectedIndexChanged += new System.EventHandler(this.lbMovies_SelectedIndexChanged);
@@ -435,6 +459,7 @@ namespace OMLDatabaseEditor
             this.groupMetadata.ControlContainer = this.navBarGroupControlContainer2;
             this.groupMetadata.GroupClientHeight = 80;
             this.groupMetadata.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
+            this.groupMetadata.LargeImage = ((System.Drawing.Image)(resources.GetObject("groupMetadata.LargeImage")));
             this.groupMetadata.Name = "groupMetadata";
             // 
             // groupImport
@@ -443,6 +468,7 @@ namespace OMLDatabaseEditor
             this.groupImport.ControlContainer = this.navBarGroupControlContainer3;
             this.groupImport.GroupClientHeight = 80;
             this.groupImport.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
+            this.groupImport.LargeImage = ((System.Drawing.Image)(resources.GetObject("groupImport.LargeImage")));
             this.groupImport.Name = "groupImport";
             // 
             // toolStrip
@@ -495,29 +521,6 @@ namespace OMLDatabaseEditor
             // defaultLookAndFeel1
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
-            // 
-            // regenerateThumbnailToolStripMenuItem
-            // 
-            this.regenerateThumbnailToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.currentMovieToolStripMenuItem,
-            this.allMoviesToolStripMenuItem});
-            this.regenerateThumbnailToolStripMenuItem.Name = "regenerateThumbnailToolStripMenuItem";
-            this.regenerateThumbnailToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.regenerateThumbnailToolStripMenuItem.Text = "Regenerate Thumbnails";
-            // 
-            // currentMovieToolStripMenuItem
-            // 
-            this.currentMovieToolStripMenuItem.Name = "currentMovieToolStripMenuItem";
-            this.currentMovieToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.currentMovieToolStripMenuItem.Text = "Current Movie";
-            this.currentMovieToolStripMenuItem.Click += new System.EventHandler(this.currentMovieToolStripMenuItem_Click);
-            // 
-            // allMoviesToolStripMenuItem
-            // 
-            this.allMoviesToolStripMenuItem.Name = "allMoviesToolStripMenuItem";
-            this.allMoviesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.allMoviesToolStripMenuItem.Text = "All Movies";
-            this.allMoviesToolStripMenuItem.Click += new System.EventHandler(this.allMoviesToolStripMenuItem_Click);
             // 
             // MainEditor
             // 
