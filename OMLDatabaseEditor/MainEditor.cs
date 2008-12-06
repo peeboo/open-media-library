@@ -156,9 +156,11 @@ namespace OMLDatabaseEditor
 
                 int numberOfTitlesAdded = 0;
                 int numberOfTitlesSkipped = 0;
+                pgbProgress.Value = 0;
                 bool YesToAll = true;// false;
 
                 pgbProgress.Maximum = titles.Count;
+
                 foreach (Title t in titles)
                 {
                     pgbProgress.Value++;

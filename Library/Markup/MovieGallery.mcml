@@ -217,6 +217,8 @@
 
     <Locals>
         <ClickHandler Name="Clicker" Command="[GalleryItem]"/>
+        <ShortcutHandler Name="PlayPauseButton" Command="[GalleryItem.QuickPlay]" Shortcut="PlayPause" Handle="true" HandlerStage="Direct"  />
+        <ShortcutHandler Name="PlayButton" Command="[GalleryItem.QuickPlay]" Shortcut="Play"   Handle="true" HandlerStage="Direct" />
         <cor:Int32 Name="CurrentIndex" />
         <MathTransformer Name="ComputeNormalizedIndex"/>
         <MathTransformer Name="ComputeRotation" Type="Int32"/>

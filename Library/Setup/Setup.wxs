@@ -197,11 +197,11 @@
                                   KeyPath="yes" Source="..\..\OMLSDK\bin\$(var.BuildType)\OMLSDK.dll"
                                   Checksum="yes" Vital="yes" Assembly=".net"/>
                         </Component>
-                        <Component Id="OMLGetDVDInfo.dll" Guid="d69b2e44-0e10-4081-9628-4db9a9ba7c0c" DiskId="1">
+<!--                        <Component Id="OMLGetDVDInfo.dll" Guid="d69b2e44-0e10-4081-9628-4db9a9ba7c0c" DiskId="1">
                             <File Name="OMLGetDVDInfo.dll"
                                   KeyPath="yes" Source="..\..\OMLGetDVDInfo\bin\$(var.BuildType)\OMLGetDVDInfo.dll"
                                   Checksum="yes" Vital="yes" Assembly=".net"/>
-                        </Component>
+                        </Component>-->
                     </Directory>
 				</Directory>
 			</Directory>
@@ -274,7 +274,7 @@
             <ComponentRef Id="MyMoviesPlugin.dll" />
             <ComponentRef Id="MyMoviesToOML.xsl" />
             <ComponentRef Id="OMLSDK.dll" />
-            <ComponentRef Id="OMLGetDVDInfo.dll" />
+<!--            <ComponentRef Id="OMLGetDVDInfo.dll" />-->
             <ComponentRef Id="VMCDVDLibraryPlugin.dll" />
             <ComponentRef Id="OMLXMLImporter.dll" />
             <ComponentRef Id="AmazonMetadata.dll" />
@@ -426,7 +426,7 @@
 		<!-- and this path is used to call RegisterMceApp.exe in several custom actions listed above to      -->
 		<!-- register this application with Windows Media Center.                                            -->
 		<Property Id="REGISTERMCEAPP" Secure="yes">
-			<DirectorySearch Id="EhomeDirectory" Path="[WindowsFolder]\ehome">
+			<DirectorySearch Id="EhomeDirectory2" Path="[WindowsFolder]\ehome">
 				<FileSearch Id="RegisterMceAppExe" Name="RegisterMceApp.exe" />
 			</DirectorySearch>
 		</Property>

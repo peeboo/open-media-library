@@ -42,8 +42,14 @@ namespace Library
         public bool PlayMovie()
         {
             if (MediaData.IsDVD(_source.MediaPath))
-            {
-                return PlayMovie("DVD://" + MediaData.GetPlayStringForPath(_source.MediaPath));
+            {                                
+                string path = MediaData.GetPlayStringForPath(_source.MediaPath);
+
+                // the unc path requires that it start with // so remove \\ if it exists
+                if (path.StartsWith("\\\\"))
+                    path = path.Substring(2);
+
+                return PlayMovie("DVD://" + path);
             }
             return false;
         }
