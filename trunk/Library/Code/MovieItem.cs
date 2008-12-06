@@ -13,7 +13,7 @@ namespace Library
     /// Represents an item in a Gallery (a movie item, actor, etc)
     /// </summary>
     public class GalleryItem : Command, IComparable
-    {
+    {        
         /// <summary>
         /// Default Image for no cover
         /// </summary>
@@ -71,6 +71,11 @@ namespace Library
             set { _owner = value; }
         }
 
+        public Command QuickPlay
+        {
+            get { return _quickPlay; }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GalleryItem"/> class.
         /// </summary>
@@ -84,6 +89,37 @@ namespace Library
             _category = browseCategory;
             MenuCoverArt = NoCoverImage; // default to NoCoverImage
             Invoked += ItemSelected;
+
+            _quickPlay = new Command();
+            _quickPlay.Invoked += new EventHandler(QuickPlayClicked);
+        }
+
+        /// <summary>
+        /// Handles the play or plause/pause button when click from the top level menu to immediately
+        /// play disk 1.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void QuickPlayClicked(object sender, EventArgs e)
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                // quick play is only allowed if we're a movie item
+                // this needs a cast here because in MCML movieitems are used
+                // as gallery items
+                MovieItem movie = this as MovieItem;
+
+                // make sure we have a disk to quick play
+                if (movie != null &&
+                    movie.Disks != null &&
+                    movie.Disks.Count > 0 &&
+                    movie.TitleObject != null)
+                {
+                    // play the first disk
+                    movie.TitleObject.SelectedDisk = movie.Disks[0];
+                    movie.PlayMovie();
+                }
+            });
         }
 
         virtual public int ItemCount
@@ -212,7 +248,7 @@ namespace Library
         private Image _MenuCoverArt;
         private MovieGallery _owner;
         private Filter _category;
-
+        private Command _quickPlay;
     }
 
     /// <summary>
@@ -331,7 +367,7 @@ namespace Library
         /// <param name="sender">The sender is a MovieItem.</param>
         /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         public override void ItemSelected(object sender, EventArgs args)
-        {
+        {            
             OMLApplication.ExecuteSafe(delegate
             {
                 MovieItem galleryItem = (MovieItem)sender;

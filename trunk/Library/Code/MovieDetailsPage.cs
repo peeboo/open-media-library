@@ -480,6 +480,12 @@ namespace Library
             });
         }
 
+        private void CreateDvdContextMenuIfNeeded()
+        {
+            if ( _dvdContextMenu == null )
+                _dvdContextMenu = new ContextMenu();
+        }
+
         public void PlayDisk(int SelectedDisk)
         {
             OMLApplication.ExecuteSafe(delegate
@@ -489,12 +495,12 @@ namespace Library
                 _movieDetails.TitleObject.SelectedDisk = _movieDetails.Disks[SelectedDisk];
                 if (_movieDetails.TitleObject.SelectedDisk.Format == VideoFormat.DVD)
                 {
-                    _dvdContextMenu = new ContextMenu();
+                    _dvdContextMenu = null;
 
                     MediaSource ms = new MediaSource(_movieDetails.TitleObject.SelectedDisk);
                     if (ms.DVDTitle != null && ms.DVDTitle.AudioTracks.Count > 0)
                     {
-                        
+                        CreateDvdContextMenuIfNeeded();
                         ICommand cmd = new Command();
                         cmd.Description = "Change Audio";
                         _dvdContextMenu.AddAudioCommand(cmd);
@@ -510,6 +516,7 @@ namespace Library
 
                     if (ms.DVDTitle != null && ms.DVDTitle.Subtitles.Count > 0)
                     {
+                        CreateDvdContextMenuIfNeeded();
                         ICommand cmd = new Command();
                         cmd.Description = "Change Subtitle";
                         _dvdContextMenu.AddSubtitleCommand(cmd);
@@ -526,6 +533,7 @@ namespace Library
 
                     if (ms.DVDTitle != null && ms.DVDTitle.Chapters.Count > 0)
                     {
+                        CreateDvdContextMenuIfNeeded();
                         ICommand cmd = new Command();
                         cmd.Description = "Select Chapter";
                         _dvdContextMenu.AddChapterCommand(cmd);
@@ -540,13 +548,17 @@ namespace Library
                         _dvdContextMenu.ChapterSelectionChoice = chapChoice;
                     }
 
-                    ICommand playCmd = new Command();
-                    playCmd.Description = "Play Now";
-                    _dvdContextMenu.AddPlayCommand(playCmd);
-
-                    if (_dvdContextMenu.LocalItems.Count > 0)
+                    if (_dvdContextMenu != null)
                     {
+                        ICommand playCmd = new Command();
+                        playCmd.Description = "Play Now";
+                        _dvdContextMenu.AddPlayCommand(playCmd);
+
                         ShowDVDContextMenu = true;
+                    }
+                    else
+                    {
+                        _movieDetails.PlayMovie();
                     }
                 }
                 else
