@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Files", "Sample File
 		Sample Files\BluRay.jpg = Sample Files\BluRay.jpg
 		Sample Files\dvd_profiler.xml = Sample Files\dvd_profiler.xml
 		Sample Files\DVDProfiler-SampleBymuskie.xml = Sample Files\DVDProfiler-SampleBymuskie.xml
+		Sample Files\DVDProfilerUnitTest.xml = Sample Files\DVDProfilerUnitTest.xml
 		Sample Files\firefly.jpg = Sample Files\firefly.jpg
 		Sample Files\firefly.oml.xml = Sample Files\firefly.oml.xml
 		Sample Files\HDDVD.jpg = Sample Files\HDDVD.jpg

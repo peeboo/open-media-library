@@ -55,7 +55,19 @@ namespace OMLTestSuite
             DVDProfilerTest dpt = new DVDProfilerTest();
             Console.WriteLine("Testing: DVDProfilerPlugin");
             dpt.TEST_SPACING_IS_CORRECT_FOR_ACTOR_NAMES();
-            dpt.TEST_SYNOPSIS_IS_CORRECTLY_SET_FROM_OVERVIEW();
+            dpt.TEST_ROLES_ARE_CORRECT_FOR_ACTORS();
+            dpt.TEST_NAMES_AND_EAN();
+            dpt.TEST_RATINGS();
+            dpt.TEST_CREWCREDITS();
+            dpt.TEST_STUDIO_AND_COUNTRY();
+            dpt.TEST_GENRES();
+            dpt.TEST_SUBTITLES();
+            dpt.TEST_AUDIO_TRACKS();
+            dpt.TEST_DATES();
+            dpt.TEST_RUNNINGTIME();
+            dpt.TEST_SYNOPSIS();
+            dpt.TEST_VIDEO();
+            dpt.TEST_DISCS();
 
             TitleTest tt = new TitleTest();
             Console.WriteLine("Testing: Title");
