@@ -12,7 +12,7 @@ using OMLSDK;
 namespace DVDProfilerPlugin
 {
     // [CLSCompliant(true)] // this requires CLSCompliant assemby attribute
-    public class DVDProfilerImporter : OMLPlugin, IOMLPlugin
+    public class DVDProfilerImporter : OMLPlugin
     {
         private Title currentTitle;
         private VideoFormat currentVideoFormat;
@@ -22,13 +22,8 @@ namespace DVDProfilerPlugin
         private readonly List<string> currentProducersAlreadyAdded = new List<string>();
         private static readonly Regex filepathRegex = new Regex(@"\[filepath((\s+disc\s*=\s*(?'discNumber'\d+)(?'side'[ab])?))?\s*\](?'path'[^\[]+)\[\s*\/\s*filepath\s*\]", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex removeFormattingRegex = new Regex(@"<\/?(i|b)>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        private static readonly Regex removeExtraLinebreaksRegex = new Regex(@"(\r|\n)+", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        private static readonly Regex removeExtraLinebreaksRegex = new Regex(@"(\s*(\r|\n)\s*)+", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         string imagesPath;
-
-        public DVDProfilerImporter()
-            : base()
-        {
-        }
 
         public override bool IsSingleFileImporter()
         {
@@ -137,7 +132,7 @@ namespace DVDProfilerPlugin
                     break;
                 case "Released":
                     DateTime release;
-                    if (TryReadElementDate(reader, out release)) CurrentTitle.ReleaseDate = release;
+                    if (TryReadElementDate(reader, DateTimeKind.Local, out release)) CurrentTitle.ReleaseDate = release;
                     break;
                 case "RunningTime":
                     int runningTime;
@@ -183,7 +178,7 @@ namespace DVDProfilerPlugin
                     break;
                 case "Overview":
                     string synopsis = removeFormattingRegex.Replace(reader.ReadElementString(), "");
-                    CurrentTitle.Synopsis = removeExtraLinebreaksRegex.Replace(synopsis, "\r\n");
+                    CurrentTitle.Synopsis = removeExtraLinebreaksRegex.Replace(synopsis, "\r\n").Trim();
                     break;
                 case "Discs":
                     ReadChildElements(reader, HandleDiscs);
@@ -388,9 +383,13 @@ namespace DVDProfilerPlugin
 
 
 
-        private static bool TryReadElementDate(XmlReader reader, out DateTime date)
+        private static bool TryReadElementDate(XmlReader reader, DateTimeKind dateTimeKind, out DateTime date)
         {
-            bool result = DateTime.TryParseExact(reader.ReadElementString(), "yyyy-mm-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.NoCurrentDateDefault, out date);
+            DateTimeStyles style = dateTimeKind == DateTimeKind.Local
+                                       ? DateTimeStyles.AssumeLocal
+                                       : DateTimeStyles.AssumeUniversal;
+            string dateString = reader.ReadElementString();
+            bool result = DateTime.TryParseExact(dateString, "yyyy-MM-dd", CultureInfo.InvariantCulture, style | DateTimeStyles.NoCurrentDateDefault, out date);
             if (result && date.Year < 1900) // DVD Profiler tend to use 1899-12-30 for no date
             {
                 date = DateTime.MinValue;
