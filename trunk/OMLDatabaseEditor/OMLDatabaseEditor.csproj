@@ -295,7 +295,11 @@
   <ItemGroup>
     <Content Include="Application.ico" />
     <Content Include="Resources\Application.png" />
+    <Content Include="Resources\applications-multimedia.png" />
+    <Content Include="Resources\emblem-symbolic-link.png" />
     <Content Include="Resources\movieheader.jpg" />
+    <Content Include="Resources\text-html.png" />
+    <Content Include="Resources\video-x-generic.png" />
     <None Include="Properties\DataSources\OMLEngine.Disk.datasource" />
     <None Include="Properties\DataSources\OMLEngine.Title.datasource" />
     <None Include="Resources\movieheader1.jpg" />
