@@ -67,9 +67,23 @@ namespace OMLDatabaseEditor.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap applications_multimedia {
+            get {
+                object obj = ResourceManager.GetObject("applications-multimedia", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ClosePreviewHS {
             get {
                 object obj = ResourceManager.GetObject("ClosePreviewHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap emblem_symbolic_link {
+            get {
+                object obj = ResourceManager.GetObject("emblem-symbolic-link", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -98,6 +112,20 @@ namespace OMLDatabaseEditor.Properties {
         internal static System.Drawing.Bitmap saveHS {
             get {
                 object obj = ResourceManager.GetObject("saveHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap text_html {
+            get {
+                object obj = ResourceManager.GetObject("text-html", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap video_x_generic {
+            get {
+                object obj = ResourceManager.GetObject("video-x-generic", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

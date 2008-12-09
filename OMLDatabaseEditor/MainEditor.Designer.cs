@@ -228,14 +228,14 @@ namespace OMLDatabaseEditor
             // currentMovieToolStripMenuItem
             // 
             this.currentMovieToolStripMenuItem.Name = "currentMovieToolStripMenuItem";
-            this.currentMovieToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.currentMovieToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.currentMovieToolStripMenuItem.Text = "Current Movie";
             this.currentMovieToolStripMenuItem.Click += new System.EventHandler(this.currentMovieToolStripMenuItem_Click);
             // 
             // allMoviesToolStripMenuItem
             // 
             this.allMoviesToolStripMenuItem.Name = "allMoviesToolStripMenuItem";
-            this.allMoviesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.allMoviesToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.allMoviesToolStripMenuItem.Text = "All Movies";
             this.allMoviesToolStripMenuItem.Click += new System.EventHandler(this.allMoviesToolStripMenuItem_Click);
             // 
@@ -394,14 +394,14 @@ namespace OMLDatabaseEditor
             this.groupMovies.Expanded = true;
             this.groupMovies.GroupClientHeight = 80;
             this.groupMovies.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
-            this.groupMovies.LargeImage = ((System.Drawing.Image)(resources.GetObject("groupMovies.LargeImage")));
+            this.groupMovies.LargeImage = global::OMLDatabaseEditor.Properties.Resources.applications_multimedia;
             this.groupMovies.Name = "groupMovies";
             // 
             // navBarGroupControlContainer1
             // 
             this.navBarGroupControlContainer1.Controls.Add(this.lbMovies);
             this.navBarGroupControlContainer1.Name = "navBarGroupControlContainer1";
-            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(175, 174);
+            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(175, 156);
             this.navBarGroupControlContainer1.TabIndex = 0;
             // 
             // lbMovies
@@ -410,7 +410,7 @@ namespace OMLDatabaseEditor
             this.lbMovies.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbMovies.Location = new System.Drawing.Point(0, 0);
             this.lbMovies.Name = "lbMovies";
-            this.lbMovies.Size = new System.Drawing.Size(175, 174);
+            this.lbMovies.Size = new System.Drawing.Size(175, 156);
             this.lbMovies.TabIndex = 0;
             this.lbMovies.ValueMember = "InternalItemID";
             this.lbMovies.SelectedIndexChanged += new System.EventHandler(this.lbMovies_SelectedIndexChanged);
@@ -459,7 +459,7 @@ namespace OMLDatabaseEditor
             this.groupMetadata.ControlContainer = this.navBarGroupControlContainer2;
             this.groupMetadata.GroupClientHeight = 80;
             this.groupMetadata.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
-            this.groupMetadata.LargeImage = ((System.Drawing.Image)(resources.GetObject("groupMetadata.LargeImage")));
+            this.groupMetadata.LargeImage = global::OMLDatabaseEditor.Properties.Resources.text_html;
             this.groupMetadata.Name = "groupMetadata";
             // 
             // groupImport
@@ -468,7 +468,7 @@ namespace OMLDatabaseEditor
             this.groupImport.ControlContainer = this.navBarGroupControlContainer3;
             this.groupImport.GroupClientHeight = 80;
             this.groupImport.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
-            this.groupImport.LargeImage = ((System.Drawing.Image)(resources.GetObject("groupImport.LargeImage")));
+            this.groupImport.LargeImage = global::OMLDatabaseEditor.Properties.Resources.emblem_symbolic_link;
             this.groupImport.Name = "groupImport";
             // 
             // toolStrip
