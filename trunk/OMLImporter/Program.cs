@@ -15,34 +15,47 @@ namespace OMLImporter
         private static Boolean isDirty = false;
         public static bool _copyImages = true;
         private static List<OMLPlugin> plugins = new List<OMLPlugin>();
+        private const string COPY_IMAGES_KEY = "copyimages=";
+        private const string CLEAR_BEFORE_IMPORT_KEY = "clearallbeforeimport=";
 
         [STAThread]
         static void Main(string[] args)
         {
             PrintHeader();
-            LoadPlugins();
-            Menu();
-            for (int ii = 0; ii < plugins.Count; ii++)
-            {
-                plugins[ii] = null;
+
+            // this can be run as command line only in the following format
+            // OMLImporter.exe <plugin name> <path> <copy images true|false [optional]>
+            if (args != null && args.Length > 0)
+            {                                
+                if (!ProcessCommandLine(args))
+                {                    
+                    Usage();
+                }
             }
-            plugins = null;
+            else
+            {
+                LoadPlugins();
+                Menu();
+                for (int ii = 0; ii < plugins.Count; ii++)
+                {
+                    plugins[ii] = null;
+                }
+                plugins = null;
+            }
         }
 
         private static void LoadPlugins()
         {
-            List<PluginServices.AvailablePlugin> Pluginz = new List<PluginServices.AvailablePlugin>();
-            string path = FileSystemWalker.PluginsDirectory;
-            Pluginz = PluginServices.FindPlugins(path, "OMLSDK.IOMLPlugin");
-            OMLPlugin objPlugin;
+            List<PluginServices.AvailablePlugin> pluginz =
+                PluginServices.FindPlugins(FileSystemWalker.PluginsDirectory, typeof(IOMLPlugin).Name);
+            
             // Loop through available plugins, creating instances and adding them
-            foreach (PluginServices.AvailablePlugin oPlugin in Pluginz)
+            foreach (PluginServices.AvailablePlugin oPlugin in pluginz)
             {
-                objPlugin = (OMLPlugin) PluginServices.CreateInstance(oPlugin);
+                OMLPlugin objPlugin = (OMLPlugin)PluginServices.CreateInstance(oPlugin);
                 objPlugin.FileFound += new OMLPlugin.FileFoundEventHandler(FileFound);
                 plugins.Add(objPlugin);
             }
-            Pluginz = null;
         }
 
         public static void Menu()
@@ -90,7 +103,7 @@ namespace OMLImporter
                     if (plugin.CanCopyImages) AskIfShouldCopyImages();
                     plugin.CopyImages = Program._copyImages;
                     plugin.DoWork(plugin.GetWork());
-                    LoadTitlesIntoDatabase(plugin);
+                    LoadTitlesIntoDatabase(plugin, true, false);
                     Console.WriteLine("Done!");
                     Console.ReadLine();
                 } 
@@ -143,6 +156,90 @@ namespace OMLImporter
                 }
             }
 
+        }        
+
+        private static bool ProcessCommandLine(string [] args)
+        {
+            OMLPlugin pluginToUse = null;
+            string pluginName = args[0].Trim();
+            bool copyImages = true;
+            string path = null;
+            bool clearBeforeImport = false;
+            
+            if (args.Length > 1)
+            {
+                path = args[1];
+            }
+            else
+            {
+                return false;
+            }
+
+            for(int i = 2 ; i < args.Length ; i++)
+            {
+                if (args[i].StartsWith(COPY_IMAGES_KEY, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!bool.TryParse(args[i].Substring(COPY_IMAGES_KEY.Length), out copyImages))
+                    {
+                        return false;
+                    }
+                }
+                else if (args[i].StartsWith(CLEAR_BEFORE_IMPORT_KEY, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!bool.TryParse(args[i].Substring(CLEAR_BEFORE_IMPORT_KEY.Length), out clearBeforeImport))
+                    {
+                        return false;
+                    }
+                }
+                else // command line argument not understood
+                    return false;
+            }
+
+            // Loop through available plugins to find the new we need to create
+            foreach (PluginServices.AvailablePlugin plugin in
+                PluginServices.FindPlugins(FileSystemWalker.PluginsDirectory, "OMLSDK.IOMLPlugin"))
+            {
+                if (plugin.ClassName.Equals(pluginName, StringComparison.OrdinalIgnoreCase))
+                {
+                    pluginToUse = (OMLPlugin)PluginServices.CreateInstance(plugin);                    
+                    pluginToUse.FileFound += new OMLPlugin.FileFoundEventHandler(FileFound);
+                }
+            }
+
+            if (pluginToUse == null)
+            {
+                Console.WriteLine(pluginName + " was not found as a plugin. The valid plugins are:");
+                Console.WriteLine("");
+                foreach (PluginServices.AvailablePlugin plugin in
+                    PluginServices.FindPlugins(FileSystemWalker.PluginsDirectory, typeof(IOMLPlugin).Name))
+                    Console.WriteLine(plugin.ClassName);
+            }
+            else
+            {
+                // use the found plugin
+                if (pluginToUse.CanCopyImages)
+                    pluginToUse.CopyImages = copyImages;
+
+                if (pluginToUse.IsSingleFileImporter() && !File.Exists(path))
+                {
+                    Console.WriteLine(pluginToUse.Name + " requires an import file which it can't find (" + path + ")");
+                }
+                else if (!pluginToUse.IsSingleFileImporter() && !Directory.Exists(path))
+                {
+                    Console.WriteLine(pluginToUse.Name + " requires an import directory which can't be found (" + path + ")");
+                }
+                else
+                {
+                    if (clearBeforeImport)                    
+                        mainTitleCollection = new TitleCollection();                    
+
+                    pluginToUse.DoWork(new string[] { path });
+                    LoadTitlesIntoDatabase(pluginToUse, false, true);
+                    mainTitleCollection.saveTitleCollection();
+                }
+            }
+
+            return true;
         }
 
         private static void FileFound(object sender, OMLSDK.PlugInFileEventArgs e)
@@ -178,7 +275,7 @@ namespace OMLImporter
         public static void Usage()
         {
             Console.WriteLine("Usage: OMLImporter.exe");
-            Console.WriteLine("Usage: OMLImporter.exe type=<importer_class> file=<full_path_to_file>");
+            Console.WriteLine("Usage: OMLImporter.exe <plugin name> <path> <CopyImages=true|false [optional <true>]> <ClearAllBeforeImport=true|false [optional <false>]>");
         }
 
         public static void PrintHeader()
@@ -187,7 +284,7 @@ namespace OMLImporter
             Console.WriteLine("Licensed under GPL V3\n");
         }
 
-        public static void LoadTitlesIntoDatabase(OMLPlugin plugin)
+        public static void LoadTitlesIntoDatabase(OMLPlugin plugin, bool flushInputBuffer, bool autoYesToAll)
         {
             try
             {
@@ -199,9 +296,9 @@ namespace OMLImporter
 
                 int numberOfTitlesAdded = 0;
                 int numberOfTitlesSkipped = 0;
-                bool YesToAll = false;
+                bool YesToAll = autoYesToAll;
 
-                if (Console.In.Peek() > 0)
+                if (flushInputBuffer && Console.In.Peek() > 0)
                     Console.In.ReadToEnd(); // flush out anything still in there
 
                 foreach (Title t in titles)
