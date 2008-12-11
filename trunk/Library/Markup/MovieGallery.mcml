@@ -88,9 +88,31 @@
 
     <Condition Source="[GalleryView]" SourceValue="Cover Art" ConditionOp="Equals" >
       <Actions>
-        <Set Target="[GalleryRepeater.Layout]" Value="[GridLayout]" />
-      </Actions>
+        <Set Target="[GalleryRepeater.Layout]" Value="[GridLayout]" />        
+      </Actions>           
     </Condition>
+
+    <!-- don't lock the scroll if we only have 1 or less pages -->
+    <Rule ConditionLogicalOp="And">
+      <Conditions>
+        <Equality Source="[GalleryView]" Value="Cover Art"/>
+        <Equality Source="[ScrollingData.TotalPages]" Value="1" ConditionOp="LessThanOrEquals" />
+      </Conditions>
+      <Actions>
+        <Set Target="[ScrollingData.LockedPosition]" Value="-1" />
+      </Actions>
+    </Rule>
+
+    <!-- if there are more than 1 pages - lock the scroll in the middle -->
+    <Rule ConditionLogicalOp="And">
+      <Conditions>
+        <Equality Source="[GalleryView]" Value="Cover Art"/>
+        <Equality Source="[ScrollingData.TotalPages]" Value="1" ConditionOp="GreaterThan" />
+      </Conditions>
+      <Actions>
+        <Set Target="[ScrollingData.LockedPosition]" Value=".5" />
+      </Actions>
+    </Rule>
 
       <Condition Source="[GalleryView]" SourceValue="Carousel" ConditionOp="Equals">
           <Actions>
@@ -141,7 +163,6 @@
     <Panel Name="GalleryContainer" Layout="Form"  MouseInteractive="true">
 
       <Children>
-
         <!-- Put in a scroller so that if we repeat, the row will scroll. -->
         <Scroller Name="GalleryScroller"
                   Orientation="Horizontal"
