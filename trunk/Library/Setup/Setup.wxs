@@ -88,10 +88,10 @@
                               Source="..\Images\Application.png" Checksum="no" />
                     </Component>
 
-                    <Component Id="ComponentFactory.Krypton.Toolkit.DLL" Guid="ACDECE2C-B066-415e-AD42-0B63D341300F" DiskId="1">
+                    <!--<Component Id="ComponentFactory.Krypton.Toolkit.DLL" Guid="ACDECE2C-B066-415e-AD42-0B63D341300F" DiskId="1">
                         <File Name="ComponentFactory.Krypton.Toolkit.DLL"
                               Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\ComponentFactory.Krypton.Toolkit.DLL" Checksum="no" />
-                    </Component>
+                    </Component>-->
                     <Component Id="DevExpress.Data.v8.2.dll" Guid="5268F9D7-2529-4af0-B5FB-6B94079A7F74" DiskId="1">
                         <File Name="DevExpress.Data.v8.2.dll"
                               Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Data.v8.2.dll" Checksum="no" />
@@ -100,10 +100,17 @@
                         <File Name="DevExpress.Utils.v8.2.dll"
                               Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Utils.v8.2.dll" Checksum="no" />
                     </Component>
+
                     <Component Id="DevExpress.XtraEditors.v8.2.dll" Guid="CD530611-C23A-4a31-AA6E-AC8926845707" DiskId="1">
                         <File Name="DevExpress.XtraEditors.v8.2.dll"
                               Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraEditors.v8.2.dll" Checksum="no" />
                     </Component>
+
+                    <Component Id="DevExpress.XtraNavBar.v8.2.dll" Guid="CD530611-C23A-4a31-AA6F-AC8926845707" DiskId="1">
+                        <File Name="DevExpress.XtraNavBar.v8.2.dll"
+                              Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraNavBar.v8.2.dll" Checksum="no" />
+                    </Component>
+
                     <Component Id="DevExpress.Data.v8.2.xml" Guid="25AF85CB-DC9D-46df-B022-F8A3DF4F71FB" DiskId="1">
                         <File Name="DevExpress.Data.v8.2.xml"
                               Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Data.v8.2.xml" Checksum="no" />
@@ -115,6 +122,11 @@
                     <Component Id="DevExpress.XtraEditors.v8.2.xml" Guid="365BA1F3-7823-4ff7-AC1C-CB040D2B852E" DiskId="1">
                         <File Name="DevExpress.XtraEditors.v8.2.xml"
                               Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraEditors.v8.2.xml" Checksum="no" />
+                    </Component>
+
+		    <Component Id="DevExpress.XtraNavBar.v8.2.xml" Guid="365BA1F3-7823-4ff8-AC1C-CB040D2B852E" DiskId="1">
+                        <File Name="DevExpress.XtraNavBar.v8.2.xml"
+                              Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraNavBar.v8.2.xml" Checksum="no" />
                     </Component>
 
                     <Component Id="OMLDatabaseEditor.exe" Guid="4226fe89-8797-44ed-b463-6fda1be5c918" DiskId="1">
@@ -280,13 +292,15 @@
             <ComponentRef Id="AmazonMetadata.dll" />
             
             <!-- Windows programs -->
-            <ComponentRef Id="ComponentFactory.Krypton.Toolkit.DLL"/>
+            <!--<ComponentRef Id="ComponentFactory.Krypton.Toolkit.DLL"/>-->
             <ComponentRef Id="DevExpress.Data.v8.2.dll"/>
             <ComponentRef Id="DevExpress.Utils.v8.2.dll"/>
             <ComponentRef Id="DevExpress.XtraEditors.v8.2.dll"/>
+            <ComponentRef Id="DevExpress.XtraNavBar.v8.2.dll"/>
             <ComponentRef Id="DevExpress.Data.v8.2.xml"/>
             <ComponentRef Id="DevExpress.Utils.v8.2.xml"/>
             <ComponentRef Id="DevExpress.XtraEditors.v8.2.xml"/>
+            <ComponentRef Id="DevExpress.XtraNavBar.v8.2.xml"/>
             <ComponentRef Id="OMLDatabaseEditor.exe" />
             <ComponentRef Id="OMLImporter.exe" />
             <ComponentRef Id="MEncoder.exe"/>
