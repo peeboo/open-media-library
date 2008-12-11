@@ -105,6 +105,7 @@
     <Compile Include="Code\LayoutV2\OMLPage.cs" />
     <Compile Include="Code\OMLSettings.cs" />
     <Compile Include="Code\Settings.cs" />
+    <Compile Include="Code\ExternalPlayer.cs" />
     <Compile Include="Code\Setup.cs" />
     <Compile Include="Code\TreeNode.cs" />
     <Compile Include="Code\TreeNodeEventArgs.cs" />

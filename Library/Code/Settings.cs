@@ -31,7 +31,9 @@ namespace Library
             Utilities.DebugLine("[Settings] Loading Filter Settings");
             SetupFilters();
             Utilities.DebugLine("[Settings] Loading Transcoding Settings");
-            SetupTranscoding();         
+            SetupTranscoding();
+            Utilities.DebugLine("[Settings] Setting up external player Settings");
+            SetupExternalPlayers();
         }       
 
         private void SaveMountingTools()
@@ -55,6 +57,32 @@ namespace Library
                 _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
             });
         }
+
+        private void SaveExternalPlayers()
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                StringCollection mappings = new StringCollection();
+
+                try
+                {
+                    if (!string.IsNullOrEmpty(_blueRayPlayerPath.Value) &&
+                        _blueRayPlayerPath.Value.Trim().Length != 0)
+                    {
+                        mappings.Add(VideoFormat.BLURAY.ToString() + "|" + _blueRayPlayerPath.Value.Trim());
+                        mappings.Add(VideoFormat.HDDVD.ToString() + "|" + _blueRayPlayerPath.Value.Trim());
+                    }
+
+                    _omlSettings.ExternalPlayerMapping = mappings;
+                    ExternalPlayer.RefreshExternalPlayerList();
+                }
+                catch (Exception ex)
+                {
+                    Utilities.DebugLine("[Settings] Error saving external player settings", ex);
+                }
+            });
+        }
+
         private void SaveFilterSettings()
         {
             OMLApplication.ExecuteSafe(delegate
@@ -119,6 +147,7 @@ namespace Library
             SaveTrailers();
             SaveFilterSettings();
             SaveTranscoding();
+            SaveExternalPlayers();
 
             OMLApplication.ExecuteSafe(delegate
             {
@@ -222,6 +251,7 @@ namespace Library
             _trailersDefinition.Options = trailerDefinitionOptions;
             _trailersDefinition.Chosen = _omlSettings.TrailersDefinition.ToString();
         }
+
         private void SetupFilters()
         {
              _showFilterActors.Chosen = _omlSettings.ShowFilterActors;
@@ -237,6 +267,7 @@ namespace Library
              _showFilterYear.Chosen = _omlSettings.ShowFilterYear;
              _showFilterTrailers.Chosen = _omlSettings.ShowFilterTrailers;
         }
+
         private void SetupUILanguage()
         {
             string selected = null;
@@ -261,6 +292,7 @@ namespace Library
             _uiLanguage.Options = list;
             _uiLanguage.Chosen = selected;
         }
+
         private void SetupTrailers()
         {
             List<string> trailerFormats = new List<string>();
@@ -269,6 +301,7 @@ namespace Library
             _trailersDefinition.Options = trailerFormats;
             _trailersDefinition.Chosen = _omlSettings.TrailersDefinition;
         }
+
         private void SetupTranscoding()
         {
             _transcodeAVIFiles.Chosen = _omlSettings.TranscodeAVIFiles;
@@ -285,6 +318,11 @@ namespace Library
                 }
             }
             return null;
+        }
+
+        private void SetupExternalPlayers()
+        {
+            _blueRayPlayerPath.Value =  ExternalPlayer.GetExternalPlayerPath(VideoFormat.BLURAY);
         }
 
         #region properties
@@ -417,6 +455,24 @@ namespace Library
                 FirePropertyChanged("MountingToolPath");
             }
         }
+
+        public EditableText BlueRayPlayerPath
+        {
+            get
+            {
+                if (_blueRayPlayerPath == null)
+                {
+                    _blueRayPlayerPath = new EditableText();
+                }
+                return _blueRayPlayerPath;
+            }
+            set
+            {
+                _blueRayPlayerPath = value;
+                FirePropertyChanged("BluRayPlayerPath");
+            }
+        }
+
         public Choice UILanguage
         {
             get { return _uiLanguage;  }
@@ -436,6 +492,7 @@ namespace Library
         }
 
         EditableText _mountingToolPath = new EditableText();
+        EditableText _blueRayPlayerPath = new EditableText();
         OMLSettings _omlSettings = new OMLSettings();
         Choice _virtualDrive = new Choice();
         Choice _movieView = new Choice();

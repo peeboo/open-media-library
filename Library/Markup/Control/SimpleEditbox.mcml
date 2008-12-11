@@ -5,78 +5,90 @@
 
   <Aggregate Source="resx://Library/Library.Resources/Base" />
 
+  <!-- Simple edit box -->
   <UI Name="SimpleEditbox">
 
     <Properties>
 
-      <EditableText Name="EditableText" EditableText="$Required" />
+      <!-- EditableText is a required parameter. -->
+      <EditableText Name="EditableText" EditableText="$Required"/>
+
+      <!-- Label color properties. -->
+      <Color Name="LabelColor" Color="Black"/>
+
       <cor:Boolean Name="PasswordMasked" Boolean="false"/>
+
       <Size Name="Size" Size="250, 51" />
-      <cor:String Name="Label" String="" />
-      <Size Name="LabelSize" Size="250, 51" />
 
     </Properties>
 
     <Locals>
 
-      <TypingHandler Name="TypingHandler" EditableText="[EditableText]" TypingPolicy="TripleTap" HandlerStage="Bubbled" />
-      <AnchorLayoutInput Name="OvertypeAnchorLayoutInput" Left="TextField,0" Right="TextField,1" Top="TextField,0" Bottom="TextField,1" />
+      <!-- React to "typing" input. -->
+      <TypingHandler Name="TypingHandler" EditableText="[EditableText]"/>
 
     </Locals>
 
     <Rules>
 
-      <Binding Source="[TypingHandler.DisplayValue]" Target="[TextField.Content]"/>
-      <Binding Source="[PasswordMasked]" Target="[TypingHandler.PasswordMasked]"/>
-      <Default Target="[Input.KeyInteractive]" Value="true" />
+      <!-- The editable text value is bound to the label text value. -->
+      <Binding Source="[TypingHandler.DisplayValue]" Target="[Label.Content]"/>
 
+      <!-- Change color if in overtype mode. -->
       <Condition Source="[EditableText.Overtype]" SourceValue="true">
         <Actions>
           <Set Target="[Overtype.Visible]" Value="true"/>
           <Set Target="[Caret.Visible]" Value="false"/>
         </Actions>
       </Condition>
+
+      <!-- Change color of key focus. -->
       <Condition Source="[Input.KeyFocus]" SourceValue="true">
         <Actions>
-          <Set Target="[Background.Content]" Value="image://me:FindEditbox" />
+          <Set Target="[Background.Content]" Value="image://me:FindEditbox"/>
           <Set Target="[Caret.Visible]" Value="true"/>
         </Actions>
       </Condition>
 
+      <!-- Is this a password field? -->
+      <Binding Source="[PasswordMasked]" Target="[TypingHandler.PasswordMasked]"/>
+
     </Rules>
 
-    <Content>
-      <Panel Layout="HorizontalFlow">
-        <Children>
-          
-          <Text Name="TextFieldLabel" Content="[Label]" Color="White" Font="font://me:Font" MinimumSize="[LabelSize]" MaximumSize="[LabelSize]" Margins="10,10,10,10"/>
-          
-          <Graphic Name="Background" Content="image://me:FindEditboxNoFocus" MouseInteractive="true" Padding="5,5,5,5" Layout="Anchor" MinimumSize="[Size]" MaximumSize="[Size]">
-            <Children>
+    <Content>      
+      <!-- Solid background color. -->
+      <Graphic Name="Background" Content="image://me:FindEditboxNoFocus" MouseInteractive="true" Padding="5,5,5,5" Layout="Anchor" MinimumSize="[Size]" MaximumSize="[Size]">
+        <Children>          
 
-              <!-- Current value. -->
-              <Text Name="TextField" Color="Black" Font="font://me:Font" HorizontalAlignment="Far" Margins="0,0,10,0" MinimumSize="0,30" />
+          <!-- Display of the current value. -->
+          <Text Name="Label" Color="Black"  Font="font://me:Font"
+                HorizontalAlignment="Far" Margins="0,0,10,0" MinimumSize="0,30"/>
 
-              <!-- Caret -->
-              <ColorFill Name="Caret" Content="Black" Visible="false" MinimumSize="12,4">
-                <LayoutInput>
-                  <AnchorLayoutInput Left="TextField,1,-10" Top="TextField,0" Bottom="TextField,1" Vertical="Far" />
-                </LayoutInput>
-                <Animations>
-                  <Animation Animation="animation://me:EditboxCaretBlink" />
-                </Animations>
-              </ColorFill>
+          <!-- Display of the caret. -->
+          <ColorFill Name="Caret" Content="[LabelColor]" Visible="false"
+                     MinimumSize="12,4">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Label,1,-10" Top="Label,0" Bottom="Label,1"
+                                 Vertical="Far"/>
+            </LayoutInput>
+            <Animations>
+              <Animation Animation="animation://me:EditboxCaretBlink" />
+            </Animations>
+          </ColorFill>
 
-              <!-- Overtype fill. -->
-              <ColorFill Name="Overtype" Content="Black" LayoutInput="[OvertypeAnchorLayoutInput]" Visible="false" />
+          <!-- Overtype fill. -->
+          <ColorFill Name="Overtype" Content="[LabelColor]" Visible="false">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Label,0" Right="Label,1" Top="Label,0"
+                                 Bottom="Label,1"/>
+            </LayoutInput>
+          </ColorFill>
 
-            </Children>
-          </Graphic>
-          
         </Children>
-      </Panel>
+      </Graphic>
 
     </Content>
+
   </UI>
 
   <Font Name="Font"                 FontName="global://me:RegularFontName" FontSize="20" />

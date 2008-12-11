@@ -85,6 +85,16 @@ namespace Library
             }
         }
 
+        public StringCollection ExternalPlayerMapping
+        {
+            get { return Properties.Settings.Default.ExternalPlayerMapping; }
+            set
+            {
+                Properties.Settings.Default.ExternalPlayerMapping = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         public StringCollection MainFiltersToShow
         {
             get { return Properties.Settings.Default.MainFiltersToShow; }

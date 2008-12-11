@@ -44,7 +44,13 @@ namespace Library
                 //OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created: {0}", source);
                 //return new TranscodePlayer(source);
 
-                if (source.Format == VideoFormat.WPL) // if its a playlist, do that first
+                if (!OMLApplication.Current.IsExtender &&
+                    ExternalPlayer.ExternalPlayerExistForType(source.Format))
+                {
+                    OMLApplication.DebugLine("[MoviePlayerFactory] ExternalPlayer created: {0}", source);
+                    return new ExternalPlayer(source);
+                }
+                else if (source.Format == VideoFormat.WPL) // if its a playlist, do that first
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] WPLMoviePlayer created: {0}", source);
                     return new MoviePlayerWPL(source);
@@ -89,11 +95,11 @@ namespace Library
                     OMLApplication.DebugLine("[MoviePlayerFactory] HDDVDPlayer created: {0}", source);
                     return new HDDVDPlayer(source);
                 }
-//                else if (source.Format == VideoFormat.FOLDER)
-//                {
-//                    OMLApplication.DebugLine("[MoviePlayerFactory] FolderPlayer created: {0}", source);
-//                    return new FolderPlayer(movieItem);
-//                }
+                //                else if (source.Format == VideoFormat.FOLDER)
+                //                {
+                //                    OMLApplication.DebugLine("[MoviePlayerFactory] FolderPlayer created: {0}", source);
+                //                    return new FolderPlayer(movieItem);
+                //                }
                 else // try to play it (likely is avi/mkv/etc)
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] VideoPlayer created: {0}", source);
