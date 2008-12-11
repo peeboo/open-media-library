@@ -585,6 +585,16 @@ namespace Library
             }
         }
 
+        public string MovieDetailsTransitionType
+        {
+            get { return Properties.Settings.Default.MovieDetailsTransitionType; }
+            set
+            {
+                Properties.Settings.Default.MovieDetailsTransitionType = value;
+                Properties.Settings.Default.Save();
+            }
+        }       
+
         #endregion
 
         #endregion

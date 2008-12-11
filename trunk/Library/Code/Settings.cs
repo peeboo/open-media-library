@@ -17,7 +17,7 @@ using OMLSDK;
 namespace Library
 {
     public class Settings : ModelItem
-    {
+    {       
         public Settings()
         {
             Utilities.DebugLine("[Settings] Loading MountingTools Settings");
@@ -31,8 +31,8 @@ namespace Library
             Utilities.DebugLine("[Settings] Loading Filter Settings");
             SetupFilters();
             Utilities.DebugLine("[Settings] Loading Transcoding Settings");
-            SetupTranscoding();
-        }
+            SetupTranscoding();         
+        }       
 
         private void SaveMountingTools()
         {
@@ -86,6 +86,7 @@ namespace Library
                 _omlSettings.ShowMovieDetails = (bool)_showMovieDetails.Chosen;
                 _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
                 _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
+                _omlSettings.MovieDetailsTransitionType = _movieDetailsTransitionType.Chosen as string;
             });
         }
         private void SaveUILanguage()
@@ -203,6 +204,14 @@ namespace Library
             _showMovieDetails.Chosen = _omlSettings.ShowMovieDetails;
             _dimUnselectedCovers.Chosen = _omlSettings.DimUnselectedCovers;
             _useOriginalCoverArt.Chosen = _omlSettings.UseOriginalCoverArt;
+
+            List<string> transitionTypes = new List<string>(3);
+            transitionTypes.Add("None");
+            transitionTypes.Add("Zoom");
+            transitionTypes.Add("Zoom and Spin");
+            _movieDetailsTransitionType.Options = transitionTypes;
+            _movieDetailsTransitionType.Chosen = _omlSettings.MovieDetailsTransitionType;
+            
 
             //_mountingToolPath.Value = _omlSettings.MountingTool;
 
@@ -385,6 +394,12 @@ namespace Library
         {
             get { return _trailersDefinition; }
         }
+
+        public Choice MovieDetailsTransitionType
+        {
+            get { return _movieDetailsTransitionType; }
+        }
+      
         #endregion
         public EditableText MountingToolPath
         {
@@ -427,6 +442,7 @@ namespace Library
         Choice _movieSort = new Choice();
         Choice _coverArtRows = new Choice();
         Choice _coverArtSpacing = new Choice();
+        Choice _movieDetailsTransitionType = new Choice();
         BooleanChoice _showMovieDetails = new BooleanChoice();
         BooleanChoice _dimUnselectedCovers = new BooleanChoice();
         BooleanChoice _useOriginalCoverArt = new BooleanChoice();
@@ -448,6 +464,6 @@ namespace Library
         BooleanChoice _showFilterTags = new BooleanChoice();
         BooleanChoice _showFilterParentalRating = new BooleanChoice();
         BooleanChoice _showFilterCountry = new BooleanChoice();
-        BooleanChoice _showFilterRuntime = new BooleanChoice();
+        BooleanChoice _showFilterRuntime = new BooleanChoice();        
     }
 }

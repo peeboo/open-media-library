@@ -120,7 +120,7 @@
 
     <Changed Source="[ClearTimer.Tick]">
       <Actions>
-        <Set Target="[MovieBrowser.JumpInListText.Value]" Value="" />
+          <Set Target="[MovieBrowser.JumpInListText.Value]" Value="" />
           <Set Target="[JumpValue.Value]" Value="" />
       </Actions>
     </Changed>
@@ -216,7 +216,7 @@
     </Properties>
 
     <Locals>
-        <ClickHandler Name="Clicker" Command="[GalleryItem]"/>
+        <ClickHandler Name="Clicker" />
         <ShortcutHandler Name="PlayPauseButton" Command="[GalleryItem.QuickPlay]" Shortcut="PlayPause" Handle="true" HandlerStage="Direct"  />
         <ShortcutHandler Name="PlayButton" Command="[GalleryItem.QuickPlay]" Shortcut="Play"   Handle="true" HandlerStage="Direct" />
         <cor:Int32 Name="CurrentIndex" />
@@ -225,6 +225,7 @@
         <MathTransformer Name="ComputeHeightofbFromAngleofA" Type="Int32"/>
         <Rotation Name="Rotation" AngleDegrees="0" Axis="0,1,0"/>
         <cor:Int32 Name="NewHeight"/>
+        <Timer Name="ZoomTimer" Interval="250"/>
 
         <!-- This animation will scale the image. -->
         <Animation Name="LostFocusCoverArt" Loop="0">
@@ -284,10 +285,70 @@
                 <ScaleKeyframe Time="0.2" Value="[UISettings.Gallery.FocusListScale]" RelativeTo="Final" />
             </Keyframes>
         </Animation>
+
+      <Animation Name="ZoomMe" Loop="0" CenterPointPercent=".5,.5,0">
+        <Keyframes>
+          <AlphaKeyframe Time="0.0" RelativeTo="Current" Value="1" />
+          <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+          <ScaleKeyframe Time="0.5" Value="10,10,10" RelativeTo="Final" />
+          <AlphaKeyframe Time="0.5" RelativeTo="Absolute" Value=".5" />
+        </Keyframes>
+      </Animation>
+
+      <Animation Name="ZoomAndSpinMe" Loop="0" CenterPointPercent=".5,.5,0">
+        <Keyframes>
+          <RotateKeyframe Time="0.0" RelativeTo="Current" Value="0deg;1,1,1" />
+          <AlphaKeyframe Time="0.0" RelativeTo="Current" Value="1" />
+          <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+          <ScaleKeyframe Time="0.5" Value="10,10,10" RelativeTo="Final" />
+          <AlphaKeyframe Time="0.5" RelativeTo="Absolute" Value=".5" />
+          <RotateKeyframe Time="0.5" RelativeTo="Current" Value="360deg;1,1,1" />
+        </Keyframes>
+      </Animation>
     </Locals>
 
     <Rules>
-        <!-- Mark ourselves as KeyInteractive so we can receive key focus.    -->
+      <!-- have the clicker directly invoke the gallery item -->
+      <Condition Source="[UISettings.Gallery.MovieDetailsTransitionType]" SourceValue="None">
+        <Actions>
+          <Set Target="[Clicker.Command]" Value="[GalleryItem]"/>
+        </Actions>
+      </Condition>
+
+      <!-- if we have spin enabled use that transition instead -->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[UISettings.Gallery.MovieDetailsTransitionType]" Value="Zoom and Spin" />
+          <Modified Source="[Clicker.Invoked]"/>                     
+        </Conditions>      
+        <Actions>
+          <PlayAnimation Target="[MenuCover]" Animation="[ZoomAndSpinMe]"/>
+          <Set Target="[ZoomTimer.Enabled]" Value="true"/>
+        </Actions>
+      </Rule>
+
+      <!-- play the zoom animation and then invoke the gallery item on a timer -->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[UISettings.Gallery.MovieDetailsTransitionType]" Value="Zoom" />
+          <Modified Source="[Clicker.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[MenuCover]" Animation="[ZoomMe]"/>
+          <Set Target="[ZoomTimer.Enabled]" Value="true"/>
+        </Actions>
+      </Rule>                         
+
+      <!-- invoke the gallery item and disable the timer -->
+      <Changed Source="[ZoomTimer.Tick]">
+        <Actions>
+          <Invoke Target="[GalleryItem.Invoke]" />          
+          <Set Target="[ZoomTimer.Enabled]" Value="false"/>
+        </Actions>
+      </Changed>
+
+      
+      <!-- Mark ourselves as KeyInteractive so we can receive key focus.    -->
         <!--<Binding Source="[MovieBrowser.AngleDelta]" Target="[AngleDelta]"/>
         <Binding Source="[FocusedIndex.Value!cor:String]" Target="[FocusedIndexLabel.Content]"/>
         <Binding Source="[Index.Value!cor:String]" Target="[OptionIndexLabel.Content]"/>

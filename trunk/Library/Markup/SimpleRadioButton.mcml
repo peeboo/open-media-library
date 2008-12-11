@@ -11,6 +11,8 @@
                   String="$Required"/>
       <Size Name="BoxSize"
             Size="50,50"/>
+
+      <Index Index="$Required" Name="Index"/>
     </Properties>
 
 		<Locals>
@@ -81,7 +83,7 @@
 
 		<Content>
 
-      <Panel>
+      <Panel FocusOrder="[Index.Value]">
 
         <Layout>
           <FlowLayout Orientation="Horizontal"
