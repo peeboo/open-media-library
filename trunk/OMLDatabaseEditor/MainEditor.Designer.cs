@@ -66,6 +66,8 @@ namespace OMLDatabaseEditor
             this.groupMovies = new DevExpress.XtraNavBar.NavBarGroup();
             this.navBarGroupControlContainer1 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.lbMovies = new DevExpress.XtraEditors.ListBoxControl();
+            this.cmsMoviesList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.navBarGroupControlContainer2 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.lbMetadata = new DevExpress.XtraEditors.ListBoxControl();
             this.navBarGroupControlContainer3 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
@@ -89,6 +91,7 @@ namespace OMLDatabaseEditor
             this.mainNav.SuspendLayout();
             this.navBarGroupControlContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbMovies)).BeginInit();
+            this.cmsMoviesList.SuspendLayout();
             this.navBarGroupControlContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbMetadata)).BeginInit();
             this.navBarGroupControlContainer3.SuspendLayout();
@@ -406,14 +409,30 @@ namespace OMLDatabaseEditor
             // 
             // lbMovies
             // 
+            this.lbMovies.ContextMenuStrip = this.cmsMoviesList;
             this.lbMovies.DisplayMember = "Name";
             this.lbMovies.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbMovies.Location = new System.Drawing.Point(0, 0);
             this.lbMovies.Name = "lbMovies";
+            this.lbMovies.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lbMovies.Size = new System.Drawing.Size(175, 156);
             this.lbMovies.TabIndex = 0;
             this.lbMovies.ValueMember = "InternalItemID";
             this.lbMovies.SelectedIndexChanged += new System.EventHandler(this.lbMovies_SelectedIndexChanged);
+            // 
+            // cmsMoviesList
+            // 
+            this.cmsMoviesList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1});
+            this.cmsMoviesList.Name = "cmsMoviesList";
+            this.cmsMoviesList.Size = new System.Drawing.Size(219, 48);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(218, 22);
+            this.toolStripMenuItem1.Text = "MetaData Lookup These Titles";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // navBarGroupControlContainer2
             // 
@@ -482,7 +501,7 @@ namespace OMLDatabaseEditor
             this.helpToolStripButton});
             this.toolStrip.Location = new System.Drawing.Point(3, 24);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(87, 25);
+            this.toolStrip.Size = new System.Drawing.Size(85, 25);
             this.toolStrip.TabIndex = 2;
             // 
             // newToolStripButton
@@ -548,6 +567,7 @@ namespace OMLDatabaseEditor
             this.mainNav.ResumeLayout(false);
             this.navBarGroupControlContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbMovies)).EndInit();
+            this.cmsMoviesList.ResumeLayout(false);
             this.navBarGroupControlContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbMetadata)).EndInit();
             this.navBarGroupControlContainer3.ResumeLayout(false);
@@ -609,6 +629,8 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem regenerateThumbnailToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem currentMovieToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allMoviesToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip cmsMoviesList;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
     }
 }
 
