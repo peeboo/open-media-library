@@ -926,5 +926,17 @@ namespace Library.Properties {
                 this["FlipFourCCCode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Zoom")]
+        public string MovieDetailsTransitionType {
+            get {
+                return ((string)(this["MovieDetailsTransitionType"]));
+            }
+            set {
+                this["MovieDetailsTransitionType"] = value;
+            }
+        }
     }
 }

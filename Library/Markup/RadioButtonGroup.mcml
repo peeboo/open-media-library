@@ -17,11 +17,11 @@
 
 		<Content>
       <Panel Name="RootPanel"
-             Layout="VerticalFlow">
+             Layout="VerticalFlow" Navigation="PreferFocusOrder,RememberFocus">
         <Children>
 
           <Repeater Name="Repeater"
-                    ContentName="RadioButton">
+                    ContentName="RadioButton" Navigation="Group">
             <Layout>
               <FlowLayout Orientation="Vertical"
                           Spacing="5,0"
@@ -36,7 +36,7 @@
 
     <Content Name="RadioButton">
       <srb:SimpleRadioButton Model="[Model]"
-                            Option="[RepeatedItem!cor:String]" />
+                            Option="[RepeatedItem!cor:String]" Index="[RepeatedItemIndex]" />
     </Content>
 
   </UI>

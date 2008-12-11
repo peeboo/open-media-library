@@ -186,6 +186,11 @@ namespace Library
             get { return Properties.Settings.Default.ShowMovieDetails; }
         }
 
+        public string MovieDetailsTransitionType
+        {
+            get { return Properties.Settings.Default.MovieDetailsTransitionType; }
+        }
+   
         public bool DimUnselectedCovers
         {
             get { return Properties.Settings.Default.DimUnselectedCovers; }

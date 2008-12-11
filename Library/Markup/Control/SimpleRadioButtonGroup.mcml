@@ -40,7 +40,7 @@
     </Content>
 
     <Content Name="RadioButton">
-      <me:SimpleRadioButton Model="[Model]" Option="[RepeatedItem!cor:String]" />
+      <me:SimpleRadioButton Model="[Model]" Option="[RepeatedItem!cor:String]" Index="[RepeatedItemIndex]" />
     </Content>
 
   </UI>

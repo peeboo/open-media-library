@@ -30,8 +30,14 @@
                     <cor:String String="Language"/>
                     <cor:String String="Trailers"/>
                     <cor:String String="Filters"/>
-                </Options>
+                </Options>              
             </Choice>
+
+          <ScrollingData Name="ScrollDataUI"/>
+          <ScrollingHandler Name="ScrollHandlerUI"/>
+
+          <ScrollingData Name="ScrollDataFilters"/>
+          <ScrollingHandler Name="ScrollHandlerFilters"/>
         </Locals>
 
         <Properties>
@@ -42,7 +48,7 @@
             <a:UISettings Name="UISettings" UISettings="$Required" />
         </Properties>
 
-        <Rules>
+        <Rules>            
             <!-- Setup the default visibility rules -->
             <Changed Source="[SaveSettings.Invoked]">
                 <Actions>
@@ -146,23 +152,31 @@
                 </Actions>
             </Changed>
 
+          <Condition Source="[TabsPanel.Visible]" SourceValue="true">
+            <Actions>
+              <Set Target="[Tabs.ChosenIndex]" Value="0" />
+            </Actions>
+          </Condition>
+
+          <Default Target="[ScrollHandlerUI.ScrollingData]" Value="[ScrollDataUI]"/>
+          <Default Target="[ScrollHandlerFilters.ScrollingData]" Value="[ScrollDataFilters]"/>
         </Rules>
 
         <Content>
-            <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
+            <ColorFill Name="AllContent" Content="Transparent" Layout="Form" Navigation="PreferFocusOrder">
                 <Children>
 
                     <!-- Bottom -->
-                    <Panel Name="BottomPanel">
+                    <Panel Name="BottomPanel" FocusOrder="100" Navigation="PreferFocusOrder,Group">
                         <Children>
 
                             <Panel Layout="Fill" Margins="50,0,0,0" Navigation="ContainHorizontal">
                                 <Children>
                                     <Panel Layout="HorizontalFlow" Navigation="FlowHorizontal">
                                         <Children>
-                                            <c:SimpleButton Name="Save Settings" Command="[SaveSettings]" Text="Save Settings" Margins="0,20,10,0"/>
+                                          <c:SimpleButton Name="Save Settings" Command="[SaveSettings]" FocusOrder="1" Text="Save Settings" Margins="0,20,10,0" />
                                             <!-- <c:SimpleButton Name="Import Movies" Command="[BeginSetupCommand]" Text="Import Movies" Margins="0,20,10,0"/> -->
-                                            <c:SimpleButton Name="About OML"     Command="[AboutOML]" Text="About OML" Margins="0,20,10,0"/>
+                                            <c:SimpleButton Name="About OML" Command="[AboutOML]" FocusOrder="2" Text="About OML" Margins="0,20,10,0"/>
                                         </Children>
                                     </Panel>
                                 </Children>
@@ -198,9 +212,9 @@
                     </Panel>
 
                     <!-- Tabs -->
-                    <Panel Name="TabsPanel" Navigation="ContainHorizontal">
+                    <Panel Name="TabsPanel" Navigation="ContainHorizontal" FocusOrder="0">
                         <Children>
-                            <me:Pivot Model="[Tabs]" OMLFont="Calibri, 18" OMLFocusFont="Calibri, 20"/>
+                            <me:Pivot Name="TopTabs" Model="[Tabs]" OMLFont="Calibri, 18" OMLFocusFont="Calibri, 20"/>
                         </Children>
                         <LayoutInput>
                             <FormLayoutInput Left="Parent,0.1" Top="TopPanel,1" />
@@ -209,262 +223,265 @@
                     </Panel>
 
                     <!-- Everything else -->
-                    <Panel>
+                  <Panel FocusOrder="1" MinimumSize="1024,0">                    
+                    <Children>
+
+                      <!-- ViewOptions -->
+                      <Panel Name="ViewOptionsPanel" Layout="VerticalFlow">
                         <Children>
+                          <Panel Layout="VerticalFlow" Navigation="Group">
+                            <Children>
 
-                            <!-- ViewOptions -->
-                            <Panel Name="ViewOptionsPanel" Layout="VerticalFlow" Navigation="ContainHorizontal">
+                              <Panel Layout="VerticalFlow">
                                 <Children>
-                                    <Panel Layout="VerticalFlow" Navigation="Group">
-                                        <Children>
-
-                                            <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="1" Navigation="Row">
-                                                <Children>
-                                                    <Text Content="Movie Gallery View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                                                    <c:SimpleSpinner Name="MovieView" Model="[Settings.MovieView]" />
-                                                </Children>
-                                            </Panel>
-
-                                            <Panel Layout="VerticalFlow" FocusOrder="2" Navigation="Row">
-                                                <Children>
-                                                    <Text Content="Movie Sort" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                                                    <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" />
-                                                </Children>
-                                            </Panel>
-
-                                            <Panel Layout="VerticalFlow" FocusOrder="3" Navigation="Row">
-                                                <Children>
-                                                    <Text Content="Start Page" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                                                    <c:SimpleSpinner Name="StartPage" Model="[Settings.StartPage]" />
-                                                </Children>
-                                            </Panel>
-
-                                        </Children>
-                                    </Panel>
-
+                                  <Text Content="Movie Gallery View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                                  <c:SimpleSpinner Name="MovieView" Model="[Settings.MovieView]" />
                                 </Children>
+                              </Panel>
+
+                              <Panel Layout="VerticalFlow">
+                                <Children>
+                                  <Text Content="Movie Sort" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                                  <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" />
+                                </Children>
+                              </Panel>
+
+                              <Panel Layout="VerticalFlow">
+                                <Children>
+                                  <Text Content="Start Page" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                                  <c:SimpleSpinner Name="StartPage" Model="[Settings.StartPage]" />
+                                </Children>
+                              </Panel>
+
+                            </Children>
+                          </Panel>
+                        </Children>                       
+                      </Panel>
+
+                      <!-- CustomizeUI -->
+                      <Panel Name="CustomizeUI" Layout="VerticalFlow" Visible="false" Navigation="PreferFocusOrder,RememberFocus">
+                        <Children>
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <Scroller Orientation="Vertical" ScrollingData="[ScrollDataUI]" MaximumSize="0,475" MinimumSize="0,475" FadeSize="-10" Navigation="Group">
                                 <LayoutInput>
-                                    <FormLayoutInput Vertical="Center" Horizontal="Center"/>
-                                </LayoutInput>
-                            </Panel>
-
-                            <!-- CustomizeUI -->
-                            <Panel Name="CustomizeUI" Layout="VerticalFlow" Visible="false" Navigation="ContainHorizontal">
-                                <Children>
-                                    <Panel Layout="HorizontalFlow">
-                                        <Children>
-                                            <Panel Layout="VerticalFlow" Navigation="Group">
-                                                <Children>
-                                                    <Panel Navigation="Group" FocusOrder="1" Layout="VerticalFlow">
-                                                        <Children>
-                                                            <Panel Layout="HorizontalFlow" FocusOrder="1">
-                                                                <Children>
-                                                                    <c:SimpleCheckbox Name="UseOriginalCoverArt" Checked="[Settings.UseOriginalCoverArt]" Margins="0,12,10,0" />
-                                                                    <Text Content="Don't Resize Cover Art (may slow down browsing)" Color="White" Font="font://me:Font" Margins="0,0,0,0"/>
-                                                                </Children>
-                                                            </Panel>
-                                                            <Panel Layout="HorizontalFlow" FocusOrder="2">
-                                                                <Children>
-                                                                    <c:SimpleCheckbox Name="ShowMovieDetails" Checked="[Settings.ShowMovieDetails]" Margins="0,12,10,0" />
-                                                                    <Text Content="Show Movie Details While Browsing" Color="White" Font="font://me:Font" Margins="0,0,0,0"/>
-                                                                </Children>
-                                                            </Panel>
-                                                            <Panel Layout="HorizontalFlow" FocusOrder="3">
-                                                                <Children>
-                                                                    <c:SimpleCheckbox Name="DimUnselectedCovers" Checked="[Settings.DimUnselectedCovers]" Margins="0,12,10,0" />
-                                                                    <Text Content="Dim Unselected Covers" Color="White" Font="font://me:Font" Margins="0,0,0,0"/>
-                                                                </Children>
-                                                            </Panel>
-                                                        </Children>
-                                                    </Panel>
-                                                    <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="2" Navigation="Row">
-                                                        <Children>
-                                                            <Text  Content="Cover Art Rows" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                                                            <c:SimpleSpinner Name="CoverArtRows" Model="[Settings.CoverArtRows]" Size="151,51" />
-                                                        </Children>
-                                                    </Panel>
-                                                    <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="3" Navigation="Row">
-                                                        <Children>
-                                                            <Text  Content="Cover Art Spacing" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                                                            <c:SimpleSpinner Name="CoverArtSpacing" Model="[Settings.CoverArtSpacing]" Size="151,51" />
-                                                        </Children>
-                                                    </Panel>
-                                                </Children>
-                                            </Panel>
-                                        </Children>
-                                    </Panel>
-                                </Children>
-                                <LayoutInput>
-                                    <FormLayoutInput Vertical="Center" Horizontal="Center"/>
-                                </LayoutInput>
-                            </Panel>
-
-                            <!-- Language -->
-                            <Panel Name="LanguagePanel" Layout="Fill" Visible="false" Navigation="Group" FocusOrder="1">
-                                <Children>
-                                    <Panel Layout="Center" Navigation="Group" FocusOrder="1">
-                                        <Children>
-                                            <Graphic Content="image://me:ListboxNoFocus" Margins="0,0,0,20" MinimumSize="300,400" MaximumSize="400,400">
-                                                <Children>
-                                                    <Scroller Orientation="Vertical"
-                                                              FadeSize="10"
-                                                              Padding="15,15,15,15" FocusOrder="1" Navigation="Group">
-                                                        <Children>
-                                                            <controls:RadioButtonGroup Model="[Settings.UILanguage]"/>
-                                                        </Children>
-                                                    </Scroller>
-                                                </Children>
-                                            </Graphic>
-                                        </Children>
-                                    </Panel>
-                                </Children>
-                            </Panel>
-
-                            <!-- Mounting -->
-                            <Panel Name="DTPanel" Layout="VerticalFlow" Visible="false" Navigation="ContainHorizontal">
-                                <Children>
-                                    <Panel Name="WhichTool" Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="1" Navigation="Row">
-                                        <Children>
-                                            <Text Content="Which Mounting Tool" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                                            <rbg:RadioButtonGroup Model="[Settings.ImageMountingSelection]" />
-                                        </Children>
-                                    </Panel>
-                                    <Panel Name="DTPath" Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="2" Navigation="Row">
-                                        <Children>
-                                            <Text Content="Mounting Tool Path" Color="White" Font="font://me:Font" Margins="0,20,0,0" />
-                                            <c:SimpleEditbox Name="DTEditbox" Size="700,51" EditableText="[Settings.MountingToolPath]" Label="" LabelSize="0,0"/>
-                                        </Children>
-                                    </Panel>
-                                    <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="3" Navigation="Row">
-                                        <Children>
-                                            <Text Content="Virtual Drive" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                                            <c:SimpleSpinner Name="VirtualDrive" Model="[Settings.VirtualDrive]" Size="51,51" />
-                                        </Children>
-                                    </Panel>
-                                </Children>
-                                <LayoutInput>
-                                    <FormLayoutInput Vertical="Center" Horizontal="Center"/>
+                                  <FormLayoutInput Left="Parent,0" Top="Parent,.25" Horizontal="Center"/>
                                 </LayoutInput>
 
-                            </Panel>
-
-                            <!-- Trailers -->
-                            <Panel Name="Trailers" Visible="false" Navigation="ContainHorizontal" Layout="VerticalFlow">
                                 <Children>
-                                    <Text Content="Trailers Definition" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                                    <c:SimpleSpinner Name="TrailersDefinition" Model="[Settings.TrailersDefinition]" Size="51,51" />
-                                </Children>
-                                <LayoutInput>
-                                    <FormLayoutInput Top="Parent,0.05"/>
-                                </LayoutInput>
-                            </Panel>
-
-                            <!-- Filters -->
-                            <Panel Name="Filters" Visible="false" Navigation="PreferFocusOrder" Layout="VerticalFlow" FocusOrder="0" >
-                                <Children>
-                                 
-                                  <Panel Layout="HorizontalFlow" FocusOrder="1">
+                                  <Panel Navigation="Group" Layout="VerticalFlow" FocusOrder="1">
                                     <Children>
-                                      <c:SimpleCheckbox Name="ShowFilterActors" Checked="[Settings.ShowFilterActors]" Margins="0,0,0,0" />
-                                      <Text Content="Actors" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                      <Panel Layout="HorizontalFlow" Margins="0,10,0,0">
+                                        <Children>
+                                          <c:SimpleCheckbox Name="UseOriginalCoverArt" Checked="[Settings.UseOriginalCoverArt]" Margins="0,0,10,0" />
+                                          <Text Content="Don't Resize Cover Art (may slow down browsing)" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
+                                        </Children>
+                                      </Panel>
+                                      <Panel Layout="HorizontalFlow" Margins="0,10,0,0">
+                                        <Children>
+                                          <c:SimpleCheckbox Name="ShowMovieDetails" Checked="[Settings.ShowMovieDetails]" Margins="0,0,10,0" />
+                                          <Text Content="Show Movie Details While Browsing" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
+                                        </Children>
+                                      </Panel>
+                                      <Panel Layout="HorizontalFlow" Margins="0,10,0,0">
+                                        <Children>
+                                          <c:SimpleCheckbox Name="DimUnselectedCovers" Checked="[Settings.DimUnselectedCovers]" Margins="0,0,10,0" />
+                                          <Text Content="Dim Unselected Covers" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
+                                        </Children>
+                                      </Panel>
                                     </Children>
                                   </Panel>
                                   
-                                  <Panel Layout="HorizontalFlow" FocusOrder="2">
+                                  <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="2">
                                     <Children>
-                                      <c:SimpleCheckbox Name="ShowFilterDirectors" Checked="[Settings.ShowFilterDirectors]" Margins="0,0,0,0" />
-                                      <Text Content="Directors" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                      <Text Content="Cover Art Rows" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                                      <c:SimpleSpinner Name="CoverArtRows" Model="[Settings.CoverArtRows]" Size="151,51" />
+                                    </Children>
+                                  </Panel>
+                                  
+                                  <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="3">
+                                    <Children>
+                                      <Text  Content="Cover Art Spacing" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                                      <c:SimpleSpinner Name="CoverArtSpacing" Model="[Settings.CoverArtSpacing]" Size="151,51" />
                                     </Children>
                                   </Panel>
 
-                                  <Panel Layout="HorizontalFlow" FocusOrder="3">
+                                  <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="4">
                                     <Children>
-                                      <c:SimpleCheckbox Name="ShowFilterGenres" Checked="[Settings.ShowFilterGenres]" Margins="0,0,0,0" />
-                                      <Text Content="Genres" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                                      <Text Content="Transition when selecting a movie" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                                      <c:SimpleSpinner Name="TransitionType" Model="[Settings.MovieDetailsTransitionType]" Size="200,51" />
                                     </Children>
                                   </Panel>
-
-                                  <Panel Layout="HorizontalFlow" FocusOrder="4">
-                                    <Children>
-                                      <c:SimpleCheckbox Name="ShowFilterRuntime" Checked="[Settings.ShowFilterRuntime]" Margins="0,0,0,0" />
-                                      <Text Content="Runtime" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
-                                    </Children>
-                                  </Panel>
-
-                                  <Panel Layout="HorizontalFlow" FocusOrder="5">
-                                    <Children>
-                                      <c:SimpleCheckbox Name="ShowFilterCountry" Checked="[Settings.ShowFilterCountry]" Margins="0,0,0,0" />
-                                      <Text Content="Country" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
-                                    </Children>
-                                  </Panel>
-
-                                  <Panel Layout="HorizontalFlow" FocusOrder="6">
-                                    <Children>
-                                      <c:SimpleCheckbox Name="ShowFilterParentalRating" Checked="[Settings.ShowFilterParentalRating]" Margins="0,0,0,0" />
-                                      <Text Content="Parental Rating" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
-                                    </Children>
-                                  </Panel>
-
-                                  <Panel Layout="HorizontalFlow" FocusOrder="7">
-                                    <Children>
-                                      <c:SimpleCheckbox Name="ShowFilterTags" Checked="[Settings.ShowFilterTags]" Margins="0,0,0,0" />
-                                      <Text Content="Tags" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
-                                    </Children>
-                                  </Panel>
-
-                                  <Panel Layout="HorizontalFlow" FocusOrder="8">
-                                    <Children>
-                                      <c:SimpleCheckbox Name="ShowFilterUserRating" Checked="[Settings.ShowFilterUserRating]" Margins="0,0,0,0" />
-                                      <Text Content="User Rating" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
-                                    </Children>
-                                  </Panel>
-
-                                  <Panel Layout="HorizontalFlow" FocusOrder="9">
-                                    <Children>
-                                      <c:SimpleCheckbox Name="ShowFilterYear" Checked="[Settings.ShowFilterYear]" Margins="0,0,0,0" />
-                                      <Text Content="Release Year" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
-                                    </Children>
-                                  </Panel>
-
-                                  <Panel Layout="HorizontalFlow" FocusOrder="10">
-                                    <Children>
-                                      <c:SimpleCheckbox Name="ShowFilterDateAdded" Checked="[Settings.ShowFilterDateAdded]" Margins="0,0,0,0" />
-                                      <Text Content="Date Added" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
-                                    </Children>
-                                  </Panel>
-
-                                  <Panel Layout="HorizontalFlow" FocusOrder="11">
-                                    <Children>
-                                      <c:SimpleCheckbox Name="ShowFilterFormat" Checked="[Settings.ShowFilterFormat]" Margins="0,0,0,0" />
-                                      <Text Content="Video Format" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
-                                    </Children>
-                                  </Panel>
-
-                                  <Panel Layout="HorizontalFlow" FocusOrder="12">
-                                    <Children>
-                                      <c:SimpleCheckbox Name="ShowFilterTrailers" Checked="[Settings.ShowFilterTrailers]" Margins="0,0,0,0" />
-                                      <Text Content="Trailers" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
-                                    </Children>
-                                  </Panel>
-
                                 </Children>
-                                <LayoutInput>
-                                    <FormLayoutInput Vertical="Center" Horizontal="Center"/>
-                                </LayoutInput>
-                            </Panel>
-
-
+                              </Scroller>
+                            </Children>
+                          </Panel>
                         </Children>
                         <LayoutInput>
-                            <FormLayoutInput Left="Parent,0.05" />
+                          <FormLayoutInput Vertical="Center" Horizontal="Center"/>
                         </LayoutInput>
-                    </Panel>
+                      </Panel>
+
+                      <!-- Language -->
+                      <Panel Name="LanguagePanel" Layout="Center" Visible="false">
+                        <Children>
+                          <Graphic Content="image://me:ListboxNoFocus" Margins="0,0,0,20" MinimumSize="300,400" MaximumSize="400,400">
+                            <Children>
+                              <Scroller Orientation="Vertical"
+                                        FadeSize="10"
+                                        Padding="15,15,15,15" Navigation="Group">
+                                <Children>
+                                  <controls:RadioButtonGroup Model="[Settings.UILanguage]"/>
+                                </Children>
+                              </Scroller>
+                            </Children>
+                          </Graphic>
+                        </Children>
+                      </Panel>
+
+                      <!-- Mounting -->
+                      <Panel Name="DTPanel" Layout="VerticalFlow" Visible="false">
+                        <Children>
+                          <Panel Name="WhichTool" Layout="VerticalFlow" Margins="0,0,50,0" Navigation="Row">
+                            <Children>
+                              <Text Content="Which Mounting Tool" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                              <rbg:RadioButtonGroup Model="[Settings.ImageMountingSelection]" />
+                            </Children>
+                          </Panel>
+                          <Panel Name="DTPath" Layout="VerticalFlow" Margins="0,0,50,0" Navigation="Row">
+                            <Children>
+                              <Text Content="Mounting Tool Path" Color="White" Font="font://me:Font" Margins="0,20,0,0" />
+                              <c:SimpleEditbox Name="DTEditbox" Size="700,51" EditableText="[Settings.MountingToolPath]" Label="" LabelSize="0,0"/>
+                            </Children>
+                          </Panel>
+                          <Panel Layout="VerticalFlow" Margins="0,0,50,0">
+                            <Children>
+                              <Text Content="Virtual Drive" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                              <c:SimpleSpinner Name="VirtualDrive" Model="[Settings.VirtualDrive]" Size="51,51" />
+                            </Children>
+                          </Panel>
+                        </Children>
+                        <LayoutInput>
+                          <FormLayoutInput Vertical="Center" Horizontal="Center"/>
+                        </LayoutInput>
+
+                      </Panel>
+
+                      <!-- Trailers -->
+                      <Panel Name="Trailers" Visible="false" Layout="VerticalFlow" Navigation="Group">
+                        <Children>
+                          <Text Content="Trailers Definition" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <c:SimpleSpinner Name="TrailersDefinition" Model="[Settings.TrailersDefinition]" Size="51,51" />
+                        </Children>
+                        <LayoutInput>
+                          <FormLayoutInput Top="Parent,0.05"/>
+                        </LayoutInput>
+                      </Panel>
+
+                      <!-- Filters -->
+                      <Scroller Name="Filters" Orientation="Vertical" ScrollingData="[ScrollDataFilters]" MaximumSize="0,475" MinimumSize="0,475" FadeSize="-10" Navigation="Group" Visible="false">
+                        <LayoutInput>
+                          <FormLayoutInput Left="Parent,0" Top="Parent,.25" Horizontal="Center"/>
+                        </LayoutInput>
+                        
+                        <Children>
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="ShowFilterActors" Checked="[Settings.ShowFilterActors]" Margins="0,0,0,0" />
+                              <Text Content="Actors" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="ShowFilterDirectors" Checked="[Settings.ShowFilterDirectors]" Margins="0,0,0,0" />
+                              <Text Content="Directors" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="ShowFilterGenres" Checked="[Settings.ShowFilterGenres]" Margins="0,0,0,0" />
+                              <Text Content="Genres" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="ShowFilterRuntime" Checked="[Settings.ShowFilterRuntime]" Margins="0,0,0,0" />
+                              <Text Content="Runtime" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="ShowFilterCountry" Checked="[Settings.ShowFilterCountry]" Margins="0,0,0,0" />
+                              <Text Content="Country" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="ShowFilterParentalRating" Checked="[Settings.ShowFilterParentalRating]" Margins="0,0,0,0" />
+                              <Text Content="Parental Rating" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="ShowFilterTags" Checked="[Settings.ShowFilterTags]" Margins="0,0,0,0" />
+                              <Text Content="Tags" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="ShowFilterUserRating" Checked="[Settings.ShowFilterUserRating]" Margins="0,0,0,0" />
+                              <Text Content="User Rating" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="ShowFilterYear" Checked="[Settings.ShowFilterYear]" Margins="0,0,0,0" />
+                              <Text Content="Release Year" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="ShowFilterDateAdded" Checked="[Settings.ShowFilterDateAdded]" Margins="0,0,0,0" />
+                              <Text Content="Date Added" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="ShowFilterFormat" Checked="[Settings.ShowFilterFormat]" Margins="0,0,0,0" />
+                              <Text Content="Video Format" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="ShowFilterTrailers" Checked="[Settings.ShowFilterTrailers]" Margins="0,0,0,0" />
+                              <Text Content="Trailers" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                            </Children>
+                          </Panel>
+
+                        </Children>
+                      </Scroller>
+
+                    </Children>
+                    <LayoutInput>
+                      <FormLayoutInput Left="Parent,0.05" />
+                    </LayoutInput>
+                  </Panel>
                 </Children>
             </ColorFill>
         </Content>
     </UI>
-
     <Font Name="Font" FontName="global://me:RegularFontName" FontSize="16" />
-    <Font Name="SmallFont" FontName="global://me:RegularFontName" FontSize="16" />
+    <Font Name="SmallFont" FontName="global://me:RegularFontName" FontSize="20" />
     <Image Name="ListboxNoFocus" Source="resx://Library/Library.Resources/ListboxNoFocus" />
 </Mcml>

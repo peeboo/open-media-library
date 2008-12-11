@@ -19,9 +19,8 @@
     </Properties>
 
     <Rules>
-
       <Default Target="[Input.KeyInteractive]" Value="true"/>
-      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false"/>
+      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false"/>      
       
       <Rule ConditionLogicalOp="Or">
         <Conditions>
@@ -51,8 +50,10 @@
           <Set Target="[Name.Color]" Value="[OMLFocusColor]"/>
           <Set Target="[PivotPanel.Scale]" Value="1.1,1.1,1.1" />
           <Set Target="[PivotPanel.Alpha]" Value="1" />
+          <!-- if it's the first time in and we don't have key focus but we're selected go ahead and give us key focus -->
+          <Invoke Target="[PivotPanel.NavigateInto]" />
         </Actions>
-      </Condition>
+      </Condition>           
 
       <Condition Source="[Model.ChosenIndex]" ConditionOp="NotEquals" SourceValue="[Index.Value]">
         <Actions>
@@ -67,7 +68,7 @@
 
     <Content>
 
-      <Panel Layout="HorizontalFlow" Name="PivotPanel" Alpha="0.75" CenterPointPercent="0.5,0.5,0.5">
+      <Panel Layout="HorizontalFlow" Name="PivotPanel" Alpha="0.75" CenterPointPercent="0.5,0.5,0.5" FocusOrder="[Index.Value]">
 
         <Animations>
           <Animation Animation="animation://me:RegularFastScale" />
