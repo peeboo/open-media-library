@@ -480,5 +480,44 @@ namespace OMLDatabaseEditor
                 _titleCollection.saveTitleCollection();
             }
         }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            SaveCurrentMovie();
+
+            BaseListBoxControl.SelectedIndexCollection collection =
+                lbMovies.SelectedIndices;
+
+            foreach (int index in collection)
+            {
+
+                Title selectedTitle = lbMovies.GetItem(index) as Title;
+                if (selectedTitle == null) return;
+
+                titleEditor.LoadDVD(selectedTitle);
+                this.Text = APP_TITLE + " - " + selectedTitle.Name;
+                ToggleSaveState(false);
+
+                IOMLMetadataPlugin metadata = _metadataPlugins[0];
+                StartMetadataImport(metadata, false);
+
+                Title editedTitle = titleEditor.EditedTitle;
+                Title collectionTitle = _titleCollection.GetTitleById(editedTitle.InternalItemID);
+                if (collectionTitle == null)
+                {
+                    // Title doesn't exist so we'll add it
+                    _titleCollection.Add(editedTitle);
+                }
+                else
+                {
+                    // Title exists so we need to copy edited data to collection title
+                    _titleCollection.Replace(editedTitle);
+                }
+                _titleCollection.saveTitleCollection();
+            
+            }
+            Cursor = Cursors.Default;
+        }
     }
 }
