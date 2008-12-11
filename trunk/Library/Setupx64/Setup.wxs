@@ -90,34 +90,49 @@
                               Source="..\Images\Application.png" Checksum="no" />
                     </Component>
                     
-                    <Component Id="ComponentFactory.Krypton.Toolkit.DLL" Guid="ACDECE2C-B066-415e-AD42-0B63D341300F" Win64="yes" DiskId="1">
+                    <!--<Component Id="ComponentFactory.Krypton.Toolkit.DLL" Guid="ACDECE2C-B066-415e-AD42-0B63D341300F" Win64="yes" DiskId="1">
                         <File Name="ComponentFactory.Krypton.Toolkit.DLL"
                               Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\ComponentFactory.Krypton.Toolkit.DLL" Checksum="no" />
-                    </Component>
-                    <Component Id="DevExpress.Data.v8.2.dll" Guid="5268F9D7-2529-4af0-B5FB-6B94079A7F74" Win64="yes" DiskId="1">
-                        <File Name="DevExpress.Data.v8.2.dll"
-                              Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Data.v8.2.dll" Checksum="no" />
-                    </Component>
-                    <Component Id="DevExpress.Utils.v8.2.dll" Guid="419C9895-3E28-442c-AF94-D77F9E4487B4" Win64="yes" DiskId="1">
-                        <File Name="DevExpress.Utils.v8.2.dll"
-                              Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Utils.v8.2.dll" Checksum="no" />
-                    </Component>
-                    <Component Id="DevExpress.XtraEditors.v8.2.dll" Guid="CD530611-C23A-4a31-AA6E-AC8926845707" Win64="yes" DiskId="1">
-                        <File Name="DevExpress.XtraEditors.v8.2.dll"
-                              Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraEditors.v8.2.dll" Checksum="no" />
-                    </Component>
-                    <Component Id="DevExpress.Data.v8.2.xml" Guid="25AF85CB-DC9D-46df-B022-F8A3DF4F71FB" Win64="yes" DiskId="1">
-                        <File Name="DevExpress.Data.v8.2.xml"
-                              Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Data.v8.2.xml" Checksum="no" />
-                    </Component>
-                    <Component Id="DevExpress.Utils.v8.2.xml" Guid="AC15AD59-C236-4a0b-9CB9-A009684582B7" Win64="yes" DiskId="1">
-                        <File Name="DevExpress.Utils.v8.2.xml"
-                              Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Utils.v8.2.xml" Checksum="no" />
-                    </Component>
-                    <Component Id="DevExpress.XtraEditors.v8.2.xml" Guid="365BA1F3-7823-4ff7-AC1C-CB040D2B852E" Win64="yes" DiskId="1">
-                        <File Name="DevExpress.XtraEditors.v8.2.xml"
-                              Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraEditors.v8.2.xml" Checksum="no" />
-                    </Component>
+                    </Component>-->
+                  <Component Id="DevExpress.Data.v8.2.dll" Guid="5268F9D7-2529-4af0-B5FB-6B94079A7F74" Win64="yes" DiskId="1">
+                    <File Name="DevExpress.Data.v8.2.dll"
+                          Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Data.v8.2.dll" Checksum="no" />
+                  </Component>
+                  
+                  <Component Id="DevExpress.Utils.v8.2.dll" Guid="419C9895-3E28-442c-AF94-D77F9E4487B4" Win64="yes" DiskId="1">
+                    <File Name="DevExpress.Utils.v8.2.dll"
+                          Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Utils.v8.2.dll" Checksum="no" />
+                  </Component>
+
+                  <Component Id="DevExpress.XtraEditors.v8.2.dll" Guid="CD530611-C23A-4a31-AA6E-AC8926845707" Win64="yes" DiskId="1">
+                    <File Name="DevExpress.XtraEditors.v8.2.dll"
+                          Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraEditors.v8.2.dll" Checksum="no" />
+                  </Component>
+
+                  <Component Id="DevExpress.XtraNavBar.v8.2.dll" Guid="CD530611-C23A-4a31-AA6F-AC8926845707" Win64="yes" DiskId="1">
+                    <File Name="DevExpress.XtraNavBar.v8.2.dll"
+                          Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraNavBar.v8.2.dll" Checksum="no" />
+                  </Component>
+
+                  <Component Id="DevExpress.Data.v8.2.xml" Guid="25AF85CB-DC9D-46df-B022-F8A3DF4F71FB" Win64="yes" DiskId="1">
+                    <File Name="DevExpress.Data.v8.2.xml"
+                          Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Data.v8.2.xml" Checksum="no" />
+                  </Component>
+                  
+                  <Component Id="DevExpress.Utils.v8.2.xml" Guid="AC15AD59-C236-4a0b-9CB9-A009684582B7" Win64="yes" DiskId="1">
+                    <File Name="DevExpress.Utils.v8.2.xml"
+                          Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Utils.v8.2.xml" Checksum="no" />
+                  </Component>
+                  
+                  <Component Id="DevExpress.XtraEditors.v8.2.xml" Guid="365BA1F3-7823-4ff7-AC1C-CB040D2B852E" Win64="yes" DiskId="1">
+                    <File Name="DevExpress.XtraEditors.v8.2.xml"
+                          Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraEditors.v8.2.xml" Checksum="no" />
+                  </Component>
+
+                  <Component Id="DevExpress.XtraNavBar.v8.2.xml" Guid="365BA1F3-7823-4ff8-AC1C-CB040D2B852E" Win64="yes" DiskId="1">
+                    <File Name="DevExpress.XtraNavBar.v8.2.xml"
+                          Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraNavBar.v8.2.xml" Checksum="no" />
+                  </Component>
 
                     <Component Id="OMLDatabaseEditor.exe" Guid="4226fe89-8797-44ed-b463-6fda1be5c918" Win64="yes" DiskId="1">
                         <File Name="OMLDatabaseEditor.exe"
@@ -199,11 +214,11 @@
                                   KeyPath="yes" Source="..\..\OMLSDK\bin\$(var.BuildType)\OMLSDK.dll"
                                   Checksum="yes" Vital="yes" Assembly=".net"/>
                         </Component>
-                        <Component Id="OMLGetDVDInfo.dll" Guid="d69b2e44-0e10-4081-9628-4db9a9ba7c0c" Win64="yes" DiskId="1">
+                        <!--<Component Id="OMLGetDVDInfo.dll" Guid="d69b2e44-0e10-4081-9628-4db9a9ba7c0c" Win64="yes" DiskId="1">
                             <File Name="OMLGetDVDInfo.dll"
                                   KeyPath="yes" Source="..\..\OMLGetDVDInfo\bin\$(var.BuildType)\OMLGetDVDInfo.dll"
                                   Checksum="yes" Vital="yes" Assembly=".net"/>
-                        </Component>
+                        </Component>-->
                     </Directory>
                 </Directory>
             </Directory>
@@ -278,19 +293,21 @@
             <ComponentRef Id="MyMoviesPlugin.dll" />
             <ComponentRef Id="MyMoviesToOML.xsl" />
             <ComponentRef Id="OMLSDK.dll" />
-            <ComponentRef Id="OMLGetDVDInfo.dll" />
+            <!--<ComponentRef Id="OMLGetDVDInfo.dll" />-->
             <ComponentRef Id="VMCDVDLibraryPlugin.dll" />
             <ComponentRef Id="OMLXMLImporter.dll" />
             <ComponentRef Id="AmazonMetadata.dll" />
 
             <!-- Windows programs -->
-            <ComponentRef Id="ComponentFactory.Krypton.Toolkit.DLL"/>
+            <!--<ComponentRef Id="ComponentFactory.Krypton.Toolkit.DLL"/>-->
             <ComponentRef Id="DevExpress.Data.v8.2.dll"/>
             <ComponentRef Id="DevExpress.Utils.v8.2.dll"/>
             <ComponentRef Id="DevExpress.XtraEditors.v8.2.dll"/>
+            <ComponentRef Id="DevExpress.XtraNavBar.v8.2.dll"/>
             <ComponentRef Id="DevExpress.Data.v8.2.xml"/>
             <ComponentRef Id="DevExpress.Utils.v8.2.xml"/>
             <ComponentRef Id="DevExpress.XtraEditors.v8.2.xml"/>
+            <ComponentRef Id="DevExpress.XtraNavBar.v8.2.xml"/>
             <ComponentRef Id="OMLDatabaseEditor.exe" />
             <ComponentRef Id="OMLImporter.exe" />
             <ComponentRef Id="MEncoder.exe"/>
@@ -430,7 +447,7 @@
 		<!-- and this path is used to call RegisterMceApp.exe in several custom actions listed above to      -->
 		<!-- register this application with Windows Media Center.                                            -->
 		<Property Id="REGISTERMCEAPP" Secure="yes">
-			<DirectorySearch Id="EhomeDirectory" Path="[WindowsFolder]\ehome">
+			<DirectorySearch Id="EhomeDirectory2" Path="[WindowsFolder]\ehome">
 				<FileSearch Id="RegisterMceAppExe" Name="RegisterMceApp.exe" />
 			</DirectorySearch>
 		</Property>
