@@ -597,13 +597,18 @@ namespace Library
 
         public string MovieDetailsTransitionType
         {
-            get { return Properties.Settings.Default.MovieDetailsTransitionType; }
+            get
+            {
+                return (string.IsNullOrEmpty(Properties.Settings.Default.MovieDetailsTransitionType))
+                            ? "None"
+                            : Properties.Settings.Default.MovieDetailsTransitionType;
+            }
             set
             {
                 Properties.Settings.Default.MovieDetailsTransitionType = value;
                 Properties.Settings.Default.Save();
             }
-        }       
+        }   
 
         #endregion
 
