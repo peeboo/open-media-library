@@ -520,7 +520,16 @@ namespace DVDProfilerPlugin
                 string path = m.Groups["path"].Value;
                 currentVideoFormat = GetFormatFromExtension(Path.GetExtension(path), currentVideoFormat);
 
-                CurrentTitle.Disks.Add(new Disk(title, path, currentVideoFormat));
+                if (!string.IsNullOrEmpty(path))
+                {
+                    // validate that the path to the file/directory is valid
+                    if (!File.Exists(path) && !Directory.Exists(path))
+                    {
+                        this.AddError("Invalid path \"" + path + "\" for movie \"" + CurrentTitle.Name + "\"");
+                    }
+                }
+                
+                CurrentTitle.Disks.Add(new Disk(title, path, currentVideoFormat));                
             }
         }
 
