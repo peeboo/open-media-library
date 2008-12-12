@@ -11,6 +11,15 @@ namespace VMCDVDLibraryPlugin
 {
     public class DVDLibraryImporter : OMLPlugin, IOMLPlugin
     {
+        private enum DirectoryType
+        {
+            HDDvd,
+            BluRay,
+            DVD_Ripped,
+            DVD_Flat,
+            Normal
+        }
+
         public DVDLibraryImporter()
             : base()
         {
@@ -169,7 +178,10 @@ namespace VMCDVDLibraryPlugin
             try
             {
                 string xmlFile = "";
-                if (Directory.Exists(folderName + "\\VIDEO_TS") || File.Exists(folderName + "\\VIDEO_TS.IFO") || File.Exists(folderName + "\\VTS_01_1.VOB"))
+
+                DirectoryType dirType = GetDirectoryType(folderName);
+
+                if (dirType != DirectoryType.Normal )
                 {
                     string[] xmlFiles = Directory.GetFiles(folderName, "*dvdid.xml");
                     if (xmlFiles.Length > 0)
@@ -212,16 +224,31 @@ namespace VMCDVDLibraryPlugin
 
                     t.ImporterSource = "VMCDVDLibraryPlugin";
                     Disk disk = new Disk();
-                    disk.Name = "Disk 1";
-                    disk.Format = VideoFormat.DVD;
-                    if (File.Exists(folderName + "\\VTS_01_1.VOB"))
+                    disk.Name = "Disk 1";                    
+
+                    switch (dirType)
                     {
-                        disk.Path = folderName;
-                    }
-                    else
-                    {
-                        disk.Path = folderName + "\\VIDEO_TS";
-                    }
+                        case DirectoryType.BluRay:
+                            disk.Format = VideoFormat.BLURAY;
+                            disk.Path = folderName;
+                            break;
+
+                        case DirectoryType.HDDvd:
+                            disk.Format = VideoFormat.HDDVD;
+                            disk.Path = folderName;
+                            break;
+
+                        case DirectoryType.DVD_Flat:
+                            disk.Format = VideoFormat.DVD;
+                            disk.Path = folderName;
+                            break;
+
+                        case DirectoryType.DVD_Ripped:
+                            disk.Format = VideoFormat.DVD;
+                            disk.Path = Path.Combine(folderName, "VIDEO_TS");
+                            break;
+                    }                    
+
                     t.Disks.Add(disk);
                     t.MetadataSourceName = "VMC DVD Library";
                     return t;
@@ -435,11 +462,9 @@ namespace VMCDVDLibraryPlugin
                 foreach (DirectoryInfo folder in diArr)
                 {
                     folderList.Add(folder.FullName);
-                    if (Directory.Exists(folder.FullName + "\\VIDEO_TS") || File.Exists(folder.FullName + "\\VIDEO_TS.IFO") || File.Exists(folder.FullName + "\\VTS_01_1.VOB"))
-                    {
-                        // stop here
-                    }
-                    else
+
+                    // ignore subdirectories of movie folders
+                    if (GetDirectoryType(folder.FullName) == DirectoryType.Normal)
                     {
                         GetSubFolders(folder.FullName, folderList);
                     }
@@ -451,6 +476,34 @@ namespace VMCDVDLibraryPlugin
                 Utilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
                 // ignore any permission errors
             }
+        }
+
+        /// <summary>
+        /// Gets what kind of movie this directory may contain
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <returns></returns>
+        private DirectoryType GetDirectoryType(string folder)
+        {
+            if (Directory.Exists(Path.Combine(folder, "VIDEO_TS")))
+            {
+                return DirectoryType.DVD_Ripped;
+            }
+            else if (File.Exists(Path.Combine(folder, "VIDEO_TS.IFO")) ||
+                       File.Exists(Path.Combine(folder, "vts_01_1.vob")))
+            {
+                return DirectoryType.DVD_Flat;
+            }
+            else if (Directory.Exists(Path.Combine(folder, "BDMV")))
+            {
+                return DirectoryType.BluRay;
+            }
+            else if (Directory.Exists(Path.Combine(folder, "HVDVD_TS")))
+            {
+                return DirectoryType.HDDvd;
+            }
+
+            return DirectoryType.Normal;
         }
 
         private void UpdateTitleFromOMLXML(Title t)
