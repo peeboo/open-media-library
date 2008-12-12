@@ -30,6 +30,7 @@ namespace OMLDatabaseEditor
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainEditor));
+            DevExpress.XtraNavBar.ViewInfo.SkinNavigationPaneViewInfoRegistrator skinNavigationPaneViewInfoRegistrator2 = new DevExpress.XtraNavBar.ViewInfo.SkinNavigationPaneViewInfoRegistrator();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblCurrentStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.pgbProgress = new System.Windows.Forms.ToolStripProgressBar();
@@ -105,10 +106,10 @@ namespace OMLDatabaseEditor
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblCurrentStatus,
             this.pgbProgress});
-            this.statusStrip.Location = new System.Drawing.Point(0, 418);
+            this.statusStrip.Location = new System.Drawing.Point(0, 719);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode;
-            this.statusStrip.Size = new System.Drawing.Size(721, 22);
+            this.statusStrip.Size = new System.Drawing.Size(745, 22);
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -134,7 +135,7 @@ namespace OMLDatabaseEditor
             this.helpToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(721, 24);
+            this.menuStrip.Size = new System.Drawing.Size(745, 24);
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "menuStrip";
             // 
@@ -326,11 +327,11 @@ namespace OMLDatabaseEditor
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.panelControl1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(721, 369);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(745, 670);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(721, 418);
+            this.toolStripContainer1.Size = new System.Drawing.Size(745, 719);
             this.toolStripContainer1.TabIndex = 2;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -347,7 +348,7 @@ namespace OMLDatabaseEditor
             this.panelControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControl1.Location = new System.Drawing.Point(0, 0);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(721, 369);
+            this.panelControl1.Size = new System.Drawing.Size(745, 670);
             this.panelControl1.TabIndex = 5;
             // 
             // titleEditor
@@ -355,7 +356,7 @@ namespace OMLDatabaseEditor
             this.titleEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.titleEditor.Location = new System.Drawing.Point(185, 2);
             this.titleEditor.Name = "titleEditor";
-            this.titleEditor.Size = new System.Drawing.Size(534, 365);
+            this.titleEditor.Size = new System.Drawing.Size(558, 666);
             this.titleEditor.Status = OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.Normal;
             this.titleEditor.TabIndex = 2;
             this.titleEditor.TitleChanged += new OMLDatabaseEditor.Controls.TitleEditor.TitleChangeEventHandler(this.titleEditor_TitleChanged);
@@ -365,7 +366,7 @@ namespace OMLDatabaseEditor
             // 
             this.splitterControl1.Location = new System.Drawing.Point(179, 2);
             this.splitterControl1.Name = "splitterControl1";
-            this.splitterControl1.Size = new System.Drawing.Size(6, 365);
+            this.splitterControl1.Size = new System.Drawing.Size(6, 666);
             this.splitterControl1.TabIndex = 1;
             this.splitterControl1.TabStop = false;
             // 
@@ -384,10 +385,10 @@ namespace OMLDatabaseEditor
             this.mainNav.Location = new System.Drawing.Point(2, 2);
             this.mainNav.Name = "mainNav";
             this.mainNav.OptionsNavPane.ExpandedWidth = 140;
-            this.mainNav.Size = new System.Drawing.Size(177, 365);
+            this.mainNav.Size = new System.Drawing.Size(177, 666);
             this.mainNav.TabIndex = 0;
             this.mainNav.Text = "navBarControl1";
-            this.mainNav.View = new DevExpress.XtraNavBar.ViewInfo.SkinNavigationPaneViewInfoRegistrator();
+            this.mainNav.View = skinNavigationPaneViewInfoRegistrator2;
             this.mainNav.ActiveGroupChanged += new DevExpress.XtraNavBar.NavBarGroupEventHandler(this.mainNav_ActiveGroupChanged);
             // 
             // groupMovies
@@ -404,7 +405,7 @@ namespace OMLDatabaseEditor
             // 
             this.navBarGroupControlContainer1.Controls.Add(this.lbMovies);
             this.navBarGroupControlContainer1.Name = "navBarGroupControlContainer1";
-            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(175, 156);
+            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(175, 407);
             this.navBarGroupControlContainer1.TabIndex = 0;
             // 
             // lbMovies
@@ -415,7 +416,7 @@ namespace OMLDatabaseEditor
             this.lbMovies.Location = new System.Drawing.Point(0, 0);
             this.lbMovies.Name = "lbMovies";
             this.lbMovies.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lbMovies.Size = new System.Drawing.Size(175, 156);
+            this.lbMovies.Size = new System.Drawing.Size(175, 457);
             this.lbMovies.TabIndex = 0;
             this.lbMovies.ValueMember = "InternalItemID";
             this.lbMovies.SelectedIndexChanged += new System.EventHandler(this.lbMovies_SelectedIndexChanged);
@@ -425,12 +426,12 @@ namespace OMLDatabaseEditor
             this.cmsMoviesList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1});
             this.cmsMoviesList.Name = "cmsMoviesList";
-            this.cmsMoviesList.Size = new System.Drawing.Size(219, 48);
+            this.cmsMoviesList.Size = new System.Drawing.Size(234, 26);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(218, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(233, 22);
             this.toolStripMenuItem1.Text = "MetaData Lookup These Titles";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
@@ -501,7 +502,7 @@ namespace OMLDatabaseEditor
             this.helpToolStripButton});
             this.toolStrip.Location = new System.Drawing.Point(3, 24);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(85, 25);
+            this.toolStrip.Size = new System.Drawing.Size(87, 25);
             this.toolStrip.TabIndex = 2;
             // 
             // newToolStripButton
@@ -545,7 +546,7 @@ namespace OMLDatabaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(721, 440);
+            this.ClientSize = new System.Drawing.Size(745, 741);
             this.Controls.Add(this.toolStripContainer1);
             this.Controls.Add(this.statusStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
