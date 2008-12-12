@@ -19,6 +19,7 @@ namespace OMLDatabaseEditor
         private static List<OMLPlugin> _importPlugins = new List<OMLPlugin>();
         private static List<IOMLMetadataPlugin> _metadataPlugins = new List<IOMLMetadataPlugin>();
         private const string APP_TITLE = "OML Movie Manager";
+        private bool _loading = false;
 
         public MainEditor()
         {
@@ -410,6 +411,7 @@ namespace OMLDatabaseEditor
 
         private void mainNav_ActiveGroupChanged(object sender, DevExpress.XtraNavBar.NavBarGroupEventArgs e)
         {
+            _loading = true;
             ToggleSaveState(false);
             if (e.Group == groupMovies)
                 LoadMovies();
@@ -417,10 +419,12 @@ namespace OMLDatabaseEditor
                 LoadMetadata();
             else
                 LoadImporters();
+            _loading = false;
         }
 
         private void lbMovies_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (_loading) return;
             Cursor = Cursors.WaitCursor;
             SaveCurrentMovie();
 
@@ -435,6 +439,7 @@ namespace OMLDatabaseEditor
 
         private void lbMetadata_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (_loading) return;
             Cursor = Cursors.WaitCursor;
             IOMLMetadataPlugin metadata = lbMetadata.SelectedItem as IOMLMetadataPlugin;
             StartMetadataImport(metadata, false);
@@ -443,6 +448,7 @@ namespace OMLDatabaseEditor
 
         private void lbImport_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (_loading) return;
             Cursor = Cursors.WaitCursor;
             OMLPlugin importer = lbImport.SelectedItem as OMLPlugin;
             importer.CopyImages = true;
