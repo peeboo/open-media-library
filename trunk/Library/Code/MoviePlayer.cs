@@ -186,12 +186,14 @@ namespace Library
         {
             switch (videoFormat)
             {
+                case VideoFormat.AVI:
                 case VideoFormat.DVRMS:
                 case VideoFormat.MPEG:
                 case VideoFormat.MPG:
                 case VideoFormat.WMV:
                 case VideoFormat.WTV:
                 case VideoFormat.ASX:
+                case VideoFormat.UNKNOWN:
                     return false;
                 default:
                     return true;
