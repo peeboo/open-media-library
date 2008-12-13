@@ -108,7 +108,7 @@
 
                     <Component Id="DevExpress.XtraNavBar.v8.2.dll" Guid="CD530611-C23A-4a31-AA6F-AC8926845707" DiskId="1">
                         <File Name="DevExpress.XtraNavBar.v8.2.dll"
-                              Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraNavBar.v8.2.dll" Checksum="no" />
+                              Source="..\..\..\OMLDatabaseEditor\DevExpress.XtraNavBar.v8.2.dll" Checksum="no" />
                     </Component>
 
                     <Component Id="DevExpress.Data.v8.2.xml" Guid="25AF85CB-DC9D-46df-B022-F8A3DF4F71FB" DiskId="1">
@@ -126,7 +126,7 @@
 
 		    <Component Id="DevExpress.XtraNavBar.v8.2.xml" Guid="365BA1F3-7823-4ff8-AC1C-CB040D2B852E" DiskId="1">
                         <File Name="DevExpress.XtraNavBar.v8.2.xml"
-                              Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraNavBar.v8.2.xml" Checksum="no" />
+                              Source="..\..\..\OMLDatabaseEditor\DevExpress.XtraNavBar.v8.2.xml" Checksum="no" />
                     </Component>
 
                     <Component Id="OMLDatabaseEditor.exe" Guid="4226fe89-8797-44ed-b463-6fda1be5c918" DiskId="1">
@@ -204,6 +204,11 @@
                                   KeyPath="yes" Source="..\..\AmazonMetadata\bin\$(var.BuildType)\AmazonMetadata.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
+                      <Component Id="TheMovieDbMetadata.dll" Guid="46534B9A-16B6-4c74-AB87-03B89BE3B160" DiskId="1">
+                        <File Name="TheMovieDbMetadata.dll"
+                              KeyPath="yes" Source="..\..\TheMovieDbMetadata\bin\$(var.BuildType)\TheMovieDbMetadata.dll"
+                              Checksum="yes" Vital="yes"/>
+                      </Component>
                         <Component Id="OMLSDK.dll" Guid="26097a63-fc55-41d2-a8d5-432809de99fc" DiskId="1">
                             <File Name="OMLSDK.dll"
                                   KeyPath="yes" Source="..\..\OMLSDK\bin\$(var.BuildType)\OMLSDK.dll"
@@ -290,6 +295,7 @@
             <ComponentRef Id="VMCDVDLibraryPlugin.dll" />
             <ComponentRef Id="OMLXMLImporter.dll" />
             <ComponentRef Id="AmazonMetadata.dll" />
+            <ComponentRef Id="TheMovieDbMetadata.dll" />
             
             <!-- Windows programs -->
             <!--<ComponentRef Id="ComponentFactory.Krypton.Toolkit.DLL"/>-->

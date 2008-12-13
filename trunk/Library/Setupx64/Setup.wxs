@@ -204,6 +204,11 @@
                                   KeyPath="yes" Source="..\..\AmazonMetadata\bin\$(var.BuildType)\AmazonMetadata.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
+                      <Component Id="TheMovieDbMetadata.dll" Guid="46534B9A-16B6-4c74-AB87-03B89BE3B160" Win64="yes" DiskId="1">
+                        <File Name="TheMovieDbMetadata.dll"
+                              KeyPath="yes" Source="..\..\TheMovieDbMetadata\bin\$(var.BuildType)\TheMovieDbMetadata.dll"
+                              Checksum="yes" Vital="yes"/>
+                      </Component>
                         <Component Id="OMLXMLImporter.dll" Guid="5BE2002C-EF0D-4358-93EF-5C495492AB0D" Win64="yes" DiskId="1">
                             <File Name="OMLXMLImporter.dll"
                                   KeyPath="yes" Source="..\..\OMLXMLImporter\bin\$(var.BuildType)\OMLXMLImporter.dll"
@@ -297,6 +302,7 @@
             <ComponentRef Id="VMCDVDLibraryPlugin.dll" />
             <ComponentRef Id="OMLXMLImporter.dll" />
             <ComponentRef Id="AmazonMetadata.dll" />
+            <ComponentRef Id="TheMovieDbMetadata.dll" />
 
             <!-- Windows programs -->
             <!--<ComponentRef Id="ComponentFactory.Krypton.Toolkit.DLL"/>-->
