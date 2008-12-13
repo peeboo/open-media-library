@@ -58,6 +58,7 @@
             <Actions>
                 <Set Target="[dvdContextMenu.MenuData]" Value="[DetailsPage.DVDContextMenu]"/>
                 <Set Target="[dvdContextMenu.Visible]" Value="true"/>
+                <Invoke Target="[dvdContextMenu.NavigateInto]" />
             </Actions>
         </Changed>
         <Changed Source="[DetailsPage.ShowDVDContextMenu]" InitialEvaluate="true">
