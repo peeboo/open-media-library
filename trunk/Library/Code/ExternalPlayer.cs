@@ -89,6 +89,7 @@ namespace Library
         public bool PlayMovie()
         {            
             string path;
+            string moviePath = _source.MediaPath;
 
             // make sure the external player really cares about this
             if (!TypeToExternalPlayer.TryGetValue(_source.Format, out path))
@@ -97,12 +98,22 @@ namespace Library
             // validate the player exists
             if (!File.Exists(path))
                 return false;
+            
+            // solomon : apparently some external players want you to point to the \BDMV path
+            // this may not work for all players so i'm adding this in now and if it becomes
+            // a problem we'll need to add it as config switch down the road
+            if (_source.Format == VideoFormat.BLURAY &&
+                !File.Exists( Path.Combine(_source.MediaPath, "index.bdmv")) &&
+                File.Exists(Path.Combine(_source.MediaPath, "BDMV\\index.bdmv")))
+            {    
+                moviePath = Path.Combine(moviePath, "BDMV");
+            }
 
             OMLApplication.ExecuteSafe(delegate
             {
                 Process process = new Process();
                 process.StartInfo.FileName = path;
-                process.StartInfo.Arguments = "\"" + _source.MediaPath + "\"";
+                process.StartInfo.Arguments = "\"" + moviePath + "\"";
                 process.Start();
             });
                         
