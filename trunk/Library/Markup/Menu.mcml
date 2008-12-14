@@ -284,7 +284,7 @@
                   <!-- Filters -->
                   <Panel Name="Filters" >
                     <Children>
-                      <filter:FilterList Page="[MovieBrowser]" Margins="0,-4,20,0" MinimumSize="0,32"/>
+                      <filter:FilterList Page="[MovieBrowser]" Margins="0,-4,20,0" MinimumSize="0,32" UISettings="[UISettings]"/>
                     </Children>
 
                     <LayoutInput>

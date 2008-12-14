@@ -154,6 +154,7 @@
     <None Include="Images\overlays.outline.png" />
     <None Include="Images\overlays.shadow.png" />
     <Content Include="Markup\About.mcml" />
+    <Content Include="Markup\Control\AlphaFilter.mcml" />
     <Content Include="Markup\Control\ContextMenu.mcml" />
     <Content Include="Markup\LayoutV2\BasePage.mcml" />
     <Content Include="Markup\Base\Animations.mcml" />

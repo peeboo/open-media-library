@@ -929,7 +929,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Zoom")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Zoom and Spin")]
         public string MovieDetailsTransitionType {
             get {
                 return ((string)(this["MovieDetailsTransitionType"]));
@@ -949,6 +949,18 @@ namespace Library.Properties {
             }
             set {
                 this["ExternalPlayerMapping"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseOnScreenAlphaJumper {
+            get {
+                return ((bool)(this["UseOnScreenAlphaJumper"]));
+            }
+            set {
+                this["UseOnScreenAlphaJumper"] = value;
             }
         }
     }

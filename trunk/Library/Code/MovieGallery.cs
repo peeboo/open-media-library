@@ -15,8 +15,30 @@ namespace Library
     /// A list of movies (MovieItems)
     /// </summary>
     public class MovieGallery : ModelItem
-    {
+    {       
         #region Public Properties
+
+        public int NumberOfPages 
+        {
+            get { return numberOfPages; } 
+            set 
+            { 
+                numberOfPages = value;
+                FirePropertyChanged("NumberOfPages");
+            } 
+        }
+        
+        public List<string> AlphaCharacters { get { return alphaCharacters; } }
+        
+        public string JumpLetter 
+        { 
+            get { return jumpLetter; }
+            set
+            {
+                this.jumpLetter = value;
+                FirePropertyChanged("JumpLetter");
+            }
+        }      
 
         public Int32 AngleDelta
         {
@@ -38,8 +60,7 @@ namespace Library
         {
             get { return _categoryChoice; }
             set { _categoryChoice = value; }
-        }
-
+        }      
 
         public Comparison<MovieItem> CurrentSort
         {
@@ -245,7 +266,7 @@ namespace Library
                 }
             }
             _categoryChoice = new Choice(this, "Categories", _categories);
-        }
+        }        
 
         private void Initialize(TitleCollection col)
         {
@@ -280,6 +301,8 @@ namespace Library
                 _currentSort = _sortFunctionLookup[Properties.Settings.Default.MovieSort];
             else
                 _currentSort = SortByNameAscending;
+
+            SetupAlphaCharacters();
 
             LoadMovies(col);
             OMLApplication.DebugLine("[MovieGallery] Initialize: time: {0}, items: {1}", DateTime.Now - start, this._movies.Count);
@@ -588,6 +611,14 @@ namespace Library
                 }
             //}, null);
         }
+
+        private void SetupAlphaCharacters()
+        {
+            alphaCharacters = new List<string>(26);
+
+            for (int x = 65; x < 91; x++)
+                alphaCharacters.Add(((char)x).ToString());
+        }
         
         #endregion  
 
@@ -612,7 +643,11 @@ namespace Library
         private int _jumpToPosition = -1;           // the ScrollData jump is relative (Scroll # of items)
         private int _relativeJumpToPosition = -1;   // the Repeater jump (NavigateIntoIndex) is absolute
 
+        private string jumpLetter = "a";
 
+        private List<string> alphaCharacters;
+
+        private int numberOfPages = 0;      
         #endregion
    }
 
