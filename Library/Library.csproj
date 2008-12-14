@@ -156,6 +156,7 @@
     <Content Include="Markup\About.mcml" />
     <Content Include="Markup\Control\AlphaFilter.mcml" />
     <Content Include="Markup\Control\ContextMenu.mcml" />
+    <Content Include="Markup\DetailsPage3.mcml" />
     <Content Include="Markup\LayoutV2\BasePage.mcml" />
     <Content Include="Markup\Base\Animations.mcml" />
     <Content Include="Markup\Base\Base.mcml" />

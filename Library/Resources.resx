@@ -511,4 +511,7 @@
   <data name="AlphaFilter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\control\alphafilter.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="DetailsPage3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\detailspage3.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

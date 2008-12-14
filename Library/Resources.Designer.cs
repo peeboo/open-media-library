@@ -340,6 +340,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] DetailsPage3 {
+            get {
+                object obj = ResourceManager.GetObject("DetailsPage3", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap EditBoxFocus {
             get {
                 object obj = ResourceManager.GetObject("EditBoxFocus", resourceCulture);
