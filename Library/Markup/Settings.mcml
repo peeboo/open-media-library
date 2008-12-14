@@ -245,8 +245,11 @@
 
           </Panel>
 
-          <!-- Everything else -->
-          <Panel FocusOrder="1" MinimumSize="1024,0">
+          <!-- settings panels -->
+          <Panel FocusOrder="1">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0.05" />
+            </LayoutInput>
             <Children>
 
               <!-- ViewOptions -->
@@ -519,10 +522,7 @@
               </Children>
             </Panel>
 
-            </Children>
-            <LayoutInput>
-              <FormLayoutInput Left="Parent,0.05" />
-            </LayoutInput>
+            </Children>            
           </Panel>
         </Children>
       </ColorFill>
