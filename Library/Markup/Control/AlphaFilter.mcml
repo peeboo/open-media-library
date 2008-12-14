@@ -86,16 +86,7 @@
           <Set Target="[Label.Color]" Value="White"/>
           <PlaySound Sound="sound://me:Focus" />
         </Actions>
-      </Condition>
-
-      <!-- Change color on mouse focus. -->
-      <Condition Source="[Input.MouseFocus]" SourceValue="true">
-        <Actions>
-          <!--<Set Target="[Background.Content]" Value="[BackgroundHoverColor]"/>-->
-          <PlayAnimation Target="[Background]" Animation="animation://me:GotFocusList" />
-          <Set Target="[Label.Color]" Value="White"/>
-        </Actions>
-      </Condition>
+      </Condition>           
 
       <Condition Source="[Input.KeyFocus]" SourceValue="false">
         <Actions>
