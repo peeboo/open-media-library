@@ -1,0 +1,136 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+    xmlns:a="assembly://Library/Library"
+	  xmlns:cor="assembly://MSCorLib/System"
+    xmlns:styles="resx://Library/Library.Resources/Styles"
+    xmlns:me="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/Base" />
+
+	<UI Name="AlphaFilter">
+
+		<Properties>
+        <a:MovieGallery Name="MovieGallery" MovieGallery="$Required"/>   
+		</Properties>
+
+    <Rules>
+      <Condition Source="[MovieGallery.NumberOfPages]" ConditionOp="GreaterThanOrEquals" SourceValue ="2" Target="[AlphaFilter.Visible]" Value="true" />
+      <Condition Source="[MovieGallery.NumberOfPages]" ConditionOp="LessThan" SourceValue="2" Target="[AlphaFilter.Visible]" Value="false" />
+    </Rules>
+	
+		<Content>
+      <Panel Name="AlphaFilter" Layout="HorizontalFlow" Navigation="Group" Margins="7,0,0,0" >
+        <Children>
+          <Text Content="Jump to " Font="font://styles:Normal" WordWrap="false" Color="color://styles:NormalColor" />
+          <Repeater Name="RepeatAlpha" Navigation="RememberFocus" DefaultFocusIndex="0" Source="[MovieGallery.AlphaCharacters]">
+            <Layout>
+              <FlowLayout Spacing="10,10"/>
+            </Layout>
+            <Content>
+              <me:AlphaSortButton filterCharacter="[RepeatedItem!cor:String]" MovieGallery="[MovieGallery]"/>
+            </Content>
+          </Repeater>
+        </Children>
+      </Panel>
+		</Content>
+
+	</UI>
+
+  <UI Name="AlphaSortButton">
+    <Properties>
+      <cor:String Name="filterCharacter" cor:String="$required" />
+      <a:MovieGallery Name="MovieGallery" MovieGallery="$Required"/>
+
+      <!-- Background color properties. -->
+      <Color Name="BackgroundColor" Color="Transparent"/>
+      <Color Name="BackgroundFocusedColor" Color="Transparent"/>
+      <Color Name="BackgroundHoverColor" Color="PaleGoldenrod"/>
+      <Color Name="BackgroundPressedColor" Color="White"/>
+
+      <!-- Label color properties. -->
+      <Color Name="LabelColor" Color="White"/>
+      <Color Name="LabelFocusedColor" Color="White"/>
+      <Color Name="LabelHoverColor" Color="DimGray"/>
+      <Color Name="LabelPressedColor" Color="Yellow"/>
+
+      <Image Name="BackgroundImageList" Source="resx://Library/Library.Resources/ButtonLeftFocus" NineGrid="4,4,4,4"/>
+    </Properties>
+
+    <Locals>
+      <!-- React to "click" input. -->
+      <ClickHandler Name="Clicker"/>
+    </Locals>
+
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+
+      <Changed Source="[Clicker.Invoked]">
+        <Actions>
+          <Set Target="[MovieGallery.JumpLetter]" Value="[filterCharacter]" />
+        </Actions>
+      </Changed>
+
+      <!-- Change color on click. -->
+      <Condition Source="[Clicker.Clicking]" SourceValue="true">
+        <Actions>
+          <!--<Set Target="[Background.Content]" Value="[BackgroundPressedColor]"/>-->
+          <PlaySound Sound="sound://me:MiniSelect" />
+          <Set Target="[Label.Color]" Value="[LabelPressedColor]"/>
+        </Actions>
+      </Condition>
+
+      <!-- Change color on key focus. -->
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <!--<Set Target="[Background.Content]" Value="[BackgroundHoverColor]"/>-->
+          <PlayAnimation Target="[Label]" Animation="animation://me:GotFocusList" />
+          <Set Target="[Label.Color]" Value="White"/>
+          <PlaySound Sound="sound://me:Focus" />
+        </Actions>
+      </Condition>
+
+      <!-- Change color on mouse focus. -->
+      <Condition Source="[Input.MouseFocus]" SourceValue="true">
+        <Actions>
+          <!--<Set Target="[Background.Content]" Value="[BackgroundHoverColor]"/>-->
+          <PlayAnimation Target="[Background]" Animation="animation://me:GotFocusList" />
+          <Set Target="[Label.Color]" Value="White"/>
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="false">
+        <Actions>
+          <!-- Play an animation on the cover target item. -->
+          <PlayAnimation Target="[Label]" Animation="animation://me:LostFocusList"/>
+
+        </Actions>
+      </Condition>
+    </Rules>
+
+    <Content>
+      <!-- Solid background color. -->
+      <ColorFill Name="Background" Content="[BackgroundColor]" Padding="5,0,5,0">
+        <Children>
+          <Text Name="Label" Content="[filterCharacter]" Font="font://styles:NormalBold" Color="color://styles:NormalColor"  />
+        </Children>
+
+      </ColorFill>
+    </Content>
+
+  </UI>
+
+  <!-- This animation will scale the image. -->
+  <Animation Name="LostFocusList" Loop="0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
+      <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="GotFocusList" Loop="0" CenterPointPercent=".1,.1,0" >
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+      <ScaleKeyframe Time="0.2" Value="1.05,1.05,1.05" RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
+
+</Mcml>

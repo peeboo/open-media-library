@@ -71,7 +71,7 @@
                                             <!-- Filters -->
                                             <Clip Name="Filters">
                                                 <Children>
-                                                    <filter:FilterList Page="[MovieBrowser]"/>
+                                                    <filter:FilterList Page="[MovieBrowser]" UISettings="[UISettings]"/>
                                                 </Children>
                                                 <LayoutInput>
                                                     <FormLayoutInput Horizontal="Far" Vertical="Far"/>

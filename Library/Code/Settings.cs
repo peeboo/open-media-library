@@ -115,6 +115,7 @@ namespace Library
                 _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
                 _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
                 _omlSettings.MovieDetailsTransitionType = _movieDetailsTransitionType.Chosen as string;
+                _omlSettings.UseOnScreenAlphaJumper = (bool)_useOnScreenAlpha.Chosen;
             });
         }
         private void SaveUILanguage()
@@ -233,14 +234,14 @@ namespace Library
             _showMovieDetails.Chosen = _omlSettings.ShowMovieDetails;
             _dimUnselectedCovers.Chosen = _omlSettings.DimUnselectedCovers;
             _useOriginalCoverArt.Chosen = _omlSettings.UseOriginalCoverArt;
+            _useOnScreenAlpha.Chosen = _omlSettings.UseOnScreenAlphaJumper;
 
             List<string> transitionTypes = new List<string>(3);
             transitionTypes.Add("None");
             transitionTypes.Add("Zoom");
             transitionTypes.Add("Zoom and Spin");
             _movieDetailsTransitionType.Options = transitionTypes;
-            _movieDetailsTransitionType.Chosen = _omlSettings.MovieDetailsTransitionType;
-            
+            _movieDetailsTransitionType.Chosen = _omlSettings.MovieDetailsTransitionType;            
 
             //_mountingToolPath.Value = _omlSettings.MountingTool;
 
@@ -392,6 +393,11 @@ namespace Library
             get { return _useOriginalCoverArt; }
         }
 
+        public BooleanChoice UseOnScreenAlpha
+        {
+            get { return _useOnScreenAlpha; }
+        }
+
         public BooleanChoice DimUnselectedCovers
         {
             get { return _dimUnselectedCovers; }
@@ -503,6 +509,7 @@ namespace Library
         BooleanChoice _showMovieDetails = new BooleanChoice();
         BooleanChoice _dimUnselectedCovers = new BooleanChoice();
         BooleanChoice _useOriginalCoverArt = new BooleanChoice();
+        BooleanChoice _useOnScreenAlpha = new BooleanChoice();
         Choice _startPage = new Choice();
         Choice _uiLanguage = new Choice();
         Choice _ImageMountingSelection = new Choice();

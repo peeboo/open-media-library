@@ -92,6 +92,12 @@
       </Actions>           
     </Condition>
 
+    <Changed Source="[ScrollingData.TotalPages]">
+      <Actions>
+        <Set Target="[MovieBrowser.NumberOfPages]" Value="[ScrollingData.TotalPages!cor:Int32]" />
+      </Actions>
+    </Changed>
+
     <!-- don't lock the scroll if we only have 1 or less pages -->
     <Rule ConditionLogicalOp="And">
       <Conditions>
@@ -110,7 +116,7 @@
         <Equality Source="[ScrollingData.TotalPages]" Value="1" ConditionOp="GreaterThan" />
       </Conditions>
       <Actions>
-        <Set Target="[ScrollingData.LockedPosition]" Value=".5" />
+        <Set Target="[ScrollingData.LockedPosition]" Value=".5" />        
       </Actions>
     </Rule>
 
@@ -129,6 +135,8 @@
               <Set Target="[GalleryRepeater.Layout]" Value="[FolderViewLayout]" />
           </Actions>
       </Condition>
+    
+    
     <Rule>
       <Conditions>
         <Modified Source="[TypingHandler.DisplayValue]"/>
@@ -140,6 +148,14 @@
       </Actions>
     </Rule>
 
+    <Changed Source="[MovieBrowser.JumpLetter]" >
+      <Actions>
+          <Set Target="[JumpValue.Value]" Value="[MovieBrowser.JumpLetter]"/>
+          <Invoke Target="[MovieBrowser.JumpToMovie]" jumpString="[MovieBrowser.JumpLetter]" list="[List]"/>
+          <Invoke Target="[ClearTimer.Start]" />
+      </Actions>
+    </Changed>
+    
     <Changed Source="[ClearTimer.Tick]">
       <Actions>
           <Set Target="[MovieBrowser.JumpInListText.Value]" Value="" />
@@ -162,12 +178,12 @@
   <Content>
     <Panel Name="GalleryContainer" Layout="Form"  MouseInteractive="true">
 
-      <Children>
+      <Children>                
         <!-- Put in a scroller so that if we repeat, the row will scroll. -->
         <Scroller Name="GalleryScroller"
                   Orientation="Horizontal"
                   ScrollingData="[ScrollingData]">
-          <Children>
+          <Children>            
 
             <!-- Hook up our list to the repeater.  -->
             <Repeater Name="GalleryRepeater"

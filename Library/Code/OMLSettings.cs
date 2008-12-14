@@ -608,7 +608,21 @@ namespace Library
                 Properties.Settings.Default.MovieDetailsTransitionType = value;
                 Properties.Settings.Default.Save();
             }
-        }   
+        }
+
+        public bool UseOnScreenAlphaJumper
+        {
+            get
+            {
+                return Properties.Settings.Default.UseOnScreenAlphaJumper;
+            }
+            set
+            {
+                Properties.Settings.Default.UseOnScreenAlphaJumper = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
 
         #endregion
 

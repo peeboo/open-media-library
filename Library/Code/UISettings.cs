@@ -211,5 +211,9 @@ namespace Library
             get { return new Vector3(Properties.Settings.Default.FocusListScale, Properties.Settings.Default.FocusListScale, Properties.Settings.Default.FocusListScale); }
         }
 
+        public bool UseOnScreenAlphaFiltering
+        {
+            get { return Properties.Settings.Default.UseOnScreenAlphaJumper; }
+        }
     }
 }

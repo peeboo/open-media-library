@@ -294,42 +294,48 @@
                         <Children>
                           <Panel Navigation="Group" Layout="VerticalFlow" FocusOrder="1">
                             <Children>
-                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0">
+                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0" Navigation="Group">
                                 <Children>
                                   <c:SimpleCheckbox Name="UseOriginalCoverArt" Checked="[Settings.UseOriginalCoverArt]" Margins="0,0,10,0" />
                                   <Text Content="Don't Resize Cover Art (may slow down browsing)" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
                                 </Children>
                               </Panel>
-                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0">
+                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0" Navigation="Group">
                                 <Children>
                                   <c:SimpleCheckbox Name="ShowMovieDetails" Checked="[Settings.ShowMovieDetails]" Margins="0,0,10,0" />
                                   <Text Content="Show Movie Details While Browsing" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
                                 </Children>
                               </Panel>
-                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0">
+                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0" Navigation="Group">
                                 <Children>
                                   <c:SimpleCheckbox Name="DimUnselectedCovers" Checked="[Settings.DimUnselectedCovers]" Margins="0,0,10,0" />
                                   <Text Content="Dim Unselected Covers" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
                                 </Children>
                               </Panel>
+                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0" Navigation="Group">
+                                <Children>
+                                  <c:SimpleCheckbox Name="UseOnScreenAlpha" Checked="[Settings.UseOnScreenAlpha]" Margins="0,0,10,0" />
+                                  <Text Content="Show Alpha Jump Bar" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
+                                </Children>
+                              </Panel>
                             </Children>
                           </Panel>
 
-                          <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="2">
+                          <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="2" Navigation="Group">
                             <Children>
                               <Text Content="Cover Art Rows" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                               <c:SimpleSpinner Name="CoverArtRows" Model="[Settings.CoverArtRows]" Size="151,51" />
                             </Children>
                           </Panel>
 
-                          <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="3">
+                          <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="3" Navigation="Group">
                             <Children>
                               <Text  Content="Cover Art Spacing" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                               <c:SimpleSpinner Name="CoverArtSpacing" Model="[Settings.CoverArtSpacing]" Size="151,51" />
                             </Children>
                           </Panel>
 
-                          <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="4">
+                          <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="4" Navigation="Group">
                             <Children>
                               <Text Content="Transition when selecting a movie" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                               <c:SimpleSpinner Name="TransitionType" Model="[Settings.MovieDetailsTransitionType]" Size="200,51" />
