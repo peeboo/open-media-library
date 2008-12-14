@@ -93,7 +93,7 @@ namespace Library
                 }
                 return dirs;
             }
-        }
+        }        
 
         public string WritersAsString
         {
@@ -244,6 +244,17 @@ namespace Library
             }
         }
 
+        public string ReleaseDateYear
+        {
+            get
+            {
+                if (_movieDetails.TitleObject.ReleaseDate != DateTime.MinValue)
+                    return _movieDetails.TitleObject.ReleaseDate.Year.ToString();
+                else
+                    return "";
+            }
+        }
+
         public string ReleaseDate
         {
             get
@@ -313,6 +324,12 @@ namespace Library
                 return res;
             }
         }
+
+        public List<string> Languages
+        {
+            get { return _movieDetails.TitleObject.AudioTracks; }
+        }
+
         public string LanguagesAsString
         {
             get
@@ -423,6 +440,7 @@ namespace Library
             else
             {
                 Disk[] temp = { new Disk() };
+                temp[0].Name = "Play Me";
                 _diskChoice.Options = temp; // MCE barfs if Options is bound to empty List.
                 OMLApplication.DebugLine("[MovieDetailsPage] Details Page.LoadMovies: no disks");
             }

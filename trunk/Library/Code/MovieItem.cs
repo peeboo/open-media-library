@@ -593,7 +593,15 @@ namespace Library
         /// <value>The writers.</value>
         public IList Writers
         {
-            get { return _titleObj.Writers; }
+            get
+            {
+                List<string> writer_names = new List<string>();
+                foreach (Person p in _titleObj.Writers)
+                {
+                    writer_names.Add(p.full_name);
+                }
+                return writer_names;
+            }
             //set { _titleObj.Writers = value; }
         }
 
