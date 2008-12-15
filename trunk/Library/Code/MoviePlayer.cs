@@ -193,6 +193,12 @@ namespace Library
                 case VideoFormat.WMV:
                 case VideoFormat.WTV:
                 case VideoFormat.ASX:
+                case VideoFormat.WVX:
+                case VideoFormat.ASF:
+                case VideoFormat.H264:
+                case VideoFormat.MKV:
+                case VideoFormat.MOV:
+                case VideoFormat.WPL:
                 case VideoFormat.UNKNOWN:
                     return false;
                 default:
