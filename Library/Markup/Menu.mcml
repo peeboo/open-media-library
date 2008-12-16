@@ -40,7 +40,7 @@
             <AnchorEdge Name="NowPlayingBottomAnchor" Percent="0.95" Offset ="0" Id="Parent"/>
             <AnchorEdge Name="RightAnchor" Percent="[UISettings.Anchor.RightAnchor]" Offset ="[UISettings.Anchor.RightOffset]" Id="Parent"/>
 
-            <AnchorEdge Name="DetailsTop" Id="Parent" Percent="0" Offset="17" />
+            <AnchorEdge Name="DetailsTop" Id="Parent" Percent="0" Offset="25" />
 
             <ShortcutHandler Name="MoreInfo" />
             <cor:Single Name="AlphaCoverArt" Single="0.5"/>
