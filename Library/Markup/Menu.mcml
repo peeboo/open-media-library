@@ -163,16 +163,16 @@
                   
                   <Panel Name="BottomBar" Layout="Form">                    
                     <LayoutInput>
-                      <FormLayoutInput Left="Parent,0,20" Bottom="Parent, 1" Top="Parent, 1,-160" Right="PageStats,0,-20"/>
+                      <FormLayoutInput Left="Parent,0,20" Bottom="Parent, 1" Top="Parent, 1,-165" Right="PageStats,0,-20"/>
                     </LayoutInput>
                     <Children>                                           
 
-                      <Panel Name="LeftCoverImage" Padding="10,0,10,20">
+                      <Panel Name="LeftCoverImage" Margins="10,0,0,0" >
                         <LayoutInput>
                           <FormLayoutInput Left="Parent,0" />
                         </LayoutInput>
                         <Children>
-                          <Graphic Name="LeftPanelThumb"  >
+                          <Graphic Name="LeftPanelThumb" Scale=".92,.92,0"  >
                             <Animations>
                               <TransformAnimation Source="animation://s:ChangeHide"/>
                               <TransformAnimation Source="animation://s:ChangeShow"/>
