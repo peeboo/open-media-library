@@ -18,7 +18,7 @@
     </Rules>
 	
 		<Content>
-      <Panel Name="AlphaFilter" Layout="HorizontalFlow" Navigation="Group" Margins="7,0,0,0" >
+      <Panel Name="AlphaFilter" Layout="HorizontalFlow" Navigation="WrapHorizontal,Group" Margins="7,0,0,0" >
         <Children>
           <Text Content="Jump to " Font="font://styles:Normal" WordWrap="false" Color="color://styles:NormalColor" />
           <Repeater Name="RepeatAlpha" Navigation="RememberFocus" DefaultFocusIndex="0" Source="[MovieGallery.AlphaCharacters]">

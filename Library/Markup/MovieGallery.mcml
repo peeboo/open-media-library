@@ -529,7 +529,7 @@
             <Children>
                 <Panel Name="ImagePanel" Margins="0,0,0,0">
                     <Children>
-                        <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:ListFont" Color="White"  WordWrap="true" Margins="20,10,20,10" />
+                        <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:ListFont" Color="White" Margins="20,10,20,10" />
                         <Graphic Name="MenuCover" Content="[GalleryItem.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint">
                             <!--<Children>
                                 <Panel Layout="VerticalFlow">

@@ -106,7 +106,7 @@
           </Panel>
 
           <!-- actors panel -->
-          <Panel Layout="VerticalFlow" Margins="20,0,0,0" MaximumSize="0,625">
+          <Panel Name="ActorsPanel" Layout="VerticalFlow" Margins="20,0,0,0" MaximumSize="0,625">
             <LayoutInput>
               <FormLayoutInput Top="DetailsPanel,0" Left="DetailsPanel,1"/>
             </LayoutInput>
@@ -144,7 +144,7 @@
               <FlowLayout Orientation="Vertical" Spacing="2,2" />
             </Layout>
             <LayoutInput>
-              <FormLayoutInput Left="DetailsPanel,0" Top="DetailsPanel,1.05"/>
+              <FormLayoutInput Left="DetailsPanel,0" Top="DetailsPanel,1.05" Right="ActorsPanel,0"/>
             </LayoutInput>
             <Children>
 
