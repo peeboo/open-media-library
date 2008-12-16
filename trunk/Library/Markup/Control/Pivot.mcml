@@ -73,7 +73,7 @@
                 >
         <Children>
 
-          <Repeater Source="[Model.Options]" Layout="HorizontalFlow" Name="ButtonRepeater">
+          <Repeater Source="[Model.Options]" Layout="HorizontalFlow" Name="ButtonRepeater" Navigation="WrapHorizontal">
 
             <Animations>
               <Animation Animation="animation://me:ScrollerMoveItemSmooth"/>

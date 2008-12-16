@@ -73,6 +73,13 @@ namespace Library
                         mappings.Add(VideoFormat.HDDVD.ToString() + "|" + _blueRayPlayerPath.Value.Trim());
                     }
 
+                    if (_useExternalPlayer.Value && 
+                        !string.IsNullOrEmpty(_externalPlayerPath.Value) &&
+                        _externalPlayerPath.Value.Trim().Length != 0 )
+                    {
+                        mappings.Add(VideoFormat.ALL.ToString() + "|" + _externalPlayerPath.Value.Trim());
+                    }
+
                     _omlSettings.ExternalPlayerMapping = mappings;
                     ExternalPlayer.RefreshExternalPlayerList();
                 }
@@ -98,7 +105,7 @@ namespace Library
                 _omlSettings.ShowFilterTags = (bool)_showFilterTags.Chosen;
                 _omlSettings.ShowFilterUserRating = (bool)_showFilterUserRating.Chosen;
                 _omlSettings.ShowFilterYear = (bool)_showFilterYear.Chosen;
-                _omlSettings.ShowFilterTrailers = (bool)_showFilterTrailers.Chosen;
+                _omlSettings.ShowFilterTrailers = (bool)_showFilterTrailers.Chosen;                
             });
         }
         private void SaveMovieSettings()
@@ -323,7 +330,12 @@ namespace Library
 
         private void SetupExternalPlayers()
         {
-            _blueRayPlayerPath.Value =  ExternalPlayer.GetExternalPlayerPath(VideoFormat.BLURAY);
+            _blueRayPlayerPath.Value = ExternalPlayer.GetExternalPlayerPath(VideoFormat.BLURAY);
+            _useExternalPlayer.Chosen = ExternalPlayer.ExternalPlayerExistForType(VideoFormat.ALL);
+
+            _externalPlayerPath.Value = ( (bool)_useExternalPlayer.Chosen == true )
+                                    ? ExternalPlayer.GetExternalPlayerPath(VideoFormat.ALL)
+                                    : string.Empty;            
         }
 
         #region properties
@@ -443,6 +455,11 @@ namespace Library
         {
             get { return _movieDetailsTransitionType; }
         }
+
+        public BooleanChoice UseExternalPlayer
+        {
+            get { return _useExternalPlayer; }
+        }        
       
         #endregion
         public EditableText MountingToolPath
@@ -479,6 +496,23 @@ namespace Library
             }
         }
 
+        public EditableText ExternalPlayerPath
+        {
+            get
+            {
+                if (_externalPlayerPath == null)
+                {
+                    _externalPlayerPath = new EditableText();
+                }
+                return _externalPlayerPath;
+            }
+            set
+            {
+                _externalPlayerPath = value;
+                FirePropertyChanged("ExternalPlayerPath");
+            }
+        }
+
         public Choice UILanguage
         {
             get { return _uiLanguage;  }
@@ -499,6 +533,7 @@ namespace Library
 
         EditableText _mountingToolPath = new EditableText();
         EditableText _blueRayPlayerPath = new EditableText();
+        EditableText _externalPlayerPath = new EditableText();
         OMLSettings _omlSettings = new OMLSettings();
         Choice _virtualDrive = new Choice();
         Choice _movieView = new Choice();
@@ -528,6 +563,7 @@ namespace Library
         BooleanChoice _showFilterTags = new BooleanChoice();
         BooleanChoice _showFilterParentalRating = new BooleanChoice();
         BooleanChoice _showFilterCountry = new BooleanChoice();
-        BooleanChoice _showFilterRuntime = new BooleanChoice();        
+        BooleanChoice _showFilterRuntime = new BooleanChoice();
+        BooleanChoice _useExternalPlayer = new BooleanChoice();
     }
 }

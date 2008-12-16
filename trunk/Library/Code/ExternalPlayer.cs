@@ -87,12 +87,12 @@ namespace Library
         /// </summary>
         /// <returns></returns>
         public bool PlayMovie()
-        {            
-            string path;
+        {                        
             string moviePath = _source.MediaPath;
+            string path = GetExternalPlayerPath(_source.Format);
 
             // make sure the external player really cares about this
-            if (!TypeToExternalPlayer.TryGetValue(_source.Format, out path))
+            if (string.IsNullOrEmpty(path))
                 return false;
 
             // validate the player exists
@@ -103,11 +103,13 @@ namespace Library
             // this may not work for all players so i'm adding this in now and if it becomes
             // a problem we'll need to add it as config switch down the road
             if (_source.Format == VideoFormat.BLURAY &&
-                !File.Exists( Path.Combine(_source.MediaPath, "index.bdmv")) &&
+                !File.Exists(Path.Combine(_source.MediaPath, "index.bdmv")) &&
                 File.Exists(Path.Combine(_source.MediaPath, "BDMV\\index.bdmv")))
-            {    
+            {
                 moviePath = Path.Combine(moviePath, "BDMV");
             }
+
+            OMLApplication.DebugLine("Calling external application \"" + path + "\" \"" + moviePath + "\"");
 
             OMLApplication.ExecuteSafe(delegate
             {
@@ -127,7 +129,13 @@ namespace Library
         /// <returns></returns>
         public static bool ExternalPlayerExistForType(VideoFormat format)
         {
-            return TypeToExternalPlayer.ContainsKey(format) && File.Exists(TypeToExternalPlayer[format]);
+            bool keyExists = TypeToExternalPlayer.ContainsKey(format) && File.Exists(TypeToExternalPlayer[format]);
+
+            // if we didn't find the type - see if the all override was used
+            if (!keyExists)
+                keyExists = TypeToExternalPlayer.ContainsKey(VideoFormat.ALL);
+
+            return keyExists;
         }
 
         /// <summary>
@@ -145,9 +153,13 @@ namespace Library
         /// <returns></returns>
         public static string GetExternalPlayerPath(VideoFormat format)
         {
-            return (TypeToExternalPlayer.ContainsKey(format))
-                    ? TypeToExternalPlayer[format]
-                    : string.Empty;
+            string playerPath;
+
+            if (!TypeToExternalPlayer.TryGetValue(format, out playerPath))
+                if (!TypeToExternalPlayer.TryGetValue(VideoFormat.ALL, out playerPath))
+                    playerPath = string.Empty;
+
+            return playerPath;
         }
     }
 }
