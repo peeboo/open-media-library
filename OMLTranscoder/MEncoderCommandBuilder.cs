@@ -98,10 +98,11 @@ namespace OMLTranscoder
 
             // output format
             // always set the output format to mpeg for extenders
-            if (IsDVD)
+//            if (IsDVD)
                 strBuilder.Append(@" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0:autoaspect=1, harddup -of mpeg -mpegopts format=dvd:tsaf");
-            else
-                strBuilder.Append(@" -lavcopts vcodec=msmpeg4v2:vpass=1");
+// the files created using these settings dont seem to be playable in wmp
+//            else
+//                strBuilder.Append(@" -lavcopts vcodec=msmpeg4v2:vpass=1");
 
             // set quiet mode on
             strBuilder.Append(@" -really-quiet");
