@@ -39,6 +39,7 @@ namespace OMLEngine
     /// </summary>
     public enum VideoFormat
     {
+        ALL, // meaning all format types - used for setting video format to external player
         ASF, // WMV style
         AVC, // AVC H264
         AVI, // DivX, Xvid, etc

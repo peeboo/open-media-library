@@ -53,7 +53,8 @@
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRuntime.Visible]" />
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRating.Visible]" />
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelSummary.Visible]" />-->
-          
+
+          <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[BottomBar.Visible]" />
 
             <Rule>
                 <Conditions>
@@ -63,9 +64,20 @@
                 <Actions>
                     <Set Target="[Caption.Content]" Value="[MovieBrowser.FocusedItem.Caption]"/>
                     <Set Target="[SubCaption.Content]" Value="[MovieBrowser.FocusedItem.SubCaption]"/>
-                    <Set Target="[Summary.Content]" Value="[MovieBrowser.FocusedItem.Details]"/>
+                    <Set Target="[Summary.Content]" Value="[MovieBrowser.FocusedItem.Details]"/>                  
                 </Actions>
             </Rule>
+
+          <Rule>
+            <Conditions>
+              <IsValid Source="[MovieBrowser.FocusedItem]"/>
+              <Modified Source="[FocusedIndex.Value]" InitialEvaluate="true" />
+              <Equality Source="[GalleryView]" Value="List" ConditionOp="Equals" />
+            </Conditions>
+            <Actions>
+              <Set Target="[LeftPanelThumb.Content]" Value="[MovieBrowser.FocusedItem.MenuCoverArt]" />
+            </Actions>            
+          </Rule>
 
             <Rule>
                 <Conditions>
@@ -135,22 +147,37 @@
 
                   </Panel>
 
-
-                  <Panel Name="BottomBar" Layout="Form">
+                  <Panel Name="PageStats">
                     <Children>
-                      
-                      <Panel Name="PageStats" Layout="HorizontalFlow">
-                        <Children>
-                          <me:PositionIndicator Gallery="[MovieBrowser]" FocusedIndex="[FocusedIndex]" />
-                        </Children>
+                      <me:PositionIndicator Gallery="[MovieBrowser]" FocusedIndex="[FocusedIndex]" />
+                    </Children>
+                    <LayoutInput>
+                      <FormLayoutInput Right="Parent, 1, -20" Bottom="Parent,1,-20"/>
+                    </LayoutInput>
+                  </Panel>
+                  
+                  <Panel Name="BottomBar" Layout="Form">                    
+                    <LayoutInput>
+                      <FormLayoutInput Left="Parent,0,20" Bottom="Parent, 1" Top="Parent, 1,-160" Right="PageStats,0,-20"/>
+                    </LayoutInput>
+                    <Children>                                           
+
+                      <Panel Name="LeftCoverImage" Margins="0,0,20,0">
                         <LayoutInput>
-                          <FormLayoutInput Right="Parent, 1, -20" Bottom="Parent,1,-20"/>
+                          <FormLayoutInput Left="Parent,0" Bottom="Parent,1,-20"/>
                         </LayoutInput>
-                      </Panel>
-                      
+                        <Children>
+                          <Graphic Name="LeftPanelThumb" CenterPointPercent="0.5,0.75,0.0">
+                            <Animations>
+                              <TransformAnimation Source="animation://s:ChangeHide"/>
+                              <TransformAnimation Source="animation://s:ChangeShow"/>
+                            </Animations>
+                          </Graphic>
+                        </Children>                        
+                      </Panel>                                                                 
 
                       <Panel Name="LeftPanelTitle">
-                        <Children>
+                        <Children>                          
                           <Text Name="Caption" Content="" WordWrap="true" Font="font://s:MovieNameFont" Color="color://s:HeadingColor" >
                             <Animations>
                               <TransformAnimation Source="animation://s:ChangeHide"/>
@@ -159,7 +186,7 @@
                           </Text>
                         </Children>
                         <LayoutInput>
-                          <FormLayoutInput Left="Parent, 0.02"/>
+                          <FormLayoutInput Left="LeftCoverImage, 1" Top="Parent,0"/>
                         </LayoutInput>
                       </Panel>
 
@@ -180,7 +207,7 @@
                           </Clip>
                         </Children>
                         <LayoutInput>
-                          <FormLayoutInput Left="LeftPanelTitle,1,5" Top="LeftPanelTitle,0,3" Right="PageStats,0,-20"/>
+                          <FormLayoutInput Left="LeftPanelTitle,1,5" Top="LeftPanelTitle,0,3" Right="Parent,1"/>
                         </LayoutInput>
                       </Panel>
 
@@ -198,16 +225,13 @@
                             </Clip>
                           </Children>
                           <LayoutInput>
-                            <FormLayoutInput Left="LeftPanelTitle,0" Top="LeftPanelTitle,1" Right="PageStats,0,-20" />
+                            <FormLayoutInput Left="LeftPanelTitle,0" Top="LeftPanelTitle,1" Right="Parent,1" />
                           </LayoutInput>
                         </Panel>
 
 
 
-                    </Children>
-                    <LayoutInput>
-                      <FormLayoutInput Left="Parent,0" Bottom="Parent, 1" Top="Parent, 0.70,-20" />
-                    </LayoutInput>
+                    </Children>                    
                   </Panel>
                   
                   <!-- LeftPanelTitle -->
