@@ -40,6 +40,8 @@
             <AnchorEdge Name="NowPlayingBottomAnchor" Percent="0.95" Offset ="0" Id="Parent"/>
             <AnchorEdge Name="RightAnchor" Percent="[UISettings.Anchor.RightAnchor]" Offset ="[UISettings.Anchor.RightOffset]" Id="Parent"/>
 
+            <AnchorEdge Name="DetailsTop" Id="Parent" Percent="0" Offset="17" />
+
             <ShortcutHandler Name="MoreInfo" />
             <cor:Single Name="AlphaCoverArt" Single="0.5"/>
             <cor:Single Name="AlphaList" Single="1"/>
@@ -67,6 +69,9 @@
                     <Set Target="[Summary.Content]" Value="[MovieBrowser.FocusedItem.Details]"/>                  
                 </Actions>
             </Rule>
+
+          <!-- the List mode version of details can be a bit higher -->
+          <Condition Source="[GalleryView]" SourceValue="List" Target="[DetailsTop.Offset]" Value="0" />
 
           <Rule>
             <Conditions>
@@ -162,12 +167,12 @@
                     </LayoutInput>
                     <Children>                                           
 
-                      <Panel Name="LeftCoverImage" Margins="10,0,10,20">
+                      <Panel Name="LeftCoverImage" Padding="10,0,10,20">
                         <LayoutInput>
                           <FormLayoutInput Left="Parent,0" />
                         </LayoutInput>
                         <Children>
-                          <Graphic Name="LeftPanelThumb" SizingPolicy="SizeToContent">
+                          <Graphic Name="LeftPanelThumb"  >
                             <Animations>
                               <TransformAnimation Source="animation://s:ChangeHide"/>
                               <TransformAnimation Source="animation://s:ChangeShow"/>
@@ -186,7 +191,7 @@
                           </Text>
                         </Children>
                         <LayoutInput>
-                          <FormLayoutInput Left="LeftCoverImage, 1,10" Top="Parent,0"/>
+                          <FormLayoutInput Left="LeftCoverImage, 1,10" Top="[DetailsTop]"/>
                         </LayoutInput>
                       </Panel>
 
