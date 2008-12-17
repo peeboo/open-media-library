@@ -252,7 +252,10 @@ namespace Library
 
         private void CreateCategories()
         {
-            // Always add the settings first
+            // home is first
+            _categories.Add(new HomeCommand(Filter.Home));
+
+            // then settings
             _categories.Add(new FilterCommand(Filters[Filter.Settings]));
 
             System.Collections.Specialized.StringCollection filtersToShow =
@@ -271,7 +274,7 @@ namespace Library
         private void Initialize(TitleCollection col)
         {
             DateTime start = DateTime.Now;
-           
+
             _filters.Add(Filter.Settings, new Filter(Filter.Settings, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
             if (Properties.Settings.Default.ShowFilterActors) _filters.Add(Filter.Actor, new Filter(Filter.Actor, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
             if (Properties.Settings.Default.ShowFilterDirectors) _filters.Add(Filter.Director, new Filter(Filter.Director, this, Properties.Settings.Default.DirectorView, true, Properties.Settings.Default.DirectorSort));
@@ -654,5 +657,28 @@ namespace Library
     public class GalleryView
     {
         public const string List = "List";
+    }
+
+    public class HomeCommand : FilterCommand
+    {      
+        public HomeCommand(string name)
+        {
+            FilterName = name;
+            Invoked += GoHome;
+        }
+
+        public override string ToString()
+        {
+            return FilterName;
+        }
+
+        public void GoHome(object sender, EventArgs args)
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                Trace.TraceInformation("MovieGallery.GoHome");                
+                OMLApplication.Current.GoToMenu(new MovieGallery(OMLApplication.Current.Titles, Filter.Home));
+            });
+        }
     }
 }

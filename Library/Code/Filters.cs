@@ -14,10 +14,13 @@ namespace Library
     /// </summary>
     public class FilterCommand : Command
     {
+        protected string FilterName;
+
         public FilterCommand(Filter filter)
             : base()
-        {
+        {            
             _filter = filter;
+            FilterName = _filter.Name;
             Invoked += filter.OnFilterSelected;
         }
 
@@ -26,13 +29,17 @@ namespace Library
             return Caption;
         }
 
+        protected FilterCommand()
+        {
+        }
+
         /// <summary>
         /// Gets the description.
         /// </summary>
         /// <returns></returns>
         public string Caption
         {
-            get { return _filter.Name; }
+            get { return FilterName; }
         }
 
         private Filter _filter;
@@ -44,7 +51,6 @@ namespace Library
         }
 
     }
-
 
     public class Filter
     {
