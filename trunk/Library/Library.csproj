@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\AppleTrailers.cs" />
+    <Compile Include="Code\GroupColor.cs" />
     <Compile Include="Code\ContextMenu.cs" />
     <Compile Include="Code\LayoutV2\BaseGallery.cs" />
     <Compile Include="Code\MountingTool.cs" />
@@ -195,6 +196,7 @@
     <Content Include="Markup\MovieGallery.mcml" />
     <Content Include="Markup\LayoutV2\NewMenu.mcml" />
     <Content Include="Markup\RadioButtonGroup.mcml" />
+    <Content Include="Markup\Scan Wizard\ScanNewItems.mcml" />
     <Content Include="Markup\SelectDirectoriesToScan.mcml" />
     <Content Include="Markup\SelectFilesToImport.mcml" />
     <Content Include="Markup\SelectImporter.mcml" />

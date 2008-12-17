@@ -14,6 +14,15 @@
   <Color Name="Accent.A" Color="255,255,255"/>
   <Color Name="Accent.B" Color="182,206,0"/>
 
+  <!-- font color for when the section is active -->
+  <Color Name="Text.SectionActive" Color="124,181,221"/>
+
+  <!-- font color for when the section is inactive -->
+  <Color Name="Text.SectionNotActive" Color="3,141,189"/>
+  
+  <!-- font color for selected item -->
+  <Color Name="Text.Selected" Color="White"/>
+
   <!-- Fonts -->
 
   <Font Name="MainMenuSectionTitle" Font="Calibri Bold,48"/>

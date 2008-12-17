@@ -289,7 +289,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        [global::System.Configuration.DefaultSettingValueAttribute("7")]
         public int GalleryListRows {
             get {
                 return ((int)(this["GalleryListRows"]));

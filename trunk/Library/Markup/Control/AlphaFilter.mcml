@@ -9,24 +9,50 @@
 	<UI Name="AlphaFilter">
 
 		<Properties>
-        <a:MovieGallery Name="MovieGallery" MovieGallery="$Required"/>   
+        <a:MovieGallery Name="MovieGallery" MovieGallery="$Required"/>        
 		</Properties>
+
+    <Locals>
+      <a:GroupColor Name="GroupColor" />
+    </Locals>
 
     <Rules>
       <Condition Source="[MovieGallery.NumberOfPages]" ConditionOp="GreaterThanOrEquals" SourceValue ="2" Target="[AlphaFilter.Visible]" Value="true" />
       <Condition Source="[MovieGallery.NumberOfPages]" ConditionOp="LessThan" SourceValue="2" Target="[AlphaFilter.Visible]" Value="false" />
+      <Binding Source="[GroupColor.Color]" Target="[JumpToLabel.Color]" />
+
+      <!-- change the color and scale if selected -->      
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Input.DeepMouseFocus]" Value="true"/>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[GroupColor.Color]" Value="color://styles:Text.SectionActive" />
+          <PlayAnimation Animation="animation://me:SectionFocusOn" Target="[AlphaFilter]" />
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Input.DeepMouseFocus]" Value="false"/>
+          <Equality Source="[Input.DeepKeyFocus]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[GroupColor.Color]" Value="color://styles:Text.SectionNotActive" />
+          <PlayAnimation Animation="animation://me:SectionFocusOff" Target="[AlphaFilter]" />
+        </Actions>
+      </Rule>
+      <!-- end change color and scale -->
     </Rules>
 	
 		<Content>
       <Panel Name="AlphaFilter" Layout="HorizontalFlow" Navigation="WrapHorizontal,Group" Margins="7,0,0,0" >
         <Children>
-          <Text Content="Jump to " Font="font://styles:Normal" WordWrap="false" Color="color://styles:NormalColor" />
-          <Repeater Name="RepeatAlpha" Navigation="RememberFocus" DefaultFocusIndex="0" Source="[MovieGallery.AlphaCharacters]">
-            <Layout>
-              <FlowLayout Spacing="10,10"/>
-            </Layout>
+          <Text Content="Jump to " Name="JumpToLabel" Font="font://styles:Normal" WordWrap="false" />
+          <Repeater Name="RepeatAlpha" Layout="HorizontalFlow" Navigation="RememberFocus" DefaultFocusIndex="0" Source="[MovieGallery.AlphaCharacters]">           
             <Content>
-              <me:AlphaSortButton filterCharacter="[RepeatedItem!cor:String]" MovieGallery="[MovieGallery]"/>
+              <me:AlphaSortButton filterCharacter="[RepeatedItem!cor:String]" MovieGallery="[MovieGallery]" GroupColor="[GroupColor]"/>
             </Content>
           </Repeater>
         </Children>
@@ -40,18 +66,12 @@
       <cor:String Name="filterCharacter" cor:String="$required" />
       <a:MovieGallery Name="MovieGallery" MovieGallery="$Required"/>
 
-      <!-- Background color properties. -->
-      <Color Name="BackgroundColor" Color="Transparent"/>
-      <Color Name="BackgroundFocusedColor" Color="Transparent"/>
-      <Color Name="BackgroundHoverColor" Color="PaleGoldenrod"/>
-      <Color Name="BackgroundPressedColor" Color="White"/>
-
       <!-- Label color properties. -->
-      <Color Name="LabelColor" Color="White"/>
       <Color Name="LabelFocusedColor" Color="White"/>
       <Color Name="LabelHoverColor" Color="DimGray"/>
       <Color Name="LabelPressedColor" Color="Yellow"/>
-
+      <a:GroupColor Name="GroupColor" GroupColor="$Required"/>
+      
       <Image Name="BackgroundImageList" Source="resx://Library/Library.Resources/ButtonLeftFocus" NineGrid="4,4,4,4"/>
     </Properties>
 
@@ -63,13 +83,24 @@
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
+      <Rule>
+        <Conditions>
+          <Modified Source="[GroupColor.Color]"/>
+          <Equality Source="[Label.Color]" ConditionOp="NotEquals" Value="color://styles:Text.Selected"/>
+          <Equality Source="[Input.KeyFocus]" ConditionOp="NotEquals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Color]" Value="[GroupColor.Color]" />
+        </Actions>
+      </Rule>
+      
       <Changed Source="[Clicker.Invoked]">
         <Actions>
           <Set Target="[MovieGallery.JumpLetter]" Value="[filterCharacter]" />
         </Actions>
       </Changed>
 
-      <!-- Change color on click. -->
+      <!-- Change color on click. -->                    
       <Condition Source="[Clicker.Clicking]" SourceValue="true">
         <Actions>
           <!--<Set Target="[Background.Content]" Value="[BackgroundPressedColor]"/>-->
@@ -82,28 +113,27 @@
       <Condition Source="[Input.KeyFocus]" SourceValue="true">
         <Actions>
           <!--<Set Target="[Background.Content]" Value="[BackgroundHoverColor]"/>-->
-          <PlayAnimation Target="[Label]" Animation="animation://me:GotFocusList" />
-          <Set Target="[Label.Color]" Value="White"/>
+          <PlayAnimation Target="[Label]" Animation="animation://me:GotFocusList" />          
           <PlaySound Sound="sound://me:Focus" />
+          <Set Target="[Label.Color]" Value="color://styles:Text.Selected"/>
         </Actions>
       </Condition>           
 
       <Condition Source="[Input.KeyFocus]" SourceValue="false">
         <Actions>
           <!-- Play an animation on the cover target item. -->
-          <PlayAnimation Target="[Label]" Animation="animation://me:LostFocusList"/>         
+          <PlayAnimation Target="[Label]" Animation="animation://me:LostFocusList"/>
+          <Set Target="[Label.Color]" Value="[GroupColor.Color]"/>
         </Actions>
       </Condition>
     </Rules>
 
     <Content>
-      <!-- Solid background color. -->
-      <ColorFill Name="Background" Content="[BackgroundColor]" Padding="5,0,5,0">
+      <Panel Padding="10,0,10,0">
         <Children>
-          <Text Name="Label" Content="[filterCharacter]" Font="font://styles:NormalBold" Color="color://styles:NormalColor"  />
+          <Text Name="Label" Content="[filterCharacter]" Font="font://styles:NormalBold" />
         </Children>
-
-      </ColorFill>
+      </Panel>
     </Content>
 
   </UI>
