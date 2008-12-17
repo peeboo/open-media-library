@@ -36,13 +36,13 @@ namespace OMLDatabaseEditor
             _titleCollection = new TitleCollection();
             OMLEngine.Utilities.DebugLine("[MainEditor] InitData() : loadTitleCollection()");
             _titleCollection.loadTitleCollection();
-            SetupNewMovieMenu();
+            SetupNewMovieAndContextMenu();
 
             LoadMovies();
             Cursor = Cursors.Default;
         }
 
-        private void SetupNewMovieMenu()
+        private void SetupNewMovieAndContextMenu()
         {
             LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
             foreach (IOMLMetadataPlugin plugin in _metadataPlugins)
@@ -51,6 +51,11 @@ namespace OMLDatabaseEditor
                 newItem.Tag = plugin;
                 newItem.Click += new EventHandler(this.fromMetaDataToolStripMenuItem_Click);
                 newToolStripMenuItem.DropDownItems.Add(newItem);
+
+                ToolStripMenuItem metadataItem = new ToolStripMenuItem("From " + plugin.PluginName);
+                metadataItem.Tag = plugin;
+                metadataItem.Click += new EventHandler(this.miMetadataMulti_Click);
+                miMetadataMulti.DropDownItems.Add(metadataItem);
             }
         }
 
@@ -113,6 +118,7 @@ namespace OMLDatabaseEditor
             lbImport.Items.Clear();
             LoadImportPlugins(PluginTypes.ImportPlugin, _importPlugins);
             lbImport.DataSource = _importPlugins;
+            lbImport.SelectedItem = null;
             Cursor = Cursors.Default;
         }
 
@@ -122,6 +128,7 @@ namespace OMLDatabaseEditor
             lbMetadata.Items.Clear();
             LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
             lbMetadata.DataSource = _metadataPlugins;
+            lbMetadata.SelectedItem = null;
             Cursor = Cursors.Default;
         }
 
@@ -223,7 +230,7 @@ namespace OMLDatabaseEditor
             nfe.Show();
         }
 
-        private void StartMetadataImport(IOMLMetadataPlugin plugin, bool coverArtOnly)
+        private bool StartMetadataImport(IOMLMetadataPlugin plugin, bool coverArtOnly)
         {
             try
             {
@@ -252,12 +259,17 @@ namespace OMLDatabaseEditor
                             }
                         }
                         titleEditor.RefreshEditor();
+                        return true;
                     }
+                    else
+                        return false;
                 }
+                return false;
             }
             catch
             {
                 Cursor = Cursors.Default;
+                return false;
             }
         }
 
@@ -487,43 +499,26 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        private void miMetadataMulti_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
             SaveCurrentMovie();
+            ToolStripMenuItem selectedItem = sender as ToolStripMenuItem;
+            IOMLMetadataPlugin plugin = selectedItem.Tag as IOMLMetadataPlugin;
 
-            BaseListBoxControl.SelectedIndexCollection collection =
-                lbMovies.SelectedIndices;
-
-            foreach (int index in collection)
+            //BaseListBoxControl.SelectedItemCollection collection = lbMovies.SelectedItems;
+            foreach (Title title in lbMovies.SelectedItems)
             {
-
-                Title selectedTitle = lbMovies.GetItem(index) as Title;
-                if (selectedTitle == null) return;
-
-                titleEditor.LoadDVD(selectedTitle);
-                this.Text = APP_TITLE + " - " + selectedTitle.Name;
+                titleEditor.LoadDVD(title);
+                this.Text = APP_TITLE + " - " + title.Name;
                 ToggleSaveState(false);
 
-                IOMLMetadataPlugin metadata = _metadataPlugins[0];
-                StartMetadataImport(metadata, false);
-
-                Title editedTitle = titleEditor.EditedTitle;
-                Title collectionTitle = _titleCollection.GetTitleById(editedTitle.InternalItemID);
-                if (collectionTitle == null)
+                if (StartMetadataImport(plugin, false))
                 {
-                    // Title doesn't exist so we'll add it
-                    _titleCollection.Add(editedTitle);
+                    _titleCollection.Replace(titleEditor.EditedTitle);
+                    _titleCollection.saveTitleCollection();
                 }
-                else
-                {
-                    // Title exists so we need to copy edited data to collection title
-                    _titleCollection.Replace(editedTitle);
-                }
-                _titleCollection.saveTitleCollection();
-            
             }
-            Cursor = Cursors.Default;
         }
     }
 }

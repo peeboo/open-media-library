@@ -30,7 +30,6 @@ namespace OMLDatabaseEditor
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainEditor));
-            DevExpress.XtraNavBar.ViewInfo.SkinNavigationPaneViewInfoRegistrator skinNavigationPaneViewInfoRegistrator2 = new DevExpress.XtraNavBar.ViewInfo.SkinNavigationPaneViewInfoRegistrator();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblCurrentStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.pgbProgress = new System.Windows.Forms.ToolStripProgressBar();
@@ -68,7 +67,7 @@ namespace OMLDatabaseEditor
             this.navBarGroupControlContainer1 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.lbMovies = new DevExpress.XtraEditors.ListBoxControl();
             this.cmsMoviesList = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.miMetadataMulti = new System.Windows.Forms.ToolStripMenuItem();
             this.navBarGroupControlContainer2 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.lbMetadata = new DevExpress.XtraEditors.ListBoxControl();
             this.navBarGroupControlContainer3 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
@@ -388,7 +387,7 @@ namespace OMLDatabaseEditor
             this.mainNav.Size = new System.Drawing.Size(177, 666);
             this.mainNav.TabIndex = 0;
             this.mainNav.Text = "navBarControl1";
-            this.mainNav.View = skinNavigationPaneViewInfoRegistrator2;
+            this.mainNav.View = new DevExpress.XtraNavBar.ViewInfo.SkinNavigationPaneViewInfoRegistrator();
             this.mainNav.ActiveGroupChanged += new DevExpress.XtraNavBar.NavBarGroupEventHandler(this.mainNav_ActiveGroupChanged);
             // 
             // groupMovies
@@ -405,7 +404,7 @@ namespace OMLDatabaseEditor
             // 
             this.navBarGroupControlContainer1.Controls.Add(this.lbMovies);
             this.navBarGroupControlContainer1.Name = "navBarGroupControlContainer1";
-            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(175, 407);
+            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(175, 457);
             this.navBarGroupControlContainer1.TabIndex = 0;
             // 
             // lbMovies
@@ -424,16 +423,16 @@ namespace OMLDatabaseEditor
             // cmsMoviesList
             // 
             this.cmsMoviesList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1});
+            this.miMetadataMulti});
             this.cmsMoviesList.Name = "cmsMoviesList";
-            this.cmsMoviesList.Size = new System.Drawing.Size(234, 26);
+            this.cmsMoviesList.Size = new System.Drawing.Size(166, 48);
             // 
-            // toolStripMenuItem1
+            // miMetadataMulti
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(233, 22);
-            this.toolStripMenuItem1.Text = "MetaData Lookup These Titles";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            this.miMetadataMulti.Name = "miMetadataMulti";
+            this.miMetadataMulti.Size = new System.Drawing.Size(165, 22);
+            this.miMetadataMulti.Text = "Update metadata";
+            this.miMetadataMulti.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // navBarGroupControlContainer2
             // 
@@ -552,6 +551,7 @@ namespace OMLDatabaseEditor
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainEditor";
             this.Text = "OML Movie Manager";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainEditor_FormClosing);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
@@ -631,7 +631,7 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem currentMovieToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allMoviesToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip cmsMoviesList;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem miMetadataMulti;
     }
 }
 
