@@ -25,13 +25,13 @@ namespace OMLDatabaseEditor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1B9Q0Y02W3RCF0ZKQ9R2")]
-        public string AWSAccessKeyId {
+        [global::System.Configuration.DefaultSettingValueAttribute("Blue")]
+        public string gsAppSkin {
             get {
-                return ((string)(this["AWSAccessKeyId"]));
+                return ((string)(this["gsAppSkin"]));
             }
             set {
-                this["AWSAccessKeyId"] = value;
+                this["gsAppSkin"] = value;
             }
         }
     }

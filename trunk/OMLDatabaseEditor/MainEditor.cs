@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 
 using DevExpress.XtraEditors;
+using DevExpress.Skins;
+using DevExpress.Skins.Info;
 
 using OMLEngine;
 using OMLSDK;
@@ -20,12 +22,15 @@ namespace OMLDatabaseEditor
         private static List<IOMLMetadataPlugin> _metadataPlugins = new List<IOMLMetadataPlugin>();
         private const string APP_TITLE = "OML Movie Manager";
         private bool _loading = false;
+        public List<String> DXSkins;
 
         public MainEditor()
         {
             OMLEngine.Utilities.RawSetup();
 
             InitializeComponent();
+
+            defaultLookAndFeel1.LookAndFeel.SkinName = Properties.Settings.Default.gsAppSkin;
             InitData();
         }
 
@@ -37,9 +42,20 @@ namespace OMLDatabaseEditor
             OMLEngine.Utilities.DebugLine("[MainEditor] InitData() : loadTitleCollection()");
             _titleCollection.loadTitleCollection();
             SetupNewMovieAndContextMenu();
+            GetDXSkins();
 
             LoadMovies();
             Cursor = Cursors.Default;
+        }
+
+        private void GetDXSkins()
+        {
+            DXSkins = new List<string>();
+            foreach (SkinContainer s in SkinManager.Default.Skins)
+            {
+                DXSkins.Add(s.SkinName);
+            }
+            DXSkins.Sort();
         }
 
         private void SetupNewMovieAndContextMenu()
@@ -137,7 +153,7 @@ namespace OMLDatabaseEditor
             DialogResult result;
             if (titleEditor.EditedTitle != null && titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges)
             {
-                result = MessageBox.Show("You have unsaved changes to " + titleEditor.EditedTitle.Name + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
+                result = XtraMessageBox.Show("You have unsaved changes to " + titleEditor.EditedTitle.Name + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
                 if (result == DialogResult.Cancel)
                 {
                     lbMovies.SelectedValue = titleEditor.EditedTitle.InternalItemID;
@@ -212,13 +228,13 @@ namespace OMLDatabaseEditor
 
                 _titleCollection.saveTitleCollection();
 
-                MessageBox.Show("Added " + numberOfTitlesAdded + " titles\nSkipped " + numberOfTitlesSkipped + " titles\n", "Import Results");
+                XtraMessageBox.Show("Added " + numberOfTitlesAdded + " titles\nSkipped " + numberOfTitlesSkipped + " titles\n", "Import Results");
 
                 plugin.GetTitles().Clear();
             }
             catch (Exception e)
             {
-                MessageBox.Show("Exception in LoadTitlesIntoDatabase: %1", e.Message);
+                XtraMessageBox.Show("Exception in LoadTitlesIntoDatabase: %1", e.Message);
                 Utilities.DebugLine("[OMLImporter] Exception in LoadTitlesIntoDatabase: " + e.Message);
             }
         }
@@ -284,7 +300,7 @@ namespace OMLDatabaseEditor
                     // Title doesn't exist so we'll add it
                     if (editedTitle.MetadataSourceID == String.Empty)
                     {
-                        DialogResult result = MessageBox.Show("Would you like to retrieve metadata on this movie?", "Get data", MessageBoxButtons.YesNo);
+                        DialogResult result = XtraMessageBox.Show("Would you like to retrieve metadata on this movie?", "Get data", MessageBoxButtons.YesNo);
                         if (result == DialogResult.Yes)
                         {
                             LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
@@ -340,7 +356,7 @@ namespace OMLDatabaseEditor
                 Title titleToRemove = _titleCollection.GetTitleById(titleEditor.EditedTitle.InternalItemID);
                 if (titleToRemove != null)
                 {
-                    DialogResult result = MessageBox.Show("Are you sure you want to delete " + titleToRemove.Name + "?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                    DialogResult result = XtraMessageBox.Show("Are you sure you want to delete " + titleToRemove.Name + "?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                     if (result == DialogResult.Yes)
                     {
                         _titleCollection.Remove(titleToRemove);
@@ -372,7 +388,7 @@ namespace OMLDatabaseEditor
 
         private void deleteAllMoviesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to delete all the movies?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult result = XtraMessageBox.Show("Are you sure you want to delete all the movies?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (result == DialogResult.Yes)
             {
