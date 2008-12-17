@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevExpress.XtraEditors;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -73,7 +74,7 @@ namespace OMLDatabaseEditor.Controls
             }
             catch (System.ArgumentException ae)
             {
-                MessageBox.Show("Unable to match extension " + cleanedExtension + " defaulting to MPG, " +
+                XtraMessageBox.Show("Unable to match extension " + cleanedExtension + " defaulting to MPG, " +
                     " if this is a valid video extension please post about it in our forusm.",
                     "Error Matching File Extension");
                 Utilities.DebugLine("[DiskEditor] Error trying to match file extension " + cleanedExtension +
@@ -82,7 +83,7 @@ namespace OMLDatabaseEditor.Controls
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Error");
+                XtraMessageBox.Show(ex.ToString(), "Error");
                 Utilities.DebugLine("[DiskEditor] Error trying to match file extension " + cleanedExtension +
                     " to video format", ex);
             }
@@ -140,7 +141,7 @@ namespace OMLDatabaseEditor.Controls
             }
             else
             {
-                MessageBox.Show("The new path is neither a file nor directory", "Error");
+                XtraMessageBox.Show("The new path is neither a file nor directory", "Error");
                 txtPath.Focus();
                 txtPath.SelectAll();
             }

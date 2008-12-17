@@ -39,6 +39,8 @@ namespace OMLDatabaseEditor
             this.fromScratchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportCurrentMovieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportAllMoviesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,8 +82,6 @@ namespace OMLDatabaseEditor
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
-            this.exportCurrentMovieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportAllMoviesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -185,6 +185,20 @@ namespace OMLDatabaseEditor
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.saveToolStripMenuItem.Text = "&Save Movie";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripButton_Click);
+            // 
+            // exportCurrentMovieToolStripMenuItem
+            // 
+            this.exportCurrentMovieToolStripMenuItem.Name = "exportCurrentMovieToolStripMenuItem";
+            this.exportCurrentMovieToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.exportCurrentMovieToolStripMenuItem.Text = "Export Current Movie";
+            this.exportCurrentMovieToolStripMenuItem.Click += new System.EventHandler(this.exportCurrentMovieToolStripMenuItem_Click);
+            // 
+            // exportAllMoviesToolStripMenuItem
+            // 
+            this.exportAllMoviesToolStripMenuItem.Name = "exportAllMoviesToolStripMenuItem";
+            this.exportAllMoviesToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.exportAllMoviesToolStripMenuItem.Text = "Export All Movies";
+            this.exportAllMoviesToolStripMenuItem.Click += new System.EventHandler(this.exportAllMoviesToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -408,7 +422,7 @@ namespace OMLDatabaseEditor
             // 
             this.navBarGroupControlContainer1.Controls.Add(this.lbMovies);
             this.navBarGroupControlContainer1.Name = "navBarGroupControlContainer1";
-            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(175, 457);
+            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(173, 457);
             this.navBarGroupControlContainer1.TabIndex = 0;
             // 
             // lbMovies
@@ -419,7 +433,7 @@ namespace OMLDatabaseEditor
             this.lbMovies.Location = new System.Drawing.Point(0, 0);
             this.lbMovies.Name = "lbMovies";
             this.lbMovies.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lbMovies.Size = new System.Drawing.Size(175, 457);
+            this.lbMovies.Size = new System.Drawing.Size(173, 457);
             this.lbMovies.TabIndex = 0;
             this.lbMovies.ValueMember = "InternalItemID";
             this.lbMovies.SelectedIndexChanged += new System.EventHandler(this.lbMovies_SelectedIndexChanged);
@@ -539,24 +553,6 @@ namespace OMLDatabaseEditor
             this.helpToolStripButton.Name = "helpToolStripButton";
             this.helpToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.helpToolStripButton.Text = "He&lp";
-            // 
-            // defaultLookAndFeel1
-            // 
-            this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
-            // 
-            // exportCurrentMovieToolStripMenuItem
-            // 
-            this.exportCurrentMovieToolStripMenuItem.Name = "exportCurrentMovieToolStripMenuItem";
-            this.exportCurrentMovieToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.exportCurrentMovieToolStripMenuItem.Text = "Export Current Movie";
-            this.exportCurrentMovieToolStripMenuItem.Click += new System.EventHandler(this.exportCurrentMovieToolStripMenuItem_Click);
-            // 
-            // exportAllMoviesToolStripMenuItem
-            // 
-            this.exportAllMoviesToolStripMenuItem.Name = "exportAllMoviesToolStripMenuItem";
-            this.exportAllMoviesToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.exportAllMoviesToolStripMenuItem.Text = "Export All Movies";
-            this.exportAllMoviesToolStripMenuItem.Click += new System.EventHandler(this.exportAllMoviesToolStripMenuItem_Click);
             // 
             // MainEditor
             // 
