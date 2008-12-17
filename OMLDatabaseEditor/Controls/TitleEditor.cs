@@ -80,7 +80,7 @@ namespace OMLDatabaseEditor.Controls
         {
             if (TitleChanged != null && Status != TitleStatus.UnsavedChanges && !_isLoading)
             {
-                _status = TitleStatus.UnsavedChanges;
+                Status = TitleStatus.UnsavedChanges;
                 TitleChanged(this, e);
             }
         }
@@ -89,7 +89,7 @@ namespace OMLDatabaseEditor.Controls
         {
             if (TitleNameChanged != null && !_isLoading)
             {
-                _status = TitleStatus.UnsavedChanges;
+                Status = TitleStatus.UnsavedChanges;
                 TitleNameChanged(this, e);
             }
         }
@@ -156,6 +156,7 @@ namespace OMLDatabaseEditor.Controls
             {
                 DiskEditorFrm diskEditor = new DiskEditorFrm(EditedTitle.Disks);
                 diskEditor.ShowDialog();
+                Status = TitleStatus.UnsavedChanges;
                 _titleChanged(EventArgs.Empty);
             }
         }
