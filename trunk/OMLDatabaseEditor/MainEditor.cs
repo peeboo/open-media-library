@@ -520,5 +520,24 @@ namespace OMLDatabaseEditor
                 }
             }
         }
+
+        private void exportCurrentMovieToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (titleEditor.EditedTitle != null)
+            {
+                Title _currentTitle = (Title)_titleCollection.MoviesByItemId[titleEditor.EditedTitle.InternalItemID];
+                if (_currentTitle.Disks.Count > 0)
+                    _currentTitle.SerializeToXMLFile(_currentTitle.Disks[0].Path + ".oml.xml");
+            }
+        }
+
+        private void exportAllMoviesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor; 
+            foreach (Title t in _titleCollection) 
+                if (t.Disks.Count > 0) 
+                    t.SerializeToXMLFile(t.Disks[0].Path + ".oml.xml"); 
+            Cursor = Cursors.Default; 
+        }
     }
 }

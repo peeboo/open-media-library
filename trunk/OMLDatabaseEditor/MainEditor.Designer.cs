@@ -80,6 +80,8 @@ namespace OMLDatabaseEditor
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
+            this.exportCurrentMovieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportAllMoviesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -144,6 +146,8 @@ namespace OMLDatabaseEditor
             this.newToolStripMenuItem,
             this.toolStripSeparator2,
             this.saveToolStripMenuItem,
+            this.exportCurrentMovieToolStripMenuItem,
+            this.exportAllMoviesToolStripMenuItem,
             this.toolStripSeparator3,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -157,7 +161,7 @@ namespace OMLDatabaseEditor
             this.newToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripMenuItem.Image")));
             this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.newToolStripMenuItem.Text = "&New Movie";
             // 
             // fromScratchToolStripMenuItem
@@ -170,7 +174,7 @@ namespace OMLDatabaseEditor
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(171, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(183, 6);
             // 
             // saveToolStripMenuItem
             // 
@@ -178,19 +182,19 @@ namespace OMLDatabaseEditor
             this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.saveToolStripMenuItem.Text = "&Save Movie";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripButton_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(171, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(183, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -425,14 +429,13 @@ namespace OMLDatabaseEditor
             this.cmsMoviesList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miMetadataMulti});
             this.cmsMoviesList.Name = "cmsMoviesList";
-            this.cmsMoviesList.Size = new System.Drawing.Size(166, 48);
+            this.cmsMoviesList.Size = new System.Drawing.Size(166, 26);
             // 
             // miMetadataMulti
             // 
             this.miMetadataMulti.Name = "miMetadataMulti";
             this.miMetadataMulti.Size = new System.Drawing.Size(165, 22);
             this.miMetadataMulti.Text = "Update metadata";
-            this.miMetadataMulti.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // navBarGroupControlContainer2
             // 
@@ -541,6 +544,20 @@ namespace OMLDatabaseEditor
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
             // 
+            // exportCurrentMovieToolStripMenuItem
+            // 
+            this.exportCurrentMovieToolStripMenuItem.Name = "exportCurrentMovieToolStripMenuItem";
+            this.exportCurrentMovieToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.exportCurrentMovieToolStripMenuItem.Text = "Export Current Movie";
+            this.exportCurrentMovieToolStripMenuItem.Click += new System.EventHandler(this.exportCurrentMovieToolStripMenuItem_Click);
+            // 
+            // exportAllMoviesToolStripMenuItem
+            // 
+            this.exportAllMoviesToolStripMenuItem.Name = "exportAllMoviesToolStripMenuItem";
+            this.exportAllMoviesToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.exportAllMoviesToolStripMenuItem.Text = "Export All Movies";
+            this.exportAllMoviesToolStripMenuItem.Click += new System.EventHandler(this.exportAllMoviesToolStripMenuItem_Click);
+            // 
             // MainEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -632,6 +649,8 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem allMoviesToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip cmsMoviesList;
         private System.Windows.Forms.ToolStripMenuItem miMetadataMulti;
+        private System.Windows.Forms.ToolStripMenuItem exportCurrentMovieToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportAllMoviesToolStripMenuItem;
     }
 }
 
