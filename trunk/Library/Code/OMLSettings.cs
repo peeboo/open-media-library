@@ -194,6 +194,16 @@ namespace Library
                 Properties.Settings.Default.Save();
             }
         }
+
+        public string StartPageSubFilter
+        {
+            get { return Properties.Settings.Default.StartPageSubFilter; }
+            set
+            {
+                Properties.Settings.Default.StartPageSubFilter = value;
+                Properties.Settings.Default.Save();
+            }
+        }
         public string MovieSort
         {
             get { return Properties.Settings.Default.MovieSort; }
