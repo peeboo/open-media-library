@@ -39,7 +39,8 @@ namespace OMLEngine
     /// </summary>
     public enum VideoFormat
     {
-        ALL, // meaning all format types - used for setting video format to external player
+        // DO NOT MODIFY ORDER, INSERT IN THE MIDDLE, OR REMOVE ENTRIES, JUST ADD TO THE END!
+
         ASF, // WMV style
         AVC, // AVC H264
         AVI, // DivX, Xvid, etc
@@ -81,7 +82,9 @@ namespace OMLEngine
         WVX, // wtf is this?
         ASX, // like WPL
         WPL, // playlist file?
-        WTV // new dvr format in vista (introduced in the tv pack 2008)
+        WTV, // new dvr format in vista (introduced in the tv pack 2008)
+
+        ALL, // meaning all format types - used for setting video format to external player
     };
 
     /// <summary>
