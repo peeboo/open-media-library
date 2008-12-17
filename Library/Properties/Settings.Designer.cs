@@ -963,5 +963,17 @@ namespace Library.Properties {
                 this["UseOnScreenAlphaJumper"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StartPageSubFilter {
+            get {
+                return ((string)(this["StartPageSubFilter"]));
+            }
+            set {
+                this["StartPageSubFilter"] = value;
+            }
+        }
     }
 }

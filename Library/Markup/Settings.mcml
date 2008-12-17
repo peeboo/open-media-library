@@ -20,7 +20,7 @@
       <Command Name="SaveSettings"
                Description="Save Settings"/>
       <Command Name="AboutOML"
-               Description="About OML"/>
+               Description="About OML"/>      
 
       <Choice Name="Tabs">
         <Options>
@@ -39,7 +39,6 @@
 
       <ScrollingData Name="ScrollDataFilters"/>
       <ScrollingHandler Name="ScrollHandlerFilters"/>
-      
     </Locals>
 
     <Properties>
@@ -47,10 +46,10 @@
       <a:Settings Name="Settings" Settings="$Required" />
       <a:OMLApplication Name="Application" OMLApplication="$Required"/>
       <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
-      <a:UISettings Name="UISettings" UISettings="$Required" />
+      <a:UISettings Name="UISettings" UISettings="$Required" />      
     </Properties>
 
-    <Rules>
+    <Rules>           
       <!-- Setup the default visibility rules -->
       <Changed Source="[SaveSettings.Invoked]">
         <Actions>
@@ -185,6 +184,28 @@
       <Condition Source="[UseExternalPlayer.Checked.Value]" SourceValue="true" Target="[ExternalPlayer.Visible]" Value="true" />
       <Condition Source="[UseExternalPlayer.Checked.Value]" SourceValue="false" Target="[ExternalPlayer.Visible]" Value="false" />
 
+      <Changed Source="[Settings.StartPage.Chosen]">
+        <Actions>
+          <Invoke Target="[Settings.BuildSubFilterOptions]"  ResultTarget="[SubFilter.Model]" />
+        </Actions>
+      </Changed>
+
+      <!-- begin show and hide subfilter label when choosing home -->
+      <Condition Source="[Settings.StartPage.Chosen!cor:String]" SourceValue="OML Home">
+        <Actions>
+          <Set Target="[SubFilterLabel.Visible]" Value="false" />
+          <Set Target="[SubFilter.Visible]" Value="false" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Settings.StartPage.Chosen!cor:String]" SourceValue="OML Home" ConditionOp="NotEquals">
+        <Actions>
+          <Set Target="[SubFilterLabel.Visible]" Value="true" />
+          <Set Target="[SubFilter.Visible]" Value="true" />
+        </Actions>
+      </Condition>
+      <!-- end show and hide subfilter label when choosing home-->
+
       <Default Target="[ScrollHandlerUI.ScrollingData]" Value="[ScrollDataUI]"/>
       <Default Target="[ScrollHandlerFilters.ScrollingData]" Value="[ScrollDataFilters]"/>
     </Rules>
@@ -250,7 +271,13 @@
                       <Panel Layout="VerticalFlow">
                         <Children>
                           <Text Content="Start Page" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <c:SimpleSpinner Name="StartPage" Model="[Settings.StartPage]" />
+                          <Panel Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleSpinner Name="StartPage" Model="[Settings.StartPage]" />
+                              <Text Content="Filter" Name="SubFilterLabel" Color="White" Font="font://me:SmallFont" Margins="15,10,10,0"/>
+                              <c:SimpleSpinner Name="SubFilter" Model="[Settings.StartPageSubFilter]" />
+                            </Children>
+                          </Panel>
                         </Children>
                       </Panel>
 

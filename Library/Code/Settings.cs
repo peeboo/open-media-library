@@ -114,6 +114,7 @@ namespace Library
             {
                 _omlSettings.MovieSort = _movieSort.Chosen as string;
                 _omlSettings.StartPage = _startPage.Chosen as string;
+                _omlSettings.StartPageSubFilter = _startPageSubFilter.Chosen as string;
                 _omlSettings.GalleryCoverArtRows = System.Convert.ToInt32(_coverArtRows.Chosen as string);
                 _omlSettings.CoverArtSpacingVertical = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
                 _omlSettings.CoverArtSpacingHorizontal = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
@@ -181,6 +182,30 @@ namespace Library
             _virtualDrive.Options = items;
             _virtualDrive.Chosen = _omlSettings.VirtualDiscDrive;
         }
+        
+
+        public Choice BuildSubFilterOptions()
+        {
+            Choice subFilterChoice = new Choice();
+
+            List<string> subFilters = new List<string>();
+
+            subFilters.Add("");
+
+            MovieGallery gallery = new MovieGallery(OMLApplication.Current.Titles, "Temp");
+
+            if (gallery.Filters.ContainsKey(_startPage.Chosen.ToString()))
+            {
+                Filter filter = gallery.Filters[_startPage.Chosen.ToString()];
+                foreach (GalleryItem item in filter.Items)
+                    subFilters.Add(item.Name);
+            }
+
+            subFilterChoice.Options = subFilters;
+
+            return subFilterChoice;
+        }
+
         private void SetupMovieSettings()
         {
             List<string> viewItems = new List<string>();
@@ -223,6 +248,13 @@ namespace Library
             _startPage.Options = starPageItems;
             _startPage.Chosen = _omlSettings.StartPage;
 
+            _startPageSubFilter = BuildSubFilterOptions();
+
+            if (!string.IsNullOrEmpty(_omlSettings.StartPageSubFilter) &&
+                _startPageSubFilter.Options.Contains(_omlSettings.StartPageSubFilter))
+            {
+                _startPageSubFilter.Chosen = _omlSettings.StartPageSubFilter;
+            }
 
             List<string> rowItems = new List<string>();
             for (int ndx = 1; ndx <= 10; ++ndx)
@@ -436,6 +468,11 @@ namespace Library
             get { return _startPage; }
         }
 
+        public Choice StartPageSubFilter
+        {
+            get { return _startPageSubFilter; }
+        }
+
         public Choice CoverArtRows
         {
             get { return _coverArtRows; }
@@ -546,6 +583,7 @@ namespace Library
         BooleanChoice _useOriginalCoverArt = new BooleanChoice();
         BooleanChoice _useOnScreenAlpha = new BooleanChoice();
         Choice _startPage = new Choice();
+        Choice _startPageSubFilter;
         Choice _uiLanguage = new Choice();
         Choice _ImageMountingSelection = new Choice();
         Choice _trailersDefinition = new Choice();

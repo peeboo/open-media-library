@@ -91,6 +91,11 @@ namespace Library
             }
         }
 
+        public TitleCollection Titles
+        {
+            get { return _titles; }
+        }
+
         public OMLApplication()
             : this(null, null)
         {
@@ -172,8 +177,18 @@ namespace Library
                     }
                     else
                     {
-                        // assume it's a filter page (Genre, Actor, etc)
-                        GoToSelectionList(new MovieGallery(_titles, Filter.Home), Properties.Settings.Default.StartPage);
+                        // see if they've selected a subfilter
+                        if (!string.IsNullOrEmpty(Properties.Settings.Default.StartPageSubFilter))
+                        {
+                            GoToSelectionList(new MovieGallery(_titles, Filter.Home), 
+                                                Properties.Settings.Default.StartPage,
+                                                Properties.Settings.Default.StartPageSubFilter);
+                        }
+                        else
+                        {
+                            // assume it's a filter page (Genre, Actor, etc)
+                            GoToSelectionList(new MovieGallery(_titles, Filter.Home), Properties.Settings.Default.StartPage);
+                        }
                     }
                     return;
                 case "Settings":
@@ -268,7 +283,19 @@ namespace Library
 
         public void GoToSelectionList(MovieGallery gallery, string filterName)
         {
-            if (gallery != null && gallery.Filters.ContainsKey(filterName))
+            GoToSelectionList(gallery, filterName, null);
+        }
+        
+        public void GoToSelectionList(MovieGallery gallery, string filterName, string subFilter)
+        {
+            if (gallery != null &&
+                gallery.Filters.ContainsKey(filterName) &&
+                !string.IsNullOrEmpty(subFilter))
+            {
+                Filter filter = gallery.Filters[filterName];
+                GoToMenu(filter.CreateGallery(subFilter));
+            }
+            else if (gallery != null && gallery.Filters.ContainsKey(filterName))
             {
                 Filter filter = gallery.Filters[filterName];
                 string listName = gallery.Title + " > " + filter.Name;
