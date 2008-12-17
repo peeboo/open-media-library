@@ -69,7 +69,7 @@
       <Value Profile="(Default)">3</Value>
     </Setting>
     <Setting Name="GalleryListRows" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">8</Value>
+      <Value Profile="(Default)">7</Value>
     </Setting>
     <Setting Name="CoverArtWidth" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">141</Value>

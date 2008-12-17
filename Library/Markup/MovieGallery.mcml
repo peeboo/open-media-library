@@ -173,6 +173,28 @@
       </Actions>
     </Changed>
 
+    <!-- change the color and scale if selected -->
+    <Rule ConditionLogicalOp="Or">
+      <Conditions>
+        <Equality Source="[Input.DeepMouseFocus]" Value="true"/>
+        <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+      </Conditions>
+      <Actions>        
+        <PlayAnimation Animation="animation://me:SectionGraphicFocusOn" Target="[GalleryContainer]" />
+      </Actions>
+    </Rule>
+
+    <Rule ConditionLogicalOp="And">
+      <Conditions>
+        <Equality Source="[Input.DeepMouseFocus]" Value="false"/>
+        <Equality Source="[Input.DeepKeyFocus]" Value="false"/>
+      </Conditions>
+      <Actions>
+        <PlayAnimation Animation="animation://me:SectionGraphicFocusOff" Target="[GalleryContainer]" />
+      </Actions>
+    </Rule>
+    <!-- end change color and scale -->
+
   </Rules>
 
   <Content>
@@ -182,7 +204,7 @@
         <!-- Put in a scroller so that if we repeat, the row will scroll. -->
         <Scroller Name="GalleryScroller"
                   Orientation="Horizontal"
-                  ScrollingData="[ScrollingData]">
+                  ScrollingData="[ScrollingData]">          
           <Children>            
 
             <!-- Hook up our list to the repeater.  -->
@@ -196,7 +218,8 @@
                 <Animation Type="Move">
                     <Keyframes>
                         <PositionKeyframe Time="0" RelativeTo="Current" />
-                        <PositionKeyframe Time=".2" RelativeTo="Final" />
+                        <PositionKeyframe Time=".3" RelativeTo="Final" Value=".8,.8,.8" />
+                        <PositionKeyframe Time=".4" RelativeTo="Final" />
                     </Keyframes>
                 </Animation>
               </Animations>
@@ -519,7 +542,7 @@
             <Actions>
                 <!-- Play an animation on the cover target item. -->
                 <PlayAnimation Target="[ItemPanel]" Animation="[LostFocus]"/>
-
+              <Set Target="[Caption.Color]" Value="color://s:Text.SectionActive" />
             </Actions>
         </Condition>
     </Rules>
@@ -529,7 +552,7 @@
             <Children>
                 <Panel Name="ImagePanel" Margins="0,0,0,0">
                     <Children>
-                        <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:ListFont" Color="White" Margins="20,10,20,10" />
+                        <Text Name="Caption" Content="[GalleryItem.Caption]" Font="font://s:ListFont" Color="color://s:Text.SectionActive" Margins="20,10,20,10" />
                         <Graphic Name="MenuCover" Content="[GalleryItem.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint">
                             <!--<Children>
                                 <Panel Layout="VerticalFlow">

@@ -3,8 +3,7 @@
 	  xmlns:sys="assembly://mscorlib/System"
 	  xmlns:styles="resx://Library/Library.Resources/Styles"
 	  xmlns:core="resx://Library/Library.Resources/CoreControls"
-    xmlns:c="resx://Library/Library.Resources/Controls"
-    xmlns:alpha="resx://Library/Library.Resources/AlphaFilter"
+    xmlns:c="resx://Library/Library.Resources/Controls"    
 	  xmlns:me="Me">
 
   <Aggregate Source="resx://Library/Library.Resources/Base" />
@@ -20,7 +19,8 @@
     <Locals>
       <ScrollingData Name="ScrollingData"/>
       <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true" HandlePageCommands="true" HandlePageKeys="true"/>
-      <Timer Name="ClearTimer" AutoRepeat="false" Interval="5000" Enabled="false"/>      
+      <Timer Name="ClearTimer" AutoRepeat="false" Interval="5000" Enabled="false"/>
+      <z:GroupColor Name="GroupColor" />
     </Locals>
 
     <Rules>
@@ -37,6 +37,30 @@
         </Actions>
       </Rule>
 
+      <!-- change the color and scale if selected -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Input.DeepMouseFocus]" Value="true"/>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[GroupColor.Color]" Value="color://styles:Text.SectionActive" />
+          <PlayAnimation Animation="animation://me:SectionFocusOn" Target="[Scroll]" />
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Input.DeepMouseFocus]" Value="false"/>
+          <Equality Source="[Input.DeepKeyFocus]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[GroupColor.Color]" Value="color://styles:Text.SectionNotActive" />
+          <PlayAnimation Animation="animation://me:SectionFocusOff" Target="[Scroll]" />
+        </Actions>
+      </Rule>
+      <!-- end change color and scale -->
+
     </Rules>
 
     
@@ -48,7 +72,7 @@
         </Children>
       </Panel>-->
       
-      <Scroller Name="Scroll"  Orientation="Vertical" FadeSize="5" ScrollingData="[ScrollingData]" Navigation="ContainHorizontal" >
+      <Scroller Name="Scroll"  Orientation="Vertical" FadeSize="5" ScrollingData="[ScrollingData]" Navigation="ContainHorizontal">
         <Children>          
         <Repeater Name="Repeater" Navigation="RememberFocus" DividerName="Divider" DefaultFocusIndex="0">
           <Layout>
@@ -56,11 +80,11 @@
           </Layout>
           <Content>
             <!--<c:SimpleButton Command="[RepeatedItem!z:FilterCommand]" Text="[RepeatedItem!z:FilterCommand.Caption]" Size="180,51"/>-->
-            <me:CategoryButton Category="[RepeatedItem!z:FilterCommand]" Choice="[Page.Categories]"/>            
+            <me:CategoryButton Category="[RepeatedItem!z:FilterCommand]" GroupColor="[GroupColor]" Choice="[Page.Categories]"/>            
           </Content>
         </Repeater>
 
-          <alpha:AlphaFilter MovieGallery="[Page]" Visible="[UISettings.Gallery.UseOnScreenAlphaFiltering]" />          
+               
           
         </Children>
       </Scroller>
@@ -89,6 +113,7 @@
       <Color Name="LabelPressedColor" Color="Yellow"/>
 
       <Image Name="BackgroundImageList" Source="resx://Library/Library.Resources/ButtonLeftFocus" NineGrid="4,4,4,4"/>
+      <z:GroupColor Name="GroupColor" GroupColor="$Required" />
     </Properties>
 
     <Locals>
@@ -104,6 +129,17 @@
       <!-- runtime.                                                 -->
       <Binding Source="[Category.Caption]" Target="[Label.Content]"/>
       <Binding Source="[Category]" Target="[Clicker.Command]"/>
+
+      <Rule>
+        <Conditions>
+          <Modified Source="[GroupColor.Color]"/>
+          <Equality Source="[Label.Color]" ConditionOp="NotEquals" Value="color://styles:Text.Selected"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Color]" Value="[GroupColor.Color]" />
+        </Actions>
+      </Rule>
+      
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
      
@@ -127,7 +163,7 @@
         <Actions>
           <!--<Set Target="[Background.Content]" Value="[BackgroundHoverColor]"/>-->
           <PlayAnimation Target="[Label]" Animation="animation://me:GotFocusList" />
-          <Set Target="[Label.Color]" Value="White"/>
+          <Set Target="[Label.Color]" Value="color://styles:Text.Selected"/>
           <PlaySound Sound="sound://me:Focus" />
         </Actions>
       </Condition>
@@ -137,7 +173,7 @@
         <Actions>
           <!--<Set Target="[Background.Content]" Value="[BackgroundHoverColor]"/>-->
           <PlayAnimation Target="[Background]" Animation="animation://me:GotFocusList" />
-          <Set Target="[Label.Color]" Value="White"/>
+          <Set Target="[Label.Color]" Value="color://styles:Text.Selected"/>
         </Actions>
       </Condition>
 
@@ -145,7 +181,7 @@
         <Actions>
           <!-- Play an animation on the cover target item. -->
           <PlayAnimation Target="[Label]" Animation="animation://me:LostFocusList"/>
-
+          <Set Target="[Label.Color]" Value="[GroupColor.Color]"/>          
         </Actions>
       </Condition>
       

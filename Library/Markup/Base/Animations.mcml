@@ -66,4 +66,32 @@
     </Keyframes>
   </Animation>
 
+  <Animation Name="SectionFocusOff">
+    <Keyframes>
+      <ScaleKeyframe Time="0" Value="1.05,1.05,1.05"/>
+      <ScaleKeyframe Time="0.2" Value="1,1,1"/>      
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="SectionFocusOn">
+    <Keyframes>
+      <ScaleKeyframe Time="0" Value="1,1,1"/>
+      <ScaleKeyframe Time="0.2" Value="1.05,1.05,1.05"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="SectionGraphicFocusOn">
+    <Keyframes>
+      <AlphaKeyframe Time="0" Value="0.25"/>
+      <AlphaKeyframe Time="0.2" Value="1"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="SectionGraphicFocusOff">
+    <Keyframes>
+      <AlphaKeyframe Time="0" Value="1"/>
+      <AlphaKeyframe Time="0.2" Value=".25"/>
+    </Keyframes>
+  </Animation>
+
 </Mcml>
