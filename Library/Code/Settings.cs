@@ -209,8 +209,9 @@ namespace Library
         private void SetupMovieSettings()
         {
             List<string> viewItems = new List<string>();
-            viewItems.Add("Cover Art");
-            viewItems.Add("List");
+            viewItems.Add(GalleryView.CoverArt);
+            viewItems.Add(GalleryView.CoverArtWithAlpha);
+            viewItems.Add(GalleryView.List);
 #if LAYOUT_V2
             viewItems.Add("Folder View");
 #endif

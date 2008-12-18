@@ -14,7 +14,10 @@ namespace Library
     /// </summary>
     public class FilterCommand : Command
     {
-        protected string FilterName;
+        /// <summary>
+        /// Implemented has an accessor so a derived class can have access to update it
+        /// </summary>
+        protected string FilterName { get; set; }
 
         public FilterCommand(Filter filter)
             : base()
@@ -70,6 +73,7 @@ namespace Library
         public const string Home = "OML Home";
         public const string VideoFormat = "Format";
         public const string Trailers = "Trailers";
+        public const string Alpha = "Alpha";
 
         public const string AllItems = " All ";
 

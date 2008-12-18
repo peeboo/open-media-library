@@ -18,6 +18,46 @@ namespace Library
     {       
         #region Public Properties
 
+        private List<LabeledList> labeledLists = null;
+
+        public List<LabeledList> LabeledLists
+        {
+            get
+            {
+                if (labeledLists == null)
+                {
+                    Filter alphaFilter = null;
+
+                    if (!Filters.TryGetValue(Filter.Alpha, out alphaFilter))
+                    {
+                        OMLApplication.DebugLine("[MovieGallery][LabeledLists] Alpha filter hit when no alpha filters existed");
+                        return new List<LabeledList>(0);
+                    }
+
+                    labeledLists = new List<LabeledList>(alphaFilter.ItemMovieRelation.Keys.Count);                                        
+                    List<string> keys = new List<string>(alphaFilter.ItemMovieRelation.Keys.Count);
+                    
+                    foreach (string key in alphaFilter.ItemMovieRelation.Keys)
+                        keys.Add(key);
+
+                    keys.Sort();
+
+                    foreach (string filterKey in keys)                    
+                    {
+                        MovieGallery gallery = alphaFilter.CreateGallery(filterKey);
+                        if (gallery != null &&
+                            gallery.Movies != null &&
+                            gallery.Movies.Count != 0)
+                        {
+                            labeledLists.Add(new LabeledList(filterKey, gallery.Movies));
+                        }                        
+                    }
+                }
+
+                return labeledLists;
+            }
+        }
+
         public int NumberOfPages 
         {
             get { return numberOfPages; } 
@@ -288,7 +328,8 @@ namespace Library
             if (Properties.Settings.Default.ShowFilterParentalRating) _filters.Add(Filter.ParentRating, new Filter(Filter.ParentRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
             if (Properties.Settings.Default.ShowFilterTags) _filters.Add(Filter.Tags, new Filter(Filter.Tags, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
             if (Properties.Settings.Default.ShowFilterCountry) _filters.Add(Filter.Country, new Filter(Filter.Country, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
-            if (Properties.Settings.Default.ShowFilterTrailers) _filters.Add(Filter.Trailers, new Filter(Filter.Trailers, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
+            if (Properties.Settings.Default.ShowFilterTrailers) _filters.Add(Filter.Trailers, new Filter(Filter.Trailers, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));            
+            if ( Properties.Settings.Default.MovieView == GalleryView.CoverArtWithAlpha) _filters.Add(Filter.Alpha, new Filter(Filter.Alpha, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
             
             _jumpInListText = new EditableText(this);
             _jumpInListText.Value = String.Empty;
@@ -331,6 +372,50 @@ namespace Library
         public int JumpToPosition
         {
             get { return _jumpToPosition; }
+        }
+
+        public void JumpToLetter(string jumpString, IList list)
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                if (jumpString.Length == 0)
+                    return;
+
+                List<LabeledList> labels = list as List<LabeledList>;
+
+                if (labels == null)
+                    return;
+
+                Utilities.DebugLine("[MovieGallery] JumpToMovie: {0}", jumpString);
+                foreach (LabeledList m in list)
+                {
+                    if (m.FilterLabel == jumpLetter)
+                    {
+                        int focusedItemIndex = -1;
+
+                        for (int x = 0; x < labels.Count; x++)
+                        {
+                            if (labels[x].FilterLabel.Equals(FocusedItem.SortName[0].ToString(), StringComparison.OrdinalIgnoreCase))
+                            {
+                                focusedItemIndex = x;
+                                break;
+                            }
+                        }
+
+                        if (focusedItemIndex < 0)
+                        {
+                            focusedItemIndex = 0;
+                        }
+
+                        _jumpToPosition = labels.IndexOf(m);
+                        _relativeJumpToPosition = _jumpToPosition - focusedItemIndex;
+
+                        //Utilities.DebugLine("[MovieGallery] JumpToString: Found movie {0} pos {1} relpos {2}", m.Name, _jumpToPosition, _relativeJumpToPosition);
+                        FirePropertyChanged("JumpToPosition");
+                        break;
+                    }
+                }
+            });
         }
 
         public void JumpToMovie(string jumpString, IList list)
@@ -459,6 +544,16 @@ namespace Library
             if (Filters.ContainsKey(Filter.Runtime))
             {
                 AddRuntimeFilter(movie);
+            }
+
+            if (Filters.ContainsKey(Filter.Alpha))
+            {
+                string firstChar = title.SortName.Substring(0, 1).ToUpper();
+
+                if (((int)firstChar[0]) < 65 || ((int)firstChar[0]) > 90)
+                    firstChar = "#";
+
+                Filters[Filter.Alpha].AddMovie(firstChar, movie);
             }
         }
 
@@ -652,13 +747,13 @@ namespace Library
 
         private int numberOfPages = 0;      
         #endregion
-   }
+   } 
 
-    public class GalleryView
-    {
-        public const string List = "List";
-    }
-
+    /// <summary>
+    /// Home command is based off the FilterCommands so it can sit as a top level menu
+    /// For some reason MCML won't let this be it's own class and share in the array - by deriving
+    /// from FilterCommand I have access to the "Caption" property and can update it through the Filtername variable
+    /// </summary>
     public class HomeCommand : FilterCommand
     {      
         public HomeCommand(string name)

@@ -1,9 +1,9 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
 	  xmlns:a="assembly://Library/Library"
 	  xmlns:s="resx://Library/Library.Resources/Styles"
-      xmlns:filter="resx://Library/Library.Resources/FilterList"
-      xmlns:gallery="resx://Library/Library.Resources/MovieGallery"
+      xmlns:filter="resx://Library/Library.Resources/FilterList"      
       xmlns:c="resx://Library/Library.Resources/Controls"
+      xmlns:view="resx://Library/Library.Resources/Views"
 	  xmlns:cor="assembly://MSCorLib/System"
       xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
       xmlns:alpha="resx://Library/Library.Resources/AlphaFilter"
@@ -56,6 +56,9 @@
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRuntime.Visible]" />
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRating.Visible]" />
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelSummary.Visible]" />-->
+
+          <Condition Source="[GalleryView]" SourceValue="Cover Art" Target="[ViewCoverArt.Visible]" Value="true" />
+          <Condition Source="[GalleryView]" SourceValue="Cover Art With Alpha" Target="[ViewCoverArtWithAlpha.Visible]" Value="true" />
 
           <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[BottomBar.Visible]" />
 
@@ -162,6 +165,7 @@
                     </LayoutInput>
                   </Panel>
                   
+                  <!-- Bottom Description Bar -->
                   <Panel Name="BottomBar" Layout="Form">                    
                     <LayoutInput>
                       <FormLayoutInput Left="Parent,0,20" Bottom="Parent, 1" Top="Parent, 1,-165" Right="PageStats,0,-20"/>
@@ -326,7 +330,8 @@
                   <!-- GalleryPanel -->
                   <Panel Name="GalleryPanel" MouseInteractive="true" FocusOrder="0">
                     <Children>
-                      <gallery:Gallery Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" />
+                      <view:CoverArtWithAlpha Name="ViewCoverArtWithAlpha" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" ScrollingData="[ScrollingData]" UISettings="[UISettings]" Visible="False"/>
+                      <view:CoverArt Name="ViewCoverArt" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
                     </Children>
 
                     <LayoutInput>
