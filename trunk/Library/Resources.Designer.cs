@@ -333,6 +333,20 @@ namespace Library {
             }
         }
         
+        internal static byte[] CoverArt {
+            get {
+                object obj = ResourceManager.GetObject("CoverArt", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] CoverArtWithAlpha {
+            get {
+                object obj = ResourceManager.GetObject("CoverArtWithAlpha", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] DetailsPage {
             get {
                 object obj = ResourceManager.GetObject("DetailsPage", resourceCulture);
@@ -600,13 +614,6 @@ namespace Library {
         internal static System.IO.UnmanagedMemoryStream MiniSelect {
             get {
                 return ResourceManager.GetStream("MiniSelect", resourceCulture);
-            }
-        }
-        
-        internal static byte[] MovieGallery {
-            get {
-                object obj = ResourceManager.GetObject("MovieGallery", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         
@@ -968,6 +975,13 @@ namespace Library {
         internal static byte[] TranscodingMessage {
             get {
                 object obj = ResourceManager.GetObject("TranscodingMessage", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] Views {
+            get {
+                object obj = ResourceManager.GetObject("Views", resourceCulture);
                 return ((byte[])(obj));
             }
         }

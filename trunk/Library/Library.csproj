@@ -113,6 +113,8 @@
     <Compile Include="Code\TreeView.cs" />
     <Compile Include="Code\UISettings.cs" />
     <Compile Include="Code\Filters.cs" />
+    <Compile Include="Code\Views\LabeledList.cs" />
+    <Compile Include="Code\Views\MovieViews.cs" />
     <Compile Include="Code\VirtualDirectory.cs" />
     <Compile Include="Code\TitleCollectionAPIProxy.cs" />
     <Compile Include="I18nResources.Designer.cs">
@@ -193,7 +195,6 @@
     <Content Include="Markup\LayoutV2\ImageItem.mcml" />
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\MovieDetails.mcml" />
-    <Content Include="Markup\MovieGallery.mcml" />
     <Content Include="Markup\LayoutV2\NewMenu.mcml" />
     <Content Include="Markup\RadioButtonGroup.mcml" />
     <Content Include="Markup\Scan Wizard\ScanNewItems.mcml" />
@@ -209,6 +210,9 @@
     <Content Include="Markup\Styles.mcml" />
     <Content Include="Markup\TestBackground.mcml" />
     <Content Include="Markup\Trailers.mcml" />
+    <Content Include="Markup\Views\CoverArt.mcml" />
+    <Content Include="Markup\Views\CoverArtWithAlpha.mcml" />
+    <Content Include="Markup\Views\Views.mcml" />
     <Content Include="Registration.xml" />
     <Content Include="Images\Application.png" />
     <None Include="app.config" />

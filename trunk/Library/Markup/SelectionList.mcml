@@ -2,10 +2,10 @@
 	  xmlns:a="assembly://Library/Library"
 	  xmlns:s="resx://Library/Library.Resources/Styles"
     xmlns:filter="resx://Library/Library.Resources/FilterList"
-    xmlns:gallery="resx://Library/Library.Resources/MovieGallery"
 	  xmlns:cor="assembly://MSCorLib/System"
     xmlns:col="assembly://MSCorLib/System.Collections"
     xmlns:c="resx://Library/Library.Resources/Controls"
+    xmlns:view="resx://Library/Library.Resources/Views"
     xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
 	  xmlns:me="Me">
 
@@ -97,8 +97,7 @@
 
           <Panel Name="GalleryPanel" MouseInteractive="true">
             <Children>
-              <gallery:Gallery Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[List]" JumpValue="[JumpValue]" UISettings="[UISettings]">
-              </gallery:Gallery>
+              <view:CoverArt Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[List]" JumpValue="[JumpValue]" UISettings="[UISettings]" />
             </Children>
 
             <LayoutInput>

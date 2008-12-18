@@ -272,7 +272,17 @@ namespace Library
         {
             DebugLine("[OMLApplication] GoToMenu(Gallery, #{0} Movies)", gallery.Movies.Count);
             Dictionary<string, object> properties = CreateProperties(true, false, gallery);
-            properties["GalleryView"] = Properties.Settings.Default.MovieView;
+
+            if (Properties.Settings.Default.MovieView == GalleryView.CoverArtWithAlpha &&
+                gallery.Movies.Count < 30)
+            {
+                // alpha falls back to cover art view if there's not enough items
+                properties["GalleryView"] = GalleryView.CoverArt;
+            }
+            else
+            {
+                properties["GalleryView"] = Properties.Settings.Default.MovieView;
+            }
 
             if (_session != null)
             {
