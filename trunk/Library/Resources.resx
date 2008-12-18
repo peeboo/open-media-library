@@ -517,6 +517,9 @@
   <data name="CoverArtWithAlpha" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\views\coverartwithalpha.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="ListView" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\views\listview.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Views" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\views\views.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

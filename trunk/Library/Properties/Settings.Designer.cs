@@ -37,7 +37,7 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Cover Art With Alpha")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Cover Art")]
         public string MovieView {
             get {
                 return ((string)(this["MovieView"]));

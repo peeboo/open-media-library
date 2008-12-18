@@ -604,6 +604,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] ListView {
+            get {
+                object obj = ResourceManager.GetObject("ListView", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] Menu {
             get {
                 object obj = ResourceManager.GetObject("Menu", resourceCulture);

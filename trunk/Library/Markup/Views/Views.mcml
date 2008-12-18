@@ -5,5 +5,6 @@
 
   <Aggregate Source="resx://Library/Library.Resources/CoverArtWithAlpha" />
   <Aggregate Source="resx://Library/Library.Resources/CoverArt"/>
+  <Aggregate Source="resx://Library/Library.Resources/ListView"/>
 
 </Mcml>
