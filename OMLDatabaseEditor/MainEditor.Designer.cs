@@ -77,11 +77,12 @@ namespace OMLDatabaseEditor
             this.groupMetadata = new DevExpress.XtraNavBar.NavBarGroup();
             this.groupImport = new DevExpress.XtraNavBar.NavBarGroup();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
+            this.newMovieSplitButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.fromScratchToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -422,7 +423,7 @@ namespace OMLDatabaseEditor
             // 
             this.navBarGroupControlContainer1.Controls.Add(this.lbMovies);
             this.navBarGroupControlContainer1.Name = "navBarGroupControlContainer1";
-            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(173, 457);
+            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(175, 457);
             this.navBarGroupControlContainer1.TabIndex = 0;
             // 
             // lbMovies
@@ -433,7 +434,7 @@ namespace OMLDatabaseEditor
             this.lbMovies.Location = new System.Drawing.Point(0, 0);
             this.lbMovies.Name = "lbMovies";
             this.lbMovies.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lbMovies.Size = new System.Drawing.Size(173, 457);
+            this.lbMovies.Size = new System.Drawing.Size(175, 457);
             this.lbMovies.TabIndex = 0;
             this.lbMovies.ValueMember = "InternalItemID";
             this.lbMovies.SelectedIndexChanged += new System.EventHandler(this.lbMovies_SelectedIndexChanged);
@@ -512,23 +513,14 @@ namespace OMLDatabaseEditor
             this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newToolStripButton,
+            this.newMovieSplitButton,
             this.saveToolStripButton,
             this.toolStripSeparator,
             this.helpToolStripButton});
             this.toolStrip.Location = new System.Drawing.Point(3, 24);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(87, 25);
+            this.toolStrip.Size = new System.Drawing.Size(96, 25);
             this.toolStrip.TabIndex = 2;
-            // 
-            // newToolStripButton
-            // 
-            this.newToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.newToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripButton.Image")));
-            this.newToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.newToolStripButton.Name = "newToolStripButton";
-            this.newToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.newToolStripButton.Text = "&New Movie";
             // 
             // saveToolStripButton
             // 
@@ -553,6 +545,28 @@ namespace OMLDatabaseEditor
             this.helpToolStripButton.Name = "helpToolStripButton";
             this.helpToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.helpToolStripButton.Text = "He&lp";
+            // 
+            // defaultLookAndFeel1
+            // 
+            this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
+            // 
+            // newMovieSplitButton
+            // 
+            this.newMovieSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.newMovieSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fromScratchToolStripMenuItem1});
+            this.newMovieSplitButton.Image = global::OMLDatabaseEditor.Properties.Resources.NewDocumentHS;
+            this.newMovieSplitButton.ImageTransparentColor = System.Drawing.Color.Black;
+            this.newMovieSplitButton.Name = "newMovieSplitButton";
+            this.newMovieSplitButton.Size = new System.Drawing.Size(32, 22);
+            this.newMovieSplitButton.Text = "New Movie";
+            // 
+            // fromScratchToolStripMenuItem1
+            // 
+            this.fromScratchToolStripMenuItem1.Name = "fromScratchToolStripMenuItem1";
+            this.fromScratchToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.fromScratchToolStripMenuItem1.Text = "From Scratch";
+            this.fromScratchToolStripMenuItem1.Click += new System.EventHandler(this.fromScratchToolStripMenuItem_Click);
             // 
             // MainEditor
             // 
@@ -616,7 +630,6 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton newToolStripButton;
         private System.Windows.Forms.ToolStripButton saveToolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
         private System.Windows.Forms.ToolStripButton helpToolStripButton;
@@ -647,6 +660,8 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem miMetadataMulti;
         private System.Windows.Forms.ToolStripMenuItem exportCurrentMovieToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportAllMoviesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSplitButton newMovieSplitButton;
+        private System.Windows.Forms.ToolStripMenuItem fromScratchToolStripMenuItem1;
     }
 }
 

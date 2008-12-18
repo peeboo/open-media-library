@@ -70,6 +70,11 @@ namespace OMLDatabaseEditor
                 newItem.Click += new EventHandler(this.fromMetaDataToolStripMenuItem_Click);
                 newToolStripMenuItem.DropDownItems.Add(newItem);
 
+                newItem = new ToolStripMenuItem("From " + plugin.PluginName);
+                newItem.Tag = plugin;
+                newItem.Click += new EventHandler(this.fromMetaDataToolStripMenuItem_Click);
+                newMovieSplitButton.DropDownItems.Add(newItem);
+
                 ToolStripMenuItem metadataItem = new ToolStripMenuItem("From " + plugin.PluginName);
                 metadataItem.Tag = plugin;
                 metadataItem.Click += new EventHandler(this.miMetadataMulti_Click);
