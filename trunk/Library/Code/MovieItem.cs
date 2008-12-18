@@ -434,7 +434,8 @@ namespace Library
                     _friendlyNamedDisks = new List<Disk>();
                     List<Disk> disks = this._titleObj.Disks;
                     
-                    if (OMLApplication.Current.IsExtender)
+                    bool isExtender = OMLApplication.Current.IsExtender;
+                    if (isExtender)
                         for (int i = 0; i < disks.Count; ++i)
                             foreach (MediaSource ms in (MediaSource.GetSourcesFromOptions(disks[i].Path, disks[i].ExtraOptions, true)))
                                 if (disks.Contains(ms.Disk) == false)
@@ -445,11 +446,11 @@ namespace Library
                         var ms = new MediaSource(d);
                         string name;
                         if (disks.Count == 1)
-                            name = ms.ResumeTime != null ? "Resume Movie" : "Play Movie";
+                            name = ms.ResumeTime != null && isExtender ? "Resume Movie" : "Play Movie";
                         else if (d.DVDDiskInfo != null && new MediaSource(d).DVDTitle.Main == false)
-                            name = (ms.ResumeTime != null ? "~> " : "-> ") + d.Name;
+                            name = (ms.ResumeTime != null && isExtender ? "~> " : "-> ") + d.Name;
                         else
-                            name = (ms.ResumeTime != null ? "Resume " : "Play ") + d.Name;
+                            name = (ms.ResumeTime != null && isExtender ? "Resume " : "Play ") + d.Name;
 
                         _friendlyNamedDisks.Add(new Disk(name, d.Path, d.Format, d.ExtraOptions));
                     }
