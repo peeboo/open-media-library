@@ -51,16 +51,16 @@
 
         <Rules>
             <Binding Source="[JumpValue.Value]" Target="[JumpInText.Content]" />
-            <!--<Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanel.Visible]" />
-            --><!--<Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelTitle.Visible]" />--><!--
-            <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRuntime.Visible]" />
+            <!--<Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanel.Visible]" />-->
+            <!--<Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelTitle.Visible]" />-->
+            <!--<Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRuntime.Visible]" />
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRating.Visible]" />
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelSummary.Visible]" />-->
 
-          <Condition Source="[GalleryView]" SourceValue="Cover Art" Target="[ViewCoverArt.Visible]" Value="true" />
-          <Condition Source="[GalleryView]" SourceValue="Cover Art With Alpha" Target="[ViewCoverArtWithAlpha.Visible]" Value="true" />
+            <Condition Source="[GalleryView]" SourceValue="Cover Art" Target="[ViewCoverArt.Visible]" Value="true" />
+            <Condition Source="[GalleryView]" SourceValue="Cover Art With Alpha" Target="[ViewCoverArtWithAlpha.Visible]" Value="true" />
 
-          <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[BottomBar.Visible]" />
+            <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[BottomBar.Visible]" />
 
             <Rule>
                 <Conditions>
@@ -74,19 +74,19 @@
                 </Actions>
             </Rule>
 
-          <!-- the List mode version of details can be a bit higher -->
-          <Condition Source="[GalleryView]" SourceValue="List" Target="[DetailsTop.Offset]" Value="0" />
+            <!-- the List mode version of details can be a bit higher -->
+            <Condition Source="[GalleryView]" SourceValue="List" Target="[DetailsTop.Offset]" Value="0" />
 
-          <Rule>
-            <Conditions>
-              <IsValid Source="[MovieBrowser.FocusedItem]"/>
-              <Modified Source="[FocusedIndex.Value]" InitialEvaluate="true" />
-              <Equality Source="[GalleryView]" Value="List" ConditionOp="Equals" />
-            </Conditions>
-            <Actions>
-              <Set Target="[LeftPanelThumb.Content]" Value="[MovieBrowser.FocusedItem.MenuCoverArt]" />
-            </Actions>            
-          </Rule>
+            <Rule>
+                <Conditions>
+                    <IsValid Source="[MovieBrowser.FocusedItem]"/>
+                    <Modified Source="[FocusedIndex.Value]" InitialEvaluate="true" />
+                    <Equality Source="[GalleryView]" Value="List" ConditionOp="Equals" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[LeftPanelThumb.Content]" Value="[MovieBrowser.FocusedItem.MenuCoverArt]" />
+                </Actions>            
+            </Rule>
 
             <Rule>
                 <Conditions>
@@ -104,13 +104,13 @@
                 </Actions>
             </Changed>
 
-          <Changed Source="[MovieBrowser.FocusedItem]" >
-            <Actions>
-              <Set Target="[Caption.Content]" Value="[MovieBrowser.FocusedItem.Caption]"/>
-              <Set Target="[SubCaption.Content]" Value="[MovieBrowser.FocusedItem.SubCaption]"/>
-              <Set Target="[Summary.Content]" Value="[MovieBrowser.FocusedItem.Details]"/>
-            </Actions>
-          </Changed>
+            <Changed Source="[MovieBrowser.FocusedItem]" >
+                <Actions>
+                    <Set Target="[Caption.Content]" Value="[MovieBrowser.FocusedItem.Caption]"/>
+                    <Set Target="[SubCaption.Content]" Value="[MovieBrowser.FocusedItem.SubCaption]"/>
+                    <Set Target="[Summary.Content]" Value="[MovieBrowser.FocusedItem.Details]"/>
+                </Actions>
+            </Changed>
 
             <Changed Source="[GoToNowPlaying.Invoked]" >
                 <Conditions>
