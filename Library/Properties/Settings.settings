@@ -6,7 +6,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="MovieView" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Cover Art With Alpha</Value>
+      <Value Profile="(Default)">Cover Art</Value>
     </Setting>
     <Setting Name="ActorView" Type="System.String" Scope="User">
       <Value Profile="(Default)">List</Value>

@@ -212,6 +212,7 @@
     <Content Include="Markup\Trailers.mcml" />
     <Content Include="Markup\Views\CoverArt.mcml" />
     <Content Include="Markup\Views\CoverArtWithAlpha.mcml" />
+    <Content Include="Markup\Views\ListView.mcml" />
     <Content Include="Markup\Views\Views.mcml" />
     <Content Include="Registration.xml" />
     <Content Include="Images\Application.png" />

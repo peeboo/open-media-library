@@ -209,7 +209,7 @@
 
               <!-- Hook up our list to the repeater.  -->
               <Repeater Name="GalleryRepeater"
-                        Navigation="FlowVertical"
+                        Navigation="FlowVertical,RememberFocus,PreferFocusOrder"
                         Source="[List]"
                         DiscardOffscreenVisuals="true"
                         Layout="[GridLayout]">

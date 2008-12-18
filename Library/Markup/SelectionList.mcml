@@ -97,7 +97,7 @@
 
           <Panel Name="GalleryPanel" MouseInteractive="true">
             <Children>
-              <view:CoverArt Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[List]" JumpValue="[JumpValue]" UISettings="[UISettings]" />
+              <view:ListView Name="MovieGallery" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" ScrollingData="[ScrollingData]" List="[List]" JumpValue="[JumpValue]" UISettings="[UISettings]" />
             </Children>
 
             <LayoutInput>

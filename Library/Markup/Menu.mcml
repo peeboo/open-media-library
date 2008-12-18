@@ -58,7 +58,7 @@
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelSummary.Visible]" />-->
 
             <Condition Source="[GalleryView]" SourceValue="Cover Art" Target="[ViewCoverArt.Visible]" Value="true" />
-            <Condition Source="[GalleryView]" SourceValue="List" Target="[ViewCoverArt.Visible]" Value="true" />
+            <Condition Source="[GalleryView]" SourceValue="List" Target="[ViewList.Visible]" Value="true" />
             <Condition Source="[GalleryView]" SourceValue="Cover Art With Alpha" Target="[ViewCoverArtWithAlpha.Visible]" Value="true" />
 
             <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[BottomBar.Visible]" />
@@ -333,6 +333,7 @@
                     <Children>
                       <view:CoverArtWithAlpha Name="ViewCoverArtWithAlpha" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" ScrollingData="[ScrollingData]" UISettings="[UISettings]" Visible="False"/>
                       <view:CoverArt Name="ViewCoverArt" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" Application="[Application]" ScrollingData="[ScrollingData]" GalleryView="[GalleryView]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
+                      <view:ListView Name="ViewList" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" ScrollingData="[ScrollingData]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
                     </Children>
 
                     <LayoutInput>
