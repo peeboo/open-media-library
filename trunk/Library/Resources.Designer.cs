@@ -624,6 +624,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] MovieDescription {
+            get {
+                object obj = ResourceManager.GetObject("MovieDescription", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] NewMenu {
             get {
                 object obj = ResourceManager.GetObject("NewMenu", resourceCulture);

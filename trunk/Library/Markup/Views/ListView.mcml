@@ -3,6 +3,7 @@
 	  xmlns:s="resx://Library/Library.Resources/Styles"
 	  xmlns:cor="assembly://MSCorLib/System"
       xmlns:col="assembly://MSCorLib/System.Collections"
+      xmlns:c="resx://Library/Library.Resources/Controls"
 	  xmlns:me="Me">
 
   <Aggregate Source="resx://Library/Library.Resources/Base" />
@@ -14,7 +15,7 @@
       <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
       <col:IList Name="List" IList="$Required"/>
       <EditableText Name="JumpValue"/>
-
+      <cor:Boolean Name="ShowDescription" Boolean="true" />
       <!-- An object to track which item in the list currently has focus -->
       <IntRangedValue Name="FocusedIndex"/>
 
@@ -31,6 +32,8 @@
       <Default Target="[Input.KeyInteractive]" Value="true" />
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
       <Default Target="[ScrollingData.Repeater]" Value="[GalleryRepeater]" />
+
+      <Binding Source="[ShowDescription]" Target="[DescriptionBar.Visible]" />
 
       <Changed Source="[ScrollingData.TotalPages]">
         <Actions>
@@ -119,56 +122,61 @@
     </Rules>
 
     <Content>
-      <Panel Name="GalleryContainer" Layout="Form"  MouseInteractive="true">
+      <Panel Name="GalleryContainer" Layout="VerticalFlow"  MouseInteractive="true">
 
         <Children>
-          <!-- Put in a scroller so that if we repeat, the row will scroll. -->
-          <Scroller Name="GalleryScroller"
-                    Orientation="Horizontal"
-                    ScrollingData="[ScrollingData]">
+          <Panel MaximumSize="0,450">
             <Children>
+              <!-- Put in a scroller so that if we repeat, the row will scroll. -->
+              <Scroller Name="GalleryScroller"
+                        Orientation="Horizontal"
+                        ScrollingData="[ScrollingData]">
+                <Children>
 
-              <!-- Hook up our list to the repeater.  -->
-              <Repeater Name="GalleryRepeater"
-                        Navigation="FlowVertical,RememberFocus,PreferFocusOrder"
-                        Source="[List]"
-                        DiscardOffscreenVisuals="true">
-                <Layout>
-                  <GridLayout Repeat="WhenTooBig"
-                              Rows="[UISettings.Gallery.ListRows]"
-                              Orientation="Vertical"
-                              AllowWrap="true"
-                              ReferenceSize="[UISettings.Gallery.ListItemSize]"
-                              Spacing="[UISettings.Gallery.ListSpacing]"
-                              MajorAlignment="Fill"
-                              MinorAlignment="Fill"
-                              RepeatGap="100"/>
-                </Layout>
-                <Animations>
-                  <Animation Animation="animation://s:MoveAnimation"/>
-                  <Animation Type="Move">
-                    <Keyframes>
-                      <PositionKeyframe Time="0" RelativeTo="Current" />
-                      <PositionKeyframe Time=".3" RelativeTo="Final" Value=".8,.8,.8" />
-                      <PositionKeyframe Time=".4" RelativeTo="Final" />
-                    </Keyframes>
-                  </Animation>
-                </Animations>
-                <Content>
+                  <!-- Hook up our list to the repeater.  -->
+                  <Repeater Name="GalleryRepeater"
+                            Navigation="FlowVertical,RememberFocus,PreferFocusOrder"
+                            Source="[List]"
+                            DiscardOffscreenVisuals="true">
+                    <Layout>
+                      <GridLayout Repeat="WhenTooBig"
+                                  Rows="[UISettings.Gallery.ListRows]"
+                                  Orientation="Vertical"
+                                  AllowWrap="true"
+                                  ReferenceSize="[UISettings.Gallery.ListItemSize]"
+                                  Spacing="[UISettings.Gallery.ListSpacing]"
+                                  MajorAlignment="Fill"
+                                  MinorAlignment="Fill"
+                                  RepeatGap="100"/>
+                    </Layout>
+                    <Animations>
+                      <Animation Animation="animation://s:MoveAnimation"/>
+                      <Animation Type="Move">
+                        <Keyframes>
+                          <PositionKeyframe Time="0" RelativeTo="Current" />
+                          <PositionKeyframe Time=".3" RelativeTo="Final" Value=".8,.8,.8" />
+                          <PositionKeyframe Time=".4" RelativeTo="Final" />
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                    <Content>
 
-                  <!-- For each item, repeat our RepeatedItem UI, passing in-->
-                  <!-- the index of the item and the image.                 -->
-                  <me:RepeatedItem  Index="[RepeatedItemIndex]"
-                                    FocusedIndex="[FocusedIndex]"
-                                    GalleryItem="[RepeatedItem!a:GalleryItem]"
-                                    MovieBrowser="[MovieBrowser]"
-                                    UISettings="[UISettings]" />
-                </Content>
-              </Repeater>
+                      <!-- For each item, repeat our RepeatedItem UI, passing in-->
+                      <!-- the index of the item and the image.                 -->
+                      <me:RepeatedItem  Index="[RepeatedItemIndex]"
+                                        FocusedIndex="[FocusedIndex]"
+                                        GalleryItem="[RepeatedItem!a:GalleryItem]"
+                                        MovieBrowser="[MovieBrowser]"
+                                        UISettings="[UISettings]" />
+                    </Content>
+                  </Repeater>
 
+                </Children>
+              </Scroller>
             </Children>
-          </Scroller>
+          </Panel>
 
+          <c:MovieDescription Name="DescriptionBar" MovieBrowser="[MovieBrowser]" UISettings="[UISettings]" FocusedIndex="[FocusedIndex]" ShowCoverThumbnail="true" />
         </Children>
       </Panel>
     </Content>
