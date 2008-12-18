@@ -414,7 +414,6 @@
             // 
             this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtName.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "Name", true));
             this.txtName.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "Name", true));
             this.txtName.Location = new System.Drawing.Point(120, 3);
             this.txtName.Name = "txtName";
