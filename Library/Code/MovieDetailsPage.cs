@@ -444,49 +444,7 @@ namespace Library
                 _diskChoice.Options = temp; // MCE barfs if Options is bound to empty List.
                 OMLApplication.DebugLine("[MovieDetailsPage] Details Page.LoadMovies: no disks");
             }
-            //_showDisks = new Command();
-            //_hideDisks = new Command();
-
-
-
-            //try
-            //{
-            //    if( File.Exists(item.FileLocation) )
-            //        _localMedia = new System.IO.FileInfo(item.FileLocation);
-            //}
-            //catch (Exception e)
-            //{
-            //    OMLApplication.DebugLine("Details Page.LoadMovies exception: " + e.Message);
-            //}
         }
-
-        //public void PlayMovie()
-        //{
-        //    if (_movieDetails.Disks.Count == 0)
-        //    {
-        //        Utilities.DebugLine("Movie has no disks!");
-        //    }
-        //    else if (_movieDetails.Disks.Count > 1)
-        //    {
-        //        if (_isShowingDisks)  // disk page is currently shown, so we should change to Hide Details
-        //        {
-        //            HideDisks.Invoke();
-        //            FirePropertyChanged("HideDisks");
-        //            _isShowingDisks = false;
-        //        }
-        //        else  // Otherwise show the disk list and change the text to Show Discs
-        //        {
-        //            ShowDisks.Invoke();
-        //            FirePropertyChanged("ShowDisks");
-        //            _isShowingDisks = true;
-        //        }
-        //    }
-        //    else  //only one disk, play it
-        //    {
-        //        _movieDetails.SelectedDisk = _movieDetails.Disks[0];
-        //        _movieDetails.PlayMovie();
-        //    }
-        //}
 
         public void PlayDiskWithOptions()
         {
@@ -511,80 +469,87 @@ namespace Library
                 // Play the Selected Disk
                 PlayClicked = true;
                 _movieDetails.TitleObject.SelectedDisk = _movieDetails.Disks[SelectedDisk];
-                if (_movieDetails.TitleObject.SelectedDisk.Format == VideoFormat.DVD)
+                PlayMovieOrShowDVDContextMenu();
+                _PlayClicked = false; // I use the private variable because I don't want to send an event to the MCML page
+            });
+        }
+
+        // TODO: enable this once it is present on all detail pages 1, 2, 3, and working, but only for extender sessions
+        private bool _useDVDContextMenu = false; // OMLApplication.Current.IsExtender;
+        private void PlayMovieOrShowDVDContextMenu()
+        {
+            if (_useDVDContextMenu && _movieDetails.TitleObject.SelectedDisk.Format == VideoFormat.DVD)
+            {
+                _dvdContextMenu = null;
+
+                MediaSource ms = new MediaSource(_movieDetails.TitleObject.SelectedDisk);
+                if (ms.DVDTitle != null && ms.DVDTitle.AudioTracks.Count > 0)
                 {
-                    _dvdContextMenu = null;
+                    CreateDvdContextMenuIfNeeded();
+                    ICommand cmd = new Command();
+                    cmd.Description = "Change Audio";
+                    _dvdContextMenu.AddAudioCommand(cmd);
 
-                    MediaSource ms = new MediaSource(_movieDetails.TitleObject.SelectedDisk);
-                    if (ms.DVDTitle != null && ms.DVDTitle.AudioTracks.Count > 0)
-                    {
-                        CreateDvdContextMenuIfNeeded();
-                        ICommand cmd = new Command();
-                        cmd.Description = "Change Audio";
-                        _dvdContextMenu.AddAudioCommand(cmd);
+                    IList audList = new List<string>();
+                    foreach (var audio in ms.DVDTitle.AudioTracks)
+                        audList.Add(audio.ToString());
 
-                        IList audList = new List<string>();
-                        foreach (var audio in ms.DVDTitle.AudioTracks)
-                            audList.Add(audio.ToString());
+                    Choice audChoice = new Choice();
+                    audChoice.Options = audList;
+                    _dvdContextMenu.AudioTracksChoice = audChoice;
+                }
 
-                        Choice audChoice = new Choice();
-                        audChoice.Options = audList;
-                        _dvdContextMenu.AudioTracksChoice = audChoice;
-                    }
+                if (ms.DVDTitle != null && ms.DVDTitle.Subtitles.Count > 0)
+                {
+                    CreateDvdContextMenuIfNeeded();
+                    ICommand cmd = new Command();
+                    cmd.Description = "Change Subtitle";
+                    _dvdContextMenu.AddSubtitleCommand(cmd);
 
-                    if (ms.DVDTitle != null && ms.DVDTitle.Subtitles.Count > 0)
-                    {
-                        CreateDvdContextMenuIfNeeded();
-                        ICommand cmd = new Command();
-                        cmd.Description = "Change Subtitle";
-                        _dvdContextMenu.AddSubtitleCommand(cmd);
+                    IList subList = new List<string>();
+                    subList.Add("None");
+                    foreach (var subtitle in ms.DVDTitle.Subtitles)
+                        subList.Add(subtitle.Language);
 
-                        IList subList = new List<string>();
-                        subList.Add("None");
-                        foreach (var subtitle in ms.DVDTitle.Subtitles)
-                            subList.Add(subtitle.Language);
+                    Choice subChoice = new Choice();
+                    subChoice.Options = subList;
+                    _dvdContextMenu.SubtitleTracksChoice = subChoice;
+                }
 
-                        Choice subChoice = new Choice();
-                        subChoice.Options = subList;
-                        _dvdContextMenu.SubtitleTracksChoice = subChoice;
-                    }
+                if (ms.DVDTitle != null && ms.DVDTitle.Chapters.Count > 0)
+                {
+                    CreateDvdContextMenuIfNeeded();
+                    ICommand cmd = new Command();
+                    cmd.Description = "Select Chapter";
+                    _dvdContextMenu.AddChapterCommand(cmd);
 
-                    if (ms.DVDTitle != null && ms.DVDTitle.Chapters.Count > 0)
-                    {
-                        CreateDvdContextMenuIfNeeded();
-                        ICommand cmd = new Command();
-                        cmd.Description = "Select Chapter";
-                        _dvdContextMenu.AddChapterCommand(cmd);
+                    IList chapList = new List<string>();
+                    chapList.Add("None");
+                    foreach (var chapter in ms.DVDTitle.Chapters)
+                        chapList.Add(string.Format("Chapter {0}", chapter.ChapterNumber));
 
-                        IList chapList = new List<string>();
-                        chapList.Add("None");
-                        foreach (var chapter in ms.DVDTitle.Chapters)
-                            chapList.Add(string.Format("Chapter {0}", chapter.ChapterNumber));
+                    Choice chapChoice = new Choice();
+                    chapChoice.Options = chapList;
+                    _dvdContextMenu.ChapterSelectionChoice = chapChoice;
+                }
 
-                        Choice chapChoice = new Choice();
-                        chapChoice.Options = chapList;
-                        _dvdContextMenu.ChapterSelectionChoice = chapChoice;
-                    }
+                if (_dvdContextMenu != null)
+                {
+                    ICommand playCmd = new Command();
+                    playCmd.Description = "Play Now";
+                    _dvdContextMenu.AddPlayCommand(playCmd);
 
-                    if (_dvdContextMenu != null)
-                    {
-                        ICommand playCmd = new Command();
-                        playCmd.Description = "Play Now";
-                        _dvdContextMenu.AddPlayCommand(playCmd);
-
-                        ShowDVDContextMenu = true;
-                    }
-                    else
-                    {
-                        _movieDetails.PlayMovie();
-                    }
+                    ShowDVDContextMenu = true;
                 }
                 else
                 {
                     _movieDetails.PlayMovie();
                 }
-                _PlayClicked = false; // I use the private variable because I don't want to send an event to the MCML page
-            });
+            }
+            else
+            {
+                _movieDetails.PlayMovie();
+            }
         }
     }
 
