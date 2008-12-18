@@ -57,7 +57,18 @@ namespace Library
             }
         }
 
+        private int _globalIndex;
 
+        /// <summary>
+        /// Represents this items index in the large collection
+        /// this is only used for the alpha filter view where there's a
+        /// bunch of collections
+        /// </summary>
+        public int GlobalIndex
+        {
+            get { return _globalIndex; }
+            set { _globalIndex = value; }
+        }
 
         virtual public string SortName
         {
@@ -259,12 +270,14 @@ namespace Library
         private Title _titleObj;
         private List<string> _actingRoles;
         private List<Disk> _friendlyNamedDisks;
-
+               
         public List<string> ActingRoles
         {
             get { return _actingRoles; }
             set { _actingRoles = value; }
         }
+
+        
 
         public override GalleryItem Clone(MovieGallery newOwner)
         {
