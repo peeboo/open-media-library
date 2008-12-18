@@ -52,6 +52,17 @@ namespace Library
                             labeledLists.Add(new LabeledList(filterKey, gallery.Movies));
                         }                        
                     }
+
+                    int index = 0;
+
+                    // index all the times
+                    foreach (LabeledList list in labeledLists)
+                    {
+                        foreach (MovieItem movie in list.Movies)
+                        {
+                            movie.GlobalIndex = index++;
+                        }
+                    }
                 }
 
                 return labeledLists;

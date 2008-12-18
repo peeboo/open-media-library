@@ -291,7 +291,7 @@
           <PlayAnimation Target="[ItemPanel]" Animation="[GotFocusCoverArt]" />
           <Set Target="[MenuCover.Alpha]" Value="1.0"/>
           <Set Target="[Background.Visible]" Value="true"/>
-          <Set Target="[FocusedIndex.Value]" Value="[Index.SourceValue]"/>
+          <Set Target="[FocusedIndex.Value]" Value="[GalleryItem.GlobalIndex]"/>
           <Set Target="[MovieBrowser.FocusedItem]" Value="[GalleryItem]" />
           <!-- Play an animation on the cover target item. -->
           <PlaySound Sound="sound://me:Focus" />
