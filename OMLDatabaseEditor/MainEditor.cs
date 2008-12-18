@@ -44,7 +44,9 @@ namespace OMLDatabaseEditor
             SetupNewMovieAndContextMenu();
             GetDXSkins();
 
+            _loading = true;
             LoadMovies();
+            _loading = false;
             Cursor = Cursors.Default;
         }
 
@@ -125,6 +127,11 @@ namespace OMLDatabaseEditor
             lbMovies.DataSource = _titleCollection.Source;
             if (titleEditor.EditedTitle != null)
                 lbMovies.SelectedItem = _titleCollection.GetTitleById(titleEditor.EditedTitle.InternalItemID);
+            else
+            {
+                lbMovies.SelectedIndex = -1;
+                lbMovies.SelectedItem = null;
+            }
             Cursor = Cursors.Default;
         }
 
