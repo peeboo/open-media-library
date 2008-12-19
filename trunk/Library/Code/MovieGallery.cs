@@ -484,6 +484,39 @@ namespace Library
             });
         }
 
+        /// <summary>
+        /// Creates a filter after the initial filter process - this will scan through all titles to recreate the filter
+        /// </summary>
+        /// <param name="filterName"></param>
+        public Filter CreateFilter(string filterName)
+        {
+            // check it alreayd exists 
+            if (Filters.ContainsKey(filterName))
+                return Filters[filterName];
+
+            Filter filter = new Filter(Filter.Actor, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort);
+
+            foreach (MovieItem movie in _movies)
+            {
+                AddToActorFilter(filter, movie);
+            }
+
+            _filters.Add(Filter.Actor, filter);
+
+            return filter;
+        }
+
+        private void AddToActorFilter(Filter actorFilter, MovieItem movie)
+        {
+            foreach (KeyValuePair<string, string> kvp in movie.TitleObject.ActingRoles)
+            {
+                if (kvp.Key.Trim().Length == 0)
+                    actorFilter.AddMovie("Unknown actor", movie);
+                else
+                    actorFilter.AddMovie(kvp.Key, movie);
+            }
+        }
+
         public void AddMovie(MovieItem movie)
         {
             //_moviesVirtualList.Add(movie);
@@ -506,13 +539,7 @@ namespace Library
 
             if (Filters.ContainsKey(Filter.Actor))
             {
-                foreach (KeyValuePair<string, string> kvp in title.ActingRoles)
-                {
-                    if (kvp.Key.Trim().Length == 0)
-                        Filters[Filter.Actor].AddMovie("Unknown actor", movie);
-                    else
-                        Filters[Filter.Actor].AddMovie(kvp.Key, movie);
-                }
+                AddToActorFilter(Filters[Filter.Actor], movie);            
             }
 
             if (Filters.ContainsKey(Filter.Genres))

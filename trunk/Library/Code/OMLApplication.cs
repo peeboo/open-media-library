@@ -294,12 +294,20 @@ namespace Library
         public void GoToSelectionList(MovieGallery gallery, string filterName)
         {
             GoToSelectionList(gallery, filterName, null);
-        }
+        }        
         
         public void GoToSelectionList(MovieGallery gallery, string filterName, string subFilter)
         {
-            Filter filter = null;            
-            gallery.Filters.TryGetValue(filterName, out filter);
+            Filter filter = null;
+
+            // if the filter doesn't exist we'll need to create it            
+            // todo : solomon : i'm only going to do this for actors now 
+            // but it should be considered to do it for everything
+            if (!gallery.Filters.TryGetValue(filterName, out filter)
+                && filterName == Filter.Actor)
+            {
+                filter = gallery.CreateFilter(filterName);
+            }
 
             // if there's only one item in the subfilter - just go there
             // the ALL filter is always first so ignore that

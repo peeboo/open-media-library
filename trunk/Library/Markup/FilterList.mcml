@@ -204,21 +204,6 @@
       </ColorFill>
     </Content>
 
-  </UI>
-
-  <!-- This animation will scale the image. -->
-  <Animation Name="LostFocusList" Loop="0">
-    <Keyframes>
-      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
-      <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
-    </Keyframes>
-  </Animation>
-
-  <Animation Name="GotFocusList" Loop="0" CenterPointPercent=".1,.1,0" >
-    <Keyframes>
-      <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
-      <ScaleKeyframe Time="0.2" Value="1.05,1.05,1.05" RelativeTo="Final" />
-    </Keyframes>
-  </Animation>
+  </UI>  
   
 </Mcml>
