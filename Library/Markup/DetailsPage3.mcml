@@ -47,7 +47,6 @@
       <Changed Source="[CheckWatched.Checked.Value]">
         <Actions>
           <Invoke Target="[DetailsPage.UpdateWatched]" />
-          <Set Target="[stuff.Content]" Value="things" />
         </Actions>
       </Changed>
       
@@ -231,7 +230,7 @@
             </LayoutInput>
             <Children>
               <c:SimpleCheckbox Name="CheckWatched" Checked="[DetailsPage.Watched]" Margins="0,0,8,0" />
-              <Text Name="stuff" Content="Watched" Color="color://s:NormalColor" Font="font://s:Normal" Margins="0,3,0,0"/>
+              <Text Content="Watched" Color="color://s:NormalColor" Font="font://s:Normal" Margins="0,3,0,0"/>
             </Children>
           </Panel>
 
