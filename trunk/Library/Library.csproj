@@ -189,13 +189,10 @@
     <Content Include="Markup\Control\TranscodingMessage.mcml" />
     <Content Include="Markup\Control\WaitCursor.mcml" />
     <Content Include="Markup\CoreControls.mcml" />
-    <Content Include="Markup\DetailsPage.mcml" />
-    <Content Include="Markup\DetailsPage2.mcml" />
     <Content Include="Markup\FilterList.mcml" />
     <Content Include="Markup\LayoutV2\GalleryV2.mcml" />
     <Content Include="Markup\LayoutV2\ImageItem.mcml" />
     <Content Include="Markup\Menu.mcml" />
-    <Content Include="Markup\MovieDetails.mcml" />
     <Content Include="Markup\LayoutV2\NewMenu.mcml" />
     <Content Include="Markup\RadioButtonGroup.mcml" />
     <Content Include="Markup\Scan Wizard\ScanNewItems.mcml" />
@@ -216,6 +213,10 @@
     <Content Include="Markup\Views\ListView.mcml" />
     <Content Include="Markup\Views\MovieGallery.Old.mcml" />
     <Content Include="Markup\Views\Views.mcml" />
+    <Content Include="OldMarkup\DetailsPage.mcml" />
+    <Content Include="OldMarkup\DetailsPage2.mcml" />
+    <Content Include="OldMarkup\MenuWithHorizontalBars.mcml" />
+    <Content Include="OldMarkup\MovieDetails.mcml" />
     <Content Include="Registration.xml" />
     <Content Include="Images\Application.png" />
     <None Include="app.config" />

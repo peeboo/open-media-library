@@ -494,26 +494,56 @@ namespace Library
             if (Filters.ContainsKey(filterName))
                 return Filters[filterName];
 
-            Filter filter = new Filter(Filter.Actor, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort);
+            // we'll only create the Participant filter right now
+            if (filterName != Filter.Participant)
+                return null;
+
+            Filter filter = new Filter(Filter.Participant, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort);
 
             foreach (MovieItem movie in _movies)
             {
-                AddToActorFilter(filter, movie);
+                AddToActorFilter(filter, movie, false);
+                AddToWriterFilter(filter, movie, false);
+                AddToDirectorFilter(filter, movie, false);
             }
 
-            _filters.Add(Filter.Actor, filter);
+            _filters.Add(Filter.Participant, filter);
 
             return filter;
         }
 
-        private void AddToActorFilter(Filter actorFilter, MovieItem movie)
+        private void AddToDirectorFilter(Filter directorFilter, MovieItem movie, bool allowDuplicates)
+        {
+            foreach (Person p in movie.TitleObject.Directors)
+            {
+                if (p.full_name.Trim().Length == 0)
+                    directorFilter.AddMovie("Unknown director", movie, allowDuplicates);
+                else
+                {
+                    directorFilter.AddMovie(p.full_name, movie, allowDuplicates);
+                }
+            }
+        }
+
+        private void AddToActorFilter(Filter actorFilter, MovieItem movie, bool allowDuplicates)
         {
             foreach (KeyValuePair<string, string> kvp in movie.TitleObject.ActingRoles)
             {
                 if (kvp.Key.Trim().Length == 0)
-                    actorFilter.AddMovie("Unknown actor", movie);
+                    actorFilter.AddMovie("Unknown actor", movie, allowDuplicates);
                 else
-                    actorFilter.AddMovie(kvp.Key, movie);
+                    actorFilter.AddMovie(kvp.Key, movie, allowDuplicates);
+            }
+        }
+
+        private void AddToWriterFilter(Filter writerFilter, MovieItem movie, bool allowDuplicates)
+        {
+            foreach (Person p in movie.TitleObject.Writers)
+            {
+                if (p.full_name.Trim().Length == 0)
+                    writerFilter.AddMovie("Unknown writer", movie, allowDuplicates);
+                else
+                    writerFilter.AddMovie(p.full_name, movie, allowDuplicates);
             }
         }
 
@@ -527,19 +557,16 @@ namespace Library
 
             if (Filters.ContainsKey(Filter.Director) )
             {
-                foreach (Person p in title.Directors)
-                {
-                    if (p.full_name.Trim().Length == 0)
-                        Filters[Filter.Director].AddMovie("Unknown director", movie);
-                    else
-                        Filters[Filter.Director].AddMovie(p.full_name, movie);
-                }
+                // add the movie to the directors filter
+                // since we know the movie is unique we don't need to check for duplicates
+                AddToDirectorFilter(Filters[Filter.Director], movie, true);
             }
-
 
             if (Filters.ContainsKey(Filter.Actor))
             {
-                AddToActorFilter(Filters[Filter.Actor], movie);            
+                // add the movie to the actor filter
+                // since we know the movie is unique we don't need to check for duplicates
+                AddToActorFilter(Filters[Filter.Actor], movie, true);            
             }
 
             if (Filters.ContainsKey(Filter.Genres))
