@@ -39,6 +39,8 @@
 
       <ScrollingData Name="ScrollDataFilters"/>
       <ScrollingHandler Name="ScrollHandlerFilters"/>
+
+      <Size Name="ChoiceSpinnerSize" Size="275,51" />
     </Locals>
 
     <Properties>
@@ -257,31 +259,31 @@
               <!-- ViewOptions -->
               <Panel Name="ViewOptionsPanel" Layout="VerticalFlow">
                 <Children>
-                  <Panel Layout="VerticalFlow" Navigation="Group">
+                  <Panel Layout="VerticalFlow" Navigation="Group,Column,PreferFocusOrder,RememberFocus">
                     <Children>
 
                       <Panel Layout="VerticalFlow">
                         <Children>
                           <Text Content="Movie Gallery View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <c:SimpleSpinner Name="MovieView" Model="[Settings.MovieView]" />
+                          <c:SimpleSpinner Name="MovieView" Model="[Settings.MovieView]" Size="[ChoiceSpinnerSize]" />
                         </Children>
                       </Panel>
 
                       <Panel Layout="VerticalFlow">
                         <Children>
                           <Text Content="Movie Sort" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" />
+                          <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" Size="[ChoiceSpinnerSize]"/>
                         </Children>
                       </Panel>
 
-                      <Panel Layout="VerticalFlow">
+                      <Panel Layout="VerticalFlow" Navigation="Group">
                         <Children>
                           <Text Content="Start Page" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
-                          <Panel Layout="HorizontalFlow">
+                          <Panel Layout="HorizontalFlow" Navigation="RememberFocus,PreferFocusOrder">
                             <Children>
-                              <c:SimpleSpinner Name="StartPage" Model="[Settings.StartPage]" />
+                              <c:SimpleSpinner Name="StartPage" Model="[Settings.StartPage]" Size="[ChoiceSpinnerSize]" />
                               <Text Content="Filter" Name="SubFilterLabel" Color="White" Font="font://me:SmallFont" Margins="15,10,10,0" Visible="false"/>
-                              <c:SimpleSpinner Name="SubFilter" Model="[Settings.StartPageSubFilter]" Visible="false"/>
+                              <c:SimpleSpinner Name="SubFilter" Model="[Settings.StartPageSubFilter]" Visible="false" Size="[ChoiceSpinnerSize]"/>
                             </Children>
                           </Panel>
                         </Children>
