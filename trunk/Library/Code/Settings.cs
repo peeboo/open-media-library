@@ -94,6 +94,7 @@ namespace Library
         {
             OMLApplication.ExecuteSafe(delegate
             {
+                _omlSettings.ShowFilterUnwatched = (bool)_showFilterUnwatched.Chosen;
                 _omlSettings.ShowFilterActors = (bool)_showFilterActors.Chosen;
                 _omlSettings.ShowFilterCountry = (bool)_showFilterCountry.Chosen;
                 _omlSettings.ShowFilterDateAdded = (bool)_showFilterDateAdded.Chosen;
@@ -240,6 +241,7 @@ namespace Library
 
             List<string> starPageItems = new List<string>();
             starPageItems.Add(Filter.Home);
+            starPageItems.Add(Filter.Unwatched);
             starPageItems.Add(Filter.Genres);
             starPageItems.Add(Filter.Tags);
             starPageItems.Add(Filter.UserRating);
@@ -295,18 +297,19 @@ namespace Library
 
         private void SetupFilters()
         {
-             _showFilterActors.Chosen = _omlSettings.ShowFilterActors;
-             _showFilterCountry.Chosen = _omlSettings.ShowFilterCountry;
-             _showFilterDateAdded.Chosen = _omlSettings.ShowFilterDateAdded;
-             _showFilterDirectors.Chosen = _omlSettings.ShowFilterDirectors;
-             _showFilterFormat.Chosen = _omlSettings.ShowFilterFormat;
-             _showFilterGenres.Chosen = _omlSettings.ShowFilterGenres;
-             _showFilterParentalRating.Chosen = _omlSettings.ShowFilterParentalRating;
-             _showFilterRuntime.Chosen = _omlSettings.ShowFilterRuntime;
-             _showFilterTags.Chosen = _omlSettings.ShowFilterTags;
-             _showFilterUserRating.Chosen = _omlSettings.ShowFilterUserRating;
-             _showFilterYear.Chosen = _omlSettings.ShowFilterYear;
-             _showFilterTrailers.Chosen = _omlSettings.ShowFilterTrailers;
+            _showFilterUnwatched.Chosen = _omlSettings.ShowFilterUnwatched;
+            _showFilterActors.Chosen = _omlSettings.ShowFilterActors;
+            _showFilterCountry.Chosen = _omlSettings.ShowFilterCountry;
+            _showFilterDateAdded.Chosen = _omlSettings.ShowFilterDateAdded;
+            _showFilterDirectors.Chosen = _omlSettings.ShowFilterDirectors;
+            _showFilterFormat.Chosen = _omlSettings.ShowFilterFormat;
+            _showFilterGenres.Chosen = _omlSettings.ShowFilterGenres;
+            _showFilterParentalRating.Chosen = _omlSettings.ShowFilterParentalRating;
+            _showFilterRuntime.Chosen = _omlSettings.ShowFilterRuntime;
+            _showFilterTags.Chosen = _omlSettings.ShowFilterTags;
+            _showFilterUserRating.Chosen = _omlSettings.ShowFilterUserRating;
+            _showFilterYear.Chosen = _omlSettings.ShowFilterYear;
+            _showFilterTrailers.Chosen = _omlSettings.ShowFilterTrailers;
         }
 
         private void SetupUILanguage()
@@ -436,6 +439,11 @@ namespace Library
         public BooleanChoice UseOriginalCoverArt
         {
             get { return _useOriginalCoverArt; }
+        }
+
+        public BooleanChoice ShowFilterUnwatched
+        {
+            get { return _showFilterUnwatched; }
         }
 
         public BooleanChoice UseOnScreenAlpha
@@ -604,5 +612,6 @@ namespace Library
         BooleanChoice _showFilterCountry = new BooleanChoice();
         BooleanChoice _showFilterRuntime = new BooleanChoice();
         BooleanChoice _useExternalPlayer = new BooleanChoice();
+        BooleanChoice _showFilterUnwatched = new BooleanChoice();
     }
 }

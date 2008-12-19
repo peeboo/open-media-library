@@ -615,6 +615,7 @@ namespace Library.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>Unwatched</string>
   <string>Genres</string>
   <string>Directors</string>
   <string>Actors</string>
@@ -973,6 +974,18 @@ namespace Library.Properties {
             }
             set {
                 this["StartPageSubFilter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilterUnwatched {
+            get {
+                return ((bool)(this["ShowFilterUnwatched"]));
+            }
+            set {
+                this["ShowFilterUnwatched"] = value;
             }
         }
     }

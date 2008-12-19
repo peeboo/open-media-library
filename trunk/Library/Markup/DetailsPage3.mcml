@@ -42,16 +42,23 @@
         <Actions>
           <Set Target="[Actors.Visible]" Value="false" />
         </Actions>
-      </Condition>           
+      </Condition>
+
+      <Changed Source="[CheckWatched.Checked.Value]">
+        <Actions>
+          <Invoke Target="[DetailsPage.UpdateWatched]" />
+          <Set Target="[stuff.Content]" Value="things" />
+        </Actions>
+      </Changed>
       
     </Rules>
 
     <Content>
-      <ColorFill Content="Transparent" Layout="Form">
+      <ColorFill Content="Transparent" Layout="Form" Navigation="PreferFocusOrder">
         <Children>
 
           <!-- play buttons -->
-          <Panel Name ="DVDButtons">
+          <Panel Name="DVDButtons" FocusOrder="0" Navigation="Group">
             <Layout>
               <FlowLayout Orientation="Horizontal" />
             </Layout>
@@ -62,7 +69,7 @@
               <me:DVDDisks Name="DiscList" DetailsPage="[DetailsPage]" DiskListChoice="[DetailsPage.DiskChoice]" />
             </Children>
           </Panel>
-          
+
           <!-- image panel -->
           <Panel Name="Image" Layout="VerticalFlow">
             <LayoutInput>
@@ -96,7 +103,7 @@
           </Panel>
 
           <!-- details panel -->
-          <Panel Name="DetailsPanel" MinimumSize="500,0">
+          <Panel Name="DetailsPanel" MinimumSize="500,0" FocusOrder="2" Navigation="Group">
             <LayoutInput>
               <FormLayoutInput Top="Parent,.14" Left="[DetailsLeftAnchor]"/>
             </LayoutInput>
@@ -106,7 +113,7 @@
           </Panel>
 
           <!-- actors panel -->
-          <Panel Name="ActorsPanel" Layout="VerticalFlow" Margins="20,0,0,0" MaximumSize="0,625">
+          <Panel Name="ActorsPanel" Layout="VerticalFlow" Margins="20,0,0,0" MaximumSize="0,625" FocusOrder="1" Navigation="Group">
             <LayoutInput>
               <FormLayoutInput Top="DetailsPanel,0" Left="DetailsPanel,1"/>
             </LayoutInput>
@@ -133,10 +140,10 @@
                   </Repeater>
                 </Children>
               </Panel>
-              
+
               <me:ActorsPanel Name="Actors" ActorList="[DetailsPage.ActingRoles]" />
             </Children>
-          </Panel>                
+          </Panel>
 
           <!-- extra info panel-->
           <Panel >
@@ -187,10 +194,10 @@
                   <FormLayoutInput Left="ExtraInfo,0" Top="ExtraInfo,1"/>
                 </LayoutInput>
                 <Children>
-                  <Text Content="SubTitles: " Name="SubLabel"  Font="font://s:Normal" Color="color://s:LabelColor" >                    
-                      <LayoutInput>
-                        <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
-                      </LayoutInput>
+                  <Text Content="SubTitles: " Name="SubLabel"  Font="font://s:Normal" Color="color://s:LabelColor" >
+                    <LayoutInput>
+                      <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
+                    </LayoutInput>
                   </Text>
                   <Text Content="[DetailsPage.SubtitlesAsString]"  Font="font://s:Normal" Color="color://s:NormalColor" >
                     <LayoutInput>
@@ -203,7 +210,7 @@
                       <FormLayoutInput Left="Parent,0" Top="SubLabel,1"/>
                     </LayoutInput>
                   </Text>
-                  
+
                   <Repeater Source="[DetailsPage.Languages]" Layout="VerticalFlow" Margins="0,5,0,0">
                     <LayoutInput>
                       <FormLayoutInput Left="SoundLabel,1" Top="SoundLabel,0" />
@@ -216,8 +223,19 @@
               </Panel>
             </Children>
           </Panel>
-            
+
+          <!-- unwatched checkbox -->
+          <Panel Name="WatchedCheckbox" Layout="HorizontalFlow" FocusOrder="3">
+            <LayoutInput>
+              <FormLayoutInput Left="Image,0" Bottom="Parent,1,-20"/>
+            </LayoutInput>
+            <Children>
+              <c:SimpleCheckbox Name="CheckWatched" Checked="[DetailsPage.Watched]" Margins="0,0,8,0" />
+              <Text Name="stuff" Content="Watched" Color="color://s:NormalColor" Font="font://s:Normal" Margins="0,3,0,0"/>
             </Children>
+          </Panel>
+
+        </Children>
       </ColorFill>
     </Content>
 
@@ -311,18 +329,24 @@
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[ActorRepater.ColorFilter]" Value="color://s:FocusColor"/>
+        </Actions>
+      </Condition>
     </Rules>
 
     <Content>
-      <Panel Layout="VerticalFlow">
+      <Panel Layout="VerticalFlow" >
         <Children>
           <Text Name="Actors" Content="Actors" Font ="font://s:LabelFont" Color="color://s:LabelColor" />
           
           <Scroller Name="Scroll" Orientation="Vertical" FadeSize="5" ScrollingData="[ScrollingData]">
             <Children>              
-              <Repeater Source="[ActorList]" Layout="VerticalFlow" >
+              <Repeater Name="ActorRepater" Source="[ActorList]" Layout="VerticalFlow" ColorFilter="color://s:NormalColor" >
                 <Content>
-                  <Text Content="[RepeatedItem!cor:String]" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor"/>
+                  <Text Name="ActorsText" Content="[RepeatedItem!cor:String]" WordWrap="true" Font="font://s:Normal" Color="White"/>
                 </Content>
               </Repeater>
             </Children>

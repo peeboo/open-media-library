@@ -73,6 +73,7 @@ namespace Library
         public const string Home = "OML Home";
         public const string VideoFormat = "Format";
         public const string Trailers = "Trailers";
+        public const string Unwatched = "Unwatched";
         public const string Alpha = "Alpha";
 
         public const string AllItems = " All ";

@@ -196,14 +196,20 @@
           <Set Target="[SubFilterLabel.Visible]" Value="false" />
           <Set Target="[SubFilter.Visible]" Value="false" />
         </Actions>
-      </Condition>
+      </Condition>     
 
-      <Condition Source="[Settings.StartPage.Chosen!cor:String]" SourceValue="OML Home" ConditionOp="NotEquals">
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Settings.StartPage.Chosen!cor:String]" Value="OML Home" ConditionOp="NotEquals" />
+          <Equality Source="[Settings.StartPage.Chosen!cor:String]" Value="Unwatched" ConditionOp="NotEquals" />
+        </Conditions>
         <Actions>
           <Set Target="[SubFilterLabel.Visible]" Value="true" />
           <Set Target="[SubFilter.Visible]" Value="true" />
         </Actions>
-      </Condition>
+      </Rule>      
+        
+      
       <!-- end show and hide subfilter label when choosing home-->
 
       <Default Target="[ScrollHandlerUI.ScrollingData]" Value="[ScrollDataUI]"/>
@@ -274,8 +280,8 @@
                           <Panel Layout="HorizontalFlow">
                             <Children>
                               <c:SimpleSpinner Name="StartPage" Model="[Settings.StartPage]" />
-                              <Text Content="Filter" Name="SubFilterLabel" Color="White" Font="font://me:SmallFont" Margins="15,10,10,0"/>
-                              <c:SimpleSpinner Name="SubFilter" Model="[Settings.StartPageSubFilter]" />
+                              <Text Content="Filter" Name="SubFilterLabel" Color="White" Font="font://me:SmallFont" Margins="15,10,10,0" Visible="false"/>
+                              <c:SimpleSpinner Name="SubFilter" Model="[Settings.StartPageSubFilter]" Visible="false"/>
                             </Children>
                           </Panel>
                         </Children>
@@ -419,6 +425,13 @@
                 </LayoutInput>
 
                 <Children>
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterUnwatched" Checked="[Settings.ShowFilterUnwatched]" Margins="0,0,0,0" />
+                      <Text Content="Unwatched" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+                  
                   <Panel Layout="HorizontalFlow">
                     <Children>
                       <c:SimpleCheckbox Name="ShowFilterActors" Checked="[Settings.ShowFilterActors]" Margins="0,0,0,0" />

@@ -309,6 +309,10 @@ namespace Library
             // then settings
             _categories.Add(new FilterCommand(Filters[Filter.Settings]));
 
+            // add unwatched filter at the top            
+            if ( Properties.Settings.Default.ShowFilterUnwatched )
+                _categories.Add(new UnwatchedCommand(Filter.Unwatched));
+
             System.Collections.Specialized.StringCollection filtersToShow =
                 Properties.Settings.Default.MainFiltersToShow;
 
@@ -325,8 +329,18 @@ namespace Library
         private void Initialize(TitleCollection col)
         {
             DateTime start = DateTime.Now;
+            
+            // if their start page is unwatched movies - auto-add the filter
+            if (!Properties.Settings.Default.ShowFilterUnwatched && 
+                Properties.Settings.Default.StartPage == Filter.Unwatched)
+            {
+                Properties.Settings.Default.ShowFilterUnwatched = true;
+                Properties.Settings.Default.Save();
+            }
 
             _filters.Add(Filter.Settings, new Filter(Filter.Settings, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
+            if (Properties.Settings.Default.ShowFilterUnwatched) _filters.Add(Filter.Unwatched, new Filter(Filter.Unwatched, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
+
             if (Properties.Settings.Default.ShowFilterActors) _filters.Add(Filter.Actor, new Filter(Filter.Actor, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
             if (Properties.Settings.Default.ShowFilterDirectors) _filters.Add(Filter.Director, new Filter(Filter.Director, this, Properties.Settings.Default.DirectorView, true, Properties.Settings.Default.DirectorSort));
             if (Properties.Settings.Default.ShowFilterGenres) _filters.Add(Filter.Genres, new Filter(Filter.Genres, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.GenreSort));
@@ -566,6 +580,12 @@ namespace Library
 
                 Filters[Filter.Alpha].AddMovie(firstChar, movie);
             }
+
+            if (Filters.ContainsKey(Filter.Unwatched))
+            {
+                if( title.WatchedCount == 0 )
+                    Filters[Filter.Unwatched].AddMovie(Filter.Unwatched, movie);
+            }
         }
 
         private void AddDateAddedFilter( MovieItem movie )
@@ -784,6 +804,29 @@ namespace Library
             {
                 Trace.TraceInformation("MovieGallery.GoHome");                
                 OMLApplication.Current.GoToMenu(new MovieGallery(OMLApplication.Current.Titles, Filter.Home));
+            });
+        }
+    }
+
+    public class UnwatchedCommand : FilterCommand
+    {
+        public UnwatchedCommand(string name)
+        {
+            FilterName = name;
+            Invoked += GoHome;
+        }
+
+        public override string ToString()
+        {
+            return FilterName;
+        }
+
+        public void GoHome(object sender, EventArgs args)
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                Trace.TraceInformation("MovieGallery.GoHome");
+                OMLApplication.Current.GoToSelectionList(new MovieGallery(OMLApplication.Current.Titles, Filter.Home), Filter.Unwatched, Filter.Unwatched);
             });
         }
     }
