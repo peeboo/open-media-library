@@ -176,6 +176,8 @@ namespace Library
 
             _mountingToolPath.Value = _omlSettings.MountingToolPath;
 
+            _ImageMountingSelection.Chosen = ((MountingTool.Tool)_omlSettings.MountingToolSelection).ToString();
+
             List<string> items = new List<string>();
             for (char c = 'A'; c <= 'Z'; c++)
                 items.Add(new string(c, 1));
