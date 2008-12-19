@@ -328,15 +328,7 @@
     </Locals>
 
     <Rules>
-      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
-      <Default Target="[Input.KeyInteractive]" Value="true"/>
-
-
-      <Condition Source="[Input.KeyFocus]" SourceValue="true">
-        <Actions>
-          <Set Target="[ActorRepater.ColorFilter]" Value="color://s:FocusColor"/>
-        </Actions>
-      </Condition>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>      
     </Rules>
 
     <Content>
@@ -346,7 +338,7 @@
           
           <Scroller Name="Scroll" Orientation="Vertical" FadeSize="5" ScrollingData="[ScrollingData]">
             <Children>              
-              <Repeater Name="ActorRepater" Source="[ActorList.Options]" Layout="VerticalFlow" ColorFilter="color://s:NormalColor" Navigation="PreferFocusOrder,RememberFocus" >
+              <Repeater Name="ActorRepater" Source="[ActorList.Options]" Layout="VerticalFlow" Navigation="PreferFocusOrder,RememberFocus" >
                 <Content>
                   <!--<Text Name="ActorsText" Content="[RepeatedItem!a:MovieCastCommand.Name]" WordWrap="true" Font="font://s:Normal" Color="White"/>-->
                   <me:ActorRow ActorCommand="[RepeatedItem!a:MovieCastCommand]" Choice="[DetailsPage.Actors]" />
@@ -425,7 +417,7 @@
       <Panel Layout="HorizontalFlow">
         <Children>
           <Graphic Name="ArrowLeft" Content="resx://Library/Library.Resources/PivotArrowLeft" Margins="0,8,6,0" Scale="1,1,1" Visible="false"/>
-          <Text Name="ActorsText" Content="[ActorCommand.Name]" WordWrap="true" Font="font://s:Normal" Color="White"/>
+          <Text Name="ActorsText" Content="[ActorCommand.Name]" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor"/>
           <Graphic Name="ArrowRight" Content="resx://Library/Library.Resources/PivotArrowRight" Margins="15,8,0,0" Scale="1,1,1" Visible="false"/>
         </Children>
       </Panel>
