@@ -26,7 +26,6 @@
 
         <Locals>
             <addin:AddInHost Name="AddInHost"/>
-            <ScrollingData Name="ScrollingData" LockedPosition="0.38"/>
             <ScrollingData Name="TitleScrollingData" LockedPosition="0.38"/>
 
             <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "[UISettings.Anchor.DetailsLeftOffset]" Id="Parent"/>
@@ -103,7 +102,7 @@
                     <!-- GalleryPanel -->
                     <Panel Name="GalleryPanel" MouseInteractive="true" FocusOrder="0">
                         <Children>
-                            <view:ListView Name="MovieGallery" ShowDescription="false" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" ScrollingData="[ScrollingData]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" />
+                            <view:ListView Name="MovieGallery" ShowDescription="false" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" />
                         </Children>
 
                         <LayoutInput>

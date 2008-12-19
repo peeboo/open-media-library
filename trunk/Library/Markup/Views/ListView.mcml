@@ -11,8 +11,7 @@
   <UI Name="ListView">
     <Properties>
       <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
-      <a:UISettings Name="UISettings" UISettings="$Required" />
-      <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
+      <a:UISettings Name="UISettings" UISettings="$Required" />      
       <col:IList Name="List" IList="$Required"/>
       <EditableText Name="JumpValue"/>
       <cor:Boolean Name="ShowDescription" Boolean="true" />
@@ -24,6 +23,7 @@
     <Locals>      
       <!-- Create an input handler for scrolling. -->
       <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled" />
+      <ScrollingData Name="ScrollingData" LockedPosition="0.5" />
       <TypingHandler Name="TypingHandler" EditableText="[MovieBrowser.JumpInListText]" TypingPolicy="TripleTap" HandlerStage="Bubbled"/>
       <Timer Name="ClearTimer" AutoRepeat="false" Interval="5000" Enabled="false"/>
     </Locals>
@@ -34,6 +34,13 @@
       <Default Target="[ScrollingData.Repeater]" Value="[GalleryRepeater]" />
 
       <Binding Source="[ShowDescription]" Target="[DescriptionBar.Visible]" />
+
+      <!-- moves the focus back into the list when hitting the back button -->
+      <Condition Source="[MovieBrowser.IsReturning]" SourceValue="true">
+        <Actions>
+          <Invoke Target="[GalleryRepeater.NavigateIntoIndex]" index="[FocusedIndex.Value]" />
+        </Actions>
+      </Condition>
 
       <Changed Source="[ScrollingData.TotalPages]">
         <Actions>
@@ -227,6 +234,13 @@
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+
+      <!-- this will cause the first item to be highlighted when loading list -->
+      <Condition Source="[Index.Value]" SourceValue="0">
+        <Actions>
+          <Invoke Target="[ItemPanel.NavigateInto]"/>
+        </Actions>
+      </Condition>
 
       <!-- If we get key focus, change our background color to indicate it. -->
       <Condition Source="[Input.KeyFocus]" SourceValue="true">
