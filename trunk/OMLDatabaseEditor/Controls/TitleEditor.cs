@@ -157,7 +157,7 @@ namespace OMLDatabaseEditor.Controls
             {
                 DiskEditorFrm diskEditor = new DiskEditorFrm(EditedTitle.Disks);
                 diskEditor.ShowDialog();
-                _titleChanged(EventArgs.Empty);
+                TitleChanges(null, EventArgs.Empty);
             }
         }
 

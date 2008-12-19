@@ -122,7 +122,7 @@ namespace OMLDatabaseEditor.Controls
         private void cbDVD_CheckedChanged(object sender, EventArgs e)
         {
             txtPath.Properties.Buttons[1].Enabled = cbDVD.Checked;
-            if (!Directory.Exists(txtPath.Text)) txtPath.Text = "";
+            if (cbDVD.Checked && !Directory.Exists(txtPath.Text)) txtPath.Text = "";
             if (!cbDVD.Checked)
                 _currentDisk.ExtraOptions = "";
         }
