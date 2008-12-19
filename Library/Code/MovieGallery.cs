@@ -18,6 +18,17 @@ namespace Library
     {       
         #region Public Properties
 
+        bool isReturning = false;
+
+        /// <summary>
+        /// Used to track if this is the first time this page is loaded or
+        /// if we're loaded through a back button
+        /// </summary>
+        public bool IsReturning
+        {
+            get { return (isReturning) ? isReturning : !(isReturning = true); }
+        }
+
         private List<LabeledList> labeledLists = null;
 
         public List<LabeledList> LabeledLists

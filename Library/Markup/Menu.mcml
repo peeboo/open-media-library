@@ -27,7 +27,7 @@
 
         <Locals>
             <addin:AddInHost Name="AddInHost"/>
-            <ScrollingData Name="ScrollingData" LockedPosition="0.5" />
+            
                                                                         
             <AnchorEdge Name="FiltersTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.FiltersTopOffset]" Id="Parent"/>                                                                                               
         </Locals>
@@ -147,9 +147,9 @@
                   <!-- GalleryPanel -->
                   <Panel Name="GalleryPanel" MouseInteractive="true" FocusOrder="0">
                     <Children>
-                      <view:CoverArtWithAlpha Name="ViewCoverArtWithAlpha" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" ScrollingData="[ScrollingData]" UISettings="[UISettings]" Visible="False"/>
-                      <view:CoverArt Name="ViewCoverArt" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" ScrollingData="[ScrollingData]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
-                      <view:ListView Name="ViewList" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" ScrollingData="[ScrollingData]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
+                      <view:CoverArtWithAlpha Name="ViewCoverArtWithAlpha" FocusedIndex="[FocusedIndex]" MovieBrowser="[MovieBrowser]" UISettings="[UISettings]" Visible="False"/>
+                      <view:CoverArt Name="ViewCoverArt" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
+                      <view:ListView Name="ViewList" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
                     </Children>
 
                     <LayoutInput>
