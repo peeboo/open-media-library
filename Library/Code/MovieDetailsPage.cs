@@ -285,7 +285,13 @@ namespace Library
         }
 
         public void PlayDisk(int SelectedDisk)
-        {
+        {            
+            // check the checkbox - this is to make it checked when the user clicks the back button
+            // this will trigure the save to happen again but since we've already updated the count 
+            // the save will be a noop
+            if (! ((bool)_watched.Chosen))
+                _watched.Chosen = true;
+
             OMLApplication.ExecuteSafe(delegate
             {
                 // Play the Selected Disk
