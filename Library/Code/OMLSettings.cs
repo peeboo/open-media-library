@@ -501,6 +501,16 @@ namespace Library
             }
         }
 
+        public bool ShowFilterUnwatched
+        {
+            get { return Properties.Settings.Default.ShowFilterUnwatched; }
+            set
+            {
+                Properties.Settings.Default.ShowFilterUnwatched = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
 
         public bool ShowFilterActors
         {

@@ -404,12 +404,23 @@ namespace Library
             return new MovieDetailsPage(item);
         }
 
+        private void IncrementPlayCount()
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                this.TitleObject.WatchedCount++;
+                OMLApplication.Current.SaveTitles();
+            });
+        }
+
         /// <summary>
         /// Plays the movie.
         /// </summary>
         public void PlayMovie()
         {
-            var ms = new MediaSource(this.TitleObject.SelectedDisk);
+            IncrementPlayCount();
+
+            var ms = new MediaSource(this.TitleObject.SelectedDisk);            
             ms.OnSave += new Action<MediaSource>(ms_OnSave);
             IPlayMovie moviePlayer = MoviePlayerFactory.CreateMoviePlayer(ms);
             moviePlayer.PlayMovie();

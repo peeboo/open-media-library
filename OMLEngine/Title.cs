@@ -22,7 +22,7 @@ namespace OMLEngine
     public class Title : IComparable, ISerializable
     {
         #region locals
-        private int _watchedCount;
+        private int _watchedCount;        
         private string _fileLocation = "";
         private VideoFormat _videoFormat = VideoFormat.DVD;
         private bool _needsTranscode = false;
@@ -74,7 +74,7 @@ namespace OMLEngine
 
         #endregion
 
-        #region properties
+        #region properties       
 
         public Disk SelectedDisk
         {
@@ -646,6 +646,7 @@ namespace OMLEngine
             }
             _videoResolution = GetSerializedString(info, "video_resolution");
             _extraFeatures = GetSerializedList<List<string>>(info, "extra_features");
+            _watchedCount = GetSerializedInt(info, "watched_count");
         }
 
         void CleanDuplicateDisks()
@@ -717,6 +718,7 @@ namespace OMLEngine
             info.AddValue("subtitles", _subtitles);
             info.AddValue("video_resolution", _videoResolution);
             info.AddValue("extra_features", _extraFeatures);
+            info.AddValue("watched_count", _watchedCount);
         }
         #endregion
 

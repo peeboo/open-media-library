@@ -185,7 +185,7 @@ namespace Library
                                                 Properties.Settings.Default.StartPageSubFilter);
                         }
                         else
-                        {
+                        {                                              
                             // assume it's a filter page (Genre, Actor, etc)
                             GoToSelectionList(new MovieGallery(_titles, Filter.Home), Properties.Settings.Default.StartPage);
                         }
@@ -298,16 +298,18 @@ namespace Library
         
         public void GoToSelectionList(MovieGallery gallery, string filterName, string subFilter)
         {
-            if (gallery != null &&
-                gallery.Filters.ContainsKey(filterName) &&
-                !string.IsNullOrEmpty(subFilter))
-            {
-                Filter filter = gallery.Filters[filterName];
-                GoToMenu(filter.CreateGallery(subFilter));
-            }
-            else if (gallery != null && gallery.Filters.ContainsKey(filterName))
-            {
-                Filter filter = gallery.Filters[filterName];
+            Filter filter = null;            
+            gallery.Filters.TryGetValue(filterName, out filter);
+
+            // if there's only one item in the subfilter - just go there
+            // the ALL filter is always first so ignore that
+            if (filter != null && filter.Items.Count <= 2 && filter.Items.Count > 0)
+                subFilter = filter.Items[filter.Items.Count - 1].Name;
+
+            // see if we're a top level filter
+            if (string.IsNullOrEmpty(subFilter) &&
+                filter != null )
+            {                                
                 string listName = gallery.Title + " > " + filter.Name;
                 IList list = filter.Items;
                 string galleryView = filter.GalleryView;
@@ -324,6 +326,11 @@ namespace Library
                     _session.GoToPage("resx://Library/Library.Resources/SelectionList", properties);
                 }
             }
+            else  if (filter != null &&
+                !string.IsNullOrEmpty(subFilter))
+            {                                                
+                GoToMenu(filter.CreateGallery(subFilter));
+            }                        
             else
             {
                 OMLApplication.DebugLine("[OMLApplication] GoToSelectionList - filter {0} not found - going to Menu Page", filterName);

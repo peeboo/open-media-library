@@ -25,6 +25,7 @@ namespace Library
         private IList _commands;
         private string _metadata;
         private Choice _diskChoice = new Choice();
+        private BooleanChoice _watched = new BooleanChoice();
         private ContextMenu _dvdContextMenu;
         private bool _showDVDContextMenu = false;
         //private Command _hideDisks;
@@ -34,6 +35,11 @@ namespace Library
         #endregion
 
         #region Public Properties
+
+        public BooleanChoice Watched
+        {
+            get { return _watched; }         
+        }
 
         public bool ShowDVDContextMenu
         {
@@ -444,6 +450,8 @@ namespace Library
                 _diskChoice.Options = temp; // MCE barfs if Options is bound to empty List.
                 OMLApplication.DebugLine("[MovieDetailsPage] Details Page.LoadMovies: no disks");
             }
+
+            _watched.Chosen = (_movieDetails.TitleObject.WatchedCount != 0);
         }
 
         public void PlayDiskWithOptions()
@@ -549,6 +557,22 @@ namespace Library
             else
             {
                 _movieDetails.PlayMovie();
+            }
+        }
+
+        public void UpdateWatched()
+        {
+            bool watched = (bool)_watched.Chosen;
+
+            if (watched && _movieDetails.TitleObject.WatchedCount == 0)
+            {                    
+                _movieDetails.TitleObject.WatchedCount = 1;
+                OMLApplication.Current.SaveTitles();
+            }
+            else if (!watched && _movieDetails.TitleObject.WatchedCount != 0)
+            {
+                _movieDetails.TitleObject.WatchedCount = 0;
+                OMLApplication.Current.SaveTitles();
             }
         }
     }
