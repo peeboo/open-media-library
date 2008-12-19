@@ -49,6 +49,8 @@
           <Invoke Target="[DetailsPage.UpdateWatched]" />
         </Actions>
       </Changed>
+
+
       
     </Rules>
 
@@ -140,7 +142,7 @@
                 </Children>
               </Panel>
 
-              <me:ActorsPanel Name="Actors" ActorList="[DetailsPage.ActingRoles]" />
+              <me:ActorsPanel Name="Actors" ActorList="[DetailsPage.Actors]" DetailsPage="[DetailsPage]" />
             </Children>
           </Panel>
 
@@ -312,7 +314,8 @@
 
   <UI Name="ActorsPanel">
     <Properties>
-      <coll:IList Name="ActorList" IList="$Required" />
+      <Choice Name="ActorList" Choice="$Required" />
+      <a:MovieDetailsPage Name="DetailsPage" MovieDetailsPage="$Required"/>
     </Properties>
 
     <Locals>
@@ -343,9 +346,10 @@
           
           <Scroller Name="Scroll" Orientation="Vertical" FadeSize="5" ScrollingData="[ScrollingData]">
             <Children>              
-              <Repeater Name="ActorRepater" Source="[ActorList]" Layout="VerticalFlow" ColorFilter="color://s:NormalColor" >
+              <Repeater Name="ActorRepater" Source="[ActorList.Options]" Layout="VerticalFlow" ColorFilter="color://s:NormalColor" Navigation="PreferFocusOrder,RememberFocus" >
                 <Content>
-                  <Text Name="ActorsText" Content="[RepeatedItem!cor:String]" WordWrap="true" Font="font://s:Normal" Color="White"/>
+                  <!--<Text Name="ActorsText" Content="[RepeatedItem!a:MovieCastCommand.Name]" WordWrap="true" Font="font://s:Normal" Color="White"/>-->
+                  <me:ActorRow ActorCommand="[RepeatedItem!a:MovieCastCommand]" Choice="[DetailsPage.Actors]" />
                 </Content>
               </Repeater>
             </Children>
@@ -356,6 +360,78 @@
     </Content>
   </UI>
 
+  <UI Name="ActorRow">
+    <Properties>
+      <a:MovieCastCommand Name="ActorCommand" MovieCastCommand="$Required" />
+      <Choice Name="Choice" Choice="$Required"/>
+    </Properties>
+    <Locals>
+      <ClickHandler Name="Clicker"/>
+    </Locals>    
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+      <Binding Source="[ActorCommand]" Target="[Clicker.Command]"/>
+
+      <Changed Source="[ActorCommand.Invoked]">
+        <Actions>
+          <Set Target="[Choice.Chosen]" Value="[ActorCommand]"/>
+        </Actions>
+      </Changed>
+
+      <!-- Change color on click. -->
+      <Condition Source="[Clicker.Clicking]" SourceValue="true">
+        <Actions>          
+          <PlaySound Sound="sound://me:MiniSelect" />          
+        </Actions>
+      </Condition>
+
+      <!-- Change color on key focus. -->
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <PlayAnimation Target="[ActorsText]" Animation="animation://me:GotFocusList" />
+          <Set Target="[ActorsText.Color]" Value="color://s:Text.Selected"/>
+          <PlaySound Sound="sound://me:Focus" />
+
+          <Set Target="[ArrowLeft.Visible]" Value="true" />
+          <Set Target="[ArrowRight.Visible]" Value="true" />
+        </Actions>
+      </Condition>
+
+      <!-- Change color on mouse focus. -->
+      <Condition Source="[Input.MouseFocus]" SourceValue="true">
+        <Actions>
+          <PlayAnimation Target="[ActorsText]" Animation="animation://me:GotFocusList" />
+          <Set Target="[ActorsText.Color]" Value="color://s:Text.Selected"/>
+
+          <Set Target="[ArrowLeft.Visible]" Value="true" />
+          <Set Target="[ArrowRight.Visible]" Value="true" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="false">
+        <Actions>
+          <!-- Play an animation on the cover target item. -->
+          <PlayAnimation Target="[ActorsText]" Animation="animation://me:LostFocusList"/>
+          <Set Target="[ActorsText.Color]" Value="color://s:NormalColor"/>
+
+          <Set Target="[ArrowLeft.Visible]" Value="false" />
+          <Set Target="[ArrowRight.Visible]" Value="false" />
+        </Actions>
+      </Condition>
+      
+    </Rules>        
+      
+    <Content>
+      <Panel Layout="HorizontalFlow">
+        <Children>
+          <Graphic Name="ArrowLeft" Content="resx://Library/Library.Resources/PivotArrowLeft" Margins="0,8,6,0" Scale="1,1,1" Visible="false"/>
+          <Text Name="ActorsText" Content="[ActorCommand.Name]" WordWrap="true" Font="font://s:Normal" Color="White"/>
+          <Graphic Name="ArrowRight" Content="resx://Library/Library.Resources/PivotArrowRight" Margins="15,8,0,0" Scale="1,1,1" Visible="false"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  
   <UI Name="TextWithLabel">
     <Properties>
       <cor:String Name="Label" String="$Required" />

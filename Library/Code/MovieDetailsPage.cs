@@ -15,6 +15,9 @@ namespace Library
     /// </summary>
     public class MovieDetailsPage : ModelItem
     {
+        private Choice _actors;
+
+        public Choice Actors { get { return _actors; } }
 
         #region Private Variables
         /// <summary>The URI of the media at its locally cached location.</summary>
@@ -283,11 +286,6 @@ namespace Library
             }
         }
 
-        public IList Actors
-        {
-            get { return _movieDetails.Actors; }
-        }
-
         public IList ActingRoles
         {
             get { return _movieDetails.ActingRoles; }
@@ -452,6 +450,15 @@ namespace Library
             }
 
             _watched.Chosen = (_movieDetails.TitleObject.WatchedCount != 0);
+            
+            List<MovieCastCommand> actors = new List<MovieCastCommand>(_movieDetails.TitleObject.ActingRoles.Count);
+
+            foreach (string actor in _movieDetails.TitleObject.ActingRoles.Keys)
+            {
+                actors.Add(new MovieCastCommand(actor, _movieDetails.TitleObject.ActingRoles[actor], "actor"));
+            }
+
+            _actors = new Choice(this, "Actors", actors);
         }
 
         public void PlayDiskWithOptions()
@@ -577,6 +584,39 @@ namespace Library
         }
     }
 
+    public class MovieCastCommand : Command
+    {
+        private string name;
+        private string part;
+
+        public override string ToString()
+        {
+            return name;
+        }
+
+        public string Name
+        {
+            get 
+            {
+                return (string.IsNullOrEmpty(part)) ? name : name + " as " + part;
+            }
+        }
+
+        public MovieCastCommand(string name, string part, string type)  
+        {
+            this.name = name;
+            this.part = part;
+
+            this.Invoked += new EventHandler(MovieCastCommand_Invoked);
+        }
+
+        private void MovieCastCommand_Invoked(object sender, EventArgs e)
+        {
+            MovieGallery gallery = new MovieGallery(OMLApplication.Current.Titles, "Home");
+            OMLApplication.Current.GoToSelectionList(gallery, Filter.Actor, name);
+        }        
+    }
+
 
     // since for some reason Media Center's MCML engine will not load the OMLEngine Assembly 
     // This prevents me from casting the Disks Repeater items to Disk type.
@@ -591,8 +631,6 @@ namespace Library
         public DiskWrapper(string name, string path, VideoFormat format)
             : base(name, path, format)
             {}
-
-
     }
 }
 
