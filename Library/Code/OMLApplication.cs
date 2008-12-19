@@ -301,10 +301,9 @@ namespace Library
             Filter filter = null;
 
             // if the filter doesn't exist we'll need to create it            
-            // todo : solomon : i'm only going to do this for actors now 
-            // but it should be considered to do it for everything
-            if (!gallery.Filters.TryGetValue(filterName, out filter)
-                && filterName == Filter.Actor)
+            // todo : solomon : i'm only going to do this for the perticipant filter now 
+            // but it should be considered for everything
+            if (!gallery.Filters.TryGetValue(filterName, out filter))
             {
                 filter = gallery.CreateFilter(filterName);
             }

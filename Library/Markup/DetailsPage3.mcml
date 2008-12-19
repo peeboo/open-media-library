@@ -26,19 +26,19 @@
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
-      <Condition Source="[DetailsPage.Directors.Count]" SourceValue="0">
+      <Condition Source="[DetailsPage.Directors.Options.Count]" SourceValue="0">
         <Actions>
           <Set Target="[DirectorsPanel.Visible]" Value="false" />
         </Actions>
       </Condition>
 
-      <Condition Source="[DetailsPage.Writers.Count]" SourceValue="0">
+      <Condition Source="[DetailsPage.Writers.Options.Count]" SourceValue="0">
         <Actions>
           <Set Target="[WritersPanel.Visible]" Value="false" />
         </Actions>
       </Condition>
 
-      <Condition Source="[DetailsPage.ActingRoles.Count]" SourceValue="0">
+      <Condition Source="[DetailsPage.Actors.Options.Count]" SourceValue="0">
         <Actions>
           <Set Target="[Actors.Visible]" Value="false" />
         </Actions>
@@ -114,29 +114,30 @@
           </Panel>
 
           <!-- actors panel -->
-          <Panel Name="ActorsPanel" Layout="VerticalFlow" Margins="20,0,0,0" MaximumSize="0,625" FocusOrder="1" Navigation="Group">
+          <Panel Name="ActorsPanel" Layout="VerticalFlow" Margins="20,0,0,0" MaximumSize="0,625" FocusOrder="1" Navigation="Group,Column,PreferFocusOrder,RememberFocus">
             <LayoutInput>
               <FormLayoutInput Top="DetailsPanel,0" Left="DetailsPanel,1"/>
             </LayoutInput>
             <Children>
               <Panel Name="DirectorsPanel" Layout="VerticalFlow">
                 <Children>
-                  <Text Content="Directed By" Font="font://s:LabelFont" Color="color://s:LabelColor"/>
-
-                  <Repeater Source="[DetailsPage.Directors]" Layout="VerticalFlow">
+                  <Text Content="Directed By" Font="font://s:LabelFont" Color="color://s:LabelColor"/>                  
+                  
+                  <Repeater Source="[DetailsPage.Directors.Options]" Layout="VerticalFlow" Navigation="PreferFocusOrder,RememberFocus">
                     <Content>
-                      <Text Content="[RepeatedItem!cor:String]" Font="font://s:Normal" Color="color://s:NormalColor" />
+                      <me:PersonRow CastCommand="[RepeatedItem!a:MovieCastCommand]" Choice="[DetailsPage.Directors]" />
                     </Content>
                   </Repeater>
+                                    
                 </Children>
               </Panel>
 
               <Panel Name="WritersPanel" Layout="VerticalFlow">
                 <Children>
                   <Text Content="Written By" Font="font://s:LabelFont" Color="color://s:LabelColor"/>
-                  <Repeater Source="[DetailsPage.Writers]" Layout="VerticalFlow">
+                  <Repeater Source="[DetailsPage.Writers.Options]" Layout="VerticalFlow" Navigation="PreferFocusOrder,RememberFocus">
                     <Content>
-                      <Text Content="[RepeatedItem!cor:String]" Font="font://s:Normal" Color="color://s:NormalColor" />
+                      <me:PersonRow CastCommand="[RepeatedItem!a:MovieCastCommand]" Choice="[DetailsPage.Writers]" />
                     </Content>
                   </Repeater>
                 </Children>
@@ -307,8 +308,6 @@
         </Children>
       </Panel>
 
-
-
     </Content>
   </UI>
 
@@ -341,7 +340,7 @@
               <Repeater Name="ActorRepater" Source="[ActorList.Options]" Layout="VerticalFlow" Navigation="PreferFocusOrder,RememberFocus" >
                 <Content>
                   <!--<Text Name="ActorsText" Content="[RepeatedItem!a:MovieCastCommand.Name]" WordWrap="true" Font="font://s:Normal" Color="White"/>-->
-                  <me:ActorRow ActorCommand="[RepeatedItem!a:MovieCastCommand]" Choice="[DetailsPage.Actors]" />
+                  <me:PersonRow CastCommand="[RepeatedItem!a:MovieCastCommand]" Choice="[DetailsPage.Actors]" />
                 </Content>
               </Repeater>
             </Children>
@@ -352,9 +351,9 @@
     </Content>
   </UI>
 
-  <UI Name="ActorRow">
+  <UI Name="PersonRow">
     <Properties>
-      <a:MovieCastCommand Name="ActorCommand" MovieCastCommand="$Required" />
+      <a:MovieCastCommand Name="CastCommand" MovieCastCommand="$Required" />
       <Choice Name="Choice" Choice="$Required"/>
     </Properties>
     <Locals>
@@ -362,11 +361,11 @@
     </Locals>    
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
-      <Binding Source="[ActorCommand]" Target="[Clicker.Command]"/>
+      <Binding Source="[CastCommand]" Target="[Clicker.Command]"/>
 
-      <Changed Source="[ActorCommand.Invoked]">
+      <Changed Source="[CastCommand.Invoked]">
         <Actions>
-          <Set Target="[Choice.Chosen]" Value="[ActorCommand]"/>
+          <Set Target="[Choice.Chosen]" Value="[CastCommand]"/>
         </Actions>
       </Changed>
 
@@ -380,8 +379,8 @@
       <!-- Change color on key focus. -->
       <Condition Source="[Input.KeyFocus]" SourceValue="true">
         <Actions>
-          <PlayAnimation Target="[ActorsText]" Animation="animation://me:GotFocusList" />
-          <Set Target="[ActorsText.Color]" Value="color://s:Text.Selected"/>
+          <PlayAnimation Target="[PersonText]" Animation="animation://me:GotFocusList" />
+          <Set Target="[PersonText.Color]" Value="color://s:Text.Selected"/>
           <PlaySound Sound="sound://me:Focus" />
 
           <Set Target="[ArrowLeft.Visible]" Value="true" />
@@ -392,8 +391,8 @@
       <!-- Change color on mouse focus. -->
       <Condition Source="[Input.MouseFocus]" SourceValue="true">
         <Actions>
-          <PlayAnimation Target="[ActorsText]" Animation="animation://me:GotFocusList" />
-          <Set Target="[ActorsText.Color]" Value="color://s:Text.Selected"/>
+          <PlayAnimation Target="[PersonText]" Animation="animation://me:GotFocusList" />
+          <Set Target="[PersonText.Color]" Value="color://s:Text.Selected"/>
 
           <Set Target="[ArrowLeft.Visible]" Value="true" />
           <Set Target="[ArrowRight.Visible]" Value="true" />
@@ -403,8 +402,8 @@
       <Condition Source="[Input.KeyFocus]" SourceValue="false">
         <Actions>
           <!-- Play an animation on the cover target item. -->
-          <PlayAnimation Target="[ActorsText]" Animation="animation://me:LostFocusList"/>
-          <Set Target="[ActorsText.Color]" Value="color://s:NormalColor"/>
+          <PlayAnimation Target="[PersonText]" Animation="animation://me:LostFocusList"/>
+          <Set Target="[PersonText.Color]" Value="color://s:NormalColor"/>
 
           <Set Target="[ArrowLeft.Visible]" Value="false" />
           <Set Target="[ArrowRight.Visible]" Value="false" />
@@ -417,7 +416,7 @@
       <Panel Layout="HorizontalFlow">
         <Children>
           <Graphic Name="ArrowLeft" Content="resx://Library/Library.Resources/PivotArrowLeft" Margins="0,8,6,0" Scale="1,1,1" Visible="false"/>
-          <Text Name="ActorsText" Content="[ActorCommand.Name]" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor"/>
+          <Text Name="PersonText" Content="[CastCommand.Name]" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor"/>
           <Graphic Name="ArrowRight" Content="resx://Library/Library.Resources/PivotArrowRight" Margins="15,8,0,0" Scale="1,1,1" Visible="false"/>
         </Children>
       </Panel>

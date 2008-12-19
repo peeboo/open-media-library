@@ -52,12 +52,10 @@ namespace Library
             get { return _filter; }
             set { _filter = value; }
         }
-
     }
 
     public class Filter
     {
-
         public const string About = "About";
         public const string Settings = "Settings";
         public const string Genres = "Genres";
@@ -75,6 +73,7 @@ namespace Library
         public const string Trailers = "Trailers";
         public const string Unwatched = "Unwatched";
         public const string Alpha = "Alpha";
+        public const string Participant = "Participant";
 
         public const string AllItems = " All ";
 
@@ -140,21 +139,32 @@ namespace Library
             }
         }
 
+        /// <summary>
+        /// Adds a movie to the filter - assumes this movie is unique within the filter
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="movie"></param>
         public void AddMovie(string item, MovieItem movie)
         {
-            AddMovieToFilter(item, movie);
+            AddMovie(item, movie, true);
         }
+
         /// <summary>
         /// Adds the movie corresponding to the item.
         /// </summary>
         /// <param name="item">The item.</param>
         /// <param name="movie">The movie.</param>
-        private void AddMovieToFilter(string item, MovieItem movie)
+        /// <param name="allowDuplicates">if false will check the collection before 
+        /// adding the movie to see it already exists</param>
+        public void AddMovie(string item, MovieItem movie, bool allowDuplicates)
         {
             if (_itemMovieRelation.ContainsKey(item))
             {
                 VirtualList movies = (VirtualList)_itemMovieRelation[item];
-                movies.Add(movie);
+                                
+                // the allowDuplicates key will be a perf savings when we know it won't be a duplicate
+                if (allowDuplicates || (!movies.Contains(movie)))
+                    movies.Add(movie);
             }
             else
             {

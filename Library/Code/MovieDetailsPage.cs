@@ -14,35 +14,37 @@ namespace Library
     /// details page UI.
     /// </summary>
     public class MovieDetailsPage : ModelItem
-    {
+    {                
+        #region Private Variables        
         private Choice _actors;
-
-        public Choice Actors { get { return _actors; } }
-
-        #region Private Variables
-        /// <summary>The URI of the media at its locally cached location.</summary>
-        //private FileInfo _localMedia = null;
+        private Choice _directors;
+        private Choice _writers;
         private MovieItem _movieDetails = null;
-        //private bool _isShowingDisks = false;
-        //private string _playMovieCommandText = "Show Discs";
-        private IList _commands;
-        private string _metadata;
         private Choice _diskChoice = new Choice();
         private BooleanChoice _watched = new BooleanChoice();
         private ContextMenu _dvdContextMenu;
         private bool _showDVDContextMenu = false;
-        //private Command _hideDisks;
-        //private Command _showDisks;
-        private Image _FullCover;
-        private bool _PlayClicked = false;
+        private Image _fullCover;
+        private bool _playClicked = false;
         #endregion
 
         #region Public Properties
 
-        public BooleanChoice Watched
-        {
-            get { return _watched; }         
-        }
+        public Choice Actors { get { return _actors; } }
+        public Choice Directors { get { return _directors; } }
+        public Choice Writers { get { return _writers; } }
+        public BooleanChoice Watched { get { return _watched; } }
+        public MovieItem MovieDetails { get { return _movieDetails; } }
+        public string UserRating { get { return ((double)_movieDetails.UseStarRating / 10).ToString(); } }
+        public string Title { get { return _movieDetails.Name; } }
+        public Image FullCover { get { return _fullCover; } }
+        public List<string> Languages { get { return _movieDetails.TitleObject.AudioTracks; } }
+        public Choice DiskChoice { get { return _diskChoice; } }
+
+        /// <summary>
+        /// A multiline summary of the object.
+        /// </summary>
+        public string Summary { get { return _movieDetails.Synopsis; } }        
 
         public bool ShowDVDContextMenu
         {
@@ -66,152 +68,13 @@ namespace Library
 
         public bool PlayClicked
         {
-            get { return _PlayClicked; }
+            get { return _playClicked; }
             set
             {
-                _PlayClicked = value;
+                _playClicked = value;
                 FirePropertyChanged("PlayClicked");
             }
-        }
-        //public string PlayMovieCommandText
-        //{
-        //    get
-        //    {
-        //        if (this.MovieDetails.Disks.Count == 1)
-        //            return "Play Movie";
-        //        else if (this.MovieDetails.Disks.Count == 0)
-        //            return "No Discs!";
-        //        else
-        //            return _playMovieCommandText;
-        //    }
-        //    set
-        //    {
-        //        _playMovieCommandText = value;
-        //    }
-        //}
-
-        public string DirectorsAsString
-        {
-            get
-            {
-                string dirs = "";
-                foreach (Person p in _movieDetails.TitleObject.Directors)
-                {
-                    if (dirs.Length > 0) dirs += ", ";
-                    dirs += p.full_name;
-                }
-                return dirs;
-            }
-        }        
-
-        public string WritersAsString
-        {
-            get
-            {
-                string dirs = "";
-                foreach (Person p in _movieDetails.TitleObject.Writers)
-                {
-                    if (dirs.Length > 0) dirs += ", ";
-                    dirs += p.full_name;
-                }
-                return dirs;
-            }
-        }
-        public MovieItem MovieDetails
-        {
-            get { return _movieDetails; }
-            set { _movieDetails = value; }
-        }
-        /// <summary>Gets or sets the URI of the media at its locally cached location.</summary>
-        //public FileInfo LocalMedia
-        //{
-        //    get { return _localMedia; }
-        //    set { _localMedia = value; }
-        //}
-
-        public string UserRating
-        {
-            get { return ((double)_movieDetails.UseStarRating / 10).ToString(); }
-        }
-
-        /// <summary>
-        /// The primary title of the object.
-        /// </summary>
-        public string Title
-        {
-            get { return _movieDetails.Name; }
-            set
-            {
-                if (_movieDetails.Name != value)
-                {
-                    _movieDetails.Name = value;
-                    FirePropertyChanged("Title");
-                }
-            }
-        }
-
-        /// <summary>
-        /// A multiline summary of the object.
-        /// </summary>
-        public string Summary
-        {
-            get { return _movieDetails.Synopsis; }
-            set
-            {
-                if (_movieDetails.Synopsis != value)
-                {
-                    _movieDetails.Synopsis = value;
-                    FirePropertyChanged("Summary");
-                }
-            }
-        }
-
-        /// <summary>
-        /// A list of actions that can be performed on this object.
-        /// This list should only contain objects of type Command.
-        /// </summary>
-        public IList Commands
-        {
-            get { return _commands; }
-            set
-            {
-                if (_commands != value)
-                {
-                    _commands = value;
-                    FirePropertyChanged("Commands");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Additional minor metadata about this object.
-        /// </summary>
-        public string Metadata
-        {
-            get { return _metadata; }
-            set
-            {
-                if (_metadata != value)
-                {
-                    _metadata = value;
-                    FirePropertyChanged("Metadata");
-                }
-            }
-        }
-
-        public Image FullCover
-        {
-            get { return _FullCover; }
-            set
-            {
-                if (_FullCover != value)
-                {
-                    _FullCover = value;
-                    FirePropertyChanged("FullCover");
-                }
-
-            }
-        }
+        }                             
 
         public string Rating
         {
@@ -221,16 +84,6 @@ namespace Library
                     return _movieDetails.Rating;
                 else
                     return "";
-            }
-
-            set
-            {
-
-                if (_movieDetails.Rating != value)
-                {
-                    _movieDetails.Rating = value;
-                    FirePropertyChanged("Rating");
-                }
             }
         }
 
@@ -242,15 +95,7 @@ namespace Library
                     return _movieDetails.Runtime + " min";
                 else
                     return "";
-            }
-            set
-            {
-                if (_movieDetails.Runtime != value)
-                {
-                    _movieDetails.Runtime = value;
-                    FirePropertyChanged("Length");
-                }
-            }
+            }           
         }
 
         public string ReleaseDateYear
@@ -284,17 +129,7 @@ namespace Library
                 else
                     return "";
             }
-        }
-
-        public IList ActingRoles
-        {
-            get { return _movieDetails.ActingRoles; }
-        }
-
-        public IList Directors
-        {
-            get { return _movieDetails.Directors; }
-        }
+        }      
 
         public IList Genres
         {
@@ -327,26 +162,7 @@ namespace Library
                 }
                 return res;
             }
-        }
-
-        public List<string> Languages
-        {
-            get { return _movieDetails.TitleObject.AudioTracks; }
-        }
-
-        public string LanguagesAsString
-        {
-            get
-            {
-                string res = "";
-                foreach (string s in _movieDetails.TitleObject.AudioTracks)
-                {
-                    if (res.Length > 0) res += ", ";
-                    res += s;
-                }
-                return res;
-            }
-        }
+        }       
 
         public string VideoDetails
         {
@@ -371,41 +187,8 @@ namespace Library
                 }
                 return res;
             }
-        }
-
-        public IList Producers
-        {
-            get { return _movieDetails.Producers; }
-        }
-
-        public IList Writers
-        {
-            get { return _movieDetails.Writers; }
-            //set
-            //{
-            //    if (_movieDetails.Writers != value)
-            //    {
-            //        _movieDetails.Writers = value;
-            //        FirePropertyChanged("Writers");
-            //    }
-            //}
-        }
-
-        public Choice DiskChoice
-        {
-            get { return _diskChoice; }
-        }
-
-        //public Command ShowDisks
-        //{
-        //    get { return _showDisks; }
-        //}
-
-        //public Command HideDisks
-        //{
-        //    get { return _hideDisks; }
-        //}
-
+        }               
+        
         #endregion
 
         public MovieDetailsPage(MovieItem item)
@@ -433,7 +216,7 @@ namespace Library
             {
                 if (File.Exists(item.TitleObject.FrontCoverPath))
                 {
-                    _FullCover = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
+                    _fullCover = GalleryItem.LoadImage(item.TitleObject.FrontCoverPath);
                 }
             }
             _diskChoice = new Choice();
@@ -450,15 +233,39 @@ namespace Library
             }
 
             _watched.Chosen = (_movieDetails.TitleObject.WatchedCount != 0);
-            
+
+            SetupCastObjects();                       
+        }
+
+        private void SetupCastObjects()
+        {
             List<MovieCastCommand> actors = new List<MovieCastCommand>(_movieDetails.TitleObject.ActingRoles.Count);
 
             foreach (string actor in _movieDetails.TitleObject.ActingRoles.Keys)
             {
-                actors.Add(new MovieCastCommand(actor, _movieDetails.TitleObject.ActingRoles[actor], "actor"));
+                actors.Add(new MovieCastCommand(actor, _movieDetails.TitleObject.ActingRoles[actor]));
             }
 
             _actors = new Choice(this, "Actors", actors);
+
+
+            List<MovieCastCommand> directors = new List<MovieCastCommand>(_movieDetails.TitleObject.Directors.Count);
+
+            foreach (Person director in _movieDetails.TitleObject.Directors)
+            {
+                directors.Add(new MovieCastCommand(director.full_name, null));
+            }
+
+            _directors = new Choice(this, "Directors", directors);
+
+            List<MovieCastCommand> writers = new List<MovieCastCommand>(_movieDetails.TitleObject.Writers.Count);
+
+            foreach (Person writer in _movieDetails.TitleObject.Writers)
+            {
+                writers.Add(new MovieCastCommand(writer.full_name, null));
+            }
+
+            _writers = new Choice(this, "Writers", writers);
         }
 
         public void PlayDiskWithOptions()
@@ -467,7 +274,7 @@ namespace Library
             {
                 // Play the Selected Disk
                 _movieDetails.PlayMovie();
-                _PlayClicked = false; // I use the private variable because I don't want to send an event to the MCML page
+                _playClicked = false; // I use the private variable because I don't want to send an event to the MCML page
             });
         }
 
@@ -485,7 +292,7 @@ namespace Library
                 PlayClicked = true;
                 _movieDetails.TitleObject.SelectedDisk = _movieDetails.Disks[SelectedDisk];
                 PlayMovieOrShowDVDContextMenu();
-                _PlayClicked = false; // I use the private variable because I don't want to send an event to the MCML page
+                _playClicked = false; // I use the private variable because I don't want to send an event to the MCML page
             });
         }
 
@@ -602,7 +409,7 @@ namespace Library
             }
         }
 
-        public MovieCastCommand(string name, string part, string type)  
+        public MovieCastCommand(string name, string part)  
         {
             this.name = name;
             this.part = part;
@@ -613,7 +420,7 @@ namespace Library
         private void MovieCastCommand_Invoked(object sender, EventArgs e)
         {
             MovieGallery gallery = new MovieGallery(OMLApplication.Current.Titles, "Home");
-            OMLApplication.Current.GoToSelectionList(gallery, Filter.Actor, name);
+            OMLApplication.Current.GoToSelectionList(gallery, Filter.Participant, name);
         }        
     }
 
