@@ -15,13 +15,10 @@
 
     <Locals>
       <AnchorEdge Name="DetailsTop" Id="Parent" Percent="0" Offset="25" />
-    </Locals>
-	
+    </Locals>	
 
 		<Rules>
       <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[BottomBar.Visible]" />
-      <Binding Source="[ShowCoverThumbnail]" Target="[LeftPanelThumb.Visible]" />
-      
 
       <Condition Source="[ShowCoverThumbnail]" SourceValue="true">
         <Actions>
@@ -30,7 +27,7 @@
         </Actions>
       </Condition>
 
-      <Changed Source="[MovieBrowser.FocusedItem.MenuCoverArt]"       >
+      <Changed Source="[MovieBrowser.FocusedItem.MenuCoverArt]">
         <Actions>          
           <Set Target="[LeftPanelThumb.Content]" Value="[MovieBrowser.FocusedItem.MenuCoverArt]"/>
         </Actions>
@@ -51,7 +48,7 @@
         <Children>
           <Panel Name="BottomBar" Layout="Form">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0" Bottom="Parent, 1" Top="Parent, 1,-165" Right="PageStats,0,-20"/>
+              <FormLayoutInput Left="Parent,0" Bottom="Parent, 1,-20" Top="Parent, 1,-165" Right="PageStats,0,-20"/>
             </LayoutInput>
             <Children>
 
@@ -60,7 +57,7 @@
                   <FormLayoutInput Left="Parent,0" />
                 </LayoutInput>
                 <Children>
-                  <Graphic Name="LeftPanelThumb" Scale=".92,.92,0"  >
+                  <Graphic Name="LeftPanelThumb" MaintainAspectRatio="true" Visible="false">
                     <Animations>
                       <TransformAnimation Source="animation://s:ChangeHide"/>
                       <TransformAnimation Source="animation://s:ChangeShow"/>
