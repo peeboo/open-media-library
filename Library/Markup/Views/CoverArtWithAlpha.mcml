@@ -135,7 +135,7 @@
 
                           <!-- Hook up our list to the repeater.  -->
                           <Repeater Name="GalleryRepeater"
-                                    Navigation="FlowVertical,RememberFocus,PreferFocusOrder"
+                                    Navigation="FlowVertical,RememberFocus"
                                     Source="[RepeatedItem!a:LabeledList.Movies]">
                             <Layout>
                               <GridLayout Repeat="Never"
