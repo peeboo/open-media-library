@@ -64,7 +64,19 @@ namespace Library
                 OMLApplication.DebugLine("[MountingTool] Mount waiting for 100 milliseconds");
                 System.Threading.Thread.Sleep(100);
                 timeout += 100;
-            }            
+            }
+
+            string path = _Drive + ":\\";
+            timeout = 0;
+            while (timeout < 10000)
+            {
+                if (System.IO.Directory.Exists(path) &&
+                    System.IO.Directory.GetDirectories(path).Length != 0)
+                    break;
+
+                System.Threading.Thread.Sleep(250);
+                timeout += 250;
+            }
 
             VirtualDrive = _Drive;
             _MountedIsoFile = IsoFile;
