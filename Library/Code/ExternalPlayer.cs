@@ -18,8 +18,8 @@ namespace Library
     {
         private static Dictionary<VideoFormat, string> _typeToExternalPlayer = null;
         private static object _lockObject = new object();
-
-        private MediaSource _source;
+        private string _mediaPath;
+        private VideoFormat _videoFormat;
 
         private static Dictionary<VideoFormat, string> TypeToExternalPlayer
         {
@@ -77,9 +77,10 @@ namespace Library
         /// Constructor
         /// </summary>
         /// <param name="source"></param>
-        public ExternalPlayer(MediaSource source)
+        public ExternalPlayer(string mediaPath, VideoFormat videoFormat)
         {
-            _source = source;
+            _videoFormat = videoFormat;
+            _mediaPath = mediaPath;
         }
 
         /// <summary>
@@ -87,9 +88,8 @@ namespace Library
         /// </summary>
         /// <returns></returns>
         public bool PlayMovie()
-        {                        
-            string moviePath = _source.MediaPath;
-            string path = GetExternalPlayerPath(_source.Format);
+        {
+            string path = GetExternalPlayerPath(_videoFormat);
 
             // make sure the external player really cares about this
             if (string.IsNullOrEmpty(path))
@@ -102,20 +102,20 @@ namespace Library
             // solomon : apparently some external players want you to point to the \BDMV path
             // this may not work for all players so i'm adding this in now and if it becomes
             // a problem we'll need to add it as config switch down the road
-            if (_source.Format == VideoFormat.BLURAY &&
-                !File.Exists(Path.Combine(_source.MediaPath, "index.bdmv")) &&
-                File.Exists(Path.Combine(_source.MediaPath, "BDMV\\index.bdmv")))
+            if (_videoFormat == VideoFormat.BLURAY &&
+                !File.Exists(Path.Combine(_mediaPath, "index.bdmv")) &&
+                File.Exists(Path.Combine(_mediaPath, "BDMV\\index.bdmv")))
             {
-                moviePath = Path.Combine(moviePath, "BDMV");
+                _mediaPath = Path.Combine(_mediaPath, "BDMV");
             }
 
-            OMLApplication.DebugLine("Calling external application \"" + path + "\" \"" + moviePath + "\"");
+            OMLApplication.DebugLine("Calling external application \"" + path + "\" \"" + _mediaPath + "\"");
 
             OMLApplication.ExecuteSafe(delegate
             {
                 Process process = new Process();
                 process.StartInfo.FileName = path;
-                process.StartInfo.Arguments = "\"" + moviePath + "\"";
+                process.StartInfo.Arguments = "\"" + _mediaPath + "\"";
                 process.Start();
             });
                         

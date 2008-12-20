@@ -13,37 +13,35 @@ namespace Library
     public class DVDPlayer : IPlayMovie
     {
         MediaSource _source;
+        string _mediaPath;
 
-        public DVDPlayer(MediaSource source)
+        public DVDPlayer(MediaSource source, string path)
         {
             _source = source;
+            _mediaPath = path;
         }
 
-        public bool PlayMovie(string playString)
-        {
-            if (MediaData.IsDVD(_source.MediaPath))
+        private bool PlayMovie(string playString)
+        {            
+            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, playString, false))
             {
-                if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, playString, false))
+                if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                 {
-                    if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
-                    {
-                        OMLApplication.Current.NowPlayingMovieName = _source.Name;
-                        OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
-                        AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
-                        AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
-                    }
-                    return true;
+                    OMLApplication.Current.NowPlayingMovieName = _source.Name;
+                    OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
+                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
+                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                 }
-                return false;
+                return true;
             }
-            return false;
+            return false;            
         }
 
         public bool PlayMovie()
         {
-            if (MediaData.IsDVD(_source.MediaPath))
-            {                                
-                string path = MediaData.GetPlayStringForPath(_source.MediaPath);
+            if (MediaData.IsDVD(_mediaPath))
+            {
+                string path = MediaData.GetPlayStringForPath(_mediaPath);
 
                 // the unc path requires that it start with // so remove \\ if it exists
                 if (path.StartsWith("\\\\"))
