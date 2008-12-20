@@ -354,6 +354,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] DiskChooserContext {
+            get {
+                object obj = ResourceManager.GetObject("DiskChooserContext", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap EditBoxFocus {
             get {
                 object obj = ResourceManager.GetObject("EditBoxFocus", resourceCulture);

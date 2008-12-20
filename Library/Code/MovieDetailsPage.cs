@@ -284,8 +284,25 @@ namespace Library
                 _dvdContextMenu = new ContextMenu();
         }
 
+        public void PlayMovie()
+        {
+            // if there is more than one disk show the context menu
+            if (_movieDetails.Disks != null &&
+                MovieDetails.Disks.Count > 1)
+            {
+                ShowDVDContextMenu = true;
+            }
+            else if ( _movieDetails.Disks.Count == 1 )
+            {
+                // just play the first disk
+                PlayDisk(0);
+            }
+
+            // if there are no disks do nothing
+        }
+
         public void PlayDisk(int SelectedDisk)
-        {            
+        {
             // check the checkbox - this is to make it checked when the user clicks the back button
             // this will trigure the save to happen again but since we've already updated the count 
             // the save will be a noop
