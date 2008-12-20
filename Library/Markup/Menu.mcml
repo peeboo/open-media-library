@@ -19,7 +19,6 @@
             <Color Name="BackgroundColor" Color="color://s:BackgroundColor"/>
             <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
             <a:UISettings Name="UISettings" UISettings="$Required" />
-            <IntRangedValue Name="FocusedIndex"/>
             <cor:String Name="GalleryView" String="$Required" />
             <EditableText Name="JumpValue"/>
             <Command Name="GoToNowPlaying" />
@@ -147,9 +146,9 @@
                   <!-- GalleryPanel -->
                   <Panel Name="GalleryPanel" MouseInteractive="true" FocusOrder="0">
                     <Children>
-                      <view:CoverArtWithAlpha Name="ViewCoverArtWithAlpha" FocusedIndex="[FocusedIndex]" MovieBrowser="[MovieBrowser]" UISettings="[UISettings]" Visible="False"/>
-                      <view:CoverArt Name="ViewCoverArt" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
-                      <view:ListView Name="ViewList" FocusedIndex="[FocusedIndex]"  MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
+                      <view:CoverArtWithAlpha Name="ViewCoverArtWithAlpha" MovieBrowser="[MovieBrowser]" UISettings="[UISettings]" Visible="False"/>
+                      <view:CoverArt Name="ViewCoverArt" MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
+                      <view:ListView Name="ViewList" MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
                     </Children>
 
                     <LayoutInput>

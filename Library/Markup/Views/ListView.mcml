@@ -15,8 +15,6 @@
       <col:IList Name="List" IList="$Required"/>
       <EditableText Name="JumpValue"/>
       <cor:Boolean Name="ShowDescription" Boolean="true" />
-      <!-- An object to track which item in the list currently has focus -->
-      <IntRangedValue Name="FocusedIndex"/>
 
     </Properties>
 
@@ -34,6 +32,13 @@
       <Default Target="[ScrollingData.Repeater]" Value="[GalleryRepeater]" />
 
       <Binding Source="[ShowDescription]" Target="[DescriptionBar.Visible]" />
+
+      <!-- when the page loads up select the first element-->
+      <Condition Source="[GalleryContainer.Visible]" SourceValue="true">
+        <Actions>
+          <Invoke Target="[GalleryRepeater.NavigateIntoIndex]" index="[MovieBrowser.FocusIndex.Value]" />
+        </Actions>
+      </Condition>
 
       <Changed Source="[ScrollingData.TotalPages]">
         <Actions>
@@ -164,7 +169,7 @@
                       <!-- For each item, repeat our RepeatedItem UI, passing in-->
                       <!-- the index of the item and the image.                 -->
                       <me:RepeatedItem  Index="[RepeatedItemIndex]"
-                                        FocusedIndex="[FocusedIndex]"
+                                        FocusedIndex="[MovieBrowser.FocusIndex]"
                                         GalleryItem="[RepeatedItem!a:GalleryItem]"
                                         MovieBrowser="[MovieBrowser]"
                                         UISettings="[UISettings]" />
@@ -176,7 +181,7 @@
             </Children>
           </Panel>
 
-          <c:MovieDescription Name="DescriptionBar" MovieBrowser="[MovieBrowser]" UISettings="[UISettings]" FocusedIndex="[FocusedIndex]" ShowCoverThumbnail="true" />
+          <c:MovieDescription Name="DescriptionBar" MovieBrowser="[MovieBrowser]" UISettings="[UISettings]" ShowCoverThumbnail="true" />
         </Children>
       </Panel>
     </Content>
