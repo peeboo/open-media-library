@@ -9,6 +9,7 @@
 	  xmlns:me="Me">
 
   <Aggregate Source="resx://Library/Library.Resources/Base" />
+  <Aggregate Source="resx://Library/Library.Resources/DiskChooserContext"/>
 
   <UI Name="MovieDetails3">
     <Properties>
@@ -20,7 +21,11 @@
     <Locals>
       <AnchorEdge Name="ImageLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "[UISettings.Anchor.DetailsLeftOffset]" Id="Parent"/>
       <AnchorEdge Name="TitleTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset = "[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
-      <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "400" Id="Parent"/>      
+      <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "400" Id="Parent"/>
+      <Command Name="PlayMovie" Description="Plays the movie if there is only one disc - otherwise brings up the disc menu"/>
+
+      <ShortcutHandler Name="BackHandler" Shortcut="Back" Handle="false" HandlerStage="Routed" />
+      <KeyHandler Key="Backspace" Name="BackHandlerKey" Handle="false" HandlerStage="Routed"/>
     </Locals>
 
     <Rules>
@@ -50,8 +55,42 @@
         </Actions>
       </Changed>
 
+      <Changed Source="[PlayMovie.Invoked]">
+        <Actions>
+          <Invoke Target="[DetailsPage.PlayMovie]" />
+        </Actions>
+      </Changed>
 
-      
+      <!-- context and back button support -->
+      <Changed Source="[DetailsPage.ShowDVDContextMenu]">
+        <Actions>                    
+          <Set Target="[dvdContextMenuPanel.Visible]" Value="true"/>
+          <Invoke Target="[dvdContextMenu.NavigateInto]" />
+
+          <Set Target="[BackHandler.Handle]" Value="true"/>
+          <Set Target="[BackHandlerKey.Handle]" Value="true"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[BackHandler.Invoked]" >
+        <Actions>
+          <Set Target="[dvdContextMenuPanel.Visible]" Value="false"/>
+
+          <Set Target="[BackHandler.Handle]" Value="false"/>
+          <Set Target="[BackHandlerKey.Handle]" Value="false"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[BackHandlerKey.Invoked]" >
+        <Actions>
+          <Set Target="[dvdContextMenuPanel.Visible]" Value="false"/>
+
+          <Set Target="[BackHandler.Handle]" Value="false"/>
+          <Set Target="[BackHandlerKey.Handle]" Value="false"/>
+        </Actions>
+      </Changed>             
+      <!-- end context and back button -->
+
     </Rules>
 
     <Content>
@@ -59,16 +98,38 @@
         <Children>
 
           <!-- play buttons -->
-          <Panel Name="DVDButtons" FocusOrder="0" Navigation="Group">
-            <Layout>
-              <FlowLayout Orientation="Horizontal" />
-            </Layout>
+          <Panel Name="DVDButtons" FocusOrder="0" Navigation="Group">            
             <LayoutInput>
               <FormLayoutInput Top="Parent,0.05" Right="Parent,.95"/>
             </LayoutInput>
             <Children>
-              <me:DVDDisks Name="DiscList" DetailsPage="[DetailsPage]" DiskListChoice="[DetailsPage.DiskChoice]" />
+              <c:SimpleButton Name="PlayButton" Text="Play Movie" Command="[PlayMovie]" Size="180,51"/>
             </Children>
+          </Panel>
+
+          <!-- Disk chooser context menu -->
+          <Panel Name="dvdContextMenuPanel" Visible="false">
+            <Children>
+              <me:DiskChooserContext Name="dvdContextMenu" DetailsPage="[DetailsPage]" />
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Top="DVDButtons,1,5" Right="DVDButtons,1"/>
+            </LayoutInput>
+            <Animations>
+              <Animation Type="Show">
+                <Keyframes>
+                  <PositionKeyframe Time="0" RelativeTo="Final" Value="400,0,0"/>
+                  <PositionKeyframe Time=".25" RelativeTo="Final" Value="-20,0,0"/>
+                  <PositionKeyframe Time=".40" RelativeTo="Final" Value="0,0,0"/>
+                </Keyframes>
+              </Animation>
+              <Animation Type="Hide">
+                <Keyframes>
+                  <PositionKeyframe Time="0" RelativeTo="Final" Value="0,0,0"/>
+                  <PositionKeyframe Time=".25" RelativeTo="Final" Value="400,0,0"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
           </Panel>
 
           <!-- image panel -->
@@ -430,7 +491,6 @@
     </Properties>
 
     <Rules>
-
       <Rule>
         <Conditions>
           <Equality Source="[Text]" Value=""/>
@@ -450,71 +510,6 @@
         </Children>
       </Panel>
     </Content>
-  </UI>
-
-  <UI Name="DVDDisks">
-    <Properties>
-      <a:MovieDetailsPage Name="DetailsPage" a:MovieDetailsPage="$Required" />
-      <Choice Name="DiskListChoice" Choice="$Required" />
-    </Properties>
-
-    <Locals>
-      <ScrollingHandler Name="ScrollingHandler" />
-      <ScrollingData Name="ScrollingData" />
-      <MouseWheelHandler Name="WheelHandler"/>
-
-      <GridLayout Name="ListLayout" Repeat="WhenTooBig"
-                  AllowWrap="true"
-                  Orientation="Horizontal"
-                  Spacing="10,10"
-                  />
-    </Locals>
-
-    <Rules>
-      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
-      <Default Target="[ScrollingData.Repeater]" Value="[DiskRepeater]"/>
-    </Rules>
-
-    <Content>
-      <Panel Layout="VerticalFlow">
-        <Children>
-          <Repeater Name="DiskRepeater" Source="[DiskListChoice.Options]" Layout="[ListLayout]" Navigation="FlowVertical">         
-
-            <Content>
-              <me:ShowDisc DetailsPage="[DetailsPage]" Index="[RepeatedItemIndex]" DiscName="[RepeatedItem!a:DiskWrapper.Name.ToString]" />
-            </Content>
-          </Repeater>
-        </Children>
-      </Panel>
-    </Content>
-  </UI>
-
-  <UI Name="ShowDisc">
-    <Properties>
-      <a:MovieDetailsPage Name="DetailsPage" a:MovieDetailsPage="$Required" />
-      <cor:String Name="DiscName" cor:String="$Required" />
-      <Index Name="Index" Index="$Required"/>
-    </Properties>
-
-    <Locals>
-      <Command Name="PlaySelectedDisk" Description="Plays the selected disc"/>
-    </Locals>
-
-    <Rules>
-      <Default Target="[Input.KeyInteractive]" Value="true" />
-
-      <Changed Source="[PlaySelectedDisk.Invoked]">
-        <Actions>
-          <DebugTrace Message="Playing Selected Disk"></DebugTrace>
-          <Invoke Target="[DetailsPage.PlayDisk]" SelectedDisk="[Index.Value]" />
-        </Actions>
-      </Changed>
-
-    </Rules>
-
-    <Content>
-      <c:SimpleButton Name="Button" Text="[DiscName]" Command="[PlaySelectedDisk]" Size="180,51"/>
-    </Content>
-  </UI>
-
+  </UI>  
+  
 </Mcml>
