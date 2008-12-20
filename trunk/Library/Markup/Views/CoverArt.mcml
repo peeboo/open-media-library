@@ -122,8 +122,8 @@
 
     </Rules>
 
-    <Content>
-      <Panel Name="GalleryContainer" Layout="VerticalFlow"  MouseInteractive="true" >        
+    <Content>      
+      <Panel Name="GalleryContainer" Layout="VerticalFlow"  MouseInteractive="true" >       
         <Children>
           <Panel MaximumSize="0,450" Layout="Center">
             
@@ -205,7 +205,7 @@
     </Properties>
 
     <Locals>
-      <ClickHandler Name="Clicker" />
+      <ClickHandler Name="Clicker" Command="[GalleryItem]" />
       <ShortcutHandler Name="PlayPauseButton" Command="[GalleryItem.QuickPlay]" Shortcut="PlayPause" Handle="true" HandlerStage="Direct"  />
       <ShortcutHandler Name="PlayButton" Command="[GalleryItem.QuickPlay]" Shortcut="Play"   Handle="true" HandlerStage="Direct" />
       <cor:Int32 Name="CurrentIndex" />     
@@ -253,14 +253,14 @@
       <Binding Source="[GalleryItem.MenuCoverArt]" Target="[MenuCover.Content]" />
       
       <!-- have the clicker directly invoke the gallery item -->
-      <Condition Source="[UISettings.Gallery.MovieDetailsTransitionType]" SourceValue="None">
+      <!--<Condition Source="[UISettings.Gallery.MovieDetailsTransitionType]" SourceValue="None">
         <Actions>
           <Set Target="[Clicker.Command]" Value="[GalleryItem]"/>
         </Actions>
-      </Condition>
+      </Condition>-->
 
       <!-- if we have spin enabled use that transition instead -->
-      <Rule ConditionLogicalOp="And">
+      <!--<Rule ConditionLogicalOp="And">
         <Conditions>
           <Equality Source="[UISettings.Gallery.MovieDetailsTransitionType]" Value="Zoom and Spin" />
           <Modified Source="[Clicker.Invoked]"/>
@@ -269,10 +269,10 @@
           <PlayAnimation Target="[MenuCover]" Animation="[ZoomAndSpinMe]"/>
           <Set Target="[ZoomTimer.Enabled]" Value="true"/>
         </Actions>
-      </Rule>
+      </Rule>-->
 
       <!-- play the zoom animation and then invoke the gallery item on a timer -->
-      <Rule ConditionLogicalOp="And">
+      <!--<Rule ConditionLogicalOp="And">
         <Conditions>
           <Equality Source="[UISettings.Gallery.MovieDetailsTransitionType]" Value="Zoom" />
           <Modified Source="[Clicker.Invoked]"/>
@@ -281,7 +281,7 @@
           <PlayAnimation Target="[MenuCover]" Animation="[ZoomMe]"/>
           <Set Target="[ZoomTimer.Enabled]" Value="true"/>
         </Actions>
-      </Rule>
+      </Rule>-->
 
       <!-- invoke the gallery item and disable the timer -->
       <Changed Source="[ZoomTimer.Tick]">
