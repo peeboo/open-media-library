@@ -34,14 +34,7 @@
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true" />
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
-      <Default Target="[ScrollingData.Repeater]" Value="[GalleryRepeater]" />
-
-      <!-- moves the focus back into the list when hitting the back button -->
-      <Condition Source="[MovieBrowser.IsReturning]" SourceValue="true">
-        <Actions>
-          <Invoke Target="[GalleryRepeater.NavigateIntoIndex]" index="[FocusedIndex.Value]" />
-        </Actions>
-      </Condition>
+      <Default Target="[ScrollingData.Repeater]" Value="[GalleryRepeater]" />     
 
       <Changed Source="[ScrollingData.TotalPages]">
         <Actions>
@@ -266,12 +259,6 @@
         </Actions>
       </Condition>
 
-      <Condition Source="[CurrentIndex]" SourceValue="[Index.Value]">
-        <Actions>
-          <Invoke Target="[ItemPanel.NavigateInto]"/>
-        </Actions>
-      </Condition>      
-
       <!-- if we have spin enabled use that transition instead -->
       <Rule ConditionLogicalOp="And">
         <Conditions>
@@ -303,13 +290,6 @@
           <Set Target="[ZoomTimer.Enabled]" Value="false"/>
         </Actions>
       </Changed>
-
-      <!-- this will cause the first item to be highlighted when loading list -->
-      <Condition Source="[Index.Value]" SourceValue="0">
-        <Actions>
-          <Invoke Target="[ItemPanel.NavigateInto]"/>
-        </Actions>
-      </Condition>
       
       <!-- If we get key focus, change our background color to indicate it. -->
       <Condition Source="[Input.KeyFocus]" SourceValue="true">

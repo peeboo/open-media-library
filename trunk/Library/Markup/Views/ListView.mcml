@@ -35,13 +35,6 @@
 
       <Binding Source="[ShowDescription]" Target="[DescriptionBar.Visible]" />
 
-      <!-- moves the focus back into the list when hitting the back button -->
-      <Condition Source="[MovieBrowser.IsReturning]" SourceValue="true">
-        <Actions>
-          <Invoke Target="[GalleryRepeater.NavigateIntoIndex]" index="[FocusedIndex.Value]" />
-        </Actions>
-      </Condition>
-
       <Changed Source="[ScrollingData.TotalPages]">
         <Actions>
           <Set Target="[MovieBrowser.NumberOfPages]" Value="[ScrollingData.TotalPages!cor:Int32]" />
@@ -234,13 +227,6 @@
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
-
-      <!-- this will cause the first item to be highlighted when loading list -->
-      <Condition Source="[Index.Value]" SourceValue="0">
-        <Actions>
-          <Invoke Target="[ItemPanel.NavigateInto]"/>
-        </Actions>
-      </Condition>
 
       <!-- If we get key focus, change our background color to indicate it. -->
       <Condition Source="[Input.KeyFocus]" SourceValue="true">
