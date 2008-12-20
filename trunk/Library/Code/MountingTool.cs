@@ -16,12 +16,13 @@ namespace Library
             VirtualCloneDrive
         };
 
-        static string _Path;
-        static string _Drive;
-        static int _DriveNo;
-        static string _MountedIsoFile = string.Empty;
+        private string _Path;
+        private string _Drive;
+        private int _DriveNo;
+        private string _MountedIsoFile = string.Empty;
 
-        static MountingTool()
+        // this can't be a static constructor since these settings can change during the session
+        public MountingTool()
         {
             OMLApplication.DebugLine("[MountingTool] MountingTool()");
             _Path = OMLEngine.Properties.Settings.Default.MountingToolPath;
@@ -56,13 +57,15 @@ namespace Library
                 strParams = string.Format("-mount {0}, \"{1}\"", _DriveNo, IsoFile);
             }
             Process p = StartProcess(_Path, strParams, true, true);
+
             int timeout = 0;
             while (!p.HasExited && (timeout < 10000))
             {
                 OMLApplication.DebugLine("[MountingTool] Mount waiting for 100 milliseconds");
                 System.Threading.Thread.Sleep(100);
                 timeout += 100;
-            }
+            }            
+
             VirtualDrive = _Drive;
             _MountedIsoFile = IsoFile;
             return true;

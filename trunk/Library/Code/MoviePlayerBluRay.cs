@@ -10,17 +10,19 @@ namespace Library
     public class BluRayPlayer : IPlayMovie
     {
         MediaSource _source;
+        string _mediaPath;
 
-        public BluRayPlayer(MediaSource source)
+        public BluRayPlayer(MediaSource source, string mediaPath)
         {
             _source = source;
+            _mediaPath = mediaPath;
         }
 
         public bool PlayMovie()
         {
-            if (MediaData.IsBluRay(_source.MediaPath))
+            if (MediaData.IsBluRay(_mediaPath))
             {
-                string play_string = MediaData.GetPlayStringForPath(_source.MediaPath);
+                string play_string = MediaData.GetPlayStringForPath(_mediaPath);
 //                play_string = "BLURAY://" + play_string;
 //                play_string.Replace('\\', '/');
                 if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, play_string, false))

@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Library
 {
-    public class MountImagePlayer : IPlayMovie
+    /*public class MountImagePlayer : IPlayMovie
     {
         MediaSource _source;
         MountingTool _dt;
@@ -64,7 +64,7 @@ namespace Library
             return false;
         }
 
-    }
+    }*/
 
 
 }

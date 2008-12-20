@@ -10,17 +10,19 @@ namespace Library
     public class HDDVDPlayer : IPlayMovie
     {
         MediaSource _source;
+        string _mediaPath;
 
-        public HDDVDPlayer(MediaSource source)
+        public HDDVDPlayer(MediaSource source, string mediaPath)
         {
             _source = source;
+            _mediaPath = mediaPath;
         }
 
         public bool PlayMovie()
         {
-            if (MediaData.IsHDDVD(_source.MediaPath))
+            if (MediaData.IsHDDVD(_mediaPath))
             {
-                string media = MediaData.GetPlayStringForPath(_source.MediaPath);
+                string media = MediaData.GetPlayStringForPath(_mediaPath);
                 media = "HDDVD://" + media;
                 media.Replace('\\', '/');
                 if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, media, false))
