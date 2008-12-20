@@ -15,14 +15,10 @@
       <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
       <a:UISettings Name="UISettings" UISettings="$Required" />
       <col:IList Name="List" IList="$Required"/>
-      <EditableText Name="JumpValue"/>
-
-      <!-- An object to track which item in the list currently has focus -->
-      <IntRangedValue Name="FocusedIndex"/>
-
+      <EditableText Name="JumpValue"/>  
     </Properties>
 
-    <Locals>      
+    <Locals>            
       <!-- Create an input handler for scrolling. -->
       <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled" />
       <ScrollingData Name="ScrollingData" LockedPosition="0.5" />
@@ -34,7 +30,14 @@
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true" />
       <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
-      <Default Target="[ScrollingData.Repeater]" Value="[GalleryRepeater]" />     
+      <Default Target="[ScrollingData.Repeater]" Value="[GalleryRepeater]" />      
+      
+      <!-- when the page loads up select the first element-->
+      <Condition Source="[GalleryContainer.Visible]" SourceValue="true">        
+        <Actions>
+          <Invoke Target="[GalleryRepeater.NavigateIntoIndex]" index="[MovieBrowser.FocusIndex.Value]" />
+        </Actions>
+      </Condition>
 
       <Changed Source="[ScrollingData.TotalPages]">
         <Actions>
@@ -165,7 +168,7 @@
                       <!-- For each item, repeat our RepeatedItem UI, passing in-->
                       <!-- the index of the item and the image.                 -->
                       <me:RepeatedItem  Index="[RepeatedItemIndex]"
-                                    FocusedIndex="[FocusedIndex]"
+                                    FocusedIndex="[MovieBrowser.FocusIndex]"
                                     GalleryItem="[RepeatedItem!a:GalleryItem]"
                                     MovieBrowser="[MovieBrowser]"
                                     CoverArtAlpha="[UISettings.Gallery.CoverArtAlpha]"
@@ -178,7 +181,7 @@
 
             </Children>
           </Panel>
-          <c:MovieDescription MovieBrowser="[MovieBrowser]" UISettings="[UISettings]" FocusedIndex="[FocusedIndex]" />
+          <c:MovieDescription MovieBrowser="[MovieBrowser]" UISettings="[UISettings]" />
         </Children>
       </Panel>
     </Content>
@@ -209,7 +212,7 @@
       <ShortcutHandler Name="PlayPauseButton" Command="[GalleryItem.QuickPlay]" Shortcut="PlayPause" Handle="true" HandlerStage="Direct"  />
       <ShortcutHandler Name="PlayButton" Command="[GalleryItem.QuickPlay]" Shortcut="Play"   Handle="true" HandlerStage="Direct" />
       <cor:Int32 Name="CurrentIndex" />     
-      <Timer Name="ZoomTimer" Interval="250"/>
+      <!--<Timer Name="ZoomTimer" Interval="250"/>-->
 
       <!-- This animation will scale the image. -->
       <Animation Name="LostFocusCoverArt" Loop="0">
@@ -226,7 +229,7 @@
         </Keyframes>
       </Animation>            
 
-      <Animation Name="ZoomMe" Loop="0" CenterPointPercent=".5,.5,0">
+      <!--<Animation Name="ZoomMe" Loop="0" CenterPointPercent=".5,.5,0">
         <Keyframes>
           <AlphaKeyframe Time="0.0" RelativeTo="Current" Value="1" />
           <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
@@ -244,7 +247,7 @@
           <AlphaKeyframe Time="0.5" RelativeTo="Absolute" Value=".5" />
           <RotateKeyframe Time="0.5" RelativeTo="Current" Value="360deg;1,1,1" />
         </Keyframes>
-      </Animation>
+      </Animation>-->
     </Locals>
 
     <Rules>
@@ -284,12 +287,12 @@
       </Rule>-->
 
       <!-- invoke the gallery item and disable the timer -->
-      <Changed Source="[ZoomTimer.Tick]">
+      <!--<Changed Source="[ZoomTimer.Tick]">
         <Actions>
           <Invoke Target="[GalleryItem.Invoke]" />
           <Set Target="[ZoomTimer.Enabled]" Value="false"/>
         </Actions>
-      </Changed>
+      </Changed>-->
       
       <!-- If we get key focus, change our background color to indicate it. -->
       <Condition Source="[Input.KeyFocus]" SourceValue="true">

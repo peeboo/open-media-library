@@ -321,6 +321,9 @@ namespace Library
                 IList list = filter.Items;
                 string galleryView = filter.GalleryView;
 
+                // reset the index
+                gallery.FocusIndex.Value = 0;
+
                 DebugLine("[OMLApplication] GoToSelectionList(#{0} items, list name: {1}, gallery: {2})", list.Count, listName, galleryView);
                 Dictionary<string, object> properties = CreateProperties(true, false, gallery);
                 properties["MovieBrowser"] = gallery;

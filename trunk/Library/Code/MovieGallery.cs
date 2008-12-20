@@ -156,6 +156,14 @@ namespace Library
             set { _title = value; }
         }
 
+        private IntRangedValue _focusIndex = new IntRangedValue();
+
+        public IntRangedValue FocusIndex
+        {
+            get { return _focusIndex; }
+            set { _focusIndex = value; }
+        }
+
         /// <summary>
         /// Gets or sets the focused item in the gallery
         /// </summary>

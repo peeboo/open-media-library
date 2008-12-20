@@ -11,7 +11,6 @@
       <cor:Boolean Name="ShowCoverThumbnail" Boolean="false" />
       <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
       <a:UISettings Name="UISettings" UISettings="$Required" />
-      <IntRangedValue Name="FocusedIndex"/>
 		</Properties>
 
     <Locals>
@@ -22,19 +21,20 @@
 		<Rules>
       <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[BottomBar.Visible]" />
       <Binding Source="[ShowCoverThumbnail]" Target="[LeftPanelThumb.Visible]" />
-
-      <Condition Source="[ShowCoverThumbnail]" SourceValue="true" Target="[DetailsTop.Offset]" Value="0" />
       
-      <Rule>
-        <Conditions>
-          <IsValid Source="[MovieBrowser.FocusedItem]"/>
-          <Modified Source="[FocusedIndex.Value]"  InitialEvaluate="true"/>
-          <Equality Source="[ShowCoverThumbnail]" Value="true" ConditionOp="Equals" />
-        </Conditions>
+
+      <Condition Source="[ShowCoverThumbnail]" SourceValue="true">
         <Actions>
-          <Set Target="[LeftPanelThumb.Content]" Value="[MovieBrowser.FocusedItem.MenuCoverArt]" />
+          <Set Target="[DetailsTop.Offset]" Value="0" />
+          <Set Target="[LeftPanelThumb.Visible]" Value="true" />
         </Actions>
-      </Rule>
+      </Condition>
+
+      <Changed Source="[MovieBrowser.FocusedItem.MenuCoverArt]"       >
+        <Actions>          
+          <Set Target="[LeftPanelThumb.Content]" Value="[MovieBrowser.FocusedItem.MenuCoverArt]"/>
+        </Actions>
+      </Changed>                    
       
       <Changed Source="[MovieBrowser.FocusedItem]" >
         <Actions>
@@ -128,7 +128,7 @@
           <!-- movie counter / index -->
           <Panel Name="PageStats">
             <Children>
-              <me:PositionIndicator Gallery="[MovieBrowser]" FocusedIndex="[FocusedIndex]" />
+              <me:PositionIndicator Gallery="[MovieBrowser]" FocusedIndex="[MovieBrowser.FocusIndex]" />
             </Children>
             <LayoutInput>
               <FormLayoutInput Right="Parent, 1, -20" Bottom="Parent,1,-20"/>
