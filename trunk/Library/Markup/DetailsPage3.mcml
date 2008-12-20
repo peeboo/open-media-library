@@ -91,6 +91,28 @@
       </Changed>             
       <!-- end context and back button -->
 
+      <Condition Source="[dvdContextMenuPanel.Visible]" SourceValue="true">
+        <Actions>
+          <PlayAnimation Target="[Image]" Animation="animation://me:SectionGraphicFocusOff" />
+          <PlayAnimation Target="[DVDButtons]" Animation="animation://me:SectionGraphicFocusOff" />
+          <PlayAnimation Target="[DetailsPanel]" Animation="animation://me:SectionGraphicFocusOff" />
+          <PlayAnimation Target="[ActorsPanel]" Animation="animation://me:SectionGraphicFocusOff" />
+          <PlayAnimation Target="[ExtraInofPanel]" Animation="animation://me:SectionGraphicFocusOff" />
+          <PlayAnimation Target="[WatchedCheckbox]" Animation="animation://me:SectionGraphicFocusOff" />          
+        </Actions>
+      </Condition>
+
+      <Condition Source="[dvdContextMenuPanel.Visible]" SourceValue="false">
+        <Actions>
+          <PlayAnimation Target="[Image]" Animation="animation://me:SectionGraphicFocusOn" />
+          <PlayAnimation Target="[DVDButtons]" Animation="animation://me:SectionGraphicFocusOn" />
+          <PlayAnimation Target="[DetailsPanel]" Animation="animation://me:SectionGraphicFocusOn" />
+          <PlayAnimation Target="[ActorsPanel]" Animation="animation://me:SectionGraphicFocusOn" />
+          <PlayAnimation Target="[ExtraInofPanel]" Animation="animation://me:SectionGraphicFocusOn" />
+          <PlayAnimation Target="[WatchedCheckbox]" Animation="animation://me:SectionGraphicFocusOn" />
+        </Actions>
+      </Condition>
+
     </Rules>
 
     <Content>
@@ -209,7 +231,7 @@
           </Panel>
 
           <!-- extra info panel-->
-          <Panel >
+          <Panel Name="ExtraInofPanel">
             <Layout>
               <FlowLayout Orientation="Vertical" Spacing="2,2" />
             </Layout>
