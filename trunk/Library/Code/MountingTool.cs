@@ -50,7 +50,7 @@ namespace Library
             string strParams;
             if (OMLEngine.Properties.Settings.Default.MountingToolPath.ToLower().Contains("virtual"))
             {
-                strParams = string.Format("/l={0} {1}", _DriveNo, IsoFile);
+                strParams = string.Format("/l={0} \"{1}\"", _DriveNo, IsoFile);
             }
             else
             {
