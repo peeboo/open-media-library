@@ -72,7 +72,7 @@
 
         <Content>
 
-              <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
+              <ColorFill Name="AllContent" Content="Transparent" Layout="Form" CenterPointPercent=".25,.25,.25">                
                 <Children>
                   <!-- TitlePanel -->
                   <!--<Panel Name="DetailsPanel" > -->
@@ -158,7 +158,24 @@
                   </Panel>                  
 
                 </Children>
-
+                <Animations>
+                  <Animation Type="Show">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0" RelativeTo="Absolute" Value=".3" />
+                      <AlphaKeyframe Time=".25" RelativeTo="Absolute" Value="1" />
+                      <ScaleKeyframe Time="0" RelativeTo="Final" Value="1.5,1.5,1.5"/>
+                      <ScaleKeyframe Time=".25" RelativeTo="Final" Value="1,1,1"/>
+                    </Keyframes>
+                  </Animation>
+                  <Animation Type="Hide">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0" RelativeTo="Absolute" Value="1" />
+                      <AlphaKeyframe Time=".25" RelativeTo="Absolute" Value="0" />
+                      <ScaleKeyframe Time="0" RelativeTo="Final" Value="1,1,1"/>
+                      <ScaleKeyframe Time=".25" RelativeTo="Final" Value="1.5,1.5,1.5"/>
+                    </Keyframes>
+                  </Animation>
+                </Animations>
               </ColorFill>
         </Content>
 
