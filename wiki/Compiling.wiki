@@ -21,7 +21,7 @@ Requirements
 
 Note: This has to be done on a pc with Vista Media Center and the Media Center SDK 5.3 installed.
 
-2) using a visual studio cmd prompt go into the Library\Setup (or Setup64) dir and run Build.bat
+2) using a cmd prompt go into the Library\Setup (or Setup64) dir and run Build.bat
 
 Note: This will require wix 3.0 to be installed.
 
