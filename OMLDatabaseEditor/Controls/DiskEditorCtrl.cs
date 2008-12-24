@@ -136,8 +136,25 @@ namespace OMLDatabaseEditor.Controls
             }
             else if (Directory.Exists(txtPath.Text))
             {
-                _currentDisk.Format = VideoFormat.DVD;
-                cbDVD.Checked = true;
+                if (MediaData.IsDVD(txtPath.Text))
+                {
+                    _currentDisk.Format = VideoFormat.DVD;
+                    cbDVD.Checked = true;
+                }
+                else if (MediaData.IsBluRay(txtPath.Text))
+                {
+                    _currentDisk.Format = VideoFormat.BLURAY;
+                    cbDVD.Checked = true;
+                }
+                else if (MediaData.IsHDDVD(txtPath.Text))
+                {
+                    _currentDisk.Format = VideoFormat.HDDVD;
+                    cbDVD.Checked = true;
+                }
+                else
+                {
+                    XtraMessageBox.Show("The new path does not contain a DVD, Blu-ray or HDDVD movie", "Error");
+                }
             }
             else
             {
