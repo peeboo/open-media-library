@@ -532,7 +532,7 @@ namespace MyMoviesPlugin
 
                             if (MediaData.IsBluRay(fullPath))
                             {
-                                Utilities.DebugLine("[MyMoviesImporter] its hddvd");
+                                Utilities.DebugLine("[MyMoviesImporter] its bluray");
                                 Disk disk = DiskForFormatAndLocation(VideoFormat.BLURAY, fullPath);
                                 disks.Add(disk);
                                 break;
@@ -540,7 +540,7 @@ namespace MyMoviesPlugin
 
                             if (MediaData.IsHDDVD(fullPath))
                             {
-                                Utilities.DebugLine("[MyMoviesImporter] its bluray");
+                                Utilities.DebugLine("[MyMoviesImporter] its hddvd");
                                 Disk disk = DiskForFormatAndLocation(VideoFormat.HDDVD, fullPath);
                                 disks.Add(disk);
                                 break;
