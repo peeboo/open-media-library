@@ -524,6 +524,30 @@ namespace OMLEngine
         {
             get { return _producers; }
         }
+
+        public decimal PercentComplete
+        {
+            get
+            {
+                decimal score = 0;
+                decimal possible = 12;
+
+                if (Studio.Length > 0) score++;
+                if (Runtime > 0) score++;
+                if (ReleaseDate != DateTime.MinValue) score++;
+                if (Synopsis.Length > 0) score++;
+                if (Genres.Count > 0) score++;
+                if (FrontCoverPath.Length > 0) score++;
+                if (AspectRatio.Length > 0) score++;
+                if (CountryOfOrigin.Length > 0) score++;
+                if (VideoResolution.Length > 0) score++;
+                if (VideoStandard.Length > 0) score++;
+                if (ActingRoles.Count > 0) score++;
+                if (Directors.Count > 0) score++;
+
+                return score / possible;
+            }
+        }
         #endregion
 
         #region serialization methods

@@ -577,5 +577,14 @@ namespace OMLDatabaseEditor
                     t.SerializeToXMLFile(t.Disks[0].Path + ".oml.xml"); 
             Cursor = Cursors.Default; 
         }
+
+        private void lbMovies_DrawItem(object sender, ListBoxDrawItemEventArgs e)
+        {
+            Title currentTitle = _titleCollection.GetTitleById((int)e.Item);
+            if (currentTitle.PercentComplete < .3M)
+                e.Appearance.BackColor = Color.Red;
+            else if (currentTitle.PercentComplete < .6M)
+                e.Appearance.BackColor = Color.Yellow;
+        }
     }
 }
