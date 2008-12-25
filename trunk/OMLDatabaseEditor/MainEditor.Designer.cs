@@ -420,6 +420,7 @@ namespace OMLDatabaseEditor
             this.lbMovies.Size = new System.Drawing.Size(202, 457);
             this.lbMovies.TabIndex = 0;
             this.lbMovies.ValueMember = "InternalItemID";
+            this.lbMovies.DrawItem += new DevExpress.XtraEditors.ListBoxDrawItemEventHandler(this.lbMovies_DrawItem);
             this.lbMovies.SelectedIndexChanged += new System.EventHandler(this.lbMovies_SelectedIndexChanged);
             // 
             // cmsMoviesList
