@@ -125,10 +125,36 @@ namespace OMLEngine
             set { _sortName = value.Trim(); }
         }
 
+        public List<Role> NonActingRolesBinding
+        {
+            get
+            {
+                List<Role> roles = new List<Role>();
+                foreach (string person in _nonActingRoles.Keys)
+                {
+                    roles.Add(new Role(person, _nonActingRoles[person]));
+                }
+                return roles;
+            }
+        }
+
         public Dictionary<string, string> NonActingRoles
         {
             get { return _nonActingRoles; }
             set { _nonActingRoles = value; }
+        }
+
+        public List<Role> ActingRolesBinding
+        {
+            get
+            {
+                List<Role> roles = new List<Role>();
+                foreach (string person in _actingRoles.Keys)
+                {
+                    roles.Add(new Role(person, _actingRoles[person]));
+                }
+                return roles;
+            }
         }
 
         public Dictionary<string, string> ActingRoles
@@ -2103,6 +2129,28 @@ namespace OMLEngine
         public override string ToString()
         {
             return "Title:" + this._name + " (" + this._itemId + ")";
+        }
+    }
+
+    public class Role
+    {
+        public string PersonName;
+        public string RoleName;
+
+        public Role(string personName, string roleName)
+        {
+            PersonName = personName;
+            RoleName = roleName;
+        }
+
+        public override string ToString()
+        {
+            return PersonName + " as " + RoleName;
+        }
+
+        public string Display
+        {
+            get { return ToString(); }
         }
     }
 }

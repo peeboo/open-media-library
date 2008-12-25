@@ -124,12 +124,23 @@ namespace OMLDatabaseEditor.Controls
                 {
                     case 0: //Directors
                         lbPeople.DataSource = EditedTitle.Directors;
+                        lbPeople.DisplayMember = "full_name";
                         break;
                     case 1: //Writers
                         lbPeople.DataSource = EditedTitle.Writers;
+                        lbPeople.DisplayMember = "full_name";
                         break;
                     case 2: //Producers
                         lbPeople.DataSource = EditedTitle.Producers;
+                        lbPeople.DisplayMember = "";
+                        break;
+                    case 3: //Actors
+                        lbPeople.DataSource = EditedTitle.ActingRolesBinding;
+                        lbPeople.DisplayMember = "Display";
+                        break;
+                    case 4: //Non-Actors
+                        lbPeople.DataSource = EditedTitle.NonActingRolesBinding;
+                        lbPeople.DisplayMember = "Display";
                         break;
                 }
             }
@@ -241,6 +252,82 @@ namespace OMLDatabaseEditor.Controls
             // Update scaled menu image
             if (e.ChangeType == WatcherChangeTypes.Changed && e.Name == Path.GetFileName(_dvdTitle.FrontCoverPath))
                 _dvdTitle.BuildResizedMenuImage();
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // delete selected item from source list
+            foreach (object item in lbPeople.SelectedItems)
+            {
+                switch (rgPeople.SelectedIndex)
+                {
+                    case 0: //Directors
+                        EditedTitle.Directors.Remove(item as Person);
+                        break;
+                    case 1: //Writers
+                        EditedTitle.Writers.Remove(item as Person);
+                        break;
+                    case 2: //Producers
+                        EditedTitle.Producers.Remove(item as string);
+                        break;
+                    case 3: //Actors
+                        EditedTitle.ActingRoles.Remove(((Role)item).PersonName);
+                        break;
+                    case 4: //Non-Actors
+                        EditedTitle.NonActingRoles.Remove(((Role)item).PersonName);
+                        break;
+                }
+            }
+            TitleChanges(null, EventArgs.Empty);
+            TogglePeople(rgPeople.SelectedIndex);
+        }
+
+        private void lbPeople_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lbPeople.SelectedIndices.Count == 0)
+            {
+                deleteToolStripMenuItem.Visible = false;
+            }
+            else
+            {
+                deleteToolStripMenuItem.Visible = true;
+            }
+        }
+
+        private void addToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PersonEditorFrm frmPerson = new PersonEditorFrm(rgPeople.SelectedIndex == 3 || rgPeople.SelectedIndex == 4);
+            if (frmPerson.ShowDialog() == DialogResult.OK)
+            {
+                switch (rgPeople.SelectedIndex)
+                {
+                    case 0: //Directors
+                        EditedTitle.AddDirector(new Person(frmPerson.PersonName));
+                        break;
+                    case 1: //Writers
+                        EditedTitle.AddWriter(new Person(frmPerson.PersonName));
+                        break;
+                    case 2: //Producers
+                        EditedTitle.AddProducer(frmPerson.PersonName);
+                        break;
+                    case 3: //Actors
+                        EditedTitle.AddActingRole(frmPerson.PersonName, frmPerson.PersonRole);
+                        break;
+                    case 4: //Non-Actors
+                        EditedTitle.AddNonActingRole(frmPerson.PersonName, frmPerson.PersonRole);
+                        break;
+                }
+                TitleChanges(null, EventArgs.Empty);
+                TogglePeople(rgPeople.SelectedIndex);
+            }
+        }
+
+        private void xtraTabControl1_SelectedPageChanged(object sender, DevExpress.XtraTab.TabPageChangedEventArgs e)
+        {
+            if (e.Page == tpPeople)
+            {
+                TogglePeople(rgPeople.SelectedIndex);
+            }
         }
     }
 
