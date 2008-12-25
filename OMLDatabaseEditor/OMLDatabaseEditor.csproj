@@ -136,6 +136,12 @@
     <Compile Include="Controls\NonFatalErrors.Designer.cs">
       <DependentUpon>NonFatalErrors.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PersonEditorFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\PersonEditorFrm.Designer.cs">
+      <DependentUpon>PersonEditorFrm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TitleEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -205,6 +211,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\NonFatalErrors.resx">
       <DependentUpon>NonFatalErrors.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PersonEditorFrm.resx">
+      <DependentUpon>PersonEditorFrm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TitleEditor.resx">

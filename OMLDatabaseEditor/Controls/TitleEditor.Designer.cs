@@ -87,7 +87,9 @@
             this.tpPeople = new DevExpress.XtraTab.XtraTabPage();
             this.rgPeople = new DevExpress.XtraEditors.RadioGroup();
             this.lbPeople = new DevExpress.XtraEditors.ListBoxControl();
-            this.directorsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.contextPeople = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextImage = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disksBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -128,7 +130,7 @@
             this.tpPeople.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rgPeople.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lbPeople)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.directorsBindingSource)).BeginInit();
+            this.contextPeople.SuspendLayout();
             this.contextImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.disksBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).BeginInit();
@@ -146,6 +148,7 @@
             this.tpVisual,
             this.tpTechnical,
             this.tpPeople});
+            this.xtraTabControl1.SelectedPageChanged += new DevExpress.XtraTab.TabPageChangedEventHandler(this.xtraTabControl1_SelectedPageChanged);
             // 
             // tpVisual
             // 
@@ -780,31 +783,57 @@
             // 
             // rgPeople
             // 
+            this.rgPeople.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.rgPeople.Location = new System.Drawing.Point(4, 4);
             this.rgPeople.Name = "rgPeople";
             this.rgPeople.Properties.Columns = 3;
             this.rgPeople.Properties.Items.AddRange(new DevExpress.XtraEditors.Controls.RadioGroupItem[] {
             new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Directors"),
             new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Writers"),
-            new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Producers")});
+            new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Producers"),
+            new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Actors"),
+            new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Non-Actors")});
             this.rgPeople.Properties.SelectedIndexChanged += new System.EventHandler(this.rgPeople_Properties_SelectedIndexChanged);
-            this.rgPeople.Size = new System.Drawing.Size(510, 38);
+            this.rgPeople.Size = new System.Drawing.Size(510, 46);
             this.rgPeople.TabIndex = 1;
             // 
             // lbPeople
             // 
-            this.lbPeople.DataSource = this.directorsBindingSource;
+            this.lbPeople.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbPeople.ContextMenuStrip = this.contextPeople;
             this.lbPeople.DisplayMember = "full_name";
-            this.lbPeople.Location = new System.Drawing.Point(4, 48);
+            this.lbPeople.Location = new System.Drawing.Point(4, 56);
             this.lbPeople.MultiColumn = true;
             this.lbPeople.Name = "lbPeople";
-            this.lbPeople.Size = new System.Drawing.Size(511, 136);
+            this.lbPeople.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lbPeople.Size = new System.Drawing.Size(511, 437);
             this.lbPeople.TabIndex = 0;
+            this.lbPeople.SelectedIndexChanged += new System.EventHandler(this.lbPeople_SelectedIndexChanged);
             // 
-            // directorsBindingSource
+            // contextPeople
             // 
-            this.directorsBindingSource.DataMember = "Directors";
-            this.directorsBindingSource.DataSource = this.titleSource;
+            this.contextPeople.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToolStripMenuItem,
+            this.deleteToolStripMenuItem});
+            this.contextPeople.Name = "contextMenuStrip1";
+            this.contextPeople.Size = new System.Drawing.Size(108, 48);
+            // 
+            // addToolStripMenuItem
+            // 
+            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.addToolStripMenuItem.Text = "Add";
+            this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // contextImage
             // 
@@ -891,7 +920,7 @@
             this.tpPeople.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.rgPeople.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lbPeople)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.directorsBindingSource)).EndInit();
+            this.contextPeople.ResumeLayout(false);
             this.contextImage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.disksBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).EndInit();
@@ -963,8 +992,10 @@
         private System.Windows.Forms.OpenFileDialog openCoverFile;
         private DevExpress.XtraEditors.RadioGroup rgPeople;
         private DevExpress.XtraEditors.ListBoxControl lbPeople;
-        private System.Windows.Forms.BindingSource directorsBindingSource;
         private System.IO.FileSystemWatcher imageWatcherFront;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.ContextMenuStrip contextPeople;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
     }
 }
