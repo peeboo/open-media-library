@@ -482,7 +482,12 @@ namespace OMLDatabaseEditor
             if (_loading) return;
             Cursor = Cursors.WaitCursor;
             IOMLMetadataPlugin metadata = lbMetadata.SelectedItem as IOMLMetadataPlugin;
-            StartMetadataImport(metadata, false);
+            if (metadata != null)
+            {
+                StartMetadataImport(metadata, false);
+                lbMetadata.SelectedItem = null;
+                lbMetadata.SelectedIndex = -1;
+            }
             Cursor = Cursors.Default;
         }
 
@@ -491,24 +496,29 @@ namespace OMLDatabaseEditor
             if (_loading) return;
             Cursor = Cursors.WaitCursor;
             OMLPlugin importer = lbImport.SelectedItem as OMLPlugin;
-            importer.CopyImages = true;
-
-            lblCurrentStatus.Text = "Importing movies";
-            pgbProgress.Visible = true;
-            string[] work = importer.GetWork();
-            if (work != null)
+            if (importer != null)
             {
-                importer.DoWork(work);
-                LoadTitlesIntoDatabase(importer);
-            }
-            pgbProgress.Visible = false;
-            lblCurrentStatus.Text = "";
+                importer.CopyImages = true;
 
+                lblCurrentStatus.Text = "Importing movies";
+                pgbProgress.Visible = true;
+                string[] work = importer.GetWork();
+                if (work != null)
+                {
+                    importer.DoWork(work);
+                    LoadTitlesIntoDatabase(importer);
+                }
+                pgbProgress.Visible = false;
+                lblCurrentStatus.Text = "";
+
+                this.Refresh();
+                string[] nonFatalErrors = importer.GetErrors;
+                if (nonFatalErrors.Length > 0)
+                    ShowNonFatalErrors(nonFatalErrors);
+                lbImport.SelectedItem = null;
+                lbImport.SelectedIndex = -1;
+            }
             Cursor = Cursors.Default;
-            this.Refresh();
-            string[] nonFatalErrors = importer.GetErrors;
-            if (nonFatalErrors.Length > 0)
-                ShowNonFatalErrors(nonFatalErrors);
         }
 
         private void currentMovieToolStripMenuItem_Click(object sender, EventArgs e)
