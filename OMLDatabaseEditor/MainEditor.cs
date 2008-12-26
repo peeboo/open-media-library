@@ -372,7 +372,13 @@ namespace OMLDatabaseEditor
             {
                 Options options = new Options();
                 options.Owner = this;
-                options.ShowDialog(this);
+                if (options.ShowDialog(this) == DialogResult.OK)
+                {
+                    if (options.OptionsDirty)
+                    {
+                        this.titleEditor.SetMRULists();
+                    }
+                }
             }
             else if (sender == aboutToolStripMenuItem)
             {

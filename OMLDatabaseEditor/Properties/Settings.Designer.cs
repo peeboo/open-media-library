@@ -46,5 +46,17 @@ namespace OMLDatabaseEditor.Properties {
                 this["gsMPAARatings"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool gbUseMPAAList {
+            get {
+                return ((bool)(this["gbUseMPAAList"]));
+            }
+            set {
+                this["gbUseMPAAList"] = value;
+            }
+        }
     }
 }
