@@ -18,6 +18,8 @@ namespace OMLDatabaseEditor.Controls
 {
     public partial class TitleEditor : UserControl
     {
+        public AutoCompleteStringCollection MPAARatings;
+
         public delegate void TitleChangeEventHandler(object sender, EventArgs e);
         public delegate void TitleNameChangeEventHandler(object sender, TitleNameChangedEventArgs e);
         public delegate void SavedEventHandler(object sender, EventArgs e);
@@ -328,6 +330,21 @@ namespace OMLDatabaseEditor.Controls
             {
                 TogglePeople(rgPeople.SelectedIndex);
             }
+        }
+
+        public void SetMRULists()
+        {
+            MPAARatings = new AutoCompleteStringCollection();
+            MPAARatings.AddRange(Properties.Settings.Default.gsMPAARatings.Split('|'));
+
+            // MaskBox is a hidden property
+            // It is explained on the DevExpress Website at:
+            //
+            // http://www.devexpress.com/Support/Center/p/Q181219.aspx
+            //
+            teParentalRating.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            teParentalRating.MaskBox.AutoCompleteCustomSource = MPAARatings;
         }
     }
 
