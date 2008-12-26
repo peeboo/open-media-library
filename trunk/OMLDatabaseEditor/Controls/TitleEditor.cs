@@ -334,17 +334,27 @@ namespace OMLDatabaseEditor.Controls
 
         public void SetMRULists()
         {
-            MPAARatings = new AutoCompleteStringCollection();
-            MPAARatings.AddRange(Properties.Settings.Default.gsMPAARatings.Split('|'));
+            if (Properties.Settings.Default.gbUseMPAAList)
+            {
+                if (MPAARatings != null)
+                {
+                    MPAARatings.Clear();
+                }
+                else
+                {
+                    MPAARatings = new AutoCompleteStringCollection();
+                }
+                MPAARatings.AddRange(Properties.Settings.Default.gsMPAARatings.Split('|'));
 
-            // MaskBox is a hidden property
-            // It is explained on the DevExpress Website at:
-            //
-            // http://www.devexpress.com/Support/Center/p/Q181219.aspx
-            //
-            teParentalRating.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            teParentalRating.MaskBox.AutoCompleteCustomSource = MPAARatings;
+                // MaskBox is a hidden property
+                // It is explained on the DevExpress Website at:
+                //
+                // http://www.devexpress.com/Support/Center/p/Q181219.aspx
+                //
+                teParentalRating.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                teParentalRating.MaskBox.AutoCompleteCustomSource = MPAARatings;
+            }
         }
     }
 
