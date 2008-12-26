@@ -63,7 +63,7 @@
             this.labelControl19 = new DevExpress.XtraEditors.LabelControl();
             this.textEdit8 = new DevExpress.XtraEditors.TextEdit();
             this.labelControl18 = new DevExpress.XtraEditors.LabelControl();
-            this.textEdit7 = new DevExpress.XtraEditors.TextEdit();
+            this.teParentalRating = new DevExpress.XtraEditors.TextEdit();
             this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
             this.textEdit6 = new DevExpress.XtraEditors.TextEdit();
             this.labelControl16 = new DevExpress.XtraEditors.LabelControl();
@@ -115,7 +115,7 @@
             this.tpTechnical.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit9.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit8.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit7.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teParentalRating.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit6.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit5.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit4.Properties)).BeginInit();
@@ -436,7 +436,7 @@
             this.tpTechnical.Controls.Add(this.labelControl19);
             this.tpTechnical.Controls.Add(this.textEdit8);
             this.tpTechnical.Controls.Add(this.labelControl18);
-            this.tpTechnical.Controls.Add(this.textEdit7);
+            this.tpTechnical.Controls.Add(this.teParentalRating);
             this.tpTechnical.Controls.Add(this.labelControl17);
             this.tpTechnical.Controls.Add(this.textEdit6);
             this.tpTechnical.Controls.Add(this.labelControl16);
@@ -545,17 +545,17 @@
             this.labelControl18.TabIndex = 25;
             this.labelControl18.Text = "Parental Rating";
             // 
-            // textEdit7
+            // teParentalRating
             // 
-            this.textEdit7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.teParentalRating.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textEdit7.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "ParentalRating", true));
-            this.textEdit7.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "ParentalRating", true));
-            this.textEdit7.Location = new System.Drawing.Point(120, 263);
-            this.textEdit7.Name = "textEdit7";
-            this.textEdit7.Size = new System.Drawing.Size(394, 20);
-            this.textEdit7.TabIndex = 10;
-            this.textEdit7.TextChanged += new System.EventHandler(this.TitleChanges);
+            this.teParentalRating.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "ParentalRating", true));
+            this.teParentalRating.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "ParentalRating", true));
+            this.teParentalRating.Location = new System.Drawing.Point(120, 263);
+            this.teParentalRating.Name = "teParentalRating";
+            this.teParentalRating.Size = new System.Drawing.Size(394, 20);
+            this.teParentalRating.TabIndex = 10;
+            this.teParentalRating.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl17
             // 
@@ -905,7 +905,7 @@
             this.tpTechnical.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit9.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit8.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit7.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teParentalRating.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit6.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit5.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit4.Properties)).EndInit();
@@ -981,7 +981,7 @@
         private DevExpress.XtraEditors.LabelControl labelControl19;
         private DevExpress.XtraEditors.TextEdit textEdit8;
         private DevExpress.XtraEditors.LabelControl labelControl18;
-        private DevExpress.XtraEditors.TextEdit textEdit7;
+        private DevExpress.XtraEditors.TextEdit teParentalRating;
         private DevExpress.XtraEditors.LabelControl labelControl17;
         private DevExpress.XtraEditors.TextEdit textEdit6;
         private DevExpress.XtraEditors.SimpleButton btnSubtitles;
