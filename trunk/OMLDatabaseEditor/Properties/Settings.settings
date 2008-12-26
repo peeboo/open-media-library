@@ -5,5 +5,8 @@
     <Setting Name="gsAppSkin" Type="System.String" Scope="User">
       <Value Profile="(Default)">Blue</Value>
     </Setting>
+    <Setting Name="gsMPAARatings" Type="System.String" Scope="User">
+      <Value Profile="(Default)">NR|G|PG-13|PG|R|NC-17</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
