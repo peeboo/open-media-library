@@ -184,7 +184,6 @@ namespace OMLDatabaseEditor
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.saveToolStripMenuItem.Text = "&Save Movie";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripButton_Click);
             // 
             // exportCurrentMovieToolStripMenuItem
             // 
@@ -210,7 +209,7 @@ namespace OMLDatabaseEditor
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
             // 
             // editToolStripMenuItem
             // 
@@ -282,7 +281,7 @@ namespace OMLDatabaseEditor
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
-            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
             // 
             // toolStripSeparator1
             // 
@@ -336,7 +335,7 @@ namespace OMLDatabaseEditor
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
             // 
             // toolStripContainer1
             // 
@@ -543,7 +542,7 @@ namespace OMLDatabaseEditor
             this.saveToolStripButton.Name = "saveToolStripButton";
             this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.saveToolStripButton.Text = "&Save Movie";
-            this.saveToolStripButton.Click += new System.EventHandler(this.saveToolStripButton_Click);
+            this.saveToolStripButton.Click += new System.EventHandler(this.ToolStripOptionClick);
             // 
             // toolStripSeparator
             // 
@@ -645,7 +644,6 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraEditors.ListBoxControl lbMovies;
         private DevExpress.XtraEditors.ListBoxControl lbMetadata;
         private DevExpress.XtraEditors.ListBoxControl lbImport;
-        private DevExpress.LookAndFeel.DefaultLookAndFeel defaultLookAndFeel1;
         private System.Windows.Forms.ToolStripMenuItem regenerateThumbnailToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem currentMovieToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allMoviesToolStripMenuItem;
@@ -656,6 +654,7 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripSplitButton newMovieSplitButton;
         private System.Windows.Forms.ToolStripMenuItem fromScratchToolStripMenuItem1;
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl1;
+        public DevExpress.LookAndFeel.DefaultLookAndFeel defaultLookAndFeel1;
     }
 }
 
