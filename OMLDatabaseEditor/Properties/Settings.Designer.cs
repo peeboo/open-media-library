@@ -34,5 +34,17 @@ namespace OMLDatabaseEditor.Properties {
                 this["gsAppSkin"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NR|G|PG-13|PG|R|NC-17")]
+        public string gsMPAARatings {
+            get {
+                return ((string)(this["gsMPAARatings"]));
+            }
+            set {
+                this["gsMPAARatings"] = value;
+            }
+        }
     }
 }
