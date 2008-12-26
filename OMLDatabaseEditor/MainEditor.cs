@@ -46,6 +46,7 @@ namespace OMLDatabaseEditor
 
             _loading = true;
             LoadMovies();
+            this.titleEditor.SetMRULists();
             _loading = false;
             Cursor = Cursors.Default;
         }
@@ -356,9 +357,28 @@ namespace OMLDatabaseEditor
             ToggleSaveState(true);
         }
 
-        private void saveToolStripButton_Click(object sender, EventArgs e)
+        private void ToolStripOptionClick(object sender, EventArgs e)
         {
-            SaveChanges();
+            if (sender == saveToolStripButton)
+            {
+                SaveChanges();
+            } 
+            else if (sender == exitToolStripMenuItem)
+            {
+                SaveCurrentMovie();
+                Application.Exit();
+            }
+            else if (sender == optionsToolStripMenuItem)
+            {
+                Options options = new Options();
+                options.Owner = this;
+                options.ShowDialog(this);
+            }
+            else if (sender == aboutToolStripMenuItem)
+            {
+                AboutOML about = new AboutOML();
+                about.Show();
+            }
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -379,12 +399,6 @@ namespace OMLDatabaseEditor
                     this.Text = APP_TITLE;
                 }
             }
-        }
-
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveCurrentMovie();
-            Application.Exit();
         }
 
         private void MainEditor_FormClosing(object sender, FormClosingEventArgs e)
@@ -408,17 +422,6 @@ namespace OMLDatabaseEditor
                 _titleCollection.saveTitleCollection();
                 LoadMovies();
             }
-        }
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AboutOML about = new AboutOML();
-            about.Show();
-        }
-
-        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Open settings form
         }
 
         private void fromScratchToolStripMenuItem_Click(object sender, EventArgs e)
@@ -584,7 +587,10 @@ namespace OMLDatabaseEditor
             if (currentTitle.PercentComplete < .3M)
                 e.Appearance.BackColor = Color.Red;
             else if (currentTitle.PercentComplete < .6M)
+            {
+                e.Appearance.ForeColor = Color.Black;
                 e.Appearance.BackColor = Color.Yellow;
+            }
         }
     }
 }
