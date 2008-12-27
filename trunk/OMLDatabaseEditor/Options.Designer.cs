@@ -138,7 +138,7 @@ namespace OMLDatabaseEditor
             this.tpMPAAList.Controls.Add(this.lbcMPAA);
             this.tpMPAAList.Controls.Add(this.beMPAA);
             this.tpMPAAList.Name = "tpMPAAList";
-            this.tpMPAAList.Size = new System.Drawing.Size(346, 270);
+            this.tpMPAAList.Size = new System.Drawing.Size(346, 271);
             this.tpMPAAList.Text = "MPAA";
             // 
             // lbcMPAA
@@ -147,14 +147,15 @@ namespace OMLDatabaseEditor
             this.lbcMPAA.Location = new System.Drawing.Point(0, 0);
             this.lbcMPAA.Name = "lbcMPAA";
             this.lbcMPAA.Padding = new System.Windows.Forms.Padding(2);
-            this.lbcMPAA.Size = new System.Drawing.Size(346, 250);
+            this.lbcMPAA.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lbcMPAA.Size = new System.Drawing.Size(346, 251);
             this.lbcMPAA.TabIndex = 1;
             this.lbcMPAA.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbcMPAA_KeyDown);
             // 
             // beMPAA
             // 
             this.beMPAA.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.beMPAA.Location = new System.Drawing.Point(0, 250);
+            this.beMPAA.Location = new System.Drawing.Point(0, 251);
             this.beMPAA.Name = "beMPAA";
             this.beMPAA.Padding = new System.Windows.Forms.Padding(2);
             this.beMPAA.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
@@ -169,7 +170,7 @@ namespace OMLDatabaseEditor
             this.tpGenres.Controls.Add(this.btnGenre);
             this.tpGenres.Controls.Add(this.lbGenres);
             this.tpGenres.Name = "tpGenres";
-            this.tpGenres.Size = new System.Drawing.Size(346, 270);
+            this.tpGenres.Size = new System.Drawing.Size(346, 271);
             this.tpGenres.Text = "Genres";
             // 
             // labelControl1
@@ -184,7 +185,7 @@ namespace OMLDatabaseEditor
             // 
             this.btnGenre.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGenre.Location = new System.Drawing.Point(3, 248);
+            this.btnGenre.Location = new System.Drawing.Point(3, 249);
             this.btnGenre.Name = "btnGenre";
             this.btnGenre.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus)});
@@ -201,7 +202,7 @@ namespace OMLDatabaseEditor
             this.lbGenres.Location = new System.Drawing.Point(3, 20);
             this.lbGenres.Name = "lbGenres";
             this.lbGenres.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lbGenres.Size = new System.Drawing.Size(340, 225);
+            this.lbGenres.Size = new System.Drawing.Size(340, 226);
             this.lbGenres.SortOrder = System.Windows.Forms.SortOrder.Ascending;
             this.lbGenres.TabIndex = 5;
             this.lbGenres.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbGenres_KeyDown);

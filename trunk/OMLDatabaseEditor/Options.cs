@@ -129,14 +129,15 @@ namespace OMLDatabaseEditor
 
         private void lbcMPAA_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete)
+            if (e.KeyCode == Keys.Delete && lbcMPAA.SelectedItems.Count > 0)
             {
-                if (lbcMPAA.SelectedItem != null)
+                foreach (object item in lbcMPAA.SelectedItems)
                 {
-                    MPAAList.Remove((String)lbcMPAA.SelectedItem);
+                    String MPAA = item as String;
+                    MPAAList.Remove(MPAA);
                     MPAAdirty = true;
-                    lbcMPAA.Refresh();
                 }
+                lbcMPAA.Refresh();
             }
         }
 
@@ -176,6 +177,7 @@ namespace OMLDatabaseEditor
                     GenreDirty = true;
                     //Properties.Settings.Default.gsValidGenres.Remove(genre);
                 }
+                lbGenres.Refresh();
             }
         }
     }
