@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -345,6 +346,28 @@ namespace OMLEngine
 
             return null;
         }
+
+        public List<string> GetAllGenres()
+        {
+            List<string> genres = new List<string>();
+            foreach (Title title in _list)
+            {
+                genres = genres.Union<string>(title.Genres).ToList<string>();
+            }
+            return genres;
+        }
+
+        public List<Title> FindByGenre(string genre)
+        {
+            List<Title> titles = new List<Title>();
+            foreach (Title title in _list)
+            {
+                if (title.Genres.Contains(genre))
+                    titles.Add(title);
+            }
+            return titles;
+        }
+
         /// <summary>
         /// Get/Set the Source Database type to use
         /// </summary>

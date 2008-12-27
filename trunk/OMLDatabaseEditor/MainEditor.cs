@@ -17,9 +17,9 @@ namespace OMLDatabaseEditor
 {
     public partial class MainEditor : XtraForm
     {
-        private static TitleCollection _titleCollection;
-        private static List<OMLPlugin> _importPlugins = new List<OMLPlugin>();
-        private static List<IOMLMetadataPlugin> _metadataPlugins = new List<IOMLMetadataPlugin>();
+        internal static TitleCollection _titleCollection;
+        internal static List<OMLPlugin> _importPlugins = new List<OMLPlugin>();
+        internal static List<IOMLMetadataPlugin> _metadataPlugins = new List<IOMLMetadataPlugin>();
         private const string APP_TITLE = "OML Movie Manager";
         private bool _loading = false;
         public List<String> DXSkins;
@@ -410,6 +410,7 @@ namespace OMLDatabaseEditor
         private void MainEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = SaveCurrentMovie() == DialogResult.Cancel;
+            Properties.Settings.Default.Save();
         }
 
         private void metaDataSettingsToolStripMenuItem_Click(object sender, EventArgs e)

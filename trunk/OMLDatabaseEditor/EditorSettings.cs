@@ -9,8 +9,8 @@ namespace OMLDatabaseEditor
     public class EditorSettings
     {
         public string ImageRootDirectory = string.Empty;
-        public string ImageEditor = string.Empty;
         public bool ImportAll = true;
         public bool CopyCoverArt = false;
+        public List<string> ValidGenres;
     }
 }
