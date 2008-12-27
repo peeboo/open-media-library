@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -21,10 +22,13 @@ namespace OMLDatabaseEditor
 
         public Boolean OptionsDirty = false;
         private Boolean MPAAdirty = false;
+        private Boolean GenreDirty = false;
         private List<String> MPAAList;
+        private List<String> GenreList;
 
         private void Options_Load(object sender, EventArgs e)
         {
+            String[] arrGenre = new String[Properties.Settings.Default.gsValidGenres.Count];
             this.lbcSkins.DataSource = ((MainEditor)this.Owner).DXSkins;
             String skin = Properties.Settings.Default.gsAppSkin;
             int idx = this.lbcSkins.FindItem(skin);
@@ -35,20 +39,25 @@ namespace OMLDatabaseEditor
             }
             this.lbcSkins.SetSelected(idx, true);
             this.ceUseMPAAList.Checked = Properties.Settings.Default.gbUseMPAAList;
-            MPAAList = new List<string>();
+            MPAAList = new List<String>();
             MPAAList.AddRange(Properties.Settings.Default.gsMPAARatings.Split('|'));
+            MPAAList.Sort();
             this.lbcMPAA.DataSource = MPAAList;
 
             this.ceUseGenreList.Checked = Properties.Settings.Default.gbUseGenreList;
             if (Properties.Settings.Default.gsValidGenres == null || Properties.Settings.Default.gsValidGenres.Count == 0)
             {
-                if (MessageBox.Show("No allowable genres have been defined. Would you like to load them from your current movie collection?", "No Genres", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (XtraMessageBox.Show("No allowable genres have been defined. Would you like to load them from your current movie collection?", "No Genres", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    Properties.Settings.Default.gsValidGenres = new System.Collections.Specialized.StringCollection();
+                    Properties.Settings.Default.gsValidGenres = new StringCollection();
                     Properties.Settings.Default.gsValidGenres.AddRange(MainEditor._titleCollection.GetAllGenres().ToArray());
                 }
             }
-            lbGenres.DataSource = Properties.Settings.Default.gsValidGenres;
+            GenreList = new List<String>();
+            Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
+            GenreList.AddRange(arrGenre);
+            GenreList.Sort();
+            lbGenres.DataSource = GenreList;
         }
 
         private void SimpleButtonClick(object sender, EventArgs e)
@@ -77,6 +86,12 @@ namespace OMLDatabaseEditor
                 {
                     bDirty = true;
                     Properties.Settings.Default.gbUseGenreList = this.ceUseGenreList.Checked;
+                }
+                if (GenreDirty)
+                {
+                    bDirty = true;
+                    Properties.Settings.Default.gsValidGenres.Clear();
+                    Properties.Settings.Default.gsValidGenres.AddRange(GenreList.ToArray());
                 }
                 if (bDirty)
                 {
@@ -107,6 +122,7 @@ namespace OMLDatabaseEditor
                     MPAAList.Add((String)beMPAA.Text);
                     MPAAdirty = true;
                     lbcMPAA.Refresh();
+                    beMPAA.Text = String.Empty;
                 }
             }
         }
@@ -126,11 +142,13 @@ namespace OMLDatabaseEditor
 
         private void btnGenre_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
         {
-            if (Properties.Settings.Default.gsValidGenres.Contains(btnGenre.Text)) return;
+            if (GenreList.Contains(btnGenre.Text)) return;
 
-            Properties.Settings.Default.gsValidGenres.Add(btnGenre.Text);
+            GenreList.Add(btnGenre.Text);
+            GenreDirty = true;
+            lbGenres.Refresh();
 
-            btnGenre.Text = "";
+            btnGenre.Text = String.Empty;
         }
 
         private void lbGenres_KeyDown(object sender, KeyEventArgs e)
@@ -146,7 +164,7 @@ namespace OMLDatabaseEditor
                         StringBuilder message = new StringBuilder(titles.Count + " movie(s) in your collection are associated with the " + genre + " genre. Would you like to remove the association?\r\n\r\n");
                         foreach (Title title in titles)
                             message.Append(title.Name + "\r\n");
-                        if (MessageBox.Show(message.ToString(), "Remove Genre", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        if (XtraMessageBox.Show(message.ToString(), "Remove Genre", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
                             foreach (Title title in MainEditor._titleCollection.FindByGenre(genre))
                             {
@@ -154,7 +172,9 @@ namespace OMLDatabaseEditor
                             }
                         }
                     }
-                    Properties.Settings.Default.gsValidGenres.Remove(genre);
+                    GenreList.Remove(genre);
+                    GenreDirty = true;
+                    //Properties.Settings.Default.gsValidGenres.Remove(genre);
                 }
             }
         }
