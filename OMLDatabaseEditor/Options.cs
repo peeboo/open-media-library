@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 
+using OMLEngine;
+
 namespace OMLDatabaseEditor
 {
     public partial class Options : DevExpress.XtraEditors.XtraForm
@@ -36,6 +38,17 @@ namespace OMLDatabaseEditor
             MPAAList = new List<string>();
             MPAAList.AddRange(Properties.Settings.Default.gsMPAARatings.Split('|'));
             this.lbcMPAA.DataSource = MPAAList;
+
+            this.ceUseGenreList.Checked = Properties.Settings.Default.gbUseGenreList;
+            if (Properties.Settings.Default.gsValidGenres == null || Properties.Settings.Default.gsValidGenres.Count == 0)
+            {
+                if (MessageBox.Show("No allowable genres have been defined. Would you like to load them from your current movie collection?", "No Genres", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Properties.Settings.Default.gsValidGenres = new System.Collections.Specialized.StringCollection();
+                    Properties.Settings.Default.gsValidGenres.AddRange(MainEditor._titleCollection.GetAllGenres().ToArray());
+                }
+            }
+            lbGenres.DataSource = Properties.Settings.Default.gsValidGenres;
         }
 
         private void SimpleButtonClick(object sender, EventArgs e)
@@ -59,6 +72,11 @@ namespace OMLDatabaseEditor
                     bDirty = true;
                     String MPAAs = String.Join("|", MPAAList.ToArray());
                     Properties.Settings.Default.gsMPAARatings = MPAAs;
+                }
+                if (Properties.Settings.Default.gbUseGenreList != this.ceUseGenreList.Checked)
+                {
+                    bDirty = true;
+                    Properties.Settings.Default.gbUseGenreList = this.ceUseGenreList.Checked;
                 }
                 if (bDirty)
                 {
@@ -102,6 +120,41 @@ namespace OMLDatabaseEditor
                     MPAAList.Remove((String)lbcMPAA.SelectedItem);
                     MPAAdirty = true;
                     lbcMPAA.Refresh();
+                }
+            }
+        }
+
+        private void btnGenre_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
+        {
+            if (Properties.Settings.Default.gsValidGenres.Contains(btnGenre.Text)) return;
+
+            Properties.Settings.Default.gsValidGenres.Add(btnGenre.Text);
+
+            btnGenre.Text = "";
+        }
+
+        private void lbGenres_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete && lbGenres.SelectedItems.Count > 0)
+            {
+                foreach (object item in lbGenres.SelectedItems)
+                {
+                    string genre = item as string;
+                    List<Title> titles = MainEditor._titleCollection.FindByGenre(genre);
+                    if (titles.Count > 0)
+                    {
+                        StringBuilder message = new StringBuilder(titles.Count + " movie(s) in your collection are associated with the " + genre + " genre. Would you like to remove the association?\r\n\r\n");
+                        foreach (Title title in titles)
+                            message.Append(title.Name + "\r\n");
+                        if (MessageBox.Show(message.ToString(), "Remove Genre", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            foreach (Title title in MainEditor._titleCollection.FindByGenre(genre))
+                            {
+                                title.Genres.Remove(genre);
+                            }
+                        }
+                    }
+                    Properties.Settings.Default.gsValidGenres.Remove(genre);
                 }
             }
         }
