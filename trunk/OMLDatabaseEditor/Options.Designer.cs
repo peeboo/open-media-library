@@ -31,6 +31,7 @@ namespace OMLDatabaseEditor
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.tpOptions = new DevExpress.XtraTab.XtraTabPage();
+            this.ceUseGenreList = new DevExpress.XtraEditors.CheckEdit();
             this.ceUseMPAAList = new DevExpress.XtraEditors.CheckEdit();
             this.tpSkins = new DevExpress.XtraTab.XtraTabPage();
             this.lbcSkins = new DevExpress.XtraEditors.ListBoxControl();
@@ -43,11 +44,11 @@ namespace OMLDatabaseEditor
             this.lbGenres = new DevExpress.XtraEditors.ListBoxControl();
             this.sbCancel = new DevExpress.XtraEditors.SimpleButton();
             this.sbOK = new DevExpress.XtraEditors.SimpleButton();
-            this.ceUseGenreList = new DevExpress.XtraEditors.CheckEdit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tpOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseMPAAList.Properties)).BeginInit();
             this.tpSkins.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbcSkins)).BeginInit();
@@ -57,7 +58,6 @@ namespace OMLDatabaseEditor
             this.tpGenres.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnGenre.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lbGenres)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -101,6 +101,14 @@ namespace OMLDatabaseEditor
             this.tpOptions.Size = new System.Drawing.Size(346, 271);
             this.tpOptions.Text = "Options";
             // 
+            // ceUseGenreList
+            // 
+            this.ceUseGenreList.Location = new System.Drawing.Point(7, 28);
+            this.ceUseGenreList.Name = "ceUseGenreList";
+            this.ceUseGenreList.Properties.Caption = "Use Genre Auto Complete List";
+            this.ceUseGenreList.Size = new System.Drawing.Size(259, 18);
+            this.ceUseGenreList.TabIndex = 1;
+            // 
             // ceUseMPAAList
             // 
             this.ceUseMPAAList.Location = new System.Drawing.Point(7, 4);
@@ -113,7 +121,7 @@ namespace OMLDatabaseEditor
             // 
             this.tpSkins.Controls.Add(this.lbcSkins);
             this.tpSkins.Name = "tpSkins";
-            this.tpSkins.Size = new System.Drawing.Size(346, 271);
+            this.tpSkins.Size = new System.Drawing.Size(346, 270);
             this.tpSkins.Text = "Skins";
             // 
             // lbcSkins
@@ -121,7 +129,7 @@ namespace OMLDatabaseEditor
             this.lbcSkins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbcSkins.Location = new System.Drawing.Point(0, 0);
             this.lbcSkins.Name = "lbcSkins";
-            this.lbcSkins.Size = new System.Drawing.Size(346, 271);
+            this.lbcSkins.Size = new System.Drawing.Size(346, 270);
             this.lbcSkins.TabIndex = 0;
             this.lbcSkins.SelectedValueChanged += new System.EventHandler(this.lbcSkins_SelectedValueChanged);
             // 
@@ -130,7 +138,7 @@ namespace OMLDatabaseEditor
             this.tpMPAAList.Controls.Add(this.lbcMPAA);
             this.tpMPAAList.Controls.Add(this.beMPAA);
             this.tpMPAAList.Name = "tpMPAAList";
-            this.tpMPAAList.Size = new System.Drawing.Size(346, 271);
+            this.tpMPAAList.Size = new System.Drawing.Size(346, 270);
             this.tpMPAAList.Text = "MPAA";
             // 
             // lbcMPAA
@@ -139,14 +147,14 @@ namespace OMLDatabaseEditor
             this.lbcMPAA.Location = new System.Drawing.Point(0, 0);
             this.lbcMPAA.Name = "lbcMPAA";
             this.lbcMPAA.Padding = new System.Windows.Forms.Padding(2);
-            this.lbcMPAA.Size = new System.Drawing.Size(346, 251);
+            this.lbcMPAA.Size = new System.Drawing.Size(346, 250);
             this.lbcMPAA.TabIndex = 1;
             this.lbcMPAA.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbcMPAA_KeyDown);
             // 
             // beMPAA
             // 
             this.beMPAA.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.beMPAA.Location = new System.Drawing.Point(0, 251);
+            this.beMPAA.Location = new System.Drawing.Point(0, 250);
             this.beMPAA.Name = "beMPAA";
             this.beMPAA.Padding = new System.Windows.Forms.Padding(2);
             this.beMPAA.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
@@ -161,7 +169,7 @@ namespace OMLDatabaseEditor
             this.tpGenres.Controls.Add(this.btnGenre);
             this.tpGenres.Controls.Add(this.lbGenres);
             this.tpGenres.Name = "tpGenres";
-            this.tpGenres.Size = new System.Drawing.Size(346, 271);
+            this.tpGenres.Size = new System.Drawing.Size(346, 270);
             this.tpGenres.Text = "Genres";
             // 
             // labelControl1
@@ -220,14 +228,6 @@ namespace OMLDatabaseEditor
             this.sbOK.Text = "&OK";
             this.sbOK.Click += new System.EventHandler(this.SimpleButtonClick);
             // 
-            // ceUseGenreList
-            // 
-            this.ceUseGenreList.Location = new System.Drawing.Point(7, 28);
-            this.ceUseGenreList.Name = "ceUseGenreList";
-            this.ceUseGenreList.Properties.Caption = "Use Genre Auto Complete List";
-            this.ceUseGenreList.Size = new System.Drawing.Size(259, 18);
-            this.ceUseGenreList.TabIndex = 1;
-            // 
             // Options
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -243,6 +243,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
             this.xtraTabControl1.ResumeLayout(false);
             this.tpOptions.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseMPAAList.Properties)).EndInit();
             this.tpSkins.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbcSkins)).EndInit();
@@ -253,7 +254,6 @@ namespace OMLDatabaseEditor
             this.tpGenres.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnGenre.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lbGenres)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
