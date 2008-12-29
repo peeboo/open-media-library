@@ -31,11 +31,11 @@ namespace OMLDatabaseEditor
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ListEditor));
             this.lbItems = new DevExpress.XtraEditors.ListBoxControl();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
-            this.btnItem = new DevExpress.XtraEditors.ButtonEdit();
+            this.cbeItem = new DevExpress.XtraEditors.ComboBoxEdit();
             ((System.ComponentModel.ISupportInitialize)(this.lbItems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.btnItem.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cbeItem.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // lbItems
@@ -52,23 +52,24 @@ namespace OMLDatabaseEditor
             // 
             // panelControl1
             // 
-            this.panelControl1.Controls.Add(this.btnItem);
+            this.panelControl1.Controls.Add(this.cbeItem);
             this.panelControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelControl1.Location = new System.Drawing.Point(0, 215);
             this.panelControl1.Name = "panelControl1";
             this.panelControl1.Size = new System.Drawing.Size(216, 29);
             this.panelControl1.TabIndex = 3;
             // 
-            // btnItem
+            // cbeItem
             // 
-            this.btnItem.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnItem.Location = new System.Drawing.Point(2, 2);
-            this.btnItem.Name = "btnItem";
-            this.btnItem.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            this.cbeItem.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbeItem.Location = new System.Drawing.Point(2, 2);
+            this.cbeItem.Name = "cbeItem";
+            this.cbeItem.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo),
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus)});
-            this.btnItem.Size = new System.Drawing.Size(212, 20);
-            this.btnItem.TabIndex = 0;
-            this.btnItem.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.btnItem_ButtonClick);
+            this.cbeItem.Properties.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.btnItem_ButtonClick);
+            this.cbeItem.Size = new System.Drawing.Size(212, 20);
+            this.cbeItem.TabIndex = 1;
             // 
             // ListEditor
             // 
@@ -88,7 +89,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.lbItems)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.btnItem.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cbeItem.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -97,6 +98,6 @@ namespace OMLDatabaseEditor
 
         private DevExpress.XtraEditors.ListBoxControl lbItems;
         private DevExpress.XtraEditors.PanelControl panelControl1;
-        private DevExpress.XtraEditors.ButtonEdit btnItem;
+        private DevExpress.XtraEditors.ComboBoxEdit cbeItem;
     }
 }
