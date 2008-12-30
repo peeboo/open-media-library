@@ -147,6 +147,14 @@ namespace Library
             {
                 _omlSettings.TranscodeAVIFiles = (bool)_transcodeAVIFiles.Chosen;
                 _omlSettings.FlipFourCCCode = (bool)_flipFourCCCode.Chosen;
+                int transcodeBufferDelay = 7;
+                try
+                {
+                    Int32.TryParse(_transcodeBufferDelay.Value, out transcodeBufferDelay);
+                }
+                catch { }
+                if (transcodeBufferDelay != 7)
+                    _omlSettings.TranscodeBufferDelay = transcodeBufferDelay;
             });
         }
         public void SaveSettings()
@@ -350,6 +358,7 @@ namespace Library
 
         private void SetupTranscoding()
         {
+            _transcodeBufferDelay.Value = _omlSettings.TranscodeBufferDelay.ToString();
             _transcodeAVIFiles.Chosen = _omlSettings.TranscodeAVIFiles;
             _flipFourCCCode.Chosen = _omlSettings.FlipFourCCCode;
         }
@@ -561,6 +570,23 @@ namespace Library
             }
         }
 
+        public EditableText TranscodingBufferDelay
+        {
+            get
+            {
+                if (_transcodeBufferDelay == null)
+                {
+                    _transcodeBufferDelay = new EditableText();
+                }
+                return _transcodeBufferDelay;
+            }
+            set
+            {
+                _transcodeBufferDelay = value;
+                FirePropertyChanged("TranscodingBufferDelay");
+            }
+        }
+
         public Choice UILanguage
         {
             get { return _uiLanguage;  }
@@ -599,6 +625,7 @@ namespace Library
         Choice _ImageMountingSelection = new Choice();
         Choice _trailersDefinition = new Choice();
         Choice _filtersToShow = new Choice();
+        EditableText _transcodeBufferDelay = new EditableText();
         BooleanChoice _showFilterGenres = new BooleanChoice();
         BooleanChoice _transcodeAVIFiles = new BooleanChoice();
         BooleanChoice _flipFourCCCode = new BooleanChoice();
