@@ -60,6 +60,7 @@ namespace OMLEngine
         IMG, // using an image loader lib and load/play this as a DVD
         ISO, // Standard ISO image
         ISZ, // Compressed ISO image
+        M2TS, // mpeg2 transport stream
         MDF, // using an image loader lib and load/play this as a DVD
         MDS, // Media Descriptor file
         MKV, // Likely h264
