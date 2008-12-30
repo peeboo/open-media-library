@@ -577,13 +577,31 @@
                       <c:SimpleEditbox Size="700,51" Name="TranscodingBufferDelay" EditableText="[Settings.TranscodingBufferDelay]" />
                       <Panel Layout="HorizontalFlow" Margins="0,40,0,0" Navigation="Group">
                         <Children>
-                          <c:SimpleCheckbox Name="TranscodeAVIFiles" Checked="[Settings.TranscodeAVIFiles]" Margins="0,0,10,0" />
-                          <Text Content="Transcode AVI Files" Color="White" Font="font://me:SmallFont"/>
-                          <c:SimpleCheckbox Name="TranscodeMKVFiles" Checked="[Settings.TranscodeMKVFiles]" Margins="0,0,10,0" />
-                          <Text Content="Transcode MKV Files" Color="White" Font="font://me:SmallFont"/>
-                          <c:SimpleCheckbox Name="TranscodeOGMFiles" Checked="[Settings.TranscodeOGMFiles]" Margins="0,0,10,0" />
-                          <Text Content="Transcode OGM Files" Color="White" Font="font://me:SmallFont"/>
+                          <Clip Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="TranscodeAVIFiles" Checked="[Settings.TranscodeAVIFiles]" Margins="0,0,10,0" />
+                              <Text Content="Transcode AVI Files" Color="White" Font="font://me:SmallFont"/>
+                            </Children>
+                          </Clip>
+                          <Clip Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="TranscodeMKVFiles" Checked="[Settings.TranscodeMKVFiles]" Margins="0,0,10,0" />
+                              <Text Content="Transcode MKV Files" Color="White" Font="font://me:SmallFont"/>
+                            </Children>
+                          </Clip>
+                          <Clip Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="TranscodeOGMFiles" Checked="[Settings.TranscodeOGMFiles]" Margins="0,0,10,0" />
+                              <Text Content="Transcode OGM Files" Color="White" Font="font://me:SmallFont"/>
+                            </Children>
+                          </Clip>
 
+                          <Clip Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="PreserveAudioOnTranscode" Checked="[Settings.PreserveAudioOnTranscode]" Margins="0,0,10,0" />
+                              <Text Content="Preserve AudioFormat On Transcode of non DVD files" Color="White" Font="font://me:SmallFont"/>
+                            </Children>
+                          </Clip>
                         </Children>
                       </Panel>
                     </Children>

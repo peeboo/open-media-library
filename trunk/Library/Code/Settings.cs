@@ -148,6 +148,7 @@ namespace Library
                 _omlSettings.TranscodeAVIFiles = (bool)_transcodeAVIFiles.Chosen;
                 _omlSettings.TranscodeMKVFiles = (bool)_transcodeMKVFiles.Chosen;
                 _omlSettings.TranscodeOGMFiles = (bool)_transcodeOGMFiles.Chosen;
+                _omlSettings.PreserveAudioOnTranscode = (bool)_preserveAudioOnTranscode.Chosen;
                 _omlSettings.FlipFourCCCode = (bool)_flipFourCCCode.Chosen;
                 int transcodeBufferDelay = 7;
                 try
@@ -364,6 +365,7 @@ namespace Library
             _transcodeAVIFiles.Chosen = _omlSettings.TranscodeAVIFiles;
             _transcodeMKVFiles.Chosen = _omlSettings.TranscodeMKVFiles;
             _transcodeOGMFiles.Chosen = _omlSettings.TranscodeOGMFiles;
+            _preserveAudioOnTranscode.Chosen = _omlSettings.PreserveAudioOnTranscode;
             _flipFourCCCode.Chosen = _omlSettings.FlipFourCCCode;
         }
 
@@ -390,6 +392,10 @@ namespace Library
         }
 
         #region properties
+        public BooleanChoice PreserveAudioOnTranscode
+        {
+            get { return _preserveAudioOnTranscode; }
+        }
         public BooleanChoice TranscodeAVIFiles
         {
             get { return _transcodeAVIFiles; }
@@ -642,6 +648,7 @@ namespace Library
         BooleanChoice _transcodeAVIFiles = new BooleanChoice();
         BooleanChoice _transcodeMKVFiles = new BooleanChoice();
         BooleanChoice _transcodeOGMFiles = new BooleanChoice();
+        BooleanChoice _preserveAudioOnTranscode = new BooleanChoice();
         BooleanChoice _flipFourCCCode = new BooleanChoice();
         BooleanChoice _showFilterDirectors = new BooleanChoice();
         BooleanChoice _showFilterActors = new BooleanChoice();
