@@ -1000,5 +1000,29 @@ namespace Library.Properties {
                 this["TranscodeBufferDelay"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool TranscodeMKVFiles {
+            get {
+                return ((bool)(this["TranscodeMKVFiles"]));
+            }
+            set {
+                this["TranscodeMKVFiles"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool TranscodeOGMFiles {
+            get {
+                return ((bool)(this["TranscodeOGMFiles"]));
+            }
+            set {
+                this["TranscodeOGMFiles"] = value;
+            }
+        }
     }
 }

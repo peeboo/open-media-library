@@ -75,6 +75,25 @@ namespace Library
             }
         }
 
+        public bool TranscodeMKVFiles
+        {
+            get { return Properties.Settings.Default.TranscodeMKVFiles; }
+            set
+            {
+                Properties.Settings.Default.TranscodeMKVFiles = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public bool TranscodeOGMFiles
+        {
+            get { return Properties.Settings.Default.TranscodeOGMFiles; }
+            set
+            {
+                Properties.Settings.Default.TranscodeOGMFiles = value;
+                Properties.Settings.Default.Save();
+            }
+        }
         public bool FlipFourCCCode
         {
             get { return Properties.Settings.Default.FlipFourCCCode; }

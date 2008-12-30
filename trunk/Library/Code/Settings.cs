@@ -146,6 +146,8 @@ namespace Library
             OMLApplication.ExecuteSafe(delegate
             {
                 _omlSettings.TranscodeAVIFiles = (bool)_transcodeAVIFiles.Chosen;
+                _omlSettings.TranscodeMKVFiles = (bool)_transcodeMKVFiles.Chosen;
+                _omlSettings.TranscodeOGMFiles = (bool)_transcodeOGMFiles.Chosen;
                 _omlSettings.FlipFourCCCode = (bool)_flipFourCCCode.Chosen;
                 int transcodeBufferDelay = 7;
                 try
@@ -360,6 +362,8 @@ namespace Library
         {
             _transcodeBufferDelay.Value = _omlSettings.TranscodeBufferDelay.ToString();
             _transcodeAVIFiles.Chosen = _omlSettings.TranscodeAVIFiles;
+            _transcodeMKVFiles.Chosen = _omlSettings.TranscodeMKVFiles;
+            _transcodeOGMFiles.Chosen = _omlSettings.TranscodeOGMFiles;
             _flipFourCCCode.Chosen = _omlSettings.FlipFourCCCode;
         }
 
@@ -389,6 +393,14 @@ namespace Library
         public BooleanChoice TranscodeAVIFiles
         {
             get { return _transcodeAVIFiles; }
+        }
+        public BooleanChoice TranscodeMKVFiles
+        {
+            get { return _transcodeMKVFiles; }
+        }
+        public BooleanChoice TranscodeOGMFiles
+        {
+            get { return _transcodeOGMFiles; }
         }
         public BooleanChoice FlipFourCCCode
         {
@@ -628,6 +640,8 @@ namespace Library
         EditableText _transcodeBufferDelay = new EditableText();
         BooleanChoice _showFilterGenres = new BooleanChoice();
         BooleanChoice _transcodeAVIFiles = new BooleanChoice();
+        BooleanChoice _transcodeMKVFiles = new BooleanChoice();
+        BooleanChoice _transcodeOGMFiles = new BooleanChoice();
         BooleanChoice _flipFourCCCode = new BooleanChoice();
         BooleanChoice _showFilterDirectors = new BooleanChoice();
         BooleanChoice _showFilterActors = new BooleanChoice();
