@@ -1,0 +1,295 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Library.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ShowFileLocation" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="MovieView" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Cover Art</Value>
+    </Setting>
+    <Setting Name="ActorView" Type="System.String" Scope="User">
+      <Value Profile="(Default)">List</Value>
+    </Setting>
+    <Setting Name="DirectorView" Type="System.String" Scope="User">
+      <Value Profile="(Default)">List</Value>
+    </Setting>
+    <Setting Name="GenreView" Type="System.String" Scope="User">
+      <Value Profile="(Default)">List</Value>
+    </Setting>
+    <Setting Name="DateAddedView" Type="System.String" Scope="User">
+      <Value Profile="(Default)">List</Value>
+    </Setting>
+    <Setting Name="YearView" Type="System.String" Scope="User">
+      <Value Profile="(Default)">List</Value>
+    </Setting>
+    <Setting Name="StartPage" Type="System.String" Scope="User">
+      <Value Profile="(Default)">OML Home</Value>
+    </Setting>
+    <Setting Name="MovieSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Name Ascending</Value>
+    </Setting>
+    <Setting Name="ActorSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Name Ascending</Value>
+    </Setting>
+    <Setting Name="DirectorSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Name Ascending</Value>
+    </Setting>
+    <Setting Name="YearSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Name Descending</Value>
+    </Setting>
+    <Setting Name="DateAddedSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Name Descending</Value>
+    </Setting>
+    <Setting Name="SortFullString" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="GenreSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Name Ascending</Value>
+    </Setting>
+    <Setting Name="DetailsLeftAnchor" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="DetailsTopAnchor" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="DetailsLeftOffset" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
+    <Setting Name="DetailsTopOffset" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
+    <Setting Name="BottomAnchor" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0.85</Value>
+    </Setting>
+    <Setting Name="BottomOffset" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="GalleryCoverArtRows" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="GalleryListRows" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">7</Value>
+    </Setting>
+    <Setting Name="CoverArtWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">141</Value>
+    </Setting>
+    <Setting Name="CoverArtHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="ListItemWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">400</Value>
+    </Setting>
+    <Setting Name="ListItemHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="UserRatingSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Name Descending</Value>
+    </Setting>
+    <Setting Name="RightAnchor" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="RightOffset" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">-30</Value>
+    </Setting>
+    <Setting Name="CoverArtSpacingHorizontal" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="CoverArtSpacingVertical" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="NameAscendingSort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Name Ascending</Value>
+    </Setting>
+    <Setting Name="ListSpacingVertical" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="ListSpacingHorizontal" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">80</Value>
+    </Setting>
+    <Setting Name="ShowMovieDetails" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ScrollingLockPosition" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0.38</Value>
+    </Setting>
+    <Setting Name="NowPlayingBottomOffset" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">-15</Value>
+    </Setting>
+    <Setting Name="LeftPanelDetailsAlpha" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.7</Value>
+    </Setting>
+    <Setting Name="DimUnselectedCovers" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="UseOriginalCoverArt" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="FocusCoverArtScale" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">1.4</Value>
+    </Setting>
+    <Setting Name="FocusListScale" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">1.3</Value>
+    </Setting>
+    <Setting Name="GalleryCarouselRows" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="Extender_UseAsx" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Extender_MergeVOB" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="BaseFolders" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Filters" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;Genres&lt;/string&gt;
+  &lt;string&gt;Directors&lt;/string&gt;
+  &lt;string&gt;Actors&lt;/string&gt;
+  &lt;string&gt;Runtime&lt;/string&gt;
+  &lt;string&gt;Country&lt;/string&gt;
+  &lt;string&gt;Parental Rating&lt;/string&gt;
+  &lt;string&gt;Tags&lt;/string&gt;
+  &lt;string&gt;User Rating&lt;/string&gt;
+  &lt;string&gt;Year&lt;/string&gt;
+  &lt;string&gt;Date Added&lt;/string&gt;
+  &lt;string&gt;Format&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="AllFilters" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;Unwatched&lt;/string&gt;
+  &lt;string&gt;Genres&lt;/string&gt;
+  &lt;string&gt;Directors&lt;/string&gt;
+  &lt;string&gt;Actors&lt;/string&gt;
+  &lt;string&gt;Runtime&lt;/string&gt;
+  &lt;string&gt;Country&lt;/string&gt;
+  &lt;string&gt;Parental Rating&lt;/string&gt;
+  &lt;string&gt;Tags&lt;/string&gt;
+  &lt;string&gt;User Rating&lt;/string&gt;
+  &lt;string&gt;Year&lt;/string&gt;
+  &lt;string&gt;Date Added&lt;/string&gt;
+  &lt;string&gt;Format&lt;/string&gt;
+  &lt;string&gt;Trailers&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="UILanguage" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="FocusCarouselScale" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">1.3</Value>
+    </Setting>
+    <Setting Name="CarouselRows" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="CarouselItemWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">141</Value>
+    </Setting>
+    <Setting Name="CarouselItemHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">180</Value>
+    </Setting>
+    <Setting Name="CarouselItemSpacingVertical" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="CarouselItemSpacingHorizontal" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="AppleTrailerFidelity" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Hi</Value>
+    </Setting>
+    <Setting Name="MainFiltersToShow" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;Genres&lt;/string&gt;
+  &lt;string&gt;Directors&lt;/string&gt;
+  &lt;string&gt;Actors&lt;/string&gt;
+  &lt;string&gt;Runtime&lt;/string&gt;
+  &lt;string&gt;Country&lt;/string&gt;
+  &lt;string&gt;Parental Rating&lt;/string&gt;
+  &lt;string&gt;Tags&lt;/string&gt;
+  &lt;string&gt;User Rating&lt;/string&gt;
+  &lt;string&gt;Year&lt;/string&gt;
+  &lt;string&gt;Date Added&lt;/string&gt;
+  &lt;string&gt;Format&lt;/string&gt;
+  &lt;string&gt;Trailers&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="ShowFilterGenres" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowFilterDirectors" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowFilterActors" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowFilterRuntime" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowFilterCountry" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowFilterParentalRating" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowFilterYear" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowFilterTags" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowFilterUserRating" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowFilterDateAdded" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowFilterFormat" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowFilterTrailers" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="TranscodeAVIFiles" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="FlipFourCCCode" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ExternalPlayerMapping" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" /&gt;</Value>
+    </Setting>
+    <Setting Name="UseOnScreenAlphaJumper" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="StartPageSubFilter" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ShowFilterUnwatched" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="TranscodeBufferDelay" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">7</Value>
+    </Setting>
+    <Setting Name="TranscodeMKVFiles" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="TranscodeOGMFiles" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DebugTranscoding" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="BrowserHeightWhenShowingDetails" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">450</Value>
+    </Setting>
+    <Setting Name="BrowserHeightWhenNotShowingDetails" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">600</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

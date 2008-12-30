@@ -1,0 +1,31 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:me="Me">
+
+    <Aggregate Source="resx://Library/Library.Resources/GroupItem"/>
+
+	<UI Name="ListBox">
+
+		<Properties>
+            <Choice Name="Model" Choice="$Required"/>
+		</Properties>
+
+		<Content>
+            <Scroller FocusPadding="0">
+                <Children>
+                    <Repeater Name="ListRepeater" ContentName="Item" DiscardOffscreenVisuals="true" Source="[Model.Options]">
+                        <Layout>
+                            <GridLayout Orientation="Horizontal" Repeat="WhenTooBig" RepeatGap="100"/>
+                        </Layout>
+                    </Repeater>
+                </Children>
+            </Scroller>
+		</Content>
+
+        <Content Name="Item">
+            <me:GroupItem Model="[RepeatedItem!Choice]"/>
+        </Content>
+
+	</UI>
+
+</Mcml>
