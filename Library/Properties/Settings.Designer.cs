@@ -988,5 +988,17 @@ namespace Library.Properties {
                 this["ShowFilterUnwatched"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("7")]
+        public int TranscodeBufferDelay {
+            get {
+                return ((int)(this["TranscodeBufferDelay"]));
+            }
+            set {
+                this["TranscodeBufferDelay"] = value;
+            }
+        }
     }
 }

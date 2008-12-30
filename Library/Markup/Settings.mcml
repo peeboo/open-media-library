@@ -31,6 +31,7 @@
           <cor:String String="Trailers"/>
           <cor:String String="Filters"/>
           <cor:String String="External Players"/>
+          <cor:String String="Extender Transcoding"/>
         </Options>
       </Choice>
 
@@ -76,6 +77,7 @@
           <Set Target="[Trailers.Visible]" Value="false"/>
           <Set Target="[Filters.Visible]" Value="false"/>
           <Set Target="[ExternalPlayers.Visible]" Value="false" />
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
 
           <Set Target="[ViewOptionsPanel.Visible]" Value="true"/>
         </Actions>
@@ -92,6 +94,7 @@
           <Set Target="[Trailers.Visible]" Value="false"/>
           <Set Target="[Filters.Visible]" Value="false"/>
           <Set Target="[ExternalPlayers.Visible]" Value="false" />
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
 
           <Set Target="[DTPanel.Visible]" Value="true"/>
         </Actions>
@@ -108,6 +111,7 @@
           <Set Target="[Trailers.Visible]" Value="false"/>
           <Set Target="[Filters.Visible]" Value="false"/>
           <Set Target="[ExternalPlayers.Visible]" Value="false" />
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
 
           <Set Target="[CustomizeUI.Visible]" Value="true"/>
         </Actions>
@@ -124,6 +128,7 @@
           <Set Target="[Trailers.Visible]" Value="false"/>
           <Set Target="[Filters.Visible]" Value="false"/>
           <Set Target="[ExternalPlayers.Visible]" Value="false" />
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
 
           <Set Target="[LanguagePanel.Visible]" Value="true"/>
         </Actions>
@@ -140,6 +145,7 @@
           <Set Target="[Filters.Visible]" Value="false"/>
           <Set Target="[LanguagePanel.Visible]" Value="false"/>
           <Set Target="[ExternalPlayers.Visible]" Value="false" />
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
 
           <Set Target="[Trailers.Visible]" Value="true"/>
         </Actions>
@@ -156,6 +162,7 @@
           <Set Target="[Trailers.Visible]" Value="false"/>
           <Set Target="[LanguagePanel.Visible]" Value="false"/>
           <Set Target="[ExternalPlayers.Visible]" Value="false" />
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
 
           <Set Target="[Filters.Visible]" Value="true"/>
         </Actions>
@@ -172,8 +179,26 @@
           <Set Target="[Trailers.Visible]" Value="false"/>
           <Set Target="[LanguagePanel.Visible]" Value="false"/>
           <Set Target="[Filters.Visible]" Value="false"/>
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
 
           <Set Target="[ExternalPlayers.Visible]" Value="true" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Tabs.Chosen]">
+        <Conditions>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="Extender Transcoding"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+          <Set Target="[CustomizeUI.Visible]" Value="false"/>
+          <Set Target="[DTPanel.Visible]" Value="false"/>
+          <Set Target="[Trailers.Visible]" Value="false"/>
+          <Set Target="[LanguagePanel.Visible]" Value="false"/>
+          <Set Target="[Filters.Visible]" Value="false"/>
+          <Set Target="[ExternalPlayers.Visible]" Value="false" />
+
+          <Set Target="[ExtenderTranscoding.Visible]" Value="true"/>
         </Actions>
       </Changed>
 
@@ -543,10 +568,22 @@
                 </Children>
               </Panel>
 
-            </Children>            
+              <!-- ExtenderTranscoding -->
+              <Panel Name="ExtenderTranscoding" Layout="VerticalFlow" Visible="false" Navigation="Group">
+                <Children>
+                  <Panel Layout="VerticalFlow" Navigation="Group">
+                    <Children>
+                      <Text Content="Number of Seconds to Delay Transcoding" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                      <c:SimpleEditbox Size="700,51" Name="TranscodingBufferDelay" EditableText="[Settings.TranscodingBufferDelay]" />
+                    </Children>
+                  </Panel>
+                </Children>
+              </Panel>
+
+            </Children>
           </Panel>
 
-          <!-- Bottom -->
+        <!-- Bottom -->
           <Panel Name="BottomPanel" Navigation="PreferFocusOrder,Group">
             <Children>
 

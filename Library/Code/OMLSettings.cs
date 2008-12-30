@@ -643,6 +643,19 @@ namespace Library
             }
         }
 
+        public int TranscodeBufferDelay
+        {
+            get
+            {
+                return Properties.Settings.Default.TranscodeBufferDelay;
+            }
+            set
+            {
+                Properties.Settings.Default.TranscodeBufferDelay = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
 
         #endregion
 

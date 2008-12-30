@@ -102,6 +102,8 @@ namespace Library
             transcoder = new TranscodingAPI(_source, trancoderStatusChanged);
             transcodedFile = _source.GetTranscodingFileName();
             transcoder.Transcode();
+            // Give the transcoder some time to startup and get a buffer going
+            System.Threading.Thread.Sleep(new TimeSpan(0, 0, Properties.Settings.Default.TranscodeBufferDelay));
             return true;
         }
     }
