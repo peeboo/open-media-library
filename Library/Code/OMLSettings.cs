@@ -65,6 +65,15 @@ namespace Library
 
         #region Library Settings
 
+        public bool PreserveAudioOnTranscode
+        {
+            get { return OMLTranscoder.Properties.Settings.Default.PreserveAudioOnTranscode; }
+            set
+            {
+                OMLTranscoder.Properties.Settings.Default.PreserveAudioOnTranscode = value;
+                OMLTranscoder.Properties.Settings.Default.Save();
+            }
+        }
         public bool TranscodeAVIFiles
         {
             get { return Properties.Settings.Default.TranscodeAVIFiles; }
