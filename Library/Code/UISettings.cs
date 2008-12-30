@@ -110,6 +110,16 @@ namespace Library
 
     public class GallerySettings
     {
+        public Size HeightOfBrowser
+        {
+            get
+            {
+                if (Properties.Settings.Default.ShowMovieDetails)
+                    return new Size(0, Properties.Settings.Default.BrowserHeightWhenShowingDetails);
+                else
+                    return new Size(0, Properties.Settings.Default.BrowserHeightWhenNotShowingDetails);
+            }
+        }
         public int CoverArtRows
         {
             get { return Properties.Settings.Default.GalleryCoverArtRows; }
