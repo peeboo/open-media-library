@@ -30,24 +30,32 @@ namespace Library
                 switch (status)
                 {
                     case TranscodingStatus.Initializing:
+                        OMLApplication.DebugLine("Received Transcoding Status Change: Initializing");
                         OMLApplication.Current.IsStartingTranscodingJob = true;
                         OMLApplication.Current.TranscodeStatus = @"Starting Job";
                         break;
                     case TranscodingStatus.BufferReady:
+                        OMLApplication.DebugLine("Received Transcoding Status Change: Buffer Ready");
                         OMLApplication.Current.IsStartingTranscodingJob = true;
                         OMLApplication.Current.TranscodeStatus = @"Buffer Ready";
                         break;
                     case TranscodingStatus.Done:
+                        OMLApplication.DebugLine("Received Transcoding Status Change: Done");
                         OMLApplication.Current.IsStartingTranscodingJob = false;
                         OMLApplication.Current.TranscodeStatus = @"Done";
                         break;
                     case TranscodingStatus.Error:
+                        OMLApplication.DebugLine("Received Transcoding Status Change: Error");
                         OMLApplication.Current.IsStartingTranscodingJob = false;
                         OMLApplication.Current.TranscodeStatus = @"Error";
                         break;
                     case TranscodingStatus.Stopped:
+                        OMLApplication.DebugLine("Received Transcoding Status Change: Stopped");
                         OMLApplication.Current.IsStartingTranscodingJob = false;
                         OMLApplication.Current.TranscodeStatus = @"Stopped";
+                        break;
+                    default:
+                        OMLApplication.DebugLine("Received Transcoding Status Change: Unknown");
                         break;
                 }
             });
@@ -102,8 +110,6 @@ namespace Library
             transcoder = new TranscodingAPI(_source, trancoderStatusChanged);
             transcodedFile = _source.GetTranscodingFileName();
             transcoder.Transcode();
-            // Give the transcoder some time to startup and get a buffer going
-            System.Threading.Thread.Sleep(new TimeSpan(0, 0, Properties.Settings.Default.TranscodeBufferDelay));
             return true;
         }
     }

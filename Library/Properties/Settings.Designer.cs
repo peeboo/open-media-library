@@ -1024,5 +1024,17 @@ namespace Library.Properties {
                 this["TranscodeOGMFiles"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DebugTranscoding {
+            get {
+                return ((bool)(this["DebugTranscoding"]));
+            }
+            set {
+                this["DebugTranscoding"] = value;
+            }
+        }
     }
 }

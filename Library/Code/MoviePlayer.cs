@@ -44,6 +44,13 @@ namespace Library
             OMLApplication.DebugLine("[MoviePlayerFactory] Determing MoviePlayer to use for: {0}", source);
             if (File.Exists(source.MediaPath) || Directory.Exists(source.MediaPath))
             {
+                // This is for transcoding debugging
+                if (Properties.Settings.Default.DebugTranscoding)
+                {
+                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created: {0}", source);
+                    return new TranscodePlayer(source);
+                }
+
                 // if we need to be mounted - do that now so we can get the real type
                 if (NeedsMounting(source.Format))
                 {
@@ -229,18 +236,42 @@ namespace Library
             switch (videoFormat)
             {
                 case VideoFormat.AVI:
+                    if (Properties.Settings.Default.TranscodeAVIFiles)
+                        return true;
+                    else
+                        return false;
                 case VideoFormat.DVRMS:
+                    return false;
                 case VideoFormat.MPEG:
+                    return false;
                 case VideoFormat.MPG:
+                    return false;
                 case VideoFormat.WMV:
+                    return false;
                 case VideoFormat.WTV:
+                    return false;
                 case VideoFormat.ASX:
+                    return false;
                 case VideoFormat.WVX:
+                    return false;
                 case VideoFormat.ASF:
+                    return false;
                 case VideoFormat.H264:
+                    return false;
                 case VideoFormat.MKV:
+                    if (Properties.Settings.Default.TranscodeMKVFiles)
+                        return true;
+                    else
+                        return false;
+                case VideoFormat.OGM:
+                    if (Properties.Settings.Default.TranscodeOGMFiles)
+                        return true;
+                    else
+                        return false;
                 case VideoFormat.MOV:
+                    return false;
                 case VideoFormat.WPL:
+                    return false;
                 case VideoFormat.UNKNOWN:
                     return false;
                 default:
