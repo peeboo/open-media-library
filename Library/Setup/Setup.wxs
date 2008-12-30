@@ -144,15 +144,13 @@
                     <Component Id="OMLEngineService.exe" Guid="12988468-3DCC-496a-B0B3-6982FFDE25B9" DiskId="1">
                         <File Name="OMLEngineService.exe"
                               Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe" Checksum="yes"/>
+                        <File Name="OMLEngineService.exe.config"
+                              Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe.config" Checksum="no"/>
                         <ServiceInstall Id="OMLEngineService" Name="OMLEngineService" DisplayName="OMLEngineService"
-                                        Account="NT AUTHORITY\NetworkService" Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
+                                        Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
                                         ErrorControl="normal"/>
                         <!--<ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
-                    </Component>
-                    <Component Id="OMLEngineService.exe.config" Guid="1958AFFB-76DD-49df-AC83-824320C612C0" DiskId="1">
-                        <File Name="OMLEngineService.exe.config"
-                              Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe.config" Checksum="no"/>
                     </Component>
                     <Component Id="OMLFWService.exe" Guid="8F57190C-0489-40b4-9C46-5E9B09EC0DEC" DiskId="1">
                         <File Name="OMLFWService.exe"
@@ -275,14 +273,14 @@
 		<!-- can be displayed and allow user selection in setup UI if desired.                               -->
 		<Feature Id="APPLICATIONROOTFEATURE" Title="Open Media Library" Level="1">
 			<ComponentRef Id="Library.dll" />
-            <ComponentRef Id="OMLEngine.dll" />
-            <ComponentRef Id="OMLFileWatcher.dll"/>
-            <ComponentRef Id="OMLTranscoder.dll"/>
+      <ComponentRef Id="OMLEngine.dll" />
+      <ComponentRef Id="OMLFileWatcher.dll"/>
+      <ComponentRef Id="OMLTranscoder.dll"/>
 			<ComponentRef Id="Registration.xml" />
 			<ComponentRef Id="Application.png" />
-            <ComponentRef Id="OMLEngineService.exe"/>
-            <ComponentRef Id="OMLEngineService.exe.config"/>
-            <ComponentRef Id="OMLFWService.exe"/>
+      <ComponentRef Id="OMLEngineService.exe"/>
+      <!-- <ComponentRef Id="OMLEngineService.exe.config"/> -->
+      <ComponentRef Id="OMLFWService.exe"/>
 			
 			<!-- Plugins -->
             <ComponentRef Id="DVDProfilerPlugin.dll" />
@@ -345,11 +343,14 @@
 		<CustomAction Id="CA_RegisterMceApp_Register" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
 		<CustomAction Id="CA_RegisterMceApp_Rollback" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="rollback" Return="ignore" Impersonate="no"/>
 
-        <CustomAction Id="ActivateNetTcpPortSharing"
-                      Directory="TARGETDIR"
-                      ExeCommand="sc.exe config NetTcpPortSharing start= demand"
-                      Return="check"/>
-		<!-- The InstallExecuteSequence table describes the order that actions will be executed during       -->
+    <CustomAction Id="ActivateNetTcpPortSharing"
+                  Directory="TARGETDIR"
+                  ExeCommand="sc.exe config NetTcpPortSharing start= demand"
+                  Execute="deferred"
+                  Impersonate="no"
+                  Return="ignore" />
+
+    <!-- The InstallExecuteSequence table describes the order that actions will be executed during       -->
 		<!-- installation, repair and uninstall of this product.                                             -->
 		<InstallExecuteSequence>
 			<Custom Action="CA_BlockOlderVersionInstall" After="FindRelatedProducts">
@@ -397,7 +398,7 @@
 			<Custom Action="CA_RegisterMceApp_Register" After="CA_RegisterMceApp_Unregister_Install">
 				<![CDATA[NOT REMOVE]]>
 			</Custom>
-            <Custom Action="ActivateNetTcpPortSharing" After="InstallFinalize">Not Installed</Custom>
+            <Custom Action="ActivateNetTcpPortSharing" After="InstallInitialize">Not Installed</Custom>
             <ScheduleReboot After="InstallFinalize"/>
         </InstallExecuteSequence>
 
