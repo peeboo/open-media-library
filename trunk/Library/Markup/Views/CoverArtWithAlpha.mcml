@@ -102,7 +102,7 @@
     <Content>
       <Panel Name="GalleryContainer" Layout="VerticalFlow"  MouseInteractive="true">
         <Children>
-          <Panel MaximumSize="0,450" Layout="Center">
+          <Panel MaximumSize="[UISettings.Gallery.HeightOfBrowser]" Layout="Center">
             <Children>
               <!-- Put in a scroller so that if we repeat, the row will scroll. -->
               <Scroller Name="GalleryScroller"

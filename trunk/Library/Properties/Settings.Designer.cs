@@ -1036,5 +1036,29 @@ namespace Library.Properties {
                 this["DebugTranscoding"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("450")]
+        public int BrowserHeightWhenShowingDetails {
+            get {
+                return ((int)(this["BrowserHeightWhenShowingDetails"]));
+            }
+            set {
+                this["BrowserHeightWhenShowingDetails"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("600")]
+        public int BrowserHeightWhenNotShowingDetails {
+            get {
+                return ((int)(this["BrowserHeightWhenNotShowingDetails"]));
+            }
+            set {
+                this["BrowserHeightWhenNotShowingDetails"] = value;
+            }
+        }
     }
 }
