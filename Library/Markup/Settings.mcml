@@ -575,6 +575,17 @@
                     <Children>
                       <Text Content="Number of Seconds to Delay Transcoding" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                       <c:SimpleEditbox Size="700,51" Name="TranscodingBufferDelay" EditableText="[Settings.TranscodingBufferDelay]" />
+                      <Panel Layout="HorizontalFlow" Margins="0,40,0,0" Navigation="Group">
+                        <Children>
+                          <c:SimpleCheckbox Name="TranscodeAVIFiles" Checked="[Settings.TranscodeAVIFiles]" Margins="0,0,10,0" />
+                          <Text Content="Transcode AVI Files" Color="White" Font="font://me:SmallFont"/>
+                          <c:SimpleCheckbox Name="TranscodeMKVFiles" Checked="[Settings.TranscodeMKVFiles]" Margins="0,0,10,0" />
+                          <Text Content="Transcode MKV Files" Color="White" Font="font://me:SmallFont"/>
+                          <c:SimpleCheckbox Name="TranscodeOGMFiles" Checked="[Settings.TranscodeOGMFiles]" Margins="0,0,10,0" />
+                          <Text Content="Transcode OGM Files" Color="White" Font="font://me:SmallFont"/>
+
+                        </Children>
+                      </Panel>
                     </Children>
                   </Panel>
                 </Children>
