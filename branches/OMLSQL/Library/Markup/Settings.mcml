@@ -1,0 +1,650 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
+      xmlns:coll="assembly://MsCorLib/System.Collections"
+      xmlns:s="resx://Library/Library.Resources/Styles"
+      xmlns:cor="assembly://MsCorLib/System"
+      xmlns:a="assembly://Library/Library"
+      xmlns:controls="resx://Library/Library.Resources/CoreControls"
+      xmlns:c="resx://Library/Library.Resources/Controls"
+      xmlns:rbg="resx://Library/Library.Resources/RadioButtonGroup"
+      xmlns:me="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/Base" />
+  <Aggregate Source="resx://Library/Library.Resources/Controls" />
+
+  <UI Name="Settings">
+
+    <Locals>
+      <Command Name="BeginSetupCommand"
+               Description="Begin Setup"/>
+      <Command Name="SaveSettings"
+               Description="Save Settings"/>
+      <Command Name="AboutOML"
+               Description="About OML"/>      
+
+      <Choice Name="Tabs">
+        <Options>
+          <cor:String String="View Options"/>
+          <cor:String String="Customize UI"/>
+          <cor:String String="Filters"/>
+          <cor:String String="Image Mounting"/>          
+          <cor:String String="Language"/>
+          <cor:String String="Trailers"/>          
+          <cor:String String="External Players"/>
+          <cor:String String="Extender"/>
+        </Options>
+      </Choice>
+
+      <ScrollingData Name="ScrollDataUI"/>
+      <ScrollingHandler Name="ScrollHandlerUI"/>
+
+      <ScrollingData Name="ScrollDataFilters"/>
+      <ScrollingHandler Name="ScrollHandlerFilters"/>
+
+      <Size Name="ChoiceSpinnerSize" Size="275,51" />
+    </Locals>
+
+    <Properties>
+      <!-- <a:Setup Name="Setup" /> -->
+      <a:Settings Name="Settings" Settings="$Required" />
+      <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+      <a:UISettings Name="UISettings" UISettings="$Required" />      
+    </Properties>
+
+    <Rules>           
+      <!-- Setup the default visibility rules -->
+      <Changed Source="[SaveSettings.Invoked]">
+        <Actions>
+          <Invoke Target="[Settings.SaveSettings]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[AboutOML.Invoked]">
+        <Actions>
+          <Navigate Source="@resx://Library/Library.Resources/About" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Tabs.Chosen]">
+        <Conditions>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="View Options"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[CustomizeUI.Visible]" Value="false"/>
+          <Set Target="[DTPanel.Visible]" Value="false"/>
+          <Set Target="[LanguagePanel.Visible]" Value="false"/>
+          <Set Target="[Trailers.Visible]" Value="false"/>
+          <Set Target="[Filters.Visible]" Value="false"/>
+          <Set Target="[ExternalPlayers.Visible]" Value="false" />
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
+
+          <Set Target="[ViewOptionsPanel.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Tabs.Chosen]">
+        <Conditions>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="Image Mounting"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+          <Set Target="[CustomizeUI.Visible]" Value="false"/>
+          <Set Target="[LanguagePanel.Visible]" Value="false"/>
+          <Set Target="[Trailers.Visible]" Value="false"/>
+          <Set Target="[Filters.Visible]" Value="false"/>
+          <Set Target="[ExternalPlayers.Visible]" Value="false" />
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
+
+          <Set Target="[DTPanel.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Tabs.Chosen]">
+        <Conditions>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="Customize UI"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+          <Set Target="[DTPanel.Visible]" Value="false"/>
+          <Set Target="[LanguagePanel.Visible]" Value="false"/>
+          <Set Target="[Trailers.Visible]" Value="false"/>
+          <Set Target="[Filters.Visible]" Value="false"/>
+          <Set Target="[ExternalPlayers.Visible]" Value="false" />
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
+
+          <Set Target="[CustomizeUI.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Tabs.Chosen]">
+        <Conditions>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="Language"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+          <Set Target="[CustomizeUI.Visible]" Value="false"/>
+          <Set Target="[DTPanel.Visible]" Value="false"/>
+          <Set Target="[Trailers.Visible]" Value="false"/>
+          <Set Target="[Filters.Visible]" Value="false"/>
+          <Set Target="[ExternalPlayers.Visible]" Value="false" />
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
+
+          <Set Target="[LanguagePanel.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Tabs.Chosen]">
+        <Conditions>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="Trailers"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+          <Set Target="[CustomizeUI.Visible]" Value="false"/>
+          <Set Target="[DTPanel.Visible]" Value="false"/>
+          <Set Target="[Filters.Visible]" Value="false"/>
+          <Set Target="[LanguagePanel.Visible]" Value="false"/>
+          <Set Target="[ExternalPlayers.Visible]" Value="false" />
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
+
+          <Set Target="[Trailers.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Tabs.Chosen]">
+        <Conditions>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="Filters"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+          <Set Target="[CustomizeUI.Visible]" Value="false"/>
+          <Set Target="[DTPanel.Visible]" Value="false"/>
+          <Set Target="[Trailers.Visible]" Value="false"/>
+          <Set Target="[LanguagePanel.Visible]" Value="false"/>
+          <Set Target="[ExternalPlayers.Visible]" Value="false" />
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
+
+          <Set Target="[Filters.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Tabs.Chosen]">
+        <Conditions>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="External Players"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+          <Set Target="[CustomizeUI.Visible]" Value="false"/>
+          <Set Target="[DTPanel.Visible]" Value="false"/>
+          <Set Target="[Trailers.Visible]" Value="false"/>
+          <Set Target="[LanguagePanel.Visible]" Value="false"/>
+          <Set Target="[Filters.Visible]" Value="false"/>
+          <Set Target="[ExtenderTranscoding.Visible]" Value="false"/>
+
+          <Set Target="[ExternalPlayers.Visible]" Value="true" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Tabs.Chosen]">
+        <Conditions>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="Extender"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
+          <Set Target="[CustomizeUI.Visible]" Value="false"/>
+          <Set Target="[DTPanel.Visible]" Value="false"/>
+          <Set Target="[Trailers.Visible]" Value="false"/>
+          <Set Target="[LanguagePanel.Visible]" Value="false"/>
+          <Set Target="[Filters.Visible]" Value="false"/>
+          <Set Target="[ExternalPlayers.Visible]" Value="false" />
+
+          <Set Target="[ExtenderTranscoding.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+
+      <Condition Source="[TabsPanel.Visible]" SourceValue="true">
+        <Actions>
+          <Set Target="[Tabs.ChosenIndex]" Value="0" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[UseExternalPlayer.Checked.Value]" SourceValue="true" Target="[ExternalPlayer.Visible]" Value="true" />
+      <Condition Source="[UseExternalPlayer.Checked.Value]" SourceValue="false" Target="[ExternalPlayer.Visible]" Value="false" />
+
+      <Changed Source="[Settings.StartPage.Chosen]">
+        <Actions>
+          <Invoke Target="[Settings.BuildSubFilterOptions]"  ResultTarget="[SubFilter.Model]" />
+        </Actions>
+      </Changed>
+
+      <!-- begin show and hide subfilter label when choosing home -->
+      <Condition Source="[Settings.StartPage.Chosen!cor:String]" SourceValue="OML Home">
+        <Actions>
+          <Set Target="[SubFilterLabel.Visible]" Value="false" />
+          <Set Target="[SubFilter.Visible]" Value="false" />
+        </Actions>
+      </Condition>     
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Settings.StartPage.Chosen!cor:String]" Value="OML Home" ConditionOp="NotEquals" />
+          <Equality Source="[Settings.StartPage.Chosen!cor:String]" Value="Unwatched" ConditionOp="NotEquals" />
+        </Conditions>
+        <Actions>
+          <Set Target="[SubFilterLabel.Visible]" Value="true" />
+          <Set Target="[SubFilter.Visible]" Value="true" />
+        </Actions>
+      </Rule>      
+        
+      
+      <!-- end show and hide subfilter label when choosing home-->
+
+      <Default Target="[ScrollHandlerUI.ScrollingData]" Value="[ScrollDataUI]"/>
+      <Default Target="[ScrollHandlerFilters.ScrollingData]" Value="[ScrollDataFilters]"/>
+    </Rules>
+
+    <Content>
+      <ColorFill Name="AllContent" Content="Transparent" Layout="Form" Navigation="Column">
+        <Children>
+          
+          <!-- Top -->
+          <Panel Name="TopPanel">
+            <Children>
+              <Text Content="Open Media Library Settings" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0"/>
+              <Clip Orientation="Vertical">
+                <Children>
+                  <ColorFill Content="Black" Alpha="0.5"/>
+                </Children>
+              </Clip>
+
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
+            </LayoutInput>
+          </Panel>
+
+          <!-- Tabs -->
+          <Panel Name="TabsPanel" Navigation="ContainHorizontal">
+            <Children>
+              <me:Pivot Name="TopTabs" Model="[Tabs]" OMLFont="Calibri, 18" OMLFocusFont="Calibri, 20"/>
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0.1" Top="TopPanel,1" />
+            </LayoutInput>
+
+          </Panel>
+
+          <!-- settings panels -->
+          <Panel Navigation="Group">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0.05"/>
+            </LayoutInput>
+            <Children>
+
+              <!-- ViewOptions -->
+              <Panel Name="ViewOptionsPanel" Layout="VerticalFlow">
+                <Children>
+                  <Panel Layout="VerticalFlow" Navigation="Group,Column,PreferFocusOrder,RememberFocus">
+                    <Children>
+
+                      <Panel Layout="VerticalFlow">
+                        <Children>
+                          <Text Content="Movie Gallery View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <c:SimpleSpinner Name="MovieView" Model="[Settings.MovieView]" Size="[ChoiceSpinnerSize]" />
+                        </Children>
+                      </Panel>
+
+                      <Panel Layout="VerticalFlow">
+                        <Children>
+                          <Text Content="Movie Sort" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" Size="[ChoiceSpinnerSize]"/>
+                        </Children>
+                      </Panel>
+
+                      <Panel Layout="VerticalFlow" Navigation="Group">
+                        <Children>
+                          <Text Content="Start Page" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <Panel Layout="HorizontalFlow" Navigation="RememberFocus,PreferFocusOrder">
+                            <Children>
+                              <c:SimpleSpinner Name="StartPage" Model="[Settings.StartPage]" Size="[ChoiceSpinnerSize]" />
+                              <Text Content="Filter" Name="SubFilterLabel" Color="White" Font="font://me:SmallFont" Margins="15,10,10,0" Visible="false"/>
+                              <c:SimpleSpinner Name="SubFilter" Model="[Settings.StartPageSubFilter]" Visible="false" Size="[ChoiceSpinnerSize]"/>
+                            </Children>
+                          </Panel>
+                        </Children>
+                      </Panel>
+
+                    </Children>
+                  </Panel>
+                </Children>
+              </Panel>
+
+              <!-- CustomizeUI -->
+              <Panel Name="CustomizeUI" Layout="VerticalFlow" Visible="false" Navigation="PreferFocusOrder,RememberFocus">
+                <Children>
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <Scroller Orientation="Vertical" ScrollingData="[ScrollDataUI]" MaximumSize="0,475" MinimumSize="0,475" FadeSize="-10" Navigation="Group">
+                        <LayoutInput>
+                          <FormLayoutInput Left="Parent,0" Top="Parent,.25" Horizontal="Center"/>
+                        </LayoutInput>
+
+                        <Children>
+                          <Panel Navigation="Group" Layout="VerticalFlow" FocusOrder="1">
+                            <Children>
+                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0" Navigation="Group">
+                                <Children>
+                                  <c:SimpleCheckbox Name="UseOriginalCoverArt" Checked="[Settings.UseOriginalCoverArt]" Margins="0,0,10,0" />
+                                  <Text Content="Don't Resize Cover Art (may slow down browsing)" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
+                                </Children>
+                              </Panel>
+                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0" Navigation="Group">
+                                <Children>
+                                  <c:SimpleCheckbox Name="ShowMovieDetails" Checked="[Settings.ShowMovieDetails]" Margins="0,0,10,0" />
+                                  <Text Content="Show Movie Details While Browsing" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
+                                </Children>
+                              </Panel>
+                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0" Navigation="Group">
+                                <Children>
+                                  <c:SimpleCheckbox Name="DimUnselectedCovers" Checked="[Settings.DimUnselectedCovers]" Margins="0,0,10,0" />
+                                  <Text Content="Dim Unselected Covers" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
+                                </Children>
+                              </Panel>
+                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0" Navigation="Group">
+                                <Children>
+                                  <c:SimpleCheckbox Name="UseOnScreenAlpha" Checked="[Settings.UseOnScreenAlpha]" Margins="0,0,10,0" />
+                                  <Text Content="Show Alpha Jump Bar" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
+                                </Children>
+                              </Panel>
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="2" Navigation="Group">
+                            <Children>
+                              <Text Content="Cover Art Rows" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                              <c:SimpleSpinner Name="CoverArtRows" Model="[Settings.CoverArtRows]" Size="151,51" />
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="3" Navigation="Group">
+                            <Children>
+                              <Text  Content="Cover Art Spacing" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                              <c:SimpleSpinner Name="CoverArtSpacing" Model="[Settings.CoverArtSpacing]" Size="151,51" />
+                            </Children>
+                          </Panel>
+                          
+                        </Children>
+                      </Scroller>
+                    </Children>
+                  </Panel>
+                </Children>
+                <LayoutInput>
+                  <FormLayoutInput Vertical="Center" Horizontal="Center"/>
+                </LayoutInput>
+              </Panel>
+
+              <!-- Language -->
+              <Panel Name="LanguagePanel" Layout="Center" Visible="false">
+                <Children>
+                  <Graphic Content="image://me:ListboxNoFocus" Margins="0,0,0,20" MinimumSize="300,400" MaximumSize="400,400">
+                    <Children>
+                      <Scroller Orientation="Vertical"
+                                FadeSize="10"
+                                Padding="15,15,15,15" Navigation="Group">
+                        <Children>
+                          <controls:RadioButtonGroup Model="[Settings.UILanguage]"/>
+                        </Children>
+                      </Scroller>
+                    </Children>
+                  </Graphic>
+                </Children>
+              </Panel>
+
+              <!-- Mounting -->
+              <Panel Name="DTPanel" Layout="VerticalFlow" Visible="false">
+                <Children>
+                  <Panel Name="WhichTool" Layout="VerticalFlow" Margins="0,0,50,0" Navigation="Row">
+                    <Children>
+                      <Text Content="Which Mounting Tool" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                      <rbg:RadioButtonGroup Model="[Settings.ImageMountingSelection]" />
+                    </Children>
+                  </Panel>
+                  <Panel Name="DTPath" Layout="VerticalFlow" Margins="0,0,50,0" Navigation="Row">
+                    <Children>
+                      <Text Content="Mounting Tool Path" Color="White" Font="font://me:Font" Margins="0,20,0,0" />
+                      <c:SimpleEditbox Size="700,51" Name="DTEditbox" EditableText="[Settings.MountingToolPath]" />
+                    </Children>
+                  </Panel>
+                  <Panel Layout="VerticalFlow" Margins="0,0,50,0">
+                    <Children>
+                      <Text Content="Virtual Drive" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                      <c:SimpleSpinner Name="VirtualDrive" Model="[Settings.VirtualDrive]" Size="51,51" />
+                    </Children>
+                  </Panel>
+                </Children>
+                <LayoutInput>
+                  <FormLayoutInput Vertical="Center" Horizontal="Center"/>
+                </LayoutInput>
+
+              </Panel>
+
+              <!-- Trailers -->
+              <Panel Name="Trailers" Visible="false" Layout="VerticalFlow" Navigation="Group">
+                <Children>
+                  <Text Content="Trailers Definition" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                  <c:SimpleSpinner Name="TrailersDefinition" Model="[Settings.TrailersDefinition]" Size="51,51" />
+                </Children>
+                <LayoutInput>
+                  <FormLayoutInput Top="Parent,0.05"/>
+                </LayoutInput>
+              </Panel>
+
+              <!-- Filters -->
+              <Scroller Name="Filters" Orientation="Vertical" ScrollingData="[ScrollDataFilters]" MaximumSize="0,475" MinimumSize="0,475" FadeSize="-10" Navigation="Group" Visible="false">
+                <LayoutInput>
+                  <FormLayoutInput Left="Parent,0" Top="Parent,.25" Horizontal="Center"/>
+                </LayoutInput>
+
+                <Children>
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterUnwatched" Checked="[Settings.ShowFilterUnwatched]" Margins="0,0,0,0" />
+                      <Text Content="Unwatched" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+                  
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterActors" Checked="[Settings.ShowFilterActors]" Margins="0,0,0,0" />
+                      <Text Content="Actors" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterDirectors" Checked="[Settings.ShowFilterDirectors]" Margins="0,0,0,0" />
+                      <Text Content="Directors" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterGenres" Checked="[Settings.ShowFilterGenres]" Margins="0,0,0,0" />
+                      <Text Content="Genres" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterRuntime" Checked="[Settings.ShowFilterRuntime]" Margins="0,0,0,0" />
+                      <Text Content="Runtime" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterCountry" Checked="[Settings.ShowFilterCountry]" Margins="0,0,0,0" />
+                      <Text Content="Country" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterParentalRating" Checked="[Settings.ShowFilterParentalRating]" Margins="0,0,0,0" />
+                      <Text Content="Parental Rating" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterTags" Checked="[Settings.ShowFilterTags]" Margins="0,0,0,0" />
+                      <Text Content="Tags" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterUserRating" Checked="[Settings.ShowFilterUserRating]" Margins="0,0,0,0" />
+                      <Text Content="User Rating" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterYear" Checked="[Settings.ShowFilterYear]" Margins="0,0,0,0" />
+                      <Text Content="Release Year" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterDateAdded" Checked="[Settings.ShowFilterDateAdded]" Margins="0,0,0,0" />
+                      <Text Content="Date Added" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterFormat" Checked="[Settings.ShowFilterFormat]" Margins="0,0,0,0" />
+                      <Text Content="Video Format" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+
+                  <Panel Layout="HorizontalFlow">
+                    <Children>
+                      <c:SimpleCheckbox Name="ShowFilterTrailers" Checked="[Settings.ShowFilterTrailers]" Margins="0,0,0,0" />
+                      <Text Content="Trailers" Color="White" Font="font://me:SmallFont" Margins="5,5,0,0"/>
+                    </Children>
+                  </Panel>
+
+                </Children>
+              </Scroller>
+              
+              <!-- ExternalPlayers -->
+              <Panel Name="ExternalPlayers" Layout="VerticalFlow" Visible="false" Navigation="Group">
+                <Children>
+                  <Panel Layout="VerticalFlow" Navigation="Group">
+                    <Children>
+                      <Text Content="External HD/BluRay Player" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                      <c:SimpleEditbox Size="700,51" Name="BluRayPlayer" EditableText="[Settings.BlueRayPlayerPath]" />
+
+                      <Panel Layout="HorizontalFlow" Margins="0,40,0,0" Navigation="Group">
+                        <Children>
+                          <c:SimpleCheckbox Name="UseExternalPlayer" Checked="[Settings.UseExternalPlayer]" Margins="0,0,10,0" />
+                          <Text Content="Use External Player for all other media types" Color="White" Font="font://me:SmallFont"/>
+                        </Children>
+                      </Panel>
+
+                      <c:SimpleEditbox Size="700,51" Name="ExternalPlayer" EditableText="[Settings.ExternalPlayerPath]" />
+
+                    </Children>
+                  </Panel>
+                </Children>
+              </Panel>
+
+              <!-- ExtenderTranscoding -->
+              <Panel Name="ExtenderTranscoding" Layout="VerticalFlow" Visible="false" Navigation="Group">
+                <Children>
+                  <Panel Layout="VerticalFlow" Navigation="Group">
+                    <Children>
+                      <Text Content="Number of Seconds to Delay Transcoding" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                      <c:SimpleEditbox Size="700,51" Name="TranscodingBufferDelay" EditableText="[Settings.TranscodingBufferDelay]" />
+                      <Panel Layout="VerticalFlow" Margins="0,40,0,0" Navigation="Group">
+                        <Children>
+                          <Clip Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="TranscodeAVIFiles" Checked="[Settings.TranscodeAVIFiles]" Margins="0,0,10,0" />
+                              <Text Content="Transcode AVI Files" Color="White" Font="font://me:SmallFont"/>
+                            </Children>
+                          </Clip>
+                          <Clip Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="TranscodeMKVFiles" Checked="[Settings.TranscodeMKVFiles]" Margins="0,0,10,0" />
+                              <Text Content="Transcode MKV Files" Color="White" Font="font://me:SmallFont"/>
+                            </Children>
+                          </Clip>
+                          <Clip Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="TranscodeOGMFiles" Checked="[Settings.TranscodeOGMFiles]" Margins="0,0,10,0" />
+                              <Text Content="Transcode OGM Files" Color="White" Font="font://me:SmallFont"/>
+                            </Children>
+                          </Clip>
+                          <Clip Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="PreserveAudioOnTranscode" Checked="[Settings.PreserveAudioOnTranscode]" Margins="0,0,10,0" />
+                              <Text Content="Preserve AudioFormat On Transcode of non DVD files" Color="White" Font="font://me:SmallFont"/>
+                            </Children>
+                          </Clip>
+                          <Clip Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="DebugTranscoding" Checked="[Settings.DebugTranscoding]" Margins="0,0,10,0" />
+                              <Text Content="Run ALL non DVDs through the Transcoding Engine (DEBUG ONLY)" Color="White" Font="font://me:SmallFont"/>
+                            </Children>
+                          </Clip>
+                        </Children>
+                      </Panel>
+                    </Children>
+                  </Panel>
+                </Children>
+              </Panel>
+
+            </Children>
+          </Panel>
+
+        <!-- Bottom -->
+          <Panel Name="BottomPanel" Navigation="PreferFocusOrder,Group">
+            <Children>
+
+              <Panel  Margins="50,0,0,0" Navigation="ContainHorizontal">
+                <Children>
+                  <Panel Layout="HorizontalFlow" Navigation="FlowHorizontal">
+                    <Children>
+                      <c:SimpleButton Name="Save Settings" Command="[SaveSettings]" FocusOrder="1" Text="Save Settings" Margins="0,20,10,0" />
+                      <!-- <c:SimpleButton Name="Import Movies" Command="[BeginSetupCommand]" Text="Import Movies" Margins="0,20,10,0"/> -->
+                      <c:SimpleButton Name="About OML" Command="[AboutOML]" FocusOrder="2" Text="About OML" Margins="0,20,10,0"/>
+                    </Children>
+                  </Panel>
+                </Children>
+              </Panel>
+
+              <Clip Orientation="Vertical">
+                <Children>
+                  <ColorFill Content="Black" Alpha="0.5"/>
+                </Children>
+              </Clip>
+
+            </Children>
+
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
+            </LayoutInput>
+          </Panel>
+
+        </Children>
+      </ColorFill>
+    </Content>
+  </UI>
+  <Font Name="Font" FontName="global://me:RegularFontName" FontSize="16" />
+  <Font Name="SmallFont" FontName="global://me:RegularFontName" FontSize="20" />
+  <Image Name="ListboxNoFocus" Source="resx://Library/Library.Resources/ListboxNoFocus" />
+</Mcml>

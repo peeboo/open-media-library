@@ -1,0 +1,628 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:cor="assembly://MsCorLib/System"
+      xmlns:a="assembly://Library/Library"
+      xmlns:rbg="resx://Library/Library.Resources/RadioButtonGroup"
+      xmlns:controls="resx://Library/Library.Resources/CoreControls"
+      xmlns:c="resx://Library/Library.Resources/Controls"
+      xmlns:me="Me">
+
+  <UI Name="SelectFileToImport">
+      <Properties>
+          <a:Setup Name="Setup" Setup="$Required" />
+          <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+          <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+          <a:UISettings Name="UISettings" UISettings="$Required" />
+      </Properties>
+
+      <Locals>
+          <Command Name="FocusedNodeChanged" />
+          <Command Name="BeginScanCommand" Description="Begin Scan" />
+      </Locals>
+
+      <Rules>
+          <Condition ConditionOp="Equals" Source="[Setup.IsSingleFileImporter]" SourceValue="true">
+              <Actions>
+                  <Set Target="[PluginMessage.Content]" Value="NOTICE: The importer you have selected will ONLY import files as they are named by your SOURCE application from the directories you select. (Example: MyMovies creates a titles.xml file)" />
+              </Actions>
+          </Condition>
+          <Condition ConditionOp="Equals" Source="[Setup.IsSingleFileImporter]" SourceValue="false">
+              <Actions>
+                  <Set Target="[PluginMessage.Content]" Value="NOTICE: Select all the directories that you want to search for movies." />
+              </Actions>
+          </Condition>
+
+          <Changed Source="[BeginScanCommand.Invoked]">
+              <Conditions>
+                  <Equality Source="[Setup.HasCheckedNodes]" Value="true" />
+              </Conditions>
+              <Actions>
+                  <Navigate Source="@resx://Library/Library.Resources/SelectFilesToImport"
+                            Setup="[Setup]"
+                            OMLApplication="[Application]"
+                            MovieGallery="[MovieBrowser]"
+                            UISettings="[UISettings]"/>
+
+              </Actions>
+          </Changed>
+          <Changed Source="[BeginScanCommand.Invoked]">
+              <Conditions>
+                  <Equality Source="[Setup.HasCheckedNodes]" Value="false" />
+              </Conditions>
+              <Actions>
+                  <Invoke Target="[Setup.RequestNodeSelection]" />
+              </Actions>
+          </Changed>
+      </Rules>
+
+      <Content>
+          <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
+              <Children>
+
+                  <Panel Name="Bottom" >
+                      <Children>
+                          <Panel Layout="Fill" Margins="50,0,0,0">
+                              <Children>
+                                  <Panel Layout="VerticalFlow">
+                                      <Children>
+                                          <Clip Layout="HorizontalFlow">
+                                              <Children>
+                                                  <Clip Layout="Grid">
+                                                      <Children>
+                                                          <Text Name="SelectedImporterLabel" Content="Selected Importer: " Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                          <Text Name="SelectedImporterText" Content="[Setup.ImporterSelection.Chosen!cor:String]" Font="Calibri, 20" Color="LightBlue"/>
+                                                      </Children>
+                                                  </Clip>
+                                              </Children>
+                                          </Clip>
+                                          <Clip Layout="HorizontalFlow">
+                                              <Children>
+                                                  <Clip Layout="Grid">
+                                                      <Children>
+                                                          <Text Name="ShouldCopyImagesLabel" Content="Copy Images: " Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                          <Text Name="ShouldCopyImagesText" Content="[Setup.ShouldCopyImages.Value!cor:String]" Font="Calibri, 20" Color="LightBlue"/>
+                                                      </Children>
+                                                  </Clip>
+                                              </Children>
+                                          </Clip>
+                                      </Children>
+                                  </Panel>
+                              </Children>
+                          </Panel>
+                          <Clip Orientation="Vertical">
+                              <Children>
+                                  <ColorFill Content="Black" Alpha="0.5"/>
+                              </Children>
+                          </Clip>
+                      </Children>
+                      <LayoutInput>
+                          <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
+                      </LayoutInput>
+                  </Panel>
+
+                  <Panel Name="Top" >
+                      <Children>
+                          <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0">
+                          </Text>
+                          <Clip Orientation="Vertical">
+                              <Children>
+                                  <ColorFill Content="Black" Alpha="0.5"/>
+                              </Children>
+                          </Clip>
+
+                      </Children>
+                      <LayoutInput>
+                          <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
+                      </LayoutInput>
+                  </Panel>
+
+                  <Panel Name="Content">
+                      <Children>
+                          <Clip Layout="VerticalFlow">
+                              <Children>
+
+                                  <Graphic Content="image://me:ListboxNoFocus" Margins="0,0,0,20">
+                                      <Children>
+
+                                          <Scroller Orientation="Vertical"
+                                                    FadeSize="10"
+                                                    Padding="15,15,15,15">
+                                              <Children>
+
+                                                  <Repeater Layout="VerticalFlow"
+                                                            Source="[Setup.TreeView.ChildNodes]">
+
+                                                      <Animations>
+                                                          <Animation Animation="animation://me:ScrollerMoveItemSmooth" />
+                                                      </Animations>
+
+                                                      <Content>
+                                                          <me:TreeNodeItem TreeNode="[RepeatedItem!a:TreeNode]"
+                                                                           Focused="[FocusedNodeChanged]" />
+                                                      </Content>
+                                                  </Repeater>
+                                              </Children>
+                                          </Scroller>
+
+                                      </Children>
+                                  </Graphic>
+                                  <c:SimpleButton Name="Begin Scan" Command="[BeginScanCommand]" Text="Begin Scan"/>
+                                  <Text Name="PluginMessage" Content="Woohoo!" WordWrap="true" Font="Calibri, 20, Bold" Color="LightBlue" />
+
+                              </Children>
+                          </Clip>
+                      </Children>
+                      <LayoutInput>
+                          <FormLayoutInput Left="Parent,0.15,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
+                      </LayoutInput>
+                  </Panel>
+
+              </Children>
+          </ColorFill>
+      </Content>
+  </UI>
+
+  <UI Name="TreeNodeItem">
+
+    <Properties>
+      <a:TreeNode Name="TreeNode"
+                  TreeNode="$Required" />
+      <Command Name="Focused"/>
+    </Properties>
+
+    <Locals>
+      <ClickHandler Name="Clicker" />
+      <Command Name="cmdExpandCollapse" />
+    </Locals>
+
+    <Rules>
+      <Binding Source="[TreeNode.ChildNodes]"
+               Target="[ChildNodes.Source]" />
+      <Changed Source="[cmdExpandCollapse.Invoked]">
+        <Conditions>
+          <Equality Source="[ChildNodes.Visible]"
+                    Value="false" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[TreeNode.GetChildNodes]" />
+        </Actions>
+      </Changed>
+      <Changed Source="[cmdExpandCollapse.Invoked]">
+        <Actions>
+          <Set Target="[ChildNodes.Visible]"
+               Value="[ChildNodes.Visible]">
+            <Transformer>
+              <BooleanTransformer Inverse="true" />
+            </Transformer>
+          </Set>
+        </Actions>
+      </Changed>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[TreeNode.HasChildNodes]"
+                    ConditionOp="Equals"
+                    Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Button.Visible]"
+               Value="false" />
+          <Set Target="[Label.Margins]"
+               Value="50,7,0,0" />
+        </Actions>
+      </Rule>
+      <Condition Source="[Input.DeepKeyFocus]"
+                 SourceValue="true">
+        <Actions>
+          <Set Target="[Focused.Description]"
+               Value="[TreeNode.ToString]" />
+          <Invoke Target="[Focused.Invoke]" />
+        </Actions>
+      </Condition>
+    </Rules>
+
+    <Content>
+      <Panel Layout="VerticalFlow">
+        <Children>
+          <Panel Layout="HorizontalFlow">
+            <Children>
+              <me:SimpleCheckbox Name="Checked"
+                                 Checked="[TreeNode.Checked]"
+                                 Margins="0,7,4,0" />
+              <Panel Layout="HorizontalFlow"
+                     Margins="[TreeNode.LevelMargin]">
+                <Children>
+                  <me:ExpandCollapseButton Name="Button"
+                                           Command="[cmdExpandCollapse]" />
+                  <Text Name="Label"
+                        Content="[TreeNode.Title]"
+                        Color="White"
+                        Margins="0,7,0,0" />
+                </Children>
+              </Panel>
+            </Children>
+          </Panel>
+          <Repeater Name="ChildNodes"
+                    Layout="VerticalFlow"
+                    Visible="false">
+            <Content>
+              <me:TreeNodeItem TreeNode="[RepeatedItem!a:TreeNode]"
+                               Focused="[Focused]" />
+            </Content>
+          </Repeater>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="SimpleCheckbox">
+    <Properties>
+      <BooleanChoice Name="Checked"
+                     BooleanChoice="$Required" />
+    </Properties>
+
+    <Locals>
+      <ClickHandler Name="Clicker" />
+      <BooleanTransformer Name="BooleanInverseTransformer" Inverse="true" />
+    </Locals>
+
+    <Rules>
+      <Default Target="[Input.KeyInteractive]"
+               Value="true" />
+      <Binding Source="[Checked.Description]"
+               Target="[Label.Content]" />
+      <Changed Source="[Clicker.Invoked]">
+        <Actions>
+          <Set Target="[Checked.Value]"
+               Value="[Checked.Value]"
+               Transformer="[BooleanInverseTransformer]" />
+        </Actions>
+      </Changed>
+
+      <Condition Source="[Clicker.Clicking]"
+                 SourceValue="true">
+        <Conditions>
+          <Equality Source="[Checked.Value]"
+                    Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Background.Content]"
+               Value="image://me:FirstRunCheckBoxCheckedFocus" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Clicker.Clicking]"
+                 SourceValue="true">
+        <Conditions>
+          <Equality Source="[Checked.Value]"
+                    Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Background.Content]"
+               Value="image://me:FirstRunCheckBoxUncheckedFocus" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.KeyFocus]"
+                 SourceValue="true">
+        <Conditions>
+          <Equality Source="[Checked.Value]"
+                    Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Background.Content]"
+               Value="image://me:FirstRunCheckBoxCheckedFocus" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.KeyFocus]"
+                 SourceValue="true">
+        <Conditions>
+          <Equality Source="[Checked.Value]"
+                    Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Background.Content]"
+               Value="image://me:FirstRunCheckBoxUncheckedFocus" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.KeyFocus]"
+                 SourceValue="false">
+        <Conditions>
+          <Equality Source="[Checked.Value]"
+                    Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Background.Content]"
+               Value="image://me:FirstRunCheckBoxCheckedNoFocus" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.KeyFocus]"
+                 SourceValue="false">
+        <Conditions>
+          <Equality Source="[Checked.Value]"
+                    Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Background.Content]"
+               Value="image://me:FirstRunCheckBoxUncheckedNoFocus" />
+        </Actions>
+      </Condition>
+
+    </Rules>
+
+    <Content>
+      <Panel>
+
+        <Layout>
+          <FlowLayout Orientation="Horizontal"
+                      ItemAlignment="Center" />
+        </Layout>
+
+        <Children>
+
+          <Panel Name="Items"
+                 Layout="HorizontalFlow">
+            <Children>
+
+              <Graphic Name="Background"
+                       Content="image://me:FirstRunCheckBoxUncheckedNoFocus"
+                       Margins="0,0,0,0"
+                       MaximumSize="34,34" />
+              <Text Name="Label"
+                    Color="White"
+                    Margins="10,0,0,10" />
+
+            </Children>
+          </Panel>
+
+        </Children>
+
+      </Panel>
+    </Content>
+    
+  </UI>
+
+  <UI Name="ExpandCollapseButton">
+    <Properties>
+      <Command Name="Command" Command="$Required" />
+    </Properties>
+    <Locals>
+      <Size Name="Size"
+            Size="50,51" />
+      <BooleanTransformer Name="BooleanInverseTransformer" Inverse="true" />
+    </Locals>
+    <Rules>
+      <Binding Source="[Forward.Visible]"
+               Target="[Back.Visible]"
+               Transformer="[BooleanInverseTransformer]" />
+      <Changed Source="[Command.Invoked]">
+        <Actions>
+          <Set Target="[Forward.Visible]"
+               Value="[Forward.Visible]"
+               Transformer="[BooleanInverseTransformer]"
+               InvokePolicy="Synchronous" />
+          <Invoke Target="[Host.NavigateInto]" />
+        </Actions>
+      </Changed>
+    </Rules>
+
+    <Content>
+      <Panel Name="Host">
+        <Children>
+          <me:SimpleButton Name="Forward" Command="[Command]" Size="[Size]"
+                           ImageFocus="image://me:SpinnerArrowForwardFocus"
+                           ImageNoFocus="image://me:SpinnerArrowForwardNoFocus"
+                           ImageDormant="image://me:SpinnerArrowForwardDormant" />
+          <me:SimpleButton Name="Back"
+                           Command="[Command]"
+                           Size="[Size]"
+                           ImageFocus="image://me:SpinnerArrowBackFocus"
+                           ImageNoFocus="image://me:SpinnerArrowBackNoFocus"
+                           ImageDormant="image://me:SpinnerArrowBackDormant"
+                           Visible="false" />
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="SimpleButton">
+
+    <Properties>
+      <ICommand Name="Command"
+                ICommand="$Required" />
+      <cor:Boolean Name="IsNavigatingCommand"
+                   Boolean="false" />
+      <cor:String Name="Text"
+                  String="" />
+      <Size Name="Size"
+            Size="251,51" />
+      <Image Name="ImageFocus"
+             Image="image://me:ButtonLeftFocus" />
+      <Image Name="ImageNoFocus"
+             Image="image://me:ButtonNoFocus" />
+      <Image Name="ImageDormant"
+             Image="image://me:ButtonDormant" />
+    </Properties>
+
+    <Locals>
+
+      <ClickHandler Name="Clicker" />
+
+    </Locals>
+
+    <Rules>
+
+      <Binding Source="[Command]"
+               Target="[Clicker.Command]" />
+      <Binding Source="[Command.Available]"
+               Target="[Input.KeyInteractive]" />
+      <Binding Source="[Input.KeyFocus]"
+               Target="[imgFocusOverlay.Visible]" />
+      <Binding Source="[Text]"
+               Target="[Label.Content]" />
+      <Default Target="[Input.KeyInteractive]"
+               Value="true" />
+
+      <Condition Source="[Input.KeyFocus]"
+                 SourceValue="true">
+        <Conditions>
+          <Equality Source="[Command.Available]"
+                    ConditionOp="Equals"
+                    Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[imgButton.Content]"
+               Value="[ImageFocus]"/>
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.MouseFocus]"
+                 SourceValue="true">
+        <Conditions>
+          <Equality Source="[Command.Available]"
+                    ConditionOp="Equals"
+                    Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[imgButton.Content]"
+               Value="[ImageFocus]"/>
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Command.Available]"
+                 ConditionOp="Equals"
+                 SourceValue="false">
+        <Actions>
+          <Set Target="[imgButton.Content]"
+               Value="[ImageDormant]" />
+        </Actions>
+      </Condition>
+
+    </Rules>
+
+      <Content>
+
+          <Panel>
+              <Children>
+
+                  <Graphic Name="imgButton"
+                           Content="[ImageNoFocus]"
+                           Padding="12,7,12,7"
+                           MouseInteractive="true"
+                           MinimumSize="[Size]"
+                           MaximumSize="[Size]"
+                           SizingPolicy="SizeToContent"
+                           HorizontalAlignment="Fill"
+                           VerticalAlignment="Fill"
+                   >
+                      <Children>
+                          <Text Name="Label"
+                                Color="White"
+                                Margins="0,0,0,0" />
+                      </Children>
+                  </Graphic>
+
+                  <Graphic Name="imgFocusOverlay"
+                           Content="image://me:ButtonLeftFocusOverlay"
+                           MinimumSize="[Size]"
+                           MaximumSize="[Size]"
+                           SizingPolicy="SizeToContent"
+                           HorizontalAlignment="Fill"
+                           VerticalAlignment="Fill">
+
+                      <Animations>
+                          <Animation Animation="animation://me:ButtonFocusOverlayIdle"/>
+                      </Animations>
+
+                  </Graphic>
+
+              </Children>
+          </Panel>
+      </Content>
+  </UI>
+
+  <Image Name="ButtonDisabled"
+         Source="resx://Library/Library.Resources/ButtonDisabled"
+         NineGrid="7,7,7,7" />
+  <Image Name="ButtonDormant"
+         Source="resx://Library/Library.Resources/ButtonDormant"
+         NineGrid="7,7,7,7" />
+  <Image Name="ButtonLeftFocus"
+         Source="resx://Library/Library.Resources/ButtonLeftFocus"
+         NineGrid="7,7,7,7" />
+  <Image Name="ButtonLeftFocusOverlay"
+         Source="resx://Library/Library.Resources/ButtonLeftFocusOverlay"
+         NineGrid="7,7,7,7" />
+  <Image Name="ButtonNoFocus"
+         Source="resx://Library/Library.Resources/ButtonNoFocus"
+         NineGrid="7,7,7,7" />
+  <Image Name="ButtonPressedAfterGlow"
+         Source="resx://Library/Library.Resources/ButtonPressedAfterGlow"
+         NineGrid="7,7,7,7" />
+  <Image Name="ButtonPressedHighlight"
+         Source="resx://Library/Library.Resources/ButtonPressedHighlight"
+         NineGrid="7,7,7,7" />
+  <Image Name="FirstRunCheckBoxCheckedDisabled"
+         Source="resx://Library/Library.Resources/FirstRunCheckBoxCheckedDisabled"/>
+  <Image Name="FirstRunCheckBoxCheckedFocus"
+         Source="resx://Library/Library.Resources/FirstRunCheckBoxCheckedFocus"/>
+  <Image Name="FirstRunCheckBoxCheckedNoFocus"
+         Source="resx://Library/Library.Resources/FirstRunCheckBoxCheckedNoFocus"/>
+  <Image Name="FirstRunCheckBoxCheckedPressed"
+         Source="resx://Library/Library.Resources/FirstRunCheckBoxCheckedPressed"/>
+  <Image Name="FirstRunCheckBoxUncheckedDisabled"
+         Source="resx://Library/Library.Resources/FirstRunCheckBoxUncheckedDisabled"/>
+  <Image Name="FirstRunCheckBoxUncheckedFocus"
+         Source="resx://Library/Library.Resources/FirstRunCheckBoxUncheckedFocus"/>
+  <Image Name="FirstRunCheckBoxUncheckedNoFocus"
+         Source="resx://Library/Library.Resources/FirstRunCheckBoxUncheckedNoFocus"/>
+  <Image Name="FirstRunCheckBoxUncheckedPressed"
+         Source="resx://Library/Library.Resources/FirstRunCheckBoxUncheckedPressed"/>
+  <Image Name="SpinnerArrowBackDormant"
+         Source="resx://Library/Library.Resources/SpinnerArrowBackDormant" />
+  <Image Name="SpinnerArrowBackFocus"
+         Source="resx://Library/Library.Resources/SpinnerArrowBackFocus" />
+  <Image Name="SpinnerArrowBackNoFocus"
+         Source="resx://Library/Library.Resources/SpinnerArrowBackNoFocus" />
+  <Image Name="SpinnerArrowForwardDormant"
+         Source="resx://Library/Library.Resources/SpinnerArrowForwardDormant" />
+  <Image Name="SpinnerArrowForwardFocus"
+         Source="resx://Library/Library.Resources/SpinnerArrowForwardFocus" />
+  <Image Name="SpinnerArrowForwardNoFocus"
+         Source="resx://Library/Library.Resources/SpinnerArrowForwardNoFocus" />
+  <Image Name="ListboxNoFocus"
+         Source="resx://Library/Library.Resources/ListboxNoFocus" />
+
+  <Animation Name="ScrollerMoveItemSmooth"
+             Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0.0"
+                        Value="0,0,0"
+                        RelativeTo="Current"
+                        Interpolation="EaseOut" />
+      <PositionKeyframe Time="0.2"
+                        Value="0,0,0"
+                        RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
+  <Animation Name="ButtonFocusOverlayIdle"
+             Loop="-1"
+             Type="Idle">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0"
+                     Value="0.0"
+                     Interpolation="SCurve"
+                     RelativeTo="Absolute"/>
+      <AlphaKeyframe Time="1.55"
+                     Value="0.60"
+                     Interpolation="SCurve"
+                     RelativeTo="Absolute"/>
+      <AlphaKeyframe Time="2.0"
+                     Value="0.0"
+                     RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+
+</Mcml>

@@ -1,0 +1,112 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:a="assembly://Library/Library"
+	  xmlns:cor="assembly://MSCorLib/System"
+	  xmlns:me="Me">
+
+    <Aggregate Source="resx://Library/Library.Resources/Button" />
+    <Aggregate Source="resx://Library/Library.Resources/SimpleButton" />
+    <Aggregate Source="resx://Library/Library.Resources/RadioButtonGroup" />
+    
+	<UI Name="ContextMenu">
+        <Properties>
+            <a:ContextMenu Name="MenuData"/>
+            <a:MovieDetailsPage Name="DetailsPage" MovieDetailsPage="$Required"/>
+        </Properties>
+        <Rules>
+            <Changed Source="[MenuData.ShowAudioOptions]" InitialEvaluate="false">
+                <Actions>
+                    <Set Target="[AudioChoices.Visible]" Value="true"/>
+                    <Set Target="[SubtitleChoices.Visible]" Value="false"/>
+                    <Set Target="[ChapterChoices.Visible]" Value="false"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[MenuData.ShowSubtitleOptions]" InitialEvaluate="false">
+                <Actions>
+                    <Set Target="[AudioChoices.Visible]" Value="false"/>
+                    <Set Target="[SubtitleChoices.Visible]" Value="true"/>
+                    <Set Target="[ChapterChoices.Visible]" Value="false"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[MenuData.ShowChapterOptions]" InitialEvaluate="false">
+                <Actions>
+                    <Set Target="[AudioChoices.Visible]" Value="false"/>
+                    <Set Target="[SubtitleChoices.Visible]" Value="false"/>
+                    <Set Target="[ChapterChoices.Visible]" Value="true"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[MenuData.PlayDisk]" InitialEvaluate="false">
+                <Actions>
+                    <Invoke Target="[DetailsPage.PlayDiskWithOptions]" />
+                </Actions>
+            </Changed>
+        </Rules>
+        <Content>
+            <Panel Name="ContextMenuPanel" Layout="Anchor" Navigation="ContainAll, WrapVertical">
+                <Children>
+                    <Graphic Name="Background" Navigation="ContainAll" Content="image://me:OverlaysOutline" SizingPolicy="SizeToChildren" Padding="5,5,5,5" MinimumSize="287,0" MaximumSize="587,0">
+                        <Layout>
+                            <FlowLayout Orientation="Horizontal" ItemAlignment="Fill"/>
+                        </Layout>
+                        <Children>
+                            <Graphic Name="TopImage" Content="image://me:OverlaysBackgroundTopLight" Padding="5,5,5,5">
+                                <Layout>
+                                    <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
+                                </Layout>
+                                <Children>
+                                    <Panel Layout="VerticalFlow" Navigation="ContainVertical">
+                                        <Children>
+                                            <Repeater Name="LocalRepeater" Layout="VerticalFlow" DefaultFocusIndex="0" Source="[MenuData.LocalItems]">
+                                                <Content>
+                                                    <me:ItemMenuButton Model="[RepeatedItem!Command]"/>
+                                                </Content>
+                                                <!--<Divider>
+                                                    <me:ItemMenuButtonDivider/>
+                                                </Divider>-->
+                                            </Repeater>
+                                        </Children>
+                                    </Panel>
+                                    <Graphic Content="image://me:OverlaysDividerVertical" Margins="5,5,5,5" MinimumSize="3,0" />
+                                    <Panel Navigation="ContainVertical" MaximumSize="0,200">
+                                        <Children>
+                                            <Scroller Orientation="Vertical" FadeAmount="1" FadeSize=".95">
+                                                <Children>
+                                                    <me:RadioButtonGroup Name="AudioChoices" Model="[MenuData.AudioTracksChoice]" Visible="false"/>
+                                                    <me:RadioButtonGroup Name="SubtitleChoices" Model="[MenuData.SubtitleTracksChoice]" Visible="false"/>
+                                                    <me:RadioButtonGroup Name="ChapterChoices" Model="[MenuData.ChapterSelectionChoice]" Visible="false"/>
+                                                </Children>
+                                            </Scroller>
+                                        </Children>
+                                        <LayoutInput>
+                                            <DockLayoutInput Position="Top"/>
+                                        </LayoutInput>
+                                    </Panel>
+                                </Children>
+                            </Graphic>
+                        </Children>
+                    </Graphic>
+                </Children>
+            </Panel>
+        </Content>
+	</UI>
+
+    <UI Name="ItemMenuButton">
+        <Properties>
+            <ICommand Name="Model" ICommand="$Required"/>
+        </Properties>
+        <Content>
+            <me:SimpleButton Name="CMButtonItem" Command="[Model]" Text="[Model.Description]"/>
+        </Content>
+    </UI>
+    
+    <!--<UI Name="ItemMenuButtonDivider">
+        <Content>
+            <Graphic Content="image://me:OverlaysDividerHorizontal" Name="Divider" Padding="2,0,0,0" Margins="0,1,0,1"/>
+        </Content>
+    </UI>-->
+
+    <Image Name="OverlaysOutline" Image="resx://Library/Library.Resources/OverlaysOutline"/>
+    <Image Name="OverlaysBackgroundTopLight" Image="resx://Library/Library.Resources/OverlaysBackgroundTopLight"/>
+    <Image Name="OverlaysBackgroundDark" Image="resx://Library/Library.Resources/OverlaysBackgroundDark"/>
+    <Image Name="OverlaysDividerHorizontal" Image="resx://Library/Library.Resources/overlays_divider_horizontal"/>
+    <Image Name="OverlaysDividerVertical" Image="resx://Library/Library.Resources/overlays_divider_vertical"/>
+</Mcml>

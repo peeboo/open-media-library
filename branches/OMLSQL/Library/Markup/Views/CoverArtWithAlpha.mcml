@@ -1,0 +1,346 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:a="assembly://Library/Library"
+	  xmlns:s="resx://Library/Library.Resources/Styles"
+      xmlns:filter="resx://Library/Library.Resources/FilterList"
+	  xmlns:cor="assembly://MSCorLib/System"
+      xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
+      xmlns:col="assembly://MSCorLib/System.Collections"
+      xmlns:c="resx://Library/Library.Resources/Controls"
+	  xmlns:me="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/Base" />
+
+  <UI Name="CoverArtWithAlpha">
+    <Properties>
+      <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+      <a:UISettings Name="UISettings" UISettings="$Required" />      
+    </Properties>
+
+    <Locals>
+      <!-- Create an input handler for scrolling. -->
+      <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled" />
+      <ScrollingData Name="ScrollingData" LockedPosition="0.5" />
+    </Locals>
+
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
+      <Default Target="[ScrollingData.Repeater]" Value="[AlphaRepeater]" />
+
+      <!-- when the page loads up select the first element-->
+      <Condition Source="[GalleryContainer.Visible]" SourceValue="true">
+        <Actions>
+          <Invoke Target="[AlphaRepeater.NavigateIntoIndex]" index="0" />
+        </Actions>
+      </Condition>
+
+      <Changed Source="[ScrollingData.TotalPages]">
+        <Actions>
+          <Set Target="[MovieBrowser.NumberOfPages]" Value="[ScrollingData.TotalPages!cor:Int32]" />
+        </Actions>
+      </Changed>
+
+      <!-- don't lock the scroll if we only have 1 or less pages -->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[ScrollingData.TotalPages]" Value="1" ConditionOp="LessThanOrEquals" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ScrollingData.LockedPosition]" Value="-1" />
+        </Actions>
+      </Rule>
+
+      <!-- if there are more than 1 pages - lock the scroll in the middle -->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[ScrollingData.TotalPages]" Value="1" ConditionOp="GreaterThan" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ScrollingData.LockedPosition]" Value=".5" />
+        </Actions>
+      </Rule>
+
+      <Changed Source="[MovieBrowser.JumpLetter]" >
+        <Actions>
+          <Invoke Target="[MovieBrowser.JumpToLetter]" jumpString="[MovieBrowser.JumpLetter]" list="[MovieBrowser.LabeledLists]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[MovieBrowser.JumpToPosition]" >
+        <Actions>
+          <!--Scroll parameter is the number of items to scroll to, relative to the current position-->
+          <Invoke Target ="[ScrollingData.Scroll]" amount="[MovieBrowser.RelativeJumpToPosition]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--This is the absolute index-->
+          <Invoke Target ="[AlphaRepeater.NavigateIntoIndex]" index="[MovieBrowser.JumpToPosition]" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Changed>
+
+      <!-- change the color and scale if selected -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Input.DeepMouseFocus]" Value="true"/>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Animation="animation://me:SectionGraphicFocusOn" Target="[GalleryContainer]" />
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Input.DeepMouseFocus]" Value="false"/>
+          <Equality Source="[Input.DeepKeyFocus]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Animation="animation://me:SectionGraphicFocusOff" Target="[GalleryContainer]" />
+        </Actions>
+      </Rule>
+      <!-- end change color and scale -->
+
+    </Rules>
+
+    <Content>
+      <Panel Name="GalleryContainer" Layout="VerticalFlow"  MouseInteractive="true">
+        <Children>
+          <Panel MaximumSize="[UISettings.Gallery.HeightOfBrowser]" Layout="Center">
+            <Children>
+              <!-- Put in a scroller so that if we repeat, the row will scroll. -->
+              <Scroller Name="GalleryScroller"
+                        Orientation="Horizontal"
+                        ScrollingData="[ScrollingData]" >
+                <Children>
+
+                  <Repeater Name="AlphaRepeater"
+                            Layout="HorizontalFlow"
+                            Navigation="RememberFocus,PreferFocusOrder"
+                            Source="[MovieBrowser.LabeledLists]">
+                    <Layout>
+                      <FlowLayout Repeat="WhenTooBig" RepeatGap="250,0"/>
+                    </Layout>
+                    <Animations>
+                      <Animation Animation="animation://s:MoveAnimation"/>
+                      <Animation Type="Move">
+                        <Keyframes>
+                          <PositionKeyframe Time="0" RelativeTo="Current" />
+                          <PositionKeyframe Time=".3" RelativeTo="Final" Value=".8,.8,.8" />
+                          <PositionKeyframe Time=".4" RelativeTo="Final" />
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                    <Content>
+                      <Panel Layout="HorizontalFlow">
+                        <Children>
+                          <Text Content="[RepeatedItem!a:LabeledList.FilterLabel]" Color="White" Margins="30,0,30,0" />
+
+
+                          <!-- Hook up our list to the repeater.  -->
+                          <Repeater Name="GalleryRepeater"
+                                    Navigation="FlowVertical,RememberFocus"
+                                    Source="[RepeatedItem!a:LabeledList.Movies]">
+                            <Layout>
+                              <GridLayout Repeat="Never"
+                                          Rows="[UISettings.Gallery.CoverArtRows]"
+                                          Orientation="Vertical"
+                                          AllowWrap="true"
+                                          Spacing="[UISettings.Gallery.CoverArtSpacing]"
+                                          ReferenceSize="[UISettings.Gallery.CoverArtSize]"
+                                          MajorAlignment="Fill"
+                                          MinorAlignment="Center"
+                                    />
+                            </Layout>
+
+                            <Content>
+                              <!-- For each item, repeat our RepeatedItem UI, passing in-->
+                              <!-- the index of the item and the image.                 -->
+                              <me:RepeatedItem  Index="[RepeatedItemIndex]"
+                                                        FocusedIndex="[MovieBrowser.FocusIndex]"
+                                                        GalleryItem="[RepeatedItem!a:GalleryItem]"
+                                                        MovieBrowser="[MovieBrowser]"
+                                                        CoverArtAlpha="[UISettings.Gallery.CoverArtAlpha]"
+                                                        UISettings="[UISettings]" />
+                            </Content>
+                          </Repeater>
+                        </Children>
+                      </Panel>
+                    </Content>
+                  </Repeater>
+                </Children>
+              </Scroller>
+            </Children>
+          </Panel>
+          <c:MovieDescription MovieBrowser="[MovieBrowser]" UISettings="[UISettings]" />
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <!-- The RepeatedItem UI is what gets repeated for each image in our list -->
+  <!-- from the ScrollingSample UI.  It displays the image itself, the      -->
+  <!-- item's index and "Real" indexes, and a background color fill that    -->
+  <!-- changes color when it receives key focus.                            -->
+  <UI Name="RepeatedItem">
+    <Properties>
+      <a:GalleryItem Name="GalleryItem" GalleryItem="$Required"/>
+      <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+      
+      <!-- Update these 2 values everytime we get the focus -->
+      <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
+      <cor:Single Name="CoverArtAlpha" Single="0.5"/>
+      <a:UISettings Name="UISettings" UISettings="$Required" />
+
+      <!-- The index passed down from the repeater.-->
+      <Index Name="Index" Index="$Required"/>
+      
+      <Image Name="BackgroundImage" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
+      <Image Name="BackgroundImageList" Source="resx://Library/Library.Resources/ButtonLeftFocus" NineGrid="4,4,4,4"/>
+      <Image Name="BackgroundImageCoverArt" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
+    </Properties>
+
+    <Locals>
+      <ClickHandler Name="Clicker" Command="[GalleryItem]"/>
+      <ShortcutHandler Name="PlayPauseButton" Command="[GalleryItem.QuickPlay]" Shortcut="PlayPause" Handle="true" HandlerStage="Direct"  />
+      <ShortcutHandler Name="PlayButton" Command="[GalleryItem.QuickPlay]" Shortcut="Play"   Handle="true" HandlerStage="Direct" />
+      <cor:Int32 Name="CurrentIndex" />      
+      
+      <cor:Int32 Name="NewHeight"/>
+      <!--<Timer Name="ZoomTimer" Interval="250"/>-->
+
+      <!-- This animation will scale the image. -->
+      <Animation Name="LostFocusCoverArt" Loop="0">
+        <Keyframes>
+          <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" RelativeTo="Current" />
+          <ScaleKeyframe Time="0.1" Value="1,1,1" RelativeTo="Final" />
+        </Keyframes>
+      </Animation>
+
+      <Animation Name="GotFocusCoverArt" Loop="0" CenterPointPercent=".5,.5,0" >
+        <Keyframes>
+          <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+          <ScaleKeyframe Time="0.4" Value="[UISettings.Gallery.FocusCoverArtScale]" RelativeTo="Final" />
+        </Keyframes>
+      </Animation>
+
+      <!-- This animation will scale the image. -->
+
+      <!--<Animation Name="ZoomMe" Loop="0" CenterPointPercent=".5,.5,0">
+        <Keyframes>
+          <AlphaKeyframe Time="0.0" RelativeTo="Current" Value="1" />
+          <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+          <ScaleKeyframe Time="0.5" Value="10,10,10" RelativeTo="Final" />
+          <AlphaKeyframe Time="0.5" RelativeTo="Absolute" Value=".5" />
+        </Keyframes>
+      </Animation>
+
+      <Animation Name="ZoomAndSpinMe" Loop="0" CenterPointPercent=".5,.5,0">
+        <Keyframes>
+          <RotateKeyframe Time="0.0" RelativeTo="Current" Value="0deg;1,1,1" />
+          <AlphaKeyframe Time="0.0" RelativeTo="Current" Value="1" />
+          <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
+          <ScaleKeyframe Time="0.5" Value="10,10,10" RelativeTo="Final" />
+          <AlphaKeyframe Time="0.5" RelativeTo="Absolute" Value=".5" />
+          <RotateKeyframe Time="0.5" RelativeTo="Current" Value="360deg;1,1,1" />
+        </Keyframes>
+      </Animation>-->
+    </Locals>
+
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+      <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+      <Binding Source="[GalleryItem.MenuCoverArt]" Target="[MenuCover.Content]" />     
+
+      <!-- have the clicker directly invoke the gallery item -->
+      <!--<Condition Source="[UISettings.Gallery.MovieDetailsTransitionType]" SourceValue="None">
+        <Actions>
+          <Set Target="[Clicker.Command]" Value="[GalleryItem]"/>
+        </Actions>
+      </Condition>-->
+
+      <!-- if we have spin enabled use that transition instead -->
+      <!--<Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[UISettings.Gallery.MovieDetailsTransitionType]" Value="Zoom and Spin" />
+          <Modified Source="[Clicker.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[MenuCover]" Animation="[ZoomAndSpinMe]"/>
+          <Set Target="[ZoomTimer.Enabled]" Value="true"/>
+        </Actions>
+      </Rule>-->
+
+      <!-- play the zoom animation and then invoke the gallery item on a timer -->
+      <!--<Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[UISettings.Gallery.MovieDetailsTransitionType]" Value="Zoom" />
+          <Modified Source="[Clicker.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[MenuCover]" Animation="[ZoomMe]"/>
+          <Set Target="[ZoomTimer.Enabled]" Value="true"/>
+        </Actions>
+      </Rule>-->
+
+      <!-- invoke the gallery item and disable the timer -->
+      <!--<Changed Source="[ZoomTimer.Tick]">
+        <Actions>
+          <Invoke Target="[GalleryItem.Invoke]" />
+          <Set Target="[ZoomTimer.Enabled]" Value="false"/>
+        </Actions>
+      </Changed>-->
+            
+      <!-- If we get key focus, change our background color to indicate it. -->
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <PlayAnimation Target="[ItemPanel]" Animation="[GotFocusCoverArt]" />
+          <Set Target="[MenuCover.Alpha]" Value="1.0"/>
+          <Set Target="[Background.Visible]" Value="true"/>
+          <Set Target="[FocusedIndex.Value]" Value="[GalleryItem.GlobalIndex]"/>
+          <Set Target="[MovieBrowser.FocusedItem]" Value="[GalleryItem]" />
+          <!-- Play an animation on the cover target item. -->
+          <PlaySound Sound="sound://me:Focus" />
+        </Actions>
+      </Condition>
+
+      <!-- when we loose focus -->
+      <Condition Source="[Input.KeyFocus]" SourceValue="false">
+        <Actions>
+          <!-- Play an animation on the cover target item. -->
+          <PlayAnimation Target="[ItemPanel]" Animation="[LostFocusCoverArt]"/>
+        </Actions>
+      </Condition>
+    </Rules>
+
+    <Content>
+      <Panel Name="ItemPanel" Layout="Anchor" Scale="1.0,1.0,1.0" CenterPointPercent="0.5,0.75,0.0">
+        <Children>
+          <Panel Name="ImagePanel" Margins="0,0,0,0">
+            <Children>
+              <Graphic Name="MenuCover" Content="[GalleryItem.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint" />
+            </Children>
+          </Panel>
+
+          <Graphic Name="Background" Content="[BackgroundImage]" Visible="false">
+            <LayoutInput>
+              <AnchorLayoutInput Left="ImagePanel,-0.03" Right="ImagePanel,1.03" Top="ImagePanel,-0.02" Bottom="ImagePanel,1.02"/>
+            </LayoutInput>
+          </Graphic>
+
+        </Children>
+        <Animations>
+          <Animation Type="Rotate">
+            <Keyframes>
+              <RotateKeyframe Time="0" Value="0deg;0,1,0" RelativeTo="Current" Interpolation="Log" />
+              <RotateKeyframe Time=".5" Value="0deg;0,1,0" RelativeTo="Final" />
+            </Keyframes>
+          </Animation>
+          <Animation Type="ContentChangeShow">
+            <Keyframes>
+              <AlphaKeyframe Time="0" Value="0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time=".3" RelativeTo="Final" />
+            </Keyframes>
+          </Animation>
+        </Animations>
+      </Panel>
+    </Content>
+  </UI>
+</Mcml>
+

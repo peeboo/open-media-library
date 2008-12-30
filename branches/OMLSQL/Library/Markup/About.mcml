@@ -1,0 +1,107 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
+      xmlns:coll="assembly://MsCorLib/System.Collections"
+      xmlns:s="resx://Library/Library.Resources/Styles"
+      xmlns:cor="assembly://MsCorLib/System"
+      xmlns:a="assembly://Library/Library"
+      xmlns:controls="resx://Library/Library.Resources/CoreControls"
+      xmlns:c="resx://Library/Library.Resources/Controls"
+      xmlns:me="Me">
+
+    <UI Name="About">
+        <Content>
+            <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
+                <Children>
+
+                    <Panel Name="Bottom" >
+                        <Children>
+                            <Panel Layout="Fill" Margins="50,0,0,0">
+                                <Children>
+                                    <Panel Layout="VerticalFlow" />
+                                </Children>
+                            </Panel>
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                    <Panel Name="Top">
+                        <Children>
+                            <Text Content="About Open Media Library" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0">
+                            </Text>
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
+
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                    <Panel Name="Content" >
+                        <Children>
+                            <Clip Layout="VerticalFlow">
+                                <Children>
+                                    <Clip Layout="HorizontalFlow">
+                                        <Children>
+                                            <Clip Layout="VerticalFlow" Margins="0,0,50,0">
+                                                <Children>
+                                                    <Text Content="Development Team" Color="LightBlue" Font="Calibri, 20" />
+                                                    <Text Content="KingManon - Project Manager" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="Translucent - Senior Developer" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="Taranu - Senior Developer" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="eck brian 'dbldown768' - Creator" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="Thom 'Bermuda' Lamb - Developer" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="docmattman - Developer" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="ntlord - Developer" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="poweredbyporkers - Developer" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="PeteT - Developer" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="TheSeeker - Developer" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="STReNT - Developer" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="Warren - Slacker" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="Dravor - Daily Build Guy" Color="White" Font="Calibri, 12" />
+                                                </Children>
+                                            </Clip>
+                                            <Clip Layout="VerticalFlow">
+                                                <Children>
+                                                    <Text Content="Contributed Supporters" Font="Calibri, 20" Color="LightBlue" />
+                                                    <Text Content="Invelos Software (License of DVD Profiler)" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="Collectorz.com (License of Movie Collectorz)" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="Code|Aero Technologies (License of Movie Label 2K9)" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="Stephen Toub (Kick Ass DVR-MS metadata editor)" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="Microsoft Corporation (Kick Ass Media Center)" Color="White" Font="Calibri, 12" />
+                                                    <Text Content="Niveus Media, Inc (Initial Look and Feel Idea)" Color="White" Font="Calibri, 12" />
+                                                </Children>
+                                            </Clip>
+                                        </Children>
+                                    </Clip>
+                                    <Clip Layout="HorizontalFlow">
+                                        <Children>
+                                            <Text Content="Special Thanks to: " Color="LightBlue" Font="Calibri, 20"/>
+                                            <Text Content="mikinho, jusbo, jafterdark, ppitkin, mjw, fonager, (Olcay Buyan and Jas Manghera for their MCML Samples) and many others that we have missed, sorry we missed you but thanks for your support" Color="White" Font="Calibri, 12" WordWrap="true"/>
+                                        </Children>
+                                    </Clip>
+                                </Children>
+                            </Clip>
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0.15,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                </Children>
+            </ColorFill>
+        </Content>
+
+    </UI>
+
+</Mcml>

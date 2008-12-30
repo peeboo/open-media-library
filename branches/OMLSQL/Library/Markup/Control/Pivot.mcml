@@ -1,0 +1,104 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	    xmlns:cor="assembly://MSCorLib/System"
+      xmlns:styles="resx://Library/Library.Resources/Styles"
+      xmlns:me="Me"
+      >
+
+  <Aggregate Source="resx://Library/Library.Resources/PivotItem" />
+
+  <UI Name="Pivot">
+
+    <Properties>
+      <Choice Name="Model" Choice="$Required"/>
+      <Font Name="OMLFont" Font="font://styles:ListFont"/>
+      <Font Name="OMLFocusFont" Font="font://styles:ListFont"/>
+      <Color Name="OMLColor" Color="color://styles:LabelColor"/>
+      <Color Name="OMLFocusColor" Color="color://styles:NormalColor"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled" />
+      <!--<ScrollingData Name="ScrollingData" LockedPosition="0.1" />-->
+      <ScrollingData Name="ScrollingData" />
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
+      <Default Target="[ScrollingData.Repeater]" Value="[ButtonRepeater]" />
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Input.DeepMouseFocus]" Value="true"/>
+          <Equality Source="[Input.DeepKeyFocus]" Value="false"/>
+          <Equality Source="[Model.Description]" Value=""/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Model.Description]" Value="Active"/>
+          <PlayAnimation Animation="animation://me:PivotItemFocusOn" Target="[Scroller]" />
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Input.DeepMouseFocus]" Value="false"/>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+          <Equality Source="[Model.Description]" Value=""/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Model.Description]" Value="Active"/>
+          <PlayAnimation Animation="animation://me:PivotItemFocusOn" Target="[Scroller]" />
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Input.DeepMouseFocus]" Value="false"/>
+          <Equality Source="[Input.DeepKeyFocus]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Model.Description]" Value=""/>
+          <PlayAnimation Animation="animation://me:PivotItemFocusOff" Target="[Scroller]" />
+        </Actions>
+      </Rule>
+    </Rules>
+
+    <Content>
+      <Scroller Name="Scroller"
+                Orientation="Horizontal"
+                FocusPadding="100"
+                Navigation="PreferFocusOrder,RememberFocus"
+                ScrollingData="[ScrollingData]"
+                CenterPointPercent="0.75,0.5,0.5"
+                Scale="0.9,0.9,0.9"
+                >
+        <Children>
+
+          <Repeater Source="[Model.Options]" Layout="HorizontalFlow" Name="ButtonRepeater" Navigation="WrapHorizontal">
+
+            <Animations>
+              <Animation Animation="animation://me:ScrollerMoveItemSmooth"/>
+            </Animations>
+
+            <Layout>
+              <FlowLayout Repeat="Never" RepeatGap="100,0" Spacing="20,0" ItemAlignment="Near"/>
+            </Layout>
+
+            <Content>
+              <me:PivotItem Label="[RepeatedItem.ToString]"
+                            Index="[RepeatedItemIndex]"
+                            Model="[Model]"
+                            OMLFont="[OMLFont]"
+                            OMLFocusFont="[OMLFocusFont]"
+                            OMLColor="[OMLColor]"
+                            OMLFocusColor="[OMLFocusColor]"
+                            />
+            </Content>
+
+          </Repeater>
+
+        </Children>
+      </Scroller>
+    </Content>
+  </UI>
+
+</Mcml>

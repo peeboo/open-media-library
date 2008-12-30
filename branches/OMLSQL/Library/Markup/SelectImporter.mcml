@@ -1,0 +1,122 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
+      xmlns:coll="assembly://MsCorLib/System.Collections"
+      xmlns:s="resx://Library/Library.Resources/Styles"
+      xmlns:cor="assembly://MsCorLib/System"
+      xmlns:a="assembly://Library/Library"
+      xmlns:rbg="resx://Library/Library.Resources/RadioButtonGroup"
+      xmlns:controls="resx://Library/Library.Resources/CoreControls"
+      xmlns:c="resx://Library/Library.Resources/Controls"
+      xmlns:me="Me">
+
+    <UI Name="SelectImporter">
+
+        <Properties>
+            <a:Setup Name="Setup" Setup="$Required"/>
+            <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+            <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+            <a:UISettings Name="UISettings" UISettings="$Required" />
+        </Properties>
+        <Locals>
+
+            <Command Name="NextCommand" Description="Next"/>
+
+        </Locals>
+
+        <Rules>
+                <Binding Source="[Setup.ShouldCopyImages.Value!cor:String]" Target="[ShouldCopyImagesText.Content]" />
+                <Binding Source="[Setup.ImporterSelection.Chosen!cor:String]" Target="[SelectedImporterText.Content]"/>
+                <Binding Source="[Setup.ImporterDescription!cor:String]" Target="[ImporterDescription.Content]"/>
+
+            <Changed Source="[NextCommand.Invoked]">
+                <Actions>
+                    <Navigate Source="@resx://Library/Library.Resources/SelectDirectoriesToScan"
+                              Setup="[Setup]"
+                              OMLApplication="[Application]"
+                              MovieGallery="[MovieBrowser]"
+                              UISettings="[UISettings]"/>
+                </Actions>
+            </Changed>
+        </Rules>
+
+        <Content>
+            <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
+                <Children>
+                    <Panel Name="Bottom" >
+                        <Children>
+                            <Panel Layout="Fill" Margins="50,0,0,0">
+                                <Children>
+                                    <Panel Layout="VerticalFlow">
+                                        <Children>
+                                            <Clip Layout="HorizontalFlow">
+                                                <Children>
+                                                    <Clip Layout="Grid">
+                                                        <Children>
+                                                            <Text Name="SelectedImporterLabel" Content="Selected Importer: " Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                            <Text Name="SelectedImporterText" Font="Calibri, 20" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+                                                </Children>
+                                            </Clip>
+                                            <Clip Layout="HorizontalFlow">
+                                                <Children>
+                                                    <Clip Layout="Grid">
+                                                        <Children>
+                                                            <Text Name="ShouldCopyImagesLabel" Content="Copy Images: " Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                            <Text Name="ShouldCopyImagesText" Font="Calibri, 20" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+                                                </Children>
+                                            </Clip>
+                                        </Children>
+                                    </Panel>
+                                </Children>
+                            </Panel>
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
+                        </LayoutInput>
+                    </Panel>
+                    <Panel Name="Top" >
+                        <Children>
+                            <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue" Margins="50,20,0,0"/>
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
+
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                    <Panel Name="Content" >
+                        <Children>
+                            <Clip Layout="VerticalFlow">
+                                <Children>
+                                    <Text Content="Select an Importer" Color="LightBlue" Font="Calibri, 26" />
+                                    <rbg:RadioButtonGroup Model="[Setup.ImporterSelection]" />
+                                    <c:SimpleButton Name="Next" Command="[NextCommand]" Text="Next"/>
+                                    <Text Name="ImporterDescription" Font="Calibri, 20" Color="LightBlue" WordWrap="true" />
+                                </Children>
+                            </Clip>
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0.15,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                </Children>
+            </ColorFill>
+        </Content>
+
+    </UI>
+
+</Mcml>
