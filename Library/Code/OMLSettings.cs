@@ -641,22 +641,7 @@ namespace Library
                 Properties.Settings.Default.ShowFilterTrailers = value;
                 Properties.Settings.Default.Save();
             }
-        }
-
-        public string MovieDetailsTransitionType
-        {
-            get
-            {
-                return (string.IsNullOrEmpty(Properties.Settings.Default.MovieDetailsTransitionType))
-                            ? "None"
-                            : Properties.Settings.Default.MovieDetailsTransitionType;
-            }
-            set
-            {
-                Properties.Settings.Default.MovieDetailsTransitionType = value;
-                Properties.Settings.Default.Save();
-            }
-        }
+        }     
 
         public bool UseOnScreenAlphaJumper
         {

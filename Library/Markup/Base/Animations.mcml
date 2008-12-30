@@ -109,4 +109,39 @@
     </Keyframes>
   </Animation>
 
+  <Animation Name="ShowFromRight" Type="Show">
+    <Keyframes>
+      <PositionKeyframe Time="0" RelativeTo="Final" Value="200,0,0"/>
+      <PositionKeyframe Time=".25" RelativeTo="Final" Value="1,1,1"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="ShowFromLeft" Type="Show">
+    <Keyframes>
+      <PositionKeyframe Time="0" RelativeTo="Final" Value="-200,0,0"/>
+      <PositionKeyframe Time=".25" RelativeTo="Final" Value="1,1,1"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="ShowFromTop" Type="Show">
+    <Keyframes>
+      <PositionKeyframe Time="0" RelativeTo="Final" Value="0,-200,0"/>
+      <PositionKeyframe Time=".25" RelativeTo="Final" Value="1,1,1"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="ShowFromBottom" Type="Show">
+    <Keyframes>
+      <PositionKeyframe Time="0" RelativeTo="Final" Value="0,200,0"/>
+      <PositionKeyframe Time=".25" RelativeTo="Final" Value="1,1,1"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="FadeIn" Type="Show">
+    <Keyframes>
+      <AlphaKeyframe Time="0" RelativeTo="Absolute" Value="0" />
+      <AlphaKeyframe Time=".5" RelativeTo="Absolute" Value="1" />
+    </Keyframes>    
+  </Animation>
+
 </Mcml>

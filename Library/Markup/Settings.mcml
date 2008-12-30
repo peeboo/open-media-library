@@ -25,13 +25,13 @@
       <Choice Name="Tabs">
         <Options>
           <cor:String String="View Options"/>
-          <cor:String String="Image Mounting Tool"/>
           <cor:String String="Customize UI"/>
-          <cor:String String="Language"/>
-          <cor:String String="Trailers"/>
           <cor:String String="Filters"/>
+          <cor:String String="Image Mounting"/>          
+          <cor:String String="Language"/>
+          <cor:String String="Trailers"/>          
           <cor:String String="External Players"/>
-          <cor:String String="Extender Transcoding"/>
+          <cor:String String="Extender"/>
         </Options>
       </Choice>
 
@@ -85,7 +85,7 @@
 
       <Changed Source="[Tabs.Chosen]">
         <Conditions>
-          <Equality Source="[Tabs.Chosen.ToString]" Value="Image Mounting Tool"/>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="Image Mounting"/>
         </Conditions>
         <Actions>
           <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
@@ -187,7 +187,7 @@
 
       <Changed Source="[Tabs.Chosen]">
         <Conditions>
-          <Equality Source="[Tabs.Chosen.ToString]" Value="Extender Transcoding"/>
+          <Equality Source="[Tabs.Chosen.ToString]" Value="Extender"/>
         </Conditions>
         <Actions>
           <Set Target="[ViewOptionsPanel.Visible]" Value="false"/>
@@ -372,13 +372,7 @@
                               <c:SimpleSpinner Name="CoverArtSpacing" Model="[Settings.CoverArtSpacing]" Size="151,51" />
                             </Children>
                           </Panel>
-
-                          <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="4" Navigation="Group">
-                            <Children>
-                              <Text Content="Transition when selecting a movie" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
-                              <c:SimpleSpinner Name="TransitionType" Model="[Settings.MovieDetailsTransitionType]" Size="200,51" />
-                            </Children>
-                          </Panel>
+                          
                         </Children>
                       </Scroller>
                     </Children>

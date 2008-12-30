@@ -127,6 +127,9 @@
             <Children>
               <c:SimpleButton Name="PlayButton" Text="Play Movie" Command="[PlayMovie]" Size="180,51"/>
             </Children>
+            <Animations>
+              <Animation Animation="animation://me:ShowFromRight" />
+            </Animations>
           </Panel>
 
           <!-- Disk chooser context menu -->
@@ -161,7 +164,11 @@
             </LayoutInput>
 
             <Children>
-              <Text Name="Title" Content="[DetailsPage.Title]" Font="font://s:Heading" Color="color://s:HeadingColor" />
+              <Text Name="Title" Content="[DetailsPage.Title]" Font="font://s:Heading" Color="color://s:HeadingColor" >
+                <Animations>
+                  <Animation Animation="animation://me:ShowFromRight" />
+                </Animations>
+              </Text>
 
               <Panel Layout="HorizontalFlow" Margins="0,0,0,10">
                 <Children>
@@ -173,17 +180,27 @@
                   <Text Content=", " Font="font://s:SubHeading" Color="color://s:LabelColor" />
                   <Text Content="[DetailsPage.Length]" Font="font://s:SubHeading" Color="color://s:LabelColor" />
                 </Children>
+                <Animations>
+                  <Animation Animation="animation://me:ShowFromRight" />
+                </Animations>
               </Panel>
 
-              <Graphic Name="FullCover" Content="[DetailsPage.FullCover]" MinimumSize="336,480" MaximumSize="336,480" />
-              <Clip Orientation="Vertical" FadeSize="40" NearOffset="70" MinimumSize="336,0" MaximumSize="336, 480">
+              <Panel Layout="VerticalFlow">
                 <Children>
-                  <Graphic Name="FullCoverFlip" CenterPointPercent=".5,.5,.5" Scale="1,-1,1"
-											 Content="[DetailsPage.FullCover]" Alpha=".4" >
-                  </Graphic>
+                  <Graphic Name="FullCover" Content="[DetailsPage.FullCover]" MinimumSize="336,480" MaximumSize="336,480" />
+                  <Clip Orientation="Vertical" FadeSize="40" NearOffset="70" MinimumSize="336,0" MaximumSize="336, 480">
+                    <Children>
+                      <Graphic Name="FullCoverFlip" CenterPointPercent=".5,.5,.5" Scale="1,-1,1"
+                           Content="[DetailsPage.FullCover]" Alpha=".4" >
+                      </Graphic>
+                    </Children>
+                  </Clip>
                 </Children>
-              </Clip>
-            </Children>
+                <Animations>
+                  <Animation Animation="animation://me:ShowFromLeft" />
+                </Animations>
+              </Panel>
+            </Children>            
           </Panel>
 
           <!-- details panel -->
@@ -194,6 +211,9 @@
             <Children>
               <me:SynopsisPanel Synopsis="[DetailsPage.Summary]"/>
             </Children>
+            <Animations>
+              <Animation Animation="animation://me:ShowFromBottom" />
+            </Animations>
           </Panel>
 
           <!-- actors panel -->
@@ -228,6 +248,9 @@
 
               <me:ActorsPanel Name="Actors" ActorList="[DetailsPage.Actors]" DetailsPage="[DetailsPage]" />
             </Children>
+            <Animations>
+              <Animation Animation="animation://me:ShowFromTop" />
+            </Animations>
           </Panel>
 
           <!-- extra info panel-->
@@ -307,6 +330,9 @@
                 </Children>
               </Panel>
             </Children>
+            <Animations>
+              <Animation Animation="animation://me:ShowFromBottom" />
+            </Animations>
           </Panel>
 
           <!-- unwatched checkbox -->
@@ -321,6 +347,9 @@
           </Panel>
 
         </Children>
+        <Animations>
+          <Animation Animation="animation://me:FadeIn" />
+        </Animations>
       </ColorFill>
     </Content>
 
@@ -388,7 +417,7 @@
               </Scroller>
             </Children>
           </ColorFill>
-        </Children>
+        </Children>        
       </Panel>
 
     </Content>
