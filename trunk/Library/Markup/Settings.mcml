@@ -575,7 +575,7 @@
                     <Children>
                       <Text Content="Number of Seconds to Delay Transcoding" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                       <c:SimpleEditbox Size="700,51" Name="TranscodingBufferDelay" EditableText="[Settings.TranscodingBufferDelay]" />
-                      <Panel Layout="HorizontalFlow" Margins="0,40,0,0" Navigation="Group">
+                      <Panel Layout="VerticalFlow" Margins="0,40,0,0" Navigation="Group">
                         <Children>
                           <Clip Layout="HorizontalFlow">
                             <Children>
@@ -595,11 +595,16 @@
                               <Text Content="Transcode OGM Files" Color="White" Font="font://me:SmallFont"/>
                             </Children>
                           </Clip>
-
                           <Clip Layout="HorizontalFlow">
                             <Children>
                               <c:SimpleCheckbox Name="PreserveAudioOnTranscode" Checked="[Settings.PreserveAudioOnTranscode]" Margins="0,0,10,0" />
                               <Text Content="Preserve AudioFormat On Transcode of non DVD files" Color="White" Font="font://me:SmallFont"/>
+                            </Children>
+                          </Clip>
+                          <Clip Layout="HorizontalFlow">
+                            <Children>
+                              <c:SimpleCheckbox Name="DebugTranscoding" Checked="[Settings.DebugTranscoding]" Margins="0,0,10,0" />
+                              <Text Content="Run ALL non DVDs through the Transcoding Engine (DEBUG ONLY)" Color="White" Font="font://me:SmallFont"/>
                             </Children>
                           </Clip>
                         </Children>

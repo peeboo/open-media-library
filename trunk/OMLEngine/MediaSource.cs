@@ -343,9 +343,9 @@ namespace OMLEngine
                 return null;
 
             if (this.Format != VideoFormat.DVD)
-                return Path.ChangeExtension(Path.Combine(FileSystemWalker.TranscodeBufferDirectory, transcodingName), ".wmv");
+                return Path.ChangeExtension(Path.Combine(FileSystemWalker.TranscodeBufferDirectory, transcodingName), ".OML");
 
-            return Path.ChangeExtension(Path.Combine(FileSystemWalker.TranscodeBufferDirectory, transcodingName), ".mpg");
+            return Path.ChangeExtension(Path.Combine(FileSystemWalker.TranscodeBufferDirectory, transcodingName), ".OML");
         }
 
         public void ClearResumeTime()

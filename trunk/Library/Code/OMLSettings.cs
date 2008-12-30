@@ -684,6 +684,19 @@ namespace Library
             }
         }
 
+        public bool DebugTranscoding
+        {
+            get
+            {
+                return Properties.Settings.Default.DebugTranscoding;
+            }
+            set
+            {
+                Properties.Settings.Default.DebugTranscoding = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
 
         #endregion
 

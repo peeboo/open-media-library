@@ -149,6 +149,7 @@ namespace Library
                 _omlSettings.TranscodeMKVFiles = (bool)_transcodeMKVFiles.Chosen;
                 _omlSettings.TranscodeOGMFiles = (bool)_transcodeOGMFiles.Chosen;
                 _omlSettings.PreserveAudioOnTranscode = (bool)_preserveAudioOnTranscode.Chosen;
+                _omlSettings.DebugTranscoding = (bool)_debugTranscoding.Chosen;
                 _omlSettings.FlipFourCCCode = (bool)_flipFourCCCode.Chosen;
                 int transcodeBufferDelay = 7;
                 try
@@ -366,6 +367,7 @@ namespace Library
             _transcodeMKVFiles.Chosen = _omlSettings.TranscodeMKVFiles;
             _transcodeOGMFiles.Chosen = _omlSettings.TranscodeOGMFiles;
             _preserveAudioOnTranscode.Chosen = _omlSettings.PreserveAudioOnTranscode;
+            _debugTranscoding.Chosen = _omlSettings.DebugTranscoding;
             _flipFourCCCode.Chosen = _omlSettings.FlipFourCCCode;
         }
 
@@ -407,6 +409,10 @@ namespace Library
         public BooleanChoice TranscodeOGMFiles
         {
             get { return _transcodeOGMFiles; }
+        }
+        public BooleanChoice DebugTranscoding
+        {
+            get { return _debugTranscoding; }
         }
         public BooleanChoice FlipFourCCCode
         {
@@ -663,5 +669,6 @@ namespace Library
         BooleanChoice _showFilterRuntime = new BooleanChoice();
         BooleanChoice _useExternalPlayer = new BooleanChoice();
         BooleanChoice _showFilterUnwatched = new BooleanChoice();
+        BooleanChoice _debugTranscoding = new BooleanChoice();
     }
 }
