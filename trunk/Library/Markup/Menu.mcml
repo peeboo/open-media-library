@@ -89,6 +89,9 @@
                     <LayoutInput>
                       <FormLayoutInput Left="Parent,0.02"  Top="Parent,0,5"/>
                     </LayoutInput>
+                    <Animations>
+                      <Animation Animation="animation://me:ShowFromRight" />
+                    </Animations>
                   </Panel>
 
                   <!-- NowPlayingPanel -->
@@ -100,13 +103,15 @@
                     <LayoutInput>
                       <FormLayoutInput  Top="Parent, 0, 5" Right="Parent, 1, -10" />
                     </LayoutInput>
+                    <Animations>
+                      <Animation Animation="animation://me:ShowFromRight" />
+                    </Animations>
                   </Panel>                  
                                   
                   <!-- JumpInTextPanel -->
                   <Panel Name="JumpInTextPanel" Layout="HorizontalFlow">
                     <Children>
                       <Text Name="JumpInText" Content="" Font="Verdana,40" Color="White" HorizontalAlignment="Far"/>
-
                     </Children>
                     <LayoutInput>
                       <FormLayoutInput  Right="Parent, 0.95" Bottom="Parent,0.9"/>
@@ -134,13 +139,27 @@
                   <!-- Filters -->
                   <Panel Name="Filters" Layout="VerticalFlow" Navigation="Column" >
                     <Children>
-                      <filter:FilterList Page="[MovieBrowser]" Margins="0,-4,20,0" MinimumSize="0,32" UISettings="[UISettings]"/>
-                      <alpha:AlphaFilter MovieGallery="[MovieBrowser]" Visible="[UISettings.Gallery.UseOnScreenAlphaFiltering]" />
+                      <Panel>
+                        <Children>
+                          <filter:FilterList Page="[MovieBrowser]" Margins="0,-4,20,0" MinimumSize="0,32" UISettings="[UISettings]" />
+                        </Children>
+                        <Animations>
+                          <Animation Animation="animation://me:ShowFromLeft" />
+                        </Animations>
+                      </Panel>
+                      <Panel>
+                        <Children>
+                          <alpha:AlphaFilter MovieGallery="[MovieBrowser]" Visible="[UISettings.Gallery.UseOnScreenAlphaFiltering]" />
+                        </Children>
+                        <Animations>
+                          <Animation Animation="animation://me:ShowFromRight" />                            
+                        </Animations>
+                      </Panel>
                     </Children>
 
                     <LayoutInput>
                       <FormLayoutInput Left="Parent,0, 25" Right="Parent,1,-5" Top="[FiltersTopAnchor]"/>
-                    </LayoutInput>                   
+                    </LayoutInput>
                   </Panel>
 
                   <!-- GalleryPanel -->
@@ -153,27 +172,12 @@
 
                     <LayoutInput>
                       <FormLayoutInput Left="Parent,0,25" Right="Parent,1,-20" Top="Filters,1,25"/>
-                    </LayoutInput>
+                    </LayoutInput>                    
                   </Panel>                  
 
                 </Children>
                 <Animations>
-                  <Animation Type="Show">
-                    <Keyframes>
-                      <AlphaKeyframe Time="0" RelativeTo="Absolute" Value=".3" />
-                      <AlphaKeyframe Time=".25" RelativeTo="Absolute" Value="1" />
-                      <ScaleKeyframe Time="0" RelativeTo="Final" Value="1.5,1.5,1.5"/>
-                      <ScaleKeyframe Time=".25" RelativeTo="Final" Value="1,1,1"/>
-                    </Keyframes>
-                  </Animation>
-                  <Animation Type="Hide">
-                    <Keyframes>
-                      <AlphaKeyframe Time="0" RelativeTo="Absolute" Value="1" />
-                      <AlphaKeyframe Time=".25" RelativeTo="Absolute" Value="0" />
-                      <ScaleKeyframe Time="0" RelativeTo="Final" Value="1,1,1"/>
-                      <ScaleKeyframe Time=".25" RelativeTo="Final" Value="1.5,1.5,1.5"/>
-                    </Keyframes>
-                  </Animation>
+                  <Animation Animation="animation://me:FadeIn" />
                 </Animations>
               </ColorFill>
         </Content>

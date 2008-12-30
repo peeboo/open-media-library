@@ -123,7 +123,6 @@ namespace Library
                 _omlSettings.ShowMovieDetails = (bool)_showMovieDetails.Chosen;
                 _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
                 _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
-                _omlSettings.MovieDetailsTransitionType = _movieDetailsTransitionType.Chosen as string;
                 _omlSettings.UseOnScreenAlphaJumper = (bool)_useOnScreenAlpha.Chosen;
             });
         }
@@ -296,8 +295,6 @@ namespace Library
             transitionTypes.Add("None");
             transitionTypes.Add("Zoom");
             transitionTypes.Add("Zoom and Spin");
-            _movieDetailsTransitionType.Options = transitionTypes;
-            _movieDetailsTransitionType.Chosen = _omlSettings.MovieDetailsTransitionType;            
 
             //_mountingToolPath.Value = _omlSettings.MountingTool;
 
@@ -530,11 +527,6 @@ namespace Library
         public Choice TrailersDefinition
         {
             get { return _trailersDefinition; }
-        }
-
-        public Choice MovieDetailsTransitionType
-        {
-            get { return _movieDetailsTransitionType; }
         }
 
         public BooleanChoice UseExternalPlayer

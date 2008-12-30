@@ -260,9 +260,6 @@
     <Setting Name="FlipFourCCCode" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="MovieDetailsTransitionType" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Zoom and Spin</Value>
-    </Setting>
     <Setting Name="ExternalPlayerMapping" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" /&gt;</Value>
