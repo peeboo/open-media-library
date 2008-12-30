@@ -28,7 +28,11 @@ namespace OMLDatabaseEditor
 
         private void Options_Load(object sender, EventArgs e)
         {
-            String[] arrGenre = new String[Properties.Settings.Default.gsValidGenres.Count];
+            int genreCount = 0;
+            if (Properties.Settings.Default.gsValidGenres != null)
+                genreCount = Properties.Settings.Default.gsValidGenres.Count;
+
+            String[] arrGenre = new String[genreCount];
             this.lbcSkins.DataSource = ((MainEditor)this.Owner).DXSkins;
             String skin = Properties.Settings.Default.gsAppSkin;
             int idx = this.lbcSkins.FindItem(skin);
@@ -54,7 +58,8 @@ namespace OMLDatabaseEditor
                 }
             }
             GenreList = new List<String>();
-            Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
+            // I disabled this line because gsValidGenres is not just empty, its undef
+            //Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
             GenreList.AddRange(arrGenre);
             GenreList.Sort();
             lbGenres.DataSource = GenreList;
