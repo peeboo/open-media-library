@@ -1,9 +1,0 @@
-﻿<application title="Library" id="{ad208fce-2431-47d6-abed-1974a2a0555f}">
-	<entrypoint id="{543d0438-b10d-43d8-a20d-f0c96db4e6bd}"
-				addin="Library.MyAddIn, Library,Culture=Neutral,Version=1.0.0.0,PublicKeyToken=74d3b407d6cf16f1"
-				title="open media library"
-				description="Open Media Library"
-				ImageUrl=".\Application.png">
-		<category category="Services\Movies"/>
-	</entrypoint>
-</application>
