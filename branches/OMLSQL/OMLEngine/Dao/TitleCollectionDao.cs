@@ -86,6 +86,18 @@ namespace OMLEngine.Dao
         }
 
         /// <summary>
+        /// Gets all the people
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<BioData> GetAllPeople()
+        {
+            var people = from t in DBContext.Instance.BioDatas
+                         select t;
+
+            return people;
+        }
+
+        /// <summary>
         /// Returns the number of items in a given genre
         /// </summary>
         /// <param name="genre"></param>
@@ -96,6 +108,21 @@ namespace OMLEngine.Dao
                          from m in DBContext.Instance.GenreMetaDatas
                          where g.GenreMetaDataId == m.Id && m.Id == genre.Id
                          select g).Count();
+
+            return count;
+        }
+
+        /// <summary>
+        /// Gets the number of movies a given person is in
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
+        public static int GetItemsPerPerson(BioData person)
+        {
+            int count = (from p in DBContext.Instance.Persons
+                         from b in DBContext.Instance.BioDatas
+                         where p.BioId == b.Id && b.Id == person.Id
+                         select p).Count();
 
             return count;
         }

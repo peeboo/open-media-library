@@ -17,11 +17,12 @@ namespace OMLTestSuite
             TitleCollectionManagerTest tcm = new TitleCollectionManagerTest();
             
             Console.WriteLine("Testing: Title Collection Manager SQL");
-            tcm.TEST_DELETE_ALL_DATA();
-            tcm.TEST_IMPORT_INTO_DATABASE();
-            tcm.TEST_GETTING_ALL_TITLES();
-            tcm.TEST_GET_ALL_GENRES();
-            tcm.TEST_GET_ALL_MOVIES_FOR_ACTOR();
+            //tcm.TEST_DELETE_ALL_DATA();
+            //tcm.TEST_IMPORT_INTO_DATABASE();
+            //tcm.TEST_GETTING_ALL_TITLES();
+            //tcm.TEST_GET_ALL_GENRES();
+            //tcm.TEST_GET_ALL_MOVIES_FOR_ACTOR();
+            tcm.TEST_GET_ALL_PEOPLE();
 
             Console.ReadLine();
             return;

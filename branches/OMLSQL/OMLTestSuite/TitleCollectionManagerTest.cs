@@ -74,6 +74,22 @@ namespace OMLTestSuite
         }
 
         [Test]
+        public void TEST_GET_ALL_PEOPLE()
+        {
+            Console.WriteLine("Starting to get all people");
+            DateTime start = DateTime.Now;
+
+            IList<FilteredCollection> items = TitleCollectionManager.GetAllPeople();
+
+            foreach (FilteredCollection item in items)
+                Console.WriteLine(item.Name + " " + item.Count);
+
+            Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
+                                        (DateTime.Now - start).TotalMilliseconds.ToString(),
+                                        items.Count));            
+        }
+
+        [Test]
         public void TEST_GET_ALL_MOVIES_FOR_ACTOR()
         {
             Console.WriteLine("Starting to get all Tim Burton movies");
