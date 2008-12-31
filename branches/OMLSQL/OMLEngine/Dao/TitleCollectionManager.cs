@@ -113,6 +113,16 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Returns all the titles for a given person
+        /// </summary>
+        /// <param name="actor"></param>
+        /// <returns></returns>
+        public static IList<Title> GetFilteredTitlesActor(string name)
+        {
+            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetFilteredTitlesPerson(name));
+        }
+
+        /// <summary>
         /// Gets all the genres and their item count
         /// </summary>
         /// <returns></returns>

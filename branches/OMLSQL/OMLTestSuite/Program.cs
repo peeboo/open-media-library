@@ -21,6 +21,7 @@ namespace OMLTestSuite
             tcm.TEST_IMPORT_INTO_DATABASE();
             tcm.TEST_GETTING_ALL_TITLES();
             tcm.TEST_GET_ALL_GENRES();
+            tcm.TEST_GET_ALL_MOVIES_FOR_ACTOR();
 
             Console.ReadLine();
             return;

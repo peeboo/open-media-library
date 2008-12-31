@@ -59,6 +59,21 @@ namespace OMLEngine.Dao
         }
 
         /// <summary>
+        /// Returns all the titles for a given person
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static IEnumerable<Title> GetFilteredTitlesPerson(string name)
+        {
+            var titles = (from t in DBContext.Instance.Titles
+                          from p in DBContext.Instance.Persons
+                          where t.Id == p.Title.Id && p.MetaData.FullName == name
+                          select t).Distinct();
+
+            return titles;
+        }
+
+        /// <summary>
         /// Gets all the genres
         /// </summary>
         /// <returns></returns>

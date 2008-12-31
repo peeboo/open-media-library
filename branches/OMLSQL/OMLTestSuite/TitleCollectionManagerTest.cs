@@ -72,5 +72,21 @@ namespace OMLTestSuite
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
                                         items.Count));
         }
+
+        [Test]
+        public void TEST_GET_ALL_MOVIES_FOR_ACTOR()
+        {
+            Console.WriteLine("Starting to get all Tim Burton movies");
+            DateTime start = DateTime.Now;
+
+            IList<Title> items = TitleCollectionManager.GetFilteredTitlesActor("Tim Burton");
+
+            foreach (Title title in items)
+                Console.WriteLine(title.Name);
+
+            Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
+                                        (DateTime.Now - start).TotalMilliseconds.ToString(),
+                                        items.Count));
+        }
     }
 }
