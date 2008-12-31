@@ -15,7 +15,91 @@ namespace OMLEngine.Dao
     }
 
     internal partial class Title
-    {       
+    {
+        /// <summary>
+        /// Will create an oml engine title from a dao title.
+        /// // todo : solomon : this should go away when the title objects are combined
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        public static OMLEngine.Title CreateOMLEngineTitleFromTitle(Title title, bool includePeople)
+        {
+            if (title == null)
+                return null;
+
+            OMLEngine.Title returnTitle = new OMLEngine.Title(title.Id);
+
+            returnTitle.AspectRatio = title.AspectRatio;
+            returnTitle.CountryOfOrigin = title.CountryOfOrgin;
+            returnTitle.DateAdded = (DateTime)title.DateAdded;
+            returnTitle.Name = title.Name;
+            returnTitle.ParentalRating = title.ParentalRating ?? string.Empty;
+            returnTitle.ParentalRatingReason = title.ParentalRatingReason;
+            returnTitle.ReleaseDate = (DateTime)title.ReleaseDate;
+            returnTitle.Runtime = (int)title.Runtime;
+            returnTitle.SortName = title.SortName;
+            returnTitle.Studio = title.Studio;
+            //doaTitle.Subtitles = title.Subtitles; // todo : solomon : figure out how to store this
+            returnTitle.Synopsis = title.Synopsis;
+            returnTitle.UPC = title.UPC;
+            returnTitle.UserStarRating = (int)title.UserRating;
+            returnTitle.VideoDetails = title.VideoDetails;
+            returnTitle.VideoResolution = title.VideoResolution;
+            returnTitle.VideoStandard = title.VideoStandard;
+            returnTitle.WatchedCount = title.WatchedCount ?? 0;
+            returnTitle.OfficialWebsiteURL = title.WebsiteUrl;
+
+            returnTitle.FrontCoverPath = title.FrontCoverImagePath;
+            returnTitle.FrontCoverMenuPath = title.MenuImagePath;
+            returnTitle.BackCoverPath = title.BackCoverImagePath;
+
+            // add the genres
+            foreach (Genre genre in title.Genres)
+            {
+                returnTitle.Genres.Add(genre.MetaData.Name);
+            }
+
+            // add the tags
+            foreach (Tag tag in title.Tags)
+            {
+                returnTitle.Tags.Add(tag.Name);
+            }
+
+            // add the people
+            if (includePeople)
+            {
+                foreach (Person person in title.People)
+                {
+                    switch ((PeopleRoles) person.Role)
+                    {
+                        case PeopleRoles.Actor:
+                            returnTitle.ActingRoles.Add(person.MetaData.FullName, person.CharacterName);
+                            break;
+
+                        case PeopleRoles.Director:
+                            returnTitle.Directors.Add(new OMLEngine.Person(person.MetaData.FullName));
+                            break;
+
+                        case PeopleRoles.Producers:
+                            returnTitle.Producers.Add(person.MetaData.FullName);
+                            break;
+
+                        case PeopleRoles.Writer:
+                            returnTitle.Writers.Add(new OMLEngine.Person(person.MetaData.FullName));
+                            break;
+                    }
+                }
+            }
+
+            // add the disks
+            foreach (Disk disk in title.Disks)
+            {
+                returnTitle.Disks.Add(new OMLEngine.Disk(disk.Name, disk.Path, (VideoFormat)disk.VideoFormat));
+            }
+
+            return returnTitle;
+        }
+
         /// <summary>
         /// Will create a title object from an engine title
         /// todo : solomon : this should go away and engine title should just contain the dao title object
@@ -30,13 +114,13 @@ namespace OMLEngine.Dao
             daoTitle.CountryOfOrgin = title.CountryOfOrigin;
             daoTitle.DateAdded = title.DateAdded;
             daoTitle.Name = title.Name;
-            //doaTitle.ParentalRating = title.ParentalRating;
+            daoTitle.ParentalRating = title.ParentalRating;
             daoTitle.ParentalRatingReason = title.ParentalRatingReason;
             daoTitle.ReleaseDate = title.ReleaseDate;
             daoTitle.Runtime = (short) title.Runtime;
             daoTitle.SortName = title.SortName;
             daoTitle.Studio = title.Studio;
-            //doaTitle.Subtitles = title.Subtitles;
+            //doaTitle.Subtitles = title.Subtitles; // todo : solomon : figure out how to store this
             daoTitle.Synopsis = title.Synopsis;
             daoTitle.UPC = title.UPC;
             daoTitle.UserRating = (byte) title.UserStarRating;
@@ -46,25 +130,60 @@ namespace OMLEngine.Dao
             daoTitle.WatchedCount = title.WatchedCount;
             daoTitle.WebsiteUrl = title.OfficialWebsiteURL;
 
+            daoTitle.FrontCoverImagePath = title.FrontCoverPath;
+            daoTitle.MenuImagePath = title.FrontCoverMenuPath;
+            daoTitle.BackCoverImagePath = title.BackCoverPath;
+
             // add the genres
             foreach (string genre in title.Genres)
-            {               
+            {
+                // see if we've added this genre locally already
+                Genre daoGenre = daoTitle.Genres.FirstOrDefault(t => t.MetaData.Name.Equals(genre));
+
+                // genres must be unique
+                if (daoGenre != null)
+                    continue;
+
                 // try to see if the genre exists
                 GenreMetaData metaData = TitleCollectionDao.GetGenreMetaDataByName(genre);
-                
+
                 if (metaData == null)
-                {                
-                    // if it doesn't create a new one                    
+                {
+                    // if it doesn't exist create a new one                    
                     metaData = new GenreMetaData();
                     metaData.Name = genre;
                 }
-                
+
                 // setup the genre
-                Genre daoGenre = new Genre();
-                daoGenre.MetaData = metaData;                
+                daoGenre = new Genre();
+                daoGenre.MetaData = metaData;
 
                 // add the genre to the title
                 daoTitle.Genres.Add(daoGenre);
+            }
+
+            // add the tags
+            foreach (string name in title.Tags)
+            {
+                // see if we've added this tag locally already
+                Tag tag = daoTitle.Tags.FirstOrDefault(t => t.Name.Equals(name));
+
+                // tags must be unique
+                if (tag != null)
+                    continue;
+
+                // try to see if the tag exists in the db already
+                tag = TitleCollectionDao.GetTagByTagName(name);
+
+                if (tag == null)
+                {
+                    // if it doesn't exist create a new one
+                    tag = new Tag();
+                    tag.Name = name;
+                }
+
+                // add the tag
+                daoTitle.Tags.Add(tag);
             }
 
             // grab from the db who we know about already
@@ -158,6 +277,7 @@ namespace OMLEngine.Dao
             foreach (string person in title.Producers)
                 names.Add(person);
 
+            // now that we have all the people - query to see who exists
             var actors = from actor in DBContext.Instance.BioDatas
                          where names.Contains(actor.FullName)
                          select actor;
@@ -178,9 +298,11 @@ namespace OMLEngine.Dao
         /// <param name="role"></param>
         /// <returns></returns>
         private static Person CreatePerson(string name, string characterName, PeopleRoles role, Dictionary<string, BioData> existingPeople)
-        {
+        {            
+            BioData metaData = null;
+
             // see if the actor exists already
-            BioData metaData = existingPeople.ContainsKey(name) ? existingPeople[name] : null; //TitleCollectionDao.GetPersonBioDataByName(name);
+            existingPeople.TryGetValue(name, out metaData);
 
             if (metaData == null)
             {

@@ -89,5 +89,108 @@ namespace OMLEngine
             TitleCollectionManager.DeleteAllPeopleData();
             TitleCollectionManager.DeleteAllGenreMetaData();
         }
+
+        /// <summary>
+        /// Gets all titles with data needed for browsing
+        /// </summary>
+        /// <returns></returns>
+        public static IList<Title> GetAllTitles()
+        {
+            // get all the titles
+            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetAllTitles());            
+        }
+
+        /// <summary>
+        /// Returns the titles in the unwatched filter
+        /// todo : solomon : this is a just a proof of concept - the final version will need to be
+        /// much more robust with multiple levels of filters
+        /// </summary>
+        /// <returns></returns>
+        public static IList<Title> GetUnwatchedTitles()
+        {
+            // get all the unwatched titles
+            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetUnwatchedTitles());
+        }
+
+        /// <summary>
+        /// Gets all the genres and their item count
+        /// </summary>
+        /// <returns></returns>
+        public static IList<FilteredCollection> GetAllGenres()
+        {
+            IEnumerable<Dao.GenreMetaData> genres = Dao.TitleCollectionDao.GetAllGenres();
+
+            List<FilteredCollection> returnItems = new List<FilteredCollection>(genres.Count());
+
+            foreach (Dao.GenreMetaData genre in genres)
+            {
+                int count = Dao.TitleCollectionDao.GetItemsPerGenre(genre);
+                if (count == 0)
+                    continue;
+
+                returnItems.Add(new FilteredCollection() { Name = genre.Name, Count = count });
+            }
+
+            return returnItems;
+        }
+
+        /// <summary>
+        /// Creates a list of title objects from the DAO title objects
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <returns></returns>
+        private static IList<Title> ConvertDaoTitlesToTitles(IEnumerable<Dao.Title> titles)
+        {
+            List<Title> returnTitles = new List<Title>(titles.Count());
+
+            foreach (Dao.Title title in titles)
+                returnTitles.Add(Dao.Title.CreateOMLEngineTitleFromTitle(title, false));
+
+            return returnTitles;
+        }
+
+        /// <summary>
+        /// Gets a title by it's id - will include all the actor information
+        /// </summary>
+        /// <param name="titleId"></param>
+        /// <returns></returns>
+        public static Title GetTitle(int titleId)
+        {
+            return Dao.Title.CreateOMLEngineTitleFromTitle(Dao.TitleCollectionDao.GetTitleById(titleId), true);
+        }        
+
+        /// <summary>
+        /// Increments the watch count on the title object
+        /// </summary>
+        /// <param name="title"></param>
+        public static void IncrementWatchedCount(Title title)
+        {
+            Dao.Title daoTitle = Dao.TitleCollectionDao.GetTitleById(title.InternalItemID);
+            daoTitle.WatchedCount = (daoTitle.WatchedCount == null) ? 1 : daoTitle.WatchedCount.Value + 1;
+            
+            Dao.DBContext.Instance.SubmitChanges();
+
+            title.WatchedCount = daoTitle.WatchedCount.Value;
+        }
+
+        /// <summary>
+        /// Clears the watched count on the title
+        /// </summary>
+        /// <param name="title"></param>
+        public static void ClearWatchedCount(Title title)
+        {
+            Dao.Title daoTitle = Dao.TitleCollectionDao.GetTitleById(title.InternalItemID);
+            daoTitle.WatchedCount = null;
+
+            Dao.DBContext.Instance.SubmitChanges();
+
+            title.WatchedCount = 0;
+        }
+    }
+
+    public class FilteredCollection
+    {
+        public string Name { get; set; }
+        public int Count { get; set; }
     }
 }

@@ -398,6 +398,16 @@ namespace OMLEngine
             Utilities.DebugLine("[TitleCollection] TitleCollection()");
         }
 
+        /// <summary>
+        /// todo : solomon : this is a test constructor to test the filter concept
+        /// </summary>
+        /// <param name="titles"></param>
+        public TitleCollection(IList<Title> titles)
+        {
+            foreach (Title title in titles)
+                Add(title);
+        }
+
         static TitleCollection()
         {
             _source_database_to_use = SourceDatabase.OML;
@@ -465,7 +475,13 @@ namespace OMLEngine
         public bool loadTitleCollection()
         {
             Utilities.DebugLine("[TitleCollection] :loadTitleCollection()");
-            return _loadTitleCollectionFromOML();
+            //return _loadTitleCollectionFromOML();
+            IList<Title> titles = TitleCollectionManager.GetAllTitles();
+
+            foreach (Title title in titles)
+                Add(title);
+
+            return true;
         }
 
         public static void checkACL()
@@ -482,7 +498,7 @@ namespace OMLEngine
         /// Loads data from OML Database
         /// </summary>
         /// <returns>True on successful load</returns>
-        private bool _loadTitleCollectionFromOML()
+        /*private bool _loadTitleCollectionFromOML()
         {
             Utilities.DebugLine("[TitleCollection] Using OML database");
             Stream stm;
@@ -520,7 +536,7 @@ namespace OMLEngine
                 }
             }
             return false;
-        }
+        }*/
 
         private string CalculateMD5Hash(string input)
         {
