@@ -256,7 +256,7 @@ namespace OMLEngine.Dao
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private long _TitleId;
+		private int _TitleId;
 		
 		private long _GenreMetaDataId;
 		
@@ -270,7 +270,7 @@ namespace OMLEngine.Dao
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnTitleIdChanging(long value);
+    partial void OnTitleIdChanging(int value);
     partial void OnTitleIdChanged();
     partial void OnGenreMetaDataIdChanging(long value);
     partial void OnGenreMetaDataIdChanged();
@@ -285,8 +285,8 @@ namespace OMLEngine.Dao
 			OnCreated();
 		}
 		
-		[Column(Storage="_TitleId", DbType="BigInt NOT NULL")]
-		public long TitleId
+		[Column(Storage="_TitleId", DbType="Int NOT NULL")]
+		public int TitleId
 		{
 			get
 			{
@@ -398,7 +398,7 @@ namespace OMLEngine.Dao
 					}
 					else
 					{
-						this._TitleId = default(long);
+						this._TitleId = default(int);
 					}
 					this.SendPropertyChanged("Title");
 				}
@@ -434,7 +434,7 @@ namespace OMLEngine.Dao
 		
 		private string _Name;
 		
-		private long _Id;
+		private int _Id;
 		
 		private string _SortName;
 		
@@ -442,15 +442,15 @@ namespace OMLEngine.Dao
 		
 		private string _MetaDataSource;
 		
-		private System.Data.Linq.Binary _FrontCoverImage;
+		private string _FrontCoverImage;
 		
-		private System.Data.Linq.Binary _MenuImage;
+		private string _MenuImage;
 		
-		private System.Data.Linq.Binary _BackCoverImage;
+		private string _BackCoverImage;
 		
 		private System.Nullable<short> _Runtime;
 		
-		private System.Nullable<byte> _ParentalRating;
+		private string _ParentalRating;
 		
 		private string _Synopsis;
 		
@@ -498,7 +498,7 @@ namespace OMLEngine.Dao
     partial void OnCreated();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnIdChanging(long value);
+    partial void OnIdChanging(int value);
     partial void OnIdChanged();
     partial void OnSortNameChanging(string value);
     partial void OnSortNameChanged();
@@ -506,15 +506,15 @@ namespace OMLEngine.Dao
     partial void OnWatchedCountChanged();
     partial void OnMetaDataSourceChanging(string value);
     partial void OnMetaDataSourceChanged();
-    partial void OnFrontCoverImageChanging(System.Data.Linq.Binary value);
-    partial void OnFrontCoverImageChanged();
-    partial void OnMenuImageChanging(System.Data.Linq.Binary value);
-    partial void OnMenuImageChanged();
-    partial void OnBackCoverImageChanging(System.Data.Linq.Binary value);
-    partial void OnBackCoverImageChanged();
+    partial void OnFrontCoverImagePathChanging(string value);
+    partial void OnFrontCoverImagePathChanged();
+    partial void OnMenuImagePathChanging(string value);
+    partial void OnMenuImagePathChanged();
+    partial void OnBackCoverImagePathChanging(string value);
+    partial void OnBackCoverImagePathChanged();
     partial void OnRuntimeChanging(System.Nullable<short> value);
     partial void OnRuntimeChanged();
-    partial void OnParentalRatingChanging(System.Nullable<byte> value);
+    partial void OnParentalRatingChanging(string value);
     partial void OnParentalRatingChanged();
     partial void OnSynopsisChanging(string value);
     partial void OnSynopsisChanged();
@@ -579,8 +579,8 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public long Id
+		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
 		{
 			get
 			{
@@ -659,8 +659,8 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_FrontCoverImage", DbType="Image", UpdateCheck=UpdateCheck.Never)]
-		public System.Data.Linq.Binary FrontCoverImage
+		[Column(Storage="_FrontCoverImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
+		public string FrontCoverImagePath
 		{
 			get
 			{
@@ -670,17 +670,17 @@ namespace OMLEngine.Dao
 			{
 				if ((this._FrontCoverImage != value))
 				{
-					this.OnFrontCoverImageChanging(value);
+					this.OnFrontCoverImagePathChanging(value);
 					this.SendPropertyChanging();
 					this._FrontCoverImage = value;
-					this.SendPropertyChanged("FrontCoverImage");
-					this.OnFrontCoverImageChanged();
+					this.SendPropertyChanged("FrontCoverImagePath");
+					this.OnFrontCoverImagePathChanged();
 				}
 			}
 		}
 		
-		[Column(Storage="_MenuImage", DbType="Image", UpdateCheck=UpdateCheck.Never)]
-		public System.Data.Linq.Binary MenuImage
+		[Column(Storage="_MenuImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
+		public string MenuImagePath
 		{
 			get
 			{
@@ -690,17 +690,17 @@ namespace OMLEngine.Dao
 			{
 				if ((this._MenuImage != value))
 				{
-					this.OnMenuImageChanging(value);
+					this.OnMenuImagePathChanging(value);
 					this.SendPropertyChanging();
 					this._MenuImage = value;
-					this.SendPropertyChanged("MenuImage");
-					this.OnMenuImageChanged();
+					this.SendPropertyChanged("MenuImagePath");
+					this.OnMenuImagePathChanged();
 				}
 			}
 		}
 		
-		[Column(Storage="_BackCoverImage", DbType="Image", UpdateCheck=UpdateCheck.Never)]
-		public System.Data.Linq.Binary BackCoverImage
+		[Column(Storage="_BackCoverImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
+		public string BackCoverImagePath
 		{
 			get
 			{
@@ -710,11 +710,11 @@ namespace OMLEngine.Dao
 			{
 				if ((this._BackCoverImage != value))
 				{
-					this.OnBackCoverImageChanging(value);
+					this.OnBackCoverImagePathChanging(value);
 					this.SendPropertyChanging();
 					this._BackCoverImage = value;
-					this.SendPropertyChanged("BackCoverImage");
-					this.OnBackCoverImageChanged();
+					this.SendPropertyChanged("BackCoverImagePath");
+					this.OnBackCoverImagePathChanged();
 				}
 			}
 		}
@@ -739,8 +739,8 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_ParentalRating", DbType="TinyInt")]
-		public System.Nullable<byte> ParentalRating
+		[Column(Storage="_ParentalRating", DbType="NVarChar(20)")]
+		public string ParentalRating
 		{
 			get
 			{
@@ -1208,11 +1208,11 @@ namespace OMLEngine.Dao
 		
 		private string _CharacterName;
 		
-		private long _TitleId;
+		private int _TitleId;
 		
 		private short _Sort;
 		
-		private System.Nullable<byte> _Role;
+		private byte _Role;
 		
 		private long _BioId;
 		
@@ -1228,11 +1228,11 @@ namespace OMLEngine.Dao
     partial void OnCreated();
     partial void OnCharacterNameChanging(string value);
     partial void OnCharacterNameChanged();
-    partial void OnTitleIdChanging(long value);
+    partial void OnTitleIdChanging(int value);
     partial void OnTitleIdChanged();
     partial void OnSortChanging(short value);
     partial void OnSortChanged();
-    partial void OnRoleChanging(System.Nullable<byte> value);
+    partial void OnRoleChanging(byte value);
     partial void OnRoleChanged();
     partial void OnBioIdChanging(long value);
     partial void OnBioIdChanged();
@@ -1267,8 +1267,8 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_TitleId", DbType="BigInt NOT NULL")]
-		public long TitleId
+		[Column(Storage="_TitleId", DbType="Int NOT NULL")]
+		public int TitleId
 		{
 			get
 			{
@@ -1312,7 +1312,7 @@ namespace OMLEngine.Dao
 		}
 		
 		[Column(Storage="_Role", DbType="TinyInt")]
-		public System.Nullable<byte> Role
+		public byte Role
 		{
 			get
 			{
@@ -1420,7 +1420,7 @@ namespace OMLEngine.Dao
 					}
 					else
 					{
-						this._TitleId = default(long);
+						this._TitleId = default(int);
 					}
 					this.SendPropertyChanged("Title");
 				}
@@ -1588,7 +1588,7 @@ namespace OMLEngine.Dao
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private long _MovieId;
+		private int _MovieId;
 		
 		private string _Name;
 		
@@ -1600,7 +1600,7 @@ namespace OMLEngine.Dao
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnMovieIdChanging(long value);
+    partial void OnMovieIdChanging(int value);
     partial void OnMovieIdChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
@@ -1614,8 +1614,8 @@ namespace OMLEngine.Dao
 			OnCreated();
 		}
 		
-		[Column(Storage="_MovieId", DbType="BigInt NOT NULL")]
-		public long MovieId
+		[Column(Storage="_MovieId", DbType="Int NOT NULL")]
+		public int MovieId
 		{
 			get
 			{
@@ -1705,7 +1705,7 @@ namespace OMLEngine.Dao
 					}
 					else
 					{
-						this._MovieId = default(long);
+						this._MovieId = default(int);
 					}
 					this.SendPropertyChanged("Title");
 				}
@@ -1747,7 +1747,7 @@ namespace OMLEngine.Dao
 		
 		private long _Id;
 		
-		private long _TitleId;
+		private int _TitleId;
 		
 		private EntityRef<Title> _Title;
 		
@@ -1763,7 +1763,7 @@ namespace OMLEngine.Dao
     partial void OnVideoFormatChanged();
     partial void OnIdChanging(long value);
     partial void OnIdChanged();
-    partial void OnTitleIdChanging(long value);
+    partial void OnTitleIdChanging(int value);
     partial void OnTitleIdChanged();
     #endregion
 		
@@ -1853,8 +1853,8 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_TitleId", DbType="BigInt NOT NULL")]
-		public long TitleId
+		[Column(Storage="_TitleId", DbType="Int NOT NULL")]
+		public int TitleId
 		{
 			get
 			{
@@ -1904,7 +1904,7 @@ namespace OMLEngine.Dao
 					}
 					else
 					{
-						this._TitleId = default(long);
+						this._TitleId = default(int);
 					}
 					this.SendPropertyChanged("Title");
 				}

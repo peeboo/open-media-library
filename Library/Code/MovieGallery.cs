@@ -888,7 +888,10 @@ namespace Library
             OMLApplication.ExecuteSafe(delegate
             {
                 Trace.TraceInformation("MovieGallery.GoHome");
-                OMLApplication.Current.GoToSelectionList(new MovieGallery(OMLApplication.Current.Titles, Filter.Home), Filter.Unwatched, Filter.Unwatched);
+                
+                // todo : solomon : testing creating new filters on the fly
+                TitleCollection collection = new TitleCollection(TitleCollectionManager.GetUnwatchedTitles());
+                OMLApplication.Current.GoToMenu(new MovieGallery(collection, "Unwatched"));
             });
         }
     }

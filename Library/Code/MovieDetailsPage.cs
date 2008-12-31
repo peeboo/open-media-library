@@ -202,8 +202,13 @@ namespace Library
         }
 
         private void LoadDetails(MovieItem item)
-        {
-            _movieDetails = item;
+        {            
+            // get the title from the db will full information
+            Title title = OMLEngine.TitleCollectionManager.GetTitle(item.TitleObject.InternalItemID);
+
+            // create a new movie item to use
+            _movieDetails = new MovieItem(title, item.Gallery);            
+
             //_localMedia = null;
 
             //DVDDiskInfo debug code
@@ -402,14 +407,12 @@ namespace Library
             bool watched = (bool)_watched.Chosen;
 
             if (watched && _movieDetails.TitleObject.WatchedCount == 0)
-            {                    
-                _movieDetails.TitleObject.WatchedCount = 1;
-                OMLApplication.Current.SaveTitles();
+            {
+                TitleCollectionManager.IncrementWatchedCount(_movieDetails.TitleObject);
             }
             else if (!watched && _movieDetails.TitleObject.WatchedCount != 0)
             {
-                _movieDetails.TitleObject.WatchedCount = 0;
-                OMLApplication.Current.SaveTitles();
+                TitleCollectionManager.ClearWatchedCount(_movieDetails.TitleObject);
             }
         }
     }

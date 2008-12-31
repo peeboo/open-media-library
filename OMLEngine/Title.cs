@@ -112,7 +112,6 @@ namespace OMLEngine
             set { _parentalRatingReason = value; }
         }
 
-
         public string SortName
         {
             get 
@@ -775,7 +774,11 @@ namespace OMLEngine
         /// <summary>
         /// Generic Constructor, inits all the IList items
         /// </summary>
-        public Title()
+        public Title() : this(Utilities.NewRandomNumber())
+        {            
+        }
+
+        public Title(int id)
         {
             Utilities.DebugLine("[Title] Creating new Empty Title object");
             _actors = new List<Person>();
@@ -784,7 +787,7 @@ namespace OMLEngine
             _producers = new List<string>();
             _audioTracks = new List<string>();
             _genres = new List<string>();
-            _itemId = Utilities.NewRandomNumber();
+            _itemId = id;
         }
 
         /// <summary>

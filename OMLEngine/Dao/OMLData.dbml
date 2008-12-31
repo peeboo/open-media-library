@@ -10,7 +10,7 @@
   </Table>
   <Table Name="dbo.Genres" Member="Genres" AccessModifier="Internal">
     <Type Name="Genre" AccessModifier="Internal">
-      <Column Name="TitleId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="TitleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="GenreMetaDataId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Association Name="GenreMetaData_Genre" Member="MetaData" Storage="_GenreMetaData" ThisKey="GenreMetaDataId" OtherKey="Id" Type="GenreMetaData" IsForeignKey="true" />
@@ -20,15 +20,15 @@
   <Table Name="dbo.Titles" Member="Titles" AccessModifier="Internal">
     <Type Name="Title" AccessModifier="Internal">
       <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="SortName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="WatchedCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="MetaDataSource" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="FrontCoverImage" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="MenuImage" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="BackCoverImage" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="FrontCoverImagePath" Storage="_FrontCoverImage" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="MenuImagePath" Storage="_MenuImage" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="BackCoverImagePath" Storage="_BackCoverImage" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="Runtime" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="ParentalRating" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="ParentalRating" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
       <Column Name="Synopsis" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="Studio" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="CountryOfOrgin" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
@@ -54,9 +54,9 @@
   <Table Name="dbo.People" Member="Persons" AccessModifier="Internal">
     <Type Name="Person" AccessModifier="Internal">
       <Column Name="CharacterName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="TitleId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="TitleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Sort" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="Role" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="Role" Type="System.Byte" DbType="TinyInt" CanBeNull="false" />
       <Column Name="BioId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Association Name="BioData_Person" Member="MetaData" Storage="_BioData" ThisKey="BioId" OtherKey="Id" Type="BioData" IsForeignKey="true" />
@@ -73,7 +73,7 @@
   </Table>
   <Table Name="dbo.Tags" Member="Tags" AccessModifier="Internal">
     <Type Name="Tag" AccessModifier="Internal">
-      <Column Name="MovieId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="MovieId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Association Name="Title_Tag" Member="Title" ThisKey="MovieId" OtherKey="Id" Type="Title" IsForeignKey="true" />
@@ -85,7 +85,7 @@
       <Column Name="Path" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="VideoFormat" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="TitleId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="TitleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="Title_Disk" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" />
     </Type>
   </Table>
