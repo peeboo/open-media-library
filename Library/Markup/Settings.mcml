@@ -401,7 +401,7 @@
               </Panel>
 
               <!-- Mounting -->
-              <Panel Name="DTPanel" Layout="VerticalFlow" Visible="false">
+              <Panel Name="DTPanel" Layout="VerticalFlow" Visible="false" Navigation="Column">
                 <Children>
                   <Panel Name="WhichTool" Layout="VerticalFlow" Margins="0,0,50,0" Navigation="Row">
                     <Children>
@@ -440,7 +440,7 @@
               </Panel>
 
               <!-- Filters -->
-              <Scroller Name="Filters" Orientation="Vertical" ScrollingData="[ScrollDataFilters]" MaximumSize="0,475" MinimumSize="0,475" FadeSize="-10" Navigation="Group" Visible="false">
+              <Scroller Name="Filters" Orientation="Vertical" ScrollingData="[ScrollDataFilters]" MaximumSize="0,475" MinimumSize="0,475" FadeSize="-10" Navigation="Group,Column" Visible="false">
                 <LayoutInput>
                   <FormLayoutInput Left="Parent,0" Top="Parent,.25" Horizontal="Center"/>
                 </LayoutInput>
@@ -565,7 +565,7 @@
               <!-- ExtenderTranscoding -->
               <Panel Name="ExtenderTranscoding" Layout="VerticalFlow" Visible="false" Navigation="Group">
                 <Children>
-                  <Panel Layout="VerticalFlow" Navigation="Group">
+                  <Panel Layout="VerticalFlow" Navigation="Group,Column">
                     <Children>
                       <Text Content="Number of Seconds to Delay Transcoding" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                       <c:SimpleEditbox Size="700,51" Name="TranscodingBufferDelay" EditableText="[Settings.TranscodingBufferDelay]" />
