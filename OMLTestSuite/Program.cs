@@ -14,6 +14,11 @@ namespace OMLTestSuite
     {
         static void Main(string[] args)
         {
+            TitleCollectionManagerTest tcm = new TitleCollectionManagerTest();
+            Console.WriteLine("Testing: Title Collection Manager SQL");
+            tcm.TEST_IMPORT_INTO_DATABASE();
+
+
             OMLFileWatcherTest fwt = new OMLFileWatcherTest();
             fwt.TEST_BASE_CASE();
 #if WCF_TEST
