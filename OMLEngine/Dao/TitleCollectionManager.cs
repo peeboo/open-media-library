@@ -145,6 +145,28 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Gets all the people and their count of movies
+        /// </summary>
+        /// <returns></returns>
+        public static IList<FilteredCollection> GetAllPeople()
+        {
+            IEnumerable<Dao.BioData> people = Dao.TitleCollectionDao.GetAllPeople();
+
+            List<FilteredCollection> returnItems = new List<FilteredCollection>(people.Count());
+
+            foreach (Dao.BioData bio in people)
+            {
+                int count = Dao.TitleCollectionDao.GetItemsPerPerson(bio);
+                if (count == 0)
+                    continue;
+
+                returnItems.Add(new FilteredCollection() { Name = bio.FullName, Count = count });
+            }
+
+            return returnItems;
+        }
+
+        /// <summary>
         /// Creates a list of title objects from the DAO title objects
         /// </summary>
         /// <param name="titles"></param>
