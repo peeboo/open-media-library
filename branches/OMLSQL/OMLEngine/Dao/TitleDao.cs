@@ -14,125 +14,13 @@ namespace OMLEngine.Dao
         NonActing = 4 // this is a placeholder - we should flush this out to include all film roles
     }
 
-    internal partial class Title
+    internal static class TitleDao
     {
-        /// <summary>
-        /// Will create an oml engine title from a dao title.
-        /// // todo : solomon : this should go away when the title objects are combined
-        /// </summary>
-        /// <param name="title"></param>
-        /// <returns></returns>
-        public static OMLEngine.Title CreateOMLEngineTitleFromTitle(Title title, bool includePeople)
+        private const char dbCollectionDelimiter = '\t';        
+
+        public static void SetupCollectionsToBeAdded(OMLEngine.Title title)
         {
-            if (title == null)
-                return null;
-
-            OMLEngine.Title returnTitle = new OMLEngine.Title(title.Id);
-
-            returnTitle.AspectRatio = title.AspectRatio;
-            returnTitle.CountryOfOrigin = title.CountryOfOrgin;
-            returnTitle.DateAdded = (DateTime)title.DateAdded;
-            returnTitle.Name = title.Name;
-            returnTitle.ParentalRating = title.ParentalRating ?? string.Empty;
-            returnTitle.ParentalRatingReason = title.ParentalRatingReason;
-            returnTitle.ReleaseDate = (DateTime)title.ReleaseDate;
-            returnTitle.Runtime = (int)title.Runtime;
-            returnTitle.SortName = title.SortName;
-            returnTitle.Studio = title.Studio;
-            //doaTitle.Subtitles = title.Subtitles; // todo : solomon : figure out how to store this
-            returnTitle.Synopsis = title.Synopsis;
-            returnTitle.UPC = title.UPC;
-            returnTitle.UserStarRating = (int)title.UserRating;
-            returnTitle.VideoDetails = title.VideoDetails;
-            returnTitle.VideoResolution = title.VideoResolution;
-            returnTitle.VideoStandard = title.VideoStandard;
-            returnTitle.WatchedCount = title.WatchedCount ?? 0;
-            returnTitle.OfficialWebsiteURL = title.WebsiteUrl;
-
-            returnTitle.FrontCoverPath = title.FrontCoverImagePath;
-            returnTitle.FrontCoverMenuPath = title.MenuImagePath;
-            returnTitle.BackCoverPath = title.BackCoverImagePath;
-
-            // add the genres
-            foreach (Genre genre in title.Genres)
-            {
-                returnTitle.Genres.Add(genre.MetaData.Name);
-            }
-
-            // add the tags
-            foreach (Tag tag in title.Tags)
-            {
-                returnTitle.Tags.Add(tag.Name);
-            }
-
-            // add the people
-            if (includePeople)
-            {
-                foreach (Person person in title.People)
-                {
-                    switch ((PeopleRoles) person.Role)
-                    {
-                        case PeopleRoles.Actor:
-                            returnTitle.ActingRoles.Add(person.MetaData.FullName, person.CharacterName);
-                            break;
-
-                        case PeopleRoles.Director:
-                            returnTitle.Directors.Add(new OMLEngine.Person(person.MetaData.FullName));
-                            break;
-
-                        case PeopleRoles.Producers:
-                            returnTitle.Producers.Add(person.MetaData.FullName);
-                            break;
-
-                        case PeopleRoles.Writer:
-                            returnTitle.Writers.Add(new OMLEngine.Person(person.MetaData.FullName));
-                            break;
-                    }
-                }
-            }
-
-            // add the disks
-            foreach (Disk disk in title.Disks)
-            {
-                returnTitle.Disks.Add(new OMLEngine.Disk(disk.Name, disk.Path, (VideoFormat)disk.VideoFormat));
-            }
-
-            return returnTitle;
-        }
-
-        /// <summary>
-        /// Will create a title object from an engine title
-        /// todo : solomon : this should go away and engine title should just contain the dao title object
-        /// </summary>
-        /// <param name="title"></param>
-        /// <returns></returns>
-        public static Title CreateFromOMLEngineTitle(OMLEngine.Title title)
-        {
-            Title daoTitle = new Title();
-
-            daoTitle.AspectRatio = title.AspectRatio;
-            daoTitle.CountryOfOrgin = title.CountryOfOrigin;
-            daoTitle.DateAdded = title.DateAdded;
-            daoTitle.Name = title.Name;
-            daoTitle.ParentalRating = title.ParentalRating;
-            daoTitle.ParentalRatingReason = title.ParentalRatingReason;
-            daoTitle.ReleaseDate = title.ReleaseDate;
-            daoTitle.Runtime = (short) title.Runtime;
-            daoTitle.SortName = title.SortName;
-            daoTitle.Studio = title.Studio;
-            //doaTitle.Subtitles = title.Subtitles; // todo : solomon : figure out how to store this
-            daoTitle.Synopsis = title.Synopsis;
-            daoTitle.UPC = title.UPC;
-            daoTitle.UserRating = (byte) title.UserStarRating;
-            daoTitle.VideoDetails = title.VideoDetails;
-            daoTitle.VideoResolution = title.VideoResolution;
-            daoTitle.VideoStandard = title.VideoStandard;
-            daoTitle.WatchedCount = title.WatchedCount;
-            daoTitle.WebsiteUrl = title.OfficialWebsiteURL;
-
-            daoTitle.FrontCoverImagePath = title.FrontCoverPath;
-            daoTitle.MenuImagePath = title.FrontCoverMenuPath;
-            daoTitle.BackCoverImagePath = title.BackCoverPath;
+            Title daoTitle = title.DaoTitle;
 
             // add the genres
             foreach (string genre in title.Genres)
@@ -189,8 +77,8 @@ namespace OMLEngine.Dao
             // grab from the db who we know about already
             Dictionary<string, BioData> existingPeople = GetAllExistingPeople(title);
 
-            int actorIndex = 0;            
-            
+            int actorIndex = 0;
+
             // add the actors
             foreach (string actor in title.ActingRoles.Keys)
             {
@@ -200,8 +88,8 @@ namespace OMLEngine.Dao
                 person.Sort = (short)(actorIndex++);
 
                 // add them to the title
-                daoTitle.People.Add(person);               
-            }            
+                daoTitle.People.Add(person);
+            }
 
             // add the directors
             foreach (OMLEngine.Person director in title.Directors)
@@ -242,7 +130,7 @@ namespace OMLEngine.Dao
             // ignore the rest for now 
 
             // add all the disks
-            foreach( OMLEngine.Disk disk in title.Disks)
+            foreach (OMLEngine.Disk disk in title.Disks)
             {
                 Disk daoDisk = new Disk();
                 daoDisk.Name = disk.Name;
@@ -252,7 +140,57 @@ namespace OMLEngine.Dao
                 daoTitle.Disks.Add(daoDisk);
             }
 
-            return daoTitle;
+            // add the audio tracks            
+            daoTitle.AudioTracks = GetDelimitedStringFromCollection(title.AudioTracks);
+
+            // add the subtitles            
+            daoTitle.Subtitles = GetDelimitedStringFromCollection(title.Subtitles);
+
+            // add the trailers             
+            daoTitle.Trailers = GetDelimitedStringFromCollection(title.Trailers);
+        }
+
+        /// <summary>
+        /// Turns a collection into a delimted string
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        private static string GetDelimitedStringFromCollection(List<string> collection)
+        {
+            if (collection == null || collection.Count == 0)
+                return null;
+
+            StringBuilder delimitedString = new StringBuilder(collection.Count * 30);
+            for (int x = 0; x < collection.Count; x++)
+            {
+                delimitedString.Append(collection[x]);
+
+                if (x != collection.Count - 1)
+                    delimitedString.Append(dbCollectionDelimiter);
+            }
+
+            return delimitedString.ToString();
+        }
+
+        /// <summary>
+        /// Given a DB delimited string return a collection
+        /// </summary>
+        /// <param name="delimitedString"></param>
+        /// <returns></returns>
+        public static List<string> DelimitedDBStringToCollection(string delimitedString)
+        {
+            if (delimitedString == null)
+                return new List<string>(0);
+
+            string[] parts = delimitedString.Split(dbCollectionDelimiter);
+
+            List<string> returnParts = new List<string>(parts.Length);
+
+            foreach (string part in parts)
+                if (!string.IsNullOrEmpty(part))
+                    returnParts.Add(part);
+
+            return returnParts;
         }
 
         /// <summary>

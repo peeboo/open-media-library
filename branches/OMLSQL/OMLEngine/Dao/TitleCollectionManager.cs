@@ -15,8 +15,22 @@ namespace OMLEngine
         /// <returns></returns>
         public static bool AddTitle(Title title)
         {
+            // setup all the collections objects
+            Dao.TitleDao.SetupCollectionsToBeAdded(title);
+
             // todo : solomon : do your duplicate logic here
-            Dao.TitleCollectionDao.AddTitle(OMLEngine.Dao.Title.CreateFromOMLEngineTitle(title));
+            Dao.TitleCollectionDao.AddTitle(title.DaoTitle);
+            return true;
+        }
+
+        /// <summary>
+        /// Persists any pending updates to the database
+        /// </summary>
+        /// <returns></returns>
+        public static bool SaveTitleUpdates()
+        {            
+            // todo : solomon : add error handing and logging here
+            Dao.DBContext.Instance.SubmitChanges();            
             return true;
         }
 
@@ -176,7 +190,8 @@ namespace OMLEngine
             List<Title> returnTitles = new List<Title>(titles.Count());
 
             foreach (Dao.Title title in titles)
-                returnTitles.Add(Dao.Title.CreateOMLEngineTitleFromTitle(title, false));
+                returnTitles.Add(new Title(title));
+                //returnTitles.Add(Dao.Title.CreateOMLEngineTitleFromTitle(title, false));
 
             return returnTitles;
         }
@@ -188,7 +203,7 @@ namespace OMLEngine
         /// <returns></returns>
         public static Title GetTitle(int titleId)
         {
-            return Dao.Title.CreateOMLEngineTitleFromTitle(Dao.TitleCollectionDao.GetTitleById(titleId), true);
+            return new Title(Dao.TitleCollectionDao.GetTitleById(titleId));
         }        
 
         /// <summary>
@@ -197,7 +212,7 @@ namespace OMLEngine
         /// <param name="title"></param>
         public static void IncrementWatchedCount(Title title)
         {
-            Dao.Title daoTitle = Dao.TitleCollectionDao.GetTitleById(title.InternalItemID);
+            Dao.Title daoTitle = Dao.TitleCollectionDao.GetTitleById(title.Id);
             daoTitle.WatchedCount = (daoTitle.WatchedCount == null) ? 1 : daoTitle.WatchedCount.Value + 1;
             
             Dao.DBContext.Instance.SubmitChanges();
@@ -211,7 +226,7 @@ namespace OMLEngine
         /// <param name="title"></param>
         public static void ClearWatchedCount(Title title)
         {
-            Dao.Title daoTitle = Dao.TitleCollectionDao.GetTitleById(title.InternalItemID);
+            Dao.Title daoTitle = Dao.TitleCollectionDao.GetTitleById(title.Id);
             daoTitle.WatchedCount = null;
 
             Dao.DBContext.Instance.SubmitChanges();

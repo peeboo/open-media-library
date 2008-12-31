@@ -21,17 +21,17 @@
     <Type Name="Title" AccessModifier="Internal">
       <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="SortName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="SortName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="true" />
       <Column Name="WatchedCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="MetaDataSource" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="FrontCoverImagePath" Storage="_FrontCoverImage" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="MenuImagePath" Storage="_MenuImage" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="BackCoverImagePath" Storage="_BackCoverImage" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="FrontCoverImagePath" Member="FrontCoverPath" Storage="_FrontCoverImage" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="MenuImagePath" Member="FrontCoverMenuPath" Storage="_MenuImage" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="BackCoverImagePath" Member="BackCoverPath" Storage="_BackCoverImage" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="Runtime" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
       <Column Name="ParentalRating" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
       <Column Name="Synopsis" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="Studio" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="CountryOfOrgin" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="CountryOfOrigin" Storage="_CountryOfOrgin" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="WebsiteUrl" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="ReleaseDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
       <Column Name="DateAdded" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
@@ -45,6 +45,8 @@
       <Column Name="VideoDetails" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="Subtitles" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="VideoResolution" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="OriginalName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ImporterSource" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Association Name="Title_Genre" Member="Genres" ThisKey="Id" OtherKey="TitleId" Type="Genre" />
       <Association Name="Title_Person" Member="People" Storage="_Peoples" ThisKey="Id" OtherKey="TitleId" Type="Person" />
       <Association Name="Title_Tag" Member="Tags" ThisKey="Id" OtherKey="MovieId" Type="Tag" />

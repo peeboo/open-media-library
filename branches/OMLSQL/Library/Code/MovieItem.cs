@@ -359,7 +359,7 @@ namespace Library
             //}
 
             Details = _titleObj.Synopsis;
-            _actingRoles = new List<string>();
+            /*_actingRoles = new List<string>();
 
             if (title.ActingRoles.Count > 0)
             {
@@ -371,7 +371,7 @@ namespace Library
                     else
                         _actingRoles.Add(kvp.Key);
                 }
-            }
+            }*/
         }
 
         /// <summary>
@@ -484,7 +484,7 @@ namespace Library
 
         public int itemId
         {
-            get { return _titleObj.InternalItemID; }
+            get { return _titleObj.Id; }
         }
 
         /// <summary>

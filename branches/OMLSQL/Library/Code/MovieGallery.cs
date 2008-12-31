@@ -55,7 +55,7 @@ namespace Library
 
                     int index = 0;
 
-                    // index all the times
+                    // index all the items
                     foreach (LabeledList list in labeledLists)
                     {
                         foreach (MovieItem movie in list.Movies)
@@ -339,7 +339,7 @@ namespace Library
             DateTime start = DateTime.Now;
             
             // if their start page is unwatched movies - auto-add the filter
-            if (!Properties.Settings.Default.ShowFilterUnwatched && 
+            /*if (!Properties.Settings.Default.ShowFilterUnwatched && 
                 Properties.Settings.Default.StartPage == Filter.Unwatched)
             {
                 Properties.Settings.Default.ShowFilterUnwatched = true;
@@ -363,6 +363,11 @@ namespace Library
             if (Properties.Settings.Default.ShowFilterCountry) _filters.Add(Filter.Country, new Filter(Filter.Country, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
             if (Properties.Settings.Default.ShowFilterTrailers) _filters.Add(Filter.Trailers, new Filter(Filter.Trailers, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));            
             if ( Properties.Settings.Default.MovieView == GalleryView.CoverArtWithAlpha) _filters.Add(Filter.Alpha, new Filter(Filter.Alpha, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
+             */
+
+            _filters.Add(Filter.Settings, new Filter(Filter.Settings, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
+            if (Properties.Settings.Default.ShowFilterUnwatched) _filters.Add(Filter.Unwatched, new Filter(Filter.Unwatched, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
+            if (Properties.Settings.Default.MovieView == GalleryView.CoverArtWithAlpha) _filters.Add(Filter.Alpha, new Filter(Filter.Alpha, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
             
             _jumpInListText = new EditableText(this);
             _jumpInListText.Value = String.Empty;
@@ -442,6 +447,7 @@ namespace Library
 
                         _jumpToPosition = labels.IndexOf(m);
                         _relativeJumpToPosition = _jumpToPosition - focusedItemIndex;
+                        _focusIndex.Value = _jumpToPosition;
 
                         //Utilities.DebugLine("[MovieGallery] JumpToString: Found movie {0} pos {1} relpos {2}", m.Name, _jumpToPosition, _relativeJumpToPosition);
                         FirePropertyChanged("JumpToPosition");
@@ -472,6 +478,7 @@ namespace Library
 
                         _jumpToPosition = _moviesVirtualList.IndexOf(m);
                         _relativeJumpToPosition = _jumpToPosition - focusedItemIndex;
+                        _focusIndex.Value = _jumpToPosition;
 
                         Utilities.DebugLine("[MovieGallery] JumpToString: Found movie {0} pos {1} relpos {2}", m.Name, _jumpToPosition, _relativeJumpToPosition);
                         FirePropertyChanged("JumpToPosition");
@@ -891,7 +898,7 @@ namespace Library
                 
                 // todo : solomon : testing creating new filters on the fly
                 TitleCollection collection = new TitleCollection(TitleCollectionManager.GetUnwatchedTitles());
-                OMLApplication.Current.GoToMenu(new MovieGallery(collection, "Unwatched"));
+                OMLApplication.Current.GoToMenu(new MovieGallery(collection, "OML Home > Unwatched"));
             });
         }
     }

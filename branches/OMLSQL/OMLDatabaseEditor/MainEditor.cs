@@ -132,7 +132,7 @@ namespace OMLDatabaseEditor
             _titleCollection.SortBy("SortName", true);
             lbMovies.DataSource = _titleCollection.Source;
             if (titleEditor.EditedTitle != null)
-                lbMovies.SelectedItem = _titleCollection.GetTitleById(titleEditor.EditedTitle.InternalItemID);
+                lbMovies.SelectedItem = _titleCollection.GetTitleById(titleEditor.EditedTitle.Id);
             else
             {
                 lbMovies.SelectedIndex = -1;
@@ -169,7 +169,7 @@ namespace OMLDatabaseEditor
                 result = XtraMessageBox.Show("You have unsaved changes to " + titleEditor.EditedTitle.Name + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
                 if (result == DialogResult.Cancel)
                 {
-                    lbMovies.SelectedValue = titleEditor.EditedTitle.InternalItemID;
+                    lbMovies.SelectedValue = titleEditor.EditedTitle.Id;
                 }
                 else if (result == DialogResult.Yes)
                 {
@@ -307,7 +307,7 @@ namespace OMLDatabaseEditor
             if (titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges)
             {
                 Title editedTitle = titleEditor.EditedTitle;
-                Title collectionTitle = _titleCollection.GetTitleById(editedTitle.InternalItemID);
+                Title collectionTitle = _titleCollection.GetTitleById(editedTitle.Id);
                 if (collectionTitle == null)
                 {
                     // Title doesn't exist so we'll add it
@@ -391,7 +391,7 @@ namespace OMLDatabaseEditor
         {
             if (titleEditor.EditedTitle != null)
             {
-                Title titleToRemove = _titleCollection.GetTitleById(titleEditor.EditedTitle.InternalItemID);
+                Title titleToRemove = _titleCollection.GetTitleById(titleEditor.EditedTitle.Id);
                 if (titleToRemove != null)
                 {
                     DialogResult result = XtraMessageBox.Show("Are you sure you want to delete " + titleToRemove.Name + "?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
@@ -573,7 +573,7 @@ namespace OMLDatabaseEditor
         {
             if (titleEditor.EditedTitle != null)
             {
-                Title _currentTitle = (Title)_titleCollection.MoviesByItemId[titleEditor.EditedTitle.InternalItemID];
+                Title _currentTitle = (Title)_titleCollection.MoviesByItemId[titleEditor.EditedTitle.Id];
                 if (_currentTitle.Disks.Count > 0)
                     _currentTitle.SerializeToXMLFile(_currentTitle.Disks[0].Path + ".oml.xml");
             }

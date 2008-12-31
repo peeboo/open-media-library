@@ -52,7 +52,7 @@ namespace OMLEngine.Dao
         public static IEnumerable<Title> GetUnwatchedTitles()
         {
             var titles = from t in DBContext.Instance.Titles
-                         where t.WatchedCount < 1
+                         where t.WatchedCount == 0 || t.WatchedCount == null
                          select t;
 
             return titles;

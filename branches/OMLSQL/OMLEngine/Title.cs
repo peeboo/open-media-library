@@ -15,67 +15,43 @@ using System.Runtime.Remoting.Channels.Tcp;
 using System.IO;
 using System.Drawing;
 
+using Dao = OMLEngine.Dao;
+
 namespace OMLEngine
 {
     [Serializable()]
     [XmlRootAttribute("OMLTitle", Namespace = "http://www.openmedialibrary.org/", IsNullable = false)]
     public class Title : IComparable, ISerializable
     {
-        #region locals
-        private int _watchedCount;        
-        private string _fileLocation = "";
-        private VideoFormat _videoFormat = VideoFormat.DVD;
-        private bool _needsTranscode = false;
-        private string _name = "";
-        private int _itemId = -1;
-        private string _metadataSourceId = "";
-        private string _sourceName = "";
-        private string _frontCoverPath = "";
-        private string _frontCoverMenuPath = "";
-        private string _backCoverPath = "";
-        private int _runtime = 0;
-        private string _parentalRating = "";
-        private string _synopsis = "";
-        private string _studio = "";
-        private string _countryOfOrigin = "";
-        private string _officialWebsiteURL = "";
-        private DateTime _releaseDate = DateTime.MinValue;
-        private DateTime _dateAdded = DateTime.MinValue;
-        private string _importerSource = "";
-        private List<Person> _actors = new List<Person>();
-        private List<Person> _directors = new List<Person>();
-        private List<Person> _writers = new List<Person>();
-        private List<string> _producers = new List<string>();
-        private List<string> _audioTracks = new List<string>();
-        private List<string> _genres = new List<string>();
-        private int _userStarRating = 0;
-        private string _aspectRatio = "";    // Widescreen, 1.33, 1.66, 
-        private string _videoStandard = "";  // NTSC, PAL
-        private string _UPC = "";
-        private string _originalName = "";
-        private List<string> _tags = new List<string>();
-        private Dictionary<string, string> _actingRoles = new Dictionary<string, string>(); // actor, role
-        private Dictionary<string, string> _nonActingRoles = new Dictionary<string, string>(); // name, role (ie. Vangelis, Music)
-        private Dictionary<string, string> _additionalFields = new Dictionary<string, string>();
-        private List<string> _photos = new List<string>();
-        private List<string> _trailers = new List<string>();
-        private List<int> _children = new List<int>();
-        private int _parent = 0;
-        private string _sortName = "";
-        private string _parentalRatingReason = "";
-        private string _videoDetails = "";
-        private List<string> _subtitles = new List<string>();
-        private string _videoResolution = "";
-        private List<string> _extraFeatures = new List<string>();
-        private List<Disk> _disks = new List<Disk>();
-        private Disk _selectedDisk = null;
+        #region locals        
+        //private static string XmlNameSpace = "http://www.openmedialibrary.org/";
+        //private bool _needsTranscode = false;        
 
-        private static string XmlNameSpace = "http://www.openmedialibrary.org/";
+        private Disk _selectedDisk = null;
+        private Dao.Title _title;
+        private string _metadataSourceId = null; 
+
+        private Dictionary<string, string> _nonActingRoles = new Dictionary<string, string>(); // name, role (ie. Vangelis, Music)        
+        private Dictionary<string, string> _actingRoles = null; // actor, role                                       
+
+        private List<string> _tags = null;
+        private List<Person> _directors = null;
+        private List<Person> _writers = null;
+        private List<string> _producers = null;
+        private List<Disk> _disks = null;
+        private List<string> _genres = null;
+        private List<string> _audioTracks = null;
+        private List<string> _subtitles = null;
+        private List<string> _trailers = null;  
+           
+        private List<string> _extraFeatures = new List<string>();
+        private Dictionary<string, string> _additionalFields = new Dictionary<string, string>();
 
         #endregion
 
         #region properties       
 
+        #region Unknown Properties
         public Disk SelectedDisk
         {
             get { return _selectedDisk; }
@@ -86,43 +62,7 @@ namespace OMLEngine
         {
             get { return _extraFeatures; }
             set { _extraFeatures = value; }
-        }
-
-        public string VideoResolution
-        {
-            get { return _videoResolution; }
-            set { _videoResolution = value; }
-        }
-        
-        public List<string> Subtitles
-        {
-            get { return _subtitles; }
-            set { _subtitles = value; }
-        }
-
-        public string VideoDetails
-        {
-            get { return _videoDetails; }
-            set { _videoDetails = value; }
-        }
-
-        public string ParentalRatingReason
-        {
-            get { return _parentalRatingReason; }
-            set { _parentalRatingReason = value; }
-        }
-
-        public string SortName
-        {
-            get 
-            {
-                if (String.IsNullOrEmpty(_sortName))
-                    return Name;
-                else
-                    return _sortName; 
-            }
-            set { _sortName = value.Trim(); }
-        }
+        }       
 
         public List<Role> NonActingRolesBinding
         {
@@ -154,12 +94,402 @@ namespace OMLEngine
                 }
                 return roles;
             }
+        }       
+
+        /// <summary>
+        /// Gets or sets the additional fields (for future expansion).
+        /// </summary>
+        /// <value>The additional fields.</value>
+        public Dictionary<string, string> AdditionalFields
+        {
+            get { return _additionalFields; }
+            set { _additionalFields = value; }
+        }                
+
+        /// <summary>
+        /// Unique id from the Source of our title info (MyMovies, DVD Profiler, etc).
+        /// todo : solomon : i'm not sure this is the right way to do this
+        /// </summary>
+        public string MetadataSourceID
+        {
+            get { return _metadataSourceId ?? string.Empty; }
+            set { _metadataSourceId = value; }
+        }
+
+        #endregion        
+
+        internal Dao.Title DaoTitle
+        {
+            get { return _title; }
+        }
+
+        public string VideoResolution
+        {
+            get { return _title.VideoResolution; }
+            set { _title.VideoResolution = value; }
+        }               
+
+        public string VideoDetails
+        {
+            get { return _title.VideoDetails; }
+            set { _title.VideoResolution = value; }
+        }
+
+        public string ParentalRatingReason
+        {
+            get { return _title.ParentalRatingReason; }
+            set { _title.ParentalRatingReason = value; }
+        }
+
+        public string SortName
+        {
+            get 
+            {
+                if (String.IsNullOrEmpty(_title.SortName))
+                    return _title.Name;
+                else
+                    return _title.SortName; 
+            }
+            set { _title.SortName = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the name of the original name (especially for foreign movies)
+        /// </summary>
+        /// <value>The name of the original name.</value>
+        public string OriginalName
+        {
+            get { return _title.OriginalName; }
+            set { _title.OriginalName = value; }
+        }
+
+        /// <summary>
+        /// A user can add tags to movies
+        /// todo : solomon : this should be a read only collection
+        /// </summary>
+        /// <value>The tags.</value>
+        public List<string> Tags
+        {
+            get 
+            {
+                // lazy load the tags
+                if (_tags == null)
+                {
+                    _tags = new List<string>(_title.Tags.Count);
+                    foreach (Dao.Tag tag in _title.Tags)
+                        _tags.Add(tag.Name);
+                }
+                return _tags; 
+            }
+        }        
+
+        /// <summary>
+        /// Gets or sets the video standard (NTSC, PAL).
+        /// </summary>
+        /// <value>The video standard.</value>
+        public string VideoStandard
+        {
+            get { return _title.VideoStandard; }
+            set { _title.VideoStandard = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the aspect ratio (1.33:1, Widescreen, etc)
+        /// </summary>
+        /// <value>The aspect ratio.</value>
+        public string AspectRatio
+        {
+            get { return _title.AspectRatio; }
+            set { _title.AspectRatio = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the UPC.
+        /// </summary>
+        /// <value>The UPC.</value>
+        public string UPC
+        {
+            get { return _title.UPC; }
+            set { _title.UPC = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the user star rating (0 to 100)
+        /// </summary>
+        /// <value>The user star rating.</value>
+        public int UserStarRating
+        {
+            get { return _title.UserRating ?? 0; }
+            set { _title.UserRating = (byte) value; }
+        }
+
+        /// <summary>
+        /// Number of times video has been watched
+        /// </summary>
+        public int WatchedCount
+        {
+            get { return _title.WatchedCount ?? 0; }
+            set { _title.WatchedCount = value; }
+        }
+
+        /// <summary>
+        ///  Physical location of media
+        /// </summary>
+        public string FileLocation
+        {
+            get 
+            {
+                if (_title.Disks.Count == 1)
+                    return (_title.Disks[0].Path);
+                else
+                    return (String.Empty);
+            
+            }
+        }        
+
+        // To Support Multi-Disk!
+        /// <summary>
+        /// Todo : solomon : this should be a readonly collection
+        /// </summary>
+        public List<Disk> Disks
+        {
+            get
+            {
+                if (_disks == null)
+                {
+                    _disks = new List<Disk>(_title.Disks.Count);
+                    foreach (Dao.Disk disk in _title.Disks)
+                        _disks.Add(new Disk(disk.Name, disk.Path, (VideoFormat)disk.VideoFormat));
+                }
+
+                return _disks;
+            }
+            set { }
+        }
+
+        /// <summary>
+        /// Video format of title (DVD, AVI, etc)
+        /// </summary>
+        public VideoFormat VideoFormat
+        {
+            get
+            {
+                if (_title.Disks.Count > 0)
+                    return (VideoFormat) _title.Disks[0].VideoFormat;
+                else
+                    return VideoFormat.DVD;
+            }
+        }
+
+        /// <summary>
+        /// Display name of movie
+        /// </summary>
+        public string Name
+        {
+            get { return _title.Name; }
+            set { _title.Name = value; }
+        }
+
+        /// <summary>
+        /// Internal id of the Title
+        /// </summary>
+        public int Id
+        {
+            get { return _title.Id; }
+        }
+        
+        /// <summary>
+        /// Name of the source for our info (MyMovies, DVD Profiler, etc)
+        /// </summary>
+        public string MetadataSourceName
+        {
+            get { return _title.MetaDataSource; }
+            set { _title.MetaDataSource = value; }
+        }
+
+        /// <summary>
+        /// Name of the source from which meta-data was gathered (MyMovies, DVD Profiler, etc.)
+        /// </summary>
+        public string ImporterSource
+        {
+            get { return _title.ImporterSource; }
+            set { _title.ImporterSource = value; }
+        }
+
+        /// <summary>
+        /// Pull path to the cover art image, 
+        /// default the the front cover menu art image to this as well
+        /// </summary>
+        public string FrontCoverPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_title.FrontCoverPath))
+                    return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
+
+                return _title.FrontCoverPath;
+            }
+            set { _title.FrontCoverPath = value; }
+        }
+
+        public string FrontCoverMenuPath
+        {
+            get { return _title.FrontCoverMenuPath; }
+            set { _title.FrontCoverMenuPath = value; }
+        }
+
+        /// <summary>
+        /// Full path to the rear cover art image
+        /// </summary>
+        public string BackCoverPath
+        {
+            get 
+            {
+                if (string.IsNullOrEmpty(_title.BackCoverPath))
+                    return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
+
+                return _title.BackCoverPath; 
+            }
+            set { _title.BackCoverPath = value; }
+        }
+
+        /// <summary>
+        /// Runtime in minutes of the title
+        /// </summary>
+        public int Runtime
+        {
+            get { return _title.Runtime ?? 0; }
+            set { _title.Runtime = (short) value; }
+        }
+
+        /// <summary>
+        /// Rating of the film 
+        /// </summary>
+        public string ParentalRating
+        {
+            get { return _title.ParentalRating ?? string.Empty; }
+            set { _title.ParentalRating = value; }
+        }
+
+        /// <summary>
+        /// Long description of title
+        /// </summary>
+        public string Synopsis
+        {
+            get { return _title.Synopsis ?? string.Empty; }
+            set { _title.Synopsis = value; }
+        }
+
+        /// <summary>
+        /// Name of studio company
+        /// </summary>
+        public string Studio
+        {
+            get { return _title.Studio ?? string.Empty; }
+            set { _title.Studio = value; }
+        }
+        /// <summary>
+        /// Country where the title was created/first released
+        /// </summary>
+        public string CountryOfOrigin
+        {
+            get { return _title.CountryOfOrigin ?? string.Empty; }
+            set { _title.CountryOfOrigin = value; }
+        }
+        /// <summary>
+        /// website for title (if it has one)
+        /// </summary>
+        public string OfficialWebsiteURL
+        {
+            get { return _title.WebsiteUrl ?? string.Empty; }
+            set { _title.WebsiteUrl = value; }
+        }
+
+        /// <summary>
+        /// Original date of release (or re-release)
+        /// </summary>
+        public DateTime ReleaseDate
+        {
+            get { return _title.ReleaseDate ?? DateTime.MinValue; }
+            set { _title.ReleaseDate = value; }
+        }
+
+        /// <summary>
+        /// Date that this title was added to the database
+        /// </summary>
+        public DateTime DateAdded
+        {
+            get { return _title.DateAdded ?? DateTime.MinValue; }
+            set { _title.DateAdded = value; }
+        }        
+
+        /// <summary>
+        /// List of languages (English, Spanish, French, DTS, DD5.1, DD2.0, etc)
+        /// </summary>
+        public List<string> AudioTracks
+        {
+            get 
+            {
+                // lazy load the audio tracks
+                if (_audioTracks == null)
+                    _audioTracks = Dao.TitleDao.DelimitedDBStringToCollection(_title.AudioTracks);
+
+                return _audioTracks; 
+            }
+        }
+
+        public List<string> Subtitles
+        {
+            get
+            {
+                // lazy load the subtitles
+                if (_subtitles == null)
+                    _subtitles = Dao.TitleDao.DelimitedDBStringToCollection(_title.Subtitles);
+
+                return _subtitles;
+            }
+        }
+
+        public List<string> Trailers
+        {
+            get
+            {
+                // lazy load the trailers
+                if (_trailers == null)
+                    _trailers = Dao.TitleDao.DelimitedDBStringToCollection(_title.Trailers);
+
+                return _trailers;
+            }
+        }
+
+        /// <summary>
+        /// List of Genres
+        /// </summary>
+        public List<string> Genres
+        {
+            get 
+            {
+                // lazy load the genres
+                if (_genres == null)
+                {
+                    _genres = new List<string>(_title.Genres.Count);
+                    foreach (Dao.Genre genre in _title.Genres)
+                        _genres.Add(genre.MetaData.Name);
+                }
+
+                return _genres; 
+            }
         }
 
         public Dictionary<string, string> ActingRoles
         {
-            get { return _actingRoles; }
-            set { _actingRoles = value; }
+            get 
+            {
+                if (_actingRoles == null)
+                    SetupPeopleCollections();
+
+                return _actingRoles; 
+            }            
         }
 
         public void AddActingRole(string actor, string role)
@@ -178,323 +508,8 @@ namespace OMLEngine
             {
                 _nonActingRoles.Add(name, role);
             }
-        }
+        }       
 
-
-        public int Parent
-        {
-            get { return _parent; }
-            set { _parent = value; }
-        }
-
-        public List<int> Children
-        {
-            get { return _children; }
-            set { _children = value; }
-        }
-
-        public List<string> Photos
-        {
-            get { return _photos; }
-            set { _photos = value; }
-        }
-
-        public List<string> Trailers
-        {
-            get { return _trailers; }
-            set { _trailers = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the additional fields (for future expansion).
-        /// </summary>
-        /// <value>The additional fields.</value>
-        public Dictionary<string, string> AdditionalFields
-        {
-            get { return _additionalFields; }
-            set { _additionalFields = value; }
-        }
-
-
-        /// <summary>
-        /// A user can add tags to movies
-        /// </summary>
-        /// <value>The tags.</value>
-        public List<string> Tags
-        {
-            get { return _tags; }
-            set { _tags = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the name of the original name (especially for foreign movies)
-        /// </summary>
-        /// <value>The name of the original name.</value>
-        public string OriginalName
-        {
-            get { return _originalName; }
-            set { _originalName = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the video standard (NTSC, PAL).
-        /// </summary>
-        /// <value>The video standard.</value>
-        public string VideoStandard
-        {
-            get { return _videoStandard; }
-            set { _videoStandard = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the aspect ratio (1.33:1, Widescreen, etc)
-        /// </summary>
-        /// <value>The aspect ratio.</value>
-        public string AspectRatio
-        {
-            get { return _aspectRatio; }
-            set { _aspectRatio = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the UPC.
-        /// </summary>
-        /// <value>The UPC.</value>
-        public string UPC
-        {
-            get { return _UPC; }
-            set { _UPC = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the user star rating (0 to 100)
-        /// </summary>
-        /// <value>The user star rating.</value>
-        public int UserStarRating
-        {
-            get { return _userStarRating; }
-            set { _userStarRating = value; }
-        }
-
-        /// <summary>
-        /// Number of times video has been watched
-        /// </summary>
-        public int WatchedCount
-        {
-            get { return _watchedCount; }
-            set
-            {
-                _watchedCount = value;
-            }
-        }
-
-        /// <summary>
-        ///  Physical location of media
-        /// </summary>
-        public string FileLocation
-        {
-            get 
-            {
-                if (this._disks.Count == 1)
-                    return (this._disks[0].Path);
-                else
-                    return (String.Empty);
-            
-            }
-        }
-
-        // To Support Multi-Disk!
-        public List<Disk> Disks
-        {
-            get { return _disks; }
-            set { _disks = value; }
-        }
-
-        /// <summary>
-        /// Video format of title (DVD, AVI, etc)
-        /// </summary>
-        public VideoFormat VideoFormat
-        {
-            get
-            {
-                if (this.Disks.Count > 0)
-                    return _disks[0].Format;
-                else
-                    return VideoFormat.DVD;
-            }
-        }
-
-        /// <summary>
-        /// Display name of movie
-        /// </summary>
-        public string Name
-        {
-            get { return _name; }
-            set {
-                if (value != null)
-                    _name = value;
-            }
-        }
-
-        /// <summary>
-        /// Internal id of the Title
-        /// </summary>
-        public int InternalItemID
-        {
-            get { return _itemId; }
-        }
-        /// <summary>
-        /// Unique id from the Source of our title info (MyMovies, DVD Profiler, etc).
-        /// </summary>
-        public string MetadataSourceID
-        {
-            get { return _metadataSourceId; }
-            set
-            {
-                if (value != null)
-                    _metadataSourceId = value;
-            }
-        }
-        /// <summary>
-        /// Name of the source for our info (MyMovies, DVD Profiler, etc)
-        /// </summary>
-        public string MetadataSourceName
-        {
-            get { return _sourceName; }
-            set
-            {
-                if (value != null)
-                    _sourceName = value;
-            }
-        }
-        /// <summary>
-        /// Pull path to the cover art image, 
-        /// default the the front cover menu art image to this as well
-        /// </summary>
-        public string FrontCoverPath
-        {
-            get 
-            {
-                if (_frontCoverPath == string.Empty)
-                    return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
-                return _frontCoverPath; 
-            }
-            set 
-            { 
-                _frontCoverPath = value;
-                if (string.IsNullOrEmpty(_frontCoverMenuPath))
-                    _frontCoverMenuPath = value;
-            }
-        }
-
-        public string FrontCoverMenuPath
-        {
-            get { return _frontCoverMenuPath; }
-            set { _frontCoverMenuPath = value; }
-        }
-        /// <summary>
-        /// Full path to the rear cover art image
-        /// </summary>
-        public string BackCoverPath
-        {
-            get 
-            {
-                if (_backCoverPath == string.Empty)
-                    return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
-                return _backCoverPath; 
-            }
-            set { _backCoverPath = value; }
-        }
-        /// <summary>
-        /// Runtime in minutes of the title
-        /// </summary>
-        public int Runtime
-        {
-            get { return _runtime; }
-            set { _runtime = value; }
-        }
-        /// <summary>
-        /// Rating of the film 
-        /// </summary>
-        public string ParentalRating
-        {
-            get { return _parentalRating; }
-            set { _parentalRating = value; }
-        }
-        /// <summary>
-        /// Long description of title
-        /// </summary>
-        public string Synopsis
-        {
-            get { return _synopsis; }
-            set { _synopsis = value; }
-        }
-        /// <summary>
-        /// Name of studio company
-        /// </summary>
-        public string Studio
-        {
-            get { return _studio; }
-            set { _studio = value; }
-        }
-        /// <summary>
-        /// Country where the title was created/first released
-        /// </summary>
-        public string CountryOfOrigin
-        {
-            get { return _countryOfOrigin; }
-            set { _countryOfOrigin = value; }
-        }
-        /// <summary>
-        /// website for title (if it has one)
-        /// </summary>
-        public string OfficialWebsiteURL
-        {
-            get { return _officialWebsiteURL; }
-            set { _officialWebsiteURL = value; }
-        }
-        /// <summary>
-        /// Original date of release (or re-release)
-        /// </summary>
-        public DateTime ReleaseDate
-        {
-            get { return _releaseDate; }
-            set
-            {
-                if (value != null)
-                    _releaseDate = value;
-            }
-        }
-        /// <summary>
-        /// Date that this title was added to the database
-        /// </summary>
-        public DateTime DateAdded
-        {
-            get { return _dateAdded; }
-            set { _dateAdded = value; }
-        }
-        /// <summary>
-        /// Name of the source from which meta-data was gathered (MyMovies, DVD Profiler, etc.)
-        /// </summary>
-        public string ImporterSource
-        {
-            get { return _importerSource; }
-            set { _importerSource = value; }
-        }
-        /// <summary>
-        /// List of languages (English, Spanish, French, DTS, DD5.1, DD2.0, etc)
-        /// </summary>
-        public List<string> AudioTracks
-        {
-            get { return _audioTracks; }
-        }
-        /// <summary>
-        /// List of Genres
-        /// </summary>
-        public List<string> Genres
-        {
-            get { return _genres; }
-        }
         ///// <summary>
         ///// List of actors (Person objects)
         ///// </summary>
@@ -507,21 +522,40 @@ namespace OMLEngine
         /// </summary>
         public List<Person> Directors
         {
-            get { return _directors; }
+            get 
+            {
+                if (_directors == null)
+                    SetupPeopleCollections();
+
+                return _directors; 
+            }
         }
         /// <summary>
         /// List of Person objects that wrote the title
         /// </summary>
         public List<Person> Writers
         {
-            get { return _writers; }
+            get 
+            {
+                if (_writers == null)
+                    SetupPeopleCollections();
+
+                return _writers; 
+            }
         }
+
         /// <summary>
         /// List of people/companies that produced the title
         /// </summary>
         public List<string> Producers
         {
-            get { return _producers; }
+            get 
+            {
+                if (_producers == null)
+                    SetupPeopleCollections();
+
+                return _producers; 
+            }
         }
 
         public decimal PercentComplete
@@ -548,6 +582,36 @@ namespace OMLEngine
             }
         }
         #endregion
+
+        private void SetupPeopleCollections()
+        {
+            _actingRoles = new Dictionary<string, string>();
+            _writers = new List<Person>();
+            _producers = new List<string>();
+            _directors = new List<Person>();
+
+            foreach (Dao.Person person in _title.People)
+            {
+                switch ((Dao.PeopleRoles)person.Role)
+                {
+                    case Dao.PeopleRoles.Actor:
+                        AddActingRole(person.MetaData.FullName, person.CharacterName);
+                        break;
+
+                    case Dao.PeopleRoles.Director:
+                        _directors.Add(new Person(person.MetaData.FullName));
+                        break;
+
+                    case Dao.PeopleRoles.Producers:
+                        _producers.Add(person.MetaData.FullName);
+                        break;
+
+                    case Dao.PeopleRoles.Writer:
+                        _writers.Add(new Person(person.MetaData.FullName));
+                        break;
+                }
+            }
+        }
 
         #region serialization methods
 
@@ -639,7 +703,7 @@ namespace OMLEngine
         public Title(SerializationInfo info, StreamingContext ctxt)
         {
             //Utilities.DebugLine("[Title] Loading Title from Serialization");
-            _fileLocation = GetSerializedString(info, "file_location");
+            /*_fileLocation = GetSerializedString(info, "file_location");
             _videoFormat = GetSerializedVideoFormat(info, "video_format");
             _needsTranscode = GetSerializedBoolean(info, "transcode_to_extender");
             _name = GetSerializedString(info,"name");
@@ -695,10 +759,10 @@ namespace OMLEngine
             }
             _videoResolution = GetSerializedString(info, "video_resolution");
             _extraFeatures = GetSerializedList<List<string>>(info, "extra_features");
-            _watchedCount = GetSerializedInt(info, "watched_count");
+            _watchedCount = GetSerializedInt(info, "watched_count");*/
         }
 
-        void CleanDuplicateDisks()
+        /*void CleanDuplicateDisks()
         {
             foreach (Disk d in new List<Disk>(this._disks))
             {
@@ -712,7 +776,7 @@ namespace OMLEngine
                     _disks.RemoveAt(oi);
                 }
             }
-        }
+        }*/
 
         /// <summary>
         /// Used for serializing the title object (required for the ISerializable interface)
@@ -722,7 +786,7 @@ namespace OMLEngine
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             //Utilities.DebugLine("[Title] Adding Title ("+_name+") to Serialization data");
-            info.AddValue("file_location", _fileLocation);
+            /*info.AddValue("file_location", _fileLocation);
             info.AddValue("disks", _disks);
             info.AddValue("video_format", _videoFormat);
             info.AddValue("transcode_to_extender", _needsTranscode);
@@ -767,37 +831,34 @@ namespace OMLEngine
             info.AddValue("subtitles", _subtitles);
             info.AddValue("video_resolution", _videoResolution);
             info.AddValue("extra_features", _extraFeatures);
-            info.AddValue("watched_count", _watchedCount);
+            info.AddValue("watched_count", _watchedCount);*/
         }
         #endregion
 
         /// <summary>
         /// Generic Constructor, inits all the IList items
         /// </summary>
-        public Title() : this(Utilities.NewRandomNumber())
-        {            
+        public Title() 
+        {
+            _title = new OMLEngine.Dao.Title();
         }
 
-        public Title(int id)
+        internal Title(OMLEngine.Dao.Title title)
         {
-            Utilities.DebugLine("[Title] Creating new Empty Title object");
-            _actors = new List<Person>();
+            _title = title;
+        }
+
+        //public Title(int id)
+        //{
+            //Utilities.DebugLine("[Title] Creating new Empty Title object");
+            /*_actors = new List<Person>();
             _directors = new List<Person>();
             _writers = new List<Person>();
             _producers = new List<string>();
             _audioTracks = new List<string>();
             _genres = new List<string>();
-            _itemId = id;
-        }
-
-        /// <summary>
-        /// Default destructor
-        /// </summary>
-        ~Title()
-        {
-            // Unless this becomes a problem, it just clutters the log
-            //Utilities.DebugLine("[Title] Title destroyed");
-        }
+            _itemId = id;*/
+        //}       
 
         ///// <summary>
         ///// Add a Person object to the actors list
@@ -816,8 +877,10 @@ namespace OMLEngine
         /// <param name="director">Person object to add</param>
         public void AddDirector(Person director)
         {
+            /*
             if (director == null) return;
             _directors.Add(director);
+             */
         }
         /// <summary>
         /// Add a Person object to the writers list
@@ -825,8 +888,10 @@ namespace OMLEngine
         /// <param name="writer">Person object to add</param>
         public void AddWriter(Person writer)
         {
+            /*
             if (writer == null) return;
             _writers.Add(writer);
+             */
         }
         /// <summary>
         /// Add a string (person name or company name) to the producers list
@@ -834,8 +899,10 @@ namespace OMLEngine
         /// <param name="producer">string name to add</param>
         public void AddProducer(string producer)
         {
+            /*
             if (producer == null) return;
             _producers.Add(producer);
+             */
         }
         /// <summary>
         /// Add a Genre to the genres list
@@ -843,8 +910,10 @@ namespace OMLEngine
         /// <param name="genre">A Genre from the Genre enum</param>
         public void AddGenre(string genre)
         {
+            /*
             if (genre == null) return;
             _genres.Add(genre);
+             */
         }
 
         /// <summary>
@@ -853,8 +922,10 @@ namespace OMLEngine
         /// <param name="language_format">string name to add</param>
         public void AddSubtitle(string subtitle)
         {
+            /*
             if (subtitle == null) return;
             _subtitles.Add(subtitle);
+             */
         }
         /// <summary>
         /// Add a string language to the language formats list
@@ -862,8 +933,10 @@ namespace OMLEngine
         /// <param name="language_format">string name to add</param>
         public void AddLanguageFormat(string language_format)
         {
+            /*
             if (language_format == null) return;
             _audioTracks.Add(language_format);
+             */
         }
 
         public override bool Equals(object obj)
@@ -871,7 +944,7 @@ namespace OMLEngine
             Title otherT = obj as Title;
             if (otherT == null)
                 return false;
-            if (this.InternalItemID == otherT.InternalItemID)
+            if (this.Id == otherT.Id)
                 return true;
             if (this.Name == otherT.Name)
                 return true;
@@ -893,7 +966,8 @@ namespace OMLEngine
 
         static public Title CreateFromXML(string fileName, bool copyImages)
         {
-            Title t = new Title();
+            return new Title();
+            /*Title t = new Title();
 
             try
             {
@@ -1518,7 +1592,7 @@ namespace OMLEngine
                 t.CopyBackCoverFromFile(t.BackCoverPath, false);
             }
 
-            return t;
+            return t;*/
         }
 
         // for paths that don't exist, try to guess
@@ -1587,7 +1661,8 @@ namespace OMLEngine
         
         public bool SerializeToXMLFile(string fileName)
         {
-            fileName = fileName.ToUpper();
+            return true;
+            /*fileName = fileName.ToUpper();
             try
             {
                 if (File.Exists(fileName))
@@ -1789,7 +1864,7 @@ namespace OMLEngine
             catch
             {
                 return false;
-            }
+            }*/
         }
 
         private string CopyStringValue(string src, string dest, bool overWrite)
@@ -1813,7 +1888,7 @@ namespace OMLEngine
 
         public void CopyMetadata(Title t, bool overWrite)
         {
-            _name = CopyStringValue(t._name, _name, overWrite);
+            /*_name = CopyStringValue(t._name, _name, overWrite);
             _metadataSourceId = CopyStringValue(t._metadataSourceId, _metadataSourceId, overWrite);
 
             _parentalRating = CopyStringValue(t._parentalRating, _parentalRating, overWrite);
@@ -2048,7 +2123,7 @@ namespace OMLEngine
             catch
             {
                 return false;
-            }
+            }*/
         }
 
         public bool SaveBackCoverToFile(string dest)
@@ -2114,17 +2189,17 @@ namespace OMLEngine
         
         public string GetDefaultFrontCoverName()
         {
-            return OMLEngine.FileSystemWalker.ImageDirectory + "\\F" + InternalItemID + ".jpg";
+            return OMLEngine.FileSystemWalker.ImageDirectory + "\\F" + Id + ".jpg";
         }
 
         public string GetDefaultBackCoverName()
         {
-            return OMLEngine.FileSystemWalker.ImageDirectory + "\\B" + InternalItemID + ".jpg";
+            return OMLEngine.FileSystemWalker.ImageDirectory + "\\B" + Id + ".jpg";
         }
 
         public string GetDefaultFrontCoverMenuName()
         {
-            return OMLEngine.FileSystemWalker.ImageDirectory + "\\MF" + InternalItemID + ".jpg";
+            return OMLEngine.FileSystemWalker.ImageDirectory + "\\MF" + Id + ".jpg";
         }
 
         public void BuildResizedMenuImage()
@@ -2155,7 +2230,7 @@ namespace OMLEngine
 
         public override string ToString()
         {
-            return "Title:" + this._name + " (" + this._itemId + ")";
+            return "Title:" + this.Name + " (" + this.Id + ")";
         }
     }
 

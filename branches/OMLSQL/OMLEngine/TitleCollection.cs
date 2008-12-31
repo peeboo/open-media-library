@@ -173,7 +173,7 @@ namespace OMLEngine
             Utilities.DebugLine("[TitleCollectionAPI] List() -> #{0}", _list.Count);
             IDictionary<int, string> ret = new Dictionary<int, string>();
             foreach (Title t in _list)
-                ret[t.InternalItemID] = t.Name;
+                ret[t.Id] = t.Name;
             return ret;
         }
 
@@ -279,15 +279,15 @@ namespace OMLEngine
             {
                 _moviesByFilename.Add(key, newTitle);
             }
-            if (!_moviesByItemId.ContainsKey(newTitle.InternalItemID))
+            if (!_moviesByItemId.ContainsKey(newTitle.Id))
             {
-                _moviesByItemId.Add(newTitle.InternalItemID, newTitle);
+                _moviesByItemId.Add(newTitle.Id, newTitle);
             }
         }
 
         public void Remove(Title newTitle)
         {
-            _moviesByItemId.Remove(newTitle.InternalItemID);
+            _moviesByItemId.Remove(newTitle.Id);
             if (newTitle.Disks.Count > 0)
                 _moviesByFilename.Remove(GetDiskHash(newTitle.Disks));
             _list.Remove(newTitle);
@@ -319,7 +319,7 @@ namespace OMLEngine
         public void Replace(Title title)
         {
             Utilities.DebugLine("[TitleCollection] Title ("+title.Name+") has been replaced");
-            Title t = GetTitleById(title.InternalItemID);
+            Title t = GetTitleById(title.Id);
 
             if (t != null)
             {
@@ -350,21 +350,23 @@ namespace OMLEngine
         public List<string> GetAllGenres()
         {
             List<string> genres = new List<string>();
-            foreach (Title title in _list)
+            // todo : solomon : figure this out
+            /*foreach (Title title in _list)
             {
                 genres = genres.Union<string>(title.Genres).ToList<string>();
-            }
+            }*/
             return genres;
         }
 
         public List<Title> FindByGenre(string genre)
         {
+            // todo : solomon : figure this out
             List<Title> titles = new List<Title>();
-            foreach (Title title in _list)
+            /*foreach (Title title in _list)
             {
                 if (title.Genres.Contains(genre))
                     titles.Add(title);
-            }
+            }*/
             return titles;
         }
 
