@@ -442,6 +442,7 @@ namespace Library
 
                         _jumpToPosition = labels.IndexOf(m);
                         _relativeJumpToPosition = _jumpToPosition - focusedItemIndex;
+                        _focusIndex.Value = _jumpToPosition;
 
                         //Utilities.DebugLine("[MovieGallery] JumpToString: Found movie {0} pos {1} relpos {2}", m.Name, _jumpToPosition, _relativeJumpToPosition);
                         FirePropertyChanged("JumpToPosition");
@@ -472,6 +473,7 @@ namespace Library
 
                         _jumpToPosition = _moviesVirtualList.IndexOf(m);
                         _relativeJumpToPosition = _jumpToPosition - focusedItemIndex;
+                        _focusIndex.Value = _jumpToPosition;
 
                         Utilities.DebugLine("[MovieGallery] JumpToString: Found movie {0} pos {1} relpos {2}", m.Name, _jumpToPosition, _relativeJumpToPosition);
                         FirePropertyChanged("JumpToPosition");
