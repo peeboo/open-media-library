@@ -29,10 +29,6 @@ namespace OMLDatabaseEditor
         private void Options_Load(object sender, EventArgs e)
         {
             int genreCount = 0;
-            if (Properties.Settings.Default.gsValidGenres != null)
-                genreCount = Properties.Settings.Default.gsValidGenres.Count;
-
-            String[] arrGenre = new String[genreCount];
             this.lbcSkins.DataSource = ((MainEditor)this.Owner).DXSkins;
             String skin = Properties.Settings.Default.gsAppSkin;
             int idx = this.lbcSkins.FindItem(skin);
@@ -49,18 +45,25 @@ namespace OMLDatabaseEditor
             this.lbcMPAA.DataSource = MPAAList;
 
             this.ceUseGenreList.Checked = Properties.Settings.Default.gbUseGenreList;
-            if (Properties.Settings.Default.gsValidGenres == null || Properties.Settings.Default.gsValidGenres.Count == 0)
+            GenreList = new List<String>();
+            if (Properties.Settings.Default.gsValidGenres != null 
+            && Properties.Settings.Default.gsValidGenres.Count > 0)
+            {
+                genreCount = Properties.Settings.Default.gsValidGenres.Count;
+                String[] arrGenre = new String[genreCount];
+                Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
+                GenreList.AddRange(arrGenre);
+            }
+            else
             {
                 if (XtraMessageBox.Show("No allowable genres have been defined. Would you like to load them from your current movie collection?", "No Genres", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     Properties.Settings.Default.gsValidGenres = new StringCollection();
                     Properties.Settings.Default.gsValidGenres.AddRange(MainEditor._titleCollection.GetAllGenres().ToArray());
+                    GenreList.AddRange(MainEditor._titleCollection.GetAllGenres().ToArray());
                 }
             }
-            GenreList = new List<String>();
             // I disabled this line because gsValidGenres is not just empty, its undef
-            //Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
-            GenreList.AddRange(arrGenre);
             GenreList.Sort();
             lbGenres.DataSource = GenreList;
         }

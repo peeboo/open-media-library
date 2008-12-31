@@ -67,9 +67,9 @@ namespace OMLDatabaseEditor
             this.cbeItem.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo),
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus)});
-            this.cbeItem.Properties.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.btnItem_ButtonClick);
             this.cbeItem.Size = new System.Drawing.Size(212, 20);
             this.cbeItem.TabIndex = 1;
+            this.cbeItem.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.cbeItem_ButtonClick);
             // 
             // ListEditor
             // 
