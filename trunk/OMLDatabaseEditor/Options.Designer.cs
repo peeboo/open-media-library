@@ -63,9 +63,9 @@ namespace OMLDatabaseEditor
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.xtraTabControl1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.sbCancel, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.sbOK, 1, 1);
@@ -121,7 +121,7 @@ namespace OMLDatabaseEditor
             // 
             this.tpSkins.Controls.Add(this.lbcSkins);
             this.tpSkins.Name = "tpSkins";
-            this.tpSkins.Size = new System.Drawing.Size(346, 270);
+            this.tpSkins.Size = new System.Drawing.Size(346, 271);
             this.tpSkins.Text = "Skins";
             // 
             // lbcSkins
@@ -129,7 +129,7 @@ namespace OMLDatabaseEditor
             this.lbcSkins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbcSkins.Location = new System.Drawing.Point(0, 0);
             this.lbcSkins.Name = "lbcSkins";
-            this.lbcSkins.Size = new System.Drawing.Size(346, 270);
+            this.lbcSkins.Size = new System.Drawing.Size(346, 271);
             this.lbcSkins.TabIndex = 0;
             this.lbcSkins.SelectedValueChanged += new System.EventHandler(this.lbcSkins_SelectedValueChanged);
             // 
@@ -222,7 +222,7 @@ namespace OMLDatabaseEditor
             // 
             this.sbOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.sbOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.sbOK.Location = new System.Drawing.Point(163, 310);
+            this.sbOK.Location = new System.Drawing.Point(202, 310);
             this.sbOK.Name = "sbOK";
             this.sbOK.Size = new System.Drawing.Size(75, 23);
             this.sbOK.TabIndex = 2;
