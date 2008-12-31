@@ -21,13 +21,13 @@
         <classShapeMoniker Id="1b7b6397-0e60-4d0f-8bdd-34cc3fecff26" />
       </nodes>
     </associationConnector>
-    <classShape Id="489dd18d-13bb-4ea6-b69e-cbd8e7af224e" absoluteBounds="3.25, 0.5, 2, 5.8092268880208326">
+    <classShape Id="489dd18d-13bb-4ea6-b69e-cbd8e7af224e" absoluteBounds="3.25, 0.5, 2, 6.1938297526041657">
       <DataClassMoniker Name="/OMLDataDataContext/Title" />
       <nestedChildShapes>
-        <elementListCompartment Id="c9b3310f-eb8e-4e65-aa21-7b6282264a7f" absoluteBounds="3.265, 0.96, 1.9700000000000002, 5.249226888020833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="c9b3310f-eb8e-4e65-aa21-7b6282264a7f" absoluteBounds="3.265, 0.96, 1.9700000000000002, 5.6338297526041661" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(3.25 : 2.94314697265625); (2.5 : 2.94314697265625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(3.25 : 2.94314697265625); (2.5 : 2.94314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/OMLDataDataContext/Title/Title_Genre" />
       <nodes>
         <classShapeMoniker Id="489dd18d-13bb-4ea6-b69e-cbd8e7af224e" />
@@ -52,7 +52,7 @@
         <elementListCompartment Id="f25b7bab-6594-4c9a-aa43-b46c0ecd6108" absoluteBounds="0.51500000000000012, 4.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(3.25 : 4.69314697265625); (2.5 : 4.69314697265625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(3.25 : 4.69314697265625); (2.5 : 4.69314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/OMLDataDataContext/Title/Title_Tag" />
       <nodes>
         <classShapeMoniker Id="489dd18d-13bb-4ea6-b69e-cbd8e7af224e" />
@@ -65,14 +65,14 @@
         <elementListCompartment Id="fb3de300-e8a2-4084-8177-6b2715d40a5c" absoluteBounds="6.14, 5.335, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(5.25 : 5.59211344401042); (6.125 : 5.59211344401042)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(5.25 : 5.76044840494792); (6.125 : 5.76044840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/OMLDataDataContext/Title/Title_Disk" />
       <nodes>
         <classShapeMoniker Id="489dd18d-13bb-4ea6-b69e-cbd8e7af224e" />
         <classShapeMoniker Id="4896df30-6b47-4b17-90da-19b190c7d9c3" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(7.5 : 2.07859537760417); (7.5 : 2.5)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(7.5 : 2.07859537760417); (7.5 : 2.5)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/OMLDataDataContext/BioData/BioData_Person" />
       <nodes>
         <classShapeMoniker Id="340dae8a-01d5-4c65-80fc-e2b84267d1ce" />

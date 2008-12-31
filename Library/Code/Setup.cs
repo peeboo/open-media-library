@@ -293,7 +293,7 @@ namespace Library
             }
             else
             {
-                OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.InternalItemID);
+                OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.Id);
                 OMLPlugin.BuildResizedMenuImage(CurrentTitle);
                 _titleCollection.Add(CurrentTitle);
                 TotalTitlesAdded++;
@@ -344,7 +344,7 @@ namespace Library
                     }
                     else
                     {
-                        OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.InternalItemID);
+                        OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.Id);
                         OMLPlugin.BuildResizedMenuImage(CurrentTitle);
                         _titleCollection.Add(CurrentTitle);
                         TotalTitlesAdded++;

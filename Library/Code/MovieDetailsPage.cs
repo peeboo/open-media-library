@@ -204,7 +204,7 @@ namespace Library
         private void LoadDetails(MovieItem item)
         {            
             // get the title from the db will full information
-            Title title = OMLEngine.TitleCollectionManager.GetTitle(item.TitleObject.InternalItemID);
+            Title title = OMLEngine.TitleCollectionManager.GetTitle(item.TitleObject.Id);
 
             // create a new movie item to use
             _movieDetails = new MovieItem(title, item.Gallery);            

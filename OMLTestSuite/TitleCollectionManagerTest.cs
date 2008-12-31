@@ -33,11 +33,16 @@ namespace OMLTestSuite
             Console.WriteLine("Adding items to the db");
             DateTime start = DateTime.Now;
             foreach (Title title in titles)
-            {
-
-                OMLPlugin.BuildResizedMenuImage(title);
+            {                
+                // save the title - this also generates it an id
                 TitleCollectionManager.AddTitle(title);
+
+                // update the image
+                OMLPlugin.BuildResizedMenuImage(title);
             }
+
+            // save all the image updates
+            TitleCollectionManager.SaveTitleUpdates();
 
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
@@ -51,6 +56,9 @@ namespace OMLTestSuite
             DateTime start = DateTime.Now;
 
             IList<Title> titles = TitleCollectionManager.GetAllTitles();
+
+            foreach (Title title in titles)
+                Console.WriteLine(title.Name);
 
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),

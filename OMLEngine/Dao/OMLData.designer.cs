@@ -189,7 +189,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
+		[Column(Storage="_Photo", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Photo
 		{
 			get
@@ -484,6 +484,10 @@ namespace OMLEngine.Dao
 		
 		private string _VideoResolution;
 		
+		private string _OriginalName;
+		
+		private string _ImporterSource;
+		
 		private EntitySet<Genre> _Genres;
 		
 		private EntitySet<Person> _Peoples;
@@ -506,12 +510,12 @@ namespace OMLEngine.Dao
     partial void OnWatchedCountChanged();
     partial void OnMetaDataSourceChanging(string value);
     partial void OnMetaDataSourceChanged();
-    partial void OnFrontCoverImagePathChanging(string value);
-    partial void OnFrontCoverImagePathChanged();
-    partial void OnMenuImagePathChanging(string value);
-    partial void OnMenuImagePathChanged();
-    partial void OnBackCoverImagePathChanging(string value);
-    partial void OnBackCoverImagePathChanged();
+    partial void OnFrontCoverPathChanging(string value);
+    partial void OnFrontCoverPathChanged();
+    partial void OnFrontCoverMenuPathChanging(string value);
+    partial void OnFrontCoverMenuPathChanged();
+    partial void OnBackCoverPathChanging(string value);
+    partial void OnBackCoverPathChanged();
     partial void OnRuntimeChanging(System.Nullable<short> value);
     partial void OnRuntimeChanged();
     partial void OnParentalRatingChanging(string value);
@@ -520,8 +524,8 @@ namespace OMLEngine.Dao
     partial void OnSynopsisChanged();
     partial void OnStudioChanging(string value);
     partial void OnStudioChanged();
-    partial void OnCountryOfOrginChanging(string value);
-    partial void OnCountryOfOrginChanged();
+    partial void OnCountryOfOriginChanging(string value);
+    partial void OnCountryOfOriginChanged();
     partial void OnWebsiteUrlChanging(string value);
     partial void OnWebsiteUrlChanged();
     partial void OnReleaseDateChanging(System.Nullable<System.DateTime> value);
@@ -548,6 +552,10 @@ namespace OMLEngine.Dao
     partial void OnSubtitlesChanged();
     partial void OnVideoResolutionChanging(string value);
     partial void OnVideoResolutionChanged();
+    partial void OnOriginalNameChanging(string value);
+    partial void OnOriginalNameChanged();
+    partial void OnImporterSourceChanging(string value);
+    partial void OnImporterSourceChanged();
     #endregion
 		
 		public Title()
@@ -599,7 +607,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_SortName", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		[Column(Storage="_SortName", DbType="NVarChar(255) NOT NULL")]
 		public string SortName
 		{
 			get
@@ -659,8 +667,8 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_FrontCoverImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
-		public string FrontCoverImagePath
+		[Column(Name="FrontCoverImagePath", Storage="_FrontCoverImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
+		public string FrontCoverPath
 		{
 			get
 			{
@@ -670,17 +678,17 @@ namespace OMLEngine.Dao
 			{
 				if ((this._FrontCoverImage != value))
 				{
-					this.OnFrontCoverImagePathChanging(value);
+					this.OnFrontCoverPathChanging(value);
 					this.SendPropertyChanging();
 					this._FrontCoverImage = value;
-					this.SendPropertyChanged("FrontCoverImagePath");
-					this.OnFrontCoverImagePathChanged();
+					this.SendPropertyChanged("FrontCoverPath");
+					this.OnFrontCoverPathChanged();
 				}
 			}
 		}
 		
-		[Column(Storage="_MenuImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
-		public string MenuImagePath
+		[Column(Name="MenuImagePath", Storage="_MenuImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
+		public string FrontCoverMenuPath
 		{
 			get
 			{
@@ -690,17 +698,17 @@ namespace OMLEngine.Dao
 			{
 				if ((this._MenuImage != value))
 				{
-					this.OnMenuImagePathChanging(value);
+					this.OnFrontCoverMenuPathChanging(value);
 					this.SendPropertyChanging();
 					this._MenuImage = value;
-					this.SendPropertyChanged("MenuImagePath");
-					this.OnMenuImagePathChanged();
+					this.SendPropertyChanged("FrontCoverMenuPath");
+					this.OnFrontCoverMenuPathChanged();
 				}
 			}
 		}
 		
-		[Column(Storage="_BackCoverImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
-		public string BackCoverImagePath
+		[Column(Name="BackCoverImagePath", Storage="_BackCoverImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
+		public string BackCoverPath
 		{
 			get
 			{
@@ -710,11 +718,11 @@ namespace OMLEngine.Dao
 			{
 				if ((this._BackCoverImage != value))
 				{
-					this.OnBackCoverImagePathChanging(value);
+					this.OnBackCoverPathChanging(value);
 					this.SendPropertyChanging();
 					this._BackCoverImage = value;
-					this.SendPropertyChanged("BackCoverImagePath");
-					this.OnBackCoverImagePathChanged();
+					this.SendPropertyChanged("BackCoverPath");
+					this.OnBackCoverPathChanged();
 				}
 			}
 		}
@@ -800,7 +808,7 @@ namespace OMLEngine.Dao
 		}
 		
 		[Column(Storage="_CountryOfOrgin", DbType="NVarChar(255)")]
-		public string CountryOfOrgin
+		public string CountryOfOrigin
 		{
 			get
 			{
@@ -810,11 +818,11 @@ namespace OMLEngine.Dao
 			{
 				if ((this._CountryOfOrgin != value))
 				{
-					this.OnCountryOfOrginChanging(value);
+					this.OnCountryOfOriginChanging(value);
 					this.SendPropertyChanging();
 					this._CountryOfOrgin = value;
-					this.SendPropertyChanged("CountryOfOrgin");
-					this.OnCountryOfOrginChanged();
+					this.SendPropertyChanged("CountryOfOrigin");
+					this.OnCountryOfOriginChanged();
 				}
 			}
 		}
@@ -1075,6 +1083,46 @@ namespace OMLEngine.Dao
 					this._VideoResolution = value;
 					this.SendPropertyChanged("VideoResolution");
 					this.OnVideoResolutionChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_OriginalName", DbType="NVarChar(255)")]
+		public string OriginalName
+		{
+			get
+			{
+				return this._OriginalName;
+			}
+			set
+			{
+				if ((this._OriginalName != value))
+				{
+					this.OnOriginalNameChanging(value);
+					this.SendPropertyChanging();
+					this._OriginalName = value;
+					this.SendPropertyChanged("OriginalName");
+					this.OnOriginalNameChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_ImporterSource", DbType="NVarChar(255)")]
+		public string ImporterSource
+		{
+			get
+			{
+				return this._ImporterSource;
+			}
+			set
+			{
+				if ((this._ImporterSource != value))
+				{
+					this.OnImporterSourceChanging(value);
+					this.SendPropertyChanging();
+					this._ImporterSource = value;
+					this.SendPropertyChanged("ImporterSource");
+					this.OnImporterSourceChanged();
 				}
 			}
 		}
@@ -1501,7 +1549,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
+		[Column(Storage="_Photo", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Photo
 		{
 			get
