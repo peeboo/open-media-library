@@ -440,7 +440,7 @@
               </Panel>
 
               <!-- Filters -->
-              <Scroller Name="Filters" Orientation="Vertical" ScrollingData="[ScrollDataFilters]" MaximumSize="0,475" MinimumSize="0,475" FadeSize="-10" Navigation="Group" Visible="false">
+              <Scroller Name="Filters" Orientation="Vertical" ScrollingData="[ScrollDataFilters]" MaximumSize="0,475" MinimumSize="0,475" FadeSize="-10" Navigation="Group,Column" Visible="false">
                 <LayoutInput>
                   <FormLayoutInput Left="Parent,0" Top="Parent,.25" Horizontal="Center"/>
                 </LayoutInput>
