@@ -483,7 +483,7 @@ namespace OMLEngine
         {
             Utilities.DebugLine("[TitleCollection] :loadTitleCollection()");
             //return _loadTitleCollectionFromOML();
-            IList<Title> titles = TitleCollectionManager.GetAllTitles();
+            IEnumerable<Title> titles = TitleCollectionManager.GetAllTitles();
 
             foreach (Title title in titles)
                 Add(title);

@@ -897,7 +897,7 @@ namespace Library
                 Trace.TraceInformation("MovieGallery.GoHome");
                 
                 // todo : solomon : testing creating new filters on the fly
-                OMLApplication.Current.GoToMenu(new MovieGallery(TitleCollectionManager.GetUnwatchedTitles(), "OML Home > Unwatched"));
+                OMLApplication.Current.GoToMenu(new MovieGallery(TitleCollectionManager.GetFilteredTitles(TitleFilterType.Watched, null), "OML Home > Unwatched"));
             });
         }
     }

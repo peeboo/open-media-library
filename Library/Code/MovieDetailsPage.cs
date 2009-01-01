@@ -449,7 +449,7 @@ namespace Library
             OMLApplication.Current.GoToSelectionList(gallery, Filter.Participant, name);*/
 
             // todo : solomon : testing creating new filters on the fly
-            OMLApplication.Current.GoToMenu(new MovieGallery(TitleCollectionManager.GetFilteredTitlesActor(name), "OML Home > " + name));
+            OMLApplication.Current.GoToMenu(new MovieGallery(TitleCollectionManager.GetFilteredTitles(TitleFilterType.Person, name), "OML Home > " + name));
         }        
     }
 

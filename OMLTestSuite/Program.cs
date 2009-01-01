@@ -22,7 +22,8 @@ namespace OMLTestSuite
             //tcm.TEST_GETTING_ALL_TITLES();
             //tcm.TEST_GET_ALL_GENRES();
             //tcm.TEST_GET_ALL_MOVIES_FOR_ACTOR();
-            tcm.TEST_GET_ALL_PEOPLE();
+            tcm.TEST_GET_ALL_MOVIES_FOR_ACTOR_WITH_GENRE();
+            //tcm.TEST_GET_ALL_PEOPLE();
 
             Console.ReadLine();
             return;

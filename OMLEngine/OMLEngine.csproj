@@ -74,6 +74,7 @@
     <Compile Include="Dao\TitleDao.cs" />
     <Compile Include="Dao\TitleCollectionDao.cs" />
     <Compile Include="Dao\TitleCollectionManager.cs" />
+    <Compile Include="Dao\TitleFilter.cs" />
     <Compile Include="DVDAudioTrack.cs" />
     <Compile Include="DVDChapter.cs" />
     <Compile Include="DVDDisk.cs" />
