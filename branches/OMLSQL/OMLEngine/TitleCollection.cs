@@ -187,7 +187,7 @@ namespace OMLEngine
     #endregion
 
     [Serializable()]
-    public class TitleCollection : ISerializable
+    public class TitleCollection : ISerializable, IEnumerable<Title>
     {
         private List<Title> _list = new List<Title>();
         static SourceDatabase _source_database_to_use;
@@ -221,10 +221,15 @@ namespace OMLEngine
             return _moviesByFilename.ContainsKey(hash);
         }
 
-        public List<Title>.Enumerator GetEnumerator()
+        public IEnumerator<Title> GetEnumerator()
         {
             return _list.GetEnumerator();
         }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }        
 
         public List<Title> Source
         {

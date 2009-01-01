@@ -191,7 +191,6 @@ namespace OMLEngine
 
             foreach (Dao.Title title in titles)
                 returnTitles.Add(new Title(title));
-                //returnTitles.Add(Dao.Title.CreateOMLEngineTitleFromTitle(title, false));
 
             return returnTitles;
         }
