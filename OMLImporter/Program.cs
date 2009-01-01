@@ -328,6 +328,10 @@ namespace OMLImporter
                         {
                             case "Y":
                                 TitleCollectionManager.AddTitle(t);
+
+                                // update the image
+                                OMLPlugin.BuildResizedMenuImage(t);
+
                                 numberOfTitlesAdded++;
                                 break;
                             case "N":
@@ -336,6 +340,9 @@ namespace OMLImporter
                             case "A":
                                 YesToAll = true;
                                 TitleCollectionManager.AddTitle(t);
+
+                                // update the image
+                                OMLPlugin.BuildResizedMenuImage(t);
                                 numberOfTitlesAdded++;
                                 break;
                             default:
@@ -345,9 +352,16 @@ namespace OMLImporter
                     else
                     {
                         TitleCollectionManager.AddTitle(t);
+
+                        // update the image
+                        OMLPlugin.BuildResizedMenuImage(t);
+
                         numberOfTitlesAdded++;
                     }
                 }
+
+                // save all the image updates
+                TitleCollectionManager.SaveTitleUpdates();
 
                 plugin.GetTitles().Clear();
 
