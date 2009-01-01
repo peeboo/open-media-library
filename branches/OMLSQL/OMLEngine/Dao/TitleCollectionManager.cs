@@ -108,43 +108,42 @@ namespace OMLEngine
         /// Gets all titles with data needed for browsing
         /// </summary>
         /// <returns></returns>
-        public static IList<Title> GetAllTitles()
+        public static IEnumerable<Title> GetAllTitles()
         {
             // get all the titles
             return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetAllTitles());            
         }
 
         /// <summary>
-        /// Returns the titles in the unwatched filter
-        /// todo : solomon : this is a just a proof of concept - the final version will need to be
-        /// much more robust with multiple levels of filters
+        /// Returns the title for the given filter
         /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="filterText"></param>
         /// <returns></returns>
-        public static IList<Title> GetUnwatchedTitles()
+        public static IEnumerable<Title> GetFilteredTitles(TitleFilterType filter, string filterText)
         {
-            // get all the unwatched titles
-            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetUnwatchedTitles());
+            return ConvertDaoTitlesToTitles(
+                            Dao.TitleCollectionDao.GetFilteredTitles(new List<TitleFilter> { new TitleFilter(filter, filterText) })
+                        );
         }
 
         /// <summary>
-        /// Returns all the titles for a given person
+        /// Returns the titles for the given filter
         /// </summary>
-        /// <param name="actor"></param>
+        /// <param name="filters"></param>
         /// <returns></returns>
-        public static IList<Title> GetFilteredTitlesActor(string name)
+        public static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters)
         {
-            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetFilteredTitlesPerson(name));
-        }
+            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetFilteredTitles(filters));
+        }        
 
         /// <summary>
         /// Gets all the genres and their item count
         /// </summary>
         /// <returns></returns>
-        public static IList<FilteredCollection> GetAllGenres()
+        public static IEnumerable<FilteredCollection> GetAllGenres()
         {
             IEnumerable<Dao.GenreMetaData> genres = Dao.TitleCollectionDao.GetAllGenres();
-
-            List<FilteredCollection> returnItems = new List<FilteredCollection>(genres.Count());
 
             foreach (Dao.GenreMetaData genre in genres)
             {
@@ -152,21 +151,17 @@ namespace OMLEngine
                 if (count == 0)
                     continue;
 
-                returnItems.Add(new FilteredCollection() { Name = genre.Name, Count = count });
+                yield return new FilteredCollection() { Name = genre.Name, Count = count };
             }
-
-            return returnItems;
         }
 
         /// <summary>
         /// Gets all the people and their count of movies
         /// </summary>
         /// <returns></returns>
-        public static IList<FilteredCollection> GetAllPeople()
+        public static IEnumerable<FilteredCollection> GetAllPeople()
         {
             IEnumerable<Dao.BioData> people = Dao.TitleCollectionDao.GetAllPeople();
-
-            List<FilteredCollection> returnItems = new List<FilteredCollection>(people.Count());
 
             foreach (Dao.BioData bio in people)
             {
@@ -174,10 +169,8 @@ namespace OMLEngine
                 if (count == 0)
                     continue;
 
-                returnItems.Add(new FilteredCollection() { Name = bio.FullName, Count = count });
+                yield return new FilteredCollection() { Name = bio.FullName, Count = count };
             }
-
-            return returnItems;
         }
 
         /// <summary>
@@ -185,14 +178,10 @@ namespace OMLEngine
         /// </summary>
         /// <param name="titles"></param>
         /// <returns></returns>
-        private static IList<Title> ConvertDaoTitlesToTitles(IEnumerable<Dao.Title> titles)
+        private static IEnumerable<Title> ConvertDaoTitlesToTitles(IEnumerable<Dao.Title> titles)
         {
-            List<Title> returnTitles = new List<Title>(titles.Count());
-
             foreach (Dao.Title title in titles)
-                returnTitles.Add(new Title(title));
-
-            return returnTitles;
+                yield return new Title(title);
         }
 
         /// <summary>

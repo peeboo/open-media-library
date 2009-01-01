@@ -55,14 +55,14 @@ namespace OMLTestSuite
             Console.WriteLine("Starting to get all titles");
             DateTime start = DateTime.Now;
 
-            IList<Title> titles = TitleCollectionManager.GetAllTitles();
+            IEnumerable<Title> titles = TitleCollectionManager.GetAllTitles();
 
             foreach (Title title in titles)
                 Console.WriteLine(title.Name);
 
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
-                                        titles.Count));
+                                        titles.Count()));
         }
 
         [Test]
@@ -71,14 +71,14 @@ namespace OMLTestSuite
             Console.WriteLine("Starting to get all genres");
             DateTime start = DateTime.Now;
 
-            IList<FilteredCollection> items = TitleCollectionManager.GetAllGenres();
+            IEnumerable<FilteredCollection> items = TitleCollectionManager.GetAllGenres();
 
             foreach (FilteredCollection item in items)
                 Console.WriteLine(item.Name + " " + item.Count);
 
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
-                                        items.Count));
+                                        items.Count()));
         }
 
         [Test]
@@ -87,14 +87,14 @@ namespace OMLTestSuite
             Console.WriteLine("Starting to get all people");
             DateTime start = DateTime.Now;
 
-            IList<FilteredCollection> items = TitleCollectionManager.GetAllPeople();
+            IEnumerable<FilteredCollection> items = TitleCollectionManager.GetAllPeople();
 
             foreach (FilteredCollection item in items)
                 Console.WriteLine(item.Name + " " + item.Count);
 
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
-                                        items.Count));            
+                                        items.Count()));            
         }
 
         [Test]
@@ -103,14 +103,33 @@ namespace OMLTestSuite
             Console.WriteLine("Starting to get all Tim Burton movies");
             DateTime start = DateTime.Now;
 
-            IList<Title> items = TitleCollectionManager.GetFilteredTitlesActor("Tim Burton");
+            IEnumerable<Title> items = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Person, "Tim Burton");
 
             foreach (Title title in items)
                 Console.WriteLine(title.Name);
 
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
-                                        items.Count));
+                                        items.Count()));
+        }
+
+        public void TEST_GET_ALL_MOVIES_FOR_ACTOR_WITH_GENRE()
+        {
+            Console.WriteLine("Starting to get all Tim Burton movies");
+            DateTime start = DateTime.Now;
+
+            List<TitleFilter> filter = new List<TitleFilter>();
+            filter.Add(new TitleFilter(TitleFilterType.Person, "Tim Burton"));
+            filter.Add(new TitleFilter(TitleFilterType.Genre, "Drama"));
+
+            IEnumerable<Title> items = TitleCollectionManager.GetFilteredTitles(filter);
+
+            foreach (Title title in items)
+                Console.WriteLine(title.Name);
+
+            Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
+                                        (DateTime.Now - start).TotalMilliseconds.ToString(),
+                                        items.Count()));
         }
     }
 }
