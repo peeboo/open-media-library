@@ -25,7 +25,8 @@ namespace OMLTestSuite
             //tcm.TEST_GET_ALL_MOVIES_FOR_ACTOR_WITH_GENRE();
             //tcm.TEST_GET_ALL_PEOPLE();
             //tcm.TEST_GET_ALL_GENRES_GIVEN_FILTER();
-            tcm.TEST_GET_ACTORS_UNWATCHED();
+            //tcm.TEST_GET_ACTORS_UNWATCHED();
+            tcm.TEST_DISK_ALREADY_EXISTS();
 
             Console.ReadLine();
             return;

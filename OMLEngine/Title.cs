@@ -21,7 +21,7 @@ namespace OMLEngine
 {
     [Serializable()]
     [XmlRootAttribute("OMLTitle", Namespace = "http://www.openmedialibrary.org/", IsNullable = false)]
-    public class Title : IComparable, ISerializable
+    public class Title : IComparable
     {
         #region locals        
         //private static string XmlNameSpace = "http://www.openmedialibrary.org/";
@@ -45,7 +45,6 @@ namespace OMLEngine
         private List<string> _trailers = null;  
            
         private List<string> _extraFeatures = new List<string>();
-        private Dictionary<string, string> _additionalFields = new Dictionary<string, string>();
 
         #endregion
 
@@ -97,18 +96,10 @@ namespace OMLEngine
         }       
 
         /// <summary>
-        /// Gets or sets the additional fields (for future expansion).
-        /// </summary>
-        /// <value>The additional fields.</value>
-        public Dictionary<string, string> AdditionalFields
-        {
-            get { return _additionalFields; }
-            set { _additionalFields = value; }
-        }                
-
-        /// <summary>
         /// Unique id from the Source of our title info (MyMovies, DVD Profiler, etc).
-        /// todo : solomon : i'm not sure this is the right way to do this
+        /// todo : solomon : this is used to store the id when moving the object from one place to another     
+        /// during the import - we don't need to store it since we already store the name - there's probably
+        /// a way to do this where we could remove this property
         /// </summary>
         public string MetadataSourceID
         {
@@ -259,7 +250,7 @@ namespace OMLEngine
                 {
                     _disks = new List<Disk>(_title.Disks.Count);
                     foreach (Dao.Disk disk in _title.Disks)
-                        _disks.Add(new Disk(disk.Name, disk.Path, (VideoFormat)disk.VideoFormat));
+                        _disks.Add(new Disk(disk));
                 }
 
                 return _disks;
@@ -509,14 +500,7 @@ namespace OMLEngine
                 _nonActingRoles.Add(name, role);
             }
         }       
-
-        ///// <summary>
-        ///// List of actors (Person objects)
-        ///// </summary>
-        //public List<Person> Actors
-        //{
-        //    get { return _actors; }
-        //}
+        
         /// <summary>
         /// List of Person objects that directed the title (usually one Person)
         /// </summary>
@@ -615,7 +599,7 @@ namespace OMLEngine
 
         #region serialization methods
 
-        private DateTime GetSerializedDateTime(SerializationInfo info, string id)
+        /*private DateTime GetSerializedDateTime(SerializationInfo info, string id)
         {
             try
             {
@@ -693,17 +677,17 @@ namespace OMLEngine
                 Trace.WriteLine("Exception in GetSerializedList: " + e.Message);
                 return new T();
             }
-        }
+        }*/
 
         /// <summary>
         /// Constructor used for loading from database file
         /// </summary>
         /// <param name="info">SerializationInfo object</param>
         /// <param name="ctxt">StreamingContext object</param>
-        public Title(SerializationInfo info, StreamingContext ctxt)
+        /*public Title(SerializationInfo info, StreamingContext ctxt)
         {
             //Utilities.DebugLine("[Title] Loading Title from Serialization");
-            /*_fileLocation = GetSerializedString(info, "file_location");
+            _fileLocation = GetSerializedString(info, "file_location");
             _videoFormat = GetSerializedVideoFormat(info, "video_format");
             _needsTranscode = GetSerializedBoolean(info, "transcode_to_extender");
             _name = GetSerializedString(info,"name");
@@ -759,8 +743,8 @@ namespace OMLEngine
             }
             _videoResolution = GetSerializedString(info, "video_resolution");
             _extraFeatures = GetSerializedList<List<string>>(info, "extra_features");
-            _watchedCount = GetSerializedInt(info, "watched_count");*/
-        }
+            _watchedCount = GetSerializedInt(info, "watched_count");
+        }*/
 
         /*void CleanDuplicateDisks()
         {
@@ -783,10 +767,10 @@ namespace OMLEngine
         /// </summary>
         /// <param name="info"></param>
         /// <param name="ctxt"></param>
-        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+        /*public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             //Utilities.DebugLine("[Title] Adding Title ("+_name+") to Serialization data");
-            /*info.AddValue("file_location", _fileLocation);
+            info.AddValue("file_location", _fileLocation);
             info.AddValue("disks", _disks);
             info.AddValue("video_format", _videoFormat);
             info.AddValue("transcode_to_extender", _needsTranscode);
@@ -831,45 +815,26 @@ namespace OMLEngine
             info.AddValue("subtitles", _subtitles);
             info.AddValue("video_resolution", _videoResolution);
             info.AddValue("extra_features", _extraFeatures);
-            info.AddValue("watched_count", _watchedCount);*/
-        }
+            info.AddValue("watched_count", _watchedCount);
+        }*/
         #endregion
 
         /// <summary>
-        /// Generic Constructor, inits all the IList items
+        /// Generic Constructor - used to add a new title to the db
         /// </summary>
         public Title() 
         {
             _title = new OMLEngine.Dao.Title();
         }
 
+        /// <summary>
+        /// Constructor to base a title object off a db title object
+        /// </summary>
+        /// <param name="title"></param>
         internal Title(OMLEngine.Dao.Title title)
         {
             _title = title;
-        }
-
-        //public Title(int id)
-        //{
-            //Utilities.DebugLine("[Title] Creating new Empty Title object");
-            /*_actors = new List<Person>();
-            _directors = new List<Person>();
-            _writers = new List<Person>();
-            _producers = new List<string>();
-            _audioTracks = new List<string>();
-            _genres = new List<string>();
-            _itemId = id;*/
-        //}       
-
-        ///// <summary>
-        ///// Add a Person object to the actors list
-        ///// </summary>
-        ///// <param name="actor">Person object to add</param>
-        //public void AddActor(Person actor)
-        //{
-        //    if (actor == null) return;
-        //    if (!_actors.Contains(actor))
-        //        _actors.Add(actor);
-        //}
+        }        
 
         /// <summary>
         /// Add a Person object to the directors list
@@ -1597,7 +1562,7 @@ namespace OMLEngine
 
         // for paths that don't exist, try to guess
         // replace the folder for the path with the folder where oml.xml file was found
-        private static string FixupDiskPath(string path, string omlXmlFile)
+        /*private static string FixupDiskPath(string path, string omlXmlFile)
         {
             path = path.Trim();
             if (File.Exists(path) || Directory.Exists(path))
@@ -1618,11 +1583,11 @@ namespace OMLEngine
             }
 
             return path;
-        }
+        }*/
 
         // for paths that don't exist, try to guess
         // replace the folder for the path with the folder where oml.xml file was found
-        private static string FixupImagePath(string path, string omlXmlFile, string suffix)
+        /*private static string FixupImagePath(string path, string omlXmlFile, string suffix)
         {
             path = path.Trim();
             if (File.Exists(path)) return path;
@@ -1654,7 +1619,7 @@ namespace OMLEngine
 
 
             return path;
-        }
+        }*/
         
 //<?xml version="1.0" encoding="utf-8"?>
 //<OMLTitle xmlns="http://www.openmedialibrary.org/">
@@ -1888,21 +1853,21 @@ namespace OMLEngine
 
         public void CopyMetadata(Title t, bool overWrite)
         {
-            /*_name = CopyStringValue(t._name, _name, overWrite);
+            Name = CopyStringValue(t.Name, Name, overWrite);
             _metadataSourceId = CopyStringValue(t._metadataSourceId, _metadataSourceId, overWrite);
 
-            _parentalRating = CopyStringValue(t._parentalRating, _parentalRating, overWrite);
-            _synopsis = CopyStringValue(t._synopsis, _synopsis, overWrite);
-            _studio = CopyStringValue(t._studio, _studio, overWrite);
-            _countryOfOrigin = CopyStringValue(t._countryOfOrigin, _countryOfOrigin, overWrite);
-            _officialWebsiteURL = CopyStringValue(t._officialWebsiteURL, _officialWebsiteURL, overWrite);
-            _aspectRatio = CopyStringValue(t._aspectRatio, _aspectRatio, overWrite);
-            _videoStandard = CopyStringValue(t._videoStandard, _videoStandard, overWrite);
-            _UPC = CopyStringValue(t._UPC, _UPC, overWrite);
-            _originalName = CopyStringValue(t._originalName, _originalName, overWrite);
-            _sortName = CopyStringValue(t._sortName, _sortName, overWrite);
-            _parentalRatingReason = CopyStringValue(t._parentalRatingReason, _parentalRatingReason, overWrite);
-            _videoDetails = CopyStringValue(t._videoDetails, _videoDetails, overWrite);
+            ParentalRating = CopyStringValue(t.ParentalRating, ParentalRating, overWrite);
+            Synopsis = CopyStringValue(t.Synopsis, Synopsis, overWrite);
+            Studio = CopyStringValue(t.Studio, Studio, overWrite);
+            CountryOfOrigin = CopyStringValue(t.CountryOfOrigin, CountryOfOrigin, overWrite);
+            OfficialWebsiteURL = CopyStringValue(t.OfficialWebsiteURL, OfficialWebsiteURL, overWrite);
+            AspectRatio = CopyStringValue(t.AspectRatio, AspectRatio, overWrite);
+            VideoStandard = CopyStringValue(t.VideoStandard, VideoStandard, overWrite);
+            UPC = CopyStringValue(t.UPC, UPC, overWrite);
+            OriginalName = CopyStringValue(t.OriginalName, OriginalName, overWrite);
+            SortName = CopyStringValue(t.SortName, SortName, overWrite);
+            ParentalRatingReason = CopyStringValue(t.ParentalRatingReason, ParentalRatingReason, overWrite);
+            VideoDetails = CopyStringValue(t.VideoDetails, VideoDetails, overWrite);
             
             if ( t.Runtime > 0) Runtime = t.Runtime;
             if (t.ReleaseDate != null) ReleaseDate = t.ReleaseDate;
@@ -1990,7 +1955,6 @@ namespace OMLEngine
                 }
             }
 
-
             if (t._actingRoles != null && t._actingRoles.Count > 0)
             {
                 if (_actingRoles == null) _actingRoles = new Dictionary<string, string>();
@@ -2016,35 +1980,7 @@ namespace OMLEngine
                         _nonActingRoles.Add(p.Key, p.Value);
                     }
                 }
-            }
-
-            if (t._additionalFields != null && t._additionalFields.Count > 0)
-            {
-                if (_additionalFields == null) _additionalFields = new Dictionary<string, string>();
-                if (overWrite || _additionalFields.Count == 0)
-                {
-
-                    _additionalFields.Clear();
-                    foreach (KeyValuePair<string, string> p in t._additionalFields)
-                    {
-                        _additionalFields.Add(p.Key, p.Value);
-                    }
-                }
-            }
-
-            if (t._photos != null && t._photos.Count > 0)
-            {
-                if (_photos == null) _photos = new List<string>();
-                if (overWrite || _photos.Count == 0)
-                {
-
-                    _photos.Clear();
-                    foreach (string p in t._photos)
-                    {
-                        _photos.Add(p);
-                    }
-                }
-            }
+            }            
 
             if (t._trailers != null && t._trailers.Count > 0)
             {
@@ -2094,11 +2030,10 @@ namespace OMLEngine
                 {
                     CopyFrontCoverFromFile(t.FrontCoverPath, true);
                 }
-            }
-        
+            }        
         }
 
-        public bool SaveFrontCoverToFile(string dest)
+        /*public bool SaveFrontCoverToFile(string dest)
         {
             try
             {
@@ -2122,11 +2057,10 @@ namespace OMLEngine
             }
             catch
             {
-                return false;
-            }*/
-        }
+                return false;            
+        }*/
 
-        public bool SaveBackCoverToFile(string dest)
+        /*public bool SaveBackCoverToFile(string dest)
         {
             try
             {
@@ -2151,7 +2085,7 @@ namespace OMLEngine
             {
                 return false;
             }
-        }
+        }*/
 
 
         // copy front cover image and set the menu cover too (resized version)

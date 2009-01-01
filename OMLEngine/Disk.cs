@@ -7,13 +7,14 @@ using OMLGetDVDInfo;
 
 namespace OMLEngine
 {
-    [Serializable]
-    public class Disk : ISerializable
+    public class Disk
     {
-        public string Name { get; set; }
-        public string Path { get; set; }
-        public VideoFormat Format { get; set; }
-        public string ExtraOptions { get; set; }
+        private Dao.Disk _disk;
+
+        public string Name { get { return _disk.Name; } set { _disk.Name = value; } }
+        public string Path { get { return _disk.Path; } set { _disk.Path = value; } }
+        public VideoFormat Format { get { return (VideoFormat)_disk.VideoFormat; } set { _disk.VideoFormat = (byte)value; } }
+        public string ExtraOptions { get { return _disk.ExtraOptions; } set { _disk.ExtraOptions = value; } }
 
         public override bool Equals(object obj)
         {
@@ -76,10 +77,17 @@ namespace OMLEngine
 
         public Disk(string name, string path, VideoFormat format, string extraOptions)
         {
-            Name = name;
-            Path = path;
-            Format = format;
-            ExtraOptions = string.IsNullOrEmpty(extraOptions) ? null : extraOptions;
+            _disk = new OMLEngine.Dao.Disk();
+
+            this.Name = name;
+            this.Path = path;
+            this.Format = format;
+            this.ExtraOptions = string.IsNullOrEmpty(extraOptions) ? null : extraOptions;
+        }
+
+        internal Disk(Dao.Disk disk)
+        {
+            _disk = disk;
         }
 
         public override string ToString()
@@ -87,7 +95,7 @@ namespace OMLEngine
             return Name + ", " + Format + ", @ " + Path;
         }
 
-        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+        /*public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             info.AddValue("name", Name);
             info.AddValue("path", Path);
@@ -103,7 +111,7 @@ namespace OMLEngine
             Format = GetSerializedVideoFormat(info, "format");
             if (info.MemberCount > 3)
                 ExtraOptions = info.GetString("extraOptions");
-        }
+        }*/
 
         static string sBasePaths = System.Configuration.ConfigurationSettings.AppSettings["BasePaths"];
         void FindPath()
@@ -145,7 +153,7 @@ namespace OMLEngine
             Utilities.DebugLine("Disk.FindPath({0}), no new path match found in BasePaths='{1}'", Path, sBasePaths);
         }
 
-        static VideoFormat GetSerializedVideoFormat(SerializationInfo info, string id)
+        /*static VideoFormat GetSerializedVideoFormat(SerializationInfo info, string id)
         {
             try
             {
@@ -155,7 +163,7 @@ namespace OMLEngine
             {
                 return VideoFormat.DVD;
             }
-        }
+        }*/
 
     }
 }

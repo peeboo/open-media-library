@@ -324,8 +324,8 @@ namespace Library
         }
         public void gotoMenu()
         {
-            TitleCollection tc = OMLApplication.Current.ReloadTitleCollection();
-            OMLApplication.Current.GoToMenu(new MovieGallery(tc, Filter.Home));
+            //TitleCollection tc = OMLApplication.Current.ReloadTitleCollection();
+            OMLApplication.Current.GoToMenu(new MovieGallery());
         }
         public void AddAllCurrentTitles()
         {
