@@ -81,5 +81,17 @@ namespace OMLDatabaseEditor.Properties {
                 this["gsValidGenres"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string gsTags {
+            get {
+                return ((string)(this["gsTags"]));
+            }
+            set {
+                this["gsTags"] = value;
+            }
+        }
     }
 }
