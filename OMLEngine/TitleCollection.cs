@@ -349,36 +349,56 @@ namespace OMLEngine
 
         public List<string> GetAllActors()
         {
-            List<string> actors = new List<string>();
-            foreach (Title title in _list)
-            {
-                actors = actors.Union<string>(title.ActingRoles.Keys).ToList<string>();
-            }
+            List<string> actors = (from title in _list 
+                                   from actor in title.ActingRoles 
+                                   orderby actor.Key ascending
+                                   select actor.Key).Distinct().ToList<string>();
             return actors;
         }
 
         public List<string> GetAllDirectors()
         {
-            List<string> directors = new List<string>();
-            foreach (Title title in _list)
-            {
-                foreach (Person person in title.Directors)
-                {
-                    if (!directors.Contains(person.full_name))
-                        directors.Add(person.full_name);
-                }
-            }
+            List<string> directors = (from title in _list
+                                      from director in title.Directors
+                                      orderby director.full_name
+                                      select director.full_name).Distinct().ToList<string>();
             return directors;
         }
 
         public List<string> GetAllGenres()
         {
-            List<string> genres = new List<string>();
-            foreach (Title title in _list)
-            {
-                genres = genres.Union<string>(title.Genres).ToList<string>();
-            }
+            List<string> genres = (from title in _list
+                                   from genre in title.Genres
+                                   orderby genre ascending
+                                   select genre).Distinct().ToList<string>();
             return genres;
+        }
+
+        public List<string> GetAllProducers()
+        {
+            List<string> producers = (from title in _list
+                                      from producer in title.Producers
+                                      orderby producer ascending
+                                      select producer).Distinct().ToList<string>();
+            return producers;
+        }
+
+        public List<string> GetAllTags()
+        {
+            List<string> tags = (from title in _list
+                                 from tag in title.Tags
+                                 orderby tag ascending
+                                 select tag).Distinct().ToList<string>();
+            return tags;
+        }
+
+        public List<string> GetAllWriters()
+        {
+            List<string> writers = (from title in _list
+                                    from writer in title.Writers
+                                    orderby writer.full_name ascending
+                                    select writer.full_name).Distinct().ToList<string>();
+            return writers;
         }
 
         public List<Title> FindByGenre(string genre)
