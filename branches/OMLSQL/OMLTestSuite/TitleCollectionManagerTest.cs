@@ -113,9 +113,10 @@ namespace OMLTestSuite
                                         items.Count()));
         }
 
+        [Test]
         public void TEST_GET_ALL_MOVIES_FOR_ACTOR_WITH_GENRE()
         {
-            Console.WriteLine("Starting to get all Tim Burton movies");
+            Console.WriteLine("Starting to get all Tim Burton movies that are dramas");
             DateTime start = DateTime.Now;
 
             List<TitleFilter> filter = new List<TitleFilter>();
@@ -126,6 +127,45 @@ namespace OMLTestSuite
 
             foreach (Title title in items)
                 Console.WriteLine(title.Name);
+
+            Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
+                                        (DateTime.Now - start).TotalMilliseconds.ToString(),
+                                        items.Count()));
+        }
+
+        [Test]
+        public void TEST_GET_ALL_GENRES_GIVEN_FILTER()
+        {
+            Console.WriteLine("Starting to get all Tim Burton movie genres");
+            DateTime start = DateTime.Now;
+
+            List<TitleFilter> filter = new List<TitleFilter>();
+            filter.Add(new TitleFilter(TitleFilterType.Person, "Tim Burton"));
+
+            IEnumerable<FilteredCollection> items = TitleCollectionManager.GetAllGenres(filter);
+
+            foreach (FilteredCollection item in items)
+                Console.WriteLine(item.Name + " " + item.Count);
+
+            Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
+                                        (DateTime.Now - start).TotalMilliseconds.ToString(),
+                                        items.Count()));
+        }
+
+        [Test]
+        public void TEST_GET_ACTORS_UNWATCHED()
+        {
+            Console.WriteLine("Starting to get all unwatched Harrison Ford Movies");
+            DateTime start = DateTime.Now;
+
+            List<TitleFilter> filter = new List<TitleFilter>();
+            filter.Add(new TitleFilter(TitleFilterType.Person, "Harrison Ford (1942)"));
+            filter.Add(new TitleFilter(TitleFilterType.Unwatched, null));
+
+            IEnumerable<Title> items = TitleCollectionManager.GetFilteredTitles(filter);
+
+            foreach (Title item in items)
+                Console.WriteLine(item.Name);
 
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),

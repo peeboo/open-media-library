@@ -9,6 +9,7 @@ using System.Diagnostics;
 using OMLEngine;
 using System.Threading;
 using System.Linq;
+using System.Text;
 
 namespace Library
 {
@@ -19,6 +20,7 @@ namespace Library
         #region Public Properties        
 
         private List<LabeledList> labeledLists = null;
+        private List<TitleFilter> filters = null;   
 
         public List<LabeledList> LabeledLists
         {
@@ -34,23 +36,43 @@ namespace Library
                         return new List<LabeledList>(0);
                     }
 
-                    labeledLists = new List<LabeledList>(alphaFilter.ItemMovieRelation.Keys.Count);                                        
-                    List<string> keys = new List<string>(alphaFilter.ItemMovieRelation.Keys.Count);
-                    
-                    foreach (string key in alphaFilter.ItemMovieRelation.Keys)
-                        keys.Add(key);
+                    SetupAlphaCharacters();
 
-                    keys.Sort();
+                    Dictionary<char, List<Title>> alphaTitles = new Dictionary<char, List<Title>>();
 
-                    foreach (string filterKey in keys)                    
+                    // get all the valid titles and iterate through them - this is much
+                    // faster then doing 26 queries to sql
+                    IEnumerable<Title> allTitles = TitleCollectionManager.GetFilteredTitles(filters);
+
+                    // build the list of valid alpha characters
+                    foreach (Title title in allTitles)
                     {
-                        MovieGallery gallery = alphaFilter.CreateGallery(filterKey);
-                        if (gallery != null &&
-                            gallery.Movies != null &&
-                            gallery.Movies.Count != 0)
+                        List<Title> alphaTitle;
+
+                        char firstChar = title.Name.ToUpperInvariant()[0];
+
+                        if (((int)firstChar) < 65 || ((int)firstChar) > 90)
+                            firstChar = '#';
+
+                        if (alphaTitles.TryGetValue(firstChar, out alphaTitle))
                         {
-                            labeledLists.Add(new LabeledList(filterKey, gallery.Movies));
-                        }                        
+                            alphaTitle.Add(title);
+                        }
+                        else
+                        {
+                            alphaTitles.Add(firstChar, new List<Title>() { title });
+                        }
+                    }
+
+                    labeledLists = new List<LabeledList>(alphaTitles.Keys.Count);
+
+                    // based off the list create a bunch of gallery objects
+                    foreach (string alpha in alphaCharacters)
+                    {
+                        List<Title> alphaTitle;
+
+                        if (alphaTitles.TryGetValue(alpha[0], out alphaTitle))
+                            labeledLists.Add(new LabeledList(alpha, new MovieGallery(alphaTitle, string.Empty).Movies));
                     }
 
                     int index = 0;
@@ -307,6 +329,39 @@ namespace Library
             _title = title;
             OMLApplication.DebugLine("[MovieGallery] MovieGallery: Title [{0}]", Title);
             Initialize(titles);
+        }        
+     
+        public MovieGallery(List<TitleFilter> filters)
+        {
+            this.filters = filters;
+
+            if (filters != null && filters.Count != 0)
+            {
+                StringBuilder sb = new StringBuilder(filters.Count * 10);
+                sb.Append("OMLHome");
+
+                foreach (TitleFilter filter in filters)
+                {
+                    sb.Append(" > ");
+                    if (!string.IsNullOrEmpty(filter.FilterText))
+                        sb.Append(filter.FilterText);
+                    else
+                        sb.Append(filter.FilterType.ToString());                                                
+                }
+
+                _title = sb.ToString();
+            }
+            else
+            {
+                _title = "OMLHome";
+            }
+
+            Initialize(TitleCollectionManager.GetFilteredTitles(this.filters));
+        }
+
+        public MovieGallery(TitleFilter filter)
+            : this(new List<TitleFilter>(){filter})
+        {
         }
 
         private void CreateCategories()
@@ -318,8 +373,9 @@ namespace Library
             _categories.Add(new FilterCommand(Filters[Filter.Settings]));
 
             // add unwatched filter at the top            
-            if ( Properties.Settings.Default.ShowFilterUnwatched )
-                _categories.Add(new UnwatchedCommand(Filter.Unwatched));
+            if (Properties.Settings.Default.ShowFilterUnwatched)
+                //_categories.Add(new UnwatchedCommand(Filter.Unwatched));
+                _categories.Add(new FilterCommand(Filters[Filter.Unwatched])); 
 
             System.Collections.Specialized.StringCollection filtersToShow =
                 Properties.Settings.Default.MainFiltersToShow;
@@ -366,8 +422,9 @@ namespace Library
              */
 
             _filters.Add(Filter.Settings, new Filter(Filter.Settings, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));
-            if (Properties.Settings.Default.ShowFilterUnwatched) _filters.Add(Filter.Unwatched, new Filter(Filter.Unwatched, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
+            if (Properties.Settings.Default.ShowFilterUnwatched) _filters.Add(Filter.Unwatched, new Filter(Filter.Unwatched, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort, TitleFilterType.Unwatched, filters));
             if (Properties.Settings.Default.MovieView == GalleryView.CoverArtWithAlpha) _filters.Add(Filter.Alpha, new Filter(Filter.Alpha, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
+            if (Properties.Settings.Default.ShowFilterGenres) _filters.Add(Filter.Genres, new Filter(Filter.Genres, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.GenreSort, TitleFilterType.Genre, filters));
             
             _jumpInListText = new EditableText(this);
             _jumpInListText.Value = String.Empty;
@@ -559,6 +616,7 @@ namespace Library
             // update the filters
             Title title = movie.TitleObject;
 
+            /*
             if (Filters.ContainsKey(Filter.Director) )
             {
                 // add the movie to the directors filter
@@ -638,6 +696,12 @@ namespace Library
             if (Filters.ContainsKey(Filter.Runtime))
             {
                 AddRuntimeFilter(movie);
+            }            
+
+            if (Filters.ContainsKey(Filter.Unwatched))
+            {
+                if( title.WatchedCount == 0 )
+                    Filters[Filter.Unwatched].AddMovie(Filter.Unwatched, movie);
             }
 
             if (Filters.ContainsKey(Filter.Alpha))
@@ -648,13 +712,7 @@ namespace Library
                     firstChar = "#";
 
                 Filters[Filter.Alpha].AddMovie(firstChar, movie);
-            }
-
-            if (Filters.ContainsKey(Filter.Unwatched))
-            {
-                if( title.WatchedCount == 0 )
-                    Filters[Filter.Unwatched].AddMovie(Filter.Unwatched, movie);
-            }
+            }*/
         }
 
         private void AddDateAddedFilter( MovieItem movie )
@@ -812,7 +870,12 @@ namespace Library
 
         private void SetupAlphaCharacters()
         {
-            alphaCharacters = new List<string>(26);
+            if (alphaCharacters != null)
+                return;
+
+            alphaCharacters = new List<string>(27);
+
+            alphaCharacters.Add("#");
 
             for (int x = 65; x < 91; x++)
                 alphaCharacters.Add(((char)x).ToString());
@@ -875,30 +938,5 @@ namespace Library
                 OMLApplication.Current.GoToMenu(new MovieGallery(TitleCollectionManager.GetAllTitles(), Filter.Home));
             });
         }
-    }
-
-    public class UnwatchedCommand : FilterCommand
-    {
-        public UnwatchedCommand(string name)
-        {
-            FilterName = name;
-            Invoked += GoHome;
-        }
-
-        public override string ToString()
-        {
-            return FilterName;
-        }
-
-        public void GoHome(object sender, EventArgs args)
-        {
-            OMLApplication.ExecuteSafe(delegate
-            {
-                Trace.TraceInformation("MovieGallery.GoHome");
-                
-                // todo : solomon : testing creating new filters on the fly
-                OMLApplication.Current.GoToMenu(new MovieGallery(TitleCollectionManager.GetFilteredTitles(TitleFilterType.Watched, null), "OML Home > Unwatched"));
-            });
-        }
-    }
+    }        
 }

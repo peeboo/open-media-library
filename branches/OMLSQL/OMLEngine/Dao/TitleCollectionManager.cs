@@ -133,9 +133,42 @@ namespace OMLEngine
         /// <param name="filters"></param>
         /// <returns></returns>
         public static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters)
+        {            
+            return (filters == null || filters.Count == 0 ) 
+                    ? GetAllTitles()
+                    : ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetFilteredTitles(filters));
+        }               
+
+        /// <summary>
+        /// Returns all the genres and counts given a filter
+        /// todo : solomon : even though this method returns pretty quick it could probably be done
+        /// more effeciently
+        /// </summary>
+        /// <param name="givenFilter"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllGenres(List<TitleFilter> givenFilter)
         {
-            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetFilteredTitles(filters));
-        }        
+            if (givenFilter == null)
+            {
+                foreach (FilteredCollection item in GetAllGenres())
+                    yield return item;
+            }
+            else
+            {
+                IQueryable<Dao.Title> titles = (IQueryable<Dao.Title>)Dao.TitleCollectionDao.GetFilteredTitles(givenFilter);
+
+                IEnumerable<Dao.GenreMetaData> genres = Dao.TitleCollectionDao.GetAllGenres(titles);
+
+                foreach (Dao.GenreMetaData genre in genres)
+                {
+                    int count = Dao.TitleCollectionDao.GetItemsPerGenre(titles, genre);
+                    if (count == 0)
+                        continue;
+
+                    yield return new FilteredCollection() { Name = genre.Name, Count = count };
+                }
+            }
+        }
 
         /// <summary>
         /// Gets all the genres and their item count
