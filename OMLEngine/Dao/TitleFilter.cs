@@ -15,7 +15,15 @@ namespace OMLEngine
         Tag,
         Alpha,
         ParentalRating,
-        Runtime
+        Runtime,
+
+        /* not implemented yet*/
+        Director,
+        Actor,
+        Country,
+        UserRating,
+        Year,
+        DateAdded
     }
 
     public class TitleFilter

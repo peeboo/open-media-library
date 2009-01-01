@@ -100,9 +100,15 @@ namespace OMLEngine.Dao
                         break;
 
                     case TitleFilterType.Unwatched:
+
+                        bool unwatchedState;
+
+                        if (!bool.TryParse(filter.FilterText, out unwatchedState))
+                            unwatchedState = false;
+
                         results = ApplyWatchedFilter(
                                         lastQuery,
-                                        (string.IsNullOrEmpty(filter.FilterText) ? false : bool.Parse(filter.FilterText)));
+                                        unwatchedState);
                         break;
 
                     case TitleFilterType.Tag:

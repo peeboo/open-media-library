@@ -160,8 +160,6 @@ namespace Library
             return;
 #endif
 
-            IEnumerable<Title> allTitles = TitleCollectionManager.GetAllTitles();
-
             switch (context)
             {
                 case "Menu":
@@ -169,27 +167,32 @@ namespace Library
                     if (Properties.Settings.Default.StartPage == Filter.Home)
                     {
                         OMLApplication.DebugLine("[OMLApplication] going to Menu Page");
-                        GoToMenu(new MovieGallery(allTitles, Filter.Home));
+                        GoToMenu(new MovieGallery());
                     }
                     else
-                    {
+                    {                                                
                         // see if they've selected a subfilter
-                        if (!string.IsNullOrEmpty(Properties.Settings.Default.StartPageSubFilter))
+                        // the unwatched is a special case until we add a user setting to determine the subfilter
+                        if (!string.IsNullOrEmpty(Properties.Settings.Default.StartPageSubFilter)
+                            || Properties.Settings.Default.StartPage == Filter.Unwatched)
                         {
-                            GoToSelectionList(new MovieGallery(allTitles, Filter.Home), 
-                                                Properties.Settings.Default.StartPage,
-                                                Properties.Settings.Default.StartPageSubFilter);
+                            // go to the subfilter
+                            GoToMenu(
+                                new MovieGallery(
+                                    new TitleFilter(Filter.FilterStringToTitleFilter(Properties.Settings.Default.StartPage),
+                                        Properties.Settings.Default.StartPageSubFilter)));
                         }
                         else
-                        {                                              
-                            // assume it's a filter page (Genre, Actor, etc)
-                            GoToSelectionList(new MovieGallery(allTitles, Filter.Home), Properties.Settings.Default.StartPage);
+                        {
+                            // go to the selection list
+                            GoToSelectionList(new MovieGallery(),
+                                                Properties.Settings.Default.StartPage);               
                         }
                     }
                     return;
                 case "Settings":
                     OMLApplication.DebugLine("[OMLApplication] going to Settings Page");
-                    GoToSettingsPage(new MovieGallery(allTitles, Filter.Settings));
+                    GoToSettingsPage(new MovieGallery(TitleCollectionManager.GetAllTitles(), Filter.Settings));
                     return;
                 case "Trailers":
                     OMLApplication.DebugLine("[OMLApplication] going to Trailers Page");
@@ -197,11 +200,11 @@ namespace Library
                     return;
                 case "About":
                     OMLApplication.DebugLine("[OMLApplication] going to About Page");
-                    GoToAboutPage(new MovieGallery(allTitles, Filter.About));
+                    GoToAboutPage(new MovieGallery(TitleCollectionManager.GetAllTitles(), Filter.About));
                     return;
                 default:
                     OMLApplication.DebugLine("[OMLApplication] going to Default (Menu) Page");
-                    GoToMenu(new MovieGallery(allTitles, Filter.Home));
+                    GoToMenu(new MovieGallery());
                     return;
             }
         }
@@ -296,18 +299,8 @@ namespace Library
         {
             Filter filter = null;
 
-            // if the filter doesn't exist we'll need to create it            
-            // todo : solomon : i'm only going to do this for the perticipant filter now 
-            // but it should be considered for everything
-            if (!gallery.Filters.TryGetValue(filterName, out filter))
-            {
-                filter = gallery.CreateFilter(filterName);
-            }
-
-            // if there's only one item in the subfilter - just go there
-            // the ALL filter is always first so ignore that
-            if (filter != null && filter.Items.Count <= 2 && filter.Items.Count > 0)
-                subFilter = filter.Items[filter.Items.Count - 1].Name;
+            // see if the filter has been created
+            gallery.Filters.TryGetValue(filterName, out filter);
 
             // see if we're a top level filter
             if (string.IsNullOrEmpty(subFilter) &&
