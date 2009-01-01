@@ -7,11 +7,13 @@ namespace OMLEngine
 {
     public enum TitleFilterType
     {
+        All,
         Person,
         Genre,
         VideoFormat,
-        Watched,
-        Tag
+        Unwatched,
+        Tag,
+        Alpha
     }
 
     public class TitleFilter
@@ -26,6 +28,16 @@ namespace OMLEngine
         {
             this.filterType = filterType;
             this.filterText = filterText;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (obj == null || GetType() != obj.GetType()) return false;
+
+            TitleFilter compareTo = (TitleFilter)obj;
+
+            return (this.filterType == compareTo.filterType 
+                        && this.filterText == compareTo.filterText);
         }
     }
 }

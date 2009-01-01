@@ -86,7 +86,7 @@ namespace OMLEngine.Dao
                         results = ApplyFormatFilter(lastQuery, (VideoFormat)Enum.Parse(typeof(VideoFormat), filter.FilterText));
                         break;
 
-                    case TitleFilterType.Watched:
+                    case TitleFilterType.Unwatched:
                         results = ApplyWatchedFilter(
                                         lastQuery,
                                         (string.IsNullOrEmpty(filter.FilterText) ? false : bool.Parse(filter.FilterText)));
@@ -95,12 +95,35 @@ namespace OMLEngine.Dao
                     case TitleFilterType.Tag:
                         results = ApplyTagFilter(lastQuery, filter.FilterText);
                         break;
+
+                    case TitleFilterType.Alpha:
+                        results = ApplyAlphaFilter(lastQuery, filter.FilterText);
+                        break;
                 }
             }
 
             return results;
         }
 
+        /// <summary>
+        /// Returns all the titles that start with the specific string
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="startCharacter"></param>
+        /// <returns></returns>
+        private static IQueryable<Title> ApplyAlphaFilter(IQueryable<Title> titles, string startCharacter)
+        {
+            return from t in titles
+                   where t.Name.StartsWith(startCharacter)
+                   select t;
+        }
+
+        /// <summary>
+        /// Returns all the titles that start with the given tag
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="tagName"></param>
+        /// <returns></returns>
         private static IQueryable<Title> ApplyTagFilter(IQueryable<Title> titles, string tagName)
         {
             return (from t in titles
@@ -119,13 +142,13 @@ namespace OMLEngine.Dao
         {
             if (watched)
             {
-                return from t in DBContext.Instance.Titles
+                return from t in titles
                        where t.WatchedCount != 0 && t.WatchedCount != null
                        select t;
             }
             else
             {
-                return from t in DBContext.Instance.Titles
+                return from t in titles
                        where t.WatchedCount == 0 || t.WatchedCount == null
                        select t;
             }
@@ -196,6 +219,18 @@ namespace OMLEngine.Dao
         }
 
         /// <summary>
+        /// Returns all the genres available given the title list
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        public static IEnumerable<GenreMetaData> GetAllGenres(IQueryable<Title> titles)
+        {
+            return (from t in titles
+                    from g in t.Genres
+                    select g.MetaData).Distinct();
+        }
+
+        /// <summary>
         /// Gets all the people
         /// </summary>
         /// <returns></returns>
@@ -203,6 +238,20 @@ namespace OMLEngine.Dao
         {
             return from t in DBContext.Instance.BioDatas
                    select t;
+        }
+
+        /// <summary>
+        /// Returns the items per genre given the title list
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="genre"></param>
+        /// <returns></returns>
+        public static int GetItemsPerGenre(IQueryable<Title> titles, GenreMetaData genre)
+        {
+            return (from g in titles
+                    from m in g.Genres
+                    where m.GenreMetaDataId == genre.Id
+                    select g).Count();
         }
 
         /// <summary>

@@ -77,6 +77,9 @@ namespace Library
 
         public const string AllItems = " All ";
 
+        TitleFilterType filterType = TitleFilterType.All;
+        List<TitleFilter> existingFilters;
+
         public string Name
         {
             get { return _name; }
@@ -85,8 +88,25 @@ namespace Library
 
         public List<GalleryItem> Items
         {
-            get { return _items; }
-            set { _items = value; }
+            get
+            {
+                //if (_items == null)
+                //{
+                List<GalleryItem> items = new List<GalleryItem>();
+                items.Add(new GalleryItem(_gallery, AllItems, AllItems, this));
+
+                switch (filterType)
+                {
+                    case TitleFilterType.Genre:
+                        IEnumerable<FilteredCollection> genres = TitleCollectionManager.GetAllGenres(existingFilters);
+
+                        foreach (FilteredCollection genre in genres)
+                            items.Add(new GalleryItem(_gallery, genre.Name, genre.Name, this, genre.Count));
+                        break;
+                }
+                //}
+                return items;
+            }
         }
 
         public Dictionary<string, VirtualList> ItemMovieRelation
@@ -101,6 +121,13 @@ namespace Library
             set { _galleryView = value; }
         }
 
+        public Filter(string name, MovieGallery gallery, string galleryView, bool bSort, string sortFunction, TitleFilterType filterType, List<TitleFilter> existingFilters)
+            : this(name, gallery, galleryView, bSort, sortFunction)
+        {
+            this.filterType = filterType;
+            this.existingFilters = existingFilters;
+        }
+
         public Filter(string name, MovieGallery gallery, string galleryView, bool bSort, string sortFunction)
         {
             _allowSort = bSort;
@@ -109,7 +136,7 @@ namespace Library
             _galleryView = galleryView;
             _currentSort = SortByNameAscending;
             Initialize(sortFunction);
-            AddItem(AllItems);
+            //AddItem(AllItems);
         }
 
         private void Initialize(string sortFunction)
@@ -131,12 +158,12 @@ namespace Library
         /// <param name="item">The item.</param>
         public void AddItem(string item)
         {
-            if (!_itemMovieRelation.ContainsKey(item))
+            /*if (!_itemMovieRelation.ContainsKey(item))
             {
                 VirtualList movies = new VirtualList(_gallery, null);
                 _itemMovieRelation.Add(item, movies);
                 _items.Add(new GalleryItem(_gallery, item, item, this));
-            }
+            }*/
         }
 
         /// <summary>
@@ -158,7 +185,7 @@ namespace Library
         /// adding the movie to see it already exists</param>
         public void AddMovie(string item, MovieItem movie, bool allowDuplicates)
         {
-            if (_itemMovieRelation.ContainsKey(item))
+            /*if (_itemMovieRelation.ContainsKey(item))
             {
                 VirtualList movies = (VirtualList)_itemMovieRelation[item];
                                 
@@ -172,32 +199,46 @@ namespace Library
                 movies.Add(movie);
                 _itemMovieRelation.Add(item, movies);
                 _items.Add(new GalleryItem(_gallery, item, item, this));
-            }
+            }*/
         }
 
         public void Sort()
         {
-            if (_allowSort && _currentSort != null) _items.Sort(_currentSort);
+            //if (_allowSort && _currentSort != null) _items.Sort(_currentSort);
         }
 
         public MovieGallery CreateGallery(string filter)
         {
-            Trace.TraceInformation("MovieGallery.CreateFilteredCollection");
-            MovieGallery movies = new MovieGallery(_gallery.Title + " > " + filter);
-            if (_itemMovieRelation.ContainsKey(filter))
+            Trace.TraceInformation("MovieGallery.CreateFilteredCollection");      
+                  
+            List<TitleFilter> filters;
+
+            if (existingFilters != null)
+                filters = new List<TitleFilter>(existingFilters);
+            else
+                filters = new List<TitleFilter>(1);
+
+            TitleFilter newFilter = new TitleFilter(filterType, filter);
+
+            if (!filters.Contains(newFilter))
+                filters.Add(newFilter);
+
+            MovieGallery movies = new MovieGallery(filters);
+            //if (_itemMovieRelation.ContainsKey(filter))
+            //{
+
+            /*foreach (MovieItem movie in _itemMovieRelation[filter])
             {
-                foreach (MovieItem movie in _itemMovieRelation[filter])
-                {
-                    MovieItem newMovie = (MovieItem)movie.Clone(movies);
-                    movies.AddMovie(newMovie);
-                }
-            }
+                MovieItem newMovie = (MovieItem)movie.Clone(movies);
+                movies.AddMovie(newMovie);
+            }*/
+            //}
             movies.SortMovies();
             //Trace.TraceInformation("MovieGallery.CreateFilteredCollection: done: directors {0} actors {1} genres {2} movies {3}", movies._directors.Count, movies._actors.Count, movies._genres.Count, movies._movies.Count);
-            foreach (KeyValuePair<string, Filter> kvp in movies.Filters)
+            /*foreach (KeyValuePair<string, Filter> kvp in movies.Filters)
             {
                 kvp.Value.Sort();
-            }
+            }*/
             return movies;
         }
 
@@ -215,6 +256,18 @@ namespace Library
                 else if (cmd.Filter.Name == Filter.Trailers)
                 {
                     OMLApplication.Current.GoToTrailersPage();
+                }
+                else if (cmd.Filter.Name == Filter.Unwatched)
+                {
+                    if ( existingFilters == null )
+                        existingFilters = new List<TitleFilter>(1);
+
+                    TitleFilter newFilter = new TitleFilter(TitleFilterType.Unwatched, null);
+
+                    if (!existingFilters.Contains(newFilter))
+                        existingFilters.Add(newFilter);
+
+                    OMLApplication.Current.GoToMenu(new MovieGallery(existingFilters));
                 }
                 else
                 {
@@ -259,7 +312,6 @@ namespace Library
         private string _name;
 
         private Dictionary<string, VirtualList> _itemMovieRelation = new Dictionary<string, VirtualList>();
-        private List<GalleryItem> _items = new List<GalleryItem>();
         private string _galleryView;
         private Comparison<GalleryItem> _currentSort;
         private Dictionary<string, Comparison<GalleryItem>> _sortFunctionLookup = new Dictionary<string, Comparison<GalleryItem>>();

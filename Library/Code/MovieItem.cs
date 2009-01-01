@@ -85,6 +85,12 @@ namespace Library
         public Command QuickPlay
         {
             get { return _quickPlay; }
+        }        
+
+        public GalleryItem(MovieGallery owner, string name, string caption, Filter browseCategory, int forcedCount)
+            : this(owner, name, caption, browseCategory)
+        {
+            _forcedCount = forcedCount;
         }
 
         /// <summary>
@@ -156,7 +162,7 @@ namespace Library
         {
             get 
             {
-                int itemCount = ItemCount;
+                int itemCount = ( _forcedCount != -1 ) ? _forcedCount : ItemCount;
                 if (itemCount > 0 )
                 {
                     return Name + " (" + Convert.ToString( itemCount ) + ")";
@@ -260,6 +266,7 @@ namespace Library
         private MovieGallery _owner;
         private Filter _category;
         private Command _quickPlay;
+        private int _forcedCount = -1;
     }
 
     /// <summary>

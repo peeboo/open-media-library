@@ -449,10 +449,9 @@ namespace Library
             OMLApplication.Current.GoToSelectionList(gallery, Filter.Participant, name);*/
 
             // todo : solomon : testing creating new filters on the fly
-            OMLApplication.Current.GoToMenu(new MovieGallery(TitleCollectionManager.GetFilteredTitles(TitleFilterType.Person, name), "OML Home > " + name));
+            OMLApplication.Current.GoToMenu(new MovieGallery(new TitleFilter(TitleFilterType.Person, name)));
         }        
     }
-
 
     // since for some reason Media Center's MCML engine will not load the OMLEngine Assembly 
     // This prevents me from casting the Disks Repeater items to Disk type.
