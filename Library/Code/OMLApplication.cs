@@ -13,7 +13,7 @@ using OMLEngine;
 using System;
 
 namespace Library
-{
+{    
     /// <summary>
     /// Starting point for the OML
     /// </summary>
@@ -173,7 +173,7 @@ namespace Library
                     if (Properties.Settings.Default.StartPage == Filter.Home)
                     {
                         OMLApplication.DebugLine("[OMLApplication] going to Menu Page");
-                        GoToMenu(new MovieGallery(_titles, Filter.Home));
+                        GoToMenu(new MovieGallery(TitleCollectionManager.GetAllTitles(), Filter.Home));
                     }
                     else
                     {
@@ -266,7 +266,7 @@ namespace Library
             DebugLine("[OMLApplication] GotoAboutPage()");
             if (_session != null)
                 _session.GoToPage("resx://Library/Library.Resources/About", CreateProperties(true, false, gallery));
-        }
+        }        
 
         public void GoToMenu(MovieGallery gallery)
         {

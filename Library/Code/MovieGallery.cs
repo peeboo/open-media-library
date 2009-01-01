@@ -302,11 +302,11 @@ namespace Library
             Initialize(null);
         }
 
-        public MovieGallery(TitleCollection col, string title)
+        public MovieGallery(IEnumerable<Title> titles, string title)
         {
             _title = title;
             OMLApplication.DebugLine("[MovieGallery] MovieGallery: Title [{0}]", Title);
-            Initialize(col);
+            Initialize(titles);
         }
 
         private void CreateCategories()
@@ -334,7 +334,7 @@ namespace Library
             _categoryChoice = new Choice(this, "Categories", _categories);
         }        
 
-        private void Initialize(TitleCollection col)
+        private void Initialize(IEnumerable<Title> titles)
         {
             DateTime start = DateTime.Now;
             
@@ -386,7 +386,7 @@ namespace Library
 
             SetupAlphaCharacters();
 
-            LoadMovies(col);
+            LoadMovies(titles);
             OMLApplication.DebugLine("[MovieGallery] Initialize: time: {0}, items: {1}", DateTime.Now - start, this._movies.Count);
         }
 
@@ -741,15 +741,15 @@ namespace Library
             }
         }
 
-        private void LoadMovies(TitleCollection col)
+        private void LoadMovies(IEnumerable<Title> titles)
         {
             _movies = new List<MovieItem>();
 
-            if (col != null)
+            if (titles != null)
             {
                 OMLApplication.DebugLine("[MovieGallery] LoadMovies: have TitleCollection");
 
-                foreach (Title title in col)
+                foreach (Title title in titles)
                 {
                     MovieItem movie = new MovieItem(title, this);
                     AddMovie(movie);
@@ -871,8 +871,8 @@ namespace Library
         {
             OMLApplication.ExecuteSafe(delegate
             {
-                Trace.TraceInformation("MovieGallery.GoHome");                
-                OMLApplication.Current.GoToMenu(new MovieGallery(OMLApplication.Current.Titles, Filter.Home));
+                Trace.TraceInformation("MovieGallery.GoHome");
+                OMLApplication.Current.GoToMenu(new MovieGallery(TitleCollectionManager.GetAllTitles(), Filter.Home));
             });
         }
     }
@@ -897,8 +897,7 @@ namespace Library
                 Trace.TraceInformation("MovieGallery.GoHome");
                 
                 // todo : solomon : testing creating new filters on the fly
-                TitleCollection collection = new TitleCollection(TitleCollectionManager.GetUnwatchedTitles());
-                OMLApplication.Current.GoToMenu(new MovieGallery(collection, "OML Home > Unwatched"));
+                OMLApplication.Current.GoToMenu(new MovieGallery(TitleCollectionManager.GetUnwatchedTitles(), "OML Home > Unwatched"));
             });
         }
     }
