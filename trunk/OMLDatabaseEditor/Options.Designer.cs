@@ -121,7 +121,7 @@ namespace OMLDatabaseEditor
             // 
             this.tpSkins.Controls.Add(this.lbcSkins);
             this.tpSkins.Name = "tpSkins";
-            this.tpSkins.Size = new System.Drawing.Size(346, 271);
+            this.tpSkins.Size = new System.Drawing.Size(346, 270);
             this.tpSkins.Text = "Skins";
             // 
             // lbcSkins
@@ -129,7 +129,7 @@ namespace OMLDatabaseEditor
             this.lbcSkins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbcSkins.Location = new System.Drawing.Point(0, 0);
             this.lbcSkins.Name = "lbcSkins";
-            this.lbcSkins.Size = new System.Drawing.Size(346, 271);
+            this.lbcSkins.Size = new System.Drawing.Size(346, 270);
             this.lbcSkins.TabIndex = 0;
             this.lbcSkins.SelectedValueChanged += new System.EventHandler(this.lbcSkins_SelectedValueChanged);
             // 
@@ -138,7 +138,7 @@ namespace OMLDatabaseEditor
             this.tpMPAAList.Controls.Add(this.lbcMPAA);
             this.tpMPAAList.Controls.Add(this.beMPAA);
             this.tpMPAAList.Name = "tpMPAAList";
-            this.tpMPAAList.Size = new System.Drawing.Size(346, 271);
+            this.tpMPAAList.Size = new System.Drawing.Size(346, 270);
             this.tpMPAAList.Text = "MPAA";
             // 
             // lbcMPAA
@@ -148,14 +148,14 @@ namespace OMLDatabaseEditor
             this.lbcMPAA.Name = "lbcMPAA";
             this.lbcMPAA.Padding = new System.Windows.Forms.Padding(2);
             this.lbcMPAA.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lbcMPAA.Size = new System.Drawing.Size(346, 251);
+            this.lbcMPAA.Size = new System.Drawing.Size(346, 250);
             this.lbcMPAA.TabIndex = 1;
             this.lbcMPAA.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbcMPAA_KeyDown);
             // 
             // beMPAA
             // 
             this.beMPAA.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.beMPAA.Location = new System.Drawing.Point(0, 251);
+            this.beMPAA.Location = new System.Drawing.Point(0, 250);
             this.beMPAA.Name = "beMPAA";
             this.beMPAA.Padding = new System.Windows.Forms.Padding(2);
             this.beMPAA.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
@@ -170,7 +170,7 @@ namespace OMLDatabaseEditor
             this.tpGenres.Controls.Add(this.btnGenre);
             this.tpGenres.Controls.Add(this.lbGenres);
             this.tpGenres.Name = "tpGenres";
-            this.tpGenres.Size = new System.Drawing.Size(346, 271);
+            this.tpGenres.Size = new System.Drawing.Size(346, 270);
             this.tpGenres.Text = "Genres";
             // 
             // labelControl1
