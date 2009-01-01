@@ -79,7 +79,7 @@ namespace Library
         public const string AllItems = " All ";
 
         TitleFilterType filterType = TitleFilterType.All;
-        List<TitleFilter> existingFilters;
+        List<TitleFilter> existingFilters;        
 
         public string Name
         {
@@ -172,6 +172,44 @@ namespace Library
         {
             get { return _galleryView; }
             set { _galleryView = value; }
+        }
+
+        /// <summary>
+        /// Takes the given filter string and returns a filter type
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static TitleFilterType FilterStringToTitleFilter(string filter)
+        {
+            switch (filter)
+            {
+                case "Genres":
+                    return TitleFilterType.Genre;
+                case "Directors":
+                    return TitleFilterType.Director;
+                case "Actors":
+                    return TitleFilterType.Actor;
+                case "Runtime":
+                    return TitleFilterType.Runtime;
+                case "Country":
+                    return TitleFilterType.Country;                    
+                case "Parental Rating":
+                    return TitleFilterType.ParentalRating;
+                case "Tags":
+                    return TitleFilterType.Tag;
+                case "User Rating":
+                    return TitleFilterType.UserRating;
+                case "Year":
+                    return TitleFilterType.Year;
+                case "Date Added":
+                    return TitleFilterType.DateAdded;
+                case "Format":
+                    return TitleFilterType.VideoFormat;
+                case "Unwatched":
+                    return TitleFilterType.Unwatched;
+            }
+
+            return TitleFilterType.All;
         }
 
         public Filter(string name, MovieGallery gallery, string galleryView, bool bSort, string sortFunction, TitleFilterType filterType, List<TitleFilter> existingFilters)
