@@ -57,8 +57,20 @@ namespace OMLTranscoder
 
             StringBuilder strBuilder = new StringBuilder();
 
-            // from TGB: -oac copy -ovc lavc -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0:autoaspect=1, harddup -of mpeg -mpegopts format=dvd:tsaf
+            // from TGB: 
+            // -oac copy -ovc lavc -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0:autoaspect=1, harddup -of mpeg -mpegopts format=dvd:tsaf
             // input location
+
+            // from Vlader's page (http://iandixon.co.uk/cs/wikis/mediacenter/dvd-library-on-extenders-using-vader-s-transcoder.aspx):
+            // -dvd-device "{0}" dvd://{2} -alang en -slang en -oac copy -ovc lavc 
+            // NTSC: -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=5000:keyint=18:vstrict=0:aspect=16/9 
+            //       -vf scale=720:480,harddup
+            //       -ofps 30000/1001
+            // PAL:  -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0:aspect=16/9
+            //       -vf scale=720:576,harddup
+            //       -ofps 25
+            // -of mpeg -mpegopts format=dvd:tsaf -o "{1}" -quiet
+
             //if (IsDVD)
             //{
             //    strBuilder.Append(@" dvd://");
