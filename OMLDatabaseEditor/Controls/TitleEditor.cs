@@ -29,6 +29,8 @@ namespace OMLDatabaseEditor.Controls
         public event SavedEventHandler SavedTitle;
 
         private bool _isLoading = false;
+        private List<String> listPersona = new List<string>();
+        private List<String> filterPersona = new List<string>();
 
         public enum TitleStatus { Normal, UnsavedChanges }
 
@@ -122,11 +124,14 @@ namespace OMLDatabaseEditor.Controls
         {
             if (EditedTitle != null)
             {
+                listPersona.Clear();
                 switch (selectedPeople)
                 {
                     case 0: //Directors
                         lbPeople.DataSource = EditedTitle.Directors;
                         lbPeople.DisplayMember = "full_name";
+                        listPersona.AddRange(MainEditor._titleCollection.GetAllDirectors().ToArray());
+                        listPersona.Sort();
                         break;
                     case 1: //Writers
                         lbPeople.DataSource = EditedTitle.Writers;
@@ -139,12 +144,18 @@ namespace OMLDatabaseEditor.Controls
                     case 3: //Actors
                         lbPeople.DataSource = EditedTitle.ActingRolesBinding;
                         lbPeople.DisplayMember = "Display";
+                        listPersona.AddRange(MainEditor._titleCollection.GetAllActors().ToArray());
+                        listPersona.Sort();
                         break;
                     case 4: //Non-Actors
                         lbPeople.DataSource = EditedTitle.NonActingRolesBinding;
                         lbPeople.DisplayMember = "Display";
                         break;
                 }
+                filterPersona.Clear();
+                filterPersona.AddRange(listPersona);
+                lbcPersona.DataSource = filterPersona;
+                lbcPersona.Refresh();
             }
         }
 
@@ -354,6 +365,48 @@ namespace OMLDatabaseEditor.Controls
                 teParentalRating.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
                 teParentalRating.MaskBox.AutoCompleteCustomSource = MPAARatings;
+            }
+        }
+
+        private void lbPeople_DoubleClick(object sender, EventArgs e)
+        {
+            List<String> listToEdit = new List<string>();
+            listToEdit.AddRange(MainEditor._titleCollection.GetAllActors().ToArray());
+            listToEdit.Sort();
+            lbcPersona.DataSource = listToEdit;
+            //String name = "Actors";
+            //ListEditor editor = new ListEditor(name, listToEdit);
+            //List<string> original = listToEdit.ToList<string>();
+            //editor.ShowDialog();
+            //if (listToEdit.Union(original).Count<string>() != original.Count)
+            //{
+            //    TitleChanges(null, null);
+            //}
+        }
+
+        private void buttonEdit1_TextChanged(object sender, EventArgs e)
+        {
+            sFilter = beFilter.Text.ToLower();
+            filterPersona.Clear();
+            if (String.IsNullOrEmpty(sFilter))
+            {
+                filterPersona.AddRange(listPersona);
+            }
+            else
+            {
+                filterPersona.AddRange(listPersona.FindAll(StartsWithFilter));
+            }
+            lbcPersona.Refresh();
+        }
+
+        private static String sFilter;
+        private static bool StartsWithFilter(String s)
+        {
+            if (s.ToLower().StartsWith(sFilter))
+            {
+                return true;
+            } else {
+                return false;
             }
         }
     }
