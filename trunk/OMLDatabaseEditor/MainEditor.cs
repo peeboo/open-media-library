@@ -25,6 +25,8 @@ namespace OMLDatabaseEditor
         private const string APP_TITLE = "OML Movie Manager";
         private bool _loading = false;
         private AppearanceObject Percent30 = null;
+        private AppearanceObject Percent40 = null;
+        private AppearanceObject Percent50 = null;
         private AppearanceObject Percent60 = null;
         public List<String> DXSkins;
 
@@ -595,7 +597,7 @@ namespace OMLDatabaseEditor
         private void lbMovies_DrawItem(object sender, ListBoxDrawItemEventArgs e)
         {
             Title currentTitle = _titleCollection.GetTitleById((int)e.Item);
-            if (currentTitle.PercentComplete < .3M)
+            if (currentTitle.PercentComplete <= .3M)
             {
                 if (Percent30 == null)
                 {
@@ -606,7 +608,31 @@ namespace OMLDatabaseEditor
                 }
                 e.Appearance.Combine(Percent30);
             }
-            else if (currentTitle.PercentComplete < .6M)
+            else if (currentTitle.PercentComplete <= .4M)
+            {
+                if (Percent40 == null)
+                {
+                    Percent40 = (AppearanceObject)e.Appearance.Clone();
+                    Percent40.ForeColor = Color.White;
+                    Percent40.BackColor = Color.CornflowerBlue;
+                    Percent40.BackColor2 = Color.CadetBlue;
+                    Percent40.GradientMode = LinearGradientMode.Vertical;
+                }
+                e.Appearance.Combine(Percent40);
+            }
+            else if (currentTitle.PercentComplete <= .5M)
+            {
+                if (Percent50 == null)
+                {
+                    Percent50 = (AppearanceObject)e.Appearance.Clone();
+                    Percent50.ForeColor = Color.Black;
+                    Percent50.BackColor = Color.MediumSpringGreen;
+                    Percent50.BackColor2 = Color.LightSeaGreen;
+                    Percent50.GradientMode = LinearGradientMode.Vertical;
+                }
+                e.Appearance.Combine(Percent50);
+            }
+            else if (currentTitle.PercentComplete <= .6M)
             {
                 if (Percent60 == null)
                 {
