@@ -356,6 +356,22 @@ namespace OMLEngine
             return actors;
         }
 
+        public List<string> GetAllAspectRatios()
+        {
+            List<string> aspects = (from title in _list
+                                    orderby title.AspectRatio
+                                    select title.AspectRatio).Distinct().ToList<string>();
+            return aspects;
+        }
+
+        public List<string> GetAllCountryofOrigin()
+        {
+            List<string> countries = (from title in _list
+                                      orderby title.CountryOfOrigin
+                                      select title.CountryOfOrigin).Distinct().ToList<string>();
+            return countries;
+        }
+
         public List<string> GetAllDirectors()
         {
             List<string> directors = (from title in _list
@@ -381,6 +397,14 @@ namespace OMLEngine
                                       orderby producer ascending
                                       select producer).Distinct().ToList<string>();
             return producers;
+        }
+
+        public List<string> GetAllStudios()
+        {
+            List<string> studios = (from title in _list
+                                    orderby title.Studio ascending
+                                    select title.Studio).Distinct().ToList<string>();
+            return studios;
         }
 
         public List<string> GetAllTags()
