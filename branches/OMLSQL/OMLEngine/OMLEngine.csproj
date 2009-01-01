@@ -71,6 +71,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Dao\TitleConfig.cs" />
     <Compile Include="Dao\TitleDao.cs" />
     <Compile Include="Dao\TitleCollectionDao.cs" />
     <Compile Include="Dao\TitleCollectionManager.cs" />

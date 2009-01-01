@@ -71,7 +71,7 @@ namespace OMLTestSuite
             Console.WriteLine("Starting to get all genres");
             DateTime start = DateTime.Now;
 
-            IEnumerable<FilteredCollection> items = TitleCollectionManager.GetAllGenres();
+            IEnumerable<FilteredCollection> items = TitleCollectionManager.GetAllGenres(null);
 
             foreach (FilteredCollection item in items)
                 Console.WriteLine(item.Name + " " + item.Count);

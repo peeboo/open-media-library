@@ -13,7 +13,9 @@ namespace OMLEngine
         VideoFormat,
         Unwatched,
         Tag,
-        Alpha
+        Alpha,
+        ParentalRating,
+        Runtime
     }
 
     public class TitleFilter
@@ -38,6 +40,14 @@ namespace OMLEngine
 
             return (this.filterType == compareTo.filterType 
                         && this.filterText == compareTo.filterText);
+        }
+
+        public override int GetHashCode()
+        {
+            if (filterText != null)
+                return filterType.GetHashCode() ^ filterText.GetHashCode();
+            else
+                return filterType.GetHashCode();
         }
     }
 }

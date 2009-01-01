@@ -17,10 +17,7 @@ namespace Library
     /// </summary>
     public class MovieGallery : ModelItem
     {       
-        #region Public Properties        
-
-        private List<LabeledList> labeledLists = null;
-        private List<TitleFilter> filters = null;   
+        #region Public Properties               
 
         public List<LabeledList> LabeledLists
         {
@@ -425,6 +422,13 @@ namespace Library
             if (Properties.Settings.Default.ShowFilterUnwatched) _filters.Add(Filter.Unwatched, new Filter(Filter.Unwatched, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort, TitleFilterType.Unwatched, filters));
             if (Properties.Settings.Default.MovieView == GalleryView.CoverArtWithAlpha) _filters.Add(Filter.Alpha, new Filter(Filter.Alpha, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
             if (Properties.Settings.Default.ShowFilterGenres) _filters.Add(Filter.Genres, new Filter(Filter.Genres, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.GenreSort, TitleFilterType.Genre, filters));
+
+            if (Properties.Settings.Default.ShowFilterRuntime) _filters.Add(Filter.Runtime, new Filter(Filter.Runtime, this, GalleryView.List, false, String.Empty, TitleFilterType.Runtime, filters));
+
+            if (Properties.Settings.Default.ShowFilterFormat) _filters.Add(Filter.VideoFormat, new Filter(Filter.VideoFormat, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort, TitleFilterType.VideoFormat, filters));
+            
+            if (Properties.Settings.Default.ShowFilterParentalRating) _filters.Add(Filter.ParentRating, new Filter(Filter.ParentRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort, TitleFilterType.ParentalRating, filters));
+
             
             _jumpInListText = new EditableText(this);
             _jumpInListText.Value = String.Empty;
@@ -741,63 +745,7 @@ namespace Library
             if (days <= 184) Filters[Filter.DateAdded].AddMovie("Within Last 6 Months", movie);
             if (days <= 365) Filters[Filter.DateAdded].AddMovie("Within Last Year", movie);
             if (days > 365) Filters[Filter.DateAdded].AddMovie("More Than 1 Year", movie);
-
-        }
-
-        private void AddRuntimeFilter( MovieItem movie)
-        {
-            //TODO: make this configurable
-            Filters[Filter.Runtime].AddItem("30 minutes or less");
-            Filters[Filter.Runtime].AddItem("1 hour or less");
-            Filters[Filter.Runtime].AddItem("1.5 hours or less");
-            Filters[Filter.Runtime].AddItem("2 hours or less");
-            Filters[Filter.Runtime].AddItem("2.5 hours or less");
-            Filters[Filter.Runtime].AddItem("3 hours or less");
-            Filters[Filter.Runtime].AddItem("Over 3 hours");
-            Filters[Filter.Runtime].AddItem("Unknown duration");
-
-            Title title = movie.TitleObject;
-
-            if (title.Runtime < 1)
-            {
-                Filters[Filter.Runtime].AddMovie("Unknown duration", movie);
-                return;
-            }
-
-            if (title.Runtime <= 30)
-            {
-                Filters[Filter.Runtime].AddMovie("30 minutes or less", movie);
-            }
-
-            if (title.Runtime <= 60)
-            {
-                Filters[Filter.Runtime].AddMovie("1 hour or less", movie);
-            }
-            
-            if (title.Runtime <= 90)
-            {
-                Filters[Filter.Runtime].AddMovie("1.5 hours or less", movie);
-            }
-            
-            if (title.Runtime <= 120)
-            {
-                Filters[Filter.Runtime].AddMovie("2 hours or less", movie);
-            }
-            
-            if (title.Runtime <= 150)
-            {
-                Filters[Filter.Runtime].AddMovie("2.5 hours or less", movie);
-            }
-            
-            if (title.Runtime <= 180)
-            {
-                Filters[Filter.Runtime].AddMovie("3 hours or less", movie);
-            }
-            else
-            {
-                Filters[Filter.Runtime].AddMovie("Over 3 hours", movie);
-            }
-        }
+        }        
 
         private void LoadMovies(IEnumerable<Title> titles)
         {
@@ -908,7 +856,9 @@ namespace Library
 
         private List<string> alphaCharacters;
 
-        private int numberOfPages = 0;      
+        private int numberOfPages = 0;
+        private List<LabeledList> labeledLists = null;
+        private List<TitleFilter> filters = null;   
         #endregion
    } 
 
