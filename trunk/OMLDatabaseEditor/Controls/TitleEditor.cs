@@ -314,6 +314,7 @@ namespace OMLDatabaseEditor.Controls
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PersonEditorFrm frmPerson = new PersonEditorFrm(rgPeople.SelectedIndex == 3 || rgPeople.SelectedIndex == 4);
+            frmPerson.PersonList = listPersona;
             if (frmPerson.ShowDialog() == DialogResult.OK)
             {
                 switch (rgPeople.SelectedIndex)
