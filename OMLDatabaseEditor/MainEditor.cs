@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Text;
 using System.Windows.Forms;
 
 using DevExpress.XtraEditors;
 using DevExpress.Skins;
 using DevExpress.Skins.Info;
+using DevExpress.Utils;
 
 using OMLEngine;
 using OMLSDK;
@@ -22,6 +24,8 @@ namespace OMLDatabaseEditor
         internal static List<IOMLMetadataPlugin> _metadataPlugins = new List<IOMLMetadataPlugin>();
         private const string APP_TITLE = "OML Movie Manager";
         private bool _loading = false;
+        private AppearanceObject Percent30 = null;
+        private AppearanceObject Percent60 = null;
         public List<String> DXSkins;
 
         public MainEditor()
@@ -592,11 +596,27 @@ namespace OMLDatabaseEditor
         {
             Title currentTitle = _titleCollection.GetTitleById((int)e.Item);
             if (currentTitle.PercentComplete < .3M)
-                e.Appearance.BackColor = Color.Red;
+            {
+                if (Percent30 == null)
+                {
+                    Percent30 = (AppearanceObject)e.Appearance.Clone();
+                    Percent30.BackColor = Color.Coral;
+                    Percent30.BackColor2 = Color.Crimson;
+                    Percent30.GradientMode = LinearGradientMode.Vertical;
+                }
+                e.Appearance.Combine(Percent30);
+            }
             else if (currentTitle.PercentComplete < .6M)
             {
-                e.Appearance.ForeColor = Color.Black;
-                e.Appearance.BackColor = Color.Yellow;
+                if (Percent60 == null)
+                {
+                    Percent60 = (AppearanceObject)e.Appearance.Clone();
+                    Percent60.ForeColor = Color.Black;
+                    Percent60.BackColor = Color.Yellow;
+                    Percent60.BackColor2 = Color.Gold;
+                    Percent60.GradientMode = LinearGradientMode.Vertical;
+                }
+                e.Appearance.Combine(Percent60);
             }
         }
     }
