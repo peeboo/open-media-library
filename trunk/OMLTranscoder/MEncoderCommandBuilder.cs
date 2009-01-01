@@ -79,6 +79,7 @@ namespace OMLTranscoder
             //        strBuilder.AppendFormat(" -chapter {0}", _source.StartChapter);
             //}
 
+                strBuilder.Append(@" -of mpeg");
             //audio format
             strBuilder.Append(@" -oac copy");
             //if (!IsDVD && Properties.Settings.Default.PreserveAudioOnTranscode)
@@ -105,7 +106,7 @@ namespace OMLTranscoder
 
             // output format
             // always set the output format to mpeg for extenders
-            strBuilder.Append(@" -lavcopts vcodec=wmv2");
+            strBuilder.Append(@" -mpegopts format=mpeg2:tsaf:vbitrate=8000");
 
             // set quiet mode on
             strBuilder.Append(@" -really-quiet");
