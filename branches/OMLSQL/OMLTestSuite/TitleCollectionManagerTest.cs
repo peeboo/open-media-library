@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DVDProfilerPlugin;
+using System.Diagnostics;
 
 using NUnit.Framework;
 
@@ -170,6 +171,38 @@ namespace OMLTestSuite
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
                                         items.Count()));
+        }
+
+        [Test]
+        public void TEST_DISK_ALREADY_EXISTS()
+        {
+            Console.WriteLine("Starting to check if disk already exists");
+
+            string existingPath = null;
+
+            foreach (Title title in TitleCollectionManager.GetAllTitles())
+            {
+                existingPath = title.Disks[0].Path;
+                break;
+            }
+               
+            DateTime start = DateTime.Now;
+
+            bool found = false;
+
+            Assert.AreEqual(true, found = TitleCollectionManager.ContainsDisks(existingPath), "Disk path should have been found");
+
+            Console.WriteLine("Result : " + found);
+
+            Console.WriteLine(string.Format("Done - Took: {0} milliseconds",
+                                        (DateTime.Now - start).TotalMilliseconds.ToString()));
+
+            Console.WriteLine("Starting to check to verify disk is not found");
+
+            Assert.AreEqual(false, found = TitleCollectionManager.ContainsDisks(existingPath + "test"), "Disk path should not have been found");
+
+            Console.WriteLine("Result : " + found);
+            
         }
     }
 }

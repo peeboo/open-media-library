@@ -438,7 +438,8 @@ namespace Library
                 if (d == ms.Disk)
                 {
                     d.ExtraOptions = ms.UpdateExtraOptions(d.ExtraOptions);
-                    OMLApplication.Current.SaveTitles();
+                    //OMLApplication.Current.SaveTitles();
+                    TitleCollectionManager.SaveTitleUpdates();
                     break;
                 }
         }

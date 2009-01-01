@@ -89,12 +89,7 @@ namespace Library
                 isStartingTranscodingJob = value;
                 FirePropertyChanged("IsStartingTranscodingJob");
             }
-        }
-
-        public TitleCollection Titles
-        {
-            get { return _titles; }
-        }
+        }       
 
         public OMLApplication()
             : this(null, null)
@@ -142,8 +137,6 @@ namespace Library
             I18n.InitializeResourceManager();
             string uiCulture = Properties.Settings.Default.UILanguage;
             if (!string.IsNullOrEmpty(uiCulture)) I18n.SetCulture(new CultureInfo(uiCulture));
-            _titles = new TitleCollection();
-            _titles.loadTitleCollection();
             _nowPlayingMovieName = "Playing an unknown movie";
         }
 
@@ -166,6 +159,9 @@ namespace Library
             _session.GoToPage(@"resx://Library/Library.Resources/NewMenu", properties);
             return;
 #endif
+
+            IEnumerable<Title> allTitles = TitleCollectionManager.GetAllTitles();
+
             switch (context)
             {
                 case "Menu":
@@ -173,27 +169,27 @@ namespace Library
                     if (Properties.Settings.Default.StartPage == Filter.Home)
                     {
                         OMLApplication.DebugLine("[OMLApplication] going to Menu Page");
-                        GoToMenu(new MovieGallery(TitleCollectionManager.GetAllTitles(), Filter.Home));
+                        GoToMenu(new MovieGallery(allTitles, Filter.Home));
                     }
                     else
                     {
                         // see if they've selected a subfilter
                         if (!string.IsNullOrEmpty(Properties.Settings.Default.StartPageSubFilter))
                         {
-                            GoToSelectionList(new MovieGallery(_titles, Filter.Home), 
+                            GoToSelectionList(new MovieGallery(allTitles, Filter.Home), 
                                                 Properties.Settings.Default.StartPage,
                                                 Properties.Settings.Default.StartPageSubFilter);
                         }
                         else
                         {                                              
                             // assume it's a filter page (Genre, Actor, etc)
-                            GoToSelectionList(new MovieGallery(_titles, Filter.Home), Properties.Settings.Default.StartPage);
+                            GoToSelectionList(new MovieGallery(allTitles, Filter.Home), Properties.Settings.Default.StartPage);
                         }
                     }
                     return;
                 case "Settings":
                     OMLApplication.DebugLine("[OMLApplication] going to Settings Page");
-                    GoToSettingsPage(new MovieGallery(_titles, Filter.Settings));
+                    GoToSettingsPage(new MovieGallery(allTitles, Filter.Settings));
                     return;
                 case "Trailers":
                     OMLApplication.DebugLine("[OMLApplication] going to Trailers Page");
@@ -201,18 +197,18 @@ namespace Library
                     return;
                 case "About":
                     OMLApplication.DebugLine("[OMLApplication] going to About Page");
-                    GoToAboutPage(new MovieGallery(_titles, Filter.About));
+                    GoToAboutPage(new MovieGallery(allTitles, Filter.About));
                     return;
                 default:
                     OMLApplication.DebugLine("[OMLApplication] going to Default (Menu) Page");
-                    GoToMenu(new MovieGallery(_titles, Filter.Home));
+                    GoToMenu(new MovieGallery(allTitles, Filter.Home));
                     return;
             }
         }
 
         public void Uninitialize()
         {
-            ExtenderDVDPlayer.Uninitialize(_titles);
+            ExtenderDVDPlayer.Uninitialize(TitleCollectionManager.GetAllTitles());
         }
 
         public static OMLApplication Current
@@ -344,7 +340,7 @@ namespace Library
             else
             {
                 OMLApplication.DebugLine("[OMLApplication] GoToSelectionList - filter {0} not found - going to Menu Page", filterName);
-                GoToMenu(new MovieGallery(_titles, Filter.Home));
+                GoToMenu(new MovieGallery());
             }
         }
 
@@ -410,17 +406,17 @@ namespace Library
             get { return NowPlayingStatus.ToString() + ": " + NowPlayingMovieName; }
         }
 
-        public TitleCollection ReloadTitleCollection()
+        /*public TitleCollection ReloadTitleCollection()
         {
             DebugLine("[OMLApplication] ReloadTitleCollection()");
             _titles.loadTitleCollection();
             return _titles;
-        }
+        }*/
 
-        public void SaveTitles()
+        /*public void SaveTitles()
         {
-            _titles.saveTitleCollection();
-        }
+            //_titles.saveTitleCollection();
+        }*/
 
         public static void ExecuteSafe(Action action)
         {
@@ -459,7 +455,6 @@ namespace Library
         private static OMLApplication _singleApplicationInstance;
         private AddInHost _host;
         private HistoryOrientedPageSession _session;
-        private TitleCollection _titles;
 
         private bool _isExtender;
     }

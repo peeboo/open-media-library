@@ -34,6 +34,19 @@ namespace OMLEngine.Dao
         }
 
         /// <summary>
+        /// Checks to see if any of the given disk paths exist in the db already
+        /// </summary>
+        /// <param name="diskPaths"></param>
+        /// <returns></returns>
+        public static bool ContainsDisks(IList<string> diskPaths)
+        {
+            var allDisks = from d in DBContext.Instance.Disks
+                           select d.Path.ToLowerInvariant();
+
+            return diskPaths.Intersect(allDisks).Count() > 0;            
+        }
+
+        /// <summary>
         /// Returns all the titles but doesn't return the actors/directors/writers
         /// </summary>
         /// <returns></returns>

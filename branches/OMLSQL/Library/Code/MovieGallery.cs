@@ -321,6 +321,14 @@ namespace Library
             Initialize(null);
         }
 
+        /// <summary>
+        /// // creates a new movie gallery for the homepage listing all available titles
+        /// </summary>
+        public MovieGallery()
+            : this(TitleCollectionManager.GetAllTitles(), Filter.Home)
+        {
+        }
+
         public MovieGallery(IEnumerable<Title> titles, string title)
         {
             _title = title;
@@ -335,7 +343,7 @@ namespace Library
             if (filters != null && filters.Count != 0)
             {
                 StringBuilder sb = new StringBuilder(filters.Count * 10);
-                sb.Append("OMLHome");
+                sb.Append(Filter.Home);
 
                 foreach (TitleFilter filter in filters)
                 {
@@ -350,7 +358,7 @@ namespace Library
             }
             else
             {
-                _title = "OMLHome";
+                _title = Filter.Home;
             }
 
             Initialize(TitleCollectionManager.GetFilteredTitles(this.filters));
@@ -885,7 +893,7 @@ namespace Library
             OMLApplication.ExecuteSafe(delegate
             {
                 Trace.TraceInformation("MovieGallery.GoHome");
-                OMLApplication.Current.GoToMenu(new MovieGallery(TitleCollectionManager.GetAllTitles(), Filter.Home));
+                OMLApplication.Current.GoToMenu(new MovieGallery());
             });
         }
     }        

@@ -278,6 +278,34 @@ namespace OMLEngine
 
             title.WatchedCount = 0;
         }
+        
+        /// <summary>
+        /// Checks to see if disk is already using the given path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool ContainsDisks(string path)
+        {
+            return Dao.TitleCollectionDao.ContainsDisks(new string[] { path.ToLowerInvariant() });
+        }
+
+        /// <summary>
+        /// returns true if any of the disks returned already exist in the database
+        /// </summary>
+        /// <param name="disks"></param>
+        public static bool ContainsDisks(IList<Disk> disks)
+        {
+            List<string> paths = new List<string>(disks.Count);
+            foreach (Disk disk in disks)
+            {
+                if (string.IsNullOrEmpty(disk.Path))
+                    continue;
+
+                paths.Add(disk.Path.ToLowerInvariant());
+            }
+
+            return Dao.TitleCollectionDao.ContainsDisks(paths);
+        }
     }
 
     public class FilteredCollection

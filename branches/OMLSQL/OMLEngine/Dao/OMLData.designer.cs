@@ -1797,6 +1797,8 @@ namespace OMLEngine.Dao
 		
 		private int _TitleId;
 		
+		private string _ExtraOptions;
+		
 		private EntityRef<Title> _Title;
 		
     #region Extensibility Method Definitions
@@ -1813,6 +1815,8 @@ namespace OMLEngine.Dao
     partial void OnIdChanged();
     partial void OnTitleIdChanging(int value);
     partial void OnTitleIdChanged();
+    partial void OnExtraOptionsChanging(string value);
+    partial void OnExtraOptionsChanged();
     #endregion
 		
 		public Disk()
@@ -1921,6 +1925,26 @@ namespace OMLEngine.Dao
 					this._TitleId = value;
 					this.SendPropertyChanged("TitleId");
 					this.OnTitleIdChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_ExtraOptions", DbType="NVarChar(255)")]
+		public string ExtraOptions
+		{
+			get
+			{
+				return this._ExtraOptions;
+			}
+			set
+			{
+				if ((this._ExtraOptions != value))
+				{
+					this.OnExtraOptionsChanging(value);
+					this.SendPropertyChanging();
+					this._ExtraOptions = value;
+					this.SendPropertyChanged("ExtraOptions");
+					this.OnExtraOptionsChanged();
 				}
 			}
 		}

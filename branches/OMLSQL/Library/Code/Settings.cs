@@ -206,7 +206,7 @@ namespace Library
 
             subFilters.Add("");
 
-            MovieGallery gallery = new MovieGallery(OMLApplication.Current.Titles, "Temp");
+            MovieGallery gallery = new MovieGallery();
 
             if (gallery.Filters.ContainsKey(_startPage.Chosen.ToString()))
             {
