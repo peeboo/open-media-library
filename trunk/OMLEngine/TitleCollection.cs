@@ -347,6 +347,30 @@ namespace OMLEngine
             return null;
         }
 
+        public List<string> GetAllActors()
+        {
+            List<string> actors = new List<string>();
+            foreach (Title title in _list)
+            {
+                actors = actors.Union<string>(title.ActingRoles.Keys).ToList<string>();
+            }
+            return actors;
+        }
+
+        public List<string> GetAllDirectors()
+        {
+            List<string> directors = new List<string>();
+            foreach (Title title in _list)
+            {
+                foreach (Person person in title.Directors)
+                {
+                    if (!directors.Contains(person.full_name))
+                        directors.Add(person.full_name);
+                }
+            }
+            return directors;
+        }
+
         public List<string> GetAllGenres()
         {
             List<string> genres = new List<string>();
