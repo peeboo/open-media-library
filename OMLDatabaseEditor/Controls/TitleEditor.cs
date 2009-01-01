@@ -136,10 +136,14 @@ namespace OMLDatabaseEditor.Controls
                     case 1: //Writers
                         lbPeople.DataSource = EditedTitle.Writers;
                         lbPeople.DisplayMember = "full_name";
+                        listPersona.AddRange(MainEditor._titleCollection.GetAllWriters().ToArray());
+                        listPersona.Sort();
                         break;
                     case 2: //Producers
                         lbPeople.DataSource = EditedTitle.Producers;
                         lbPeople.DisplayMember = "";
+                        listPersona.AddRange(MainEditor._titleCollection.GetAllProducers().ToArray());
+                        listPersona.Sort();
                         break;
                     case 3: //Actors
                         lbPeople.DataSource = EditedTitle.ActingRolesBinding;
