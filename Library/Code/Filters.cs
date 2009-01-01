@@ -7,6 +7,7 @@ using Microsoft.MediaCenter.UI;
 using System.Diagnostics;
 using OMLEngine;
 
+
 namespace Library
 {
     /// <summary>
@@ -86,24 +87,76 @@ namespace Library
             set { _name = value; }
         }
 
+        private void IncrementCount(Dictionary<int, int> timeToCount, int time)
+        {
+            if (timeToCount.ContainsKey(time))
+                timeToCount[time]++;
+            else
+                timeToCount.Add(time, 1);
+        }
+
         public List<GalleryItem> Items
         {
             get
             {
+                // todo : solomon : look at storing this locally again - i think 
+                // the problem i saw with it was unrelated
                 //if (_items == null)
                 //{
                 List<GalleryItem> items = new List<GalleryItem>();
                 items.Add(new GalleryItem(_gallery, AllItems, AllItems, this));
 
+                IEnumerable<FilteredCollection> filteredItems = null;
                 switch (filterType)
                 {
                     case TitleFilterType.Genre:
-                        IEnumerable<FilteredCollection> genres = TitleCollectionManager.GetAllGenres(existingFilters);
+                        filteredItems = TitleCollectionManager.GetAllGenres(existingFilters);                        
+                        break;
 
-                        foreach (FilteredCollection genre in genres)
-                            items.Add(new GalleryItem(_gallery, genre.Name, genre.Name, this, genre.Count));
+                    case TitleFilterType.ParentalRating:
+                        filteredItems = TitleCollectionManager.GetAllParentalRatings(existingFilters);
+                        break;
+
+                    case TitleFilterType.VideoFormat:
+                        filteredItems = TitleCollectionManager.GetAllVideoFormats(existingFilters);
+                        break;
+
+                    case TitleFilterType.Runtime:
+                        List<FilteredCollection> filteredList = new List<FilteredCollection>(8);
+
+                        // for now i think it's more effecient to just grab the whole list and filter
+                        // it.  some smart sql person may find a faster way to do this in sql
+                        Dictionary<int, int> timeToCount = new Dictionary<int, int>();
+
+                        foreach (Title title in TitleCollectionManager.GetFilteredTitles(existingFilters))
+                        {
+                            foreach(int time in TitleConfig.RUNTIME_FILTER_LENGTHS )
+                            {
+                                if ( title.Runtime <= time )
+                                {
+                                    IncrementCount(timeToCount, time);
+                                    break;
+                                }
+                            }
+                        }
+
+                        // add filtercollection for every count
+                        foreach (int length in TitleConfig.RUNTIME_FILTER_LENGTHS)
+                        {
+                            if ( timeToCount.ContainsKey(length))
+                                filteredList.Add(new FilteredCollection() { Name = TitleConfig.RuntimeToFilterString(length), Count = timeToCount[length] });
+                        }
+
+                        filteredItems = filteredList;                        
                         break;
                 }
+
+                if (filteredItems != null)
+                {
+                    foreach (FilteredCollection item in filteredItems)
+                        items.Add(new GalleryItem(_gallery, item.Name, item.Name, this, item.Count));
+                }
+
                 //}
                 return items;
             }

@@ -125,7 +125,7 @@ namespace OMLEngine
             return ConvertDaoTitlesToTitles(
                             Dao.TitleCollectionDao.GetFilteredTitles(new List<TitleFilter> { new TitleFilter(filter, filterText) })
                         );
-        }
+        }        
 
         /// <summary>
         /// Returns the titles for the given filter
@@ -137,7 +137,55 @@ namespace OMLEngine
             return (filters == null || filters.Count == 0 ) 
                     ? GetAllTitles()
                     : ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetFilteredTitles(filters));
-        }               
+        }
+
+        /// <summary>
+        /// Returns all the valid parental ratings and their count
+        /// todo : solomon : optimize this
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllParentalRatings(List<TitleFilter> filter)
+        {
+            IQueryable<Dao.Title> titles = ( filter == null || filter.Count == 0 )
+                                                ? Dao.DBContext.Instance.Titles
+                                                : (IQueryable<Dao.Title>)Dao.TitleCollectionDao.GetFilteredTitles(filter);
+
+            IEnumerable<string> ratings = Dao.TitleCollectionDao.GetAllParentalRatings(titles);
+
+            foreach (string rating in ratings)
+            {
+                int count = Dao.TitleCollectionDao.GetItemsPerParentalRating(titles, rating);
+                if (count == 0)
+                    continue;
+
+                yield return new FilteredCollection() { Name = rating, Count = count };
+            }
+        }
+
+        /// <summary>
+        /// Returns all the valid video formats and their counts
+        /// todo : solomon : optimize this
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllVideoFormats(List<TitleFilter> filter)
+        {
+            IQueryable<Dao.Title> titles = (filter == null || filter.Count == 0)
+                                                ? Dao.DBContext.Instance.Titles
+                                                : (IQueryable<Dao.Title>)Dao.TitleCollectionDao.GetFilteredTitles(filter);
+
+            IEnumerable<byte> formats = Dao.TitleCollectionDao.GetAllVideoFormats(titles);
+
+            foreach (byte format in formats)
+            {
+                int count = Dao.TitleCollectionDao.GetItemsPerVideoFormat(titles, format);
+                if (count == 0)
+                    continue;
+
+                yield return new FilteredCollection() { Name = ((VideoFormat) format).ToString(), Count = count };
+            }
+        }
 
         /// <summary>
         /// Returns all the genres and counts given a filter
@@ -146,47 +194,23 @@ namespace OMLEngine
         /// </summary>
         /// <param name="givenFilter"></param>
         /// <returns></returns>
-        public static IEnumerable<FilteredCollection> GetAllGenres(List<TitleFilter> givenFilter)
-        {
-            if (givenFilter == null)
-            {
-                foreach (FilteredCollection item in GetAllGenres())
-                    yield return item;
-            }
-            else
-            {
-                IQueryable<Dao.Title> titles = (IQueryable<Dao.Title>)Dao.TitleCollectionDao.GetFilteredTitles(givenFilter);
+        public static IEnumerable<FilteredCollection> GetAllGenres(List<TitleFilter> filter)
+        {        
+            IQueryable<Dao.Title> titles = (filter == null || filter.Count == 0)
+                                            ? Dao.DBContext.Instance.Titles
+                                            : (IQueryable<Dao.Title>)Dao.TitleCollectionDao.GetFilteredTitles(filter);
 
-                IEnumerable<Dao.GenreMetaData> genres = Dao.TitleCollectionDao.GetAllGenres(titles);
-
-                foreach (Dao.GenreMetaData genre in genres)
-                {
-                    int count = Dao.TitleCollectionDao.GetItemsPerGenre(titles, genre);
-                    if (count == 0)
-                        continue;
-
-                    yield return new FilteredCollection() { Name = genre.Name, Count = count };
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets all the genres and their item count
-        /// </summary>
-        /// <returns></returns>
-        public static IEnumerable<FilteredCollection> GetAllGenres()
-        {
-            IEnumerable<Dao.GenreMetaData> genres = Dao.TitleCollectionDao.GetAllGenres();
+            IEnumerable<Dao.GenreMetaData> genres = Dao.TitleCollectionDao.GetAllGenres(titles);
 
             foreach (Dao.GenreMetaData genre in genres)
             {
-                int count = Dao.TitleCollectionDao.GetItemsPerGenre(genre);
+                int count = Dao.TitleCollectionDao.GetItemsPerGenre(titles, genre);
                 if (count == 0)
                     continue;
 
                 yield return new FilteredCollection() { Name = genre.Name, Count = count };
-            }
-        }
+            }            
+        }        
 
         /// <summary>
         /// Gets all the people and their count of movies

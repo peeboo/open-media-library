@@ -99,10 +99,73 @@ namespace OMLEngine.Dao
                     case TitleFilterType.Alpha:
                         results = ApplyAlphaFilter(lastQuery, filter.FilterText);
                         break;
+
+                    case TitleFilterType.ParentalRating:
+                        results = ApplyParentalRatingFilter(lastQuery, filter.FilterText);
+                        break;
+
+                    case TitleFilterType.Runtime:
+                        results = ApplyRuntimeFilter(lastQuery, filter.FilterText);
+                        break;
                 }
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Returns all the titles that have a specific runtime
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="runtime"></param>
+        /// <returns></returns>
+        private static IQueryable<Title> ApplyRuntimeFilter(IQueryable<Title> titles, string runtime)
+        {
+            int maxTime = TitleConfig.RuntimeFilterStringToInt(runtime);            
+
+            if (maxTime == 0)
+            {
+                return from t in titles
+                       where t.Runtime <= maxTime
+                       select t;
+            }               
+            else if ( maxTime == -1 )
+            {
+                return from t in titles
+                       where t.Runtime > TitleConfig.MAX_RUNTIME
+                       select t;
+            }
+            else
+            {
+                int minTime = 0;
+
+                // the min time is the previous index
+                for (int x = 0; x < TitleConfig.RUNTIME_FILTER_LENGTHS.Length - 1; x++)
+                {
+                    if (TitleConfig.RUNTIME_FILTER_LENGTHS[x] == maxTime)
+                    {
+                        minTime = TitleConfig.RUNTIME_FILTER_LENGTHS[x - 1];
+                        break;
+                    }
+                }
+                
+                return from t in titles
+                       where t.Runtime <= maxTime && t.Runtime > minTime
+                       select t;
+            }            
+        }
+
+        /// <summary>
+        /// Returns all the titles that have a specific rating
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="rating"></param>
+        /// <returns></returns>
+        private static IQueryable<Title> ApplyParentalRatingFilter(IQueryable<Title> titles, string rating)
+        {
+            return from t in titles
+                   where t.ParentalRating == rating
+                   select t;
         }
 
         /// <summary>
@@ -231,6 +294,29 @@ namespace OMLEngine.Dao
         }
 
         /// <summary>
+        /// Returns all the valid parental ratings
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> GetAllParentalRatings(IQueryable<Title> titles)
+        {
+            return (from t in titles
+                    select t.ParentalRating).Distinct();
+        }
+
+        /// <summary>
+        /// Returns all the valid video formats
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <returns></returns>
+        public static IEnumerable<byte> GetAllVideoFormats(IQueryable<Title> titles)
+        {
+            return (from t in titles
+                    from d in t.Disks
+                    select d.VideoFormat).Distinct();
+        }
+
+        /// <summary>
         /// Gets all the people
         /// </summary>
         /// <returns></returns>
@@ -238,6 +324,33 @@ namespace OMLEngine.Dao
         {
             return from t in DBContext.Instance.BioDatas
                    select t;
+        }
+
+        /// <summary>
+        /// Returns the number of items that have the given rating
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="rating"></param>
+        /// <returns></returns>
+        public static int GetItemsPerParentalRating(IQueryable<Title> titles, string rating)
+        {
+            return (from t in titles
+                    where t.ParentalRating == rating
+                    select t).Count();
+        }
+
+        /// <summary>
+        /// Returns the count of titles for a given video format
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="format"></param>
+        /// <returns></returns>
+        public static int GetItemsPerVideoFormat(IQueryable<Title> titles, byte format)
+        {
+            return (from t in titles
+                    from d in t.Disks
+                    where t.Id == d.TitleId && d.VideoFormat == format
+                    select t).Count();
         }
 
         /// <summary>
