@@ -189,7 +189,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
+		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Photo
 		{
 			get
@@ -488,6 +488,8 @@ namespace OMLEngine.Dao
 		
 		private string _ImporterSource;
 		
+		private System.Nullable<int> _GroupId;
+		
 		private EntitySet<Genre> _Genres;
 		
 		private EntitySet<Person> _Peoples;
@@ -556,6 +558,8 @@ namespace OMLEngine.Dao
     partial void OnOriginalNameChanged();
     partial void OnImporterSourceChanging(string value);
     partial void OnImporterSourceChanged();
+    partial void OnGroupIdChanging(System.Nullable<int> value);
+    partial void OnGroupIdChanged();
     #endregion
 		
 		public Title()
@@ -1127,6 +1131,26 @@ namespace OMLEngine.Dao
 			}
 		}
 		
+		[Column(Storage="_GroupId", DbType="int (System.Int32)")]
+		public System.Nullable<int> GroupId
+		{
+			get
+			{
+				return this._GroupId;
+			}
+			set
+			{
+				if ((this._GroupId != value))
+				{
+					this.OnGroupIdChanging(value);
+					this.SendPropertyChanging();
+					this._GroupId = value;
+					this.SendPropertyChanged("GroupId");
+					this.OnGroupIdChanged();
+				}
+			}
+		}
+		
 		[Association(Name="Title_Genre", Storage="_Genres", ThisKey="Id", OtherKey="TitleId")]
 		public EntitySet<Genre> Genres
 		{
@@ -1549,7 +1573,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
+		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Photo
 		{
 			get

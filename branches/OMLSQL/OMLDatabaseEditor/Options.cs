@@ -174,9 +174,12 @@ namespace OMLDatabaseEditor
                 {
                     string genre = item as string;
                     IEnumerable<Title> titles = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Genre, genre);
-                    if (titles.Count() > 0)
+
+                    int titleCount = titles.Count();
+
+                    if (titleCount > 0)
                     {
-                        StringBuilder message = new StringBuilder(titles.Count() + " movie(s) in your collection are associated with the " + genre + " genre. Would you like to remove the association?\r\n\r\n");
+                        StringBuilder message = new StringBuilder(titleCount + " movie(s) in your collection are associated with the " + genre + " genre. Would you like to remove the association?\r\n\r\n");
                         foreach (Title title in titles)
                             message.Append(title.Name + "\r\n");
 

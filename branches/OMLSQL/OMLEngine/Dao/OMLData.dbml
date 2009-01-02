@@ -47,6 +47,7 @@
       <Column Name="VideoResolution" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
       <Column Name="OriginalName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="ImporterSource" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="GroupId" Type="System.Int32" DbType="int (System.Int32)" CanBeNull="true" />
       <Association Name="Title_Genre" Member="Genres" ThisKey="Id" OtherKey="TitleId" Type="Genre" />
       <Association Name="Title_Person" Member="People" Storage="_Peoples" ThisKey="Id" OtherKey="TitleId" Type="Person" />
       <Association Name="Title_Tag" Member="Tags" ThisKey="Id" OtherKey="MovieId" Type="Tag" />

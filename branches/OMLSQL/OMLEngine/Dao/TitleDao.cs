@@ -220,7 +220,7 @@ namespace OMLEngine.Dao
                          where names.Contains(actor.FullName)
                          select actor;
 
-            Dictionary<string, BioData> existingPeople = new Dictionary<string, BioData>(actors.Count());
+            Dictionary<string, BioData> existingPeople = new Dictionary<string, BioData>();
 
             foreach (BioData data in actors)
                 if (!existingPeople.ContainsKey(data.FullName))
