@@ -395,7 +395,7 @@ namespace MyMoviesPlugin
                                 audioTrackString += string.Format(", {0}", audioChannels);
 
                             Utilities.DebugLine("[MyMoviesImporter] Got one: {0}, {1}, {2}", audioLanguage, audioType, audioChannels);
-                            newTitle.AddLanguageFormat(audioTrackString);
+                            newTitle.AddAudioTrack(audioTrackString);
                         }
                         localNav.MoveToNext("AudioTrack", "");
                     }
@@ -480,7 +480,7 @@ namespace MyMoviesPlugin
                 foreach (Disk disk in sideAdisks)
                 {
                     disk.Name = string.Format(@"Disk{0}", j++);
-                    newTitle.Disks.Add(disk);
+                    newTitle.AddDisk(disk);
                 }
 
                 if (isDoubleSided)
@@ -491,7 +491,7 @@ namespace MyMoviesPlugin
                     foreach (Disk disk in sideBdisks)
                     {
                         disk.Name = string.Format(@"Disk{0}", j++);
-                        newTitle.Disks.Add(disk);
+                        newTitle.AddDisk(disk);
                     }
                 }
 
@@ -732,21 +732,21 @@ namespace MyMoviesPlugin
                     if (MediaData.IsBluRay(directoryName))
                     {
                         Utilities.DebugLine("[MyMoviesImporter] its a bluray, adding a new disk");
-                        title_to_validate.Disks.Add(new Disk("Disk1", directoryName, VideoFormat.BLURAY));
+                        title_to_validate.AddDisk(new Disk("Disk1", directoryName, VideoFormat.BLURAY));
                         return true;
                     }
 
                     if (MediaData.IsHDDVD(directoryName))
                     {
                         Utilities.DebugLine("[MyMoviesImporter] its an hddvd, adding a new disk");
-                        title_to_validate.Disks.Add(new Disk("Disk1", directoryName, VideoFormat.HDDVD));
+                        title_to_validate.AddDisk(new Disk("Disk1", directoryName, VideoFormat.HDDVD));
                         return true;
                     }
 
                     if (MediaData.IsDVD(directoryName))
                     {
                         Utilities.DebugLine("[MyMoviesImporter] its a dvd, adding a new disk");
-                        title_to_validate.Disks.Add(new Disk("Disk1", directoryName, VideoFormat.DVD));
+                        title_to_validate.AddDisk(new Disk("Disk1", directoryName, VideoFormat.DVD));
                         return true;
                     }
 
@@ -783,7 +783,7 @@ namespace MyMoviesPlugin
                                     disk.Name = string.Format("Disk{0}", i + 1);
                                     disk.Path = Path.Combine(directoryName, files[i]);
                                     disk.Format = format;
-                                    title_to_validate.Disks.Add(disk);
+                                    title_to_validate.AddDisk(disk);
                                 }
                                 catch (Exception)
                                 {

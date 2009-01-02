@@ -132,7 +132,7 @@ namespace DVRMSPlugin
                         Utilities.DebugLine("[DVRMSPlugin] Adding file: " + Path.GetFullPath(file));
                         disk.Path = Path.GetFullPath(file);
                         disk.Name = @"Disk 1";
-                        newTitle.Disks.Add(disk);
+                        newTitle.AddDisk(disk);
                         //newTitle.FileLocation = file;
                         if (!String.IsNullOrEmpty(newTitle.AspectRatio))
                         {
@@ -233,7 +233,7 @@ namespace DVRMSPlugin
                         string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
                         //newTitle.VideoFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
                         disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                        newTitle.Disks.Add(disk);
+                        newTitle.AddDisk(disk);
                         string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
                         if (File.Exists(Path.GetFullPath(cover)))
                         {

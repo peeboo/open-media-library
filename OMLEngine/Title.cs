@@ -868,19 +868,7 @@ namespace OMLEngine
             if (producer == null) return;
             _producers.Add(producer);
              */
-        }        
-        
-        /// <summary>
-        /// Add a string language to the language formats list
-        /// </summary>
-        /// <param name="language_format">string name to add</param>
-        public void AddLanguageFormat(string language_format)
-        {
-            /*
-            if (language_format == null) return;
-            _audioTracks.Add(language_format);
-             */
-        }
+        }                       
 
         /// <summary>
         /// Add an audio track
@@ -916,6 +904,25 @@ namespace OMLEngine
             _subtitles.Add(subtitle);
 
             _title.Subtitles = Dao.TitleDao.GetDelimitedStringFromCollection(_subtitles);
+
+            _subtitles = null;
+        }
+
+        /// <summary>
+        /// Adds a trailer to the title
+        /// </summary>
+        /// <param name="trailer"></param>
+        public void AddTrailer(string trailer)
+        {
+            if (string.IsNullOrEmpty(trailer))
+                return;
+
+            if (_trailers == null)
+                _trailers = Dao.TitleDao.DelimitedDBStringToCollection(_title.Trailers);
+
+            _trailers.Add(trailer);
+
+            _title.Trailers = Dao.TitleDao.GetDelimitedStringFromCollection(_trailers);
 
             _subtitles = null;
         }

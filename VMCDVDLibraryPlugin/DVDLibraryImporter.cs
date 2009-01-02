@@ -121,7 +121,7 @@ namespace VMCDVDLibraryPlugin
                                 string extension = Path.GetExtension(video).ToUpper();
                                 if (SupportedVideoExtensions.Contains(extension))
                                 {
-                                    dvd.Trailers.Add(video);
+                                    dvd.AddTrailer(video);
                                 }
                             }
                         }
@@ -158,7 +158,7 @@ namespace VMCDVDLibraryPlugin
                                         SetFrontCoverImage(ref newVideo, Path.GetDirectoryName(video) + "\\folder.jpg");
                                     }
 
-                                    newVideo.Disks.Add(disk);
+                                    newVideo.AddDisk(disk);
                                     AddTitle(newVideo);
                                 }
                             }
@@ -249,7 +249,7 @@ namespace VMCDVDLibraryPlugin
                             break;
                     }                    
 
-                    t.Disks.Add(disk);
+                    t.AddDisk(disk);
                     t.MetadataSourceName = "VMC DVD Library";
                     return t;
                 }
@@ -312,7 +312,7 @@ namespace VMCDVDLibraryPlugin
 
                         bFound = reader.ReadToFollowing("language");
                         if (bFound)
-                            t.AddLanguageFormat(reader.ReadString().Trim());
+                            t.AddAudioTrack(reader.ReadString().Trim());
 
                         bFound = reader.ReadToFollowing("releaseDate");
                         if (bFound)
