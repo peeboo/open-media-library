@@ -41,7 +41,7 @@ namespace OMLEngine.Dao
         public static bool ContainsDisks(IList<string> diskPaths)
         {
             var allDisks = from d in DBContext.Instance.Disks
-                           select d.Path.ToLowerInvariant();
+                           select d.Path.ToLower();
 
             return diskPaths.Intersect(allDisks).Count() > 0;            
         }
@@ -126,10 +126,48 @@ namespace OMLEngine.Dao
                     case TitleFilterType.Runtime:
                         results = ApplyRuntimeFilter(lastQuery, filter.FilterText);
                         break;
+
+                    case TitleFilterType.Year:
+                        results = ApplyYearFilter(lastQuery, filter.FilterText);
+                        break;
+
+                    case TitleFilterType.Country:
+                        results = ApplyCountryFilter(lastQuery, filter.FilterText);
+                        break;                    
                 }
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Applies the country filter
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="country"></param>
+        /// <returns></returns>
+        private static IQueryable<Title> ApplyCountryFilter(IQueryable<Title> titles, string country)
+        {
+            return from t in titles
+                   where t.CountryOfOrigin.ToLower() == country.ToLower()
+                   select t;
+        }
+
+        /// <summary>
+        /// returns the titles for the given year
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        private static IQueryable<Title> ApplyYearFilter(IQueryable<Title> titles, string year)
+        {
+            int filterYear;
+
+            int.TryParse(year, out filterYear);
+
+            return from t in titles
+                   where t.ReleaseDate.HasValue && t.ReleaseDate.Value.Year == filterYear
+                   select t;
         }
 
         /// <summary>
@@ -210,7 +248,7 @@ namespace OMLEngine.Dao
         {
             return (from t in titles
                     from p in t.Tags
-                    where t.Id == p.Title.Id && p.Name == tagName
+                    where p.Name.ToLower() == tagName.ToLower()
                     select t).Distinct();
         }
 
@@ -246,7 +284,7 @@ namespace OMLEngine.Dao
         {
             return (from t in titles
                     from p in t.People
-                    where t.Id == p.Title.Id && p.MetaData.FullName == name
+                    where p.MetaData.FullName == name
                     select t).Distinct();
         }
 
@@ -274,7 +312,7 @@ namespace OMLEngine.Dao
         {
             return (from title in titles
                     from disk in title.Disks
-                    where title.Id == disk.TitleId && disk.VideoFormat == (byte)format
+                    where disk.VideoFormat == (byte)format
                     select title).Distinct();
         }
 
@@ -368,7 +406,7 @@ namespace OMLEngine.Dao
         {
             return (from t in titles
                     from d in t.Disks
-                    where t.Id == d.TitleId && d.VideoFormat == format
+                    where d.VideoFormat == format
                     select t).Count();
         }
 
@@ -384,20 +422,7 @@ namespace OMLEngine.Dao
                     from m in g.Genres
                     where m.GenreMetaDataId == genre.Id
                     select g).Count();
-        }
-
-        /// <summary>
-        /// Returns the number of items in a given genre
-        /// </summary>
-        /// <param name="genre"></param>
-        /// <returns></returns>
-        public static int GetItemsPerGenre(GenreMetaData genre)
-        {
-            return (from g in DBContext.Instance.Genres
-                    from m in DBContext.Instance.GenreMetaDatas
-                    where g.GenreMetaDataId == m.Id && m.Id == genre.Id
-                    select g).Count();
-        }
+        }        
 
         /// <summary>
         /// Gets the number of movies a given person is in

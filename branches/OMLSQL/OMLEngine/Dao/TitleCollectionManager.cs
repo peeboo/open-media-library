@@ -190,6 +190,157 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Returns all the valid runtimes for the collection and their counts
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllRuntimes(List<TitleFilter> filter)
+        {
+            // for now i think it's more effecient to just grab the whole list and filter
+            // it.  some smart sql person may find a faster way to do this in sql
+            Dictionary<int, int> timeToCount = new Dictionary<int, int>();
+
+            foreach (Title title in GetFilteredTitles(filter))
+            {
+                foreach (int time in TitleConfig.RUNTIME_FILTER_LENGTHS)
+                {
+                    if (title.Runtime <= time)
+                    {
+                        IncrementCount(timeToCount, time);
+                        break;
+                    }
+                }
+            }
+
+            // add filtercollection for every count
+            foreach (int length in TitleConfig.RUNTIME_FILTER_LENGTHS)
+            {
+                if (timeToCount.ContainsKey(length))
+                    yield return new FilteredCollection() { Name = TitleConfig.RuntimeToFilterString(length), Count = timeToCount[length] };
+            }            
+        }
+
+        /// <summary>
+        /// Returns the all the valid years for the given filter and their counts
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllYears(List<TitleFilter> filter)
+        {
+            // again i'm gonna run through the list and build the filter instead of doing it in sql
+            // hopefully we can figure out a sql way of doing it
+            Dictionary<int, int> yearToCount = new Dictionary<int, int>();
+
+            foreach (Title title in GetFilteredTitles(filter))
+            {
+                IncrementCount(yearToCount, title.ReleaseDate.Year);
+            }
+
+            List<FilteredCollection> yearList = new List<FilteredCollection>(yearToCount.Count);
+
+            foreach (int year in yearToCount.Keys)
+            {
+                yearList.Add(new FilteredCollection() { Name = year.ToString(), Count = yearToCount[year] });
+            }
+
+            yearList.Sort();
+
+            return yearList;
+        }
+
+        /// <summary>
+        /// Returns all the countries and counts for the given filters
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllCountries(List<TitleFilter> filter)
+        {
+            // again i'm gonna run through the list and build the filter instead of doing it in sql
+            // hopefully we can figure out a sql way of doing it
+            Dictionary<string, int> countryToCount = new Dictionary<string, int>();
+
+            foreach (Title title in GetFilteredTitles(filter))
+            {
+                if (string.IsNullOrEmpty(title.CountryOfOrigin))
+                    continue;
+
+                IncrementCount(countryToCount, title.CountryOfOrigin);
+            }
+
+            List<FilteredCollection> countryList = new List<FilteredCollection>(countryToCount.Count);
+
+            foreach (string country in countryToCount.Keys)
+            {
+                countryList.Add(new FilteredCollection() { Name = country, Count = countryToCount[country] });
+            }
+
+            countryList.Sort();
+
+            return countryList;
+        }
+
+        /// <summary>
+        /// Returns all the tags and their counts for a given filter
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllTags(List<TitleFilter> filter)
+        {
+            // again i'm gonna run through the list and build the filter instead of doing it in sql
+            // hopefully we can figure out a sql way of doing it
+            Dictionary<string, int> tagToCount = new Dictionary<string, int>();
+
+            foreach (Title title in GetFilteredTitles(filter))
+            {
+                if (title.Tags != null && title.Tags.Count != 0)
+                {
+                    foreach (string tag in title.Tags)
+                    {
+                        if (!string.IsNullOrEmpty(tag))
+                            IncrementCount(tagToCount, tag);
+                    }
+                }
+            }
+
+            List<FilteredCollection> tagList = new List<FilteredCollection>(tagToCount.Count);
+
+            foreach (string tag in tagToCount.Keys)
+            {
+                tagList.Add(new FilteredCollection() { Name = tag, Count = tagToCount[tag] });
+            }
+
+            tagList.Sort();
+
+            return tagList;
+        }
+
+        /// <summary>
+        /// Increments the count for a given value in the dictionary
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <param name="item"></param>
+        private static void IncrementCount(Dictionary<int, int> collection, int item)
+        {
+            if (collection.ContainsKey(item))
+                collection[item]++;
+            else
+                collection.Add(item, 1);
+        }
+
+        /// <summary>
+        /// Increments the count for a given value in the dictionary
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <param name="item"></param>
+        private static void IncrementCount(Dictionary<string, int> collection, string item)
+        {
+            if (collection.ContainsKey(item))
+                collection[item]++;
+            else
+                collection.Add(item, 1);
+        }
+
+        /// <summary>
         /// Returns all the genres and their counts
         /// </summary>
         /// <returns></returns>
@@ -350,9 +501,17 @@ namespace OMLEngine
         }
     }
 
-    public class FilteredCollection
+    public class FilteredCollection : IComparable
     {
         public string Name { get; set; }
-        public int Count { get; set; }
+        public int Count { get; set; }       
+
+        public int CompareTo(object other)
+        {
+            FilteredCollection otherT = other as FilteredCollection;
+            if (otherT == null)
+                return -1;
+            return Name.CompareTo(otherT.Name);
+        }
     }
 }
