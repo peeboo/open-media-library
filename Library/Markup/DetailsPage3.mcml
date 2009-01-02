@@ -113,12 +113,22 @@
         </Actions>
       </Condition>
 
+      <Changed Source="[Application.IsStartingTranscodingJob]" InitialEvaluate="false">
+        <Actions>
+          <Set Target="[transcodingMessage.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[Application.IsStartingTranscodingJob]" InitialEvaluate="true">
+        <Actions>
+          <Set Target="[transcodingMessage.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
     </Rules>
 
     <Content>
       <ColorFill Content="Transparent" Layout="Form" Navigation="PreferFocusOrder">
         <Children>
-
+          <controls:TranscodingMessage Name="transcodingMessage" Visible="false" Application="[Application]"/>
           <!-- play buttons -->
           <Panel Name="DVDButtons" FocusOrder="0" Navigation="Group">            
             <LayoutInput>
