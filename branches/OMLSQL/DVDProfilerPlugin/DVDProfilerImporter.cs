@@ -164,7 +164,7 @@ namespace DVDProfilerPlugin
                     ReadChildElements(reader,
                           delegate
                           {
-                              if (reader.LocalName == "Subtitle") CurrentTitle.Subtitles.Add(reader.ReadElementString());
+                              if (reader.LocalName == "Subtitle") CurrentTitle.AddSubtitle(reader.ReadElementString());
                           });
                     break;
                 case "Actors":
@@ -195,7 +195,7 @@ namespace DVDProfilerPlugin
             if (reader.LocalName == "Genre")
             {
                 string genre = reader.ReadElementString();
-                if (!string.IsNullOrEmpty(genre)) CurrentTitle.Genres.Add(genre);
+                if (!string.IsNullOrEmpty(genre)) CurrentTitle.AddGenre(genre);
             }
         }
 
@@ -336,7 +336,7 @@ namespace DVDProfilerPlugin
                 if (string.IsNullOrEmpty(content)) content = format;
                 else if (!string.IsNullOrEmpty(format)) content += " (" + format + ")";
 
-                if (!string.IsNullOrEmpty(content)) CurrentTitle.AudioTracks.Add(content);
+                if (!string.IsNullOrEmpty(content)) CurrentTitle.AddAudioTrack(content);
             }
         }
 
@@ -529,7 +529,7 @@ namespace DVDProfilerPlugin
                     }
                 }
                 
-                CurrentTitle.Disks.Add(new Disk(title, path, currentVideoFormat));                
+                CurrentTitle.AddDisk(new Disk(title, path, currentVideoFormat));                
             }
         }
 

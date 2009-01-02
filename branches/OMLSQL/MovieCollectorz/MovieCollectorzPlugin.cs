@@ -134,7 +134,7 @@ namespace MovieCollectorzPlugin
 
                         for (int i = 0; i < genreIter.Count; i++)
                         {
-                            newTitle.Genres.Add(GetChildNodesValue(localNav, "displayname"));
+                            newTitle.AddGenre(GetChildNodesValue(localNav, "displayname"));
                             localNav.MoveToNext("genre", "");
                         }
                     }
@@ -213,7 +213,7 @@ namespace MovieCollectorzPlugin
 
                         for (int i = 0; i < subtitleIter.Count; i++)
                         {
-                            newTitle.Subtitles.Add(GetChildNodesValue(localNav, "displayname"));
+                            newTitle.AddSubtitle(GetChildNodesValue(localNav, "displayname"));
                             localNav.MoveToNext("subtitle", "");
                         }
                     }
@@ -230,7 +230,7 @@ namespace MovieCollectorzPlugin
 
                         for (int i = 0; i < audioIter.Count; i++)
                         {
-                            newTitle.AudioTracks.Add(GetChildNodesValue(localNav, "displayname"));
+                            newTitle.AddAudioTrack(GetChildNodesValue(localNav, "displayname"));
                             localNav.MoveToNext("audio", "");
                         }
                     }
@@ -286,7 +286,7 @@ namespace MovieCollectorzPlugin
                                                         disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
                                                         disk.Path = path;
                                                         disk.Name = GetChildNodesValue(localNav, "description");
-                                                        newTitle.Disks.Add(disk);
+                                                        newTitle.AddDisk(disk);
                                                     }
                                                 }
                                             }

@@ -44,8 +44,8 @@ namespace OMLTestSuite
             t.AddNonActingRole("Chris", "crew");
             t.AddDirector(new Person("Tim"));
             t.AddGenre("Comedy");
-            t.AddLanguageFormat("English");
-            t.AddLanguageFormat("French");
+            t.AddAudioTrack("English");
+            t.AddAudioTrack("French");
             t.AddProducer("Sony");
             t.AddWriter(new Person("Timothy"));
 
