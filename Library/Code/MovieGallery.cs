@@ -430,12 +430,12 @@ namespace Library
             if (Properties.Settings.Default.ShowFilterUnwatched) _filters.Add(Filter.Unwatched, new Filter(Filter.Unwatched, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort, TitleFilterType.Unwatched, filters));
             if (Properties.Settings.Default.MovieView == GalleryView.CoverArtWithAlpha) _filters.Add(Filter.Alpha, new Filter(Filter.Alpha, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort));
             if (Properties.Settings.Default.ShowFilterGenres) _filters.Add(Filter.Genres, new Filter(Filter.Genres, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.GenreSort, TitleFilterType.Genre, filters));
-
+            if (Properties.Settings.Default.ShowFilterYear) _filters.Add(Filter.Year, new Filter(Filter.Year, this, Properties.Settings.Default.YearView, true, Properties.Settings.Default.YearSort, TitleFilterType.Year, filters));
             if (Properties.Settings.Default.ShowFilterRuntime) _filters.Add(Filter.Runtime, new Filter(Filter.Runtime, this, GalleryView.List, false, String.Empty, TitleFilterType.Runtime, filters));
-
-            if (Properties.Settings.Default.ShowFilterFormat) _filters.Add(Filter.VideoFormat, new Filter(Filter.VideoFormat, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort, TitleFilterType.VideoFormat, filters));
-            
+            if (Properties.Settings.Default.ShowFilterFormat) _filters.Add(Filter.VideoFormat, new Filter(Filter.VideoFormat, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort, TitleFilterType.VideoFormat, filters));            
             if (Properties.Settings.Default.ShowFilterParentalRating) _filters.Add(Filter.ParentRating, new Filter(Filter.ParentRating, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort, TitleFilterType.ParentalRating, filters));
+            if (Properties.Settings.Default.ShowFilterTags) _filters.Add(Filter.Tags, new Filter(Filter.Tags, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort, TitleFilterType.Tag, filters));
+            if (Properties.Settings.Default.ShowFilterCountry) _filters.Add(Filter.Country, new Filter(Filter.Country, this, Properties.Settings.Default.GenreView, true, Properties.Settings.Default.NameAscendingSort, TitleFilterType.Country, filters));
 
             
             _jumpInListText = new EditableText(this);

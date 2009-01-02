@@ -85,15 +85,7 @@ namespace Library
         {
             get { return _name; }
             set { _name = value; }
-        }
-
-        private void IncrementCount(Dictionary<int, int> timeToCount, int time)
-        {
-            if (timeToCount.ContainsKey(time))
-                timeToCount[time]++;
-            else
-                timeToCount.Add(time, 1);
-        }
+        }        
 
         public List<GalleryItem> Items
         {
@@ -119,35 +111,22 @@ namespace Library
 
                     case TitleFilterType.VideoFormat:
                         filteredItems = TitleCollectionManager.GetAllVideoFormats(existingFilters);
-                        break;
+                        break;                        
 
                     case TitleFilterType.Runtime:
-                        List<FilteredCollection> filteredList = new List<FilteredCollection>(8);
+                        filteredItems = TitleCollectionManager.GetAllRuntimes(existingFilters);
+                        break;                                                                   
 
-                        // for now i think it's more effecient to just grab the whole list and filter
-                        // it.  some smart sql person may find a faster way to do this in sql
-                        Dictionary<int, int> timeToCount = new Dictionary<int, int>();
+                    case TitleFilterType.Year:
+                        filteredItems = TitleCollectionManager.GetAllYears(existingFilters);
+                        break;
 
-                        foreach (Title title in TitleCollectionManager.GetFilteredTitles(existingFilters))
-                        {
-                            foreach(int time in TitleConfig.RUNTIME_FILTER_LENGTHS )
-                            {
-                                if ( title.Runtime <= time )
-                                {
-                                    IncrementCount(timeToCount, time);
-                                    break;
-                                }
-                            }
-                        }
+                    case TitleFilterType.Country:
+                        filteredItems = TitleCollectionManager.GetAllCountries(existingFilters);                            
+                        break;
 
-                        // add filtercollection for every count
-                        foreach (int length in TitleConfig.RUNTIME_FILTER_LENGTHS)
-                        {
-                            if ( timeToCount.ContainsKey(length))
-                                filteredList.Add(new FilteredCollection() { Name = TitleConfig.RuntimeToFilterString(length), Count = timeToCount[length] });
-                        }
-
-                        filteredItems = filteredList;                        
+                    case TitleFilterType.Tag:
+                        filteredItems = TitleCollectionManager.GetAllTags(existingFilters);
                         break;
                 }
 

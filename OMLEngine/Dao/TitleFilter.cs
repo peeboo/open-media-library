@@ -16,13 +16,13 @@ namespace OMLEngine
         Alpha,
         ParentalRating,
         Runtime,
+        Year,
+        Country,
 
         /* not implemented yet*/
         Director,
-        Actor,
-        Country,
-        UserRating,
-        Year,
+        Actor,        
+        UserRating,        
         DateAdded
     }
 
