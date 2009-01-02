@@ -342,6 +342,7 @@ namespace Library
 
             if (filters != null && filters.Count != 0)
             {
+                // create the title given the list of filters
                 StringBuilder sb = new StringBuilder(filters.Count * 10);
                 sb.Append(Filter.Home);
 
@@ -620,13 +621,13 @@ namespace Library
             }
         }
 
-        public void AddMovie(MovieItem movie)
-        {
+        //public void AddMovie(MovieItem movie)
+        //{
             //_moviesVirtualList.Add(movie);
-            _movies.Add(movie);
+            //_movies.Add(movie);
 
             // update the filters
-            Title title = movie.TitleObject;
+            //Title title = movie.TitleObject;
 
             /*
             if (Filters.ContainsKey(Filter.Director) )
@@ -725,7 +726,7 @@ namespace Library
 
                 Filters[Filter.Alpha].AddMovie(firstChar, movie);
             }*/
-        }
+        //}
 
         private void AddDateAddedFilter( MovieItem movie )
         {
@@ -765,12 +766,14 @@ namespace Library
 
                 foreach (Title title in titles)
                 {
-                    MovieItem movie = new MovieItem(title, this);
-                    AddMovie(movie);
+                    //MovieItem movie = new MovieItem(title, this);
+                    //AddMovie(movie);
+                    _movies.Add(new MovieItem(title, this));
                 }
             }
 
             SortMovies();
+
             if (Movies.Count > 0)
             {
                 foreach (KeyValuePair<string, Filter> kvp in Filters)

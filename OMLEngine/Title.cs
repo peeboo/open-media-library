@@ -287,6 +287,15 @@ namespace OMLEngine
         {
             get { return _title.Id; }
         }
+
+        /// <summary>
+        /// The id that this title is a group member of
+        /// </summary>
+        public int GropuId
+        {
+            get { return _title.GroupId ?? _title.Id; }
+            set { _title.GroupId = value; }
+        }
         
         /// <summary>
         /// Name of the source for our info (MyMovies, DVD Profiler, etc)
