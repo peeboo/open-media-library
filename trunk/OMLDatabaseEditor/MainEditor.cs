@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -87,6 +88,24 @@ namespace OMLDatabaseEditor
                 metadataItem.Click += new EventHandler(this.miMetadataMulti_Click);
                 miMetadataMulti.DropDownItems.Add(metadataItem);
             }
+
+            // Set up filter lists
+            ToolStripMenuItem item;
+            foreach (string genre in _titleCollection.GetAllGenres())
+            {
+                item = new ToolStripMenuItem(genre);
+                item.CheckOnClick = true;
+                item.Click += new EventHandler(filterTitles_Click);
+                filterByGenreToolStripMenuItem.DropDownItems.Add(item);
+            }
+
+            foreach (string rating in _titleCollection.GetAllParentalRatings())
+            {
+                item = new ToolStripMenuItem(rating);
+                item.CheckOnClick = true;
+                item.Click += new EventHandler(filterTitles_Click);
+                filterByParentalRatingToolStripMenuItem.DropDownItems.Add(item);
+            }
         }
 
         private static void LoadImportPlugins(string pluginType, List<OMLPlugin> pluginList)
@@ -134,17 +153,81 @@ namespace OMLDatabaseEditor
         {
             if (mainNav.ActiveGroup != groupMovies) return;
             Cursor = Cursors.WaitCursor;
+            if (allMoviesToolStripMenuItem1.Checked)
+            {
+                _titleCollection.loadTitleCollection();
+                _titleCollection.SortBy("SortName", true);
+                PopulateMovieList(_titleCollection.Source);
+            }
+            else
+            {
+                // Find currently checked filter menu item
+                bool found = false;
+                foreach (ToolStripMenuItem item in filterByCompletenessToolStripMenuItem.DropDownItems)
+                {
+                    if (item.Checked)
+                    {
+                        filterTitles_Click(item, null);
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    foreach (ToolStripMenuItem item in filterByGenreToolStripMenuItem.DropDownItems)
+                    {
+                        if (item.Checked)
+                        {
+                            filterTitles_Click(item, null);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        foreach (ToolStripMenuItem item in filterByParentalRatingToolStripMenuItem.DropDownItems)
+                        {
+                            if (item.Checked)
+                            {
+                                filterTitles_Click(item, null);
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void PopulateMovieList(List<Title> titles)
+        {
             lbMovies.Items.Clear();
-            _titleCollection.SortBy("SortName", true);
-            lbMovies.DataSource = _titleCollection.Source;
+            lbMovies.DataSource = titles;
             if (titleEditor.EditedTitle != null)
-                lbMovies.SelectedItem = _titleCollection.GetTitleById(titleEditor.EditedTitle.InternalItemID);
+            {
+                List<Title> matches = (from title in titles
+                                       where title.InternalItemID == titleEditor.EditedTitle.InternalItemID
+                                       select title).ToList<Title>();
+                if (matches.Count == 0)
+                {
+                    lbMovies.SelectedIndex = -1;
+                    lbMovies.SelectedItem = null;
+                    titleEditor.ClearEditor();
+                }
+                else
+                {
+                    lbMovies.SelectedItem = matches[0];
+                }
+            }
             else
             {
                 lbMovies.SelectedIndex = -1;
                 lbMovies.SelectedItem = null;
+                titleEditor.ClearEditor();
             }
-            Cursor = Cursors.Default;
         }
 
         private void LoadImporters()
@@ -365,7 +448,7 @@ namespace OMLDatabaseEditor
 
         private void ToolStripOptionClick(object sender, EventArgs e)
         {
-            if (sender == saveToolStripButton)
+            if (sender == saveToolStripButton || sender == saveToolStripMenuItem)
             {
                 SaveChanges();
             } 
@@ -644,6 +727,38 @@ namespace OMLDatabaseEditor
                 }
                 e.Appearance.Combine(Percent60);
             }
+        }
+
+        private void filterTitles_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            ToolStripMenuItem filterItem = ((ToolStripMenuItem)sender);
+            // Uncheck all other filters
+            foreach (ToolStripMenuItem item in filterByCompletenessToolStripMenuItem.DropDownItems)
+                if (item != filterItem) item.Checked = false;
+            foreach (ToolStripMenuItem item in filterByGenreToolStripMenuItem.DropDownItems)
+                if (item != filterItem) item.Checked = false;
+            foreach (ToolStripMenuItem item in filterByParentalRatingToolStripMenuItem.DropDownItems)
+                if (item != filterItem) item.Checked = false;
+
+            if (sender == allMoviesToolStripMenuItem1)
+            {
+                LoadMovies();
+            }
+            else
+            {
+                allMoviesToolStripMenuItem1.Checked = false;
+                List<Title> titles = new List<Title>();
+                if (filterItem.OwnerItem == filterByGenreToolStripMenuItem)
+                    titles = _titleCollection.FindByGenre(filterItem.Text);
+                else if (filterItem.OwnerItem == filterByCompletenessToolStripMenuItem)
+                    titles = _titleCollection.FindByCompleteness(decimal.Parse("." + filterItem.Text.TrimEnd('%')));
+                else if (filterItem.OwnerItem == filterByParentalRatingToolStripMenuItem)
+                    titles = _titleCollection.FindByParentalRating(filterItem.Text);
+
+                PopulateMovieList(titles);
+            }
+            Cursor = Cursors.Default;
         }
     }
 }
