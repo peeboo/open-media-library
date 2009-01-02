@@ -16,6 +16,8 @@ namespace OMLEngine
         public VideoFormat Format { get { return (VideoFormat)_disk.VideoFormat; } set { _disk.VideoFormat = (byte)value; } }
         public string ExtraOptions { get { return _disk.ExtraOptions; } set { _disk.ExtraOptions = value; } }
 
+        internal Dao.Disk DaoDisk { get { return _disk; } }
+
         public override bool Equals(object obj)
         {
             Disk other = obj as Disk;
@@ -69,16 +71,18 @@ namespace OMLEngine
         }
         #endregion
 
-        public Disk() { }
+        public Disk()         
+        {
+            _disk = new OMLEngine.Dao.Disk();
+        }
 
         public Disk(string name, string path, VideoFormat format) 
             : this(name, path, format, null)
         { }
 
         public Disk(string name, string path, VideoFormat format, string extraOptions)
+            : this()
         {
-            _disk = new OMLEngine.Dao.Disk();
-
             this.Name = name;
             this.Path = path;
             this.Format = format;

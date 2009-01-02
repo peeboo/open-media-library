@@ -23,7 +23,7 @@ namespace OMLEngine.Dao
             Title daoTitle = title.DaoTitle;
 
             // add the genres
-            foreach (string genre in title.Genres)
+            /*foreach (string genre in title.Genres)
             {
                 // see if we've added this genre locally already
                 Genre daoGenre = daoTitle.Genres.FirstOrDefault(t => t.MetaData.Name.Equals(genre));
@@ -48,10 +48,10 @@ namespace OMLEngine.Dao
 
                 // add the genre to the title
                 daoTitle.Genres.Add(daoGenre);
-            }
+            }*/
 
             // add the tags
-            foreach (string name in title.Tags)
+            /*foreach (string name in title.Tags)
             {
                 // see if we've added this tag locally already
                 Tag tag = daoTitle.Tags.FirstOrDefault(t => t.Name.Equals(name));
@@ -72,7 +72,7 @@ namespace OMLEngine.Dao
 
                 // add the tag
                 daoTitle.Tags.Add(tag);
-            }
+            }*/
 
             // grab from the db who we know about already
             Dictionary<string, BioData> existingPeople = GetAllExistingPeople(title);
@@ -130,7 +130,7 @@ namespace OMLEngine.Dao
             // ignore the rest for now 
 
             // add all the disks
-            foreach (OMLEngine.Disk disk in title.Disks)
+            /*foreach (OMLEngine.Disk disk in title.Disks)
             {
                 Disk daoDisk = new Disk();
                 daoDisk.Name = disk.Name;
@@ -147,7 +147,7 @@ namespace OMLEngine.Dao
             daoTitle.Subtitles = GetDelimitedStringFromCollection(title.Subtitles);
 
             // add the trailers             
-            daoTitle.Trailers = GetDelimitedStringFromCollection(title.Trailers);
+            daoTitle.Trailers = GetDelimitedStringFromCollection(title.Trailers);*/
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace OMLEngine.Dao
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        private static string GetDelimitedStringFromCollection(List<string> collection)
+        public static string GetDelimitedStringFromCollection(IList<string> collection)
         {
             if (collection == null || collection.Count == 0)
                 return null;
@@ -170,7 +170,7 @@ namespace OMLEngine.Dao
             }
 
             return delimitedString.ToString();
-        }
+        }       
 
         /// <summary>
         /// Given a DB delimited string return a collection
@@ -235,7 +235,7 @@ namespace OMLEngine.Dao
         /// <param name="name"></param>
         /// <param name="role"></param>
         /// <returns></returns>
-        private static Person CreatePerson(string name, string characterName, PeopleRoles role, Dictionary<string, BioData> existingPeople)
+        public static Person CreatePerson(string name, string characterName, PeopleRoles role, Dictionary<string, BioData> existingPeople)
         {            
             BioData metaData = null;
 

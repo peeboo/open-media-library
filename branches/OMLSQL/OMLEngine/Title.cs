@@ -156,10 +156,9 @@ namespace OMLEngine
 
         /// <summary>
         /// A user can add tags to movies
-        /// todo : solomon : this should be a read only collection
         /// </summary>
         /// <value>The tags.</value>
-        public List<string> Tags
+        public IList<string> Tags
         {
             get 
             {
@@ -170,7 +169,7 @@ namespace OMLEngine
                     foreach (Dao.Tag tag in _title.Tags)
                         _tags.Add(tag.Name);
                 }
-                return _tags; 
+                return _tags.AsReadOnly();
             }
         }        
 
@@ -242,7 +241,7 @@ namespace OMLEngine
         /// <summary>
         /// Todo : solomon : this should be a readonly collection
         /// </summary>
-        public List<Disk> Disks
+        public IList<Disk> Disks
         {
             get
             {
@@ -253,7 +252,7 @@ namespace OMLEngine
                         _disks.Add(new Disk(disk));
                 }
 
-                return _disks;
+                return _disks.AsReadOnly();
             }
             set { }
         }
@@ -417,7 +416,7 @@ namespace OMLEngine
         /// <summary>
         /// List of languages (English, Spanish, French, DTS, DD5.1, DD2.0, etc)
         /// </summary>
-        public List<string> AudioTracks
+        public IList<string> AudioTracks
         {
             get 
             {
@@ -425,11 +424,11 @@ namespace OMLEngine
                 if (_audioTracks == null)
                     _audioTracks = Dao.TitleDao.DelimitedDBStringToCollection(_title.AudioTracks);
 
-                return _audioTracks; 
+                return _audioTracks.AsReadOnly(); 
             }
         }
 
-        public List<string> Subtitles
+        public IList<string> Subtitles
         {
             get
             {
@@ -437,11 +436,11 @@ namespace OMLEngine
                 if (_subtitles == null)
                     _subtitles = Dao.TitleDao.DelimitedDBStringToCollection(_title.Subtitles);
 
-                return _subtitles;
+                return _subtitles.AsReadOnly();
             }
         }
 
-        public List<string> Trailers
+        public IList<string> Trailers
         {
             get
             {
@@ -449,14 +448,14 @@ namespace OMLEngine
                 if (_trailers == null)
                     _trailers = Dao.TitleDao.DelimitedDBStringToCollection(_title.Trailers);
 
-                return _trailers;
+                return _trailers.AsReadOnly();
             }
         }
 
         /// <summary>
         /// List of Genres
         /// </summary>
-        public List<string> Genres
+        public IList<string> Genres
         {
             get 
             {
@@ -468,7 +467,7 @@ namespace OMLEngine
                         _genres.Add(genre.MetaData.Name);
                 }
 
-                return _genres; 
+                return _genres.AsReadOnly(); 
             }
         }
 
@@ -842,6 +841,7 @@ namespace OMLEngine
         /// <param name="director">Person object to add</param>
         public void AddDirector(Person director)
         {
+            /*if ( Directors.Contains(
             /*
             if (director == null) return;
             _directors.Add(director);
@@ -868,30 +868,8 @@ namespace OMLEngine
             if (producer == null) return;
             _producers.Add(producer);
              */
-        }
-        /// <summary>
-        /// Add a Genre to the genres list
-        /// </summary>
-        /// <param name="genre">A Genre from the Genre enum</param>
-        public void AddGenre(string genre)
-        {
-            /*
-            if (genre == null) return;
-            _genres.Add(genre);
-             */
-        }
-
-        /// <summary>
-        /// Add a subtitle
-        /// </summary>
-        /// <param name="language_format">string name to add</param>
-        public void AddSubtitle(string subtitle)
-        {
-            /*
-            if (subtitle == null) return;
-            _subtitles.Add(subtitle);
-             */
-        }
+        }        
+        
         /// <summary>
         /// Add a string language to the language formats list
         /// </summary>
@@ -904,10 +882,160 @@ namespace OMLEngine
              */
         }
 
+        /// <summary>
+        /// Add an audio track
+        /// </summary>
+        /// <param name="audioTrack"></param>
+        public void AddAudioTrack(string audioTrack)
+        {
+            if (string.IsNullOrEmpty(audioTrack))
+                return;
+
+            if (_audioTracks == null)
+                _audioTracks = Dao.TitleDao.DelimitedDBStringToCollection(_title.AudioTracks);
+
+            _audioTracks.Add(audioTrack);
+
+            _title.AudioTracks = Dao.TitleDao.GetDelimitedStringFromCollection(_audioTracks);
+
+            _audioTracks = null;
+        }
+
+        /// <summary>
+        /// Adds a subtitle
+        /// </summary>
+        /// <param name="subtitle"></param>
+        public void AddSubtitle(string subtitle)
+        {
+            if (string.IsNullOrEmpty(subtitle))
+                return;
+
+            if (_subtitles == null)
+                _subtitles = Dao.TitleDao.DelimitedDBStringToCollection(_title.Subtitles);
+
+            _subtitles.Add(subtitle);
+
+            _title.Subtitles = Dao.TitleDao.GetDelimitedStringFromCollection(_subtitles);
+
+            _subtitles = null;
+        }
+
+        /// <summary>
+        /// Add a Genre to the genres list
+        /// </summary>
+        /// <param name="genre">A Genre from the Genre enum</param>
+        public void AddGenre(string genre)
+        {
+            if (string.IsNullOrEmpty(genre))
+                return;
+
+            if (Genres.Contains(genre))
+                return;
+
+            TitleCollectionManager.AddGenreToTitle(this, genre);
+
+            _genres = null;
+        }
+
+        /// <summary>
+        /// Removes a genre from the title
+        /// </summary>
+        /// <param name="genre"></param>
+        public void RemoveGenre(string genre)
+        {
+            if (string.IsNullOrEmpty(genre))
+                return;
+
+            if (!Tags.Contains(genre))
+                return;
+
+            Dao.Genre foundGenre = null;
+
+            foreach (Dao.Genre daoGenre in _title.Genres)
+            {
+                if (daoGenre.MetaData.Name == genre)
+                {
+                    foundGenre = daoGenre;
+                    break;
+                }
+            }
+
+            if (foundGenre != null)
+                _title.Genres.Remove(foundGenre);
+
+            _genres = null;
+        }
+
+        /// <summary>
+        /// Adds a disk to the collection
+        /// </summary>
+        /// <param name="disk"></param>
+        public void AddDisk(Disk disk)
+        {
+            if (disk == null)
+                return;
+
+            if (Disks.Contains(disk))
+                return;
+
+            _title.Disks.Add(disk.DaoDisk);
+        }
+
+        /// <summary>
+        /// Sets a tag to be added
+        /// </summary>
+        /// <param name="tag"></param>
+        public void AddTag(string tag)
+        {
+            if (string.IsNullOrEmpty(tag))
+                return;
+
+            if (Tags.Contains(tag))
+                return;
+
+            Dao.Tag daoTag = new OMLEngine.Dao.Tag();
+            daoTag.Name = tag;
+
+            _title.Tags.Add(daoTag);
+            _tags = null;
+        }
+
+        /// <summary>
+        /// Removes the tag from the collection
+        /// </summary>
+        /// <param name="tag"></param>
+        public void RemoveTag(string tag)
+        {
+            if (string.IsNullOrEmpty(tag))
+                return;
+
+            if (!Tags.Contains(tag))
+                return;
+
+            Dao.Tag foundTag = null;
+
+            foreach (Dao.Tag daoTag in _title.Tags)
+            {
+                if (daoTag.Name == tag)
+                {
+                    foundTag = daoTag;
+                    break;
+                }
+            }
+
+            if (foundTag != null)
+                _title.Tags.Remove(foundTag);
+
+            _tags = null;
+        }
+
         public override bool Equals(object obj)
         {
             Title otherT = obj as Title;
+
             if (otherT == null)
+                return false;
+            if (otherT._title == null)
                 return false;
             if (this.Id == otherT.Id)
                 return true;

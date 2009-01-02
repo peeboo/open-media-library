@@ -11,9 +11,9 @@ namespace OMLDatabaseEditor
 {
     public partial class ListEditor : DevExpress.XtraEditors.XtraForm
     {
-        private List<string> _list;
+        private IList<string> _list;
 
-        public ListEditor(string name, List<string> list)
+        public ListEditor(string name, IList<string> list)
         {
             InitializeComponent();
             _list = list;
