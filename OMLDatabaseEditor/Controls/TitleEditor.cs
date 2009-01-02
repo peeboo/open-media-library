@@ -18,8 +18,6 @@ namespace OMLDatabaseEditor.Controls
 {
     public partial class TitleEditor : UserControl
     {
-        public AutoCompleteStringCollection MPAARatings;
-
         public delegate void TitleChangeEventHandler(object sender, EventArgs e);
         public delegate void TitleNameChangeEventHandler(object sender, TitleNameChangedEventArgs e);
         public delegate void SavedEventHandler(object sender, EventArgs e);
@@ -352,16 +350,6 @@ namespace OMLDatabaseEditor.Controls
         {
             if (Properties.Settings.Default.gbUseMPAAList)
             {
-                if (MPAARatings != null)
-                {
-                    MPAARatings.Clear();
-                }
-                else
-                {
-                    MPAARatings = new AutoCompleteStringCollection();
-                }
-                MPAARatings.AddRange(Properties.Settings.Default.gsMPAARatings.Split('|'));
-
                 // MaskBox is a hidden property
                 // It is explained on the DevExpress Website at:
                 //
@@ -369,8 +357,21 @@ namespace OMLDatabaseEditor.Controls
                 //
                 teParentalRating.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                teParentalRating.MaskBox.AutoCompleteCustomSource = MPAARatings;
+                teParentalRating.MaskBox.AutoCompleteCustomSource.AddRange(Properties.Settings.Default.gsMPAARatings.Split('|'));
             }
+
+            txtStudio.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            txtStudio.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txtStudio.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllStudios().ToArray());
+
+            txtAspectRatio.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            txtAspectRatio.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txtAspectRatio.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllAspectRatios().ToArray());
+
+            txtCountryOfOrigin.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            txtCountryOfOrigin.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txtCountryOfOrigin.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllCountryofOrigin().ToArray());
+
         }
 
         private void lbPeople_DoubleClick(object sender, EventArgs e)
