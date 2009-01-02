@@ -90,12 +90,11 @@ namespace OMLTestSuite
 
             IEnumerable<FilteredCollection> items = TitleCollectionManager.GetAllPeople();
 
-            foreach (FilteredCollection item in items)
-                Console.WriteLine(item.Name + " " + item.Count);
+            List<FilteredCollection> allItems = new List<FilteredCollection>(items);            
 
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
-                                        items.Count()));            
+                                        allItems.Count));            
         }
 
         [Test]
@@ -125,7 +124,7 @@ namespace OMLTestSuite
             filter.Add(new TitleFilter(TitleFilterType.Genre, "Drama"));
 
             IEnumerable<Title> items = TitleCollectionManager.GetFilteredTitles(filter);
-
+            
             foreach (Title title in items)
                 Console.WriteLine(title.Name);
 
