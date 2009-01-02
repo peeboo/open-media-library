@@ -331,6 +331,14 @@ namespace OMLEngine
                 Add(title);
             }
         }
+
+        public void Clear()
+        {
+            _list.Clear();
+            _moviesByFilename.Clear();
+            _moviesByItemId.Clear();
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -425,14 +433,39 @@ namespace OMLEngine
             return writers;
         }
 
+        public List<string> GetAllParentalRatings()
+        {
+            List<string> ratings = (from title in _list
+                                    orderby title.ParentalRating ascending
+                                    select title.ParentalRating).Distinct().ToList<string>();
+            return ratings;
+        }
+
         public List<Title> FindByGenre(string genre)
         {
-            List<Title> titles = new List<Title>();
-            foreach (Title title in _list)
-            {
-                if (title.Genres.Contains(genre))
-                    titles.Add(title);
-            }
+            List<Title> titles = (from title in _list
+                                  from titleGenre in title.Genres
+                                  where titleGenre == genre
+                                  orderby title.SortName ascending
+                                  select title).ToList<Title>();
+            return titles;
+        }
+
+        public List<Title> FindByParentalRating(string rating)
+        {
+            List<Title> titles = (from title in _list
+                                  where title.ParentalRating == rating
+                                  orderby title.SortName ascending
+                                  select title).ToList<Title>();
+            return titles;
+        }
+
+        public List<Title> FindByCompleteness(decimal percentComplete)
+        {
+            List<Title> titles = (from title in _list
+                                  where title.PercentComplete <= percentComplete
+                                  orderby title.SortName ascending
+                                  select title).ToList<Title>();
             return titles;
         }
 
@@ -533,6 +566,7 @@ namespace OMLEngine
         public bool loadTitleCollection()
         {
             Utilities.DebugLine("[TitleCollection] :loadTitleCollection()");
+            Clear();
             return _loadTitleCollectionFromOML();
         }
 
