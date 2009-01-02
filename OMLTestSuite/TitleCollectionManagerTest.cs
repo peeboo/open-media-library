@@ -204,5 +204,25 @@ namespace OMLTestSuite
             Console.WriteLine("Result : " + found);
             
         }
+
+        [Test]
+        public void TEST_DELETE_DISK()
+        {
+            Console.WriteLine("Starting to delete disks");
+
+            Title deleteTitle = null;
+
+            foreach (Title title in TitleCollectionManager.GetAllTitles())
+            {
+                deleteTitle = title;
+                break;
+            }
+
+            int titleId = deleteTitle.Id;
+
+            TitleCollectionManager.DeleteTitle(deleteTitle);
+
+            Console.WriteLine("Done deleting " + titleId.ToString());
+        }
     }
 }

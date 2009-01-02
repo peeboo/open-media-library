@@ -38,7 +38,7 @@ namespace Library
         public string UserRating { get { return ((double)_movieDetails.UseStarRating / 10).ToString(); } }
         public string Title { get { return _movieDetails.Name; } }
         public Image FullCover { get { return _fullCover; } }
-        public List<string> Languages { get { return _movieDetails.TitleObject.AudioTracks; } }
+        public List<string> Languages { get { return new List<string>(_movieDetails.TitleObject.AudioTracks); } }
         public Choice DiskChoice { get { return _diskChoice; } }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Library
             }
         }      
 
-        public IList Genres
+        public IList<string> Genres
         {
             get { return _movieDetails.TitleObject.Genres; }
         }

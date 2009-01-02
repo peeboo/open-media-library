@@ -159,7 +159,7 @@ namespace OMLEngine.Dao
                 int minTime = 0;
 
                 // the min time is the previous index
-                for (int x = 0; x < TitleConfig.RUNTIME_FILTER_LENGTHS.Length - 1; x++)
+                for (int x = 0; x < TitleConfig.RUNTIME_FILTER_LENGTHS.Length; x++)
                 {
                     if (TitleConfig.RUNTIME_FILTER_LENGTHS[x] == maxTime)
                     {
@@ -410,6 +410,28 @@ namespace OMLEngine.Dao
                     from b in DBContext.Instance.BioDatas
                     where p.BioId == b.Id && b.Id == person.Id
                     select p).Count();
+        }
+
+        /// <summary>
+        /// Deletes the given title
+        /// </summary>
+        /// <param name="title"></param>
+        public static void DeleteTitle(Title title)
+        {
+            foreach (Disk disk in title.Disks)
+                DBContext.Instance.Disks.DeleteOnSubmit(disk);
+
+            foreach (Genre genre in title.Genres)
+                DBContext.Instance.Genres.DeleteOnSubmit(genre);
+
+            foreach (Tag tag in title.Tags)
+                DBContext.Instance.Tags.DeleteOnSubmit(tag);
+
+            foreach (Person person in title.People)
+                DBContext.Instance.Persons.DeleteOnSubmit(person);
+
+            DBContext.Instance.Titles.DeleteOnSubmit(title);
+            DBContext.Instance.SubmitChanges();
         }
     }
 }

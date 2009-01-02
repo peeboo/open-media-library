@@ -14,9 +14,9 @@ namespace OMLDatabaseEditor.Controls
 {
     public partial class DiskEditorFrm : XtraForm
     {
-        private List<Disk> _disks;
+        private IList<Disk> _disks;
 
-        public DiskEditorFrm(List<Disk> disks)
+        public DiskEditorFrm(IList<Disk> disks)
         {
             InitializeComponent();
             _disks = disks;

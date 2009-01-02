@@ -450,7 +450,7 @@ namespace Library
         /// <value>The title object.</value>
         public Title TitleObject { get { return _titleObj; } }
 
-        public List<Disk> Disks
+        public IList<Disk> Disks
         {
             get { return _titleObj.Disks; }
             set { _titleObj.Disks = value; }
@@ -463,7 +463,7 @@ namespace Library
                 if (_friendlyNamedDisks == null)
                 {
                     _friendlyNamedDisks = new List<Disk>();
-                    List<Disk> disks = this._titleObj.Disks;
+                    IList<Disk> disks = this._titleObj.Disks;
                     
                     bool isExtender = OMLApplication.Current.IsExtender;
                     if (isExtender)
@@ -613,7 +613,7 @@ namespace Library
         /// Gets the producers.
         /// </summary>
         /// <value>The producers.</value>
-        public IList Producers
+        public IList<string> Producers
         {
             get { return _titleObj.Producers; }
             //set { _titleObj.Producers = value; }

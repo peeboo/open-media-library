@@ -16,6 +16,8 @@ namespace OMLEngine
         public static bool AddTitle(Title title)
         {
             // setup all the collections objects
+            // todo : solomon : this should go away once it's understood how people 
+            // will be added
             Dao.TitleDao.SetupCollectionsToBeAdded(title);
 
             // todo : solomon : do your duplicate logic here
@@ -188,6 +190,15 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Returns all the genres and their counts
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllGenres()
+        {
+            return GetAllGenres(null);
+        }
+
+        /// <summary>
         /// Returns all the genres and counts given a filter
         /// todo : solomon : even though this method returns pretty quick it could probably be done
         /// more effeciently
@@ -249,7 +260,16 @@ namespace OMLEngine
         public static Title GetTitle(int titleId)
         {
             return new Title(Dao.TitleCollectionDao.GetTitleById(titleId));
-        }        
+        }
+
+        /// <summary>
+        /// Removes the given title and all it's meta data
+        /// </summary>
+        /// <param name="titleId"></param>
+        public static void DeleteTitle(Title title)
+        {
+            Dao.TitleCollectionDao.DeleteTitle(title.DaoTitle);
+        }
 
         /// <summary>
         /// Increments the watch count on the title object
@@ -305,6 +325,28 @@ namespace OMLEngine
             }
 
             return Dao.TitleCollectionDao.ContainsDisks(paths);
+        }
+
+        /// <summary>
+        /// Adds a genre to a title
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="genre"></param>
+        public static void AddGenreToTitle(Title title, string genre)
+        {
+            if (string.IsNullOrEmpty(genre))
+                return;
+
+            // see if the genre exists
+            Dao.GenreMetaData meta = Dao.TitleCollectionDao.GetGenreMetaDataByName(genre);
+
+            if (meta == null)
+            {
+                meta = new OMLEngine.Dao.GenreMetaData();
+                meta.Name = genre;
+            }
+
+            title.DaoTitle.Genres.Add(new Dao.Genre { MetaData = meta });
         }
     }
 

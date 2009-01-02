@@ -35,7 +35,7 @@ namespace OMLDatabaseEditor
 
         }
 
-        private string MakeStringFromList(List<string> list)
+        private string MakeStringFromList(IList<string> list)
         {
             string ret = "";
             if (list != null)
@@ -49,7 +49,7 @@ namespace OMLDatabaseEditor
             return ret;
         }
 
-        private string MakeStringFromPersonList(List<Person> list)
+        private string MakeStringFromPersonList(IList<Person> list)
         {
             string ret = "";
             if (list != null)

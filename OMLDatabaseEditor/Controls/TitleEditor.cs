@@ -52,13 +52,14 @@ namespace OMLDatabaseEditor.Controls
 
         public void LoadDVD(Title dvd)
         {
-            BinaryFormatter formatter = new BinaryFormatter();
+            /*BinaryFormatter formatter = new BinaryFormatter();
             using (MemoryStream stream = new MemoryStream())
             {
                 formatter.Serialize(stream, dvd);
                 stream.Position = 0;
                 _dvdTitle = (Title)formatter.Deserialize(stream);
-            }
+            }*/
+            _dvdTitle = dvd;
             _isLoading = true;
             titleSource.DataSource = _dvdTitle;
             Status = TitleStatus.Normal;
@@ -107,7 +108,7 @@ namespace OMLDatabaseEditor.Controls
             _titleNameChanged(new TitleNameChangedEventArgs(txtName.Text));
         }
 
-        private void EditList(string name, List<string> listToEdit)
+        private void EditList(string name, IList<string> listToEdit)
         {
             ListEditor editor = new ListEditor(name, listToEdit);
             List<string> original = listToEdit.ToList<string>();

@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
+using System.Linq;
 
 using OMLEngine;
 
@@ -54,7 +55,15 @@ namespace OMLDatabaseEditor
                 if (XtraMessageBox.Show("No allowable genres have been defined. Would you like to load them from your current movie collection?", "No Genres", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     Properties.Settings.Default.gsValidGenres = new StringCollection();
-                    Properties.Settings.Default.gsValidGenres.AddRange(MainEditor._titleCollection.GetAllGenres().ToArray());
+
+                    IEnumerable<FilteredCollection> genres = TitleCollectionManager.GetAllGenres();
+                    string[] genreNames = new string[genres.Count()];
+
+                    int index = 0;
+                    foreach (FilteredCollection genre in genres)
+                        genreNames[index++] = genre.Name;
+
+                    Properties.Settings.Default.gsValidGenres.AddRange(genreNames);
                 }
             }
             GenreList = new List<String>();
@@ -164,15 +173,16 @@ namespace OMLDatabaseEditor
                 foreach (object item in lbGenres.SelectedItems)
                 {
                     string genre = item as string;
-                    List<Title> titles = MainEditor._titleCollection.FindByGenre(genre);
-                    if (titles.Count > 0)
+                    IEnumerable<Title> titles = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Genre, genre);
+                    if (titles.Count() > 0)
                     {
-                        StringBuilder message = new StringBuilder(titles.Count + " movie(s) in your collection are associated with the " + genre + " genre. Would you like to remove the association?\r\n\r\n");
+                        StringBuilder message = new StringBuilder(titles.Count() + " movie(s) in your collection are associated with the " + genre + " genre. Would you like to remove the association?\r\n\r\n");
                         foreach (Title title in titles)
                             message.Append(title.Name + "\r\n");
+
                         if (XtraMessageBox.Show(message.ToString(), "Remove Genre", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            foreach (Title title in MainEditor._titleCollection.FindByGenre(genre))
+                            foreach (Title title in TitleCollectionManager.GetFilteredTitles(TitleFilterType.Genre, genre))
                             {
                                 title.Genres.Remove(genre);
                             }
