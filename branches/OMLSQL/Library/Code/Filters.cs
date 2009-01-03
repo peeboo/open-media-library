@@ -57,6 +57,14 @@ namespace Library
 
     public class Filter
     {
+        private MovieGallery _gallery;
+        private string _name;
+
+        private Dictionary<string, VirtualList> _itemMovieRelation = new Dictionary<string, VirtualList>();
+        private string _galleryView;
+        private Comparison<GalleryItem> _currentSort;
+        private Dictionary<string, Comparison<GalleryItem>> _sortFunctionLookup = new Dictionary<string, Comparison<GalleryItem>>();
+
         public const string About = "About";
         public const string Settings = "Settings";
         public const string Genres = "Genres";
@@ -140,6 +148,10 @@ namespace Library
                     case TitleFilterType.UserRating:
                         filteredItems = TitleCollectionManager.GetAllUserRatings(existingFilters);
                         break;
+
+                    case TitleFilterType.DateAdded:
+                        filteredItems = TitleCollectionManager.GetAllDateAdded(existingFilters);
+                        break;
                 }
 
                 if (filteredItems != null)
@@ -203,23 +215,17 @@ namespace Library
             return TitleFilterType.All;
         }
 
-        public Filter(string name, MovieGallery gallery, string galleryView, bool bSort, string sortFunction, TitleFilterType filterType, List<TitleFilter> existingFilters)
-            : this(name, gallery, galleryView, bSort, sortFunction)
+        public Filter(string name, MovieGallery gallery, string galleryView, string sortFunction, TitleFilterType filterType, List<TitleFilter> existingFilters)
         {
             this.filterType = filterType;
             this.existingFilters = existingFilters;
-        }
 
-        public Filter(string name, MovieGallery gallery, string galleryView, bool bSort, string sortFunction)
-        {
-            _allowSort = bSort;
             _name = name;
             _gallery = gallery;
             _galleryView = galleryView;
             _currentSort = SortByNameAscending;
             Initialize(sortFunction);
-            //AddItem(AllItems);
-        }
+        }        
 
         private void Initialize(string sortFunction)
         {
@@ -232,58 +238,11 @@ namespace Library
                 if (_sortFunctionLookup.ContainsKey(sortFunction))
                     _currentSort = _sortFunctionLookup[sortFunction];
             }
-        }
+        }                        
 
         /// <summary>
-        /// Adds an empty item to our lists. Use this to create the items first in a certain order before adding the movies
+        /// todo : solomon : does this still make sense ?
         /// </summary>
-        /// <param name="item">The item.</param>
-        public void AddItem(string item)
-        {
-            /*if (!_itemMovieRelation.ContainsKey(item))
-            {
-                VirtualList movies = new VirtualList(_gallery, null);
-                _itemMovieRelation.Add(item, movies);
-                _items.Add(new GalleryItem(_gallery, item, item, this));
-            }*/
-        }
-
-        /// <summary>
-        /// Adds a movie to the filter - assumes this movie is unique within the filter
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="movie"></param>
-        public void AddMovie(string item, MovieItem movie)
-        {
-            AddMovie(item, movie, true);
-        }
-
-        /// <summary>
-        /// Adds the movie corresponding to the item.
-        /// </summary>
-        /// <param name="item">The item.</param>
-        /// <param name="movie">The movie.</param>
-        /// <param name="allowDuplicates">if false will check the collection before 
-        /// adding the movie to see it already exists</param>
-        public void AddMovie(string item, MovieItem movie, bool allowDuplicates)
-        {
-            /*if (_itemMovieRelation.ContainsKey(item))
-            {
-                VirtualList movies = (VirtualList)_itemMovieRelation[item];
-                                
-                // the allowDuplicates key will be a perf savings when we know it won't be a duplicate
-                if (allowDuplicates || (!movies.Contains(movie)))
-                    movies.Add(movie);
-            }
-            else
-            {
-                VirtualList movies = new VirtualList(_gallery, null);
-                movies.Add(movie);
-                _itemMovieRelation.Add(item, movies);
-                _items.Add(new GalleryItem(_gallery, item, item, this));
-            }*/
-        }
-
         public void Sort()
         {
             //if (_allowSort && _currentSort != null) _items.Sort(_currentSort);
@@ -306,21 +265,9 @@ namespace Library
                 filters.Add(newFilter);
 
             MovieGallery movies = new MovieGallery(filters);
-            //if (_itemMovieRelation.ContainsKey(filter))
-            //{
-
-            /*foreach (MovieItem movie in _itemMovieRelation[filter])
-            {
-                MovieItem newMovie = (MovieItem)movie.Clone(movies);
-                movies.AddMovie(newMovie);
-            }*/
-            //}
+            
             movies.SortMovies();
-            //Trace.TraceInformation("MovieGallery.CreateFilteredCollection: done: directors {0} actors {1} genres {2} movies {3}", movies._directors.Count, movies._actors.Count, movies._genres.Count, movies._movies.Count);
-            /*foreach (KeyValuePair<string, Filter> kvp in movies.Filters)
-            {
-                kvp.Value.Sort();
-            }*/
+            
             return movies;
         }
 
@@ -379,7 +326,6 @@ namespace Library
                 return SortByNameAscending(m1, m2);
         }
 
-
         private static int SortByNameAscending(GalleryItem m1, GalleryItem m2)
         {
             return m1.Name.CompareTo(m2.Name);
@@ -389,17 +335,5 @@ namespace Library
         {
             return m2.Name.CompareTo(m1.Name);
         }
-
-        private MovieGallery _gallery;
-        private string _name;
-
-        private Dictionary<string, VirtualList> _itemMovieRelation = new Dictionary<string, VirtualList>();
-        private string _galleryView;
-        private Comparison<GalleryItem> _currentSort;
-        private Dictionary<string, Comparison<GalleryItem>> _sortFunctionLookup = new Dictionary<string, Comparison<GalleryItem>>();
-        private bool _allowSort = false;
-
     }
-
-
 }

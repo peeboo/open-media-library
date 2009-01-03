@@ -196,6 +196,40 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Returns the date when titles were added and their counts
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllDateAdded(List<TitleFilter> filters)
+        {
+            // for now i think it's more effecient to just grab the whole list and filter
+            // it.  some smart sql person may find a faster way to do this in sql
+            Dictionary<int, int> dateToCount = new Dictionary<int, int>();
+
+            foreach (Title title in GetFilteredTitles(filters))
+            {
+                if (title.DateAdded == DateTime.MinValue)
+                    continue;
+
+                foreach (int days in TitleConfig.ADDED_FILTER_DATE)
+                {
+                    if ((DateTime.Now - title.DateAdded).Days <= days)
+                    {
+                        IncrementCount(dateToCount, days);
+                        break;
+                    }
+                }
+            }
+
+            // add filtercollection for every count
+            foreach (int days in TitleConfig.ADDED_FILTER_DATE)
+            {
+                if (dateToCount.ContainsKey(days))
+                    yield return new FilteredCollection() { Name = TitleConfig.DaysToFilterString(days), Count = dateToCount[days] };
+            }           
+        }
+
+        /// <summary>
         /// Increments the count for a given value in the dictionary
         /// </summary>
         /// <param name="collection"></param>
