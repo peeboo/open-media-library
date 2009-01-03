@@ -152,6 +152,10 @@ namespace OMLEngine.Dao
                     case TitleFilterType.UserRating:
                         results = ApplyUserRatingFilter(lastQuery, filter.FilterText);
                         break;
+
+                    case TitleFilterType.DateAdded:
+                        results = ApplyDateAddedFilter(lastQuery, filter.FilterText);
+                        break;
                         
                 }
             }
@@ -207,6 +211,48 @@ namespace OMLEngine.Dao
             return from t in titles
                    where t.ReleaseDate.HasValue && t.ReleaseDate.Value.Year == filterYear
                    select t;
+        }
+
+        /// <summary>
+        /// Applys the date added filter
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="dateAdded"></param>
+        /// <returns></returns>
+        private static IQueryable<Title> ApplyDateAddedFilter(IQueryable<Title> titles, string dateAdded)
+        {
+            int days = TitleConfig.DateAddedFilterStringToInt(dateAdded);
+
+            if (days == 0)
+            {
+                return from t in titles
+                       where t.DateAdded != null && ((TimeSpan) (DateTime.Now - t.DateAdded)).Days <= days
+                       select t;
+            }
+            else if (days == -1)
+            {
+                return from t in titles
+                       where t.DateAdded != null && ((TimeSpan)(DateTime.Now - t.DateAdded)).Days > TitleConfig.MAX_DATE_ADDED
+                       select t;
+            }
+            else
+            {
+                int minDate = 0;
+
+                // the min time is the previous index
+                for (int x = 0; x < TitleConfig.ADDED_FILTER_DATE.Length; x++)
+                {
+                    if (TitleConfig.ADDED_FILTER_DATE[x] == days)
+                    {
+                        minDate = TitleConfig.ADDED_FILTER_DATE[x - 1];
+                        break;
+                    }
+                }
+
+                return from t in titles
+                       where t.DateAdded != null && ((TimeSpan)(DateTime.Now - t.DateAdded)).Days <= days && ((TimeSpan)(DateTime.Now - t.DateAdded)).Days > minDate
+                       select t;
+            }
         }
 
         /// <summary>
@@ -517,7 +563,7 @@ namespace OMLEngine.Dao
         }
 
         /// <summary>
-        /// Creating a method for this since for some reason it doesn't work inline
+        /// Creating a method for this since doing it inline makes SQL try to do it which fails
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
