@@ -495,9 +495,39 @@ namespace OMLEngine
             {
                 meta = new OMLEngine.Dao.GenreMetaData();
                 meta.Name = genre;
+
+                // save the genre
+                Dao.DBContext.Instance.GenreMetaDatas.InsertOnSubmit(meta);
+                Dao.DBContext.Instance.SubmitChanges();
             }
 
             title.DaoTitle.Genres.Add(new Dao.Genre { MetaData = meta });
+        }
+
+        /// <summary>
+        /// Sets a tag to be added to a title
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="tag"></param>
+        public static void AddTagToTitle(Title title, string tag)
+        {
+            if (string.IsNullOrEmpty(tag))
+                return;
+
+            // see if the tag exists
+            Dao.Tag daoTag = Dao.TitleCollectionDao.GetTagByTagName(tag);
+
+            if (daoTag == null)
+            {
+                daoTag = new OMLEngine.Dao.Tag();
+                daoTag.Name = tag;
+
+                // save the genre
+                Dao.DBContext.Instance.Tags.InsertOnSubmit(daoTag);
+                Dao.DBContext.Instance.SubmitChanges();
+            }
+
+            title.DaoTitle.Tags.Add(daoTag);
         }
     }
 
