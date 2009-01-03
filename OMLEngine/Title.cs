@@ -207,13 +207,22 @@ namespace OMLEngine
         }
 
         /// <summary>
-        /// Gets or sets the user star rating (0 to 100)
+        /// Gets or sets the user star rating (0 to 100) - null will make the item unrated
         /// </summary>
         /// <value>The user star rating.</value>
-        public int UserStarRating
+        public int? UserStarRating
         {
             get { return _title.UserRating ?? 0; }
-            set { _title.UserRating = (byte) value; }
+            set 
+            { 
+                _title.UserRating = ( value == null ) 
+                                            ? (byte?)null 
+                                            : (value > 100) ?
+                                                (byte)100 
+                                                : (value < 0) 
+                                                    ? (byte)0 
+                                                    : (byte)value; 
+            }
         }
 
         /// <summary>

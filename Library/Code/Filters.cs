@@ -136,6 +136,10 @@ namespace Library
                     case TitleFilterType.Actor:
                         filteredItems = TitleCollectionManager.GetAllPeople(existingFilters, PeopleRole.Actor);
                         break;
+
+                    case TitleFilterType.UserRating:
+                        filteredItems = TitleCollectionManager.GetAllUserRatings(existingFilters);
+                        break;
                 }
 
                 if (filteredItems != null)

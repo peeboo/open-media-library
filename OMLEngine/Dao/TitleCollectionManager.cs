@@ -271,6 +271,37 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Gets all the user rated titles and their counts
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllUserRatings(List<TitleFilter> filters)
+        {
+            // again i'm gonna run through the list and build the filter instead of doing it in sql
+            // hopefully we can figure out a sql way of doing it
+            Dictionary<string, int> ratingToCount = new Dictionary<string, int>();
+
+            foreach (Title title in GetFilteredTitles(filters))
+            {                
+                if (title.DaoTitle.UserRating == null)
+                    continue;
+
+                IncrementCount(ratingToCount, ((double)title.UserStarRating / 10).ToString("0.0"));
+            }
+
+            List<FilteredCollection> ratingList = new List<FilteredCollection>(ratingToCount.Count);
+
+            foreach (string rating in ratingToCount.Keys)
+            {
+                ratingList.Add(new FilteredCollection() { Name = rating, Count = ratingToCount[rating] });
+            }
+
+            ratingList.Sort();
+
+            return ratingList;
+        }
+
+        /// <summary>
         /// Returns all the countries and counts for the given filters
         /// </summary>
         /// <param name="filter"></param>
