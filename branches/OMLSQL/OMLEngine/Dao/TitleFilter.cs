@@ -19,10 +19,10 @@ namespace OMLEngine
         Year,
         Country,
         Director,
-        Actor,        
+        Actor,
+        UserRating,        
 
         /* not implemented yet*/
-        UserRating,        
         DateAdded
     }
 

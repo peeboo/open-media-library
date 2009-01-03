@@ -308,7 +308,7 @@ namespace Library
             if (_titleObj.UserStarRating > 0)
             {
                 if (SubCaption.Length > 0) SubCaption += " / ";
-                SubCaption += ((double)(_titleObj.UserStarRating / 10)).ToString("0.0");
+                SubCaption += (((double)_titleObj.UserStarRating / 10)).ToString("0.0");
             }
 
 //            if (_titleObj.Directors.Count > 0 && ((Person)_titleObj.Directors[0]).full_name.Trim().Length > 0)
@@ -501,7 +501,7 @@ namespace Library
         /// <value>The use star rating.</value>
         public int UseStarRating
         {
-            get { return _titleObj.UserStarRating; }
+            get { return _titleObj.UserStarRating ?? 0; }
         }
 
         /// <summary>

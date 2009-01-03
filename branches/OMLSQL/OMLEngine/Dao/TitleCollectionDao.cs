@@ -99,16 +99,8 @@ namespace OMLEngine.Dao
                         results = ApplyFormatFilter(lastQuery, (VideoFormat)Enum.Parse(typeof(VideoFormat), filter.FilterText));
                         break;
 
-                    case TitleFilterType.Unwatched:
-
-                        bool unwatchedState;
-
-                        if (!bool.TryParse(filter.FilterText, out unwatchedState))
-                            unwatchedState = false;
-
-                        results = ApplyWatchedFilter(
-                                        lastQuery,
-                                        unwatchedState);
+                    case TitleFilterType.Unwatched:                       
+                        results = ApplyWatchedFilter(lastQuery, filter.FilterText);
                         break;
 
                     case TitleFilterType.Tag:
@@ -142,11 +134,35 @@ namespace OMLEngine.Dao
                     case TitleFilterType.Director:
                         results = ApplyPersonFilter(lastQuery, filter.FilterText, PeopleRole.Director);
                         break;
+
+                    case TitleFilterType.UserRating:
+                        results = ApplyUserRatingFilter(lastQuery, filter.FilterText);
+                        break;
                         
                 }
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Applies the rating filter
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="rating"></param>
+        /// <returns></returns>
+        private static IQueryable<Title> ApplyUserRatingFilter(IQueryable<Title> titles, string rating)
+        {
+            double userRating;
+
+            if (double.TryParse(rating, out userRating))
+            {
+                userRating *= 10;
+            }
+
+            return from t in titles
+                   where t.UserRating == (byte)userRating
+                   select t;
         }
 
         /// <summary>
@@ -267,9 +283,14 @@ namespace OMLEngine.Dao
         /// <param name="titles"></param>
         /// <param name="watched"></param>
         /// <returns></returns>
-        private static IQueryable<Title> ApplyWatchedFilter(IQueryable<Title> titles, bool watched)
+        private static IQueryable<Title> ApplyWatchedFilter(IQueryable<Title> titles, string watched)
         {
-            if (watched)
+            bool unwatchedState;
+
+            if (!bool.TryParse(watched, out unwatchedState))
+                unwatchedState = false;
+
+            if (unwatchedState)
             {
                 return from t in titles
                        where t.WatchedCount != 0 && t.WatchedCount != null
