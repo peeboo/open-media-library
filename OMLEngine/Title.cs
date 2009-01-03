@@ -57,6 +57,9 @@ namespace OMLEngine
             set { _selectedDisk = value; }
         }
 
+        /// <summary>
+        /// Does this still make sense ?
+        /// </summary>
         public List<string> ExtraFeatures
         {
             get { return _extraFeatures; }
@@ -1002,17 +1005,15 @@ namespace OMLEngine
         /// </summary>
         /// <param name="tag"></param>
         public void AddTag(string tag)
-        {
+        {            
             if (string.IsNullOrEmpty(tag))
                 return;
 
             if (Tags.Contains(tag))
                 return;
 
-            Dao.Tag daoTag = new OMLEngine.Dao.Tag();
-            daoTag.Name = tag;
+            TitleCollectionManager.AddTagToTitle(this, tag);
 
-            _title.Tags.Add(daoTag);
             _tags = null;
         }
 

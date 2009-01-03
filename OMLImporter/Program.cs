@@ -4,7 +4,6 @@ using System.IO;
 using System.Windows.Forms;
 using OMLSDK;
 using OMLEngine;
-using System.Drawing;
 using System.Linq;
 
 namespace OMLImporter
