@@ -293,13 +293,12 @@
                   </Panel>
 
                   <!-- extra info panel right column -->
-                  <Panel MinimumSize="250,0" MaximumSize="250,0">
+                  <Panel MinimumSize="244,0" MaximumSize="244,0">
                     <Layout>
                       <FlowLayout Orientation="Vertical" Spacing="2,2" />
                     </Layout>
                     <Children>
                       <me:TextWithLabel Label="User Rating: " Text="[DetailsPage.UserRating]" />
-                      <me:TextWithLabel Label="Video Details: " Text="[DetailsPage.MovieDetails.TitleObject.VideoDetails]" />
                       <me:TextWithLabel Label="Resolution: " Text="[DetailsPage.MovieDetails.TitleObject.VideoResolution]" />
                       <me:TextWithLabel Label="Tags: " Text="[DetailsPage.TagsAsString]" />
                     </Children>
@@ -552,9 +551,11 @@
     </Properties>
 
     <Rules>
-      <Rule>
+      <Rule ConditionLogicalOp="Or">
         <Conditions>
           <Equality Source="[Text]" Value=""/>
+          <Equality Source="[Text]" Value="0"/>
+          <Equality Source="[Text]" Value="null"/>
         </Conditions>
         <Actions>
           <Set Target="[LabelField.Visible]" Value="false" />
