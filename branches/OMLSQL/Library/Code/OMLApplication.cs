@@ -211,7 +211,15 @@ namespace Library
 
         public void Uninitialize()
         {
-            ExtenderDVDPlayer.Uninitialize(TitleCollectionManager.GetAllTitles());
+            try
+            {
+                ExtenderDVDPlayer.Uninitialize(TitleCollectionManager.GetAllTitles());
+            }
+            finally
+            {
+                // close the db connection
+                TitleCollectionManager.CloseDBConnection();
+            }            
         }
 
         public static OMLApplication Current

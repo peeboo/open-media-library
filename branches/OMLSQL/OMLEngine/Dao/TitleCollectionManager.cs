@@ -139,90 +139,43 @@ namespace OMLEngine
             return (filters == null || filters.Count == 0 ) 
                     ? GetAllTitles()
                     : ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetFilteredTitles(filters));
-        }
+        }       
 
         /// <summary>
         /// Returns all the valid parental ratings and their count
-        /// todo : solomon : optimize this
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public static IEnumerable<FilteredCollection> GetAllParentalRatings(List<TitleFilter> filter)
+        public static IEnumerable<FilteredCollection> GetAllParentalRatings(List<TitleFilter> filters)
         {
-            // again i'm gonna run through the list and build the filter instead of doing it in sql
-            // hopefully we can figure out a sql way of doing it
-            Dictionary<string, int> ratingToCount = new Dictionary<string, int>();
-
-            foreach (Title title in GetFilteredTitles(filter))
-            {
-                if (title.ParentalRating != null)
-                {
-                    IncrementCount(ratingToCount, title.ParentalRating);
-                }
-            }
-
-            List<FilteredCollection> ratingList = new List<FilteredCollection>(ratingToCount.Count);
-
-            foreach (string rating in ratingToCount.Keys)
-            {
-                ratingList.Add(new FilteredCollection() { Name = rating, Count = ratingToCount[rating] });
-            }
-
-            ratingList.Sort();
-
-            return ratingList;
+            return Dao.TitleCollectionDao.GetAllParentalRatings(filters);            
         }
 
         /// <summary>
         /// Returns all the valid video formats and their counts
-        /// todo : solomon : optimize this
         /// </summary>
-        /// <param name="filter"></param>
+        /// <param name="filters"></param>
         /// <returns></returns>
-        public static IEnumerable<FilteredCollection> GetAllVideoFormats(List<TitleFilter> filter)
+        public static IEnumerable<FilteredCollection> GetAllVideoFormats(List<TitleFilter> filters)
         {
-            IQueryable<Dao.Title> titles = (filter == null || filter.Count == 0)
-                                            ? Dao.DBContext.Instance.Titles
-                                            : (IQueryable<Dao.Title>)Dao.TitleCollectionDao.GetFilteredTitles(filter);
-
-            // again i'm gonna run through the list and build the filter instead of doing it in sql
-            // hopefully we can figure out a sql way of doing it
-            Dictionary<int, int> formatToCount = new Dictionary<int, int>();
-
-            foreach (Title title in GetFilteredTitles(filter))
-            {
-                // it'll default to dvd if there is no disk - but i don't want that to show up 
-                // in the filter
-                if (title.DaoTitle.Disks == null || title.DaoTitle.Disks.Count == 0)
-                    continue;
-
-                IncrementCount(formatToCount, (int)title.VideoFormat);
-            }
-
-            List<FilteredCollection> filteredFormats = new List<FilteredCollection>(formatToCount.Count);
-
-            foreach (int format in formatToCount.Keys)
-            {
-                filteredFormats.Add(new FilteredCollection() { Name = ((VideoFormat)format).ToString(), Count = formatToCount[format] });
-            }
-
-            filteredFormats.Sort();
-
-            return filteredFormats;
+            return Dao.TitleCollectionDao.GetAllVideoFormats(filters);            
         }
 
         /// <summary>
         /// Returns all the valid runtimes for the collection and their counts
+        /// 
+        /// todo : solomon : runtimes doesn't use the fancy LINQ way because of the grouping
+        /// although i bet some smarty can figure it out
         /// </summary>
-        /// <param name="filter"></param>
+        /// <param name="filters"></param>
         /// <returns></returns>
-        public static IEnumerable<FilteredCollection> GetAllRuntimes(List<TitleFilter> filter)
+        public static IEnumerable<FilteredCollection> GetAllRuntimes(List<TitleFilter> filters)
         {
             // for now i think it's more effecient to just grab the whole list and filter
             // it.  some smart sql person may find a faster way to do this in sql
             Dictionary<int, int> timeToCount = new Dictionary<int, int>();
 
-            foreach (Title title in GetFilteredTitles(filter))
+            foreach (Title title in GetFilteredTitles(filters))
             {
                 foreach (int time in TitleConfig.RUNTIME_FILTER_LENGTHS)
                 {
@@ -243,131 +196,6 @@ namespace OMLEngine
         }
 
         /// <summary>
-        /// Returns the all the valid years for the given filter and their counts
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public static IEnumerable<FilteredCollection> GetAllYears(List<TitleFilter> filter)
-        {
-            // again i'm gonna run through the list and build the filter instead of doing it in sql
-            // hopefully we can figure out a sql way of doing it
-            Dictionary<int, int> yearToCount = new Dictionary<int, int>();
-
-            foreach (Title title in GetFilteredTitles(filter))
-            {
-                IncrementCount(yearToCount, title.ReleaseDate.Year);
-            }
-
-            List<FilteredCollection> yearList = new List<FilteredCollection>(yearToCount.Count);
-
-            foreach (int year in yearToCount.Keys)
-            {
-                yearList.Add(new FilteredCollection() { Name = year.ToString(), Count = yearToCount[year] });
-            }
-
-            yearList.Sort();
-
-            return yearList;
-        }
-
-        /// <summary>
-        /// Gets all the user rated titles and their counts
-        /// </summary>
-        /// <param name="filters"></param>
-        /// <returns></returns>
-        public static IEnumerable<FilteredCollection> GetAllUserRatings(List<TitleFilter> filters)
-        {
-            // again i'm gonna run through the list and build the filter instead of doing it in sql
-            // hopefully we can figure out a sql way of doing it
-            Dictionary<string, int> ratingToCount = new Dictionary<string, int>();
-
-            foreach (Title title in GetFilteredTitles(filters))
-            {                
-                if (title.DaoTitle.UserRating == null)
-                    continue;
-
-                IncrementCount(ratingToCount, ((double)title.UserStarRating / 10).ToString("0.0"));
-            }
-
-            List<FilteredCollection> ratingList = new List<FilteredCollection>(ratingToCount.Count);
-
-            foreach (string rating in ratingToCount.Keys)
-            {
-                ratingList.Add(new FilteredCollection() { Name = rating, Count = ratingToCount[rating] });
-            }
-
-            ratingList.Sort();
-
-            return ratingList;
-        }
-
-        /// <summary>
-        /// Returns all the countries and counts for the given filters
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public static IEnumerable<FilteredCollection> GetAllCountries(List<TitleFilter> filter)
-        {
-            // again i'm gonna run through the list and build the filter instead of doing it in sql
-            // hopefully we can figure out a sql way of doing it
-            Dictionary<string, int> countryToCount = new Dictionary<string, int>();
-
-            foreach (Title title in GetFilteredTitles(filter))
-            {
-                if (string.IsNullOrEmpty(title.CountryOfOrigin))
-                    continue;
-
-                IncrementCount(countryToCount, title.CountryOfOrigin);
-            }
-
-            List<FilteredCollection> countryList = new List<FilteredCollection>(countryToCount.Count);
-
-            foreach (string country in countryToCount.Keys)
-            {
-                countryList.Add(new FilteredCollection() { Name = country, Count = countryToCount[country] });
-            }
-
-            countryList.Sort();
-
-            return countryList;
-        }
-
-        /// <summary>
-        /// Returns all the tags and their counts for a given filter
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public static IEnumerable<FilteredCollection> GetAllTags(List<TitleFilter> filter)
-        {
-            // again i'm gonna run through the list and build the filter instead of doing it in sql
-            // hopefully we can figure out a sql way of doing it
-            Dictionary<string, int> tagToCount = new Dictionary<string, int>();
-
-            foreach (Title title in GetFilteredTitles(filter))
-            {
-                if (title.Tags != null && title.Tags.Count != 0)
-                {
-                    foreach (string tag in title.Tags)
-                    {
-                        if (!string.IsNullOrEmpty(tag))
-                            IncrementCount(tagToCount, tag);
-                    }
-                }
-            }
-
-            List<FilteredCollection> tagList = new List<FilteredCollection>(tagToCount.Count);
-
-            foreach (string tag in tagToCount.Keys)
-            {
-                tagList.Add(new FilteredCollection() { Name = tag, Count = tagToCount[tag] });
-            }
-
-            tagList.Sort();
-
-            return tagList;
-        }
-
-        /// <summary>
         /// Increments the count for a given value in the dictionary
         /// </summary>
         /// <param name="collection"></param>
@@ -381,63 +209,53 @@ namespace OMLEngine
         }
 
         /// <summary>
-        /// Increments the count for a given value in the dictionary
+        /// Returns the all the valid years for the given filter and their counts
         /// </summary>
-        /// <param name="collection"></param>
-        /// <param name="item"></param>
-        private static void IncrementCount(Dictionary<string, int> collection, string item)
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllYears(List<TitleFilter> filters)
         {
-            if (collection.ContainsKey(item))
-                collection[item]++;
-            else
-                collection.Add(item, 1);
+            return Dao.TitleCollectionDao.GetAllYears(filters);                
         }
 
         /// <summary>
-        /// Returns all the genres and their counts
+        /// Gets all the user rated titles and their counts
         /// </summary>
+        /// <param name="filters"></param>
         /// <returns></returns>
-        public static IEnumerable<FilteredCollection> GetAllGenres()
+        public static IEnumerable<FilteredCollection> GetAllUserRatings(List<TitleFilter> filters)
         {
-            return GetAllGenres(null);
+            return Dao.TitleCollectionDao.GetAllUserRatings(filters);                
         }
 
         /// <summary>
-        /// Returns all the genres and counts given a filter
-        /// todo : solomon : even though this method returns pretty quick it could probably be done
-        /// more effeciently
-        /// 
-        /// consider using the 1 pass approach as that seems much faster
+        /// Returns all the countries and counts for the given filters
         /// </summary>
-        /// <param name="givenFilter"></param>
+        /// <param name="filters"></param>
         /// <returns></returns>
-        public static IEnumerable<FilteredCollection> GetAllGenres(List<TitleFilter> filter)
-        {        
-            IQueryable<Dao.Title> titles = (filter == null || filter.Count == 0)
-                                            ? Dao.DBContext.Instance.Titles
-                                            : (IQueryable<Dao.Title>)Dao.TitleCollectionDao.GetFilteredTitles(filter);
+        public static IEnumerable<FilteredCollection> GetAllCountries(List<TitleFilter> filters)
+        {
+            return Dao.TitleCollectionDao.GetAllCountries(filters);            
+        }
 
-            // again i'm gonna run through the list and build the filter instead of doing it in sql
-            // hopefully we can figure out a sql way of doing it
-            Dictionary<string, int> genreToCount = new Dictionary<string, int>();
-
-            var allGenres = Dao.TitleCollectionDao.GetAllGenres(titles);
-
-            foreach (Dao.Genre genre in allGenres)
-            {
-                IncrementCount(genreToCount, genre.MetaData.Name);
-            }
-
-            List<FilteredCollection> filteredGenres = new List<FilteredCollection>(genreToCount.Count);
-
-            foreach (string name in genreToCount.Keys)
-            {
-                filteredGenres.Add(new FilteredCollection() { Name = name, Count = genreToCount[name] });
-            }
-
-            filteredGenres.Sort();
-
-            return filteredGenres;
+        /// <summary>
+        /// Returns all the tags and their counts for a given filter
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllTags(List<TitleFilter> filters)
+        {
+            return Dao.TitleCollectionDao.GetAllTags(filters);            
+        }               
+        
+        /// <summary>
+        /// Returns all the genres and counts given a filter      
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllGenres(List<TitleFilter> filters)
+        {         
+            return Dao.TitleCollectionDao.GetAllGenres(filters);
         }                
 
         /// <summary>
@@ -446,33 +264,7 @@ namespace OMLEngine
         /// <returns></returns>
         public static IEnumerable<FilteredCollection> GetAllPeople(List<TitleFilter> filter, PeopleRole role)
         {
-            IQueryable<Dao.Title> titles = (filter == null || filter.Count == 0)
-                                            ? Dao.DBContext.Instance.Titles
-                                            : (IQueryable<Dao.Title>)Dao.TitleCollectionDao.GetFilteredTitles(filter);
-
-            return Dao.TitleCollectionDao.GetAllPersons(titles, role);
-
-            // again i'm gonna run through the list and build the filter instead of doing it in sql
-            // hopefully we can figure out a sql way of doing it
-            //Dictionary<string, int> nameToCount = new Dictionary<string, int>();
-
-            //var allPeople = Dao.TitleCollectionDao.GetAllPersons(titles, role);
-
-            //foreach(Dao.Person person in allPeople)
-            //{
-            //    IncrementCount(nameToCount, person.MetaData.FullName);
-            //}
-
-            //List<FilteredCollection> filteredPeople = new List<FilteredCollection>(nameToCount.Count);
-
-            //foreach (string name in nameToCount.Keys)
-            //{
-            //    filteredPeople.Add(new FilteredCollection() { Name = name, Count = nameToCount[name] });
-            //}
-
-            //filteredPeople.Sort();
-
-            //return filteredPeople;
+            return Dao.TitleCollectionDao.GetAllPersons(filter, role);            
         }
 
         /// <summary>
@@ -611,6 +403,14 @@ namespace OMLEngine
             }
 
             title.DaoTitle.Tags.Add(daoTag);
+        }
+
+        /// <summary>
+        /// Closes any open db connections
+        /// </summary>
+        public static void CloseDBConnection()
+        {
+            Dao.DBContext.Instance.Connection.Close();
         }
     }
 

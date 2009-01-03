@@ -72,6 +72,16 @@ namespace OMLEngine.Dao
         }
 
         /// <summary>
+        /// Wrapper for returning the IQueryable object instead of the enumerator
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        private static IQueryable<Title> GetFilteredTitlesWrapper(List<TitleFilter> filters)
+        {
+            return (IQueryable<Title>) GetFilteredTitles(filters);
+        }
+
+        /// <summary>
         /// Gets all the titles given the list of filters
         /// </summary>
         /// <param name="filters"></param>
@@ -79,6 +89,10 @@ namespace OMLEngine.Dao
         public static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters)
         {
             var titles = DBContext.Instance.Titles;
+
+            if (filters == null || filters.Count == 0)
+                return titles;
+
             IQueryable<Title> results = null;
 
             foreach (TitleFilter filter in filters)
@@ -371,83 +385,146 @@ namespace OMLEngine.Dao
             return from title in titles
                    where title.WatchedCount == 0 || title.WatchedCount == null
                    select title;
-        }
+        }       
 
-        /// <summary>
-        /// Gets all the genres
-        /// </summary>
-        /// <returns></returns>
-        public static IEnumerable<GenreMetaData> GetAllGenres()
-        {
-            return from t in DBContext.Instance.GenreMetaDatas
-                   select t;
-        }        
-
-        /// <summary>
-        /// Returns all the genres for the given titles
+        // <summary>
+        /// Returns all the people in the given titles
         /// </summary>
         /// <param name="titles"></param>
         /// <returns></returns>
-        public static IEnumerable<Genre> GetAllGenres(IQueryable<Title> titles)
+        public static IEnumerable<FilteredCollection> GetAllGenres(List<TitleFilter> filters)
         {
-            return from t in titles
+            return from t in GetFilteredTitlesWrapper(filters)
                    from g in t.Genres
-                   select g;
+                   join b in DBContext.Instance.GenreMetaDatas on g.GenreMetaDataId equals b.Id
+                   group b by b.Name into g
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = g.Key, Count = g.Count() };
         }
         
         /// <summary>
         /// Returns all the people in the given titles
         /// </summary>
-        /// <param name="titles"></param>
+        /// <param name="filters"></param>
+        /// <param name="role"></param>
         /// <returns></returns>
-        public static IEnumerable<FilteredCollection> GetAllPersons(IQueryable<Title> titles, PeopleRole role)
+        public static IEnumerable<FilteredCollection> GetAllPersons(List<TitleFilter> filters, PeopleRole role)
         {
-            return from t in titles
+            return from t in GetFilteredTitlesWrapper(filters)
                    from p in t.People
                    where p.Role == (byte)role
                    join b in DBContext.Instance.BioDatas on p.BioId equals b.Id
                    group b by b.FullName into g
                    orderby g.Key ascending
-                   select new FilteredCollection() { Name = g.Key, Count = g.Count() } ;
-
-            //return from t in titles
-            //       from p in t.People
-            //       where p.Role == (byte) role
-            //       select p;
+                   select new FilteredCollection() { Name = g.Key, Count = g.Count() } ;           
         }
 
         /// <summary>
         /// Returns all the valid parental ratings
         /// </summary>
-        /// <param name="titles"></param>
+        /// <param name="filters"></param>
         /// <returns></returns>
-        public static IEnumerable<string> GetAllParentalRatings(IQueryable<Title> titles)
+        public static IEnumerable<FilteredCollection> GetAllParentalRatings(List<TitleFilter> filters)
         {
-            return (from t in titles
-                    select t.ParentalRating).Distinct();
+            return from t in GetFilteredTitlesWrapper(filters)
+                   where t.ParentalRating != null && t.ParentalRating.Length != 0
+                   group t by t.ParentalRating into g
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = g.Key, Count = g.Count() };
         }
 
         /// <summary>
-        /// Returns all the valid video formats
+        /// Returns all the valid countries for the collection and their counts
         /// </summary>
-        /// <param name="titles"></param>
+        /// <param name="filters"></param>
         /// <returns></returns>
-        public static IEnumerable<byte> GetAllVideoFormats(IQueryable<Title> titles)
+        public static IEnumerable<FilteredCollection> GetAllCountries(List<TitleFilter> filters)
         {
-            return (from t in titles
-                    from d in t.Disks
-                    select d.VideoFormat).Distinct();
+            return from t in GetFilteredTitlesWrapper(filters)
+                   where t.CountryOfOrigin != null && t.CountryOfOrigin.Length != 0
+                   group t by t.CountryOfOrigin into g                   
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = g.Key, Count = g.Count() };
         }
 
         /// <summary>
-        /// Gets all the people
+        /// Returns all the user ratings and their counts
         /// </summary>
+        /// <param name="filters"></param>
         /// <returns></returns>
-        public static IEnumerable<BioData> GetAllPeople()
+        public static IEnumerable<FilteredCollection> GetAllUserRatings(List<TitleFilter> filters)
         {
-            return from t in DBContext.Instance.BioDatas
-                   select t;
-        }                
+            return from t in GetFilteredTitlesWrapper(filters)
+                   where t.UserRating != null && t.UserRating != 0
+                   group t by t.UserRating into g
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = UserRatingToString(g.Key), Count = g.Count() };
+        }
+
+        /// <summary>
+        /// Converts a user rating to it's string
+        /// </summary>
+        /// <param name="byteUserRating"></param>
+        /// <returns></returns>
+        private static string UserRatingToString(byte? userRating)
+        {
+            if (userRating == null)
+                userRating = 0;
+
+            return ((double)userRating.Value / 10).ToString("0.0");
+        }
+
+        /// <summary>
+        /// Returns all the movie release years and their counts
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllYears(List<TitleFilter> filters)
+        {
+            return from t in GetFilteredTitlesWrapper(filters)
+                   where t.ReleaseDate != null
+                   group t by t.ReleaseDate.Value.Year into g
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = g.Key.ToString(), Count = g.Count() };
+        }        
+
+        /// <summary>
+        /// Returns all the valid video formats and their counts
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllVideoFormats(List<TitleFilter> filters)
+        {
+            return from t in GetFilteredTitlesWrapper(filters)
+                   from d in t.Disks
+                   group d by d.VideoFormat into g
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = GetVideoStringFromByte(g.Key), Count = g.Count() };
+        }
+
+        /// <summary>
+        /// Returns all the tags for the given filter and their counts
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllTags(List<TitleFilter> filters)
+        {
+            return from t in GetFilteredTitlesWrapper(filters)
+                   from ta in t.Tags
+                   group ta by ta.Name into g
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = g.Key, Count = g.Count() };
+        }
+
+        /// <summary>
+        /// Creating a method for this since for some reason it doesn't work inline
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        private static string GetVideoStringFromByte(byte key)
+        {
+            return ((VideoFormat)key).ToString();
+        }
 
         /// <summary>
         /// Deletes the given title
@@ -469,6 +546,6 @@ namespace OMLEngine.Dao
 
             DBContext.Instance.Titles.DeleteOnSubmit(title);
             DBContext.Instance.SubmitChanges();
-        }
+        }        
     }
 }
