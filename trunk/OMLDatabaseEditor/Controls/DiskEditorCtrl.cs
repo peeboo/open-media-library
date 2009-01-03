@@ -21,6 +21,9 @@ namespace OMLDatabaseEditor.Controls
         public DiskEditorCtrl()
         {
             InitializeComponent();
+
+            txtPath.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            txtPath.MaskBox.AutoCompleteSource = AutoCompleteSource.FileSystem;
         }
 
         public void LoadDisk(Disk disk)
