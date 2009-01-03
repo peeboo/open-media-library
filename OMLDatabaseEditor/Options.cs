@@ -56,7 +56,7 @@ namespace OMLDatabaseEditor
                 {
                     Properties.Settings.Default.gsValidGenres = new StringCollection();
 
-                    IEnumerable<FilteredCollection> genres = TitleCollectionManager.GetAllGenres();
+                    IEnumerable<FilteredCollection> genres = TitleCollectionManager.GetAllGenres(null);
                     string[] genreNames = new string[genres.Count()];
 
                     int index = 0;
