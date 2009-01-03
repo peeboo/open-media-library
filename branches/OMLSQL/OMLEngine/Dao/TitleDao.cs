@@ -4,16 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace OMLEngine.Dao
-{
-    public enum PeopleRoles : byte
-    {
-        Actor = 0,
-        Director = 1,
-        Writer = 2,
-        Producers = 3,
-        NonActing = 4 // this is a placeholder - we should flush this out to include all film roles
-    }
-
+{    
     internal static class TitleDao
     {
         private const char dbCollectionDelimiter = '\t';        
@@ -82,7 +73,7 @@ namespace OMLEngine.Dao
             // add the actors
             foreach (string actor in title.ActingRoles.Keys)
             {
-                Person person = CreatePerson(actor, title.ActingRoles[actor], PeopleRoles.Actor, existingPeople);
+                Person person = CreatePerson(actor, title.ActingRoles[actor], PeopleRole.Actor, existingPeople);
 
                 // maintain the order
                 person.Sort = (short)(actorIndex++);
@@ -94,7 +85,7 @@ namespace OMLEngine.Dao
             // add the directors
             foreach (OMLEngine.Person director in title.Directors)
             {
-                Person person = CreatePerson(director.full_name, null, PeopleRoles.Director, existingPeople);
+                Person person = CreatePerson(director.full_name, null, PeopleRole.Director, existingPeople);
 
                 // maintain the order
                 person.Sort = (short)(actorIndex++);
@@ -106,7 +97,7 @@ namespace OMLEngine.Dao
             // add the writers
             foreach (OMLEngine.Person writer in title.Writers)
             {
-                Person person = CreatePerson(writer.full_name, null, PeopleRoles.Writer, existingPeople);
+                Person person = CreatePerson(writer.full_name, null, PeopleRole.Writer, existingPeople);
 
                 // maintain the order
                 person.Sort = (short)(actorIndex++);
@@ -118,7 +109,7 @@ namespace OMLEngine.Dao
             // add the producers
             foreach (string name in title.Producers)
             {
-                Person person = CreatePerson(name, null, PeopleRoles.Producers, existingPeople);
+                Person person = CreatePerson(name, null, PeopleRole.Producers, existingPeople);
 
                 // maintain the order
                 person.Sort = (short)(actorIndex++);
@@ -235,7 +226,7 @@ namespace OMLEngine.Dao
         /// <param name="name"></param>
         /// <param name="role"></param>
         /// <returns></returns>
-        public static Person CreatePerson(string name, string characterName, PeopleRoles role, Dictionary<string, BioData> existingPeople)
+        public static Person CreatePerson(string name, string characterName, PeopleRole role, Dictionary<string, BioData> existingPeople)
         {            
             BioData metaData = null;
 

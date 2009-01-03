@@ -88,14 +88,14 @@ namespace OMLTestSuite
             Console.WriteLine("Starting to get all people");
             DateTime start = DateTime.Now;
 
-            IEnumerable<FilteredCollection> items = TitleCollectionManager.GetAllPeople();
+            IEnumerable<FilteredCollection> items = TitleCollectionManager.GetAllPeople(null, PeopleRole.Actor);
 
             List<FilteredCollection> allItems = new List<FilteredCollection>(items);            
 
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
                                         allItems.Count));            
-        }
+        }       
 
         [Test]
         public void TEST_GET_ALL_MOVIES_FOR_ACTOR()
