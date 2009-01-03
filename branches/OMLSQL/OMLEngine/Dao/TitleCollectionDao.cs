@@ -404,6 +404,7 @@ namespace OMLEngine.Dao
         {
             return from t in titles
                    from p in t.People
+                   where p.Role == (byte)role
                    join b in DBContext.Instance.BioDatas on p.BioId equals b.Id
                    group b by b.FullName into g
                    orderby g.Key ascending
