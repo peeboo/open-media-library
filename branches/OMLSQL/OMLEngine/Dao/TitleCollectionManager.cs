@@ -450,27 +450,29 @@ namespace OMLEngine
                                             ? Dao.DBContext.Instance.Titles
                                             : (IQueryable<Dao.Title>)Dao.TitleCollectionDao.GetFilteredTitles(filter);
 
+            return Dao.TitleCollectionDao.GetAllPersons(titles, role);
+
             // again i'm gonna run through the list and build the filter instead of doing it in sql
             // hopefully we can figure out a sql way of doing it
-            Dictionary<string, int> nameToCount = new Dictionary<string, int>();
+            //Dictionary<string, int> nameToCount = new Dictionary<string, int>();
 
-            var allPeople = Dao.TitleCollectionDao.GetAllPersons(titles, role);
+            //var allPeople = Dao.TitleCollectionDao.GetAllPersons(titles, role);
 
-            foreach(Dao.Person person in allPeople)
-            {
-                IncrementCount(nameToCount, person.MetaData.FullName);
-            }
+            //foreach(Dao.Person person in allPeople)
+            //{
+            //    IncrementCount(nameToCount, person.MetaData.FullName);
+            //}
 
-            List<FilteredCollection> filteredPeople = new List<FilteredCollection>(nameToCount.Count);
+            //List<FilteredCollection> filteredPeople = new List<FilteredCollection>(nameToCount.Count);
 
-            foreach (string name in nameToCount.Keys)
-            {
-                filteredPeople.Add(new FilteredCollection() { Name = name, Count = nameToCount[name] });
-            }
+            //foreach (string name in nameToCount.Keys)
+            //{
+            //    filteredPeople.Add(new FilteredCollection() { Name = name, Count = nameToCount[name] });
+            //}
 
-            filteredPeople.Sort();
+            //filteredPeople.Sort();
 
-            return filteredPeople;
+            //return filteredPeople;
         }
 
         /// <summary>
