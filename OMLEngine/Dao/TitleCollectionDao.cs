@@ -133,7 +133,16 @@ namespace OMLEngine.Dao
 
                     case TitleFilterType.Country:
                         results = ApplyCountryFilter(lastQuery, filter.FilterText);
-                        break;                    
+                        break;           
+         
+                    case TitleFilterType.Actor:
+                        results = ApplyPersonFilter(lastQuery, filter.FilterText, PeopleRole.Actor);
+                        break;
+
+                    case TitleFilterType.Director:
+                        results = ApplyPersonFilter(lastQuery, filter.FilterText, PeopleRole.Director);
+                        break;
+                        
                 }
             }
 
@@ -275,6 +284,21 @@ namespace OMLEngine.Dao
         }
 
         /// <summary>
+        /// Returns all the titles for the given name in the given role
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="name"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        private static IQueryable<Title> ApplyPersonFilter(IQueryable<Title> titles, string name, PeopleRole role)
+        {
+            return (from t in titles
+                    from p in t.People
+                    where p.MetaData.FullName == name && p.Role == (byte)role
+                    select t).Distinct();
+        }
+
+        /// <summary>
         /// Returns all the titles for the given name
         /// </summary>
         /// <param name="titles"></param>
@@ -336,18 +360,31 @@ namespace OMLEngine.Dao
         {
             return from t in DBContext.Instance.GenreMetaDatas
                    select t;
-        }
+        }        
 
         /// <summary>
-        /// Returns all the genres available given the title list
+        /// Returns all the genres for the given titles
         /// </summary>
-        /// <param name="filters"></param>
+        /// <param name="titles"></param>
         /// <returns></returns>
-        public static IEnumerable<GenreMetaData> GetAllGenres(IQueryable<Title> titles)
+        public static IEnumerable<Genre> GetAllGenres(IQueryable<Title> titles)
         {
-            return (from t in titles
-                    from g in t.Genres
-                    select g.MetaData).Distinct();
+            return from t in titles
+                   from g in t.Genres
+                   select g;
+        }
+        
+        /// <summary>
+        /// Returns all the people in the given titles
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <returns></returns>
+        public static IEnumerable<Person> GetAllPersons(IQueryable<Title> titles, PeopleRole role)
+        {
+            return from t in titles
+                   from p in t.People
+                   where p.Role == (byte) role
+                   select p;
         }
 
         /// <summary>
@@ -381,61 +418,7 @@ namespace OMLEngine.Dao
         {
             return from t in DBContext.Instance.BioDatas
                    select t;
-        }
-
-        /// <summary>
-        /// Returns the number of items that have the given rating
-        /// </summary>
-        /// <param name="titles"></param>
-        /// <param name="rating"></param>
-        /// <returns></returns>
-        public static int GetItemsPerParentalRating(IQueryable<Title> titles, string rating)
-        {
-            return (from t in titles
-                    where t.ParentalRating == rating
-                    select t).Count();
-        }
-
-        /// <summary>
-        /// Returns the count of titles for a given video format
-        /// </summary>
-        /// <param name="titles"></param>
-        /// <param name="format"></param>
-        /// <returns></returns>
-        public static int GetItemsPerVideoFormat(IQueryable<Title> titles, byte format)
-        {
-            return (from t in titles
-                    from d in t.Disks
-                    where d.VideoFormat == format
-                    select t).Count();
-        }
-
-        /// <summary>
-        /// Returns the items per genre given the title list
-        /// </summary>
-        /// <param name="titles"></param>
-        /// <param name="genre"></param>
-        /// <returns></returns>
-        public static int GetItemsPerGenre(IQueryable<Title> titles, GenreMetaData genre)
-        {
-            return (from g in titles
-                    from m in g.Genres
-                    where m.GenreMetaDataId == genre.Id
-                    select g).Count();
-        }        
-
-        /// <summary>
-        /// Gets the number of movies a given person is in
-        /// </summary>
-        /// <param name="person"></param>
-        /// <returns></returns>
-        public static int GetItemsPerPerson(BioData person)
-        {
-            return (from p in DBContext.Instance.Persons
-                    from b in DBContext.Instance.BioDatas
-                    where p.BioId == b.Id && b.Id == person.Id
-                    select p).Count();
-        }
+        }                
 
         /// <summary>
         /// Deletes the given title

@@ -587,21 +587,21 @@ namespace OMLEngine
 
             foreach (Dao.Person person in _title.People)
             {
-                switch ((Dao.PeopleRoles)person.Role)
+                switch ((PeopleRole)person.Role)
                 {
-                    case Dao.PeopleRoles.Actor:
+                    case PeopleRole.Actor:
                         AddActingRole(person.MetaData.FullName, person.CharacterName);
                         break;
 
-                    case Dao.PeopleRoles.Director:
+                    case PeopleRole.Director:
                         _directors.Add(new Person(person.MetaData.FullName));
                         break;
 
-                    case Dao.PeopleRoles.Producers:
+                    case PeopleRole.Producers:
                         _producers.Add(person.MetaData.FullName);
                         break;
 
-                    case Dao.PeopleRoles.Writer:
+                    case PeopleRole.Writer:
                         _writers.Add(new Person(person.MetaData.FullName));
                         break;
                 }

@@ -18,10 +18,10 @@ namespace OMLEngine
         Runtime,
         Year,
         Country,
-
-        /* not implemented yet*/
         Director,
         Actor,        
+
+        /* not implemented yet*/
         UserRating,        
         DateAdded
     }

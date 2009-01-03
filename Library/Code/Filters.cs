@@ -128,6 +128,14 @@ namespace Library
                     case TitleFilterType.Tag:
                         filteredItems = TitleCollectionManager.GetAllTags(existingFilters);
                         break;
+
+                    case TitleFilterType.Director:
+                        filteredItems = TitleCollectionManager.GetAllPeople(existingFilters, PeopleRole.Director);
+                        break;
+
+                    case TitleFilterType.Actor:
+                        filteredItems = TitleCollectionManager.GetAllPeople(existingFilters, PeopleRole.Actor);
+                        break;
                 }
 
                 if (filteredItems != null)
