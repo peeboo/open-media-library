@@ -400,12 +400,19 @@ namespace OMLEngine.Dao
         /// </summary>
         /// <param name="titles"></param>
         /// <returns></returns>
-        public static IEnumerable<Person> GetAllPersons(IQueryable<Title> titles, PeopleRole role)
+        public static IEnumerable<FilteredCollection> GetAllPersons(IQueryable<Title> titles, PeopleRole role)
         {
             return from t in titles
                    from p in t.People
-                   where p.Role == (byte) role
-                   select p;
+                   join b in DBContext.Instance.BioDatas on p.BioId equals b.Id
+                   group b by b.FullName into g
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = g.Key, Count = g.Count() } ;
+
+            //return from t in titles
+            //       from p in t.People
+            //       where p.Role == (byte) role
+            //       select p;
         }
 
         /// <summary>

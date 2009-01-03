@@ -501,7 +501,7 @@ namespace Library
         /// <value>The use star rating.</value>
         public int UseStarRating
         {
-            get { return _titleObj.UserStarRating ?? 0; }
+            get { return _titleObj.UserStarRating.HasValue ? _titleObj.UserStarRating.Value : 0; }
         }
 
         /// <summary>
