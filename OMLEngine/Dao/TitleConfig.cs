@@ -4,32 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace OMLEngine
-{
-    /*Filters[Filter.DateAdded].AddItem("Today");
-            Filters[Filter.DateAdded].AddItem("Yesterday");
-            Filters[Filter.DateAdded].AddItem("Within Last Week");
-            Filters[Filter.DateAdded].AddItem("Within Last 2 Weeks");
-            Filters[Filter.DateAdded].AddItem("Within Last Month");
-            Filters[Filter.DateAdded].AddItem("Within Last 3 Months");
-            Filters[Filter.DateAdded].AddItem("Within Last 6 Months");
-            Filters[Filter.DateAdded].AddItem("Within Last Year");
-            Filters[Filter.DateAdded].AddItem("More Than 1 Year");
-
-            DateTime today = DateTime.Today;
-            DateTime d = new DateTime(movie.TitleObject.DateAdded.Year, movie.TitleObject.DateAdded.Month, movie.TitleObject.DateAdded.Day);
-            
-            int days = (today - d).Days;
-
-            if (days == 0) Filters[Filter.DateAdded].AddMovie("Today", movie);
-            if( days == 1) Filters[Filter.DateAdded].AddMovie("Yesterday", movie);
-            if (days <= 7) Filters[Filter.DateAdded].AddMovie("Within Last Week", movie);
-            if (days <= 14) Filters[Filter.DateAdded].AddMovie("Within Last 2 Weeks", movie);
-            if (days <= 31) Filters[Filter.DateAdded].AddMovie("Within Last Month", movie);
-            if (days <= 92) Filters[Filter.DateAdded].AddMovie("Within Last 3 Months", movie);
-            if (days <= 184) Filters[Filter.DateAdded].AddMovie("Within Last 6 Months", movie);
-            if (days <= 365) Filters[Filter.DateAdded].AddMovie("Within Last Year", movie);
-            if (days > 365) Filters[Filter.DateAdded].AddMovie("More Than 1 Year", movie);*/
-
+{    
     public static class TitleConfig
     {
         private const string DATE_TODAY = "Today";
@@ -65,6 +40,7 @@ namespace OMLEngine
             , new NumericRange() {Start = 150, End = 180}
             , new NumericRange() {Start = 180, End = int.MaxValue}
         };
+        
         public readonly static int[] ADDED_FILTER_DATE = new int[] { 0, 1, 7, 14, 31, 92, 184, 365, int.MaxValue };
         public readonly static IEnumerable<NumericRange> DATE_ADDED_RANGE = new List<NumericRange>()
         {
