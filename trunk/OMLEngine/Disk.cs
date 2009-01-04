@@ -53,7 +53,7 @@ namespace OMLEngine
                 if (string.Compare(new DirectoryInfo(Path).Name, "VIDEO_TS", true) == 0)
                     return Path;
                 string path = System.IO.Path.Combine(Path, "VIDEO_TS");
-                return Directory.Exists(path) ? path : null;
+                return Directory.Exists(path) ? path : Path;
             }
         }
         public string VIDEO_TS_Parent

@@ -19,6 +19,11 @@ namespace Library
     /// </summary>
     public class ExtenderDVDPlayer : IPlayMovie
     {
+        [DllImport("kernel32.dll")]
+        static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);
+        static int SYMLINK_FLAG_DIRECTORY = 1;
+        static int SYMLINK_FLAG_FILE = 0;
+
         MediaSource _source;
         DVDDiskInfo _info;
 
@@ -92,9 +97,9 @@ namespace Library
 
                 string vob = Path.Combine(videoTSDir, vobs[0]);
                 OMLApplication.DebugLine("Trying to create '{0}' soft-link to '{1}'", mpegFile, vob);
-                System.Diagnostics.Process p = System.Diagnostics.Process.Start("mklink",
-                    string.Format("\"{0}\" \"{1}\"", mpegFile, vob));
-                p.WaitForExit();
+
+                CreateSymbolicLink(mpegFile, vob, SYMLINK_FLAG_FILE);
+
                 if (File.Exists(mpegFile))
                     return mpegFile;
                 OMLApplication.DebugLine("Soft-link creation failed!");
