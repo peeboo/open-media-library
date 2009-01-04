@@ -574,7 +574,7 @@ namespace OMLEngine.Dao
                    where d < r.End
                    group r by r.Start into g
                    orderby g.Key ascending
-                   select new FilteredCollection() { Name = g.Key.ToString(), Count = g.Count() };
+                   select new FilteredCollection() { Name = TitleConfig.DaysToFilterString(g.Key), Count = g.Count() };
         }
 
         public static IEnumerable<FilteredCollection> GetAllRuntimes(List<TitleFilter> filters)
@@ -589,7 +589,7 @@ namespace OMLEngine.Dao
                    where d < r.End
                    group r by r.Start into g
                    orderby g.Key ascending
-                   select new FilteredCollection() { Name = g.Key.ToString(), Count = g.Count() };
+                   select new FilteredCollection() { Name = TitleConfig.RuntimeToFilterString(g.Key), Count = g.Count() };
         }
 
         /// <summary>
