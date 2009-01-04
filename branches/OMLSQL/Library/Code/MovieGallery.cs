@@ -24,15 +24,7 @@ namespace Library
             get
             {
                 if (labeledLists == null)
-                {
-                    Filter alphaFilter = null;
-
-                    if (!Filters.TryGetValue(Filter.Alpha, out alphaFilter))
-                    {
-                        OMLApplication.DebugLine("[MovieGallery][LabeledLists] Alpha filter hit when no alpha filters existed");
-                        return new List<LabeledList>(0);
-                    }
-
+                {                    
                     SetupAlphaCharacters();
 
                     Dictionary<char, List<Title>> alphaTitles = new Dictionary<char, List<Title>>();
@@ -171,7 +163,6 @@ namespace Library
             get { return _focusIndex; }
             set { _focusIndex = value; }
         }
-
         /// <summary>
         /// Gets or sets the focused item in the gallery
         /// </summary>
