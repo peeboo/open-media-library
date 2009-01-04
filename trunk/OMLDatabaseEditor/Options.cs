@@ -50,11 +50,11 @@ namespace OMLDatabaseEditor
             TagList = new List<string>();
             if (String.IsNullOrEmpty(Properties.Settings.Default.gsTags.Trim()))
             {
-                TagList.AddRange(MainEditor._titleCollection.GetAllTags());
+                TagList.AddRange(MainEditor._titleCollection.GetAllTags);
             }
             else
             {
-                TagList.AddRange(MainEditor._titleCollection.GetAllTags().Union(Properties.Settings.Default.gsTags.Split('|')));
+                TagList.AddRange(MainEditor._titleCollection.GetAllTags.Union(Properties.Settings.Default.gsTags.Split('|')));
             }
             int iTags = Properties.Settings.Default.gsTags.Split('|').Count();
             if (iTags < TagList.Count()) TagsDirty = true;
@@ -76,8 +76,8 @@ namespace OMLDatabaseEditor
                 if (XtraMessageBox.Show("No allowable genres have been defined. Would you like to load them from your current movie collection?", "No Genres", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     Properties.Settings.Default.gsValidGenres = new StringCollection();
-                    Properties.Settings.Default.gsValidGenres.AddRange(MainEditor._titleCollection.GetAllGenres().ToArray());
-                    GenreList.AddRange(MainEditor._titleCollection.GetAllGenres().ToArray());
+                    Properties.Settings.Default.gsValidGenres.AddRange(MainEditor._titleCollection.GetAllGenres.ToArray());
+                    GenreList.AddRange(MainEditor._titleCollection.GetAllGenres.ToArray());
                 }
             }
             // I disabled this line because gsValidGenres is not just empty, its undef
