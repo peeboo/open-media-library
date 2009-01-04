@@ -162,6 +162,16 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Returns the date when titles were added and their counts
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollection> GetAllDateAdded(List<TitleFilter> filters)
+        {
+            return Dao.TitleCollectionDao.GetAllDateAdded(filters);
+        }
+
+        /// <summary>
         /// Returns all the valid runtimes for the collection and their counts
         /// 
         /// todo : solomon : runtimes doesn't use the fancy LINQ way because of the grouping
@@ -171,62 +181,7 @@ namespace OMLEngine
         /// <returns></returns>
         public static IEnumerable<FilteredCollection> GetAllRuntimes(List<TitleFilter> filters)
         {
-            // for now i think it's more effecient to just grab the whole list and filter
-            // it.  some smart sql person may find a faster way to do this in sql
-            Dictionary<int, int> timeToCount = new Dictionary<int, int>();
-
-            foreach (Title title in GetFilteredTitles(filters))
-            {
-                foreach (int time in TitleConfig.RUNTIME_FILTER_LENGTHS)
-                {
-                    if (title.Runtime <= time)
-                    {
-                        IncrementCount(timeToCount, time);
-                        break;
-                    }
-                }
-            }
-
-            // add filtercollection for every count
-            foreach (int length in TitleConfig.RUNTIME_FILTER_LENGTHS)
-            {
-                if (timeToCount.ContainsKey(length))
-                    yield return new FilteredCollection() { Name = TitleConfig.RuntimeToFilterString(length), Count = timeToCount[length] };
-            }            
-        }
-
-        /// <summary>
-        /// Returns the date when titles were added and their counts
-        /// </summary>
-        /// <param name="filters"></param>
-        /// <returns></returns>
-        public static IEnumerable<FilteredCollection> GetAllDateAdded(List<TitleFilter> filters)
-        {
-            // for now i think it's more effecient to just grab the whole list and filter
-            // it.  some smart sql person may find a faster way to do this in sql
-            Dictionary<int, int> dateToCount = new Dictionary<int, int>();
-
-            foreach (Title title in GetFilteredTitles(filters))
-            {
-                if (title.DateAdded == DateTime.MinValue)
-                    continue;
-
-                foreach (int days in TitleConfig.ADDED_FILTER_DATE)
-                {
-                    if ((DateTime.Now - title.DateAdded).Days <= days)
-                    {
-                        IncrementCount(dateToCount, days);
-                        break;
-                    }
-                }
-            }
-
-            // add filtercollection for every count
-            foreach (int days in TitleConfig.ADDED_FILTER_DATE)
-            {
-                if (dateToCount.ContainsKey(days))
-                    yield return new FilteredCollection() { Name = TitleConfig.DaysToFilterString(days), Count = dateToCount[days] };
-            }           
+            return Dao.TitleCollectionDao.GetAllRuntimes(filters);
         }
 
         /// <summary>

@@ -55,7 +55,34 @@ namespace OMLEngine
         public const int MAX_DATE_ADDED = 365;
 
         public readonly static int[] RUNTIME_FILTER_LENGTHS = new int[] { 0, 30, 60, 90, 120, 150, 180, int.MaxValue };
+        public readonly static IEnumerable<NumericRange> RUNTIME_RANGE = new List<NumericRange>()
+        {
+            new NumericRange() {Start = 0, End = 30}
+            , new NumericRange() {Start = 30, End = 60}
+            , new NumericRange() {Start = 60, End = 90}
+            , new NumericRange() {Start = 90, End = 120}
+            , new NumericRange() {Start = 120, End = 150}
+            , new NumericRange() {Start = 150, End = 180}
+            , new NumericRange() {Start = 180, End = int.MaxValue}
+        };
         public readonly static int[] ADDED_FILTER_DATE = new int[] { 0, 1, 7, 14, 31, 92, 184, 365, int.MaxValue };
+        public readonly static IEnumerable<NumericRange> DATE_ADDED_RANGE = new List<NumericRange>()
+        {
+            new NumericRange() {Start = 0, End = 1}
+            , new NumericRange() {Start = 1, End = 7}
+            , new NumericRange() {Start = 7, End = 14}
+            , new NumericRange() {Start = 14, End = 31}
+            , new NumericRange() {Start = 31, End = 92}
+            , new NumericRange() {Start = 92, End = 184}
+            , new NumericRange() {Start = 184, End = 365}
+            , new NumericRange() {Start = 365, End = int.MaxValue}
+        };
+
+        public struct NumericRange
+        {
+            public int Start;
+            public int End;
+        }
 
         /// <summary>
         /// Turns a timespan into a filter string

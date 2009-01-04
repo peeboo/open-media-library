@@ -95,6 +95,44 @@ namespace OMLTestSuite
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
                                         allItems.Count));            
+        }
+
+        [Test]
+        public void TEST_GET_ALL_RUNTIMES()
+        {
+            Console.WriteLine("Starting to get all runtime values");
+            DateTime start = DateTime.Now;
+
+            IEnumerable<FilteredCollection> items = TitleCollectionManager.GetAllRuntimes(null);
+
+            List<FilteredCollection> allItems = new List<FilteredCollection>(items);
+
+            Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
+                                        (DateTime.Now - start).TotalMilliseconds.ToString(),
+                                        allItems.Count));
+            foreach (FilteredCollection item in allItems)
+            {
+                Console.WriteLine(String.Format("{0}-{1}", item.Name, item.Count));
+            }
+        }
+
+        [Test]
+        public void TEST_GET_ALL_DATEADDED()
+        {
+            Console.WriteLine("Starting to get all date added values");
+            DateTime start = DateTime.Now;
+
+            IEnumerable<FilteredCollection> items = TitleCollectionManager.GetAllDateAdded(null);
+
+            List<FilteredCollection> allItems = new List<FilteredCollection>(items);
+
+            Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
+                                        (DateTime.Now - start).TotalMilliseconds.ToString(),
+                                        allItems.Count));
+            foreach (FilteredCollection item in allItems)
+            {
+                Console.WriteLine(String.Format("{0}-{1}", item.Name, item.Count));
+            }
         }       
 
         [Test]
