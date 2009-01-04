@@ -87,12 +87,21 @@ namespace Library
             get { return _quickPlay; }
         }
 
+        public bool Watched
+        {
+            get { return _watched; }
+        }
+
+        public GalleryItem(MovieGallery owner, string name, string caption, Filter browseCategory) :
+            this(owner, name, caption, browseCategory, false) { }        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GalleryItem"/> class.
         /// </summary>
-        public GalleryItem(MovieGallery owner, string name, string caption, Filter browseCategory)
+        public GalleryItem(MovieGallery owner, string name, string caption, Filter browseCategory, bool watched)
             : base(owner)
         {
+            _watched = watched;
             _name = name;
             _sortName = name;
             _caption = caption;
@@ -234,7 +243,7 @@ namespace Library
 
         public virtual GalleryItem Clone(MovieGallery newOwner)
         {
-            return new GalleryItem(newOwner, Name, Caption, Category);
+            return new GalleryItem(newOwner, Name, Caption, Category, Watched);
         }
 
         public int CompareTo(object obj)
@@ -260,6 +269,7 @@ namespace Library
         private MovieGallery _owner;
         private Filter _category;
         private Command _quickPlay;
+        private bool _watched;
     }
 
     /// <summary>
@@ -290,7 +300,7 @@ namespace Library
         /// </summary>
         /// <param name="title">The title.</param>
         public MovieItem(Title title, MovieGallery owner)
-            : base(owner, title.Name, title.Name, null)
+            : base(owner, title.Name, title.Name, null, title.WatchedCount > 0)
         {
             _titleObj = title;
             SortName = title.SortName;

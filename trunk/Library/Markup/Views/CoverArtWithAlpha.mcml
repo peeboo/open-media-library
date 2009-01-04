@@ -262,6 +262,7 @@
       <Default Target="[Input.KeyInteractive]" Value="true"/>
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
       <Binding Source="[GalleryItem.MenuCoverArt]" Target="[MenuCover.Content]" />
+      <Binding Source="[GalleryItem.Watched]" Target="[WatchedPanel.Visible]" />
 
       <!-- If we get key focus, change our background color to indicate it. -->
       <Condition Source="[Input.KeyFocus]" SourceValue="true">
@@ -291,6 +292,15 @@
     <Content>
       <Panel Name="ItemPanel" Layout="Anchor" Scale="1.0,1.0,1.0" CenterPointPercent="0.5,0.75,0.0">
         <Children>
+          <Panel Name="WatchedPanel" Visible="false">
+            <LayoutInput>
+              <AnchorLayoutInput Left="ImagePanel,.02" Bottom="ImagePanel,.98" />
+            </LayoutInput>
+            <Children>
+              <Graphic Name="WatchedGraphic" Content="image://me:WatchedIcon"  />
+            </Children>
+          </Panel>
+          
           <Panel Name="ImagePanel" Margins="0,0,0,0">
             <Children>
               <Graphic Name="MenuCover" Content="[GalleryItem.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint" />

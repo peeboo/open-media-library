@@ -157,6 +157,7 @@
     <None Include="Images\overlays.divider.vertical.png" />
     <None Include="Images\overlays.outline.png" />
     <None Include="Images\overlays.shadow.png" />
+    <Content Include="Images\watched-icon.png" />
     <Content Include="Markup\About.mcml" />
     <Content Include="Markup\Control\AlphaFilter.mcml" />
     <Content Include="Markup\Control\ContextMenu.mcml" />
