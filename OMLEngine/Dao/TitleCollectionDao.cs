@@ -562,6 +562,36 @@ namespace OMLEngine.Dao
                    select new FilteredCollection() { Name = g.Key, Count = g.Count() };
         }
 
+        public static IEnumerable<FilteredCollection> GetAllDateAdded(List<TitleFilter> filters)
+        {
+            IEnumerable<int> days = from t in GetFilteredTitlesWrapper(filters)
+                       where t.DateAdded.HasValue
+                       select (DateTime.Now - t.DateAdded.Value).Days;
+
+            return from d in days
+                   from r in TitleConfig.DATE_ADDED_RANGE
+                   where d >= r.Start
+                   where d < r.End
+                   group r by r.Start into g
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = g.Key.ToString(), Count = g.Count() };
+        }
+
+        public static IEnumerable<FilteredCollection> GetAllRuntimes(List<TitleFilter> filters)
+        {
+            IEnumerable<short> runtimes = from t in GetFilteredTitlesWrapper(filters)
+                                        where t.Runtime.HasValue
+                                        select t.Runtime.Value;
+
+            return from d in runtimes
+                   from r in TitleConfig.RUNTIME_RANGE
+                   where d >= r.Start
+                   where d < r.End
+                   group r by r.Start into g
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = g.Key.ToString(), Count = g.Count() };
+        }
+
         /// <summary>
         /// Creating a method for this since doing it inline makes SQL try to do it which fails
         /// </summary>
@@ -592,6 +622,6 @@ namespace OMLEngine.Dao
 
             DBContext.Instance.Titles.DeleteOnSubmit(title);
             DBContext.Instance.SubmitChanges();
-        }        
+        }
     }
 }
