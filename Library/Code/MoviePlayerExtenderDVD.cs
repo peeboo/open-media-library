@@ -27,12 +27,75 @@ namespace Library
             _source = source;
         }
 
+        public static bool CanPlay(MediaSource source)
+        {
+            if (FindMPeg(source) != null)
+                return true;
+
+            // TODO: allow to play auto-merging VOBs, asx, and other handings below
+            return false;
+        }
+
+        public static string FindMPeg(MediaSource source)
+        {
+            DVDTitle dvdTitle = source.DVDTitle;
+            if (dvdTitle == null)
+                return null;
+
+            string videoTSDir = source.VIDEO_TS;
+            int fileID = int.Parse(dvdTitle.File.Substring(4));
+            string vts = string.Format("VTS_{0:D2}_", fileID);
+            List<string> vobs = new List<string>(Directory.GetFiles(videoTSDir, vts + "*.VOB"));
+            vobs.Remove(Path.Combine(videoTSDir, vts + "0.VOB"));
+
+            if (vobs.Count < 1)
+                return null;
+
+            if (IsNTFS(videoTSDir))
+            {
+                string mpegFolder = Path.Combine(videoTSDir, "Extender-MyMovies");
+                if (Directory.Exists(mpegFolder) == false)
+                    return null;
+
+                if (vobs.Count == 1)
+                {
+                    string mpegFile = GetMPEGName(mpegFolder, vobs[0]);
+                    if (File.Exists(mpegFile))
+                        return mpegFile;
+                }
+            }
+            else if (videoTSDir.StartsWith("\\\\"))
+            {
+                string mpegFile = Path.ChangeExtension(source.GetTranscodingFileName(), ".MPEG");
+                if (File.Exists(mpegFile))
+                {
+                    OMLApplication.DebugLine("Found '{0}' as pre-existing .MPEG soft-link", mpegFile);
+                    return mpegFile;
+                }
+
+                string vob = Path.Combine(videoTSDir, vobs[0]);
+                OMLApplication.DebugLine("Trying to create '{0}' soft-link to '{1}'", mpegFile, vob);
+                System.Diagnostics.Process p = System.Diagnostics.Process.Start("mklink",
+                    string.Format("\"{0}\" \"{1}\"", mpegFile, vob));
+                p.WaitForExit();
+                if (File.Exists(mpegFile))
+                    return mpegFile;
+                OMLApplication.DebugLine("Soft-link creation failed!");
+            }
+            else
+            {
+                OMLApplication.DebugLine("Media not on a network drive nor on a NTFS compatible drive, no supported");
+            }
+
+            return null;
+        }
+
         public bool PlayMovie()
         {
             _info = _source.DVDDiskInfo;
 
-            string videoFile = null;
-            if (_info != null)
+            string videoFile = FindMPeg(_source);
+            if (videoFile == null && _info != null)
             {
                 OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: DVD Disk info: '{0}'", _info);
                 DVDTitle dvdTitle = _source.DVDTitle;
