@@ -254,6 +254,7 @@
       <Default Target="[Input.KeyInteractive]" Value="true"/>
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
       <Binding Source="[GalleryItem.MenuCoverArt]" Target="[MenuCover.Content]" />
+      <Binding Source="[GalleryItem.Watched]" Target="[WatchedPanel.Visible]" />
       
       <!-- have the clicker directly invoke the gallery item -->
       <!--<Condition Source="[UISettings.Gallery.MovieDetailsTransitionType]" SourceValue="None">
@@ -313,17 +314,26 @@
           <!-- Play an animation on the cover target item. -->
           <PlayAnimation Target="[ItemPanel]" Animation="[LostFocusCoverArt]"/>
         </Actions>
-      </Condition>
+      </Condition>      
     </Rules>
 
     <Content>
       <Panel Name="ItemPanel" Layout="Anchor" Scale="1.0,1.0,1.0" CenterPointPercent="0.5,0.75,0.0">
         <Children>
-          <Panel Name="ImagePanel" Margins="0,0,0,0">
+          <Panel Name="WatchedPanel" Visible="false">
+            <LayoutInput>
+              <AnchorLayoutInput Left="ImagePanel,.02" Bottom="ImagePanel,.98" />
+            </LayoutInput>
             <Children>
-              <Graphic Name="MenuCover" Content="[GalleryItem.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint" />
+              <Graphic Name="WatchedGraphic" Content="image://me:WatchedIcon"  />
             </Children>
           </Panel>
+          
+          <Panel Name="ImagePanel" Margins="0,0,0,0">
+            <Children>
+              <Graphic Name="MenuCover" Content="[GalleryItem.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint" />              
+            </Children>
+          </Panel>          
 
           <Graphic Name="Background" Content="[BackgroundImage]" Visible="false">
             <LayoutInput>
