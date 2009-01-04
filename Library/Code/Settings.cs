@@ -124,6 +124,7 @@ namespace Library
                 _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
                 _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
                 _omlSettings.UseOnScreenAlphaJumper = (bool)_useOnScreenAlpha.Chosen;
+                _omlSettings.ShowWatchedIcon = (bool)_showWatchedIcon.Chosen;
             });
         }
         private void SaveUILanguage()
@@ -290,6 +291,7 @@ namespace Library
             _dimUnselectedCovers.Chosen = _omlSettings.DimUnselectedCovers;
             _useOriginalCoverArt.Chosen = _omlSettings.UseOriginalCoverArt;
             _useOnScreenAlpha.Chosen = _omlSettings.UseOnScreenAlphaJumper;
+            _showWatchedIcon.Chosen = _omlSettings.ShowWatchedIcon;
 
             List<string> transitionTypes = new List<string>(3);
             transitionTypes.Add("None");
@@ -483,6 +485,11 @@ namespace Library
             get { return _useOnScreenAlpha; }
         }
 
+        public BooleanChoice ShowWatchedIcon
+        {
+            get { return _showWatchedIcon; }
+        }
+
         public BooleanChoice DimUnselectedCovers
         {
             get { return _dimUnselectedCovers; }
@@ -635,6 +642,7 @@ namespace Library
         BooleanChoice _dimUnselectedCovers = new BooleanChoice();
         BooleanChoice _useOriginalCoverArt = new BooleanChoice();
         BooleanChoice _useOnScreenAlpha = new BooleanChoice();
+        BooleanChoice _showWatchedIcon = new BooleanChoice();
         Choice _startPage = new Choice();
         Choice _startPageSubFilter;
         Choice _uiLanguage = new Choice();

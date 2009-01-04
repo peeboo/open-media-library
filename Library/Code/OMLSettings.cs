@@ -641,7 +641,17 @@ namespace Library
                 Properties.Settings.Default.ShowFilterTrailers = value;
                 Properties.Settings.Default.Save();
             }
-        }     
+        }
+
+        public bool ShowWatchedIcon
+        {
+            get { return Properties.Settings.Default.ShowWatchedIcon; }
+            set
+            {
+                Properties.Settings.Default.ShowWatchedIcon = value;
+                Properties.Settings.Default.Save();
+            }
+        }
 
         public bool UseOnScreenAlphaJumper
         {
