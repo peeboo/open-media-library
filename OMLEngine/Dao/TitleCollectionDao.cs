@@ -587,7 +587,7 @@ namespace OMLEngine.Dao
                    from r in TitleConfig.RUNTIME_RANGE
                    where d >= r.Start
                    where d < r.End
-                   group r by r.Start into g
+                   group r by r.End into g
                    orderby g.Key ascending
                    select new FilteredCollection() { Name = TitleConfig.RuntimeToFilterString(g.Key), Count = g.Count() };
         }
