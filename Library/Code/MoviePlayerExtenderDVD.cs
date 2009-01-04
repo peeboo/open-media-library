@@ -54,12 +54,29 @@ namespace Library
             if (IsNTFS(videoTSDir))
             {
                 string mpegFolder = Path.Combine(videoTSDir, "Extender-MyMovies");
+
+                if (Directory.Exists(mpegFolder) == false)
+                    Directory.CreateDirectory(mpegFolder);
                 if (Directory.Exists(mpegFolder) == false)
                     return null;
 
                 if (vobs.Count == 1)
                 {
-                    string mpegFile = GetMPEGName(mpegFolder, vobs[0]);
+                    string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);
+                    if (File.Exists(mpegFile))
+                        return mpegFile;
+                }
+                else if (Properties.Settings.Default.Extender_UseAsx)
+                {
+                    foreach (string vob in vobs)
+                        MakeMPEGLink(mpegFolder, vob);
+
+                    if (File.Exists(GetMPEGName(mpegFolder, vobs[0])))
+                        return CreateASX(mpegFolder, vts, source.Name, vobs);
+                }
+                else if (Properties.Settings.Default.Extender_MergeVOB)
+                {
+                    string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);
                     if (File.Exists(mpegFile))
                         return mpegFile;
                 }
@@ -138,7 +155,7 @@ namespace Library
                             MakeMPEGLink(mpegFolder, vob);
 
                         if (File.Exists(GetMPEGName(mpegFolder, vobs[0])))
-                            videoFile = CreateASX(mpegFolder, vts, vobs);
+                            videoFile = CreateASX(mpegFolder, vts, _source.Name, vobs);
                     }
                     else if (Properties.Settings.Default.Extender_MergeVOB)
                     {
@@ -281,18 +298,18 @@ namespace Library
             return mpegFile;
         }
 
-        string CreateASX(string mpegFolder, string vts, IEnumerable<string> vobs)
+        static string CreateASX(string mpegFolder, string vts, string name, IEnumerable<string> vobs)
         {
             string videoFile = Path.Combine(mpegFolder, vts.Trim('_')) + ".asx";
             if (File.Exists(videoFile))
                 return videoFile;
 
             Utilities.DebugLine("ExtenderDVDPlayer.PlayMovie: creating .asx playlist for extender for '{0}'/'{1}' " +
-                "containing multiple .VOB files", _source.Name, vts);
+                "containing multiple .VOB files", name, vts);
             using (StreamWriter writer = File.CreateText(videoFile))
             {
                 writer.WriteLine("<asx version=\"3.0\">");
-                writer.WriteLine("\t<title>" + HttpUtility.HtmlEncode(_source.Name) + "</title>");
+                writer.WriteLine("\t<title>" + HttpUtility.HtmlEncode(name) + "</title>");
                 writer.WriteLine("\t<param name=\"AllowShuffle\" value=\"no\" />");
                 writer.WriteLine("\t<param name=\"CanPause\" value=\"yes\" />");
                 writer.WriteLine("\t<param name=\"CanSeek\" value=\"yes\" />");
