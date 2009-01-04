@@ -75,6 +75,9 @@
             <LayoutInput>
               <FormLayoutInput Left="Parent,0.02"  Top="Parent,0,5"/>
             </LayoutInput>
+            <Animations>
+              <Animation Animation="animation://me:ShowFromLeft" />
+            </Animations>
           </Panel>
 
 
@@ -90,7 +93,7 @@
             </Children>
             <LayoutInput>
               <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,1" Bottom="Parent,0.95,-15"/>
-            </LayoutInput>
+            </LayoutInput>            
           </Panel>
 
           <Panel Name="GalleryPanel" MouseInteractive="true">
@@ -113,6 +116,10 @@
             <LayoutInput>
               <FormLayoutInput  Top="Parent, 0, 5" Right="Parent, 1, -10" />
             </LayoutInput>
+
+            <Animations>
+              <Animation Animation="animation://me:ShowFromLeft" />
+            </Animations>
 
           </Panel>
         </Children>
