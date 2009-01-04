@@ -69,7 +69,8 @@ namespace OMLEngine
         public readonly static IEnumerable<NumericRange> DATE_ADDED_RANGE = new List<NumericRange>()
         {
             new NumericRange() {Start = 0, End = 1}
-            , new NumericRange() {Start = 1, End = 7}
+            , new NumericRange() {Start = 1, End = 2}
+            , new NumericRange() {Start = 2, End = 7}
             , new NumericRange() {Start = 7, End = 14}
             , new NumericRange() {Start = 14, End = 31}
             , new NumericRange() {Start = 31, End = 92}
@@ -91,9 +92,9 @@ namespace OMLEngine
         /// <returns></returns>
         public static string DaysToFilterString(int days)
         {
-            if (days <= 0)
+            if (days <= 1)
                 return DATE_TODAY;
-            else if (days <= 1)
+            else if (days <= 2)
                 return DATE_YESTERDAY;
             else if (days <= 7)
                 return DATE_LAST_WEEK;
