@@ -572,7 +572,7 @@ namespace OMLEngine.Dao
                    from r in TitleConfig.DATE_ADDED_RANGE
                    where d >= r.Start
                    where d < r.End
-                   group r by r.Start into g
+                   group r by r.End into g
                    orderby g.Key ascending
                    select new FilteredCollection() { Name = TitleConfig.DaysToFilterString(g.Key), Count = g.Count() };
         }
