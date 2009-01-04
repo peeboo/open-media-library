@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2D747049-9A5C-4FFB-919F-1FD47BC18B3D}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -113,6 +113,7 @@
     <Compile Include="Code\TreeView.cs" />
     <Compile Include="Code\UISettings.cs" />
     <Compile Include="Code\Filters.cs" />
+    <Compile Include="Code\Views\AlphaView.cs" />
     <Compile Include="Code\Views\LabeledList.cs" />
     <Compile Include="Code\Views\MovieViews.cs" />
     <Compile Include="Code\VirtualDirectory.cs" />

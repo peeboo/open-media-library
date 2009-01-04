@@ -20,6 +20,20 @@ namespace Library
 
         private List<LabeledList> labeledLists = null;
 
+
+        private AlphaView alphaView = null;
+
+        public AlphaView AlphaView
+        {
+            get
+            {
+                if (alphaView == null)
+                    alphaView = new AlphaView();
+
+                return alphaView;
+            }
+        }
+
         public List<LabeledList> LabeledLists
         {
             get
@@ -151,7 +165,7 @@ namespace Library
         {
             get { return _focusIndex; }
             set { _focusIndex = value; }
-        }
+        }        
 
         /// <summary>
         /// Gets or sets the focused item in the gallery
