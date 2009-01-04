@@ -73,7 +73,6 @@
           <Invoke Target ="[ScrollingData.Scroll]" amount="[MovieBrowser.RelativeJumpToPosition]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <!--This is the absolute index-->
           <Set Target="[MovieBrowser.AlphaView.FocusSubIndex.Value]" Value="0"/>
-          <Invoke Target ="[AlphaRepeater.NavigateIntoIndex]" index="[MovieBrowser.JumpToPosition]" InvokePolicy="Synchronous"/>
         </Actions>
       </Changed>
 
