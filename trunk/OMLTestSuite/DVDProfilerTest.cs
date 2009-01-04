@@ -127,7 +127,7 @@ namespace OMLTestSuite
             DateTime before = DateTime.Now;
             Title title = LoadTitle("1");
             DateTime after = DateTime.Now;
-            Assert.AreEqual(new DateTime(2001, 02, 03), title.ReleaseDate, "Release date is incorrect");
+            Assert.AreEqual(new DateTime(1991, 01, 01), title.ReleaseDate, "Release date is incorrect");
 
             //TODO: Should this be the date entered in DVD Profiler instead?
             Assert.IsTrue(before <= title.DateAdded && title.DateAdded <= after, "Date entered is incorrect");
