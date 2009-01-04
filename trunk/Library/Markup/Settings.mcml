@@ -356,6 +356,12 @@
                                   <Text Content="Show Alpha Jump Bar" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
                                 </Children>
                               </Panel>
+                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0" Navigation="Group">
+                                <Children>
+                                  <c:SimpleCheckbox Name="ShowWatchedIcon" Checked="[Settings.ShowWatchedIcon]" Margins="0,0,10,0" />
+                                  <Text Content="Show Watched Icon" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
+                                </Children>
+                              </Panel>
                             </Children>
                           </Panel>
 

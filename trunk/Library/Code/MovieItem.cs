@@ -89,7 +89,10 @@ namespace Library
 
         public bool Watched
         {
-            get { return _watched; }
+            get 
+            {
+                return Properties.Settings.Default.ShowWatchedIcon ? _watched : false;
+            }
         }
 
         public GalleryItem(MovieGallery owner, string name, string caption, Filter browseCategory) :
