@@ -128,7 +128,7 @@ namespace OMLDatabaseEditor
             // 
             this.tpSkins.Controls.Add(this.lbcSkins);
             this.tpSkins.Name = "tpSkins";
-            this.tpSkins.Size = new System.Drawing.Size(346, 270);
+            this.tpSkins.Size = new System.Drawing.Size(346, 271);
             this.tpSkins.Text = "Skins";
             // 
             // lbcSkins
@@ -136,7 +136,7 @@ namespace OMLDatabaseEditor
             this.lbcSkins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbcSkins.Location = new System.Drawing.Point(0, 0);
             this.lbcSkins.Name = "lbcSkins";
-            this.lbcSkins.Size = new System.Drawing.Size(346, 270);
+            this.lbcSkins.Size = new System.Drawing.Size(346, 271);
             this.lbcSkins.TabIndex = 0;
             this.lbcSkins.SelectedValueChanged += new System.EventHandler(this.lbcSkins_SelectedValueChanged);
             // 
@@ -145,7 +145,7 @@ namespace OMLDatabaseEditor
             this.tpMPAAList.Controls.Add(this.lbcMPAA);
             this.tpMPAAList.Controls.Add(this.beMPAA);
             this.tpMPAAList.Name = "tpMPAAList";
-            this.tpMPAAList.Size = new System.Drawing.Size(346, 270);
+            this.tpMPAAList.Size = new System.Drawing.Size(346, 271);
             this.tpMPAAList.Text = "MPAA";
             // 
             // lbcMPAA
@@ -180,7 +180,7 @@ namespace OMLDatabaseEditor
             this.tpGenres.Controls.Add(this.btnGenre);
             this.tpGenres.Controls.Add(this.lbGenres);
             this.tpGenres.Name = "tpGenres";
-            this.tpGenres.Size = new System.Drawing.Size(346, 270);
+            this.tpGenres.Size = new System.Drawing.Size(346, 271);
             this.tpGenres.Text = "Genres";
             // 
             // labelControl1
@@ -222,7 +222,7 @@ namespace OMLDatabaseEditor
             this.tpTags.Controls.Add(this.lbcTags);
             this.tpTags.Controls.Add(this.beTags);
             this.tpTags.Name = "tpTags";
-            this.tpTags.Size = new System.Drawing.Size(346, 270);
+            this.tpTags.Size = new System.Drawing.Size(346, 271);
             this.tpTags.Text = "Tags";
             // 
             // lbcTags

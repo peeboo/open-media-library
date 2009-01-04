@@ -91,7 +91,7 @@ namespace OMLDatabaseEditor
 
             // Set up filter lists
             ToolStripMenuItem item;
-            foreach (string genre in _titleCollection.GetAllGenres())
+            foreach (string genre in _titleCollection.GetAllGenres)
             {
                 item = new ToolStripMenuItem(genre);
                 item.CheckOnClick = true;
@@ -99,7 +99,7 @@ namespace OMLDatabaseEditor
                 filterByGenreToolStripMenuItem.DropDownItems.Add(item);
             }
 
-            foreach (string rating in _titleCollection.GetAllParentalRatings())
+            foreach (string rating in _titleCollection.GetAllParentalRatings)
             {
                 item = new ToolStripMenuItem(rating);
                 item.CheckOnClick = true;

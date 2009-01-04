@@ -128,25 +128,25 @@ namespace OMLDatabaseEditor.Controls
                     case 0: //Directors
                         lbPeople.DataSource = EditedTitle.Directors;
                         lbPeople.DisplayMember = "full_name";
-                        listPersona.AddRange(MainEditor._titleCollection.GetAllDirectors().ToArray());
+                        listPersona.AddRange(MainEditor._titleCollection.GetAllDirectors.ToArray());
                         listPersona.Sort();
                         break;
                     case 1: //Writers
                         lbPeople.DataSource = EditedTitle.Writers;
                         lbPeople.DisplayMember = "full_name";
-                        listPersona.AddRange(MainEditor._titleCollection.GetAllWriters().ToArray());
+                        listPersona.AddRange(MainEditor._titleCollection.GetAllWriters.ToArray());
                         listPersona.Sort();
                         break;
                     case 2: //Producers
                         lbPeople.DataSource = EditedTitle.Producers;
                         lbPeople.DisplayMember = "";
-                        listPersona.AddRange(MainEditor._titleCollection.GetAllProducers().ToArray());
+                        listPersona.AddRange(MainEditor._titleCollection.GetAllProducers.ToArray());
                         listPersona.Sort();
                         break;
                     case 3: //Actors
                         lbPeople.DataSource = EditedTitle.ActingRolesBinding;
                         lbPeople.DisplayMember = "Display";
-                        listPersona.AddRange(MainEditor._titleCollection.GetAllActors().ToArray());
+                        listPersona.AddRange(MainEditor._titleCollection.GetAllActors.ToArray());
                         listPersona.Sort();
                         break;
                     case 4: //Non-Actors
@@ -362,22 +362,22 @@ namespace OMLDatabaseEditor.Controls
 
             txtStudio.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtStudio.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            txtStudio.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllStudios().ToArray());
+            txtStudio.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllStudios.ToArray());
 
             txtAspectRatio.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtAspectRatio.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            txtAspectRatio.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllAspectRatios().ToArray());
+            txtAspectRatio.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllAspectRatios.ToArray());
 
             txtCountryOfOrigin.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtCountryOfOrigin.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            txtCountryOfOrigin.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllCountryofOrigin().ToArray());
+            txtCountryOfOrigin.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllCountryofOrigin.ToArray());
 
         }
 
         private void lbPeople_DoubleClick(object sender, EventArgs e)
         {
             List<String> listToEdit = new List<string>();
-            listToEdit.AddRange(MainEditor._titleCollection.GetAllActors().ToArray());
+            listToEdit.AddRange(MainEditor._titleCollection.GetAllActors.ToArray());
             listToEdit.Sort();
             lbcPersona.DataSource = listToEdit;
             //String name = "Actors";
