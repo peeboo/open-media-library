@@ -413,18 +413,21 @@ namespace Library
 
         public void UpdateWatched()
         {
-            bool watched = (bool)_watched.Chosen;
-
-            if (watched && _movieDetails.TitleObject.WatchedCount == 0)
-            {                    
-                _movieDetails.TitleObject.WatchedCount = 1;
-                OMLApplication.Current.SaveTitles();
-            }
-            else if (!watched && _movieDetails.TitleObject.WatchedCount != 0)
+            OMLApplication.ExecuteSafe(delegate
             {
-                _movieDetails.TitleObject.WatchedCount = 0;
-                OMLApplication.Current.SaveTitles();
-            }
+                bool watched = (bool)_watched.Chosen;
+
+                if (watched && _movieDetails.TitleObject.WatchedCount == 0)
+                {
+                    _movieDetails.TitleObject.WatchedCount = 1;
+                    OMLApplication.Current.SaveTitles();
+                }
+                else if (!watched && _movieDetails.TitleObject.WatchedCount != 0)
+                {
+                    _movieDetails.TitleObject.WatchedCount = 0;
+                    OMLApplication.Current.SaveTitles();
+                }
+            });
         }
     }
 
