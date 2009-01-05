@@ -195,7 +195,7 @@
                 </Animations>
               </Panel>
 
-              <Panel Layout="VerticalFlow">
+              <Panel Layout="VerticalFlow" CenterPointPercent=".5,.5,.5">
                 <Children>
                   <Graphic Name="FullCover" Content="[DetailsPage.FullCover]" MinimumSize="336,480" MaximumSize="336,480" />
                   <Clip Orientation="Vertical" FadeSize="40" NearOffset="70" MinimumSize="336,0" MaximumSize="336, 480">
@@ -207,7 +207,7 @@
                   </Clip>
                 </Children>
                 <Animations>
-                  <Animation Animation="animation://me:ShowFromLeft" />
+                  <Animation Animation="animation://me:Zoomin" />
                 </Animations>
               </Panel>
             </Children>            
