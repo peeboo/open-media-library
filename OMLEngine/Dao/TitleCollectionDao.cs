@@ -570,8 +570,7 @@ namespace OMLEngine.Dao
 
             return from d in days
                    from r in TitleConfig.DATE_ADDED_RANGE
-                   where d >= r.Start
-                   where d < r.End
+                   where d >= r.Start && d < r.End
                    group r by r.End into g
                    orderby g.Key ascending
                    select new FilteredCollection() { Name = TitleConfig.DaysToFilterString(g.Key), Count = g.Count() };
@@ -585,11 +584,29 @@ namespace OMLEngine.Dao
 
             return from d in runtimes
                    from r in TitleConfig.RUNTIME_RANGE
-                   where d >= r.Start
-                   where d < r.End
+                   where d >= r.Start && d < r.End
                    group r by r.End into g
                    orderby g.Key ascending
                    select new FilteredCollection() { Name = TitleConfig.RuntimeToFilterString(g.Key), Count = g.Count() };
+        }
+
+        public static IEnumerable<FilteredCollection> GetAllAlphaIndex(List<TitleFilter> filters)
+        {
+            IEnumerable<char> firstLetters = from t in GetFilteredTitlesWrapper(filters)
+                                          select GetProperIndex(t.SortName.ToUpper()[0]);
+
+            return from l in firstLetters
+                   group l by l into g
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = g.Key.ToString(), Count = g.Count() };
+        }
+
+        private static char GetProperIndex(char letter)
+        {
+            if (letter < 'A')
+                return '#';
+            else
+                return letter;
         }
 
         /// <summary>
