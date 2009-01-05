@@ -30,6 +30,11 @@ namespace OMLEngine
             }
         }
 
+        public static string TempPlayListDirectory
+        {
+            get { return Path.Combine(PublicRootDirectory, "TempPlaylists"); }
+        }
+
         /// <summary>
         /// Location for cover art and other images to be stored
         /// </summary>
@@ -141,6 +146,11 @@ namespace OMLEngine
         public static void createPublicRootDirectory()
         {
             Directory.CreateDirectory(PublicRootDirectory);
+        }
+
+        public static void CreateTempPlayListDirectory()
+        {
+            Directory.CreateDirectory(TempPlayListDirectory);
         }
 
         /// <summary>
