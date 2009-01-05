@@ -11,6 +11,7 @@ using Microsoft.MediaCenter.Hosting;
 
 using OMLEngine;
 using OMLGetDVDInfo;
+using System.ComponentModel;
 
 namespace Library
 {
@@ -19,11 +20,6 @@ namespace Library
     /// </summary>
     public class ExtenderDVDPlayer : IPlayMovie
     {
-        [DllImport("kernel32.dll")]
-        static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);
-        static int SYMLINK_FLAG_DIRECTORY = 1;
-        static int SYMLINK_FLAG_FILE = 0;
-
         MediaSource _source;
         DVDDiskInfo _info;
 
@@ -98,11 +94,12 @@ namespace Library
                 string vob = Path.Combine(videoTSDir, vobs[0]);
                 OMLApplication.DebugLine("Trying to create '{0}' soft-link to '{1}'", mpegFile, vob);
 
-                CreateSymbolicLink(mpegFile, vob, SYMLINK_FLAG_FILE);
+                bool ret = CreateSymbolicLink(mpegFile, vob, SYMLINK_FLAG_FILE);
+                string retMsg = ret ? "success" : "Sym-Link failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message;
 
                 if (File.Exists(mpegFile))
                     return mpegFile;
-                OMLApplication.DebugLine("Soft-link creation failed!");
+                OMLApplication.DebugLine("Soft-link creation failed! {0}", retMsg);
             }
             else
             {
@@ -286,21 +283,43 @@ namespace Library
         static string MakeMPEGLink(string mpegFolder, string vob)
         {
             string mpegFile = GetMPEGName(mpegFolder, vob);
-            if (File.Exists(mpegFile) == false)
+            if (File.Exists(mpegFile))
+                return mpegFile;
+
+            bool ret = CreateSymbolicLink(mpegFile, vob, SYMLINK_FLAG_FILE);
+            string retMsg = ret ? "success" : "Sym-Link failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message;
+            if (File.Exists(mpegFile))
             {
-                if (IsNTFS(mpegFolder) == false)
-                {
-                    OMLApplication.DebugLine("File system not NTFS: can't create hard-links: {0}", mpegFolder);
-                    //break;
-                }
-                if (CreateHardLinkAPI(mpegFile, vob, IntPtr.Zero) == false)
-                {
-                    OMLApplication.DebugLine("Failed to create a hard-link {0} -> {1}", vob, mpegFile);
-                    //break;
-                }
-                OMLApplication.DebugLine("created a hard-link {0} -> {1}, Success:{2}", vob, mpegFile, File.Exists(mpegFile));
+                OMLApplication.DebugLine("created a sym-link {0} -> {1}, kernel32 success", vob, mpegFile);
+                return mpegFile;
             }
-            return mpegFile;
+
+            OMLApplication.DebugLine("created a sym-link {0} -> {1}, failed, {2}", vob, mpegFile, retMsg);
+
+            string args = string.Format("/c mklink \"{0}\" \"{1}\"", mpegFile, vob);
+            System.Diagnostics.Process p = System.Diagnostics.Process.Start("cmd.exe", 
+                args);
+            p.WaitForExit();
+            int exitCode = p.ExitCode;
+
+            if (File.Exists(mpegFile))
+            {
+                OMLApplication.DebugLine("created a sym-link {0} -> {1}, cmd.exe success", vob, mpegFile);
+                return mpegFile;
+            }
+
+            OMLApplication.DebugLine("created a sym-link {0} -> {1}, mklink failed: args:'{2}', exit code: {3}", vob, mpegFile, args, exitCode);
+
+            ret = CreateHardLinkAPI(mpegFile, vob, IntPtr.Zero);
+            retMsg = ret ? "success" : "Hard-Link failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message;
+            if (File.Exists(mpegFile))
+            {
+                OMLApplication.DebugLine("created a hard-link {0} -> {1}, success", vob, mpegFile);
+                return mpegFile;
+            }
+
+            OMLApplication.DebugLine("failed to create link {0} -> {1}, neither with sym-link, mklink nor hard-link", vob, mpegFile);
+            return null;
         }
 
         static string CreateASX(string mpegFolder, string vts, string name, IEnumerable<string> vobs)
@@ -350,7 +369,15 @@ namespace Library
         }
 
         #region -- NTFS helper functions to create hard-links --
-        [DllImport("Kernel32.Dll", CharSet = CharSet.Unicode, EntryPoint = "CreateHardLink")]
+        [DllImport("Kernel32.Dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern bool CreateSymbolicLink(
+            [MarshalAs(UnmanagedType.LPTStr)] string lpSymlinkFileName,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpTargetFileName, 
+            int dwFlags);
+        const int SYMLINK_FLAG_DIRECTORY = 1;
+        const int SYMLINK_FLAG_FILE = 0;
+
+        [DllImport("Kernel32.Dll", CharSet = CharSet.Unicode, EntryPoint = "CreateHardLink", SetLastError = true)]
         static extern bool CreateHardLinkAPI(
             [MarshalAs(UnmanagedType.LPTStr)] string lpFileName,
             [MarshalAs(UnmanagedType.LPTStr)] string lpExistingFileName,
