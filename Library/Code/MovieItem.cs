@@ -439,6 +439,38 @@ namespace Library
             moviePlayer.PlayMovie();
         }
 
+        public void PlayAllDisks()
+        {
+            IncrementPlayCount();
+
+            // create a disk out of the playlist of all items
+            this.TitleObject.SelectedDisk = new Disk(this.Name, CreatePlayListFromAllDisks(), VideoFormat.WPL);
+
+            PlayMovie();
+        }
+
+        private string CreatePlayListFromAllDisks()
+        {
+            if (!Directory.Exists(FileSystemWalker.TempPlayListDirectory))
+                FileSystemWalker.CreateTempPlayListDirectory();
+
+            WindowsPlayListManager playlist = new WindowsPlayListManager();
+
+            string playlistFile = Path.Combine(FileSystemWalker.TempPlayListDirectory, "AllDisks_" + this.TitleObject.InternalItemID + ".WPL");
+
+            foreach (Disk disk in this.TitleObject.Disks)
+            {
+                if (string.IsNullOrEmpty(disk.Path))
+                    continue;
+
+                playlist.AddItem(new PlayListItem(disk.Path));
+            }
+
+            playlist.WriteWPLFile(playlistFile);
+
+            return playlistFile;
+        }
+
         void ms_OnSave(MediaSource ms)
         {
             foreach (Disk d in this.TitleObject.Disks)
