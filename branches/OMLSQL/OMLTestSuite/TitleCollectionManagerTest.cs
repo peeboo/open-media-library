@@ -133,6 +133,25 @@ namespace OMLTestSuite
             {
                 Console.WriteLine(String.Format("{0}-{1}", item.Name, item.Count));
             }
+        }
+
+        [Test]
+        public void TEST_GET_ALL_ALPHAINDEX()
+        {
+            Console.WriteLine("Starting to get all date added values");
+            DateTime start = DateTime.Now;
+
+            IEnumerable<FilteredCollection> items = TitleCollectionManager.GetAllAlphaIndex(null);
+
+            List<FilteredCollection> allItems = new List<FilteredCollection>(items);
+
+            Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
+                                        (DateTime.Now - start).TotalMilliseconds.ToString(),
+                                        allItems.Count));
+            foreach (FilteredCollection item in allItems)
+            {
+                Console.WriteLine(String.Format("{0}-{1}", item.Name, item.Count));
+            }
         }       
 
         [Test]

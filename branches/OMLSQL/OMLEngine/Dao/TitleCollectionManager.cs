@@ -184,6 +184,11 @@ namespace OMLEngine
             return Dao.TitleCollectionDao.GetAllRuntimes(filters);
         }
 
+        public static IEnumerable<FilteredCollection> GetAllAlphaIndex(List<TitleFilter> filters)
+        {
+            return Dao.TitleCollectionDao.GetAllAlphaIndex(filters);
+        }
+
         /// <summary>
         /// Increments the count for a given value in the dictionary
         /// </summary>
