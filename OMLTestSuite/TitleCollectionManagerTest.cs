@@ -141,16 +141,16 @@ namespace OMLTestSuite
             Console.WriteLine("Starting to get all date added values");
             DateTime start = DateTime.Now;
 
-            IEnumerable<FilteredCollection> items = TitleCollectionManager.GetAllAlphaIndex(null);
+            IEnumerable<FilteredTitleCollection> items = TitleCollectionManager.GetAllAlphaIndex(null);
 
-            List<FilteredCollection> allItems = new List<FilteredCollection>(items);
+            List<FilteredTitleCollection> allItems = new List<FilteredTitleCollection>(items);
 
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
                                         allItems.Count));
-            foreach (FilteredCollection item in allItems)
+            foreach (FilteredTitleCollection item in allItems)
             {
-                Console.WriteLine(String.Format("{0}-{1}", item.Name, item.Count));
+                Console.WriteLine(String.Format("{0}-{1}", item.Name, item.Titles.Count()));
             }
         }       
 

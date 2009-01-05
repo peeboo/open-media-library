@@ -319,7 +319,7 @@ namespace OMLEngine.Dao
         private static IQueryable<Title> ApplyAlphaFilter(IQueryable<Title> titles, string startCharacter)
         {
             return from t in titles
-                   where t.Name.StartsWith(startCharacter)
+                   where (startCharacter != "#" && t.Name.StartsWith(startCharacter)) || (startCharacter == "#" && t.SortName.ToUpper()[0] < 'A')
                    select t;
         }
 
@@ -590,7 +590,7 @@ namespace OMLEngine.Dao
                    select new FilteredCollection() { Name = TitleConfig.RuntimeToFilterString(g.Key), Count = g.Count() };
         }
 
-        public static IEnumerable<FilteredCollection> GetAllAlphaIndex(List<TitleFilter> filters)
+        public static IEnumerable<FilteredTitleCollection> GetAllAlphaIndex(List<TitleFilter> filters)
         {
             IEnumerable<char> firstLetters = from t in GetFilteredTitlesWrapper(filters)
                                           select GetProperIndex(t.SortName.ToUpper()[0]);
@@ -598,7 +598,7 @@ namespace OMLEngine.Dao
             return from l in firstLetters
                    group l by l into g
                    orderby g.Key ascending
-                   select new FilteredCollection() { Name = g.Key.ToString(), Count = g.Count() };
+                   select new FilteredTitleCollection() { Name = g.Key.ToString(), Titles = TitleCollectionManager.ConvertDaoTitlesToTitles(from t in ApplyAlphaFilter(GetFilteredTitlesWrapper(filters), g.Key.ToString()) select t) };
         }
 
         private static char GetProperIndex(char letter)

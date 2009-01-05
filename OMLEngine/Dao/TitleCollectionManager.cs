@@ -184,7 +184,7 @@ namespace OMLEngine
             return Dao.TitleCollectionDao.GetAllRuntimes(filters);
         }
 
-        public static IEnumerable<FilteredCollection> GetAllAlphaIndex(List<TitleFilter> filters)
+        public static IEnumerable<FilteredTitleCollection> GetAllAlphaIndex(List<TitleFilter> filters)
         {
             return Dao.TitleCollectionDao.GetAllAlphaIndex(filters);
         }
@@ -266,7 +266,7 @@ namespace OMLEngine
         /// </summary>
         /// <param name="titles"></param>
         /// <returns></returns>
-        private static IEnumerable<Title> ConvertDaoTitlesToTitles(IEnumerable<Dao.Title> titles)
+        internal static IEnumerable<Title> ConvertDaoTitlesToTitles(IEnumerable<Dao.Title> titles)
         {
             foreach (Dao.Title title in titles)
                 yield return new Title(title);
@@ -416,6 +416,20 @@ namespace OMLEngine
         public int CompareTo(object other)
         {
             FilteredCollection otherT = other as FilteredCollection;
+            if (otherT == null)
+                return -1;
+            return Name.CompareTo(otherT.Name);
+        }
+    }
+
+    public class FilteredTitleCollection : IComparable
+    {
+        public string Name { get; set; }
+        public IEnumerable<Title> Titles { get; set; }
+
+        public int CompareTo(object other)
+        {
+            FilteredTitleCollection otherT = other as FilteredTitleCollection;
             if (otherT == null)
                 return -1;
             return Name.CompareTo(otherT.Name);
