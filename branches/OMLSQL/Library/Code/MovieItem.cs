@@ -93,12 +93,24 @@ namespace Library
             _forcedCount = forcedCount;
         }
 
+        public bool Watched
+        {
+            get 
+            {
+                return Properties.Settings.Default.ShowWatchedIcon ? _watched : false;
+            }
+        }
+
+        public GalleryItem(MovieGallery owner, string name, string caption, Filter browseCategory) :
+            this(owner, name, caption, browseCategory, false) { }        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GalleryItem"/> class.
         /// </summary>
-        public GalleryItem(MovieGallery owner, string name, string caption, Filter browseCategory)
+        public GalleryItem(MovieGallery owner, string name, string caption, Filter browseCategory, bool watched)
             : base(owner)
         {
+            _watched = watched;
             _name = name;
             _sortName = name;
             _caption = caption;
@@ -240,7 +252,7 @@ namespace Library
 
         public virtual GalleryItem Clone(MovieGallery newOwner)
         {
-            return new GalleryItem(newOwner, Name, Caption, Category);
+            return new GalleryItem(newOwner, Name, Caption, Category, Watched);
         }
 
         public int CompareTo(object obj)
@@ -267,6 +279,7 @@ namespace Library
         private Filter _category;
         private Command _quickPlay;
         private int _forcedCount = -1;
+        private bool _watched;
     }
 
     /// <summary>
@@ -297,7 +310,7 @@ namespace Library
         /// </summary>
         /// <param name="title">The title.</param>
         public MovieItem(Title title, MovieGallery owner)
-            : base(owner, title.Name, title.Name, null)
+            : base(owner, title.Name, title.Name, null, title.WatchedCount > 0)
         {
             _titleObj = title;
             SortName = title.SortName;
@@ -430,6 +443,38 @@ namespace Library
             ms.OnSave += new Action<MediaSource>(ms_OnSave);
             IPlayMovie moviePlayer = MoviePlayerFactory.CreateMoviePlayer(ms);
             moviePlayer.PlayMovie();
+        }
+
+        public void PlayAllDisks()
+        {
+            IncrementPlayCount();
+
+            // create a disk out of the playlist of all items
+            this.TitleObject.SelectedDisk = new Disk(this.Name, CreatePlayListFromAllDisks(), VideoFormat.WPL);
+
+            PlayMovie();
+        }
+
+        private string CreatePlayListFromAllDisks()
+        {
+            if (!Directory.Exists(FileSystemWalker.TempPlayListDirectory))
+                FileSystemWalker.CreateTempPlayListDirectory();
+
+            WindowsPlayListManager playlist = new WindowsPlayListManager();
+
+            string playlistFile = Path.Combine(FileSystemWalker.TempPlayListDirectory, "AllDisks_" + this.TitleObject.Id + ".WPL");
+
+            foreach (Disk disk in this.TitleObject.Disks)
+            {
+                if (string.IsNullOrEmpty(disk.Path))
+                    continue;
+
+                playlist.AddItem(new PlayListItem(disk.Path));
+            }
+
+            playlist.WriteWPLFile(playlistFile);
+
+            return playlistFile;
         }
 
         void ms_OnSave(MediaSource ms)

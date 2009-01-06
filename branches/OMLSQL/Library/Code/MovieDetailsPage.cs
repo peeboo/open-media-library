@@ -306,10 +306,24 @@ namespace Library
             // if there are no disks do nothing
         }
 
+        public void PlayAllDisks()
+        {
+            if (!((bool)_watched.Chosen))
+                _watched.Chosen = true;
+
+            OMLApplication.ExecuteSafe(delegate
+            {
+                // Play the Selected Disk
+                PlayClicked = true;
+                _movieDetails.PlayAllDisks();
+                _playClicked = false; // I use the private variable because I don't want to send an event to the MCML page
+            });
+        }
+
         public void PlayDisk(int SelectedDisk)
         {
             // check the checkbox - this is to make it checked when the user clicks the back button
-            // this will trigure the save to happen again but since we've already updated the count 
+            // this will trigger the save to happen again but since we've already updated the count 
             // the save will be a noop
             if (! ((bool)_watched.Chosen))
                 _watched.Chosen = true;
@@ -404,16 +418,19 @@ namespace Library
 
         public void UpdateWatched()
         {
-            bool watched = (bool)_watched.Chosen;
+            OMLApplication.ExecuteSafe(delegate
+            {
+                bool watched = (bool)_watched.Chosen;
 
-            if (watched && _movieDetails.TitleObject.WatchedCount == 0)
-            {
-                TitleCollectionManager.IncrementWatchedCount(_movieDetails.TitleObject);
-            }
-            else if (!watched && _movieDetails.TitleObject.WatchedCount != 0)
-            {
-                TitleCollectionManager.ClearWatchedCount(_movieDetails.TitleObject);
-            }
+                if (watched && _movieDetails.TitleObject.WatchedCount == 0)
+                {
+                    TitleCollectionManager.IncrementWatchedCount(_movieDetails.TitleObject);
+                }
+                else if (!watched && _movieDetails.TitleObject.WatchedCount != 0)
+                {
+                    TitleCollectionManager.ClearWatchedCount(_movieDetails.TitleObject);
+                }
+            });
         }
     }
 

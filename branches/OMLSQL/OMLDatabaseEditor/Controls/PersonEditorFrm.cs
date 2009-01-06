@@ -23,6 +23,16 @@ namespace OMLDatabaseEditor.Controls
             set { txtRole.Text = value; }
         }
 
+        public List<string> PersonList
+        {
+            set
+            {
+                txtName.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                txtName.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                txtName.MaskBox.AutoCompleteCustomSource.AddRange(value.ToArray());
+            }
+        }
+
         public PersonEditorFrm(bool showRole)
         {
             InitializeComponent();

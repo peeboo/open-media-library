@@ -3,4 +3,5 @@
 
   <Image Name="AppIcon" Source="resx://Library/Library.Resources/AppIcon" />
 
+  <Image Name="WatchedIcon" Source="resx://Library/Library.Resources/watched_icon" />
 </Mcml>

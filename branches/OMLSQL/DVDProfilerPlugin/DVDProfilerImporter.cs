@@ -130,9 +130,10 @@ namespace DVDProfilerPlugin
                 case "CountryOfOrigin":
                     CurrentTitle.CountryOfOrigin = reader.ReadElementString();
                     break;
-                case "Released":
-                    DateTime release;
-                    if (TryReadElementDate(reader, DateTimeKind.Local, out release)) CurrentTitle.ReleaseDate = release;
+                case "ProductionYear":
+                    // Set to January first in the appropriate year in lack of better...
+                    int releaseYear;
+                    if (TryReadElementInt(reader, out releaseYear)) CurrentTitle.ReleaseDate = new DateTime(releaseYear, 1, 1);
                     break;
                 case "RunningTime":
                     int runningTime;

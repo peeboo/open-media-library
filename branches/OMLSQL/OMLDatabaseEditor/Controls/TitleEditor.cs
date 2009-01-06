@@ -18,8 +18,6 @@ namespace OMLDatabaseEditor.Controls
 {
     public partial class TitleEditor : UserControl
     {
-        public AutoCompleteStringCollection MPAARatings;
-
         public delegate void TitleChangeEventHandler(object sender, EventArgs e);
         public delegate void TitleNameChangeEventHandler(object sender, TitleNameChangedEventArgs e);
         public delegate void SavedEventHandler(object sender, EventArgs e);
@@ -29,6 +27,8 @@ namespace OMLDatabaseEditor.Controls
         public event SavedEventHandler SavedTitle;
 
         private bool _isLoading = false;
+        private List<String> listPersona = new List<string>();
+        private List<String> filterPersona = new List<string>();
 
         public enum TitleStatus { Normal, UnsavedChanges }
 
@@ -123,29 +123,42 @@ namespace OMLDatabaseEditor.Controls
         {
             if (EditedTitle != null)
             {
+                listPersona.Clear();
                 switch (selectedPeople)
                 {
                     case 0: //Directors
                         lbPeople.DataSource = EditedTitle.Directors;
                         lbPeople.DisplayMember = "full_name";
+                        listPersona.AddRange(MainEditor._titleCollection.GetAllDirectors.ToArray());
+                        listPersona.Sort();
                         break;
                     case 1: //Writers
                         lbPeople.DataSource = EditedTitle.Writers;
                         lbPeople.DisplayMember = "full_name";
+                        listPersona.AddRange(MainEditor._titleCollection.GetAllWriters.ToArray());
+                        listPersona.Sort();
                         break;
                     case 2: //Producers
                         lbPeople.DataSource = EditedTitle.Producers;
                         lbPeople.DisplayMember = "";
+                        listPersona.AddRange(MainEditor._titleCollection.GetAllProducers.ToArray());
+                        listPersona.Sort();
                         break;
                     case 3: //Actors
                         lbPeople.DataSource = EditedTitle.ActingRolesBinding;
                         lbPeople.DisplayMember = "Display";
+                        listPersona.AddRange(MainEditor._titleCollection.GetAllActors.ToArray());
+                        listPersona.Sort();
                         break;
                     case 4: //Non-Actors
                         lbPeople.DataSource = EditedTitle.NonActingRolesBinding;
                         lbPeople.DisplayMember = "Display";
                         break;
                 }
+                filterPersona.Clear();
+                filterPersona.AddRange(listPersona);
+                lbcPersona.DataSource = filterPersona;
+                lbcPersona.Refresh();
             }
         }
 
@@ -300,6 +313,7 @@ namespace OMLDatabaseEditor.Controls
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PersonEditorFrm frmPerson = new PersonEditorFrm(rgPeople.SelectedIndex == 3 || rgPeople.SelectedIndex == 4);
+            frmPerson.PersonList = listPersona;
             if (frmPerson.ShowDialog() == DialogResult.OK)
             {
                 switch (rgPeople.SelectedIndex)
@@ -337,16 +351,6 @@ namespace OMLDatabaseEditor.Controls
         {
             if (Properties.Settings.Default.gbUseMPAAList)
             {
-                if (MPAARatings != null)
-                {
-                    MPAARatings.Clear();
-                }
-                else
-                {
-                    MPAARatings = new AutoCompleteStringCollection();
-                }
-                MPAARatings.AddRange(Properties.Settings.Default.gsMPAARatings.Split('|'));
-
                 // MaskBox is a hidden property
                 // It is explained on the DevExpress Website at:
                 //
@@ -354,7 +358,62 @@ namespace OMLDatabaseEditor.Controls
                 //
                 teParentalRating.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                teParentalRating.MaskBox.AutoCompleteCustomSource = MPAARatings;
+                teParentalRating.MaskBox.AutoCompleteCustomSource.AddRange(Properties.Settings.Default.gsMPAARatings.Split('|'));
+            }
+
+            txtStudio.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            txtStudio.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txtStudio.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllStudios.ToArray());
+
+            txtAspectRatio.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            txtAspectRatio.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txtAspectRatio.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllAspectRatios.ToArray());
+
+            txtCountryOfOrigin.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            txtCountryOfOrigin.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txtCountryOfOrigin.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllCountryofOrigin.ToArray());
+
+        }
+
+        private void lbPeople_DoubleClick(object sender, EventArgs e)
+        {
+            List<String> listToEdit = new List<string>();
+            listToEdit.AddRange(MainEditor._titleCollection.GetAllActors.ToArray());
+            listToEdit.Sort();
+            lbcPersona.DataSource = listToEdit;
+            //String name = "Actors";
+            //ListEditor editor = new ListEditor(name, listToEdit);
+            //List<string> original = listToEdit.ToList<string>();
+            //editor.ShowDialog();
+            //if (listToEdit.Union(original).Count<string>() != original.Count)
+            //{
+            //    TitleChanges(null, null);
+            //}
+        }
+
+        private void buttonEdit1_TextChanged(object sender, EventArgs e)
+        {
+            sFilter = beFilter.Text.ToLower();
+            filterPersona.Clear();
+            if (String.IsNullOrEmpty(sFilter))
+            {
+                filterPersona.AddRange(listPersona);
+            }
+            else
+            {
+                filterPersona.AddRange(listPersona.FindAll(StartsWithFilter));
+            }
+            lbcPersona.Refresh();
+        }
+
+        private static String sFilter;
+        private static bool StartsWithFilter(String s)
+        {
+            if (s.ToLower().StartsWith(sFilter))
+            {
+                return true;
+            } else {
+                return false;
             }
         }
     }

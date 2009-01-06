@@ -21,7 +21,6 @@
       <col:IList Name="List" IList="$Required"/>
       <cor:String Name="ListName" String="$Required" />
       <cor:String Name="GalleryView" String="$Required" />
-      <IntRangedValue Name="FocusedIndex"/>
       <EditableText Name="JumpValue"/>
       <Command Name="GoToNowPlaying" />
     </Properties>
@@ -58,11 +57,11 @@
       </Changed>
 
     </Rules>
-    
+
     <!--<Rules>
       <Binding Source="[JumpValue.Value]" Target="[JumpInText.Content]" />
     </Rules>-->
-    
+
     <Content>
       <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
         <Children>
@@ -76,6 +75,9 @@
             <LayoutInput>
               <FormLayoutInput Left="Parent,0.02"  Top="Parent,0,5"/>
             </LayoutInput>
+            <Animations>
+              <Animation Animation="animation://me:ShowFromLeft" />
+            </Animations>
           </Panel>
 
 
@@ -84,14 +86,14 @@
             </LayoutInput>
           </Panel>-->
 
-            <!-- Display of the current and total pages. -->
+          <!-- Display of the current and total pages. -->
           <Panel Name="PageStats" Layout="HorizontalFlow">
             <Children>
-              <me:PositionIndicator Gallery="[MovieBrowser]" FocusedIndex="[FocusedIndex]" List="[List]" />
+              <me:PositionIndicator Gallery="[MovieBrowser]" List="[List]" />
             </Children>
             <LayoutInput>
               <FormLayoutInput Left="Parent,0.05,15" Right="Parent,.35,1" Bottom="Parent,0.95,-15"/>
-            </LayoutInput>
+            </LayoutInput>            
           </Panel>
 
           <Panel Name="GalleryPanel" MouseInteractive="true">
@@ -115,6 +117,10 @@
               <FormLayoutInput  Top="Parent, 0, 5" Right="Parent, 1, -10" />
             </LayoutInput>
 
+            <Animations>
+              <Animation Animation="animation://me:ShowFromLeft" />
+            </Animations>
+
           </Panel>
         </Children>
 
@@ -128,7 +134,6 @@
   <UI Name="PositionIndicator">
     <Properties>
       <a:MovieGallery Name="Gallery" MovieGallery="$Required" />
-      <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
       <col:IList Name="List" IList="$Required"/>
     </Properties>
 
@@ -139,9 +144,9 @@
     <Rules>
 
       <!-- Whenever the focused index changes recreate our string. -->
-      <Changed Source="[FocusedIndex.Value]" InitialEvaluate="true">
+      <Changed Source="[Gallery.FocusIndex.Value]" InitialEvaluate="true">
         <Actions>
-          <Set Target="[FocusedIndexString]" Value="[FocusedIndex.Value]">
+          <Set Target="[FocusedIndexString]" Value="[Gallery.FocusIndex.Value]">
             <!-- Convert from zero-based to a one-based index -->
             <Transformer>
               <MathTransformer AddInt="1" Type="String"/>

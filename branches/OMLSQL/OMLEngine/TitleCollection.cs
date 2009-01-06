@@ -236,6 +236,121 @@ namespace OMLEngine
             get { return _list; }
         }
 
+        public List<string> GetAllActors
+        {
+           get {
+               List<string> actors = (from title in _list 
+                                   from actor in title.ActingRoles 
+                                   orderby actor.Key ascending
+                                   select actor.Key).Distinct().ToList<string>();
+                return actors;
+            }
+        }
+
+        public List<string> GetAllAspectRatios
+        {
+            get
+            {
+                List<string> aspects = (from title in _list
+                                        orderby title.AspectRatio
+                                        select title.AspectRatio).Distinct().ToList<string>();
+                return aspects;
+            }
+        }
+
+        public List<string> GetAllCountryofOrigin
+        {
+            get
+            {
+                List<string> countries = (from title in _list
+                                          orderby title.CountryOfOrigin
+                                          select title.CountryOfOrigin).Distinct().ToList<string>();
+                return countries;
+            }
+        }
+
+        public List<string> GetAllDirectors
+        {
+            get
+            {
+                List<string> directors = (from title in _list
+                                          from director in title.Directors
+                                          orderby director.full_name
+                                          select director.full_name).Distinct().ToList<string>();
+                return directors;
+            }
+        }
+
+        public List<string> GetAllGenres
+        {
+            get
+            {
+                List<string> genres = (from title in _list
+                                       from genre in title.Genres
+                                       orderby genre ascending
+                                       select genre).Distinct().ToList<string>();
+                return genres;
+            }
+        }
+
+        public List<string> GetAllProducers
+        {
+            get
+            {
+                List<string> producers = (from title in _list
+                                          from producer in title.Producers
+                                          orderby producer ascending
+                                          select producer).Distinct().ToList<string>();
+                return producers;
+            }
+        }
+
+        public List<string> GetAllStudios
+        {
+            get
+            {
+                List<string> studios = (from title in _list
+                                        orderby title.Studio ascending
+                                        select title.Studio).Distinct().ToList<string>();
+                return studios;
+            }
+        }
+
+        public List<string> GetAllTags
+        {
+            get
+            {
+                List<string> tags = (from title in _list
+                                     from tag in title.Tags
+                                     orderby tag ascending
+                                     select tag).Distinct().ToList<string>();
+                return tags;
+            }
+        }
+
+        public List<string> GetAllWriters
+        {
+            get
+            {
+                List<string> writers = (from title in _list
+                                        from writer in title.Writers
+                                        orderby writer.full_name ascending
+                                        select writer.full_name).Distinct().ToList<string>();
+                return writers;
+            }
+        }
+
+        public List<string> GetAllParentalRatings
+        {
+            get
+            {
+                List<string> ratings = (from title in _list
+                                        orderby title.ParentalRating ascending
+                                        select title.ParentalRating).Distinct().ToList<string>();
+                return ratings;
+            }
+        }
+
         public Title this[int index]
         {
             get 
@@ -336,6 +451,14 @@ namespace OMLEngine
                 Add(title);
             }
         }
+
+        public void Clear()
+        {
+            _list.Clear();
+            _moviesByFilename.Clear();
+            _moviesByItemId.Clear();
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -352,26 +475,31 @@ namespace OMLEngine
             return null;
         }
 
-        public List<string> GetAllGenres()
-        {
-            List<string> genres = new List<string>();
-            // todo : solomon : figure this out
-            /*foreach (Title title in _list)
-            {
-                genres = genres.Union<string>(title.Genres).ToList<string>();
-            }*/
-            return genres;
-        }
-
         public List<Title> FindByGenre(string genre)
         {
-            // todo : solomon : figure this out
-            List<Title> titles = new List<Title>();
-            /*foreach (Title title in _list)
-            {
-                if (title.Genres.Contains(genre))
-                    titles.Add(title);
-            }*/
+            List<Title> titles = (from title in _list
+                                  from titleGenre in title.Genres
+                                  where titleGenre == genre
+                                  orderby title.SortName ascending
+                                  select title).ToList<Title>();
+            return titles;
+        }
+
+        public List<Title> FindByParentalRating(string rating)
+        {
+            List<Title> titles = (from title in _list
+                                  where title.ParentalRating == rating
+                                  orderby title.SortName ascending
+                                  select title).ToList<Title>();
+            return titles;
+        }
+
+        public List<Title> FindByCompleteness(decimal percentComplete)
+        {
+            List<Title> titles = (from title in _list
+                                  where title.PercentComplete <= percentComplete
+                                  orderby title.SortName ascending
+                                  select title).ToList<Title>();
             return titles;
         }
 

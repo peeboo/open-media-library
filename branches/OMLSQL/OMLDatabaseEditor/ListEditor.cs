@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
+using DevExpress.XtraEditors.Controls;
 
 namespace OMLDatabaseEditor
 {
@@ -19,36 +20,10 @@ namespace OMLDatabaseEditor
             _list = list;
             this.Text = name;
             lbItems.DataSource = _list;
-            if (name == "Genres")
+            if ((name == "Genres") || (name == "Tags"))
             {
                 SetMRULists();
             }
-        }
-
-        private void btnItem_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
-        {
-            if (_list.Contains(cbeItem.Text)) return;
-
-            if (this.Text == "Genres")
-            {
-                if (!Properties.Settings.Default.gsValidGenres.Contains(cbeItem.Text))
-                {
-                    DialogResult result = XtraMessageBox.Show("You are attempting to add a genre that is not in the allowed list. Would you like to add it to the list?\r\nClick \"Yes\" to add it to the list, \"No\" to add it to the movie but not the allowed list or \"Cancel\" to do nothing.", "Allowed Genre Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                    switch (result)
-                    {
-                        case DialogResult.Yes:
-                            Properties.Settings.Default.gsValidGenres.Add(cbeItem.Text);
-                            break;
-                        case DialogResult.No:
-                            break;
-                        case DialogResult.Cancel:
-                            return;
-                    }
-                }
-            }
-            _list.Add(cbeItem.Text);
-
-            cbeItem.Text = "";
         }
 
         private void lbItems_KeyDown(object sender, KeyEventArgs e)
@@ -64,7 +39,7 @@ namespace OMLDatabaseEditor
 
         public void SetMRULists()
         {
-            if (Properties.Settings.Default.gbUseGenreList)
+            if ((this.Text == "Genres") && (Properties.Settings.Default.gbUseGenreList))
             {
                 string[] aGenres = new string[0];
                 if (Properties.Settings.Default.gsValidGenres != null)
@@ -74,6 +49,40 @@ namespace OMLDatabaseEditor
                 }
 
                 cbeItem.Properties.Items.AddRange(aGenres);
+            }
+            else if ((this.Text == "Tags"))
+            {
+                cbeItem.Properties.Items.AddRange(Properties.Settings.Default.gsTags.Split('|'));
+            }
+        }
+
+        private void cbeItem_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
+        {
+            if (e.Button.Kind == ButtonPredefines.Plus)
+            {
+                if (_list.Contains(cbeItem.Text)) return;
+
+                if (this.Text == "Genres")
+                {
+                    if (!Properties.Settings.Default.gsValidGenres.Contains(cbeItem.Text))
+                    {
+                        DialogResult result = XtraMessageBox.Show("You are attempting to add a genre that is not in the allowed list. Would you like to add it to the list?\r\nClick \"Yes\" to add it to the list, \"No\" to add it to the movie but not the allowed list or \"Cancel\" to do nothing.", "Allowed Genre Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                        switch (result)
+                        {
+                            case DialogResult.Yes:
+                                Properties.Settings.Default.gsValidGenres.Add(cbeItem.Text);
+                                break;
+                            case DialogResult.No:
+                                break;
+                            case DialogResult.Cancel:
+                                return;
+                        }
+                    }
+                }
+                _list.Add(cbeItem.Text);
+                lbItems.Refresh();
+
+                cbeItem.Text = "";
             }
         }
     }

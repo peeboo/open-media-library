@@ -61,6 +61,18 @@ namespace OMLDatabaseEditor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool gbUseGenreList {
+            get {
+                return ((bool)(this["gbUseGenreList"]));
+            }
+            set {
+                this["gbUseGenreList"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public global::System.Collections.Specialized.StringCollection gsValidGenres {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["gsValidGenres"]));
@@ -72,13 +84,13 @@ namespace OMLDatabaseEditor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool gbUseGenreList {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string gsTags {
             get {
-                return ((bool)(this["gbUseGenreList"]));
+                return ((string)(this["gsTags"]));
             }
             set {
-                this["gbUseGenreList"] = value;
+                this["gsTags"] = value;
             }
         }
     }

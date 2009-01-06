@@ -108,6 +108,14 @@ namespace Library
             {
                 _mediaPath = Path.Combine(_mediaPath, "BDMV");
             }
+            // TMT is picky and will only play a ripped HDDVD if it ends in a backslash when
+            // pointing to a folder
+            else if (_videoFormat == VideoFormat.HDDVD &&
+                Directory.Exists(_mediaPath) &&
+                !_mediaPath.EndsWith("\\"))
+            {
+                _mediaPath += "\\";
+            }
 
             OMLApplication.DebugLine("Calling external application \"" + path + "\" \"" + _mediaPath + "\"");
 

@@ -144,4 +144,14 @@
     </Keyframes>    
   </Animation>
 
+  <Animation Name="Zoomin" Type="Show">
+    <Keyframes>
+      <AlphaKeyframe Time="0" RelativeTo="Absolute" Value=".25"/>
+      <ScaleKeyframe Time="0" RelativeTo="Absolute" Value=".2,.2,.2" Interpolation="SCurve" />
+      <ScaleKeyframe Time=".25" RelativeTo="Current" Value="1.05,1.05,1.05" Interpolation="SCurve" />
+      <ScaleKeyframe Time=".35" RelativeTo="Current" Value="1,1,1" />
+      <AlphaKeyframe Time=".35" RelativeTo="Absolute" Value="1"/>
+    </Keyframes>
+  </Animation>
+
 </Mcml>

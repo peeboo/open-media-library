@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
 using DevExpress.XtraEditors;
 using DevExpress.Skins;
 using DevExpress.Skins.Info;
+using DevExpress.Utils;
 
 using OMLEngine;
 using OMLSDK;
@@ -21,6 +24,10 @@ namespace OMLDatabaseEditor
         internal static List<IOMLMetadataPlugin> _metadataPlugins = new List<IOMLMetadataPlugin>();
         private const string APP_TITLE = "OML Movie Manager";
         private bool _loading = false;
+        private AppearanceObject Percent30 = null;
+        private AppearanceObject Percent40 = null;
+        private AppearanceObject Percent50 = null;
+        private AppearanceObject Percent60 = null;
         public List<String> DXSkins;
 
         public MainEditor()
@@ -78,6 +85,24 @@ namespace OMLDatabaseEditor
                 metadataItem.Click += new EventHandler(this.miMetadataMulti_Click);
                 miMetadataMulti.DropDownItems.Add(metadataItem);
             }
+
+            // Set up filter lists
+            ToolStripMenuItem item;
+            foreach (string genre in TitleCollectionManager.GetAllGenres())
+            {
+                item = new ToolStripMenuItem(genre);
+                item.CheckOnClick = true;
+                item.Click += new EventHandler(filterTitles_Click);
+                filterByGenreToolStripMenuItem.DropDownItems.Add(item);
+            }
+
+            foreach (string rating in TitleCollectionManager.GetAllParentalRatings())
+            {
+                item = new ToolStripMenuItem(rating);
+                item.CheckOnClick = true;
+                item.Click += new EventHandler(filterTitles_Click);
+                filterByParentalRatingToolStripMenuItem.DropDownItems.Add(item);
+            }
         }
 
         private static void LoadImportPlugins(string pluginType, List<OMLPlugin> pluginList)
@@ -125,19 +150,84 @@ namespace OMLDatabaseEditor
         {
             if (mainNav.ActiveGroup != groupMovies) return;
             Cursor = Cursors.WaitCursor;
+            if (allMoviesToolStripMenuItem1.Checked)
+            {
+                _titleCollection.loadTitleCollection();
+                _titleCollection.SortBy("SortName", true);
+                PopulateMovieList(_titleCollection.Source);
+            }
+            else
+            {
+                // Find currently checked filter menu item
+                bool found = false;
+                foreach (ToolStripMenuItem item in filterByCompletenessToolStripMenuItem.DropDownItems)
+                {
+                    if (item.Checked)
+                    {
+                        filterTitles_Click(item, null);
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    foreach (ToolStripMenuItem item in filterByGenreToolStripMenuItem.DropDownItems)
+                    {
+                        if (item.Checked)
+                        {
+                            filterTitles_Click(item, null);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        foreach (ToolStripMenuItem item in filterByParentalRatingToolStripMenuItem.DropDownItems)
+                        {
+                            if (item.Checked)
+                            {
+                                filterTitles_Click(item, null);
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void PopulateMovieList(List<Title> titles)
+        {
             lbMovies.Items.Clear();
             //_titleCollection.SortBy("SortName", true);
 
             // throwing this into a new list shouldn't be needed but it seems like this control wants it
             lbMovies.DataSource = new List<Title>(TitleCollectionManager.GetAllTitles());
             if (titleEditor.EditedTitle != null)
-                lbMovies.SelectedItem = TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
+            {
+                List<Title> matches = (from title in titles
+                                       where title.InternalItemID == titleEditor.EditedTitle.InternalItemID
+                                       select title).ToList<Title>();
+                if (matches.Count == 0)
+                {
+                    lbMovies.SelectedIndex = -1;
+                    lbMovies.SelectedItem = null;
+                    titleEditor.ClearEditor();
+                }
+                else
+                {
+                    lbMovies.SelectedItem = matches[0];
+                }
+            }
             else
             {
                 lbMovies.SelectedIndex = -1;
                 lbMovies.SelectedItem = null;
+                titleEditor.ClearEditor();
             }
-            Cursor = Cursors.Default;
         }
 
         private void LoadImporters()
@@ -364,7 +454,7 @@ namespace OMLDatabaseEditor
 
         private void ToolStripOptionClick(object sender, EventArgs e)
         {
-            if (sender == saveToolStripButton)
+            if (sender == saveToolStripButton || sender == saveToolStripMenuItem)
             {
                 SaveChanges();
             } 
@@ -603,13 +693,85 @@ namespace OMLDatabaseEditor
                 return;
 
             Title currentTitle = TitleCollectionManager.GetTitle((int)e.Item);
-            if (currentTitle.PercentComplete < .3M)
-                e.Appearance.BackColor = Color.Red;
-            else if (currentTitle.PercentComplete < .6M)
+            if (currentTitle.PercentComplete <= .3M)
             {
-                e.Appearance.ForeColor = Color.Black;
-                e.Appearance.BackColor = Color.Yellow;
+                if (Percent30 == null)
+                {
+                    Percent30 = (AppearanceObject)e.Appearance.Clone();
+                    Percent30.BackColor = Color.Coral;
+                    Percent30.BackColor2 = Color.Crimson;
+                    Percent30.GradientMode = LinearGradientMode.Vertical;
+                }
+                e.Appearance.Combine(Percent30);
             }
+            else if (currentTitle.PercentComplete <= .4M)
+            {
+                if (Percent40 == null)
+                {
+                    Percent40 = (AppearanceObject)e.Appearance.Clone();
+                    Percent40.ForeColor = Color.White;
+                    Percent40.BackColor = Color.CornflowerBlue;
+                    Percent40.BackColor2 = Color.CadetBlue;
+                    Percent40.GradientMode = LinearGradientMode.Vertical;
+                }
+                e.Appearance.Combine(Percent40);
+            }
+            else if (currentTitle.PercentComplete <= .5M)
+            {
+                if (Percent50 == null)
+                {
+                    Percent50 = (AppearanceObject)e.Appearance.Clone();
+                    Percent50.ForeColor = Color.Black;
+                    Percent50.BackColor = Color.MediumSpringGreen;
+                    Percent50.BackColor2 = Color.LightSeaGreen;
+                    Percent50.GradientMode = LinearGradientMode.Vertical;
+                }
+                e.Appearance.Combine(Percent50);
+            }
+            else if (currentTitle.PercentComplete <= .6M)
+            {
+                if (Percent60 == null)
+                {
+                    Percent60 = (AppearanceObject)e.Appearance.Clone();
+                    Percent60.ForeColor = Color.Black;
+                    Percent60.BackColor = Color.Yellow;
+                    Percent60.BackColor2 = Color.Gold;
+                    Percent60.GradientMode = LinearGradientMode.Vertical;
+                }
+                e.Appearance.Combine(Percent60);
+            }
+        }
+
+        private void filterTitles_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            ToolStripMenuItem filterItem = ((ToolStripMenuItem)sender);
+            // Uncheck all other filters
+            foreach (ToolStripMenuItem item in filterByCompletenessToolStripMenuItem.DropDownItems)
+                if (item != filterItem) item.Checked = false;
+            foreach (ToolStripMenuItem item in filterByGenreToolStripMenuItem.DropDownItems)
+                if (item != filterItem) item.Checked = false;
+            foreach (ToolStripMenuItem item in filterByParentalRatingToolStripMenuItem.DropDownItems)
+                if (item != filterItem) item.Checked = false;
+
+            if (sender == allMoviesToolStripMenuItem1)
+            {
+                LoadMovies();
+            }
+            else
+            {
+                allMoviesToolStripMenuItem1.Checked = false;
+                List<Title> titles = new List<Title>();
+                if (filterItem.OwnerItem == filterByGenreToolStripMenuItem)
+                    titles = _titleCollection.FindByGenre(filterItem.Text);
+                else if (filterItem.OwnerItem == filterByCompletenessToolStripMenuItem)
+                    titles = _titleCollection.FindByCompleteness(decimal.Parse("." + filterItem.Text.TrimEnd('%')));
+                else if (filterItem.OwnerItem == filterByParentalRatingToolStripMenuItem)
+                    titles = _titleCollection.FindByParentalRating(filterItem.Text);
+
+                PopulateMovieList(titles);
+            }
+            Cursor = Cursors.Default;
         }
     }
 }
