@@ -42,7 +42,7 @@ namespace OMLEngine
         private List<string> _genres = null;
         private List<string> _audioTracks = null;
         private List<string> _subtitles = null;
-        private List<string> _trailers = null;  
+        private List<string> _trailers = null;
            
         private List<string> _extraFeatures = new List<string>();
 
@@ -272,14 +272,14 @@ namespace OMLEngine
         /// <summary>
         /// Video format of title (DVD, AVI, etc)
         /// </summary>
-        public VideoFormat VideoFormat
+        public VideoFormat? VideoFormat
         {
             get
             {
                 if (_title.Disks.Count > 0)
                     return (VideoFormat) _title.Disks[0].VideoFormat;
                 else
-                    return VideoFormat.DVD;
+                    return null;
             }
         }
 
@@ -505,16 +505,28 @@ namespace OMLEngine
 
         public void AddActingRole(string actor, string role)
         {
-            if (actor == null || role == null) return;
-            if (!_actingRoles.ContainsKey(actor))
-            {
-                _actingRoles.Add(actor, role);
-            }
+            //if (string.IsNullOrEmpty(genre))
+            //    return;
+            //if (Genres.Contains(genre))
+            //    return;
+            //TitleCollectionManager.AddGenreToTitle(this, genre);
+            //_genres = null;
+            if (string.IsNullOrEmpty(actor) || string.IsNullOrEmpty(role))
+                return;
+
+            if (ActingRoles.ContainsKey(actor))
+                return;
+
+            TitleCollectionManager.AddActorToTitle(this, actor, role);
         }
 
         public void AddNonActingRole(string name, string role)
         {
             if (name == null || role == null) return;
+            if (_nonActingRoles != null && !_nonActingRoles.ContainsKey(name))
+            {
+
+            }
             if (!_nonActingRoles.ContainsKey(name))
             {
                 _nonActingRoles.Add(name, role);
