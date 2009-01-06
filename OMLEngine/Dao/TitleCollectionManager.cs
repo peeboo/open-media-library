@@ -279,7 +279,11 @@ namespace OMLEngine
         /// <returns></returns>
         public static Title GetTitle(int titleId)
         {
-            return new Title(Dao.TitleCollectionDao.GetTitleById(titleId));
+            Dao.Title title = Dao.TitleCollectionDao.GetTitleById(titleId);
+            if (title != null)
+                return new Title(title);
+
+            return null;
         }
 
         /// <summary>
@@ -371,6 +375,25 @@ namespace OMLEngine
             }
 
             title.DaoTitle.Genres.Add(new Dao.Genre { MetaData = meta });
+        }
+
+        public static void AddActorToTitle(Title title, string actor, string role)
+        {
+            if (string.IsNullOrEmpty(actor))
+                return;
+
+            Dao.BioData bioData = Dao.TitleCollectionDao.GetPersonBioDataByName(actor);
+
+            if (bioData == null)
+            {
+                bioData = new OMLEngine.Dao.BioData();
+                bioData.FullName = actor;
+            }
+
+            Dao.Person person = new OMLEngine.Dao.Person();
+            person.BioId = bioData.Id;
+            person.CharacterName = role;
+            title.DaoTitle.People.Add(person);
         }
 
         /// <summary>

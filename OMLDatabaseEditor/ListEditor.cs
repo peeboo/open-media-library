@@ -66,8 +66,13 @@ namespace OMLDatabaseEditor
         {
             if (Properties.Settings.Default.gbUseGenreList)
             {
-                string[] aGenres = new string[Properties.Settings.Default.gsValidGenres.Count];
-                Properties.Settings.Default.gsValidGenres.CopyTo(aGenres, 0);
+                string[] aGenres = new string[0];
+                if (Properties.Settings.Default.gsValidGenres != null)
+                {
+                    aGenres = new string[Properties.Settings.Default.gsValidGenres.Count];
+                    Properties.Settings.Default.gsValidGenres.CopyTo(aGenres, 0);
+                }
+
                 cbeItem.Properties.Items.AddRange(aGenres);
             }
         }
