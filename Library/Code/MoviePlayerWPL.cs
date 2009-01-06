@@ -15,9 +15,7 @@ namespace Library
 
         public MoviePlayerWPL(MediaSource source)
         {
-            _mItem = source;
-            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
-            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += Transport_PropertyChanged;
+            _mItem = source;            
 
             OMLApplication.DebugLine("[MoviePlayerWPL] Loading for playlist: " + _mItem.MediaPath);
             _wplm = new WindowsPlayListManager(_mItem.MediaPath);
@@ -41,7 +39,13 @@ namespace Library
                         Utilities.DebugLine("[MoviePlayerWPL] Playing now: " + _mItem.MediaPath);
                         IPlayMovie player = MoviePlayerFactory.CreateMoviePlayer(_mItem);
                         if (player != null)
+                        {
                             player.PlayMovie();
+
+                            // the MediaExperience object isn't loaded until a media file is playing
+                            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
+                            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += Transport_PropertyChanged;
+                        }
 
                         _currentItem++;
                     }

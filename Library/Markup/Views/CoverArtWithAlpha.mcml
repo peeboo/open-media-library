@@ -13,7 +13,7 @@
   <UI Name="CoverArtWithAlpha">
     <Properties>
       <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
-      <a:UISettings Name="UISettings" UISettings="$Required" />      
+      <a:UISettings Name="UISettings" UISettings="$Required" />
     </Properties>
 
     <Locals>
@@ -29,8 +29,9 @@
 
       <!-- when the page loads up select the first element-->
       <Condition Source="[GalleryContainer.Visible]" SourceValue="true">
-        <Actions>
-          <Invoke Target="[AlphaRepeater.NavigateIntoIndex]" index="0" />
+        <Actions>          
+          <Invoke Target="[AlphaRepeater.NavigateIntoIndex]" index="[MovieBrowser.AlphaView.FocusIndex.Value]" />
+          <Set Target="[MovieBrowser.AlphaView.UpdateDefaultFocus]" Value="true" />
         </Actions>
       </Condition>
 
@@ -71,7 +72,7 @@
           <!--Scroll parameter is the number of items to scroll to, relative to the current position-->
           <Invoke Target ="[ScrollingData.Scroll]" amount="[MovieBrowser.RelativeJumpToPosition]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <!--This is the absolute index-->
-          <Invoke Target ="[AlphaRepeater.NavigateIntoIndex]" index="[MovieBrowser.JumpToPosition]" InvokePolicy="Synchronous"/>
+          <Set Target="[MovieBrowser.AlphaView.FocusSubIndex.Value]" Value="0"/>
         </Actions>
       </Changed>
 
@@ -112,7 +113,7 @@
 
                   <Repeater Name="AlphaRepeater"
                             Layout="HorizontalFlow"
-                            Navigation="RememberFocus,PreferFocusOrder"
+                            Navigation="Group,RememberFocus"
                             Source="[MovieBrowser.LabeledLists]">
                     <Layout>
                       <FlowLayout Repeat="WhenTooBig" RepeatGap="250,0"/>
@@ -128,40 +129,12 @@
                       </Animation>
                     </Animations>
                     <Content>
-                      <Panel Layout="HorizontalFlow">
-                        <Children>
-                          <Text Content="[RepeatedItem!a:LabeledList.FilterLabel]" Color="White" Margins="30,0,30,0" />
-
-
-                          <!-- Hook up our list to the repeater.  -->
-                          <Repeater Name="GalleryRepeater"
-                                    Navigation="FlowVertical,RememberFocus"
-                                    Source="[RepeatedItem!a:LabeledList.Movies]">
-                            <Layout>
-                              <GridLayout Repeat="Never"
-                                          Rows="[UISettings.Gallery.CoverArtRows]"
-                                          Orientation="Vertical"
-                                          AllowWrap="true"
-                                          Spacing="[UISettings.Gallery.CoverArtSpacing]"
-                                          ReferenceSize="[UISettings.Gallery.CoverArtSize]"
-                                          MajorAlignment="Fill"
-                                          MinorAlignment="Center"
-                                    />
-                            </Layout>
-
-                            <Content>
-                              <!-- For each item, repeat our RepeatedItem UI, passing in-->
-                              <!-- the index of the item and the image.                 -->
-                              <me:RepeatedItem  Index="[RepeatedItemIndex]"
-                                                        FocusedIndex="[MovieBrowser.FocusIndex]"
-                                                        GalleryItem="[RepeatedItem!a:GalleryItem]"
-                                                        MovieBrowser="[MovieBrowser]"
-                                                        CoverArtAlpha="[UISettings.Gallery.CoverArtAlpha]"
-                                                        UISettings="[UISettings]" />
-                            </Content>
-                          </Repeater>
-                        </Children>
-                      </Panel>
+                      <me:RepeatedItem  Index="[RepeatedItemIndex]"
+                                        Movies="[RepeatedItem!a:LabeledList.Movies]"
+                                        MovieBrowser="[MovieBrowser]"
+                                        UISettings="[UISettings]"
+                                        FilterLabel="[RepeatedItem!a:LabeledList.FilterLabel]"
+                                        LocalView="[MovieBrowser.AlphaView]"/>
                     </Content>
                   </Repeater>
                 </Children>
@@ -174,15 +147,77 @@
     </Content>
   </UI>
 
+  <UI Name="RepeatedItem">
+    <Properties>
+      <Index Name="Index" Index="$Required"/>
+      <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+      <a:UISettings Name="UISettings" UISettings="$Required" />
+      <col:IList Name="Movies"  IList="$Required"/>
+      <cor:String Name="FilterLabel" cor:String="$Required"/>
+      <a:AlphaView Name="LocalView" AlphaView="$Required"/>
+    </Properties>
+    <Rules>
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          
+          <Equality Source="[LocalView.UpdateDefaultFocus]" Value="true" />
+          <Equality Source="[LocalView.FocusIndex.Value]" Value="[Index.Value]" />
+        </Conditions>
+        <Actions>
+          <Set Target="[LocalView.UpdateDefaultFocus]" Value="false" />
+          <Invoke Target="[GalleryRepeater.NavigateIntoIndex]" index="[LocalView.FocusSubIndex.Value]" />
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <Panel Layout="HorizontalFlow" Name="AlphaContainer">
+        <Children>
+          <Text Content="[FilterLabel]" Color="White" Margins="30,0,30,0" />
+
+
+          <!-- Hook up our list to the repeater.  -->
+          <Repeater Name="GalleryRepeater"
+                    Source="[Movies]">
+            <Layout>
+              <GridLayout Repeat="Never"
+                          Rows="[UISettings.Gallery.CoverArtRows]"
+                          Orientation="Vertical"
+                          AllowWrap="true"
+                          Spacing="[UISettings.Gallery.CoverArtSpacing]"
+                          ReferenceSize="[UISettings.Gallery.CoverArtSize]"
+                          MajorAlignment="Fill"
+                          MinorAlignment="Center"
+                                    />
+            </Layout>
+
+            <Content>
+              <!-- For each item, repeat our RepeatedItem UI, passing in-->
+              <!-- the index of the item and the image.                 -->
+              <me:RepeatedSubItem   Index="[RepeatedItemIndex]"
+                                    ParentIndex="[Index]"
+                                    FocusedIndex="[MovieBrowser.FocusIndex]"
+                                    GalleryItem="[RepeatedItem!a:GalleryItem]"
+                                    MovieBrowser="[MovieBrowser]"
+                                    CoverArtAlpha="[UISettings.Gallery.CoverArtAlpha]"
+                                    UISettings="[UISettings]"
+                                    LocalView="[LocalView]"/>
+            </Content>
+          </Repeater>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
   <!-- The RepeatedItem UI is what gets repeated for each image in our list -->
   <!-- from the ScrollingSample UI.  It displays the image itself, the      -->
   <!-- item's index and "Real" indexes, and a background color fill that    -->
   <!-- changes color when it receives key focus.                            -->
-  <UI Name="RepeatedItem">
+  <UI Name="RepeatedSubItem">
     <Properties>
       <a:GalleryItem Name="GalleryItem" GalleryItem="$Required"/>
       <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
-      
+      <a:AlphaView Name="LocalView" AlphaView="$Required"/>
       <!-- Update these 2 values everytime we get the focus -->
       <IntRangedValue Name="FocusedIndex" IntRangedValue="$Required"/>
       <cor:Single Name="CoverArtAlpha" Single="0.5"/>
@@ -190,7 +225,8 @@
 
       <!-- The index passed down from the repeater.-->
       <Index Name="Index" Index="$Required"/>
-      
+      <Index Name="ParentIndex" Index="$Required"/>
+
       <Image Name="BackgroundImage" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
       <Image Name="BackgroundImageList" Source="resx://Library/Library.Resources/ButtonLeftFocus" NineGrid="4,4,4,4"/>
       <Image Name="BackgroundImageCoverArt" Source="resx://Library/Library.Resources/Focus_Outline" NineGrid="4,4,4,4"/>
@@ -200,8 +236,8 @@
       <ClickHandler Name="Clicker" Command="[GalleryItem]"/>
       <ShortcutHandler Name="PlayPauseButton" Command="[GalleryItem.QuickPlay]" Shortcut="PlayPause" Handle="true" HandlerStage="Direct"  />
       <ShortcutHandler Name="PlayButton" Command="[GalleryItem.QuickPlay]" Shortcut="Play"   Handle="true" HandlerStage="Direct" />
-      <cor:Int32 Name="CurrentIndex" />      
-      
+      <cor:Int32 Name="CurrentIndex" />
+
       <cor:Int32 Name="NewHeight"/>
       <!--<Timer Name="ZoomTimer" Interval="250"/>-->
 
@@ -219,81 +255,24 @@
           <ScaleKeyframe Time="0.4" Value="[UISettings.Gallery.FocusCoverArtScale]" RelativeTo="Final" />
         </Keyframes>
       </Animation>
-
-      <!-- This animation will scale the image. -->
-
-      <!--<Animation Name="ZoomMe" Loop="0" CenterPointPercent=".5,.5,0">
-        <Keyframes>
-          <AlphaKeyframe Time="0.0" RelativeTo="Current" Value="1" />
-          <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
-          <ScaleKeyframe Time="0.5" Value="10,10,10" RelativeTo="Final" />
-          <AlphaKeyframe Time="0.5" RelativeTo="Absolute" Value=".5" />
-        </Keyframes>
-      </Animation>
-
-      <Animation Name="ZoomAndSpinMe" Loop="0" CenterPointPercent=".5,.5,0">
-        <Keyframes>
-          <RotateKeyframe Time="0.0" RelativeTo="Current" Value="0deg;1,1,1" />
-          <AlphaKeyframe Time="0.0" RelativeTo="Current" Value="1" />
-          <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="SCurve" />
-          <ScaleKeyframe Time="0.5" Value="10,10,10" RelativeTo="Final" />
-          <AlphaKeyframe Time="0.5" RelativeTo="Absolute" Value=".5" />
-          <RotateKeyframe Time="0.5" RelativeTo="Current" Value="360deg;1,1,1" />
-        </Keyframes>
-      </Animation>-->
     </Locals>
 
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
-      <Binding Source="[GalleryItem.MenuCoverArt]" Target="[MenuCover.Content]" />     
+      <Binding Source="[GalleryItem.MenuCoverArt]" Target="[MenuCover.Content]" />
+      <Binding Source="[GalleryItem.Watched]" Target="[WatchedPanel.Visible]" />
 
-      <!-- have the clicker directly invoke the gallery item -->
-      <!--<Condition Source="[UISettings.Gallery.MovieDetailsTransitionType]" SourceValue="None">
-        <Actions>
-          <Set Target="[Clicker.Command]" Value="[GalleryItem]"/>
-        </Actions>
-      </Condition>-->
-
-      <!-- if we have spin enabled use that transition instead -->
-      <!--<Rule ConditionLogicalOp="And">
-        <Conditions>
-          <Equality Source="[UISettings.Gallery.MovieDetailsTransitionType]" Value="Zoom and Spin" />
-          <Modified Source="[Clicker.Invoked]"/>
-        </Conditions>
-        <Actions>
-          <PlayAnimation Target="[MenuCover]" Animation="[ZoomAndSpinMe]"/>
-          <Set Target="[ZoomTimer.Enabled]" Value="true"/>
-        </Actions>
-      </Rule>-->
-
-      <!-- play the zoom animation and then invoke the gallery item on a timer -->
-      <!--<Rule ConditionLogicalOp="And">
-        <Conditions>
-          <Equality Source="[UISettings.Gallery.MovieDetailsTransitionType]" Value="Zoom" />
-          <Modified Source="[Clicker.Invoked]"/>
-        </Conditions>
-        <Actions>
-          <PlayAnimation Target="[MenuCover]" Animation="[ZoomMe]"/>
-          <Set Target="[ZoomTimer.Enabled]" Value="true"/>
-        </Actions>
-      </Rule>-->
-
-      <!-- invoke the gallery item and disable the timer -->
-      <!--<Changed Source="[ZoomTimer.Tick]">
-        <Actions>
-          <Invoke Target="[GalleryItem.Invoke]" />
-          <Set Target="[ZoomTimer.Enabled]" Value="false"/>
-        </Actions>
-      </Changed>-->
-            
       <!-- If we get key focus, change our background color to indicate it. -->
       <Condition Source="[Input.KeyFocus]" SourceValue="true">
         <Actions>
           <PlayAnimation Target="[ItemPanel]" Animation="[GotFocusCoverArt]" />
           <Set Target="[MenuCover.Alpha]" Value="1.0"/>
           <Set Target="[Background.Visible]" Value="true"/>
-          <Set Target="[FocusedIndex.Value]" Value="[GalleryItem.GlobalIndex]"/>
+          <Set Target="[MovieBrowser.FocusIndex.Value]" Value="[GalleryItem.GlobalIndex]"/>
+          <Set Target="[LocalView.FocusIndex.Value]" Value="[ParentIndex.Value]" />
+          <Set Target="[LocalView.FocusSubIndex.Value]" Value="[Index.Value]" />
+
           <Set Target="[MovieBrowser.FocusedItem]" Value="[GalleryItem]" />
           <!-- Play an animation on the cover target item. -->
           <PlaySound Sound="sound://me:Focus" />
@@ -312,6 +291,15 @@
     <Content>
       <Panel Name="ItemPanel" Layout="Anchor" Scale="1.0,1.0,1.0" CenterPointPercent="0.5,0.75,0.0">
         <Children>
+          <Panel Name="WatchedPanel" Visible="false">
+            <LayoutInput>
+              <AnchorLayoutInput Left="ImagePanel,.02" Bottom="ImagePanel,.98" />
+            </LayoutInput>
+            <Children>
+              <Graphic Name="WatchedGraphic" Content="image://me:WatchedIcon"  />
+            </Children>
+          </Panel>
+          
           <Panel Name="ImagePanel" Margins="0,0,0,0">
             <Children>
               <Graphic Name="MenuCover" Content="[GalleryItem.MenuCoverArt]" Alpha="[CoverArtAlpha]" SizingPolicy="SizeToConstraint" />

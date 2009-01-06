@@ -187,7 +187,7 @@ namespace Library
         static bool IsExtenderDVD_NoTranscoding(MediaSource source)
         {
             if (OMLApplication.Current.IsExtender == false || source.Format != VideoFormat.DVD 
-                || MediaData.IsDVD(source.MediaPath) == false || ExtenderDVDPlayer.IsNTFS(source.MediaPath) == false)
+                || MediaData.IsDVD(source.MediaPath) == false || ExtenderDVDPlayer.CanPlay(source) == false)
                 return false;
 
             // non-default audio/subtitle/chapter start: needs transcoding
@@ -201,6 +201,7 @@ namespace Library
                 Utilities.DebugLine("Source has no DVDDiskInfo: {0}", source);
                 return true;
             }
+
             string languageCode = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             DVDTitle title = source.Title != null ? source.DVDDiskInfo.Titles[source.Title.Value] : source.DVDDiskInfo.GetMainTitle();
             if (title.AudioTracks.Count != 0 && string.Compare(title.AudioTracks[0].LanguageID, languageCode, true) != 0)
@@ -213,6 +214,7 @@ namespace Library
                     return false;
                 }
             }
+
             return true;
         }
 

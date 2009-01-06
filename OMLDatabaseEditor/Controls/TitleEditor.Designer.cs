@@ -85,6 +85,8 @@
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
             this.txtAspectRatio = new DevExpress.XtraEditors.TextEdit();
             this.tpPeople = new DevExpress.XtraTab.XtraTabPage();
+            this.beFilter = new DevExpress.XtraEditors.ButtonEdit();
+            this.lbcPersona = new DevExpress.XtraEditors.ListBoxControl();
             this.rgPeople = new DevExpress.XtraEditors.RadioGroup();
             this.lbPeople = new DevExpress.XtraEditors.ListBoxControl();
             this.contextPeople = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -128,6 +130,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtCountryOfOrigin.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAspectRatio.Properties)).BeginInit();
             this.tpPeople.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.beFilter.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lbcPersona)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgPeople.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lbPeople)).BeginInit();
             this.contextPeople.SuspendLayout();
@@ -775,11 +779,33 @@
             // tpPeople
             // 
             this.tpPeople.AutoScroll = true;
+            this.tpPeople.Controls.Add(this.beFilter);
+            this.tpPeople.Controls.Add(this.lbcPersona);
             this.tpPeople.Controls.Add(this.rgPeople);
             this.tpPeople.Controls.Add(this.lbPeople);
             this.tpPeople.Name = "tpPeople";
             this.tpPeople.Size = new System.Drawing.Size(517, 496);
             this.tpPeople.Text = "People";
+            // 
+            // beFilter
+            // 
+            this.beFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.beFilter.Location = new System.Drawing.Point(4, 472);
+            this.beFilter.Name = "beFilter";
+            this.beFilter.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus)});
+            this.beFilter.Size = new System.Drawing.Size(157, 20);
+            this.beFilter.TabIndex = 3;
+            this.beFilter.TextChanged += new System.EventHandler(this.buttonEdit1_TextChanged);
+            // 
+            // lbcPersona
+            // 
+            this.lbcPersona.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.lbcPersona.Location = new System.Drawing.Point(4, 56);
+            this.lbcPersona.Name = "lbcPersona";
+            this.lbcPersona.Size = new System.Drawing.Size(157, 410);
+            this.lbcPersona.TabIndex = 2;
             // 
             // rgPeople
             // 
@@ -805,12 +831,13 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPeople.ContextMenuStrip = this.contextPeople;
             this.lbPeople.DisplayMember = "full_name";
-            this.lbPeople.Location = new System.Drawing.Point(4, 56);
+            this.lbPeople.Location = new System.Drawing.Point(167, 56);
             this.lbPeople.MultiColumn = true;
             this.lbPeople.Name = "lbPeople";
             this.lbPeople.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lbPeople.Size = new System.Drawing.Size(511, 437);
+            this.lbPeople.Size = new System.Drawing.Size(348, 437);
             this.lbPeople.TabIndex = 0;
+            this.lbPeople.DoubleClick += new System.EventHandler(this.lbPeople_DoubleClick);
             this.lbPeople.SelectedIndexChanged += new System.EventHandler(this.lbPeople_SelectedIndexChanged);
             // 
             // contextPeople
@@ -918,6 +945,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtCountryOfOrigin.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAspectRatio.Properties)).EndInit();
             this.tpPeople.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.beFilter.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lbcPersona)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgPeople.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lbPeople)).EndInit();
             this.contextPeople.ResumeLayout(false);
@@ -997,5 +1026,7 @@
         private System.Windows.Forms.ContextMenuStrip contextPeople;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
+        private DevExpress.XtraEditors.ListBoxControl lbcPersona;
+        private DevExpress.XtraEditors.ButtonEdit beFilter;
     }
 }

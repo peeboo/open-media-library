@@ -321,7 +321,9 @@ namespace OMLEngine
                 if (this.Format != VideoFormat.DVD)
                     return Path.GetFileNameWithoutExtension(this.MediaPath);
 
-                string root = this.VIDEO_TS_Parent;
+                // if the media path is the same as the ts folder - that means there 
+                // is no parent since there's no video_ts folder
+                string root = (this.MediaPath.TrimEnd('\\').ToUpper().EndsWith("VIDEO_TS")) ? this.VIDEO_TS_Parent : this.MediaPath;
                 if (root != Path.GetPathRoot(root))
                     return new DirectoryInfo(root).Name;
 

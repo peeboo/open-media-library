@@ -11,6 +11,7 @@ using Microsoft.MediaCenter.Hosting;
 
 using OMLEngine;
 using OMLGetDVDInfo;
+using System.ComponentModel;
 
 namespace Library
 {
@@ -27,12 +28,93 @@ namespace Library
             _source = source;
         }
 
+        public static bool CanPlay(MediaSource source)
+        {
+            if (FindMPeg(source) != null)
+                return true;
+
+            // TODO: allow to play auto-merging VOBs, asx, and other handings below
+            return false;
+        }
+
+        public static string FindMPeg(MediaSource source)
+        {
+            DVDTitle dvdTitle = source.DVDTitle;
+            if (dvdTitle == null)
+                return null;
+
+            string videoTSDir = source.VIDEO_TS;
+            int fileID = int.Parse(dvdTitle.File.Substring(4));
+            string vts = string.Format("VTS_{0:D2}_", fileID);
+            List<string> vobs = new List<string>(Directory.GetFiles(videoTSDir, vts + "*.VOB"));
+            vobs.Remove(Path.Combine(videoTSDir, vts + "0.VOB"));
+
+            if (vobs.Count < 1)
+                return null;
+
+            if (IsNTFS(videoTSDir))
+            {
+                string mpegFolder = Path.Combine(videoTSDir, "Extender-MyMovies");
+
+                if (Directory.Exists(mpegFolder) == false)
+                    Directory.CreateDirectory(mpegFolder);
+                if (Directory.Exists(mpegFolder) == false)
+                    return null;
+
+                if (vobs.Count == 1)
+                {
+                    string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);
+                    if (File.Exists(mpegFile))
+                        return mpegFile;
+                }
+                else if (Properties.Settings.Default.Extender_UseAsx)
+                {
+                    foreach (string vob in vobs)
+                        MakeMPEGLink(mpegFolder, vob);
+
+                    if (File.Exists(GetMPEGName(mpegFolder, vobs[0])))
+                        return CreateASX(mpegFolder, vts, source.Name, vobs);
+                }
+                else if (Properties.Settings.Default.Extender_MergeVOB)
+                {
+                    string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);
+                    if (File.Exists(mpegFile))
+                        return mpegFile;
+                }
+            }
+            else if (videoTSDir.StartsWith("\\\\"))
+            {
+                string mpegFile = Path.ChangeExtension(source.GetTranscodingFileName(), ".MPEG");
+                if (File.Exists(mpegFile))
+                {
+                    OMLApplication.DebugLine("Found '{0}' as pre-existing .MPEG soft-link", mpegFile);
+                    return mpegFile;
+                }
+
+                string vob = Path.Combine(videoTSDir, vobs[0]);
+                OMLApplication.DebugLine("Trying to create '{0}' soft-link to '{1}'", mpegFile, vob);
+
+                bool ret = CreateSymbolicLink(mpegFile, vob, SYMLINK_FLAG_FILE);
+                string retMsg = ret ? "success" : "Sym-Link failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message;
+
+                if (File.Exists(mpegFile))
+                    return mpegFile;
+                OMLApplication.DebugLine("Soft-link creation failed! {0}", retMsg);
+            }
+            else
+            {
+                OMLApplication.DebugLine("Media not on a network drive nor on a NTFS compatible drive, no supported");
+            }
+
+            return null;
+        }
+
         public bool PlayMovie()
         {
             _info = _source.DVDDiskInfo;
 
-            string videoFile = null;
-            if (_info != null)
+            string videoFile = FindMPeg(_source);
+            if (videoFile == null && _info != null)
             {
                 OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: DVD Disk info: '{0}'", _info);
                 DVDTitle dvdTitle = _source.DVDTitle;
@@ -75,7 +157,7 @@ namespace Library
                             MakeMPEGLink(mpegFolder, vob);
 
                         if (File.Exists(GetMPEGName(mpegFolder, vobs[0])))
-                            videoFile = CreateASX(mpegFolder, vts, vobs);
+                            videoFile = CreateASX(mpegFolder, vts, _source.Name, vobs);
                     }
                     else if (Properties.Settings.Default.Extender_MergeVOB)
                     {
@@ -201,35 +283,57 @@ namespace Library
         static string MakeMPEGLink(string mpegFolder, string vob)
         {
             string mpegFile = GetMPEGName(mpegFolder, vob);
-            if (File.Exists(mpegFile) == false)
+            if (File.Exists(mpegFile))
+                return mpegFile;
+
+            bool ret = CreateSymbolicLink(mpegFile, vob, SYMLINK_FLAG_FILE);
+            string retMsg = ret ? "success" : "Sym-Link failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message;
+            if (File.Exists(mpegFile))
             {
-                if (IsNTFS(mpegFolder) == false)
-                {
-                    OMLApplication.DebugLine("File system not NTFS: can't create hard-links: {0}", mpegFolder);
-                    //break;
-                }
-                if (CreateHardLinkAPI(mpegFile, vob, IntPtr.Zero) == false)
-                {
-                    OMLApplication.DebugLine("Failed to create a hard-link {0} -> {1}", vob, mpegFile);
-                    //break;
-                }
-                OMLApplication.DebugLine("created a hard-link {0} -> {1}, Success:{2}", vob, mpegFile, File.Exists(mpegFile));
+                OMLApplication.DebugLine("created a sym-link {0} -> {1}, kernel32 success", vob, mpegFile);
+                return mpegFile;
             }
-            return mpegFile;
+
+            OMLApplication.DebugLine("created a sym-link {0} -> {1}, failed, {2}", vob, mpegFile, retMsg);
+
+            string args = string.Format("/c mklink \"{0}\" \"{1}\"", mpegFile, vob);
+            System.Diagnostics.Process p = System.Diagnostics.Process.Start("cmd.exe", 
+                args);
+            p.WaitForExit();
+            int exitCode = p.ExitCode;
+
+            if (File.Exists(mpegFile))
+            {
+                OMLApplication.DebugLine("created a sym-link {0} -> {1}, cmd.exe success", vob, mpegFile);
+                return mpegFile;
+            }
+
+            OMLApplication.DebugLine("created a sym-link {0} -> {1}, mklink failed: args:'{2}', exit code: {3}", vob, mpegFile, args, exitCode);
+
+            ret = CreateHardLinkAPI(mpegFile, vob, IntPtr.Zero);
+            retMsg = ret ? "success" : "Hard-Link failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message;
+            if (File.Exists(mpegFile))
+            {
+                OMLApplication.DebugLine("created a hard-link {0} -> {1}, success", vob, mpegFile);
+                return mpegFile;
+            }
+
+            OMLApplication.DebugLine("failed to create link {0} -> {1}, neither with sym-link, mklink nor hard-link", vob, mpegFile);
+            return null;
         }
 
-        string CreateASX(string mpegFolder, string vts, IEnumerable<string> vobs)
+        static string CreateASX(string mpegFolder, string vts, string name, IEnumerable<string> vobs)
         {
             string videoFile = Path.Combine(mpegFolder, vts.Trim('_')) + ".asx";
             if (File.Exists(videoFile))
                 return videoFile;
 
             Utilities.DebugLine("ExtenderDVDPlayer.PlayMovie: creating .asx playlist for extender for '{0}'/'{1}' " +
-                "containing multiple .VOB files", _source.Name, vts);
+                "containing multiple .VOB files", name, vts);
             using (StreamWriter writer = File.CreateText(videoFile))
             {
                 writer.WriteLine("<asx version=\"3.0\">");
-                writer.WriteLine("\t<title>" + HttpUtility.HtmlEncode(_source.Name) + "</title>");
+                writer.WriteLine("\t<title>" + HttpUtility.HtmlEncode(name) + "</title>");
                 writer.WriteLine("\t<param name=\"AllowShuffle\" value=\"no\" />");
                 writer.WriteLine("\t<param name=\"CanPause\" value=\"yes\" />");
                 writer.WriteLine("\t<param name=\"CanSeek\" value=\"yes\" />");
@@ -265,7 +369,15 @@ namespace Library
         }
 
         #region -- NTFS helper functions to create hard-links --
-        [DllImport("Kernel32.Dll", CharSet = CharSet.Unicode, EntryPoint = "CreateHardLink")]
+        [DllImport("Kernel32.Dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern bool CreateSymbolicLink(
+            [MarshalAs(UnmanagedType.LPTStr)] string lpSymlinkFileName,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpTargetFileName, 
+            int dwFlags);
+        const int SYMLINK_FLAG_DIRECTORY = 1;
+        const int SYMLINK_FLAG_FILE = 0;
+
+        [DllImport("Kernel32.Dll", CharSet = CharSet.Unicode, EntryPoint = "CreateHardLink", SetLastError = true)]
         static extern bool CreateHardLinkAPI(
             [MarshalAs(UnmanagedType.LPTStr)] string lpFileName,
             [MarshalAs(UnmanagedType.LPTStr)] string lpExistingFileName,

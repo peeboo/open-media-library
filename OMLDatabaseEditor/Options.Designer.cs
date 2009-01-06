@@ -42,6 +42,9 @@ namespace OMLDatabaseEditor
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.btnGenre = new DevExpress.XtraEditors.ButtonEdit();
             this.lbGenres = new DevExpress.XtraEditors.ListBoxControl();
+            this.tpTags = new DevExpress.XtraTab.XtraTabPage();
+            this.lbcTags = new DevExpress.XtraEditors.ListBoxControl();
+            this.beTags = new DevExpress.XtraEditors.ButtonEdit();
             this.sbCancel = new DevExpress.XtraEditors.SimpleButton();
             this.sbOK = new DevExpress.XtraEditors.SimpleButton();
             this.tableLayoutPanel1.SuspendLayout();
@@ -58,14 +61,17 @@ namespace OMLDatabaseEditor
             this.tpGenres.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnGenre.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lbGenres)).BeginInit();
+            this.tpTags.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lbcTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.beTags.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.xtraTabControl1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.sbCancel, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.sbOK, 1, 1);
@@ -91,7 +97,8 @@ namespace OMLDatabaseEditor
             this.tpOptions,
             this.tpSkins,
             this.tpMPAAList,
-            this.tpGenres});
+            this.tpGenres,
+            this.tpTags});
             // 
             // tpOptions
             // 
@@ -121,7 +128,7 @@ namespace OMLDatabaseEditor
             // 
             this.tpSkins.Controls.Add(this.lbcSkins);
             this.tpSkins.Name = "tpSkins";
-            this.tpSkins.Size = new System.Drawing.Size(346, 270);
+            this.tpSkins.Size = new System.Drawing.Size(346, 271);
             this.tpSkins.Text = "Skins";
             // 
             // lbcSkins
@@ -129,7 +136,7 @@ namespace OMLDatabaseEditor
             this.lbcSkins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbcSkins.Location = new System.Drawing.Point(0, 0);
             this.lbcSkins.Name = "lbcSkins";
-            this.lbcSkins.Size = new System.Drawing.Size(346, 270);
+            this.lbcSkins.Size = new System.Drawing.Size(346, 271);
             this.lbcSkins.TabIndex = 0;
             this.lbcSkins.SelectedValueChanged += new System.EventHandler(this.lbcSkins_SelectedValueChanged);
             // 
@@ -143,18 +150,21 @@ namespace OMLDatabaseEditor
             // 
             // lbcMPAA
             // 
-            this.lbcMPAA.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbcMPAA.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lbcMPAA.Location = new System.Drawing.Point(0, 0);
             this.lbcMPAA.Name = "lbcMPAA";
             this.lbcMPAA.Padding = new System.Windows.Forms.Padding(2);
             this.lbcMPAA.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lbcMPAA.Size = new System.Drawing.Size(346, 251);
+            this.lbcMPAA.Size = new System.Drawing.Size(346, 245);
             this.lbcMPAA.TabIndex = 1;
             this.lbcMPAA.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbcMPAA_KeyDown);
             // 
             // beMPAA
             // 
-            this.beMPAA.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.beMPAA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.beMPAA.Location = new System.Drawing.Point(0, 251);
             this.beMPAA.Name = "beMPAA";
             this.beMPAA.Padding = new System.Windows.Forms.Padding(2);
@@ -162,7 +172,7 @@ namespace OMLDatabaseEditor
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus)});
             this.beMPAA.Size = new System.Drawing.Size(346, 20);
             this.beMPAA.TabIndex = 0;
-            this.beMPAA.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.beMPAA_ButtonClick);
+            this.beMPAA.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.beOptions_ButtonClick);
             // 
             // tpGenres
             // 
@@ -191,7 +201,7 @@ namespace OMLDatabaseEditor
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus)});
             this.btnGenre.Size = new System.Drawing.Size(340, 20);
             this.btnGenre.TabIndex = 6;
-            this.btnGenre.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.btnGenre_ButtonClick);
+            this.btnGenre.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.beOptions_ButtonClick);
             // 
             // lbGenres
             // 
@@ -206,6 +216,38 @@ namespace OMLDatabaseEditor
             this.lbGenres.SortOrder = System.Windows.Forms.SortOrder.Ascending;
             this.lbGenres.TabIndex = 5;
             this.lbGenres.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbGenres_KeyDown);
+            // 
+            // tpTags
+            // 
+            this.tpTags.Controls.Add(this.lbcTags);
+            this.tpTags.Controls.Add(this.beTags);
+            this.tpTags.Name = "tpTags";
+            this.tpTags.Size = new System.Drawing.Size(346, 271);
+            this.tpTags.Text = "Tags";
+            // 
+            // lbcTags
+            // 
+            this.lbcTags.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbcTags.Location = new System.Drawing.Point(0, 0);
+            this.lbcTags.Name = "lbcTags";
+            this.lbcTags.Padding = new System.Windows.Forms.Padding(2);
+            this.lbcTags.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lbcTags.Size = new System.Drawing.Size(346, 245);
+            this.lbcTags.TabIndex = 3;
+            // 
+            // beTags
+            // 
+            this.beTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.beTags.Location = new System.Drawing.Point(0, 251);
+            this.beTags.Name = "beTags";
+            this.beTags.Padding = new System.Windows.Forms.Padding(2);
+            this.beTags.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus)});
+            this.beTags.Size = new System.Drawing.Size(346, 20);
+            this.beTags.TabIndex = 2;
             // 
             // sbCancel
             // 
@@ -222,7 +264,7 @@ namespace OMLDatabaseEditor
             // 
             this.sbOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.sbOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.sbOK.Location = new System.Drawing.Point(163, 310);
+            this.sbOK.Location = new System.Drawing.Point(202, 310);
             this.sbOK.Name = "sbOK";
             this.sbOK.Size = new System.Drawing.Size(75, 23);
             this.sbOK.TabIndex = 2;
@@ -255,6 +297,9 @@ namespace OMLDatabaseEditor
             this.tpGenres.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnGenre.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lbGenres)).EndInit();
+            this.tpTags.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.lbcTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.beTags.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -277,5 +322,8 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraEditors.ListBoxControl lbGenres;
         private DevExpress.XtraEditors.LabelControl labelControl1;
         private DevExpress.XtraEditors.CheckEdit ceUseGenreList;
+        private DevExpress.XtraTab.XtraTabPage tpTags;
+        private DevExpress.XtraEditors.ListBoxControl lbcTags;
+        private DevExpress.XtraEditors.ButtonEdit beTags;
     }
 }

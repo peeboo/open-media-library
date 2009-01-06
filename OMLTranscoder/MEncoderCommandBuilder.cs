@@ -57,55 +57,75 @@ namespace OMLTranscoder
 
             StringBuilder strBuilder = new StringBuilder();
 
-            // from TGB: -oac copy -ovc lavc -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0:autoaspect=1, harddup -of mpeg -mpegopts format=dvd:tsaf
+            // from TGB: 
+            // -oac copy -ovc lavc -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0:autoaspect=1, harddup -of mpeg -mpegopts format=dvd:tsaf
             // input location
-            //if (IsDVD)
-            //{
-            //    strBuilder.Append(@" dvd://");
-            //    if (_source.Title != null)
-            //        strBuilder.Append(_source.Title.Value.ToString());
-            //    else
-            //        strBuilder.Append(_source.DVDDiskInfo.GetMainTitle().TitleNumber);
-            //    strBuilder.AppendFormat(@" -dvd-device ""{0}""", _source.VIDEO_TS_Parent);
-            //}
-            //else
+
+            // from Vlader's page (http://iandixon.co.uk/cs/wikis/mediacenter/dvd-library-on-extenders-using-vader-s-transcoder.aspx):
+            // -dvd-device "{0}" dvd://{2} -alang en -slang en -oac copy -ovc lavc 
+            // NTSC: -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=5000:keyint=18:vstrict=0:aspect=16/9 
+            //       -vf scale=720:480,harddup
+            //       -ofps 30000/1001
+            // PAL:  -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0:aspect=16/9
+            //       -vf scale=720:576,harddup
+            //       -ofps 25
+            // -of mpeg -mpegopts format=dvd:tsaf -o "{1}" -quiet
+
+            if (IsDVD)
+            {
+                strBuilder.Append(@" dvd://");
+                if (_source.Title != null)
+                    strBuilder.Append(_source.Title.Value.ToString());
+                else
+                    strBuilder.Append(_source.DVDDiskInfo.GetMainTitle().TitleNumber);
+                strBuilder.AppendFormat(@" -dvd-device ""{0}""", _source.VIDEO_TS_Parent);
+
+                // chapter start (optional)
+                if (_source.StartChapter != null)
+                {
+                    if (_source.EndChapter != null)
+                        strBuilder.AppendFormat(" -chapter {0}-{1}", _source.StartChapter, _source.EndChapter);
+                    else
+                        strBuilder.AppendFormat(" -chapter {0}", _source.StartChapter);
+                }
+
+                // audio format
+                strBuilder.AppendFormat(@" -lavcopts acodec={0}", "mp2");
+                strBuilder.AppendFormat(@" -oac {0}", AudioEncoderFormat.ToString().ToLower());
+
+                if (AudioEncoderFormat == MEncoder.AudioFormat.NoAudio)
+                    strBuilder.Append(@" -nosound");
+
+                //subtitles
+                if (_source.Subtitle != null && _source.Subtitle.SubtitleID != null)
+                    strBuilder.AppendFormat(@" -font c:\windows\fonts\arial.ttf -sid {0}", _source.Subtitle.SubtitleID.Value - 1);
+                else
+                {
+                    if (_source.AudioStream != null && _source.AudioStream.AudioID != null)
+                        strBuilder.AppendFormat(@" -aid {0}", _source.AudioStream.AudioID);
+                }
+
+                //video format
+                strBuilder.AppendFormat(@" -ovc {0}", VideoEncoderFormat.ToString().ToLower());
+
+                strBuilder.Append(@" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0:autoaspect=1, harddup");
+            }
+            else
+            {
                 strBuilder.AppendFormat(@"""{0}""", _source.MediaPath);
 
-            //if (_source.StartChapter != null)
-            //{
-            //    if (_source.EndChapter != null)
-            //        strBuilder.AppendFormat(" -chapter {0}-{1}", _source.StartChapter, _source.EndChapter);
-            //    else
-            //        strBuilder.AppendFormat(" -chapter {0}", _source.StartChapter);
-            //}
+                // audio format
+                strBuilder.Append(@" -oac copy");
 
-            //audio format
-            strBuilder.Append(@" -oac copy");
-            //if (!IsDVD && Properties.Settings.Default.PreserveAudioOnTranscode)
-            //    strBuilder.Append(@" -oac copy");
-            //else
-            //    strBuilder.AppendFormat(@" -lavcopts acodec={0}", "mp2");
-//                strBuilder.AppendFormat(@" -oac {0}", AudioEncoderFormat.ToString().ToLower());
+                //video format
+                strBuilder.AppendFormat(@" -ovc lavc");
+                strBuilder.Append(@" -mpegopts format=mpeg2:tsaf:vbitrate=4900");
+            }
 
-            //if (AudioEncoderFormat == MEncoder.AudioFormat.NoAudio)
-            //    strBuilder.Append(@" -nosound");
-            //else
-            //{
-            //    if (_source.AudioStream != null && _source.AudioStream.AudioID != null)
-            //        strBuilder.AppendFormat(@" -aid {0}", _source.AudioStream.AudioID);
-            //}
+            // these are the same for dvds and non-dvds
+            strBuilder.Append(@" -of mpeg");
 
-            //subtitles
-            //if (_source.Subtitle != null && _source.Subtitle.SubtitleID != null)
-            //    strBuilder.AppendFormat(@" -font c:\windows\fonts\arial.ttf -sid {0}", _source.Subtitle.SubtitleID.Value - 1);
 
-            //video
-            strBuilder.AppendFormat(@" -ovc lavc");
-            //strBuilder.AppendFormat(@" -ovc {0}", VideoEncoderFormat.ToString().ToLower());
-
-            // output format
-            // always set the output format to mpeg for extenders
-            strBuilder.Append(@" -lavcopts vcodec=wmv2");
 
             // set quiet mode on
             strBuilder.Append(@" -really-quiet");

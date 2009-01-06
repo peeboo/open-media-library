@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
@@ -24,16 +25,14 @@ namespace OMLDatabaseEditor
         public Boolean OptionsDirty = false;
         private Boolean MPAAdirty = false;
         private Boolean GenreDirty = false;
+        private Boolean TagsDirty = false;
         private List<String> MPAAList;
         private List<String> GenreList;
+        private List<String> TagList;
 
         private void Options_Load(object sender, EventArgs e)
         {
             int genreCount = 0;
-            if (Properties.Settings.Default.gsValidGenres != null)
-                genreCount = Properties.Settings.Default.gsValidGenres.Count;
-
-            String[] arrGenre = new String[genreCount];
             this.lbcSkins.DataSource = ((MainEditor)this.Owner).DXSkins;
             String skin = Properties.Settings.Default.gsAppSkin;
             int idx = this.lbcSkins.FindItem(skin);
@@ -49,8 +48,31 @@ namespace OMLDatabaseEditor
             MPAAList.Sort();
             this.lbcMPAA.DataSource = MPAAList;
 
+            TagList = new List<string>();
+            if (String.IsNullOrEmpty(Properties.Settings.Default.gsTags.Trim()))
+            {
+                //TagList.AddRange(MainEditor._titleCollection.GetAllTags); NEEDS_TO_BE_RESOLVED
+            }
+            else
+            {
+                // TagList.AddRange(MainEditor._titleCollection.GetAllTags.Union(Properties.Settings.Default.gsTags.Split('|'))); NEEDS_TO_BE_RESOLVED
+            }
+            int iTags = Properties.Settings.Default.gsTags.Split('|').Count();
+            if (iTags < TagList.Count()) TagsDirty = true;
+            TagList.Sort();
+            lbcTags.DataSource = TagList;
+
             this.ceUseGenreList.Checked = Properties.Settings.Default.gbUseGenreList;
-            if (Properties.Settings.Default.gsValidGenres == null || Properties.Settings.Default.gsValidGenres.Count == 0)
+            GenreList = new List<String>();
+            if (Properties.Settings.Default.gsValidGenres != null 
+            && Properties.Settings.Default.gsValidGenres.Count > 0)
+            {
+                genreCount = Properties.Settings.Default.gsValidGenres.Count;
+                String[] arrGenre = new String[genreCount];
+                Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
+                GenreList.AddRange(arrGenre);
+            }
+            else
             {
                 if (XtraMessageBox.Show("No allowable genres have been defined. Would you like to load them from your current movie collection?", "No Genres", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
@@ -66,10 +88,7 @@ namespace OMLDatabaseEditor
                     Properties.Settings.Default.gsValidGenres.AddRange(genreNames);
                 }
             }
-            GenreList = new List<String>();
             // I disabled this line because gsValidGenres is not just empty, its undef
-            //Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
-            GenreList.AddRange(arrGenre);
             GenreList.Sort();
             lbGenres.DataSource = GenreList;
         }
@@ -107,6 +126,12 @@ namespace OMLDatabaseEditor
                     Properties.Settings.Default.gsValidGenres.Clear();
                     Properties.Settings.Default.gsValidGenres.AddRange(GenreList.ToArray());
                 }
+                if (TagsDirty)
+                {
+                    bDirty = true;
+                    String Tags = String.Join("|", TagList.ToArray());
+                    Properties.Settings.Default.gsTags = Tags;
+                }
                 if (bDirty)
                 {
                     OptionsDirty = bDirty;
@@ -127,43 +152,54 @@ namespace OMLDatabaseEditor
             ((MainEditor)this.Owner).defaultLookAndFeel1.LookAndFeel.SkinName = skin;
         }
 
-        private void beMPAA_ButtonClick(object sender, ButtonPressedEventArgs e)
+        private void beOptions_ButtonClick(object sender, ButtonPressedEventArgs e)
         {
-            if ((sender == beMPAA) && (e.Button.Kind == ButtonPredefines.Plus))
+            if (e.Button.Kind != ButtonPredefines.Plus) return;
+
+            if (sender == beMPAA)
             {
-                if (!String.IsNullOrEmpty((String)beMPAA.Text))
-                {
-                    MPAAList.Add((String)beMPAA.Text);
-                    MPAAdirty = true;
-                    lbcMPAA.Refresh();
-                    beMPAA.Text = String.Empty;
-                }
+                if (String.IsNullOrEmpty((String)beMPAA.Text)) return;
+                if (MPAAList.Contains(beMPAA.Text)) return;
+
+                MPAAList.Add((String)beMPAA.Text);
+                MPAAdirty = true;
+                lbcMPAA.Refresh();
+                beMPAA.Text = String.Empty;
+            }
+            else if (sender == beTags)
+            {
+                if (String.IsNullOrEmpty((String)beTags.Text)) return;
+                if (TagList.Contains(beTags.Text)) return;
+
+                TagList.Add((String)beTags.Text);
+                TagsDirty = true;
+                lbcTags.Refresh();
+                beTags.Text = String.Empty;
+            }
+            else if (sender == btnGenre)
+            {
+                if (String.IsNullOrEmpty((String)btnGenre.Text)) return;
+                if (GenreList.Contains(btnGenre.Text)) return;
+
+                GenreList.Add(btnGenre.Text);
+                GenreDirty = true;
+                lbGenres.Refresh();
+                btnGenre.Text = String.Empty;
             }
         }
 
         private void lbcMPAA_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete && lbcMPAA.SelectedItems.Count > 0)
+            if (e.KeyCode != Keys.Delete) return;
+            if (((ListBoxControl)sender).SelectedItems.Count <= 0) return;
+
+            foreach (object item in ((ListBoxControl)sender).SelectedItems)
             {
-                foreach (object item in lbcMPAA.SelectedItems)
-                {
-                    String MPAA = item as String;
-                    MPAAList.Remove(MPAA);
-                    MPAAdirty = true;
-                }
-                lbcMPAA.Refresh();
+                String MPAA = item as String;
+                MPAAList.Remove(MPAA);
+                MPAAdirty = true;
             }
-        }
-
-        private void btnGenre_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
-        {
-            if (GenreList.Contains(btnGenre.Text)) return;
-
-            GenreList.Add(btnGenre.Text);
-            GenreDirty = true;
-            lbGenres.Refresh();
-
-            btnGenre.Text = String.Empty;
+            ((ListBoxControl)sender).Refresh();
         }
 
         private void lbGenres_KeyDown(object sender, KeyEventArgs e)

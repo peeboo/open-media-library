@@ -25,6 +25,7 @@ namespace Library
         {
             Utilities.DebugLine("[TranscodePlayer] Status Changed: {0}, Status: {1}", _source, status);
 
+            OMLApplication.Current.IsStartingTranscodingJob = true;
             Application.DeferredInvoke(delegate
             {
                 switch (status)
@@ -32,7 +33,7 @@ namespace Library
                     case TranscodingStatus.Initializing:
                         OMLApplication.DebugLine("Received Transcoding Status Change: Initializing");
                         OMLApplication.Current.IsStartingTranscodingJob = true;
-                        OMLApplication.Current.TranscodeStatus = @"Starting Job";
+                        OMLApplication.Current.TranscodeStatus = @"Initializing";
                         break;
                     case TranscodingStatus.BufferReady:
                         OMLApplication.DebugLine("Received Transcoding Status Change: Buffer Ready");
@@ -74,6 +75,7 @@ namespace Library
                     {
                         if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                         {
+                            OMLApplication.Current.IsStartingTranscodingJob = false;
                             Utilities.DebugLine("TranscodePlayer.PlayMovie: movie '{0}', Playing file '{1}'", _source.Name, _source.GetTranscodingFileName());
                             OMLApplication.Current.NowPlayingMovieName = _source.Name;
                             OMLApplication.Current.NowPlayingStatus = PlayState.Playing;

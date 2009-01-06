@@ -287,14 +287,14 @@
                   <Panel Layout="VerticalFlow" Navigation="Group,Column,PreferFocusOrder,RememberFocus">
                     <Children>
 
-                      <Panel Layout="VerticalFlow">
+                      <Panel Layout="VerticalFlow" Navigation="Group">
                         <Children>
                           <Text Content="Movie Gallery View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
                           <c:SimpleSpinner Name="MovieView" Model="[Settings.MovieView]" Size="[ChoiceSpinnerSize]" />
                         </Children>
                       </Panel>
 
-                      <Panel Layout="VerticalFlow">
+                      <Panel Layout="VerticalFlow" Navigation="Group">
                         <Children>
                           <Text Content="Movie Sort" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
                           <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" Size="[ChoiceSpinnerSize]"/>
@@ -354,6 +354,12 @@
                                 <Children>
                                   <c:SimpleCheckbox Name="UseOnScreenAlpha" Checked="[Settings.UseOnScreenAlpha]" Margins="0,0,10,0" />
                                   <Text Content="Show Alpha Jump Bar" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
+                                </Children>
+                              </Panel>
+                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0" Navigation="Group">
+                                <Children>
+                                  <c:SimpleCheckbox Name="ShowWatchedIcon" Checked="[Settings.ShowWatchedIcon]" Margins="0,0,10,0" />
+                                  <Text Content="Show Watched Icon" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
                                 </Children>
                               </Panel>
                             </Children>
