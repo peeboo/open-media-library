@@ -38,7 +38,7 @@ namespace Library
             get
             {
                 if (labeledLists == null)
-                {                    
+                {
                     SetupAlphaCharacters();
 
                     Dictionary<char, List<Title>> alphaTitles = new Dictionary<char, List<Title>>();
@@ -151,12 +151,7 @@ namespace Library
         public VirtualList Movies
         {
             get { return _moviesVirtualList; }
-        }
-
-        public Dictionary<string, Filter> Filters
-        {
-            get { return _filters; }
-        }
+        }        
 
         public EditableText JumpInListText
         {
@@ -381,7 +376,7 @@ namespace Library
             _categories.Add(new NavigationCommand(Filter.Home, delegate() { OMLApplication.Current.GoToMenu(new MovieGallery()); }));
 
             // then settings
-            _categories.Add(new NavigationCommand(Filter.Settings, delegate() { OMLApplication.Current.GoToSettingsPage(new MovieGallery()); }));
+            _categories.Add(new NavigationCommand(Filter.Settings, delegate() { OMLApplication.Current.GoToSettingsPage(new MovieGallery()); }));           
 
             // add the trailers if they've requested to show them
             if ( Properties.Settings.Default.ShowFilterTrailers )
@@ -389,42 +384,25 @@ namespace Library
 
             // add unwatched filter at the top            
             if (Properties.Settings.Default.ShowFilterUnwatched)
-                //_categories.Add(new UnwatchedCommand(Filter.Unwatched));
-                _categories.Add(new FilterCommand(Filters[Filter.Unwatched]));
+                _categories.Add(new FilterCommand(new Filter(this, TitleFilterType.Unwatched, filters)));
 
             System.Collections.Specialized.StringCollection filtersToShow =
                 Properties.Settings.Default.MainFiltersToShow;
 
             foreach (string filterName in filtersToShow)
             {
-                if (Filters.ContainsKey(filterName))
-                {
-                    _categories.Add(new FilterCommand(Filters[filterName]));
-                }
+                TitleFilterType filterType = Filter.FilterStringToTitleType(filterName);
+
+                if (Filter.ShowFilterType(filterType))
+                    _categories.Add(new FilterCommand(new Filter(this, filterType, filters)));               
             }
+
             _categoryChoice = new Choice(this, "Categories", _categories);
         }
 
         private void Initialize(IEnumerable<Title> titles)
         {
-            DateTime start = DateTime.Now;
-
-            /*/
-            if (Properties.Settings.Default.ShowFilterTrailers) _filters.Add(Filter.Trailers, new Filter(Filter.Trailers, this, Properties.Settings.Default.ActorView, true, Properties.Settings.Default.ActorSort));            
-             */
-
-            if (Properties.Settings.Default.ShowFilterUnwatched) _filters.Add(Filter.Unwatched, new Filter(Filter.Unwatched, this, Properties.Settings.Default.GenreView, Properties.Settings.Default.NameAscendingSort, TitleFilterType.Unwatched, filters));
-            if (Properties.Settings.Default.ShowFilterActors) _filters.Add(Filter.Actor, new Filter(Filter.Actor, this, Properties.Settings.Default.ActorView, Properties.Settings.Default.ActorSort, TitleFilterType.Actor, filters));
-            if (Properties.Settings.Default.ShowFilterDirectors) _filters.Add(Filter.Director, new Filter(Filter.Director, this, Properties.Settings.Default.DirectorView, Properties.Settings.Default.DirectorSort, TitleFilterType.Director, filters));
-            if (Properties.Settings.Default.ShowFilterGenres) _filters.Add(Filter.Genres, new Filter(Filter.Genres, this, Properties.Settings.Default.GenreView, Properties.Settings.Default.GenreSort, TitleFilterType.Genre, filters));
-            if (Properties.Settings.Default.ShowFilterYear) _filters.Add(Filter.Year, new Filter(Filter.Year, this, Properties.Settings.Default.YearView, Properties.Settings.Default.YearSort, TitleFilterType.Year, filters));
-            if (Properties.Settings.Default.ShowFilterDateAdded) _filters.Add(Filter.DateAdded, new Filter(Filter.DateAdded, this, Properties.Settings.Default.DateAddedView, Properties.Settings.Default.DateAddedSort, TitleFilterType.DateAdded, filters));
-            if (Properties.Settings.Default.ShowFilterRuntime) _filters.Add(Filter.Runtime, new Filter(Filter.Runtime, this, GalleryView.List, String.Empty, TitleFilterType.Runtime, filters));
-            if (Properties.Settings.Default.ShowFilterUserRating) _filters.Add(Filter.UserRating, new Filter(Filter.UserRating, this, Properties.Settings.Default.GenreView, Properties.Settings.Default.UserRatingSort, TitleFilterType.UserRating, filters));
-            if (Properties.Settings.Default.ShowFilterFormat) _filters.Add(Filter.VideoFormat, new Filter(Filter.VideoFormat, this, Properties.Settings.Default.GenreView, Properties.Settings.Default.NameAscendingSort, TitleFilterType.VideoFormat, filters));
-            if (Properties.Settings.Default.ShowFilterParentalRating) _filters.Add(Filter.ParentRating, new Filter(Filter.ParentRating, this, Properties.Settings.Default.GenreView, Properties.Settings.Default.NameAscendingSort, TitleFilterType.ParentalRating, filters));
-            if (Properties.Settings.Default.ShowFilterTags) _filters.Add(Filter.Tags, new Filter(Filter.Tags, this, Properties.Settings.Default.GenreView, Properties.Settings.Default.NameAscendingSort, TitleFilterType.Tag, filters));
-            if (Properties.Settings.Default.ShowFilterCountry) _filters.Add(Filter.Country, new Filter(Filter.Country, this, Properties.Settings.Default.GenreView, Properties.Settings.Default.NameAscendingSort, TitleFilterType.Country, filters));
+            DateTime start = DateTime.Now;            
 
             _jumpInListText = new EditableText(this);
             _jumpInListText.Value = String.Empty;
@@ -565,10 +543,10 @@ namespace Library
 
             if (Movies.Count > 0)
             {
-                foreach (KeyValuePair<string, Filter> kvp in Filters)
+                /*foreach (KeyValuePair<string, Filter> kvp in Filters)
                 {
                     kvp.Value.Sort();
-                }
+                }*/
                 FocusedItem = (GalleryItem)Movies[0];
             }
             //OMLApplication.DebugLine("[MovieGallery] LoadMovies: done: directors {0} actors {1} genres {2} movies {3}", _directors.Count, _actors.Count, _genres.Count, _movies.Count);

@@ -263,8 +263,18 @@ namespace OMLEngine
         /// <param name="filters"></param>
         /// <returns></returns>
         public static IEnumerable<FilteredCollection> GetAllGenres(List<TitleFilter> filters)
-        {         
-            return Dao.TitleCollectionDao.GetAllGenres(filters);
+        {
+            foreach (FilteredCollection col in Dao.TitleCollectionDao.GetAllGenres(filters))
+            {
+                // todo : solomon : this way kinda sucks because it's a sql query per item returned
+                // there's probably a better way
+                col.ImagePath = (from t in Dao.TitleCollectionDao.GetFilteredTitlesWrapper(filters)
+                                 from g in t.Genres
+                                 where g.MetaData.Name == col.Name
+                                 select t).First().FrontCoverMenuPath;
+
+                yield return col;
+            }
         }                
 
         /// <summary>
@@ -449,7 +459,8 @@ namespace OMLEngine
     public class FilteredCollection : IComparable
     {
         public string Name { get; set; }
-        public int Count { get; set; }       
+        public int Count { get; set; }
+        public string ImagePath { get; set; }
 
         public int CompareTo(object other)
         {

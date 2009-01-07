@@ -214,6 +214,7 @@
     <Content Include="Markup\Views\CoverArt.mcml" />
     <Content Include="Markup\Views\CoverArtWithAlpha.mcml" />
     <Content Include="Markup\Views\ListView.mcml" />
+    <Content Include="Markup\Views\ListWithCovers.mcml" />
     <Content Include="Markup\Views\Views.mcml" />
     <Content Include="OldMarkup\DetailsPage.mcml" />
     <Content Include="OldMarkup\DetailsPage2.mcml" />
