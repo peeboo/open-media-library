@@ -88,7 +88,7 @@ namespace OMLDatabaseEditor
 
             // Set up filter lists
             ToolStripMenuItem item;
-            foreach (string genre in TitleCollectionManager.GetAllGenres())
+            foreach (string genre in from t in TitleCollectionManager.GetAllPeople(null, PeopleRole.Director) select t.Name)
             {
                 item = new ToolStripMenuItem(genre);
                 item.CheckOnClick = true;
@@ -96,7 +96,7 @@ namespace OMLDatabaseEditor
                 filterByGenreToolStripMenuItem.DropDownItems.Add(item);
             }
 
-            foreach (string rating in TitleCollectionManager.GetAllParentalRatings())
+            foreach (string rating in from t in TitleCollectionManager.GetAllRuntimes(null) select t.Name)
             {
                 item = new ToolStripMenuItem(rating);
                 item.CheckOnClick = true;
@@ -152,9 +152,9 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.WaitCursor;
             if (allMoviesToolStripMenuItem1.Checked)
             {
-                _titleCollection.loadTitleCollection();
-                _titleCollection.SortBy("SortName", true);
-                PopulateMovieList(_titleCollection.Source);
+//                _titleCollection.loadTitleCollection();
+//                _titleCollection.SortBy("SortName", true);
+//                PopulateMovieList(_titleCollection.Source);
             }
             else
             {
@@ -763,11 +763,11 @@ namespace OMLDatabaseEditor
                 allMoviesToolStripMenuItem1.Checked = false;
                 List<Title> titles = new List<Title>();
                 if (filterItem.OwnerItem == filterByGenreToolStripMenuItem)
-                    titles = _titleCollection.FindByGenre(filterItem.Text);
-                else if (filterItem.OwnerItem == filterByCompletenessToolStripMenuItem)
-                    titles = _titleCollection.FindByCompleteness(decimal.Parse("." + filterItem.Text.TrimEnd('%')));
+                    titles = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Genre, filterItem.Text).ToList<Title>();
+                //else if (filterItem.OwnerItem == filterByCompletenessToolStripMenuItem)
+                //    titles = _titleCollection.FindByCompleteness(decimal.Parse("." + filterItem.Text.TrimEnd('%')));
                 else if (filterItem.OwnerItem == filterByParentalRatingToolStripMenuItem)
-                    titles = _titleCollection.FindByParentalRating(filterItem.Text);
+                    titles = TitleCollectionManager.GetFilteredTitles(TitleFilterType.ParentalRating, filterItem.Text).ToList<Title>();
 
                 PopulateMovieList(titles);
             }

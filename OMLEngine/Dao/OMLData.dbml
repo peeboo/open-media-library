@@ -13,8 +13,8 @@
       <Column Name="TitleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="GenreMetaDataId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Association Name="GenreMetaData_Genre" Member="MetaData" Storage="_GenreMetaData" ThisKey="GenreMetaDataId" Type="GenreMetaData" IsForeignKey="true" />
-      <Association Name="Title_Genre" Member="Title" ThisKey="TitleId" Type="Title" IsForeignKey="true" />
+      <Association Name="GenreMetaData_Genre" Member="MetaData" Storage="_GenreMetaData" ThisKey="GenreMetaDataId" OtherKey="Id" Type="GenreMetaData" IsForeignKey="true" />
+      <Association Name="Title_Genre" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Titles" Member="Titles" AccessModifier="Internal">
@@ -48,10 +48,11 @@
       <Column Name="OriginalName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="ImporterSource" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="GroupId" Type="System.Int32" DbType="int (System.Int32)" CanBeNull="true" />
-      <Association Name="Title_Genre" Member="Genres" OtherKey="TitleId" Type="Genre" />
-      <Association Name="Title_Person" Member="People" Storage="_Peoples" OtherKey="TitleId" Type="Person" />
-      <Association Name="Title_Tag" Member="Tags" OtherKey="TitleId" Type="Tag" />
-      <Association Name="Title_Disk" Member="Disks" OtherKey="TitleId" Type="Disk" />
+      <Column Member="PercentComplete" Type="System.Int32" CanBeNull="false" />
+      <Association Name="Title_Genre" Member="Genres" ThisKey="Id" OtherKey="TitleId" Type="Genre" />
+      <Association Name="Title_Person" Member="People" Storage="_Peoples" ThisKey="Id" OtherKey="TitleId" Type="Person" />
+      <Association Name="Title_Tag" Member="Tags" ThisKey="Id" OtherKey="TitleId" Type="Tag" />
+      <Association Name="Title_Disk" Member="Disks" ThisKey="Id" OtherKey="TitleId" Type="Disk" />
     </Type>
   </Table>
   <Table Name="dbo.People" Member="Persons" AccessModifier="Internal">
@@ -62,8 +63,8 @@
       <Column Name="Role" Type="System.Byte" DbType="TinyInt" CanBeNull="false" />
       <Column Name="BioId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Association Name="BioData_Person" Member="MetaData" Storage="_BioData" ThisKey="BioId" Type="BioData" IsForeignKey="true" />
-      <Association Name="Title_Person" Member="Title" ThisKey="TitleId" Type="Title" IsForeignKey="true" />
+      <Association Name="BioData_Person" Member="MetaData" Storage="_BioData" ThisKey="BioId" OtherKey="Id" Type="BioData" IsForeignKey="true" />
+      <Association Name="Title_Person" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.BioData" Member="BioDatas" AccessModifier="Internal">
@@ -79,7 +80,7 @@
       <Column Name="TitleId" Storage="_MovieId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Association Name="Title_Tag" Member="Title" ThisKey="TitleId" Type="Title" IsForeignKey="true" />
+      <Association Name="Title_Tag" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Disks" Member="Disks" AccessModifier="Internal">
@@ -90,7 +91,7 @@
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="TitleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ExtraOptions" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Association Name="Title_Disk" Member="Title" ThisKey="TitleId" Type="Title" IsForeignKey="true" />
+      <Association Name="Title_Disk" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

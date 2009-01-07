@@ -156,7 +156,6 @@ namespace OMLEngine.Dao
                     case TitleFilterType.DateAdded:
                         results = ApplyDateAddedFilter(lastQuery, filter.FilterText);
                         break;
-                        
                 }
             }
 
@@ -518,6 +517,33 @@ namespace OMLEngine.Dao
                 userRating = 0;
 
             return ((double)userRating.Value / 10).ToString("0.0");
+        }
+
+        public static IEnumerable<FilteredCollection> GetAllStudios(List<TitleFilter> filters)
+        {
+            return from t in GetFilteredTitlesWrapper(filters)
+                   where t.Studio != null
+                   group t by t.Studio into g
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = g.Key.ToString(), Count = g.Count() };
+        }
+
+        public static IEnumerable<FilteredCollection> GetAllAspectRatios(List<TitleFilter> filters)
+        {
+            return from t in GetFilteredTitlesWrapper(filters)
+                   where t.AspectRatio != null
+                   group t by t.AspectRatio into g
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = g.Key.ToString(), Count = g.Count() };
+        }
+
+        public static IEnumerable<FilteredCollection> GetAllCountryOfOrigin(List<TitleFilter> filters)
+        {
+            return from t in GetFilteredTitlesWrapper(filters)
+                   where t.CountryOfOrigin != null
+                   group t by t.CountryOfOrigin into g
+                   orderby g.Key ascending
+                   select new FilteredCollection() { Name = g.Key.ToString(), Count = g.Count() };
         }
 
         /// <summary>

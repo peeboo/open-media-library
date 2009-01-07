@@ -139,7 +139,22 @@ namespace OMLEngine
             return (filters == null || filters.Count == 0 ) 
                     ? GetAllTitles()
                     : ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetFilteredTitles(filters));
-        }       
+        }
+
+        public static IEnumerable<FilteredCollection> GetAllStudios(List<TitleFilter> filters)
+        {
+            return Dao.TitleCollectionDao.GetAllStudios(filters);
+        }
+
+        public static IEnumerable<FilteredCollection> GetAllAspectRatios(List<TitleFilter> filters)
+        {
+            return Dao.TitleCollectionDao.GetAllAspectRatios(filters);
+        }
+
+        public static IEnumerable<FilteredCollection> GetAllCountryOfOrigin(List<TitleFilter> filters)
+        {
+            return Dao.TitleCollectionDao.GetAllCountryOfOrigin(filters);
+        }
 
         /// <summary>
         /// Returns all the valid parental ratings and their count
