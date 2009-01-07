@@ -495,10 +495,14 @@ namespace Library
                     
                     bool isExtender = OMLApplication.Current.IsExtender;
                     if (isExtender)
+                    {
                         for (int i = 0; i < disks.Count; ++i)
                             foreach (MediaSource ms in (MediaSource.GetSourcesFromOptions(disks[i].Path, disks[i].ExtraOptions, true)))
                                 if (disks.Contains(ms.Disk) == false)
-                                    disks.Insert(i + 1, ms.Disk);
+                                {
+                                    _titleObj.AddTempDisk(ms.Disk);
+                                }
+                    }
 
                     foreach (Disk d in disks)
                     {
