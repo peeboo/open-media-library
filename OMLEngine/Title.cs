@@ -29,7 +29,8 @@ namespace OMLEngine
 
         private Disk _selectedDisk = null;
         private Dao.Title _title;
-        private string _metadataSourceId = null; 
+        private string _metadataSourceId = null;
+        private bool _peopleProcesed = false;
 
         private Dictionary<string, string> _nonActingRoles = new Dictionary<string, string>(); // name, role (ie. Vangelis, Music)        
         private Dictionary<string, string> _actingRoles = null; // actor, role                                       
@@ -249,9 +250,8 @@ namespace OMLEngine
             }
         }        
 
-        // To Support Multi-Disk!
         /// <summary>
-        /// Todo : solomon : this should be a readonly collection
+        /// disks for the title
         /// </summary>
         public IList<Disk> Disks
         {
@@ -266,7 +266,6 @@ namespace OMLEngine
 
                 return _disks.AsReadOnly();
             }
-            set { }
         }
 
         /// <summary>
@@ -496,29 +495,12 @@ namespace OMLEngine
         {
             get 
             {
-                if (_actingRoles == null)
+                if (!_peopleProcesed)
                     SetupPeopleCollections();
 
                 return _actingRoles; 
             }            
-        }
-
-        public void AddActingRole(string actor, string role)
-        {
-            //if (string.IsNullOrEmpty(genre))
-            //    return;
-            //if (Genres.Contains(genre))
-            //    return;
-            //TitleCollectionManager.AddGenreToTitle(this, genre);
-            //_genres = null;
-            if (string.IsNullOrEmpty(actor) || string.IsNullOrEmpty(role))
-                return;
-
-            if (ActingRoles.ContainsKey(actor))
-                return;
-
-            TitleCollectionManager.AddActorToTitle(this, actor, role);
-        }
+        }        
 
         public void AddNonActingRole(string name, string role)
         {
@@ -540,7 +522,7 @@ namespace OMLEngine
         {
             get 
             {
-                if (_directors == null)
+                if (!_peopleProcesed)
                     SetupPeopleCollections();
 
                 return _directors; 
@@ -553,7 +535,7 @@ namespace OMLEngine
         {
             get 
             {
-                if (_writers == null)
+                if (!_peopleProcesed)
                     SetupPeopleCollections();
 
                 return _writers; 
@@ -567,7 +549,7 @@ namespace OMLEngine
         {
             get 
             {
-                if (_producers == null)
+                if (!_peopleProcesed)
                     SetupPeopleCollections();
 
                 return _producers; 
@@ -611,7 +593,7 @@ namespace OMLEngine
                 switch ((PeopleRole)person.Role)
                 {
                     case PeopleRole.Actor:
-                        AddActingRole(person.MetaData.FullName, person.CharacterName);
+                        _actingRoles.Add(person.MetaData.FullName, person.CharacterName);
                         break;
 
                     case PeopleRole.Director:
@@ -627,6 +609,8 @@ namespace OMLEngine
                         break;
                 }
             }
+
+            _peopleProcesed = true;
         }
 
         #region serialization methods
@@ -866,7 +850,21 @@ namespace OMLEngine
         internal Title(OMLEngine.Dao.Title title)
         {
             _title = title;
-        }        
+        }
+
+        public void AddActingRole(string actor, string role)
+        {
+            if (string.IsNullOrEmpty(actor) || string.IsNullOrEmpty(role))
+                return;
+
+            if (ActingRoles.ContainsKey(actor))
+                return;
+
+            TitleCollectionManager.AddActorToTitle(this, actor, role);
+            
+            // reset the internal collection
+            _peopleProcesed = false;
+        }
 
         /// <summary>
         /// Add a Person object to the directors list
