@@ -21,6 +21,7 @@ namespace OMLEngine
         Director,
         Actor,
         UserRating,        
+        PercentComplete,
 
         /* not implemented yet*/
         DateAdded
