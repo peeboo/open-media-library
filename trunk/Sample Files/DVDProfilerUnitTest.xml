@@ -269,4 +269,85 @@ Multiple newlines.
     <Locks/>
   </DVD>
 
+
+  <!-- No disc defined in DVD Profiler but two discs added in notes field -->
+  <DVD>
+    <ProfileTimestamp>2008-11-13T07:16:00.000Z</ProfileTimestamp>
+    <ID>3</ID>
+    <MediaTypes>
+      <DVD>False</DVD>
+      <HDDVD>False</HDDVD>
+      <BluRay>True</BluRay>
+    </MediaTypes>
+    <UPC>111111-222222</UPC>
+    <CollectionNumber/>
+    <CollectionType>Owned</CollectionType>
+    <Title>Title 3</Title>
+    <DistTrait>Description 3</DistTrait>
+    <OriginalTitle>Original title 3</OriginalTitle>
+    <CountryOfOrigin/>
+    <ProductionYear/>
+    <Released>1899-12-30</Released>
+    <RunningTime>42</RunningTime>
+    <RatingSystem>Film</RatingSystem>
+    <Rating>R</Rating>
+    <RatingAge>17</RatingAge>
+    <RatingVariant>0</RatingVariant>
+    <RatingDetails>Rating details 3</RatingDetails>
+    <CaseType>Keep Case</CaseType>
+    <CaseSlipCover>True</CaseSlipCover>
+    <Genres/>
+    <Regions/>
+    <Format>
+      <FormatAspectRatio/>
+      <FormatVideoStandard>PAL</FormatVideoStandard>
+      <FormatLetterBox>False</FormatLetterBox>
+      <FormatPanAndScan>False</FormatPanAndScan>
+      <FormatFullFrame>Frue</FormatFullFrame>
+      <Format16X9>False</Format16X9>
+      <FormatDualSided>False</FormatDualSided>
+      <FormatDualLayered>True</FormatDualLayered>
+    </Format>
+    <Features>
+      <FeatureSceneAccess>True</FeatureSceneAccess>
+      <FeatureCommentary>True</FeatureCommentary>
+      <FeatureTrailer>True</FeatureTrailer>
+      <FeaturePhotoGallery>True</FeaturePhotoGallery>
+      <FeatureDeletedScenes>True</FeatureDeletedScenes>
+      <FeatureMakingOf>True</FeatureMakingOf>
+      <FeatureProductionNotes>True</FeatureProductionNotes>
+      <FeatureGame>True</FeatureGame>
+      <FeatureDVDROMContent>True</FeatureDVDROMContent>
+      <FeatureMultiAngle>True</FeatureMultiAngle>
+      <FeatureMusicVideos>True</FeatureMusicVideos>
+      <FeatureInterviews>True</FeatureInterviews>
+      <FeatureStoryboardComparisons>True</FeatureStoryboardComparisons>
+      <FeatureOuttakes>True</FeatureOuttakes>
+      <FeatureClosedCaptioned>True</FeatureClosedCaptioned>
+      <FeatureTHXCertified>True</FeatureTHXCertified>
+      <OtherFeatures/>
+    </Features>
+    <Studios/>
+    <MediaPublisher/>
+    <Audio/>
+    <Subtitles/>
+    <SRP DenominationType="USD" DenominationDesc="United States (Dollar)" FormattedValue="$39.98">39.98</SRP>
+    <Actors/>
+    <Credits/>
+    <Overview/>
+    <EasterEggs/>
+    <Discs/>
+    <SortTitle/>
+    <LastEdited>2008-11-16T09:57:30.000Z</LastEdited>
+    <WishPriority>0</WishPriority>
+    <PurchaseInfo/>
+    <Review Film="6" Video="0" Audio="0" Extras="0"/>
+    <Events/>
+    <Notes>
+      [filepath]\\unc_server\share\folder with space\file1.mkv[/filepath]
+      [filepath]\\unc_server\share\folder with space\file2.mkv[/filepath]
+    </Notes>
+    <Tags/>
+    <Locks/>
+  </DVD>
 </Collection>
