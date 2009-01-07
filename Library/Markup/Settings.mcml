@@ -20,7 +20,9 @@
       <Command Name="SaveSettings"
                Description="Save Settings"/>
       <Command Name="AboutOML"
-               Description="About OML"/>      
+               Description="About OML"/>
+      <Command Name="ScanForTMTCommand"
+               Description="Scan For TMT Plugin"/>
 
       <Choice Name="Tabs">
         <Options>
@@ -52,8 +54,24 @@
       <a:UISettings Name="UISettings" UISettings="$Required" />      
     </Properties>
 
-    <Rules>           
+    <Rules>
+      <Changed Source="[Application.IsBusy]" InitialEvaluate="false">
+        <Actions>
+          <Set Target="[waitCursor.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[Application.IsBusy]" InitialEvaluate="true">
+        <Actions>
+          <Set Target="[waitCursor.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+
       <!-- Setup the default visibility rules -->
+      <Changed Source="[ScanForTMTCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Settings.LocateTotalMediaTheatrePluginExecutable]"/>
+        </Actions>
+      </Changed>
       <Changed Source="[SaveSettings.Invoked]">
         <Actions>
           <Invoke Target="[Settings.SaveSettings]" />
@@ -246,7 +264,7 @@
     <Content>
       <ColorFill Name="AllContent" Content="Transparent" Layout="Form" Navigation="Column">
         <Children>
-          
+          <controls:WaitCursor Name="waitCursor" Visible="false"/>
           <!-- Top -->
           <Panel Name="TopPanel">
             <Children>
@@ -551,6 +569,13 @@
                 <Children>
                   <Panel Layout="VerticalFlow" Navigation="Group">
                     <Children>
+                      <Text Content="Scan Drive for Total Media Theatre Plugin" Color="White" Font="font://me:SmallFont"/>
+                      <Panel Layout="HorizontalFlow">
+                        <Children>
+                          <c:SimpleSpinner Name="LocalFixedDrives" Model="[Settings.LocalFixedDrives]" Size="51,51" />
+                          <c:SimpleButton Name="ScanForTMTButton" Command="[ScanForTMTCommand]" FocusOrder="1" Text="Begin Scan"/>
+                        </Children>
+                      </Panel>
                       <Text Content="External HD/BluRay Player" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                       <c:SimpleEditbox Size="700,51" Name="BluRayPlayer" EditableText="[Settings.BlueRayPlayerPath]" />
 
