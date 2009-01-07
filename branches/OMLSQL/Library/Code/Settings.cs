@@ -242,6 +242,7 @@ namespace Library
             viewItems.Add(GalleryView.CoverArt);
             viewItems.Add(GalleryView.CoverArtWithAlpha);
             viewItems.Add(GalleryView.List);
+            viewItems.Add(GalleryView.ListWithCovers);
 #if LAYOUT_V2
             viewItems.Add("Folder View");
 #endif

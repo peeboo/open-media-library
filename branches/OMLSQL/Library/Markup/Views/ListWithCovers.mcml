@@ -230,7 +230,7 @@
 
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
-
+      <Binding Source="[GalleryItem.MenuCoverArt]" Target="[MenuCover.Content]" />
       <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
 
       <!-- If we get key focus, change our background color to indicate it. -->
