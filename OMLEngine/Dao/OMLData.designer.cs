@@ -490,8 +490,6 @@ namespace OMLEngine.Dao
 		
 		private System.Nullable<int> _GroupId;
 		
-		private int _PercentComplete;
-		
 		private EntitySet<Genre> _Genres;
 		
 		private EntitySet<Person> _Peoples;
@@ -562,8 +560,6 @@ namespace OMLEngine.Dao
     partial void OnImporterSourceChanged();
     partial void OnGroupIdChanging(System.Nullable<int> value);
     partial void OnGroupIdChanged();
-    partial void OnPercentCompleteChanging(int value);
-    partial void OnPercentCompleteChanged();
     #endregion
 		
 		public Title()
@@ -1151,26 +1147,6 @@ namespace OMLEngine.Dao
 					this._GroupId = value;
 					this.SendPropertyChanged("GroupId");
 					this.OnGroupIdChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_PercentComplete")]
-		public int PercentComplete
-		{
-			get
-			{
-				return this._PercentComplete;
-			}
-			set
-			{
-				if ((this._PercentComplete != value))
-				{
-					this.OnPercentCompleteChanging(value);
-					this.SendPropertyChanging();
-					this._PercentComplete = value;
-					this.SendPropertyChanged("PercentComplete");
-					this.OnPercentCompleteChanged();
 				}
 			}
 		}
