@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml;
 using OMLEngine;
 using NUnit.Framework;
 using DVDProfilerPlugin;
@@ -193,7 +194,14 @@ namespace OMLTestSuite
 
             title = LoadTitle("2");
             Assert.AreEqual(0, title.Disks.Count, "The second DVD should not have any disks defined.");
+        }
 
+        [Test]
+        public void TEST_DEFAULT_DISC_NAMES()
+        {
+            Title title = LoadTitle("3");
+            Assert.AreEqual("Disc 1a", title.Disks[0].Name, "The first disc name incorrect");
+            Assert.AreEqual("Disc 2a", title.Disks[1].Name, "The second disc name incorrect");
         }
 
         private static Title LoadTitle(string id)
@@ -201,9 +209,12 @@ namespace OMLTestSuite
             if (string.IsNullOrEmpty(id)) throw new ArgumentNullException("id");
             Title result = null;
             DVDProfilerImporter importer = new DVDProfilerImporter();
-            importer.DoWork(new [] { @"..\..\..\Sample Files\DVDProfilerUnitTest.xml" });
+            string xmlPath = @"..\..\..\Sample Files\DVDProfilerUnitTest.xml";
+            importer.DoWork(new [] { xmlPath});
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(xmlPath);
             IList<Title> titles = importer.GetTitles();
-            Assert.AreEqual(2, titles.Count, "Unexpected number of profiles loaded.");
+            Assert.AreEqual(xmlDoc.SelectNodes("Collection/DVD").Count, titles.Count, "Unexpected number of profiles loaded.");
             foreach (Title title in titles)
             {
                 if (title.MetadataSourceID == id)

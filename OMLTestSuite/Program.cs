@@ -68,6 +68,7 @@ namespace OMLTestSuite
             dpt.TEST_SYNOPSIS();
             dpt.TEST_VIDEO();
             dpt.TEST_DISCS();
+            dpt.TEST_DEFAULT_DISC_NAMES();
 
             TitleTest tt = new TitleTest();
             Console.WriteLine("Testing: Title");

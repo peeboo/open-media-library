@@ -501,11 +501,13 @@ namespace DVDProfilerPlugin
             if (string.IsNullOrEmpty(currentNotes)) return;
 
             var matches = filepathRegex.Matches(currentNotes);
+            int lastDiskNumber = 0;
             foreach (Match m in matches)
             {
                 string discNumberString = m.Groups["discNumber"].Value;
-                int discNumber = Convert.ToInt32(string.IsNullOrEmpty(discNumberString) ? "1" : discNumberString,
+                int discNumber = Convert.ToInt32(string.IsNullOrEmpty(discNumberString) ? "0" : discNumberString,
                                                  CultureInfo.InvariantCulture);
+                if (discNumber == 0) discNumber = lastDiskNumber + 1;
                 string sideString = m.Groups["side"].Value;
                 int side = 0;
                 if (!string.IsNullOrEmpty(sideString) && sideString.ToLowerInvariant() == "b") side = 1;
@@ -530,7 +532,8 @@ namespace DVDProfilerPlugin
                     }
                 }
                 
-                CurrentTitle.Disks.Add(new Disk(title, path, currentVideoFormat));                
+                CurrentTitle.Disks.Add(new Disk(title, path, currentVideoFormat));
+                lastDiskNumber++;
             }
         }
 
