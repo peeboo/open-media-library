@@ -1020,6 +1020,24 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Add a disk that won't be persisted to the database
+        /// </summary>
+        /// <param name="disk"></param>
+        public void AddTempDisk(Disk disk)
+        {
+            if (disk == null)
+                return;
+
+            if (Disks.Contains(disk))
+                return;
+
+            if (_disks == null)
+                _disks = new List<Disk>(1);
+
+            _disks.Add(disk);
+        }
+
+        /// <summary>
         /// Sets a tag to be added
         /// </summary>
         /// <param name="tag"></param>
