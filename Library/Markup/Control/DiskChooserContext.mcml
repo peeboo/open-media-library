@@ -19,37 +19,45 @@
           <Invoke Target="[DetailsPage.PlayAllDisks]" />
         </Actions>
       </Changed>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
     </Rules>
     <Locals>
       <Command Name="PlayAllDisks" Description="Plays the selected disc"/>
+      <ScrollingHandler Name="ScrollingHandler" HandleHomeEndKeys="true"
+                        HandleDirectionalKeys="true" HandlePageKeys="true"/>
+      <ScrollingData Name="ScrollingData" />
     </Locals>
     <Content>
       <Panel Name="ContextMenuPanel" Layout="Anchor" Navigation="ContainAll, WrapVertical">
         <Children>
-          <Graphic Name="Background" Navigation="ContainAll" Content="image://me:OverlaysOutline" SizingPolicy="SizeToChildren" Padding="5,5,5,5" MinimumSize="287,0" MaximumSize="587,0">
+          <Graphic Name="Background" Navigation="ContainAll" Content="image://me:OverlaysOutline" SizingPolicy="SizeToChildren" Padding="5,5,5,5" MinimumSize="287,0">
             <Layout>
               <FlowLayout Orientation="Horizontal" ItemAlignment="Fill"/>
             </Layout>
             <Children>
-              <Graphic Name="TopImage" Content="image://me:OverlaysBackgroundTopLight" Padding="5,5,5,5" MinimumSize="287,0">
+              <Graphic Name="TopImage" Content="image://me:OverlaysBackgroundTopLight" Padding="5,5,5,5" MinimumSize="287,0" MaximumSize="350,650">
                 <Layout>
                   <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
                 </Layout>
-                <Children>
-                  <Panel Layout="VerticalFlow" Navigation="ContainVertical">
+                <Children>                  
+                  <Scroller Orientation="Vertical" FadeSize="5" ScrollingData="[ScrollingData]" >
                     <Children>
-                      <c:SimpleButton Name="Button" Text="Play All" Command="[PlayAllDisks]" Size="287,51"/>
-                      
-                      <Repeater Source="[DetailsPage.DiskChoice.Options]" Layout="VerticalFlow">
-                        <Layout>
-                          <FlowLayout Spacing="4,0" Orientation="Vertical"/>
-                        </Layout>
-                        <Content>
-                          <me:ShowDisc DetailsPage="[DetailsPage]" Index="[RepeatedItemIndex]" DiscName="[RepeatedItem!a:DiskWrapper.Name.ToString]" />
-                        </Content>
-                      </Repeater>
+                      <Panel Layout="VerticalFlow" Navigation="ContainVertical">
+                        <Children>
+                          <c:SimpleButton Name="Button" Text="Play All" Command="[PlayAllDisks]" Size="287,51"/>
+
+                          <Repeater Source="[DetailsPage.DiskChoice.Options]" Layout="VerticalFlow" Margins="0,4,0,0">
+                            <Layout>
+                              <FlowLayout Spacing="4,0" Orientation="Vertical"/>
+                            </Layout>
+                            <Content>
+                              <me:ShowDisc DetailsPage="[DetailsPage]" Index="[RepeatedItemIndex]" DiscName="[RepeatedItem!a:DiskWrapper.Name.ToString]" />
+                            </Content>
+                          </Repeater>
+                        </Children>
+                      </Panel>
                     </Children>
-                  </Panel>                                    
+                  </Scroller>                                                                                           
                 </Children>
               </Graphic>
             </Children>
