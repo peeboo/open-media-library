@@ -70,12 +70,14 @@ namespace Library
                     labeledLists = new List<LabeledList>(alphaTitles.Keys.Count);
 
                     // based off the list create a bunch of gallery objects
-                    foreach (string alpha in alphaCharacters)
+                    for (int x = alphaCharacters.Count - 1; x >= 0; x--)
                     {
                         List<Title> alphaTitle;
 
-                        if (alphaTitles.TryGetValue(alpha[0], out alphaTitle))
-                            labeledLists.Add(new LabeledList(alpha, new MovieGallery(alphaTitle, string.Empty).Movies));
+                        if (alphaTitles.TryGetValue(alphaCharacters[x][0], out alphaTitle))
+                            labeledLists.Insert(0, new LabeledList(alphaCharacters[x], new MovieGallery(alphaTitle, string.Empty).Movies));
+                        else
+                            alphaCharacters.RemoveAt(x);
                     }
 
                     int index = 0;

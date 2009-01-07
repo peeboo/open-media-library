@@ -271,14 +271,14 @@ namespace OMLEngine
         /// <summary>
         /// Video format of title (DVD, AVI, etc)
         /// </summary>
-        public VideoFormat? VideoFormat
+        public VideoFormat VideoFormat
         {
             get
             {
                 if (_title.Disks.Count > 0)
                     return (VideoFormat) _title.Disks[0].VideoFormat;
                 else
-                    return null;
+                    return VideoFormat.UNKNOWN;
             }
         }
 
