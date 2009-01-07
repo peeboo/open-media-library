@@ -209,7 +209,7 @@ namespace OMLDatabaseEditor
             if (titleEditor.EditedTitle != null)
             {
                 List<Title> matches = (from title in titles
-                                       where title.InternalItemID == titleEditor.EditedTitle.InternalItemID
+                                       where title.Id == titleEditor.EditedTitle.Id
                                        select title).ToList<Title>();
                 if (matches.Count == 0)
                 {
