@@ -106,6 +106,14 @@ namespace OMLDatabaseEditor
                 item.Click += new EventHandler(filterTitles_Click);
                 filterByParentalRatingToolStripMenuItem.DropDownItems.Add(item);
             }
+
+            foreach (string tag in _titleCollection.GetAllTags)
+            {
+                item = new ToolStripMenuItem(tag);
+                item.CheckOnClick = true;
+                item.Click += new EventHandler(filterTitles_Click);
+                filterByTagToolStripMenuItem.DropDownItems.Add(item);
+            }
         }
 
         private static void LoadImportPlugins(string pluginType, List<OMLPlugin> pluginList)
@@ -740,6 +748,8 @@ namespace OMLDatabaseEditor
                 if (item != filterItem) item.Checked = false;
             foreach (ToolStripMenuItem item in filterByParentalRatingToolStripMenuItem.DropDownItems)
                 if (item != filterItem) item.Checked = false;
+            foreach (ToolStripMenuItem item in filterByTagToolStripMenuItem.DropDownItems)
+                if (item != filterItem) item.Checked = false;
 
             if (sender == allMoviesToolStripMenuItem1)
             {
@@ -755,6 +765,8 @@ namespace OMLDatabaseEditor
                     titles = _titleCollection.FindByCompleteness(decimal.Parse("." + filterItem.Text.TrimEnd('%')));
                 else if (filterItem.OwnerItem == filterByParentalRatingToolStripMenuItem)
                     titles = _titleCollection.FindByParentalRating(filterItem.Text);
+                else if (filterItem.OwnerItem == filterByTagToolStripMenuItem)
+                    titles = _titleCollection.FindByTag(filterItem.Text);
 
                 PopulateMovieList(titles);
             }

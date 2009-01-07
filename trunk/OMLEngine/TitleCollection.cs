@@ -489,6 +489,16 @@ namespace OMLEngine
             return titles;
         }
 
+        public List<Title> FindByTag(string tag)
+        {
+            List<Title> titles = (from title in _list
+                                  from tags in title.Tags
+                                  where tags == tag
+                                  orderby title.SortName ascending
+                                  select title).ToList<Title>();
+            return titles;
+        }
+
         public List<Title> FindByCompleteness(decimal percentComplete)
         {
             List<Title> titles = (from title in _list

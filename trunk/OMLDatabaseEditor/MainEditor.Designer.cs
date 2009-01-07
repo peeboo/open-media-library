@@ -49,6 +49,14 @@ namespace OMLDatabaseEditor
             this.regenerateThumbnailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentMovieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allMoviesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allMoviesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.filterByGenreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.filterByCompletenessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.filterByParentalRatingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,14 +90,7 @@ namespace OMLDatabaseEditor
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.filterByGenreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.filterByCompletenessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.filterByParentalRatingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.allMoviesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.filterByTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -268,6 +269,74 @@ namespace OMLDatabaseEditor
             this.allMoviesToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.allMoviesToolStripMenuItem.Text = "All Movies";
             this.allMoviesToolStripMenuItem.Click += new System.EventHandler(this.allMoviesToolStripMenuItem_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.allMoviesToolStripMenuItem1,
+            this.filterByGenreToolStripMenuItem,
+            this.filterByCompletenessToolStripMenuItem,
+            this.filterByParentalRatingToolStripMenuItem,
+            this.filterByTagToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // allMoviesToolStripMenuItem1
+            // 
+            this.allMoviesToolStripMenuItem1.Checked = true;
+            this.allMoviesToolStripMenuItem1.CheckOnClick = true;
+            this.allMoviesToolStripMenuItem1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.allMoviesToolStripMenuItem1.Name = "allMoviesToolStripMenuItem1";
+            this.allMoviesToolStripMenuItem1.Size = new System.Drawing.Size(199, 22);
+            this.allMoviesToolStripMenuItem1.Text = "All Movies";
+            this.allMoviesToolStripMenuItem1.Click += new System.EventHandler(this.filterTitles_Click);
+            // 
+            // filterByGenreToolStripMenuItem
+            // 
+            this.filterByGenreToolStripMenuItem.Name = "filterByGenreToolStripMenuItem";
+            this.filterByGenreToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.filterByGenreToolStripMenuItem.Text = "Filter By Genre";
+            // 
+            // filterByCompletenessToolStripMenuItem
+            // 
+            this.filterByCompletenessToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem2,
+            this.toolStripMenuItem3,
+            this.toolStripMenuItem4});
+            this.filterByCompletenessToolStripMenuItem.Name = "filterByCompletenessToolStripMenuItem";
+            this.filterByCompletenessToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.filterByCompletenessToolStripMenuItem.Text = "Filter By Completeness";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.CheckOnClick = true;
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(96, 22);
+            this.toolStripMenuItem2.Text = "25%";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.filterTitles_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.CheckOnClick = true;
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(96, 22);
+            this.toolStripMenuItem3.Text = "50%";
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.filterTitles_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.CheckOnClick = true;
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(96, 22);
+            this.toolStripMenuItem4.Text = "75%";
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.filterTitles_Click);
+            // 
+            // filterByParentalRatingToolStripMenuItem
+            // 
+            this.filterByParentalRatingToolStripMenuItem.Name = "filterByParentalRatingToolStripMenuItem";
+            this.filterByParentalRatingToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.filterByParentalRatingToolStripMenuItem.Text = "Filter By Parental Rating";
             // 
             // toolsToolStripMenuItem
             // 
@@ -572,72 +641,11 @@ namespace OMLDatabaseEditor
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
             // 
-            // viewToolStripMenuItem
+            // filterByTagToolStripMenuItem
             // 
-            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.allMoviesToolStripMenuItem1,
-            this.filterByGenreToolStripMenuItem,
-            this.filterByCompletenessToolStripMenuItem,
-            this.filterByParentalRatingToolStripMenuItem});
-            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "View";
-            // 
-            // filterByGenreToolStripMenuItem
-            // 
-            this.filterByGenreToolStripMenuItem.Name = "filterByGenreToolStripMenuItem";
-            this.filterByGenreToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.filterByGenreToolStripMenuItem.Text = "Filter By Genre";
-            // 
-            // filterByCompletenessToolStripMenuItem
-            // 
-            this.filterByCompletenessToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem2,
-            this.toolStripMenuItem3,
-            this.toolStripMenuItem4});
-            this.filterByCompletenessToolStripMenuItem.Name = "filterByCompletenessToolStripMenuItem";
-            this.filterByCompletenessToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.filterByCompletenessToolStripMenuItem.Text = "Filter By Completeness";
-            // 
-            // filterByParentalRatingToolStripMenuItem
-            // 
-            this.filterByParentalRatingToolStripMenuItem.Name = "filterByParentalRatingToolStripMenuItem";
-            this.filterByParentalRatingToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.filterByParentalRatingToolStripMenuItem.Text = "Filter By Parental Rating";
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.CheckOnClick = true;
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItem2.Text = "25%";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.filterTitles_Click);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.CheckOnClick = true;
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItem3.Text = "50%";
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.filterTitles_Click);
-            // 
-            // toolStripMenuItem4
-            // 
-            this.toolStripMenuItem4.CheckOnClick = true;
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItem4.Text = "75%";
-            this.toolStripMenuItem4.Click += new System.EventHandler(this.filterTitles_Click);
-            // 
-            // allMoviesToolStripMenuItem1
-            // 
-            this.allMoviesToolStripMenuItem1.Checked = true;
-            this.allMoviesToolStripMenuItem1.CheckOnClick = true;
-            this.allMoviesToolStripMenuItem1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.allMoviesToolStripMenuItem1.Name = "allMoviesToolStripMenuItem1";
-            this.allMoviesToolStripMenuItem1.Size = new System.Drawing.Size(199, 22);
-            this.allMoviesToolStripMenuItem1.Text = "All Movies";
-            this.allMoviesToolStripMenuItem1.Click += new System.EventHandler(this.filterTitles_Click);
+            this.filterByTagToolStripMenuItem.Name = "filterByTagToolStripMenuItem";
+            this.filterByTagToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.filterByTagToolStripMenuItem.Text = "Filter By Tag";
             // 
             // MainEditor
             // 
@@ -740,6 +748,7 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem allMoviesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem filterByTagToolStripMenuItem;
     }
 }
 
