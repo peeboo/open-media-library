@@ -384,6 +384,14 @@ namespace Library
 
         private void SetupExternalPlayers()
         {
+            List<string> localFixedDrivesOptions = new List<string>();
+            foreach (DriveInfo dInfo in GetFileSystemDrives())
+            {
+                localFixedDrivesOptions.Add(dInfo.Name);
+            }
+
+            _LocalFixedDrives.Options = localFixedDrivesOptions;
+
             _blueRayPlayerPath.Value = ExternalPlayer.GetExternalPlayerPath(VideoFormat.BLURAY);
             _useExternalPlayer.Chosen = ExternalPlayer.ExternalPlayerExistForType(VideoFormat.ALL);
 
@@ -536,6 +544,11 @@ namespace Library
             get { return _trailersDefinition; }
         }
 
+        public Choice LocalFixedDrives
+        {
+            get { return _LocalFixedDrives; }
+        }
+
         public BooleanChoice UseExternalPlayer
         {
             get { return _useExternalPlayer; }
@@ -628,6 +641,87 @@ namespace Library
             }
         }
 
+        public void LocateTotalMediaTheatrePluginExecutable()
+        {
+            string DriveLetterToScan = LocalFixedDrives.Chosen as String;
+            DriveInfo dInfo;
+
+            dInfo = new DriveInfo(DriveLetterToScan);
+            if (File.Exists(Path.Combine(dInfo.RootDirectory.FullName, @"Program Files\Arcsoft\umcedvdplayer.exe")))
+                BlueRayPlayerPath.Value = Path.Combine(dInfo.RootDirectory.FullName, @"Program Files\Arcsoft\umcedvdplayer.exe");
+
+            OMLApplication.Current.IsBusy = true;
+            Application.DeferredInvokeOnWorkerThread(delegate {
+                exePath = GetTotalMediaTheatrePluginExecutable(dInfo.RootDirectory.FullName);
+            }, delegate {
+                OMLApplication.Current.IsBusy = false;
+                if (exePath.Length > 0)
+                {
+                    OMLApplication.DebugLine("[Settings] Found Total Media Theatre Plugin: {0}", exePath);
+                    BlueRayPlayerPath.Value = exePath;
+                }
+                else
+                {
+                    AddInHost.Current.MediaCenterEnvironment.Dialog(
+                        string.Format("The Total Media Theatre plugin was not" +
+                                      " found on the [{0}] drive.", DriveLetterToScan),
+                        "Failed to Find TMT Plugin",
+                        Microsoft.MediaCenter.DialogButtons.Ok,
+                        5, true);
+                }
+            }, null);
+        }
+
+        public static IList<DriveInfo> GetFileSystemDrives()
+        {
+            IList<DriveInfo> fixedDrives = new List<DriveInfo>();
+            DriveInfo[] drives = DriveInfo.GetDrives();
+            foreach (DriveInfo drInfo in drives)
+            {
+                if (drInfo.DriveType == DriveType.Fixed)
+                    fixedDrives.Add(drInfo);
+            }
+
+            return fixedDrives;
+        }
+
+        private static string GetTotalMediaTheatrePluginExecutable(string dir)
+        {
+            string tmtPath = string.Empty;
+            DirectoryInfo dInfo;
+            FileSystemInfo[] items = new FileSystemInfo[0]; // this just needs to be init'd
+            try
+            {
+                dInfo = new DirectoryInfo(dir);
+                items = dInfo.GetFileSystemInfos();
+            }
+            catch (Exception e)
+            {
+                OMLApplication.DebugLine("Caught exception trying to scan {0}: {1}", dir, e.Message);
+            }
+
+            foreach (FileSystemInfo item in items)
+            {
+                if (item is DirectoryInfo)
+                {
+                    DirectoryInfo dirInfo = item as DirectoryInfo;
+                    OMLApplication.DebugLine("[Settings] Scanning folder [{0}] for TMT", dirInfo.FullName);
+                    tmtPath = GetTotalMediaTheatrePluginExecutable(dirInfo.FullName);
+                    if (!string.IsNullOrEmpty(tmtPath))
+                        return tmtPath;
+                }
+
+                if (item is FileInfo)
+                {
+                    FileInfo fInfo = item as FileInfo;
+                    if (fInfo.Name.ToLower().Equals("umcedvdplayer.exe"))
+                        return fInfo.FullName;
+                }
+            }
+            return string.Empty;
+        }
+
+        private string exePath = string.Empty;
         EditableText _mountingToolPath = new EditableText();
         EditableText _blueRayPlayerPath = new EditableText();
         EditableText _externalPlayerPath = new EditableText();
@@ -648,6 +742,7 @@ namespace Library
         Choice _uiLanguage = new Choice();
         Choice _ImageMountingSelection = new Choice();
         Choice _trailersDefinition = new Choice();
+        Choice _LocalFixedDrives = new Choice();
         Choice _filtersToShow = new Choice();
         EditableText _transcodeBufferDelay = new EditableText();
         BooleanChoice _showFilterGenres = new BooleanChoice();
