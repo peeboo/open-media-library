@@ -461,11 +461,7 @@ namespace Library
         }
 
         private void MovieCastCommand_Invoked(object sender, EventArgs e)
-        {
-            /*MovieGallery gallery = new MovieGallery(OMLApplication.Current.Titles, "Home");
-            OMLApplication.Current.GoToSelectionList(gallery, Filter.Participant, name);*/
-
-            // todo : solomon : testing creating new filters on the fly
+        {            
             OMLApplication.Current.GoToMenu(new MovieGallery(new TitleFilter(TitleFilterType.Person, name)));
         }        
     }

@@ -611,6 +611,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] ListWithCovers {
+            get {
+                object obj = ResourceManager.GetObject("ListWithCovers", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] Menu {
             get {
                 object obj = ResourceManager.GetObject("Menu", resourceCulture);

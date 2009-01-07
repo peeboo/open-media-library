@@ -76,7 +76,7 @@ namespace OMLEngine.Dao
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
-        private static IQueryable<Title> GetFilteredTitlesWrapper(List<TitleFilter> filters)
+        public static IQueryable<Title> GetFilteredTitlesWrapper(List<TitleFilter> filters)
         {
             return (IQueryable<Title>) GetFilteredTitles(filters);
         }

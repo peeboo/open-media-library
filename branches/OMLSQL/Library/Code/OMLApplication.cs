@@ -98,7 +98,7 @@ namespace Library
         }
 
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
-        {
+        {           
             this._session = session;
             try { // borrowed from vmcNetFlix project on google-code
                 bool isConsole = false;
@@ -179,14 +179,13 @@ namespace Library
                             // go to the subfilter
                             GoToMenu(
                                 new MovieGallery(
-                                    new TitleFilter(Filter.FilterStringToTitleFilter(Properties.Settings.Default.StartPage),
+                                    new TitleFilter(Filter.FilterStringToTitleType(Properties.Settings.Default.StartPage),
                                         Properties.Settings.Default.StartPageSubFilter)));
                         }
                         else
                         {
                             // go to the selection list
-                            GoToSelectionList(new MovieGallery(),
-                                                Properties.Settings.Default.StartPage);               
+                            GoToSelectionList(new Filter(new MovieGallery(), Filter.FilterStringToTitleType(Properties.Settings.Default.StartPage), null));               
                         }
                     }
                     return;
@@ -298,51 +297,27 @@ namespace Library
             IsBusy = true;
         }
 
-        public void GoToSelectionList(MovieGallery gallery, string filterName)
+        public void GoToSelectionList(Filter filter)
         {
-            GoToSelectionList(gallery, filterName, null);
-        }        
-        
-        public void GoToSelectionList(MovieGallery gallery, string filterName, string subFilter)
-        {
-            Filter filter = null;
+            // currently the selection list page uses the same gallery object as the previous page
+            // we shoud look into refactoring this so the selection logic is in a different object than
+            // the movie list so we can deal with selections across pages better
+            MovieGallery gallery = filter.Gallery;
 
-            // see if the filter has been created
-            gallery.Filters.TryGetValue(filterName, out filter);
+            // reset the index
+            gallery.FocusIndex.Value = 0;
 
-            // see if we're a top level filter
-            if (string.IsNullOrEmpty(subFilter) &&
-                filter != null )
-            {                                
-                string listName = gallery.Title + " > " + filter.Name;
-                IList list = filter.Items;
-                string galleryView = filter.GalleryView;
+            //DebugLine("[OMLApplication] GoToSelectionList(#{0} items, list name: {1}, gallery: {2})", list.Count, listName, galleryView);
+            Dictionary<string, object> properties = CreateProperties(true, false, gallery);
+            properties["MovieBrowser"] = gallery;
+            properties["List"] = filter.GetGalleryItems();
+            properties["ListName"] = filter.Title;
+            properties["GalleryView"] = filter.GetViewForFilter();
 
-                // reset the index
-                gallery.FocusIndex.Value = 0;
-
-                DebugLine("[OMLApplication] GoToSelectionList(#{0} items, list name: {1}, gallery: {2})", list.Count, listName, galleryView);
-                Dictionary<string, object> properties = CreateProperties(true, false, gallery);
-                properties["MovieBrowser"] = gallery;
-                properties["List"] = list;
-                properties["ListName"] = listName;
-                properties["GalleryView"] = galleryView;
-
-                if (_session != null)
-                {
-                    _session.GoToPage("resx://Library/Library.Resources/SelectionList", properties);
-                }
-            }
-            else  if (filter != null &&
-                !string.IsNullOrEmpty(subFilter))
-            {                                                
-                GoToMenu(filter.CreateGallery(subFilter));
-            }                        
-            else
+            if (_session != null)
             {
-                OMLApplication.DebugLine("[OMLApplication] GoToSelectionList - filter {0} not found - going to Menu Page", filterName);
-                GoToMenu(new MovieGallery());
-            }
+                _session.GoToPage("resx://Library/Library.Resources/SelectionList", properties);
+            }            
         }
 
         public void GoToDetails(MovieDetailsPage page)

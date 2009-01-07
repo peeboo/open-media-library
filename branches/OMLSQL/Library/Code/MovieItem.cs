@@ -149,22 +149,7 @@ namespace Library
                     movie.PlayMovie();
                 }
             });
-        }
-
-        virtual public int ItemCount
-        {
-            get
-            {
-                if (Gallery != null && Category != null && Category.ItemMovieRelation.ContainsKey(Name))
-                {
-                    return Category.ItemMovieRelation[Name].Count;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
+        }       
 
         /// <summary>
         /// Gets the description.
@@ -174,10 +159,9 @@ namespace Library
         {
             get 
             {
-                int itemCount = ( _forcedCount != -1 ) ? _forcedCount : ItemCount;
-                if (itemCount > 0 )
+                if (_forcedCount > 0 )
                 {
-                    return Name + " (" + Convert.ToString( itemCount ) + ")";
+                    return Name + " (" + Convert.ToString( _forcedCount ) + ")";
                 }
                 else
                 {
@@ -498,7 +482,6 @@ namespace Library
         public IList<Disk> Disks
         {
             get { return _titleObj.Disks; }
-            set { _titleObj.Disks = value; }
         }
 
         public List<Disk> FriendlyNamedDisks

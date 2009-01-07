@@ -75,7 +75,7 @@ namespace OMLTestSuite
             IEnumerable<FilteredCollection> items = TitleCollectionManager.GetAllGenres(null);
 
             foreach (FilteredCollection item in items)
-                Console.WriteLine(item.Name + " " + item.Count);
+                Console.WriteLine(item.Name + " " + item.Count + " " + item.ImagePath);
 
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
@@ -141,17 +141,25 @@ namespace OMLTestSuite
             Console.WriteLine("Starting to get all date added values");
             DateTime start = DateTime.Now;
 
+            List<List<Title>> titlesCollection = new List<List<Title>>();
+
             IEnumerable<FilteredTitleCollection> items = TitleCollectionManager.GetAllAlphaIndex(null);
 
-            List<FilteredTitleCollection> allItems = new List<FilteredTitleCollection>(items);
+            List<FilteredTitleCollection> allItems = new List<FilteredTitleCollection>(items);            
+
+            foreach (FilteredTitleCollection item in allItems)
+            {
+                List<Title> list = new List<Title>();
+
+                foreach (Title title in item.Titles)
+                    list.Add(title);
+
+                titlesCollection.Add(list);
+            }
 
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
-                                        allItems.Count));
-            foreach (FilteredTitleCollection item in allItems)
-            {
-                Console.WriteLine(String.Format("{0}-{1}", item.Name, item.Titles.Count()));
-            }
+                                        titlesCollection.Count));
         }       
 
         [Test]
