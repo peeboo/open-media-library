@@ -33,7 +33,7 @@ namespace Library
             Utilities.DebugLine("[Settings] Loading Transcoding Settings");
             SetupTranscoding();
             Utilities.DebugLine("[Settings] Setting up external player Settings");
-            SetupExternalPlayers();
+            SetupExternalPlayers();            
         }       
 
         private void SaveMountingTools()
@@ -641,6 +641,67 @@ namespace Library
             }
         }
 
+        private const string DefaultDaemonToolsPath = @"Program Files\DAEMON Tools Lite\daemon.exe";
+        private const string DefaultVirtualCloneDrivePath = @"Program Files\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";
+
+        public void LocateSelectedMounter()
+        {           
+            string driveLetterToScan = LocalFixedDrives.Chosen as String;
+            DriveInfo dInfo = new DriveInfo(driveLetterToScan);
+
+            string startPath = null;
+
+            switch ((MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), _ImageMountingSelection.Chosen.ToString()))
+            {
+                case MountingTool.Tool.None:
+                    // don't do anything if there's no mounting tool selected
+                    return;
+
+                case MountingTool.Tool.DaemonTools:
+                    startPath = DefaultDaemonToolsPath;
+                    break;
+
+                case  MountingTool.Tool.VirtualCloneDrive:
+                    startPath = DefaultVirtualCloneDrivePath;
+                    break;
+
+                default:
+                    return;
+            }
+
+            if (File.Exists(Path.Combine(dInfo.RootDirectory.FullName, startPath)))
+            {
+                MountingToolPath.Value = Path.Combine(dInfo.RootDirectory.FullName, startPath);
+            }
+            else
+            {
+                // let's scan all the folders for it
+                OMLApplication.Current.IsBusy = true;
+                Application.DeferredInvokeOnWorkerThread(delegate
+                {
+                    exePath = ScanAllFoldersForExecutable(dInfo.RootDirectory.FullName, Path.GetFileName(startPath));
+
+                }, delegate
+                {
+                    OMLApplication.Current.IsBusy = false;
+                    if (exePath.Length > 0)
+                    {
+                        OMLApplication.DebugLine("[Settings] Found Image Mounter: {0}", exePath);
+                        MountingToolPath.Value = exePath;
+                    }
+                    else
+                    {
+                        AddInHost.Current.MediaCenterEnvironment.Dialog(
+                            string.Format("The image mounter was not" +
+                                          " found on the [{0}] drive.", driveLetterToScan),
+                            "Failed to Find Image Mounter",
+                            Microsoft.MediaCenter.DialogButtons.Ok,
+                            5, true);
+                    }
+                }, null);
+            }
+        }
+
         public void LocateTotalMediaTheatrePluginExecutable()
         {
             string DriveLetterToScan = LocalFixedDrives.Chosen as String;
@@ -648,28 +709,35 @@ namespace Library
 
             dInfo = new DriveInfo(DriveLetterToScan);
             if (File.Exists(Path.Combine(dInfo.RootDirectory.FullName, @"Program Files\Arcsoft\umcedvdplayer.exe")))
+            {
                 BlueRayPlayerPath.Value = Path.Combine(dInfo.RootDirectory.FullName, @"Program Files\Arcsoft\umcedvdplayer.exe");
+            }
+            else
+            {
+                OMLApplication.Current.IsBusy = true;
+                Application.DeferredInvokeOnWorkerThread(delegate
+                {
+                    exePath = ScanAllFoldersForExecutable(dInfo.RootDirectory.FullName, "umcedvdplayer.exe");
+                }, delegate
+                {
+                    OMLApplication.Current.IsBusy = false;
 
-            OMLApplication.Current.IsBusy = true;
-            Application.DeferredInvokeOnWorkerThread(delegate {
-                exePath = GetTotalMediaTheatrePluginExecutable(dInfo.RootDirectory.FullName);
-            }, delegate {
-                OMLApplication.Current.IsBusy = false;
-                if (exePath.Length > 0)
-                {
-                    OMLApplication.DebugLine("[Settings] Found Total Media Theatre Plugin: {0}", exePath);
-                    BlueRayPlayerPath.Value = exePath;
-                }
-                else
-                {
-                    AddInHost.Current.MediaCenterEnvironment.Dialog(
-                        string.Format("The Total Media Theatre plugin was not" +
-                                      " found on the [{0}] drive.", DriveLetterToScan),
-                        "Failed to Find TMT Plugin",
-                        Microsoft.MediaCenter.DialogButtons.Ok,
-                        5, true);
-                }
-            }, null);
+                    if (exePath.Length > 0)
+                    {
+                        OMLApplication.DebugLine("[Settings] Found Total Media Theatre Plugin: {0}", exePath);
+                        BlueRayPlayerPath.Value = exePath;
+                    }
+                    else
+                    {
+                        AddInHost.Current.MediaCenterEnvironment.Dialog(
+                            string.Format("The Total Media Theatre plugin was not" +
+                                          " found on the [{0}] drive.", DriveLetterToScan),
+                            "Failed to Find TMT Plugin",
+                            Microsoft.MediaCenter.DialogButtons.Ok,
+                            5, true);
+                    }
+                }, null);
+            }
         }
 
         public static IList<DriveInfo> GetFileSystemDrives()
@@ -685,8 +753,11 @@ namespace Library
             return fixedDrives;
         }
 
-        private static string GetTotalMediaTheatrePluginExecutable(string dir)
+        private static string ScanAllFoldersForExecutable(string dir, string executable)
         {
+            if (!Directory.Exists(dir))
+                return string.Empty;
+
             string tmtPath = string.Empty;
             DirectoryInfo dInfo;
             FileSystemInfo[] items = new FileSystemInfo[0]; // this just needs to be init'd
@@ -706,7 +777,7 @@ namespace Library
                 {
                     DirectoryInfo dirInfo = item as DirectoryInfo;
                     OMLApplication.DebugLine("[Settings] Scanning folder [{0}] for TMT", dirInfo.FullName);
-                    tmtPath = GetTotalMediaTheatrePluginExecutable(dirInfo.FullName);
+                    tmtPath = ScanAllFoldersForExecutable(dirInfo.FullName, executable);
                     if (!string.IsNullOrEmpty(tmtPath))
                         return tmtPath;
                 }
@@ -714,7 +785,7 @@ namespace Library
                 if (item is FileInfo)
                 {
                     FileInfo fInfo = item as FileInfo;
-                    if (fInfo.Name.ToLower().Equals("umcedvdplayer.exe"))
+                    if (fInfo.Name.Equals(executable, StringComparison.OrdinalIgnoreCase))
                         return fInfo.FullName;
                 }
             }
