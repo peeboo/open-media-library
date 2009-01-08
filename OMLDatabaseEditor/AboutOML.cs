@@ -1,20 +1,37 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
+using System.IO;
+using System.Reflection;
 
 namespace OMLDatabaseEditor
 {
     partial class AboutOML : Form
     {
+            Assembly _assembly;
+            Stream _txtStream;
+            StreamReader _txtStreamReader;
+
         public AboutOML()
         {
             InitializeComponent();
             this.Text = String.Format("About {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
+            //this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
             this.labelCopyright.Text = AssemblyCopyright;
             //this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
+            //this.textBoxDescription.Text = AssemblyDescription;
+            try
+            {
+                _assembly = Assembly.GetExecutingAssembly();
+                _txtStream = _assembly.GetManifestResourceStream("OMLDatabaseEditor.Revision.txt");
+                _txtStreamReader = new StreamReader(_txtStream);
+                labelVersion.Text += _txtStreamReader.ReadToEnd();
+                _txtStreamReader.Close();
+                _txtStream.Close();
+            }
+            catch (Exception e)
+            { }
         }
 
         #region Assembly Attribute Accessors
