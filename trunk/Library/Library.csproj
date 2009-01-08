@@ -363,6 +363,7 @@
     <None Include="Resources\spinnerbluebarlargedormant1.png" />
     <None Include="Resources\spinnerbluebarlargefocus1.png" />
     <None Include="Resources\spinnerbluebarlargenofocus1.png" />
+    <EmbeddedResource Include="Revision.txt" />
     <Content Include="Sounds\Error.wav" />
     <Content Include="Sounds\Focus.wav" />
     <Content Include="Sounds\MiniSelect.wav" />

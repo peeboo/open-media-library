@@ -16,7 +16,7 @@ namespace omlrevision
                 items.MoveNext();
 
             string revision_string = items.Current.Title.Text;
-            revision_string = revision_string.Substring(0, revision_string.IndexOf(':'));
+            revision_string = revision_string.Substring(9, (revision_string.IndexOf(':') - 9));
             Console.Write(revision_string);
         }
     }
