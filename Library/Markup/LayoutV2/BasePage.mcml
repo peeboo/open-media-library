@@ -16,16 +16,8 @@
       </Locals>
 
       <Rules>
-        <Changed Source="[Application.IsBusy]" InitialEvaluate="false">
-          <Actions>
-            <Set Target="[waitCursor.Visible]" Value="true"/>
-          </Actions>
-        </Changed>
-        <Changed Source="[Application.IsBusy]" InitialEvaluate="true">
-          <Actions>
-            <Set Target="[waitCursor.Visible]" Value="false"/>
-          </Actions>
-        </Changed>
+        <Binding Source="[Application.IsBusy]" Target="[waitCursor.Visible]" />        
+        
         <Changed Source="[Application.IsStartingTranscodingJob]" InitialEvaluate="false">
           <Actions>
             <Set Target="[transcodingMessage.Visible]" Value="true"/>

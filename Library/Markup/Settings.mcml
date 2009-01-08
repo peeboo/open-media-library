@@ -23,6 +23,8 @@
                Description="About OML"/>
       <Command Name="ScanForTMTCommand"
                Description="Scan For TMT Plugin"/>
+      <Command Name="ScanForMounter"
+               Description="Scan For Mounting tool"/>
 
       <Choice Name="Tabs">
         <Options>
@@ -55,16 +57,7 @@
     </Properties>
 
     <Rules>
-      <Changed Source="[Application.IsBusy]" InitialEvaluate="false">
-        <Actions>
-          <Set Target="[waitCursor.Visible]" Value="true"/>
-        </Actions>
-      </Changed>
-      <Changed Source="[Application.IsBusy]" InitialEvaluate="true">
-        <Actions>
-          <Set Target="[waitCursor.Visible]" Value="false"/>
-        </Actions>
-      </Changed>
+      <Binding Source="[Application.IsBusy]" Target="[waitCursor.Visible]" />
 
       <!-- Setup the default visibility rules -->
       <Changed Source="[ScanForTMTCommand.Invoked]">
@@ -72,11 +65,18 @@
           <Invoke Target="[Settings.LocateTotalMediaTheatrePluginExecutable]"/>
         </Actions>
       </Changed>
+
+      <Changed Source="[ScanForMounter.Invoked]">
+        <Actions>
+          <Invoke Target="[Settings.LocateSelectedMounter]" />
+        </Actions>
+      </Changed>
+
       <Changed Source="[SaveSettings.Invoked]">
         <Actions>
           <Invoke Target="[Settings.SaveSettings]" />
         </Actions>
-      </Changed>
+      </Changed>      
 
       <Changed Source="[AboutOML.Invoked]">
         <Actions>
@@ -429,19 +429,32 @@
                 <Children>
                   <Panel Name="WhichTool" Layout="VerticalFlow" Margins="0,0,50,0" Navigation="Row">
                     <Children>
-                      <Text Content="Which Mounting Tool" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                      <Text Content="Which Mounting Tool" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                       <rbg:RadioButtonGroup Model="[Settings.ImageMountingSelection]" />
                     </Children>
                   </Panel>
+
+                  <Panel Layout="VerticalFlow" Margins="0,25,0,0" Navigation="Row">
+                    <Children>
+                      <Text Content="Scan Drive for selected Mounting Tool" Color="White" Font="font://me:SmallFont"/>
+                      <Panel Layout="HorizontalFlow">
+                        <Children>
+                          <c:SimpleSpinner Name="LocalFixedDrivesMount" Model="[Settings.LocalFixedDrives]" Size="51,51" />
+                          <c:SimpleButton Name="ScanForMount" Command="[ScanForMounter]" FocusOrder="1" Text="Begin Scan"/>
+                        </Children>
+                      </Panel>
+                    </Children>
+                  </Panel>
+
                   <Panel Name="DTPath" Layout="VerticalFlow" Margins="0,0,50,0" Navigation="Row">
                     <Children>
-                      <Text Content="Mounting Tool Path" Color="White" Font="font://me:Font" Margins="0,20,0,0" />
+                      <Text Content="Mounting Tool Path" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0" />
                       <c:SimpleEditbox Size="700,51" Name="DTEditbox" EditableText="[Settings.MountingToolPath]" />
                     </Children>
                   </Panel>
                   <Panel Layout="VerticalFlow" Margins="0,0,50,0">
                     <Children>
-                      <Text Content="Virtual Drive" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                      <Text Content="Virtual Drive" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                       <c:SimpleSpinner Name="VirtualDrive" Model="[Settings.VirtualDrive]" Size="51,51" />
                     </Children>
                   </Panel>
