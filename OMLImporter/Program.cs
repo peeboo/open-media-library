@@ -230,8 +230,8 @@ namespace OMLImporter
                 }
                 else
                 {
-                    if (clearBeforeImport)                    
-                        mainTitleCollection = new TitleCollection();                    
+                    if (!clearBeforeImport)                    
+                        mainTitleCollection.loadTitleCollection();
 
                     pluginToUse.DoWork(new string[] { path });
                     LoadTitlesIntoDatabase(pluginToUse, false, true);
