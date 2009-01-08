@@ -7,14 +7,45 @@ using OMLGetDVDInfo;
 
 namespace OMLEngine
 {
-    public class Disk
+    [Serializable]
+    public class Disk : ISerializable
     {
         private Dao.Disk _disk;
 
-        public string Name { get { return _disk.Name; } set { _disk.Name = value; } }
-        public string Path { get { return _disk.Path; } set { _disk.Path = value; } }
+        public string Name 
+        { 
+            get { return _disk.Name; } 
+            set 
+            {
+                if (!string.IsNullOrEmpty(value) && value.Length > 255)
+                    throw new FormatException("Disk name must be 255 characters or less.");
+                _disk.Name = value; 
+            } 
+        }
+
+        public string Path 
+        { 
+            get { return _disk.Path; } 
+            set 
+            {
+                if (!string.IsNullOrEmpty(value) && value.Length > 255)
+                    throw new FormatException("Disk path must be 255 characters or less.");
+                _disk.Path = value; 
+            } 
+        }
+
         public VideoFormat Format { get { return (VideoFormat)_disk.VideoFormat; } set { _disk.VideoFormat = (byte)value; } }
-        public string ExtraOptions { get { return _disk.ExtraOptions; } set { _disk.ExtraOptions = value; } }
+
+        public string ExtraOptions 
+        { 
+            get { return _disk.ExtraOptions; } 
+            set 
+            {
+                if (!string.IsNullOrEmpty(value) && value.Length > 255)
+                    throw new FormatException("Disk extra options must be 255 characters or less.");
+                _disk.ExtraOptions = value; 
+            } 
+        }
 
         internal Dao.Disk DaoDisk { get { return _disk; } }
 
@@ -99,23 +130,20 @@ namespace OMLEngine
             return Name + ", " + Format + ", @ " + Path;
         }
 
-        /*public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
-            info.AddValue("name", Name);
-            info.AddValue("path", Path);
-            info.AddValue("format", Format);
-            info.AddValue("extraOptions", ExtraOptions);
         }
 
         public Disk(SerializationInfo info, StreamingContext ctxt)
         {
+            _disk = new OMLEngine.Dao.Disk();
             Name = info.GetString("name");
             Path = info.GetString("path");
             FindPath();
             Format = GetSerializedVideoFormat(info, "format");
             if (info.MemberCount > 3)
                 ExtraOptions = info.GetString("extraOptions");
-        }*/
+        }
 
         static string sBasePaths = System.Configuration.ConfigurationSettings.AppSettings["BasePaths"];
         void FindPath()
@@ -157,7 +185,7 @@ namespace OMLEngine
             Utilities.DebugLine("Disk.FindPath({0}), no new path match found in BasePaths='{1}'", Path, sBasePaths);
         }
 
-        /*static VideoFormat GetSerializedVideoFormat(SerializationInfo info, string id)
+        static VideoFormat GetSerializedVideoFormat(SerializationInfo info, string id)
         {
             try
             {
@@ -167,7 +195,7 @@ namespace OMLEngine
             {
                 return VideoFormat.DVD;
             }
-        }*/
+        }
 
     }
 }

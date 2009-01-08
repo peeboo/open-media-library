@@ -88,7 +88,7 @@ namespace OMLDatabaseEditor
 
             // Set up filter lists
             ToolStripMenuItem item;
-            foreach (string genre in from t in TitleCollectionManager.GetAllPeople(null, PeopleRole.Director) select t.Name)
+            foreach (string genre in from g in TitleCollectionManager.GetAllGenres(null) select g.Name)
             {
                 item = new ToolStripMenuItem(genre);
                 item.CheckOnClick = true;
@@ -96,7 +96,7 @@ namespace OMLDatabaseEditor
                 filterByGenreToolStripMenuItem.DropDownItems.Add(item);
             }
 
-            foreach (string rating in from t in TitleCollectionManager.GetAllRuntimes(null) select t.Name)
+            foreach (string rating in from t in TitleCollectionManager.GetAllParentalRatings(null) select t.Name)
             {
                 item = new ToolStripMenuItem(rating);
                 item.CheckOnClick = true;
@@ -152,9 +152,7 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.WaitCursor;
             if (allMoviesToolStripMenuItem1.Checked)
             {
-//                _titleCollection.loadTitleCollection();
-//                _titleCollection.SortBy("SortName", true);
-//                PopulateMovieList(_titleCollection.Source);
+                PopulateMovieList(TitleCollectionManager.GetAllTitles().ToList<Title>());
             }
             else
             {
@@ -205,7 +203,7 @@ namespace OMLDatabaseEditor
             //_titleCollection.SortBy("SortName", true);
 
             // throwing this into a new list shouldn't be needed but it seems like this control wants it
-            lbMovies.DataSource = new List<Title>(TitleCollectionManager.GetAllTitles());
+            lbMovies.DataSource = titles;
             if (titleEditor.EditedTitle != null)
             {
                 List<Title> matches = (from title in titles
@@ -772,6 +770,23 @@ namespace OMLDatabaseEditor
                 PopulateMovieList(titles);
             }
             Cursor = Cursors.Default;
+        }
+
+        private void MainEditor_Load(object sender, EventArgs e)
+        {
+            // If the old DAT file still exists ask the user if they want to import those titles.
+            TitleCollection coll = new TitleCollection();
+            if (coll.loadTitleCollectionFromOML())
+            {
+                if (XtraMessageBox.Show("Would you like to convert your existing movie collection?", "Convert collection", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    foreach (Title title in coll)
+                    {
+                        TitleCollectionManager.AddTitle(title);
+                    }
+                }
+                coll.RenameDATCollection();
+            }
         }
     }
 }
