@@ -633,7 +633,7 @@ namespace OMLEngine
         /// Loads data from OML Database
         /// </summary>
         /// <returns>True on successful load</returns>
-        /*private bool _loadTitleCollectionFromOML()
+        public bool loadTitleCollectionFromOML()
         {
             Utilities.DebugLine("[TitleCollection] Using OML database");
             Stream stm;
@@ -671,7 +671,13 @@ namespace OMLEngine
                 }
             }
             return false;
-        }*/
+        }
+
+        public void RenameDATCollection()
+        {
+            if (File.Exists(_database_filename))
+                File.Move(_database_filename, _database_filename + ".bak");
+        }
 
         private string CalculateMD5Hash(string input)
         {

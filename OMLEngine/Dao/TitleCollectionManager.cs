@@ -402,7 +402,32 @@ namespace OMLEngine
             title.DaoTitle.Genres.Add(new Dao.Genre { MetaData = meta });
         }
 
+        public static void AddPersonToTitle(Title title, string name, PeopleRole type)
+        {
+            if (string.IsNullOrEmpty(name))
+                return;
+
+            Dao.BioData bioData = Dao.TitleCollectionDao.GetPersonBioDataByName(name);
+
+            if (bioData == null)
+            {
+                bioData = new OMLEngine.Dao.BioData();
+                bioData.FullName = name;
+                Dao.DBContext.Instance.BioDatas.InsertOnSubmit(bioData);
+            }
+
+            Dao.Person person = new OMLEngine.Dao.Person();
+            person.MetaData = bioData;
+            person.Role = (byte)type;
+            title.DaoTitle.People.Add(person);
+        }
+
         public static void AddActorToTitle(Title title, string actor, string role)
+        {
+            AddActorToTitle(title, actor, role, PeopleRole.Actor);
+        }
+
+        public static void AddActorToTitle(Title title, string actor, string role, PeopleRole type)
         {
             if (string.IsNullOrEmpty(actor))
                 return;
@@ -418,6 +443,7 @@ namespace OMLEngine
             Dao.Person person = new OMLEngine.Dao.Person();
             person.BioId = bioData.Id;
             person.CharacterName = role;
+            person.Role = (byte)type;
             title.DaoTitle.People.Add(person);
         }
 

@@ -21,7 +21,7 @@ namespace OMLEngine
 {
     [Serializable()]
     [XmlRootAttribute("OMLTitle", Namespace = "http://www.openmedialibrary.org/", IsNullable = false)]
-    public class Title : IComparable
+    public class Title : IComparable, ISerializable
     {
         #region locals        
         //private static string XmlNameSpace = "http://www.openmedialibrary.org/";
@@ -121,19 +121,32 @@ namespace OMLEngine
         public string VideoResolution
         {
             get { return _title.VideoResolution; }
-            set { _title.VideoResolution = value; }
+            set 
+            {
+                if (value.Length > 20)
+                    throw new FormatException("VideoResolution must be 20 characters or less.");
+                _title.VideoResolution = value; 
+            }
         }               
 
         public string VideoDetails
         {
             get { return _title.VideoDetails; }
-            set { _title.VideoResolution = value; }
+            set 
+            {
+                _title.VideoDetails = value; 
+            }
         }
 
         public string ParentalRatingReason
         {
             get { return _title.ParentalRatingReason; }
-            set { _title.ParentalRatingReason = value; }
+            set 
+            {
+                if (value.Length > 255)
+                    throw new FormatException("ParentalRatingReason must be 255 characters or less.");
+                _title.ParentalRatingReason = value; 
+            }
         }
 
         public string SortName
@@ -145,7 +158,12 @@ namespace OMLEngine
                 else
                     return _title.SortName; 
             }
-            set { _title.SortName = value; }
+            set 
+            {
+                if (value.Length > 255)
+                    throw new FormatException("SortName must be 255 characters or less.");
+                _title.SortName = value; 
+            }
         }
 
         /// <summary>
@@ -155,7 +173,12 @@ namespace OMLEngine
         public string OriginalName
         {
             get { return _title.OriginalName; }
-            set { _title.OriginalName = value; }
+            set 
+            {
+                if (value.Length > 255)
+                    throw new FormatException("OriginalName must be 255 characters or less.");
+                _title.OriginalName = value; 
+            }
         }
 
         /// <summary>
@@ -184,7 +207,12 @@ namespace OMLEngine
         public string VideoStandard
         {
             get { return _title.VideoStandard; }
-            set { _title.VideoStandard = value; }
+            set 
+            {
+                if (value.Length > 10)
+                    throw new FormatException("VideoStandard must be 10 characters or less.");
+                _title.VideoStandard = value; 
+            }
         }
 
         /// <summary>
@@ -194,7 +222,12 @@ namespace OMLEngine
         public string AspectRatio
         {
             get { return _title.AspectRatio; }
-            set { _title.AspectRatio = value; }
+            set 
+            {
+                if (value.Length > 10)
+                    throw new FormatException("AspectRatio must be 10 characters or less.");
+                _title.AspectRatio = value; 
+            }
         }
 
         /// <summary>
@@ -204,7 +237,12 @@ namespace OMLEngine
         public string UPC
         {
             get { return _title.UPC; }
-            set { _title.UPC = value; }
+            set 
+            {
+                if (value.Length > 100)
+                    throw new FormatException("UPC must be 100 characters or less.");
+                _title.UPC = value; 
+            }
         }
 
         /// <summary>
@@ -288,7 +326,12 @@ namespace OMLEngine
         public string Name
         {
             get { return _title.Name; }
-            set { _title.Name = value; }
+            set 
+            {
+                if (value.Length > 255)
+                    throw new FormatException("Name must be 255 characters or less.");
+                _title.Name = value; 
+            }
         }
 
         /// <summary>
@@ -297,12 +340,13 @@ namespace OMLEngine
         public int Id
         {
             get { return _title.Id; }
+            private set { _title.Id = value; }
         }
 
         /// <summary>
         /// The id that this title is a group member of
         /// </summary>
-        public int GropuId
+        public int GroupId
         {
             get { return _title.GroupId ?? _title.Id; }
             set { _title.GroupId = value; }
@@ -314,7 +358,12 @@ namespace OMLEngine
         public string MetadataSourceName
         {
             get { return _title.MetaDataSource; }
-            set { _title.MetaDataSource = value; }
+            set 
+            {
+                if (value.Length > 200)
+                    throw new FormatException("MetaDataSourceName must be 200 characters or less.");
+                _title.MetaDataSource = value; 
+            }
         }
 
         /// <summary>
@@ -323,7 +372,12 @@ namespace OMLEngine
         public string ImporterSource
         {
             get { return _title.ImporterSource; }
-            set { _title.ImporterSource = value; }
+            set 
+            {
+                if (value.Length > 255)
+                    throw new FormatException("ImporterSource must be 255 characters or less.");
+                _title.ImporterSource = value; 
+            }
         }
 
         /// <summary>
@@ -339,13 +393,23 @@ namespace OMLEngine
 
                 return _title.FrontCoverPath;
             }
-            set { _title.FrontCoverPath = value; }
+            set 
+            {
+                if (value.Length > 255)
+                    throw new FormatException("FrontCoverPath must be 255 characters or less.");
+                _title.FrontCoverPath = value; 
+            }
         }
 
         public string FrontCoverMenuPath
         {
             get { return _title.FrontCoverMenuPath; }
-            set { _title.FrontCoverMenuPath = value; }
+            set 
+            {
+                if (value.Length > 255)
+                    throw new FormatException("FrontCoverMenuPath must be 255 characters or less.");
+                _title.FrontCoverMenuPath = value; 
+            }
         }
 
         /// <summary>
@@ -360,7 +424,12 @@ namespace OMLEngine
 
                 return _title.BackCoverPath; 
             }
-            set { _title.BackCoverPath = value; }
+            set 
+            {
+                if (value.Length > 255)
+                    throw new FormatException("BackCoverPath must be 255 characters or less.");
+                _title.BackCoverPath = value; 
+            }
         }
 
         /// <summary>
@@ -378,7 +447,12 @@ namespace OMLEngine
         public string ParentalRating
         {
             get { return _title.ParentalRating ?? string.Empty; }
-            set { _title.ParentalRating = value; }
+            set 
+            {
+                if (value.Length > 20)
+                    throw new FormatException("ParentalRating must be 20 characters or less.");
+                _title.ParentalRating = value; 
+            }
         }
 
         /// <summary>
@@ -396,7 +470,12 @@ namespace OMLEngine
         public string Studio
         {
             get { return _title.Studio ?? string.Empty; }
-            set { _title.Studio = value; }
+            set 
+            {
+                if (value.Length > 255)
+                    throw new FormatException("Studio must be 255 characters or less.");
+                _title.Studio = value; 
+            }
         }
         /// <summary>
         /// Country where the title was created/first released
@@ -404,7 +483,12 @@ namespace OMLEngine
         public string CountryOfOrigin
         {
             get { return _title.CountryOfOrigin ?? string.Empty; }
-            set { _title.CountryOfOrigin = value; }
+            set 
+            {
+                if (value.Length > 255)
+                    throw new FormatException("CountryOfOrigin must be 255 characters or less.");
+                _title.CountryOfOrigin = value; 
+            }
         }
         /// <summary>
         /// website for title (if it has one)
@@ -412,7 +496,12 @@ namespace OMLEngine
         public string OfficialWebsiteURL
         {
             get { return _title.WebsiteUrl ?? string.Empty; }
-            set { _title.WebsiteUrl = value; }
+            set 
+            {
+                if (value.Length > 255)
+                    throw new FormatException("OfficialWebsiteURL must be 255 characters or less.");
+                _title.WebsiteUrl = value; 
+            }
         }
 
         /// <summary>
@@ -854,6 +943,11 @@ namespace OMLEngine
 
         public void AddActingRole(string actor, string role)
         {
+            if (actor.Length > 255)
+                throw new FormatException("Actor must be 255 characters or less.");
+            if (role.Length > 255)
+                throw new FormatException("Role must be 255 characters or less.");
+
             if (string.IsNullOrEmpty(actor) || string.IsNullOrEmpty(role))
                 return;
 
@@ -915,8 +1009,13 @@ namespace OMLEngine
 
             _audioTracks.Add(audioTrack);
 
-            _title.AudioTracks = Dao.TitleDao.GetDelimitedStringFromCollection(_audioTracks);
-
+            string tracks = Dao.TitleDao.GetDelimitedStringFromCollection(_audioTracks);
+            if (tracks.Length > 255)
+            {
+                _audioTracks = null;
+                throw new FormatException("Too many audio tracks have been added.");
+            }
+            _title.AudioTracks = tracks;
             _audioTracks = null;
         }
 
@@ -933,8 +1032,13 @@ namespace OMLEngine
                 _subtitles = Dao.TitleDao.DelimitedDBStringToCollection(_title.Subtitles);
 
             _subtitles.Add(subtitle);
-
-            _title.Subtitles = Dao.TitleDao.GetDelimitedStringFromCollection(_subtitles);
+            string subtitles = Dao.TitleDao.GetDelimitedStringFromCollection(_subtitles);
+            if (subtitles.Length > 255)
+            {
+                _subtitles = null;
+                throw new FormatException("Too many audio tracks have been added.");
+            }
+            _title.Subtitles = subtitle;
 
             _subtitles = null;
         }
@@ -953,9 +1057,15 @@ namespace OMLEngine
 
             _trailers.Add(trailer);
 
-            _title.Trailers = Dao.TitleDao.GetDelimitedStringFromCollection(_trailers);
+            string trailers = Dao.TitleDao.GetDelimitedStringFromCollection(_trailers);
+            if (trailers.Length > 255)
+            {
+                _trailers = null;
+                throw new FormatException("Too many audio tracks have been added.");
+            }
+            _title.Trailers = trailers;
 
-            _subtitles = null;
+            _trailers = null;
         }
 
         /// <summary>
@@ -964,6 +1074,8 @@ namespace OMLEngine
         /// <param name="genre">A Genre from the Genre enum</param>
         public void AddGenre(string genre)
         {
+            if (genre.Length > 255)
+                throw new FormatException("Genre must be 255 characters or less.");
             if (string.IsNullOrEmpty(genre))
                 return;
 
@@ -1042,7 +1154,10 @@ namespace OMLEngine
         /// </summary>
         /// <param name="tag"></param>
         public void AddTag(string tag)
-        {            
+        {
+            if (tag.Length > 255)
+                throw new FormatException("Tag must be 255 characters or less.");
+
             if (string.IsNullOrEmpty(tag))
                 return;
 
@@ -2348,6 +2463,195 @@ namespace OMLEngine
         {
             return "Title:" + this.Name + " (" + this.Id + ")";
         }
+
+        #region serialization methods
+
+        private DateTime GetSerializedDateTime(SerializationInfo info, string id)
+        {
+            try
+            {
+                return info.GetDateTime(id);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedDateTime: " + e.Message);
+                return new DateTime(0);
+            }
+        }
+
+        private VideoFormat GetSerializedVideoFormat(SerializationInfo info, string id)
+        {
+            try
+            {
+                return (VideoFormat)info.GetValue(id, typeof(VideoFormat));
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedVideoFormat: " + e.Message);
+                return VideoFormat.DVD;
+            }
+        }
+
+        private bool GetSerializedBoolean(SerializationInfo info, string id)
+        {
+            try
+            {
+                return info.GetBoolean(id);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedBoolean: " + e.Message);
+                return false;
+            }
+        }
+
+        private int GetSerializedInt(SerializationInfo info, string id)
+        {
+            try
+            {
+                return (int)info.GetValue(id, typeof(int));
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedInt: " + e.Message);
+                return 0;
+            }
+        }
+
+        private string GetSerializedString(SerializationInfo info, string id)
+        {
+            try
+            {
+                string result = info.GetString(id);
+                return (result == null ? String.Empty : result.Trim());
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedString: " + e.Message);
+                return String.Empty;
+            }
+        }
+
+        private  T GetSerializedList<T>(SerializationInfo info, string id) where T : new()
+        {
+            try
+            {
+                T result = (T)info.GetValue(id, typeof(T));
+                return (result == null ? new T() : result);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedList: " + e.Message);
+                return new T();
+            }
+        }
+
+        /// <summary>
+        /// Constructor used for loading from database file
+        /// </summary>
+        /// <param name="info">SerializationInfo object</param>
+        /// <param name="ctxt">StreamingContext object</param>
+        public Title(SerializationInfo info, StreamingContext ctxt)
+        {
+            _title = new OMLEngine.Dao.Title();
+            //Utilities.DebugLine("[Title] Loading Title from Serialization");
+            Name = GetSerializedString(info,"name");
+            //Id = GetSerializedInt( info,"itemid");
+            MetadataSourceID = GetSerializedString(info,"sourceid");
+            MetadataSourceName = GetSerializedString(info,"sourcename");
+            FrontCoverPath = GetSerializedString(info,"front_boxart_path");
+            FrontCoverMenuPath = GetSerializedString(info, "front_boxart_menu_path");
+            BackCoverPath = GetSerializedString(info,"back_boxart_path");
+            Synopsis = GetSerializedString(info,"synopsis");
+            Studio = GetSerializedString(info,"distributor");
+            CountryOfOrigin = GetSerializedString(info,"country_of_origin");
+            OfficialWebsiteURL = GetSerializedString(info,"official_website_url");
+            DateAdded = GetSerializedDateTime(info, "date_added");
+            ImporterSource = GetSerializedString(info,"importer_source");
+            Runtime = GetSerializedInt(info, "runtime");
+            ParentalRating = GetSerializedString(info, "mpaa_rating");
+            
+
+            ReleaseDate = GetSerializedDateTime(info, "release_date");
+            _producers = GetSerializedList<List<string>>(info, "producers");
+            foreach (string p in _producers)
+                TitleCollectionManager.AddPersonToTitle(this, p, PeopleRole.Producers);
+            _writers = GetSerializedList<List<Person>>(info, "writers");
+            foreach (Person p in _writers)
+                TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Writer);
+            _directors = GetSerializedList<List<Person>>(info, "directors");
+            foreach (Person p in _directors)
+                TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Director);
+            _audioTracks = GetSerializedList<List<string>>(info, "language_formats");
+            _title.AudioTracks = Dao.TitleDao.GetDelimitedStringFromCollection(_audioTracks);
+            _genres = GetSerializedList<List<string>>(info, "genres");
+            foreach (string g in _genres)
+                TitleCollectionManager.AddGenreToTitle(this, g);
+
+            UserStarRating = GetSerializedInt(info,"user_star_rating");
+            AspectRatio = GetSerializedString(info,"aspect_ratio");
+            VideoStandard = GetSerializedString(info,"video_standard");
+            UPC = GetSerializedString(info,"upc");
+            OriginalName = GetSerializedString(info,"original_name");
+            _tags = GetSerializedList<List<string>>(info, "tags");
+            foreach (string t in _tags)
+                TitleCollectionManager.AddTagToTitle(this, t);
+            _actingRoles = GetSerializedList<Dictionary<string, string>>(info, "acting_roles");
+            foreach (string key in _actingRoles.Keys)
+                TitleCollectionManager.AddActorToTitle(this, key, _actingRoles[key]);
+            _nonActingRoles = GetSerializedList<Dictionary<string, string>>(info, "nonacting_roles");
+            foreach (string key in _nonActingRoles.Keys)
+                TitleCollectionManager.AddActorToTitle(this, key, _nonActingRoles[key], PeopleRole.NonActing);
+            _trailers = GetSerializedList<List<string>>(info, "trailers");
+            _title.Trailers = Dao.TitleDao.GetDelimitedStringFromCollection(_trailers);
+            SortName = GetSerializedString(info, "sort_name");
+            ParentalRatingReason = GetSerializedString(info, "mpaa_rating_reason");
+            VideoDetails = GetSerializedString(info, "video_details");
+            _subtitles = GetSerializedList<List<string>>(info, "subtitles");
+            _title.Subtitles = Dao.TitleDao.GetDelimitedStringFromCollection(_subtitles);
+            _disks = GetSerializedList<List<Disk>>(info, "disks");
+            foreach (Disk d in _disks)
+                _title.Disks.Add(d.DaoDisk);
+            
+            CleanDuplicateDisks();
+            if (VideoFormat == VideoFormat.DVD)
+            {
+                if (VideoStandard == "PAL")
+                    VideoResolution = "720x576";
+                else
+                    VideoResolution = "720x480";
+            }
+            VideoResolution = GetSerializedString(info, "video_resolution");
+            ExtraFeatures = GetSerializedList<List<string>>(info, "extra_features");
+            WatchedCount = GetSerializedInt(info, "watched_count");
+        }
+
+        void CleanDuplicateDisks()
+        {
+            foreach (Disk d in new List<Disk>(this._disks))
+            {
+                int i = _disks.IndexOf(d);
+                if (i < 0)
+                    continue;
+                while (true) {
+                    int oi = _disks.IndexOf(d, i+1);
+                    if (oi < 0)
+                        break;
+                    _disks.RemoveAt(oi);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Used for serializing the title object (required for the ISerializable interface)
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="ctxt"></param>
+        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+        {
+
+        }
+        #endregion
     }
 
     public class Role
