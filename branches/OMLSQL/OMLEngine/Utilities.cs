@@ -37,53 +37,53 @@ namespace OMLEngine
     /// <summary>
     /// Enumerator for Video Fromats
     /// </summary>
-    public enum VideoFormat
+    public enum VideoFormat : int
     {
         // DO NOT MODIFY ORDER, INSERT IN THE MIDDLE, OR REMOVE ENTRIES, JUST ADD TO THE END!
 
-        ASF, // WMV style
-        AVC, // AVC H264
-        AVI, // DivX, Xvid, etc
-        B5T, // BlindWrite image
-        B6T, // BlindWrite image
-        BIN, // using an image loader lib and load/play this as a DVD
-        BLURAY, // detect which drive supports this and request the disc
-        BWT, // BlindWrite image
-        CCD, // CloneCD image
-        CDI, // DiscJuggler Image
-        CUE, // cue sheet
-        DVD, // detect which drive supports this and request the disc
-        DVRMS, // MPG
-        H264, // AVC OR MP4
-        HDDVD, // detect which drive supports this and request the disc
-        IFO, // Online DVD
-        IMG, // using an image loader lib and load/play this as a DVD
-        ISO, // Standard ISO image
-        ISZ, // Compressed ISO image
-        M2TS, // mpeg2 transport stream
-        MDF, // using an image loader lib and load/play this as a DVD
-        MDS, // Media Descriptor file
-        MKV, // Likely h264
-        MOV, // Quicktime
-        MPG,
-        MPEG,
-        MP4, // DivX, AVC, or H264
-        NRG, // Nero image
-        OFFLINEBLURAY, // detect which drive supports this and request the disc
-        OFFLINEDVD, // detect which drive supports this and request the disc
-        OFFLINEHDDVD, // detect which drive supports this and request the disc
-        OGM, // Similar to MKV
-        PDI, // Instant CD/DVD image
-        TS, // MPEG2
-        UIF,
-        UNKNOWN,
-        URL, // this is used for online content (such as streaming trailers)
-        WMV,
-        VOB, // MPEG2
-        WVX, // wtf is this?
-        ASX, // like WPL
-        WPL, // playlist file?
-        WTV, // new dvr format in vista (introduced in the tv pack 2008)
+        ASF = 1, // WMV style
+        AVC = 2, // AVC H264
+        AVI = 3, // DivX, Xvid, etc
+        B5T = 4, // BlindWrite image
+        B6T = 5, // BlindWrite image
+        BIN = 6, // using an image loader lib and load/play this as a DVD
+        BLURAY = 7, // detect which drive supports this and request the disc
+        BWT = 8, // BlindWrite image
+        CCD = 9, // CloneCD image
+        CDI = 10, // DiscJuggler Image
+        CUE = 11, // cue sheet
+        DVD = 12, // detect which drive supports this and request the disc
+        DVRMS = 13, // MPG
+        H264 = 14, // AVC OR MP4
+        HDDVD = 15, // detect which drive supports this and request the disc
+        IFO = 16, // Online DVD
+        IMG = 17, // using an image loader lib and load/play this as a DVD
+        ISO = 18, // Standard ISO image
+        ISZ = 19, // Compressed ISO image
+        M2TS = 20, // mpeg2 transport stream
+        MDF = 21, // using an image loader lib and load/play this as a DVD
+        MDS = 22, // Media Descriptor file
+        MKV = 23, // Likely h264
+        MOV = 24, // Quicktime
+        MPG = 25,
+        MPEG = 26,
+        MP4 = 27, // DivX, AVC, or H264
+        NRG = 28, // Nero image
+        OFFLINEBLURAY = 29, // detect which drive supports this and request the disc
+        OFFLINEDVD = 30, // detect which drive supports this and request the disc
+        OFFLINEHDDVD = 31, // detect which drive supports this and request the disc
+        OGM = 32, // Similar to MKV
+        PDI = 33, // Instant CD/DVD image
+        TS = 34, // MPEG2
+        UIF = 35,
+        UNKNOWN = 36,
+        URL = 37, // this is used for online content (such as streaming trailers)
+        WMV = 38,
+        VOB = 39, // MPEG2
+        WVX = 40, // wtf is this?
+        ASX = 41, // like WPL
+        WPL = 42, // playlist file?
+        WTV = 43, // new dvr format in vista (introduced in the tv pack 2008)
 
         ALL, // meaning all format types - used for setting video format to external player
     };
