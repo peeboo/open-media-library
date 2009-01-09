@@ -671,6 +671,42 @@ namespace OMLEngine
             return (Convert.ToBase64String(hash));            
         }
 
+        public static long CleanUnusedImages()
+        {
+            long bytesRemoved = 0;
+            string[] imageFiles = Directory.GetFiles(FileSystemWalker.ImageDirectory);
+            TitleCollection tc = new TitleCollection();
+            tc.loadTitleCollection();
+
+            foreach (string image in imageFiles)
+            {
+                int id;
+                string strId = image.Substring(1, image.IndexOf('.') - 1);
+                try
+                {
+                    Int32.TryParse(strId, out id);
+                    if (tc.GetTitleById(id) == null)
+                    {
+                        try
+                        {
+                            FileInfo fInfo = new FileInfo(Path.Combine(FileSystemWalker.ImageDirectory, image));
+                            long size = fInfo.Length;
+                            File.Delete(Path.Combine(FileSystemWalker.ImageDirectory, image));
+                            bytesRemoved += size;
+                        }
+                        catch (Exception e)
+                        {
+                            Utilities.DebugLine("Unable to delete file: {0} {1}", image, e.Message);
+                        }
+                    }
+                }
+                catch (Exception e) {
+                    Utilities.DebugLine("Unable to parse Title id from image name: {0}", e.Message);
+                }
+            }
+            return bytesRemoved;
+        }
+
         #region serialization methods
         public TitleCollection(SerializationInfo info, StreamingContext ctxt)
         {
