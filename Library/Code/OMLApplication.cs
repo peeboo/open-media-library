@@ -214,6 +214,10 @@ namespace Library
             {
                 ExtenderDVDPlayer.Uninitialize(TitleCollectionManager.GetAllTitles());
             }
+            catch (Exception err)
+            {
+                DebugLine("Unhandled Exception: {0}", err);
+            }
             finally
             {
                 // close the db connection
