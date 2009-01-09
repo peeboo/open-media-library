@@ -414,6 +414,7 @@ namespace OMLEngine
                 bioData = new OMLEngine.Dao.BioData();
                 bioData.FullName = name;
                 Dao.DBContext.Instance.BioDatas.InsertOnSubmit(bioData);
+                Dao.DBContext.Instance.SubmitChanges();
             }
 
             Dao.Person person = new OMLEngine.Dao.Person();
@@ -429,6 +430,11 @@ namespace OMLEngine
 
         public static void AddActorToTitle(Title title, string actor, string role, PeopleRole type)
         {
+            if (actor.Length > 255)
+                throw new FormatException("Actor must be 255 characters or less.");
+            if (role.Length > 255)
+                throw new FormatException("Role must be 255 characters or less.");
+
             if (string.IsNullOrEmpty(actor))
                 return;
 
@@ -438,10 +444,12 @@ namespace OMLEngine
             {
                 bioData = new OMLEngine.Dao.BioData();
                 bioData.FullName = actor;
+                Dao.DBContext.Instance.BioDatas.InsertOnSubmit(bioData);
+                Dao.DBContext.Instance.SubmitChanges();
             }
 
             Dao.Person person = new OMLEngine.Dao.Person();
-            person.BioId = bioData.Id;
+            person.MetaData = bioData;
             person.CharacterName = role;
             person.Role = (byte)type;
             title.DaoTitle.People.Add(person);

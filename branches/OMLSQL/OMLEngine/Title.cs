@@ -71,6 +71,7 @@ namespace OMLEngine
         {
             get
             {
+                SetupPeopleCollections();
                 List<Role> roles = new List<Role>();
                 foreach (string person in _nonActingRoles.Keys)
                 {
@@ -90,6 +91,7 @@ namespace OMLEngine
         {
             get
             {
+                SetupPeopleCollections();
                 List<Role> roles = new List<Role>();
                 foreach (string person in _actingRoles.Keys)
                 {
@@ -948,7 +950,7 @@ namespace OMLEngine
             if (role.Length > 255)
                 throw new FormatException("Role must be 255 characters or less.");
 
-            if (string.IsNullOrEmpty(actor) || string.IsNullOrEmpty(role))
+            if (string.IsNullOrEmpty(actor) && string.IsNullOrEmpty(role))
                 return;
 
             if (ActingRoles.ContainsKey(actor))
