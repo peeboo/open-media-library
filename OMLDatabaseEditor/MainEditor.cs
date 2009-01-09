@@ -786,6 +786,7 @@ namespace OMLDatabaseEditor
                     }
                 }
                 coll.RenameDATCollection();
+                LoadMovies();
             }
         }
     }

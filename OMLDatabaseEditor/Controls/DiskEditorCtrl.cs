@@ -48,7 +48,7 @@ namespace OMLDatabaseEditor.Controls
                 if (folderDialog.ShowDialog() == DialogResult.OK)
                 {
                     txtPath.Text = folderDialog.SelectedPath;
-                    _currentDisk.Format = VideoFormat.DVD;
+                    _currentDisk.Format = _currentDisk.GetFormatFromPath(folderDialog.SelectedPath);
                     diskSource.EndEdit();
                 }
             }
@@ -58,37 +58,9 @@ namespace OMLDatabaseEditor.Controls
                 if (fileDialog.ShowDialog() == DialogResult.OK)
                 {
                     txtPath.Text = fileDialog.FileName;
-                    ValidateFile(fileDialog.FileName);
+                    _currentDisk.Format = _currentDisk.GetFormatFromPath(fileDialog.FileName);
                     diskSource.EndEdit();
                 }
-            }
-        }
-
-        private void ValidateFile(string fileName)
-        {
-            string cleanedExtension = System.IO.Path.GetExtension(fileName).ToUpper();
-            // remove the . from extension
-            cleanedExtension = cleanedExtension.Replace(".", "");
-            cleanedExtension = cleanedExtension.Replace("-", "");
-            try
-            {
-                _currentDisk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat),
-                    cleanedExtension, true);
-            }
-            catch (System.ArgumentException ae)
-            {
-                XtraMessageBox.Show("Unable to match extension " + cleanedExtension + " defaulting to MPG, " +
-                    " if this is a valid video extension please post about it in our forusm.",
-                    "Error Matching File Extension");
-                Utilities.DebugLine("[DiskEditor] Error trying to match file extension " + cleanedExtension +
-                    " to video format", ae);
-                _currentDisk.Format = VideoFormat.MPG;
-            }
-            catch (System.Exception ex)
-            {
-                XtraMessageBox.Show(ex.ToString(), "Error");
-                Utilities.DebugLine("[DiskEditor] Error trying to match file extension " + cleanedExtension +
-                    " to video format", ex);
             }
         }
 
@@ -135,29 +107,15 @@ namespace OMLDatabaseEditor.Controls
             // Validate the new path
             if (File.Exists(txtPath.Text))
             {
-                ValidateFile(txtPath.Text);
+                _currentDisk.Format = _currentDisk.GetFormatFromPath(txtPath.Text);
             }
             else if (Directory.Exists(txtPath.Text))
             {
-                if (MediaData.IsDVD(txtPath.Text))
-                {
-                    _currentDisk.Format = VideoFormat.DVD;
-                    cbDVD.Checked = true;
-                }
-                else if (MediaData.IsBluRay(txtPath.Text))
-                {
-                    _currentDisk.Format = VideoFormat.BLURAY;
-                    cbDVD.Checked = true;
-                }
-                else if (MediaData.IsHDDVD(txtPath.Text))
-                {
-                    _currentDisk.Format = VideoFormat.HDDVD;
-                    cbDVD.Checked = true;
-                }
-                else
-                {
+                _currentDisk.Format = _currentDisk.GetFormatFromPath(txtPath.Text);
+                if (_currentDisk.Format == VideoFormat.UNKNOWN)
                     XtraMessageBox.Show("The new path does not contain a DVD, Blu-ray or HDDVD movie", "Error");
-                }
+                else
+                    cbDVD.Checked = true;
             }
             else
             {

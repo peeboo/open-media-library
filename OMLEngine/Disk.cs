@@ -62,6 +62,39 @@ namespace OMLEngine
             return (Name + ":" + Path + ":" + Format.ToString()).GetHashCode();
         }
 
+        public VideoFormat GetFormatFromPath(string path)
+        {
+            // Validate the new path
+            if (File.Exists(path))
+            {
+                return (VideoFormat)Enum.Parse(typeof(VideoFormat),
+                    System.IO.Path.GetExtension(Path).Replace(".", "").Replace("-", ""), true);
+            }
+            else if (Directory.Exists(path))
+            {
+                if (MediaData.IsDVD(path))
+                {
+                    return VideoFormat.DVD;
+                }
+                else if (MediaData.IsBluRay(path))
+                {
+                    return VideoFormat.BLURAY;
+                }
+                else if (MediaData.IsHDDVD(path))
+                {
+                    return VideoFormat.HDDVD;
+                }
+                else
+                {
+                    return VideoFormat.UNKNOWN;
+                }
+            }
+            else
+            {
+                return VideoFormat.UNKNOWN;
+            }
+        }
+
         #region -- DVD Members --
         [NonSerialized]
         DVDDiskInfo _dvdDiskInfo;
@@ -140,7 +173,7 @@ namespace OMLEngine
             Name = info.GetString("name");
             Path = info.GetString("path");
             FindPath();
-            Format = GetSerializedVideoFormat(info, "format");
+            Format = GetFormatFromPath(Path);
             if (info.MemberCount > 3)
                 ExtraOptions = info.GetString("extraOptions");
         }
@@ -184,18 +217,5 @@ namespace OMLEngine
             }
             Utilities.DebugLine("Disk.FindPath({0}), no new path match found in BasePaths='{1}'", Path, sBasePaths);
         }
-
-        static VideoFormat GetSerializedVideoFormat(SerializationInfo info, string id)
-        {
-            try
-            {
-                return (VideoFormat)info.GetValue(id, typeof(VideoFormat));
-            }
-            catch (Exception)
-            {
-                return VideoFormat.DVD;
-            }
-        }
-
     }
 }
