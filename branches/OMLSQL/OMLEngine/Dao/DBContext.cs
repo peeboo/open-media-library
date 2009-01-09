@@ -27,6 +27,8 @@ namespace OMLEngine.Dao
 
                 return db;
             }
-        }        
+        }
+
+        public static OMLDataDataContext InstanceOrNull { get { return db; } }        
     }
 }
