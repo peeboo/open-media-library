@@ -25,6 +25,8 @@
                Description="Scan For TMT Plugin"/>
       <Command Name="ScanForMounter"
                Description="Scan For Mounting tool"/>
+      <Command Name="RemoveUnusedImagesCommand"
+               Description="Remove Unused Images"/>
 
       <Choice Name="Tabs">
         <Options>
@@ -60,6 +62,12 @@
       <Binding Source="[Application.IsBusy]" Target="[waitCursor.Visible]" />
 
       <!-- Setup the default visibility rules -->
+      <Changed Source="[RemoveUnusedImagesCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Settings.CleanupImagesFolder]"/>
+        </Actions>  
+      </Changed>
+      
       <Changed Source="[ScanForTMTCommand.Invoked]">
         <Actions>
           <Invoke Target="[Settings.LocateTotalMediaTheatrePluginExecutable]"/>
@@ -378,6 +386,11 @@
                                 <Children>
                                   <c:SimpleCheckbox Name="ShowWatchedIcon" Checked="[Settings.ShowWatchedIcon]" Margins="0,0,10,0" />
                                   <Text Content="Show Watched Icon" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
+                                </Children>
+                              </Panel>
+                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0" Navigation="Group">
+                                <Children>
+                                  <c:SimpleButton Name="RemovedUnusedImagesButton" Command="[RemoveUnusedImagesCommand]" FocusOrder="1" Text="Remove Unused Images" Size="340,51"/>
                                 </Children>
                               </Panel>
                             </Children>

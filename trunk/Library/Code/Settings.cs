@@ -740,6 +740,36 @@ namespace Library
             }
         }
 
+        public static void CleanupImagesFolder()
+        {
+            long bytesRemoved = 0;
+            OMLApplication.Current.IsBusy = true;
+            Application.DeferredInvokeOnWorkerThread(delegate
+            {
+                bytesRemoved = TitleCollection.CleanUnusedImages();
+            }, delegate
+            {
+                OMLApplication.Current.IsBusy = false;
+                if (bytesRemoved > 0)
+                {
+                    AddInHost.Current.MediaCenterEnvironment.Dialog(
+                        string.Format("A total of {0} bytes have been cleaned up by removing old images",
+                                      bytesRemoved),
+                        "Image Cleanup Complete",
+                        Microsoft.MediaCenter.DialogButtons.Ok,
+                        5, true);
+                }
+                else
+                {
+                    AddInHost.Current.MediaCenterEnvironment.Dialog(
+                        "No images have been removed, all images appeared to be in use.",
+                        "Image Cleanup Complete",
+                        Microsoft.MediaCenter.DialogButtons.Ok,
+                        5, true);
+                }
+            }, null);
+        }
+
         public static IList<DriveInfo> GetFileSystemDrives()
         {
             IList<DriveInfo> fixedDrives = new List<DriveInfo>();
