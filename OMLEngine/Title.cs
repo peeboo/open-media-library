@@ -649,27 +649,9 @@ namespace OMLEngine
 
         public decimal PercentComplete
         {
-            get
-            {
-                decimal score = 0;
-                decimal possible = 12;
-
-                if (!String.IsNullOrEmpty(Studio.Trim())) score++;
-                if (Runtime > 0) score++;
-                if (ReleaseDate != DateTime.MinValue) score++;
-                if (!String.IsNullOrEmpty(Synopsis.Trim())) score++;
-                if (Genres.Count > 0) score++;
-                if (!String.IsNullOrEmpty(FrontCoverPath.Trim())) score++;
-                if (!String.IsNullOrEmpty(AspectRatio.Trim())) score++;
-                if (!String.IsNullOrEmpty(CountryOfOrigin.Trim())) score++;
-                if (!String.IsNullOrEmpty(VideoResolution.Trim())) score++;
-                if (!String.IsNullOrEmpty(VideoStandard.Trim())) score++;
-                if (ActingRoles.Count > 0) score++;
-                if (Directors.Count > 0) score++;
-
-                return score / possible;
-            }
+            get { return _title.PercentComplete; }
         }
+
         #endregion
 
         private void SetupPeopleCollections()

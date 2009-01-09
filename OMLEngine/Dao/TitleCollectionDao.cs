@@ -430,7 +430,7 @@ namespace OMLEngine.Dao
             return from title in titles
                    where title.WatchedCount == 0 || title.WatchedCount == null
                    select title;
-        }       
+        }
 
         // <summary>
         /// Returns all the people in the given titles

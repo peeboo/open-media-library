@@ -28,6 +28,9 @@ namespace OMLDatabaseEditor
         private AppearanceObject Percent40 = null;
         private AppearanceObject Percent50 = null;
         private AppearanceObject Percent60 = null;
+        private AppearanceObject Percent70 = null;
+        private AppearanceObject Percent80 = null;
+        private List<Title> _movieList;
         public List<String> DXSkins;
 
         public MainEditor()
@@ -152,7 +155,8 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.WaitCursor;
             if (allMoviesToolStripMenuItem1.Checked)
             {
-                PopulateMovieList(TitleCollectionManager.GetAllTitles().ToList<Title>());
+                _movieList = TitleCollectionManager.GetAllTitles().ToList<Title>();
+                PopulateMovieList(_movieList);
             }
             else
             {
@@ -738,6 +742,30 @@ namespace OMLDatabaseEditor
                 }
                 e.Appearance.Combine(Percent60);
             }
+            else if (currentTitle.PercentComplete <= .7M)
+            {
+                if (Percent70 == null)
+                {
+                    Percent70 = (AppearanceObject)e.Appearance.Clone();
+                    Percent70.ForeColor = Color.Black;
+                    Percent70.BackColor = Color.Silver;
+                    Percent70.BackColor2 = Color.SkyBlue;
+                    Percent70.GradientMode = LinearGradientMode.Vertical;
+                }
+                e.Appearance.Combine(Percent70);
+            }
+            else if (currentTitle.PercentComplete <= .8M)
+            {
+                if (Percent80 == null)
+                {
+                    Percent80 = (AppearanceObject)e.Appearance.Clone();
+                    Percent80.ForeColor = Color.Black;
+                    Percent80.BackColor = Color.SkyBlue;
+                    Percent80.BackColor2 = Color.White;
+                    Percent80.GradientMode = LinearGradientMode.Vertical;
+                }
+                e.Appearance.Combine(Percent80);
+            }
         }
 
         private void filterTitles_Click(object sender, EventArgs e)
@@ -759,15 +787,14 @@ namespace OMLDatabaseEditor
             else
             {
                 allMoviesToolStripMenuItem1.Checked = false;
-                List<Title> titles = new List<Title>();
                 if (filterItem.OwnerItem == filterByGenreToolStripMenuItem)
-                    titles = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Genre, filterItem.Text).ToList<Title>();
-                //else if (filterItem.OwnerItem == filterByCompletenessToolStripMenuItem)
-                //    titles = _titleCollection.FindByCompleteness(decimal.Parse("." + filterItem.Text.TrimEnd('%')));
+                    _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Genre, filterItem.Text).ToList<Title>();
+                else if (filterItem.OwnerItem == filterByCompletenessToolStripMenuItem)
+                    _movieList = TitleCollectionManager.GetTitlesByPercentComplete(decimal.Parse("." + filterItem.Text.TrimEnd('%'))).ToList<Title>();
                 else if (filterItem.OwnerItem == filterByParentalRatingToolStripMenuItem)
-                    titles = TitleCollectionManager.GetFilteredTitles(TitleFilterType.ParentalRating, filterItem.Text).ToList<Title>();
+                    _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.ParentalRating, filterItem.Text).ToList<Title>();
 
-                PopulateMovieList(titles);
+                PopulateMovieList(_movieList);
             }
             Cursor = Cursors.Default;
         }

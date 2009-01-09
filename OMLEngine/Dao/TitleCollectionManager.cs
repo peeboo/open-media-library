@@ -116,6 +116,14 @@ namespace OMLEngine
             return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetAllTitles());            
         }
 
+        public static IEnumerable<Title> GetTitlesByPercentComplete(decimal completeness)
+        {
+            IEnumerable<Title> titles = GetAllTitles();
+            return from title in titles
+                   where title.PercentComplete <= completeness
+                   select title;
+        }
+
         /// <summary>
         /// Returns the title for the given filter
         /// </summary>
