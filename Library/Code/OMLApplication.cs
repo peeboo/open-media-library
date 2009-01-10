@@ -312,7 +312,7 @@ namespace Library
             {
                 _session.GoToPage("resx://Library/Library.Resources/Menu", properties);
             }
-            IsBusy = true;
+            //IsBusy = true; why do this?
         }
 
         public void GoToSelectionList(MovieGallery gallery, string filterName)
