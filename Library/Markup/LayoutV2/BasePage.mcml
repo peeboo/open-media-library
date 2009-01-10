@@ -5,25 +5,19 @@
 	    xmlns:me="Me">
 
     <UI Name="BasePage">
-      <Properties>
-        <a:OMLApplication Name="Application" OMLApplication="$Required"/>
-        <a:UISettings Name="UISettings" UISettings="$Required" />
-        <a:I18n Name="I18n" I18n="$Required"/>
-      </Properties>
-
       <Locals>
         <a:BasePage Name="Page" />
       </Locals>
 
       <Rules>
-        <Binding Source="[Application.IsBusy]" Target="[waitCursor.Visible]" />        
+        <Binding Source="[Page.App.IsBusy]" Target="[waitCursor.Visible]" />        
         
-        <Changed Source="[Application.IsStartingTranscodingJob]" InitialEvaluate="false">
+        <Changed Source="[Page.App.IsStartingTranscodingJob]" InitialEvaluate="false">
           <Actions>
             <Set Target="[transcodingMessage.Visible]" Value="true"/>
           </Actions>
         </Changed>
-        <Changed Source="[Application.IsStartingTranscodingJob]" InitialEvaluate="true">
+        <Changed Source="[Page.App.IsStartingTranscodingJob]" InitialEvaluate="true">
           <Actions>
             <Set Target="[transcodingMessage.Visible]" Value="false"/>
           </Actions>
@@ -35,8 +29,49 @@
           <Children>
             <!-- Make sure these next 2 are ALWAYS the first 2 items -->
             <controls:WaitCursor Name="waitCursor" Visible="false"/>
-            <controls:TranscodingMessage Name="transcodingMessage" Visible="false" Application="[Application]"/>
+            <controls:TranscodingMessage Name="transcodingMessage" Visible="false" Application="[Page.App]"/>
 
+            <Panel Name="MainPanel" Layout="Center">
+              <Children>
+                <Panel Layout="VerticalFlow">
+                  <Children>
+                    <Text Content="Welcome to the future of Media Center" Color="Red" Font="Calibri, 28">
+                      <Animations>
+                        <Animation>
+                          <Keyframes>
+                            <AlphaKeyframe Time="0" Value="0.0"/>
+                            <AlphaKeyframe Time="5" Value="0.0"/>
+                            <AlphaKeyframe Time="8" Value="1.0"/>
+                            <ScaleKeyframe Time="0" Value="1,1,1"/>
+                            <ScaleKeyframe Time="5" Value="1,1,1"/>
+                            <ScaleKeyframe Time="6.5" Value="1,1.2,1"/>
+                            <ScaleKeyframe Time="8" Value="1,1,1"/>
+                          </Keyframes>
+                        </Animation>
+                      </Animations>
+                    </Text>
+                    <Text Content="Welcome to Open Media Library" Color="Red" Font="Calibri, 28">
+                      <Animations>
+                        <Animation>
+                          <Keyframes>
+                            <AlphaKeyframe Time="0" Value="0.0"/>
+                            <AlphaKeyframe Time="8" Value="0.0"/>
+                            <AlphaKeyframe Time="11" Value="1.0"/>
+                            <ScaleKeyframe Time="0" Value="1,1,1"/>
+                            <ScaleKeyframe Time="8" Value="1,1,1"/>
+                            <ScaleKeyframe Time="9.5" Value="1,1.5,1"/>
+                            <ScaleKeyframe Time="11" Value="1,1,1"/>
+                          </Keyframes>
+                        </Animation>
+                      </Animations>
+                    </Text>
+                  </Children>
+                </Panel>
+              </Children>
+              <LayoutInput>
+                <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.125" Bottom="Parent,.875"/>
+              </LayoutInput>
+            </Panel>
             <Panel Name="TopPanel">
               <Animations>
                 <Animation>
@@ -89,8 +124,9 @@
               <Animations>
                 <Animation>
                   <Keyframes>
-                    <AlphaKeyframe Time="0.0" Value="0.0"/>
-                    <AlphaKeyframe Time="1.5" Value="1.0"/>
+                    <AlphaKeyframe Time="0" Value="0.0"/>
+                    <AlphaKeyframe Time="1.5" Value="0.0"/>
+                    <AlphaKeyframe Time="5" Value="1.0"/>
                   </Keyframes>
                 </Animation>
               </Animations>
@@ -99,4 +135,6 @@
         </ColorFill>
       </Content>
 	</UI>
+
+  <UI Name="MainContent"/>
 </Mcml>
