@@ -7,6 +7,7 @@ using System.Diagnostics;
 
 using NUnit.Framework;
 
+using OMLEngine.FileSystem;
 using OMLEngine;
 using System.Drawing;
 using OMLSDK;
@@ -287,6 +288,39 @@ namespace OMLTestSuite
             TitleCollectionManager.DeleteTitle(deleteTitle);
 
             Console.WriteLine("Done deleting " + titleId.ToString());
+        }
+
+        public void TEST_GET_NEW_FILES()
+        {
+            DateTime start = DateTime.Now;
+
+            List<string> directories = new List<string>() { @"\\percy\movies", @"\\percy\hd movies" };
+
+            IEnumerable<string> filePaths = FileScanner.GetAllMediaFromPath(directories);
+
+            IEnumerable<string> newMedia = TitleCollectionManager.GetUniquePaths(filePaths);
+
+            foreach (string media in newMedia)
+                Console.WriteLine(media);
+
+            Console.WriteLine("Took: " + (DateTime.Now - start).TotalMilliseconds + " milliseconds");
+        }
+
+        public void TEST_UNIQUE_DISKS()
+        {
+            DateTime start = DateTime.Now;
+            List<string> titles = new List<string>();
+
+            titles.Add(@"\\percy\movies\Bully");
+            titles.Add(@"\\percy\movies\Fake\1.mpg");
+            titles.Add(@"\\percy\movies\Fake\13.mpg");            
+
+            bool contains = TitleCollectionManager.ContainsDisks(@"\\percy\movies\Bully");
+
+            foreach (string disk in TitleCollectionManager.GetUniquePaths(titles))
+                Console.WriteLine(disk);
+
+            Console.WriteLine("Took: " + (DateTime.Now - start).TotalMilliseconds + " milliseconds");
         }
     }
 }

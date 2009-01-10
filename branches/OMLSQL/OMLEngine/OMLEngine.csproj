@@ -81,6 +81,9 @@
     <Compile Include="DVDDisk.cs" />
     <Compile Include="DVDSubTitle.cs" />
     <Compile Include="DVDTitle.cs" />
+    <Compile Include="FileSystem\FileScanner.cs" />
+    <Compile Include="FileSystem\FileTypes.cs" />
+    <Compile Include="FileSystem\NetworkScanner.cs" />
     <Compile Include="I18nResourceManager.cs" />
     <Compile Include="Disk.cs" />
     <Compile Include="FileSystemWalker.cs" />

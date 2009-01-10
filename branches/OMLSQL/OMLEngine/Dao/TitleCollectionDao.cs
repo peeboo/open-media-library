@@ -47,6 +47,19 @@ namespace OMLEngine.Dao
         }
 
         /// <summary>
+        /// Returns all the media paths that aren't already being used in the given collection
+        /// </summary>
+        /// <param name="disk"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> GetUniqueMediaPaths(IEnumerable<string> paths)
+        {
+            var allPaths = from d in DBContext.Instance.Disks
+                           select d.Path;
+
+            return paths.Except(allPaths, StringComparer.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
         /// Returns all the titles but doesn't return the actors/directors/writers
         /// </summary>
         /// <returns></returns>
@@ -445,7 +458,7 @@ namespace OMLEngine.Dao
                    group b by b.Name into g
                    orderby g.Key ascending
                    select new FilteredCollection() { Name = g.Key, Count = g.Count() };
-        }
+        }       
         
         /// <summary>
         /// Returns all the people in the given titles
