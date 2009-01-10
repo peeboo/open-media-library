@@ -367,6 +367,16 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Returns all the unused paths for the given collection of paths checked against existing Disks
+        /// </summary>
+        /// <param name="paths"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> GetUniquePaths(IEnumerable<string> paths)
+        {
+            return Dao.TitleCollectionDao.GetUniqueMediaPaths(paths);         
+        }
+
+        /// <summary>
         /// returns true if any of the disks returned already exist in the database
         /// </summary>
         /// <param name="disks"></param>

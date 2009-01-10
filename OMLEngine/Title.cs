@@ -1113,6 +1113,8 @@ namespace OMLEngine
                 return;
 
             _title.Disks.Add(disk.DaoDisk);
+
+            _disks = null;
         }
 
         /// <summary>
