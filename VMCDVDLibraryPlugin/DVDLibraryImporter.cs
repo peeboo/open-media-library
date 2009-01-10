@@ -83,6 +83,9 @@ namespace VMCDVDLibraryPlugin
         {
             try
             {
+                List<string> moviePaths = new List<string>();
+
+
                 List<string> dirList = new List<string>();
                 List<string> fileList = new List<string>();
                 GetSubFolders(startFolder, dirList);
@@ -126,6 +129,7 @@ namespace VMCDVDLibraryPlugin
                             }
                         }
                         AddTitle(dvd);
+                        moviePaths.Add(dvd.Disks[0].Path);
                     }// found dvd
                     else
                     {
@@ -160,12 +164,16 @@ namespace VMCDVDLibraryPlugin
 
                                     newVideo.AddDisk(disk);
                                     AddTitle(newVideo);
+
+                                    moviePaths.Add(video);
                                 }
                             }
                         }
 
                     }
                 } // loop through the sub folders
+
+
             }
             catch (Exception ex)
             {

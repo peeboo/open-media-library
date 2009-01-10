@@ -72,18 +72,14 @@ namespace OMLEngine.FileSystem
         [DllImport("Mpr.dll", EntryPoint = "WNetEnumResourceA", CallingConvention = CallingConvention.Winapi)]
         private static extern ErrorCodes WNetEnumResource(IntPtr hEnum, ref uint lpcCount, IntPtr buffer, ref uint lpBufferSize);
 
-        public static List<string> GetAllAvailableNetworkShares()
+        public static IEnumerable<string> GetAllAvailableNetworkShares()
         {
             NETRESOURCE pRsrc = new NETRESOURCE();
 
-            List<string> shares = new List<string>();
-
-            EnumerateServers(pRsrc, ResourceScope.RESOURCE_GLOBALNET, ResourceType.RESOURCETYPE_DISK, ResourceUsage.RESOURCEUSAGE_ALL, ResourceDisplayType.RESOURCEDISPLAYTYPE_SHARE, ref shares);
-
-            return shares;
+            return EnumerateServers(pRsrc, ResourceScope.RESOURCE_GLOBALNET, ResourceType.RESOURCETYPE_DISK, ResourceUsage.RESOURCEUSAGE_ALL, ResourceDisplayType.RESOURCEDISPLAYTYPE_SHARE);
         }
 
-        private static List<string> EnumerateServers(NETRESOURCE pRsrc, ResourceScope scope, ResourceType type, ResourceUsage usage, ResourceDisplayType displayType, ref List<string> shareNames)
+        private static IEnumerable<string> EnumerateServers(NETRESOURCE pRsrc, ResourceScope scope, ResourceType type, ResourceUsage usage, ResourceDisplayType displayType)
         {            
             uint bufferSize = 16384;
             IntPtr buffer = Marshal.AllocHGlobal((int)bufferSize);
@@ -104,10 +100,13 @@ namespace OMLEngine.FileSystem
                         Marshal.PtrToStructure(buffer, pRsrc);
 
                         if (pRsrc.dwDisplayType == displayType)
-                            shareNames.Add(pRsrc.lpRemoteName);
+                            yield return pRsrc.lpRemoteName;
 
                         if ((pRsrc.dwUsage & ResourceUsage.RESOURCEUSAGE_CONTAINER) == ResourceUsage.RESOURCEUSAGE_CONTAINER)
-                            EnumerateServers(pRsrc, scope, type, usage, displayType, ref shareNames);
+                        {
+                            foreach( string share in EnumerateServers(pRsrc, scope, type, usage, displayType))
+                                yield return share;
+                        }
                     }
                     else if (result != ErrorCodes.ERROR_NO_MORE_ITEMS)
                         break;
@@ -117,8 +116,6 @@ namespace OMLEngine.FileSystem
             }
 
             Marshal.FreeHGlobal((IntPtr)buffer);
-
-            return shareNames;
         }
 
         [StructLayout(LayoutKind.Sequential)]

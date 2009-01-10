@@ -90,7 +90,6 @@
     <Compile Include="Genres.cs" />
     <Compile Include="IFOUtilities.cs" />
     <Compile Include="ITranscodingService.cs" />
-    <Compile Include="MediaData.cs" />
     <Compile Include="MediaInfo.cs" />
     <Compile Include="MediaLanguage.cs" />
     <Compile Include="MediaSource.cs" />
