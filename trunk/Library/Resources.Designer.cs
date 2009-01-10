@@ -583,6 +583,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] IntroPage {
+            get {
+                object obj = ResourceManager.GetObject("IntroPage", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] ListBox {
             get {
                 object obj = ResourceManager.GetObject("ListBox", resourceCulture);

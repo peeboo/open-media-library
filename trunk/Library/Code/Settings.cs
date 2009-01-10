@@ -17,7 +17,12 @@ using OMLSDK;
 namespace Library
 {
     public class Settings : ModelItem
-    {       
+    {
+        public void ShowSampleLayout()
+        {
+            OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/IntroPage", null);
+        }
+
         public Settings()
         {
             Utilities.DebugLine("[Settings] Loading MountingTools Settings");
