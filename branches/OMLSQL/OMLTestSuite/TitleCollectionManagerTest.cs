@@ -294,7 +294,7 @@ namespace OMLTestSuite
         {
             DateTime start = DateTime.Now;
 
-            List<string> directories = new List<string>() { @"\\percy\movies", @"\\percy\hd movies" };
+            List<string> directories = new List<string>() { @"\\percy\movies", @"c:\" };
 
             IEnumerable<string> filePaths = FileScanner.GetAllMediaFromPath(directories);
 
@@ -302,6 +302,16 @@ namespace OMLTestSuite
 
             foreach (string media in newMedia)
                 Console.WriteLine(media);
+
+            Console.WriteLine("Took: " + (DateTime.Now - start).TotalMilliseconds + " milliseconds");
+        }
+
+        public void TEST_GET_NETWORKSHARES()
+        {
+            DateTime start = DateTime.Now;
+
+            foreach (string share in NetworkScanner.GetAllAvailableNetworkShares())
+                Console.WriteLine(share);
 
             Console.WriteLine("Took: " + (DateTime.Now - start).TotalMilliseconds + " milliseconds");
         }

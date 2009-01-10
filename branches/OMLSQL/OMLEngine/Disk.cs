@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using System.IO;
 
 using OMLGetDVDInfo;
+using OMLEngine.FileSystem;
 
 namespace OMLEngine
 {
@@ -72,27 +73,17 @@ namespace OMLEngine
             }
             else if (Directory.Exists(path))
             {
-                if (MediaData.IsDVD(path))
-                {
+                if (FileScanner.IsDVD(path))
                     return VideoFormat.DVD;
-                }
-                else if (MediaData.IsBluRay(path))
-                {
+
+                if (FileScanner.IsBluRay(path))
                     return VideoFormat.BLURAY;
-                }
-                else if (MediaData.IsHDDVD(path))
-                {
-                    return VideoFormat.HDDVD;
-                }
-                else
-                {
-                    return VideoFormat.UNKNOWN;
-                }
+
+                if (FileScanner.IsHDDVD(path))
+                    return VideoFormat.HDDVD;                   
             }
-            else
-            {
-                return VideoFormat.UNKNOWN;
-            }
+                
+            return VideoFormat.UNKNOWN;            
         }
 
         #region -- DVD Members --
