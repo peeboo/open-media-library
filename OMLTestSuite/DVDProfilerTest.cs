@@ -125,13 +125,10 @@ namespace OMLTestSuite
         [Test]
         public void TEST_DATES()
         {
-            DateTime before = DateTime.Now;
             Title title = LoadTitle("1");
-            DateTime after = DateTime.Now;
             Assert.AreEqual(new DateTime(1991, 01, 01), title.ReleaseDate, "Release date is incorrect");
 
-            //TODO: Should this be the date entered in DVD Profiler instead?
-            Assert.IsTrue(before <= title.DateAdded && title.DateAdded <= after, "Date entered is incorrect");
+            Assert.AreEqual(new DateTime(2001, 08, 21), title.DateAdded, "Date entered is incorrect");
 
             title = LoadTitle("2");
             Assert.AreEqual(DateTime.MinValue, title.ReleaseDate, "The second DVD should not have a release date");
@@ -200,6 +197,7 @@ namespace OMLTestSuite
         public void TEST_DEFAULT_DISC_NAMES()
         {
             Title title = LoadTitle("3");
+            Assert.AreEqual(2, title.Disks.Count, "Incorrect number of discs found");
             Assert.AreEqual("Disc 1a", title.Disks[0].Name, "The first disc name incorrect");
             Assert.AreEqual("Disc 2a", title.Disks[1].Name, "The second disc name incorrect");
         }
