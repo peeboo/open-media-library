@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Xml;
 using OMLEngine;
 using NUnit.Framework;
@@ -12,6 +14,11 @@ namespace OMLTestSuite
     [TestFixture]
     public class DVDProfilerTest : TestBase
     {
+
+        private static IList<Title> defaultTitles; // Caches default titles loaded from DVDProfilerUnitTest.xml
+        private const string defaultSettings = "<settings><tag name='Online' excludedName='Offline' xpath=\"Notes[contains(.,'filepath')]\"/></settings>";
+
+
         [Test]
         public void TEST_SPACING_IS_CORRECT_FOR_ACTOR_NAMES()
         {
@@ -202,18 +209,44 @@ namespace OMLTestSuite
             Assert.AreEqual("Disc 2a", title.Disks[1].Name, "The second disc name incorrect");
         }
 
+        [Test]
+        public void TEST_TAGS()
+        {
+            Title title = LoadTitle("1");
+            Assert.AreEqual(1, title.Tags.Count, "One tag expected in title '1'");
+            Assert.AreEqual("Online", title.Tags[0], "Expected the 'Online' tag set on title '1'");
+
+            title = LoadTitle("2");
+            Assert.AreEqual(1, title.Tags.Count, "One tag expected in title '2'");
+            Assert.AreEqual("Offline", title.Tags[0], "Expected the 'Offline' tag set on title '2'");
+
+        }
+
         private static Title LoadTitle(string id)
         {
             if (string.IsNullOrEmpty(id)) throw new ArgumentNullException("id");
+
             Title result = null;
-            DVDProfilerImporter importer = new DVDProfilerImporter();
-            string xmlPath = @"..\..\..\Sample Files\DVDProfilerUnitTest.xml";
-            importer.DoWork(new [] { xmlPath});
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(xmlPath);
-            IList<Title> titles = importer.GetTitles();
-            Assert.AreEqual(xmlDoc.SelectNodes("Collection/DVD").Count, titles.Count, "Unexpected number of profiles loaded.");
-            foreach (Title title in titles)
+
+            if (defaultTitles == null)
+            {
+
+                DVDProfilerImporter importer;
+                using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(defaultSettings), false))
+                {
+                    importer = new DVDProfilerImporter(new XmlTextReader(ms));
+                }
+
+                string xmlPath = @"..\..\..\Sample Files\DVDProfilerUnitTest.xml";
+                importer.DoWork(new[] { xmlPath });
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(xmlPath);
+                defaultTitles = importer.GetTitles();
+                Assert.AreEqual(xmlDoc.SelectNodes("Collection/DVD").Count, defaultTitles.Count, "Unexpected number of profiles loaded.");
+                
+            }
+
+            foreach (Title title in defaultTitles)
             {
                 if (title.MetadataSourceID == id)
                 {
@@ -224,6 +257,8 @@ namespace OMLTestSuite
             Assert.IsNotNull(result, "The DVDProfilerUnitTest.xml file does not contain a title with ID " + id);
             return result;
         }
+
+        
 
 
     }

@@ -18,7 +18,28 @@ namespace DVDProfilerPlugin
         private static readonly Regex filepathRegex = new Regex(@"\[filepath((\s+disc\s*=\s*(?'discNumber'\d+)(?'side'[ab])?))?\s*\](?'path'[^\[]+)\[\s*\/\s*filepath\s*\]", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex removeFormattingRegex = new Regex(@"<\/?(i|b)>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         private static readonly Regex removeExtraLinebreaksRegex = new Regex(@"(\s*(\r|\n)\s*)+", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+        private List<TagDefinition> tagDefinitions = new List<TagDefinition>();
+
         string imagesPath;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DVDProfilerImporter"/> class.
+        /// </summary>
+        public DVDProfilerImporter()
+        {
+            InitializeSettings(null);
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DVDProfilerImporter"/> class for use in UnitTesting.
+        /// </summary>
+        /// <param name="settingsXml">An <see cref="XmlTextReader"/> containing the settings to use.</param>
+        internal DVDProfilerImporter(XmlTextReader settingsXml)
+        {
+            InitializeSettings(settingsXml);
+        }
 
         public override bool IsSingleFileImporter()
         {
@@ -91,7 +112,7 @@ namespace DVDProfilerPlugin
             Title title = new Title();
             VideoFormat videoFormat = VideoFormat.DVD;
             string notes = string.Empty;
-            var discs = new Dictionary<string, string> (); // The key is on the form "1a", "10b", etc - the value is the description
+            var discs = new Dictionary<string, string>(); // The key is on the form "1a", "10b", etc - the value is the description
 
             foreach (XPathNavigator dvdElement in dvdNavigator.SelectChildren(XPathNodeType.Element))
             {
@@ -183,9 +204,9 @@ namespace DVDProfilerPlugin
                 }
             }
             MergeDiscInfo(title, videoFormat, discs, notes);
+            ApplyTags(title, dvdNavigator);
             return title;
         }
-
 
         private void ReadFilmReview(Title title, XPathNavigator reviewNavigator)
         {
@@ -349,7 +370,7 @@ namespace DVDProfilerPlugin
             XPathNavigator selectedMedia = mediaTypesNavigator.SelectSingleNode("*[.='True']");
             if (selectedMedia != null)
             {
-                switch(selectedMedia.Name)
+                switch (selectedMedia.Name)
                 {
                     case "HDDVD":
                         return VideoFormat.HDDVD;
@@ -468,6 +489,17 @@ namespace DVDProfilerPlugin
             }
         }
 
+        private void ApplyTags(Title title, XPathNavigator dvdNavigator)
+        {
+            foreach (TagDefinition tagDefinition in tagDefinitions)
+            {
+                bool match = dvdNavigator.SelectSingleNode(tagDefinition.XPath) != null;
+                if (match && !string.IsNullOrEmpty(tagDefinition.Name)) title.Tags.Add(tagDefinition.Name);
+                if (!match && !string.IsNullOrEmpty(tagDefinition.ExcludedName)) title.Tags.Add(tagDefinition.ExcludedName);
+            }
+        }
+
+
         private static VideoFormat GetFormatFromExtension(string extension, VideoFormat defaultFormat)
         {
             if (string.IsNullOrEmpty(extension)) return defaultFormat;
@@ -488,7 +520,6 @@ namespace DVDProfilerPlugin
             string id = newTitle.MetadataSourceID;
             if (!string.IsNullOrEmpty(id))
             {
-                InitializeImagesPath();
                 if (imagesPath != null && Directory.Exists(imagesPath))
                 {
                     if (File.Exists(Path.Combine(imagesPath, string.Format("{0}f.{1}", id, @"jpg"))))
@@ -504,33 +535,72 @@ namespace DVDProfilerPlugin
             }
         }
 
-        private void InitializeImagesPath()
+        private class TagDefinition
         {
-            if (!string.IsNullOrEmpty(imagesPath)) return;
+            public string Name { get; set; }
+            public string ExcludedName { get; set; }
+            public XPathExpression XPath { get; set; }
+        }
 
-            XmlTextReader dvdProfilerSettings;
-            if (File.Exists(Path.Combine(FileSystemWalker.PluginsDirectory, "DVDProfilerSettings.xml")))
+        private void InitializeSettings(XmlTextReader settingsXml)
+        {
+            XmlTextReader dvdProfilerSettings = null;
+            bool disposeReader = false;
+            try
             {
-                try
+                if (settingsXml != null)
                 {
-                    using (dvdProfilerSettings = new XmlTextReader(Path.Combine(FileSystemWalker.PluginsDirectory, "DVDProfilerSettings.xml")))
+                    dvdProfilerSettings = settingsXml;
+                }
+                else
+                {
+                    string path = Path.Combine(FileSystemWalker.PluginsDirectory, "DVDProfilerSettings.xml");
+                    if (File.Exists(path))
                     {
+                        disposeReader = true;
+                        dvdProfilerSettings = new XmlTextReader(path);
+                    }
+                }
 
-                        while (dvdProfilerSettings.Read())
+
+                if (dvdProfilerSettings != null)
+                {
+                    while (dvdProfilerSettings.Read())
+                    {
+                        if (dvdProfilerSettings.NodeType != XmlNodeType.Element) continue;
+                        switch (dvdProfilerSettings.Name)
                         {
-                            if (dvdProfilerSettings.NodeType == XmlNodeType.Element &&
-                                dvdProfilerSettings.Name == "imagesPath")
-                            {
+                            case "imagesPath":
                                 imagesPath = (dvdProfilerSettings.ReadInnerXml());
-                            }
+                                break;
+                            case "tag":
+                                string tagName = dvdProfilerSettings.GetAttribute("name");
+                                string tagExcludedName = dvdProfilerSettings.GetAttribute("excludedName");
+                                string tagXPath = dvdProfilerSettings.GetAttribute("xpath");
+                                if (string.IsNullOrEmpty(tagName) && string.IsNullOrEmpty(tagExcludedName)) Utilities.DebugLine("[DVDProfilerImporter] Tag setting missing name");
+                                if (string.IsNullOrEmpty(tagXPath)) Utilities.DebugLine("[DVDProfilerImporter] Tag setting missing xpath");
+                                if (!string.IsNullOrEmpty(tagXPath))
+                                {
+                                    tagDefinitions.Add(new TagDefinition
+                                                           {
+                                                               Name = tagName,
+                                                               ExcludedName = tagExcludedName,
+                                                               XPath = XPathExpression.Compile(tagXPath)
+                                                           });
+                                }
+                                break;
                         }
                     }
-                    if (string.IsNullOrEmpty(imagesPath)) Console.WriteLine("Missing Database location variable in DvdProfilerSettings.xml file, as a result images will not be imported");
                 }
-                catch (Exception e)
-                {
-                    Utilities.DebugLine("[DVDProfilerImporter] Unable to open DVDProfilerSettings.xml file: {0}", e.Message);
-                }
+            }
+            catch (Exception e)
+            {
+                Utilities.DebugLine("[DVDProfilerImporter] Unable to open DVDProfilerSettings.xml file: {0}",
+                                    e.Message);
+            }
+            finally
+            {
+                if (disposeReader && dvdProfilerSettings != null) dvdProfilerSettings.Close();
             }
         }
     }
