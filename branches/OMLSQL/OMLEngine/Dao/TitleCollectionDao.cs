@@ -457,7 +457,11 @@ namespace OMLEngine.Dao
                    join b in DBContext.Instance.GenreMetaDatas on g.GenreMetaDataId equals b.Id
                    group b by b.Name into g
                    orderby g.Key ascending
-                   select new FilteredCollection() { Name = g.Key, Count = g.Count() };
+                   select new FilteredCollection() { Name = g.Key, Count = g.Count(), ImagePath = 
+                    (from title in DBContext.Instance.Titles
+                     from genre in title.Genres
+                     where genre.MetaData.Name == g.Key
+                     select title).First().FrontCoverPath };
         }       
         
         /// <summary>
