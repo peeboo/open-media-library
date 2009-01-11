@@ -452,16 +452,18 @@ namespace OMLEngine.Dao
         /// <returns></returns>
         public static IEnumerable<FilteredCollection> GetAllGenres(List<TitleFilter> filters)
         {
-            return from t in GetFilteredTitlesWrapper(filters)
-                   from g in t.Genres
-                   join b in DBContext.Instance.GenreMetaDatas on g.GenreMetaDataId equals b.Id
-                   group b by b.Name into g
+            var filteredTitles = from t in GetFilteredTitlesWrapper(filters)
+                                                from g in t.Genres
+                                                join b in DBContext.Instance.GenreMetaDatas on g.GenreMetaDataId equals b.Id
+                                                select new { GenreName = b.Name, Path = t.FrontCoverPath };
+
+            return from t in filteredTitles
+                   group t by t.GenreName into g
                    orderby g.Key ascending
                    select new FilteredCollection() { Name = g.Key, Count = g.Count(), ImagePath = 
-                    (from title in DBContext.Instance.Titles
-                     from genre in title.Genres
-                     where genre.MetaData.Name == g.Key
-                     select title).First().FrontCoverPath };
+                       (from title in filteredTitles
+                        where title.GenreName == g.Key
+                        select title.Path).First() };
         }       
         
         /// <summary>
