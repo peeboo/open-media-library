@@ -20,6 +20,7 @@ namespace DVDProfilerPlugin
         private static readonly Regex removeExtraLinebreaksRegex = new Regex(@"(\s*(\r|\n)\s*)+", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
         private List<TagDefinition> tagDefinitions = new List<TagDefinition>();
+        private List<Exception> initializationErrors = new List<Exception>();
 
         string imagesPath;
 
@@ -84,6 +85,10 @@ namespace DVDProfilerPlugin
 
         public override void ProcessFile(string file)
         {
+            foreach (Exception ex in initializationErrors)
+            {
+                AddError(ex.Message);
+            }
             using (XmlTextReader reader = new XmlTextReader(file))
             {
                 var navigator = new XPathDocument(reader).CreateNavigator();
@@ -577,16 +582,35 @@ namespace DVDProfilerPlugin
                                 string tagName = dvdProfilerSettings.GetAttribute("name");
                                 string tagExcludedName = dvdProfilerSettings.GetAttribute("excludedName");
                                 string tagXPath = dvdProfilerSettings.GetAttribute("xpath");
-                                if (string.IsNullOrEmpty(tagName) && string.IsNullOrEmpty(tagExcludedName)) Utilities.DebugLine("[DVDProfilerImporter] Tag setting missing name");
-                                if (string.IsNullOrEmpty(tagXPath)) Utilities.DebugLine("[DVDProfilerImporter] Tag setting missing xpath");
+                                if (string.IsNullOrEmpty(tagName) && string.IsNullOrEmpty(tagExcludedName))
+                                {
+                                    Utilities.DebugLine("[DVDProfilerImporter] Tag setting missing name");
+                                    AddError("Tag missing name or excludeName attribute in DVDProfilerSettings.xml");
+                                }
+                                if (string.IsNullOrEmpty(tagXPath))
+                                {
+                                    Utilities.DebugLine("[DVDProfilerImporter] Tag setting missing xpath");
+                                    AddError("Tag missing xpath attribute in DVDProfilerSettings.xml");
+                                }
                                 if (!string.IsNullOrEmpty(tagXPath))
                                 {
-                                    tagDefinitions.Add(new TagDefinition
-                                                           {
-                                                               Name = tagName,
-                                                               ExcludedName = tagExcludedName,
-                                                               XPath = XPathExpression.Compile(tagXPath)
-                                                           });
+                                    try
+                                    {
+                                        tagDefinitions.Add(new TagDefinition
+                                                               {
+                                                                   Name = tagName,
+                                                                   ExcludedName = tagExcludedName,
+                                                                   XPath = XPathExpression.Compile(tagXPath)
+                                                               });
+                                    }
+                                    catch (ArgumentException e)
+                                    {
+                                        initializationErrors.Add(e);
+                                    }
+                                    catch (XPathException e)
+                                    {
+                                        initializationErrors.Add(e);
+                                    }
                                 }
                                 break;
                         }
@@ -597,6 +621,7 @@ namespace DVDProfilerPlugin
             {
                 Utilities.DebugLine("[DVDProfilerImporter] Unable to open DVDProfilerSettings.xml file: {0}",
                                     e.Message);
+                initializationErrors.Add(e);
             }
             finally
             {
