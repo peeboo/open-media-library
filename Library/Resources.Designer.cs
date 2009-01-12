@@ -95,6 +95,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap Application2 {
+            get {
+                object obj = ResourceManager.GetObject("Application2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static byte[] Base {
             get {
                 object obj = ResourceManager.GetObject("Base", resourceCulture);
@@ -112,6 +119,13 @@ namespace Library {
         internal static System.Drawing.Bitmap Blu_RayMovieDisk {
             get {
                 object obj = ResourceManager.GetObject("Blu_RayMovieDisk", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart01 {
+            get {
+                object obj = ResourceManager.GetObject("boxart01", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

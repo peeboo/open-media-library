@@ -146,7 +146,9 @@
     <None Include="Setup\Setup.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Images\application2.png" />
     <Content Include="Images\Blu-RayMovieDisk.png" />
+    <Content Include="Images\boxart01.jpg" />
     <Content Include="Images\EnhancedDVD.png" />
     <Content Include="Images\Focus_Outline.png" />
     <Content Include="Images\Folder_Closed.png" />
@@ -244,6 +246,7 @@
     <None Include="Resources\AppIcon.png" />
     <None Include="Resources\AppIcon1.png" />
     <Content Include="Resources\Application.png" />
+    <None Include="Resources\Application02.bmp" />
     <Content Include="Resources\BusyBack.png" />
     <Content Include="Resources\BusyFront.png" />
     <Content Include="Resources\ButtonDisabled.png" />
