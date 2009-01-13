@@ -97,6 +97,8 @@ namespace Library
 
         public BasePage()
         {
+            _OMLSettings = new OMLSettings();
+            _I18n = I18n.Instance;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿<application title="Library" id="{ad208fce-2431-47d6-abed-1974a2a0555f}">
 	<entrypoint id="{7533724D-C7CB-4ac2-8AEE-1B0B91ADD393}"
-				addin="Library.MyAddIn, Library,Culture=Neutral,Version=1.0.0.0,PublicKeyToken=74d3b407d6cf16f1"
+				addin="Library.MyAddIn, Library,Culture=Neutral,Version=2.1.1.1,PublicKeyToken=74d3b407d6cf16f1"
 				title="Movies"
 				context="Menu"
 				description="Open Media Library"
@@ -8,7 +8,7 @@
 		<category category="OML\Movie Library"/>
 	</entrypoint>
     <entrypoint id="{543d0438-b10d-43d8-a20d-f0c96db4e6bd}"
-				addin="Library.MyAddIn, Library,Culture=Neutral,Version=1.0.0.0,PublicKeyToken=74d3b407d6cf16f1"
+				addin="Library.MyAddIn, Library,Culture=Neutral,Version=2.1.1.1,PublicKeyToken=74d3b407d6cf16f1"
 				title="Settings"
 				context="Settings"
 				description="Open Media Library"
