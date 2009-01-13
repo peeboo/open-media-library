@@ -15,6 +15,7 @@ using DevExpress.Utils;
 
 using OMLEngine;
 using OMLSDK;
+using OMLDatabaseEditor.Controls;
 
 namespace OMLDatabaseEditor
 {
@@ -481,6 +482,38 @@ namespace OMLDatabaseEditor
             {
                 AboutOML about = new AboutOML();
                 about.Show();
+            }
+            else if (sender == moveDisksToolStripMenuItem)
+            {
+                DiskMoverFrm dsm = new DiskMoverFrm();
+                if (dsm.ShowDialog(this) == DialogResult.OK)
+                {
+                    string fromFolder = dsm.fromFolder;
+                    string toFolder = dsm.toFolder;
+                    List<Title> titles = _titleCollection.FindByFolder(fromFolder);
+                    foreach (Title title in titles)
+                    {
+                        foreach (Disk disk in title.Disks)
+                        {
+                            if (disk.Path.StartsWith(fromFolder))
+                            {
+                                disk.Path = disk.Path.Replace(fromFolder, toFolder);
+                            }
+                        }
+                        if (dsm.withImages)
+                        {
+                            if (title.FrontCoverPath.StartsWith(fromFolder))
+                            {
+                                title.FrontCoverPath = title.FrontCoverPath.Replace(fromFolder, toFolder);
+                            }
+                            if (title.FrontCoverMenuPath.StartsWith(fromFolder))
+                            {
+                                title.FrontCoverMenuPath = title.FrontCoverMenuPath.Replace(fromFolder, toFolder);
+                            }
+                        }
+                    }
+                    _titleCollection.saveTitleCollection();
+                }
             }
         }
 
