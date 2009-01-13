@@ -346,6 +346,18 @@ namespace OMLEngine
             }
         }
 
+        public List<string> GetFolders
+        {
+            get
+            {
+                List<string> folders = (from title in _list
+                                        from disk in title.Disks
+                                        orderby System.IO.Path.GetDirectoryName(disk.Path) ascending
+                                        select System.IO.Path.GetDirectoryName(disk.Path)).Distinct().ToList<string>();
+                return folders;
+            }
+        }
+
         public Title this[int index]
         {
             get 
@@ -503,6 +515,16 @@ namespace OMLEngine
         {
             List<Title> titles = (from title in _list
                                   where title.PercentComplete <= percentComplete
+                                  orderby title.SortName ascending
+                                  select title).ToList<Title>();
+            return titles;
+        }
+
+        public List<Title> FindByFolder(string folder)
+        {
+            List<Title> titles = (from title in _list
+                                  from disk in title.Disks
+                                  where disk.Path.StartsWith(folder)
                                   orderby title.SortName ascending
                                   select title).ToList<Title>();
             return titles;
