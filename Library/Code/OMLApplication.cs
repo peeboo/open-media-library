@@ -192,8 +192,9 @@ namespace Library
             return;
 #endif
 
-            OMLUpdater updater = new OMLUpdater();
-            ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
+            // DISABLE THIS UNTIL ITS READY -- DJShultz 01/13/2009
+            //OMLUpdater updater = new OMLUpdater();
+            //ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
 
             switch (context)
             {
