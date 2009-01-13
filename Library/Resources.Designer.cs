@@ -130,6 +130,55 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap boxart02 {
+            get {
+                object obj = ResourceManager.GetObject("boxart02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart03 {
+            get {
+                object obj = ResourceManager.GetObject("boxart03", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart04 {
+            get {
+                object obj = ResourceManager.GetObject("boxart04", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart05 {
+            get {
+                object obj = ResourceManager.GetObject("boxart05", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart06 {
+            get {
+                object obj = ResourceManager.GetObject("boxart06", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart07 {
+            get {
+                object obj = ResourceManager.GetObject("boxart07", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart08 {
+            get {
+                object obj = ResourceManager.GetObject("boxart08", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap BusyBack {
             get {
                 object obj = ResourceManager.GetObject("BusyBack", resourceCulture);
