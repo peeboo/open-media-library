@@ -149,6 +149,13 @@
     <None Include="Images\application2.png" />
     <Content Include="Images\Blu-RayMovieDisk.png" />
     <Content Include="Images\boxart01.jpg" />
+    <None Include="Images\boxart02.jpg" />
+    <None Include="Images\boxart03.jpg" />
+    <None Include="Images\boxart04.jpg" />
+    <None Include="Images\boxart06.jpg" />
+    <None Include="Images\boxart05.jpg" />
+    <None Include="Images\boxart07.jpg" />
+    <None Include="Images\boxart08.jpg" />
     <Content Include="Images\EnhancedDVD.png" />
     <Content Include="Images\Focus_Outline.png" />
     <Content Include="Images\Folder_Closed.png" />
