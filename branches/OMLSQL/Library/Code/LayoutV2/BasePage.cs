@@ -8,67 +8,79 @@ namespace Library
     public class BasePage : ModelItem
     {
         #region private variables
-        private bool showWaitCursor;
-        private bool startingTranscodeJob;
-        private string pageName;
-        private Image customBackgroundImage;
-        private bool showAnimations;
+        bool _ShowWaitCursor;
+        bool _StartingTranscodeJob;
+        string _PageName;
+        bool _ShowAnimations;
+        bool _IsParentalControlActive = false;
+        OMLSettings _OMLSettings;
+        I18n _I18n;
         #endregion
 
         #region properties
-        public bool ShowAnimations
+        public OMLApplication App
         {
-            get { return showAnimations; }
+            get { return OMLApplication.Current; }
+        }
+
+        public I18n I18n
+        {
+            get { return _I18n; }
+        }
+
+        public OMLSettings UISettings
+        {
+            get { return _OMLSettings; }
+        }
+
+        public bool IsParentalControlActive
+        {
+            get { return _IsParentalControlActive; }
             set
             {
-                showAnimations = value;
+                _IsParentalControlActive = value;
+                FirePropertyChanged("IsParentalControlActive");
+            }
+        }
+
+        public bool ShowAnimations
+        {
+            get { return _ShowAnimations; }
+            set
+            {
+                _ShowAnimations = value;
                 FirePropertyChanged("ShowAnimations");
             }
         }
 
         public string PageName
         {
-            get { return "TemplatePage"; }
+            get { return _PageName; }
             set
             {
-                pageName = value;
+                _PageName = value;
                 FirePropertyChanged("PageName");
             }
         }
 
         public bool ShowWaitCursor
         {
-            get { return showWaitCursor; }
+            get { return _ShowWaitCursor; }
             set
             {
-                showWaitCursor = value;
+                _ShowWaitCursor = value;
                 FirePropertyChanged("ShowWaitCursor");
             }
         }
 
         public bool StartingTranscodeJob
         {
-            get { return startingTranscodeJob; }
+            get { return _StartingTranscodeJob; }
             set
             {
-                startingTranscodeJob = value;
+                _StartingTranscodeJob = value;
                 FirePropertyChanged("StartingTranscodeJob");
             }
-        }
-
-        public Image CustomBackgroundImage
-        {
-            get { return customBackgroundImage; }
-            set
-            {
-                customBackgroundImage = value;
-                FirePropertyChanged("CustomBackgroundImage");
-            }
-        }
-
-        public OMLApplication App
-        {
-            get { return OMLApplication.Current; }
         }
 
         public AddInHost Host
@@ -78,14 +90,15 @@ namespace Library
 
         public HistoryOrientedPageSession Session
         {
-            get { return App.Session; }
+            get { return OMLApplication.Current.Session; }
         }
-
 
         #endregion
 
         public BasePage()
         {
+            _OMLSettings = new OMLSettings();
+            _I18n = I18n.Instance;
         }
     }
 }

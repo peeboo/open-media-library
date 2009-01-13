@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Config>
+  <Beta url="http://open-media-library.googlecode.com/files/omlsetup-0.21b-x64-01122009.msi" version="2.1.1.1"/>
+  <Release url="http://open-media-library.googlecode.com/files/omlsetupx86.msi" version="1.0.0.0"/>
+</Config>

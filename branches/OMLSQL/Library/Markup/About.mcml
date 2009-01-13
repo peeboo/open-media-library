@@ -9,6 +9,12 @@
       xmlns:me="Me">
 
     <UI Name="About">
+      <Properties>
+        <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+      </Properties>
+      <Rules>
+        <Binding Source="[Application.RevisionNumber]" Target="[VersionNumber.Content]" />
+      </Rules>
         <Content>
             <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
                 <Children>
@@ -90,6 +96,12 @@
                                             <Text Content="mikinho, jusbo, jafterdark, ppitkin, mjw, fonager, (Olcay Buyan and Jas Manghera for their MCML Samples) and many others that we have missed, sorry we missed you but thanks for your support" Color="White" Font="Calibri, 12" WordWrap="true"/>
                                         </Children>
                                     </Clip>
+                                  <Clip Layout="HorizontalFlow">
+                                    <Children>
+                                      <Text Content="Version: " Color="LightBlue" Font="Calibri, 20"/>
+                                      <Text Name="VersionNumber" Color="LightBlue" Font="Calibri, 20"/>
+                                    </Children> 
+                                  </Clip>
                                 </Children>
                             </Clip>
                         </Children>

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Xml;
 using OMLEngine;
 using NUnit.Framework;
 using DVDProfilerPlugin;
@@ -11,6 +14,11 @@ namespace OMLTestSuite
     [TestFixture]
     public class DVDProfilerTest : TestBase
     {
+
+        private static IList<Title> defaultTitles; // Caches default titles loaded from DVDProfilerUnitTest.xml
+        private const string defaultSettings = "<settings><tag name='Online' excludedName='Offline' xpath=\"Notes[contains(.,'filepath')]\"/></settings>";
+
+
         [Test]
         public void TEST_SPACING_IS_CORRECT_FOR_ACTOR_NAMES()
         {
@@ -124,13 +132,10 @@ namespace OMLTestSuite
         [Test]
         public void TEST_DATES()
         {
-            DateTime before = DateTime.Now;
             Title title = LoadTitle("1");
-            DateTime after = DateTime.Now;
             Assert.AreEqual(new DateTime(1991, 01, 01), title.ReleaseDate, "Release date is incorrect");
 
-            //TODO: Should this be the date entered in DVD Profiler instead?
-            Assert.IsTrue(before <= title.DateAdded && title.DateAdded <= after, "Date entered is incorrect");
+            Assert.AreEqual(new DateTime(2001, 08, 21), title.DateAdded, "Date entered is incorrect");
 
             title = LoadTitle("2");
             Assert.AreEqual(DateTime.MinValue, title.ReleaseDate, "The second DVD should not have a release date");
@@ -193,18 +198,55 @@ namespace OMLTestSuite
 
             title = LoadTitle("2");
             Assert.AreEqual(0, title.Disks.Count, "The second DVD should not have any disks defined.");
+        }
+
+        [Test]
+        public void TEST_DEFAULT_DISC_NAMES()
+        {
+            Title title = LoadTitle("3");
+            Assert.AreEqual(2, title.Disks.Count, "Incorrect number of discs found");
+            Assert.AreEqual("Disc 1a", title.Disks[0].Name, "The first disc name incorrect");
+            Assert.AreEqual("Disc 2a", title.Disks[1].Name, "The second disc name incorrect");
+        }
+
+        [Test]
+        public void TEST_TAGS()
+        {
+            Title title = LoadTitle("1");
+            Assert.AreEqual(1, title.Tags.Count, "One tag expected in title '1'");
+            Assert.AreEqual("Online", title.Tags[0], "Expected the 'Online' tag set on title '1'");
+
+            title = LoadTitle("2");
+            Assert.AreEqual(1, title.Tags.Count, "One tag expected in title '2'");
+            Assert.AreEqual("Offline", title.Tags[0], "Expected the 'Offline' tag set on title '2'");
 
         }
 
         private static Title LoadTitle(string id)
         {
             if (string.IsNullOrEmpty(id)) throw new ArgumentNullException("id");
+
             Title result = null;
-            DVDProfilerImporter importer = new DVDProfilerImporter();
-            importer.DoWork(new [] { @"..\..\..\Sample Files\DVDProfilerUnitTest.xml" });
-            IList<Title> titles = importer.GetTitles();
-            Assert.AreEqual(2, titles.Count, "Unexpected number of profiles loaded.");
-            foreach (Title title in titles)
+
+            if (defaultTitles == null)
+            {
+
+                DVDProfilerImporter importer;
+                using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(defaultSettings), false))
+                {
+                    importer = new DVDProfilerImporter(new XmlTextReader(ms));
+                }
+
+                string xmlPath = @"..\..\..\Sample Files\DVDProfilerUnitTest.xml";
+                importer.DoWork(new[] { xmlPath });
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(xmlPath);
+                defaultTitles = importer.GetTitles();
+                Assert.AreEqual(xmlDoc.SelectNodes("Collection/DVD").Count, defaultTitles.Count, "Unexpected number of profiles loaded.");
+                
+            }
+
+            foreach (Title title in defaultTitles)
             {
                 if (title.MetadataSourceID == id)
                 {
@@ -215,6 +257,8 @@ namespace OMLTestSuite
             Assert.IsNotNull(result, "The DVDProfilerUnitTest.xml file does not contain a title with ID " + id);
             return result;
         }
+
+        
 
 
     }

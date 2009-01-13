@@ -1,0 +1,227 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+  	  xmlns:cor="assembly://MSCorLib/System"
+      xmlns:a="assembly://Library/Library"
+      xmlns:controls="resx://Library/Library.Resources/CoreControls"
+	    xmlns:me="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/BasePage"/>
+
+  <UI Name="IntroPage" BaseUI="me:BasePage">
+    <Content>
+      <ColorFill Content="Black" Layout="Fill">
+        <Children>
+          <controls:WaitCursor Name="waitCursor" Visible="false"/>
+          <controls:TranscodingMessage Name="transcodingMessage" Visible="false" Application="[Page.App]"/>
+          
+          <Panel Layout="Center">
+            <Children>
+                  <Text Content="OML" Color="White" Font="Calibri, 88">
+                    <Animations>
+                      <Animation>
+                        <Keyframes>
+                          <AlphaKeyframe Time="0" Value="0"/>
+                          <AlphaKeyframe Time="10.4" Value="0"/>
+                          <AlphaKeyframe Time="11" Value="1"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Text>
+              <Panel MaximumSize="452,312" Layout="Grid">
+                <Layout>
+                  <GridLayout Columns="4" Rows="2" Orientation="Horizontal" RepeatGap="0" Spacing="0,0"/>
+                </Layout>
+                <Children>
+                  <Graphic Content="image://me:BoxArt01" MaximumSize="113,156" Padding="0,0,0,0">
+                    <Animations>
+                      <Animation CenterPointPercent=".5,.5,1">
+                        <Keyframes>
+                          <RotateKeyframe Time="0" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="0" Value="0"/>
+                          <RotateKeyframe Time="3.1" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="3.1" Value="0"/>
+                          <RotateKeyframe Time="3.2" Value="-90deg;0,1,0"/>
+                          <AlphaKeyframe Time="3.3" Value="1"/>
+                          <RotateKeyframe Time="3.3" Value="-180deg;0,1,0"/>
+                          <RotateKeyframe Time="3.4" Value="-270deg;0,1,0"/>
+                          <RotateKeyframe Time="3.5" Value="360deg;0,1,0"/>
+                          <RotateKeyframe Time="3.6" Value="270deg;0,1,0"/>
+                          <RotateKeyframe Time="3.7" Value="180deg;0,1,0"/>
+                          <RotateKeyframe Time="3.8" Value="90deg;0,1,0"/>
+                          <RotateKeyframe Time="3.9" Value="0deg;0,1,0"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Graphic>
+                  <Graphic Content="image://me:BoxArt02" MaximumSize="113,156" Padding="0,0,0,0">
+                    <Animations>
+                      <Animation CenterPointPercent=".5,.5,1">
+                        <Keyframes>
+                          <RotateKeyframe Time="0" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="0" Value="0"/>
+                          <RotateKeyframe Time="8.5" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="8.6" Value="0"/>
+                          <RotateKeyframe Time="8.7" Value="-90deg;0,1,0"/>
+                          <AlphaKeyframe Time="8.8" Value="1"/>
+                          <RotateKeyframe Time="8.8" Value="-180deg;0,1,0"/>
+                          <RotateKeyframe Time="8.9" Value="-270deg;0,1,0"/>
+                          <RotateKeyframe Time="9" Value="360deg;0,1,0"/>
+                          <RotateKeyframe Time="9.1" Value="270deg;0,1,0"/>
+                          <RotateKeyframe Time="9.2" Value="180deg;0,1,0"/>
+                          <RotateKeyframe Time="9.3" Value="90deg;0,1,0"/>
+                          <RotateKeyframe Time="9.4" Value="0deg;0,1,0"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Graphic>
+                  <Graphic Content="image://me:BoxArt03" MaximumSize="113,156" Padding="0,0,0,0">
+                    <Animations>
+                      <Animation CenterPointPercent=".5,.5,1">
+                        <Keyframes>
+                          <RotateKeyframe Time="0" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="0" Value="0"/>
+                          <RotateKeyframe Time="6.7" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="6.8" Value="0"/>
+                          <RotateKeyframe Time="6.9" Value="-90deg;0,1,0"/>
+                          <AlphaKeyframe Time="7" Value="1"/>
+                          <RotateKeyframe Time="7" Value="-180deg;0,1,0"/>
+                          <RotateKeyframe Time="7.1" Value="-270deg;0,1,0"/>
+                          <RotateKeyframe Time="7.2" Value="360deg;0,1,0"/>
+                          <RotateKeyframe Time="7.3" Value="270deg;0,1,0"/>
+                          <RotateKeyframe Time="7.4" Value="180deg;0,1,0"/>
+                          <RotateKeyframe Time="7.5" Value="90deg;0,1,0"/>
+                          <RotateKeyframe Time="7.6" Value="0deg;0,1,0"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Graphic>
+                  <Graphic Content="image://me:BoxArt04" MaximumSize="113,156" Padding="0,0,0,0">
+                    <Animations>
+                      <Animation CenterPointPercent=".5,.5,1">
+                        <Keyframes>
+                          <RotateKeyframe Time="0" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="0" Value="0"/>
+                          <RotateKeyframe Time="4.8" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="4.9" Value="0"/>
+                          <RotateKeyframe Time="5" Value="-90deg;0,1,0"/>
+                          <AlphaKeyframe Time="5.1" Value="1"/>
+                          <RotateKeyframe Time="5.1" Value="-180deg;0,1,0"/>
+                          <RotateKeyframe Time="5.2" Value="-270deg;0,1,0"/>
+                          <RotateKeyframe Time="5.3" Value="360deg;0,1,0"/>
+                          <RotateKeyframe Time="5.4" Value="270deg;0,1,0"/>
+                          <RotateKeyframe Time="5.5" Value="180deg;0,1,0"/>
+                          <RotateKeyframe Time="5.6" Value="90deg;0,1,0"/>
+                          <RotateKeyframe Time="5.7" Value="0deg;0,1,0"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Graphic>
+                  <Graphic Content="image://me:BoxArt05" MaximumSize="113,156" Padding="0,0,0,0">
+                    <Animations>
+                      <Animation CenterPointPercent=".5,.5,1">
+                        <Keyframes>
+                          <RotateKeyframe Time="0" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="0" Value="0"/>
+                          <RotateKeyframe Time="5.7" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="5.8" Value="0"/>
+                          <RotateKeyframe Time="5.9" Value="-90deg;0,1,0"/>
+                          <AlphaKeyframe Time="6" Value="1"/>
+                          <RotateKeyframe Time="6" Value="-180deg;0,1,0"/>
+                          <RotateKeyframe Time="6.1" Value="-270deg;0,1,0"/>
+                          <RotateKeyframe Time="6.2" Value="360deg;0,1,0"/>
+                          <RotateKeyframe Time="6.3" Value="270deg;0,1,0"/>
+                          <RotateKeyframe Time="6.4" Value="180deg;0,1,0"/>
+                          <RotateKeyframe Time="6.5" Value="90deg;0,1,0"/>
+                          <RotateKeyframe Time="6.6" Value="0deg;0,1,0"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Graphic>
+                  <Graphic Content="image://me:BoxArt06" MaximumSize="113,156" Padding="0,0,0,0">
+                    <Animations>
+                      <Animation CenterPointPercent=".5,.5,1">
+                        <Keyframes>
+                          <RotateKeyframe Time="0" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="0" Value="0"/>
+                          <RotateKeyframe Time="9.4" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="9.4" Value="0"/>
+                          <RotateKeyframe Time="9.5" Value="-90deg;0,1,0"/>
+                          <AlphaKeyframe Time="9.5" Value="1"/>
+                          <RotateKeyframe Time="9.6" Value="-180deg;0,1,0"/>
+                          <RotateKeyframe Time="9.7" Value="-270deg;0,1,0"/>
+                          <RotateKeyframe Time="9.8" Value="360deg;0,1,0"/>
+                          <RotateKeyframe Time="9.9" Value="270deg;0,1,0"/>
+                          <RotateKeyframe Time="10" Value="180deg;0,1,0"/>
+                          <RotateKeyframe Time="10.1" Value="90deg;0,1,0"/>
+                          <RotateKeyframe Time="10.2" Value="0deg;0,1,0"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Graphic>
+                  <Graphic Content="image://me:BoxArt07" MaximumSize="113,156" Padding="0,0,0,0">
+                    <Animations>
+                      <Animation CenterPointPercent=".5,.5,1">
+                        <Keyframes>
+                          <RotateKeyframe Time="0" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="0" Value="0"/>
+                          <RotateKeyframe Time="3.9" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="4" Value="0"/>
+                          <RotateKeyframe Time="4.1" Value="-90deg;0,1,0"/>
+                          <AlphaKeyframe Time="4.2" Value="1"/>
+                          <RotateKeyframe Time="4.2" Value="-180deg;0,1,0"/>
+                          <RotateKeyframe Time="4.3" Value="-270deg;0,1,0"/>
+                          <RotateKeyframe Time="4.4" Value="360deg;0,1,0"/>
+                          <RotateKeyframe Time="4.5" Value="270deg;0,1,0"/>
+                          <RotateKeyframe Time="4.6" Value="180deg;0,1,0"/>
+                          <RotateKeyframe Time="4.7" Value="90deg;0,1,0"/>
+                          <RotateKeyframe Time="4.8" Value="0deg;0,1,0"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Graphic>
+                  <Graphic Content="image://me:BoxArt08" MaximumSize="113,156" Padding="0,0,0,0">
+                    <Animations>
+                      <Animation CenterPointPercent=".5,.5,1">
+                        <Keyframes>
+                          <RotateKeyframe Time="0" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="0" Value="0"/>
+                          <RotateKeyframe Time="7.6" Value="0deg;0,1,0"/>
+                          <AlphaKeyframe Time="7.7" Value="0"/>
+                          <RotateKeyframe Time="7.8" Value="-90deg;0,1,0"/>
+                          <AlphaKeyframe Time="7.9" Value="1"/>
+                          <RotateKeyframe Time="7.9" Value="-180deg;0,1,0"/>
+                          <RotateKeyframe Time="8" Value="-270deg;0,1,0"/>
+                          <RotateKeyframe Time="8.1" Value="360deg;0,1,0"/>
+                          <RotateKeyframe Time="8.2" Value="270deg;0,1,0"/>
+                          <RotateKeyframe Time="8.3" Value="180deg;0,1,0"/>
+                          <RotateKeyframe Time="8.4" Value="90deg;0,1,0"/>
+                          <RotateKeyframe Time="8.5" Value="0deg;0,1,0"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Graphic>
+                </Children>
+              </Panel>
+            </Children>
+          </Panel>
+        </Children>
+        <Animations>
+          <Animation>
+            <Keyframes>
+              <AlphaKeyframe Time="0" Value="0"/>
+              <AlphaKeyframe Time="3" Value="1"/>
+            </Keyframes>
+          </Animation>
+        </Animations>
+      </ColorFill>
+    </Content>
+  </UI>
+
+  <Image Name="BoxArt01" Source="resx://Library/Library.Resources/boxart01"/>
+  <Image Name="BoxArt02" Source="resx://Library/Library.Resources/boxart02"/>
+  <Image Name="BoxArt03" Source="resx://Library/Library.Resources/boxart03"/>
+  <Image Name="BoxArt04" Source="resx://Library/Library.Resources/boxart04"/>
+  <Image Name="BoxArt05" Source="resx://Library/Library.Resources/boxart05"/>
+  <Image Name="BoxArt06" Source="resx://Library/Library.Resources/boxart06"/>
+  <Image Name="BoxArt07" Source="resx://Library/Library.Resources/boxart07"/>
+  <Image Name="BoxArt08" Source="resx://Library/Library.Resources/boxart08"/>
+</Mcml>

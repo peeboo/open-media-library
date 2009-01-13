@@ -95,6 +95,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap Application2 {
+            get {
+                object obj = ResourceManager.GetObject("Application2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static byte[] Base {
             get {
                 object obj = ResourceManager.GetObject("Base", resourceCulture);
@@ -112,6 +119,62 @@ namespace Library {
         internal static System.Drawing.Bitmap Blu_RayMovieDisk {
             get {
                 object obj = ResourceManager.GetObject("Blu_RayMovieDisk", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart01 {
+            get {
+                object obj = ResourceManager.GetObject("boxart01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart02 {
+            get {
+                object obj = ResourceManager.GetObject("boxart02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart03 {
+            get {
+                object obj = ResourceManager.GetObject("boxart03", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart04 {
+            get {
+                object obj = ResourceManager.GetObject("boxart04", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart05 {
+            get {
+                object obj = ResourceManager.GetObject("boxart05", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart06 {
+            get {
+                object obj = ResourceManager.GetObject("boxart06", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart07 {
+            get {
+                object obj = ResourceManager.GetObject("boxart07", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap boxart08 {
+            get {
+                object obj = ResourceManager.GetObject("boxart08", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -579,6 +642,13 @@ namespace Library {
         internal static byte[] Images {
             get {
                 object obj = ResourceManager.GetObject("Images", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] IntroPage {
+            get {
+                object obj = ResourceManager.GetObject("IntroPage", resourceCulture);
                 return ((byte[])(obj));
             }
         }

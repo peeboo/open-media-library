@@ -2,7 +2,7 @@
 
 <!-- These variables define the Windows Installer product version, product code and upgrade code. They   -->
 <!-- will be used later on in this file.                                                                 -->
-<?define Property_ProductVersion = "1.0.3.0" ?>
+<?define Property_ProductVersion = "2.1.1.1" ?>
 <?define Property_ProductCode = "282ffe47-5856-4f07-a5e1-617a24a9b4a5" ?>
 <?define Property_UpgradeCode = "0921ec75-fddc-46f8-bdf4-a5d697351567" ?>
 
@@ -86,6 +86,8 @@
                     <Component Id="Application.png" Guid="34c83bcd-a522-4103-8bac-ad159113d313" DiskId="1">
                         <File Name="Application.png"
                               Source="..\Images\Application.png" Checksum="no" />
+                      <File Name="Application2.png"
+                            Source="..\Images\Application.png" Checksum="no" />
                     </Component>
 
                     <!--<Component Id="ComponentFactory.Krypton.Toolkit.DLL" Guid="ACDECE2C-B066-415e-AD42-0B63D341300F" DiskId="1">

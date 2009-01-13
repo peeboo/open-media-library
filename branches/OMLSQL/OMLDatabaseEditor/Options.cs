@@ -9,7 +9,6 @@ using System.Text;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
-using System.Linq;
 
 using OMLEngine;
 

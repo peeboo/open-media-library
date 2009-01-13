@@ -119,12 +119,11 @@
                       <FlowLayout Repeat="WhenTooBig" RepeatGap="250,0"/>
                     </Layout>
                     <Animations>
-                      <Animation Animation="animation://s:MoveAnimation"/>
                       <Animation Type="Move">
                         <Keyframes>
                           <PositionKeyframe Time="0" RelativeTo="Current" />
                           <PositionKeyframe Time=".3" RelativeTo="Final" Value=".8,.8,.8" />
-                          <PositionKeyframe Time=".4" RelativeTo="Final" />
+                          <PositionKeyframe Time=".4" RelativeTo="Final" Value="1,1,1" />
                         </Keyframes>
                       </Animation>
                     </Animations>

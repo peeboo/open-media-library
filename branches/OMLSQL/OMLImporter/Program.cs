@@ -236,7 +236,6 @@ namespace OMLImporter
                     {
                         Console.WriteLine("Clearing out old data before import ( this can take awhile )");
                         TitleCollectionManager.DeleteAllDBData();
-
                     }
 
                     Console.WriteLine("Beginning to import titles...");

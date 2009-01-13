@@ -49,6 +49,9 @@ namespace OMLTranscoder
             return _command;
         }
 
+        // TODO: detect or make an settings/option to set NTSC or PAL
+        static bool IsNTSC { get { return true; } }
+
         public string GetArguments()
         {
             string outputFile = _source.GetTranscodingFileName();
@@ -90,8 +93,7 @@ namespace OMLTranscoder
                 }
 
                 // audio format
-                strBuilder.AppendFormat(@" -lavcopts acodec={0}", "mp2");
-                strBuilder.AppendFormat(@" -oac {0}", AudioEncoderFormat.ToString().ToLower());
+                strBuilder.Append(@" -oac copy -lavcopts acodec=mp2");
 
                 if (AudioEncoderFormat == MEncoder.AudioFormat.NoAudio)
                     strBuilder.Append(@" -nosound");
@@ -105,10 +107,20 @@ namespace OMLTranscoder
                         strBuilder.AppendFormat(@" -aid {0}", _source.AudioStream.AudioID);
                 }
 
-                //video format
-                strBuilder.AppendFormat(@" -ovc {0}", VideoEncoderFormat.ToString().ToLower());
-
-                strBuilder.Append(@" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0:autoaspect=1, harddup");
+                strBuilder.Append(" -ovc lavc");
+                // old options: -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0:autoaspect=1,harddup
+                if (IsNTSC)
+                {
+                    strBuilder.Append(" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=5000:keyint=18:vstrict=0:aspect=16/9");
+                    strBuilder.Append(" -vf scale=720:480,harddup");
+                    strBuilder.Append(" -ofps 30000/1001");
+                }
+                else {
+                    strBuilder.Append(" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0:aspect=16/9");
+                    strBuilder.Append(" -vf scale=720:576,harddup");
+                    strBuilder.Append(" -ofps 25");
+                }
+                strBuilder.Append(" -mpegopts format=dvd:tsaf");
             }
             else
             {
@@ -124,8 +136,6 @@ namespace OMLTranscoder
 
             // these are the same for dvds and non-dvds
             strBuilder.Append(@" -of mpeg");
-
-
 
             // set quiet mode on
             strBuilder.Append(@" -really-quiet");
