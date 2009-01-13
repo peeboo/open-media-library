@@ -351,6 +351,18 @@ namespace OMLEngine
             }
         }
 
+        public List<string> GetFolders
+        {
+            get
+            {
+                List<string> folders = (from title in _list
+                                        from disk in title.Disks
+                                        orderby System.IO.Path.GetDirectoryName(disk.Path) ascending
+                                        select System.IO.Path.GetDirectoryName(disk.Path)).Distinct().ToList<string>();
+                return folders;
+            }
+        }
+
         public Title this[int index]
         {
             get 
@@ -494,10 +506,30 @@ namespace OMLEngine
             return titles;
         }
 
+        public List<Title> FindByTag(string tag)
+        {
+            List<Title> titles = (from title in _list
+                                  from tags in title.Tags
+                                  where tags == tag
+                                  orderby title.SortName ascending
+                                  select title).ToList<Title>();
+            return titles;
+        }
+
         public List<Title> FindByCompleteness(decimal percentComplete)
         {
             List<Title> titles = (from title in _list
                                   where title.PercentComplete <= percentComplete
+                                  orderby title.SortName ascending
+                                  select title).ToList<Title>();
+            return titles;
+        }
+
+        public List<Title> FindByFolder(string folder)
+        {
+            List<Title> titles = (from title in _list
+                                  from disk in title.Disks
+                                  where disk.Path.StartsWith(folder)
                                   orderby title.SortName ascending
                                   select title).ToList<Title>();
             return titles;
@@ -685,6 +717,42 @@ namespace OMLEngine
             byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
             byte[] hash = md5.ComputeHash(inputBytes);
             return (Convert.ToBase64String(hash));            
+        }
+
+        public static long CleanUnusedImages()
+        {
+            long bytesRemoved = 0;
+            string[] imageFiles = Directory.GetFiles(FileSystemWalker.ImageDirectory);
+            TitleCollection tc = new TitleCollection();
+            tc.loadTitleCollection();
+
+            foreach (string image in imageFiles)
+            {
+                int id;
+                string strId = image.Substring(1, image.IndexOf('.') - 1);
+                try
+                {
+                    Int32.TryParse(strId, out id);
+                    if (tc.GetTitleById(id) == null)
+                    {
+                        try
+                        {
+                            FileInfo fInfo = new FileInfo(Path.Combine(FileSystemWalker.ImageDirectory, image));
+                            long size = fInfo.Length;
+                            File.Delete(Path.Combine(FileSystemWalker.ImageDirectory, image));
+                            bytesRemoved += size;
+                        }
+                        catch (Exception e)
+                        {
+                            Utilities.DebugLine("Unable to delete file: {0} {1}", image, e.Message);
+                        }
+                    }
+                }
+                catch (Exception e) {
+                    Utilities.DebugLine("Unable to parse Title id from image name: {0}", e.Message);
+                }
+            }
+            return bytesRemoved;
         }
 
         #region serialization methods

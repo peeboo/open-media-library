@@ -15,12 +15,20 @@
   <UI Name="Settings">
 
     <Locals>
+      <Command Name="ShowSampleLayoutCommand"
+               Description="Show Sample Layout"/>
       <Command Name="BeginSetupCommand"
                Description="Begin Setup"/>
       <Command Name="SaveSettings"
                Description="Save Settings"/>
       <Command Name="AboutOML"
-               Description="About OML"/>      
+               Description="About OML"/>
+      <Command Name="ScanForTMTCommand"
+               Description="Scan For TMT Plugin"/>
+      <Command Name="ScanForMounter"
+               Description="Scan For Mounting tool"/>
+      <Command Name="RemoveUnusedImagesCommand"
+               Description="Remove Unused Images"/>
 
       <Choice Name="Tabs">
         <Options>
@@ -52,13 +60,38 @@
       <a:UISettings Name="UISettings" UISettings="$Required" />      
     </Properties>
 
-    <Rules>           
+    <Rules>
+      <Binding Source="[Application.IsBusy]" Target="[waitCursor.Visible]" />
+
       <!-- Setup the default visibility rules -->
+      <Changed Source="[ShowSampleLayoutCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Settings.ShowSampleLayout]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[RemoveUnusedImagesCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Settings.CleanupImagesFolder]"/>
+        </Actions>  
+      </Changed>
+      
+      <Changed Source="[ScanForTMTCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Settings.LocateTotalMediaTheatrePluginExecutable]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[ScanForMounter.Invoked]">
+        <Actions>
+          <Invoke Target="[Settings.LocateSelectedMounter]" />
+        </Actions>
+      </Changed>
+
       <Changed Source="[SaveSettings.Invoked]">
         <Actions>
           <Invoke Target="[Settings.SaveSettings]" />
         </Actions>
-      </Changed>
+      </Changed>      
 
       <Changed Source="[AboutOML.Invoked]">
         <Actions>
@@ -252,7 +285,7 @@
     <Content>
       <ColorFill Name="AllContent" Content="Transparent" Layout="Form" Navigation="Column">
         <Children>
-          
+          <controls:WaitCursor Name="waitCursor" Visible="false"/>
           <!-- Top -->
           <Panel Name="TopPanel">
             <Children>
@@ -368,6 +401,11 @@
                                   <Text Content="Show Watched Icon" Color="White" Font="font://me:SmallFont" Margins="0,0,0,0"/>
                                 </Children>
                               </Panel>
+                              <Panel Layout="HorizontalFlow" Margins="0,10,0,0" Navigation="Group">
+                                <Children>
+                                  <c:SimpleButton Name="RemovedUnusedImagesButton" Command="[RemoveUnusedImagesCommand]" FocusOrder="1" Text="Remove Unused Images" Size="340,51"/>
+                                </Children>
+                              </Panel>
                             </Children>
                           </Panel>
 
@@ -417,19 +455,32 @@
                 <Children>
                   <Panel Name="WhichTool" Layout="VerticalFlow" Margins="0,0,50,0" Navigation="Row">
                     <Children>
-                      <Text Content="Which Mounting Tool" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                      <Text Content="Which Mounting Tool" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                       <rbg:RadioButtonGroup Model="[Settings.ImageMountingSelection]" />
                     </Children>
                   </Panel>
+
+                  <Panel Layout="VerticalFlow" Margins="0,25,0,0" Navigation="Row">
+                    <Children>
+                      <Text Content="Scan Drive for selected Mounting Tool" Color="White" Font="font://me:SmallFont"/>
+                      <Panel Layout="HorizontalFlow">
+                        <Children>
+                          <c:SimpleSpinner Name="LocalFixedDrivesMount" Model="[Settings.LocalFixedDrives]" Size="51,51" />
+                          <c:SimpleButton Name="ScanForMount" Command="[ScanForMounter]" FocusOrder="1" Text="Begin Scan"/>
+                        </Children>
+                      </Panel>
+                    </Children>
+                  </Panel>
+
                   <Panel Name="DTPath" Layout="VerticalFlow" Margins="0,0,50,0" Navigation="Row">
                     <Children>
-                      <Text Content="Mounting Tool Path" Color="White" Font="font://me:Font" Margins="0,20,0,0" />
+                      <Text Content="Mounting Tool Path" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0" />
                       <c:SimpleEditbox Size="700,51" Name="DTEditbox" EditableText="[Settings.MountingToolPath]" />
                     </Children>
                   </Panel>
                   <Panel Layout="VerticalFlow" Margins="0,0,50,0">
                     <Children>
-                      <Text Content="Virtual Drive" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                      <Text Content="Virtual Drive" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                       <c:SimpleSpinner Name="VirtualDrive" Model="[Settings.VirtualDrive]" Size="51,51" />
                     </Children>
                   </Panel>
@@ -557,6 +608,13 @@
                 <Children>
                   <Panel Layout="VerticalFlow" Navigation="Group">
                     <Children>
+                      <Text Content="Scan Drive for Total Media Theatre Plugin" Color="White" Font="font://me:SmallFont"/>
+                      <Panel Layout="HorizontalFlow">
+                        <Children>
+                          <c:SimpleSpinner Name="LocalFixedDrives" Model="[Settings.LocalFixedDrives]" Size="51,51" />
+                          <c:SimpleButton Name="ScanForTMTButton" Command="[ScanForTMTCommand]" FocusOrder="1" Text="Begin Scan"/>
+                        </Children>
+                      </Panel>
                       <Text Content="External HD/BluRay Player" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                       <c:SimpleEditbox Size="700,51" Name="BluRayPlayer" EditableText="[Settings.BlueRayPlayerPath]" />
 
@@ -634,6 +692,7 @@
                       <c:SimpleButton Name="Save Settings" Command="[SaveSettings]" FocusOrder="1" Text="Save Settings" Margins="0,20,10,0" />
                       <!-- <c:SimpleButton Name="Import Movies" Command="[BeginSetupCommand]" Text="Import Movies" Margins="0,20,10,0"/> -->
                       <c:SimpleButton Name="About OML" Command="[AboutOML]" FocusOrder="2" Text="About OML" Margins="0,20,10,0"/>
+                      <c:SimpleButton Name="Show Sample Layout" Size="25,51" Command="[ShowSampleLayoutCommand]" FocusOrder="2" Text="." Margins="0,20,10,0"/>
                     </Children>
                   </Panel>
                 </Children>

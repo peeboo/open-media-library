@@ -15,6 +15,7 @@ using DevExpress.Utils;
 
 using OMLEngine;
 using OMLSDK;
+using OMLDatabaseEditor.Controls;
 
 namespace OMLDatabaseEditor
 {
@@ -105,6 +106,14 @@ namespace OMLDatabaseEditor
                 item.CheckOnClick = true;
                 item.Click += new EventHandler(filterTitles_Click);
                 filterByParentalRatingToolStripMenuItem.DropDownItems.Add(item);
+            }
+
+            foreach (string tag in from t in TitleCollectionManager.GetAllTags(null) select t.Name)
+            {
+                item = new ToolStripMenuItem(tag);
+                item.CheckOnClick = true;
+                item.Click += new EventHandler(filterTitles_Click);
+                filterByTagToolStripMenuItem.DropDownItems.Add(item);
             }
         }
 
@@ -482,6 +491,38 @@ namespace OMLDatabaseEditor
                 AboutOML about = new AboutOML();
                 about.Show();
             }
+            else if (sender == moveDisksToolStripMenuItem)
+            {
+                DiskMoverFrm dsm = new DiskMoverFrm();
+                if (dsm.ShowDialog(this) == DialogResult.OK)
+                {
+                    string fromFolder = dsm.fromFolder;
+                    string toFolder = dsm.toFolder;
+                    List<Title> titles = _titleCollection.FindByFolder(fromFolder);
+                    foreach (Title title in titles)
+                    {
+                        foreach (Disk disk in title.Disks)
+                        {
+                            if (disk.Path.StartsWith(fromFolder))
+                            {
+                                disk.Path = disk.Path.Replace(fromFolder, toFolder);
+                            }
+                        }
+                        if (dsm.withImages)
+                        {
+                            if (title.FrontCoverPath.StartsWith(fromFolder))
+                            {
+                                title.FrontCoverPath = title.FrontCoverPath.Replace(fromFolder, toFolder);
+                            }
+                            if (title.FrontCoverMenuPath.StartsWith(fromFolder))
+                            {
+                                title.FrontCoverMenuPath = title.FrontCoverMenuPath.Replace(fromFolder, toFolder);
+                            }
+                        }
+                    }
+                    TitleCollectionManager.SaveTitleUpdates();
+                }
+            }
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -779,6 +820,8 @@ namespace OMLDatabaseEditor
                 if (item != filterItem) item.Checked = false;
             foreach (ToolStripMenuItem item in filterByParentalRatingToolStripMenuItem.DropDownItems)
                 if (item != filterItem) item.Checked = false;
+            foreach (ToolStripMenuItem item in filterByTagToolStripMenuItem.DropDownItems)
+                if (item != filterItem) item.Checked = false;
 
             if (sender == allMoviesToolStripMenuItem1)
             {
@@ -793,6 +836,8 @@ namespace OMLDatabaseEditor
                     _movieList = TitleCollectionManager.GetTitlesByPercentComplete(decimal.Parse("." + filterItem.Text.TrimEnd('%'))).ToList<Title>();
                 else if (filterItem.OwnerItem == filterByParentalRatingToolStripMenuItem)
                     _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.ParentalRating, filterItem.Text).ToList<Title>();
+                else if (filterItem.OwnerItem == filterByTagToolStripMenuItem)
+                    _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Tag, filterItem.Text).ToList<Title>();
 
                 PopulateMovieList(_movieList);
             }

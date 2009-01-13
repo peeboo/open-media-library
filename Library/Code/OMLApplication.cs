@@ -8,6 +8,10 @@ using System.Globalization;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
+using System.IO;
+using System.Reflection;
+using System.Threading;
+
 
 using OMLEngine;
 using System;
@@ -25,6 +29,27 @@ namespace Library
         private int currentFocusedItemIndex = 0;
         private int currentItemIndexPosition = 0;
         private int currentAngleDegrees;
+
+        public string RevisionNumber
+        {
+            get
+            {
+                try
+                {
+                    Assembly _assembly = Assembly.GetExecutingAssembly();
+                    Stream _txtStream = _assembly.GetManifestResourceStream("Library.Revision.txt");
+                    StreamReader _txtStreamReader = new StreamReader(_txtStream);
+                    string revisionNumber = _txtStreamReader.ReadToEnd();
+                    _txtStreamReader.Close();
+                    _txtStream.Close();
+                    return revisionNumber;
+                }
+                catch (Exception)
+                {
+                    return @"Unknown";
+                }
+            }
+        }
 
         public int DistanceToMoveCloserBasedOnAngleOrRotation
         {
@@ -159,6 +184,8 @@ namespace Library
             _session.GoToPage(@"resx://Library/Library.Resources/NewMenu", properties);
             return;
 #endif
+            OMLUpdater updater = new OMLUpdater();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
 
             switch (context)
             {
@@ -298,7 +325,7 @@ namespace Library
             {
                 _session.GoToPage("resx://Library/Library.Resources/Menu", properties);
             }
-            IsBusy = true;
+            //IsBusy = true; why do this?
         }
 
         public void GoToSelectionList(Filter filter)

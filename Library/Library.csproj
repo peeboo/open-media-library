@@ -24,7 +24,7 @@
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <FullyQualifiedOutputPath>$(MSBuildProjectDirectory)\bin\Debug</FullyQualifiedOutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
@@ -105,6 +105,7 @@
     <Compile Include="Code\LayoutV2\OMLCommand.cs" />
     <Compile Include="Code\LayoutV2\OMLPage.cs" />
     <Compile Include="Code\OMLSettings.cs" />
+    <Compile Include="Code\OMLUpdater.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\ExternalPlayer.cs" />
     <Compile Include="Code\Setup.cs" />
@@ -146,7 +147,16 @@
     <None Include="Setup\Setup.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Images\application2.png" />
     <Content Include="Images\Blu-RayMovieDisk.png" />
+    <Content Include="Images\boxart01.jpg" />
+    <None Include="Images\boxart02.jpg" />
+    <None Include="Images\boxart03.jpg" />
+    <None Include="Images\boxart04.jpg" />
+    <None Include="Images\boxart06.jpg" />
+    <None Include="Images\boxart05.jpg" />
+    <None Include="Images\boxart07.jpg" />
+    <None Include="Images\boxart08.jpg" />
     <Content Include="Images\EnhancedDVD.png" />
     <Content Include="Images\Focus_Outline.png" />
     <Content Include="Images\Folder_Closed.png" />
@@ -164,6 +174,7 @@
     <Content Include="Markup\Control\DiskChooserContext.mcml" />
     <Content Include="Markup\Control\MovieDescription.mcml" />
     <Content Include="Markup\DetailsPage3.mcml" />
+    <Content Include="Markup\IntroPage.mcml" />
     <Content Include="Markup\LayoutV2\BasePage.mcml" />
     <Content Include="Markup\Base\Animations.mcml" />
     <Content Include="Markup\Base\Base.mcml" />
@@ -221,6 +232,7 @@
     <Content Include="OldMarkup\MenuWithHorizontalBars.mcml" />
     <Content Include="OldMarkup\MovieDetails.mcml" />
     <Content Include="OldMarkup\MovieGallery.Old.mcml" />
+    <Content Include="OMLInfo.xml" />
     <Content Include="Registration.xml" />
     <Content Include="Images\Application.png" />
     <None Include="app.config" />
@@ -244,6 +256,7 @@
     <None Include="Resources\AppIcon.png" />
     <None Include="Resources\AppIcon1.png" />
     <Content Include="Resources\Application.png" />
+    <None Include="Resources\Application02.bmp" />
     <Content Include="Resources\BusyBack.png" />
     <Content Include="Resources\BusyFront.png" />
     <Content Include="Resources\ButtonDisabled.png" />
@@ -364,6 +377,7 @@
     <None Include="Resources\spinnerbluebarlargedormant1.png" />
     <None Include="Resources\spinnerbluebarlargefocus1.png" />
     <None Include="Resources\spinnerbluebarlargenofocus1.png" />
+    <EmbeddedResource Include="Revision.txt" />
     <Content Include="Sounds\Error.wav" />
     <Content Include="Sounds\Focus.wav" />
     <Content Include="Sounds\MiniSelect.wav" />

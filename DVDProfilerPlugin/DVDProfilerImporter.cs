@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.Xml.XPath;
 using OMLEngine;
 using OMLSDK;
 
@@ -14,16 +15,32 @@ namespace DVDProfilerPlugin
     // [CLSCompliant(true)] // this requires CLSCompliant assemby attribute
     public class DVDProfilerImporter : OMLPlugin
     {
-        private Title currentTitle;
-        private VideoFormat currentVideoFormat;
-        private readonly List<List<string>> currentDiscTitles = new List<List<string>>(); // List of discs with a list of sides
-        private string currentNotes;
-        private readonly List<string> currentWritersAlreadyAdded = new List<string>();
-        private readonly List<string> currentProducersAlreadyAdded = new List<string>();
         private static readonly Regex filepathRegex = new Regex(@"\[filepath((\s+disc\s*=\s*(?'discNumber'\d+)(?'side'[ab])?))?\s*\](?'path'[^\[]+)\[\s*\/\s*filepath\s*\]", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex removeFormattingRegex = new Regex(@"<\/?(i|b)>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         private static readonly Regex removeExtraLinebreaksRegex = new Regex(@"(\s*(\r|\n)\s*)+", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+        private List<TagDefinition> tagDefinitions = new List<TagDefinition>();
+        private List<Exception> initializationErrors = new List<Exception>();
+
         string imagesPath;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DVDProfilerImporter"/> class.
+        /// </summary>
+        public DVDProfilerImporter()
+        {
+            InitializeSettings(null);
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DVDProfilerImporter"/> class for use in UnitTesting.
+        /// </summary>
+        /// <param name="settingsXml">An <see cref="XmlTextReader"/> containing the settings to use.</param>
+        internal DVDProfilerImporter(XmlTextReader settingsXml)
+        {
+            InitializeSettings(settingsXml);
+        }
 
         public override bool IsSingleFileImporter()
         {
@@ -66,200 +83,181 @@ namespace DVDProfilerPlugin
             return @"DVDProfiler xml file importer v" + Version;
         }
 
-        private Title CurrentTitle
-        {
-            get
-            {
-                if (currentTitle == null) currentTitle = new Title();
-                return currentTitle;
-            }
-        }
-
         public override void ProcessFile(string file)
         {
+            foreach (Exception ex in initializationErrors)
+            {
+                AddError(ex.Message);
+            }
             using (XmlTextReader reader = new XmlTextReader(file))
             {
-                reader.MoveToContent();
-                switch (reader.LocalName)
+                var navigator = new XPathDocument(reader).CreateNavigator();
+                foreach (XPathNavigator dvd in navigator.Select("/Collection/DVD|/DVD")) // Allow both collection file and single profile export
                 {
-                    case "Collection":
-                        ReadChildElements(reader, HandleDvd);
-                        break;
-                    case "DVD":
-                        HandleDvd(reader);
-                        break;
-                    default:
-                        throw new IOException("Unsupported root node: " + reader.LocalName);
+                    HandleDvd(dvd);
                 }
             }
         }
 
-        private void HandleDvd(XmlTextReader reader)
+        private void HandleDvd(XPathNavigator dvdNavigator)
         {
-            Debug.Assert(reader.LocalName == "DVD", "Xml reader error - expected DVD node, got: " + reader.LocalName);
-            ClearImportState();
-            ReadChildElements(reader, HandleDvdElements);
-            NextTitle();
-        }
-
-        private void HandleDvdElements(XmlTextReader reader)
-        {
-            switch (reader.LocalName)
+            Title title = LoadTitle(dvdNavigator);
+            GetImagesForNewTitle(title);
+            if (ValidateTitle(title))
             {
-                case "DVD":
-                    NextTitle();
-                    break;
-                case "ID":
-                    CurrentTitle.MetadataSourceID = reader.ReadElementString();
-                    break;
-                case "MediaTypes":
-                    ReadChildElements(reader, HandleMediaTypes);
-                    break;
-                case "UPC":
-                    CurrentTitle.UPC = reader.ReadElementString();
-                    break;
-                case "Title":
-                    CurrentTitle.Name = reader.ReadElementString();
-                    break;
-                case "OriginalTitle":
-                    CurrentTitle.OriginalName = reader.ReadElementString();
-                    break;
-                case "SortTitle":
-                    CurrentTitle.SortName = reader.ReadElementString();
-                    break;
-                case "CountryOfOrigin":
-                    CurrentTitle.CountryOfOrigin = reader.ReadElementString();
-                    break;
-                case "ProductionYear":
-                    // Set to January first in the appropriate year in lack of better...
-                    int releaseYear;
-                    if (TryReadElementInt(reader, out releaseYear)) CurrentTitle.ReleaseDate = new DateTime(releaseYear, 1, 1);
-                    break;
-                case "RunningTime":
-                    int runningTime;
-                    if (TryReadElementInt(reader, out runningTime)) CurrentTitle.Runtime = runningTime;
-                    break;
-                case "Rating":
-                    CurrentTitle.ParentalRating = reader.ReadElementString();
-                    break;
-                case "RatingDetails":
-                    CurrentTitle.ParentalRatingReason = reader.ReadElementString();
-                    break;
-                case "Genres":
-                    ReadChildElements(reader, HandleGenres);
-                    break;
-                case "Format":
-                    ReadChildElements(reader, HandleFormat);
-                    break;
-                case "Studios":
-                    ReadChildElements(reader,
-                          delegate
-                          {
-                              if (reader.LocalName == "Studio" && string.IsNullOrEmpty(CurrentTitle.Studio)) CurrentTitle.Studio = reader.ReadElementString();
-                          });
-                    break;
-                case "Audio":
-                    ReadChildElements(reader, HandleAudio);
-                    break;
-                case "Subtitles":
-                    ReadChildElements(reader,
-                          delegate
-                          {
-                              if (reader.LocalName == "Subtitle") CurrentTitle.AddSubtitle(reader.ReadElementString());
-                          });
-                    break;
-                case "Actors":
-                    ReadChildElements(reader, HandleActors);
-                    break;
-                case "Credits":
-                    ReadChildElements(reader, HandleCredits);
-                    break;
-                case "Review":
-                    ReadFilmReview(reader);
-                    break;
-                case "Overview":
-                    string synopsis = removeFormattingRegex.Replace(reader.ReadElementString(), "");
-                    CurrentTitle.Synopsis = removeExtraLinebreaksRegex.Replace(synopsis, "\r\n").Trim();
-                    break;
-                case "Discs":
-                    ReadChildElements(reader, HandleDiscs);
-                    break;
-                case "Notes":
-                    currentNotes = reader.ReadElementString();
-                    break;
+                try { AddTitle(title); }
+                catch (Exception e) { Trace.WriteLine("Error adding row: " + e.Message); }
             }
+            else Trace.WriteLine("Error saving row");
+
         }
 
-        //Collection/DVD/Genres/*
-        private void HandleGenres(XmlReader reader)
+        private Title LoadTitle(XPathNavigator dvdNavigator)
         {
-            if (reader.LocalName == "Genre")
-            {
-                string genre = reader.ReadElementString();
-                if (!string.IsNullOrEmpty(genre)) CurrentTitle.AddGenre(genre);
-            }
-        }
+            Title title = new Title();
+            VideoFormat videoFormat = VideoFormat.DVD;
+            string notes = string.Empty;
+            var discs = new Dictionary<string, string>(); // The key is on the form "1a", "10b", etc - the value is the description
 
-        private void ReadFilmReview(XmlReader reader)
-        {
-            if (reader.MoveToAttribute("Film"))
+            foreach (XPathNavigator dvdElement in dvdNavigator.SelectChildren(XPathNodeType.Element))
             {
-                switch (reader.Value)
+                switch (dvdElement.Name)
                 {
-                    case "9": CurrentTitle.UserStarRating = 100; break;
-                    case "8": CurrentTitle.UserStarRating = 90; break;
-                    case "7": CurrentTitle.UserStarRating = 80; break;
-                    case "6": CurrentTitle.UserStarRating = 70; break;
-                    case "5": CurrentTitle.UserStarRating = 60; break;
-                    case "4": CurrentTitle.UserStarRating = 50; break;
-                    case "3": CurrentTitle.UserStarRating = 40; break;
-                    case "2": CurrentTitle.UserStarRating = 20; break; // Have to skip somewhere to avoid fractions :(
-                    case "1": CurrentTitle.UserStarRating = 10; break;
+                    case "ID":
+                        title.MetadataSourceID = dvdElement.Value;
+                        break;
+                    case "MediaTypes":
+                        videoFormat = HandleMediaTypes(dvdElement);
+                        break;
+                    case "UPC":
+                        title.UPC = dvdElement.Value;
+                        break;
+                    case "Title":
+                        title.Name = dvdElement.Value;
+                        break;
+                    case "OriginalTitle":
+                        title.OriginalName = dvdElement.Value;
+                        break;
+                    case "SortTitle":
+                        title.SortName = dvdElement.Value;
+                        break;
+                    case "CountryOfOrigin":
+                        title.CountryOfOrigin = dvdElement.Value;
+                        break;
+                    case "ProductionYear":
+                        // Set to January first in the appropriate year in lack of better...
+                        int releaseYear;
+                        if (TryReadItemInt(dvdElement, out releaseYear))
+                        {
+                            title.ReleaseDate = new DateTime(releaseYear, 1, 1);
+                        }
+                        break;
+                    case "RunningTime":
+                        int runningTime;
+                        if (TryReadItemInt(dvdElement, out runningTime)) title.Runtime = runningTime;
+                        break;
+                    case "Rating":
+                        title.ParentalRating = dvdElement.Value;
+                        break;
+                    case "RatingDetails":
+                        title.ParentalRatingReason = dvdElement.Value;
+                        break;
+                    case "Genres":
+                        foreach (XPathNavigator genreNavigator in dvdElement.Select("Genre[. != '']"))
+                        {
+                            title.Genres.Add(genreNavigator.Value);
+                        }
+                        break;
+                    case "Format":
+                        HandleFormat(title, dvdElement);
+                        break;
+                    case "Studios":
+                        var studioNavigator = dvdElement.SelectSingleNode("Studio[. != '']");
+                        if (studioNavigator != null) title.Studio = studioNavigator.Value;
+                        break;
+                    case "Audio":
+                        HandleAudio(title, dvdElement);
+                        break;
+                    case "Subtitles":
+                        foreach (XPathNavigator subtitleNavigator in dvdElement.SelectChildren("Subtitle", string.Empty))
+                        {
+                            title.Subtitles.Add(subtitleNavigator.Value);
+                        }
+                        break;
+                    case "Actors":
+                        HandleActors(title, dvdElement);
+                        break;
+                    case "Credits":
+                        HandleCredits(title, dvdElement);
+                        break;
+                    case "Review":
+                        ReadFilmReview(title, dvdElement);
+                        break;
+                    case "Overview":
+                        string synopsis = removeFormattingRegex.Replace(dvdElement.Value, string.Empty);
+                        title.Synopsis = removeExtraLinebreaksRegex.Replace(synopsis, "\r\n").Trim();
+                        break;
+                    case "Discs":
+                        discs = HandleDiscs(dvdElement);
+                        break;
+                    case "Notes":
+                        notes = dvdElement.Value;
+                        break;
+                    case "PurchaseInfo":
+                        HandlePurchaseInfo(title, dvdElement);
+                        break;
                 }
+            }
+            MergeDiscInfo(title, videoFormat, discs, notes);
+            ApplyTags(title, dvdNavigator);
+            return title;
+        }
+
+        private void ReadFilmReview(Title title, XPathNavigator reviewNavigator)
+        {
+            switch (reviewNavigator.GetAttribute("Film", String.Empty))
+            {
+                case "9": title.UserStarRating = 100; break;
+                case "8": title.UserStarRating = 90; break;
+                case "7": title.UserStarRating = 80; break;
+                case "6": title.UserStarRating = 70; break;
+                case "5": title.UserStarRating = 60; break;
+                case "4": title.UserStarRating = 50; break;
+                case "3": title.UserStarRating = 40; break;
+                case "2": title.UserStarRating = 20; break; // Have to skip somewhere to avoid fractions :(
+                case "1": title.UserStarRating = 10; break;
             }
         }
 
         //Collection/DVD/Discs/*
-        private void HandleDiscs(XmlTextReader reader)
+        private Dictionary<string, string> HandleDiscs(XPathNavigator discsNavigator)
         {
-            if (reader.LocalName == "Disc")
+            var discs = new Dictionary<string, string>();
+            int currentDiscId = 0;
+            foreach (XPathNavigator descriptionNavigator in discsNavigator.Select("Disc/DescriptionSideA|Disc/DescriptionSideB"))
             {
-                var sideTitles = new List<string> { null, null };
+                string description = descriptionNavigator.Value;
+                string side = descriptionNavigator.Name.EndsWith("B") ? "b" : "a";
+                if (side == "a") currentDiscId++;
 
-
-                ReadChildElements(reader,
-                    delegate
-                    {
-                        switch (reader.LocalName)
-                        {
-                            case "DescriptionSideA":
-                                sideTitles[0] = reader.ReadElementString();
-                                break;
-                            case "DescriptionSideB":
-                                sideTitles[1] = reader.ReadElementString();
-                                break;
-                        }
-
-                    });
-
-                currentDiscTitles.Add(sideTitles);
+                discs.Add(currentDiscId.ToString(CultureInfo.InvariantCulture) + side, description);
             }
+            return discs;
         }
 
 
         // Collection/DVD/Actors/*
-        private void HandleActors(XmlTextReader reader)
+        private void HandleActors(Title title, XPathNavigator actorsNavigator)
         {
-            if (reader.LocalName == "Actor")
+            foreach (XPathNavigator actorNavigator in actorsNavigator.SelectChildren("Actor", string.Empty))
             {
-                string role = "";
-                if (reader.MoveToAttribute("Role")) role = reader.Value;
-                string fullName = ReadFullName(reader);
+                string role = actorNavigator.GetAttribute("Role", string.Empty) ?? string.Empty;
+                string fullName = ReadFullName(actorNavigator);
                 if (!string.IsNullOrEmpty(fullName)) // Skip dividers
                 {
-                    if (CurrentTitle.ActingRoles.ContainsKey(fullName))
+                    if (title.ActingRoles.ContainsKey(fullName))
                     {
-                        string currentRole = CurrentTitle.ActingRoles[fullName];
+                        string currentRole = title.ActingRoles[fullName];
                         string newRole = currentRole;
                         if (string.IsNullOrEmpty(currentRole))
                         {
@@ -269,41 +267,48 @@ namespace DVDProfilerPlugin
                         {
                             newRole = currentRole + "/" + role;
                         }
-                        CurrentTitle.ActingRoles[fullName] = newRole;
+                        title.ActingRoles[fullName] = newRole;
                     }
                     else
                     {
-                        CurrentTitle.ActingRoles.Add(fullName, role);
+                        title.ActingRoles.Add(fullName, role);
                     }
                 }
             }
         }
 
         // Collection/DVD/Credits/*
-        private void HandleCredits(XmlTextReader reader)
+        private void HandleCredits(Title title, XPathNavigator creditsNavigator)
         {
-            if (reader.LocalName == "Credit")
+            List<string> directorsAlreadyAdded = new List<string>();
+            List<string> writersAlreadyAdded = new List<string>();
+            List<string> producersAlreadyAdded = new List<string>();
+
+            foreach (XPathNavigator creditNavigator in creditsNavigator.SelectChildren("Credit", string.Empty))
             {
-                string creditType = null;
-                if (reader.MoveToAttribute("CreditType")) creditType = reader.Value;
-                Person person = new Person(ReadFullName(reader));
+                string creditType = creditNavigator.GetAttribute("CreditType", string.Empty);
+                Person person = new Person(ReadFullName(creditNavigator));
                 switch (creditType)
                 {
                     case "Direction":
-                        CurrentTitle.Directors.Add(person);
+                        if (!directorsAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
+                        {
+                            title.Directors.Add(person);
+                            directorsAlreadyAdded.Add(person.full_name.ToUpperInvariant());
+                        }
                         break;
                     case "Writing":
-                        if (!currentWritersAlreadyAdded.Contains(person.full_name))
+                        if (!writersAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
                         {
-                            CurrentTitle.Writers.Add(person);
-                            currentWritersAlreadyAdded.Add(person.full_name);
+                            title.Writers.Add(person);
+                            writersAlreadyAdded.Add(person.full_name.ToUpperInvariant());
                         }
                         break;
                     case "Production":
-                        if (!currentProducersAlreadyAdded.Contains(person.full_name))
+                        if (!producersAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
                         {
-                            CurrentTitle.Producers.Add(person.full_name);
-                            currentProducersAlreadyAdded.Add(person.full_name);
+                            title.Producers.Add(person.full_name);
+                            producersAlreadyAdded.Add(person.full_name.ToUpperInvariant());
                         }
                         break;
                 }
@@ -312,84 +317,96 @@ namespace DVDProfilerPlugin
 
 
         // Collection/DVD/Audio/*
-        private void HandleAudio(XmlTextReader reader)
+        private void HandleAudio(Title title, XPathNavigator audioTracksNavigator)
         {
-            if (reader.LocalName == "AudioTrack")
+            foreach (XPathNavigator audioTrackNavigator in audioTracksNavigator.SelectChildren("AudioTrack", string.Empty))
             {
                 string content = null;
                 string format = null;
-
-                ReadChildElements(reader,
-                    delegate
+                foreach (XPathNavigator audioTrackElementNavigator in audioTrackNavigator.SelectChildren(string.Empty, string.Empty))
+                {
+                    switch (audioTrackElementNavigator.Name)
                     {
-                        switch (reader.LocalName)
-                        {
-                            case "AudioContent":
-                                content = reader.ReadElementString();
-                                break;
-                            case "AudioFormat":
-                                format = reader.ReadElementString();
-                                break;
-                        }
-                    });
+                        case "AudioContent":
+                            content = audioTrackElementNavigator.Value;
+                            break;
+                        case "AudioFormat":
+                            format = audioTrackElementNavigator.Value;
+                            break;
+                    }
+                }
 
                 // Move both into content, leaving it null if none of them are set
                 if (string.IsNullOrEmpty(content)) content = format;
                 else if (!string.IsNullOrEmpty(format)) content += " (" + format + ")";
 
-                if (!string.IsNullOrEmpty(content)) CurrentTitle.AddAudioTrack(content);
+                if (!string.IsNullOrEmpty(content)) title.AudioTracks.Add(content);
             }
         }
 
         // Collection/DVD/Format/*
-        private void HandleFormat(XmlTextReader reader)
+        private void HandleFormat(Title title, XPathNavigator formatNavigator)
         {
-            switch (reader.LocalName)
+            foreach (XPathNavigator formatChildElementNavigator in formatNavigator.SelectChildren(XPathNodeType.Element))
             {
-                case "FormatAspectRatio":
-                    CurrentTitle.AspectRatio = reader.ReadElementString();
-                    break;
-                case "FormatVideoStandard":
-                    CurrentTitle.VideoStandard = reader.ReadElementString();
-                    break;
-                case "FormatLetterBox":
-                case "FormatPanAndScan":
-                case "FormatFullFrame":
-                    if (string.IsNullOrEmpty(CurrentTitle.AspectRatio))
-                    {
-                        CurrentTitle.AspectRatio = "1.33";
-                    }
-                    break;
-            }
-        }
-
-        // Collection/DVD/MediaTypes/*
-        private void HandleMediaTypes(XmlTextReader reader)
-        {
-            string name = reader.LocalName;
-            string value = reader.ReadElementString();
-            if (string.Compare(value, "true", StringComparison.InvariantCultureIgnoreCase) == 0)
-            {
-                switch (name)
+                switch (formatChildElementNavigator.Name)
                 {
-                    case "HDDVD":
-                        currentVideoFormat = VideoFormat.HDDVD;
+                    case "FormatAspectRatio":
+                        title.AspectRatio = formatChildElementNavigator.Value;
                         break;
-                    case "BluRay":
-                        currentVideoFormat = VideoFormat.BLURAY;
+                    case "FormatVideoStandard":
+                        title.VideoStandard = formatChildElementNavigator.Value;
+                        break;
+                    case "FormatLetterBox":
+                    case "FormatPanAndScan":
+                    case "FormatFullFrame":
+                        if (string.IsNullOrEmpty(title.AspectRatio))
+                        {
+                            title.AspectRatio = "1.33";
+                        }
                         break;
                 }
             }
         }
 
+        // Collection/DVD/MediaTypes/*
+        private VideoFormat HandleMediaTypes(XPathNavigator mediaTypesNavigator)
+        {
+            XPathNavigator selectedMedia = mediaTypesNavigator.SelectSingleNode("*[.='True']");
+            if (selectedMedia != null)
+            {
+                switch (selectedMedia.Name)
+                {
+                    case "HDDVD":
+                        return VideoFormat.HDDVD;
+                    case "BluRay":
+                        return VideoFormat.BLURAY;
+                }
+            }
+            return VideoFormat.DVD;
+        }
+
+        // Collection/DVD/PurchaseInfo/*
+        private void HandlePurchaseInfo(Title title, XPathNavigator dvdElement)
+        {
+            XPathNavigator purchaseDateNavigator = dvdElement.SelectSingleNode("PurchaseDate");
+            if (purchaseDateNavigator != null)
+            {
+                DateTime purchaseDate;
+                if (TryReadItemDate(purchaseDateNavigator, DateTimeKind.Local, out purchaseDate))
+                {
+                    title.DateAdded = purchaseDate;
+                }
+            }
+        }
 
 
-        private static bool TryReadElementDate(XmlReader reader, DateTimeKind dateTimeKind, out DateTime date)
+        private static bool TryReadItemDate(XPathItem item, DateTimeKind dateTimeKind, out DateTime date)
         {
             DateTimeStyles style = dateTimeKind == DateTimeKind.Local
                                        ? DateTimeStyles.AssumeLocal
                                        : DateTimeStyles.AssumeUniversal;
-            string dateString = reader.ReadElementString();
+            string dateString = item.Value;
             bool result = DateTime.TryParseExact(dateString, "yyyy-MM-dd", CultureInfo.InvariantCulture, style | DateTimeStyles.NoCurrentDateDefault, out date);
             if (result && date.Year < 1900) // DVD Profiler tend to use 1899-12-30 for no date
             {
@@ -399,140 +416,94 @@ namespace DVDProfilerPlugin
             return result;
         }
 
-        private static bool TryReadElementInt(XmlReader reader, out int number)
+        private static bool TryReadItemInt(XPathItem item, out int number)
         {
-            return int.TryParse(reader.ReadElementString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out number);
+            return int.TryParse(item.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out number);
         }
 
-        private static string ReadFullName(XmlReader reader)
+        private static string ReadFullName(XPathNavigator personNavigator)
         {
             StringBuilder result = new StringBuilder();
 
-            if (reader.MoveToAttribute("FirstName"))
+            string firstName = personNavigator.GetAttribute("FirstName", string.Empty);
+            if (!string.IsNullOrEmpty(firstName)) result.Append(firstName);
+
+            string middleName = personNavigator.GetAttribute("MiddleName", string.Empty);
+            if (!string.IsNullOrEmpty(middleName))
             {
-                if (!string.IsNullOrEmpty(reader.Value)) result.Append(reader.Value);
+                if (result.Length > 0) result.Append(" ");
+                result.Append(middleName);
             }
-            if (reader.MoveToAttribute("MiddleName"))
+
+            string lastName = personNavigator.GetAttribute("LastName", string.Empty);
+            if (!string.IsNullOrEmpty(lastName))
             {
-                if (!string.IsNullOrEmpty(reader.Value))
-                {
-                    if (result.Length > 0) result.Append(" ");
-                    result.Append(reader.Value);
-                }
+                if (result.Length > 0) result.Append(" ");
+                result.Append(lastName);
             }
-            if (reader.MoveToAttribute("LastName"))
+
+            string birthYear = personNavigator.GetAttribute("BirthYear", string.Empty);
+            if (!string.IsNullOrEmpty(birthYear) && birthYear != "0")
             {
-                if (!string.IsNullOrEmpty(reader.Value))
-                {
-                    if (result.Length > 0) result.Append(" ");
-                    result.Append(reader.Value);
-                }
-            }
-            if (reader.MoveToAttribute("BirthYear"))
-            {
-                if (!string.IsNullOrEmpty(reader.Value) && reader.Value != "0")
-                {
-                    if (result.Length > 0) result.Append(" ");
-                    result.AppendFormat("({0})", reader.Value);
-                }
+                if (result.Length > 0) result.Append(" ");
+                result.AppendFormat("({0})", birthYear);
             }
             return result.ToString();
-        }
-
-
-
-        private delegate void ElementHandlerDelegate(XmlTextReader reader);
-
-
-        private static void ReadChildElements(XmlTextReader reader, ElementHandlerDelegate elementHandler)
-        {
-            if (!reader.IsStartElement()) throw new NotSupportedException("Reading the child nodes of an XML node of type " + reader.NodeType + " is not supported.");
-            int currentDepth = reader.Depth;
-            reader.Read();
-            reader.MoveToContent();
-            if (currentDepth >= reader.Depth) return; // node had no child nodes
-
-
-            while (!reader.EOF && reader.Depth > currentDepth)
-            {
-                int currentLine = reader.LineNumber;
-                int currentCol = reader.LinePosition;
-
-
-                if (reader.NodeType == XmlNodeType.Element && string.IsNullOrEmpty(reader.NamespaceURI))
-                {
-                    elementHandler(reader);
-                }
-                else
-                {
-                    reader.Skip();
-                }
-
-
-                // Advance the reader if the handler didn't do it
-                if (currentLine == reader.LineNumber && currentCol == reader.LinePosition) reader.Skip();
-
-                // Read back to the same level if the handler didn't do it
-                while (reader.Depth > currentDepth + 1) reader.Skip();
-            }
-        }
-
-        private void NextTitle()
-        {
-            if (currentTitle != null)
-            {
-                MergeDiscInfo();
-
-                GetImagesForNewTitle(currentTitle);
-                if (ValidateTitle(currentTitle))
-                {
-                    try { AddTitle(currentTitle); }
-                    catch (Exception e) { Trace.WriteLine("Error adding row: " + e.Message); }
-                }
-                else Trace.WriteLine("Error saving row");
-            }
         }
 
         /// <summary>
         /// Merges the information from the Notes field with the DVD Profiler Disc data to create the Disk entries for the title
         /// </summary>
-        private void MergeDiscInfo()
+        private void MergeDiscInfo(Title title, VideoFormat dvdProfilerVideoFormat, Dictionary<string, string> discs, string notes)
         {
-            if (string.IsNullOrEmpty(currentNotes)) return;
+            if (string.IsNullOrEmpty(notes)) return;
 
-            var matches = filepathRegex.Matches(currentNotes);
+            var matches = filepathRegex.Matches(notes);
+            int lastDiskNumber = 0;
             foreach (Match m in matches)
             {
                 string discNumberString = m.Groups["discNumber"].Value;
-                int discNumber = Convert.ToInt32(string.IsNullOrEmpty(discNumberString) ? "1" : discNumberString,
+                int discNumber = Convert.ToInt32(string.IsNullOrEmpty(discNumberString) ? "0" : discNumberString,
                                                  CultureInfo.InvariantCulture);
+                if (discNumber == 0) discNumber = lastDiskNumber + 1;
                 string sideString = m.Groups["side"].Value;
-                int side = 0;
-                if (!string.IsNullOrEmpty(sideString) && sideString.ToLowerInvariant() == "b") side = 1;
+                if (string.IsNullOrEmpty(sideString)) sideString = "a";
 
-                string title;
-                if (currentDiscTitles.Count >= discNumber) title = currentDiscTitles[discNumber - 1][side];
-                else
+                string description;
+                string discKey = discNumber.ToString(CultureInfo.InvariantCulture) + sideString.ToLowerInvariant();
+                if (!discs.TryGetValue(discKey, out description))
                 {
                     // TODO: I18N 
-                    if (matches.Count == 1) title = "Movie";
-                    else title = "Disc " + discNumber + (side == 0 ? "a" : "b");
+                    if (matches.Count == 1) description = "Movie";
+                    else description = "Disc " + discKey;
                 }
                 string path = m.Groups["path"].Value;
-                currentVideoFormat = GetFormatFromExtension(Path.GetExtension(path), currentVideoFormat);
+                VideoFormat discVideoFormat = GetFormatFromExtension(Path.GetExtension(path), dvdProfilerVideoFormat);
 
                 if (!string.IsNullOrEmpty(path))
                 {
                     // validate that the path to the file/directory is valid
                     if (!File.Exists(path) && !Directory.Exists(path))
                     {
-                        this.AddError("Invalid path \"" + path + "\" for movie \"" + CurrentTitle.Name + "\"");
+                        this.AddError("Invalid path \"" + path + "\" for movie \"" + title.Name + "\"");
                     }
                 }
-                
-                CurrentTitle.AddDisk(new Disk(title, path, currentVideoFormat));                
+
+                title.Disks.Add(new Disk(description, path, discVideoFormat));
+                lastDiskNumber++;
             }
         }
+
+        private void ApplyTags(Title title, XPathNavigator dvdNavigator)
+        {
+            foreach (TagDefinition tagDefinition in tagDefinitions)
+            {
+                bool match = dvdNavigator.SelectSingleNode(tagDefinition.XPath) != null;
+                if (match && !string.IsNullOrEmpty(tagDefinition.Name)) title.Tags.Add(tagDefinition.Name);
+                if (!match && !string.IsNullOrEmpty(tagDefinition.ExcludedName)) title.Tags.Add(tagDefinition.ExcludedName);
+            }
+        }
+
 
         private static VideoFormat GetFormatFromExtension(string extension, VideoFormat defaultFormat)
         {
@@ -549,24 +520,11 @@ namespace DVDProfilerPlugin
             return defaultFormat;
         }
 
-
-        private void ClearImportState()
-        {
-            currentTitle = null;
-            currentVideoFormat = VideoFormat.DVD;
-            currentDiscTitles.Clear();
-            currentNotes = null;
-            currentWritersAlreadyAdded.Clear();
-            currentProducersAlreadyAdded.Clear();
-        }
-
-
         private void GetImagesForNewTitle(Title newTitle)
         {
             string id = newTitle.MetadataSourceID;
             if (!string.IsNullOrEmpty(id))
             {
-                InitializeImagesPath();
                 if (imagesPath != null && Directory.Exists(imagesPath))
                 {
                     if (File.Exists(Path.Combine(imagesPath, string.Format("{0}f.{1}", id, @"jpg"))))
@@ -582,33 +540,92 @@ namespace DVDProfilerPlugin
             }
         }
 
-        private void InitializeImagesPath()
+        private class TagDefinition
         {
-            if (!string.IsNullOrEmpty(imagesPath)) return;
+            public string Name { get; set; }
+            public string ExcludedName { get; set; }
+            public XPathExpression XPath { get; set; }
+        }
 
-            XmlTextReader dvdProfilerSettings;
-            if (File.Exists(Path.Combine(FileSystemWalker.PluginsDirectory, "DVDProfilerSettings.xml")))
+        private void InitializeSettings(XmlTextReader settingsXml)
+        {
+            XmlTextReader dvdProfilerSettings = null;
+            bool disposeReader = false;
+            try
             {
-                try
+                if (settingsXml != null)
                 {
-                    using (dvdProfilerSettings = new XmlTextReader(Path.Combine(FileSystemWalker.PluginsDirectory, "DVDProfilerSettings.xml")))
+                    dvdProfilerSettings = settingsXml;
+                }
+                else
+                {
+                    string path = Path.Combine(FileSystemWalker.PluginsDirectory, "DVDProfilerSettings.xml");
+                    if (File.Exists(path))
                     {
+                        disposeReader = true;
+                        dvdProfilerSettings = new XmlTextReader(path);
+                    }
+                }
 
-                        while (dvdProfilerSettings.Read())
+
+                if (dvdProfilerSettings != null)
+                {
+                    while (dvdProfilerSettings.Read())
+                    {
+                        if (dvdProfilerSettings.NodeType != XmlNodeType.Element) continue;
+                        switch (dvdProfilerSettings.Name)
                         {
-                            if (dvdProfilerSettings.NodeType == XmlNodeType.Element &&
-                                dvdProfilerSettings.Name == "imagesPath")
-                            {
+                            case "imagesPath":
                                 imagesPath = (dvdProfilerSettings.ReadInnerXml());
-                            }
+                                break;
+                            case "tag":
+                                string tagName = dvdProfilerSettings.GetAttribute("name");
+                                string tagExcludedName = dvdProfilerSettings.GetAttribute("excludedName");
+                                string tagXPath = dvdProfilerSettings.GetAttribute("xpath");
+                                if (string.IsNullOrEmpty(tagName) && string.IsNullOrEmpty(tagExcludedName))
+                                {
+                                    Utilities.DebugLine("[DVDProfilerImporter] Tag setting missing name");
+                                    AddError("Tag missing name or excludeName attribute in DVDProfilerSettings.xml");
+                                }
+                                if (string.IsNullOrEmpty(tagXPath))
+                                {
+                                    Utilities.DebugLine("[DVDProfilerImporter] Tag setting missing xpath");
+                                    AddError("Tag missing xpath attribute in DVDProfilerSettings.xml");
+                                }
+                                if (!string.IsNullOrEmpty(tagXPath))
+                                {
+                                    try
+                                    {
+                                        tagDefinitions.Add(new TagDefinition
+                                                               {
+                                                                   Name = tagName,
+                                                                   ExcludedName = tagExcludedName,
+                                                                   XPath = XPathExpression.Compile(tagXPath)
+                                                               });
+                                    }
+                                    catch (ArgumentException e)
+                                    {
+                                        initializationErrors.Add(e);
+                                    }
+                                    catch (XPathException e)
+                                    {
+                                        initializationErrors.Add(e);
+                                    }
+                                }
+                                break;
                         }
                     }
-                    if (string.IsNullOrEmpty(imagesPath)) Console.WriteLine("Missing Database location variable in DvdProfilerSettings.xml file, as a result images will not be imported");
                 }
-                catch (Exception e)
-                {
-                    Utilities.DebugLine("[DVDProfilerImporter] Unable to open DVDProfilerSettings.xml file: {0}", e.Message);
-                }
+            }
+            catch (Exception e)
+            {
+                Utilities.DebugLine("[DVDProfilerImporter] Unable to open DVDProfilerSettings.xml file: {0}",
+                                    e.Message);
+                initializationErrors.Add(e);
+            }
+            finally
+            {
+                if (disposeReader && dvdProfilerSettings != null) dvdProfilerSettings.Close();
             }
         }
     }
