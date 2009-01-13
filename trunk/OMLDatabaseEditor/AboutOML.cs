@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Windows.Forms;
 using System.IO;
-using System.Reflection;
 
 namespace OMLDatabaseEditor
 {
@@ -30,7 +29,7 @@ namespace OMLDatabaseEditor
                 _txtStreamReader.Close();
                 _txtStream.Close();
             }
-            catch (Exception e)
+            catch (Exception)
             { }
         }
 
