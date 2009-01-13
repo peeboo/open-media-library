@@ -46,6 +46,15 @@ namespace OMLEngine.Dao
             return diskPaths.Intersect(allDisks).Count() > 0;            
         }
 
+        public static IEnumerable<string> GetUniqueMetaIds(IEnumerable<string> metaDataIds)
+        {
+            var ids = from t in DBContext.Instance.Titles
+                      where t.MetaDataSourceItemId != null
+                      select t.MetaDataSourceItemId;
+
+            return metaDataIds.Except(ids);
+        }
+
         /// <summary>
         /// Returns all the media paths that aren't already being used in the given collection
         /// </summary>

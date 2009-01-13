@@ -21,10 +21,10 @@
         <classShapeMoniker Id="1b7b6397-0e60-4d0f-8bdd-34cc3fecff26" />
       </nodes>
     </associationConnector>
-    <classShape Id="489dd18d-13bb-4ea6-b69e-cbd8e7af224e" absoluteBounds="3.25, 0.5, 2, 6.3861311848958326">
+    <classShape Id="489dd18d-13bb-4ea6-b69e-cbd8e7af224e" absoluteBounds="3.25, 0.5, 2, 6.5784326171875">
       <DataClassMoniker Name="/OMLDataDataContext/Title" />
       <nestedChildShapes>
-        <elementListCompartment Id="c9b3310f-eb8e-4e65-aa21-7b6282264a7f" absoluteBounds="3.265, 0.96, 1.9700000000000002, 5.826131184895833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="c9b3310f-eb8e-4e65-aa21-7b6282264a7f" absoluteBounds="3.265, 0.96, 1.9700000000000002, 6.0184326171875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
     <associationConnector edgePoints="[(3.25 : 2.94314697265625); (2.5 : 2.94314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">

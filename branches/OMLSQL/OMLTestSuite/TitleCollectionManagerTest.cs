@@ -332,5 +332,18 @@ namespace OMLTestSuite
 
             Console.WriteLine("Took: " + (DateTime.Now - start).TotalMilliseconds + " milliseconds");
         }
+
+        public void GET_ALL_GENRES_WITH_COVERS()
+        {
+            DateTime start = DateTime.Now;
+
+            IEnumerable<FilteredCollection> allGenres = TitleCollectionManager.GetAllGenres(null);
+
+            foreach (FilteredCollection item in allGenres)
+                Console.WriteLine(item.Name + " " + item.ImagePath + " " + item.Count);
+
+
+            Console.WriteLine("Took: " + (DateTime.Now - start).TotalMilliseconds + " milliseconds");
+        }
     }
 }

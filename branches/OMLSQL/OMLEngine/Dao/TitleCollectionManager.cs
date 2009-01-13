@@ -357,6 +357,16 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Will return the meta id's that aren't being used already
+        /// </summary>
+        /// <param name="metaIds"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> GetUniqueMetaIds(IEnumerable<string> metaIds)
+        {
+            return Dao.TitleCollectionDao.GetUniqueMetaIds(metaIds);
+        }
+
+        /// <summary>
         /// Returns all the unused paths for the given collection of paths checked against existing Disks
         /// </summary>
         /// <param name="paths"></param>

@@ -5,9 +5,8 @@ using System.Runtime.InteropServices;
 namespace OMLEngine.FileSystem
 {
     /// <summary>
-    /// The ServerEnum class is used to enumerate servers on the
-    /// network.
-    /// This classes copied whole cloth from here - http://www.codeproject.com/KB/cs/csenumnetworkresources.aspx
+    /// The NetworkScanner class is used to enumerate servers on the network.
+    /// This classes was copied from here - http://www.codeproject.com/KB/cs/csenumnetworkresources.aspx
     /// </summary>
     ///    
     public static class NetworkScanner
