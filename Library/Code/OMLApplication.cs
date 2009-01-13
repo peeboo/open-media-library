@@ -10,6 +10,7 @@ using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 
 
 using OMLEngine;
@@ -43,7 +44,7 @@ namespace Library
                     _txtStream.Close();
                     return revisionNumber;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return @"Unknown";
                 }
@@ -190,6 +191,10 @@ namespace Library
             _session.GoToPage(@"resx://Library/Library.Resources/NewMenu", properties);
             return;
 #endif
+
+            OMLUpdater updater = new OMLUpdater();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
+
             switch (context)
             {
                 case "Menu":

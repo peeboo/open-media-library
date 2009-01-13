@@ -17,9 +17,8 @@ namespace Library
 {
     public class OMLUpdater
     {
-        public OMLUpdater(OMLApplication appRef)
+        public OMLUpdater()
         {
-            this.appRef = appRef;
         }
 
         public static System.Version CurrentVersion
@@ -47,7 +46,7 @@ namespace Library
                 {
                     if (OMLApplication.Current.MediaCenterEnvironment.Capabilities.ContainsKey("Console"))
                     {
-                        DialogResult reply = appRef.MediaCenterEnvironment.Dialog("", "", DialogButtons.Yes | DialogButtons.No, 10, true);
+                        DialogResult reply = OMLApplication.Current.MediaCenterEnvironment.Dialog("", "", DialogButtons.Yes | DialogButtons.No, 10, true);
 
                         if (reply == DialogResult.Yes)
                             DownloadUpdate();
@@ -55,11 +54,11 @@ namespace Library
                     else
                     {
                         // at the extender
-                        appRef.MediaCenterEnvironment.Dialog("An update for OML is available, please update from your Media Center PC.", "Update Available", DialogButtons.Ok, 10, true);
+                        OMLApplication.Current.MediaCenterEnvironment.Dialog("An update for OML is available, please update from your Media Center PC.", "Update Available", DialogButtons.Ok, 10, true);
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 OMLApplication.DebugLine("Update failed");
             }
@@ -146,11 +145,10 @@ namespace Library
         }
 
 
-        OMLApplication appRef;
         string remoteFile;
         string localFile;
         System.Version newVersion;
 
-        const string infoURL = "http://open-media-library.googlecode.com/mbinfo.xml";
+        const string infoURL = "http://open-media-library.googlecode.com/svn/trunk/Library/OMLInfo.xml";
     }
 }
