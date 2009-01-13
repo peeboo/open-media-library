@@ -105,6 +105,7 @@
     <Compile Include="Code\LayoutV2\OMLCommand.cs" />
     <Compile Include="Code\LayoutV2\OMLPage.cs" />
     <Compile Include="Code\OMLSettings.cs" />
+    <Compile Include="Code\OMLUpdater.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\ExternalPlayer.cs" />
     <Compile Include="Code\Setup.cs" />
@@ -230,6 +231,7 @@
     <Content Include="OldMarkup\MenuWithHorizontalBars.mcml" />
     <Content Include="OldMarkup\MovieDetails.mcml" />
     <Content Include="OldMarkup\MovieGallery.Old.mcml" />
+    <Content Include="OMLInfo.xml" />
     <Content Include="Registration.xml" />
     <Content Include="Images\Application.png" />
     <None Include="app.config" />
