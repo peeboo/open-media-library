@@ -57,6 +57,7 @@ namespace OMLDatabaseEditor
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.filterByParentalRatingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.filterByTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,7 +91,8 @@ namespace OMLDatabaseEditor
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
-            this.filterByTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveDisksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -338,13 +340,21 @@ namespace OMLDatabaseEditor
             this.filterByParentalRatingToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.filterByParentalRatingToolStripMenuItem.Text = "Filter By Parental Rating";
             // 
+            // filterByTagToolStripMenuItem
+            // 
+            this.filterByTagToolStripMenuItem.Name = "filterByTagToolStripMenuItem";
+            this.filterByTagToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.filterByTagToolStripMenuItem.Text = "Filter By Tag";
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.customizeToolStripMenuItem,
             this.optionsToolStripMenuItem,
             this.toolStripSeparator1,
-            this.metaDataSettingsToolStripMenuItem});
+            this.metaDataSettingsToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.moveDisksToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
@@ -641,11 +651,17 @@ namespace OMLDatabaseEditor
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
             // 
-            // filterByTagToolStripMenuItem
+            // moveDisksToolStripMenuItem
             // 
-            this.filterByTagToolStripMenuItem.Name = "filterByTagToolStripMenuItem";
-            this.filterByTagToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.filterByTagToolStripMenuItem.Text = "Filter By Tag";
+            this.moveDisksToolStripMenuItem.Name = "moveDisksToolStripMenuItem";
+            this.moveDisksToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.moveDisksToolStripMenuItem.Text = "Move Disks...";
+            this.moveDisksToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(167, 6);
             // 
             // MainEditor
             // 
@@ -749,6 +765,8 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem allMoviesToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem filterByTagToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem moveDisksToolStripMenuItem;
     }
 }
 
