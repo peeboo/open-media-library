@@ -81,6 +81,7 @@
     <Compile Include="DVDDisk.cs" />
     <Compile Include="DVDSubTitle.cs" />
     <Compile Include="DVDTitle.cs" />
+    <Compile Include="FileSystem\FileHelper.cs" />
     <Compile Include="FileSystem\FileScanner.cs" />
     <Compile Include="FileSystem\FileTypes.cs" />
     <Compile Include="FileSystem\NetworkScanner.cs" />

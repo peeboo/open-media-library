@@ -29,7 +29,6 @@ namespace OMLEngine
 
         private Disk _selectedDisk = null;
         private Dao.Title _title;
-        private string _metadataSourceId = null;
         private bool _peopleProcesed = false;
 
         private Dictionary<string, string> _nonActingRoles = new Dictionary<string, string>(); // name, role (ie. Vangelis, Music)        
@@ -99,21 +98,18 @@ namespace OMLEngine
                 }
                 return roles;
             }
-        }       
+        }              
+
+        #endregion        
 
         /// <summary>
         /// Unique id from the Source of our title info (MyMovies, DVD Profiler, etc).
-        /// todo : solomon : this is used to store the id when moving the object from one place to another     
-        /// during the import - we don't need to store it since we already store the name - there's probably
-        /// a way to do this where we could remove this property
         /// </summary>
         public string MetadataSourceID
         {
-            get { return _metadataSourceId ?? string.Empty; }
-            set { _metadataSourceId = value; }
+            get { return _title.MetaDataSourceItemId ?? string.Empty; }
+            set { _title.MetaDataSourceItemId = value; }
         }
-
-        #endregion        
 
         internal Dao.Title DaoTitle
         {
@@ -650,7 +646,7 @@ namespace OMLEngine
         public decimal PercentComplete
         {
             get { return _title.PercentComplete; }
-        }
+        }        
 
         #endregion
 
@@ -2137,7 +2133,7 @@ namespace OMLEngine
         public void CopyMetadata(Title t, bool overWrite)
         {
             Name = CopyStringValue(t.Name, Name, overWrite);
-            _metadataSourceId = CopyStringValue(t._metadataSourceId, _metadataSourceId, overWrite);
+            MetadataSourceID = CopyStringValue(t.MetadataSourceID, MetadataSourceID, overWrite);
 
             ParentalRating = CopyStringValue(t.ParentalRating, ParentalRating, overWrite);
             Synopsis = CopyStringValue(t.Synopsis, Synopsis, overWrite);

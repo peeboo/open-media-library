@@ -441,6 +441,8 @@ namespace OMLEngine.Dao
 		private System.Nullable<int> _WatchedCount;
 		
 		private string _MetaDataSource;
+
+        private string _MetaDataSourceItemId;
 		
 		private string _FrontCoverImage;
 		
@@ -512,6 +514,8 @@ namespace OMLEngine.Dao
     partial void OnWatchedCountChanged();
     partial void OnMetaDataSourceChanging(string value);
     partial void OnMetaDataSourceChanged();
+    partial void OnMetaDataSourceItemIdChanging(string value);
+    partial void OnMetaDataSourceItemIdChanged();
     partial void OnFrontCoverPathChanging(string value);
     partial void OnFrontCoverPathChanged();
     partial void OnFrontCoverMenuPathChanging(string value);
@@ -670,6 +674,26 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
+
+        [Column(Storage = "_MetaDataSourceItemId", DbType = "NVarChar(255)")]
+        public string MetaDataSourceItemId
+        {
+            get
+            {
+                return this._MetaDataSourceItemId;
+            }
+            set
+            {
+                if ((this._MetaDataSourceItemId != value))
+                {
+                    this.OnMetaDataSourceItemIdChanging(value);
+                    this.SendPropertyChanging();
+                    this._MetaDataSourceItemId = value;
+                    this.SendPropertyChanged("MetaDataSourceItemId");
+                    this.OnMetaDataSourceItemIdChanged();
+                }
+            }
+        }
 		
 		[Column(Name="FrontCoverImagePath", Storage="_FrontCoverImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
 		public string FrontCoverPath

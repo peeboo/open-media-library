@@ -69,6 +69,38 @@ namespace OMLEngine.FileSystem
         }
 
         /// <summary>
+        /// Returns the video format of the media given the path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static VideoFormat GetVideoFormatFromPath(string path)
+        {
+            switch (GetDirectoryMediaType(path))
+            {
+                case DirectoryType.BluRay:
+                    return VideoFormat.BLURAY;
+
+                case DirectoryType.DVD:
+                    return VideoFormat.DVD;
+
+                case DirectoryType.HDDVD:
+                    return VideoFormat.HDDVD;
+            }
+
+            VideoFormat returnFormat = VideoFormat.UNKNOWN;
+
+            string extension = Path.GetExtension(path).Substring(1);
+
+            try
+            {
+                returnFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
+            }
+            catch { }
+
+            return returnFormat;
+        }
+
+        /// <summary>
         /// Returns all the paths to media under the given paths
         /// </summary>
         /// <param name="paths"></param>
