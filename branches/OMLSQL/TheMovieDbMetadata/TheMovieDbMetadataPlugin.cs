@@ -93,6 +93,9 @@ namespace TheMovieDbMetadata
 
             while (reader.Read())
             {
+                if (reader.Value == "Your query didn't return any results.")
+                    return null;
+
                 if (reader.NodeType == XmlNodeType.Element)
                 {
                     switch (reader.Name)
@@ -117,9 +120,11 @@ namespace TheMovieDbMetadata
                             break;
 
                         case "release":
-                            result.Title.ReleaseDate = DateTime.Parse(
-                                                            GetElementValue(reader),
-                                                            CultureInfo.CreateSpecificCulture("en-GB"));
+                            DateTime releasedDate;
+                            if (DateTime.TryParse(GetElementValue(reader), CultureInfo.CreateSpecificCulture("en-GB"), DateTimeStyles.AssumeUniversal, out releasedDate))
+                            {
+                                result.Title.ReleaseDate = releasedDate;
+                            }
                             break;
 
                         case "poster":

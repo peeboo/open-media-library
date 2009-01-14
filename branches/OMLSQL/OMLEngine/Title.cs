@@ -661,8 +661,11 @@ namespace OMLEngine
             {
                 switch ((PeopleRole)person.Role)
                 {
-                    case PeopleRole.Actor:
-                        _actingRoles.Add(person.MetaData.FullName, person.CharacterName);
+                    case PeopleRole.Actor:                        
+                        // todo : solomon : we need to move this off a dictionary 
+                        // duplicates should be allowed
+                        if (! _actingRoles.ContainsKey(person.MetaData.FullName) )
+                            _actingRoles.Add(person.MetaData.FullName, person.CharacterName);
                         break;
 
                     case PeopleRole.Director:
