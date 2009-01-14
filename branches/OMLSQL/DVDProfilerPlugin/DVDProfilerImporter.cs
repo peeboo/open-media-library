@@ -101,7 +101,7 @@ namespace DVDProfilerPlugin
 
         private void HandleDvd(XPathNavigator dvdNavigator)
         {
-            Title title = LoadTitle(dvdNavigator);
+            Title title = LoadTitle(dvdNavigator, true);
             GetImagesForNewTitle(title);
             if (ValidateTitle(title))
             {
@@ -110,11 +110,12 @@ namespace DVDProfilerPlugin
             }
             else Trace.WriteLine("Error saving row");
 
-        }
+        }      
 
-        private Title LoadTitle(XPathNavigator dvdNavigator)
+        internal Title LoadTitle(XPathNavigator dvdNavigator, bool lookForDiskInfo)
         {
             Title title = new Title();
+            title.MetadataSourceName = "DVDProfiler";
             VideoFormat videoFormat = VideoFormat.DVD;
             string notes = string.Empty;
             var discs = new Dictionary<string, string>(); // The key is on the form "1a", "10b", etc - the value is the description
@@ -165,7 +166,7 @@ namespace DVDProfilerPlugin
                     case "Genres":
                         foreach (XPathNavigator genreNavigator in dvdElement.Select("Genre[. != '']"))
                         {
-                            title.Genres.Add(genreNavigator.Value);
+                            title.AddGenre(genreNavigator.Value);
                         }
                         break;
                     case "Format":
@@ -181,7 +182,7 @@ namespace DVDProfilerPlugin
                     case "Subtitles":
                         foreach (XPathNavigator subtitleNavigator in dvdElement.SelectChildren("Subtitle", string.Empty))
                         {
-                            title.Subtitles.Add(subtitleNavigator.Value);
+                            title.AddSubtitle(subtitleNavigator.Value);
                         }
                         break;
                     case "Actors":
@@ -208,7 +209,10 @@ namespace DVDProfilerPlugin
                         break;
                 }
             }
-            MergeDiscInfo(title, videoFormat, discs, notes);
+
+            if (lookForDiskInfo)
+                MergeDiscInfo(title, videoFormat, discs, notes);
+
             ApplyTags(title, dvdNavigator);
             return title;
         }
@@ -340,7 +344,7 @@ namespace DVDProfilerPlugin
                 if (string.IsNullOrEmpty(content)) content = format;
                 else if (!string.IsNullOrEmpty(format)) content += " (" + format + ")";
 
-                if (!string.IsNullOrEmpty(content)) title.AudioTracks.Add(content);
+                if (!string.IsNullOrEmpty(content)) title.AddAudioTrack(content);
             }
         }
 
@@ -489,7 +493,7 @@ namespace DVDProfilerPlugin
                     }
                 }
 
-                title.Disks.Add(new Disk(description, path, discVideoFormat));
+                title.AddDisk(new Disk(description, path, discVideoFormat));
                 lastDiskNumber++;
             }
         }
@@ -520,7 +524,7 @@ namespace DVDProfilerPlugin
             return defaultFormat;
         }
 
-        private void GetImagesForNewTitle(Title newTitle)
+        internal void GetImagesForNewTitle(Title newTitle)
         {
             string id = newTitle.MetadataSourceID;
             if (!string.IsNullOrEmpty(id))

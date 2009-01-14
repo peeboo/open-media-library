@@ -361,9 +361,9 @@ namespace OMLEngine
         /// </summary>
         /// <param name="metaIds"></param>
         /// <returns></returns>
-        public static IEnumerable<string> GetUniqueMetaIds(IEnumerable<string> metaIds)
+        public static IEnumerable<string> GetUniqueMetaIds(IEnumerable<string> metaIds, string metaDataSource)
         {
-            return Dao.TitleCollectionDao.GetUniqueMetaIds(metaIds);
+            return Dao.TitleCollectionDao.GetUniqueMetaIds(metaIds, metaDataSource);
         }
 
         /// <summary>
