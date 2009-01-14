@@ -7,7 +7,9 @@
 <?define Property_UpgradeCode = "0921ec75-fddc-46f8-bdf4-a5d697351567" ?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
-     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:sql="http://schemas.microsoft.com/wix/SqlExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<Product Id="$(var.Property_ProductCode)"
 	         UpgradeCode="$(var.Property_UpgradeCode)" 
 	         Name="!(loc.Property_ProductName)" 
@@ -20,7 +22,7 @@
 		         InstallerVersion="200" 
 		         Compressed="yes" />
 
-		<!-- This information enables Windows Installer major upgrade functionality so users can seamlessly  -->
+    <!-- This information enables Windows Installer major upgrade functionality so users can seamlessly  -->
 		<!-- install a new version of the product and have the old version automatically uninstall behind    -->
 		<!-- the scenes. See the following topic in the MSDN Library for additional information:             -->
 		<!-- http://msdn.microsoft.com/library/default.asp?url=/library/en-us/msi/setup/major_upgrades.asp   -->
@@ -261,6 +263,21 @@
                     <RegistryValue Id="registryFWS2" Type="multiString" Name="Watches" Value="c:\\users\\public\\recorded tv;*.*" />
                 </RegistryKey>
             </Component>
+          <Component Id="DatabaseUserCreate" Guid="DC6AB4B3-D6FE-4252-8B94-FC1CBB3D4A61">
+            <util:User Id="MySqlUser" Name="[SQLUSER]" Password="[SQLPASSWORD]" />
+          </Component>
+          <Component Id="DatabaseCreate" Guid="402F76C8-442B-4349-9922-E28ACF449A3C">
+            <sql:SqlDatabase Id="db1"
+                             Server="[SQLSERVER]"
+                             Instance="SQLEXPRESS"
+                             Database="OML"
+                             User="MySqlUser"
+                             CreateOnInstall="yes"
+                             ConfirmOverwrite="yes"
+                             DropOnUninstall="no"
+                             CreateOnReinstall="no">
+            </sql:SqlDatabase>
+          </Component>
         </DirectoryRef>
         
         <!-- This is a list of all components installed as a part of this product. A component is the        -->
@@ -283,6 +300,8 @@
       <ComponentRef Id="OMLEngineService.exe"/>
       <!-- <ComponentRef Id="OMLEngineService.exe.config"/> -->
       <ComponentRef Id="OMLFWService.exe"/>
+      <ComponentRef Id="DatabaseUserCreate"/>
+      <ComponentRef Id="DatabaseCreate"/>
 			
 			<!-- Plugins -->
             <ComponentRef Id="DVDProfilerPlugin.dll" />
