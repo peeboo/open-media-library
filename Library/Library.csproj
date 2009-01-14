@@ -414,6 +414,7 @@
     <PostBuildEvent>%25windir%25\eHome\McmlVerifier.exe -verbose -assemblyredirect:"$(FullyQualifiedOutputPath)" -directory:"$(ProjectDir)Markup"
 
 "$(DevEnvDir)..\..\..\Microsoft SDKs\Windows\v6.0\Bin\GacUtil.exe" /i "$(TargetPath)" /f</PostBuildEvent>
+    <PreBuildEvent>$(SolutionDir)\BuildVersionUpdater\$(OutDir)\BuildVersionUpdater.exe</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
