@@ -75,13 +75,16 @@ namespace OMLEngine.FileSystem
         /// <returns></returns>
         public static VideoFormat GetVideoFormatFromPath(string path)
         {
+            if (string.IsNullOrEmpty(path))
+                return VideoFormat.UNKNOWN;
+
             switch (GetDirectoryMediaType(path))
             {
-                case DirectoryType.BluRay:
-                    return VideoFormat.BLURAY;
-
                 case DirectoryType.DVD:
                     return VideoFormat.DVD;
+
+                case DirectoryType.BluRay:
+                    return VideoFormat.BLURAY;                
 
                 case DirectoryType.HDDVD:
                     return VideoFormat.HDDVD;
@@ -89,30 +92,19 @@ namespace OMLEngine.FileSystem
 
             VideoFormat returnFormat = VideoFormat.UNKNOWN;
 
-            string extension = Path.GetExtension(path).Substring(1);
+            string extension = Path.GetExtension(path);
+
+            if (string.IsNullOrEmpty(extension))
+                return VideoFormat.UNKNOWN;
 
             try
             {
-                returnFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
+                returnFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension.Replace(".", string.Empty), true);
             }
-            catch { }
+            catch (ArgumentException) { }
 
             return returnFormat;
-        }
-
-        /// <summary>
-        /// Returns all the paths to media under the given paths
-        /// </summary>
-        /// <param name="paths"></param>
-        /// <returns></returns>
-        public static IEnumerable<string> GetAllMediaFromPath(IEnumerable<string> paths)
-        {
-            foreach (string path in paths)
-            {
-                foreach (string mediaPath in GetAllMediaFromPath(path))
-                    yield return mediaPath;
-            }
-        }
+        }        
 
         /// <summary>
         /// Returns the play path give the given media path
@@ -177,6 +169,20 @@ namespace OMLEngine.FileSystem
             }            
 
             return null;
+        }
+
+        /// <summary>
+        /// Returns all the paths to media under the given paths
+        /// </summary>
+        /// <param name="paths"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> GetAllMediaFromPath(IEnumerable<string> paths)
+        {
+            foreach (string path in paths)
+            {
+                foreach (string mediaPath in GetAllMediaFromPath(path))
+                    yield return mediaPath;
+            }
         }
 
         /// <summary>

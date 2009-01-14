@@ -46,10 +46,10 @@ namespace OMLEngine.Dao
             return diskPaths.Intersect(allDisks).Count() > 0;            
         }
 
-        public static IEnumerable<string> GetUniqueMetaIds(IEnumerable<string> metaDataIds)
+        public static IEnumerable<string> GetUniqueMetaIds(IEnumerable<string> metaDataIds, string metaDataSource)
         {
             var ids = from t in DBContext.Instance.Titles
-                      where t.MetaDataSourceItemId != null
+                      where t.MetaDataSourceItemId != null && t.MetaDataSource.ToLower() == metaDataSource.ToLower()
                       select t.MetaDataSourceItemId;
 
             return metaDataIds.Except(ids);

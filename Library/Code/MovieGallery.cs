@@ -52,7 +52,9 @@ namespace Library
                     {
                         List<Title> alphaTitle;
 
-                        char firstChar = title.Name.ToUpperInvariant()[0];
+                        string name = string.IsNullOrEmpty(title.SortName) ? title.Name : title.SortName;
+
+                        char firstChar = name.ToUpperInvariant()[0];
 
                         if (((int)firstChar) < 65 || ((int)firstChar) > 90)
                             firstChar = '#';

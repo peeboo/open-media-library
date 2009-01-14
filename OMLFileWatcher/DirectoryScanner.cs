@@ -7,6 +7,7 @@ using OMLEngine.FileSystem;
 using System.Xml;
 using System.IO;
 using System.Threading;
+using OMLSDK;
 
 namespace OMLFileWatcher
 {
@@ -18,66 +19,61 @@ namespace OMLFileWatcher
         private System.Timers.Timer timer;
         private List<FileSystemWatcher> watchers;
         private IList<string> watchFolders;
-        private object lockObject = new object();
+        private object lockObject = new object();        
 
-        private Dictionary<string, XmlNode> dvdsByName;
-        private Dictionary<string, XmlNode> dvdsById;
+        IOMLMetadataPlugin metaDataPlugin = null;        
 
         public DirectoryScanner()
-        {           
-            dvdsByName = new Dictionary<string, XmlNode>(StringComparer.OrdinalIgnoreCase);
-            dvdsById = new Dictionary<string, XmlNode>(StringComparer.OrdinalIgnoreCase);
-
-            XmlDocument doc = new XmlDocument();
-            doc.Load("c:\\collection.xml");
-
-            foreach (XmlNode node in doc.SelectNodes("//Collection/DVD"))
-            {
-                string title = FileHelper.GetFolderNameString(node.SelectSingleNode("Title").InnerText);
-
-                if ( dvdsByName.ContainsKey(title) )
-                    title += " " + Guid.NewGuid().ToString();
-
-                dvdsByName.Add(title, node);
-                dvdsById.Add(node.SelectSingleNode("ID").InnerText, node);
-            }
+        {                       
         }
 
         /// <summary>
-        /// Takes the title and fills it in with meta data from the selected source
+        /// Get's a meta data filled title for the given name
         /// </summary>
         /// <param name="title"></param>
-        public void FillInTitleMetaData(ref Title title)
-        {
-            List<string> possibleIds = new List<string>();
+        public Title GetTitleMetaData(string name)
+        {            
+            Title returnTitle = null;
 
-            if (dvdsByName.ContainsKey(title.Name))
+            // setup the meta data plugin the first time we need it
+            if (metaDataPlugin == null)
+                SetupMetaDataPlugin();
+
+            // if the setup failed let's bail out
+            if (metaDataPlugin == null)
             {
-                XmlNode node = dvdsByName[title.Name];
-
-                possibleIds.Add(node.SelectSingleNode("ID").InnerText);
+                return new Title() { Name = name };
             }
-            else
+
+            metaDataPlugin.SearchForMovie(name);
+
+            returnTitle = metaDataPlugin.GetBestMatch();
+
+            return returnTitle ?? new Title() { Name = name };            
+        }
+
+        /// <summary>
+        /// Initializes the meta data source of choice
+        /// </summary>
+        private void SetupMetaDataPlugin()
+        {
+            List<PluginServices.AvailablePlugin> plugins = PluginServices.FindPlugins(FileSystemWalker.PluginsDirectory, PluginTypes.MetadataPlugin);
+
+            // Loop through available plugins, creating instances and add them
+            if (plugins != null)
             {
-                foreach (string key in dvdsByName.Keys)
+                foreach (PluginServices.AvailablePlugin plugin in plugins)
                 {
-                    if (key.StartsWith(title.Name, StringComparison.OrdinalIgnoreCase))
+                    IOMLMetadataPlugin foundPlugin = (IOMLMetadataPlugin)PluginServices.CreateInstance(plugin);
+                    if (foundPlugin.PluginName.Equals("DVDProfiler", StringComparison.OrdinalIgnoreCase))
                     {
-                        possibleIds.Add(dvdsByName[key].SelectSingleNode("ID").InnerText);
+                        metaDataPlugin = foundPlugin;
+                        metaDataPlugin.SetOptionValue("Collection Path", "c:\\Collection.xml");
+                        metaDataPlugin.Initialize(null);
                     }
                 }
             }
-
-            IEnumerable<string> unusedPossibleIds = TitleCollectionManager.GetUniqueMetaIds(possibleIds);
-
-            foreach (string possibleId in unusedPossibleIds)
-            {
-                XmlNode meta = dvdsById[possibleId];
-
-                title.Name = meta.SelectSingleNode("Title").InnerText;
-                break;
-            }           
-        }        
+        }
 
         /// <summary>
         /// Scans the directory for any new media and adds the titles to the db
@@ -94,23 +90,28 @@ namespace OMLFileWatcher
         /// <param name="directories"></param>
         public void Scan(IList<string> directories)
         {
+            bool updated = false;
             IEnumerable<string> media = FileScanner.GetAllMediaFromPath(directories);
             IEnumerable<string> uniqueMedia = TitleCollectionManager.GetUniquePaths(media);
 
             foreach (string path in uniqueMedia)
             {
-                string name = FileHelper.GetNameFromPath(path);
-
-                Title title = new Title();
-                title.Name = name;
-
-                FillInTitleMetaData(ref title);
+                Title title = GetTitleMetaData(FileHelper.GetNameFromPath(path));
 
                 title.AddDisk(new Disk(DEFAULT_DISK_NAME, path, FileScanner.GetVideoFormatFromPath(path)));
 
                 // save the title to the database
                 TitleCollectionManager.AddTitle(title);
-            }            
+
+                // resize the images
+                OMLPlugin.BuildResizedMenuImage(title);
+
+                updated = true;
+            }
+
+            // save all the image updates
+            if (updated)
+                TitleCollectionManager.SaveTitleUpdates();
         }
 
         /// <summary>
