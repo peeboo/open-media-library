@@ -39,7 +39,7 @@ namespace OMLEngine.Dao
     #endregion
 		
 		public WatcherDataDataContext() : 
-				base(global::OMLEngine.Properties.Settings.Default.OMLConnectionString1, mappingSource)
+				base(global::OMLEngine.Properties.Settings.Default.OMLConnectionString, mappingSource)
 		{
 			OnCreated();
 		}

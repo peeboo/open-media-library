@@ -297,5 +297,8 @@
     <Setting Name="MovieDetailsTransitionType" Type="System.String" Scope="User">
       <Value Profile="(Default)">Zoom and Spin</Value>
     </Setting>
+    <Setting Name="HasRunSetup" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

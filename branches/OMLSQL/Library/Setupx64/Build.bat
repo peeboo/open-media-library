@@ -36,4 +36,7 @@ REM Build the MSI for the setup package
 echo Building Bootstrapper file
 MSBuild omlsetupx64.proj
 
+echo Copying "%OUTPUTNAME%" to the Builds folder
+copy "%OUTPUTNAME%" ..\..\Builds\X64\
+
 popd

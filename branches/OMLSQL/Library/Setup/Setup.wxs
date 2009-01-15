@@ -10,7 +10,8 @@
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
      xmlns:sql="http://schemas.microsoft.com/wix/SqlExtension"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-	<Product Id="$(var.Property_ProductCode)"
+
+  <Product Id="$(var.Property_ProductCode)"
 	         UpgradeCode="$(var.Property_UpgradeCode)" 
 	         Name="!(loc.Property_ProductName)" 
 	         Language="!(loc.Property_ProductLanguage)" 
@@ -22,6 +23,7 @@
 		         InstallerVersion="200" 
 		         Compressed="yes" />
 
+    <Binary Id="OMLDB" SourceFile="..\..\SQL Scripts\Title Database.sql" />
     <!-- This information enables Windows Installer major upgrade functionality so users can seamlessly  -->
 		<!-- install a new version of the product and have the old version automatically uninstall behind    -->
 		<!-- the scenes. See the following topic in the MSDN Library for additional information:             -->
@@ -104,17 +106,14 @@
                         <File Name="DevExpress.Utils.v8.2.dll"
                               Source="..\..\OMLDatabaseEditor\DevExpress.Utils.v8.2.dll" Checksum="no" />
                     </Component>
-
                     <Component Id="DevExpress.XtraEditors.v8.2.dll" Guid="CD530611-C23A-4a31-AA6E-AC8926845707" DiskId="1">
                         <File Name="DevExpress.XtraEditors.v8.2.dll"
                               Source="..\..\OMLDatabaseEditor\DevExpress.XtraEditors.v8.2.dll" Checksum="no" />
                     </Component>
-
                     <Component Id="DevExpress.XtraNavBar.v8.2.dll" Guid="CD530611-C23A-4a31-AA6F-AC8926845707" DiskId="1">
                         <File Name="DevExpress.XtraNavBar.v8.2.dll"
                               Source="..\..\OMLDatabaseEditor\DevExpress.XtraNavBar.v8.2.dll" Checksum="no" />
                     </Component>
-
                     <Component Id="DevExpress.Data.v8.2.xml" Guid="25AF85CB-DC9D-46df-B022-F8A3DF4F71FB" DiskId="1">
                         <File Name="DevExpress.Data.v8.2.xml"
                               Source="..\..\OMLDatabaseEditor\DevExpress.Data.v8.2.xml" Checksum="no" />
@@ -127,12 +126,10 @@
                         <File Name="DevExpress.XtraEditors.v8.2.xml"
                               Source="..\..\OMLDatabaseEditor\DevExpress.XtraEditors.v8.2.xml" Checksum="no" />
                     </Component>
-
 		                <Component Id="DevExpress.XtraNavBar.v8.2.xml" Guid="365BA1F3-7823-4ff8-AC1C-CB040D2B852E" DiskId="1">
                         <File Name="DevExpress.XtraNavBar.v8.2.xml"
                               Source="..\..\OMLDatabaseEditor\DevExpress.XtraNavBar.v8.2.xml" Checksum="no" />
                     </Component>
-
                     <Component Id="OMLDatabaseEditor.exe" Guid="4226fe89-8797-44ed-b463-6fda1be5c918" DiskId="1">
                         <File Name="OMLDatabaseEditor.exe"
                               Source="..\..\OMLDatabaseEditor\bin\$(var.BuildType)\OMLDatabaseEditor.exe" Checksum="no" />
@@ -146,26 +143,40 @@
                               Source="..\..\OMLTranscoder\mencoder-1.0rc2-4.2.1.exe" Checksum="no" />
                     </Component>
                     <Component Id="OMLEngineService.exe" Guid="12988468-3DCC-496a-B0B3-6982FFDE25B9" DiskId="1">
-                        <File Name="OMLEngineService.exe"
+                        <File Name="OMLEngineService.exe" KeyPath="yes"
                               Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe" Checksum="yes"/>
                         <File Name="OMLEngineService.exe.config"
                               Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe.config" Checksum="no"/>
-                        <ServiceInstall Id="OMLEngineService" Name="OMLEngineService" DisplayName="OMLEngineService"
-                                        Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
-                                        ErrorControl="normal"/>
+                        <ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService" Stop="both" Remove="uninstall"/>
+                      <ServiceInstall Id="OMLEngineService" Name="OMLEngineService" DisplayName="OMLEngineService"
+                                      Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
+                                      ErrorControl="normal">
+                        <util:PermissionEx User="Users" ServiceQueryConfig="yes" ServiceChangeConfig="yes" ServiceQueryStatus="yes"
+                                           ServiceEnumerateDependents="yes" ServiceStart="yes" ServiceStop="yes" ServicePauseContinue="yes"
+                                           ServiceInterrogate="yes" ServiceUserDefinedControl="yes"/>
+                        <util:ServiceConfig ServiceName="OMLEngineService" FirstFailureActionType="restart" SecondFailureActionType="restart"
+                                            ThirdFailureActionType="restart" ResetPeriodInDays="7" RestartServiceDelayInSeconds="60"/>
+                      </ServiceInstall>
                         <!--<ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
                     </Component>
                     <Component Id="OMLFWService.exe" Guid="8F57190C-0489-40b4-9C46-5E9B09EC0DEC" DiskId="1">
                         <File Name="OMLFWService.exe"
                               Source="..\..\OMLFWService\bin\$(var.BuildType)\OMLFWService.exe" Checksum="yes"/>
-                        <ServiceInstall Id="OMLFWService" Name="OMLFWService" DisplayName="OMLFWService"
-                                        Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
-                                        ErrorControl="normal"/>
+                        <ServiceControl Id="OMLFWServiceControl" Name="OMLFWService" Stop="both" Remove="uninstall"/>
+                      <ServiceInstall Id="OMLFWService" Name="OMLFWService" DisplayName="OMLFWService"
+                                      Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
+                                      ErrorControl="normal">
+                        <util:PermissionEx User="Users" ServiceQueryConfig="yes" ServiceChangeConfig="yes" ServiceQueryStatus="yes"
+                                           ServiceEnumerateDependents="yes" ServiceStart="yes" ServiceStop="yes" ServicePauseContinue="yes"
+                                           ServiceInterrogate="yes" ServiceUserDefinedControl="yes"/>
+                        <util:ServiceConfig ServiceName="OMLFWService" FirstFailureActionType="restart" SecondFailureActionType="restart"
+                                            ThirdFailureActionType="restart" ResetPeriodInDays="7" RestartServiceDelayInSeconds="60"/>
+                      </ServiceInstall>
                         <!--<ServiceControl Id="OMLFWServiceControl" Name="OMLFWService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
                     </Component>
-                    <Directory Id="PLUGINSDIRECTORY" Name="Plugins">
+        <Directory Id="PLUGINSDIRECTORY" Name="Plugins">
                         <Component Id="DVDProfilerPlugin.dll" Guid="b7f12ef4-e500-4d0e-bfbe-d77eae64176c" DiskId="1">
                             <File Name="DVDProfilerPlugin.dll"
                                   KeyPath="yes" Source="..\..\DVDProfilerPlugin\bin\$(var.BuildType)\DVDProfilerPlugin.dll"
@@ -224,7 +235,7 @@
                     </Directory>
 				</Directory>
 			</Directory>
-            <Directory Id="ProgramMenuFolder">
+      <Directory Id="ProgramMenuFolder">
                 <Directory Id="ApplicationProgramsFolder" Name="OpenMediaLibrary">
                     <Component Id="DatabaseEditorShortcut" Guid="">
                         <Shortcut Id="DatabaseEditorStartMenuShortcut"
@@ -248,7 +259,7 @@
             </Directory>
 		</Directory>
 
-        <DirectoryRef Id="TARGETDIR">
+    <DirectoryRef Id="TARGETDIR">
             <Component Id="registry" Guid="FDDE2AF7-995E-4b84-B8B7-2E150E7C7101" DiskId="1">
                 <RegistryKey Id="registry0" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Action="createAndRemoveOnUninstall">
                   <RegistryValue Id="reg1" Type="string" Name="Title" Value="Movie Library"/>
@@ -263,24 +274,22 @@
                     <RegistryValue Id="registryFWS2" Type="multiString" Name="Watches" Value="c:\\users\\public\\recorded tv;*.*" />
                 </RegistryKey>
             </Component>
-          <Component Id="DatabaseUserCreate" Guid="DC6AB4B3-D6FE-4252-8B94-FC1CBB3D4A61">
-            <util:User Id="MySqlUser" Name="[SQLUSER]" Password="[SQLPASSWORD]" />
-          </Component>
-          <Component Id="DatabaseCreate" Guid="402F76C8-442B-4349-9922-E28ACF449A3C">
-            <sql:SqlDatabase Id="db1"
-                             Server="[SQLSERVER]"
-                             Instance="SQLEXPRESS"
+          <!--<Component Id="DatabaseUserCreate" Guid="DC6AB4B3-D6FE-4252-8B94-FC1CBB3D4A61">
+            <util:User Id="OMLUserCreate" CreateUser="yes" CanNotChangePassword="yes" PasswordNeverExpires="yes" RemoveOnUninstall="yes" Name="OMLUser" Password="omlDataAccess" />
+          </Component>-->
+          <Component Id="DatabaseCreate" Guid="402F76C8-442B-4349-9922-E28ACF449A3C" KeyPath="yes">
+            <sql:SqlDatabase Id="OMLDatabase"
+                             Server="(local)"
+                             Instance="SQLExpress"
                              Database="OML"
-                             User="MySqlUser"
                              CreateOnInstall="yes"
-                             ConfirmOverwrite="yes"
-                             DropOnUninstall="no"
-                             CreateOnReinstall="no">
+                             ConfirmOverwrite="yes">
+              <sql:SqlScript Id="SqlScript01" BinaryKey="OMLDB" ExecuteOnInstall="yes" ExecuteOnReinstall="yes" Sequence="2"/>
             </sql:SqlDatabase>
           </Component>
         </DirectoryRef>
         
-        <!-- This is a list of all components installed as a part of this product. A component is the        -->
+    <!-- This is a list of all components installed as a part of this product. A component is the        -->
 		<!-- smallest atomic unit of installation in Windows Installer. Each component must have a unique    -->
 		<!-- GUID. In general, it is recommended that each file be installed by a separate component in      -->
 		<!-- order to avoid reference counting problems and make future servicing of this product easier.    -->
@@ -300,7 +309,7 @@
       <ComponentRef Id="OMLEngineService.exe"/>
       <!-- <ComponentRef Id="OMLEngineService.exe.config"/> -->
       <ComponentRef Id="OMLFWService.exe"/>
-      <ComponentRef Id="DatabaseUserCreate"/>
+      <!--<ComponentRef Id="DatabaseUserCreate"/>-->
       <ComponentRef Id="DatabaseCreate"/>
 			
 			<!-- Plugins -->
@@ -420,7 +429,7 @@
 				<![CDATA[NOT REMOVE]]>
 			</Custom>
             <Custom Action="ActivateNetTcpPortSharing" After="InstallInitialize">Not Installed</Custom>
-            <ScheduleReboot After="InstallFinalize"/>
+            <!--<ScheduleReboot After="InstallFinalize"/>-->
         </InstallExecuteSequence>
 
 		<!-- The InstallUISequence table describes the order that actions will be executed when the user     -->
