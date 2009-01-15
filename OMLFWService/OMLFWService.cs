@@ -14,7 +14,10 @@ namespace OMLFWService
 {
     public partial class OMLFWService : ServiceBase
     {
+        private const int SETTINGS_UPDATE_TIMEOUT = 30000;
         DirectoryScanner watcher;
+        Timer timer;
+        DateTime settingsLastUpdated = DateTime.MinValue;
 
         public OMLFWService()
         {
@@ -22,9 +25,22 @@ namespace OMLFWService
 
             watcher = new DirectoryScanner();
 
+            timer = new Timer(SETTINGS_UPDATE_TIMEOUT);
+            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
+            timer.AutoReset = true;
+            timer.Start();
+
             this.CanStop = true;
             this.CanPauseAndContinue = true;
             this.AutoLog = true;            
+        }
+
+        void timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (WatcherSettingsManager.ModifiedSince(settingsLastUpdated))
+            {
+                ReloadSettings();
+            }
         }
 
         private void ReloadSettings()
@@ -33,13 +49,20 @@ namespace OMLFWService
 
             if (!settings.Enabled)
             {
+                settingsLastUpdated = settings.LastUpdated;
                 watcher.Stop();
                 return;
             }                        
 
             try
             {
-                watcher.WatchFolders(WatcherSettingsManager.GetWatchedFolders());
+                // attempt to watch some folders
+                // this will return false if the folders can't be watched at this time - 
+                // just use the 30 second timeout to try again then
+                if (watcher.WatchFolders(WatcherSettingsManager.GetWatchedFolders()))
+                {
+                    settingsLastUpdated = settings.LastUpdated;
+                }                
             }
             catch (Exception err)
             {
@@ -51,6 +74,7 @@ namespace OMLFWService
         {
             base.OnPause();
             watcher.Stop();
+            timer.Enabled = false;            
             WriteToLog(EventLogEntryType.Information, "OMLFWService Paused");
         }
 
@@ -58,6 +82,7 @@ namespace OMLFWService
         {
             base.OnContinue();
             watcher.Start();
+            timer.Enabled = true;
             WriteToLog(EventLogEntryType.Information, "OMLFWService Continued");
         }
 
@@ -65,6 +90,7 @@ namespace OMLFWService
         {
             // TODO: Add code here to start your service.
             ReloadSettings();
+            timer.Enabled = true;
             WriteToLog(EventLogEntryType.Information, "OMLFWService Started");
         }
 
@@ -72,6 +98,7 @@ namespace OMLFWService
         {
             // TODO: Add code here to perform any tear-down necessary to stop your service.
             watcher.Stop();
+            timer.Enabled = false;
             WriteToLog(EventLogEntryType.Information, "OMLFWService Stopped");
         }
 

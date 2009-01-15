@@ -10,7 +10,8 @@ namespace OMLEngine.Settings
     {
         ScannerSetting settings = null;
 
-        public bool Enabled { get { return settings.Enabled ?? true; } set { settings.Enabled = value; } }        
+        public bool Enabled { get { return settings.Enabled ?? true; } set { settings.Enabled = value; } }
+        public DateTime LastUpdated { get { return settings.LastModified; } }
 
         internal WatcherSettings(ScannerSetting settings)
         {           

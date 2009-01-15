@@ -27,6 +27,7 @@ namespace OMLFileWatcher
         public DirectoryScanner()
         {                       
             timer = new System.Timers.Timer();
+            timer.AutoReset = false;
             timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
         }       
 
@@ -180,10 +181,18 @@ namespace OMLFileWatcher
         /// folders for new items and add them to OML
         /// </summary>
         /// <param name="folders"></param>
-        public void WatchFolders(IEnumerable<string> folders)
+        /// <returns>Returns false if it's in the middle of a scan and can't update the watch folders</returns>
+        public bool WatchFolders(IEnumerable<string> folders)
         {
             try
             {
+                // if we can't enter the lock that means a scan is already in progress
+                if (!Monitor.TryEnter(lockObject))
+                {
+                    DebugLine("Unable to watch new folders since a scan is in progress.  Try again later.");
+                    return false;
+                }
+
                 // stop any existing scans and watchers
                 Stop();
 
@@ -204,7 +213,7 @@ namespace OMLFileWatcher
                     DebugLine("No folders found to watch");
                     watchFolders = null;
                     Stop();
-                    return;
+                    return true;
                 }
 
                 watchers = new List<FileSystemWatcher>(watchFolders.Count);
@@ -222,15 +231,21 @@ namespace OMLFileWatcher
 
                         watchers.Add(watcher);
                     }
-                }
-
-                // immediately scan when the scanner starts
-                ScanASync();
+                }                
             }
             catch (Exception err)
             {
                 DebugLineError(err, "Error setting up watch folders");
             }
+            finally
+            {
+                Monitor.Exit(lockObject);
+            }
+
+            // immediately do an async scan of the new watch folders
+            ScanASync();
+
+            return true;
         }
 
         /// <summary>
@@ -246,7 +261,7 @@ namespace OMLFileWatcher
         /// Starts the timer 
         /// </summary>
         private void StartTimer()
-        {            
+        {
             timer.Interval = CHANGE_TIMER_TIMEOUT;
             timer.Start();
         }
@@ -260,7 +275,9 @@ namespace OMLFileWatcher
         private void watcher_Error(object sender, ErrorEventArgs e)
         {
             try
-            {
+            {                
+                DebugLineError(e.GetException(), "Error in Filesystem watcher - mostly likely a disconnected network");                
+
                 // if we can't find the drive anymore setup a new watcher
                 if (e.GetException().Message == "The specified network name is no longer available")
                     sender = new FileSystemWatcher(((FileSystemWatcher)sender).Path);
@@ -366,7 +383,10 @@ namespace OMLFileWatcher
         /// <param name="parameters"></param>
         private void DebugLineError(Exception err, string message, params object[] parameters)
         {
-            Utilities.DebugLine("[DirectoryScanner] " + message + " '" + err.Message + "' " + err.StackTrace, parameters);
+            if (err == null)
+                DebugLine(message, parameters);
+            else
+                Utilities.DebugLine("[DirectoryScanner] " + message + " '" + err.Message + "' " + err.StackTrace, parameters);
         }
     }
 }
