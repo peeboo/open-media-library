@@ -184,12 +184,22 @@ namespace Library
             _session.GoToPage(@"resx://Library/Library.Resources/NewMenu", properties);
             return;
 #endif
-            OMLUpdater updater = new OMLUpdater();
-            ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
+            //OMLUpdater updater = new OMLUpdater();
+            //ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
 
             switch (context)
             {
                 case "Menu":
+                    // Before running strait to the menu, check to see if we want to run the first-time setup
+                    if (!Properties.Settings.Default.HasRunSetup)
+                    {
+                        OMLApplication.DebugLine("[OMLApplication] firstrun, going to setup");
+                        GoToSetup(new MovieGallery());
+                        Properties.Settings.Default.HasRunSetup = true;
+                        Properties.Settings.Default.Save();
+                        return;
+                    }
+
                     // we want the movie library - check the startup page
                     if (Properties.Settings.Default.StartPage == Filter.Home)
                     {
@@ -276,7 +286,7 @@ namespace Library
             DebugLine("[OMLApplication] GoToSetup()");
             if (_session != null)
             {
-                _session.GoToPage("resx://Library/Library.Resources/Setup", CreateProperties(true, false, gallery));
+                _session.GoToPage("resx://Library/Library.Resources/FirstRunSetup", CreateProperties(true, false, gallery));
             }
         }
 
