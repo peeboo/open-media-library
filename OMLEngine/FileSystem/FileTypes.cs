@@ -64,8 +64,9 @@ namespace OMLEngine
         ASX = 41, // like WPL
         WPL = 42, // playlist file?
         WTV = 43, // new dvr format in vista (introduced in the tv pack 2008)
+        DIVX = 44,
 
-        ALL, // meaning all format types - used for setting video format to external player
+        ALL = 2147483647, // meaning all format types - used for setting video format to external player
     };
 
     public static class FileTypes
@@ -105,8 +106,9 @@ namespace OMLEngine
             //"VOB", // MPEG2 - make sure it's not part of a DVD
             ".WVX", // windows playlist file
             ".ASX", // windows playlist file
-            ".WPL",
-            ".WTV"// windows media playlist
+            ".WPL", // windows media playlist
+            ".WTV",
+            ".DIVX"
         };
     }
 }

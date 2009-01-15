@@ -345,5 +345,14 @@ namespace OMLTestSuite
 
             Console.WriteLine("Took: " + (DateTime.Now - start).TotalMilliseconds + " milliseconds");
         }
+
+        public void SETUP_WATCH_FOLER()
+        {
+            List<string> list = new List<string>();
+
+            list.Add(@"C:\Users\Public\Recorded TV");
+
+            OMLEngine.Settings.WatcherSettingsManager.SetWatchFolders(list);
+        }
     }
 }
