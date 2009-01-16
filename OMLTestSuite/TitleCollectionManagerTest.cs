@@ -8,6 +8,7 @@ using System.Diagnostics;
 using NUnit.Framework;
 
 using OMLEngine.FileSystem;
+using OMLEngine.Settings;
 using OMLEngine;
 using System.Drawing;
 using OMLSDK;
@@ -353,6 +354,28 @@ namespace OMLTestSuite
             list.Add(@"C:\Users\Public\Recorded TV");
 
             OMLEngine.Settings.WatcherSettingsManager.SetWatchFolders(list);
+        }
+
+        public void UPDATE_SETTINGS()
+        {
+            WatcherSettings settings = WatcherSettingsManager.GetSettings();
+
+            foreach (MetaDataSettings meta in settings.MetaDataPlugins)
+            {
+                Console.WriteLine(meta.Name);
+
+                foreach (KeyValuePair<string, string> options in meta.Options)
+                {
+                    Console.WriteLine(options.Key + " " + options.Value);
+                }
+            }
+
+            List<MetaDataSettings> list = new List<MetaDataSettings>();
+
+            List<KeyValuePair<string, string>> keys = new List<KeyValuePair<string,string>>();
+            keys.Add(new KeyValuePair<string,string>("Collection Path", "c:\\Collection.xml"));           
+
+            settings.SetMetaDataPlugins(new MetaDataSettings[] { new MetaDataSettings("DVDProfiler", keys) });
         }
     }
 }

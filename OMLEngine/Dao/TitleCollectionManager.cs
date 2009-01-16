@@ -505,17 +505,17 @@ namespace OMLEngine
         public static void CloseDBConnection()
         {
             if ( Dao.DBContext.InstanceOrNull != null  &&
-                Dao.DBContext.InstanceOrNull.Connection != null &&
-                Dao.DBContext.InstanceOrNull.Connection.State != System.Data.ConnectionState.Closed)
+                Dao.DBContext.Instance.Connection != null &&
+                Dao.DBContext.Instance.Connection.State != System.Data.ConnectionState.Closed)
             {
                 Dao.DBContext.Instance.Connection.Close();
                 Dao.DBContext.Instance.Connection.Dispose();
             }
             else if (Dao.DBContext.InstanceOrNull != null &&
-                Dao.DBContext.InstanceOrNull.Connection != null)
+                Dao.DBContext.Instance.Connection != null)
             {
                 Dao.DBContext.Instance.Dispose();
-            }
+            }            
         }
     }
 

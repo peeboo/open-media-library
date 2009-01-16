@@ -23,8 +23,26 @@ namespace OMLEngine.Settings
         /// </summary>
         /// <returns></returns>
         public static WatcherSettings GetSettings()
-        {            
-            return new WatcherSettings(WatcherDataContext.Instance.ScannerSettings.SingleOrDefault() ?? new ScannerSetting());            
+        {
+            ScannerSetting settings = WatcherDataContext.Instance.ScannerSettings.SingleOrDefault();
+
+            // if the settings hasn't been saved yet - add it now
+            if (settings == null)
+            {
+                settings = new ScannerSetting();
+                WatcherDataContext.Instance.ScannerSettings.InsertOnSubmit(settings);
+                WatcherDataContext.Instance.SubmitChanges();
+            }
+
+            return new WatcherSettings(settings);            
+        }
+
+        /// <summary>
+        /// Updates any settings changes that were made
+        /// </summary>
+        public static void SaveSettingUpdates()
+        {
+            WatcherDataContext.Instance.SubmitChanges();            
         }
 
         /// <summary>
@@ -83,6 +101,25 @@ namespace OMLEngine.Settings
             }
 
             return UpdateModifiedTime();
+        }
+
+        /// <summary>
+        /// Closes the settings db connection
+        /// </summary>
+        public static void CloseDBConnection()
+        {
+            if (Dao.WatcherDataContext.InstanceOrNull != null &&
+                Dao.WatcherDataContext.Instance.Connection != null &&
+                Dao.WatcherDataContext.Instance.Connection.State != System.Data.ConnectionState.Closed)
+            {
+                Dao.WatcherDataContext.Instance.Connection.Close();
+                Dao.WatcherDataContext.Instance.Connection.Dispose();
+            }
+            else if (Dao.WatcherDataContext.InstanceOrNull != null &&
+                Dao.WatcherDataContext.Instance.Connection != null)
+            {
+                Dao.WatcherDataContext.Instance.Connection.Dispose();
+            }
         }
     }
 }

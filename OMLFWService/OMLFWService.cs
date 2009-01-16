@@ -100,6 +100,8 @@ namespace OMLFWService
             watcher.Stop();
             timer.Enabled = false;
             WriteToLog(EventLogEntryType.Information, "OMLFWService Stopped");
+
+            WatcherSettingsManager.CloseDBConnection();
         }
 
         private void WriteToLog(EventLogEntryType type, string msg)
