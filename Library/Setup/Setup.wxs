@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!-- These variables define the Windows Installer product version, product code and upgrade code. They   -->
 <!-- will be used later on in this file.                                                                 -->
@@ -143,6 +143,12 @@
                         <File Name="MEncoder.exe"
                               Source="..\..\OMLTranscoder\mencoder-1.0rc2-4.2.1.exe" Checksum="no" />
                     </Component>
+
+                    <Component Id="Maximizer.exe" Guid="E94299E1-62CD-4068-8861-052C8C7BEC6C" DiskId="1">
+                      <File Name="Maximizer.exe"
+                            Source="..\..\Maximizer\bin\$(var.BuildType)\Maximizer.exe" Checksum="no" />
+                    </Component>
+          
                     <Component Id="OMLEngineService.exe" Guid="12988468-3DCC-496a-B0B3-6982FFDE25B9" DiskId="1">
                         <File Name="OMLEngineService.exe"
                               Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe" Checksum="yes"/>
@@ -153,8 +159,9 @@
                                         ErrorControl="normal"/>
                         <!--<ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
-                    </Component>
-                    <Component Id="OMLFWService.exe" Guid="8F57190C-0489-40b4-9C46-5E9B09EC0DEC" DiskId="1">
+                    </Component>                  
+          
+                  <Component Id="OMLFWService.exe" Guid="8F57190C-0489-40b4-9C46-5E9B09EC0DEC" DiskId="1">
                         <File Name="OMLFWService.exe"
                               Source="..\..\OMLFWService\bin\$(var.BuildType)\OMLFWService.exe" Checksum="yes"/>
                         <ServiceInstall Id="OMLFWService" Name="OMLFWService" DisplayName="OMLFWService"
@@ -310,6 +317,7 @@
             <ComponentRef Id="OMLDatabaseEditor.exe" />
             <ComponentRef Id="OMLImporter.exe" />
             <ComponentRef Id="MEncoder.exe"/>
+            <ComponentRef Id="Maximizer.exe"/>
             
             <!-- Start Menu Shortcuts -->
             <ComponentRef Id="DatabaseEditorShortcut" />
