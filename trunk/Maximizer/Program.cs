@@ -22,7 +22,7 @@ namespace Maximizer
 
             for (int x = 1; x < args.Length; x++)
             {
-                sb.Append(args[x]);
+                sb.Append("\"" + args[x] + "\"");
                 if (x != args.Length - 1)
                     sb.Append(" ");
             }
