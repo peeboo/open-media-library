@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using OMLEngine;
 using OMLEngine.FileSystem;
+using OMLEngine.Settings;
 using System.Xml;
 using System.IO;
 using System.Threading;
@@ -74,12 +75,18 @@ namespace OMLFileWatcher
         /// </summary>
         private void SetupMetaDataPlugin()
         {
-            string pluginName = "Amazon";
-            //string pluginName = "DVDProfiler";
-            //string pluginName = "themoviedb.org";
-
             try
             {
+                WatcherSettings settings = WatcherSettingsManager.GetSettings();
+
+                // if no meta plugins are set just bail out
+                if (settings.MetaDataPlugins == null && settings.MetaDataPlugins.Count == 0)
+                    return;
+
+                // todo : solomon : eventually we should support an order of meta data plugins to allow
+                // for more than one - sadly that day isn't here yet
+                MetaDataSettings metaDataSettings = settings.MetaDataPlugins[0];
+
                 List<PluginServices.AvailablePlugin> plugins = PluginServices.FindPlugins(FileSystemWalker.PluginsDirectory, PluginTypes.MetadataPlugin);
 
                 // Loop through available plugins, creating instances and add them
@@ -88,11 +95,21 @@ namespace OMLFileWatcher
                     foreach (PluginServices.AvailablePlugin plugin in plugins)
                     {
                         IOMLMetadataPlugin foundPlugin = (IOMLMetadataPlugin)PluginServices.CreateInstance(plugin);
-                        
-                        if (foundPlugin.PluginName.Equals(pluginName, StringComparison.OrdinalIgnoreCase))
+
+                        if (foundPlugin.PluginName.Equals(metaDataSettings.Name, StringComparison.OrdinalIgnoreCase))
                         {
                             metaDataPlugin = foundPlugin;
-                            metaDataPlugin.SetOptionValue("Collection Path", "c:\\Collection.xml");
+
+                            if (metaDataSettings.Options != null)
+                            {
+                                foreach (KeyValuePair<string, string> pair in metaDataSettings.Options)
+                                {
+                                    DebugLine("Setting meta data plugin options '{0}' : '{1]'", pair.Key, pair.Value);
+                                    
+                                    metaDataPlugin.SetOptionValue(pair.Key, pair.Value);
+                                }
+                            }
+
                             metaDataPlugin.Initialize(null);
 
                             DebugLine("Loaded meta data plugin '{0}'", foundPlugin.PluginName);
@@ -100,16 +117,16 @@ namespace OMLFileWatcher
                         }
                     }
                 }
-                
+
                 if (metaDataPlugin == null)
                 {
-                    DebugLine("Meta data plugin not found : " + pluginName);
+                    DebugLine("Meta data plugin not found : " + metaDataSettings.Name);
                 }
             }
             catch (Exception err)
             {
                 DebugLineError(err, "Error could not load meta data plugin");
-            }            
+            }
         }
 
         /// <summary>

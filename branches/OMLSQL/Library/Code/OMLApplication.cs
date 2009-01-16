@@ -14,6 +14,7 @@ using System.Threading;
 
 
 using OMLEngine;
+using OMLEngine.Settings;
 using System;
 
 namespace Library
@@ -257,8 +258,9 @@ namespace Library
             }
             finally
             {
-                // close the db connection
+                // close the db connections
                 TitleCollectionManager.CloseDBConnection();
+                WatcherSettingsManager.CloseDBConnection();
             }            
         }
 
