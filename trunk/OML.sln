@@ -95,6 +95,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "omlrevision", "omlrevision\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildVersionUpdater", "BuildVersionUpdater\BuildVersionUpdater.csproj", "{F1386E04-A35B-4DB2-B95D-45277E55DDE7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maximizer", "Maximizer\Maximizer.csproj", "{21240191-08FF-4C30-AE9D-62B8DC032B10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -407,6 +409,18 @@ Global
 		{F1386E04-A35B-4DB2-B95D-45277E55DDE7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F1386E04-A35B-4DB2-B95D-45277E55DDE7}.Release|x64.ActiveCfg = Release|Any CPU
 		{F1386E04-A35B-4DB2-B95D-45277E55DDE7}.Release|x86.ActiveCfg = Release|Any CPU
+		{21240191-08FF-4C30-AE9D-62B8DC032B10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21240191-08FF-4C30-AE9D-62B8DC032B10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21240191-08FF-4C30-AE9D-62B8DC032B10}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{21240191-08FF-4C30-AE9D-62B8DC032B10}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{21240191-08FF-4C30-AE9D-62B8DC032B10}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{21240191-08FF-4C30-AE9D-62B8DC032B10}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{21240191-08FF-4C30-AE9D-62B8DC032B10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21240191-08FF-4C30-AE9D-62B8DC032B10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21240191-08FF-4C30-AE9D-62B8DC032B10}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{21240191-08FF-4C30-AE9D-62B8DC032B10}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{21240191-08FF-4C30-AE9D-62B8DC032B10}.Release|x64.ActiveCfg = Release|Any CPU
+		{21240191-08FF-4C30-AE9D-62B8DC032B10}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

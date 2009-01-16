@@ -117,14 +117,29 @@ namespace Library
                 _mediaPath += "\\";
             }
 
-            OMLApplication.DebugLine("Calling external application \"" + path + "\" \"" + _mediaPath + "\"");
+            // if the maximizer app can be found use that
+            string maximizerPath = Path.Combine(OMLEngine.FileSystemWalker.RootDirectory, "Maximizer.exe");
 
             OMLApplication.ExecuteSafe(delegate
             {
-                Process process = new Process();
-                process.StartInfo.FileName = path;
-                process.StartInfo.Arguments = "\"" + _mediaPath + "\"";
-                process.Start();
+                if (File.Exists(maximizerPath))
+                {
+                    OMLApplication.DebugLine("Calling Maximizer application \"" + path + "\" \"" + _mediaPath + "\"");
+                    Process process = new Process();
+                    process.StartInfo.FileName = maximizerPath;
+                    process.StartInfo.Arguments = string.Format("\"{0}\" \"{1}\"", path, _mediaPath);
+                    process.StartInfo.CreateNoWindow = true;
+                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    process.Start();
+                }
+                else
+                {
+                    OMLApplication.DebugLine("Calling external application \"" + path + "\" \"" + _mediaPath + "\"");
+                    Process process = new Process();
+                    process.StartInfo.FileName = path;
+                    process.StartInfo.Arguments = "\"" + _mediaPath + "\"";
+                    process.Start();
+                }
             });
                         
             return true;
