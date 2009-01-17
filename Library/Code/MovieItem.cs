@@ -692,6 +692,9 @@ namespace Library
                 if (File.Exists(Path.Combine(folder, "fanart.jpg")))
                     return new Image(string.Format("file://{0}", Path.Combine(folder, "fanart.jpg")));
 
+                if (File.Exists(Path.Combine(folder, "backdrop.jpg")))
+                    return new Image(string.Format("file://{0}", Path.Combine(folder, "backdrop.jpg")));
+
                 return null;
             }
         }
