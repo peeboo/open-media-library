@@ -354,7 +354,7 @@
               <Text Content="Watched" Color="color://s:NormalColor" Font="font://s:Normal" Margins="0,3,0,0"/>
             </Children>
           </Panel>
-
+          <Graphic Content="[DetailsPage.FanArtImage]" SizingPolicy="SizeToConstraint" Name="FanArtImage"/>
         </Children>
         <Animations>
           <Animation Animation="animation://me:FadeIn" />

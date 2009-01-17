@@ -679,5 +679,21 @@ namespace Library
         {
             return "MovieItem:" + this._titleObj;
         }
+
+        public Image MovieBackgroundImage
+        {
+            get
+            {
+                string folder = Path.GetDirectoryName(_titleObj.FileLocation);
+
+                OMLApplication.DebugLine("[MovieItem] Checking for fanart file: {0}",
+                    Path.Combine(folder, "fanart.jpg"));
+
+                if (File.Exists(Path.Combine(folder, "fanart.jpg")))
+                    return new Image(string.Format("file://{0}", Path.Combine(folder, "fanart.jpg")));
+
+                return null;
+            }
+        }
     }
 }

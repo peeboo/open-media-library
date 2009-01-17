@@ -29,6 +29,29 @@ namespace Library
         private int currentFocusedItemIndex = 0;
         private int currentItemIndexPosition = 0;
         private int currentAngleDegrees;
+        private Image primaryBackgroundImage;
+
+        public Image PrimaryBackgroundImage
+        {
+            get
+            {
+                DebugLine("[OMLApplication] Trying to load mainBackground fanart: {0}",
+                    Path.Combine(FileSystemWalker.PublicRootDirectory, "mainBackground.jpg"));
+
+                if (primaryBackgroundImage != null)
+                    return primaryBackgroundImage;
+                else
+                {
+                    if (File.Exists(Path.Combine(FileSystemWalker.PublicRootDirectory, "mainBackground.jpg")))
+                    {
+                        primaryBackgroundImage = new Image(
+                            string.Format("file://{0}", Path.Combine(FileSystemWalker.PublicRootDirectory, "mainBackground.jpg")));
+                        return primaryBackgroundImage;
+                    }
+                    return null;
+                }
+            }
+        }
 
         public string RevisionNumber
         {
