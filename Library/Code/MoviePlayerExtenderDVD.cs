@@ -297,8 +297,11 @@ namespace Library
             OMLApplication.DebugLine("created a sym-link {0} -> {1}, failed, {2}", vob, mpegFile, retMsg);
 
             string args = string.Format("/c mklink \"{0}\" \"{1}\"", mpegFile, vob);
-            System.Diagnostics.Process p = System.Diagnostics.Process.Start("cmd.exe", 
-                args);
+            System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("cmd.exe", args);
+            psi.CreateNoWindow = true;
+            psi.UseShellExecute = true;
+            psi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
             p.WaitForExit();
             int exitCode = p.ExitCode;
 
