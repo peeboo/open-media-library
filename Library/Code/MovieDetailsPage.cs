@@ -201,6 +201,11 @@ namespace Library
             return "MovieDetailsPage:" + this._movieDetails;
         }
 
+        public Image FanArtImage
+        {
+            get { return _movieDetails.MovieBackgroundImage; }
+        }
+
         private void LoadDetails(MovieItem item)
         {
             _movieDetails = item;
