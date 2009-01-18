@@ -434,7 +434,7 @@
 			<Custom Action="CA_BlockOlderVersionInstall" After="FindRelatedProducts">
 				<![CDATA[NEWERVERSIONDETECTED]]>
 			</Custom>
-			<Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT = 600 OR NOT MCEINSTALLVERSION = "5.0" OR NOT REGISTERMCEAPP) AND NOT Installed]]></Custom>
+			<Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 600 OR NOT MCEINSTALLVERSION >= "5.0" OR NOT REGISTERMCEAPP) AND NOT Installed]]></Custom>
 		</InstallUISequence>
 
         <!-- This sets the icon used for the Add/Remove Programs screen -->
