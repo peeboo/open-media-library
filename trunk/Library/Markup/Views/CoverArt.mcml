@@ -303,6 +303,7 @@
           <Set Target="[Background.Visible]" Value="true"/>
           <Set Target="[FocusedIndex.Value]" Value="[Index.SourceValue]"/>
           <Set Target="[MovieBrowser.FocusedItem]" Value="[GalleryItem]" />
+          <Set Target="[ItemPanel.Scale]" Value="1.25,1.25,1"/>
           <!-- Play an animation on the cover target item. -->
           <PlaySound Sound="sound://me:Focus" />
         </Actions>
@@ -313,6 +314,7 @@
         <Actions>
           <!-- Play an animation on the cover target item. -->
           <PlayAnimation Target="[ItemPanel]" Animation="[LostFocusCoverArt]"/>
+          <Set Target="[ItemPanel.Scale]" Value="1,1,1"/>
         </Actions>
       </Condition>      
     </Rules>
