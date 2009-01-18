@@ -71,12 +71,12 @@
                               KeyPath="yes" Source="..\..\OMLEngine\bin\$(var.BuildType)\OMLEngine.dll"
                               Checksum="yes" Vital="yes" Assembly=".net"/>
                     </Component>
-                    <Component Id="OMLFileWatcher.dll" Guid="7EA6B674-1AD6-417a-A184-7F89AA8B1578" Win64="yes" DiskId="1">
+                    <Component Id="OMLFileWatcher.dll" Guid="7ea6b674-1ad6-417a-a184-7f89aa8b1578" Win64="yes" DiskId="1">
                         <File Name="OMLFileWatcher.dll"
                               KeyPath="yes" Source="..\..\OMLFileWatcher\bin\$(var.BuildType)\OMLFileWatcher.dll"
                               Checksum="yes" Vital="yes" Assembly=".net"/>
                     </Component>
-                    <Component Id="OMLTranscoder.dll" Guid="AF99C403-9114-4809-A9AF-BA8038D47EA7" Win64="yes" DiskId="1">
+                    <Component Id="OMLTranscoder.dll" Guid="af99c403-9114-4809-a9af-ba8038d47ea7" Win64="yes" DiskId="1">
                         <File Name="OMLTranscoder.dll"
                               KeyPath="yes" Source="..\..\OMLTranscoder\bin\$(var.BuildType)\OMLTranscoder.dll"
                               Checksum="yes" Vital="yes" Assembly=".net"/>
@@ -96,42 +96,42 @@
                         <File Name="ComponentFactory.Krypton.Toolkit.DLL"
                               Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\ComponentFactory.Krypton.Toolkit.DLL" Checksum="no" />
                     </Component>-->
-                  <Component Id="DevExpress.Data.v8.2.dll" Guid="5268F9D7-2529-4af0-B5FB-6B94079A7F74" Win64="yes" DiskId="1">
+                  <Component Id="DevExpress.Data.v8.2.dll" Guid="5268f9d7-2529-4af0-b5fb-6b94079a7f74" Win64="yes" DiskId="1">
                     <File Name="DevExpress.Data.v8.2.dll"
                           Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Data.v8.2.dll" Checksum="no" />
                   </Component>
                   
-                  <Component Id="DevExpress.Utils.v8.2.dll" Guid="419C9895-3E28-442c-AF94-D77F9E4487B4" Win64="yes" DiskId="1">
+                  <Component Id="DevExpress.Utils.v8.2.dll" Guid="419c9895-3e28-442c-af94-d77f9e4487b4" Win64="yes" DiskId="1">
                     <File Name="DevExpress.Utils.v8.2.dll"
                           Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Utils.v8.2.dll" Checksum="no" />
                   </Component>
 
-                  <Component Id="DevExpress.XtraEditors.v8.2.dll" Guid="CD530611-C23A-4a31-AA6E-AC8926845707" Win64="yes" DiskId="1">
+                  <Component Id="DevExpress.XtraEditors.v8.2.dll" Guid="cd530611-c23a-4a31-aa6e-ac8926845707" Win64="yes" DiskId="1">
                     <File Name="DevExpress.XtraEditors.v8.2.dll"
                           Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraEditors.v8.2.dll" Checksum="no" />
                   </Component>
 
-                  <Component Id="DevExpress.XtraNavBar.v8.2.dll" Guid="CD530611-C23A-4a31-AA6F-AC8926845707" Win64="yes" DiskId="1">
+                  <Component Id="DevExpress.XtraNavBar.v8.2.dll" Guid="cd530611-c23a-4a31-aa6f-ac8926845707" Win64="yes" DiskId="1">
                     <File Name="DevExpress.XtraNavBar.v8.2.dll"
                           Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraNavBar.v8.2.dll" Checksum="no" />
                   </Component>
 
-                  <Component Id="DevExpress.Data.v8.2.xml" Guid="25AF85CB-DC9D-46df-B022-F8A3DF4F71FB" Win64="yes" DiskId="1">
+                  <Component Id="DevExpress.Data.v8.2.xml" Guid="25af85cb-dc9d-46df-b022-f8a3df4f71fb" Win64="yes" DiskId="1">
                     <File Name="DevExpress.Data.v8.2.xml"
                           Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Data.v8.2.xml" Checksum="no" />
                   </Component>
                   
-                  <Component Id="DevExpress.Utils.v8.2.xml" Guid="AC15AD59-C236-4a0b-9CB9-A009684582B7" Win64="yes" DiskId="1">
+                  <Component Id="DevExpress.Utils.v8.2.xml" Guid="ac15ad59-c236-4a0b-9cb9-a009684582b7" Win64="yes" DiskId="1">
                     <File Name="DevExpress.Utils.v8.2.xml"
                           Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Utils.v8.2.xml" Checksum="no" />
                   </Component>
                   
-                  <Component Id="DevExpress.XtraEditors.v8.2.xml" Guid="365BA1F3-7823-4ff7-AC1C-CB040D2B852E" Win64="yes" DiskId="1">
+                  <Component Id="DevExpress.XtraEditors.v8.2.xml" Guid="365ba1f3-7823-4ff7-ac1c-cb040d2b852e" Win64="yes" DiskId="1">
                     <File Name="DevExpress.XtraEditors.v8.2.xml"
                           Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraEditors.v8.2.xml" Checksum="no" />
                   </Component>
 
-                  <Component Id="DevExpress.XtraNavBar.v8.2.xml" Guid="365BA1F3-7823-4ff8-AC1C-CB040D2B852E" Win64="yes" DiskId="1">
+                  <Component Id="DevExpress.XtraNavBar.v8.2.xml" Guid="365ba1f3-7823-4ff8-ac1c-cb040d2b852e" Win64="yes" DiskId="1">
                     <File Name="DevExpress.XtraNavBar.v8.2.xml"
                           Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraNavBar.v8.2.xml" Checksum="no" />
                   </Component>
@@ -144,17 +144,17 @@
                         <File Name="OMLImporter.exe"
                               Source="..\..\OMLImporter\bin\$(var.BuildType)\OMLImporter.exe" Checksum="no" />
                     </Component>
-                    <Component Id="MEncoder.exe" Guid="1A3587C9-7219-4298-9351-C1ED480E430F" Win64="yes" DiskId="1">
+                    <Component Id="MEncoder.exe" Guid="1a3587c9-7219-4298-9351-c1ed480e430f" Win64="yes" DiskId="1">
                         <File Name="MEncoder.exe"
                               Source="..\..\OMLTranscoder\mencoder-1.0rc2-4.2.1.exe" Checksum="no" />
                     </Component>
 
-                  <Component Id="Maximizer.exe" Guid="E94299E1-62CD-4068-8861-052C8C7BEC6C" Win64="yes" DiskId="1">
+                  <Component Id="Maximizer.exe" Guid="e94299e1-62cd-4068-8861-052c8c7bec6c" Win64="yes" DiskId="1">
                     <File Name="Maximizer.exe"
                           Source="..\..\Maximizer\bin\$(var.BuildType)\Maximizer.exe" Checksum="no" />
                   </Component>
                   
-                  <Component Id="OMLEngineService.exe" Guid="12988468-3DCC-496a-B0B3-6982FFDE25B9" DiskId="1" Win64="yes">
+                  <Component Id="OMLEngineService.exe" Guid="12988468-3dcc-496a-b0b3-6982ffde25b9" DiskId="1" Win64="yes">
                     <File Name="OMLEngineService.exe"
                           Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe" Checksum="yes"/>
                     <File Name="OMLEngineService.exe.config"
@@ -166,7 +166,7 @@
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
                   </Component>                  
                   
-                  <Component Id="OMLFWService.exe" Guid="8F57190C-0489-40b4-9C46-5E9B09EC0DEC" DiskId="1" Win64="yes">
+                  <Component Id="OMLFWService.exe" Guid="8f57190c-0489-40b4-9c46-5e9b09ec0dec" DiskId="1" Win64="yes">
                     <File Name="OMLFWService.exe"
                           Source="..\..\OMLFWService\bin\$(var.BuildType)\OMLFWService.exe" Checksum="yes"/>
                     <ServiceInstall Id="OMLFWService" Name="OMLFWService" DisplayName="OMLFWService"
@@ -196,7 +196,7 @@
                                   KeyPath="yes" Source="..\..\MyMoviesPlugin\bin\$(var.BuildType)\MyMoviesPlugin.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
-                        <Component Id="MyMoviesToOML.xsl" Guid="A449CC9C-7E60-49bf-982B-CE389FBE7D40" Win64="yes" DiskId="1">
+                        <Component Id="MyMoviesToOML.xsl" Guid="a449cc9c-7e60-49bf-982b-ce389fbe7d40" Win64="yes" DiskId="1">
                             <File Name="MyMoviesToOML.xsl"
                                   KeyPath="yes" Source="..\..\MyMoviesPlugin\MyMoviesToOML.xsl"
                                   Vital="yes"/>
@@ -206,17 +206,17 @@
                                   KeyPath="yes" Source="..\..\VMCDVDLibraryPlugin\bin\$(var.BuildType)\VMCDVDLibraryPlugin.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
-                        <Component Id="AmazonMetadata.dll" Guid="6129EB0A-3C81-4a10-BC42-6D2B5849D0CD" Win64="yes" DiskId="1">
+                        <Component Id="AmazonMetadata.dll" Guid="6129eb0a-3c81-4a10-bc42-6d2b5849d0cd" Win64="yes" DiskId="1">
                             <File Name="AmazonMetadata.dll"
                                   KeyPath="yes" Source="..\..\AmazonMetadata\bin\$(var.BuildType)\AmazonMetadata.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
-                      <Component Id="TheMovieDbMetadata.dll" Guid="46534B9A-16B6-4c74-AB87-03B89BE3B160" Win64="yes" DiskId="1">
+                      <Component Id="TheMovieDbMetadata.dll" Guid="46534b9a-16b6-4c74-ab87-03b89be3b160" Win64="yes" DiskId="1">
                         <File Name="TheMovieDbMetadata.dll"
                               KeyPath="yes" Source="..\..\TheMovieDbMetadata\bin\$(var.BuildType)\TheMovieDbMetadata.dll"
                               Checksum="yes" Vital="yes"/>
                       </Component>
-                        <Component Id="OMLXMLImporter.dll" Guid="5BE2002C-EF0D-4358-93EF-5C495492AB0D" Win64="yes" DiskId="1">
+                        <Component Id="OMLXMLImporter.dll" Guid="5be2002c-ef0d-4358-93ef-5c495492ab0d" Win64="yes" DiskId="1">
                             <File Name="OMLXMLImporter.dll"
                                   KeyPath="yes" Source="..\..\OMLXMLImporter\bin\$(var.BuildType)\OMLXMLImporter.dll"
                                   Checksum="yes" Vital="yes"/>
@@ -259,15 +259,21 @@
         </Directory>
 
         <DirectoryRef Id="TARGETDIR">
-            <Component Id="registry" Guid="FDDE2AF7-995E-4b84-B8B7-2E150E7C7101" DiskId="1">
+            <Component Id="registry" Guid="fdde2af7-995e-4b84-b8b7-2e150e7c7101" DiskId="1">
               <RegistryKey Id="registry0" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Action="createAndRemoveOnUninstall">
                 <RegistryValue Id="reg1" Type="string" Name="Title" Value="Movie Library"/>
                 <RegistryValue Id="reg2" Type="string" Name="Category" Value="OML\Movie Library"/>
                 <RegistryValue Id="reg3" Type="string" Name="OnStartMenu" Value="True"/>
               </RegistryKey>
               <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey" Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\Services\Movies\{543d0438-b10d-43d8-a20d-f0c96db4e6bd}" />
+              <RegistryValue Id="reg03c1c5754f201b686549cb36017bc3b6" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Name="Title" Value="Open Media Library" Type="string" KeyPath="yes" />
+              <RegistryValue Id="regd69f4d5be138595b27eca976f42042af" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Name="Category" Value="OML\Media Library" Type="string" />
+              <RegistryValue Id="reg659db1b0c3615c583d34904fa429615a" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Name="OnStartMenu" Value="True" Type="string" />
+              <RegistryValue Id="rega6766ab6716b50f5569e46452a6fa539" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Name="TimeStamp" Value="214505904" Type="integer" />
+              <RegistryValue Id="reg2d469bdb435da8941134393f5d40d11c" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\OML\Media Library\{7533724d-c7cb-4ac2-8aee-1b0b91add393}" Name="TimeStamp" Value="214505904" Type="integer" />
+              <RegistryValue Id="rega999b66ad490db0571cbef4089cfb6e6" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\OML\Media Library\{543d0438-b10d-43d8-a20d-f0c96db4e6bd}" Name="TimeStamp" Value="214505905" Type="integer" />
             </Component>
-            <Component Id="registryFWS" Guid="1A746A98-A8D4-4e5e-B41F-5E6D6B8B5DFD" DiskId="1">
+            <Component Id="registryFWS" Guid="1a746a98-a8d4-4e5e-b41f-5e6d6b8b5dfd" DiskId="1">
                 <RegistryKey Id="registryFWS0" Root="HKCU" Key="Software\OpenMediaLibrary" Action="createAndRemoveOnUninstall">
                     <RegistryValue Id="registryFWS1" Type="integer" Name="logging" Value="1"/>
                     <RegistryValue Id="registryFWS2" Type="multiString" Name="Watches" Value="c:\\users\\public\\recorded tv;*.*" />
@@ -385,9 +391,9 @@
 
 			<!-- This custom action searches for Windows version 6.0, the Windows Media Center Ident registry  -->
 			<!-- value 5.0 and the presence of the file %windir%\eHome\RegisterMceApp.exe. If all of these     -->
-			<!-- conditions are met, the system is a Windows Vista Home Premium or Ultimate Edition operating  -->
+			<!-- conditions are met/, the system is a Windows Vista Home Premium or Ultimate Edition operating  -->
 			<!-- system and the product will be allowed to install.                                            -->
-			<Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 600 OR NOT MCEINSTALLVERSION OR NOT REGISTERMCEAPP) AND NOT Installed]]></Custom>
+			<Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 600 OR NOT REGISTERMCEAPP) AND NOT Installed]]></Custom>
 
 			<Custom Action="CA_RegisterMceApp_Unregister_Install_Cmd" After="CostFinalize">
 				<![CDATA[NOT REMOVE]]>
@@ -434,7 +440,7 @@
 			<Custom Action="CA_BlockOlderVersionInstall" After="FindRelatedProducts">
 				<![CDATA[NEWERVERSIONDETECTED]]>
 			</Custom>
-			<Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 600 OR NOT MCEINSTALLVERSION >= "5.0" OR NOT REGISTERMCEAPP) AND NOT Installed]]></Custom>
+			<Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 600 OR NOT REGISTERMCEAPP) AND NOT Installed]]></Custom>
 		</InstallUISequence>
 
         <!-- This sets the icon used for the Add/Remove Programs screen -->
@@ -449,13 +455,6 @@
 		<!-- installed per-machine instead of per-user.                                                      -->
 		<Property Id="ALLUSERS">
 			<![CDATA[1]]>
-		</Property>
-
-		<!-- This property uses a registry locator to determine the version of Windows Media Center present  -->
-		<!-- on the system (if any). This registry-based version detection algorithm is documented in the    -->
-		<!-- Windows Media Center SDK for Windows Vista.                                                     -->
-		<Property Id="MCEINSTALLVERSION" Secure="yes">
-			<RegistrySearch Id="MceInstallRegKey" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center" Name="Ident" Type="raw"/>
 		</Property>
 
 		<!-- This property uses an AppSearch to attempt to locate the file %windir\eHome\ehShell.exe  on the -->
