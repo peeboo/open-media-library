@@ -147,8 +147,8 @@
     <None Include="Setup\Setup.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\application2.png" />
     <Content Include="Images\appleseedexmachina1080x25.jpg" />
+    <Content Include="Images\Application.png" />
     <Content Include="Images\Blu-RayMovieDisk.png" />
     <Content Include="Images\boxart01.jpg" />
     <None Include="Images\boxart02.jpg" />
@@ -168,6 +168,7 @@
     <None Include="Images\overlays.divider.vertical.png" />
     <None Include="Images\overlays.outline.png" />
     <None Include="Images\overlays.shadow.png" />
+    <Content Include="Images\Settings.png" />
     <Content Include="Images\watched-icon.png" />
     <Content Include="Markup\About.mcml" />
     <Content Include="Markup\Control\AlphaFilter.mcml" />
@@ -234,7 +235,6 @@
     <Content Include="OldMarkup\MovieGallery.Old.mcml" />
     <Content Include="OMLInfo.xml" />
     <Content Include="Registration.xml" />
-    <Content Include="Images\Application.png" />
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

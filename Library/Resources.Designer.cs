@@ -95,13 +95,6 @@ namespace Library {
             }
         }
         
-        internal static System.Drawing.Bitmap Application2 {
-            get {
-                object obj = ResourceManager.GetObject("Application2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static byte[] Base {
             get {
                 object obj = ResourceManager.GetObject("Base", resourceCulture);
@@ -878,6 +871,13 @@ namespace Library {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap SettingsIcon {
+            get {
+                object obj = ResourceManager.GetObject("SettingsIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
