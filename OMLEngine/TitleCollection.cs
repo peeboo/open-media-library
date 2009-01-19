@@ -716,6 +716,7 @@ namespace OMLEngine
                             long size = fInfo.Length;
 
                             //File.Delete(Path.Combine(FileSystemWalker.ImageDirectory, image));
+                            Utilities.DebugLine("Trying to delete file: {0}", image);
                             Win32APIFunctions.DeleteFilesToRecycleBin(image);
                             bytesRemoved += size;
                         }
