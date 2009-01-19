@@ -123,6 +123,16 @@ namespace Library
             }
         }
 
+        public bool UseMaximizer
+        {
+            get { return Properties.Settings.Default.UseMaximizer; }
+            set
+            {
+                Properties.Settings.Default.UseMaximizer = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         public StringCollection MainFiltersToShow
         {
             get { return Properties.Settings.Default.MainFiltersToShow; }
