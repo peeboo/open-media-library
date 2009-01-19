@@ -702,6 +702,26 @@ namespace Library
             }
         }
 
+        public float MainPageBackDropAlphaValue
+        {
+            get { return Properties.Settings.Default.MainPageBackDropAlpha; }
+            set
+            {
+                Properties.Settings.Default.MainPageBackDropAlpha = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public float DetailsPageBackDropAlphaValue
+        {
+            get { return Properties.Settings.Default.DetailsPageBackDropAlpha; }
+            set
+            {
+                Properties.Settings.Default.DetailsPageBackDropAlpha = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
 
         #endregion
 

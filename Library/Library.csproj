@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\application2.png" />
+    <Content Include="Images\appleseedexmachina1080x25.jpg" />
     <Content Include="Images\Blu-RayMovieDisk.png" />
     <Content Include="Images\boxart01.jpg" />
     <None Include="Images\boxart02.jpg" />

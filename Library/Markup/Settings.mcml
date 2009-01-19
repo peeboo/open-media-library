@@ -274,6 +274,8 @@
 
       <Default Target="[ScrollHandlerUI.ScrollingData]" Value="[ScrollDataUI]"/>
       <Default Target="[ScrollHandlerFilters.ScrollingData]" Value="[ScrollDataFilters]"/>
+      <Binding Source="[Settings.MainPageBackDropAlpha.Chosen!cor:Single]" Target="[SampleMainBackDropImage.Alpha]"/>
+      <Binding Source="[Settings.DetailsPageBackDropAlpha.Chosen!cor:Single]" Target="[SampleDetailsBackDropImage.Alpha]"/>
     </Rules>
 
     <Content>
@@ -416,7 +418,23 @@
                               <c:SimpleSpinner Name="CoverArtSpacing" Model="[Settings.CoverArtSpacing]" Size="151,51" />
                             </Children>
                           </Panel>
-                          
+
+                          <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="4" Navigation="Group">
+                            <Children>
+                              <Text Content="Menu Page: Alpha Level" Color="White" Font="Calibri, 14"/>
+                              <Graphic Name="SampleMainBackDropImage" Content="image://me:SampleBackDrop" MaintainAspectRatio="true" SizingPolicy="SizeToContent" />
+                              <c:SimpleSpinner Name="MainPageBackDropAlpha" Model="[Settings.MainPageBackDropAlpha]" Size="151,51" />
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="5" Navigation="Group">
+                            <Children>
+                              <Text Content="Details Page: Alpha Level" Color="White" Font="Calibri, 14"/>
+                              <Graphic Name="SampleDetailsBackDropImage" Content="image://me:SampleBackDrop" MaintainAspectRatio="true" SizingPolicy="SizeToContent" />
+                              <c:SimpleSpinner Name="DetailsPageBackDropAlpha" Model="[Settings.DetailsPageBackDropAlpha]" Size="151,51" />
+                            </Children>
+                          </Panel>
+
                         </Children>
                       </Scroller>
                     </Children>
@@ -716,7 +734,8 @@
       </ColorFill>
     </Content>
   </UI>
-  <Font Name="Font" FontName="global://me:RegularFontName" FontSize="16" />
-  <Font Name="SmallFont" FontName="global://me:RegularFontName" FontSize="20" />
+  <Font Name="Font" FontName="global://me:RegularFontName" FontSize="14" />
+  <Font Name="SmallFont" FontName="global://me:RegularFontName" FontSize="16" />
   <Image Name="ListboxNoFocus" Source="resx://Library/Library.Resources/ListboxNoFocus" />
+  <Image Name="SampleBackDrop" Source="resx://Library/Library.Resources/SampleBackDrop"/>
 </Mcml>
