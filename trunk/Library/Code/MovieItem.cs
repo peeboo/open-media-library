@@ -684,7 +684,10 @@ namespace Library
         {
             get
             {
-                string folder = Path.GetDirectoryName(_titleObj.FileLocation);
+                // if the filelocation is a directory - then use that
+                string folder = (Directory.Exists(_titleObj.FileLocation))
+                                    ? _titleObj.FileLocation
+                                    : Path.GetDirectoryName(_titleObj.FileLocation);
 
                 OMLApplication.DebugLine("[MovieItem] Checking for fanart file: {0}",
                     Path.Combine(folder, "fanart.jpg"));
