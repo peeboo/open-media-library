@@ -1072,5 +1072,17 @@ namespace Library.Properties {
                 this["MovieDetailsTransitionType"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseMaximizer {
+            get {
+                return ((bool)(this["UseMaximizer"]));
+            }
+            set {
+                this["UseMaximizer"] = value;
+            }
+        }
     }
 }

@@ -87,6 +87,8 @@ namespace Library
 
                     _omlSettings.ExternalPlayerMapping = mappings;
                     ExternalPlayer.RefreshExternalPlayerList();
+
+                    _omlSettings.UseMaximizer = (bool)_useMaximizer.Chosen;
                 }
                 catch (Exception ex)
                 {
@@ -402,7 +404,9 @@ namespace Library
 
             _externalPlayerPath.Value = ( (bool)_useExternalPlayer.Chosen == true )
                                     ? ExternalPlayer.GetExternalPlayerPath(VideoFormat.ALL)
-                                    : string.Empty;            
+                                    : string.Empty;
+
+            _useMaximizer.Chosen = _omlSettings.UseMaximizer;
         }
 
         #region properties
@@ -557,7 +561,12 @@ namespace Library
         public BooleanChoice UseExternalPlayer
         {
             get { return _useExternalPlayer; }
-        }        
+        }
+
+        public BooleanChoice UseMaximizer
+        {
+            get { return _useMaximizer; }
+        }
       
         #endregion
         public EditableText MountingToolPath
@@ -871,5 +880,6 @@ namespace Library
         BooleanChoice _useExternalPlayer = new BooleanChoice();
         BooleanChoice _showFilterUnwatched = new BooleanChoice();
         BooleanChoice _debugTranscoding = new BooleanChoice();
+        BooleanChoice _useMaximizer = new BooleanChoice();
     }
 }

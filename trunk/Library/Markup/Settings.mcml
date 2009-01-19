@@ -600,7 +600,7 @@
               <!-- ExternalPlayers -->
               <Panel Name="ExternalPlayers" Layout="VerticalFlow" Visible="false" Navigation="Group">
                 <Children>
-                  <Panel Layout="VerticalFlow" Navigation="Group">
+                  <Panel Layout="VerticalFlow" Navigation="Column">
                     <Children>
                       <Text Content="Scan Drive for Total Media Theatre Plugin" Color="White" Font="font://me:SmallFont"/>
                       <Panel Layout="HorizontalFlow">
@@ -620,6 +620,13 @@
                       </Panel>
 
                       <c:SimpleEditbox Size="700,51" Name="ExternalPlayer" EditableText="[Settings.ExternalPlayerPath]" />
+
+                      <Panel Layout="HorizontalFlow" Margins="0,40,0,0" Navigation="Group">
+                        <Children>
+                          <c:SimpleCheckbox Name="UseMaximizer" Checked="[Settings.UseMaximizer]" Margins="0,0,10,0" />
+                          <Text WordWrap="true" Content="Force Media Center to minimize when launching external programs ( Not recommended for Total Media Theater Plugin )" Color="White" Font="font://me:SmallFont"/>
+                        </Children>
+                      </Panel>
 
                     </Children>
                   </Panel>

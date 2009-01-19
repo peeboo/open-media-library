@@ -122,7 +122,7 @@ namespace Library
 
             OMLApplication.ExecuteSafe(delegate
             {
-                if (File.Exists(maximizerPath))
+                if (Properties.Settings.Default.UseMaximizer && File.Exists(maximizerPath))
                 {
                     OMLApplication.DebugLine("Calling Maximizer application \"" + path + "\" \"" + _mediaPath + "\"");
                     Process process = new Process();
