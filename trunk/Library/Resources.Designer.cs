@@ -826,6 +826,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap SampleBackDrop {
+            get {
+                object obj = ResourceManager.GetObject("SampleBackDrop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap SampleBackground2_1024_768 {
             get {
                 object obj = ResourceManager.GetObject("SampleBackground2_1024_768", resourceCulture);

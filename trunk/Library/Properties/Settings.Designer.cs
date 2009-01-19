@@ -1084,5 +1084,29 @@ namespace Library.Properties {
                 this["UseMaximizer"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.3")]
+        public float MainPageBackDropAlpha {
+            get {
+                return ((float)(this["MainPageBackDropAlpha"]));
+            }
+            set {
+                this["MainPageBackDropAlpha"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.3")]
+        public float DetailsPageBackDropAlpha {
+            get {
+                return ((float)(this["DetailsPageBackDropAlpha"]));
+            }
+            set {
+                this["DetailsPageBackDropAlpha"] = value;
+            }
+        }
     }
 }

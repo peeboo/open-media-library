@@ -132,6 +132,8 @@ namespace Library
                 _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
                 _omlSettings.UseOnScreenAlphaJumper = (bool)_useOnScreenAlpha.Chosen;
                 _omlSettings.ShowWatchedIcon = (bool)_showWatchedIcon.Chosen;
+                _omlSettings.MainPageBackDropAlphaValue = (float)_mainPageBackDropAlpha.Chosen;
+                _omlSettings.DetailsPageBackDropAlphaValue = (float)_detailsPageBackDropAlpha.Chosen;
             });
         }
         private void SaveUILanguage()
@@ -313,6 +315,9 @@ namespace Library
 
             _trailersDefinition.Options = trailerDefinitionOptions;
             _trailersDefinition.Chosen = _omlSettings.TrailersDefinition.ToString();
+
+            SetupMainPageBackDropAlpha();
+            SetupDetailsPageBackDropAlpha();
         }
 
         private void SetupFilters()
@@ -355,6 +360,42 @@ namespace Library
 
             _uiLanguage.Options = list;
             _uiLanguage.Chosen = selected;
+        }
+
+        private void SetupMainPageBackDropAlpha()
+        {
+            List<float> alphaOptions = new List<float>();
+            alphaOptions.Add(0.1F);
+            alphaOptions.Add(0.2F);
+            alphaOptions.Add(0.3F);
+            alphaOptions.Add(0.4F);
+            alphaOptions.Add(0.5F);
+            alphaOptions.Add(0.6F);
+            alphaOptions.Add(0.7F);
+            alphaOptions.Add(0.8F);
+            alphaOptions.Add(0.9F);
+            alphaOptions.Add(1.0F);
+
+            _mainPageBackDropAlpha.Options = alphaOptions;
+            _mainPageBackDropAlpha.Chosen = _omlSettings.MainPageBackDropAlphaValue;
+        }
+
+        private void SetupDetailsPageBackDropAlpha()
+        {
+            List<float> alphaOptions = new List<float>();
+            alphaOptions.Add(0.1F);
+            alphaOptions.Add(0.2F);
+            alphaOptions.Add(0.3F);
+            alphaOptions.Add(0.4F);
+            alphaOptions.Add(0.5F);
+            alphaOptions.Add(0.6F);
+            alphaOptions.Add(0.7F);
+            alphaOptions.Add(0.8F);
+            alphaOptions.Add(0.9F);
+            alphaOptions.Add(1.0F);
+
+            _detailsPageBackDropAlpha.Options = alphaOptions;
+            _detailsPageBackDropAlpha.Chosen = _omlSettings.DetailsPageBackDropAlphaValue;
         }
 
         private void SetupTrailers()
@@ -654,6 +695,24 @@ namespace Library
                 FirePropertyChanged("ImageMountingSelection");
             }
         }
+        public Choice MainPageBackDropAlpha
+        {
+            get { return _mainPageBackDropAlpha; }
+            set
+            {
+                _mainPageBackDropAlpha = value;
+                FirePropertyChanged("MainPageBackDropAlpha");
+            }
+        }
+        public Choice DetailsPageBackDropAlpha
+        {
+            get { return _detailsPageBackDropAlpha; }
+            set
+            {
+                _detailsPageBackDropAlpha = value;
+                FirePropertyChanged("DetailsPageBackDropAlpha");
+            }
+        }
 
         private const string DefaultDaemonToolsPath = @"Program Files\DAEMON Tools Lite\daemon.exe";
         private const string DefaultVirtualCloneDrivePath = @"Program Files\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";
@@ -881,5 +940,7 @@ namespace Library
         BooleanChoice _showFilterUnwatched = new BooleanChoice();
         BooleanChoice _debugTranscoding = new BooleanChoice();
         BooleanChoice _useMaximizer = new BooleanChoice();
+        Choice _mainPageBackDropAlpha = new Choice();
+        Choice _detailsPageBackDropAlpha = new Choice();
     }
 }
