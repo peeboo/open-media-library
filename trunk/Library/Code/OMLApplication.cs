@@ -153,6 +153,8 @@ namespace Library
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
         {
             this._session = session;
+            AddInHost.Current.MediaCenterEnvironment.PropertyChanged +=new PropertyChangedEventHandler(MediaCenterEnvironment_PropertyChanged);
+
             try { // borrowed from vmcNetFlix project on google-code
                 bool isConsole = false;
                 if (host.MediaCenterEnvironment.Capabilities.ContainsKey("Console"))
@@ -193,6 +195,11 @@ namespace Library
             _titles = new TitleCollection();
             _titles.loadTitleCollection();
             _nowPlayingMovieName = "Playing an unknown movie";
+        }
+
+        void MediaExperience_PropertyChanged(IPropertyObject sender, string property)
+        {
+            DebugLine("[OMLApplication] MediaExperience Property {0} changed", property);
         }
 
         // this is the context from the Media Center menu
@@ -505,6 +512,15 @@ namespace Library
             return properties;
         }
 
+        static public void MediaCenterEnvironment_PropertyChanged(IPropertyObject sender, string property)
+        {
+            DebugLine("[OMLApplication] Property {0} changed on the MediaCenterEnvironment", property);
+        }
+
+        static public void AddInHost_PropertyChanged(IPropertyObject sender, string property)
+        {
+            DebugLine("[OMLApplication] Property {0} changed on the AddInHost", property);
+        }
         // private data
         private string _nowPlayingMovieName;
         private PlayState _nowPlayingStatus;
