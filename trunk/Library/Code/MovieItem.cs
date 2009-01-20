@@ -685,19 +685,43 @@ namespace Library
             get
             {
                 // if the filelocation is a directory - then use that
-                string folder = (Directory.Exists(_titleObj.FileLocation))
-                                    ? _titleObj.FileLocation
-                                    : Path.GetDirectoryName(_titleObj.FileLocation);
+                try
+                {
+                    string folder = string.Empty;
+                    if (!string.IsNullOrEmpty(_titleObj.FileLocation))
+                    {
+                        folder = (Directory.Exists(_titleObj.FileLocation))
+                            ? _titleObj.FileLocation
+                            : Path.GetDirectoryName(_titleObj.FileLocation);
+                    }
+                    else
+                    {
+                        if (_titleObj.Disks.Count > 0 && !string.IsNullOrEmpty(_titleObj.Disks[0].Path))
+                        {
+                            folder = (Directory.Exists(_titleObj.Disks[0].Path))
+                                ? _titleObj.Disks[0].Path
+                                : Path.GetDirectoryName(_titleObj.Disks[0].Path);
+                        }
+                    }
 
-                OMLApplication.DebugLine("[MovieItem] Checking for fanart file: {0}",
-                    Path.Combine(folder, "fanart.jpg"));
+                    if (folder.Length > 0)
+                    {
+                        OMLApplication.DebugLine("[MovieItem] Checking for fanart file: {0}",
+                            Path.Combine(folder, "fanart.jpg"));
 
-                if (File.Exists(Path.Combine(folder, "fanart.jpg")))
-                    return new Image(string.Format("file://{0}", Path.Combine(folder, "fanart.jpg")));
+                        if (File.Exists(Path.Combine(folder, "fanart.jpg")))
+                            return new Image(string.Format("file://{0}", Path.Combine(folder, "fanart.jpg")));
 
-                if (File.Exists(Path.Combine(folder, "backdrop.jpg")))
-                    return new Image(string.Format("file://{0}", Path.Combine(folder, "backdrop.jpg")));
-
+                        if (File.Exists(Path.Combine(folder, "backdrop.jpg")))
+                            return new Image(string.Format("file://{0}", Path.Combine(folder, "backdrop.jpg")));
+                    }
+                    else
+                        OMLApplication.DebugLine("[MovieItem] No valid path found to look for fanart in");
+                }
+                catch (Exception e)
+                {
+                    OMLApplication.DebugLine("Error attempting to locate fanart image: {0}", e.Message);
+                }
                 return null;
             }
         }
