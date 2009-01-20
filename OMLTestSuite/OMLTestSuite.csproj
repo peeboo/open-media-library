@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CE1D8B75-3C30-43A1-AD65-BDA43AD459AC}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DVDLibraryImporterTest.cs" />
     <Compile Include="DVDProfilerTest.cs" />
     <Compile Include="MEncoderCommandBuilderTest.cs" />
     <Compile Include="MovieCollectorzTest.cs" />
@@ -107,6 +108,10 @@
     <ProjectReference Include="..\OMLXMLImporter\OMLXMLImporter.csproj">
       <Project>{3F757A9F-BA85-4B16-AD94-334D332F3DEB}</Project>
       <Name>OMLXMLImporter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VMCDVDLibraryPlugin\VMCDVDLibraryPlugin.csproj">
+      <Project>{CEEBFC5A-9CAB-40D1-A453-8C30A13F0CD4}</Project>
+      <Name>VMCDVDLibraryPlugin</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

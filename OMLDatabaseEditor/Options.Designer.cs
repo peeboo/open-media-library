@@ -33,6 +33,7 @@ namespace OMLDatabaseEditor
             this.tpOptions = new DevExpress.XtraTab.XtraTabPage();
             this.ceUseGenreList = new DevExpress.XtraEditors.CheckEdit();
             this.ceUseMPAAList = new DevExpress.XtraEditors.CheckEdit();
+            this.ceFoldersAsTitles = new DevExpress.XtraEditors.CheckEdit();
             this.tpSkins = new DevExpress.XtraTab.XtraTabPage();
             this.lbcSkins = new DevExpress.XtraEditors.ListBoxControl();
             this.tpMPAAList = new DevExpress.XtraTab.XtraTabPage();
@@ -53,6 +54,7 @@ namespace OMLDatabaseEditor
             this.tpOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseMPAAList.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceFoldersAsTitles.Properties)).BeginInit();
             this.tpSkins.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbcSkins)).BeginInit();
             this.tpMPAAList.SuspendLayout();
@@ -104,6 +106,7 @@ namespace OMLDatabaseEditor
             // 
             this.tpOptions.Controls.Add(this.ceUseGenreList);
             this.tpOptions.Controls.Add(this.ceUseMPAAList);
+            this.tpOptions.Controls.Add(this.ceFoldersAsTitles);
             this.tpOptions.Name = "tpOptions";
             this.tpOptions.Size = new System.Drawing.Size(346, 271);
             this.tpOptions.Text = "Options";
@@ -123,6 +126,14 @@ namespace OMLDatabaseEditor
             this.ceUseMPAAList.Properties.Caption = "Use MPAA Auto Complete List";
             this.ceUseMPAAList.Size = new System.Drawing.Size(259, 18);
             this.ceUseMPAAList.TabIndex = 0;
+            //
+            // ceFoldersAsTitles
+            //
+            this.ceFoldersAsTitles.Location = new System.Drawing.Point(7, 52);
+            this.ceFoldersAsTitles.Name = "ceFoldersAsTitles";
+            this.ceFoldersAsTitles.Properties.Caption = "Folders are Titles";
+            this.ceFoldersAsTitles.Size = new System.Drawing.Size(259, 18);
+            this.ceFoldersAsTitles.TabIndex = 2;
             // 
             // tpSkins
             // 
@@ -288,6 +299,7 @@ namespace OMLDatabaseEditor
             this.tpOptions.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseMPAAList.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceFoldersAsTitles.Properties)).EndInit();
             this.tpSkins.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbcSkins)).EndInit();
             this.tpMPAAList.ResumeLayout(false);
@@ -314,6 +326,7 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraEditors.SimpleButton sbCancel;
         private DevExpress.XtraEditors.SimpleButton sbOK;
         private DevExpress.XtraEditors.CheckEdit ceUseMPAAList;
+        private DevExpress.XtraEditors.CheckEdit ceFoldersAsTitles;
         private DevExpress.XtraTab.XtraTabPage tpMPAAList;
         private DevExpress.XtraEditors.ListBoxControl lbcMPAA;
         private DevExpress.XtraEditors.ButtonEdit beMPAA;
