@@ -90,6 +90,8 @@
                     <Component Id="Application.png" Guid="34c83bcd-a522-4103-8bac-ad159113d313" DiskId="1">
                         <File Name="Application.png"
                               Source="..\Images\Application.png" Checksum="no" />
+                      <File Name="Application2.png"
+                            Source="..\Images\Application2.png" Checksum="no" />
                       <File Name="Settings.png"
                             Source="..\Images\Settings.png" Checksum="no" />
                     </Component>
@@ -258,19 +260,20 @@
 		</Directory>
 
         <DirectoryRef Id="TARGETDIR">
-            <Component Id="registry" Guid="FDDE2AF7-995E-4b84-B8B7-2E150E7C7101" DiskId="1">
-                <RegistryKey Id="registry0" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Action="createAndRemoveOnUninstall">
-                  <RegistryValue Id="reg1" Type="string" Name="Title" Value="Movie Library"/>
-                  <RegistryValue Id="reg2" Type="string" Name="Category" Value="OML\Movie Library"/>
-                  <RegistryValue Id="reg3" Type="string" Name="OnStartMenu" Value="True"/>
-                </RegistryKey>
-                <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey" Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\Services\Movies\{543d0438-b10d-43d8-a20d-f0c96db4e6bd}" />
-              <RegistryValue Id="reg03c1c5754f201b686549cb36017bc3b6" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Name="Title" Value="Open Media Library" Type="string" KeyPath="yes" />
-              <RegistryValue Id="regd69f4d5be138595b27eca976f42042af" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Name="Category" Value="OML\Media Library" Type="string" />
-              <RegistryValue Id="reg659db1b0c3615c583d34904fa429615a" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Name="OnStartMenu" Value="True" Type="string" />
-              <RegistryValue Id="rega6766ab6716b50f5569e46452a6fa539" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Name="TimeStamp" Value="214505904" Type="integer" />
-              <RegistryValue Id="reg2d469bdb435da8941134393f5d40d11c" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\OML\Media Library\{7533724d-c7cb-4ac2-8aee-1b0b91add393}" Name="TimeStamp" Value="214505904" Type="integer" />
-              <RegistryValue Id="rega999b66ad490db0571cbef4089cfb6e6" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\OML\Media Library\{543d0438-b10d-43d8-a20d-f0c96db4e6bd}" Name="TimeStamp" Value="214505905" Type="integer" />
+            <Component Id="registry" Guid="FDDE2AF7-995E-4b84-B8B7-2E150E7C7101" DiskId="1" KeyPath="yes">
+              <RegistryKey Id="registry0" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Action="create">
+                <RegistryValue Id="reg1" Type="string" Name="Title" Value="Media Library" Action="write"/>
+                <RegistryValue Id="reg2" Type="string" Name="Category" Value="OML\Media Library" Action="write"/>
+                <RegistryValue Id="reg3" Type="string" Name="OnStartMenu" Value="True" Action="write"/>
+                <RegistryValue Id="reg4" Type="integer" Name="TimeStamp" Value="214505905" Action="write"/>
+              </RegistryKey>
+              <RegistryKey Id="registry1" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\OML\Media Library\{7533724d-c7cb-4ac2-8aee-1b0b91add393}" Action="create">
+                <RegistryValue Id="reg5" Type="integer" Name="TimeStamp" Value="214505905" Action="write"/>
+              </RegistryKey>
+              <RegistryKey Id="registry2" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\OML\Media Library\{543d0438-b10d-43d8-a20d-f0c96db4e6bd}" Action="create">
+                <RegistryValue Id="reg6" Type="integer" Name="TimeStamp" Value="214505906" Action="write"/>
+              </RegistryKey>
+              <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey" Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\Services\Movies\{543d0438-b10d-43d8-a20d-f0c96db4e6bd}" />
             </Component>
             <Component Id="registryFWS" Guid="1A746A98-A8D4-4e5e-B41F-5E6D6B8B5DFD" DiskId="1">
                 <RegistryKey Id="registryFWS0" Root="HKCU" Key="Software\OpenMediaLibrary" Action="createAndRemoveOnUninstall">
