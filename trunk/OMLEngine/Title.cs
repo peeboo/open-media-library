@@ -2154,6 +2154,53 @@ namespace OMLEngine
         {
             return "Title:" + this._name + " (" + this._itemId + ")";
         }
+
+        public string BasePath()
+        {
+            string folder = string.Empty;
+            if (!string.IsNullOrEmpty(FileLocation))
+                folder = Path.GetDirectoryName(FileLocation);
+            else
+            {
+                if (Disks.Count > 0)
+                {
+                    if (Disks[0].Path.Length > 0)
+                        folder = Path.GetDirectoryName(Disks[0].Path);
+                }
+            }
+
+            if (folder.Length > 0)
+            {
+                try
+                {
+                    if (Directory.Exists(folder))
+                        return folder;
+
+                    return null;
+                }
+                catch (Exception e)
+                {
+                    Utilities.DebugLine("[Title] Error Looking for folder: {0}", e.Message);
+                }
+            }
+            return null;
+        }
+
+        public string BackDropFolder
+        {
+            get { return Path.Combine(this.BasePath(), @"FanArt"); }
+        }
+
+        public void createBackDropFolder()
+        {
+            if (Directory.Exists(this.BasePath()))
+            {
+                if (!Directory.Exists(Path.Combine(this.BasePath(), @"FanArt")))
+                {
+                    Directory.CreateDirectory(Path.Combine(this.BasePath(), @"FanArt"));
+                }
+            }
+        }
     }
 
     public class Role

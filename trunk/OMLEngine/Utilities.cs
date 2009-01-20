@@ -261,6 +261,12 @@ namespace OMLEngine
             if (!FileSystemWalker.TranscodeBufferDirExists)
                 FileSystemWalker.createTranscodeBufferDirectory();
 
+            if (!FileSystemWalker.TempPlayListDirExists)
+                FileSystemWalker.createTempPlayListDirectory();
+
+            if (!FileSystemWalker.MainBackDropDirExists)
+                FileSystemWalker.createMainBackDropDirectory();
+
             return true;
         }
 
