@@ -45,7 +45,10 @@ namespace Library
 
                 // the unc path requires that it start with // so remove \\ if it exists
                 if (path.StartsWith("\\\\"))
+                {
                     path = path.Substring(2);
+                    path = path.Replace(@"\", @"/");
+                }
 
                 return PlayMovie("DVD://" + path);
             }
