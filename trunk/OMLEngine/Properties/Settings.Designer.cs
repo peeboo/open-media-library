@@ -94,5 +94,17 @@ namespace OMLEngine.Properties {
                 this["MountingToolSelection"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FoldersAreTitles {
+            get {
+                return ((bool)(this["FoldersAreTitles"]));
+            }
+            set {
+                this["FoldersAreTitles"] = value;
+            }
+        }
     }
 }

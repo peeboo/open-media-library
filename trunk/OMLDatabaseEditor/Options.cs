@@ -83,6 +83,8 @@ namespace OMLDatabaseEditor
             // I disabled this line because gsValidGenres is not just empty, its undef
             GenreList.Sort();
             lbGenres.DataSource = GenreList;
+
+            this.ceFoldersAsTitles.Checked = OMLEngine.Properties.Settings.Default.FoldersAreTitles;
         }
 
         private void SimpleButtonClick(object sender, EventArgs e)
@@ -128,6 +130,11 @@ namespace OMLDatabaseEditor
                 {
                     OptionsDirty = bDirty;
                     Properties.Settings.Default.Save();
+                }
+                if (OMLEngine.Properties.Settings.Default.FoldersAreTitles != this.ceFoldersAsTitles.Checked)
+                {
+                    OMLEngine.Properties.Settings.Default.FoldersAreTitles = this.ceFoldersAsTitles.Checked;
+                    OMLEngine.Properties.Settings.Default.Save();
                 }
             }
             else if (sender == this.sbCancel)
