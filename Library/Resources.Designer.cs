@@ -95,6 +95,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap Application2 {
+            get {
+                object obj = ResourceManager.GetObject("Application2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static byte[] Base {
             get {
                 object obj = ResourceManager.GetObject("Base", resourceCulture);

@@ -4,7 +4,7 @@
 				title="Movies"
 				context="Menu"
 				description="Open Media Library"
-				ImageUrl="Application.png">
+				ImageUrl="Application2.png">
 		<category category="OML\Media Library"/>
 	</entrypoint>
     <entrypoint id="{543d0438-b10d-43d8-a20d-f0c96db4e6bd}"
