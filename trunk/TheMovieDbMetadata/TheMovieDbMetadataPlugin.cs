@@ -16,6 +16,8 @@ namespace TheMovieDbMetadata
         public int Id { get; set; }
         public string ImageUrl { get; set; }
         public string ImageUrlThumb { get; set; }
+        public IList<string> BackDrops = new List<string>();
+        public IList<string> BackDropThumbnails = new List<string>();
 
         public TheMovieDbResult()
         {
@@ -139,6 +141,19 @@ namespace TheMovieDbMetadata
 
                                 result.ImageUrlThumb = GetElementValue(reader);
                             }                            
+                            break;
+
+                        case "backdrop":
+                            if (IsAttributeValue(reader, "original"))
+                            {
+                                result.BackDrops.Add(GetElementValue(reader));
+                            }
+
+                            else if (IsAttributeValue(reader, "thumb"))
+                            {
+                                result.BackDropThumbnails.Add(GetElementValue(reader));
+                            }
+
                             break;
 
                         case "runtime":
@@ -388,6 +403,28 @@ namespace TheMovieDbMetadata
                 {
                     File.Delete(tempFileName);                    
                 }                
+            }
+        }
+
+        public bool SupportsBackDrops()
+        {
+            return true;
+        }
+
+        public void DownloadBackDropsForTitle(Title t, int index)
+        {
+            if (results.Count >= index)
+            {
+                WebClient web = new WebClient();
+                foreach (string backDropUrl in results[index].BackDrops)
+                {
+                    if (!string.IsNullOrEmpty(backDropUrl))
+                    {
+                        string tmpFilename = Path.GetTempFileName();
+                        tmpFilename += @".jpg";
+                        web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, tmpFilename).ToString());
+                    }
+                }
             }
         }
     }

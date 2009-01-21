@@ -47,6 +47,10 @@ namespace OMLSDK
 
         List<OMLMetadataOption> GetOptions();
         bool SetOptionValue(string option, string value);
+
+        bool SupportsBackDrops();
+
+        void DownloadBackDropsForTitle(Title t, int index);
     }
 
     public class OMLMetadataOption
