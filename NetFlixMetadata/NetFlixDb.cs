@@ -141,5 +141,14 @@ namespace NetFlixMetadata
                 }
             }
         }
+
+        public bool SupportsBackDrops()
+        {
+            return false;
+        }
+
+        public void DownloadBackDropsForTitle(Title t, int index)
+        {
+        }
     }
 }
