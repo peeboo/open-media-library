@@ -50,6 +50,9 @@
             this.btnSelectMovie = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.chkUpdateMissingDataOnly = new System.Windows.Forms.CheckBox();
+            this.reSearchAdjustTitleLabel = new System.Windows.Forms.Label();
+            this.reSearchSubmitButton = new System.Windows.Forms.Button();
+            this.reSearchTitle = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.grdTitles)).BeginInit();
             this.SuspendLayout();
             // 
@@ -168,10 +171,31 @@
             this.chkUpdateMissingDataOnly.Name = "chkUpdateMissingDataOnly";
             this.chkUpdateMissingDataOnly.UseVisualStyleBackColor = true;
             // 
+            // reSearchAdjustTitleLabel
+            // 
+            resources.ApplyResources(this.reSearchAdjustTitleLabel, "reSearchAdjustTitleLabel");
+            this.reSearchAdjustTitleLabel.Name = "reSearchAdjustTitleLabel";
+            // 
+            // reSearchSubmitButton
+            // 
+            resources.ApplyResources(this.reSearchSubmitButton, "reSearchSubmitButton");
+            this.reSearchSubmitButton.Name = "reSearchSubmitButton";
+            this.reSearchSubmitButton.UseVisualStyleBackColor = true;
+            this.reSearchSubmitButton.Click += new System.EventHandler(this.reSearchSubmitButton_Click);
+            // 
+            // reSearchTitle
+            // 
+            resources.ApplyResources(this.reSearchTitle, "reSearchTitle");
+            this.reSearchTitle.Name = "reSearchTitle";
+            this.reSearchTitle.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.reSearchTitleKeypress);
+            // 
             // frmSearchResult
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.reSearchAdjustTitleLabel);
+            this.Controls.Add(this.reSearchSubmitButton);
+            this.Controls.Add(this.reSearchTitle);
             this.Controls.Add(this.chkUpdateMissingDataOnly);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSelectMovie);
@@ -200,5 +224,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colDirector;
         private System.Windows.Forms.DataGridViewTextBoxColumn colActors;
         private System.Windows.Forms.CheckBox chkUpdateMissingDataOnly;
+        private System.Windows.Forms.Label reSearchAdjustTitleLabel;
+        private System.Windows.Forms.Button reSearchSubmitButton;
+        private System.Windows.Forms.TextBox reSearchTitle;
     }
 }

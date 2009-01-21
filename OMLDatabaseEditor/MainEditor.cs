@@ -359,13 +359,29 @@ namespace OMLDatabaseEditor
 
         private bool StartMetadataImport(IOMLMetadataPlugin plugin, bool coverArtOnly)
         {
+            return StartMetadataImport(plugin, coverArtOnly, titleEditor.EditedTitle.Name, null);
+        }
+        internal bool StartMetadataImport(string pluginName, bool coverArtOnly, string titleNameSearch, Form targetForm)
+        {
+            foreach (IOMLMetadataPlugin plugin in _metadataPlugins)
+            {
+                if (plugin.PluginName == pluginName) return StartMetadataImport(plugin, coverArtOnly, titleNameSearch, targetForm);
+            }
+            return false;
+        }
+        internal bool StartMetadataImport(IOMLMetadataPlugin plugin, bool coverArtOnly, string titleNameSearch, Form targetForm)
+        {
             try
             {
-                if (titleEditor.EditedTitle != null)
+                if (titleNameSearch != null)
                 {
                     Cursor = Cursors.WaitCursor;
-                    plugin.SearchForMovie(titleEditor.EditedTitle.Name);
-                    frmSearchResult searchResultForm = new frmSearchResult();
+                    plugin.SearchForMovie(titleNameSearch);
+                    frmSearchResult searchResultForm;
+                    if (targetForm == null) searchResultForm = new frmSearchResult(this);
+                    else searchResultForm = targetForm as frmSearchResult;
+                    searchResultForm.ReSearchText = titleNameSearch;
+                    searchResultForm.LastMetaPluginName = (string)plugin.PluginName;
                     Cursor = Cursors.Default;
                     DialogResult result = searchResultForm.ShowResults(plugin.GetAvailableTitles());
                     if (result == DialogResult.OK)
