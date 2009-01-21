@@ -452,7 +452,7 @@ namespace Library
         private string CreatePlayListFromAllDisks()
         {
             if (!Directory.Exists(FileSystemWalker.TempPlayListDirectory))
-                FileSystemWalker.CreateTempPlayListDirectory();
+                FileSystemWalker.createTempPlayListDirectory();
 
             WindowsPlayListManager playlist = new WindowsPlayListManager();
 

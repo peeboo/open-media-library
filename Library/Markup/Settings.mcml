@@ -424,6 +424,8 @@
                               <Text Content="Menu Page: Alpha Level" Color="White" Font="Calibri, 14"/>
                               <Graphic Name="SampleMainBackDropImage" Content="image://me:SampleBackDrop" MaintainAspectRatio="true" SizingPolicy="SizeToContent" />
                               <c:SimpleSpinner Name="MainPageBackDropAlpha" Model="[Settings.MainPageBackDropAlpha]" Size="151,51" />
+                              <Text Content="If using random MainPage backdrops, rotate the image how often in seconds" Color="White" Font="Calibri, 14"/>
+                              <c:SimpleSpinner Name="MainPageBackDropInterval" Model="[Settings.MainPageBackDropInterval]" Size="151,51" />
                             </Children>
                           </Panel>
 

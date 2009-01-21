@@ -133,6 +133,7 @@ namespace Library
                 _omlSettings.UseOnScreenAlphaJumper = (bool)_useOnScreenAlpha.Chosen;
                 _omlSettings.ShowWatchedIcon = (bool)_showWatchedIcon.Chosen;
                 _omlSettings.MainPageBackDropAlphaValue = (float)_mainPageBackDropAlpha.Chosen;
+                _omlSettings.MainPageBackDropIntervalValue = (int)_mainPageBackDropInterval.Chosen;
                 _omlSettings.DetailsPageBackDropAlphaValue = (float)_detailsPageBackDropAlpha.Chosen;
             });
         }
@@ -318,6 +319,7 @@ namespace Library
 
             SetupMainPageBackDropAlpha();
             SetupDetailsPageBackDropAlpha();
+            SetupMainPageBackDropInterval();
         }
 
         private void SetupFilters()
@@ -378,6 +380,17 @@ namespace Library
 
             _mainPageBackDropAlpha.Options = alphaOptions;
             _mainPageBackDropAlpha.Chosen = _omlSettings.MainPageBackDropAlphaValue;
+        }
+
+        private void SetupMainPageBackDropInterval()
+        {
+            List<int> intervalOptions = new List<int>();
+            intervalOptions.Add(5);
+            intervalOptions.Add(10);
+            intervalOptions.Add(15);
+            intervalOptions.Add(20);
+            _mainPageBackDropInterval.Options = intervalOptions;
+            _mainPageBackDropInterval.Chosen = _omlSettings.MainPageBackDropIntervalValue;
         }
 
         private void SetupDetailsPageBackDropAlpha()
@@ -695,6 +708,15 @@ namespace Library
                 FirePropertyChanged("ImageMountingSelection");
             }
         }
+        public Choice MainPageBackDropInterval
+        {
+            get { return _mainPageBackDropInterval; }
+            set
+            {
+                _mainPageBackDropInterval = value;
+                FirePropertyChanged("MainPageBackDropInterval");
+            }
+        }
         public Choice MainPageBackDropAlpha
         {
             get { return _mainPageBackDropAlpha; }
@@ -941,6 +963,7 @@ namespace Library
         BooleanChoice _debugTranscoding = new BooleanChoice();
         BooleanChoice _useMaximizer = new BooleanChoice();
         Choice _mainPageBackDropAlpha = new Choice();
+        Choice _mainPageBackDropInterval = new Choice();
         Choice _detailsPageBackDropAlpha = new Choice();
     }
 }
