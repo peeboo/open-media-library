@@ -62,6 +62,7 @@
     <Compile Include="MovieCollectorzTest.cs" />
     <Compile Include="MoviePlayerDVDTest.cs" />
     <Compile Include="MyMoviesPluginTest.cs" />
+    <Compile Include="NetFlixMetadataTest.cs" />
     <Compile Include="OMLFileWatcherTest.cs" />
     <Compile Include="OMLXMLImporterTest.cs" />
     <Compile Include="Program.cs" />
@@ -88,6 +89,10 @@
     <ProjectReference Include="..\MyMoviesPlugin\MyMoviesPlugin.csproj">
       <Project>{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}</Project>
       <Name>MyMoviesPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetFlixMetadata\NetFlixMetadata.csproj">
+      <Project>{11275660-18A4-4B39-BA5D-0451E1B5DBCE}</Project>
+      <Name>NetFlixMetadata</Name>
     </ProjectReference>
     <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
       <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
