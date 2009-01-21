@@ -712,6 +712,25 @@ namespace Library
             }
         }
 
+        public int MainPageBackDropIntervalValue
+        {
+            get { return Properties.Settings.Default.MainPageBackDropRotationInSeconds; }
+            set
+            {
+                Properties.Settings.Default.MainPageBackDropRotationInSeconds = value;
+                Properties.Settings.Default.Save();
+                if (OMLApplication.Current.mainBackgroundTimer != null)
+                {
+                    OMLApplication.Current.mainBackgroundTimer.Stop();
+                    OMLApplication.Current.mainBackgroundTimer.Enabled = false;
+                    OMLApplication.Current.mainBackgroundTimer.Interval =
+                        Properties.Settings.Default.MainPageBackDropRotationInSeconds * 1000;
+                    OMLApplication.Current.mainBackgroundTimer.Enabled = true;
+                    OMLApplication.Current.mainBackgroundTimer.Start();
+                }
+            }
+        }
+
         public float DetailsPageBackDropAlphaValue
         {
             get { return Properties.Settings.Default.DetailsPageBackDropAlpha; }

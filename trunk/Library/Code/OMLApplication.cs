@@ -11,7 +11,7 @@ using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Reflection;
 using System.Threading;
-
+using System.Timers;
 
 using OMLEngine;
 using System;
@@ -30,26 +30,69 @@ namespace Library
         private int currentItemIndexPosition = 0;
         private int currentAngleDegrees;
         private Image primaryBackgroundImage;
+        private int iCurrentBackgroundImage = 0;
+        private int iTotalBackgroundImages = 0;
+        public System.Timers.Timer mainBackgroundTimer;
+
+        private void SetPrimaryBackgroundImage()
+        {
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.MainPageBackDropFile))
+            {
+                if (primaryBackgroundImage == null)
+                {
+                    string lockedFileName = Properties.Settings.Default.MainPageBackDropFile;
+                    if (File.Exists(Path.Combine(FileSystemWalker.MainBackDropDirectory, lockedFileName)))
+                    {
+                        primaryBackgroundImage = new Image(
+                            string.Format("file://{0}", Path.Combine(FileSystemWalker.MainBackDropDirectory, lockedFileName))
+                        );
+                        return;
+                    }
+                }
+            }
+
+            // a specific file is NOT set for the main backdrop, lets see how many we find.
+            DirectoryInfo dirInfo = new DirectoryInfo(FileSystemWalker.MainBackDropDirectory);
+            FileInfo[] files = dirInfo.GetFiles("*.jpg", SearchOption.TopDirectoryOnly);
+            iTotalBackgroundImages = files.Length;
+            if (iTotalBackgroundImages > 0)
+            {
+                if (iCurrentBackgroundImage >= iTotalBackgroundImages)
+                    iCurrentBackgroundImage = 0;
+
+                PrimaryBackgroundImage = new Image(string.Format("file://{0}",
+                        Path.Combine(FileSystemWalker.MainBackDropDirectory,
+                        files[iCurrentBackgroundImage].FullName)));
+                iCurrentBackgroundImage++;
+                if (mainBackgroundTimer == null)
+                {
+                    mainBackgroundTimer = new System.Timers.Timer();
+                    mainBackgroundTimer.AutoReset = true;
+                    mainBackgroundTimer.Elapsed += new ElapsedEventHandler(mainBackgroundTimer_Elapsed);
+                    int rotationInSeconds = Properties.Settings.Default.MainPageBackDropRotationInSeconds;
+                    double rotationInMilliseconds = rotationInSeconds * 1000;
+                    mainBackgroundTimer.Interval = rotationInMilliseconds;
+                    mainBackgroundTimer.Enabled = true;
+                    mainBackgroundTimer.Start();
+                    GC.KeepAlive(mainBackgroundTimer);
+                }
+
+                return;
+            }
+        }
+
+        void mainBackgroundTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            SetPrimaryBackgroundImage();
+        }
 
         public Image PrimaryBackgroundImage
         {
-            get
+            get { return primaryBackgroundImage; }
+            set
             {
-                DebugLine("[OMLApplication] Trying to load mainBackground fanart: {0}",
-                    Path.Combine(FileSystemWalker.PublicRootDirectory, "mainBackground.jpg"));
-
-                if (primaryBackgroundImage != null)
-                    return primaryBackgroundImage;
-                else
-                {
-                    if (File.Exists(Path.Combine(FileSystemWalker.PublicRootDirectory, "mainBackground.jpg")))
-                    {
-                        primaryBackgroundImage = new Image(
-                            string.Format("file://{0}", Path.Combine(FileSystemWalker.PublicRootDirectory, "mainBackground.jpg")));
-                        return primaryBackgroundImage;
-                    }
-                    return null;
-                }
+                primaryBackgroundImage = value;
+                FirePropertyChanged("PrimaryBackgroundImage");
             }
         }
 
@@ -150,6 +193,16 @@ namespace Library
             DebugLine("[OMLApplication] Empty Constructor called");
         }
 
+        ~OMLApplication()
+        {
+            if (mainBackgroundTimer != null)
+            {
+                mainBackgroundTimer.Stop();
+                mainBackgroundTimer.Enabled = false;
+                mainBackgroundTimer.Dispose();
+            }
+        }
+
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
         {
             this._session = session;
@@ -226,6 +279,7 @@ namespace Library
             //OMLUpdater updater = new OMLUpdater();
             //ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
 
+            SetPrimaryBackgroundImage();
             switch (context)
             {
                 case "Menu":

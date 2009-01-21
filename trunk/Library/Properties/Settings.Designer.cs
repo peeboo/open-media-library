@@ -1108,5 +1108,29 @@ namespace Library.Properties {
                 this["DetailsPageBackDropAlpha"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MainPageBackDropFile {
+            get {
+                return ((string)(this["MainPageBackDropFile"]));
+            }
+            set {
+                this["MainPageBackDropFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int MainPageBackDropRotationInSeconds {
+            get {
+                return ((int)(this["MainPageBackDropRotationInSeconds"]));
+            }
+            set {
+                this["MainPageBackDropRotationInSeconds"] = value;
+            }
+        }
     }
 }
