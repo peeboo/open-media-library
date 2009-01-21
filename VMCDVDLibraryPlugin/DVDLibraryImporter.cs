@@ -164,39 +164,37 @@ namespace VMCDVDLibraryPlugin
                                 {
                                     string extension = Path.GetExtension(video).ToUpper().Substring(1);
                                     extension = extension.Replace("-", "");
-                                    if (Enum.Parse(typeof(VideoFormat), extension, true) != null)
+
+                                    // this isn't 100% safe since there are videoformats that don't map 1-1 to extensions
+                                    var videoFormat = Enum.Parse(typeof(VideoFormat), extension, true);
+
+                                    if (videoFormat != null)
                                     {
-                                        foreach (VideoFormat format in Enum.GetValues(typeof(VideoFormat)))
+                                        Title newVideo = new Title();
+                                        newVideo.Name = GetSuggestedMovieName(Path.GetFileNameWithoutExtension(video));
+                                        Disk disk = new Disk();
+                                        disk.Path = video;
+                                        disk.Name = "Disk 1";
+                                        disk.Format = (VideoFormat)videoFormat;
+
+                                        string pathWithNoExtension = Path.GetDirectoryName(video) + "\\" + Path.GetFileNameWithoutExtension(video);
+                                        if (File.Exists(pathWithNoExtension + ".jpg"))
                                         {
-                                            if (Enum.GetName(typeof(VideoFormat), format).ToLowerInvariant() == extension)
-                                            {
-                                                Title newVideo = new Title();
-                                                newVideo.Name = GetSuggestedMovieName(Path.GetFileNameWithoutExtension(video));
-                                                Disk disk = new Disk();
-                                                disk.Path = video;
-                                                disk.Name = "Disk 1";
-                                                disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
-
-                                                string pathWithNoExtension = Path.GetDirectoryName(video) + "\\" + Path.GetFileNameWithoutExtension(video);
-                                                if (File.Exists(pathWithNoExtension + ".jpg"))
-                                                {
-                                                    SetFrontCoverImage(ref newVideo, pathWithNoExtension + ".jpg");
-                                                }
-                                                else if (File.Exists(video + ".jpg"))
-                                                {
-                                                    SetFrontCoverImage(ref newVideo, video + ".jpg");
-                                                }
-                                                else if (File.Exists(Path.GetDirectoryName(video) + "\\folder.jpg"))
-                                                {
-                                                    SetFrontCoverImage(ref newVideo, Path.GetDirectoryName(video) + "\\folder.jpg");
-                                                }
-
-                                                newVideo.Disks.Add(disk);
-                                                AddTitle(newVideo);
-                                            }
+                                            SetFrontCoverImage(ref newVideo, pathWithNoExtension + ".jpg");
                                         }
+                                        else if (File.Exists(video + ".jpg"))
+                                        {
+                                            SetFrontCoverImage(ref newVideo, video + ".jpg");
+                                        }
+                                        else if (File.Exists(Path.GetDirectoryName(video) + "\\folder.jpg"))
+                                        {
+                                            SetFrontCoverImage(ref newVideo, Path.GetDirectoryName(video) + "\\folder.jpg");
+                                        }
+
+                                        newVideo.Disks.Add(disk);
+                                        AddTitle(newVideo);
                                     }
-                                }
+                                }                                
                             }
                         }
                     }
