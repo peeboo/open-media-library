@@ -14,6 +14,9 @@ namespace OMLTestSuite
     {
         static void Main(string[] args)
         {
+            NetFlixMetadataTest nfmdt = new NetFlixMetadataTest();
+            nfmdt.TEST_LOGIN();
+
             DVDLibraryImporterTest vdlit = new DVDLibraryImporterTest();
             vdlit.TEST_HONORS_OMLENGINE_SETTING_FOLDER_IS_TITLE();
 
