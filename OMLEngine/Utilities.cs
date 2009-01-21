@@ -40,6 +40,7 @@ namespace OMLEngine
     public enum VideoFormat
     {
         // DO NOT MODIFY ORDER, INSERT IN THE MIDDLE, OR REMOVE ENTRIES, JUST ADD TO THE END!
+        // All items in this list MUST be uppercase
 
         ASF, // WMV style
         AVC, // AVC H264
