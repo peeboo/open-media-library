@@ -143,7 +143,8 @@ namespace VMCDVDLibraryPlugin
                                     string extension = Path.GetExtension(video).ToUpper().Substring(1);
                                     extension = extension.Replace("-", "");
 
-                                    if (Enum.Parse(typeof(VideoFormat), extension, true) != null)
+
+                                    if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
                                     {
                                         Disk disk = new Disk();
                                         disk.Path = video;
