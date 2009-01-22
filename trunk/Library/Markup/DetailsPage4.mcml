@@ -107,7 +107,7 @@
           <controls:TranscodingMessage Name="transcodingMessage" Visible="false" Application="[Application]"/>
 
           <!-- Top bar -->
-          <ColorFill Name="InfoPanel" Layout="Form" FocusOrder="1" Content="Transparent" Margins="30,10,30,0">
+          <ColorFill Name="InfoPanel" Layout="Form" FocusOrder="1" Content="Transparent" Margins="30,10,30,0" Navigation="PreferFocusOrder">
             <LayoutInput>
               <FormLayoutInput Left="Parent,0" Bottom="Parent,0,90" Top="Parent,0" Right="Parent,1"/>
             </LayoutInput>
@@ -153,11 +153,12 @@
                 <Animations>
                   <Animation Animation="animation://me:ShowFromRight" />
                 </Animations>
-              </Panel>             
+              </Panel>       
+              
               <!-- unwatched checkbox -->
               <Panel Name="WatchedCheckbox" Layout="HorizontalFlow" FocusOrder="3">
                 <LayoutInput>
-                  <FormLayoutInput Right="DVDButtons,0,-20" Top="DVDButtons,0,0"/>
+                  <FormLayoutInput Right="DVDButtons,0,-20" Bottom="DVDButtons,1"/>
                 </LayoutInput>
                 <Children>
                   <c:SimpleCheckbox Name="CheckWatched" Checked="[DetailsPage.Watched]" Margins="0,0,8,0" />
@@ -448,6 +449,7 @@
             </Children>
             <Animations>
               <Animation Animation="animation://me:ShowFromBottom" />
+              <Animation Animation="animation://me:HideToBottm" />
             </Animations>
           </Panel>
 
@@ -458,6 +460,7 @@
             </LayoutInput>
             <Animations>
               <Animation Animation="animation://me:ShowFromBottom" />
+              <Animation Animation="animation://me:HideToBottm" />              
             </Animations>
           </ColorFill>
 
