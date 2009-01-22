@@ -417,6 +417,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] DetailsPage4 {
+            get {
+                object obj = ResourceManager.GetObject("DetailsPage4", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] DiskChooserContext {
             get {
                 object obj = ResourceManager.GetObject("DiskChooserContext", resourceCulture);
