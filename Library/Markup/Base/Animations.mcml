@@ -137,6 +137,13 @@
     </Keyframes>
   </Animation>
 
+  <Animation Type="Hide" Name="HideToBottm">
+    <Keyframes>
+      <PositionKeyframe Time="0" RelativeTo="Current" Value="1,1,1"/>
+      <PositionKeyframe Time=".25" RelativeTo="Current" Value="1,100,1"/>
+    </Keyframes>
+  </Animation>
+
   <Animation Name="FadeIn" Type="Show">
     <Keyframes>
       <AlphaKeyframe Time="0" RelativeTo="Absolute" Value="0" />
