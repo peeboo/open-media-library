@@ -154,4 +154,13 @@
     </Keyframes>
   </Animation>
 
+  <Animation Name="QuickMove" Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0" RelativeTo="Current" Value="1,1,1"/>
+      <PositionKeyframe Time=".25" RelativeTo="Final" Value="1,1,1"/>
+      <SizeKeyframe Time="0" RelativeTo="Current" Value="1,1,1"/>
+      <SizeKeyframe Time=".25" RelativeTo="Final" Value="1,1,1"/>
+    </Keyframes>
+  </Animation>
+
 </Mcml>

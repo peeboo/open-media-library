@@ -232,11 +232,11 @@
 
     <Locals>
 
-      <FormLayoutInput Name="ImageLayoutFocus" Top="Parent,0,30" Left="Parent,0,30" />
-      <FormLayoutInput Name="ImageLayoutNotFocus" Left="Parent,0,150" Bottom="Parent,1,-30" />
+      <FormLayoutInput Name="ImageLayoutFocus" Left="Parent,0,60" Bottom="DetailsAlpha,0,-30" />
+      <FormLayoutInput Name="ImageLayoutNotFocus" Left="Parent,0,225" Bottom="Parent,1,-30" />
 
-      <FormLayoutInput Name="PeopleLayoutFocus" Top="DetailsPanel,0" Left="DetailsPanel,1" Bottom="DetailsAlpha,0,-30" />
-      <FormLayoutInput Name="PeopleLayoutNotFocus" Top="DetailsPanel,0" Left="DetailsPanel,1" Bottom="Parent,1,-30" />
+      <FormLayoutInput Name="PeopleLayoutFocus" Top="DetailsPanel,0" Left="DetailsPanel,1" Bottom="DetailsAlpha,0,-30" Right="Parent,1,-30" />
+      <FormLayoutInput Name="PeopleLayoutNotFocus" Top="DetailsPanel,0" Left="DetailsPanel,1" Bottom="Parent,1,-30" Right="Parent,1,-225"/>      
     </Locals>
     
     <Rules>
@@ -272,6 +272,7 @@
           <Set Target="[Image.LayoutInput]" Value="[ImageLayoutFocus]" />
           <Set Target="[DetailsAlpha.Visible]" Value="true" />
           <Set Target="[ExtraInofPanel.Visible]" Value="true" />
+          
 
           <Set Target="[ActorsPanel.LayoutInput]"  Value="[PeopleLayoutFocus]" />
         </Actions>
@@ -288,8 +289,9 @@
           <Set Target="[Image.LayoutInput]" Value="[ImageLayoutNotFocus]" />
           <Set Target="[DetailsAlpha.Visible]" Value="false" />
           <Set Target="[ExtraInofPanel.Visible]" Value="false" />
+          
 
-          <Set Target="[ActorsPanel.LayoutInput]"  Value="[PeopleLayoutNotFocus]" />
+          <Set Target="[ActorsPanel.LayoutInput]"  Value="[PeopleLayoutNotFocus]" />          
         </Actions>
       </Rule>
       <!-- end change color and scale -->
@@ -301,7 +303,7 @@
           <!-- image panel -->
           <Panel Name="Image" Layout="VerticalFlow">
             <LayoutInput>
-              <FormLayoutInput Left="Parent,0,150" Bottom="Parent,1,-30"/>
+              <FormLayoutInput Left="Parent,0,225" Bottom="Parent,1,-30"/>
             </LayoutInput>
 
             <Children>
@@ -314,6 +316,7 @@
             </Children>
             <Animations>
               <Animation Animation="animation://me:QuickMove" />
+              <Animation Animation="animation://me:ShowFromBottom" />
             </Animations>
           </Panel>
 
@@ -332,9 +335,9 @@
           </Panel>
 
           <!-- actors panel -->
-          <Panel Name="ActorsPanel" Layout="VerticalFlow" Margins="20,0,0,0" FocusOrder="1" Navigation="Group,Column,PreferFocusOrder,RememberFocus">
+          <Panel Name="ActorsPanel" Layout="VerticalFlow" Margins="20,0,10,0" FocusOrder="1" Navigation="Group,Column,PreferFocusOrder,RememberFocus">
             <LayoutInput>
-              <FormLayoutInput Top="DetailsPanel,0" Left="DetailsPanel,1" Bottom="Parent,1,-30"/>
+              <FormLayoutInput Top="DetailsPanel,0" Left="DetailsPanel,1" Bottom="Parent,1,-30" Right="Parent,1,-225"/>
             </LayoutInput>
             <Children>
               <Panel Name="DirectorsPanel" Layout="VerticalFlow">
@@ -457,7 +460,17 @@
               <Animation Animation="animation://me:ShowFromBottom" />
             </Animations>
           </ColorFill>
-        
+
+          <!-- Details backdrop -->
+          <ColorFill Name="SmallDetailsAlpha" FocusOrder="1" Content="Black" Alpha=".2" CenterPointPercent=".5,.5,.5" >
+            <LayoutInput>
+              <FormLayoutInput Left="Image,0,-30" Bottom="Image,1,30" Top="Image,0,-30" Right="ActorsPanel,1"/>
+            </LayoutInput>
+            <Animations>
+              <Animation Animation="animation://me:ShowFromBottom" />
+              <Animation Animation="animation://me:QuickMove" />              
+            </Animations>
+          </ColorFill>        
         </Children>
       </Panel>    
   </Content>
