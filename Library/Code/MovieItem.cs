@@ -680,11 +680,10 @@ namespace Library
             return "MovieItem:" + this._titleObj;
         }
 
-        public Image MovieBackgroundImage
+        public string FanArtFilePath
         {
             get
             {
-                // if the filelocation is a directory - then use that
                 try
                 {
                     string folder = string.Empty;
@@ -710,10 +709,10 @@ namespace Library
                             Path.Combine(folder, "fanart.jpg"));
 
                         if (File.Exists(Path.Combine(folder, "fanart.jpg")))
-                            return new Image(string.Format("file://{0}", Path.Combine(folder, "fanart.jpg")));
+                            return Path.Combine(folder, "fanart.jpg");
 
                         if (File.Exists(Path.Combine(folder, "backdrop.jpg")))
-                            return new Image(string.Format("file://{0}", Path.Combine(folder, "backdrop.jpg")));
+                            return Path.Combine(folder, "backdrop.jpg");
                     }
                     else
                         OMLApplication.DebugLine("[MovieItem] No valid path found to look for fanart in");
@@ -722,7 +721,21 @@ namespace Library
                 {
                     OMLApplication.DebugLine("Error attempting to locate fanart image: {0}", e.Message);
                 }
+
                 return null;
+            }        
+        }
+
+        public Image MovieBackgroundImage
+        {            
+            get
+            {
+                string path = FanArtFilePath;
+
+                if (string.IsNullOrEmpty(path))
+                    return null;
+
+                return new Image(string.Format("file://{0}", path));
             }
         }
     }
