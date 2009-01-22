@@ -422,6 +422,7 @@ namespace TheMovieDbMetadata
                     {
                         string tmpFilename = Path.GetTempFileName();
                         tmpFilename += @".jpg";
+                        tmpFilename = Path.GetFileName(tmpFilename);
                         web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, tmpFilename).ToString());
                     }
                 }
