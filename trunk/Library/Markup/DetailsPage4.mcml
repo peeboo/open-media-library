@@ -323,7 +323,7 @@
           <!-- details panel -->
           <Panel Name="DetailsPanel" MinimumSize="500,0" FocusOrder="2" Layout="VerticalFlow">
             <LayoutInput>
-              <FormLayoutInput Top="Image,0" Left="Image,1,20" Bottom="Parent,1,-30"/>
+              <FormLayoutInput Top="Image,0" Left="Image,1,20" Bottom="Image,1"/>
             </LayoutInput>
             <Children>
               <me:SynopsisPanel Synopsis="[DetailsPage.Summary]"/>

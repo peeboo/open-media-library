@@ -201,6 +201,11 @@ namespace Library
             return "MovieDetailsPage:" + this._movieDetails;
         }
 
+        public bool HasFanArtImage
+        {
+            get { return !string.IsNullOrEmpty(_movieDetails.FanArtFilePath); }
+        }
+
         public Image FanArtImage
         {
             get { return _movieDetails.MovieBackgroundImage; }
