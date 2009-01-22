@@ -361,6 +361,7 @@ namespace OMLDatabaseEditor
         {
             return StartMetadataImport(plugin, coverArtOnly, titleEditor.EditedTitle.Name, null);
         }
+
         internal bool StartMetadataImport(string pluginName, bool coverArtOnly, string titleNameSearch, Form targetForm)
         {
             foreach (IOMLMetadataPlugin plugin in _metadataPlugins)
@@ -369,6 +370,7 @@ namespace OMLDatabaseEditor
             }
             return false;
         }
+
         internal bool StartMetadataImport(IOMLMetadataPlugin plugin, bool coverArtOnly, string titleNameSearch, Form targetForm)
         {
             try
@@ -389,6 +391,8 @@ namespace OMLDatabaseEditor
                         Title t = plugin.GetTitle(searchResultForm.SelectedTitleIndex);
                         if (t != null)
                         {
+                            if (plugin.SupportsBackDrops())
+                                plugin.DownloadBackDropsForTitle(titleEditor.EditedTitle, searchResultForm.SelectedTitleIndex);
                             if (coverArtOnly)
                             {
                                 if (!String.IsNullOrEmpty(t.FrontCoverPath))

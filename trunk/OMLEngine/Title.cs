@@ -2188,7 +2188,11 @@ namespace OMLEngine
 
         public string BackDropFolder
         {
-            get { return Path.Combine(this.BasePath(), @"FanArt"); }
+            get 
+            {
+                createBackDropFolder();
+                return Path.Combine(this.BasePath(), @"FanArt"); 
+            }
         }
 
         public void createBackDropFolder()
