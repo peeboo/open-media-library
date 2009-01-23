@@ -68,6 +68,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBase.cs" />
+    <Compile Include="TheMovieDbMetadataPluginTest.cs" />
     <Compile Include="TitleCollectionTest.cs" />
     <Compile Include="TitleTest.cs" />
     <Compile Include="TranscodeTest.cs" />
@@ -113,6 +114,10 @@
     <ProjectReference Include="..\OMLXMLImporter\OMLXMLImporter.csproj">
       <Project>{3F757A9F-BA85-4B16-AD94-334D332F3DEB}</Project>
       <Name>OMLXMLImporter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TheMovieDbMetadata\TheMovieDbMetadata.csproj">
+      <Project>{BD6F6DBB-B6D8-4EC3-939A-62BC58CC19B1}</Project>
+      <Name>TheMovieDbMetadata</Name>
     </ProjectReference>
     <ProjectReference Include="..\VMCDVDLibraryPlugin\VMCDVDLibraryPlugin.csproj">
       <Project>{CEEBFC5A-9CAB-40D1-A453-8C30A13F0CD4}</Project>
