@@ -732,10 +732,10 @@ namespace Library
             {
                 string path = FanArtFilePath;
 
-                if (string.IsNullOrEmpty(path))
-                    return null;
+                if (!string.IsNullOrEmpty(path) && File.Exists(path))
+                    return new Image(string.Format("file://{0}", path));
 
-                return new Image(string.Format("file://{0}", path));
+                return null;
             }
         }
     }

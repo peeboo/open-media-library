@@ -16,8 +16,6 @@ namespace TheMovieDbMetadata
         public int Id { get; set; }
         public string ImageUrl { get; set; }
         public string ImageUrlThumb { get; set; }
-        public IList<string> BackDrops = new List<string>();
-        public IList<string> BackDropThumbnails = new List<string>();
 
         public TheMovieDbResult()
         {
@@ -27,6 +25,7 @@ namespace TheMovieDbMetadata
 
     public class TheMovieDbMetadata : IOMLMetadataPlugin
     {
+        IList<string> BackDrops = null;
         private const string API_KEY = "1376bf98794bda0c2495bd500a37f689";
         private const string API_URL_SEARCH = "http://api.themoviedb.org/2.0/Movie.search";
         private const string API_URL_INFO = "http://api.themoviedb.org/2.0/Movie.getInfo";
@@ -90,6 +89,7 @@ namespace TheMovieDbMetadata
         /// <returns></returns>
         private TheMovieDbResult GetTitleFromMovieNode(XmlTextReader reader)
         {
+            this.BackDrops = null;
             bool notMovie = false;
             TheMovieDbResult result = new TheMovieDbResult();
 
@@ -145,7 +145,12 @@ namespace TheMovieDbMetadata
 
                         case "backdrop":
                             if (IsAttributeValue(reader, "original"))
-                                result.BackDrops.Add(GetElementValue(reader));
+                            {
+                                if (this.BackDrops == null)
+                                    this.BackDrops = new List<string>();
+
+                                this.BackDrops.Add(GetElementValue(reader));
+                            }
                             break;
 
                         case "runtime":
@@ -410,14 +415,13 @@ namespace TheMovieDbMetadata
             if (results.Count >= index)
             {
                 WebClient web = new WebClient();
-                foreach (string backDropUrl in results[index].BackDrops)
+                foreach (string backDropUrl in this.BackDrops)
                 {
                     if (!string.IsNullOrEmpty(backDropUrl))
                     {
-                        string tmpFilename = Path.GetTempFileName();
-                        tmpFilename += @".jpg";
-                        tmpFilename = Path.GetFileName(tmpFilename);
-                        web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, tmpFilename).ToString());
+                        string filename = backDropUrl.Substring(backDropUrl.LastIndexOf('/') + 1);
+                        filename = Path.GetFileName(filename);
+                        web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, filename).ToString());
                     }
                 }
             }
