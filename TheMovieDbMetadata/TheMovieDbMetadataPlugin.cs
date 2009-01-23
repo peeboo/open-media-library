@@ -145,15 +145,7 @@ namespace TheMovieDbMetadata
 
                         case "backdrop":
                             if (IsAttributeValue(reader, "original"))
-                            {
                                 result.BackDrops.Add(GetElementValue(reader));
-                            }
-
-                            else if (IsAttributeValue(reader, "thumb"))
-                            {
-                                result.BackDropThumbnails.Add(GetElementValue(reader));
-                            }
-
                             break;
 
                         case "runtime":
@@ -272,6 +264,7 @@ namespace TheMovieDbMetadata
                 using (Stream resStream = response.GetResponseStream())
                 {
                     XmlTextReader reader = new XmlTextReader(resStream);
+                    reader.WhitespaceHandling = WhitespaceHandling.None;
 
                     while (reader.Read())
                     {
@@ -316,6 +309,7 @@ namespace TheMovieDbMetadata
                 using (Stream resStream = response.GetResponseStream())
                 {
                     XmlTextReader reader = new XmlTextReader(resStream);
+                    reader.WhitespaceHandling = WhitespaceHandling.None;
 
                     while (reader.Read())
                     {
