@@ -230,6 +230,7 @@ namespace Library
 
         public void PlayMedia()
         {
+            OMLApplication.DebugLine("Playing trailer: {0}", this.TrailerUrl);
             AddInHost.Current.MediaCenterEnvironment.PlayMedia(Microsoft.MediaCenter.MediaType.Video, this.TrailerUrl, false);
             AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
             AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged +=new PropertyChangedEventHandler(Transport_PropertyChanged);
