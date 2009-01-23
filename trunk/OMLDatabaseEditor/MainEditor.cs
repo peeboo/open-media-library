@@ -392,7 +392,13 @@ namespace OMLDatabaseEditor
                         if (t != null)
                         {
                             if (plugin.SupportsBackDrops())
+                            {
+                                DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
+                                dbdForm.Show();
                                 plugin.DownloadBackDropsForTitle(titleEditor.EditedTitle, searchResultForm.SelectedTitleIndex);
+                                dbdForm.Hide();
+                                dbdForm.Dispose();
+                            }
                             if (coverArtOnly)
                             {
                                 if (!String.IsNullOrEmpty(t.FrontCoverPath))
