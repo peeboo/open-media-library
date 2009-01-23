@@ -422,7 +422,7 @@ namespace OMLDatabaseEditor
 
         private void SaveChanges()
         {
-            if (titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges)
+            if ((titleEditor.EditedTitle != null) && (titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges))
             {
                 Title editedTitle = titleEditor.EditedTitle;
                 Title collectionTitle = _titleCollection.GetTitleById(editedTitle.InternalItemID);
