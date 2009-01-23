@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Timers;
 using Microsoft.MediaCenter.UI;
 
 using OMLEngine;
@@ -26,6 +27,10 @@ namespace Library
         private bool _showDVDContextMenu = false;
         private Image _fullCover;
         private bool _playClicked = false;
+        private Image backgroundImage;
+        private int iCurrentBackgroundImage = 0;
+        private int iTotalBackgroundImages = 0;
+        public System.Timers.Timer backgroundTimer;
         #endregion
 
         #region Public Properties
@@ -194,6 +199,7 @@ namespace Library
         public MovieDetailsPage(MovieItem item)
         {
             LoadDetails(item);
+            SetBackgroundImage();
         }
 
         public override string ToString()
@@ -201,23 +207,16 @@ namespace Library
             return "MovieDetailsPage:" + this._movieDetails;
         }
 
-        private bool? hasFanArtImage = null;
-
-        public bool HasFanArtImage
+        public Image BackgroundImage
         {
-            get 
+            get { return backgroundImage; }
+            set
             {
-                if (hasFanArtImage == null)
-                    hasFanArtImage = !string.IsNullOrEmpty(_movieDetails.FanArtFilePath);
-
-                return hasFanArtImage.Value; 
+                backgroundImage = value;
+                FirePropertyChanged("BackgroundImage");
             }
         }
 
-        public Image FanArtImage
-        {
-            get { return _movieDetails.MovieBackgroundImage; }
-        }
 
         private void LoadDetails(MovieItem item)
         {
@@ -447,6 +446,60 @@ namespace Library
                 }
             });
         }
+
+        public void SetBackgroundImage()
+        {
+            if (!string.IsNullOrEmpty(_movieDetails.TitleObject.BackDropImage))
+            {
+                if (backgroundImage == null)
+                {
+                    if (File.Exists(Path.GetFullPath(_movieDetails.TitleObject.BackDropImage)))
+                    {
+                        backgroundImage = new Image(
+                            string.Format("file://{0}", Path.GetFullPath(_movieDetails.TitleObject.BackDropImage)));
+                        return;
+                    }
+                }
+            }
+
+            // a specific file was NOT found, time to go hunting
+            if (!Directory.Exists(_movieDetails.TitleObject.BackDropFolder))
+                _movieDetails.TitleObject.createBackDropFolder();
+
+            DirectoryInfo dirInfo = new DirectoryInfo(_movieDetails.TitleObject.BackDropFolder);
+            FileInfo[] files = dirInfo.GetFiles("*.jpg", SearchOption.TopDirectoryOnly);
+            iTotalBackgroundImages = files.Length;
+            if (iTotalBackgroundImages > 0)
+            {
+                if (iCurrentBackgroundImage >= iTotalBackgroundImages)
+                    iCurrentBackgroundImage = 0;
+
+                OMLApplication.DebugLine("[MovieDetailsPage] loading fanart image {0}", Path.GetFullPath(files[iCurrentBackgroundImage].FullName));
+                BackgroundImage = new Image(string.Format("file://{0}", Path.GetFullPath(files[iCurrentBackgroundImage].FullName)));
+                iCurrentBackgroundImage++;
+
+                if (backgroundTimer == null)
+                {
+                    backgroundTimer = new System.Timers.Timer();
+                    backgroundTimer.AutoReset = true;
+                    backgroundTimer.Elapsed +=new ElapsedEventHandler(backgroundTimer_Elapsed);
+                    int rotationInSeconds = 5;
+                    double rotationInMilliseconds = rotationInSeconds * 1000;
+                    backgroundTimer.Interval = rotationInMilliseconds;
+                    backgroundTimer.Enabled = true;
+                    backgroundTimer.Start();
+                    GC.KeepAlive(backgroundTimer);
+                }
+            }
+            return;
+        }
+
+        void backgroundTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            SetBackgroundImage();
+        }
+
+
     }
 
     public class MovieCastCommand : Command
