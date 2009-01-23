@@ -825,5 +825,17 @@ namespace OMLDatabaseEditor
             }
             Cursor = Cursors.Default;
         }
+
+        private void deleteSelectedMoviesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Title title in lbMovies.SelectedItems)
+            {
+                if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.InternalItemID == title.InternalItemID)
+                    titleEditor.ClearEditor();
+                _titleCollection.Remove(title);
+            }
+            _titleCollection.saveTitleCollection();
+            LoadMovies();
+        }
     }
 }
