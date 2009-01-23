@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 
 using OMLEngine;
+using OMLSDK;
 
 namespace OMLDatabaseEditor.Controls
 {
@@ -414,6 +415,67 @@ namespace OMLDatabaseEditor.Controls
             } else {
                 return false;
             }
+        }
+
+        private void updateFromMetadataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            List<PluginServices.AvailablePlugin> plugins = new List<PluginServices.AvailablePlugin>();
+            string path = FileSystemWalker.PluginsDirectory;
+            plugins = PluginServices.FindPlugins(path, PluginTypes.MetadataPlugin);
+            IOMLMetadataPlugin objPlugin;
+            // Loop through available plugins, creating instances and add them
+            if (plugins != null)
+            {
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                foreach (PluginServices.AvailablePlugin oPlugin in plugins)
+                {
+                    objPlugin = (IOMLMetadataPlugin)PluginServices.CreateInstance(oPlugin);
+                    objPlugin.Initialize(new Dictionary<string, string>());
+                    objPlugin.SearchForMovie(txtName.Text);
+                    Title title = objPlugin.GetBestMatch();
+                    if (title != null)
+                    {
+                        data[objPlugin.PluginName] = title.Synopsis;
+                    }
+                    plugins = null;
+                }
+                TableLayoutPanel tblMetadata = new TableLayoutPanel();
+                pnlMetadata.Controls.Add(tblMetadata);
+                tblMetadata.Dock = DockStyle.Fill;
+                tblMetadata.ColumnCount = data.Keys.Count;
+                tblMetadata.RowCount = 2;
+                for (int i = 0; i < data.Keys.Count; i++)
+                {
+                    tblMetadata.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, (float)1 / data.Keys.Count));
+                }
+                int column = 0;
+                foreach (string key in data.Keys)
+                {
+                    LabelControl lblField = new LabelControl();
+                    lblField.Name = "lblField" + column;
+                    lblField.Text = key;
+                    lblField.Dock = DockStyle.Fill;
+                    tblMetadata.Controls.Add(lblField, column, 0);
+                    MemoEdit txtValue = new MemoEdit();
+                    txtValue.Name = "txtValue" + column;
+                    txtValue.DoubleClick += new EventHandler(txtValue_DoubleClick);
+                    txtValue.Text = data[key];
+                    txtValue.Dock = DockStyle.Fill;
+                    tblMetadata.Controls.Add(txtValue, column, 1);
+                    column++;
+                }
+            }
+            pnlMetadata.Visible = true;
+            Cursor = Cursors.Default;
+        }
+
+        void txtValue_DoubleClick(object sender, EventArgs e)
+        {
+            txtSynposis.EditValue = (sender as MemoEdit).Text;
+            txtSynposis.BindingManager.EndCurrentEdit();
+            pnlMetadata.Controls.Clear();
+            pnlMetadata.Visible = false;
         }
     }
 
