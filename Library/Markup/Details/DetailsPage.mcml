@@ -31,6 +31,7 @@
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
+      <Binding Target="[DetailsPage.BackgroundImage]" Source="[FanArtImage.Content]"/>
       <Condition Source="[DetailsPage.Directors.Options.Count]" SourceValue="0">
         <Actions>
           <Set Target="[DirectorsPanel.Visible]" Value="false" />
@@ -354,7 +355,22 @@
               <Text Content="Watched" Color="color://s:NormalColor" Font="font://s:Normal" Margins="0,3,0,0"/>
             </Children>
           </Panel>
-          <Graphic Content="[DetailsPage.FanArtImage]" SizingPolicy="SizeToConstraint" Name="FanArtImage" Alpha="[UISettings.Gallery.DetailsPageBackDropAlpha]"/>
+          <Graphic SizingPolicy="SizeToConstraint" Name="FanArtImage" Alpha="[UISettings.Gallery.DetailsPageBackDropAlpha]">
+            <Animations>
+              <Animation Type="ContentChangeHide">
+                <Keyframes>
+                  <AlphaKeyframe Time="0" Value="[UISettings.Gallery.DetailsPageBackDropAlpha!cor:Single]"/>
+                  <AlphaKeyframe Time="1" Value="0"/>
+                </Keyframes>
+              </Animation>
+              <Animation Type="ContentChangeShow">
+                <Keyframes>
+                  <AlphaKeyframe Time="0" Value="0"/>
+                  <AlphaKeyframe Time="1" Value="[UISettings.Gallery.DetailsPageBackDropAlpha!cor:Single]"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+          </Graphic>
         </Children>
         <Animations>
           <Animation Animation="animation://me:FadeIn" />

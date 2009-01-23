@@ -69,12 +69,19 @@ namespace OMLEngine
         private List<string> _extraFeatures = new List<string>();
         private List<Disk> _disks = new List<Disk>();
         private Disk _selectedDisk = null;
+        private string _backDropImage = string.Empty;
 
         private static string XmlNameSpace = "http://www.openmedialibrary.org/";
 
         #endregion
 
         #region properties       
+
+        public string BackDropImage
+        {
+            get { return _backDropImage; }
+            set { _backDropImage = value; }
+        }
 
         public Disk SelectedDisk
         {

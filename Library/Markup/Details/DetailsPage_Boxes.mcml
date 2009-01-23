@@ -31,7 +31,7 @@
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
-      
+      <Binding Source="[DetailsPage.BackgroundImage]" Target="[FanArtImage.Content]"/>
 
       <Changed Source="[CheckWatched.Checked.Value]">
         <Actions>
@@ -209,9 +209,24 @@
             <LayoutInput>
               <FormLayoutInput Left="InfoPanel,0" Bottom="InfoPanel,1" Top="InfoPanel,0" Right="InfoPanel,1"/>
             </LayoutInput>            
-          </ColorFill>          
-          
-          <Graphic Content="[DetailsPage.FanArtImage]" SizingPolicy="SizeToConstraint" Name="FanArtImage" Alpha="[UISettings.Gallery.DetailsPageBackDropAlpha]"/>
+          </ColorFill>
+
+          <Graphic SizingPolicy="SizeToConstraint" Name="FanArtImage" Alpha="[UISettings.Gallery.DetailsPageBackDropAlpha]">
+            <Animations>
+              <Animation Type="ContentChangeHide">
+                <Keyframes>
+                  <AlphaKeyframe Time="0" Value="[UISettings.Gallery.DetailsPageBackDropAlpha!cor:Single]"/>
+                  <AlphaKeyframe Time="1" Value="0"/>
+                </Keyframes>
+              </Animation>
+              <Animation Type="ContentChangeShow">
+                <Keyframes>
+                  <AlphaKeyframe Time="0" Value="0"/>
+                  <AlphaKeyframe Time="1" Value="[UISettings.Gallery.DetailsPageBackDropAlpha!cor:Single]"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+          </Graphic>
         </Children>
         <Animations>
           <Animation Animation="animation://me:FadeIn" />
@@ -266,7 +281,7 @@
         <Conditions>
           <Equality Source="[Input.DeepMouseFocus]" Value="true"/>
           <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
-          <Equality Source="[DetailsPage.HasFanArtImage]" Value="false" />
+          <!--<Equality Source="[DetailsPage.HasFanArtImage]" Value="false" />-->
         </Conditions>
         <Actions>
           <Set Target="[FullCover.MaximumSize]" Value="336,480"/>
