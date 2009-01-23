@@ -14,6 +14,9 @@ namespace OMLTestSuite
     {
         static void Main(string[] args)
         {
+            TheMovieDbMetadataPluginTest tmdmpt = new TheMovieDbMetadataPluginTest();
+            tmdmpt.TEST_BASE_CASE();
+
             NetFlixMetadataTest nfmdt = new NetFlixMetadataTest();
             nfmdt.TEST_LOGIN();
 
