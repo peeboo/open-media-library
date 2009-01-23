@@ -1132,5 +1132,17 @@ namespace Library.Properties {
                 this["MainPageBackDropRotationInSeconds"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Background Boxes")]
+        public string DetailsView {
+            get {
+                return ((string)(this["DetailsView"]));
+            }
+            set {
+                this["DetailsView"] = value;
+            }
+        }
     }
 }

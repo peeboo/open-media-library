@@ -176,8 +176,8 @@
     <Content Include="Markup\Control\ContextMenu.mcml" />
     <Content Include="Markup\Control\DiskChooserContext.mcml" />
     <Content Include="Markup\Control\MovieDescription.mcml" />
-    <Content Include="Markup\DetailsPage3.mcml" />
-    <Content Include="Markup\DetailsPage4.mcml" />
+    <Content Include="Markup\Details\DetailsPage.mcml" />
+    <Content Include="Markup\Details\DetailsPage_Boxes.mcml" />
     <Content Include="Markup\IntroPage.mcml" />
     <Content Include="Markup\LayoutV2\BasePage.mcml" />
     <Content Include="Markup\Base\Animations.mcml" />

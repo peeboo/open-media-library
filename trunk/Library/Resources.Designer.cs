@@ -410,16 +410,16 @@ namespace Library {
             }
         }
         
-        internal static byte[] DetailsPage3 {
+        internal static byte[] DetailsPage {
             get {
-                object obj = ResourceManager.GetObject("DetailsPage3", resourceCulture);
+                object obj = ResourceManager.GetObject("DetailsPage", resourceCulture);
                 return ((byte[])(obj));
             }
         }
         
-        internal static byte[] DetailsPage4 {
+        internal static byte[] DetailsPage_Boxes {
             get {
-                object obj = ResourceManager.GetObject("DetailsPage4", resourceCulture);
+                object obj = ResourceManager.GetObject("DetailsPage_Boxes", resourceCulture);
                 return ((byte[])(obj));
             }
         }

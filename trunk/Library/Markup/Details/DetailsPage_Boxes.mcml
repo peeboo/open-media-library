@@ -266,15 +266,14 @@
         <Conditions>
           <Equality Source="[Input.DeepMouseFocus]" Value="true"/>
           <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+          <Equality Source="[DetailsPage.HasFanArtImage]" Value="false" />
         </Conditions>
         <Actions>
           <Set Target="[FullCover.MaximumSize]" Value="336,480"/>
           <Set Target="[FullCover.MinimumSize]" Value="336,480"/>
           <Set Target="[Image.LayoutInput]" Value="[ImageLayoutFocus]" />
           <Set Target="[DetailsAlpha.Visible]" Value="true" />
-          <Set Target="[ExtraInofPanel.Visible]" Value="true" />
-          
-
+          <Set Target="[ExtraInofPanel.Visible]" Value="true" />         
           <Set Target="[ActorsPanel.LayoutInput]"  Value="[PeopleLayoutFocus]" />
         </Actions>
       </Rule>
@@ -289,9 +288,7 @@
           <Set Target="[FullCover.MinimumSize]" Value="150,210"/>
           <Set Target="[Image.LayoutInput]" Value="[ImageLayoutNotFocus]" />
           <Set Target="[DetailsAlpha.Visible]" Value="false" />
-          <Set Target="[ExtraInofPanel.Visible]" Value="false" />
-          
-
+          <Set Target="[ExtraInofPanel.Visible]" Value="false" />          
           <Set Target="[ActorsPanel.LayoutInput]"  Value="[PeopleLayoutNotFocus]" />          
         </Actions>
       </Rule>
@@ -311,13 +308,22 @@
 
               <Panel Layout="VerticalFlow" CenterPointPercent=".5,.5,.5">
                 <Children>
-                  <Graphic Name="FullCover" Content="[DetailsPage.FullCover]" MinimumSize="150,210" MaximumSize="150,210" CenterPointPercent="1,1,1" />
+                  <Graphic Name="FullCover" Content="[DetailsPage.FullCover]" MinimumSize="150,210" MaximumSize="150,210" CenterPointPercent=".5,.5,.5" >
+                    <Animations>
+                    <Animation Type="Size">
+                      <Keyframes>
+                        <SizeKeyframe Time="0" RelativeTo="Current" Value="1,1,1" />
+                        <SizeKeyframe Time=".25" RelativeTo="Final" Value="1,1,1" />
+                      </Keyframes>
+                    </Animation>
+                    </Animations>
+                  </Graphic>
                 </Children>
               </Panel>
             </Children>
             <Animations>
               <Animation Animation="animation://me:QuickMove" />
-              <Animation Animation="animation://me:ShowFromBottom" />
+              <Animation Animation="animation://me:ShowFromBottom" />              
             </Animations>
           </Panel>
 
@@ -449,7 +455,8 @@
             </Children>
             <Animations>
               <Animation Animation="animation://me:ShowFromBottom" />
-              <Animation Animation="animation://me:HideToBottm" />
+              <!-- this causes a problem when navigating away from the page -->
+              <!--<Animation Animation="animation://me:HideToBottom" />-->
             </Animations>
           </Panel>
 
@@ -460,7 +467,8 @@
             </LayoutInput>
             <Animations>
               <Animation Animation="animation://me:ShowFromBottom" />
-              <Animation Animation="animation://me:HideToBottm" />              
+              <!-- this causes a problem when navigating away from the page -->
+              <!--<Animation Animation="animation://me:HideToBottom" /> -->
             </Animations>
           </ColorFill>
 
