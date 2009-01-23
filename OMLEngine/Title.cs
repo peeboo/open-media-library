@@ -2159,13 +2159,19 @@ namespace OMLEngine
         {
             string folder = string.Empty;
             if (!string.IsNullOrEmpty(FileLocation))
-                folder = Path.GetDirectoryName(FileLocation);
+                if (Directory.Exists(FileLocation))
+                    folder = FileLocation;
+                else
+                    folder = Path.GetDirectoryName(FileLocation);
             else
             {
                 if (Disks.Count > 0)
                 {
                     if (Disks[0].Path.Length > 0)
-                        folder = Path.GetDirectoryName(Disks[0].Path);
+                        if (Directory.Exists(Disks[0].Path))
+                            folder = Disks[0].Path;
+                        else
+                            folder = Path.GetDirectoryName(Disks[0].Path);
                 }
             }
 
@@ -2174,7 +2180,11 @@ namespace OMLEngine
                 try
                 {
                     if (Directory.Exists(folder))
+                    {
+                        if (folder.ToUpperInvariant().EndsWith("VIDEO_TS"))
+                            folder = Path.GetDirectoryName(folder);
                         return folder;
+                    }
 
                     return null;
                 }
