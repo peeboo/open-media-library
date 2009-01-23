@@ -109,6 +109,7 @@
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\ExternalPlayer.cs" />
     <Compile Include="Code\Setup.cs" />
+    <Compile Include="Code\TheMovieDbBackDropDownloader.cs" />
     <Compile Include="Code\TreeNode.cs" />
     <Compile Include="Code\TreeNodeEventArgs.cs" />
     <Compile Include="Code\TreeView.cs" />
