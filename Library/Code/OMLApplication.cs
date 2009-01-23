@@ -478,10 +478,17 @@ namespace Library
             // If we have no page session, just spit out a trace statement.
             if (_session != null)
             {
-                if ( page.HasFanArtImage )
-                    _session.GoToPage("resx://Library/Library.Resources/DetailsPage4", properties);
-                else
-                    _session.GoToPage("resx://Library/Library.Resources/DetailsPage3", properties);
+                switch (Properties.Settings.Default.DetailsView)
+                {
+                    case "Background Boxes":
+                        _session.GoToPage("resx://Library/Library.Resources/DetailsPage_Boxes", properties);
+                        break;
+
+                    case "Original":
+                    default:
+                        _session.GoToPage("resx://Library/Library.Resources/DetailsPage", properties);
+                        break;
+                }                
             }
         }
 

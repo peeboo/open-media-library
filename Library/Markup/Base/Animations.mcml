@@ -135,12 +135,12 @@
       <PositionKeyframe Time="0" RelativeTo="Final" Value="0,200,0"/>
       <PositionKeyframe Time=".25" RelativeTo="Final" Value="1,1,1"/>
     </Keyframes>
-  </Animation>
+  </Animation>  
 
-  <Animation Type="Hide" Name="HideToBottm">
+  <Animation Type="Hide" Name="HideToBottom">
     <Keyframes>
       <PositionKeyframe Time="0" RelativeTo="Current" Value="1,1,1"/>
-      <PositionKeyframe Time=".25" RelativeTo="Current" Value="1,100,1"/>
+      <PositionKeyframe Time=".25" RelativeTo="Current" Value="1,200,1"/>
     </Keyframes>
   </Animation>
 

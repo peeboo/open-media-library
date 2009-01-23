@@ -178,6 +178,17 @@ namespace Library
                 Properties.Settings.Default.Save();
             }
         }
+
+        public string DetailsView
+        {
+            get { return Properties.Settings.Default.DetailsView; }
+            set
+            {
+                Properties.Settings.Default.DetailsView = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         public string ActorView
         {
             get { return Properties.Settings.Default.ActorView; }

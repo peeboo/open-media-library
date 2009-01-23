@@ -127,6 +127,7 @@ namespace Library
                 _omlSettings.CoverArtSpacingVertical = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
                 _omlSettings.CoverArtSpacingHorizontal = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
                 _omlSettings.MovieView = _movieView.Chosen as string;
+                _omlSettings.DetailsView = _detailsView.Chosen as string;
                 _omlSettings.ShowMovieDetails = (bool)_showMovieDetails.Chosen;
                 _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
                 _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
@@ -262,6 +263,13 @@ namespace Library
 
             _movieSort.Options = items;
             _movieSort.Chosen = _omlSettings.MovieSort;
+
+            List<string> detailViews = new List<string>();
+            detailViews.Add("Original");
+            detailViews.Add("Background Boxes");
+
+            _detailsView.Options = detailViews;
+            _detailsView.Chosen = _omlSettings.DetailsView;
 
             List<string> starPageItems = new List<string>();
             starPageItems.Add(Filter.Home);
@@ -574,7 +582,11 @@ namespace Library
         public Choice MovieView
         {
             get { return _movieView; }
+        }
 
+        public Choice DetailsView
+        {
+            get { return _detailsView; }
         }
 
         public Choice MovieSort
@@ -927,7 +939,7 @@ namespace Library
         Choice _movieSort = new Choice();
         Choice _coverArtRows = new Choice();
         Choice _coverArtSpacing = new Choice();
-        Choice _movieDetailsTransitionType = new Choice();
+        Choice _detailsView = new Choice();
         BooleanChoice _showMovieDetails = new BooleanChoice();
         BooleanChoice _dimUnselectedCovers = new BooleanChoice();
         BooleanChoice _useOriginalCoverArt = new BooleanChoice();

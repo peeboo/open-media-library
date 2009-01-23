@@ -331,6 +331,13 @@
 
                       <Panel Layout="VerticalFlow" Navigation="Group">
                         <Children>
+                          <Text Content="Details View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <c:SimpleSpinner Name="DetailsView" Model="[Settings.DetailsView]" Size="[ChoiceSpinnerSize]" />
+                        </Children>
+                      </Panel>
+
+                      <Panel Layout="VerticalFlow" Navigation="Group">
+                        <Children>
                           <Text Content="Movie Sort" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
                           <c:SimpleSpinner Name="MovieSort" Model="[Settings.MovieSort]" Size="[ChoiceSpinnerSize]"/>
                         </Children>
