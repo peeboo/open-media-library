@@ -10,6 +10,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
+using System.ComponentModel;
 
 namespace OMLEngine
 {
@@ -524,5 +526,106 @@ namespace OMLEngine
 
             return null;
         }
+
+        public delegate void WorkImpersonatedDelegate();
+
+        public static bool DoWorkImpersonated(WorkImpersonatedDelegate StuffToDo)
+        {
+            // Call LogonUser to get a token for the user
+            IntPtr _Token = IntPtr.Zero;
+            string username = Properties.Settings.Default.ImpersonationUsername;
+            string password = Properties.Settings.Default.ImpersonationPassword;
+            bool loggedOn = LogonUser(
+                username,
+                System.Environment.UserDomainName,
+                password,
+                LOGON32_LOGON_NETWORK,
+                LOGON32_PROVIDER_DEFAULT,
+                ref _Token);
+            if (!loggedOn)
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+
+            // Begin impersonating the user
+            WindowsImpersonationContext impersonationContext = null;
+            try
+            {
+                WindowsIdentity.Impersonate(_Token);
+                StuffToDo();
+            }
+            finally
+            {
+                // Clean up
+                CloseHandle(_Token);
+                if (impersonationContext != null)
+                    impersonationContext.Undo();
+            }
+            return false;
+        }
+
+        public enum SECURITY_IMPERSONATION_LEVEL : int
+        {
+            SecurityAnonymous = 0,
+            SecurityIdentification = 1,
+            SecurityImpersonation = 2,
+            SecurityDelegation = 3
+        }
+
+        private const int LOGON32_LOGON_INTERACTIVE = 2,
+                          LOGON32_LOGON_NETWORK = 3,
+                          LOGON32_PROVIDER_WINNT50 = 3,
+                          LOGON32_PROVIDER_DEFAULT = 0,
+                          LOGON32_LOGON_BATCH = 4,
+                          LOGON32_LOGON_SERVICE = 5;
+
+        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool LogonUser(string pszUsername, string pszDomain, string pszPassword,
+        int dwLogonType, int dwLogonProvider, ref IntPtr phToken);
+
+        [DllImport("advapi32.dll", SetLastError = true)]
+        public static extern bool ImpersonateLoggedOnUser(IntPtr phToken);
+
+        [DllImport("advapi32.dll", SetLastError = true)]
+        public static extern bool RevertToSelf();
+
+        [DllImport("kernel32.dll")]
+        private static extern bool CloseHandle(IntPtr hObject);
+
+        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool DuplicateToken(IntPtr ExistingTokenHandle,
+
+        int SECURITY_IMPERSONATION_LEVEL, ref IntPtr DuplicateTokenHandle);
+
+        //private bool ImpersonateUser(string UserName, string Password, string DomainName)
+        //{
+        //    try
+        //    {
+        //        WindowsIdentity _WinIdent;
+        //        IntPtr _Token = IntPtr.Zero,
+        //        _DuplicateToken = IntPtr.Zero;
+        //        int l_token1;
+        //        bool results = LogonUser(UserName, DomainName, Password, LOGON32_LOGON_NETWORK, LOGON32_PROVIDER_DEFAULT, ref _Token);
+        //        if (results == false)
+        //        {
+        //            Win32Exception _ex = new Win32Exception(Marshal.GetLastWin32Error());
+        //            Console.WriteLine(_ex.Message + "\r\n" + _ex.ErrorCode + "\r\n" + _ex.StackTrace);
+        //            return false;
+        //        }
+
+        //        if (!DuplicateToken(_Token, (int)SECURITY_IMPERSONATION_LEVEL.SecurityImpersonation, ref _DuplicateToken))
+        //        {
+        //            Win32Exception _ex = new Win32Exception(Marshal.GetLastWin32Error());
+        //            Console.WriteLine(_ex.Message + "\r\n" + _ex.ErrorCode + "\r\n" + _ex.StackTrace);
+        //            return false;
+        //        }
+
+        //        _WinIdent = new WindowsIdentity(_DuplicateToken);
+        //        m_ImpersonationContext = _WinIdent.Impersonate();
+        //        return true;
+        //    }
+        //    catch
+        //    {
+        //        return false;
+        //    }
+        //}
     }
 }

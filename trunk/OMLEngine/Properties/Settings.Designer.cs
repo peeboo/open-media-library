@@ -106,5 +106,41 @@ namespace OMLEngine.Properties {
                 this["FoldersAreTitles"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseImpersonation {
+            get {
+                return ((bool)(this["UseImpersonation"]));
+            }
+            set {
+                this["UseImpersonation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ImpersonationUsername {
+            get {
+                return ((string)(this["ImpersonationUsername"]));
+            }
+            set {
+                this["ImpersonationUsername"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ImpersonationPassword {
+            get {
+                return ((string)(this["ImpersonationPassword"]));
+            }
+            set {
+                this["ImpersonationPassword"] = value;
+            }
+        }
     }
 }
