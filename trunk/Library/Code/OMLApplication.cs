@@ -279,6 +279,11 @@ namespace Library
             //OMLUpdater updater = new OMLUpdater();
             //ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
 
+            //TheMovieDbBackDropDownloader downloader = new TheMovieDbBackDropDownloader();
+            //foreach (Title t in Titles)
+            //{
+            //    downloader.SearchForTitle(t);
+            //}
             SetPrimaryBackgroundImage();
             switch (context)
             {

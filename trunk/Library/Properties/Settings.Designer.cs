@@ -1144,5 +1144,17 @@ namespace Library.Properties {
                 this["DetailsView"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseVideoBackDrops {
+            get {
+                return ((bool)(this["UseVideoBackDrops"]));
+            }
+            set {
+                this["UseVideoBackDrops"] = value;
+            }
+        }
     }
 }
