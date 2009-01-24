@@ -477,6 +477,36 @@ namespace OMLDatabaseEditor.Controls
             pnlMetadata.Controls.Clear();
             pnlMetadata.Visible = false;
         }
+
+        private void deleteImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PictureBox pb = contextImage.Tag as PictureBox;
+            if (pb.Name.Contains("Front"))
+            {
+                DeleteImageNoException(_dvdTitle.FrontCoverPath);
+                DeleteImageNoException(_dvdTitle.FrontCoverMenuPath);
+                _dvdTitle.FrontCoverMenuPath = string.Empty;
+                _dvdTitle.FrontCoverPath = string.Empty;
+            }
+            else
+            {
+                DeleteImageNoException(_dvdTitle.BackCoverPath);
+                _dvdTitle.BackCoverPath = string.Empty;
+            }
+            titleSource.ResetCurrentItem();
+        }
+
+        private void DeleteImageNoException(string path)
+        {
+            try
+            {
+                File.Delete(path);
+            }
+            catch(Exception e)
+            {
+                OMLEngine.Utilities.DebugLine("[TitleEditor] DeleteImageNoException(" + path + ") : failed deleting image because " + e.Message);
+            }
+        }
     }
 
     public class TitleNameChangedEventArgs : EventArgs
