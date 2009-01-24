@@ -2,7 +2,7 @@
 
 <!-- These variables define the Windows Installer product version, product code and upgrade code. They   -->
 <!-- will be used later on in this file.                                                                 -->
-<?define Property_ProductVersion = "2.1.2.0" ?>
+<?define Property_ProductVersion = "2.1.3.0" ?>
 <?define Property_ProductCode = "282ffe47-5856-4f07-a5e1-617a24a9b4a5" ?>
 <?define Property_UpgradeCode = "0921ec75-fddc-46f8-bdf4-a5d697351567" ?>
 
