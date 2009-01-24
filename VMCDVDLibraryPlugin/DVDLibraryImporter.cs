@@ -119,7 +119,7 @@ namespace VMCDVDLibraryPlugin
                                 foreach (string video in fileNames)
                                 {
                                     string extension = Path.GetExtension(video).ToUpper();
-                                    if (Enum.Parse(typeof(VideoFormat), extension, true) != null)
+                                    if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
                                     {
                                         foreach (VideoFormat format in Enum.GetValues(typeof(VideoFormat)))
                                         {
