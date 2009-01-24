@@ -281,7 +281,7 @@
         <Conditions>
           <Equality Source="[Input.DeepMouseFocus]" Value="true"/>
           <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
-          <!--<Equality Source="[DetailsPage.HasFanArtImage]" Value="false" />-->
+          <Equality Source="[DetailsPage.HasFanArtImage]" Value="false" />
         </Conditions>
         <Actions>
           <Set Target="[FullCover.MaximumSize]" Value="336,480"/>

@@ -26,11 +26,11 @@ namespace Library
         private ContextMenu _dvdContextMenu;
         private bool _showDVDContextMenu = false;
         private Image _fullCover;
-        private bool _playClicked = false;
+        private bool _playClicked = false;        
         private Image backgroundImage;
-        private int iCurrentBackgroundImage = 0;
-        private int iTotalBackgroundImages = 0;
-        public System.Timers.Timer backgroundTimer;
+        
+        private System.Timers.Timer backgroundTimer;
+        private List<Image> backgroundImages = null;
         #endregion
 
         #region Public Properties
@@ -49,7 +49,8 @@ namespace Library
         /// <summary>
         /// A multiline summary of the object.
         /// </summary>
-        public string Summary { get { return _movieDetails.Synopsis; } }        
+        public string Summary { get { return _movieDetails.Synopsis; } }
+        public bool HasFanArtImage { get { return backgroundImages != null && backgroundImages.Count != 0; } }
 
         public bool ShowDVDContextMenu
         {
@@ -192,7 +193,7 @@ namespace Library
                 }
                 return res;
             }
-        }               
+        }                
         
         #endregion
 
@@ -447,59 +448,70 @@ namespace Library
             });
         }
 
-        public void SetBackgroundImage()
+        private void SetBackgroundImage()
         {
+            // only setup the background images once
+            if (backgroundImages != null)
+                return;
+
+            backgroundImages = new List<Image>(1);
+
             if (!string.IsNullOrEmpty(_movieDetails.TitleObject.BackDropImage))
-            {
-                if (backgroundImage == null)
+            {                
+                if (File.Exists(Path.GetFullPath(_movieDetails.TitleObject.BackDropImage)))
                 {
-                    if (File.Exists(Path.GetFullPath(_movieDetails.TitleObject.BackDropImage)))
-                    {
-                        backgroundImage = new Image(
-                            string.Format("file://{0}", Path.GetFullPath(_movieDetails.TitleObject.BackDropImage)));
-                        return;
-                    }
-                }
+                    backgroundImages.Add(new Image(
+                        string.Format("file://{0}", Path.GetFullPath(_movieDetails.TitleObject.BackDropImage))));
+                    
+                    return;
+                }                
             }
 
             // a specific file was NOT found, time to go hunting
+            
+            // if the /FanArt folder doesn't exist - that means no background images
             if (!Directory.Exists(_movieDetails.TitleObject.BackDropFolder))
-                _movieDetails.TitleObject.createBackDropFolder();
+                return;                
 
-            DirectoryInfo dirInfo = new DirectoryInfo(_movieDetails.TitleObject.BackDropFolder);
-            FileInfo[] files = dirInfo.GetFiles("*.jpg", SearchOption.TopDirectoryOnly);
-            iTotalBackgroundImages = files.Length;
-            if (iTotalBackgroundImages > 0)
+            foreach (string file in
+                Directory.GetFiles(_movieDetails.TitleObject.BackDropFolder, "*.jpg", SearchOption.TopDirectoryOnly))
             {
-                if (iCurrentBackgroundImage >= iTotalBackgroundImages)
-                    iCurrentBackgroundImage = 0;
+                OMLApplication.DebugLine("[MovieDetailsPage] loading fanart image {0}", file);
 
-                OMLApplication.DebugLine("[MovieDetailsPage] loading fanart image {0}", Path.GetFullPath(files[iCurrentBackgroundImage].FullName));
-                BackgroundImage = new Image(string.Format("file://{0}", Path.GetFullPath(files[iCurrentBackgroundImage].FullName)));
-                iCurrentBackgroundImage++;
-
-                if (backgroundTimer == null)
-                {
-                    backgroundTimer = new System.Timers.Timer();
-                    backgroundTimer.AutoReset = true;
-                    backgroundTimer.Elapsed +=new ElapsedEventHandler(backgroundTimer_Elapsed);
-                    int rotationInSeconds = 5;
-                    double rotationInMilliseconds = rotationInSeconds * 1000;
-                    backgroundTimer.Interval = rotationInMilliseconds;
-                    backgroundTimer.Enabled = true;
-                    backgroundTimer.Start();
-                    GC.KeepAlive(backgroundTimer);
-                }
+                backgroundImages.Add(new Image(string.Format("file://{0}", file)));
             }
-            return;
+
+            // oops - no images found in the fanart folder
+            if (backgroundImages.Count == 0)
+                return;
+
+            // set the background image
+            BackgroundImage = backgroundImages[0];
+
+            // if more than 1 background image was found go ahead and setup a timer
+            // to rotate through them
+            if (backgroundImages.Count > 1)
+            {
+                backgroundTimer = new System.Timers.Timer();
+                backgroundTimer.AutoReset = true;
+                backgroundTimer.Elapsed += new ElapsedEventHandler(backgroundTimer_Elapsed);
+                backgroundTimer.Interval = 5000;                
+                backgroundTimer.Start();
+            }
         }
 
         void backgroundTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            SetBackgroundImage();
+            if (backgroundImages == null || backgroundImages.Count == 0)
+                return;
+
+            int currentIndex = backgroundImages.IndexOf(BackgroundImage);
+
+            if (currentIndex == -1 || currentIndex == backgroundImages.Count - 1)
+                BackgroundImage = backgroundImages[0];
+            else
+                BackgroundImage = backgroundImages[currentIndex + 1];
         }
-
-
     }
 
     public class MovieCastCommand : Command
