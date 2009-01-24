@@ -103,6 +103,7 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.pnlMetadata = new DevExpress.XtraEditors.PanelControl();
             this.pnlMain = new DevExpress.XtraEditors.PanelControl();
+            this.deleteImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tpVisual.SuspendLayout();
@@ -889,14 +890,15 @@
             // 
             this.contextImage.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.contextImage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.selectImageToolStripMenuItem});
+            this.selectImageToolStripMenuItem,
+            this.deleteImageToolStripMenuItem});
             this.contextImage.Name = "contextImage";
-            this.contextImage.Size = new System.Drawing.Size(142, 26);
+            this.contextImage.Size = new System.Drawing.Size(153, 70);
             // 
             // selectImageToolStripMenuItem
             // 
             this.selectImageToolStripMenuItem.Name = "selectImageToolStripMenuItem";
-            this.selectImageToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.selectImageToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.selectImageToolStripMenuItem.Text = "Select Image";
             this.selectImageToolStripMenuItem.Click += new System.EventHandler(this.selectImageToolStripMenuItem_Click);
             // 
@@ -945,6 +947,13 @@
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(526, 402);
             this.pnlMain.TabIndex = 3;
+            // 
+            // deleteImageToolStripMenuItem
+            // 
+            this.deleteImageToolStripMenuItem.Name = "deleteImageToolStripMenuItem";
+            this.deleteImageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteImageToolStripMenuItem.Text = "Delete Image";
+            this.deleteImageToolStripMenuItem.Click += new System.EventHandler(this.deleteImageToolStripMenuItem_Click);
             // 
             // TitleEditor
             // 
@@ -1078,5 +1087,6 @@
         private DevExpress.XtraEditors.PanelControl pnlMetadata;
         private System.Windows.Forms.ContextMenuStrip contextField;
         private System.Windows.Forms.ToolStripMenuItem updateFromMetadataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteImageToolStripMenuItem;
     }
 }
