@@ -26,12 +26,26 @@
 
       <ShortcutHandler Name="BackHandler" Shortcut="Back" Handle="false" HandlerStage="Routed" />
       <KeyHandler Key="Backspace" Name="BackHandlerKey" Handle="false" HandlerStage="Routed"/>
+
+      <Timer Name="RotateBackgrounndTimer" AutoRepeat="true" Interval="5000" Enabled="false"/>
     </Locals>
 
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
-      <Binding Source="[DetailsPage.BackgroundImage]" Target="[FanArtImage.Content]"/>
+      <Binding Source="[DetailsPage.BackgroundImage]" Target="[FanArtImage.Content]"/>     
+
+      <Condition Source="[DetailsPage.RotateFanArt]" SourceValue="true">
+        <Actions>
+          <Invoke Target="[RotateBackgrounndTimer.Start]" />
+        </Actions>
+      </Condition>
+
+      <Changed Source="[RotateBackgrounndTimer.Tick]">
+        <Actions>
+          <Invoke Target="[DetailsPage.RotateBackground]" />
+        </Actions>
+      </Changed>
 
       <Changed Source="[CheckWatched.Checked.Value]">
         <Actions>
@@ -99,6 +113,9 @@
           <Set Target="[transcodingMessage.Visible]" Value="false"/>
         </Actions>
       </Changed>
+
+      <Binding Source="[DetailsPage.FanAlphaFadeOverride]" Target="[FanArtImage.Alpha]" />
+      
     </Rules>
 
     <Content>
@@ -191,7 +208,7 @@
               <FormLayoutInput Left="Parent,0" Top="InfoPanel,1,30" Right="Parent,1" />
             </LayoutInput>
             <Children>
-              <me:MainBody Application="[Application]" DetailsPage="[DetailsPage]" UISettings="[UISettings]" />
+              <me:MainBody Name="MiddleBody" Application="[Application]" DetailsPage="[DetailsPage]" UISettings="[UISettings]" />
             </Children>
           </Panel>
 
@@ -206,14 +223,20 @@
             <Animations>
               <Animation Type="ContentChangeHide">
                 <Keyframes>
-                  <AlphaKeyframe Time="0" Value="[UISettings.Gallery.DetailsPageBackDropAlpha!cor:Single]"/>
-                  <AlphaKeyframe Time="1" Value="0"/>
+                  <AlphaKeyframe Time="0" RelativeTo="Current" Value="1"/>
+                  <AlphaKeyframe Time="1" Value="0" RelativeTo="Absolute" />
                 </Keyframes>
               </Animation>
               <Animation Type="ContentChangeShow">
                 <Keyframes>
-                  <AlphaKeyframe Time="0" Value="0"/>
-                  <AlphaKeyframe Time="1" Value="[UISettings.Gallery.DetailsPageBackDropAlpha!cor:Single]"/>
+                  <AlphaKeyframe Time="0" Value="0" RelativeTo="Absolute"/>
+                  <AlphaKeyframe Time="1" Value="1" RelativeTo="Final"/>
+                </Keyframes>
+              </Animation>
+              <Animation Type="Alpha">
+                <Keyframes>
+                  <AlphaKeyframe Time="0" Value="1" RelativeTo="Current"/>
+                  <AlphaKeyframe Time=".25" Value="1" RelativeTo="Final"/>
                 </Keyframes>
               </Animation>
             </Animations>
@@ -247,7 +270,7 @@
     </Locals>
     
     <Rules>
-      <Default Target="[Input.KeyInteractive]" Value="true" />
+      <Default Target="[Input.KeyInteractive]" Value="true" />      
 
       <Condition Source="[DetailsPage.Directors.Options.Count]" SourceValue="0">
         <Actions>
@@ -293,6 +316,8 @@
           <Set Target="[DetailsAlpha.Visible]" Value="true" />
           <Set Target="[ExtraInofPanel.Visible]" Value="true" />         
           <Set Target="[ActorsPanel.LayoutInput]"  Value="[PeopleLayoutFocus]" />
+          <Set Target="[SmallDetailsAlpha.Alpha]" Value=".2" />
+          <Set Target="[DetailsPage.FanAlphaFadeOverride]" Value=".2"  />
         </Actions>
       </Rule>
 
@@ -307,7 +332,9 @@
           <Set Target="[Image.LayoutInput]" Value="[ImageLayoutNotFocus]" />
           <Set Target="[DetailsAlpha.Visible]" Value="false" />
           <Set Target="[ExtraInofPanel.Visible]" Value="false" />          
-          <Set Target="[ActorsPanel.LayoutInput]"  Value="[PeopleLayoutNotFocus]" />          
+          <Set Target="[ActorsPanel.LayoutInput]"  Value="[PeopleLayoutNotFocus]" />
+          <Set Target="[SmallDetailsAlpha.Alpha]" Value=".75" />
+          <Set Target="[DetailsPage.FanAlphaFadeOverride]" Value=".8" />
         </Actions>
       </Rule>
       <!-- end change color and scale -->
@@ -491,13 +518,19 @@
           </ColorFill>
 
           <!-- Details backdrop -->
-          <ColorFill Name="SmallDetailsAlpha" FocusOrder="1" Content="Black" Alpha=".2" CenterPointPercent=".5,.5,.5" >
+          <ColorFill Name="SmallDetailsAlpha" FocusOrder="1" Content="Black" Alpha=".75" CenterPointPercent=".5,.5,.5" >
             <LayoutInput>
               <FormLayoutInput Left="Image,0,-30" Bottom="Image,1,30" Top="Image,0,-30" Right="ActorsPanel,1"/>
             </LayoutInput>
             <Animations>
               <Animation Animation="animation://me:ShowFromBottom" />
-              <Animation Animation="animation://me:QuickMove" />              
+              <Animation Animation="animation://me:QuickMove" />
+              <Animation Type="Alpha">
+                <Keyframes>
+                  <AlphaKeyframe Time="0" RelativeTo="Current" Value="1"/>
+                  <AlphaKeyframe Time=".25" RelativeTo="Final" Value="1"/>
+                </Keyframes>
+              </Animation>
             </Animations>
           </ColorFill>        
         </Children>

@@ -121,9 +121,9 @@
                     <Animations>
                       <Animation Type="Move">
                         <Keyframes>
-                          <PositionKeyframe Time="0" RelativeTo="Current" />
-                          <PositionKeyframe Time=".3" RelativeTo="Final" Value=".8,.8,.8" />
-                          <PositionKeyframe Time=".4" RelativeTo="Final" Value="1,1,1" />
+                          <PositionKeyframe Time="0" RelativeTo="Current" Value="1,1,1" />
+                          <!--<PositionKeyframe Time=".3" RelativeTo="Final" Value=".8,.8,.8" />-->
+                          <PositionKeyframe Time=".3" RelativeTo="Final" Value="1,1,1" />
                         </Keyframes>
                       </Animation>
                     </Animations>

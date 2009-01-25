@@ -26,12 +26,27 @@
 
       <ShortcutHandler Name="BackHandler" Shortcut="Back" Handle="false" HandlerStage="Routed" />
       <KeyHandler Key="Backspace" Name="BackHandlerKey" Handle="false" HandlerStage="Routed"/>
+      
+      <Timer Name="RotateBackgrounndTimer" AutoRepeat="true" Interval="5000" Enabled="false"/>
     </Locals>
 
     <Rules>
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
-      <Binding Target="[DetailsPage.BackgroundImage]" Source="[FanArtImage.Content]"/>
+      <Binding Source="[DetailsPage.BackgroundImage]" Target="[FanArtImage.Content]"/>
+
+      <Condition Source="[DetailsPage.RotateFanArt]" SourceValue="true">
+        <Actions>
+          <Invoke Target="[RotateBackgrounndTimer.Start]" />
+        </Actions>
+      </Condition>
+
+      <Changed Source="[RotateBackgrounndTimer.Tick]">
+        <Actions>
+          <Invoke Target="[DetailsPage.RotateBackground]" />
+        </Actions>
+      </Changed>
+      
       <Condition Source="[DetailsPage.Directors.Options.Count]" SourceValue="0">
         <Actions>
           <Set Target="[DirectorsPanel.Visible]" Value="false" />

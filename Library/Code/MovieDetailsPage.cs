@@ -29,8 +29,8 @@ namespace Library
         private Image _fullCover;
         private bool _playClicked = false;        
         private Image backgroundImage;
+        private Single fanAlphaFadeOverride;
         
-        private System.Timers.Timer backgroundTimer;
         private List<Image> backgroundImages = null;
         #endregion
 
@@ -52,6 +52,7 @@ namespace Library
         /// </summary>
         public string Summary { get { return _movieDetails.Synopsis; } }
         public bool HasFanArtImage { get { return backgroundImages != null && backgroundImages.Count != 0; } }
+        public bool RotateFanArt { get { return backgroundImages != null && backgroundImages.Count > 1; } }
 
         public bool ShowDVDContextMenu
         {
@@ -60,6 +61,16 @@ namespace Library
             {
                 _showDVDContextMenu = value;
                 FirePropertyChanged("ShowDVDContextMenu");
+            }
+        }
+
+        public Single FanAlphaFadeOverride
+        {
+            get { return fanAlphaFadeOverride; }
+            set
+            {
+                fanAlphaFadeOverride = value;
+                FirePropertyChanged("FanAlphaFadeOverride");
             }
         }
 
@@ -529,21 +540,10 @@ namespace Library
                 return;
 
             // set the background image
-            BackgroundImage = backgroundImages[0];
-
-            // if more than 1 background image was found go ahead and setup a timer
-            // to rotate through them
-            if (backgroundImages.Count > 1)
-            {
-                backgroundTimer = new System.Timers.Timer();
-                backgroundTimer.AutoReset = true;
-                backgroundTimer.Elapsed += new ElapsedEventHandler(backgroundTimer_Elapsed);
-                backgroundTimer.Interval = 5000;                
-                backgroundTimer.Start();
-            }
+            BackgroundImage = backgroundImages[0];            
         }
 
-        void backgroundTimer_Elapsed(object sender, ElapsedEventArgs e)
+        public void RotateBackground()
         {
             if (backgroundImages == null || backgroundImages.Count == 0)
                 return;
