@@ -1063,30 +1063,6 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Zoom and Spin")]
-        public string MovieDetailsTransitionType {
-            get {
-                return ((string)(this["MovieDetailsTransitionType"]));
-            }
-            set {
-                this["MovieDetailsTransitionType"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UseMaximizer {
-            get {
-                return ((bool)(this["UseMaximizer"]));
-            }
-            set {
-                this["UseMaximizer"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.3")]
         public float MainPageBackDropAlpha {
             get {
