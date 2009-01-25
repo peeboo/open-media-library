@@ -49,6 +49,9 @@
       <ScrollingData Name="ScrollDataFilters"/>
       <ScrollingHandler Name="ScrollHandlerFilters"/>
 
+      <ScrollingData Name="ScrollDataExternal"/>
+      <ScrollingHandler Name="ScrollHandlerExternal"/>
+
       <Size Name="ChoiceSpinnerSize" Size="275,51" />
     </Locals>
 
@@ -77,7 +80,7 @@
       
       <Changed Source="[ScanForTMTCommand.Invoked]">
         <Actions>
-          <Invoke Target="[Settings.LocateTotalMediaTheatrePluginExecutable]"/>
+          <Invoke Target="[Settings.LocateExternalPlayerExecutable]"/>
         </Actions>
       </Changed>
 
@@ -239,10 +242,7 @@
         <Actions>
           <Set Target="[Tabs.ChosenIndex]" Value="0" />
         </Actions>
-      </Condition>
-
-      <Condition Source="[UseExternalPlayer.Checked.Value]" SourceValue="true" Target="[ExternalPlayer.Visible]" Value="true" />
-      <Condition Source="[UseExternalPlayer.Checked.Value]" SourceValue="false" Target="[ExternalPlayer.Visible]" Value="false" />
+      </Condition>      
 
       <Changed Source="[Settings.StartPage.Chosen]">
         <Actions>
@@ -274,6 +274,7 @@
 
       <Default Target="[ScrollHandlerUI.ScrollingData]" Value="[ScrollDataUI]"/>
       <Default Target="[ScrollHandlerFilters.ScrollingData]" Value="[ScrollDataFilters]"/>
+      <Default Target="[ScrollHandlerExternal.ScrollingData]" Value="[ScrollDataExternal]"/>
       <Binding Source="[Settings.MainPageBackDropAlpha.Chosen!cor:Single]" Target="[SampleMainBackDropImage.Alpha]"/>
       <Binding Source="[Settings.DetailsPageBackDropAlpha.Chosen!cor:Single]" Target="[SampleDetailsBackDropImage.Alpha]"/>
     </Rules>
@@ -625,39 +626,38 @@
               </Scroller>
               
               <!-- ExternalPlayers -->
-              <Panel Name="ExternalPlayers" Layout="VerticalFlow" Visible="false" Navigation="Group">
-                <Children>
-                  <Panel Layout="VerticalFlow" Navigation="Column">
+              <Panel Name="ExternalPlayers" Layout="VerticalFlow" Navigation="Group,Column" Visible="false">
+                <LayoutInput>
+                  <FormLayoutInput Left="Parent,0" Top="Parent,.25" Horizontal="Center"/>
+                </LayoutInput>                
                     <Children>
-                      <Text Content="Scan Drive for Total Media Theatre Plugin" Color="White" Font="font://me:SmallFont"/>
+
+                      <Panel Layout="VerticalFlow" Margins="0,5,0,10" Navigation="Column">
+                        <Children>
+                          <Text Content="Select the external player you wish to use" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                          <rbg:RadioButtonGroup Model="[Settings.ExternalPlayerSelection]" />
+                        </Children>
+                      </Panel>                      
+                      
+                      <Text Content="Scan Drive for selected external player" Color="White" Font="font://me:SmallFont"/>
                       <Panel Layout="HorizontalFlow">
                         <Children>
                           <c:SimpleSpinner Name="LocalFixedDrives" Model="[Settings.LocalFixedDrives]" Size="51,51" />
                           <c:SimpleButton Name="ScanForTMTButton" Command="[ScanForTMTCommand]" FocusOrder="1" Text="Begin Scan"/>
                         </Children>
                       </Panel>
-                      <Text Content="External HD/BluRay Player" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
-                      <c:SimpleEditbox Size="700,51" Name="BluRayPlayer" EditableText="[Settings.BlueRayPlayerPath]" />
+                      <Text Content="Path to player" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                      <c:SimpleEditbox Size="700,51" Name="BluRayPlayer" EditableText="[Settings.ExternalPlayerPath]" />
 
-                      <Panel Layout="HorizontalFlow" Margins="0,40,0,0" Navigation="Group">
+                      <Panel Layout="HorizontalFlow" Margins="0,40,0,20" Navigation="Group">
                         <Children>
-                          <c:SimpleCheckbox Name="UseExternalPlayer" Checked="[Settings.UseExternalPlayer]" Margins="0,0,10,0" />
-                          <Text Content="Use External Player for all other media types" Color="White" Font="font://me:SmallFont"/>
+                          <c:SimpleCheckbox Name="UseExternalPlayer" Checked="[Settings.UseExternalPlayerOnlyForHD]" Margins="0,0,10,0" />
+                          <Text Content="Only use external player for HD/BluRay movies" Color="White" Font="font://me:SmallFont"/>
                         </Children>
-                      </Panel>
-
-                      <c:SimpleEditbox Size="700,51" Name="ExternalPlayer" EditableText="[Settings.ExternalPlayerPath]" />
-
-                      <Panel Layout="HorizontalFlow" Margins="0,40,0,0" Navigation="Group">
-                        <Children>
-                          <c:SimpleCheckbox Name="UseMaximizer" Checked="[Settings.UseMaximizer]" Margins="0,0,10,0" />
-                          <Text WordWrap="true" Content="Force Media Center to minimize when launching external programs ( Not recommended for Total Media Theater Plugin )" Color="White" Font="font://me:SmallFont"/>
-                        </Children>
-                      </Panel>
+                      </Panel>                      
 
                     </Children>
-                  </Panel>
-                </Children>
+                  
               </Panel>
 
               <!-- ExtenderTranscoding -->
@@ -720,7 +720,7 @@
                       <c:SimpleButton Name="Save Settings" Command="[SaveSettings]" FocusOrder="1" Text="Save Settings" Margins="0,20,10,0" />
                       <!-- <c:SimpleButton Name="Import Movies" Command="[BeginSetupCommand]" Text="Import Movies" Margins="0,20,10,0"/> -->
                       <c:SimpleButton Name="About OML" Command="[AboutOML]" FocusOrder="2" Text="About OML" Margins="0,20,10,0"/>
-                      <c:SimpleButton Name="Show Sample Layout" Size="25,51" Command="[ShowSampleLayoutCommand]" FocusOrder="2" Text="." Margins="0,20,10,0"/>
+                      <!--<c:SimpleButton Name="Show Sample Layout" Size="25,51" Command="[ShowSampleLayoutCommand]" FocusOrder="2" Text="." Margins="0,20,10,0"/>-->
                     </Children>
                   </Panel>
                 </Children>

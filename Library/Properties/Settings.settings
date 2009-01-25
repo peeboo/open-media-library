@@ -294,12 +294,6 @@
     <Setting Name="ShowWatchedIcon" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="MovieDetailsTransitionType" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Zoom and Spin</Value>
-    </Setting>
-    <Setting Name="UseMaximizer" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="MainPageBackDropAlpha" Type="System.Single" Scope="User">
       <Value Profile="(Default)">0.3</Value>
     </Setting>

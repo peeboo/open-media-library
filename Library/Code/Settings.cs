@@ -71,24 +71,29 @@ namespace Library
 
                 try
                 {
-                    if (!string.IsNullOrEmpty(_blueRayPlayerPath.Value) &&
-                        _blueRayPlayerPath.Value.Trim().Length != 0)
-                    {
-                        mappings.Add(VideoFormat.BLURAY.ToString() + "|" + _blueRayPlayerPath.Value.Trim());
-                        mappings.Add(VideoFormat.HDDVD.ToString() + "|" + _blueRayPlayerPath.Value.Trim());
-                    }
+                    string chosenPlayer = _externalPlayerSelection.Chosen as string;
 
-                    if (_useExternalPlayer.Value && 
-                        !string.IsNullOrEmpty(_externalPlayerPath.Value) &&
-                        _externalPlayerPath.Value.Trim().Length != 0 )
-                    {
-                        mappings.Add(VideoFormat.ALL.ToString() + "|" + _externalPlayerPath.Value.Trim());
+                    ExternalPlayer.KnownPlayers player = (ExternalPlayer.KnownPlayers)Enum.Parse(typeof(ExternalPlayer.KnownPlayers), chosenPlayer);
+
+                    if (player != ExternalPlayer.KnownPlayers.None)
+                    {                        
+                        if (!string.IsNullOrEmpty(_externalPlayerPath.Value) &&
+                            _externalPlayerPath.Value.Trim().Length != 0)
+                        {
+                            mappings.Add(VideoFormat.BLURAY.ToString() + "|" + ((int)player).ToString() + "|" + _externalPlayerPath.Value.Trim());
+                            mappings.Add(VideoFormat.HDDVD.ToString() + "|" + ((int)player).ToString() + "|" + _externalPlayerPath.Value.Trim());
+                        }
+
+                        if (!_useExternalPlayerOnlyForHD.Value &&
+                            !string.IsNullOrEmpty(_externalPlayerPath.Value) &&
+                            _externalPlayerPath.Value.Trim().Length != 0)
+                        {
+                            mappings.Add(VideoFormat.ALL.ToString() + "|" + ((int)player).ToString() + "|" + _externalPlayerPath.Value.Trim());
+                        }
                     }
 
                     _omlSettings.ExternalPlayerMapping = mappings;
                     ExternalPlayer.RefreshExternalPlayerList();
-
-                    _omlSettings.UseMaximizer = (bool)_useMaximizer.Chosen;
                 }
                 catch (Exception ex)
                 {
@@ -187,6 +192,8 @@ namespace Library
                 OMLApplication.Current.Startup(null);
             });
         }
+
+        
 
         private void SetupMountingTools()
         {
@@ -453,6 +460,20 @@ namespace Library
 
         private void SetupExternalPlayers()
         {
+            ExternalPlayerItem bluRayPlayer = ExternalPlayer.GetExternalForFormat(VideoFormat.BLURAY);
+
+            List<string> externalPlayerChoices = new List<string>();
+            foreach (string player in Enum.GetNames(typeof(ExternalPlayer.KnownPlayers)))
+            {
+                externalPlayerChoices.Add(player);
+            }
+
+            _externalPlayerSelection.Options = externalPlayerChoices;
+
+            _externalPlayerSelection.Chosen = (bluRayPlayer == null)
+                                                 ? ExternalPlayer.KnownPlayers.None.ToString()
+                                                 : bluRayPlayer.PlayerType.ToString();
+
             List<string> localFixedDrivesOptions = new List<string>();
             foreach (DriveInfo dInfo in GetFileSystemDrives())
             {
@@ -461,14 +482,9 @@ namespace Library
 
             _LocalFixedDrives.Options = localFixedDrivesOptions;
 
-            _blueRayPlayerPath.Value = ExternalPlayer.GetExternalPlayerPath(VideoFormat.BLURAY);
-            _useExternalPlayer.Chosen = ExternalPlayer.ExternalPlayerExistForType(VideoFormat.ALL);
+            _useExternalPlayerOnlyForHD.Chosen = !ExternalPlayer.ExternalPlayerExistForType(VideoFormat.ALL);
 
-            _externalPlayerPath.Value = ( (bool)_useExternalPlayer.Chosen == true )
-                                    ? ExternalPlayer.GetExternalPlayerPath(VideoFormat.ALL)
-                                    : string.Empty;
-
-            _useMaximizer.Chosen = _omlSettings.UseMaximizer;
+            _externalPlayerPath.Value = (bluRayPlayer != null) ? bluRayPlayer.Path : string.Empty;
         }
 
         #region properties
@@ -624,14 +640,9 @@ namespace Library
             get { return _LocalFixedDrives; }
         }
 
-        public BooleanChoice UseExternalPlayer
+        public BooleanChoice UseExternalPlayerOnlyForHD
         {
-            get { return _useExternalPlayer; }
-        }
-
-        public BooleanChoice UseMaximizer
-        {
-            get { return _useMaximizer; }
+            get { return _useExternalPlayerOnlyForHD; }
         }
       
         #endregion
@@ -651,24 +662,7 @@ namespace Library
                 FirePropertyChanged("MountingToolPath");
             }
         }
-
-        public EditableText BlueRayPlayerPath
-        {
-            get
-            {
-                if (_blueRayPlayerPath == null)
-                {
-                    _blueRayPlayerPath = new EditableText();
-                }
-                return _blueRayPlayerPath;
-            }
-            set
-            {
-                _blueRayPlayerPath = value;
-                FirePropertyChanged("BluRayPlayerPath");
-            }
-        }
-
+        
         public EditableText ExternalPlayerPath
         {
             get
@@ -720,6 +714,17 @@ namespace Library
                 FirePropertyChanged("ImageMountingSelection");
             }
         }
+
+        public Choice ExternalPlayerSelection
+        {
+            get { return _externalPlayerSelection; }
+            set
+            {
+                _externalPlayerSelection = value;
+                FirePropertyChanged("ExternalPlayerSelection");
+            }
+        }
+
         public Choice MainPageBackDropInterval
         {
             get { return _mainPageBackDropInterval; }
@@ -749,7 +754,7 @@ namespace Library
         }
 
         private const string DefaultDaemonToolsPath = @"Program Files\DAEMON Tools Lite\daemon.exe";
-        private const string DefaultVirtualCloneDrivePath = @"Program Files\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";
+        private const string DefaultVirtualCloneDrivePath = @"Program Files\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";        
 
         public void LocateSelectedMounter()
         {           
@@ -809,42 +814,69 @@ namespace Library
             }
         }
 
-        public void LocateTotalMediaTheatrePluginExecutable()
-        {
-            string DriveLetterToScan = LocalFixedDrives.Chosen as String;
-            DriveInfo dInfo;
+        private const string DefaultTMTPath = @"Program Files\Arcsoft\umcedvdplayer.exe";
+        private const string DefaultPowerDVD8Path = @"Program Files\CyberLink\PowerDVD8\PowerDVD8.exe";
+        private const string DefaultWinDVD9Path = @"Program Files\Corel\DVD9\WinDVD.exe";
 
-            dInfo = new DriveInfo(DriveLetterToScan);
-            if (File.Exists(Path.Combine(dInfo.RootDirectory.FullName, @"Program Files\Arcsoft\umcedvdplayer.exe")))
+        public void LocateExternalPlayerExecutable()
+        {
+            string driveLetterToScan = LocalFixedDrives.Chosen as String;
+            DriveInfo dInfo = new DriveInfo(driveLetterToScan);
+
+            string startPath = null;
+
+            switch ((ExternalPlayer.KnownPlayers)Enum.Parse(typeof(ExternalPlayer.KnownPlayers), _externalPlayerSelection.Chosen.ToString()))
+            {               
+                case ExternalPlayer.KnownPlayers.WinDVD9:
+                    startPath = DefaultWinDVD9Path;
+                    break;
+
+                case ExternalPlayer.KnownPlayers.PowerDVD8:
+                    startPath = DefaultPowerDVD8Path;
+                    break;
+
+                case ExternalPlayer.KnownPlayers.TotalMediaTheater:
+                    startPath = DefaultTMTPath;
+                    break;
+
+                // don't do anything if there's no mounting tool selected
+                case ExternalPlayer.KnownPlayers.None:
+                case ExternalPlayer.KnownPlayers.Other:
+                default:
+                    return;
+            }
+
+            if (File.Exists(Path.Combine(dInfo.RootDirectory.FullName, startPath)))
             {
-                BlueRayPlayerPath.Value = Path.Combine(dInfo.RootDirectory.FullName, @"Program Files\Arcsoft\umcedvdplayer.exe");
+                ExternalPlayerPath.Value = Path.Combine(dInfo.RootDirectory.FullName, startPath);
             }
             else
             {
+                // let's scan all the folders for it
                 OMLApplication.Current.IsBusy = true;
                 Application.DeferredInvokeOnWorkerThread(delegate
                 {
-                    exePath = ScanAllFoldersForExecutable(dInfo.RootDirectory.FullName, "umcedvdplayer.exe");
+                    exePath = ScanAllFoldersForExecutable(dInfo.RootDirectory.FullName, Path.GetFileName(startPath));
+
                 }, delegate
                 {
                     OMLApplication.Current.IsBusy = false;
-
                     if (exePath.Length > 0)
                     {
-                        OMLApplication.DebugLine("[Settings] Found Total Media Theatre Plugin: {0}", exePath);
-                        BlueRayPlayerPath.Value = exePath;
+                        OMLApplication.DebugLine("[Settings] Found Image Mounter: {0}", exePath);
+                        ExternalPlayerPath.Value = exePath;
                     }
                     else
                     {
                         AddInHost.Current.MediaCenterEnvironment.Dialog(
-                            string.Format("The Total Media Theatre plugin was not" +
-                                          " found on the [{0}] drive.", DriveLetterToScan),
-                            "Failed to Find TMT Plugin",
+                            string.Format("The external player was not" +
+                                          " found on the [{0}] drive.", driveLetterToScan),
+                            "Failed to Find External Player",
                             Microsoft.MediaCenter.DialogButtons.Ok,
                             5, true);
                     }
                 }, null);
-            }
+            }            
         }
 
         public static void CleanupImagesFolder()
@@ -931,7 +963,6 @@ namespace Library
 
         private string exePath = string.Empty;
         EditableText _mountingToolPath = new EditableText();
-        EditableText _blueRayPlayerPath = new EditableText();
         EditableText _externalPlayerPath = new EditableText();
         OMLSettings _omlSettings = new OMLSettings();
         Choice _virtualDrive = new Choice();
@@ -949,6 +980,7 @@ namespace Library
         Choice _startPageSubFilter;
         Choice _uiLanguage = new Choice();
         Choice _ImageMountingSelection = new Choice();
+        Choice _externalPlayerSelection = new Choice();
         Choice _trailersDefinition = new Choice();
         Choice _LocalFixedDrives = new Choice();
         Choice _filtersToShow = new Choice();
@@ -970,10 +1002,10 @@ namespace Library
         BooleanChoice _showFilterParentalRating = new BooleanChoice();
         BooleanChoice _showFilterCountry = new BooleanChoice();
         BooleanChoice _showFilterRuntime = new BooleanChoice();
-        BooleanChoice _useExternalPlayer = new BooleanChoice();
+        BooleanChoice _useExternalPlayerOnlyForHD = new BooleanChoice();
         BooleanChoice _showFilterUnwatched = new BooleanChoice();
         BooleanChoice _debugTranscoding = new BooleanChoice();
-        BooleanChoice _useMaximizer = new BooleanChoice();
+        //BooleanChoice _useMaximizer = new BooleanChoice();
         Choice _mainPageBackDropAlpha = new Choice();
         Choice _mainPageBackDropInterval = new Choice();
         Choice _detailsPageBackDropAlpha = new Choice();
