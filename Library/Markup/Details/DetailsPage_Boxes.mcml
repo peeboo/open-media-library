@@ -114,7 +114,7 @@
             <Children>
 
 
-              <Panel Layout="VerticalFlow">
+              <Panel Layout="VerticalFlow" >
                 <LayoutInput>
                   <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
                 </LayoutInput>
@@ -125,14 +125,11 @@
                     </Animations>
                   </Text>
 
-                  <Panel Layout="HorizontalFlow">
-                    <Children>
-                      <Text Content="[DetailsPage.SubHeading]" Font="font://s:SubHeadingBox" Color="color://s:LabelColor" />                      
-                    </Children>
+                  <Text Margins="0,-3,0,0" Content="[DetailsPage.SubHeading]" Font="font://s:SubHeadingBox" Color="color://s:LabelColor" >
                     <Animations>
                       <Animation Animation="animation://me:ShowFromRight" />
                     </Animations>
-                  </Panel>
+                  </Text>
                 </Children>
               </Panel>
 

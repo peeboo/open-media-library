@@ -63,6 +63,7 @@
   <Font Name="NormalBold" FontName="Segoe Media Center" FontSize="16" FontStyle="Bold"/>
 
   <Font Name="SubHeading" FontName="Segoe Media Center" FontSize="14"/>
+  <Font Name="SubHeadingBox" FontName="Segoe Media Center" FontSize="15"/>
 
   <!-- Animation so we scroll smoothly -->
   <Animation Name="MoveAnimation" Type="Move">
