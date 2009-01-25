@@ -127,13 +127,7 @@
 
                   <Panel Layout="HorizontalFlow">
                     <Children>
-                      <Text Content="[DetailsPage.ReleaseDateYear]" Font="font://s:SubHeading" Color="color://s:LabelColor" />
-                      <Text Content=", " Font="font://s:SubHeading" Color="color://s:LabelColor" />
-                      <Text Content="[DetailsPage.GenresAsString]" Font="font://s:SubHeading" Color="color://s:LabelColor" />
-                      <Text Content=", " Font="font://s:SubHeading" Color="color://s:LabelColor" />
-                      <Text Content="[DetailsPage.Rating]" Font="font://s:SubHeading" Color="color://s:LabelColor" />
-                      <Text Content=", " Font="font://s:SubHeading" Color="color://s:LabelColor" />
-                      <Text Content="[DetailsPage.Length]" Font="font://s:SubHeading" Color="color://s:LabelColor" />
+                      <Text Content="[DetailsPage.SubHeading]" Font="font://s:SubHeadingBox" Color="color://s:LabelColor" />                      
                     </Children>
                     <Animations>
                       <Animation Animation="animation://me:ShowFromRight" />
@@ -275,6 +269,18 @@
           <Set Target="[Actors.Visible]" Value="false" />
         </Actions>
       </Condition>
+
+      <Condition Source="[DetailsPage.SubtitlesAsString]"  SourceValue="">
+        <Actions>
+          <Set Target="[SubTitlesPanel.Visible]" Value="false" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[DetailsPage.Languages.Count]"  SourceValue="0">
+        <Actions>
+          <Set Target="[SoundPanel.Visible]" Value="false" />
+        </Actions>
+      </Condition>
       
       <!-- change the color and scale if selected -->
       <Rule ConditionLogicalOp="Or">
@@ -413,7 +419,7 @@
                   <!-- extra info panel left column -->
                   <Panel   Name="LeftExtraColumn" Margins="0,10,10,0" >
                     <Layout>
-                      <FlowLayout Orientation="Vertical" Spacing="2,2" />
+                      <FlowLayout Orientation="Vertical" />
                     </Layout>
                     <Children>
                       <me:TextWithLabel Label="Format: " Text="[DetailsPage.MovieDetails.TitleObject.VideoFormat.ToString]" />
@@ -424,7 +430,7 @@
                   <!-- extra info panel left column -->
                   <Panel  Margins="0,10,10,0">
                     <Layout>
-                      <FlowLayout Orientation="Vertical" Spacing="2,2" />
+                      <FlowLayout Orientation="Vertical" />
                     </Layout>
                     <Children>
                       <me:TextWithLabel Label="Video Details: " Text="[DetailsPage.MovieDetails.TitleObject.VideoDetails]" />
@@ -435,7 +441,7 @@
                   <!-- extra info panel right column -->
                   <Panel Margins="0,10,10,0">
                     <Layout>
-                      <FlowLayout Orientation="Vertical" Spacing="2,2" />
+                      <FlowLayout Orientation="Vertical" />
                     </Layout>
                     <Children>
                       <me:TextWithLabel Label="User Rating: " Text="[DetailsPage.UserRating]" />
@@ -445,9 +451,9 @@
                   </Panel>
 
 
-                  <Panel Margins="0,10,10,0">
+                  <Panel Margins="0,10,10,0" Name="SubTitlesPanel">
                     <Layout>
-                      <FlowLayout Orientation="Horizontal" Spacing="2,2" />
+                      <FlowLayout Orientation="Horizontal" />
                     </Layout>
                     <Children>
                       <Text Content="SubTitles: " Name="SubLabel"  Font="font://s:Normal" Color="color://s:LabelColor"  />
@@ -455,7 +461,7 @@
                     </Children>
                   </Panel>
 
-                  <Panel Margins="0,10,0,0" Layout="HorizontalFlow">
+                  <Panel Margins="0,10,0,0" Layout="HorizontalFlow" Name="SoundPanel">
                     <Children>
                       <Text Content="Sound: " Name="SoundLabel"  Font="font://s:Normal" Color="color://s:LabelColor" />
                       <Repeater Source="[DetailsPage.Languages]" Layout="VerticalFlow" Margins="5,0,0,0">
@@ -701,7 +707,7 @@
     </Rules>
 
     <Content>
-      <Panel Layout="HorizontalFlow">
+      <Panel Layout="HorizontalFlow" Margins="0,0,0,2">
         <Children>
           <Text Name="LabelField" Content="[Label]" Font="font://s:Normal" Color="color://s:LabelColor" />
           <Text Name="TextField" Content="[Text]" Font="font://s:Normal" Color="color://s:NormalColor" WordWrap="true" MaximumLines="3"/>

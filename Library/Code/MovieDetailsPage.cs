@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Timers;
 using Microsoft.MediaCenter.UI;
+using System.Text;
 
 using OMLEngine;
 //using OMLGetDVDInfo;
@@ -135,7 +136,49 @@ namespace Library
                 else
                     return "";
             }
-        }      
+        }
+
+        public string SubHeading
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder();
+                
+                string year = ReleaseYear;
+                string genres = GenresAsString;
+                string rating = Rating;
+                string length = Length;
+
+                if (!string.IsNullOrEmpty(year))
+                    sb.Append(year);
+
+                if (!string.IsNullOrEmpty(genres))
+                {
+                    if ( sb.Length != 0)
+                        sb.Append(", ");
+
+                    sb.Append(genres);
+                }
+
+                if(!string.IsNullOrEmpty(rating))
+                {
+                    if ( sb.Length != 0)
+                        sb.Append(", ");
+
+                    sb.Append(rating);
+                }
+
+                if (!string.IsNullOrEmpty(length))
+                {
+                    if (sb.Length != 0)
+                        sb.Append(", ");
+
+                    sb.Append(length);
+                }
+
+                return sb.ToString();
+            }
+        }
 
         public IList Genres
         {

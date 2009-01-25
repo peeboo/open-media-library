@@ -183,13 +183,7 @@
 
               <Panel Layout="HorizontalFlow" Margins="0,0,0,10">
                 <Children>
-                  <Text Content="[DetailsPage.ReleaseDateYear]" Font="font://s:SubHeading" Color="color://s:LabelColor" />
-                  <Text Content=", " Font="font://s:SubHeading" Color="color://s:LabelColor" />
-                  <Text Content="[DetailsPage.GenresAsString]" Font="font://s:SubHeading" Color="color://s:LabelColor" />
-                  <Text Content=", " Font="font://s:SubHeading" Color="color://s:LabelColor" />
-                  <Text Content="[DetailsPage.Rating]" Font="font://s:SubHeading" Color="color://s:LabelColor" />
-                  <Text Content=", " Font="font://s:SubHeading" Color="color://s:LabelColor" />
-                  <Text Content="[DetailsPage.Length]" Font="font://s:SubHeading" Color="color://s:LabelColor" />
+                  <Text Content="[DetailsPage.SubHeading]" Font="font://s:SubHeading" Color="color://s:LabelColor" />
                 </Children>
                 <Animations>
                   <Animation Animation="animation://me:ShowFromRight" />
