@@ -211,7 +211,7 @@ namespace NetFlixMetadata
                             break;
 
                         case "runtime":
-                            result.Title.Runtime = int.Parse(GetElementValue(reader));
+                            result.Title.Runtime = int.Parse(GetElementValue(reader))/60;
                             break;
 
                         case "category":
