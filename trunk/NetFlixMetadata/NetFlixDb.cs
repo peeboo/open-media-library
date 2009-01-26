@@ -157,7 +157,8 @@ namespace NetFlixMetadata
                             {
                                 case "synopsis":
                                     //Utilities.DebugLine("[NetFlixDb] \t\tSynopsis at: " + attrSignedUrl);
-                                    try { result.Title.Synopsis = getNonHTML(getExternalData(attrUrl, attrTitle)); }
+                                    try { result.Title.Synopsis = Regex.Replace(getNonHTML(getExternalData(attrUrl, attrTitle)), @"<(.|\n)*?>", string.Empty); }
+                                        //Regex.Replace(HTMLToParse, @"<(.|\n)*?>", string.Empty)
                                     catch { result.Title.Synopsis = ""; }
                                     Utilities.DebugLine("[NetFlixDb] \t\tSynopsis value: " + result.Title.Synopsis);
                                     break;
