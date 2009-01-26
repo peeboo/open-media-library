@@ -30,7 +30,7 @@ namespace NetFlixMetadata
     {
         private const string API_KEY = @"8mfjpswhjxg7y4md35zs5ang";
         private const string SHARED_SECRET = @"Q9J4DrqSZv";
-        private const string HTML_TAG_PATTERN = "<.*?>";
+        private const string HTML_TAG_PATTERN = @"<(.|\n)*?>";
 
         private List<NetFlixDbResult> results = null;
 
@@ -157,8 +157,7 @@ namespace NetFlixMetadata
                             {
                                 case "synopsis":
                                     //Utilities.DebugLine("[NetFlixDb] \t\tSynopsis at: " + attrSignedUrl);
-                                    try { result.Title.Synopsis = Regex.Replace(getNonHTML(getExternalData(attrUrl, attrTitle)), @"<(.|\n)*?>", string.Empty); }
-                                        //Regex.Replace(HTMLToParse, @"<(.|\n)*?>", string.Empty)
+                                    try { result.Title.Synopsis = getNonHTML(getExternalData(attrUrl, attrTitle)); }
                                     catch { result.Title.Synopsis = ""; }
                                     Utilities.DebugLine("[NetFlixDb] \t\tSynopsis value: " + result.Title.Synopsis);
                                     break;
