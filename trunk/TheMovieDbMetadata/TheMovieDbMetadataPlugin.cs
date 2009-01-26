@@ -414,11 +414,17 @@ namespace TheMovieDbMetadata
         {
             if (results.Count >= index)
             {
-                WebClient web = new WebClient();
+                if (this.BackDrops == null)
+                    return;
+
+                WebClient web = new WebClient();                
                 foreach (string backDropUrl in this.BackDrops)
                 {
                     if (!string.IsNullOrEmpty(backDropUrl))
                     {
+                        if (!Directory.Exists(t.BackDropFolder))
+                            Directory.CreateDirectory(t.BackDropFolder);
+
                         string filename = backDropUrl.Substring(backDropUrl.LastIndexOf('/') + 1);
                         filename = Path.GetFileName(filename);
                         web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, filename).ToString());

@@ -2207,21 +2207,9 @@ namespace OMLEngine
         {
             get 
             {
-                createBackDropFolder();
                 return Path.Combine(this.BasePath(), @"FanArt"); 
             }
-        }
-
-        public void createBackDropFolder()
-        {
-            if (Directory.Exists(this.BasePath()))
-            {
-                if (!Directory.Exists(Path.Combine(this.BasePath(), @"FanArt")))
-                {
-                    Directory.CreateDirectory(Path.Combine(this.BasePath(), @"FanArt"));
-                }
-            }
-        }
+        }       
     }
 
     public class Role

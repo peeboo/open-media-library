@@ -99,6 +99,9 @@ namespace Library
                 string filename = url.Substring(url.LastIndexOf('/') + 1);
                 try
                 {
+                    if (Directory.Exists(t.BackDropFolder))
+                        Directory.CreateDirectory(t.BackDropFolder);
+
                     string localPath = Path.Combine(t.BackDropFolder, filename);
                     web.DownloadFile(url, localPath);
                 }
