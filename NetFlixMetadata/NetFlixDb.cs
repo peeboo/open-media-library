@@ -41,24 +41,20 @@ namespace NetFlixMetadata
 
         public bool Initialize(Dictionary<string, string> parameters)
         {
-            //Utilities.DebugLine("[NetFlixDb] Initializing...");
-            //Utilities.DebugLine("[NetFlixDb] DONE!");
             return true;
         }
 
         public string getSignedUrl(string url)
         {
-            //Utilities.DebugLine("[NetFlixDb] Getting signed url: " + url + "...");
             string normalizedUrl = string.Empty;
             string normalizedReqParams = string.Empty;
             OAuth.OAuthBase oauth = new OAuth.OAuthBase();
             string signature = oauth.GenerateSignature(new Uri(url), API_KEY, SHARED_SECRET, null, null, "GET", oauth.GenerateTimeStamp(), oauth.GenerateNonce(), out normalizedUrl, out normalizedReqParams);
-            //Utilities.DebugLine("[NetFlixDb] \tSignature: " + signature);
-
+            
             signature = HttpUtility.UrlEncode(signature);
             normalizedReqParams = string.Join("&", new string[] { normalizedReqParams, string.Format("oauth_signature={0}", signature) });
             string finalUrl = string.Join("?", new string[] { normalizedUrl, normalizedReqParams });
-            //Utilities.DebugLine("[NetFlixDb] \tSigned Url: " + finalUrl);
+            
             return finalUrl;
         }
 
@@ -109,7 +105,6 @@ namespace NetFlixMetadata
             {
                 if (reader.NodeType == XmlNodeType.Element)
                 {
-                    //Utilities.DebugLine("[NetFlixDb] \t\tGetting title info, reader.NodeType [" + reader.NodeType + "], name: " + reader.Name);
                     switch (reader.Name)
                     {
                         case "id":
@@ -118,9 +113,7 @@ namespace NetFlixMetadata
                             break;
 
                         case "title":
-                            //Utilities.DebugLine("[NetFlixDb] \t\t---Searching for title");
                             result.Title.Name = GetElementValue(reader, "attribute", "regular");
-                            //Utilities.DebugLine("[NetFlixDb] \t\t---Done title search");
                             break;
                         
                         // Synopsis and other data comes from other api links
@@ -131,7 +124,6 @@ namespace NetFlixMetadata
                             
                             if (reader.HasAttributes)
                             {
-                                //Utilities.DebugLine("[NetFlixDb] \t\tNode has attributes...");
                                 while (reader.MoveToNextAttribute())
                                 {
                                     switch (reader.Name)
@@ -156,13 +148,10 @@ namespace NetFlixMetadata
                             switch (attrTitle)
                             {
                                 case "synopsis":
-                                    //Utilities.DebugLine("[NetFlixDb] \t\tSynopsis at: " + attrSignedUrl);
                                     try { result.Title.Synopsis = getNonHTML(getExternalData(attrUrl, attrTitle)); }
                                     catch { result.Title.Synopsis = ""; }
-                                    Utilities.DebugLine("[NetFlixDb] \t\tSynopsis value: " + result.Title.Synopsis);
                                     break;
                                 case "cast":
-                                    Utilities.DebugLine("[NetFlixDb] \t\tCast at: " + attrSignedUrl);
                                     try 
                                     {
                                         // Cast separated by:  :::
@@ -170,15 +159,12 @@ namespace NetFlixMetadata
                                         string[] actors = Regex.Split(cast, ":::");
                                         for (int i = 0; i < actors.Length; i++)
                                         {
-                                            //Utilities.DebugLine("[NetFlixDb] \t\t*** Actor found: " + actors[i]);
                                             result.Title.AddActingRole(actors[i], string.Empty);
                                         }
-                                        //Utilities.DebugLine("[NetFlixDb] \t\tCast value: " + cast);
                                     }
                                     catch {  }
                                     break;
                                 case "directors":
-                                    Utilities.DebugLine("[NetFlixDb] \t\tDirectors at: " + attrSignedUrl);
                                     try 
                                     {
                                         // Cast separated by:  :::
@@ -186,10 +172,8 @@ namespace NetFlixMetadata
                                         string[] dirs = Regex.Split(directors, ":::");
                                         for (int i = 0; i < dirs.Length; i++)
                                         {
-                                            Utilities.DebugLine("[NetFlixDb] \t\t*** Director found: " + dirs[i]);
                                             result.Title.AddDirector(new Person(dirs[i]));
                                         }
-                                        Utilities.DebugLine("[NetFlixDb] \t\tDirector value: " + directors);
                                     }
                                     catch {  }
                                     break;
@@ -207,7 +191,6 @@ namespace NetFlixMetadata
                         case "box_art":
                             result.ImageUrl = GetElementValue(reader, "attribute", "large");
                             result.ImageUrlThumb = result.ImageUrl;
-                            Utilities.DebugLine("[NetFlixDb] \t\tImage at: " + result.ImageUrl);
                             break;
 
                         case "runtime":
@@ -217,7 +200,6 @@ namespace NetFlixMetadata
                         case "category":
                             string scheme = GetElementValue(reader, "attribute", "scheme", false);
                             string label = GetElementValue(reader, "attribute", "label");
-                            //Utilities.DebugLine("[NetFlixDb] \t\tCat: sheme: " + scheme + ", label: " + label);
                             if (scheme == "http://api.netflix.com/categories/genres")
                             {
                                 result.Title.AddGenre(label);
@@ -244,7 +226,6 @@ namespace NetFlixMetadata
         {
             string foundVal = null;
             exUrl = getSignedUrl(exUrl);
-            //Utilities.DebugLine("[NetFlixDb] \t\t----- Loading external data for: "+field);
             string startPath = null;
             string collectionOf = null;
             string valueType = null;
@@ -267,28 +248,21 @@ namespace NetFlixMetadata
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(exUrl);
             request.AllowAutoRedirect = true;
-            //Utilities.DebugLine("[NetFlixDb] \t\t----- Request: " + request.Address.ToString()+", headers: "+request.Headers.ToString());
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
-                //Utilities.DebugLine("[NetFlixDb] \t\t----- response: " + response.ToString());
                 // we will read data via the response stream
                 using (Stream resStream = response.GetResponseStream())
                 {
-                    //Utilities.DebugLine("[NetFlixDb] \t\t----- resString: " + resStream.ToString());
                     XmlTextReader reader = new XmlTextReader(resStream);
-                    //Utilities.DebugLine("[NetFlixDb] \t\t----- Reader: " + reader.ToString());
                     string pathSoFar = "";
                     while (reader.Read())
                     {
-                        //Utilities.DebugLine("[NetFlixDb] \t\t----- Path read node type: " + reader.NodeType);
                         if (reader.NodeType == XmlNodeType.EndElement || reader.NodeType == XmlNodeType.Whitespace) continue;
 
                         pathSoFar += reader.Name + "/";
-                        //Utilities.DebugLine("[NetFlixDb] \t\t----- Checking path so far: " + pathSoFar+", name: "+reader.Name);
                         if (startPath.Substring(0, pathSoFar.Length) != pathSoFar) return "";
                         if (pathSoFar == startPath)
                         {
-                            //Utilities.DebugLine("[NetFlixDb] \t\t----- Entered start path! " + pathSoFar+", name: "+reader.Name);
                             foundVal = null;
                             while (reader.Read())
                             {
@@ -297,28 +271,22 @@ namespace NetFlixMetadata
                                     if (reader.NodeType == XmlNodeType.EndElement || reader.NodeType == XmlNodeType.Whitespace) continue;
                                     if (valueFrom != null)
                                     {
-                                        //Utilities.DebugLine("[NetFlixDb] \t\t----- SUB VALUE FROM: " + valueFrom);
                                         while (reader.Read())
                                         {
-                                            //Utilities.DebugLine("[NetFlixDb] \t\t----- SUB current name: " + reader.Name);
                                             if (reader.NodeType == XmlNodeType.EndElement || reader.NodeType == XmlNodeType.Whitespace) continue;
                                             if (reader.Name != valueFrom) continue;
                                             if (valueType == "cdata") reader.Read();
-                                            //Utilities.DebugLine("[NetFlixDb] \t\t----- SUB Get value from: " + reader.Name);
                                             string tmpName = reader.Name;
                                             if (foundVal != null) foundVal += ":::";
                                             string tmpVal = GetElementValue(reader, valueType, "");
                                             foundVal += tmpVal;
-                                            //Utilities.DebugLine("[NetFlixDb] \t\t----- SUB VALUE so far: " + foundVal + " :: " + tmpName);
                                         }
                                     }
                                     else
                                     {
                                         if (valueType == "cdata") reader.Read();
-                                        //Utilities.DebugLine("[NetFlixDb] \t\t----- Get value from: " + reader.Name);
                                         if (foundVal != null) foundVal += "|";
                                         foundVal += GetElementValue(reader, valueType, "");
-                                        //Utilities.DebugLine("[NetFlixDb] \t\t----- VALUE so far: " + foundVal);
                                     }
                                 }
                             }
@@ -347,15 +315,12 @@ namespace NetFlixMetadata
         {
             results = new List<NetFlixDbResult>();
 
-            Utilities.DebugLine("[NetFlixDb] Searching for: "+query+"...");
             string queryUrl = getSignedUrl("http://api.netflix.com/catalog/titles?term=" + query + "&max_results=10");
-            Utilities.DebugLine("[NetFlixDb] \tMovie search url: "+queryUrl);
-
+            
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(queryUrl);
 
             // execute the request
-            //Utilities.DebugLine("[NetFlixDb] \tParsing results...");
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 // we will read data via the response stream
@@ -367,12 +332,9 @@ namespace NetFlixMetadata
                     {
                         if (reader.NodeType == XmlNodeType.Element)
                         {
-                            //Utilities.DebugLine("[NetFlixDb] \t\t-Node: " + reader.Name);
                             if (reader.Name == "catalog_title")
                             {
-                                //Utilities.DebugLine("[NetFlixDb] \t\t-Geting title from node: " + reader.Name);
                                 NetFlixDbResult title = GetTitleFromMovieNode(reader);
-                                //Utilities.DebugLine("[NetFlixDb] \t\t-Done!");
                                 if (title != null)results.Add(title);
                             }
                         }
@@ -400,13 +362,10 @@ namespace NetFlixMetadata
             // Check by attribute value
             if (valueType == "attribute")
             {
-                //Utilities.DebugLine("[NetFlixDb] \t\treader.NodeType: " + reader.Name);
                 if (reader.HasAttributes)
                 {
-                    //Utilities.DebugLine("[NetFlixDb] \t\tNode has attributes...");
                     while (reader.MoveToNextAttribute())
                     {
-                        //Utilities.DebugLine("[NetFlixDb] \t\t-Post attribute move: " + reader.Name + ", " + reader.Value);
                         if (reader.Name == valueTarget) return reader.Value;
                     }
                     // Move the reader back to the element node.
@@ -418,7 +377,6 @@ namespace NetFlixMetadata
             // CHeck by CDATA
             if (valueType == "cdata")
             {
-                Utilities.DebugLine("[NetFlixDb] \t\t*** Checking CDATA: " + reader.Name + ", " + reader.NodeType+", "+reader.Value);
                 if (reader.NodeType == XmlNodeType.CDATA)
                 {
                     string foundVal = reader.Value;
