@@ -227,54 +227,6 @@ namespace NetFlixMetadata
                                 result.Title.ParentalRatingReason = label;
                             }
                             break;
-
-                        case "people":
-                            while (reader.Read())
-                            {
-                                if (reader.NodeType == XmlNodeType.Element &&
-                                    reader.Name == "person")
-                                {
-                                    // add the actor
-                                    switch (reader.GetAttribute(0))
-                                    {
-                                        case "director":
-                                            result.Title.AddDirector(new Person(GetElementValue(reader)));
-                                            break;
-
-                                        case "author":
-                                        case "screenplay":
-                                        case "story":
-                                            result.Title.AddWriter(new Person(GetElementValue(reader)));
-                                            break;
-
-                                        case "producer":
-                                            result.Title.AddProducer(GetElementValue(reader));
-                                            break;
-
-                                        case "original_music_composer":
-                                            // unused
-                                            break;
-
-                                        case "director_of_photography":
-                                            // unused
-                                            break;
-
-                                        case "editor":
-                                            // unused
-                                            break;
-
-                                        case "casting":
-                                            // unused
-                                            break;
-                                    }
-                                }
-                                else if (reader.NodeType == XmlNodeType.EndElement &&
-                                    reader.Name == "people")
-                                    break;
-                            }
-
-                            break;
-
                     }
                 }
                 else if (reader.NodeType == XmlNodeType.EndElement && reader.Name == "catalog_title") break;
@@ -372,22 +324,6 @@ namespace NetFlixMetadata
                             }
                             
                         }
-                        //Utilities.DebugLine("[NetFlixDb] \t\t----- Path so far: " + pathSoFar + ", so far so good!");
-
-                        
-                        /*
-                        Utilities.DebugLine("[NetFlixDb] \t\t----- 1: Node type: " + reader.NodeType.ToString() + ", name: " + reader.Name);
-                        if (reader.NodeType == XmlNodeType.Element && reader.Name == field)
-                        {
-                            reader.Read();
-                            Utilities.DebugLine("[NetFlixDb] \t\t----- 2: Node type: " + reader.NodeType.ToString() + ", name: " + reader.Name);
-                            if (reader.NodeType == XmlNodeType.CDATA)
-                            {
-                                foundVal = reader.Value;
-                                //Utilities.DebugLine("[NetFlixDb] \t\tCDATA: " + reader.Value);
-                            }
-                        }
-                        */
                     }
                 }
             }
@@ -395,6 +331,15 @@ namespace NetFlixMetadata
         }
         private Title GetMovieDetails(int movieId)
         {
+            // load up all the titles with images
+            foreach (NetFlixDbResult title in results)
+            {
+                if (title.Id != movieId) continue;
+
+                DownloadImage(title.Title, title.ImageUrlThumb);
+                return title.Title;
+            }
+
             return null;
         }
 
@@ -404,7 +349,7 @@ namespace NetFlixMetadata
 
             Utilities.DebugLine("[NetFlixDb] Searching for: "+query+"...");
             string queryUrl = getSignedUrl("http://api.netflix.com/catalog/titles?term=" + query + "&max_results=10");
-
+            Utilities.DebugLine("[NetFlixDb] \tMovie search url: "+queryUrl);
 
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(queryUrl);
@@ -433,6 +378,12 @@ namespace NetFlixMetadata
                         }
                     }
                 }
+            }
+
+            // load up all the titles with images
+            foreach (NetFlixDbResult title in results)
+            {
+                DownloadImage(title.Title, title.ImageUrlThumb);
             }
         }
 
@@ -495,11 +446,6 @@ namespace NetFlixMetadata
             }
 
             return returnValue;
-        }
-
-        private bool IsAttributeValue(XmlTextReader reader, string value)
-        {
-            return false;
         }
 
         private void DownloadImage(Title title, string imageUrl)
