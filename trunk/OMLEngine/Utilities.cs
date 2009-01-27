@@ -357,7 +357,10 @@ namespace OMLEngine
                         string file = Path.Combine(OMLEngine.FileSystemWalker.LogDirectory, string.Format("{0}-debug.txt", Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName)));
                         if (Directory.Exists(OMLEngine.FileSystemWalker.LogDirectory) == false)
                             Directory.CreateDirectory(OMLEngine.FileSystemWalker.LogDirectory);
-                        Log = new FileStream(file, File.Exists(file) ? FileMode.Append : FileMode.OpenOrCreate);
+
+                        bool tooLarge = ( File.Exists(file) && (new FileInfo(file)).Length > 1000000);
+
+                        Log = new FileStream(file, File.Exists(file) && !tooLarge ? FileMode.Append : FileMode.Create);
                         Trace.Listeners.Add(new TextWriterTraceListener(Log, "debug.txt"));
                         Trace.AutoFlush = true;
                         Trace.WriteLine(new string('=', 80));
