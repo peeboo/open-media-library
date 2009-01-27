@@ -47,7 +47,7 @@ namespace Library
                 // This is for transcoding debugging
                 if (Properties.Settings.Default.DebugTranscoding)
                 {
-                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created: {0}", source);
+                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created (debug): {0}", source);
                     return new TranscodePlayer(source);
                 }
 
@@ -92,7 +92,7 @@ namespace Library
                 }
                 else if (OMLApplication.Current.IsExtender && NeedsTranscode(mediaFormat)) // if it needs to be transcoded
                 {
-                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created: {0}", source);
+                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created ({1}): {0}", source, mediaFormat);
                     return new TranscodePlayer(source);
                 }
                 else if (mediaFormat == VideoFormat.DVD && MediaData.IsDVD(mediaPath)) // play the dvd

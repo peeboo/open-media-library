@@ -63,7 +63,6 @@ namespace OMLEngine
         IMG, // using an image loader lib and load/play this as a DVD
         ISO, // Standard ISO image
         ISZ, // Compressed ISO image
-        M2TS, // mpeg2 transport stream
         MDF, // using an image loader lib and load/play this as a DVD
         MDS, // Media Descriptor file
         MKV, // Likely h264
@@ -87,6 +86,7 @@ namespace OMLEngine
         ASX, // like WPL
         WPL, // playlist file?
         WTV, // new dvr format in vista (introduced in the tv pack 2008)
+        M2TS, // mpeg2 transport stream (moved, since it got inserted in the middle, and all new types have to be inserted at the end)
 
         ALL, // meaning all format types - used for setting video format to external player
     };
