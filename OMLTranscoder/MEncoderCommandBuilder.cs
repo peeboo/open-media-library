@@ -93,7 +93,12 @@ namespace OMLTranscoder
                 }
 
                 // audio format
-                strBuilder.Append(@" -oac copy -lavcopts acodec=mp2");
+                OMLGetDVDInfo.AudioEncoding audioFormat = OMLGetDVDInfo.AudioEncoding.AC3;
+                if (_source.DVDTitle.AudioTracks.Count > 0)
+                    audioFormat = _source.DVDTitle.AudioTracks[0].Format;
+                if (_source.AudioStream != null)
+                    audioFormat = _source.AudioStream.Format;
+                strBuilder.AppendFormat(@" -oac {0} -lavcopts acodec=mp2", audioFormat != OMLGetDVDInfo.AudioEncoding.DTS ? "copy" : "lavc");
 
                 if (AudioEncoderFormat == MEncoder.AudioFormat.NoAudio)
                     strBuilder.Append(@" -nosound");

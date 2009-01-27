@@ -43,13 +43,18 @@ namespace Library
             if (dvdTitle == null)
                 return null;
 
+            // ensure DVD's with DTS audio get transcoded, since extenders don't support DTS audio playback
+            if (dvdTitle.AudioTracks.Count > 0 && dvdTitle.AudioTracks[0].Format == AudioEncoding.DTS)
+                return null;
+
             string videoTSDir = source.VIDEO_TS;
             int fileID = int.Parse(dvdTitle.File.Substring(4));
             string vts = string.Format("VTS_{0:D2}_", fileID);
             List<string> vobs = new List<string>(Directory.GetFiles(videoTSDir, vts + "*.VOB"));
             vobs.Remove(Path.Combine(videoTSDir, vts + "0.VOB"));
 
-            if (vobs.Count < 1)
+            // don't direct play unmerged .VOB files
+            if (vobs.Count < 1 || vobs.Count > 1)
                 return null;
 
             if (IsNTFS(videoTSDir))
@@ -61,26 +66,9 @@ namespace Library
                 if (Directory.Exists(mpegFolder) == false)
                     return null;
 
-                if (vobs.Count == 1)
-                {
-                    string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);
-                    if (File.Exists(mpegFile))
-                        return mpegFile;
-                }
-                else if (Properties.Settings.Default.Extender_UseAsx)
-                {
-                    foreach (string vob in vobs)
-                        MakeMPEGLink(mpegFolder, vob);
-
-                    if (File.Exists(GetMPEGName(mpegFolder, vobs[0])))
-                        return CreateASX(mpegFolder, vts, source.Name, vobs);
-                }
-                else if (Properties.Settings.Default.Extender_MergeVOB)
-                {
-                    string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);
-                    if (File.Exists(mpegFile))
-                        return mpegFile;
-                }
+                string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);
+                if (File.Exists(mpegFile))
+                    return mpegFile;
             }
             else if (videoTSDir.StartsWith("\\\\"))
             {
