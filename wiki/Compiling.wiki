@@ -20,7 +20,7 @@ Requirements
     * Go to this page, http://www.devexpress.com/Products/Free/WebRegistration/ to sign up and get the tools needed for free. This is not a must, but else you will get a popup.
 
 
-Steps to compile:
+Steps to build the code:
 
 1) Compile the project using Visual Studio 2008 . Build -> Rebuild Solution
 
