@@ -536,6 +536,10 @@ namespace OMLDatabaseEditor
                             {
                                 title.FrontCoverMenuPath = title.FrontCoverMenuPath.Replace(fromFolder, toFolder);
                             }
+                            if (title.BackCoverPath.StartsWith(fromFolder))
+                            {
+                                title.BackCoverPath = title.BackCoverPath.Replace(fromFolder, toFolder);
+                            }
                         }
                     }
                     _titleCollection.saveTitleCollection();
