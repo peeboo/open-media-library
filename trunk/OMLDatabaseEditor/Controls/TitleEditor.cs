@@ -169,9 +169,9 @@ namespace OMLDatabaseEditor.Controls
             //psi.UseShellExecute = false;
             psi.UseShellExecute = true;
             psi.FileName = imagePath;
-            if (psi.Verbs.Contains<string>("edit"))
+            if (psi.Verbs.Contains<string>("Edit"))
             {
-                psi.Verb = "edit";
+                psi.Verb = "Edit";
                 Process.Start(psi);
                 return;
             }
