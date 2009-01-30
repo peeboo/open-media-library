@@ -59,6 +59,7 @@ namespace OMLDatabaseEditor.Controls
             new DevExpress.XtraEditors.Controls.EditorButton()});
             this.beDestination.Size = new System.Drawing.Size(259, 20);
             this.beDestination.TabIndex = 1;
+            this.beDestination.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.beDestination_ButtonClick);
             // 
             // sbCancel
             // 

@@ -55,5 +55,14 @@ namespace OMLDatabaseEditor.Controls
                 XtraMessageBox.Show("Path does not exist");
             }
         }
+
+        private void beDestination_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                beDestination.Text = fbd.SelectedPath;
+            }
+        }
     }
 }
