@@ -19,6 +19,9 @@ Requirements
   * Dxperience (http://www.devexpress.com/go/DevExpressDownload_DXperience.aspx)
     * Go to this page, http://www.devexpress.com/Products/Free/WebRegistration/ to sign up and get the tools needed for free. This is not a must, but else you will get a popup.
 
+
+Steps to compile:
+
 1) Compile the project using Visual Studio 2008 . Build -> Rebuild Solution
 
 Note: This has to be done on a pc with Vista Media Center and the Media Center SDK 5.3 installed.
