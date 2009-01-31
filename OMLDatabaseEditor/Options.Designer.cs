@@ -28,6 +28,7 @@ namespace OMLDatabaseEditor
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.tpOptions = new DevExpress.XtraTab.XtraTabPage();
@@ -48,6 +49,7 @@ namespace OMLDatabaseEditor
             this.beTags = new DevExpress.XtraEditors.ButtonEdit();
             this.sbCancel = new DevExpress.XtraEditors.SimpleButton();
             this.sbOK = new DevExpress.XtraEditors.SimpleButton();
+            this.cmGenreMappings = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
@@ -126,9 +128,9 @@ namespace OMLDatabaseEditor
             this.ceUseMPAAList.Properties.Caption = "Use MPAA Auto Complete List";
             this.ceUseMPAAList.Size = new System.Drawing.Size(259, 18);
             this.ceUseMPAAList.TabIndex = 0;
-            //
+            // 
             // ceFoldersAsTitles
-            //
+            // 
             this.ceFoldersAsTitles.Location = new System.Drawing.Point(7, 52);
             this.ceFoldersAsTitles.Name = "ceFoldersAsTitles";
             this.ceFoldersAsTitles.Properties.Caption = "Folders are Titles";
@@ -198,9 +200,9 @@ namespace OMLDatabaseEditor
             // 
             this.labelControl1.Location = new System.Drawing.Point(6, 3);
             this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(206, 13);
+            this.labelControl1.Size = new System.Drawing.Size(330, 13);
             this.labelControl1.TabIndex = 7;
-            this.labelControl1.Text = "Changes to genres take affect immediately";
+            this.labelControl1.Text = "Changes to genres take affect immediately. Bold indicates mappings.";
             // 
             // btnGenre
             // 
@@ -226,6 +228,8 @@ namespace OMLDatabaseEditor
             this.lbGenres.Size = new System.Drawing.Size(340, 226);
             this.lbGenres.SortOrder = System.Windows.Forms.SortOrder.Ascending;
             this.lbGenres.TabIndex = 5;
+            this.lbGenres.DrawItem += new DevExpress.XtraEditors.ListBoxDrawItemEventHandler(this.lbGenres_DrawItem);
+            this.lbGenres.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lbGenres_MouseClick);
             this.lbGenres.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbGenres_KeyDown);
             // 
             // tpTags
@@ -281,6 +285,11 @@ namespace OMLDatabaseEditor
             this.sbOK.TabIndex = 2;
             this.sbOK.Text = "&OK";
             this.sbOK.Click += new System.EventHandler(this.SimpleButtonClick);
+            // 
+            // cmGenreMappings
+            // 
+            this.cmGenreMappings.Name = "cmGenreMappings";
+            this.cmGenreMappings.Size = new System.Drawing.Size(61, 4);
             // 
             // Options
             // 
@@ -338,5 +347,6 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraTab.XtraTabPage tpTags;
         private DevExpress.XtraEditors.ListBoxControl lbcTags;
         private DevExpress.XtraEditors.ButtonEdit beTags;
+        private System.Windows.Forms.ContextMenuStrip cmGenreMappings;
     }
 }
