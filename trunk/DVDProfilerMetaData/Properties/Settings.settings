@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DVDProfilerMetaData.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="xmlFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Program Files\DVD Profiler\dvd.xml</Value>
+    </Setting>
+    <Setting Name="imgPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Users\Thom Lamb\Documents\DVD Profiler\Databases\Default\Images</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
