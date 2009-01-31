@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using DevExpress.Utils;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 
@@ -227,6 +228,47 @@ namespace OMLDatabaseEditor
                     //Properties.Settings.Default.gsValidGenres.Remove(genre);
                 }
                 lbGenres.Refresh();
+            }
+        }
+
+        private void lbGenres_MouseClick(object sender, MouseEventArgs e)
+        {
+            lbGenres.SelectedIndex = lbGenres.IndexFromPoint(e.Location);
+            if (e.Button == MouseButtons.Right)
+            {
+                string genre = lbGenres.SelectedItem as string;
+                TitleCollection collection = MainEditor._titleCollection;
+                IEnumerable<KeyValuePair<string, string>> matches = collection.GenreMap.Where(kvp => kvp.Value == genre);
+                cmGenreMappings.Items.Clear();
+                foreach (KeyValuePair<string, string> match in matches)
+                {
+                    ToolStripMenuItem item = new ToolStripMenuItem(match.Key);
+                    item.Tag = match.Value;
+                    item.Click += new EventHandler(item_Click);
+                    cmGenreMappings.Items.Add(item);
+                }
+                cmGenreMappings.Show(lbGenres, e.Location);
+            }
+        }
+
+        void item_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            if (XtraMessageBox.Show(String.Format("Are you sure you want to remove the mapping of {0} to {1}?", item.Text, item.Tag), "Remove Mapping", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                MainEditor._titleCollection.GenreMap.Remove(item.Text);
+                MainEditor._titleCollection.saveTitleCollection();
+            }
+        }
+
+        private void lbGenres_DrawItem(object sender, ListBoxDrawItemEventArgs e)
+        {
+            IEnumerable<KeyValuePair<string, string>> matches = MainEditor._titleCollection.GenreMap.Where(kvp => kvp.Value == (string)e.Item);
+            if (matches.Count() > 0)
+            {
+                AppearanceObject appearance = (AppearanceObject)e.Appearance.Clone();
+                appearance.Font = new Font(appearance.Font, FontStyle.Bold);
+                e.Appearance.Combine(appearance);
             }
         }
     }

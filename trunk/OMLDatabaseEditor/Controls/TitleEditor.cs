@@ -169,9 +169,15 @@ namespace OMLDatabaseEditor.Controls
             //psi.UseShellExecute = false;
             psi.UseShellExecute = true;
             psi.FileName = imagePath;
-            if (psi.Verbs.Contains<string>("Edit"))
+            if (psi.Verbs.Contains("Edit"))
             {
                 psi.Verb = "Edit";
+                Process.Start(psi);
+                return;
+            }
+            else if (psi.Verbs.Contains("edit"))
+            {
+                psi.Verb = "edit";
                 Process.Start(psi);
                 return;
             }
@@ -483,29 +489,17 @@ namespace OMLDatabaseEditor.Controls
             PictureBox pb = contextImage.Tag as PictureBox;
             if (pb.Name.Contains("Front"))
             {
-                DeleteImageNoException(_dvdTitle.FrontCoverPath);
-                DeleteImageNoException(_dvdTitle.FrontCoverMenuPath);
+                TitleCollection.DeleteImageNoException(_dvdTitle.FrontCoverPath);
+                TitleCollection.DeleteImageNoException(_dvdTitle.FrontCoverMenuPath);
                 _dvdTitle.FrontCoverMenuPath = string.Empty;
                 _dvdTitle.FrontCoverPath = string.Empty;
             }
             else
             {
-                DeleteImageNoException(_dvdTitle.BackCoverPath);
+                TitleCollection.DeleteImageNoException(_dvdTitle.BackCoverPath);
                 _dvdTitle.BackCoverPath = string.Empty;
             }
             titleSource.ResetCurrentItem();
-        }
-
-        private void DeleteImageNoException(string path)
-        {
-            try
-            {
-                File.Delete(path);
-            }
-            catch(Exception e)
-            {
-                OMLEngine.Utilities.DebugLine("[TitleEditor] DeleteImageNoException(" + path + ") : failed deleting image because " + e.Message);
-            }
         }
     }
 

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -411,6 +412,7 @@ namespace OMLDatabaseEditor
                                 titleEditor.EditedTitle.CopyMetadata(t, searchResultForm.OverwriteMetadata);
                             }
                         }
+                        CheckGenresAgainstSupported(titleEditor.EditedTitle);
                         titleEditor.RefreshEditor();
                         return true;
                     }
@@ -423,6 +425,57 @@ namespace OMLDatabaseEditor
             {
                 Cursor = Cursors.Default;
                 return false;
+            }
+        }
+
+        private void CheckGenresAgainstSupported(Title title)
+        {
+            List<String> genreList = new List<String>();
+            if (Properties.Settings.Default.gsValidGenres != null
+            && Properties.Settings.Default.gsValidGenres.Count > 0)
+            {
+                int genreCount = Properties.Settings.Default.gsValidGenres.Count;
+                String[] arrGenre = new String[genreCount];
+                Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
+                genreList.AddRange(arrGenre);
+                Dictionary<string, string> genreIssuesList = new Dictionary<string, string>();
+                Dictionary<string, string> genreChanges = new Dictionary<string, string>();
+                foreach (string genre in title.Genres)
+                {
+                    string newGenre = genre.Trim();
+                    if (!genreList.Contains(newGenre))
+                    {
+                        if (_titleCollection.GenreMap.ContainsKey(newGenre))
+                        {
+                            // Mapping already exists for genre
+                            genreChanges[genre] = _titleCollection.GenreMap[genre];
+                        }
+                        else
+                        {
+                            if (newGenre.EndsWith("Film", true, CultureInfo.InvariantCulture))
+                                newGenre = newGenre.Replace(" Film", "");
+                            if (genreList.Contains(newGenre))
+                                genreIssuesList[genre] = newGenre;
+                            else
+                            {
+                                string match = genreList.FirstOrDefault(s => s.Split(' ').Intersect(newGenre.Split(' ')).Count() != 0);
+                                genreIssuesList[genre] = match;
+                            }
+                        }
+                    }
+                }
+                foreach (string genre in genreChanges.Keys)
+                {
+                    title.Genres.Remove(genre);
+                    // Mapping contains empty string when user wants a specific genre ignored.
+                    if (!String.IsNullOrEmpty(genreChanges[genre]) && !title.Genres.Contains(genreChanges[genre]))
+                        title.Genres.Add(genreChanges[genre]);
+                }
+                if (genreIssuesList.Keys.Count > 0)
+                {
+                    ResolveGenres resolveGenres = new ResolveGenres(genreIssuesList, title);
+                    resolveGenres.ShowDialog();
+                }
             }
         }
 
@@ -458,6 +511,7 @@ namespace OMLDatabaseEditor
                 titleEditor.ClearEditor();
                 LoadMovies();
             }
+            TitleCollection.ClearMirrorDataFiles();
         }
 
         private void ToggleSaveState(bool enabled)

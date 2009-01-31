@@ -195,10 +195,16 @@ namespace OMLEngine
         static string _database_filename;
         private Dictionary<string, Title> _moviesByFilename = new Dictionary<string, Title>();
         private Dictionary<int, Title> _moviesByItemId = new Dictionary<int, Title>();
+        private Dictionary<string, string> _genreMap = new Dictionary<string, string>();
 
         public string DBFilename
         {
             get { return _database_filename; }
+        }
+
+        public Dictionary<string, string> GenreMap
+        {
+            get { return _genreMap; }
         }
 
         public Dictionary<int, Title> MoviesByItemId
@@ -419,6 +425,31 @@ namespace OMLEngine
             if (newTitle.Disks.Count > 0)
                 _moviesByFilename.Remove(GetDiskHash(newTitle.Disks));
             _list.Remove(newTitle);
+            DeleteImageNoException(newTitle.FrontCoverPath);
+            DeleteImageNoException(newTitle.FrontCoverMenuPath);
+            DeleteImageNoException(newTitle.BackCoverPath);
+            DeleteImageNoException(newTitle.BackDropImage);
+        }
+
+        public static void DeleteImageNoException(string path)
+        {
+            try
+            {
+                File.Delete(path);
+            }
+            catch (Exception e)
+            {
+                OMLEngine.Utilities.DebugLine("[TitleCollection] DeleteImageNoException(" + path + ") : failed deleting image because " + e.Message);
+            }
+        }
+
+        public static void ClearMirrorDataFiles()
+        {
+            int i = 1;
+            while (File.Exists(String.Format(@"C:\Users\Mcx{0}\AppData\Local\VirtualStore\ProgramData\OpenMediaLibrary\oml.dat", i)))
+            {
+                File.Delete(String.Format(@"C:\Users\Mcx{0}\AppData\Local\VirtualStore\ProgramData\OpenMediaLibrary\oml.dat", i));
+            }
         }
 
         private string GetDiskHash(IEnumerable<Disk> disks)
@@ -610,7 +641,7 @@ namespace OMLEngine
                     //REMOVE DUPLICATES HERE FROM THE PRIMARY COLLECTION!!!!
                     bformatter.Serialize(stream, title);
                 }
-
+                bformatter.Serialize(stream, _genreMap);
                 stream.Close();
                 return true;
             }
@@ -674,6 +705,7 @@ namespace OMLEngine
                         //Utilities.DebugLine("[TitleCollection] Adding Title: "+t.Name);
                         Add(t);
                     }
+                    _genreMap = (Dictionary<string, string>)bf.Deserialize(stm);
                     stm.Close();
                     Utilities.DebugLine("[TitleCollection] Loaded: " + numTitles + " titles");
                     return true;
@@ -740,12 +772,14 @@ namespace OMLEngine
             List<Title> tc = (List <Title>)info.GetValue("TitleCollection", typeof(TitleCollection));
             foreach (Title title in tc)
                 Add(title);
+            _genreMap = info.GetValue("GenreMap", typeof(Dictionary<string, string>)) as Dictionary<string, string>;
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             Utilities.DebugLine("[TitleCollection] GetObjectData()");
             info.AddValue("TitleCollection", _list);
+            info.AddValue("GenreMap", _genreMap);
         }
         #endregion
     }
