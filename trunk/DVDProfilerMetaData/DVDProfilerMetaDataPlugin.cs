@@ -46,8 +46,12 @@ namespace DVDProfilerMetaData
 
         public bool Initialize(Dictionary<string, string> parameters)
         {
+            String AppImages = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            AppImages += @"\DVD Profiler\Databases\Default\Images";
             _xmlFile = Properties.Settings.Default.xmlFile;
-            _imgPath = Properties.Settings.Default.imgPath;
+            if (!String.IsNullOrEmpty(Properties.Settings.Default.imgPath))
+                AppImages = Properties.Settings.Default.imgPath;
+            _imgPath = AppImages;
             if (parameters != null)
             {
                 if (parameters.ContainsKey("xmlFile"))
@@ -81,12 +85,41 @@ namespace DVDProfilerMetaData
                 t.BackCoverPath = Path.Combine(_imgPath, (String)dr["ID"] + @"b.jpg");
                 String prodYr = (String)dr["ProductionYear"];
                 t.ReleaseDate = new DateTime(int.Parse(prodYr), 1, 1);
-                DataRow genres = dr.GetChildRows("DVD_Genres")[0];
-                foreach (DataRow gen in genres.GetChildRows("Genres_Genre"))
+                int runTime;
+                if (int.TryParse((String)dr["RunningTime"], out runTime)) 
+                    t.Runtime = runTime;
+                t.OriginalName = (String)dr["OriginalTitle"];
+                t.CountryOfOrigin = (String)dr["CountryOfOrigin"];
+                t.UPC = (String)dr["UPC"];
+                if (ds.Relations.Contains("DVD_Genres") && ds.Relations.Contains("Genres_Genre"))
                 {
-                    String genre = (String)gen[0];
-                    t.Genres.Add(genre);
+                    DataRow genres = dr.GetChildRows("DVD_Genres")[0];
+                    foreach (DataRow gen in genres.GetChildRows("Genres_Genre"))
+                    {
+                        String genre = (String)gen[0];
+                        t.Genres.Add(genre);
+                    }
                 }
+                if (ds.Relations.Contains("DVD_Actors") && ds.Relations.Contains("Actors_Actor"))
+                {
+                    DataRow actors = dr.GetChildRows("DVD_Actors")[0];
+                    foreach (DataRow actor in actors.GetChildRows("Actors_Actor"))
+                    {
+                        Person p = new Person();
+                        String fullName = String.Format(@"{0} {1}", actor["FirstName"], actor["LastName"]);
+                        t.AddActingRole(fullName, (String)actor["Role"]);
+                    }
+                }
+                List<String> _studios = new List<String>();
+                if (ds.Relations.Contains("DVD_Studios") && ds.Relations.Contains("Studios_Studio"))
+                {
+                    DataRow studios = dr.GetChildRows("DVD_Studios")[0];
+                    foreach (DataRow studio in studios.GetChildRows("Studios_Studio"))
+                    {
+                        _studios.Add((String)studio[0]);
+                    }
+                }
+                t.Studio = String.Join("; ", _studios.ToArray<String>());
                 dvdList.Add(t);
             }
             _searchResult = new DVDProfilerSearchResult(dvdList, dvds.Count, dvds.Count);
