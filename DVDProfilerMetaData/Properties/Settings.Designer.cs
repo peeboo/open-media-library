@@ -37,7 +37,7 @@ namespace DVDProfilerMetaData.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\Thom Lamb\\Documents\\DVD Profiler\\Databases\\Default\\Images")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string imgPath {
             get {
                 return ((string)(this["imgPath"]));

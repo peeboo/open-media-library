@@ -6,7 +6,7 @@
       <Value Profile="(Default)">C:\Program Files\DVD Profiler\dvd.xml</Value>
     </Setting>
     <Setting Name="imgPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Users\Thom Lamb\Documents\DVD Profiler\Databases\Default\Images</Value>
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>
