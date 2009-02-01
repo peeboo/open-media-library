@@ -2019,12 +2019,20 @@ namespace OMLEngine
 
             if (!String.IsNullOrEmpty(t.FrontCoverPath))
             {
-                if (overWrite || String.IsNullOrEmpty(FrontCoverPath))
+                if (overWrite || String.IsNullOrEmpty(FrontCoverPath) || FrontCoverPath == GetDefaultNoCoverName())
                 {
                     CopyFrontCoverFromFile(t.FrontCoverPath, true);
                 }
             }
-        
+
+            if (!String.IsNullOrEmpty(t.BackCoverPath))
+            {
+                if (overWrite || String.IsNullOrEmpty(BackCoverPath) || BackCoverPath == GetDefaultNoCoverName())
+                {
+                    CopyBackCoverFromFile(t.BackCoverPath, true);
+                }
+            }
+
         }
 
         public bool SaveFrontCoverToFile(string dest)
@@ -2114,7 +2122,12 @@ namespace OMLEngine
             {
                 return false;
             }
-        }        
+        }
+
+        public string GetDefaultNoCoverName()
+        {
+            return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
+        }
         
         public string GetDefaultFrontCoverName()
         {

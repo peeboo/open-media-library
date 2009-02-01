@@ -70,8 +70,9 @@ namespace DVDProfilerMetaData
             if (!File.Exists(_xmlFile)) return false;
             DataSet ds = new DataSet();
             ds.ReadXml(_xmlFile);
+            movieName = movieName.ToLowerInvariant();
             List<DataRow> dvds = (from dvd in ds.Tables["DVD"].AsEnumerable()
-                                  where dvd.Field<String>("Title").Contains(movieName)
+                                  where dvd.Field<String>("Title").ToLowerInvariant().Contains(movieName)
                                   select dvd).ToList<DataRow>();
 
             List<Title> dvdList = new List<Title>();
@@ -79,18 +80,23 @@ namespace DVDProfilerMetaData
             {
                 Title t = new Title();
                 t.Name = (String)dr["Title"];
-                t.SortName = (String)dr["SortTitle"];
+
+                t.ParentalRating = (String)dr["Rating"];
                 t.Synopsis = (String)dr["Overview"];
-                t.FrontCoverPath = Path.Combine(_imgPath, (String)dr["ID"] + @"f.jpg");
-                t.BackCoverPath = Path.Combine(_imgPath, (String)dr["ID"] + @"b.jpg");
-                String prodYr = (String)dr["ProductionYear"];
-                t.ReleaseDate = new DateTime(int.Parse(prodYr), 1, 1);
-                int runTime;
-                if (int.TryParse((String)dr["RunningTime"], out runTime)) 
-                    t.Runtime = runTime;
-                t.OriginalName = (String)dr["OriginalTitle"];
                 t.CountryOfOrigin = (String)dr["CountryOfOrigin"];
                 t.UPC = (String)dr["UPC"];
+                t.OriginalName = (String)dr["OriginalTitle"];
+                t.SortName = (String)dr["SortTitle"];
+
+                int runTime;
+                if (int.TryParse((String)dr["RunningTime"], out runTime))
+                    t.Runtime = runTime;
+                String prodYr = (String)dr["ProductionYear"];
+                t.ReleaseDate = new DateTime(int.Parse(prodYr), 1, 1);
+                
+                t.FrontCoverPath = Path.Combine(_imgPath, (String)dr["ID"] + @"f.jpg");
+                t.BackCoverPath = Path.Combine(_imgPath, (String)dr["ID"] + @"b.jpg");
+
                 if (ds.Relations.Contains("DVD_Genres") && ds.Relations.Contains("Genres_Genre"))
                 {
                     DataRow genres = dr.GetChildRows("DVD_Genres")[0];
