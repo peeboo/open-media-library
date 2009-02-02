@@ -99,7 +99,7 @@ namespace OMLEngine
         {
             Name = info.GetString("name");
             Path = info.GetString("path");
-            FindPath();
+            //FindPath();
             Format = GetSerializedVideoFormat(info, "format");
             if (info.MemberCount > 3)
                 ExtraOptions = info.GetString("extraOptions");
