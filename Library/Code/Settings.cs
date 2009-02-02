@@ -38,7 +38,9 @@ namespace Library
             Utilities.DebugLine("[Settings] Loading Transcoding Settings");
             SetupTranscoding();
             Utilities.DebugLine("[Settings] Setting up external player Settings");
-            SetupExternalPlayers();            
+            SetupExternalPlayers();
+            Utilities.DebugLine("[Settings] Setting up impersonation Settings");
+            SetupImpersonationSettings();
         }       
 
         private void SaveMountingTools()
@@ -177,6 +179,15 @@ namespace Library
                     _omlSettings.TranscodeBufferDelay = transcodeBufferDelay;
             });
         }
+        private void SaveImpersonationSettings()
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                OMLEngine.Properties.Settings.Default.ImpersonationUsername = _impersonationUsername.Value;
+                OMLEngine.Properties.Settings.Default.ImpersonationPassword = _impersonationPassword.Value;
+                OMLEngine.Properties.Settings.Default.Save();
+            });
+        }
         public void SaveSettings()
         {
             SaveMountingTools();
@@ -185,6 +196,7 @@ namespace Library
             SaveTrailers();
             SaveFilterSettings();
             SaveTranscoding();
+            SaveImpersonationSettings();
             SaveExternalPlayers();
 
             OMLApplication.ExecuteSafe(delegate
@@ -486,6 +498,11 @@ namespace Library
 
             _externalPlayerPath.Value = (bluRayPlayer != null) ? bluRayPlayer.Path : string.Empty;
         }
+        private void SetupImpersonationSettings()
+        {
+            _impersonationUsername.Value = OMLEngine.Properties.Settings.Default.ImpersonationUsername;
+            _impersonationPassword.Value = OMLEngine.Properties.Settings.Default.ImpersonationPassword;
+        }
 
         #region properties
         public BooleanChoice PreserveAudioOnTranscode
@@ -694,6 +711,38 @@ namespace Library
             {
                 _transcodeBufferDelay = value;
                 FirePropertyChanged("TranscodingBufferDelay");
+            }
+        }
+
+        public EditableText ImpersonationUsername
+        {
+            get
+            {
+                if (_impersonationUsername == null)
+                    _impersonationUsername = new EditableText();
+
+                return _impersonationUsername;
+            }
+            set
+            {
+                _impersonationUsername = value;
+                FirePropertyChanged("ImpersonationUsername");
+            }
+        }
+
+        public EditableText ImpersonationPassword
+        {
+            get
+            {
+                if (_impersonationPassword == null)
+                    _impersonationPassword = new EditableText();
+
+                return _impersonationPassword;
+            }
+            set
+            {
+                _impersonationPassword = value;
+                FirePropertyChanged("ImpersonationPassword");
             }
         }
 
@@ -985,6 +1034,8 @@ namespace Library
         Choice _LocalFixedDrives = new Choice();
         Choice _filtersToShow = new Choice();
         EditableText _transcodeBufferDelay = new EditableText();
+        EditableText _impersonationUsername = new EditableText();
+        EditableText _impersonationPassword = new EditableText();
         BooleanChoice _showFilterGenres = new BooleanChoice();
         BooleanChoice _transcodeAVIFiles = new BooleanChoice();
         BooleanChoice _transcodeMKVFiles = new BooleanChoice();
