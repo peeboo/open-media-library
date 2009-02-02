@@ -394,11 +394,18 @@ namespace OMLDatabaseEditor
                         {
                             if (plugin.SupportsBackDrops())
                             {
-                                DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
-                                dbdForm.Show();
-                                plugin.DownloadBackDropsForTitle(titleEditor.EditedTitle, searchResultForm.SelectedTitleIndex);
-                                dbdForm.Hide();
-                                dbdForm.Dispose();
+                                if (titleEditor.EditedTitle.BasePath() != null)
+                                {
+                                    DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
+                                    dbdForm.Show();
+                                    plugin.DownloadBackDropsForTitle(titleEditor.EditedTitle, searchResultForm.SelectedTitleIndex);
+                                    dbdForm.Hide();
+                                    dbdForm.Dispose();
+                                }
+                                else
+                                {
+                                    XtraMessageBox.Show("A disk must be assigned to this title. Assign a disk then update the metadata.", "Could not download backdrops!");
+                                }
                             }
                             if (coverArtOnly)
                             {
