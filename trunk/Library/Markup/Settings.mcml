@@ -665,6 +665,10 @@
                 <Children>
                   <Panel Layout="VerticalFlow" Navigation="Group,Column">
                     <Children>
+                      <Text Content="Impersonation Username" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                      <c:SimpleEditbox Size="700,51" Name="ImpersonationUsername" EditableText="[Settings.ImpersonationUsername]" />
+                      <Text Content="Impersonation Password" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                      <c:SimpleEditbox Size="700,51" Name="ImpersonationPassword" EditableText="[Settings.ImpersonationPassword]" PasswordMasked="true" />
                       <Text Content="Number of Seconds to Delay Transcoding" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                       <c:SimpleEditbox Size="700,51" Name="TranscodingBufferDelay" EditableText="[Settings.TranscodingBufferDelay]" />
                       <Panel Layout="VerticalFlow" Margins="0,40,0,0" Navigation="Group">
