@@ -86,16 +86,27 @@ namespace DVDProfilerMetaData
                 t.CountryOfOrigin = (String)dr["CountryOfOrigin"];
                 t.UPC = (String)dr["UPC"];
                 t.OriginalName = (String)dr["OriginalTitle"];
-                t.SortName = (String)dr["SortTitle"];
+                t.SortName = (String)dr["SortTitle"];                
 
                 int runTime;
                 if (int.TryParse((String)dr["RunningTime"], out runTime))
                     t.Runtime = runTime;
-                String prodYr = (String)dr["ProductionYear"];
-                t.ReleaseDate = new DateTime(int.Parse(prodYr), 1, 1);
+                DateTime dtReleased;
+                if (DateTime.TryParse((String)dr["Released"], out dtReleased))
+                    t.ReleaseDate = dtReleased;
+                int prodYr;
+                if (int.TryParse((String)dr["ProductionYear"], out prodYr))
+                    t.ProductionYear = prodYr;
                 
                 t.FrontCoverPath = Path.Combine(_imgPath, (String)dr["ID"] + @"f.jpg");
                 t.BackCoverPath = Path.Combine(_imgPath, (String)dr["ID"] + @"b.jpg");
+
+                if (ds.Relations.Contains("DVD_Format"))
+                {
+                    DataRow Format = dr.GetChildRows("DVD_Format")[0];
+                    t.VideoStandard = (String)Format["FormatVideoStandard"];
+                    t.VideoResolution = (String)Format["FormatAspectRatio"];
+                }
 
                 if (ds.Relations.Contains("DVD_Genres") && ds.Relations.Contains("Genres_Genre"))
                 {
@@ -106,16 +117,39 @@ namespace DVDProfilerMetaData
                         t.Genres.Add(genre);
                     }
                 }
+
                 if (ds.Relations.Contains("DVD_Actors") && ds.Relations.Contains("Actors_Actor"))
                 {
                     DataRow actors = dr.GetChildRows("DVD_Actors")[0];
                     foreach (DataRow actor in actors.GetChildRows("Actors_Actor"))
                     {
-                        Person p = new Person();
                         String fullName = String.Format(@"{0} {1}", actor["FirstName"], actor["LastName"]);
                         t.AddActingRole(fullName, (String)actor["Role"]);
                     }
                 }
+
+                if (ds.Relations.Contains("DVD_Credits") && ds.Relations.Contains("Credits_Credit"))
+                {
+                    DataRow credits = dr.GetChildRows("DVD_Credits")[0];
+                    foreach (DataRow credit in credits.GetChildRows("Credits_Credit"))
+                    {
+                        String CreditType = (String)credit["CreditType"];
+                        String fullName = String.Format(@"{0} {1}", credit["FirstName"], credit["LastName"]);
+                        if (CreditType == "Direction")
+                        {
+                            t.AddDirector(new Person(fullName));
+                        }
+                        else if (CreditType == "Writing")
+                        {
+                            t.AddWriter(new Person(fullName));
+                        }
+                        else if (CreditType == "Production")
+                        {
+                            t.AddProducer(fullName);
+                        }
+                    }
+                }
+
                 List<String> _studios = new List<String>();
                 if (ds.Relations.Contains("DVD_Studios") && ds.Relations.Contains("Studios_Studio"))
                 {
