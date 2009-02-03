@@ -70,6 +70,7 @@ namespace OMLEngine
         private List<Disk> _disks = new List<Disk>();
         private Disk _selectedDisk = null;
         private string _backDropImage = string.Empty;
+        private int _productionYear = 0;
 
         private static string XmlNameSpace = "http://www.openmedialibrary.org/";
 
@@ -77,9 +78,20 @@ namespace OMLEngine
 
         #region properties       
 
+        public int ProductionYear
+        {
+            get { return _productionYear; }
+            set { _productionYear = value; }
+        }
+
         public string BackDropImage
         {
-            get { return _backDropImage; }
+            get
+            {
+                if (_backDropImage == string.Empty)
+                    return NoCoverPath;
+                return _backDropImage;
+            }
             set { _backDropImage = value; }
         }
 
@@ -375,6 +387,11 @@ namespace OMLEngine
                     _sourceName = value;
             }
         }
+
+        public string NoCoverPath
+        {
+            get { return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg"; }
+        }
         /// <summary>
         /// Pull path to the cover art image, 
         /// default the the front cover menu art image to this as well
@@ -384,7 +401,7 @@ namespace OMLEngine
             get 
             {
                 if (_frontCoverPath == string.Empty)
-                    return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
+                    return NoCoverPath;
                 return _frontCoverPath; 
             }
             set 
@@ -408,7 +425,7 @@ namespace OMLEngine
             get 
             {
                 if (_backCoverPath == string.Empty)
-                    return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
+                    return NoCoverPath;
                 return _backCoverPath; 
             }
             set { _backCoverPath = value; }
@@ -704,6 +721,8 @@ namespace OMLEngine
             _videoResolution = GetSerializedString(info, "video_resolution");
             _extraFeatures = GetSerializedList<List<string>>(info, "extra_features");
             _watchedCount = GetSerializedInt(info, "watched_count");
+            _backDropImage = GetSerializedString(info, "backdrop_boxart_path");
+            _productionYear = GetSerializedInt(info, "production_year");
         }
 
         void CleanDuplicateDisks()
@@ -776,6 +795,8 @@ namespace OMLEngine
             info.AddValue("video_resolution", _videoResolution);
             info.AddValue("extra_features", _extraFeatures);
             info.AddValue("watched_count", _watchedCount);
+            info.AddValue("backdrop_boxart_path", _backDropImage);
+            info.AddValue("production_year", _productionYear);
         }
         #endregion
 
@@ -1098,6 +1119,18 @@ namespace OMLEngine
                             navigator.MoveToParent();
                         }
 
+                        if (navigator.MoveToChild("ProductionYear", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                int productionYear;
+                                if (int.TryParse(navigator.Value, out productionYear))
+                                {
+                                    t.ProductionYear = productionYear;
+                                }
+                            }
+                            navigator.MoveToParent();
+                        }
                         
                         if (navigator.MoveToChild("Genres", XmlNameSpace))
                         {
@@ -1668,6 +1701,7 @@ namespace OMLEngine
                 writer.WriteElementString("ParentalRating", _parentalRating);
                 writer.WriteElementString("ParentalRatingReason", _parentalRatingReason);
                 writer.WriteElementString("ReleaseDate", _releaseDate.ToString());
+                writer.WriteElementString("ProductionYear", _productionYear.ToString());
 
 
 
@@ -1836,6 +1870,7 @@ namespace OMLEngine
             if ( t.Runtime > 0) Runtime = t.Runtime;
             if (t.ReleaseDate != null) ReleaseDate = t.ReleaseDate;
             if (t.UserStarRating > 0) UserStarRating = t.UserStarRating;
+            if (t.ProductionYear > 0) ProductionYear = t.ProductionYear;
 
             if (t._directors != null && t._directors.Count > 0)
             {
