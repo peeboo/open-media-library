@@ -106,7 +106,7 @@ namespace OMLEngine
         }
 
         static string sBasePaths = System.Configuration.ConfigurationSettings.AppSettings["BasePaths"];
-        void FindPath()
+        public void FindPath()
         {
             if (Directory.Exists(Path) || File.Exists(Path))
                 return;
