@@ -54,37 +54,47 @@ namespace OMLSDK
 
         void DownloadBackDropsForTitle(Title t, int index);
     }
-/*
-    public class OMLMetadataOptionBase
-    {
-        public string Name
-        {
-            get { return _optionName; }
-            set { _optionName = value; }
-        }
 
-        public string Value
+    /*
+        public interface IOMLMetaDataOption
         {
-            get { return _optionValue; }
-            set { _optionValue = value; }
+            string Name { get; set; }
+            string Value { get; set; }
+            string Description { get; set; }
+            string AllowOnlyPossibleValues { get; set; }
         }
-
-        public OMLMetadataOptionBase()
+     
+        public class OMLMetadataOptionBase
         {
-            _optionName = String.Empty;
-            _optionValue = String.Empty;
-        }
+            public string Name
+            {
+                get { return _optionName; }
+                set { _optionName = value; }
+            }
 
-        public OMLMetadataOptionBase(string optionName, string optionvalue)
-        {
-            _optionValue = optionvalue;
-            _optionName = optionName;
-        }
+            public string Value
+            {
+                get { return _optionValue; }
+                set { _optionValue = value; }
+            }
 
-        string _optionValue;
-        string _optionName;
-    }
-*/
+            public OMLMetadataOptionBase()
+            {
+                _optionName = String.Empty;
+                _optionValue = String.Empty;
+            }
+
+            public OMLMetadataOptionBase(string optionName, string optionvalue)
+            {
+                _optionValue = optionvalue;
+                _optionName = optionName;
+            }
+
+            string _optionValue;
+            string _optionName;
+        }
+    */
+
     public class OMLMetadataOption //: OMLMetadataOptionBase
     {
 
