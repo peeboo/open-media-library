@@ -76,6 +76,7 @@
             this.grdTitles.ReadOnly = true;
             this.grdTitles.RowTemplate.Height = 120;
             this.grdTitles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.grdTitles.DoubleClick += new System.EventHandler(this.btnSelectMovie_Click);
             this.grdTitles.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdTitles_CellContentClick);
             // 
             // colIndex
