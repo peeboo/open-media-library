@@ -32,7 +32,7 @@ namespace Library
 
         public void Uninitialize()
         {
-            if (OMLApplication.Current.IsExtender)
+            if (OMLApplication.Current.IsExtender && this.imp != null)
                 this.imp.Leave();
 
             OMLApplication.Current.Uninitialize();
@@ -51,8 +51,15 @@ namespace Library
                 app = new OMLApplication(s_session, host);
             }
 
-            if (OMLApplication.Current.IsExtender)
-                this.imp.Enter();
+            try
+            {
+                if (OMLApplication.Current.IsExtender && this.imp != null)
+                    this.imp.Enter();
+            }
+            catch (Exception ex)
+            {
+                OMLApplication.DebugLine("Exception during this.imp.Enter(): {0}", ex);
+            }
 
             app.Startup(_id);
         }
