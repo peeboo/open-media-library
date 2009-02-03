@@ -142,5 +142,17 @@ namespace OMLEngine.Properties {
                 this["ImpersonationPassword"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AddParentFoldersToTitleName {
+            get {
+                return ((bool)(this["AddParentFoldersToTitleName"]));
+            }
+            set {
+                this["AddParentFoldersToTitleName"] = value;
+            }
+        }
     }
 }
