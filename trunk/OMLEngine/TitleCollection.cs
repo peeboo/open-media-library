@@ -353,6 +353,39 @@ namespace OMLEngine
             }
         }
 
+        public List<string> GetAllVideoResolutions
+        {
+            get
+            {
+                List<string> resolutions = (from title in _list
+                                        orderby title.VideoResolution ascending
+                                        select title.VideoResolution).Distinct().ToList<string>();
+                return resolutions;
+            }
+        }
+
+        public List<string> GetAllVideoStandards
+        {
+            get
+            {
+                List<string> standards = (from title in _list
+                                            orderby title.VideoStandard ascending
+                                            select title.VideoStandard).Distinct().ToList<string>();
+                return standards;
+            }
+        }
+
+        public List<string> GetAllImporterSources
+        {
+            get
+            {
+                List<string> importerz = (from title in _list
+                                          orderby title.ImporterSource ascending
+                                          select title.ImporterSource).Distinct().ToList<string>();
+                return importerz;
+            }
+        }
+
         public List<string> GetFolders
         {
             get

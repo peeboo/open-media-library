@@ -381,6 +381,22 @@ namespace OMLDatabaseEditor.Controls
             txtCountryOfOrigin.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
             txtCountryOfOrigin.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllCountryofOrigin.ToArray());
 
+            teVideoResolution.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            teVideoResolution.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            teVideoResolution.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllVideoResolutions.ToArray());
+
+            teVideoStandard.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            teVideoStandard.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            teVideoStandard.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllVideoStandards.ToArray());
+
+            teParentalRating.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            teParentalRating.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllParentalRatings.ToArray());
+
+            teImporter.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            teImporter.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            teImporter.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllImporterSources.ToArray());
+
         }
 
         private void lbPeople_DoubleClick(object sender, EventArgs e)
