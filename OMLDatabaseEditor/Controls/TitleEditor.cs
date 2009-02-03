@@ -211,6 +211,8 @@ namespace OMLDatabaseEditor.Controls
                 PictureBox pb = contextImage.Tag as PictureBox;
                 if (pb.Name.Contains("Front"))
                     _dvdTitle.CopyFrontCoverFromFile(openCoverFile.FileName, false);
+                else if (pb.Name.Contains("Backdrop"))
+                    _dvdTitle.BackDropImage = openCoverFile.FileName;
                 else
                     _dvdTitle.CopyBackCoverFromFile(openCoverFile.FileName, false);
                 titleSource.ResetCurrentItem();
