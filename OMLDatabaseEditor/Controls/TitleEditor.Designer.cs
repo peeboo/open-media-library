@@ -33,10 +33,10 @@
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.tpVisual = new DevExpress.XtraTab.XtraTabPage();
             this.numProductionYear = new DevExpress.XtraEditors.TextEdit();
+            this.titleSource = new System.Windows.Forms.BindingSource(this.components);
             this.labelControl21 = new DevExpress.XtraEditors.LabelControl();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pbFrontCover = new System.Windows.Forms.PictureBox();
-            this.titleSource = new System.Windows.Forms.BindingSource(this.components);
             this.pbBackCover = new System.Windows.Forms.PictureBox();
             this.btnTags = new DevExpress.XtraEditors.SimpleButton();
             this.btnDisks = new DevExpress.XtraEditors.SimpleButton();
@@ -63,7 +63,7 @@
             this.btnTracks = new DevExpress.XtraEditors.SimpleButton();
             this.btnExtras = new DevExpress.XtraEditors.SimpleButton();
             this.labelControl20 = new DevExpress.XtraEditors.LabelControl();
-            this.textEdit9 = new DevExpress.XtraEditors.TextEdit();
+            this.teImporter = new DevExpress.XtraEditors.TextEdit();
             this.labelControl19 = new DevExpress.XtraEditors.LabelControl();
             this.textEdit8 = new DevExpress.XtraEditors.TextEdit();
             this.labelControl18 = new DevExpress.XtraEditors.LabelControl();
@@ -75,9 +75,9 @@
             this.labelControl15 = new DevExpress.XtraEditors.LabelControl();
             this.textEdit4 = new DevExpress.XtraEditors.TextEdit();
             this.labelControl14 = new DevExpress.XtraEditors.LabelControl();
-            this.textEdit3 = new DevExpress.XtraEditors.TextEdit();
+            this.teVideoStandard = new DevExpress.XtraEditors.TextEdit();
             this.labelControl13 = new DevExpress.XtraEditors.LabelControl();
-            this.textEdit2 = new DevExpress.XtraEditors.TextEdit();
+            this.teVideoResolution = new DevExpress.XtraEditors.TextEdit();
             this.labelControl12 = new DevExpress.XtraEditors.LabelControl();
             this.textEdit1 = new DevExpress.XtraEditors.TextEdit();
             this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
@@ -112,9 +112,9 @@
             this.xtraTabControl1.SuspendLayout();
             this.tpVisual.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numProductionYear.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.titleSource)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.titleSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUserRating.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtSynposis.Properties)).BeginInit();
@@ -126,14 +126,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtSortName.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtName.Properties)).BeginInit();
             this.tpTechnical.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit9.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teImporter.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit8.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.teParentalRating.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit6.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit5.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit4.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit3.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit2.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teVideoStandard.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teVideoResolution.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtDateAdded.Properties.VistaTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtDateAdded.Properties)).BeginInit();
@@ -210,6 +210,11 @@
             this.numProductionYear.Size = new System.Drawing.Size(100, 20);
             this.numProductionYear.TabIndex = 5;
             // 
+            // titleSource
+            // 
+            this.titleSource.DataSource = typeof(OMLEngine.Title);
+            this.titleSource.CurrentChanged += new System.EventHandler(this.titleSource_CurrentChanged);
+            // 
             // labelControl21
             // 
             this.labelControl21.Location = new System.Drawing.Point(35, 138);
@@ -251,11 +256,6 @@
             this.pbFrontCover.TabStop = false;
             this.pbFrontCover.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pbFrontCover_MouseDoubleClick);
             this.pbFrontCover.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pbCovers_MouseClick);
-            // 
-            // titleSource
-            // 
-            this.titleSource.DataSource = typeof(OMLEngine.Title);
-            this.titleSource.CurrentChanged += new System.EventHandler(this.titleSource_CurrentChanged);
             // 
             // pbBackCover
             // 
@@ -490,7 +490,7 @@
             this.tpTechnical.Controls.Add(this.btnTracks);
             this.tpTechnical.Controls.Add(this.btnExtras);
             this.tpTechnical.Controls.Add(this.labelControl20);
-            this.tpTechnical.Controls.Add(this.textEdit9);
+            this.tpTechnical.Controls.Add(this.teImporter);
             this.tpTechnical.Controls.Add(this.labelControl19);
             this.tpTechnical.Controls.Add(this.textEdit8);
             this.tpTechnical.Controls.Add(this.labelControl18);
@@ -502,9 +502,9 @@
             this.tpTechnical.Controls.Add(this.labelControl15);
             this.tpTechnical.Controls.Add(this.textEdit4);
             this.tpTechnical.Controls.Add(this.labelControl14);
-            this.tpTechnical.Controls.Add(this.textEdit3);
+            this.tpTechnical.Controls.Add(this.teVideoStandard);
             this.tpTechnical.Controls.Add(this.labelControl13);
-            this.tpTechnical.Controls.Add(this.textEdit2);
+            this.tpTechnical.Controls.Add(this.teVideoResolution);
             this.tpTechnical.Controls.Add(this.labelControl12);
             this.tpTechnical.Controls.Add(this.textEdit1);
             this.tpTechnical.Controls.Add(this.labelControl11);
@@ -563,17 +563,17 @@
             this.labelControl20.TabIndex = 29;
             this.labelControl20.Text = "Importer Source";
             // 
-            // textEdit9
+            // teImporter
             // 
-            this.textEdit9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.teImporter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textEdit9.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "ImporterSource", true));
-            this.textEdit9.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "ImporterSource", true));
-            this.textEdit9.Location = new System.Drawing.Point(120, 315);
-            this.textEdit9.Name = "textEdit9";
-            this.textEdit9.Size = new System.Drawing.Size(394, 20);
-            this.textEdit9.TabIndex = 12;
-            this.textEdit9.TextChanged += new System.EventHandler(this.TitleChanges);
+            this.teImporter.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "ImporterSource", true));
+            this.teImporter.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "ImporterSource", true));
+            this.teImporter.Location = new System.Drawing.Point(120, 315);
+            this.teImporter.Name = "teImporter";
+            this.teImporter.Size = new System.Drawing.Size(394, 20);
+            this.teImporter.TabIndex = 12;
+            this.teImporter.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl19
             // 
@@ -683,17 +683,17 @@
             this.labelControl14.TabIndex = 17;
             this.labelControl14.Text = "Video Standard";
             // 
-            // textEdit3
+            // teVideoStandard
             // 
-            this.textEdit3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.teVideoStandard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textEdit3.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "VideoStandard", true));
-            this.textEdit3.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "VideoStandard", true));
-            this.textEdit3.Location = new System.Drawing.Point(120, 159);
-            this.textEdit3.Name = "textEdit3";
-            this.textEdit3.Size = new System.Drawing.Size(394, 20);
-            this.textEdit3.TabIndex = 6;
-            this.textEdit3.TextChanged += new System.EventHandler(this.TitleChanges);
+            this.teVideoStandard.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "VideoStandard", true));
+            this.teVideoStandard.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "VideoStandard", true));
+            this.teVideoStandard.Location = new System.Drawing.Point(120, 159);
+            this.teVideoStandard.Name = "teVideoStandard";
+            this.teVideoStandard.Size = new System.Drawing.Size(394, 20);
+            this.teVideoStandard.TabIndex = 6;
+            this.teVideoStandard.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl13
             // 
@@ -703,17 +703,17 @@
             this.labelControl13.TabIndex = 15;
             this.labelControl13.Text = "Video Resolution";
             // 
-            // textEdit2
+            // teVideoResolution
             // 
-            this.textEdit2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.teVideoResolution.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textEdit2.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "VideoResolution", true));
-            this.textEdit2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "VideoResolution", true));
-            this.textEdit2.Location = new System.Drawing.Point(120, 133);
-            this.textEdit2.Name = "textEdit2";
-            this.textEdit2.Size = new System.Drawing.Size(394, 20);
-            this.textEdit2.TabIndex = 5;
-            this.textEdit2.TextChanged += new System.EventHandler(this.TitleChanges);
+            this.teVideoResolution.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "VideoResolution", true));
+            this.teVideoResolution.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "VideoResolution", true));
+            this.teVideoResolution.Location = new System.Drawing.Point(120, 133);
+            this.teVideoResolution.Name = "teVideoResolution";
+            this.teVideoResolution.Size = new System.Drawing.Size(394, 20);
+            this.teVideoResolution.TabIndex = 5;
+            this.teVideoResolution.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl12
             // 
@@ -1021,9 +1021,9 @@
             this.tpVisual.ResumeLayout(false);
             this.tpVisual.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numProductionYear.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.titleSource)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.titleSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUserRating.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtSynposis.Properties)).EndInit();
@@ -1036,14 +1036,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtName.Properties)).EndInit();
             this.tpTechnical.ResumeLayout(false);
             this.tpTechnical.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit9.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teImporter.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit8.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.teParentalRating.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit6.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit5.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit4.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit3.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit2.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teVideoStandard.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teVideoResolution.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtDateAdded.Properties.VistaTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtDateAdded.Properties)).EndInit();
@@ -1107,9 +1107,9 @@
         private DevExpress.XtraEditors.LabelControl labelControl11;
         private DevExpress.XtraEditors.DateEdit dtDateAdded;
         private DevExpress.XtraEditors.LabelControl labelControl14;
-        private DevExpress.XtraEditors.TextEdit textEdit3;
+        private DevExpress.XtraEditors.TextEdit teVideoStandard;
         private DevExpress.XtraEditors.LabelControl labelControl13;
-        private DevExpress.XtraEditors.TextEdit textEdit2;
+        private DevExpress.XtraEditors.TextEdit teVideoResolution;
         private DevExpress.XtraEditors.LabelControl labelControl12;
         private DevExpress.XtraEditors.TextEdit textEdit1;
         private DevExpress.XtraEditors.LabelControl labelControl16;
@@ -1117,7 +1117,7 @@
         private DevExpress.XtraEditors.LabelControl labelControl15;
         private DevExpress.XtraEditors.TextEdit textEdit4;
         private DevExpress.XtraEditors.LabelControl labelControl20;
-        private DevExpress.XtraEditors.TextEdit textEdit9;
+        private DevExpress.XtraEditors.TextEdit teImporter;
         private DevExpress.XtraEditors.LabelControl labelControl19;
         private DevExpress.XtraEditors.TextEdit textEdit8;
         private DevExpress.XtraEditors.LabelControl labelControl18;
