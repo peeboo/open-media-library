@@ -37,6 +37,9 @@ namespace Library
         /// <returns></returns>
         static public IPlayMovie CreateMoviePlayer(MediaSource source)
         {
+            // this is an attempt to determine the physical location of the media if it was moved unexpectedly.
+            source.Disk.FindPath();
+
             string mediaPath = null;
             VideoFormat mediaFormat = VideoFormat.UNKNOWN;
 
