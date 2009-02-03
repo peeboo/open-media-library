@@ -769,9 +769,10 @@ namespace OMLEngine
             foreach (string image in imageFiles)
             {
                 int id;
-                string strId = image.Substring(1, image.IndexOf('.') - 1);
                 try
                 {
+                    string strId = string.Join("", System.Text.RegularExpressions.Regex.Split(Path.GetFileName(image), @"[^\d]"));
+
                     Int32.TryParse(strId, out id);
                     if (tc.GetTitleById(id) == null)
                     {
