@@ -527,6 +527,9 @@ namespace VMCDVDLibraryPlugin
 
         private void GetSubFolders(string startFolder, List<string> folderList)
         {
+            // First check if root is a dvd / bluray disk structure
+            if (GetDirectoryType(startFolder) != DirectoryType.Normal) { return; }
+
             DirectoryInfo[] diArr = null;
             try
             {
