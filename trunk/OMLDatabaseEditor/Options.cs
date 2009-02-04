@@ -86,6 +86,8 @@ namespace OMLDatabaseEditor
             lbGenres.DataSource = GenreList;
 
             this.ceFoldersAsTitles.Checked = OMLEngine.Properties.Settings.Default.FoldersAreTitles;
+            this.cePrependParentFolder.Checked = OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName;
+            cePrependParentFolder.Enabled = this.ceFoldersAsTitles.Checked;
         }
 
         private void SimpleButtonClick(object sender, EventArgs e)
@@ -135,6 +137,11 @@ namespace OMLDatabaseEditor
                 if (OMLEngine.Properties.Settings.Default.FoldersAreTitles != this.ceFoldersAsTitles.Checked)
                 {
                     OMLEngine.Properties.Settings.Default.FoldersAreTitles = this.ceFoldersAsTitles.Checked;
+                    OMLEngine.Properties.Settings.Default.Save();
+                }
+                if (OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName != this.cePrependParentFolder.Checked)
+                {
+                    OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName = this.cePrependParentFolder.Checked;
                     OMLEngine.Properties.Settings.Default.Save();
                 }
             }
@@ -270,6 +277,11 @@ namespace OMLDatabaseEditor
                 appearance.Font = new Font(appearance.Font, FontStyle.Bold);
                 e.Appearance.Combine(appearance);
             }
+        }
+
+        private void ceFoldersAsTitles_CheckStateChanged(object sender, EventArgs e)
+        {
+            cePrependParentFolder.Enabled = this.ceFoldersAsTitles.Checked;
         }
     }
 }
