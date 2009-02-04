@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
@@ -191,31 +192,6 @@ namespace OMLDatabaseEditor.Controls
                 DiskEditorFrm diskEditor = new DiskEditorFrm(EditedTitle.Disks);
                 diskEditor.ShowDialog();
                 TitleChanges(null, EventArgs.Empty);
-            }
-        }
-
-        private void pbCovers_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (_dvdTitle == null) return;
-            if (e.Button == MouseButtons.Right)
-            {
-                contextImage.Tag = sender;
-                contextImage.Show(sender as PictureBox, e.Location);
-            }
-        }
-
-        private void selectImageToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (openCoverFile.ShowDialog() == DialogResult.OK)
-            {
-                PictureBox pb = contextImage.Tag as PictureBox;
-                if (pb.Name.Contains("Front"))
-                    _dvdTitle.CopyFrontCoverFromFile(openCoverFile.FileName, false);
-                else if (pb.Name.Contains("Backdrop"))
-                    _dvdTitle.BackDropImage = openCoverFile.FileName;
-                else
-                    _dvdTitle.CopyBackCoverFromFile(openCoverFile.FileName, false);
-                titleSource.ResetCurrentItem();
             }
         }
 
@@ -505,6 +481,31 @@ namespace OMLDatabaseEditor.Controls
             pnlMetadata.Visible = false;
         }
 
+        private void pbCovers_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (_dvdTitle == null) return;
+            if (e.Button == MouseButtons.Right)
+            {
+                contextImage.Tag = sender;
+                contextImage.Show(sender as PictureBox, e.Location);
+            }
+        }
+
+        private void selectImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openCoverFile.ShowDialog() == DialogResult.OK)
+            {
+                PictureBox pb = contextImage.Tag as PictureBox;
+                if (pb.Name.Contains("Front"))
+                    _dvdTitle.CopyFrontCoverFromFile(openCoverFile.FileName, false);
+                else if (pb.Name.Contains("Backdrop"))
+                    _dvdTitle.BackDropImage = openCoverFile.FileName;
+                else
+                    _dvdTitle.CopyBackCoverFromFile(openCoverFile.FileName, false);
+                titleSource.ResetCurrentItem();
+            }
+        }
+
         private void deleteImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PictureBox pb = contextImage.Tag as PictureBox;
@@ -521,6 +522,43 @@ namespace OMLDatabaseEditor.Controls
                 _dvdTitle.BackCoverPath = string.Empty;
             }
             titleSource.ResetCurrentItem();
+        }
+
+        private void updateFromMetadataToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            PictureBox pb = contextImage.Tag as PictureBox;
+            Cursor = Cursors.WaitCursor;
+            string propertyName = pb.DataBindings[0].BindingMemberInfo.BindingMember;
+            MetadataSelect mdSelect = new MetadataSelect(_dvdTitle, propertyName, PropertyTypeEnum.Image);
+            mdSelect.ShowDialog();
+            PropertyInfo pInfo = _dvdTitle.GetType().GetProperty(propertyName);
+            pb.ImageLocation = (string)pInfo.GetValue(_dvdTitle, null);
+            Cursor = Cursors.Default;
+        }
+
+        private void field_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.D)
+            {
+                if (sender is Control)
+                {
+                    Cursor = Cursors.WaitCursor;
+                    BaseEdit ctrl = sender as BaseEdit;
+                    string propertyName = ctrl.DataBindings[0].BindingMemberInfo.BindingMember;
+                    MetadataSelect mdSelect = null;
+                    PropertyTypeEnum propType = PropertyTypeEnum.String;
+                    if (sender is SpinEdit)
+                        propType = PropertyTypeEnum.Number;
+                    else if (sender is PictureBox)
+                        propType = PropertyTypeEnum.Image;
+                    else if (sender is DateEdit)
+                        propType = PropertyTypeEnum.Date;
+                    mdSelect = new MetadataSelect(_dvdTitle, propertyName, propType);
+                    mdSelect.ShowDialog();
+                    (ctrl.BindingManager as CurrencyManager).Refresh();
+                    Cursor = Cursors.Default;
+                }
+            }
         }
     }
 

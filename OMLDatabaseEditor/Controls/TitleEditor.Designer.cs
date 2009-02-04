@@ -45,8 +45,6 @@
             this.numUserRating = new DevExpress.XtraEditors.SpinEdit();
             this.txtSynposis = new DevExpress.XtraEditors.MemoEdit();
             this.lblSynopsis = new DevExpress.XtraEditors.LabelControl();
-            this.contextField = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.updateFromMetadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
             this.dtReleaseDate = new DevExpress.XtraEditors.DateEdit();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
@@ -101,12 +99,12 @@
             this.contextImage = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateFromMetadataToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.disksBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.openCoverFile = new System.Windows.Forms.OpenFileDialog();
             this.imageWatcherFront = new System.IO.FileSystemWatcher();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.pnlMetadata = new DevExpress.XtraEditors.PanelControl();
             this.pnlMain = new DevExpress.XtraEditors.PanelControl();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
@@ -118,7 +116,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUserRating.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtSynposis.Properties)).BeginInit();
-            this.contextField.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtReleaseDate.Properties.VistaTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtReleaseDate.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numRuntime.Properties)).BeginInit();
@@ -151,7 +148,6 @@
             this.contextImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.disksBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pnlMetadata)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlMain)).BeginInit();
             this.pnlMain.SuspendLayout();
             this.SuspendLayout();
@@ -162,7 +158,7 @@
             this.xtraTabControl1.Location = new System.Drawing.Point(2, 2);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.tpVisual;
-            this.xtraTabControl1.Size = new System.Drawing.Size(522, 398);
+            this.xtraTabControl1.Size = new System.Drawing.Size(522, 522);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.tpVisual,
@@ -196,7 +192,7 @@
             this.tpVisual.Controls.Add(this.labelControl1);
             this.tpVisual.Controls.Add(this.txtName);
             this.tpVisual.Name = "tpVisual";
-            this.tpVisual.Size = new System.Drawing.Size(513, 368);
+            this.tpVisual.Size = new System.Drawing.Size(513, 492);
             this.tpVisual.Text = "Visual";
             // 
             // numProductionYear
@@ -209,6 +205,7 @@
             this.numProductionYear.Properties.Mask.UseMaskAsDisplayFormat = true;
             this.numProductionYear.Size = new System.Drawing.Size(100, 20);
             this.numProductionYear.TabIndex = 5;
+            this.numProductionYear.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             // 
             // titleSource
             // 
@@ -237,7 +234,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(507, 77);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(507, 201);
             this.tableLayoutPanel1.TabIndex = 20;
             // 
             // pbFrontCover
@@ -250,7 +247,7 @@
             this.pbFrontCover.InitialImage = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.InitialImage")));
             this.pbFrontCover.Location = new System.Drawing.Point(3, 3);
             this.pbFrontCover.Name = "pbFrontCover";
-            this.pbFrontCover.Size = new System.Drawing.Size(247, 71);
+            this.pbFrontCover.Size = new System.Drawing.Size(247, 195);
             this.pbFrontCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbFrontCover.TabIndex = 0;
             this.pbFrontCover.TabStop = false;
@@ -267,7 +264,7 @@
             this.pbBackCover.InitialImage = ((System.Drawing.Image)(resources.GetObject("pbBackCover.InitialImage")));
             this.pbBackCover.Location = new System.Drawing.Point(256, 3);
             this.pbBackCover.Name = "pbBackCover";
-            this.pbBackCover.Size = new System.Drawing.Size(248, 71);
+            this.pbBackCover.Size = new System.Drawing.Size(248, 195);
             this.pbBackCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbBackCover.TabIndex = 18;
             this.pbBackCover.TabStop = false;
@@ -343,30 +340,16 @@
             this.txtSynposis.Name = "txtSynposis";
             this.txtSynposis.Size = new System.Drawing.Size(390, 64);
             this.txtSynposis.TabIndex = 6;
+            this.txtSynposis.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.txtSynposis.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // lblSynopsis
             // 
-            this.lblSynopsis.ContextMenuStrip = this.contextField;
             this.lblSynopsis.Location = new System.Drawing.Point(35, 164);
             this.lblSynopsis.Name = "lblSynopsis";
             this.lblSynopsis.Size = new System.Drawing.Size(42, 13);
             this.lblSynopsis.TabIndex = 11;
             this.lblSynopsis.Text = "Synposis";
-            // 
-            // contextField
-            // 
-            this.contextField.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.updateFromMetadataToolStripMenuItem});
-            this.contextField.Name = "contextField";
-            this.contextField.Size = new System.Drawing.Size(195, 26);
-            // 
-            // updateFromMetadataToolStripMenuItem
-            // 
-            this.updateFromMetadataToolStripMenuItem.Name = "updateFromMetadataToolStripMenuItem";
-            this.updateFromMetadataToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.updateFromMetadataToolStripMenuItem.Text = "Update from metadata";
-            this.updateFromMetadataToolStripMenuItem.Click += new System.EventHandler(this.updateFromMetadataToolStripMenuItem_Click);
             // 
             // labelControl5
             // 
@@ -390,6 +373,7 @@
             this.dtReleaseDate.Size = new System.Drawing.Size(139, 20);
             this.dtReleaseDate.TabIndex = 4;
             this.dtReleaseDate.DateTimeChanged += new System.EventHandler(this.TitleChanges);
+            this.dtReleaseDate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             // 
             // labelControl4
             // 
@@ -422,6 +406,7 @@
             this.numRuntime.Size = new System.Drawing.Size(100, 20);
             this.numRuntime.TabIndex = 3;
             this.numRuntime.ValueChanged += new System.EventHandler(this.TitleChanges);
+            this.numRuntime.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             // 
             // labelControl3
             // 
@@ -441,6 +426,7 @@
             this.txtStudio.Name = "txtStudio";
             this.txtStudio.Size = new System.Drawing.Size(390, 20);
             this.txtStudio.TabIndex = 2;
+            this.txtStudio.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.txtStudio.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl2
@@ -461,6 +447,7 @@
             this.txtSortName.Name = "txtSortName";
             this.txtSortName.Size = new System.Drawing.Size(390, 20);
             this.txtSortName.TabIndex = 1;
+            this.txtSortName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.txtSortName.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl1
@@ -480,6 +467,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(390, 20);
             this.txtName.TabIndex = 0;
+            this.txtName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.txtName.TextChanged += new System.EventHandler(this.TitleNameChanges);
             // 
             // tpTechnical
@@ -516,7 +504,7 @@
             this.tpTechnical.Controls.Add(this.labelControl8);
             this.tpTechnical.Controls.Add(this.txtAspectRatio);
             this.tpTechnical.Name = "tpTechnical";
-            this.tpTechnical.Size = new System.Drawing.Size(513, 368);
+            this.tpTechnical.Size = new System.Drawing.Size(513, 492);
             this.tpTechnical.Text = "Technical";
             // 
             // btnTrailers
@@ -593,6 +581,7 @@
             this.textEdit8.Name = "textEdit8";
             this.textEdit8.Size = new System.Drawing.Size(394, 20);
             this.textEdit8.TabIndex = 11;
+            this.textEdit8.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.textEdit8.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl18
@@ -613,6 +602,7 @@
             this.teParentalRating.Name = "teParentalRating";
             this.teParentalRating.Size = new System.Drawing.Size(394, 20);
             this.teParentalRating.TabIndex = 10;
+            this.teParentalRating.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.teParentalRating.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl17
@@ -633,6 +623,7 @@
             this.textEdit6.Name = "textEdit6";
             this.textEdit6.Size = new System.Drawing.Size(394, 20);
             this.textEdit6.TabIndex = 9;
+            this.textEdit6.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.textEdit6.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl16
@@ -653,6 +644,7 @@
             this.textEdit5.Name = "textEdit5";
             this.textEdit5.Size = new System.Drawing.Size(394, 20);
             this.textEdit5.TabIndex = 8;
+            this.textEdit5.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.textEdit5.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl15
@@ -673,6 +665,7 @@
             this.textEdit4.Name = "textEdit4";
             this.textEdit4.Size = new System.Drawing.Size(394, 20);
             this.textEdit4.TabIndex = 7;
+            this.textEdit4.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.textEdit4.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl14
@@ -693,6 +686,7 @@
             this.teVideoStandard.Name = "teVideoStandard";
             this.teVideoStandard.Size = new System.Drawing.Size(394, 20);
             this.teVideoStandard.TabIndex = 6;
+            this.teVideoStandard.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.teVideoStandard.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl13
@@ -713,6 +707,7 @@
             this.teVideoResolution.Name = "teVideoResolution";
             this.teVideoResolution.Size = new System.Drawing.Size(394, 20);
             this.teVideoResolution.TabIndex = 5;
+            this.teVideoResolution.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.teVideoResolution.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl12
@@ -733,6 +728,7 @@
             this.textEdit1.Name = "textEdit1";
             this.textEdit1.Size = new System.Drawing.Size(394, 20);
             this.textEdit1.TabIndex = 4;
+            this.textEdit1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.textEdit1.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl11
@@ -808,6 +804,7 @@
             this.txtCountryOfOrigin.Name = "txtCountryOfOrigin";
             this.txtCountryOfOrigin.Size = new System.Drawing.Size(394, 20);
             this.txtCountryOfOrigin.TabIndex = 1;
+            this.txtCountryOfOrigin.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.txtCountryOfOrigin.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl8
@@ -828,6 +825,7 @@
             this.txtAspectRatio.Name = "txtAspectRatio";
             this.txtAspectRatio.Size = new System.Drawing.Size(394, 20);
             this.txtAspectRatio.TabIndex = 0;
+            this.txtAspectRatio.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             this.txtAspectRatio.TextChanged += new System.EventHandler(this.TitleChanges);
             // 
             // tpPeople
@@ -944,23 +942,31 @@
             this.contextImage.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.contextImage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectImageToolStripMenuItem,
-            this.deleteImageToolStripMenuItem});
+            this.deleteImageToolStripMenuItem,
+            this.updateFromMetadataToolStripMenuItem1});
             this.contextImage.Name = "contextImage";
-            this.contextImage.Size = new System.Drawing.Size(144, 48);
+            this.contextImage.Size = new System.Drawing.Size(195, 70);
             // 
             // selectImageToolStripMenuItem
             // 
             this.selectImageToolStripMenuItem.Name = "selectImageToolStripMenuItem";
-            this.selectImageToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.selectImageToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.selectImageToolStripMenuItem.Text = "Select Image";
             this.selectImageToolStripMenuItem.Click += new System.EventHandler(this.selectImageToolStripMenuItem_Click);
             // 
             // deleteImageToolStripMenuItem
             // 
             this.deleteImageToolStripMenuItem.Name = "deleteImageToolStripMenuItem";
-            this.deleteImageToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.deleteImageToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.deleteImageToolStripMenuItem.Text = "Delete Image";
             this.deleteImageToolStripMenuItem.Click += new System.EventHandler(this.deleteImageToolStripMenuItem_Click);
+            // 
+            // updateFromMetadataToolStripMenuItem1
+            // 
+            this.updateFromMetadataToolStripMenuItem1.Name = "updateFromMetadataToolStripMenuItem1";
+            this.updateFromMetadataToolStripMenuItem1.Size = new System.Drawing.Size(194, 22);
+            this.updateFromMetadataToolStripMenuItem1.Text = "Update from metadata";
+            this.updateFromMetadataToolStripMenuItem1.Click += new System.EventHandler(this.updateFromMetadataToolStripMenuItem1_Click);
             // 
             // disksBindingSource
             // 
@@ -990,22 +996,13 @@
             this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // pnlMetadata
-            // 
-            this.pnlMetadata.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlMetadata.Location = new System.Drawing.Point(0, 402);
-            this.pnlMetadata.Name = "pnlMetadata";
-            this.pnlMetadata.Size = new System.Drawing.Size(526, 124);
-            this.pnlMetadata.TabIndex = 2;
-            this.pnlMetadata.Visible = false;
-            // 
             // pnlMain
             // 
             this.pnlMain.Controls.Add(this.xtraTabControl1);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMain.Location = new System.Drawing.Point(0, 0);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(526, 402);
+            this.pnlMain.Size = new System.Drawing.Size(526, 526);
             this.pnlMain.TabIndex = 3;
             // 
             // TitleEditor
@@ -1013,7 +1010,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.pnlMain);
-            this.Controls.Add(this.pnlMetadata);
             this.Name = "TitleEditor";
             this.Size = new System.Drawing.Size(526, 526);
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
@@ -1027,7 +1023,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUserRating.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtSynposis.Properties)).EndInit();
-            this.contextField.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dtReleaseDate.Properties.VistaTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtReleaseDate.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numRuntime.Properties)).EndInit();
@@ -1061,7 +1056,6 @@
             this.contextImage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.disksBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pnlMetadata)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlMain)).EndInit();
             this.pnlMain.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -1140,13 +1134,11 @@
         private DevExpress.XtraEditors.ListBoxControl lbcPersona;
         private DevExpress.XtraEditors.ButtonEdit beFilter;
         private DevExpress.XtraEditors.PanelControl pnlMain;
-        private DevExpress.XtraEditors.PanelControl pnlMetadata;
-        private System.Windows.Forms.ContextMenuStrip contextField;
-        private System.Windows.Forms.ToolStripMenuItem updateFromMetadataToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteImageToolStripMenuItem;
         private DevExpress.XtraTab.XtraTabPage tpBackdrop;
         private System.Windows.Forms.PictureBox pbBackdrop;
         private DevExpress.XtraEditors.TextEdit numProductionYear;
         private DevExpress.XtraEditors.LabelControl labelControl21;
+        private System.Windows.Forms.ToolStripMenuItem updateFromMetadataToolStripMenuItem1;
     }
 }
