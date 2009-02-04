@@ -196,6 +196,7 @@ namespace OMLEngine
         private Dictionary<string, Title> _moviesByFilename = new Dictionary<string, Title>();
         private Dictionary<int, Title> _moviesByItemId = new Dictionary<int, Title>();
         private Dictionary<string, string> _genreMap = new Dictionary<string, string>();
+        private Dictionary<string, string> _metadataMap = new Dictionary<string, string>();
 
         public string DBFilename
         {
@@ -205,6 +206,30 @@ namespace OMLEngine
         public Dictionary<string, string> GenreMap
         {
             get { return _genreMap; }
+        }
+
+        public Dictionary<string, string> MetadataMap
+        {
+            get { return _metadataMap; }
+        }
+
+        public string PluginForProperty(string propertyName)
+        {
+            KeyValuePair<string, string> match = _metadataMap.SingleOrDefault(kvp => kvp.Key == propertyName);
+            return match.Value;
+        }
+
+        public Dictionary<string, List<string>> PropertiesByPlugin()
+        {
+            Dictionary<string, List<string>> result = new Dictionary<string, List<string>>();
+            foreach (KeyValuePair<string, string> map in _metadataMap)
+            {
+                if (result.ContainsKey(map.Value))
+                    result[map.Value].Add(map.Key);
+                else
+                    result[map.Value] = new List<string>() { map.Key };
+            }
+            return result;
         }
 
         public Dictionary<int, Title> MoviesByItemId
@@ -478,10 +503,13 @@ namespace OMLEngine
 
         public static void ClearMirrorDataFiles()
         {
-            int i = 1;
-            while (File.Exists(String.Format(@"C:\Users\Mcx{0}\AppData\Local\VirtualStore\ProgramData\OpenMediaLibrary\oml.dat", i)))
+            string[] userFolders = Directory.GetDirectories(@"C:\Users");
+            foreach (string userFolder in userFolders)
             {
-                File.Delete(String.Format(@"C:\Users\Mcx{0}\AppData\Local\VirtualStore\ProgramData\OpenMediaLibrary\oml.dat", i));
+                if (File.Exists(userFolder + @"AppData\Local\VirtualStore\ProgramData\OpenMediaLibrary\oml.dat"))
+                {
+                    File.Delete(userFolder + @"AppData\Local\VirtualStore\ProgramData\OpenMediaLibrary\oml.dat");
+                }
             }
         }
 
@@ -675,6 +703,7 @@ namespace OMLEngine
                     bformatter.Serialize(stream, title);
                 }
                 bformatter.Serialize(stream, _genreMap);
+                bformatter.Serialize(stream, _metadataMap);
                 stream.Close();
                 return true;
             }
@@ -739,6 +768,7 @@ namespace OMLEngine
                         Add(t);
                     }
                     _genreMap = (Dictionary<string, string>)bf.Deserialize(stm);
+                    _metadataMap = (Dictionary<string, string>)bf.Deserialize(stm);
                     stm.Close();
                     Utilities.DebugLine("[TitleCollection] Loaded: " + numTitles + " titles");
                     return true;

@@ -166,6 +166,12 @@
     <Compile Include="ListEditor.Designer.cs">
       <DependentUpon>ListEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="MetadataSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MetadataSelect.Designer.cs">
+      <DependentUpon>MetadataSelect.cs</DependentUpon>
+    </Compile>
     <Compile Include="NewMovieName.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -352,6 +358,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DownloadingBackDropsForm.resx">
       <DependentUpon>DownloadingBackDropsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MetadataSelect.resx">
+      <DependentUpon>MetadataSelect.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ResolveGenres.resx">
