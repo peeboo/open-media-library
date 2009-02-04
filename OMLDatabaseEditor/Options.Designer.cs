@@ -32,6 +32,7 @@ namespace OMLDatabaseEditor
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.tpOptions = new DevExpress.XtraTab.XtraTabPage();
+            this.cePrependParentFolder = new DevExpress.XtraEditors.CheckEdit();
             this.ceUseGenreList = new DevExpress.XtraEditors.CheckEdit();
             this.ceUseMPAAList = new DevExpress.XtraEditors.CheckEdit();
             this.ceFoldersAsTitles = new DevExpress.XtraEditors.CheckEdit();
@@ -54,6 +55,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tpOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cePrependParentFolder.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseMPAAList.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceFoldersAsTitles.Properties)).BeginInit();
@@ -106,12 +108,21 @@ namespace OMLDatabaseEditor
             // 
             // tpOptions
             // 
+            this.tpOptions.Controls.Add(this.cePrependParentFolder);
             this.tpOptions.Controls.Add(this.ceUseGenreList);
             this.tpOptions.Controls.Add(this.ceUseMPAAList);
             this.tpOptions.Controls.Add(this.ceFoldersAsTitles);
             this.tpOptions.Name = "tpOptions";
             this.tpOptions.Size = new System.Drawing.Size(346, 271);
             this.tpOptions.Text = "Options";
+            // 
+            // cePrependParentFolder
+            // 
+            this.cePrependParentFolder.Location = new System.Drawing.Point(7, 76);
+            this.cePrependParentFolder.Name = "cePrependParentFolder";
+            this.cePrependParentFolder.Properties.Caption = "Prepend Parent Folder to Title on folder scan";
+            this.cePrependParentFolder.Size = new System.Drawing.Size(259, 18);
+            this.cePrependParentFolder.TabIndex = 3;
             // 
             // ceUseGenreList
             // 
@@ -136,6 +147,7 @@ namespace OMLDatabaseEditor
             this.ceFoldersAsTitles.Properties.Caption = "Folders are Titles";
             this.ceFoldersAsTitles.Size = new System.Drawing.Size(259, 18);
             this.ceFoldersAsTitles.TabIndex = 2;
+            this.ceFoldersAsTitles.CheckStateChanged += new System.EventHandler(this.ceFoldersAsTitles_CheckStateChanged);
             // 
             // tpSkins
             // 
@@ -306,6 +318,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
             this.xtraTabControl1.ResumeLayout(false);
             this.tpOptions.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.cePrependParentFolder.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseMPAAList.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceFoldersAsTitles.Properties)).EndInit();
@@ -348,5 +361,6 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraEditors.ListBoxControl lbcTags;
         private DevExpress.XtraEditors.ButtonEdit beTags;
         private System.Windows.Forms.ContextMenuStrip cmGenreMappings;
+        private DevExpress.XtraEditors.CheckEdit cePrependParentFolder;
     }
 }
