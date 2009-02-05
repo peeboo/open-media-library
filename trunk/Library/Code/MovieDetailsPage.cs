@@ -516,6 +516,9 @@ namespace Library
                 {
                     backgroundImages.Add(new Image(
                         string.Format("file://{0}", Path.GetFullPath(_movieDetails.TitleObject.BackDropImage))));
+
+                    // set the background image
+                    BackgroundImage = backgroundImages[0];
                     
                     return;
                 }                
