@@ -417,17 +417,23 @@ namespace TheMovieDbMetadata
                 if (this.BackDrops == null)
                     return;
 
+                string downloadTo = t.BackDropFolder;
                 WebClient web = new WebClient();                
                 foreach (string backDropUrl in this.BackDrops)
                 {
                     if (!string.IsNullOrEmpty(backDropUrl))
                     {
                         if (!Directory.Exists(t.BackDropFolder))
-                            Directory.CreateDirectory(t.BackDropFolder);
-
+                        {
+                            string mainFanArtDir = @"C:\ProgramData\OpenMediaLibrary\FanArt";
+                            string pdTitleDir = @"C:\ProgramData\OpenMediaLibrary\FanArt\" + t.Name.ToString();
+                            if (!Directory.Exists(mainFanArtDir)) Directory.CreateDirectory(mainFanArtDir);
+                            if (!Directory.Exists(pdTitleDir)) Directory.CreateDirectory(pdTitleDir);
+                            downloadTo = pdTitleDir.ToString();
+                        }
                         string filename = backDropUrl.Substring(backDropUrl.LastIndexOf('/') + 1);
                         filename = Path.GetFileName(filename);
-                        web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, filename).ToString());
+                        web.DownloadFile(backDropUrl, Path.Combine(downloadTo, filename).ToString());
                     }
                 }
             }
