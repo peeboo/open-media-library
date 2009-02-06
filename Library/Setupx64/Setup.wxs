@@ -155,6 +155,11 @@
                               Source="..\..\OMLTranscoder\mencoder-1.0rc2-4.2.1.exe" Checksum="no" />
                     </Component>
 
+					<Component Id="MediaInfo.dll" Guid="BCDD1285-37EA-4086-838A-82BE908F074F" Win64="yes" DiskId="1">
+						<File Name="MediaInfo.dll"
+                              Source="..\..\OMLEngine\MediaInfox64.dll" Checksum="no" />
+					</Component>
+					
                   <Component Id="Maximizer.exe" Guid="e94299e1-62cd-4068-8861-052c8c7bec6c" Win64="yes" DiskId="1">
                     <File Name="Maximizer.exe"
                           Source="..\..\Maximizer\bin\$(var.BuildType)\Maximizer.exe" Checksum="no" />
@@ -337,6 +342,7 @@
             <ComponentRef Id="OMLDatabaseEditor.exe" />
             <ComponentRef Id="OMLImporter.exe" />
             <ComponentRef Id="MEncoder.exe"/>
+			<ComponentRef Id="MediaInfo.dll"/>
             <ComponentRef Id="Maximizer.exe"/>
 
       <!-- Start Menu Shortcuts -->
