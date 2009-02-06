@@ -14,6 +14,10 @@ namespace OMLTestSuite
     {
         static void Main(string[] args)
         {
+            DiskInfoTest dit = new DiskInfoTest();
+            //dit.TestLookup("AVI", @"G:\Films\Father Ted\Series 1\FatherTed Episode 5.divx", OMLEngine.VideoFormat.AVI);
+            //dit.TestLookup("AVI", @"G:\Films\Star Wars 1 - mkv\Star Wars Episode I - The Phontom Menace (1080p).mkv", OMLEngine.VideoFormat.AVI);
+
             TheMovieDbMetadataPluginTest tmdmpt = new TheMovieDbMetadataPluginTest();
             tmdmpt.TEST_BASE_CASE();
 
