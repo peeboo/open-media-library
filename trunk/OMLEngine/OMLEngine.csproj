@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioStream.cs" />
+    <Compile Include="DiskInfo.cs" />
     <Compile Include="DVDAudioTrack.cs" />
     <Compile Include="DVDChapter.cs" />
     <Compile Include="DVDDisk.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="ITranscodingService.cs" />
     <Compile Include="MediaData.cs" />
     <Compile Include="MediaInfo.cs" />
+    <Compile Include="MediaInfoLib.cs" />
     <Compile Include="MediaLanguage.cs" />
     <Compile Include="MediaSource.cs" />
     <Compile Include="NetHelper.cs" />
