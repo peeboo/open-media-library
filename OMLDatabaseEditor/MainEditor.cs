@@ -91,6 +91,9 @@ namespace OMLDatabaseEditor
                 miMetadataMulti.DropDownItems.Add(metadataItem);
             }
 
+            if (String.IsNullOrEmpty(Properties.Settings.Default.gsDefaultMetadataPlugin))
+                fromPreferredSourcesToolStripMenuItem.Visible = false;
+
             // Set up filter lists
             ToolStripMenuItem item;
             foreach (string genre in _titleCollection.GetAllGenres)
@@ -379,52 +382,96 @@ namespace OMLDatabaseEditor
                 if (titleNameSearch != null)
                 {
                     Cursor = Cursors.WaitCursor;
-                    plugin.SearchForMovie(titleNameSearch);
-                    frmSearchResult searchResultForm;
-                    if (targetForm == null) searchResultForm = new frmSearchResult(this);
-                    else searchResultForm = targetForm as frmSearchResult;
-                    searchResultForm.ReSearchText = titleNameSearch;
-                    searchResultForm.LastMetaPluginName = (string)plugin.PluginName;
-                    Cursor = Cursors.Default;
-                    DialogResult result = searchResultForm.ShowResults(plugin.GetAvailableTitles());
-                    if (result == DialogResult.OK)
+                    if (plugin != null)
                     {
-                        Title t = plugin.GetTitle(searchResultForm.SelectedTitleIndex);
-                        if (t != null)
+                        // Update movie based on specified plugin
+                        plugin.SearchForMovie(titleNameSearch);
+                        frmSearchResult searchResultForm;
+                        if (targetForm == null) searchResultForm = new frmSearchResult(this);
+                        else searchResultForm = targetForm as frmSearchResult;
+                        searchResultForm.ReSearchText = titleNameSearch;
+                        searchResultForm.LastMetaPluginName = (string)plugin.PluginName;
+                        Cursor = Cursors.Default;
+                        DialogResult result = searchResultForm.ShowResults(plugin.GetAvailableTitles());
+                        if (result == DialogResult.OK)
                         {
-                            if (plugin.SupportsBackDrops())
+                            Title t = plugin.GetTitle(searchResultForm.SelectedTitleIndex);
+                            if (t != null)
                             {
-                                if (titleEditor.EditedTitle.BasePath() != null)
+                                if (plugin.SupportsBackDrops())
                                 {
-                                    DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
-                                    dbdForm.Show();
-                                    plugin.DownloadBackDropsForTitle(titleEditor.EditedTitle, searchResultForm.SelectedTitleIndex);
-                                    dbdForm.Hide();
-                                    dbdForm.Dispose();
+                                    if (titleEditor.EditedTitle.BasePath() != null)
+                                    {
+                                        DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
+                                        dbdForm.Show();
+                                        plugin.DownloadBackDropsForTitle(titleEditor.EditedTitle, searchResultForm.SelectedTitleIndex);
+                                        dbdForm.Hide();
+                                        dbdForm.Dispose();
+                                    }
+                                    else
+                                    {
+                                        XtraMessageBox.Show("A disk must be assigned to this title. Assign a disk then update the metadata.", "Could not download backdrops!");
+                                    }
+                                }
+                                if (coverArtOnly)
+                                {
+                                    if (!String.IsNullOrEmpty(t.FrontCoverPath))
+                                    {
+                                        titleEditor.EditedTitle.CopyFrontCoverFromFile(t.FrontCoverPath, true);
+                                    }
                                 }
                                 else
                                 {
-                                    XtraMessageBox.Show("A disk must be assigned to this title. Assign a disk then update the metadata.", "Could not download backdrops!");
+                                    titleEditor.EditedTitle.CopyMetadata(t, searchResultForm.OverwriteMetadata);
                                 }
                             }
-                            if (coverArtOnly)
+                            CheckGenresAgainstSupported(titleEditor.EditedTitle);
+                            titleEditor.RefreshEditor();
+                            return true;
+                        }
+                        else
+                            return false;
+                    }
+                    else
+                    {
+                        // Import metadata based on field mappings and configured default plugin
+                        Dictionary<string, List<string>> mappings = _titleCollection.PropertiesByPlugin();
+                        // Loop through configured mappings
+                        Type tTitle = typeof(Title);
+                        IOMLMetadataPlugin metadata;
+                        Title title;
+                        foreach (KeyValuePair<string, List<string>> map in mappings)
+                        {
+                            if (map.Key == Properties.Settings.Default.gsDefaultMetadataPlugin) continue;
+                            metadata = _metadataPlugins.First(p => p.PluginName == map.Key);
+                            metadata.SearchForMovie(titleNameSearch);
+                            title = metadata.GetBestMatch();
+                            if (title != null)
                             {
-                                if (!String.IsNullOrEmpty(t.FrontCoverPath))
+                                Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using plugin " + map.Key); 
+                                foreach (string property in map.Value)
                                 {
-                                    titleEditor.EditedTitle.CopyFrontCoverFromFile(t.FrontCoverPath, true);
+                                    Utilities.DebugLine("[OMLDatabaseEditor] Using value for " + property + " from plugin " + map.Key);
+                                    System.Reflection.PropertyInfo prop = tTitle.GetProperty(property);
+                                    prop.SetValue(titleEditor.EditedTitle, prop.GetValue(title, null), null);
                                 }
-                            }
-                            else
-                            {
-                                titleEditor.EditedTitle.CopyMetadata(t, searchResultForm.OverwriteMetadata);
                             }
                         }
+                        // Use default plugin for remaining fields
+                        metadata = _metadataPlugins.First(p => p.PluginName == Properties.Settings.Default.gsDefaultMetadataPlugin);
+                        metadata.SearchForMovie(titleNameSearch);
+                        title = metadata.GetBestMatch();
+                        if (title != null)
+                        {
+                            Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using default plugin " + metadata.PluginName);
+                            titleEditor.EditedTitle.CopyMetadata(title, false);
+                        }
+
+                        Cursor = Cursors.Default;
                         CheckGenresAgainstSupported(titleEditor.EditedTitle);
                         titleEditor.RefreshEditor();
                         return true;
                     }
-                    else
-                        return false;
                 }
                 return false;
             }
@@ -562,6 +609,7 @@ namespace OMLDatabaseEditor
                     if (options.OptionsDirty)
                     {
                         this.titleEditor.SetMRULists();
+                        fromPreferredSourcesToolStripMenuItem.Visible = !String.IsNullOrEmpty(Properties.Settings.Default.gsDefaultMetadataPlugin);
                     }
                 }
             }
@@ -783,6 +831,22 @@ namespace OMLDatabaseEditor
                 ToggleSaveState(false);
 
                 if (StartMetadataImport(plugin, false))
+                {
+                    _titleCollection.Replace(titleEditor.EditedTitle);
+                    _titleCollection.saveTitleCollection();
+                }
+            }
+        }
+
+        private void fromPreferredSourcesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Title title in lbMovies.SelectedItems)
+            {
+                titleEditor.LoadDVD(title);
+                this.Text = APP_TITLE + " - " + title.Name;
+                ToggleSaveState(false);
+
+                if (StartMetadataImport(null, false))
                 {
                     _titleCollection.Replace(titleEditor.EditedTitle);
                     _titleCollection.saveTitleCollection();

@@ -20,5 +20,8 @@
     <Setting Name="gsTags" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="gsDefaultMetadataPlugin" Type="System.String" Scope="User">
+      <Value Profile="(Default)"> </Value>
+    </Setting>
   </Settings>
 </SettingsFile>

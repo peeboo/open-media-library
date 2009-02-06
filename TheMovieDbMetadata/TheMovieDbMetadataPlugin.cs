@@ -119,9 +119,9 @@ namespace TheMovieDbMetadata
                             break;
 
                         case "release":
-                            result.Title.ReleaseDate = DateTime.Parse(
-                                                            GetElementValue(reader),
-                                                            CultureInfo.CreateSpecificCulture("en-GB"));
+                            DateTime releaseDate;
+                            if (DateTime.TryParse(GetElementValue(reader), CultureInfo.CreateSpecificCulture("en-GB"), DateTimeStyles.None, out releaseDate))
+                                result.Title.ReleaseDate = releaseDate;
                             break;
 
                         case "poster":

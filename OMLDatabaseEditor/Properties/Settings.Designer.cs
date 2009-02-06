@@ -93,5 +93,17 @@ namespace OMLDatabaseEditor.Properties {
                 this["gsTags"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string gsDefaultMetadataPlugin {
+            get {
+                return ((string)(this["gsDefaultMetadataPlugin"]));
+            }
+            set {
+                this["gsDefaultMetadataPlugin"] = value;
+            }
+        }
     }
 }
