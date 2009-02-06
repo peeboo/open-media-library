@@ -166,7 +166,7 @@
                     <File Name="OMLEngineService.exe.config"
                           Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe.config" Checksum="no"/>
                     <ServiceInstall Id="OMLEngineService" Name="OMLEngineService" DisplayName="OMLEngineService"
-                                    Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
+                                    Type="ownProcess" Interactive="no" Start="demand" Vital="yes"
                                     ErrorControl="normal"/>
                     <!--<ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
@@ -176,7 +176,7 @@
                     <File Name="OMLFWService.exe"
                           Source="..\..\OMLFWService\bin\$(var.BuildType)\OMLFWService.exe" Checksum="yes"/>
                     <ServiceInstall Id="OMLFWService" Name="OMLFWService" DisplayName="OMLFWService"
-                                    Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
+                                    Type="ownProcess" Interactive="no" Start="demand" Vital="yes"
                                     ErrorControl="normal"/>
                     <!--<ServiceControl Id="OMLFWServiceControl" Name="OMLFWService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
@@ -436,7 +436,7 @@
 				<![CDATA[NOT REMOVE]]>
 			</Custom>
             <Custom Action="ActivateNetTcpPortSharing" After="InstallInitialize">Not Installed</Custom>
-            <ScheduleReboot After="InstallFinalize"/>
+            <!--<ScheduleReboot After="InstallFinalize"/>-->
         </InstallExecuteSequence>
 
 		<!-- The InstallUISequence table describes the order that actions will be executed when the user     -->
