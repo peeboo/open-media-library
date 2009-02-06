@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
+using DevExpress.XtraEditors.Repository;
 
 using OMLEngine;
 using OMLSDK;
@@ -54,25 +55,34 @@ namespace OMLDatabaseEditor
                     }
                 }
                 plugins = null;
+                string pluginForProperty = MainEditor._titleCollection.PluginForProperty(_propertyName);
+                cbDefault.Checked = String.IsNullOrEmpty(pluginForProperty);
 
                 foreach (KeyValuePair<string, object> data in dataCollection)
                 {
                     LabelControl lblPlugin = new LabelControl();
                     lblPlugin.Text = data.Key;
-                    if (MainEditor._titleCollection.PluginForProperty(_propertyName) == data.Key)
+                    if (pluginForProperty == data.Key)
                         lblPlugin.Font = new Font(lblPlugin.Font, FontStyle.Bold);
                     tblData.Controls.Add(lblPlugin);
                     switch (_type)
                     {
                         case PropertyTypeEnum.Image:
-                            PictureBox pbValue = new PictureBox();
-                            pbValue.ImageLocation = data.Value.ToString();
-                            pbValue.SizeMode = PictureBoxSizeMode.Zoom;
-                            pbValue.Dock = DockStyle.Fill;
-                            pbValue.Height = 200;
-                            pbValue.Tag = data.Key;
-                            pbValue.DoubleClick += new EventHandler(data_DoubleClick);
-                            tblData.Controls.Add(pbValue);
+                            PictureEdit peValue = new PictureEdit();
+                            peValue.Properties.ShowMenu = false;
+                            peValue.Tag = data.Key + "|" + data.Value.ToString();
+                            peValue.Image = Utilities.ReadImageFromFile(data.Value.ToString());
+                            if (peValue.Image == null)
+                            {
+                                tblData.Controls.Remove(lblPlugin);
+                                continue;
+                            }
+                            peValue.ToolTip = String.Format("{0}x{1}", peValue.Image.Width, peValue.Image.Height);
+                            peValue.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
+                            peValue.Height = 200;
+                            peValue.Dock = DockStyle.Fill;
+                            peValue.DoubleClick += new EventHandler(data_DoubleClick);
+                            tblData.Controls.Add(peValue);
                             break;
                         case PropertyTypeEnum.Number:
                         case PropertyTypeEnum.Date:
@@ -104,20 +114,24 @@ namespace OMLDatabaseEditor
         void data_DoubleClick(object sender, EventArgs e)
         {
             Control ctrl = sender as Control;
-            if (cbDefault.Checked)
+            string pluginName = ctrl.Tag as string;
+            if (sender is PictureEdit)
             {
-                MainEditor._titleCollection.MetadataMap[_propertyName] = ctrl.Tag as string;
-                MainEditor._titleCollection.saveTitleCollection();
-            }
-            if (sender is PictureBox)
-            {
+                string[] tagContent = pluginName.Split('|');
+                pluginName = tagContent[0];
+                string imagePath = tagContent[1];
                 if (_propertyName == "FrontCoverPath")
-                    _title.CopyFrontCoverFromFile((sender as PictureBox).ImageLocation, true);
+                    _title.CopyFrontCoverFromFile(imagePath, true);
                 else
-                    _title.CopyBackCoverFromFile((sender as PictureBox).ImageLocation, true);
+                    _title.CopyBackCoverFromFile(imagePath, true);
             }
             else
                 _propertyInfo.SetValue(_title, ctrl.Text, null);
+            if (cbDefault.Checked)
+            {
+                MainEditor._titleCollection.MetadataMap[_propertyName] = pluginName;
+                MainEditor._titleCollection.saveTitleCollection();
+            }
             DialogResult = DialogResult.OK;
         }
     }
