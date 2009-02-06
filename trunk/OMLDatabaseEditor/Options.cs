@@ -12,6 +12,7 @@ using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 
 using OMLEngine;
+using OMLSDK;
 
 namespace OMLDatabaseEditor
 {
@@ -88,6 +89,12 @@ namespace OMLDatabaseEditor
             this.ceFoldersAsTitles.Checked = OMLEngine.Properties.Settings.Default.FoldersAreTitles;
             this.cePrependParentFolder.Checked = OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName;
             cePrependParentFolder.Enabled = this.ceFoldersAsTitles.Checked;
+
+            foreach (IOMLMetadataPlugin plugin in MainEditor._metadataPlugins)
+            {
+                cmbDefaultMetadataPlugin.Properties.Items.Add(plugin.PluginName);
+            }
+            cmbDefaultMetadataPlugin.SelectedItem = Properties.Settings.Default.gsDefaultMetadataPlugin;
         }
 
         private void SimpleButtonClick(object sender, EventArgs e)
@@ -129,6 +136,10 @@ namespace OMLDatabaseEditor
                     String Tags = String.Join("|", TagList.ToArray());
                     Properties.Settings.Default.gsTags = Tags;
                 }
+
+                bDirty = true;
+                Properties.Settings.Default.gsDefaultMetadataPlugin = (string)cmbDefaultMetadataPlugin.SelectedItem;
+
                 if (bDirty)
                 {
                     OptionsDirty = bDirty;

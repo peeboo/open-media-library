@@ -126,13 +126,25 @@ namespace OMLDatabaseEditor
                     _title.CopyBackCoverFromFile(imagePath, true);
             }
             else
-                _propertyInfo.SetValue(_title, ctrl.Text, null);
+                SetPropertyValue(_propertyInfo, _title, ctrl.Text);
             if (cbDefault.Checked)
             {
                 MainEditor._titleCollection.MetadataMap[_propertyName] = pluginName;
                 MainEditor._titleCollection.saveTitleCollection();
             }
             DialogResult = DialogResult.OK;
+        }
+
+        private void SetPropertyValue(PropertyInfo property, Title title, string value)
+        {
+            if (property.PropertyType == typeof(Int32))
+                property.SetValue(title, Int32.Parse(value), null);
+            else if (property.PropertyType == typeof(bool))
+                property.SetValue(title, bool.Parse(value), null);
+            else if (property.PropertyType == typeof(DateTime))
+                property.SetValue(title, DateTime.Parse(value), null);
+            else
+                property.SetValue(title, value, null);
         }
     }
 

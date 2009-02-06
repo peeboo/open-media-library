@@ -836,7 +836,7 @@
             this.tpPeople.Controls.Add(this.rgPeople);
             this.tpPeople.Controls.Add(this.lbPeople);
             this.tpPeople.Name = "tpPeople";
-            this.tpPeople.Size = new System.Drawing.Size(513, 368);
+            this.tpPeople.Size = new System.Drawing.Size(513, 492);
             this.tpPeople.Text = "People";
             // 
             // beFilter
@@ -918,7 +918,7 @@
             // 
             this.tpBackdrop.Controls.Add(this.pbBackdrop);
             this.tpBackdrop.Name = "tpBackdrop";
-            this.tpBackdrop.Size = new System.Drawing.Size(513, 368);
+            this.tpBackdrop.Size = new System.Drawing.Size(513, 492);
             this.tpBackdrop.Text = "Backdrop";
             // 
             // pbBackdrop
@@ -931,7 +931,7 @@
             this.pbBackdrop.InitialImage = ((System.Drawing.Image)(resources.GetObject("pbBackdrop.InitialImage")));
             this.pbBackdrop.Location = new System.Drawing.Point(0, 0);
             this.pbBackdrop.Name = "pbBackdrop";
-            this.pbBackdrop.Size = new System.Drawing.Size(513, 368);
+            this.pbBackdrop.Size = new System.Drawing.Size(513, 492);
             this.pbBackdrop.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbBackdrop.TabIndex = 1;
             this.pbBackdrop.TabStop = false;
@@ -970,7 +970,6 @@
             // 
             // disksBindingSource
             // 
-            this.disksBindingSource.DataMember = "Disks";
             this.disksBindingSource.DataSource = this.titleSource;
             // 
             // defaultLookAndFeel1
