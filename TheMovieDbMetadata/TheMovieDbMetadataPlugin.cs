@@ -52,9 +52,16 @@ namespace TheMovieDbMetadata
         // get the best match
         public Title GetBestMatch()
         {
-            return (results != null && results.Count != 0)
-                ? results[0].Title
-                : null;                
+            if (results != null)
+            {
+                if (results.Count != 0)
+                {
+                    // load up the big image
+                    DownloadImage( results[0].Title, results[0].ImageUrl);
+                    return results[0].Title;
+                }
+            }
+            return null;             
         }
 
         // or choose among all the titles
