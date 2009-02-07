@@ -29,12 +29,13 @@ namespace OMLDatabaseEditor
             _type = type;
             Type tTitle = title.GetType();
             _propertyInfo = tTitle.GetProperty(propertyName);
-            PrepareForm();
+            lblTitleProperty.Text = String.Format("{0} : {1}", _title.Name, _propertyName);
         }
 
         private void PrepareForm()
         {
-            lblTitleProperty.Text = String.Format("{0} : {1}", _title.Name, _propertyName);
+            Application.DoEvents();
+            Cursor = Cursors.WaitCursor;
             List<PluginServices.AvailablePlugin> plugins = new List<PluginServices.AvailablePlugin>();
             string path = FileSystemWalker.PluginsDirectory;
             plugins = PluginServices.FindPlugins(path, PluginTypes.MetadataPlugin);
@@ -42,71 +43,120 @@ namespace OMLDatabaseEditor
             // Loop through available plugins, creating instances and add them
             if (plugins != null)
             {
+                string pluginForProperty = MainEditor._titleCollection.PluginForProperty(_propertyName);
+                cbDefault.Checked = String.IsNullOrEmpty(pluginForProperty);
+
                 Dictionary<string, object> dataCollection = new Dictionary<string, object>();
                 foreach (PluginServices.AvailablePlugin oPlugin in plugins)
                 {
                     objPlugin = (IOMLMetadataPlugin)PluginServices.CreateInstance(oPlugin);
                     objPlugin.Initialize(new Dictionary<string, string>());
-                    objPlugin.SearchForMovie(_title.Name);
-                    Title title = objPlugin.GetBestMatch();
-                    if (title != null)
+                    try
                     {
-                        dataCollection[objPlugin.PluginName] = _propertyInfo.GetValue(title, null);
+                        objPlugin.SearchForMovie(_title.Name);
+                        Title title = objPlugin.GetBestMatch();
+                        if (title != null)
+                        {
+                            AddResult(objPlugin, _propertyInfo.GetValue(title, null), pluginForProperty);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Utilities.DebugLine("[OMLDatabaseEditor] Error loading metadata: " + e.Message);
+                        continue;
                     }
                 }
                 plugins = null;
-                string pluginForProperty = MainEditor._titleCollection.PluginForProperty(_propertyName);
-                cbDefault.Checked = String.IsNullOrEmpty(pluginForProperty);
+            }
+            Cursor = Cursors.Default;
+        }
 
-                foreach (KeyValuePair<string, object> data in dataCollection)
-                {
-                    LabelControl lblPlugin = new LabelControl();
-                    lblPlugin.Text = data.Key;
-                    if (pluginForProperty == data.Key)
-                        lblPlugin.Font = new Font(lblPlugin.Font, FontStyle.Bold);
-                    tblData.Controls.Add(lblPlugin);
-                    switch (_type)
+        private void AddResult(IOMLMetadataPlugin plugin, object value, string defaultPlugin)
+        {
+            LabelControl lblPlugin = new LabelControl();
+            lblPlugin.Text = plugin.PluginName;
+            if (defaultPlugin == plugin.PluginName)
+                lblPlugin.Font = new Font(lblPlugin.Font, FontStyle.Bold);
+            // Add context menu of other search results
+            ContextMenu menu = new ContextMenu();
+            menu.Tag = plugin;
+            Title[] matches = plugin.GetAvailableTitles();
+            for (int i = 0; i < matches.Length; i++)
+            {
+                MenuItem item = new MenuItem(matches[i].Name, new EventHandler(otherTitle_Click));
+                item.Tag = i;
+                menu.MenuItems.Add(item);
+            }
+            lblPlugin.ContextMenu = menu;
+            Control ctrl = CreateValueControl(plugin.PluginName, value);
+            if (ctrl != null)
+            {
+                tblData.Controls.Add(lblPlugin);
+                tblData.Controls.Add(ctrl);
+            }
+            Application.DoEvents();
+        }
+
+        private Control CreateValueControl(string pluginName, object value)
+        {
+            switch (_type)
+            {
+                case PropertyTypeEnum.Image:
+                    PictureEdit peValue = new PictureEdit();
+                    peValue.Properties.ShowMenu = false;
+                    peValue.Tag = pluginName + "|" + value.ToString();
+                    peValue.Image = Utilities.ReadImageFromFile(value.ToString());
+                    if (peValue.Image == null)
                     {
-                        case PropertyTypeEnum.Image:
-                            PictureEdit peValue = new PictureEdit();
-                            peValue.Properties.ShowMenu = false;
-                            peValue.Tag = data.Key + "|" + data.Value.ToString();
-                            peValue.Image = Utilities.ReadImageFromFile(data.Value.ToString());
-                            if (peValue.Image == null)
-                            {
-                                tblData.Controls.Remove(lblPlugin);
-                                continue;
-                            }
-                            peValue.ToolTip = String.Format("{0}x{1}", peValue.Image.Width, peValue.Image.Height);
-                            peValue.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
-                            peValue.Height = 200;
-                            peValue.Dock = DockStyle.Fill;
-                            peValue.DoubleClick += new EventHandler(data_DoubleClick);
-                            tblData.Controls.Add(peValue);
-                            break;
-                        case PropertyTypeEnum.Number:
-                        case PropertyTypeEnum.Date:
-                        case PropertyTypeEnum.String:
-                            if (data.Value.ToString().Length > 20)
-                            {
-                                MemoEdit txtValue = new MemoEdit();
-                                txtValue.Text = data.Value.ToString();
-                                txtValue.Dock = DockStyle.Fill;
-                                txtValue.Tag = data.Key;
-                                txtValue.DoubleClick += new EventHandler(data_DoubleClick);
-                                tblData.Controls.Add(txtValue);
-                            }
-                            else
-                            {
-                                LabelControl lblValue = new LabelControl();
-                                lblValue.Text = data.Value.ToString();
-                                lblValue.Tag = data.Key;
-                                lblValue.Dock = DockStyle.Fill;
-                                lblValue.DoubleClick += new EventHandler(data_DoubleClick);
-                                tblData.Controls.Add(lblValue);
-                            }
-                            break;
+                        return null;
                     }
+                    peValue.ToolTip = String.Format("{0}x{1}", peValue.Image.Width, peValue.Image.Height);
+                    peValue.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
+                    peValue.Height = 200;
+                    peValue.Dock = DockStyle.Fill;
+                    peValue.DoubleClick += new EventHandler(data_DoubleClick);
+                    return peValue;
+                case PropertyTypeEnum.Number:
+                case PropertyTypeEnum.Date:
+                case PropertyTypeEnum.String:
+                    if (value.ToString().Length > 20)
+                    {
+                        MemoEdit txtValue = new MemoEdit();
+                        txtValue.Text = value.ToString();
+                        txtValue.Dock = DockStyle.Fill;
+                        txtValue.Tag = pluginName;
+                        txtValue.DoubleClick += new EventHandler(data_DoubleClick);
+                        return txtValue;
+                    }
+                    else
+                    {
+                        LabelControl lblValue = new LabelControl();
+                        lblValue.Text = value.ToString();
+                        lblValue.Tag = pluginName;
+                        lblValue.Dock = DockStyle.Fill;
+                        lblValue.DoubleClick += new EventHandler(data_DoubleClick);
+                        return lblValue;
+                    }
+                default:
+                    return null;
+            }
+        }
+
+        void otherTitle_Click(object sender, EventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            ContextMenu menu = item.Parent as ContextMenu;
+            IOMLMetadataPlugin plugin = ((IOMLMetadataPlugin)menu.Tag);
+            Title selectedTitle = plugin.GetTitle((int)item.Tag);
+            for (int i = 0; i < tblData.Controls.Count; i++)
+            {
+                Control ctrl = tblData.Controls[i];
+                if (ctrl is LabelControl && ctrl.Text == plugin.PluginName)
+                {
+                    int row = i / 2;
+                    tblData.Controls.RemoveAt(i + 1);
+                    tblData.Controls.Add(CreateValueControl(plugin.PluginName, _propertyInfo.GetValue(selectedTitle, null)), 1, row);
+                    return;
                 }
             }
         }
@@ -145,6 +195,11 @@ namespace OMLDatabaseEditor
                 property.SetValue(title, DateTime.Parse(value), null);
             else
                 property.SetValue(title, value, null);
+        }
+
+        private void MetadataSelect_Shown(object sender, EventArgs e)
+        {
+            PrepareForm();
         }
     }
 

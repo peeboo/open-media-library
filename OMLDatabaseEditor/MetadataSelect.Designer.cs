@@ -31,16 +31,16 @@ namespace OMLDatabaseEditor
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MetadataSelect));
             this.lblTitleProperty = new DevExpress.XtraEditors.LabelControl();
             this.tblMain = new System.Windows.Forms.TableLayoutPanel();
-            this.cbDefault = new DevExpress.XtraEditors.CheckEdit();
-            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.xtraScrollableControl1 = new DevExpress.XtraEditors.XtraScrollableControl();
             this.tblData = new System.Windows.Forms.TableLayoutPanel();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
+            this.cbDefault = new DevExpress.XtraEditors.CheckEdit();
+            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.tblMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cbDefault.Properties)).BeginInit();
             this.xtraScrollableControl1.SuspendLayout();
             this.tblData.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cbDefault.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTitleProperty
@@ -71,23 +71,6 @@ namespace OMLDatabaseEditor
             this.tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblMain.Size = new System.Drawing.Size(420, 535);
             this.tblMain.TabIndex = 2;
-            // 
-            // cbDefault
-            // 
-            this.cbDefault.EditValue = true;
-            this.cbDefault.Location = new System.Drawing.Point(3, 514);
-            this.cbDefault.Name = "cbDefault";
-            this.cbDefault.Properties.Caption = "Use selected plugin as default source for field";
-            this.cbDefault.Size = new System.Drawing.Size(262, 18);
-            this.cbDefault.TabIndex = 2;
-            // 
-            // labelControl3
-            // 
-            this.labelControl3.Location = new System.Drawing.Point(3, 31);
-            this.labelControl3.Name = "labelControl3";
-            this.labelControl3.Size = new System.Drawing.Size(329, 13);
-            this.labelControl3.TabIndex = 6;
-            this.labelControl3.Text = "Double-click desired value to use it in the title. Bold indicates default.";
             // 
             // xtraScrollableControl1
             // 
@@ -132,6 +115,23 @@ namespace OMLDatabaseEditor
             this.labelControl2.TabIndex = 1;
             this.labelControl2.Text = "Data";
             // 
+            // cbDefault
+            // 
+            this.cbDefault.EditValue = true;
+            this.cbDefault.Location = new System.Drawing.Point(3, 514);
+            this.cbDefault.Name = "cbDefault";
+            this.cbDefault.Properties.Caption = "Use selected plugin as default source for field";
+            this.cbDefault.Size = new System.Drawing.Size(262, 18);
+            this.cbDefault.TabIndex = 2;
+            // 
+            // labelControl3
+            // 
+            this.labelControl3.Location = new System.Drawing.Point(3, 31);
+            this.labelControl3.Name = "labelControl3";
+            this.labelControl3.Size = new System.Drawing.Size(329, 13);
+            this.labelControl3.TabIndex = 6;
+            this.labelControl3.Text = "Double-click desired value to use it in the title. Bold indicates default.";
+            // 
             // MetadataSelect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -142,13 +142,14 @@ namespace OMLDatabaseEditor
             this.Name = "MetadataSelect";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Select Desired Metadata Value";
+            this.Shown += new System.EventHandler(this.MetadataSelect_Shown);
             this.tblMain.ResumeLayout(false);
             this.tblMain.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cbDefault.Properties)).EndInit();
             this.xtraScrollableControl1.ResumeLayout(false);
             this.xtraScrollableControl1.PerformLayout();
             this.tblData.ResumeLayout(false);
             this.tblData.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cbDefault.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }

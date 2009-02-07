@@ -68,7 +68,7 @@ namespace NetFlixMetadata
         public Title GetBestMatch()
         {
             return (results != null && results.Count != 0)
-                ? results[0].Title
+                ? GetMovieDetails(results[0].Id)
                 : null;
         }
 
