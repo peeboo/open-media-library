@@ -33,6 +33,7 @@ namespace OMLDatabaseEditor
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblCurrentStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.pgbProgress = new System.Windows.Forms.ToolStripProgressBar();
+            this.statusText = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,6 +81,7 @@ namespace OMLDatabaseEditor
             this.lbMovies = new DevExpress.XtraEditors.ListBoxControl();
             this.cmsMoviesList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miMetadataMulti = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromPreferredSourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.navBarGroupControlContainer2 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.lbMetadata = new DevExpress.XtraEditors.ListBoxControl();
@@ -95,7 +97,6 @@ namespace OMLDatabaseEditor
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
-            this.fromPreferredSourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -120,7 +121,8 @@ namespace OMLDatabaseEditor
             this.statusStrip.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblCurrentStatus,
-            this.pgbProgress});
+            this.pgbProgress,
+            this.statusText});
             this.statusStrip.Location = new System.Drawing.Point(0, 719);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode;
@@ -138,6 +140,12 @@ namespace OMLDatabaseEditor
             this.pgbProgress.Name = "pgbProgress";
             this.pgbProgress.Size = new System.Drawing.Size(100, 16);
             this.pgbProgress.Visible = false;
+            // 
+            // statusText
+            // 
+            this.statusText.Name = "statusText";
+            this.statusText.Size = new System.Drawing.Size(597, 17);
+            this.statusText.Spring = true;
             // 
             // menuStrip
             // 
@@ -540,7 +548,7 @@ namespace OMLDatabaseEditor
             this.miMetadataMulti,
             this.deleteToolStripMenuItem1});
             this.cmsMoviesList.Name = "cmsMoviesList";
-            this.cmsMoviesList.Size = new System.Drawing.Size(166, 70);
+            this.cmsMoviesList.Size = new System.Drawing.Size(166, 48);
             // 
             // miMetadataMulti
             // 
@@ -549,6 +557,13 @@ namespace OMLDatabaseEditor
             this.miMetadataMulti.Name = "miMetadataMulti";
             this.miMetadataMulti.Size = new System.Drawing.Size(165, 22);
             this.miMetadataMulti.Text = "Update metadata";
+            // 
+            // fromPreferredSourcesToolStripMenuItem
+            // 
+            this.fromPreferredSourcesToolStripMenuItem.Name = "fromPreferredSourcesToolStripMenuItem";
+            this.fromPreferredSourcesToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.fromPreferredSourcesToolStripMenuItem.Text = "From Preferred Sources";
+            this.fromPreferredSourcesToolStripMenuItem.Click += new System.EventHandler(this.fromPreferredSourcesToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem1
             // 
@@ -684,13 +699,6 @@ namespace OMLDatabaseEditor
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
             // 
-            // fromPreferredSourcesToolStripMenuItem
-            // 
-            this.fromPreferredSourcesToolStripMenuItem.Name = "fromPreferredSourcesToolStripMenuItem";
-            this.fromPreferredSourcesToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.fromPreferredSourcesToolStripMenuItem.Text = "From Preferred Sources";
-            this.fromPreferredSourcesToolStripMenuItem.Click += new System.EventHandler(this.fromPreferredSourcesToolStripMenuItem_Click);
-            // 
             // MainEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -798,6 +806,7 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem deleteSelectedMoviesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem fromPreferredSourcesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel statusText;
     }
 }
 

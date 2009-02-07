@@ -463,6 +463,21 @@ namespace OMLDatabaseEditor
                         title = metadata.GetBestMatch();
                         if (title != null)
                         {
+                            if (metadata.SupportsBackDrops())
+                            {
+                                if (titleEditor.EditedTitle.BasePath() != null)
+                                {
+                                    DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
+                                    dbdForm.Show();
+                                    metadata.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
+                                    dbdForm.Hide();
+                                    dbdForm.Dispose();
+                                }
+                                else
+                                {
+                                    XtraMessageBox.Show("A disk must be assigned to this title. Assign a disk then update the metadata.", "Could not download backdrops!");
+                                }
+                            }
                             Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using default plugin " + metadata.PluginName);
                             titleEditor.EditedTitle.CopyMetadata(title, false);
                         }
@@ -824,8 +839,14 @@ namespace OMLDatabaseEditor
             IOMLMetadataPlugin plugin = selectedItem.Tag as IOMLMetadataPlugin;
 
             //BaseListBoxControl.SelectedItemCollection collection = lbMovies.SelectedItems;
+            pgbProgress.Visible = true;
+            pgbProgress.Maximum = lbMovies.SelectedItems.Count;
+            pgbProgress.Value = 0;
             foreach (Title title in lbMovies.SelectedItems)
             {
+                pgbProgress.Value++;
+                statusText.Text = "Getting metadata for " + title.Name;
+                Application.DoEvents();
                 titleEditor.LoadDVD(title);
                 this.Text = APP_TITLE + " - " + title.Name;
                 ToggleSaveState(false);
@@ -836,12 +857,21 @@ namespace OMLDatabaseEditor
                     _titleCollection.saveTitleCollection();
                 }
             }
+            statusText.Text = "Finished updating metadata";
+            pgbProgress.Visible = false;
+            Application.DoEvents();
         }
 
         private void fromPreferredSourcesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            pgbProgress.Visible = true;
+            pgbProgress.Maximum = lbMovies.SelectedItems.Count;
+            pgbProgress.Value = 0;
             foreach (Title title in lbMovies.SelectedItems)
             {
+                pgbProgress.Value++;
+                statusText.Text = "Getting metadata for " + title.Name;
+                Application.DoEvents();
                 titleEditor.LoadDVD(title);
                 this.Text = APP_TITLE + " - " + title.Name;
                 ToggleSaveState(false);
@@ -852,6 +882,9 @@ namespace OMLDatabaseEditor
                     _titleCollection.saveTitleCollection();
                 }
             }
+            statusText.Text = "Finished updating metadata";
+            pgbProgress.Visible = false;
+            Application.DoEvents();
         }
 
         private void exportCurrentMovieToolStripMenuItem_Click(object sender, EventArgs e)

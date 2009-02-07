@@ -469,7 +469,8 @@ namespace OMLDatabaseEditor.Controls
             Cursor = Cursors.WaitCursor;
             string propertyName = pb.DataBindings[0].BindingMemberInfo.BindingMember;
             MetadataSelect mdSelect = new MetadataSelect(_dvdTitle, propertyName, PropertyTypeEnum.Image);
-            mdSelect.ShowDialog();
+            if (mdSelect.ShowDialog() == DialogResult.OK)
+                TitleChanges(null, EventArgs.Empty);
             PropertyInfo pInfo = _dvdTitle.GetType().GetProperty(propertyName);
             pb.ImageLocation = (string)pInfo.GetValue(_dvdTitle, null);
             Cursor = Cursors.Default;
@@ -493,7 +494,8 @@ namespace OMLDatabaseEditor.Controls
                     else if (sender is DateEdit)
                         propType = PropertyTypeEnum.Date;
                     mdSelect = new MetadataSelect(_dvdTitle, propertyName, propType);
-                    mdSelect.ShowDialog();
+                    if (mdSelect.ShowDialog() == DialogResult.OK)
+                        TitleChanges(null, EventArgs.Empty);
                     (ctrl.BindingManager as CurrencyManager).Refresh();
                     Cursor = Cursors.Default;
                 }

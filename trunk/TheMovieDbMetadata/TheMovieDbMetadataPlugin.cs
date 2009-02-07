@@ -57,8 +57,7 @@ namespace TheMovieDbMetadata
                 if (results.Count != 0)
                 {
                     // load up the big image
-                    DownloadImage( results[0].Title, results[0].ImageUrl);
-                    return results[0].Title;
+                    return GetMovieDetails(results[0].Id);
                 }
             }
             return null;             

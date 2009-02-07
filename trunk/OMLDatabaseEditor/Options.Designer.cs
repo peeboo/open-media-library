@@ -32,6 +32,8 @@ namespace OMLDatabaseEditor
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.tpOptions = new DevExpress.XtraTab.XtraTabPage();
+            this.cmbDefaultMetadataPlugin = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.cePrependParentFolder = new DevExpress.XtraEditors.CheckEdit();
             this.ceUseGenreList = new DevExpress.XtraEditors.CheckEdit();
             this.ceUseMPAAList = new DevExpress.XtraEditors.CheckEdit();
@@ -51,12 +53,11 @@ namespace OMLDatabaseEditor
             this.sbCancel = new DevExpress.XtraEditors.SimpleButton();
             this.sbOK = new DevExpress.XtraEditors.SimpleButton();
             this.cmGenreMappings = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
-            this.cmbDefaultMetadataPlugin = new DevExpress.XtraEditors.ComboBoxEdit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tpOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cmbDefaultMetadataPlugin.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cePrependParentFolder.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseMPAAList.Properties)).BeginInit();
@@ -72,7 +73,6 @@ namespace OMLDatabaseEditor
             this.tpTags.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbcTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.beTags.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cmbDefaultMetadataPlugin.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -120,6 +120,26 @@ namespace OMLDatabaseEditor
             this.tpOptions.Name = "tpOptions";
             this.tpOptions.Size = new System.Drawing.Size(346, 271);
             this.tpOptions.Text = "Options";
+            // 
+            // cmbDefaultMetadataPlugin
+            // 
+            this.cmbDefaultMetadataPlugin.Location = new System.Drawing.Point(135, 101);
+            this.cmbDefaultMetadataPlugin.Name = "cmbDefaultMetadataPlugin";
+            this.cmbDefaultMetadataPlugin.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
+            this.cmbDefaultMetadataPlugin.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cmbDefaultMetadataPlugin.Properties.NullText = "Not Specified";
+            this.cmbDefaultMetadataPlugin.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
+            this.cmbDefaultMetadataPlugin.Size = new System.Drawing.Size(175, 20);
+            this.cmbDefaultMetadataPlugin.TabIndex = 5;
+            // 
+            // labelControl2
+            // 
+            this.labelControl2.Location = new System.Drawing.Point(9, 104);
+            this.labelControl2.Name = "labelControl2";
+            this.labelControl2.Size = new System.Drawing.Size(119, 13);
+            this.labelControl2.TabIndex = 4;
+            this.labelControl2.Text = "Default Metadata Plugin:";
             // 
             // cePrependParentFolder
             // 
@@ -308,26 +328,6 @@ namespace OMLDatabaseEditor
             this.cmGenreMappings.Name = "cmGenreMappings";
             this.cmGenreMappings.Size = new System.Drawing.Size(61, 4);
             // 
-            // labelControl2
-            // 
-            this.labelControl2.Location = new System.Drawing.Point(9, 104);
-            this.labelControl2.Name = "labelControl2";
-            this.labelControl2.Size = new System.Drawing.Size(119, 13);
-            this.labelControl2.TabIndex = 4;
-            this.labelControl2.Text = "Default Metadata Plugin:";
-            // 
-            // cmbDefaultMetadataPlugin
-            // 
-            this.cmbDefaultMetadataPlugin.Location = new System.Drawing.Point(135, 101);
-            this.cmbDefaultMetadataPlugin.Name = "cmbDefaultMetadataPlugin";
-            this.cmbDefaultMetadataPlugin.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
-            this.cmbDefaultMetadataPlugin.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.cmbDefaultMetadataPlugin.Properties.NullText = "Not Specified";
-            this.cmbDefaultMetadataPlugin.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            this.cmbDefaultMetadataPlugin.Size = new System.Drawing.Size(175, 20);
-            this.cmbDefaultMetadataPlugin.TabIndex = 5;
-            // 
             // Options
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -344,6 +344,7 @@ namespace OMLDatabaseEditor
             this.xtraTabControl1.ResumeLayout(false);
             this.tpOptions.ResumeLayout(false);
             this.tpOptions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cmbDefaultMetadataPlugin.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cePrependParentFolder.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseMPAAList.Properties)).EndInit();
@@ -360,7 +361,6 @@ namespace OMLDatabaseEditor
             this.tpTags.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbcTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.beTags.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cmbDefaultMetadataPlugin.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
