@@ -891,6 +891,7 @@
             this.lbPeople.TabIndex = 0;
             this.lbPeople.DoubleClick += new System.EventHandler(this.lbPeople_DoubleClick);
             this.lbPeople.SelectedIndexChanged += new System.EventHandler(this.lbPeople_SelectedIndexChanged);
+            this.lbPeople.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
             // 
             // contextPeople
             // 

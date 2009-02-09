@@ -130,29 +130,34 @@ namespace OMLDatabaseEditor.Controls
                     case 0: //Directors
                         lbPeople.DataSource = EditedTitle.Directors;
                         lbPeople.DisplayMember = "full_name";
+                        lbPeople.Tag = "Directors";
                         listPersona.AddRange(MainEditor._titleCollection.GetAllDirectors.ToArray());
                         listPersona.Sort();
                         break;
                     case 1: //Writers
                         lbPeople.DataSource = EditedTitle.Writers;
                         lbPeople.DisplayMember = "full_name";
+                        lbPeople.Tag = "Writers";
                         listPersona.AddRange(MainEditor._titleCollection.GetAllWriters.ToArray());
                         listPersona.Sort();
                         break;
                     case 2: //Producers
                         lbPeople.DataSource = EditedTitle.Producers;
                         lbPeople.DisplayMember = "";
+                        lbPeople.Tag = "Producers";
                         listPersona.AddRange(MainEditor._titleCollection.GetAllProducers.ToArray());
                         listPersona.Sort();
                         break;
                     case 3: //Actors
                         lbPeople.DataSource = EditedTitle.ActingRolesBinding;
+                        lbPeople.Tag = "ActingRoles";
                         lbPeople.DisplayMember = "Display";
                         listPersona.AddRange(MainEditor._titleCollection.GetAllActors.ToArray());
                         listPersona.Sort();
                         break;
                     case 4: //Non-Actors
                         lbPeople.DataSource = EditedTitle.NonActingRolesBinding;
+                        lbPeople.Tag = "NonActingRoles";
                         lbPeople.DisplayMember = "Display";
                         break;
                 }
@@ -484,7 +489,11 @@ namespace OMLDatabaseEditor.Controls
                 {
                     Cursor = Cursors.WaitCursor;
                     BaseEdit ctrl = sender as BaseEdit;
-                    string propertyName = ctrl.DataBindings[0].BindingMemberInfo.BindingMember;
+                    string propertyName;
+                    if (ctrl != null)
+                        propertyName = ctrl.DataBindings[0].BindingMemberInfo.BindingMember;
+                    else
+                        propertyName = (string)(sender as Control).Tag;
                     MetadataSelect mdSelect = null;
                     PropertyTypeEnum propType = PropertyTypeEnum.String;
                     if (sender is SpinEdit)
@@ -493,10 +502,14 @@ namespace OMLDatabaseEditor.Controls
                         propType = PropertyTypeEnum.Image;
                     else if (sender is DateEdit)
                         propType = PropertyTypeEnum.Date;
+                    else if (sender is ListBoxControl)
+                        propType = PropertyTypeEnum.List;
                     mdSelect = new MetadataSelect(_dvdTitle, propertyName, propType);
                     if (mdSelect.ShowDialog() == DialogResult.OK)
                         TitleChanges(null, EventArgs.Empty);
-                    (ctrl.BindingManager as CurrencyManager).Refresh();
+                    if (ctrl != null) (ctrl.BindingManager as CurrencyManager).Refresh();
+                    if (sender is ListBoxControl)
+                        TogglePeople(rgPeople.SelectedIndex);
                     Cursor = Cursors.Default;
                 }
             }

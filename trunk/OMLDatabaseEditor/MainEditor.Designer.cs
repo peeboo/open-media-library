@@ -38,6 +38,7 @@ namespace OMLDatabaseEditor
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromScratchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromPreferredSourcesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportCurrentMovieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,6 +98,7 @@ namespace OMLDatabaseEditor
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
+            this.fromPreferredSourcesToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -144,7 +146,7 @@ namespace OMLDatabaseEditor
             // statusText
             // 
             this.statusText.Name = "statusText";
-            this.statusText.Size = new System.Drawing.Size(597, 17);
+            this.statusText.Size = new System.Drawing.Size(730, 17);
             this.statusText.Spring = true;
             // 
             // menuStrip
@@ -180,7 +182,8 @@ namespace OMLDatabaseEditor
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fromScratchToolStripMenuItem});
+            this.fromScratchToolStripMenuItem,
+            this.fromPreferredSourcesToolStripMenuItem1});
             this.newToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripMenuItem.Image")));
             this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
@@ -190,9 +193,16 @@ namespace OMLDatabaseEditor
             // fromScratchToolStripMenuItem
             // 
             this.fromScratchToolStripMenuItem.Name = "fromScratchToolStripMenuItem";
-            this.fromScratchToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.fromScratchToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.fromScratchToolStripMenuItem.Text = "From Scratch";
             this.fromScratchToolStripMenuItem.Click += new System.EventHandler(this.fromScratchToolStripMenuItem_Click);
+            // 
+            // fromPreferredSourcesToolStripMenuItem1
+            // 
+            this.fromPreferredSourcesToolStripMenuItem1.Name = "fromPreferredSourcesToolStripMenuItem1";
+            this.fromPreferredSourcesToolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
+            this.fromPreferredSourcesToolStripMenuItem1.Text = "From Preferred Sources";
+            this.fromPreferredSourcesToolStripMenuItem1.Click += new System.EventHandler(this.fromMetaDataToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -650,14 +660,15 @@ namespace OMLDatabaseEditor
             this.helpToolStripButton});
             this.toolStrip.Location = new System.Drawing.Point(3, 24);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(96, 25);
+            this.toolStrip.Size = new System.Drawing.Size(127, 25);
             this.toolStrip.TabIndex = 2;
             // 
             // newMovieSplitButton
             // 
             this.newMovieSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.newMovieSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fromScratchToolStripMenuItem1});
+            this.fromScratchToolStripMenuItem1,
+            this.fromPreferredSourcesToolStripMenuItem2});
             this.newMovieSplitButton.Image = global::OMLDatabaseEditor.Properties.Resources.NewDocumentHS;
             this.newMovieSplitButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.newMovieSplitButton.Name = "newMovieSplitButton";
@@ -667,7 +678,7 @@ namespace OMLDatabaseEditor
             // fromScratchToolStripMenuItem1
             // 
             this.fromScratchToolStripMenuItem1.Name = "fromScratchToolStripMenuItem1";
-            this.fromScratchToolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
+            this.fromScratchToolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
             this.fromScratchToolStripMenuItem1.Text = "From Scratch";
             this.fromScratchToolStripMenuItem1.Click += new System.EventHandler(this.fromScratchToolStripMenuItem_Click);
             // 
@@ -698,6 +709,13 @@ namespace OMLDatabaseEditor
             // defaultLookAndFeel1
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
+            // 
+            // fromPreferredSourcesToolStripMenuItem2
+            // 
+            this.fromPreferredSourcesToolStripMenuItem2.Name = "fromPreferredSourcesToolStripMenuItem2";
+            this.fromPreferredSourcesToolStripMenuItem2.Size = new System.Drawing.Size(197, 22);
+            this.fromPreferredSourcesToolStripMenuItem2.Text = "From Preferred Sources";
+            this.fromPreferredSourcesToolStripMenuItem2.Click += new System.EventHandler(this.fromMetaDataToolStripMenuItem_Click);
             // 
             // MainEditor
             // 
@@ -807,6 +825,8 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem fromPreferredSourcesToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel statusText;
+        private System.Windows.Forms.ToolStripMenuItem fromPreferredSourcesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem fromPreferredSourcesToolStripMenuItem2;
     }
 }
 
