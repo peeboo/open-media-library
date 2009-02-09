@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -104,7 +105,7 @@ namespace OMLDatabaseEditor
                 case PropertyTypeEnum.Image:
                     PictureEdit peValue = new PictureEdit();
                     peValue.Properties.ShowMenu = false;
-                    peValue.Tag = pluginName + "|" + value.ToString();
+                    peValue.Tag = new PluginResult() { PluginName = pluginName, Value = value };
                     peValue.Image = Utilities.ReadImageFromFile(value.ToString());
                     if (peValue.Image == null)
                     {
@@ -124,7 +125,7 @@ namespace OMLDatabaseEditor
                         MemoEdit txtValue = new MemoEdit();
                         txtValue.Text = value.ToString();
                         txtValue.Dock = DockStyle.Fill;
-                        txtValue.Tag = pluginName;
+                        txtValue.Tag = new PluginResult() { PluginName = pluginName, Value = value };
                         txtValue.DoubleClick += new EventHandler(data_DoubleClick);
                         return txtValue;
                     }
@@ -132,11 +133,22 @@ namespace OMLDatabaseEditor
                     {
                         LabelControl lblValue = new LabelControl();
                         lblValue.Text = value.ToString();
-                        lblValue.Tag = pluginName;
+                        lblValue.Tag = new PluginResult() { PluginName = pluginName, Value = value };
                         lblValue.Dock = DockStyle.Fill;
                         lblValue.DoubleClick += new EventHandler(data_DoubleClick);
                         return lblValue;
                     }
+                case PropertyTypeEnum.List:
+                    MemoEdit txtList = new MemoEdit();
+                    foreach (object item in (IEnumerable)value)
+                    {
+                        txtList.Text += item.ToString() + Environment.NewLine;
+                    }
+                    txtList.Dock = DockStyle.Fill;
+                    txtList.Tag = new PluginResult() { PluginName = pluginName, Value = value };
+                    txtList.DoubleClick += new EventHandler(data_DoubleClick);
+                    return txtList;
+                    break;
                 default:
                     return null;
             }
@@ -164,37 +176,22 @@ namespace OMLDatabaseEditor
         void data_DoubleClick(object sender, EventArgs e)
         {
             Control ctrl = sender as Control;
-            string pluginName = ctrl.Tag as string;
+            PluginResult pluginResult = ctrl.Tag as PluginResult;
             if (sender is PictureEdit)
             {
-                string[] tagContent = pluginName.Split('|');
-                pluginName = tagContent[0];
-                string imagePath = tagContent[1];
                 if (_propertyName == "FrontCoverPath")
-                    _title.CopyFrontCoverFromFile(imagePath, true);
+                    _title.CopyFrontCoverFromFile((string)pluginResult.Value, true);
                 else
-                    _title.CopyBackCoverFromFile(imagePath, true);
+                    _title.CopyBackCoverFromFile((string)pluginResult.Value, true);
             }
             else
-                SetPropertyValue(_propertyInfo, _title, ctrl.Text);
+                _propertyInfo.SetValue(_title, pluginResult.Value, null);
             if (cbDefault.Checked)
             {
-                MainEditor._titleCollection.MetadataMap[_propertyName] = pluginName;
+                MainEditor._titleCollection.MetadataMap[_propertyName] = pluginResult.PluginName;
                 MainEditor._titleCollection.saveTitleCollection();
             }
             DialogResult = DialogResult.OK;
-        }
-
-        private void SetPropertyValue(PropertyInfo property, Title title, string value)
-        {
-            if (property.PropertyType == typeof(Int32))
-                property.SetValue(title, Int32.Parse(value), null);
-            else if (property.PropertyType == typeof(bool))
-                property.SetValue(title, bool.Parse(value), null);
-            else if (property.PropertyType == typeof(DateTime))
-                property.SetValue(title, DateTime.Parse(value), null);
-            else
-                property.SetValue(title, value, null);
         }
 
         private void MetadataSelect_Shown(object sender, EventArgs e)
@@ -209,5 +206,12 @@ namespace OMLDatabaseEditor
         , Number
         , Image
         , Date
+        , List
+    }
+
+    class PluginResult
+    {
+        public string PluginName;
+        public object Value;
     }
 }

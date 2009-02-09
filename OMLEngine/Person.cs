@@ -78,6 +78,11 @@ namespace OMLEngine
             _full_name = full_name;
         }
 
+        public override string ToString()
+        {
+            return full_name;
+        }
+
         /// <summary>
         /// 
         /// </summary>

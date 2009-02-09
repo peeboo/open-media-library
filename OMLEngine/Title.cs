@@ -533,6 +533,7 @@ namespace OMLEngine
         public List<Person> Directors
         {
             get { return _directors; }
+            set { _directors = value; }
         }
         /// <summary>
         /// List of Person objects that wrote the title
@@ -540,6 +541,7 @@ namespace OMLEngine
         public List<Person> Writers
         {
             get { return _writers; }
+            set { _writers = value; }
         }
         /// <summary>
         /// List of people/companies that produced the title
@@ -547,6 +549,7 @@ namespace OMLEngine
         public List<string> Producers
         {
             get { return _producers; }
+            set { _producers = value; }
         }
 
         public decimal PercentComplete
