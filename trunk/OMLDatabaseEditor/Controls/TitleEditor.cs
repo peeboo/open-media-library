@@ -352,6 +352,12 @@ namespace OMLDatabaseEditor.Controls
                 teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
                 teParentalRating.MaskBox.AutoCompleteCustomSource.AddRange(Properties.Settings.Default.gsMPAARatings.Split('|'));
             }
+            else
+            {
+                teParentalRating.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                teParentalRating.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllParentalRatings.ToArray());
+            }
 
             txtStudio.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtStudio.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
@@ -372,10 +378,6 @@ namespace OMLDatabaseEditor.Controls
             teVideoStandard.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             teVideoStandard.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
             teVideoStandard.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllVideoStandards.ToArray());
-
-            teParentalRating.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            teParentalRating.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllParentalRatings.ToArray());
 
             teImporter.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             teImporter.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
