@@ -96,6 +96,30 @@ namespace OMLDatabaseEditor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool gbTitledFanArtFolder {
+            get {
+                return ((bool)(this["gbTitledFanArtFolder"]));
+            }
+            set {
+                this["gbTitledFanArtFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string gsTitledFanArtPath {
+            get {
+                return ((string)(this["gsTitledFanArtPath"]));
+            }
+            set {
+                this["gsTitledFanArtPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string gsDefaultMetadataPlugin {
             get {
