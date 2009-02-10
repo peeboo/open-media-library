@@ -66,6 +66,7 @@ namespace OMLDatabaseEditor.Controls
             Status = TitleStatus.Normal;
             imageWatcherFront.Path = Path.GetDirectoryName(_dvdTitle.FrontCoverPath);
             imageWatcherFront.Filter = "F*.jpg";
+            LoadBackdrops();
             _isLoading = false;
         }
 
@@ -123,6 +124,25 @@ namespace OMLDatabaseEditor.Controls
         private void TitleNameChanges(object sender, EventArgs e)
         {
             _titleNameChanged(new TitleNameChangedEventArgs(txtName.Text));
+        }
+
+        private void LoadBackdrops()
+        {
+            tblBackdrops.Controls.Clear();
+            if (Directory.Exists(_dvdTitle.BackDropFolder))
+            {
+                string[] images = Directory.GetFiles(_dvdTitle.BackDropFolder);
+                foreach (string image in images)
+                {
+                    PictureBox pb = new PictureBox();
+                    pb.ImageLocation = image;
+                    pb.Height = 150;
+                    pb.Dock = DockStyle.Fill;
+                    pb.SizeMode = PictureBoxSizeMode.Zoom;
+                    //if (pb.Image == null) continue;
+                    tblBackdrops.Controls.Add(pb);
+                }
+            }
         }
 
         private void EditList(string name, List<string> listToEdit)
