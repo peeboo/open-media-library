@@ -94,11 +94,11 @@ namespace OMLDatabaseEditor
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.newMovieSplitButton = new System.Windows.Forms.ToolStripSplitButton();
             this.fromScratchToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromPreferredSourcesToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
-            this.fromPreferredSourcesToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -660,7 +660,7 @@ namespace OMLDatabaseEditor
             this.helpToolStripButton});
             this.toolStrip.Location = new System.Drawing.Point(3, 24);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(127, 25);
+            this.toolStrip.Size = new System.Drawing.Size(96, 25);
             this.toolStrip.TabIndex = 2;
             // 
             // newMovieSplitButton
@@ -681,6 +681,13 @@ namespace OMLDatabaseEditor
             this.fromScratchToolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
             this.fromScratchToolStripMenuItem1.Text = "From Scratch";
             this.fromScratchToolStripMenuItem1.Click += new System.EventHandler(this.fromScratchToolStripMenuItem_Click);
+            // 
+            // fromPreferredSourcesToolStripMenuItem2
+            // 
+            this.fromPreferredSourcesToolStripMenuItem2.Name = "fromPreferredSourcesToolStripMenuItem2";
+            this.fromPreferredSourcesToolStripMenuItem2.Size = new System.Drawing.Size(197, 22);
+            this.fromPreferredSourcesToolStripMenuItem2.Text = "From Preferred Sources";
+            this.fromPreferredSourcesToolStripMenuItem2.Click += new System.EventHandler(this.fromMetaDataToolStripMenuItem_Click);
             // 
             // saveToolStripButton
             // 
@@ -709,13 +716,6 @@ namespace OMLDatabaseEditor
             // defaultLookAndFeel1
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
-            // 
-            // fromPreferredSourcesToolStripMenuItem2
-            // 
-            this.fromPreferredSourcesToolStripMenuItem2.Name = "fromPreferredSourcesToolStripMenuItem2";
-            this.fromPreferredSourcesToolStripMenuItem2.Size = new System.Drawing.Size(197, 22);
-            this.fromPreferredSourcesToolStripMenuItem2.Text = "From Preferred Sources";
-            this.fromPreferredSourcesToolStripMenuItem2.Click += new System.EventHandler(this.fromMetaDataToolStripMenuItem_Click);
             // 
             // MainEditor
             // 
