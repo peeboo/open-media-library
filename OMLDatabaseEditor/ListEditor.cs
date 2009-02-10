@@ -39,7 +39,7 @@ namespace OMLDatabaseEditor
 
         public void SetMRULists()
         {
-            if ((this.Text == "Genres") && (Properties.Settings.Default.gbUseGenreList))
+            if ((this.Text == "Genres") && (Properties.Settings.Default.gbUseGenreList) && Properties.Settings.Default.gsValidGenres != null)
             {
                 string[] aGenres = new string[Properties.Settings.Default.gsValidGenres.Count];
                 Properties.Settings.Default.gsValidGenres.CopyTo(aGenres, 0);
