@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace OMLDatabaseEditor
 {
-    public partial class DownloadingBackDropsForm : Form
+    public partial class DownloadingBackDropsForm : DevExpress.XtraEditors.XtraForm
     {
         public DownloadingBackDropsForm()
         {

@@ -34,6 +34,19 @@ namespace TheMovieDbMetadata
 
         public string PluginName { get { return "themoviedb.org"; } }
 
+        private bool _useMainFanArtDir = false;
+        public bool UseMainFanArtDir
+        {
+            set { _useMainFanArtDir = value; }
+        }
+
+        private string _mainFanArtDir = @"C:\ProgramData\OpenMediaLibrary\FanArt";
+        public string MainFanArtDir
+        { 
+            get { return _mainFanArtDir; }
+            set { _mainFanArtDir = value; }
+        }
+
         // these 2 methods must be called in sequence
         public bool Initialize(Dictionary<string, string> parameters)
         {
@@ -429,11 +442,10 @@ namespace TheMovieDbMetadata
                 {
                     if (!string.IsNullOrEmpty(backDropUrl))
                     {
-                        if (!Directory.Exists(t.BackDropFolder))
+                        if ((_useMainFanArtDir) || (!Directory.Exists(t.BackDropFolder)))
                         {
-                            string mainFanArtDir = @"C:\ProgramData\OpenMediaLibrary\FanArt";
-                            string pdTitleDir = @"C:\ProgramData\OpenMediaLibrary\FanArt\" + t.Name.ToString();
-                            if (!Directory.Exists(mainFanArtDir)) Directory.CreateDirectory(mainFanArtDir);
+                            string pdTitleDir = System.IO.Path.Combine(MainFanArtDir, t.Name);
+                            if (!Directory.Exists(MainFanArtDir)) Directory.CreateDirectory(MainFanArtDir);
                             if (!Directory.Exists(pdTitleDir)) Directory.CreateDirectory(pdTitleDir);
                             downloadTo = pdTitleDir.ToString();
                         }

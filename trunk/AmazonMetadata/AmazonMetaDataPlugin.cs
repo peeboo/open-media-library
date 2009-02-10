@@ -47,6 +47,19 @@ namespace AmazonMetadata
             get { return "Amazon"; }
         }
 
+        private bool _useMainFanArtDir = false;
+        public bool UseMainFanArtDir
+        {
+            set { _useMainFanArtDir = value; }
+        }
+
+        private string _mainFanArtDir = @"C:\ProgramData\OpenMediaLibrary\FanArt";
+        public string MainFanArtDir
+        {
+            get { return _mainFanArtDir; }
+            set { _mainFanArtDir = value; }
+        }
+
         // Must call this before any other plugin method
         // parameters is optional -use it if you want to get parameters passed in
         // here we can accept the Locale parameter but we'll use the default if not
