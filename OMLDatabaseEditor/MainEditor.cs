@@ -553,10 +553,8 @@ namespace OMLDatabaseEditor
             if ((titleEditor.EditedTitle != null) && (titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges))
             {
                 Title editedTitle = titleEditor.EditedTitle;
-                Title collectionTitle = _titleCollection.GetTitleById(editedTitle.InternalItemID);
-                if (collectionTitle == null)
+                if (titleEditor.IsNew())
                 {
-                    // Title doesn't exist so we'll add it
                     if (editedTitle.MetadataSourceID == String.Empty)
                     {
                         DialogResult result = XtraMessageBox.Show("Would you like to retrieve metadata on this movie?", "Get data", MessageBoxButtons.YesNo);
@@ -569,15 +567,8 @@ namespace OMLDatabaseEditor
                             StartMetadataImport(plugin, false);
                         }
                     }
-                    _titleCollection.Add(editedTitle);
                 }
-                else
-                {
-                    // Title exists so we need to copy edited data to collection title
-                    _titleCollection.Replace(editedTitle);
-                }
-                _titleCollection.saveTitleCollection();
-                titleEditor.ClearEditor();
+                titleEditor.SaveChanges();
                 LoadMovies();
             }
             TitleCollection.ClearMirrorDataFiles();
