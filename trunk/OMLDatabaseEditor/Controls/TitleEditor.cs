@@ -81,6 +81,22 @@ namespace OMLDatabaseEditor.Controls
             Status = TitleStatus.Normal;
         }
 
+        public bool IsNew()
+        {
+            return MainEditor._titleCollection.GetTitleById(_dvdTitle.InternalItemID) == null;
+        }
+
+        public void SaveChanges()
+        {
+            titleSource.CurrencyManager.Refresh();
+            if (IsNew())
+                MainEditor._titleCollection.Add(_dvdTitle);
+            else
+                MainEditor._titleCollection.Replace(_dvdTitle);
+            MainEditor._titleCollection.saveTitleCollection();
+            ClearEditor();
+        }
+
         private void _titleChanged(EventArgs e)
         {
             if (TitleChanged != null && Status != TitleStatus.UnsavedChanges && !_isLoading)
