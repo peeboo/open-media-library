@@ -404,6 +404,11 @@ namespace OMLDatabaseEditor
                                     {
                                         DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
                                         dbdForm.Show();
+                                        if (Properties.Settings.Default.gbTitledFanArtFolder)
+                                        {
+                                            plugin.UseMainFanArtDir = true;
+                                            plugin.MainFanArtDir = Properties.Settings.Default.gsTitledFanArtPath;
+                                        }
                                         plugin.DownloadBackDropsForTitle(titleEditor.EditedTitle, searchResultForm.SelectedTitleIndex);
                                         dbdForm.Hide();
                                         dbdForm.Dispose();
@@ -469,6 +474,11 @@ namespace OMLDatabaseEditor
                                 {
                                     DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
                                     dbdForm.Show();
+                                    if (Properties.Settings.Default.gbTitledFanArtFolder)
+                                    {
+                                        plugin.UseMainFanArtDir = true;
+                                        plugin.MainFanArtDir = Properties.Settings.Default.gsTitledFanArtPath;
+                                    }
                                     metadata.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
                                     dbdForm.Hide();
                                     dbdForm.Dispose();
