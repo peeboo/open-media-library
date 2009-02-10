@@ -15,14 +15,14 @@ namespace OMLDatabaseEditor.Controls
         public DiskInfoFrm(Disk _disk)
         {
             InitializeComponent();
-            OMLEngine.DiskInfo di = new OMLEngine.DiskInfo(_disk.Name, _disk.Path, _disk.Format);
+            //OMLEngine.DiskInfo di = new OMLEngine.DiskInfo(_disk.Name, _disk.Path, _disk.Format);
 
             TreeNode topNode = new TreeNode();
-            topNode.Name = di.Path;
-            topNode.Text = di.Path;
+            topNode.Name = _disk.Path;
+            topNode.Text = _disk.Path;
             tvDiskInfo.Nodes.Add(topNode);
-            
-            foreach (DIFeature df in di.DiskFeatures)
+
+            foreach (DIFeature df in _disk.DiskFeatures)
             {
                 TreeNode featureNode = new TreeNode();
                 featureNode.Name = df.Name;
@@ -38,6 +38,20 @@ namespace OMLDatabaseEditor.Controls
 
                 featureNode.Nodes.Add(string.Format("Duration : {0:00}:{1:00}:{2:00}",df.Duration.TotalHours,df.Duration.Minutes,df.Duration.Seconds));
 
+                if (df.Chapters.Count > 0)
+                {
+                    TreeNode chapters = new TreeNode();
+                    chapters.Name = "Chapters";
+                    chapters.Text = "Chapters";
+                    featureNode.Nodes.Add(chapters);
+
+                    foreach (DIChapter ch in df.Chapters)
+                    {
+                        chapters.Nodes.Add("Chapter " + ch.ChapterNumber.ToString() +
+                            string.Format("  :  Start Time {0:00}:{1:00}:{2:00}", ch.StartTime.TotalHours, ch.StartTime.Minutes, ch.StartTime.Seconds) +
+                            string.Format("  :  Duration {0:00}:{1:00}:{2:00}", ch.Duration.TotalHours, ch.Duration.Minutes, ch.Duration.Seconds));
+                    }
+                }
 
                 TreeNode video = new TreeNode();
                 video.Name = "Video Streams";
