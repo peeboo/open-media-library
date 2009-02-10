@@ -32,6 +32,10 @@ namespace OMLSDK
     {
         string PluginName { get; }
 
+        string MainFanArtDir { get; set; }
+
+        bool UseMainFanArtDir { set; }
+
         // these 2 methods must be called in sequence
         bool Initialize( Dictionary<string,string> parameters );
         bool SearchForMovie( string movieName );

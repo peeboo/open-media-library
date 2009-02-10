@@ -36,7 +36,7 @@ namespace DVDProfilerMetaData
         #region IOMLMetadataPlugin Members
 
         String _xmlFile;
-        String _imgPath;
+        String _imgPath = null;
         DVDProfilerSearchResult _searchResult = null;
 
         public string PluginName
@@ -44,14 +44,39 @@ namespace DVDProfilerMetaData
             get { return "DVDProfiler"; }
         }
 
+        private bool _useMainFanArtDir = false;
+        public bool UseMainFanArtDir
+        {
+            set { _useMainFanArtDir = value; }
+        }
+
+        private string _mainFanArtDir = @"C:\ProgramData\OpenMediaLibrary\FanArt";
+        public string MainFanArtDir
+        {
+            get { return _mainFanArtDir; }
+            set { _mainFanArtDir = value; }
+        }
+
+        public string DVDProfilerImageDir
+        {
+            get
+            {
+                if (_imgPath == null)
+                {
+                    _imgPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    _imgPath += @"\DVD Profiler\Databases\Default\Images";
+                }
+                return _imgPath;
+            }
+            set { _imgPath = value; }
+        }
+
         public bool Initialize(Dictionary<string, string> parameters)
         {
-            String AppImages = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            AppImages += @"\DVD Profiler\Databases\Default\Images";
+            //AppImages += @"\DVD Profiler\Databases\Default\Images";
             _xmlFile = Properties.Settings.Default.xmlFile;
             if (!String.IsNullOrEmpty(Properties.Settings.Default.imgPath))
-                AppImages = Properties.Settings.Default.imgPath;
-            _imgPath = AppImages;
+                DVDProfilerImageDir = Properties.Settings.Default.imgPath;
             if (parameters != null)
             {
                 if (parameters.ContainsKey("xmlFile"))
@@ -97,9 +122,9 @@ namespace DVDProfilerMetaData
                 int prodYr;
                 if (int.TryParse((String)dr["ProductionYear"], out prodYr))
                     t.ProductionYear = prodYr;
-                
-                t.FrontCoverPath = Path.Combine(_imgPath, (String)dr["ID"] + @"f.jpg");
-                t.BackCoverPath = Path.Combine(_imgPath, (String)dr["ID"] + @"b.jpg");
+
+                t.FrontCoverPath = Path.Combine(DVDProfilerImageDir, (String)dr["ID"] + @"f.jpg");
+                t.BackCoverPath = Path.Combine(DVDProfilerImageDir, (String)dr["ID"] + @"b.jpg");
 
                 if (ds.Relations.Contains("DVD_Format"))
                 {
