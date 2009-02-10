@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using OMLGetDVDInfo;
 using System.Drawing;
+using System.IO;
 
 namespace OMLEngine
 {
@@ -13,7 +14,7 @@ namespace OMLEngine
         public string Path { get; set; }
         public List<DIAudioStream> AudioStreams { get; set; }
         public List<DIVideoStream> VideoStreams { get; set; }
-        public List<DVDChapter> Chapters { get; set; }
+        public List<DIChapter> Chapters { get; set; }
         public int Filesize { get; set; }
         public TimeSpan Duration { get; set; }
         public int OverallBitRate { get; set; }
@@ -27,7 +28,7 @@ namespace OMLEngine
         {
             AudioStreams = new List<DIAudioStream>();
             VideoStreams = new List<DIVideoStream>();
-            Chapters = new List<DVDChapter>();
+            Chapters = new List<DIChapter>();
         }
 
     }
@@ -67,7 +68,17 @@ namespace OMLEngine
         {
             return Name;
         }
+    }
 
+    public class DIChapter
+    {
+        public int ChapterNumber { get; set; }
+        public int FPS { get; set; }
+        public TimeSpan StartTime;
+        public TimeSpan Duration;
+        public string _Duration { get { return Duration.ToString(); } set { Duration = TimeSpan.Parse(value); } }
+        public long TotalFrames { get; set; }
+        public int Frames { get; set; }
     }
 
     public class DiskInfo
@@ -164,6 +175,20 @@ namespace OMLEngine
 
         private void QueryDVD()
         {
+            // Check to see if any IFO files exist
+            if (Directory.GetFiles(Path,"*.ifo").Length == 0)
+            {
+                // No IFO Files Found
+                // Try to see if there is a VIDEO_TS folder
+                if (Directory.Exists(System.IO.Path.Combine(Path, "VIDEO_TS")))
+                {
+                    Path = System.IO.Path.Combine(Path, "VIDEO_TS"); 
+                    if (Directory.GetFiles(Path, "*.ifo").Length == 0)
+                    {
+                        return;
+                    }
+                }
+            }
             DVDDiskInfo ddi = DVDDiskInfo.ParseDVD(Path);
             foreach(DVDTitle dt in ddi.Titles)
             {
@@ -179,6 +204,21 @@ namespace OMLEngine
                 divideostream.TitleID = dt.TitleNumber;
                 divideostream.FrameRate = (float) dt.FPS;
                 divideostream.Resolution = dt.Resolution;
+                
+
+                TimeSpan starttime = new TimeSpan(0);
+
+                foreach (DVDChapter ch in dt.Chapters)
+                {
+                    DIChapter dichapter = new DIChapter();
+                    dichapter.ChapterNumber = ch.ChapterNumber;
+                    dichapter.StartTime = starttime;
+                    dichapter.Duration = ch.Duration;
+                    dichapter.Frames = ch.Frames;
+                    dichapter.TotalFrames = ch.TotalFrames;
+                    difeature.Chapters.Add(dichapter);
+                    starttime += ch.Duration;
+                }
 
                 foreach (DVDAudioTrack at in dt.AudioTracks)
                 {

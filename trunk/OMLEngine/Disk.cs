@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.IO;
+using System.Collections.Generic;
 
 using OMLGetDVDInfo;
 
@@ -14,6 +15,7 @@ namespace OMLEngine
         public string Path { get; set; }
         public VideoFormat Format { get; set; }
         public string ExtraOptions { get; set; }
+
 
         public override bool Equals(object obj)
         {
@@ -67,6 +69,29 @@ namespace OMLEngine
             }
         }
         #endregion
+
+        #region DiskInfo
+        [NonSerialized]
+        public List<DIFeature> _diskFeatures;
+        public List<DIFeature> DiskFeatures
+        {
+            get
+            {
+                if (_diskFeatures == null)
+                {
+                //    DiskFeatures = new List<DIFeature>();
+                //}
+                DiskInfo di = new DiskInfo(Name, Path, Format);
+                _diskFeatures = di.DiskFeatures;
+                }
+                return _diskFeatures;
+            }
+            set
+            { 
+            }
+        }
+        #endregion
+
 
         public Disk() { }
 
