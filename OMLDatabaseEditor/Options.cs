@@ -95,6 +95,11 @@ namespace OMLDatabaseEditor
                 cmbDefaultMetadataPlugin.Properties.Items.Add(plugin.PluginName);
             }
             cmbDefaultMetadataPlugin.SelectedItem = Properties.Settings.Default.gsDefaultMetadataPlugin;
+            ceTitledFanArtFolder.Checked = Properties.Settings.Default.gbTitledFanArtFolder;
+            beTitledFanArtPath.EditValue = Properties.Settings.Default.gsTitledFanArtPath;
+
+            beTitledFanArtPath.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            beTitledFanArtPath.MaskBox.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
         }
 
         private void SimpleButtonClick(object sender, EventArgs e)
@@ -135,6 +140,19 @@ namespace OMLDatabaseEditor
                     bDirty = true;
                     String Tags = String.Join("|", TagList.ToArray());
                     Properties.Settings.Default.gsTags = Tags;
+                }
+
+                if (Properties.Settings.Default.gbTitledFanArtFolder != this.ceTitledFanArtFolder.Checked)
+                {
+                    bDirty = true;
+                    Properties.Settings.Default.gbTitledFanArtFolder = this.ceTitledFanArtFolder.Checked;
+                }
+
+                if (Properties.Settings.Default.gbTitledFanArtFolder && 
+                    Properties.Settings.Default.gsTitledFanArtPath != (string)beTitledFanArtPath.EditValue)
+                {
+                    bDirty = true;
+                    Properties.Settings.Default.gsTitledFanArtPath = (string)this.beTitledFanArtPath.EditValue;
                 }
 
                 bDirty = true;
@@ -293,6 +311,23 @@ namespace OMLDatabaseEditor
         private void ceFoldersAsTitles_CheckStateChanged(object sender, EventArgs e)
         {
             cePrependParentFolder.Enabled = this.ceFoldersAsTitles.Checked;
+        }
+
+        private void beTitledFanArtPath_ButtonClick(object sender, ButtonPressedEventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.Description = @"Titled FanArt Path";
+            fbd.SelectedPath = Properties.Settings.Default.gsTitledFanArtPath;
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                beTitledFanArtPath.EditValue = fbd.SelectedPath;
+            }
+        }
+
+        private void ceTitledFanArtFolder_CheckStateChanged(object sender, EventArgs e)
+        {
+            beTitledFanArtPath.Enabled = this.ceTitledFanArtFolder.Checked;
+            Properties.Settings.Default.gbTitledFanArtFolder = this.ceTitledFanArtFolder.Checked;
         }
     }
 }
