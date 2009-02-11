@@ -269,11 +269,7 @@ namespace OMLDatabaseEditor
             if (titleEditor.EditedTitle != null && titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges)
             {
                 result = XtraMessageBox.Show("You have unsaved changes to " + titleEditor.EditedTitle.Name + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
-                if (result == DialogResult.Cancel)
-                {
-                    lbMovies.SelectedValue = titleEditor.EditedTitle.InternalItemID;
-                }
-                else if (result == DialogResult.Yes)
+                if (result == DialogResult.Yes)
                 {
                     SaveChanges();
                 }
@@ -761,14 +757,21 @@ namespace OMLDatabaseEditor
         {
             if (_loading) return;
             Cursor = Cursors.WaitCursor;
-            SaveCurrentMovie();
+            if (SaveCurrentMovie() == DialogResult.Cancel)
+            {
+                _loading = true; //bypasses second save movie dialog
+                lbMovies.SelectedItem = _titleCollection.GetTitleById(titleEditor.EditedTitle.InternalItemID);
+                _loading = false;
+            }
+            else
+            {
+                Title selectedTitle = lbMovies.SelectedItem as Title;
+                if (selectedTitle == null) return;
 
-            Title selectedTitle = lbMovies.SelectedItem as Title;
-            if (selectedTitle == null) return;
-
-            titleEditor.LoadDVD(selectedTitle);
-            this.Text = APP_TITLE + " - " + selectedTitle.Name;
-            ToggleSaveState(false);
+                titleEditor.LoadDVD(selectedTitle);
+                this.Text = APP_TITLE + " - " + selectedTitle.Name;
+                ToggleSaveState(false);
+            }
             Cursor = Cursors.Default;
         }
 
