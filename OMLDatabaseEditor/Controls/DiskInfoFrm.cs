@@ -36,7 +36,7 @@ namespace OMLDatabaseEditor.Controls
                     if (df.Format.ToString() != "") { featureNode.Nodes.Add("Format : " + df.Format); }
                 }
 
-                featureNode.Nodes.Add(string.Format("Duration : {0:00}:{1:00}:{2:00}",df.Duration.TotalHours,df.Duration.Minutes,df.Duration.Seconds));
+                featureNode.Nodes.Add(string.Format("Duration : {0:00}:{1:00}:{2:00}",Math.Floor(df.Duration.TotalHours),df.Duration.Minutes,df.Duration.Seconds));
 
                 if (df.Chapters.Count > 0)
                 {
@@ -48,8 +48,8 @@ namespace OMLDatabaseEditor.Controls
                     foreach (DIChapter ch in df.Chapters)
                     {
                         chapters.Nodes.Add("Chapter " + ch.ChapterNumber.ToString() +
-                            string.Format("  :  Start Time {0:00}:{1:00}:{2:00}", ch.StartTime.TotalHours, ch.StartTime.Minutes, ch.StartTime.Seconds) +
-                            string.Format("  :  Duration {0:00}:{1:00}:{2:00}", ch.Duration.TotalHours, ch.Duration.Minutes, ch.Duration.Seconds));
+                            string.Format("  :  Start Time {0:00}:{1:00}:{2:00}", Math.Floor(ch.StartTime.TotalHours), ch.StartTime.Minutes, ch.StartTime.Seconds) +
+                            string.Format("  :  Duration {0:00}:{1:00}:{2:00}", Math.Floor(ch.Duration.TotalHours), ch.Duration.Minutes, ch.Duration.Seconds));
                     }
                 }
 
