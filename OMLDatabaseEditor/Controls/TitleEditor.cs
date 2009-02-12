@@ -129,18 +129,21 @@ namespace OMLDatabaseEditor.Controls
         private void LoadBackdrops()
         {
             tblBackdrops.Controls.Clear();
-            if (Directory.Exists(_dvdTitle.BackDropFolder))
+            if (_dvdTitle.BasePath() != null)
             {
-                string[] images = Directory.GetFiles(_dvdTitle.BackDropFolder);
-                foreach (string image in images)
+                if (Directory.Exists(_dvdTitle.BackDropFolder))
                 {
-                    PictureBox pb = new PictureBox();
-                    pb.ImageLocation = image;
-                    pb.Height = 150;
-                    pb.Dock = DockStyle.Fill;
-                    pb.SizeMode = PictureBoxSizeMode.Zoom;
-                    //if (pb.Image == null) continue;
-                    tblBackdrops.Controls.Add(pb);
+                    string[] images = Directory.GetFiles(_dvdTitle.BackDropFolder);
+                    foreach (string image in images)
+                    {
+                        PictureBox pb = new PictureBox();
+                        pb.ImageLocation = image;
+                        pb.Height = 150;
+                        pb.Dock = DockStyle.Fill;
+                        pb.SizeMode = PictureBoxSizeMode.Zoom;
+                        //if (pb.Image == null) continue;
+                        tblBackdrops.Controls.Add(pb);
+                    }
                 }
             }
         }
