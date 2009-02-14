@@ -444,7 +444,7 @@ namespace TheMovieDbMetadata
                     {
                         if ((_useMainFanArtDir) || (!Directory.Exists(t.BackDropFolder)))
                         {
-                            string pdTitleDir = System.IO.Path.Combine(MainFanArtDir, t.Name);
+                            string pdTitleDir = System.IO.Path.Combine(MainFanArtDir, t.PathSafeName);
                             if (!Directory.Exists(MainFanArtDir)) Directory.CreateDirectory(MainFanArtDir);
                             if (!Directory.Exists(pdTitleDir)) Directory.CreateDirectory(pdTitleDir);
                             downloadTo = pdTitleDir.ToString();
