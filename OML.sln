@@ -99,6 +99,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maximizer", "Maximizer\Maxi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFlixMetadata", "NetFlixMetadata\NetFlixMetadata.csproj", "{11275660-18A4-4B39-BA5D-0451E1B5DBCE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranscoderTester", "TranscoderTester\TranscoderTester.csproj", "{FFDA57EB-295C-4D84-97BF-F88DB4F4219D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -435,6 +437,18 @@ Global
 		{11275660-18A4-4B39-BA5D-0451E1B5DBCE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{11275660-18A4-4B39-BA5D-0451E1B5DBCE}.Release|x64.ActiveCfg = Release|Any CPU
 		{11275660-18A4-4B39-BA5D-0451E1B5DBCE}.Release|x86.ActiveCfg = Release|Any CPU
+		{FFDA57EB-295C-4D84-97BF-F88DB4F4219D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFDA57EB-295C-4D84-97BF-F88DB4F4219D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFDA57EB-295C-4D84-97BF-F88DB4F4219D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FFDA57EB-295C-4D84-97BF-F88DB4F4219D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FFDA57EB-295C-4D84-97BF-F88DB4F4219D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FFDA57EB-295C-4D84-97BF-F88DB4F4219D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FFDA57EB-295C-4D84-97BF-F88DB4F4219D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFDA57EB-295C-4D84-97BF-F88DB4F4219D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFDA57EB-295C-4D84-97BF-F88DB4F4219D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FFDA57EB-295C-4D84-97BF-F88DB4F4219D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FFDA57EB-295C-4D84-97BF-F88DB4F4219D}.Release|x64.ActiveCfg = Release|Any CPU
+		{FFDA57EB-295C-4D84-97BF-F88DB4F4219D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 using DevExpress.XtraEditors;
 using DevExpress.Skins;
@@ -1008,6 +1009,39 @@ namespace OMLDatabaseEditor
             }
             _titleCollection.saveTitleCollection();
             LoadMovies();
+        }
+
+        private void transcoderDiagnosticsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string mediafile = "";
+            // Search for a movie file in selected title/titles
+            foreach (Title title in lbMovies.SelectedItems)
+            {
+                foreach (Disk disk in title.Disks)
+                {
+                    if (disk.Path != "")
+                    {
+                        if (mediafile == "")
+                        {
+                            mediafile = disk.Path;
+                        }
+                    }
+
+                }
+            }
+            if (mediafile != "")
+            {
+                try
+                {
+                    Process pr = new Process();
+                    pr.StartInfo.FileName = @"c:\program files\openmedialibrary\TranscoderTester.exe";
+                    pr.StartInfo.Arguments = "\"" + mediafile + "\"";
+                    pr.Start();
+                }
+                catch
+                {
+                }
+            }
         }
     }
 }
