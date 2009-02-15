@@ -164,6 +164,11 @@
                     <File Name="Maximizer.exe"
                           Source="..\..\Maximizer\bin\$(var.BuildType)\Maximizer.exe" Checksum="no" />
                   </Component>
+
+				  <Component Id="TranscoderTester.exe" Guid="2F7D11B3-70BD-4f2d-9EC1-730D28042BBF" DiskId="1" Win64="yes">
+					<File Name="TranscoderTester.exe"
+						  Source="..\..\TranscoderTester\bin\$(var.BuildType)\TranscoderTester.exe" Checksum="no" />
+				  </Component>
                   
                   <Component Id="OMLEngineService.exe" Guid="12988468-3dcc-496a-b0b3-6982ffde25b9" DiskId="1" Win64="yes">
                     <File Name="OMLEngineService.exe"
@@ -343,6 +348,7 @@
             <ComponentRef Id="OMLImporter.exe" />
             <ComponentRef Id="MEncoder.exe"/>
 			<ComponentRef Id="MediaInfo.dll"/>
+			<ComponentRef Id="TranscoderTester.exe"/>
             <ComponentRef Id="Maximizer.exe"/>
 
       <!-- Start Menu Shortcuts -->
