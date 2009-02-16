@@ -529,7 +529,7 @@ namespace Library
             // if the /FanArt folder doesn't exist - that means no background images
             string fanArtSrcDir = _movieDetails.TitleObject.BackDropFolder;
             string pdFanArtDir = @"C:\ProgramData\OpenMediaLibrary\FanArt\" + _movieDetails.TitleObject.Name.ToString();
-            if (!Directory.Exists(fanArtSrcDir))
+            if (string.IsNullOrEmpty(fanArtSrcDir) || !Directory.Exists(fanArtSrcDir))
             {
                 fanArtSrcDir = pdFanArtDir;
                 if (!Directory.Exists(pdFanArtDir))
