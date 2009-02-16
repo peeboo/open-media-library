@@ -93,13 +93,15 @@ namespace Library
 
         public void DownloadBackDropsForTitle(Title t, IList<string> urls)
         {
+            if (string.IsNullOrEmpty(t.BackDropFolder)) return;
+
             foreach (string url in urls)
             {
                 WebClient web = new WebClient();
                 string filename = url.Substring(url.LastIndexOf('/') + 1);
                 try
                 {
-                    if (Directory.Exists(t.BackDropFolder))
+                    if (!Directory.Exists(t.BackDropFolder))
                         Directory.CreateDirectory(t.BackDropFolder);
 
                     string localPath = Path.Combine(t.BackDropFolder, filename);
