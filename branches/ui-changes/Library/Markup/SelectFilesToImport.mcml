@@ -1,0 +1,468 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:cor="assembly://MsCorLib/System"
+      xmlns:a="assembly://Library/Library"
+      xmlns:rbg="resx://Library/Library.Resources/RadioButtonGroup"
+      xmlns:controls="resx://Library/Library.Resources/CoreControls"
+      xmlns:c="resx://Library/Library.Resources/Controls"
+      xmlns:me="Me">
+
+    <UI Name="SelectFilesToImport">
+
+        <Locals>
+            <Command Name="BeginLoadingCommand"
+                     Description="Begin Loading"/>
+            <Command Name="SkipTitleButtonCommand"
+                     Description="Skip Title"/>
+            <Command Name="AddTitleButtonCommand"
+                     Description="Add Title"/>
+            <Command Name="AddAllTitleButtonCommand"
+                     Description="Add All Titles"/>
+            <Command Name="RestartImportCommand"
+                     Description="Restart Importer Process"/>
+            <Command Name="StartOMLCommand"
+                     Description="Start OML"/>
+        </Locals>
+
+        <Properties>
+            <a:Setup Name="Setup" Setup="$Required"/>
+            <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+            <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+            <a:UISettings Name="UISettings" UISettings="$Required" />
+        </Properties>
+
+        <Rules>
+            <Binding Source="[Setup.ShouldCopyImages.Value!cor:String]" Target="[ShouldCopyImagesText.Content]" />
+            <Binding Source="[Setup.ImporterSelection.Chosen!cor:String]" Target="[SelectedImporterText.Content]"/>
+            <Binding Source="[Setup.TotalTitlesFound!cor:String]" Target="[TotalTitlesFoundText.Content]"/>
+            <Binding Source="[Setup.TotalTitlesAdded!cor:String]" Target="[TotalTitlesAddedText.Content]"/>
+            <Binding Source="[Setup.TotalTitlesSkipped!cor:String]" Target="[TotalTitlesSkippedText.Content]"/>
+            <Binding Source="[Setup.CurrentTitleImage]" Target="[CurrentTitleImage.Content]"/>
+            <Binding Source="[Setup.CurrentTitleName]" Target="[CurrentTitleNameText.Content]"/>
+            <Binding Source="[Setup.CurrentTitleReleaseYear]" Target="[CurrentTitleReleaseYearText.Content]"/>
+            <Binding Source="[Setup.CurrentTitleRuntime]" Target="[CurrentTitleRuntimeText.Content]"/>
+            <Binding Source="[Setup.CurrentTitleRating]" Target="[CurrentTitleRatingText.Content]"/>
+            <Binding Source="[Setup.CurrentTitleVideoFormat]" Target="[CurrentTitleVideoFormatText.Content]"/>
+
+            <Changed Source="[StartOMLCommand.Invoked]">
+                <Actions>
+                    <Invoke Target="[Setup.gotoMenu]"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[RestartImportCommand.Invoked]">
+                <Actions>
+                    <Invoke Target="[Setup.Reset]" />
+                    <Navigate Source="@resx://Library/Library.Resources/SelectImporter"
+                              Setup="[Setup]"
+                              OMLApplication="[Application]"
+                              MovieGallery="[MovieBrowser]"
+                              UISettings="[UISettings]"/>
+
+                </Actions>
+            </Changed>
+            <Changed Source="[BeginLoadingCommand.Invoked]">
+                <Actions>
+                    <Invoke InvokePolicy="AsynchronousLowPri" Target="[Setup.BeginLoading]"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[Setup.AllTitlesProcessed]" InitialEvaluate="false">
+                <Actions>
+                    <Set Target="[TitleLoadPanel.Visible]" Value="false"/>
+                    <Set Target="[TitlesCompletePanel.Visible]" Value="true"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[SkipTitleButtonCommand.Invoked]">
+                <Actions>
+                    <Invoke Target="[Setup.SkipCurrentTitle]"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[AddTitleButtonCommand.Invoked]">
+                <Actions>
+                    <Invoke Target="[Setup.AddCurrentTitle]"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[AddAllTitleButtonCommand.Invoked]">
+                <Actions>
+                    <Invoke InvokePolicy="AsynchronousLowPri" Target="[Setup.AddAllCurrentTitles]"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[Setup.AddingAllStarted]" InitialEvaluate="false">
+                <Actions>
+                    <Set Target="[waitCursor.Visible]" Value="true"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[Setup.AddingAllComplete]" InitialEvaluate="false">
+                <Actions>
+                    <Set Target="[waitCursor.Visible]" Value="false"/>
+                </Actions>
+            </Changed>
+            <Changed Source="[Setup.LoadStarted]" InitialEvaluate="false">
+                <Actions>
+                    <Set Target="[loadingTitlesButton.Visible]" Value="false"/>
+                    <Set Target="[CurrentTitlePanel.Visible]" Value="false" />
+                    <Set Target="[SkipTitleButton.Visible]" Value="false"/>
+                    <Set Target="[AddTitleButton.Visible]" Value="false"/>
+                    <Set Target="[AddAllTitleButton.Visible]" Value="false"/>
+                    <Set Target="[NoTitlesFoundPanel.Visible]" Value="false" />
+                    <Set Target="[waitCursor.Visible]" Value="true"/>
+                </Actions>
+            </Changed>
+
+            <Changed Source="[Setup.LoadComplete]" InitialEvaluate="false">
+                <Conditions>
+                    <Equality ConditionOp="GreaterThan" Source="[Setup.TotalTitlesFound]" Value="1" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[waitCursor.Visible]" Value="false"/>
+                    <Set Target="[loadingTitlesButton.Visible]" Value="false"/>
+                    <Set Target="[CurrentTitlePanel.Visible]" Value="true" />
+                    <Set Target="[SkipTitleButton.Visible]" Value="true"/>
+                    <Set Target="[AddTitleButton.Visible]" Value="true"/>
+                    <Set Target="[AddAllTitleButton.Visible]" Value="true"/>
+                </Actions>
+            </Changed>
+
+            <Changed Source="[Setup.LoadComplete]" InitialEvaluate="false">
+                <Conditions>
+                    <Equality ConditionOp="LessThanOrEquals" Source="[Setup.TotalTitlesFound]" Value="0" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[waitCursor.Visible]" Value="false"/>
+                    <Set Target="[loadingTitlesButton.Visible]" Value="false"/>
+                    <Set Target="[NoTitlesFoundPanel.Visible]" Value="true" />
+                </Actions>
+            </Changed>
+
+        </Rules>
+
+        <Content>
+            <ColorFill Name="AllContent" Content="Transparent" Layout="Form">
+                <Children>
+                    <controls:WaitCursor Name="waitCursor" Visible="false"/>
+
+                    <Panel Name="Bottom" >
+                        <Children>
+                            <Panel Layout="Fill" Margins="50,0,0,0">
+                                <Children>
+                                    <Panel Layout="VerticalFlow">
+                                        <Children>
+                                            <Clip Layout="HorizontalFlow">
+                                                <Children>
+                                                    <Clip Layout="Grid">
+                                                        <Children>
+                                                            <Text Name="SelectedImporterLabel" Content="Selected Importer: " Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                            <Text Name="SelectedImporterText" Font="Calibri, 20" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+                                                </Children>
+                                            </Clip>
+                                            <Clip Layout="HorizontalFlow">
+                                                <Children>
+                                                    <Clip Layout="Grid">
+                                                        <Children>
+                                                            <Text Name="ShouldCopyImagesLabel" Content="Copy Images: " Font="Calibri, 20, Bold" Color="LightBlue"/>
+                                                            <Text Name="ShouldCopyImagesText" Font="Calibri, 20" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+                                                </Children>
+                                            </Clip>
+                                        </Children>
+                                    </Panel>
+                                </Children>
+                            </Panel>
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,.875,0" Bottom="Parent,1,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                    <Panel Name="Top" >
+                        <Children>
+                            <Panel Layout="Fill" Margins="50,20,0,0">
+                                <Children>
+                                    <Panel Layout="HorizontalFlow">
+                                        <Children>
+                                            <Text Content="Open Media Library Setup" Font="Calibri, 28" Color="LightBlue"/>
+                                            <Panel Layout="VerticalFlow" Padding="50,0,0,0">
+                                                <Children>
+                                                    <Panel Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Name="TotalTitlesFoundLabel" Font="Calibri, 14, Bold" Color="LightBlue" Content="Total Titles Found: "/>
+                                                            <Text Name="TotalTitlesFoundText" Font="Calibri, 14, Bold" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Panel>
+                                                    <Panel Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Name="TotalTitlesAddedLabel" Font="Calibri, 14, Bold" Color="LightBlue" Content="Total Titles Added: "/>
+                                                            <Text Name="TotalTitlesAddedText" Font="Calibri, 14, Bold" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Panel>
+                                                    <Panel Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Name="TotalTitlesSkippedLabel" Font="Calibri, 14, Bold" Color="LightBlue" Content="Total Titles Skipped: "/>
+                                                            <Text Name="TotalTitlesSkippedText" Font="Calibri, 14" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Panel>
+                                                </Children>
+                                            </Panel>
+                                        </Children>
+                                    </Panel>
+                                </Children>
+                            </Panel>
+                            <Clip Orientation="Vertical">
+                                <Children>
+                                    <ColorFill Content="Black" Alpha="0.5"/>
+                                </Children>
+                            </Clip>
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0,0" Right="Parent,1,1" Top="Parent,0,0" Bottom="Parent,.125,1"/>
+                        </LayoutInput>
+
+                    </Panel>
+
+                    <Panel Name="Content" Layout="Fill">
+                        <Children>
+                            <Panel Name="TitleLoadPanel" Layout="VerticalFlow">
+                                <Children>
+                                    <Panel Layout="HorizontalFlow">
+                                        <Children>
+                                            <Panel Layout="VerticalFlow">
+                                                <Children>
+                                                    <Text Content="Settings: " Font="Calibri, 20" Color="LightBlue"/>
+                                                    <me:ShouldCopyImages Setup="[Setup]"/>
+                                                </Children>
+                                            </Panel>
+                                            <Panel Layout="VerticalFlow" Name="CurrentTitlePanel" Visible="false">
+                                                <Children>
+                                                    <Clip Layout="VerticalFlow">
+                                                        <Children>
+                                                            <Graphic MaintainAspectRatio="true" SizingPolicy="SizeToConstraint" Name="CurrentTitleImage" Content="[Setup.DefaultImage]" MinimumSize="150,200" MaximumSize="150,200" />
+                                                            <Text Name="CurrentTitleNameText" Font="Calibri, 16" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+                                                    <Clip Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Content="Release Year: " Font="Calibri, 12, Bold" Color="LightBlue"/>
+                                                            <Text Name="CurrentTitleReleaseYearText" Font="Calibri, 12" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+                                                    <Clip Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Content="Runtime: " Font="Calibri, 12, Bold" Color="LightBlue"/>
+                                                            <Text Name="CurrentTitleRuntimeText" Font="Calibri, 12" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+                                                    <Clip Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Content="Rating: " Font="Calibri, 12, Bold" Color="LightBlue"/>
+                                                            <Text Name="CurrentTitleRatingText" Font="Calibri, 12" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+                                                    <Clip Layout="HorizontalFlow">
+                                                        <Children>
+                                                            <Text Content="Video Format: " Font="Calibri, 12, Bold" Color="LightBlue"/>
+                                                            <Text Name="CurrentTitleVideoFormatText" Font="Calibri, 12" Color="LightBlue"/>
+                                                        </Children>
+                                                    </Clip>
+
+                                                </Children>
+                                            </Panel>
+                                        </Children>
+                                    </Panel>
+                                    <Panel Layout="HorizontalFlow" Name="NoTitlesFoundPanel" Visible="false">
+                                        <Children>
+                                            <Text Content="No titles were found, please go back and try again." WordWrap="true" Font="Calibri, 20" Color="LightBlue" />
+                                        </Children>
+                                    </Panel>
+                                    <Panel Layout="VerticalFlow">
+                                        <Children>
+                                            <c:SimpleButton Name="loadingTitlesButton" Command="[BeginLoadingCommand]" Text="Start Loading" Margins="0,50,0,5"/>
+                                            <c:SimpleButton Name="AddTitleButton" Command="[AddTitleButtonCommand]" Text="Add Movie" Visible="false" Margins="0,0,0,5"/>
+                                            <c:SimpleButton Name="AddAllTitleButton" Command="[AddAllTitleButtonCommand]" Text="Add All Movies" Visible="false" Margins="0,0,0,5"/>
+                                            <c:SimpleButton Name="SkipTitleButton" Command="[SkipTitleButtonCommand]" Text="Skip This Movie" Visible="false" Margins="0,0,0,5"/>
+                                        </Children>
+                                    </Panel>
+                                </Children>
+                            </Panel>
+                            <Panel Name="TitlesCompletePanel" Layout="VerticalFlow" Visible="false">
+                                <Children>
+                                    <Text Content="All Titles have been processed." Font="Calibri, 20" Color="LightBlue"/>
+                                    <Panel Layout="HorizontalFlow">
+                                        <Children>
+                                            <c:SimpleButton Name="restartImportButton" Command="[RestartImportCommand]" Text="Restart Import"/>
+                                            <c:SimpleButton Name="startOMLButton" Command="[StartOMLCommand]" Text="Start OML"/>
+                                        </Children>
+                                    </Panel>
+                                </Children>
+                            </Panel>
+                        </Children>
+                        <LayoutInput>
+                            <FormLayoutInput Left="Parent,0.15,0" Right="Parent,0.85,1" Top="Parent,0.15,0" Bottom="Parent,1,1"/>
+                        </LayoutInput>
+                    </Panel>
+
+                </Children>
+            </ColorFill>
+        </Content>
+    </UI>
+
+    <UI Name="ShouldCopyImages">
+        <Properties>
+            <a:Setup Name="Setup" Setup="$Required" />
+        </Properties>
+
+        <Content>
+            <Panel Layout="HorizontalFlow">
+                <Children>
+                    <me:SimpleCheckbox Name="ShouldCopyImages" Checked="[Setup.ShouldCopyImages]"/>
+                    <Text Name="should_copy_images_text" Font="Calibri, 16" Color="LightBlue" Content="Copy images locally" WordWrap="true" />
+                </Children>
+            </Panel>
+        </Content>
+    </UI>
+
+    <UI Name="SimpleCheckbox">
+        <Properties>
+            <BooleanChoice Name="Checked"
+                           BooleanChoice="$Required" />
+        </Properties>
+
+        <Locals>
+            <ClickHandler Name="Clicker" />
+            <BooleanTransformer Name="BooleanInverseTransformer" Inverse="true" />
+        </Locals>
+
+        <Rules>
+            <Default Target="[Input.KeyInteractive]"
+                     Value="true" />
+            <Binding Source="[Checked.Description]"
+                     Target="[Label.Content]" />
+            <Changed Source="[Clicker.Invoked]">
+                <Actions>
+                    <Set Target="[Checked.Value]"
+                         Value="[Checked.Value]"
+                         Transformer="[BooleanInverseTransformer]" />
+                </Actions>
+            </Changed>
+
+            <Condition Source="[Clicker.Clicking]"
+                       SourceValue="true">
+                <Conditions>
+                    <Equality Source="[Checked.Value]"
+                              Value="true" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[Background.Content]"
+                         Value="image://me:FirstRunCheckBoxCheckedFocus" />
+                </Actions>
+            </Condition>
+
+            <Condition Source="[Clicker.Clicking]"
+                       SourceValue="true">
+                <Conditions>
+                    <Equality Source="[Checked.Value]"
+                              Value="false" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[Background.Content]"
+                         Value="image://me:FirstRunCheckBoxUncheckedFocus" />
+                </Actions>
+            </Condition>
+
+            <Condition Source="[Input.KeyFocus]"
+                       SourceValue="true">
+                <Conditions>
+                    <Equality Source="[Checked.Value]"
+                              Value="true" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[Background.Content]"
+                         Value="image://me:FirstRunCheckBoxCheckedFocus" />
+                </Actions>
+            </Condition>
+
+            <Condition Source="[Input.KeyFocus]"
+                       SourceValue="true">
+                <Conditions>
+                    <Equality Source="[Checked.Value]"
+                              Value="false" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[Background.Content]"
+                         Value="image://me:FirstRunCheckBoxUncheckedFocus" />
+                </Actions>
+            </Condition>
+
+            <Condition Source="[Input.KeyFocus]"
+                       SourceValue="false">
+                <Conditions>
+                    <Equality Source="[Checked.Value]"
+                              Value="true" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[Background.Content]"
+                         Value="image://me:FirstRunCheckBoxCheckedNoFocus" />
+                </Actions>
+            </Condition>
+
+            <Condition Source="[Input.KeyFocus]"
+                       SourceValue="false">
+                <Conditions>
+                    <Equality Source="[Checked.Value]"
+                              Value="false" />
+                </Conditions>
+                <Actions>
+                    <Set Target="[Background.Content]"
+                         Value="image://me:FirstRunCheckBoxUncheckedNoFocus" />
+                </Actions>
+            </Condition>
+
+        </Rules>
+
+        <Content>
+            <Panel>
+
+                <Layout>
+                    <FlowLayout Orientation="Horizontal"
+                                ItemAlignment="Center" />
+                </Layout>
+
+                <Children>
+
+                    <Panel Name="Items"
+                           Layout="HorizontalFlow">
+                        <Children>
+
+                            <Graphic Name="Background"
+                                     Content="image://me:FirstRunCheckBoxUncheckedNoFocus"
+                                     Margins="0,0,0,0"
+                                     MaximumSize="34,34" />
+                            <Text Name="Label"
+                                  Color="White"
+                                  Margins="10,0,0,10" />
+
+                        </Children>
+                    </Panel>
+
+                </Children>
+
+            </Panel>
+        </Content>
+
+    </UI>
+
+    <Image Name="FirstRunCheckBoxUncheckedNoFocus"
+           Source="resx://Library/Library.Resources/FirstRunCheckBoxUncheckedNoFocus"/>
+    <Image Name="FirstRunCheckBoxCheckedFocus"
+           Source="resx://Library/Library.Resources/FirstRunCheckBoxCheckedFocus"/>
+    <Image Name="FirstRunCheckBoxUncheckedFocus"
+           Source="resx://Library/Library.Resources/FirstRunCheckBoxUncheckedFocus"/>
+    <Image Name="FirstRunCheckBoxCheckedNoFocus"
+           Source="resx://Library/Library.Resources/FirstRunCheckBoxCheckedNoFocus"/>
+
+</Mcml>

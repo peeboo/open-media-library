@@ -1,0 +1,101 @@
+<Title>
+    <LocalTitle>Batman</LocalTitle>
+    <OriginalTitle>Batman</OriginalTitle>
+    <SortTitle>Batman</SortTitle>
+    <Added>08/05/2008 17:29:08</Added>
+    <ProductionYear>1989</ProductionYear>
+    <RunningTime>126</RunningTime>
+    <IMDBrating>7.6</IMDBrating>
+    <Description>The Dark Knight of Gotham City begins his war on crime with his first major enemy being the clownishly homicidal Joker.</Description>
+    <Covers>
+        <Front>folder.jpg</Front>
+        <Back />
+    </Covers>
+    <Genres>
+        <Genre>Action</Genre>
+        <Genre>Crime</Genre>
+        <Genre>Fantasy</Genre>
+        <Genre>Thriller</Genre>
+    </Genres>
+    <Persons>
+        <Person>
+            <Name>Tim Burton</Name>
+            <Type>Director</Type>
+        </Person>
+        <Person>
+            <Name>Michael Keaton</Name>
+            <Type>Actor</Type>
+            <Role>Batman</Role>
+        </Person>
+        <Person>
+            <Name>Jack Nicholson</Name>
+            <Type>Actor</Type>
+            <Role>Joker</Role>
+        </Person>
+        <Person>
+            <Name>Kim Basinger</Name>
+            <Type>Actor</Type>
+            <Role>Vicki Vale</Role>
+        </Person>
+        <Person>
+            <Name>Robert Wuhl</Name>
+            <Type>Actor</Type>
+            <Role>Alexander Knox</Role>
+        </Person>
+        <Person>
+            <Name>Pat Hingle</Name>
+            <Type>Actor</Type>
+            <Role>Commissioner James Gordon</Role>
+        </Person>
+        <Person>
+            <Name>Billy Dee Williams</Name>
+            <Type>Actor</Type>
+            <Role>Harvey Dent</Role>
+        </Person>
+        <Person>
+            <Name>Michael Gough</Name>
+            <Type>Actor</Type>
+            <Role>Alfred Pennyworth</Role>
+        </Person>
+        <Person>
+            <Name>Jack Palance</Name>
+            <Type>Actor</Type>
+            <Role>Carl Grissom</Role>
+        </Person>
+        <Person>
+            <Name>Jerry Hall</Name>
+            <Type>Actor</Type>
+            <Role>Alicia Grissom</Role>
+        </Person>
+        <Person>
+            <Name>Tracey Walter</Name>
+            <Type>Actor</Type>
+            <Role>Bob the Goon</Role>
+        </Person>
+        <Person>
+            <Name>Lee Wallace</Name>
+            <Type>Actor</Type>
+            <Role>The Mayor</Role>
+        </Person>
+        <Person>
+            <Name>William Hootkins</Name>
+            <Type>Actor</Type>
+            <Role>Lt. Eckhardt</Role>
+        </Person>
+        <Person>
+            <Name>Richard Strange</Name>
+            <Type>Actor</Type>
+            <Role>Goon</Role>
+        </Person>
+        <Person>
+            <Name>Carl Chase</Name>
+            <Type>Actor</Type>
+            <Role>Goon</Role>
+        </Person>
+        <Person>
+            <Name>Mac McDonald</Name>
+            <Type>Actor</Type>
+            <Role>Goon</Role>
+        </Person>
+    </Persons>
+</Title>

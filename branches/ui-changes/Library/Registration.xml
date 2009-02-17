@@ -1,0 +1,18 @@
+<application title="Open Media Library" id="{ad208fce-2431-47d6-abed-1974a2a0555f}">
+	<entrypoint id="{7533724d-c7cb-4ac2-8aee-1b0b91add393}"
+				addin="Library.MyAddIn, Library,Culture=Neutral,Version=2.1.3.0,PublicKeyToken=74d3b407d6cf16f1"
+				title="Movies"
+				context="Menu"
+				description="Open Media Library"
+				ImageUrl="Application2.png">
+		<category category="OML\Media Library"/>
+	</entrypoint>
+    <entrypoint id="{543d0438-b10d-43d8-a20d-f0c96db4e6bd}"
+				addin="Library.MyAddIn, Library,Culture=Neutral,Version=2.1.3.0,PublicKeyToken=74d3b407d6cf16f1"
+				title="Settings"
+				context="Settings"
+				description="Open Media Library"
+				ImageUrl="Settings.png">
+        <category category="OML\Media Library"/>
+    </entrypoint>
+</application>

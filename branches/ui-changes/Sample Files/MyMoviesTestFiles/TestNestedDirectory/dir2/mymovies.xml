@@ -1,0 +1,186 @@
+<Title>
+  <ID>58</ID>
+  <WebServiceID>2ca1da23-7a48-45da-8346-103fec9acb50</WebServiceID>
+  <CollectionNumber>58</CollectionNumber>
+  <Type>DVD</Type>
+  <Barcode>786936174380</Barcode>
+  <Country>United States</Country>
+  <LocalTitle>Title2</LocalTitle>
+  <OriginalTitle>Title2</OriginalTitle>
+  <SortTitle>Title2</SortTitle>
+  <Edition>
+  </Edition>
+  <AspectRatio>1.66:1</AspectRatio>
+  <VideoStandard>NTSC</VideoStandard>
+  <ProductionYear>2002</ProductionYear>
+  <ReleaseDate>8/20/2002</ReleaseDate>
+  <RunningTime>72</RunningTime>
+  <TagLine />
+  <Description><![CDATA[The classic tale of 'Peter Pan' continues in Disney's sequel 'Return to Never Land'. In a world besieged by World War II, Wendy, now grown up, tries to give her own children hope by telling them of her magical experiences with Peter Pan in Never Land. However, Jane, Wendy's 12-year-old daughter, sees it all as make believe and refuses to believe in the tales. That is, until the villainous Captain Hook mistakes her for Wendy and abducts her to Never Land in an attempt to lure and capture Peter Pan. Peter Pan's quest to return Jane safely home is jeopardized until she can begin to believe in the magic of imagination]]></Description>
+  <ExtraFeatures NotPresent="False"><![CDATA[Lost Treasures: Deleted Scenes
+Rescue The Lost Boys Adventure Game
+Disney StoryTime: Never Land's New Hero
+DVD-ROM Weblinks
+DVD-ROM Sampler Of "You Can Fly!"
+Digital-To-Digital Transfer
+THX-Certified
+]]></ExtraFeatures>
+  <ParentalRating>
+    <Value>1</Value>
+    <Description>
+    </Description>
+  </ParentalRating>
+  <DataProvider>
+  </DataProvider>
+  <DataProviderId>
+  </DataProviderId>
+  <ImportSource />
+  <ImportId />
+  <LocalTrailer>
+    <URL>
+    </URL>
+    <Type>-1</Type>
+  </LocalTrailer>
+  <Covers>
+    <Front>mymovies-front.jpg</Front>
+    <Back>mymovies-back.jpg</Back>
+  </Covers>
+  <DataChanged>9/5/2007 1:54:38 AM</DataChanged>
+  <CoversChanged>5/1/2007 11:00:26 PM</CoversChanged>
+  <LockData>False</LockData>
+  <LockCovers>False</LockCovers>
+  <Added>5/13/2008 3:07:43 PM</Added>
+  <RecordChanged>5/13/2008 3:07:44 PM</RecordChanged>
+  <Categories />
+  <Genres>
+    <Genre>Adventure</Genre>
+    <Genre>Animation</Genre>
+    <Genre>Family</Genre>
+    <Genre>Fantasy</Genre>
+    <Genre>Musical</Genre>
+  </Genres>
+  <AudioTracks>
+    <AudioTrack Language="English" Type="Dolby Digital 5.1" Channels="" />
+    <AudioTrack Language="French" Type="Dolby Digital 5.1" Channels="" />
+    <AudioTrack Language="English" Type="Dolby Digital 5.1" Channels="" />
+  </AudioTracks>
+  <Subtitles NotPresent="False">
+    <Subtitle Language="English" />
+    <Subtitle Language="French" />
+    <Subtitle Language="Spanish" />
+  </Subtitles>
+  <Studios>
+    <Studio>Buena Vista Home Entertainment</Studio>
+    <Studio>Walt Disney Pictures</Studio>
+    <Studio>Buena Vista Home Entertainment</Studio>
+  </Studios>
+  <Discs>
+    <Disc>
+      <DiscIdStored>
+      </DiscIdStored>
+      <DoubleSided>False</DoubleSided>
+      <Name>Disc 1</Name>
+      <DiscIdSideA>E33AECD5-C2BFBFC6</DiscIdSideA>
+      <DiscIdSideB>
+      </DiscIdSideB>
+      <LocationSideA>.</LocationSideA>
+      <LocationTypeSideA>1</LocationTypeSideA>
+      <LocationSideB>
+      </LocationSideB>
+      <LocationTypeSideB>-1</LocationTypeSideB>
+      <ChangerSlot>
+      </ChangerSlot>
+    </Disc>
+  </Discs>
+  <Persons ActorsComplete="False">
+    <Person>
+      <Name>Harriet Owen</Name>
+      <Type>Actor</Type>
+      <Role>Jane &amp; Young Wendy (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Blayne Weaver</Name>
+      <Type>Actor</Type>
+      <Role>Peter Pan (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Corey Burton</Name>
+      <Type>Actor</Type>
+      <Role>Captain Hook (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Jeff Bennett</Name>
+      <Type>Actor</Type>
+      <Role>Smee &amp; Pirates (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Kath Soucie</Name>
+      <Type>Actor</Type>
+      <Role>Wendy (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Andrew McDonough</Name>
+      <Type>Actor</Type>
+      <Role>Danny (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Roger Rees</Name>
+      <Type>Actor</Type>
+      <Role>Edward (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Spencer Breslin</Name>
+      <Type>Actor</Type>
+      <Role>Cubby (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Bradley Pierce</Name>
+      <Type>Actor</Type>
+      <Role>Nibs (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Quinn Beswick</Name>
+      <Type>Actor</Type>
+      <Role>Slightly (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Aaron Spann</Name>
+      <Type>Actor</Type>
+      <Role>Twins (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Dan Castellaneta</Name>
+      <Type>Actor</Type>
+      <Role>Additional Voice (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Jim Cummings</Name>
+      <Type>Actor</Type>
+      <Role>Additional Voice (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Rob Paulsen</Name>
+      <Type>Actor</Type>
+      <Role>Additional Voice (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Clive Revill</Name>
+      <Type>Actor</Type>
+      <Role>Additional Voice (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Frank Welker</Name>
+      <Type>Actor</Type>
+      <Role>Additional Voice (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Wally Wingert</Name>
+      <Type>Actor</Type>
+      <Role>Additional Voice (voice)</Role>
+    </Person>
+    <Person>
+      <Name>Robin Budd</Name>
+      <Type>Director</Type>
+    </Person>
+  </Persons>
+</Title>
