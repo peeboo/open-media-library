@@ -17,7 +17,7 @@ Requirements
   * WIX 3.0 (wix.sourceforge.net)
   * Media Center SDK 5.3 (http://www.microsoft.com/downloads/details.aspx?FamilyID=A43EA0B7-B85F-4612-AA08-3BF128C5873E&displaylang=en)
   * Dxperience (http://www.devexpress.com/go/DevExpressDownload_DXperience.aspx)
-    * Go to this page, http://www.devexpress.com/Products/Free/WebRegistration/ to sign up and get the tools needed for free. This is not a must, but else you will get a popup.
+    * Go to this page, http://www.devexpress.com/Products/Free/WebRegistration/ to sign up and get the tools needed for free. This is not a must, but else you will get a popup.  If you continue to have the popup return, you can follow the steps in this link, http://www.devexpress.com/Support/Center/KB/p/A705.aspx to get rid of the popup.
 
 
 Steps to build the code:
