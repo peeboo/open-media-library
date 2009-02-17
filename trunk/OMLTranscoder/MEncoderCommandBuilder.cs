@@ -10,6 +10,13 @@ using OMLEngine;
 
 namespace OMLTranscoder
 {
+    public enum MEncoderLogging
+    {
+        None,
+        InfoOnly,
+        All
+    }
+    
     public class MEncoderCommandBuilder
     {
         MediaSource _source;
@@ -52,7 +59,7 @@ namespace OMLTranscoder
         // TODO: detect or make an settings/option to set NTSC or PAL
         static bool IsNTSC { get { return true; } }
 
-        public string GetArguments()
+        public string GetArguments(MEncoderLogging MEncoderLogLevel)
         {
             string outputFile = _source.GetTranscodingFileName();
             if (outputFile == null)
@@ -136,14 +143,24 @@ namespace OMLTranscoder
 
                 //video format
                 strBuilder.AppendFormat(@" -ovc lavc");
-                strBuilder.Append(@" -mpegopts format=mpeg2:tsaf:vbitrate=4900");
+                //strBuilder.Append(@" -mpegopts format=mpeg2:tsaf:vbitrate=4900");
+                strBuilder.Append(@" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900");
             }
 
             // these are the same for dvds and non-dvds
             strBuilder.Append(@" -of mpeg");
-
-            // set quiet mode on
-            strBuilder.Append(@" -really-quiet");
+            
+            switch (MEncoderLogLevel)
+            {
+                case MEncoderLogging.All:
+                    break;
+                case MEncoderLogging.InfoOnly:
+                    strBuilder.Append(@" -quiet");
+                    break;
+                case MEncoderLogging.None:
+                    strBuilder.Append(@" -really-quiet");
+                    break;
+            }
 
             //output
             strBuilder.AppendFormat(@" -o ""{0}""", outputFile);
