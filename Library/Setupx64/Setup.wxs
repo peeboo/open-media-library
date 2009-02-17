@@ -232,7 +232,7 @@
                               KeyPath="yes" Source="..\..\TheMovieDbMetadata\bin\$(var.BuildType)\TheMovieDbMetadata.dll"
                               Checksum="yes" Vital="yes"/>
                       </Component>
-                    <Component Id="NetFlixMetadata.dll" Guid="" Win64="yes" DiskId="1">
+                    <Component Id="NetFlixMetadata.dll" Guid="73213057-08D2-4262-A8F2-4A4FC7BE6F62" Win64="yes" DiskId="1">
                       <File Name="NetFlixMetadata.dll"
                             KeyPath="yes" Source="..\..\NetFlixMetadata\bin\$(var.BuildType)\NetFlixMetadata.dll"
                             Checksum="yes" Vital="yes"/>
