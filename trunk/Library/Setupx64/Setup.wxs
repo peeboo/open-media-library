@@ -232,6 +232,11 @@
                               KeyPath="yes" Source="..\..\TheMovieDbMetadata\bin\$(var.BuildType)\TheMovieDbMetadata.dll"
                               Checksum="yes" Vital="yes"/>
                       </Component>
+                    <Component Id="NetFlixMetadata.dll" Guid="" Win64="yes" DiskId="1">
+                      <File Name="NetFlixMetadata.dll"
+                            KeyPath="yes" Source="..\..\NetFlixMetadata\bin\$(var.BuildType)\NetFlixMetadata.dll"
+                            Checksum="yes" Vital="yes"/>
+                    </Component>
                         <Component Id="OMLXMLImporter.dll" Guid="5be2002c-ef0d-4358-93ef-5c495492ab0d" Win64="yes" DiskId="1">
                             <File Name="OMLXMLImporter.dll"
                                   KeyPath="yes" Source="..\..\OMLXMLImporter\bin\$(var.BuildType)\OMLXMLImporter.dll"
@@ -333,6 +338,7 @@
             <ComponentRef Id="OMLXMLImporter.dll" />
             <ComponentRef Id="AmazonMetadata.dll" />
             <ComponentRef Id="TheMovieDbMetadata.dll" />
+            <ComponentRef Id="NetFlixMetadata.dll"/>
 
             <!-- Windows programs -->
             <!--<ComponentRef Id="ComponentFactory.Krypton.Toolkit.DLL"/>-->
