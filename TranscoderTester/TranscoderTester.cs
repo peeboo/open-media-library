@@ -57,7 +57,7 @@ namespace TranscoderTester
                 if (TestTranscoding(ServiceName))
                 {
                     TestActive = true;
-                    timer1.Interval = 20000; // Set timer to 10 seconds
+                    timer1.Interval = 60000; // Set timer to 60 seconds
                     timer1.Enabled = true;
                 }
                 else
@@ -141,10 +141,11 @@ namespace TranscoderTester
 
                 for (int i = 0; i < 10; i++)
                 {
+                    Thread.Sleep(1000);
                     sc.Refresh();
                     AddTextString("The service is currently " + sc.Status.ToString().ToLower() + ".");
                     if (sc.Status == ServiceControllerStatus.Running) { break; }
-                    Thread.Sleep(500);
+                    if (sc.Status == ServiceControllerStatus.Stopped) { break; }
                 }
 
 
