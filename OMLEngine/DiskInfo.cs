@@ -8,6 +8,7 @@ using System.IO;
 
 namespace OMLEngine
 {
+
     public class DIFeature
     {
         public string Name { get; set; }
@@ -68,6 +69,37 @@ namespace OMLEngine
         {
             return Name;
         }
+        public string FrameRateString {
+            get
+            {
+                // Convert the fps & Floor the last digit to avoid any rounding errors
+                int fm = (int)Math.Floor((FrameRate * 100)) * 10;
+                switch (fm)
+                {
+                    case 60000: return "60";
+                        break;
+                    case 59940: return "60000/1001";
+                        break;
+                    case 50000: return "50";
+                        break;
+                    case 30000: return "30";
+                        break;
+                    case 29970: return "30000/1001";
+                        break;
+                    case 25000: return "25";
+                        break;
+                    case 24000: return "24";
+                        break;
+                    case 23970: return "24000/1001";
+                        break;
+                }
+                return "";
+            }
+            set
+            {
+            }
+        }
+
     }
 
     public class DIChapter
