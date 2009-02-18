@@ -115,51 +115,57 @@ namespace TranscoderTester
                 return false;
             }
 
-
-            // Check the service startup type
-            string path = "Win32_Service.Name='" + servicename + "'";
-            ManagementPath p = new ManagementPath(path);
-            ManagementObject ManagementObj = new ManagementObject(p);
-            AddTextString("Statup type " + ManagementObj["StartMode"].ToString());
-
-            if ((ManagementObj["StartMode"].ToString() == "Disabled") ||
-                (ManagementObj["StartMode"].ToString() == "Manual"))
+            try
             {
-                object[] parameters = new object[1];
-                parameters[0] = "Automatic";
-                AddTextString("Setting statup type to Automatic.");
-                ManagementObj.InvokeMethod("ChangeStartMode", parameters);
+                // Check the service startup type
+                string path = "Win32_Service.Name='" + servicename + "'";
+                ManagementPath p = new ManagementPath(path);
+                ManagementObject ManagementObj = new ManagementObject(p);
+                AddTextString("Statup type " + ManagementObj["StartMode"].ToString());
+
+                if ((ManagementObj["StartMode"].ToString() == "Disabled") ||
+                    (ManagementObj["StartMode"].ToString() == "Manual"))
+                {
+                    object[] parameters = new object[1];
+                    parameters[0] = "Automatic";
+                    AddTextString("Setting statup type to Automatic.");
+                    ManagementObj.InvokeMethod("ChangeStartMode", parameters);
+                }
+
+                // Check is the service is running and start if required.
+                AddTextString("The service is currently " + sc.Status.ToString().ToLower() + ".");
+                if (sc.Status == ServiceControllerStatus.Stopped)
+                {
+                    AddTextString("");
+                    AddTextString("Starting service.");
+                    sc.Start();
+
+                    for (int i = 0; i < 10; i++)
+                    {
+                        Thread.Sleep(1000);
+                        sc.Refresh();
+                        AddTextString("The service is currently " + sc.Status.ToString().ToLower() + ".");
+                        if (sc.Status == ServiceControllerStatus.Running) { break; }
+                        if (sc.Status == ServiceControllerStatus.Stopped) { break; }
+                    }
+
+
+                    if (sc.Status == ServiceControllerStatus.Running)
+                    {
+                        AddTextString("Service started.");
+                        return true;
+                    }
+                    else
+                    {
+                        AddTextString("Service failed to start.");
+                        return false;
+                    }
+
+                }
             }
-
-            // Check is the service is running and start if required.
-            AddTextString("The service is currently " + sc.Status.ToString().ToLower() + ".");
-            if (sc.Status == ServiceControllerStatus.Stopped)
+            catch
             {
-                AddTextString("");
-                AddTextString("Starting service.");
-                sc.Start();
-
-                for (int i = 0; i < 10; i++)
-                {
-                    Thread.Sleep(1000);
-                    sc.Refresh();
-                    AddTextString("The service is currently " + sc.Status.ToString().ToLower() + ".");
-                    if (sc.Status == ServiceControllerStatus.Running) { break; }
-                    if (sc.Status == ServiceControllerStatus.Stopped) { break; }
-                }
-
-
-                if (sc.Status == ServiceControllerStatus.Running)
-                {
-                    AddTextString("Service started.");
-                    return true;
-                }
-                else
-                {
-                    AddTextString("Service failed to start.");
-                    return false;
-                }
-
+                AddTextString("A problem has occured when trying to check the service. Vista UAC can cause this!");
             }
             AddTextString("");
             return true;
@@ -204,19 +210,26 @@ namespace TranscoderTester
 
         private void RestartService(string servicename)
         {
-            this.Cursor = Cursors.WaitCursor;
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
 
-            AddTextString("Restarting transcoder service.");
-            ServiceController sc = new ServiceController(servicename);
-            sc.Stop();
-            sc.WaitForStatus(ServiceControllerStatus.Stopped);
-            AddTextString("Transcoder service stopped.");
+                AddTextString("Restarting transcoder service.");
+                ServiceController sc = new ServiceController(servicename);
+                sc.Stop();
+                sc.WaitForStatus(ServiceControllerStatus.Stopped);
+                AddTextString("Transcoder service stopped.");
 
-            sc.Start();
-            sc.WaitForStatus(ServiceControllerStatus.Running);
-            AddTextString("Transcoder started.");
+                sc.Start();
+                sc.WaitForStatus(ServiceControllerStatus.Running);
+                AddTextString("Transcoder started.");
 
-            this.Cursor = Cursors.Default;
+                this.Cursor = Cursors.Default;
+            }
+            catch
+            {
+                AddTextString("Unable to restart transcoding service. Vista UAC can cause this!");
+            }
         }
 
 
@@ -227,6 +240,14 @@ namespace TranscoderTester
             AddTextString("");
 
             if (status.ToString().Contains("BufferReady"))
+            {
+                AddTextString("Congratulations, the transcoder appears to be working fine!!");
+                AddTextString("");
+                TranscoderSuccess = true;
+                timer1.Interval = 100;
+            } 
+            
+            if (status.ToString().Contains("Done"))
             {
                 AddTextString("Congratulations, the transcoder appears to be working fine!!");
                 AddTextString("");
