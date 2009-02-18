@@ -136,15 +136,33 @@ namespace OMLTranscoder
             }
             else
             {
+                // We are not playing a dvd, we are playing a movie file (avi etc)
                 strBuilder.AppendFormat(@"""{0}""", _source.MediaPath);
 
                 // audio format
-                strBuilder.Append(@" -oac copy");
+                // TODO Mikem2te - lavc gives better sound compatabiliy at the expense of performance. Ideally
+                // Detect audio stream and decide if it needs recoding.
+                //strBuilder.Append(@" -oac copy");
+                strBuilder.Append(@" -oac lavc");
+
+                
+                // Try to find the technical details of the movie file.
+                // Assume one feature and one video stream for now
+                DIFeature df = _source.Disk.DiskFeatures[0];
+                DIVideoStream dvs = df.VideoStreams[0];
+                
+                // Add the frame rate
+                if (dvs.FrameRateString != "")
+                {
+                    strBuilder.Append(@" -ofps " + dvs.FrameRateString);
+                }
 
                 //video format
                 strBuilder.AppendFormat(@" -ovc lavc");
-                //strBuilder.Append(@" -mpegopts format=mpeg2:tsaf:vbitrate=4900");
                 strBuilder.Append(@" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900");
+                
+                //strBuilder.Append(@" -mpegopts format=mpeg2:tsaf:vbitrate=4900");
+
             }
 
             // these are the same for dvds and non-dvds
