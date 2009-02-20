@@ -222,6 +222,11 @@
                                   KeyPath="yes" Source="..\..\VMCDVDLibraryPlugin\bin\$(var.BuildType)\VMCDVDLibraryPlugin.dll"
                                   Checksum="yes" Vital="yes"/>
                         </Component>
+                        <Component Id="OMLXMLImporter.dll" Guid="5be2002c-ef0d-4358-93ef-5c495492ab0d" Win64="yes" DiskId="1">
+                            <File Name="OMLXMLImporter.dll"
+                                  KeyPath="yes" Source="..\..\OMLXMLImporter\bin\$(var.BuildType)\OMLXMLImporter.dll"
+                                  Checksum="yes" Vital="yes"/>
+                        </Component>
                         <Component Id="AmazonMetadata.dll" Guid="6129eb0a-3c81-4a10-bc42-6d2b5849d0cd" Win64="yes" DiskId="1">
                             <File Name="AmazonMetadata.dll"
                                   KeyPath="yes" Source="..\..\AmazonMetadata\bin\$(var.BuildType)\AmazonMetadata.dll"
@@ -237,11 +242,11 @@
                             KeyPath="yes" Source="..\..\NetFlixMetadata\bin\$(var.BuildType)\NetFlixMetadata.dll"
                             Checksum="yes" Vital="yes"/>
                     </Component>
-                        <Component Id="OMLXMLImporter.dll" Guid="5be2002c-ef0d-4358-93ef-5c495492ab0d" Win64="yes" DiskId="1">
-                            <File Name="OMLXMLImporter.dll"
-                                  KeyPath="yes" Source="..\..\OMLXMLImporter\bin\$(var.BuildType)\OMLXMLImporter.dll"
-                                  Checksum="yes" Vital="yes"/>
-                        </Component>
+                      <Component Id="DVDProfilerMetaData.dll" Guid="830DF3C8-507C-49f2-8153-CBE2949945A5" Win64="yes" DiskId="1">
+                        <File Name="DVDProfilerMetaData.dll"
+                              KeyPath="yes" Source="..\..\DVDProfilerMetaData\bin\$(var.BuildType)\DVDProfilerMetaData.dll"
+                              Checksum="yes" Vital="yes"/>
+                      </Component>
                         <Component Id="OMLSDK.dll" Guid="26097a63-fc55-41d2-a8d5-432809de99fc" Win64="yes" DiskId="1">
                             <File Name="OMLSDK.dll"
                                   KeyPath="yes" Source="..\..\OMLSDK\bin\$(var.BuildType)\OMLSDK.dll"
@@ -339,6 +344,7 @@
             <ComponentRef Id="AmazonMetadata.dll" />
             <ComponentRef Id="TheMovieDbMetadata.dll" />
             <ComponentRef Id="NetFlixMetadata.dll"/>
+            <ComponentRef Id="DVDProfilerMetaData.dll"/>
 
             <!-- Windows programs -->
             <!--<ComponentRef Id="ComponentFactory.Krypton.Toolkit.DLL"/>-->
