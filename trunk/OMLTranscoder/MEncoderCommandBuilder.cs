@@ -6,6 +6,8 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Drawing;
+using System.Collections.Generic;
 using OMLEngine;
 
 namespace OMLTranscoder
@@ -148,21 +150,51 @@ namespace OMLTranscoder
                 
                 // Try to find the technical details of the movie file.
                 // Assume one feature and one video stream for now
-                DIFeature df = _source.Disk.DiskFeatures[0];
-                DIVideoStream dvs = df.VideoStreams[0];
-                
-                // Add the frame rate
-                if (dvs.FrameRateString != "")
+                DIFeature df = null;
+                DIVideoStream dvs= null;
+                try
                 {
-                    strBuilder.Append(@" -ofps " + dvs.FrameRateString);
-                }
+                    df = _source.Disk.DiskFeatures[0];
+                    dvs = df.VideoStreams[0];
 
-                //video format
-                strBuilder.AppendFormat(@" -ovc lavc");
-                strBuilder.Append(@" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900");
+                    Utilities.DebugLine(string.Format("[Transcode] Movie details. Resolution {0}x{1} @ {2} fps.", dvs.Resolution.Width, dvs.Resolution.Height, dvs.FrameRate));
+                    
+                    // Add the frame rate
+                    if (dvs.FrameRateString != "")
+                    {
+                        strBuilder.Append(@" -ofps " + dvs.FrameRateString);
+                    }
+
+                    // Video scaling
+                    string AspectRatio = dvs.AspectRatio;
+                    strBuilder.AppendFormat(BuildVF_String(dvs.Resolution.Width, dvs.Resolution.Height, ref AspectRatio));
+                    
+                    //video codec
+                    strBuilder.AppendFormat(@" -ovc lavc");
+
+                    // Build the lavcopts
+                    strBuilder.Append(@" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0");
+                    //strBuilder.Append(@" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_minrate=4900:vrc_maxrate=4900:vbitrate=4900:keyint=15:vstrict=0");
                 
-                //strBuilder.Append(@" -mpegopts format=mpeg2:tsaf:vbitrate=4900");
+                    if (dvs.AspectRatio != "")
+                    {
+                        strBuilder.AppendFormat(@":aspect=" + AspectRatio);
+                    }
 
+                    strBuilder.AppendFormat(" -mpegopts format=mpeg"); //:muxrate=9800");
+                    if (dvs.AspectRatio != "")
+                    {
+                        strBuilder.AppendFormat(@":vaspect=" + AspectRatio);
+                    }
+                }
+                catch
+                {
+                    //video format
+                    strBuilder.AppendFormat(@" -ovc lavc");
+
+                    // Build the lavcopts
+                    strBuilder.Append(@" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0");
+                }
             }
 
             // these are the same for dvds and non-dvds
@@ -187,5 +219,98 @@ namespace OMLTranscoder
             Utilities.DebugLine("[MEncoderCommandBuilder] Arguments: {0}", completedArguments);
             return completedArguments;
         }
+
+        static int Floor16(double i)
+        {
+            return (int)i / 16 * 16;
+        }
+        static int Round16(double i)
+        {
+            return (int)(Math.Round(i / 16.0) * 16.0);
+        }
+
+        static string BuildVF_String(int Width, int Height, ref string AspectRatio)
+        {
+            // Absolute maximum resolution for the transcoded file
+            int maxwidth = 720;
+            int maxheight = 576;
+
+            List<string> param = new List<string>();
+
+            double CalculatedAspectRatio = (double)Width / (double)Height;
+
+            // Look for troublesome files for the xbox. Xbox can have 
+            // trouble with wide aspect ratio or large resolution
+            if ((CalculatedAspectRatio > 1.8) || (Width > maxwidth) || (Height > maxheight))
+            {
+                int cswidth;
+                int csheight;
+
+                if ((Width > maxwidth) || (Height > maxheight))
+                {
+                    // Movie is to big, scale it
+                    // Find scale factor
+                    double sfwidth = (double)maxwidth / (double)Width;
+                    double sfheight = (double)maxheight / (double)Height;
+                    double scalefactor = Math.Min(sfwidth, sfheight);
+
+                    // Find the resolution to scale to. These are rounded down to the nearest 16 pixel
+                    // boundary to be kind to the encoding and the extender. May cause slight AR inacuracy
+                    cswidth = Floor16((double)Width * scalefactor);
+                    csheight = Floor16((double)Height * scalefactor);
+
+                    //Console.WriteLine("Calculated scale " + cropwidth.ToString() + ", " + cropheight.ToString());
+                    if ((cswidth != Width) || (csheight != Height))
+                    {
+                        param.Add(string.Format(@"scale={0}:{1}", cswidth, csheight));
+                        Utilities.DebugLine(string.Format("[Transcode] Scaling Movie to {0}x{1}.", cswidth, csheight));
+                    }
+                }
+                else
+                {
+                    // File is within size limits but is too wide an aspect ratio.
+                    // Crop movie on a 16 pixel boundary
+                    cswidth = Floor16(Width);
+                    csheight = Floor16(Height);
+                    //Console.WriteLine("Calculated crop " + cropwidth.ToString() + ", " + cropheight.ToString());
+                    if ((cswidth != Width) || (csheight != Height))
+                    {
+                        param.Add(string.Format(@"crop={0}:{1}:0:0", cswidth, csheight));
+                        Utilities.DebugLine(string.Format("[Transcode] Cropping Movie to {0}x{1}.", cswidth, csheight));
+                    }
+                }
+
+                if (CalculatedAspectRatio > 1.7)
+                {
+                    // Aspect ratio is too wide
+                    double newaspectratio = 16.0 / 9.0;
+                    AspectRatio = "16/9";
+
+                    // Calculate new output size (add borders)
+                    int expandwidth = cswidth;
+                    int expandheight = Round16((int)((double)cswidth / newaspectratio));
+
+                    // Calculate the vertical offset on 16 pixel boundary
+                    int voffset = Round16((expandheight - csheight) / 2);
+                    //Console.WriteLine("Calculated output size " + expandwidth.ToString() + ", " + expandheight.ToString());
+
+                    if (expandheight > csheight)
+                    {
+                        param.Add(string.Format(@"expand={0}:{1}:0:{2}", expandwidth, (csheight - expandheight), voffset));
+                        Utilities.DebugLine(string.Format("[Transcode] Expanding Movie to {0}x{1}.", expandwidth, expandheight));
+                    }
+                }
+            }
+
+            if (param.Count > 0)
+            {
+                return @" -vf " + string.Join(",", param.ToArray());
+            }
+            else
+            {
+                return "";
+            }
+        }
+
     }
 }

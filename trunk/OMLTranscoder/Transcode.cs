@@ -37,7 +37,7 @@ namespace OMLTranscoder
             } 
             
             _mencoderlogname = source.GetTranscodingFileName() + ".log";
-            _mencoderloglevel = MEncoderLogging.InfoOnly;
+            _mencoderloglevel = MEncoderLogging.All; //.InfoOnly;
         }
 
         ~Transcode()
@@ -94,6 +94,7 @@ namespace OMLTranscoder
                 Process.BeginErrorReadLine();
             }
 
+            WriteMenCoderLogLine("Launching Memcoder with - " + Process.StartInfo.Arguments); 
             Utilities.DebugLine("[Transcode] Transcoding job started" + (Process.HasExited ? ", exit-code=" + Process.ExitCode : ""));
             
             if (Process.HasExited)
