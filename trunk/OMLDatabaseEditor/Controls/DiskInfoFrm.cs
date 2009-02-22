@@ -87,17 +87,19 @@ namespace OMLDatabaseEditor.Controls
                     audio.Nodes.Add(audiostream);
                     if (ad.TrackNo != 0) { audiostream.Nodes.Add("Track No : " + ad.TrackNo.ToString()); }
                     if (ad.AudioID != 0) { audiostream.Nodes.Add("Audio ID : " + ad.AudioID.ToString()); }
-                    if (ad.Format != "")
+
+                    // Build enocding string
+                    StringBuilder str = new StringBuilder();
+                    str.Append("Encoding : " + ad.Encoding.ToString());
+                    if (ad.EncodingProfile != DIAudioEncodingProfile.Undefined)
+                        str.Append(" " + ad.EncodingProfile.ToString());
+
+                    if (ad.SubFormat != "")
                     {
-                        if (ad.SubFormat != "")
-                        {
-                            audiostream.Nodes.Add("Format : " + ad.Format + " in " + ad.SubFormat);
-                        }
-                        else
-                        {
-                            audiostream.Nodes.Add("Format : " + ad.Format);
-                        }
+                        str.Append(" in " + ad.SubFormat);
                     }
+                    audiostream.Nodes.Add(str.ToString());
+
                     if (ad.Language != "") { audiostream.Nodes.Add("Language : " + ad.Language.ToString()); }
                     if (ad.SampleFreq != 0) { audiostream.Nodes.Add("Sample Frequency : " + ad.SampleFreq.ToString()); }
                     if (ad.Channels != 0) { audiostream.Nodes.Add("Channels : " + ad.Channels.ToString()); }
