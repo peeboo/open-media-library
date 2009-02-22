@@ -109,7 +109,7 @@ namespace TranscoderTester
             {
                 AddTextString("Service '" + sc.ServiceName + @"' found!");
             }
-            catch (Exception ex)
+            catch
             {
                 AddTextString("Cannot find the service '" + servicename + "'.");
                 return false;
@@ -204,7 +204,6 @@ namespace TranscoderTester
                 AddTextString("");
                 return false;
             }
-            return true;
         }
 
 

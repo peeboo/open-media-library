@@ -8,7 +8,27 @@ using System.IO;
 
 namespace OMLEngine
 {
-
+    public enum DIAudioEncoding
+    {
+        AC3,
+        MPEG1,
+        MPEG2,
+        LPCM,
+        DTS,
+        Undefined,
+        AAC,
+        VORBIS,
+        WMA2
+    }
+    public enum DIAudioEncodingProfile
+    {
+        Undefined,
+        Layer1,
+        Layer2,
+        Layer3,
+        L1,
+        L2
+    }
     public class DIFeature
     {
         public string Name { get; set; }
@@ -45,7 +65,8 @@ namespace OMLEngine
         public int? TrackNo { get; set; }
         public int Bitrate { get; set; }
         public string BitrateMode { get; set; }
-        public string Format { get; set; }
+        public DIAudioEncoding Encoding { get; set; }
+        public DIAudioEncodingProfile EncodingProfile { get; set; }
         public string SubFormat { get; set; }
         public AudioExtension Extension { get; set; }
         public int SampleFreq { get; set; }
@@ -77,23 +98,15 @@ namespace OMLEngine
                 switch (fm)
                 {
                     case 60000: return "60";
-                        break;
                     case 59940: return "60000/1001";
-                        break;
                     case 50000: return "50";
-                        break;
                     case 30000: return "30";
-                        break;
                     case 29970: return "30000/1001";
-                        break;
                     case 25000: return "25";
-                        break;
                     case 24000: return "24";
-                        break;
                     case 23970: return "24000/1001";
-                        break;
+                    default: return "";
                 }
-                return "";
             }
             set
             {
@@ -152,6 +165,8 @@ namespace OMLEngine
                 case VideoFormat.NRG : // Nero image
                 case VideoFormat.PDI : // Instant CD/DVD image
                     // Try to mount image then find media
+                    // Mount image before identifying media. Not implemented yet!!
+                    //MountImage(name, path);
                     break;
 
                 // Physical disks
@@ -175,35 +190,29 @@ namespace OMLEngine
                 case VideoFormat.WPL : // playlist file?
                     break;
 
-                // Video files
-                case VideoFormat.ASF : // WMV style
-                case VideoFormat.AVC : // AVC H264
-                case VideoFormat.AVI : // DivX, Xvid, etc
-                case VideoFormat.DVRMS : // MPG
-                case VideoFormat.H264 : // AVC OR MP4
-                case VideoFormat.IFO : // Online DVD
-                case VideoFormat.MDS : // Media Descriptor file
-                case VideoFormat.MKV : // Likely h264
-                case VideoFormat.MOV : // Quicktime
-                case VideoFormat.MPG :
-                case VideoFormat.MPEG :
-                case VideoFormat.MP4 : // DivX, AVC, or H264
-                case VideoFormat.OGM : // Similar to MKV
-                case VideoFormat.TS : // MPEG2
-                case VideoFormat.UIF :
-                case VideoFormat.WMV :
-                case VideoFormat.VOB : // MPEG2
-                case VideoFormat.WVX : // wtf is this?
-                case VideoFormat.WTV : // new dvr format in vista (introduced in the tv pack 2008)
-                case VideoFormat.M2TS : // mpeg2 transport stream (moved, since it got inserted in the midd
-                    QueryMediaFile(path);
+                case VideoFormat.URL: // this is used for online content (such as streaming trailers)
+                case VideoFormat.UNKNOWN:
                     break;
 
-                case VideoFormat.URL : // this is used for online content (such as streaming trailers)
-                case VideoFormat.UNKNOWN :
+                // Video files
+                default : 
+                    QueryMediaFile(path);
                     break;
             }
         }
+
+        /* Mount image before identifying media. Not implemented yet!!
+         * private void MountImage(string name, string path)
+        {
+            MountingTool mt = new MountingTool();
+            string drive;
+            mt.Mount(path, out drive);
+            drive = drive + ":";
+
+            if (MediaData.IsDVD(drive)) { IdentifyMediaType(name, drive, VideoFormat.DVD); }
+            if (MediaData.IsHDDVD(drive)) { IdentifyMediaType(name, drive, VideoFormat.HDDVD); }
+            if (MediaData.IsBluRay(drive)) { IdentifyMediaType(name, drive, VideoFormat.BLURAY); }
+        }*/
 
         private void QueryDVD()
         {
@@ -256,7 +265,8 @@ namespace OMLEngine
                 {
                     DIAudioStream diaudiostream = new DIAudioStream();
                     diaudiostream.Name = at.ToString();
-                    diaudiostream.Format = at.Format.ToString();
+                    diaudiostream.Encoding = (DIAudioEncoding)at.Format;
+                    diaudiostream.EncodingProfile = DIAudioEncodingProfile.Undefined;
                     diaudiostream.LanguageID = at.LanguageID;
                     diaudiostream.SampleFreq = at.Frequency;
                     diaudiostream.AudioID = at.ID;
@@ -320,7 +330,7 @@ namespace OMLEngine
                     difeature.VideoStreams.Add(divideostream);
                 }
             }
-             catch (Exception ex)
+            catch
             {
             }
 
@@ -332,7 +342,6 @@ namespace OMLEngine
                 for (i = 0; i < audiostreamscount; i++)
                 {
                     DIAudioStream diaudiostream = new DIAudioStream();
-                    diaudiostream.Format = MI.Get(MediaInfoLib.StreamKind.Audio, i, "Format");
                     diaudiostream.LanguageID = MI.Get(MediaInfoLib.StreamKind.Audio, i, "Language");
                     diaudiostream.BitrateMode = MI.Get(MediaInfoLib.StreamKind.Audio, i, "BitRate_Mode");
                     diaudiostream.Bitrate = ToInt32(MI.Get(MediaInfoLib.StreamKind.Audio, i, "BitRate")) / 1000;
@@ -340,10 +349,68 @@ namespace OMLEngine
                     diaudiostream.AudioID = ToInt32(MI.Get(MediaInfoLib.StreamKind.Audio, i, "ID"));
                     diaudiostream.Name = diaudiostream.Language;
                     if (diaudiostream.Channels > 0) { diaudiostream.Name = diaudiostream.Name + " " + diaudiostream.Channels.ToString() + "ch"; }
+                    
+                    // Initialise fields
+                    diaudiostream.EncodingProfile =  DIAudioEncodingProfile.Undefined;
+                    diaudiostream.SubFormat = "";
+
+                    switch (MI.Get(MediaInfoLib.StreamKind.Audio, i, "Format"))
+                    {
+                        case "AC-3": 
+                            diaudiostream.Encoding = DIAudioEncoding.AC3;
+                            diaudiostream.EncodingProfile = DIAudioEncodingProfile.Undefined;
+                            break;
+
+                        case "DTS":
+                            diaudiostream.Encoding = DIAudioEncoding.DTS;
+                            diaudiostream.EncodingProfile = DIAudioEncodingProfile.Undefined;
+                            break;
+
+                        case "AAC":
+                            diaudiostream.Encoding = DIAudioEncoding.AAC;
+                            diaudiostream.EncodingProfile = DIAudioEncodingProfile.Undefined;
+                            break;
+
+                        case "Vorbis":
+                            diaudiostream.Encoding = DIAudioEncoding.VORBIS;
+                            diaudiostream.EncodingProfile = DIAudioEncodingProfile.Undefined;
+                            break;
+
+                        case "MPEG Audio":
+                            switch (MI.Get(MediaInfoLib.StreamKind.Audio, i, "Format_Version"))
+                            {
+                                case "Version 1": diaudiostream.Encoding = DIAudioEncoding.MPEG1; break;
+                                case "Version 2": diaudiostream.Encoding = DIAudioEncoding.MPEG2; break;
+                                default: diaudiostream.Encoding = DIAudioEncoding.Undefined; break;
+                            }
+                            switch (MI.Get(MediaInfoLib.StreamKind.Audio, i, "Format_Profile"))
+                            {
+                                case "Layer 2": diaudiostream.EncodingProfile = DIAudioEncodingProfile.Layer2; break;
+                                case "Layer 3": diaudiostream.EncodingProfile = DIAudioEncodingProfile.Layer3; break;
+                                default: diaudiostream.EncodingProfile = DIAudioEncodingProfile.Undefined; break;
+                            }
+                            break;
+
+                        case "WMA2":
+                            diaudiostream.Encoding = DIAudioEncoding.WMA2;
+                            switch (MI.Get(MediaInfoLib.StreamKind.Audio, i, "Format_Profile"))
+                            {
+                                case "L1": diaudiostream.EncodingProfile =  DIAudioEncodingProfile.L1; break;
+                                case "L2": diaudiostream.EncodingProfile = DIAudioEncodingProfile.L2; break;
+                                default: diaudiostream.EncodingProfile = DIAudioEncodingProfile.Undefined; break;
+                            }
+                            break;
+
+                        default :
+                            diaudiostream.Encoding = DIAudioEncoding.Undefined;
+                            diaudiostream.EncodingProfile = DIAudioEncodingProfile.Undefined;
+                            break;
+                    }
+
                     difeature.AudioStreams.Add(diaudiostream);
                 }
             }
-            catch (Exception ex)
+            catch
             {
             }
 

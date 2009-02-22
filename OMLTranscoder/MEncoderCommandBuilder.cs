@@ -141,24 +141,37 @@ namespace OMLTranscoder
                 // We are not playing a dvd, we are playing a movie file (avi etc)
                 strBuilder.AppendFormat(@"""{0}""", _source.MediaPath);
 
-                // audio format
-                // TODO Mikem2te - lavc gives better sound compatabiliy at the expense of performance. Ideally
-                // Detect audio stream and decide if it needs recoding.
-                //strBuilder.Append(@" -oac copy");
-                strBuilder.Append(@" -oac lavc");
-
                 
-                // Try to find the technical details of the movie file.
-                // Assume one feature and one video stream for now
                 DIFeature df = null;
+                DIAudioStream das = null;
                 DIVideoStream dvs= null;
                 try
                 {
+                    bool recode_audio;
+
+                    // Try to find the technical details of the movie file.
+                    // Assume one feature and one video/audio stream for now
                     df = _source.Disk.DiskFeatures[0];
+                    das = df.AudioStreams[0];
                     dvs = df.VideoStreams[0];
 
                     Utilities.DebugLine(string.Format("[Transcode] Movie details. Resolution {0}x{1} @ {2} fps.", dvs.Resolution.Width, dvs.Resolution.Height, dvs.FrameRate));
+
+                    // audio format
+                    if ((das.Encoding == DIAudioEncoding.AC3) ||
+                        (das.EncodingProfile == DIAudioEncodingProfile.Layer1) ||
+                        (das.EncodingProfile == DIAudioEncodingProfile.Layer2))
+                    {
+                        strBuilder.Append(@" -oac copy");
+                        recode_audio = false;
+                    }
+                    else
+                    {
+                        strBuilder.Append(@" -oac lavc");
+                        recode_audio = true;
+                    }
                     
+
                     // Add the frame rate
                     if (dvs.FrameRateString != "")
                     {
@@ -174,11 +187,15 @@ namespace OMLTranscoder
 
                     // Build the lavcopts
                     strBuilder.Append(@" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_maxrate=9800:vbitrate=4900:keyint=15:vstrict=0");
-                    //strBuilder.Append(@" -lavcopts vcodec=mpeg2video:vrc_buf_size=1835:vrc_minrate=4900:vrc_maxrate=4900:vbitrate=4900:keyint=15:vstrict=0");
-                
+
                     if (dvs.AspectRatio != "")
                     {
                         strBuilder.AppendFormat(@":aspect=" + AspectRatio);
+                    }
+
+                    if (recode_audio == true)
+                    {
+                        strBuilder.Append(@":acodec=ac3");
                     }
 
                     strBuilder.AppendFormat(" -mpegopts format=mpeg"); //:muxrate=9800");
