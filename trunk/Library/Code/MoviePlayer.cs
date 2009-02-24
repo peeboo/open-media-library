@@ -38,7 +38,10 @@ namespace Library
         static public IPlayMovie CreateMoviePlayer(MediaSource source)
         {
             // this is an attempt to determine the physical location of the media if it was moved unexpectedly.
-            source.Disk.FindPath();
+            // The following function call is responsible for quite a bit of slow down and the user community
+            //  strongly believes that the app should not be responsible for auto-correcting movie locations.
+            //  For what it's worth I agree so I'm commenting it out for now.
+            // source.Disk.FindPath();
 
             string mediaPath = null;
             VideoFormat mediaFormat = VideoFormat.UNKNOWN;
