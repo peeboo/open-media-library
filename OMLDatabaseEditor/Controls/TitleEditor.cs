@@ -153,7 +153,8 @@ namespace OMLDatabaseEditor.Controls
             ListEditor editor = new ListEditor(name, listToEdit);
             List<string> original = listToEdit.ToList<string>();
             editor.ShowDialog();
-            if (listToEdit.Intersect(original).Count<string>() != original.Count)
+            int commonCount = listToEdit.Intersect(original).Count<string>();
+            if (commonCount != listToEdit.Count || commonCount != original.Count)
             {
                 TitleChanges(null, null);
             }
@@ -234,8 +235,13 @@ namespace OMLDatabaseEditor.Controls
             if (EditedTitle != null)
             {
                 DiskEditorFrm diskEditor = new DiskEditorFrm(EditedTitle.Disks);
+                List<Disk> original = EditedTitle.Disks.ToList<Disk>();
                 diskEditor.ShowDialog();
-                TitleChanges(null, EventArgs.Empty);
+                int commonCount = EditedTitle.Disks.Intersect(original).Count<Disk>();
+                if (commonCount != EditedTitle.Disks.Count || commonCount != original.Count)
+                {
+                    TitleChanges(null, EventArgs.Empty);
+                }
             }
         }
 
