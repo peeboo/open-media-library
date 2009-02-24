@@ -53,8 +53,11 @@ namespace Library
 
             try
             {
-                if (OMLApplication.Current.IsExtender && this.imp != null)
+                if (OMLApplication.Current.IsExtender)
+                {
+                    this.imp = new Impersonator();
                     this.imp.Enter();
+                }
             }
             catch (Exception ex)
             {
