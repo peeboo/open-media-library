@@ -2274,6 +2274,8 @@ namespace OMLEngine
         {
             get 
             {
+                if (!Directory.Exists(Path.Combine(this.BasePath(), @"FanArt")))
+                    Directory.CreateDirectory(Path.Combine(this.BasePath(), @"FanArt"));
                 return Path.Combine(this.BasePath(), @"FanArt"); 
             }
         }       
