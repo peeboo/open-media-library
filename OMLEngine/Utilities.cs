@@ -269,6 +269,9 @@ namespace OMLEngine
 
             if (!FileSystemWalker.MainBackDropDirExists)
                 FileSystemWalker.createMainBackDropDirectory();
+            
+            if (!FileSystemWalker.FanArtDirectoryExists)
+                FileSystemWalker.createFanArtDirectory();
 
             return true;
         }

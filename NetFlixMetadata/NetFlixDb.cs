@@ -39,18 +39,6 @@ namespace NetFlixMetadata
             get { return "NetFlix"; }
         }
 
-        private bool _useMainFanArtDir = false;
-        public bool UseMainFanArtDir
-        {
-            set { _useMainFanArtDir = value; }
-        }
-
-        private string _mainFanArtDir = @"C:\ProgramData\OpenMediaLibrary\FanArt";
-        public string MainFanArtDir
-        {
-            get { return _mainFanArtDir; }
-            set { _mainFanArtDir = value; }
-        }
 
         public bool Initialize(Dictionary<string, string> parameters)
         {

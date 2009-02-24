@@ -397,15 +397,14 @@ namespace OMLDatabaseEditor
                             {
                                 if (plugin.SupportsBackDrops())
                                 {
-                                    if (titleEditor.EditedTitle.BasePath() != null)
+                                    // Is the fanart folder for the edited title defined
+                                    if (string.IsNullOrEmpty(titleEditor.EditedTitle.BackDropFolder))
+                                        titleEditor.EditedTitle.BackDropFolder = t.CreateFanArtFolder(titleEditor.EditedTitle.BasePath());
+
+                                    if (!string.IsNullOrEmpty(titleEditor.EditedTitle.BackDropFolder))
                                     {
                                         DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
                                         dbdForm.Show();
-                                        if (Properties.Settings.Default.gbTitledFanArtFolder)
-                                        {
-                                            plugin.UseMainFanArtDir = true;
-                                            plugin.MainFanArtDir = Properties.Settings.Default.gsTitledFanArtPath;
-                                        }
                                         plugin.DownloadBackDropsForTitle(titleEditor.EditedTitle, searchResultForm.SelectedTitleIndex);
                                         dbdForm.Hide();
                                         dbdForm.Dispose();
@@ -467,16 +466,15 @@ namespace OMLDatabaseEditor
                         {
                             if (metadata.SupportsBackDrops())
                             {
-                                if (titleEditor.EditedTitle.BasePath() != null)
+                                // Is the fanart folder for the edited title defined
+                                if (string.IsNullOrEmpty(titleEditor.EditedTitle.BackDropFolder))
+                                    titleEditor.EditedTitle.BackDropFolder = title.CreateFanArtFolder(titleEditor.EditedTitle.BasePath());
+
+                                if (!string.IsNullOrEmpty(titleEditor.EditedTitle.BackDropFolder))
                                 {
                                     DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
                                     dbdForm.Show();
-                                    if (Properties.Settings.Default.gbTitledFanArtFolder)
-                                    {
-                                        plugin.UseMainFanArtDir = true;
-                                        plugin.MainFanArtDir = Properties.Settings.Default.gsTitledFanArtPath;
-                                    }
-                                    metadata.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
+                                    plugin.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
                                     dbdForm.Hide();
                                     dbdForm.Dispose();
                                 }

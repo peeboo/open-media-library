@@ -71,6 +71,7 @@ namespace OMLEngine
         private Disk _selectedDisk = null;
         private string _backDropImage = string.Empty;
         private int _productionYear = 0;
+        private string _fanartfolder = string.Empty;
 
         private static string XmlNameSpace = "http://www.openmedialibrary.org/";
 
@@ -743,6 +744,7 @@ namespace OMLEngine
             _watchedCount = GetSerializedInt(info, "watched_count");
             _backDropImage = GetSerializedString(info, "backdrop_boxart_path");
             _productionYear = GetSerializedInt(info, "production_year");
+            _fanartfolder = GetSerializedString(info, "fan_art_folder");
         }
 
         void CleanDuplicateDisks()
@@ -817,6 +819,7 @@ namespace OMLEngine
             info.AddValue("watched_count", _watchedCount);
             info.AddValue("backdrop_boxart_path", _backDropImage);
             info.AddValue("production_year", _productionYear);
+            info.AddValue("fan_art_folder", _fanartfolder);
         }
         #endregion
 
@@ -2270,14 +2273,82 @@ namespace OMLEngine
             return null;
         }
 
+        /// <summary>
+        /// This returns the fanartfolder if _fanartfolder is defined. If not it will try to see
+        /// if there is a fanart folder allready in existance under the movie folder first then
+        /// the centralised folder. _fanartfolder is then set to this ready for serialisation.
+        /// 
+        /// This routine uses a primitive token to represent basepath of the movie and this is
+        /// substituted when required. This means if the movie is moved and the basepath changed,
+        /// this will return the correct fanart folder.
+        /// 
+        /// </summary>
         public string BackDropFolder
         {
-            get 
-            {
-                if (!Directory.Exists(Path.Combine(this.BasePath(), @"FanArt")))
-                    Directory.CreateDirectory(Path.Combine(this.BasePath(), @"FanArt"));
-                return Path.Combine(this.BasePath(), @"FanArt"); 
+            get {
+                // Is there allready a fan art folder defined
+                if (!string.IsNullOrEmpty(_fanartfolder))
+                {
+                    if (!string.IsNullOrEmpty(this.BasePath()))
+                    {
+                        // Perform token substitution.
+                        return _fanartfolder.Replace("{basepath}", this.BasePath());
+                    }
+                    else
+                    {
+                        return _fanartfolder;
+                    }
+                }
+
+                // Check for an existing fanart folder under the movie/disk folder
+                if (!string.IsNullOrEmpty(this.BasePath()))
+                {
+                    if (Directory.Exists(Path.Combine(this.BasePath(), @"FanArt")))
+                    {
+                        _fanartfolder = @"{basepath}\FanArt";
+                        return _fanartfolder.Replace("{basepath}", this.BasePath());
+                    }
+                }
+
+                // Check for an existing fanart folder under the centralised folder
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.gsTitledFanArtPath))
+                {
+                    string MainFanArtDir = System.IO.Path.Combine(Properties.Settings.Default.gsTitledFanArtPath, PathSafeName);
+                    if (Directory.Exists(MainFanArtDir))
+                    {
+                        _fanartfolder = MainFanArtDir;
+                        return _fanartfolder;
+                    }
+                }
+                return null;
+
             }
+            set { _fanartfolder = value; }
+        }
+
+        public string CreateFanArtFolder(string basepath)
+        {
+            if (string.IsNullOrEmpty(_fanartfolder))
+            {
+                if (Properties.Settings.Default.gbTitledFanArtFolder)
+                {
+                    // Centralised Fan Art
+                    string MainFanArtDir = Properties.Settings.Default.gsTitledFanArtPath;
+                    if (!Directory.Exists(MainFanArtDir)) Directory.CreateDirectory(MainFanArtDir);
+                    _fanartfolder = System.IO.Path.Combine(MainFanArtDir, PathSafeName);
+                }
+                else
+                {
+                    // Fan art local to movie
+                    if (string.IsNullOrEmpty(basepath))
+                    {
+                        return null;
+                    }
+                    _fanartfolder = Path.Combine(basepath, @"FanArt");
+                }
+            }
+            if (!Directory.Exists(_fanartfolder)) Directory.CreateDirectory(_fanartfolder);
+            return _fanartfolder;
         }       
     }
 
