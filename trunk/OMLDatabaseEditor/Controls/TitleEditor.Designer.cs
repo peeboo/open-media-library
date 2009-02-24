@@ -95,7 +95,6 @@
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tpBackdrop = new DevExpress.XtraTab.XtraTabPage();
-            this.pbBackdrop = new System.Windows.Forms.PictureBox();
             this.tblBackdrops = new System.Windows.Forms.TableLayoutPanel();
             this.contextImage = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -145,7 +144,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.lbPeople)).BeginInit();
             this.contextPeople.SuspendLayout();
             this.tpBackdrop.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbBackdrop)).BeginInit();
             this.contextImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.disksBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).BeginInit();
@@ -919,27 +917,10 @@
             // tpBackdrop
             // 
             this.tpBackdrop.AutoScroll = true;
-            this.tpBackdrop.Controls.Add(this.pbBackdrop);
             this.tpBackdrop.Controls.Add(this.tblBackdrops);
             this.tpBackdrop.Name = "tpBackdrop";
             this.tpBackdrop.Size = new System.Drawing.Size(513, 492);
             this.tpBackdrop.Text = "Backdrop";
-            // 
-            // pbBackdrop
-            // 
-            this.pbBackdrop.DataBindings.Add(new System.Windows.Forms.Binding("ImageLocation", this.titleSource, "BackDropImage", true));
-            this.pbBackdrop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbBackdrop.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pbBackdrop.ErrorImage")));
-            this.pbBackdrop.Image = ((System.Drawing.Image)(resources.GetObject("pbBackdrop.Image")));
-            this.pbBackdrop.ImageLocation = "";
-            this.pbBackdrop.InitialImage = ((System.Drawing.Image)(resources.GetObject("pbBackdrop.InitialImage")));
-            this.pbBackdrop.Location = new System.Drawing.Point(0, 0);
-            this.pbBackdrop.Name = "pbBackdrop";
-            this.pbBackdrop.Size = new System.Drawing.Size(513, 492);
-            this.pbBackdrop.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbBackdrop.TabIndex = 1;
-            this.pbBackdrop.TabStop = false;
-            this.pbBackdrop.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pbCovers_MouseClick);
             // 
             // tblBackdrops
             // 
@@ -1071,7 +1052,6 @@
             this.contextPeople.ResumeLayout(false);
             this.tpBackdrop.ResumeLayout(false);
             this.tpBackdrop.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbBackdrop)).EndInit();
             this.contextImage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.disksBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).EndInit();
@@ -1159,6 +1139,5 @@
         private DevExpress.XtraEditors.LabelControl labelControl21;
         private System.Windows.Forms.ToolStripMenuItem updateFromMetadataToolStripMenuItem1;
         private System.Windows.Forms.TableLayoutPanel tblBackdrops;
-        private System.Windows.Forms.PictureBox pbBackdrop;
     }
 }
