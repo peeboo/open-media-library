@@ -153,7 +153,7 @@ namespace OMLDatabaseEditor.Controls
             ListEditor editor = new ListEditor(name, listToEdit);
             List<string> original = listToEdit.ToList<string>();
             editor.ShowDialog();
-            if (listToEdit.Union(original).Count<string>() != original.Count)
+            if (listToEdit.Intersect(original).Count<string>() != original.Count)
             {
                 TitleChanges(null, null);
             }
