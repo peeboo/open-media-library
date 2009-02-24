@@ -62,6 +62,7 @@
     <Compile Include="DiskInfo.cs" />
     <Compile Include="DVDAudioTrack.cs" />
     <Compile Include="DVDChapter.cs" />
+    <Compile Include="DVDDecrypterController.cs" />
     <Compile Include="DVDDisk.cs" />
     <Compile Include="DVDSubTitle.cs" />
     <Compile Include="DVDTitle.cs" />
