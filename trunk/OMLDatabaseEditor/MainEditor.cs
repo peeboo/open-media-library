@@ -474,7 +474,7 @@ namespace OMLDatabaseEditor
                                 {
                                     DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
                                     dbdForm.Show();
-                                    plugin.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
+                                    metadata.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
                                     dbdForm.Hide();
                                     dbdForm.Dispose();
                                 }
