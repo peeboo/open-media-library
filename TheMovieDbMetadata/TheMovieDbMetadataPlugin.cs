@@ -428,11 +428,17 @@ namespace TheMovieDbMetadata
                 
                 foreach (string backDropUrl in this.BackDrops)
                 {
-                    if (!string.IsNullOrEmpty(backDropUrl))
+                    try
                     {
-                        string filename = backDropUrl.Substring(backDropUrl.LastIndexOf('/') + 1);
-                        filename = Path.GetFileName(filename);
-                        web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, filename).ToString());
+                        if (!string.IsNullOrEmpty(backDropUrl))
+                        {
+                            string[] folders = backDropUrl.Split('/');
+                            string filename = folders[folders.Length - 2] + folders[folders.Length - 1];
+                            web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, filename).ToString());
+                        }
+                    }
+                    catch
+                    {
                     }
                 }
             }
