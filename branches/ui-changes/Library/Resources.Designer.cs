@@ -958,13 +958,6 @@ namespace Library {
             }
         }
         
-        internal static byte[] Settings_Item_Temp1 {
-            get {
-                object obj = ResourceManager.GetObject("Settings_Item_Temp1", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
         internal static byte[] Settings_Main {
             get {
                 object obj = ResourceManager.GetObject("Settings_Main", resourceCulture);
@@ -1210,10 +1203,10 @@ namespace Library {
             }
         }
         
-        internal static System.Drawing.Bitmap V3_Controls_Background_Shard1 {
+        internal static byte[] V3_Controls_Background_Shard1 {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Background_Shard1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((byte[])(obj));
             }
         }
         
