@@ -1,0 +1,14 @@
+<Mcml
+    xmlns="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor="assembly://MSCorLib/System"
+    xmlns:me="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_Common_FontNames"/>
+
+  <Font Name="ButtonText"             FontName="global://me:MainFontFace"  FontSize="20" />
+  <Font Name="BackgroundTitleText"    FontName="global://me:MainFontFace"  FontSize="150" />
+  <Font Name="DialogTitle"            FontName="global://me:MainFontFace"  FontSize="22" />
+  <Font Name="DialogContent"          FontName="global://me:MainFontFace"  FontSize="18" />
+  <Font Name="VolumeText"             FontName="global://me:MainFontFace"  FontSize="36" />
+  <Font Name="ThumbnailButtonText"    FontName="global://me:MainFontFace"  FontSize="16" />
+</Mcml>
