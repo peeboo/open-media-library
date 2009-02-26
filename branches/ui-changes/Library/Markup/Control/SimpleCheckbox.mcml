@@ -9,13 +9,16 @@
 
     <Properties>
       <BooleanChoice Name="Checked" BooleanChoice="$Required" />
+
+      <cor:Boolean Name="BoolHandleBack" Boolean="false"/>
+      <Command Name="CommandBack"/>
     </Properties>
 
     <Locals>
-
       <ClickHandler Name="Clicker" />
       <BooleanTransformer Name="BooleanInverseTransformer" Inverse="true" />
-
+      <KeyHandler Key="Backspace" Name="KeyBackspace" Command="[CommandBack]"  Handle="[BoolHandleBack]"/>
+      <ShortcutHandler Shortcut="Back" Name="ShortcutBack" Command="[CommandBack]"  Handle="[BoolHandleBack]"/>
     </Locals>
 
     <Rules>

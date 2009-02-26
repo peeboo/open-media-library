@@ -13,10 +13,17 @@
             Size="50,50"/>
 
       <Index Index="$Required" Name="Index"/>
+
+      <cor:Boolean Name="BoolHandleBack" Boolean="false"/>
+      <Command Name="CommandBack"/>
+
+      <Font Name="FontLabel" FontName="Calibri" FontSize="16"/>
     </Properties>
 
 		<Locals>
       <ClickHandler Name="Clicker"/>
+      <KeyHandler Key="Backspace" Name="KeyBackspace" Command="[CommandBack]"  Handle="[BoolHandleBack]"/>
+      <ShortcutHandler Shortcut="Back" Name="ShortcutBack" Command="[CommandBack]"  Handle="[BoolHandleBack]"/>
     </Locals>
 
 		<Rules>
@@ -96,7 +103,9 @@
           <Graphic Name="Box"
                    Content="image://me:ButtonRadioButtonOutlineNoFocus" />
           <Text Name="Label"
-                Color="White" Font="Calibri, 16" />
+                Color="White" 
+                Font="[FontLabel]" 
+                Margins="0,5,0,0"/>
 
         </Children>
       </Panel>
@@ -114,5 +123,4 @@
          Source="resx://Library/Library.Resources/ButtonRadioButtonOutlineFocus"/>
   <Image Name="ButtonRadioButtonOutlineNoFocus"
          Source="resx://Library/Library.Resources/ButtonRadioButtonOutlineNoFocus"/>
-
 </Mcml>

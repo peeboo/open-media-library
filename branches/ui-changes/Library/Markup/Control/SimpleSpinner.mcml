@@ -14,6 +14,9 @@
       <Color Name="BackgroundColor" Color="Transparent" />
       <FormatTransformer Name="LabelTransformer" Format="{0}" />
       <Size Name="Size" Size="250, 51" />
+
+      <cor:Boolean Name="BoolHandleBack" Boolean="false"/>
+      <Command Name="CommandBack"/>
     </Properties>
 
     <Locals>
@@ -49,7 +52,7 @@
     </Rules>
 
     <Content>
-      <Panel>
+      <Panel Navigation="Group, RememberFocus">
         <Layout>
           <FlowLayout Orientation="Horizontal" />
         </Layout>
@@ -62,24 +65,26 @@
             </Children>
           </Graphic>
 
-          <!-- Previous button -->
-          <me:SimpleButton  Command="[Previous]"
-                            ImageFocus="image://me:SpinnerArrowBackFocus"
-                            ImageNoFocus="image://me:SpinnerArrowBackNoFocus"
-                            ImageDormant="image://me:SpinnerArrowBackDormant"
-                            Name="btnPrevious"
-                            Size="50,51"
-                            />
+          
+              <!-- Previous button -->
+              <me:SimpleButton  Command="[Previous]"
+                                ImageFocus="image://me:SpinnerArrowBackFocus"
+                                ImageNoFocus="image://me:SpinnerArrowBackNoFocus"
+                                ImageDormant="image://me:SpinnerArrowBackDormant"
+                                Name="btnPrevious"
+                                Size="50,51"
+                                BoolHandleBack="[BoolHandleBack]"
+                                CommandBack="[CommandBack]"/>
 
-          <!-- Next button -->
-          <me:SimpleButton  Command="[Next]"
-                            ImageFocus="image://me:SpinnerArrowForwardFocus"
-                            ImageNoFocus="image://me:SpinnerArrowForwardNoFocus"
-                            ImageDormant="image://me:SpinnerArrowForwardDormant"
-                            Name="btnNext"
-                            Size="50,51"
-                            />
-
+              <!-- Next button -->
+              <me:SimpleButton  Command="[Next]"
+                                ImageFocus="image://me:SpinnerArrowForwardFocus"
+                                ImageNoFocus="image://me:SpinnerArrowForwardNoFocus"
+                                ImageDormant="image://me:SpinnerArrowForwardDormant"
+                                Name="btnNext"
+                                Size="50,51"
+                                BoolHandleBack="[BoolHandleBack]"
+                                CommandBack="[CommandBack]"/>
         </Children>
       </Panel>
     </Content>
