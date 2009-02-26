@@ -318,52 +318,15 @@ namespace Library
             gallery.Model.Pivots = new Choice(gallery, "desc", new ArrayListDataSet(gallery));
 
             //titles
+            
             #region titles
             VirtualList galleryList = new VirtualList(gallery, null);
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
-            galleryList.Add(this.CreateGalleryItem());
+            foreach (Title t in _titles)
+            {
+                galleryList.Add(this.CreateGalleryItem(t));
+            }
 
+            
             Library.Code.V3.BrowsePivot p = new Library.Code.V3.BrowsePivot(gallery, "titles", "loading titles...", galleryList);
             p.ContentLabel = "OML";
             p.SupportsJIL = true;
@@ -380,30 +343,19 @@ namespace Library
             //titles
             #region genres
             VirtualList galleryListGenres = new VirtualList(gallery, null);
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
-            galleryListGenres.Add(this.CreateGalleryItem());
+            foreach (Title t in _titles)
+            {
+                galleryListGenres.Add(this.CreateGalleryItem(t));
+            }
 
             Library.Code.V3.BrowsePivot p2 = new Library.Code.V3.BrowsePivot(gallery, "genres", "loading genres...", galleryListGenres);
             p2.ContentLabel = "OML";
             p2.SupportsJIL = false;
             p2.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
             //added 1 or 2 row logic
-            if (galleryListGenres.Count > 20)
-                p2.ContentItemTemplate = "twoRowGalleryItemPoster";
-            else
+            //if (galleryListGenres.Count > 20)
+            //    p2.ContentItemTemplate = "twoRowGalleryItemPoster";
+            //else
                 p2.ContentItemTemplate = "oneRowGalleryItemPoster";
             p2.DetailTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseDetails#Details";
             gallery.Model.Pivots.Options.Add(p2);
@@ -469,8 +421,9 @@ namespace Library
             }
         }
 
-        internal Library.Code.V3.GalleryItem CreateGalleryItem()
+        internal Library.Code.V3.GalleryItem CreateGalleryItem(Title t)
         {
+
             Library.Code.V3.GalleryItem item = new Library.Code.V3.GalleryItem();
 
             item.ItemType = 0;
@@ -491,7 +444,10 @@ namespace Library
 
             item.Metadata = "PG-13, 22 minutes\r\nblahblah";
 
-
+            if (!string.IsNullOrEmpty(t.FrontCoverPath) && File.Exists(t.FrontCoverPath))
+            {
+                item.DefaultImage = new Image("file://" + t.FrontCoverPath);
+            }
 
 
             return item;
