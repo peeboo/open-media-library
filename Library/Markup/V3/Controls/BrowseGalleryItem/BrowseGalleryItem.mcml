@@ -1,0 +1,999 @@
+<Mcml
+    xmlns="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor ="assembly://MsCorLib/System"
+    xmlns:shell ="assembly://Library/Library.Code.V3"
+    xmlns:comm="resx://Library/Library.Resources/V3_Globals"
+    xmlns:me="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseAnimations"/>
+
+  <Image Name="Browse.GalleryItemShadow" Source="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_GalleryItemShadow" NineGrid="48, 34, 47, 61" Flippable="true"/>
+
+
+  <!-- Default Gallery Item is 3 Row Square -->
+  <UI Name="GalleryItem">
+    <Properties>
+      <!-- @ -->
+      <shell:GalleryPage Name="Page"/>
+      <Size       Name="ThumbSize"        Size="136, 191"/>
+      <Image      Name="NoThumbnailImage" Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage2RowPoster"/>
+      <cor:Int32  Name="NumberOfRows"     Int32="2"/>
+      <cor:Single Name="RippleDelay"      Single="0.015"/>
+      <!-- @ -->
+      <ICommand         Name="Model"           ICommand="$Required"/>
+      <shell:ISelectionPolicy Name="SelectionPolicy" ISelectionPolicy="$Required"/>
+      <Index            Name="Index"           Index="$Required"/>
+      <PropertySet      Name="ItemProperties"  PropertySet="$Required"/>
+      <PropertySet      Name="GroupProperties" PropertySet="$Required"/>
+
+      <Font Name="GalleryItemLabel"             FontName="global://comm:RegularFontFace" FontSize="16"/>
+      <Font Name="GalleryItemOverlayLabel"      FontName="global://comm:RegularFontFace" FontSize="16"/>
+      <Font Name="GalleryItemOverlayLabelFocus" FontName="global://comm:RegularFontFace" FontSize="16"/>
+
+      <Size         Name="TileSize"          Size="0, 0"/>
+      <Size         Name="LabelTileSize"     Size="0, 0"/>
+      <cor:Boolean  Name="LabelWordWrap"     Boolean="false"/>
+      <cor:Boolean  Name="ShowLabel"         Boolean="false"/>
+      <cor:Boolean  Name="ShowOverlayLabel"  Boolean="true"/>
+      <Inset        Name="ItemPadding"       Inset="0, 0, 0, 0"/>
+      <cor:Boolean  Name="ThumbAspectRatio"  Boolean="false"/>
+      <cor:Boolean  Name="OverlayWordWrap"   Boolean="true"/>
+      <cor:Boolean  Name="OverlayLabelTransform"   Boolean="true"/>
+
+      <cor:Int32    Name="ItemMetaDataTopOffset"    Int32="0"/>
+      <cor:Int32    Name="ItemMetaDataLeftOffset"   Int32="0"/>
+      <cor:Int32    Name="ItemGalleryContentOffset" Int32="0"/>
+
+      <Color        Name="BGColor"           Color="color://comm:GalleryItemFill" />
+      <Color        Name="LabelColor"        Color="color://comm:LightBlue"/>
+      <Color        Name="OverlayLabelColor" Color="color://comm:GalleryItemLabel"/>
+
+      <Vector3      Name="NoFocusScale" Vector3="1.0, 1.0, 1.0"/>
+      <Vector3      Name="FocusScale"   Vector3="1.26, 1.26, 1.0"/>
+      <cor:Single   Name="FocusAlpha"   Single="1.0"/>
+      <cor:Single   Name="NoFocusAlpha" Single="0.85"/>
+
+      <cor:String   Name="OverlayContentTemplate"   String="null"/>
+      <cor:String   Name="UnderlayContentTemplate"  String="null"/>
+
+      <cor:Boolean  Name="AllowSelectAnimation"     Boolean="false"/>
+      <cor:Boolean  Name="IsOneRowGalleryItem"      Boolean="false"/>
+
+      <shell:AreaOfInterestLayoutInput Name="AreaOfInterest" Id="Focus"/>
+
+    </Properties>
+
+    <Locals>
+      <Environment Name="Environment"/>
+      <!-- @ -->
+      <Inset Name="TopThumbGainMarginShift"    Inset="0, 16, 0, -16" />
+      <Inset Name="BottomThumbGainMarginShift" Inset="0, -16, 0, 0" />
+      <!-- @ -->
+      <!-- This pulls all the values this object cares about from the PropertySet and gives it a local name
+                 to keep it easier to read the rules. -->
+      <IntRangedValue   Name="SelectedIndex"       IntRangedValue="[ItemProperties.#SelectedIndex!IntRangedValue]"/>
+      <IntRangedValue   Name="SelectedGroup"       IntRangedValue="[ItemProperties.#SelectedGroup!IntRangedValue]"/>
+      <IntRangedValue   Name="MetaDataTopShift"    IntRangedValue="[ItemProperties.#MetaDataTopShift!IntRangedValue]"/>
+      <IntRangedValue   Name="GalleryContentShift" IntRangedValue="[ItemProperties.#GalleryContentShift!IntRangedValue]"/>
+      <IntRangedValue   Name="MetaDataLeftShift"   IntRangedValue="[ItemProperties.#MetaDataLeftShift!IntRangedValue]"/>
+      <IntRangedValue   Name="TotalCount"          IntRangedValue="[ItemProperties.#TotalCount!IntRangedValue]"/>
+      <BooleanChoice    Name="IsOneRow"            BooleanChoice="[ItemProperties.#IsOneRow!BooleanChoice]"/>
+      <EditableText     Name="TransitionState"     EditableText="[ItemProperties.#TransitionState!EditableText]"/>
+      <EditableText     Name="ItemMode"            EditableText="[ItemProperties.#ItemMode!EditableText]"/>
+      <EditableText     Name="FocusArea"           EditableText="[ItemProperties.#FocusArea!EditableText]"/>
+      <cor:Boolean      Name="InListMaker"         Boolean="[ItemProperties.#InListMaker!cor:Boolean]"/>
+      <cor:Random       Name="Random"              Random="[ItemProperties.#Random!cor:Random]"/>
+
+      <IntRangedValue   Name="GroupIndex"          IntRangedValue="[GroupProperties.#GroupIndex!IntRangedValue]"/>
+      <IntRangedValue   Name="GroupCount"          IntRangedValue="[GroupProperties.#GroupCount!IntRangedValue]"/>
+
+      <cor:Boolean     Name="UpdateIndex" Boolean="false"/>
+      <cor:Int32       Name="IndexOffset"/>
+      <MathTransformer Name="CalcOffset" Absolute="true"/>
+
+      <cor:Int32       Name="ModResult"/>
+      <MathTransformer Name="ModTransformer"/>
+
+      <ClickHandler Name="Clicker"/>
+      <AnchorLayoutInput Name="OverlayTextLayout" Vertical="Center" Left="Parent, 0, 5" Right="Parent, 1, -10"/>
+      <AnchorLayoutInput Name="ShadowLayout" Left="Parent, 0" Top="Parent, 0" Right="Parent, 1, 30" Bottom="Parent, 1, 45" ContributesToWidth="false" ContributesToHeight="false"/>
+      <FormatTransformer Name="OverlayLabelTransformer" ToUpper="true"/>
+
+      <cor:Boolean  Name="IsFocused"/>
+      <Command      Name="Selected"/>
+      <Command      Name="Trigger"/>
+      <Command      Name="Reset"/>
+      <EditableText Name="LocalMode" Value="None"/>
+      <cor:Object   Name="InvokeReturned"/>
+
+      <cor:Int32       Name="DelayTicks"/>
+      <MathTransformer Name="DelayMultiplier" Absolute="true"/>
+      <MathTransformer Name="Adder"/>
+      <TransformAnimation Name="TransitionAnimation" Source="animation://me:Browse.Gallery.Item.NavigateToForward"/>
+      <TransformByAttributeAnimation Name="UnselectedExit" Source="animation://me:Browse.Gallery.Item.NavigateAwayForward">
+        <ValueTransformer>
+          <MathTransformer Absolute="true"/>
+        </ValueTransformer>
+      </TransformByAttributeAnimation>
+
+    </Locals>
+
+    <Rules>
+      <!-- start from a known state -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingToForward"/>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingToBackward"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LocalMode.Value]" Value="None" ExclusiveApply="false"/>
+          <Set Target="[MousePanel.Scale]" Value="1.0, 1.0, 1.0" ExclusiveApply="false"/>
+          <Set Target="[Tile.Scale]" Value="1.0, 1.0, 1.0" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+
+      <!-- adjust the ripple delay for a widescreen scenario (there are more items so they each react faster) -->
+      <Condition Source="[Environment.IsWidescreen]" SourceValue="true">
+        <Actions>
+          <Set Target="[RippleDelay]" Value="[RippleDelay]">
+            <Transformer>
+              <MathTransformer Multiply="0.7"/>
+            </Transformer>
+          </Set>
+        </Actions>
+      </Condition>
+
+      <!-- play select sound on click -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]" />
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_Select_a" />
+        </Actions>
+      </Rule>
+
+      <Binding Target="[UnderlayContentHost.ParentKeyFocus]" Source="[Input.KeyFocus]"/>
+      <Binding Target="[OverlayContentHost.ParentKeyFocus]" Source="[Input.KeyFocus]"/>
+
+      <!-- Only show the underlay content if we were given a template -->
+      <Condition Source="[UnderlayContentTemplate]" ConditionOp="NotEquals" SourceValue="null">
+        <Actions>
+          <Set Target="[UnderlayContentHost.Visible]" Value="true"/>
+          <Set Target="[UnderlayContentHost.Source]" Value="[UnderlayContentTemplate]"/>
+        </Actions>
+      </Condition>
+
+      <!-- Only show the overlay content if we were given a template -->
+      <Condition Source="[OverlayContentTemplate]" ConditionOp="NotEquals" SourceValue="null">
+        <Actions>
+          <Set Target="[OverlayContentHost.Visible]" Value="true"/>
+          <Set Target="[OverlayContentHost.Source]" Value="[OverlayContentTemplate]"/>
+        </Actions>
+      </Condition>
+
+      <Binding Target="[Label.Content]" Source="[Model.Description]"/>
+
+      <!-- Binding album title to the labels -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Model.Description]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabel.Content]" Value="[Model.Description]" Transformer="[OverlayLabelTransformer]"/>
+          <!--Invoke Target="[ContextualUIDescription.SetPropertyValue]" name="Text" value="[Model.Description]" ExclusiveApply="false"/-->
+        </Actions>
+      </Rule>
+
+      <!-- Sets the value to check if in a 1-row gallery.  -->
+      <Default Target="[IsOneRow.Value]" Value="[IsOneRowGalleryItem]"/>
+
+      <!-- Sets the value to update the Gallery alignment in the window.  -->
+      <Default Target="[GalleryContentShift.Value]" Value="[ItemGalleryContentOffset]"/>
+
+      <!-- Sets the value to update the MetaData Left alignment.  -->
+      <Default Target="[MetaDataLeftShift.Value]" Value="[ItemMetaDataLeftOffset]"/>
+
+      <!-- Sets the value to update the MetaData Top alignment.  -->
+      <Default Target="[MetaDataTopShift.Value]" Value="[ItemMetaDataTopOffset]"/>
+
+      <Binding Source="[ShowOverlayLabel]" Target="[OverlayLabel.Visible]"/>
+
+      <!-- Thumbnail image (only bound if the Model is an IThumbnailCommand) -->
+      <Rule>
+        <Conditions>
+          <IsType Source="[Model]" Type="shell:IThumbnailCommand"/>
+          <IsValid Source="[Model!shell:IThumbnailCommand.DefaultImage]"/>
+        </Conditions>
+        <Actions>
+          <Set Value="[Model!shell:IThumbnailCommand.DefaultImage]" Target="[Thumb.Content]"/>
+          <Set Target="[ShowOverlayLabel]" Value="false"/>
+        </Actions>
+      </Rule>
+      <Default Target="[Thumb.Content]" Value="[NoThumbnailImage]"/>
+
+      <!-- Associate the Model with the Behavior -->
+      <Default Target="[Input.CreateInterestTarget]" Value="Tile"/>
+      <Default Target="[Clicker.Command]" Value="[Selected]"/>
+
+      <!-- Attach the ISelectionPolicy (if any) -->
+      <!-- NOTE: It's important that this happens *after* setting Clicker.Command as that we are
+                 going to override the FocusModel -->
+      <!--Rule>
+                <Conditions>
+                    <IsValid Source="[SelectionPolicy]"/>
+                </Conditions>
+                <Actions>
+                    <Set Target="[Model!ISelectable.SelectionPolicy]" Value="[SelectionPolicy]"/>
+                    <Set Target="[Input.FocusModel]" Value="[Model!ISelectable]"/>
+                </Actions>
+            </Rule-->
+
+      <!-- Set SelectionIndex to the passed Index on KeyFocus -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SelectionPolicy.SelectionIndex]" Value="[Index.Value]"/>
+          <Set Target="[SelectedIndex.Value]" Value="[Index.Value]"/>
+          <Set Target="[SelectedGroup.Value]" Value="[GroupIndex.Value]"/>
+          <Set Target="[Page.SelectedItemCommand]" Value="[Model]"/>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_Focus_a"/>
+        </Actions>
+      </Rule>
+      <!-- Combine two possible values to keep track of whether this item appears selected - they must be combined
+                 because the real selection state moves on to the new page while the current page is still visible. -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Model.Selected]" Value="true"/>
+          <Equality Source="[LocalMode.Value]" Value="Select"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[IsFocused]" Value="true"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[IsFocused]" Value="true"/>
+        </Actions>
+      </Rule>
+      <Default Target="[IsFocused]" Value="false"/>
+
+      <!-- Apply the animations that play when it's key based navigation -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[OuterTile.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Move.GainFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Scale.GainFocus" InvokePolicy="Synchronous"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Alpha.GainFocus" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule>
+
+      <!-- set the focus state when not transitioning -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <!-- @-->
+          <Equality Source="[FocusArea.Value]" Value="Gallery"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[MousePanel.Scale]" Value="[FocusScale]"/>
+          <Set Target="[Thumb.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[OverlayLabel.Font]" Value="[GalleryItemOverlayLabelFocus]"/>
+          <Set Target="[OverlayLabel.Color]" Value="color://comm:GalleryItemLabelFocus"/>
+          <Set Target="[ItemBGColor.Content]" Value="color://comm:GalleryItemFillFocus"/>
+          <Set Target="[Shadow.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+      <!-- Lost the focus - switch to the faster animations and reset the values -->
+      <Condition Source="[IsFocused]" SourceValue="false">
+        <Actions>
+          <Invoke Target="[OuterTile.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Move.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Scale.LoseFocus" InvokePolicy="Synchronous"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Alpha.LoseFocus" InvokePolicy="Synchronous"/>
+          <Set Target="[MousePanel.Scale]" Value="[NoFocusScale]"/>
+          <Set Target="[Thumb.Alpha]" Value="[NoFocusAlpha]"/>
+        </Actions>
+      </Condition>
+
+      <!-- Turn off Label if focused -->
+      <Condition Source="[IsFocused]" SourceValue="true"
+                 Target="[Label.Visible]" Value="false"/>
+
+      <!-- If in ListMaker and using a three row gallery, change the row # to account for the smaller gallery size -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[InListMaker]" Value="true"/>
+          <Equality Source="[NumberOfRows]" Value="3"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NumberOfRows]" Value="[NumberOfRows]">
+            <Transformer>
+              <MathTransformer Subtract="1"/>
+            </Transformer>
+          </Set>
+        </Actions>
+      </Rule>
+
+      <!-- Getting the row of the item based on the mod of the item index -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Modified Source="[Index.SourceValue]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ModTransformer.ModInt]" Value="[NumberOfRows]"/>
+          <Set Target="[ModResult]" Value="[Index.SourceValue]" Transformer="[ModTransformer]"/>
+        </Actions>
+      </Rule>
+
+      <!-- The item is being clicked via key or mouse, Apply the pressed look -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Clicker.Clicking]" Value="true"/>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[AllowSelectAnimation]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LocalMode.Value]" Value="Press" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+
+      <!-- The mouse is moved away from the item - release the pressed look -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Clicker.Clicking]" Value="false"/>
+          <Equality Source="[LocalMode.Value]" Value="Press"/>
+          <Equality Source="[AllowSelectAnimation]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LocalMode.Value]" Value="Release" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+
+      <!-- The click is released inside the item - invoke the item -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Selected.Invoked]"/>
+          <Equality Source="[AllowSelectAnimation]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LocalMode.Value]" Value="Select" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <!-- pass the click through if this is a ListMaker item -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Selected.Invoked]"/>
+          <Equality Source="[AllowSelectAnimation]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Tile.Scale]" Value="1.0, 1.0, 1.0"/>
+          <Set Target="[ItemMode.Value]" Value="Release"/>
+          <Invoke Target="[Model!Command.Invoke]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Start the item-has-been-pressed animation -->
+      <Condition Source="[LocalMode.Value]" SourceValue="Press">
+        <Actions>
+          <Set Target="[Tile.Scale]" Value="0.9, 0.9, 1.0"/>
+          <Set Target="[ItemMode.Value]" Value="[LocalMode.Value]"/>
+        </Actions>
+      </Condition>
+      <!-- Start the item-has-been-released animation -->
+      <Condition Source="[LocalMode.Value]" SourceValue="Release">
+        <Actions>
+          <Set Target="[Tile.Scale]" Value="1.0, 1.0, 1.0"/>
+          <Set Target="[ItemMode.Value]" Value="[LocalMode.Value]"/>
+          <Set Target="[Page.CachedSelectedValue.Value]" Value="[Index.Value]"/>
+          <DebugTrace Message="{0}/{1}">
+            <Params>
+              <ObjectPath ObjectPath="[Index.Value]"/>
+              <ObjectPath ObjectPath="[Page.CachedSelectedValue.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Condition>
+      <!-- The item has been selected, set up the appropriate visual reaction -->
+      <Condition Source="[LocalMode.Value]" SourceValue="Select">
+        <Actions>
+          <Set Target="[ItemMode.Value]" Value="[LocalMode.Value]"/>
+          <!-- the annoying flying animation-->
+          <Invoke Target="[Tile.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Select.NavigateAwayForward"/>
+          <Set Target="[Page.CachedSelectedValue.Value]" Value="[Index.Value]"/>
+          <Invoke Target="[OuterTile.DetachAnimation]" type="Hide"/>
+          <Invoke Target="[Trigger.Invoke]" InvokePolicy="AsynchronousLowPri"/>
+        </Actions>
+      </Condition>
+      <!-- The item has been triggered, so tell the model.  this is seperate from the previous rule because of the Synchronous settings
+                 which create animation delays when put all in one rule.  the double command invocation allows the animations to get
+                 started before invoking the model -->
+      <Changed Source="[Trigger.Invoked]">
+        <Actions>
+          <Invoke Target="[OuterTile.NavigateInto]"/>
+          <Invoke Target="[Model!Command.Invoke]" ResultTarget="[InvokeReturned]" invokePolicy="Synchronous" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Changed>
+
+      <!-- Reset the LocalMode when this item gains focus - a fresh start for the state -->
+      <Condition Source="[Input.KeyFocus]" ConditionOp="ChangedTo" SourceValue="true">
+        <Actions>
+          <Set Target="[LocalMode.Value]" Value="None" ExclusiveApply="false"/>
+        </Actions>
+      </Condition>
+
+      <!-- If GalleryItem is on the top row, shift focus state down -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[FocusArea.Value]" Value="Gallery"/>
+          <Equality Source="[ModResult]" Value="0"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OuterTile.Margins]" Value="[TopThumbGainMarginShift]"/>
+        </Actions>
+      </Rule>
+      <!-- If GalleryItem is on the bottom row, shift focus state up -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[FocusArea.Value]" Value="Gallery"/>
+          <Equality Source="[NumberOfRows]" ConditionOp="GreaterThan" Value="1"/>
+          <Equality Source="[ModResult]" Value="[NumberOfRows]">
+            <SourceTransformer>
+              <MathTransformer Add="1"/>
+            </SourceTransformer>
+          </Equality>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OuterTile.Margins]" Value="[BottomThumbGainMarginShift]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Track all the index values for changes -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Modified Source="[Index.Value]" InitialEvaluate="true"/>
+          <Modified Source="[GroupIndex.Value]"/>
+          <Modified Source="[SelectedIndex.Value]"/>
+          <Modified Source="[SelectedGroup.Value]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[UpdateIndex]" Value="true"/>
+        </Actions>
+      </Rule>
+      <!-- Calculate an index offset within the current group - also for groupless layout -->
+      <!--this could be it-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[UpdateIndex]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <!-- IndexOffset = abs(SelectedIndex - Index) -->
+          <Set Target="[CalcOffset.AddInt]" Value="0"/>
+          <Set Target="[CalcOffset.SubtractInt]" Value="[SelectedIndex.Value]"/>
+          <Set Target="[IndexOffset]" Value="[Index.Value]" Transformer="[CalcOffset]"/>
+          <Set Target="[UpdateIndex]" Value="false"/>
+        </Actions>
+      </Rule>
+      <!-- Set the correct animation when arriving to the page based on the direction of travel. -->
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingToForward"
+                 Target="[TransitionAnimation.Source]" Value="animation://me:Browse.Gallery.Item.NavigateToForward"/>
+      <Rule>
+        <Conditions>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingToBackward"/>
+          <Equality Source="[Index.Value]" ConditionOp="NotEquals" Value="[Page.CachedSelectedValue.Value]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[TransitionAnimation.Source]" Value="animation://me:Browse.Gallery.Item.NavigateToBackward"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingToBackward"/>
+          <Equality Source="[Index.Value]" Value="[Page.CachedSelectedValue.Value]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[TransitionAnimation.Delay]" Value=".21"/>
+          <Set Target="[TransitionAnimation.Source]" Value="animation://me:Browse.Gallery.Item.Select.NavigateToBackward" ExclusiveApply="true" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule>
+
+      <!-- Set up the rippling delay for the transition arrival.  The ripple stays the same for both directions. -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingToForward"/>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingToBackward"/>
+        </Conditions>
+        <Actions>
+          <!-- Delay = Abs((Index - SelectedIndex) * 0.01) + Abs(((Index - SelectedIndex) % NumberOfRows) + Random(-5 to 5) * 0.02) -->
+          <Set Target="[DelayMultiplier.Multiply]" Value="[RippleDelay]"/>
+          <Set Target="[TransitionAnimation.Delay]" Value="[IndexOffset]" Transformer="[DelayMultiplier]" ExclusiveApply="false"/>
+
+          <Set Target="[DelayTicks]" Value="[IndexOffset]" Transformer="[ModTransformer]" ExclusiveApply="false"/>
+          <Set Target="[Adder.AddInt]" Value="[Random.Next]">
+            <Transformer>
+              <MathTransformer Mod="15"/>
+            </Transformer>
+          </Set>
+          <Set Target="[Adder.SubtractInt]" Value="7" ExclusiveApply="false"/>
+          <Set Target="[DelayTicks]" Value="[DelayTicks]" Transformer="[Adder]"/>
+
+          <Set Target="[Adder.SubtractInt]" Value="0"/>
+          <Set Target="[Adder.Add]" Value="[DelayTicks]">
+            <Transformer>
+              <MathTransformer Multiply="0.02" Absolute="true" Type="Single"/>
+            </Transformer>
+          </Set>
+
+          <Set Target="[TransitionAnimation.Delay]" Value="[TransitionAnimation.Delay]" Transformer="[Adder]"/>
+          <Invoke Target="[OuterTile.AttachAnimation]" animation="[TransitionAnimation]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+
+      <!-- Navigating away from the page in a forward direction - prepare the correct animation when this isn't the selected item -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingAwayForward"/>
+          <IsValid Source="[SelectionPolicy]"/>
+          <Equality Source="[Index.Value]" ConditionOp="NotEquals" Value="[SelectedIndex.Value]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[UnselectedExit.Override]" Value="[IndexOffset!cor:Single]"/>
+          <Set Target="[UnselectedExit.Delay]" Value="[RippleDelay]"/>
+          <Invoke Target="[OuterTile.AttachAnimation]" animation="[UnselectedExit]" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <!-- Navigating away from the page backwards - all items get the same treatment -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingAwayBackward"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[UnselectedExit.Override]" Value="[IndexOffset!cor:Single]"/>
+          <Set Target="[UnselectedExit.Delay]" Value="[RippleDelay]"/>
+          <Set Target="[UnselectedExit.Source]" Value="animation://me:Browse.Gallery.Item.NavigateAwayBackward"/>
+          <Invoke Target="[OuterTile.AttachAnimation]" animation="[UnselectedExit]" ExclusiveApply="false"/>
+          <Invoke Target="[Tile.DetachAnimation]" type="Hide"/>
+        </Actions>
+      </Rule>
+
+      <!-- @ -->
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+
+      <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[MousePanel.Scale]" Value="[FocusScale]"/>
+          <Set Target="[Thumb.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[OverlayLabel.Font]" Value="[GalleryItemOverlayLabelFocus]"/>
+          <Set Target="[OverlayLabel.Color]" Value="color://comm:GalleryItemLabelFocus"/>
+          <Set Target="[ItemBGColor.Content]" Value="color://comm:GalleryItemFillFocus"/>
+          <Set Target="[Shadow.Visible]" Value="true"/>
+          <Invoke Target="[OuterTile.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Move.GainFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Scale.GainFocus" InvokePolicy="Synchronous"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Alpha.GainFocus" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+
+      <!-- Lost the focus - switch to the faster animations and reset the values -->
+      <Condition Source="[Input.KeyFocus]" SourceValue="false">
+        <Actions>
+          <Invoke Target="[OuterTile.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Move.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Scale.LoseFocus" InvokePolicy="Synchronous"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Alpha.LoseFocus" InvokePolicy="Synchronous"/>
+          <Set Target="[MousePanel.Scale]" Value="[NoFocusScale]"/>
+          <Set Target="[Thumb.Alpha]" Value="[NoFocusAlpha]"/>
+        </Actions>
+      </Condition>
+
+    </Rules>
+
+    <Content>
+
+      <Panel Name="OuterTile" MinimumSize="[TileSize]" Margins="0, 0, 0, 0">
+        <Layout>
+          <FlowLayout Orientation="Vertical"/>
+        </Layout>
+        <Children>
+
+          <Panel Name="MousePanel" MouseInteractive="true" CenterPointPercent="0.5, 0.5, 0.0">
+            <Children>
+
+              <Panel Name="Tile" Layout="Anchor" MaximumSize="[ThumbSize]" Scale="1.0, 1.0, 1.0">
+                <Animations>
+                  <Animation Animation="animation://me:Browse.Gallery.Item.Thumb.Scale"/>
+                </Animations>
+                <Children>
+
+                  <!-- Customizable overlay view -->
+                  <me:BaseGalleryItemOverlayContent Name="OverlayContentHost" Model="[Model]" Visible="true" Source="null">
+                    <LayoutInput>
+                      <AnchorLayoutInput Left="Parent, 0" Right="Parent, 1" Top="Parent, 0" Bottom="Parent, 1"
+                                         ContributesToWidth="false" ContributesToHeight="false"/>
+                    </LayoutInput>
+                  </me:BaseGalleryItemOverlayContent>
+
+                  <Panel Name="ThumbPanel" Layout="Anchor">
+                    <LayoutInput>
+                      <AnchorLayoutInput Left="Parent, 0" Right="Parent, 1" Top="Parent, 0" Bottom="Parent, 1"/>
+                    </LayoutInput>
+                    <Children>
+
+                      <!-- Thumbnail -->
+                      <Graphic Name="Thumb" MaintainAspectRatio="[ThumbAspectRatio]" SizingPolicy="SizeToConstraint">
+                        <LayoutInput>
+                          <AnchorLayoutInput Top="Parent, 0" Left="Parent, 0" />
+                        </LayoutInput>
+                      </Graphic>
+
+                      <!-- Overlay Label -->
+                      <Text Name="OverlayLabel" Font="[GalleryItemOverlayLabel]" Color="[OverlayLabelColor]"
+                                   MaximumSize="[ThumbSize]" Visible="[ShowOverlayLabel]" WordWrap="[OverlayWordWrap]"
+                                   LayoutInput="[OverlayTextLayout]" />
+
+                      <!-- Customizable underlay view -->
+                      <me:BaseGalleryItemOverlayContent Name="UnderlayContentHost" Model="[Model]" Visible="false" Source="null">
+                        <LayoutInput>
+                          <AnchorLayoutInput Horizontal="Center" Vertical="Center" ContributesToWidth="false" ContributesToHeight="false"/>
+                        </LayoutInput>
+                      </me:BaseGalleryItemOverlayContent>
+
+                      <!-- Item Background ColorFill -->
+                      <ColorFill Name="ItemBGColor" Content="[BGColor]" Layout="LegacyFill">
+                        <LayoutInput>
+                          <AnchorLayoutInput Top="Parent, 0" Left="Parent, 0" Bottom="Parent, 1" Right="Parent, 1"/>
+                        </LayoutInput>
+                      </ColorFill>
+
+                      <!-- Drop Shadow -->
+                      <Graphic Name="Shadow" Content="image://me:Browse.GalleryItemShadow" Visible="false" LayoutInput="[ShadowLayout]" >
+                        <Animations>
+                          <Animation Animation="animation://me:Browse.Gallery.Item.Shadow.Show"/>
+                          <Animation Animation="animation://me:Browse.Gallery.Item.Shadow.Hide"/>
+                        </Animations>
+                      </Graphic>
+
+                    </Children>
+                  </Panel>
+
+                </Children>
+              </Panel>
+
+            </Children>
+          </Panel>
+
+          <!-- Label -->
+          <Text Name="Label" Font="[GalleryItemLabel]" Color="[LabelColor]" Visible="[ShowLabel]" WordWrap="[LabelWordWrap]" MinimumSize="[LabelTileSize]" MaximumSize="[LabelTileSize]" Margins="0, 1, 0, 0">
+            <Animations>
+              <Animation Animation="animation://me:Browse.Gallery.Item.Label.Show"/>
+              <Animation Animation="animation://me:Browse.Gallery.Item.Label.Hide"/>
+            </Animations>
+          </Text>
+
+        </Children>
+      </Panel>
+
+    </Content>
+  </UI>
+
+
+  <UI Name="BaseGalleryItemOverlayContent">
+    <Properties>
+      <ICommand    Name="Model"          ICommand="$Required"/>
+      <cor:Boolean Name="ParentKeyFocus" Boolean="false"/>
+    </Properties>
+  </UI>
+
+
+  <!-- Standard gallery item variants -->
+
+  <UI Name="1RowGalleryItem" BaseUI="me:GalleryItem">
+    <Properties>
+      <Size        Name="TileSize"      Size="0, 218"/>
+      <Size        Name="ThumbSize"     Size="152, 152"/>
+      <Size        Name="LabelTileSize" Size="140, 60"/>
+      <cor:Boolean Name="ShowLabel"     Boolean="true"/>
+      <cor:Boolean Name="LabelWordWrap" Boolean="true"/>
+      <cor:Int32   Name="NumberOfRows"  Int32="1"/>
+      <cor:Single  Name="RippleDelay"   Single="0.04"/>
+
+      <cor:Int32   Name="ItemMetaDataTopOffset"    Int32="-25"/>
+      <cor:Int32   Name="ItemMetaDataLeftOffset"   Int32="-25"/>
+      <cor:Int32   Name="ItemGalleryContentOffset" Int32="40"/>
+      <cor:Boolean Name="IsOneRowGalleryItem"      Boolean="true"/>
+
+      <Image Name="NoThumbnailImage"  Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage1RowSquare"/>
+    </Properties>
+
+    <Locals>
+      <Inset Name="TopThumbGainMarginShift" Inset="0, 15, 0, -15" />
+    </Locals>
+  </UI>
+
+  <UI Name="3RowGalleryItem" BaseUI="me:GalleryItem">
+    <Properties>
+      <Size      Name="ThumbSize"    Size="122, 122"/>
+      <cor:Int32 Name="NumberOfRows" Int32="3"/>
+    </Properties>
+  </UI>
+
+  <UI Name="5RowGalleryItem" BaseUI="me:GalleryItem">
+    <Properties>
+      <Size       Name="ThumbSize"               Size="72, 72"/>
+      <Font       Name="GalleryItemOverlayLabel" FontName="global://comm:MainFontFace" FontSize="12"/>
+      <Image      Name="NoThumbnailImage"        Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage5RowSquare"/>
+      <cor:Int32  Name="NumberOfRows"            Int32="5"/>
+      <cor:Single Name="RippleDelay"             Single="0.004"/>
+    </Properties>
+
+    <Locals>
+      <Inset Name="TopThumbGainMarginShift"    Inset="0, 5, 0, -5" />
+      <Inset Name="BottomThumbGainMarginShift" Inset="0, -5, 0, 0" />
+      <AnchorLayoutInput Name="ShadowLayout"   Left="Parent, 0" Top="Parent, 0" Right="Parent, 1, 30" Bottom="Parent, 1, 30" ContributesToWidth="false" ContributesToHeight="false"/>
+    </Locals>
+  </UI>
+
+  <UI Name="oneRowGalleryItem4x3" BaseUI="me:3RowGalleryItem4x3">
+    <Properties>
+      <Size        Name="TileSize"                 Size="0, 218"/>
+      <Size        Name="ThumbSize"                Size="203, 152"/>
+      <Size        Name="LabelTileSize"            Size="190, 60"/>
+      <cor:Boolean Name="ShowLabel"                Boolean="true"/>
+      <cor:Boolean Name="LabelWordWrap"            Boolean="false"/>
+      <cor:Int32   Name="ItemMetaDataTopOffset"    Int32="-200"/>
+      <cor:Int32   Name="ItemMetaDataLeftOffset"   Int32="-20"/>
+      <cor:Int32   Name="ItemGalleryContentOffset" Int32="145"/>
+      <cor:Int32   Name="NumberOfRows"             Int32="1"/>
+      <cor:Single  Name="RippleDelay"              Single="0.04"/>
+      <cor:Boolean Name="IsOneRowGalleryItem"      Boolean="true"/>
+
+      <Image Name="NoThumbnailImage"  Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage1Row4x3"/>
+    </Properties>
+
+    <Locals>
+      <Inset Name="TopThumbGainMarginShift" Inset="0, 15, 0, -15" />
+    </Locals>
+
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFolder]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ShowOverlayLabel]" Value="true"/>
+          <Set Target="[OverlayLabel.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+    </Rules>
+  </UI>
+
+  <UI Name="oneRowGalleryItem4x3NoDetails" BaseUI="me:oneRowGalleryItem4x3">
+    <Properties>
+      <Size        Name="TileSize"                 Size="0, 218"/>
+      <Size        Name="ThumbSize"                Size="203, 152"/>
+      <Size        Name="LabelTileSize"            Size="190, 60"/>
+      <cor:Boolean Name="ShowLabel"                Boolean="true"/>
+      <cor:Boolean Name="LabelWordWrap"            Boolean="false"/>
+      <cor:Int32   Name="ItemMetaDataTopOffset"    Int32="-140"/>
+      <cor:Int32   Name="ItemMetaDataLeftOffset"   Int32="-20"/>
+      <cor:Int32   Name="ItemGalleryContentOffset" Int32="220"/>
+      <cor:Int32   Name="NumberOfRows"             Int32="1"/>
+      <cor:Single  Name="RippleDelay"              Single="0.04"/>
+      <cor:Boolean Name="IsOneRowGalleryItem"      Boolean="true"/>
+
+      <Image Name="NoThumbnailImage"  Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage1Row4x3"/>
+    </Properties>
+  </UI>
+
+  <UI Name="twoRowGalleryItem4x3" BaseUI="me:3RowGalleryItem4x3">
+    <Properties>
+      <Size        Name="TileSize"                 Size="0, 218"/>
+      <Size        Name="ThumbSize"                Size="203, 152"/>
+      <Size        Name="LabelTileSize"            Size="190, 60"/>
+      <cor:Boolean Name="ShowLabel"                Boolean="false"/>
+      <cor:Boolean Name="LabelWordWrap"            Boolean="false"/>
+      <cor:Int32   Name="ItemMetaDataTopOffset"    Int32="0"/>
+      <cor:Int32   Name="ItemMetaDataLeftOffset"   Int32="-20"/>
+      <cor:Int32   Name="ItemGalleryContentOffset" Int32="0"/>
+      <cor:Int32   Name="NumberOfRows"             Int32="2"/>
+      <cor:Single  Name="RippleDelay"              Single="0.04"/>
+
+      <Image Name="NoThumbnailImage"  Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage1Row4x3"/>
+    </Properties>
+
+    <Locals>
+      <Inset Name="TopThumbGainMarginShift" Inset="0, 15, 0, -15" />
+    </Locals>
+
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFolder]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ShowOverlayLabel]" Value="true"/>
+          <Set Target="[OverlayLabel.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+    </Rules>
+  </UI>
+
+  <UI Name="3RowGalleryItem4x3" BaseUI="me:GalleryItem">
+    <Properties>
+      <Size       Name="ThumbSize"        Size="163, 122"/>
+      <Image      Name="NoThumbnailImage" Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage3Row4x3"/>
+      <cor:Single Name="RippleDelay"      Single="0.015"/>
+
+      <Font Name="GalleryFolderOverlayLabelFocus" FontName="global://comm:MainFontFace" FontSize="16"/>
+    </Properties>
+
+    <Locals>
+      <cor:Boolean Name="IsFolder" Boolean="false"/>
+    </Locals>
+
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFolder]" Value="true"/>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Thumb.Margins]"            Value="4, 4, 4, 0"/>
+          <Set Target="[ItemBGColor.Content]"      Value="color://comm:GalleryFolderFillFocus"/>
+          <Set Target="[OverlayLabel.Color]"       Value="color://comm:GalleryFolderLabelFocus"/>
+          <Set Target="[OverlayTextLayout.Bottom]" Value="Parent, 1, -12"/>
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFolder]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[GalleryItemOverlayLabelFocus]"    Value="[GalleryFolderOverlayLabelFocus]"/>
+          <Set Target="[ItemBGColor.Content]"             Value="color://comm:GalleryFolderFill"/>
+          <Set Target="[OverlayLabel.Color]"              Value="color://comm:GalleryFolderLabel"/>
+          <Set Target="[Thumb.SizingPolicy]"              Value="SizeToContent"/>
+          <Set Target="[Thumb.Margins]"                   Value="5, 5, 5, 0"/>
+          <Set Target="[OverlayLabel.Margins]"            Value="5, 0, 5, -2"/>
+          <Set Target="[Thumb.MaintainAspectRatio]"       Value="true"/>
+          <Set Target="[OverlayLabel.WordWrap]"           Value="false"/>
+          <Set Target="[OverlayLabel.Visible]"            Value="true"/>
+          <Set Target="[OverlayLabelTransformer.ToUpper]" Value="false"/>
+          <Set Target="[OverlayTextLayout.Vertical]"      Value="Far"/>
+          <Set Target="[OverlayTextLayout.Bottom]"        Value="Parent, 1, -9"/>
+        </Actions>
+      </Rule>
+    </Rules>
+
+  </UI>
+
+  <UI Name="5RowGalleryItem4x3" BaseUI="me:3RowGalleryItem4x3">
+    <Properties>
+      <Size       Name="ThumbSize"               Size="96, 72"/>
+      <Font       Name="GalleryItemOverlayLabel" FontName="global://comm:RegularFontFace" FontSize="11"/>
+      <Font       Name="GalleryFolderOverlayLabelFocus" FontName="global://comm:MainFontFace" FontSize="11"/>
+      <Image      Name="NoThumbnailImage"        Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage5Row4x3"/>
+      <cor:Int32  Name="NumberOfRows"            Int32="5"/>
+      <cor:Single Name="RippleDelay"             Single="0.005"/>
+    </Properties>
+
+    <Locals>
+      <Inset Name="TopThumbGainMarginShift"    Inset="0, 5, 0, -5" />
+      <Inset Name="BottomThumbGainMarginShift" Inset="0, -5, 0, 0" />
+      <AnchorLayoutInput Name="ShadowLayout"   Left="Parent, 0" Top="Parent, 0" Right="Parent, 1, 30" Bottom="Parent, 1, 30" ContributesToWidth="false" ContributesToHeight="false"/>
+    </Locals>
+
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFolder]" Value="true"/>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayTextLayout.Bottom]" Value="Parent, 1, -3"/>
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFolder]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayTextLayout.Bottom]" Value="Parent, 1, 0"/>
+        </Actions>
+      </Rule>
+    </Rules>
+  </UI>
+
+  <UI Name="oneRowGalleryItemPoster" BaseUI="me:GalleryItem">
+    <Properties>
+      <Size        Name="ThumbSize"                Size="193, 265"/>
+      <Size        Name="TileSize"                 Size="0, 330"/>
+      <Size        Name="LabelTileSize"            Size="180, 60"/>
+      <cor:Boolean Name="ShowLabel"                Boolean="true"/>
+      <cor:Boolean Name="LabelWordWrap"            Boolean="true"/>
+      <Image       Name="NoThumbnailImage"         Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage1RowPoster"/>
+      <cor:Int32   Name="ItemMetaDataTopOffset"    Int32="-65"/>
+      <cor:Int32   Name="ItemMetaDataLeftOffset"   Int32="-25"/>
+      <cor:Int32   Name="ItemGalleryContentOffset" Int32="5"/>
+      <cor:Int32   Name="NumberOfRows"             Int32="1"/>
+      <cor:Single  Name="RippleDelay"              Single="0.04"/>
+      <cor:Boolean Name="IsOneRowGalleryItem"      Boolean="true"/>
+    </Properties>
+
+    <Locals>
+      <Inset Name="TopThumbGainMarginShift" Inset="0, 20, 0, -20" />
+    </Locals>
+  </UI>
+
+  <UI Name="twoRowGalleryItemPoster" BaseUI="me:GalleryItem">
+    <Properties>
+      <Size       Name="ThumbSize"        Size="136, 191"/>
+      <Image      Name="NoThumbnailImage" Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage2RowPoster"/>
+      <cor:Int32  Name="NumberOfRows"     Int32="2"/>
+      <cor:Single Name="RippleDelay"      Single="0.015"/>
+      <cor:Int32   Name="ItemMetaDataTopOffset"    Int32="-5"/>
+    </Properties>
+
+    <Locals>
+      <Inset Name="TopThumbGainMarginShift"    Inset="0, 16, 0, -16" />
+      <Inset Name="BottomThumbGainMarginShift" Inset="0, -16, 0, 0" />
+    </Locals>
+  </UI>
+
+  <UI Name="twoRowGalleryItemPosterZ" BaseUI="me:GalleryItem">
+    <Properties>
+      <Image      Name="NoThumbnailImage" Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage2RowPoster"/>
+      <Size        Name="ThumbSize"                Size="235, 176"/>
+      <Size        Name="LabelTileSize"            Size="190, 60"/>
+      <cor:Int32   Name="NumberOfRows"             Int32="2"/>
+      <cor:Single  Name="RippleDelay"              Single="0.04"/>
+      <cor:Int32   Name="ItemMetaDataTopOffset"    Int32="-35"/>
+      <cor:Int32    Name="ItemMetaDataLeftOffset"   Int32="-25"/>
+    </Properties>
+
+    <Locals>
+      <Inset Name="TopThumbGainMarginShift"    Inset="0, 16, 0, -16" />
+      <Inset Name="BottomThumbGainMarginShift" Inset="0, -16, 0, 0" />
+    </Locals>
+  </UI>
+
+
+  <UI Name="DiscItemOverlay" BaseUI="me:BaseGalleryItemOverlayContent">
+    <Locals>
+      <Image Name="InsertedDisc"       Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_InsertCD"/>
+      <Image Name="InsertedDiscFocus"  Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_InsertCDFocus"/>
+      <AnchorLayoutInput Name="DiscLayout" Bottom="Parent, 1, 18" Right="Parent, 1, 15" />
+    </Locals>
+
+    <Content>
+
+      <Panel>
+        <Layout>
+          <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false" />
+        </Layout>
+        <Children>
+
+          <Graphic Name="DiscImage" Content="[InsertedDisc]" MaintainAspectRatio="true" LayoutInput="[DiscLayout]" />
+
+        </Children>
+      </Panel>
+
+    </Content>
+
+  </UI>
+
+</Mcml>

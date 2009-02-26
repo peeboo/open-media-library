@@ -1,5 +1,6 @@
 //#define DEBUG_EXT
 //#define LAYOUT_V2
+#define LAYOUT_V3
 //#define CAROUSEL
 
 using System.Collections;
@@ -33,6 +34,18 @@ namespace Library
         private int iCurrentBackgroundImage = 0;
         private int iTotalBackgroundImages = 0;
         public System.Timers.Timer mainBackgroundTimer;
+
+        public void FixRepeatRate(object scroller, uint val)
+        {
+            PropertyInfo pi = scroller.GetType().GetProperty("View", BindingFlags.Public | BindingFlags.Instance);
+            object view = pi.GetValue(scroller, null);
+            pi = view.GetType().GetProperty("Control", BindingFlags.Public | BindingFlags.Instance);
+            object control = pi.GetValue(view, null);
+
+            pi = control.GetType().GetProperty("KeyRepeatThreshold", BindingFlags.NonPublic | BindingFlags.Instance);
+            pi.SetValue(control, val, null);
+
+        }
 
         private void SetPrimaryBackgroundImage()
         {
@@ -274,6 +287,133 @@ namespace Library
             _session.GoToPage(@"resx://Library/Library.Resources/NewMenu", properties);
             return;
 #endif
+#if LAYOUT_V3
+            //this is temp to test controls
+            OMLProperties properties = new OMLProperties();
+            properties.Add("Application", this);
+            properties.Add("UISettings", new UISettings());
+            properties.Add("Settings", new Settings());
+            properties.Add("I18n", I18n.Instance);
+            //v3 main gallery
+            Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage();
+            //description
+            gallery.Description = "OML";
+            //size of the galleryitems
+            gallery.ItemSize = Library.Code.V3.GalleryItemSize.Small;
+            gallery.Model = new Library.Code.V3.BrowseModel(gallery);
+            //commands at top of screen
+            gallery.Model.Commands = new ArrayListDataSet(gallery);
+
+            //create the settings cmd
+            Library.Code.V3.ThumbnailCommand settingsCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            settingsCmd.Description = "settings";
+            settingsCmd.DefaultImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings");
+            settingsCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings_Dormant");
+            settingsCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings_Focus");
+            //no invoke for now
+            //settingsCmd.Invoked += new EventHandler(settingsCmd_Invoked);
+            gallery.Model.Commands.Add(settingsCmd);
+
+            //the pivots
+            gallery.Model.Pivots = new Choice(gallery, "desc", new ArrayListDataSet(gallery));
+
+            //titles
+            #region titles
+            VirtualList galleryList = new VirtualList(gallery, null);
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+            galleryList.Add(this.CreateGalleryItem());
+
+            Library.Code.V3.BrowsePivot p = new Library.Code.V3.BrowsePivot(gallery, "titles", "loading titles...", galleryList);
+            p.ContentLabel = "OML";
+            p.SupportsJIL = true;
+            p.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            //added 1 or 2 row logic
+            if (galleryList.Count > 20)
+                p.ContentItemTemplate = "twoRowGalleryItemPoster";
+            else
+                p.ContentItemTemplate = "oneRowGalleryItemPoster";
+            p.DetailTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseDetails#Details";
+            gallery.Model.Pivots.Options.Add(p);
+            #endregion titles
+
+            //titles
+            #region genres
+            VirtualList galleryListGenres = new VirtualList(gallery, null);
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+            galleryListGenres.Add(this.CreateGalleryItem());
+
+            Library.Code.V3.BrowsePivot p2 = new Library.Code.V3.BrowsePivot(gallery, "genres", "loading genres...", galleryListGenres);
+            p2.ContentLabel = "OML";
+            p2.SupportsJIL = false;
+            p2.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            //added 1 or 2 row logic
+            if (galleryListGenres.Count > 20)
+                p2.ContentItemTemplate = "twoRowGalleryItemPoster";
+            else
+                p2.ContentItemTemplate = "oneRowGalleryItemPoster";
+            p2.DetailTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseDetails#Details";
+            gallery.Model.Pivots.Options.Add(p2);
+            #endregion genres
+
+            //properties.Add("Gallery", new GalleryV2(properties, _titles));
+            properties.Add("Page", gallery);
+            _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
+            return;
+#endif
 
             // DISABLE THIS UNTIL ITS READY -- DJShultz 01/13/2009
             //OMLUpdater updater = new OMLUpdater();
@@ -327,6 +467,34 @@ namespace Library
                     GoToMenu(new MovieGallery(_titles, Filter.Home));
                     return;
             }
+        }
+
+        internal Library.Code.V3.GalleryItem CreateGalleryItem()
+        {
+            Library.Code.V3.GalleryItem item = new Library.Code.V3.GalleryItem();
+
+            item.ItemType = 0;
+            string imageName = null;
+            string moviePath = null;
+            DateTime releaseDate = new DateTime(2000, 1, 1);
+            item.MetadataTop = releaseDate.Year.ToString();
+
+
+            item.Description = "This is a Test";
+            item.ItemId = 1;
+            string starRating = "5";
+            item.StarRating = starRating;
+            string extendedMetadata = string.Empty;
+
+
+            item.MetadataTop = releaseDate.Year.ToString();
+
+            item.Metadata = "PG-13, 22 minutes\r\nblahblah";
+
+
+
+
+            return item;
         }
 
         public void Uninitialize()

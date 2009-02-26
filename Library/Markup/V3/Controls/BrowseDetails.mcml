@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor ="assembly://MsCorLib/System"
+    xmlns:coll="assembly://MsCorLib/System.Collections"
+    xmlns:shell ="assembly://Library/Library.Code.V3"
+    xmlns:comm="resx://Library/Library.Resources/V3_Globals"
+    xmlns:me  ="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseAnimations"/>
+  <!-- This is the base template that all Details templates should inherit from. -->
+  <UI Name="DetailsBase">
+
+    <Properties>
+      <shell:BrowseModel Name="Model" BrowseModel="$Required"/>
+      <shell:ISelectable Name="Selection" ISelectable="$Required"/>
+      <shell:ThumbnailCommand Name="GallerySelection" ThumbnailCommand="$Required"/>
+      <shell:GalleryPage Name="GalleryPage" GalleryPage="$Required"/>
+      <shell:ThumbnailCommand Name="GalleryItem" ThumbnailCommand="$Required"/>
+      <shell:GalleryItem Name="GalleryPageItem"/>
+
+      <RangedValue Name="KeyDelay" RangedValue="$Required"/>
+      <RangedValue Name="MouseDelay" RangedValue="$Required"/>
+
+      <EditableText Name="TransitionState" EditableText="$Required"/>
+
+      <Font  Name="TitleFont"     FontName="global://comm:MainFontFace"    FontSize="20"/>
+      <Font  Name="DataFont"      FontName="global://comm:RegularFontFace" FontSize="18"/>
+
+      <!-- Recorded TV warnings use the following -->
+      <Font  Name="AlertFont"     FontName="global://comm:MainFontFace"    FontSize="16"/>
+
+      <Color Name="TitleColor"    Color="color://comm:OffWhite"/>
+      <Color Name="DataColor"     Color="color://comm:LightBlue"/>
+
+      <Animation Name="ShowUpperAnimation" Animation="animation://comm:Details.Upper.Show"/>
+      <Animation Name="ShowLowerAnimation" Animation="animation://comm:Details.Lower.Show"/>
+
+      <TransformAnimation Name="ChangeShowUpperAnimation" Source="animation://comm:Details.Upper.ShowChange"/>
+      <TransformAnimation Name="ChangeShowLowerAnimation" Source="animation://comm:Details.Lower.ShowChange"/>
+      <Animation Name="ChangeHideUpperAnimation" Animation="animation://comm:Details.Upper.HideChange"/>
+      <Animation Name="ChangeHideLowerAnimation" Animation="animation://comm:Details.Lower.HideChange"/>
+
+      <RangedValue Name="DefaultKeyDelay" Value="3.0"/>
+      <RangedValue Name="DefaultMouseDelay" Value="0.101"/>
+    </Properties>
+
+    <Locals>
+      <Environment Name="Environment"/>
+    </Locals>
+
+    <Rules>
+      <!-- Accessibility -->
+      <Default Target="[Accessible.Role]" Value="StaticText"/>
+
+      <!-- Make sure the panels get redrawn when the data changes -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Selection]"/>
+          <IsValid Source="[LowerPanel]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[LowerPanel.ForceContentChange]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Selection]"/>
+          <IsValid Source="[UpperPanel]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[UpperPanel.ForceContentChange]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Set the new data show delay times based on various conditions -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[MouseDelay]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ChangeShowUpperAnimation.Delay]" Value="[DefaultMouseDelay.Value]"/>
+          <Set Target="[ChangeShowLowerAnimation.Delay]" Value="[DefaultMouseDelay.Value]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[MouseDelay]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ChangeShowUpperAnimation.Delay]" Value="[MouseDelay.Value]"/>
+          <Set Target="[ChangeShowLowerAnimation.Delay]" Value="[MouseDelay.Value]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[KeyDelay]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ChangeShowUpperAnimation.Delay]" Value="[KeyDelay.Value]"/>
+          <Set Target="[ChangeShowLowerAnimation.Delay]" Value="[KeyDelay.Value]"/>
+        </Actions>
+      </Rule>
+      <Default Target="[ChangeShowLowerAnimation.Delay]" Value="[DefaultKeyDelay.Value]"/>
+      <Default Target="[ChangeShowUpperAnimation.Delay]" Value="[DefaultKeyDelay.Value]"/>
+
+      <!-- Attach the animations -->
+      <!-- BUG: If these attaches are not done synchronously, we get a null 
+                 value for ShowUpperAnimation and HideUpperAnimation.  How are they
+                 getting nulled out in that time inbetween? -->
+      <Rule>
+        <Conditions>
+          <IsValid Source="[UpperPanel]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[UpperPanel.AttachAnimation]" animation="[ShowUpperAnimation]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[UpperPanel.AttachAnimation]" animation="[ChangeShowUpperAnimation]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[UpperPanel.AttachAnimation]" animation="[ChangeHideUpperAnimation]" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[LowerPanel]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[LowerPanel.AttachAnimation]" animation="[ShowLowerAnimation]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LowerPanel.AttachAnimation]" animation="[ChangeShowLowerAnimation]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LowerPanel.AttachAnimation]" animation="[ChangeHideLowerAnimation]" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule>
+    </Rules>
+
+    <Content>
+
+      <!-- NOTE: You must use this template model to accommodate the above rules.  UpperPanel and LowerPanel
+                 can each be optionally defined.  They are used to divide the display data into the two fade sections
+                 to create a rippled show animation.  Please put all display items into one or the other so the
+                 animations can do their job. -->
+      <Panel>
+        <Children>
+
+          <Panel Name="UpperPanel">
+          </Panel>
+
+          <Panel Name="LowerPanel">
+          </Panel>
+
+        </Children>
+      </Panel>
+
+    </Content>
+
+  </UI>
+
+
+
+  <!-- This simple details template will display the Description of the selected item. -->
+  <UI Name="oldDetails" BaseUI="me:DetailsBase">
+    <Rules>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[Selection]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Title.Content]" Value="[Selection]">
+            <Transformer>
+              <shell:DescriptionTransformer Format="{0}"/>
+            </Transformer>
+          </Set>
+        </Actions>
+      </Rule>
+    </Rules>
+
+    <Content>
+
+      <Panel Name="UpperPanel">
+        <Children>
+
+          <Text Name="Title" Font="[TitleFont]" Color="[TitleColor]"/>
+
+        </Children>
+      </Panel>
+
+    </Content>
+
+  </UI>
+
+  <UI Name="Details" BaseUI="me:DetailsBase">
+    <Properties>
+      <Font  Name="TitleFont"     FontName="global://comm:MainFontFace"    FontSize="20"/>
+      <Font  Name="DataFont"      FontName="global://comm:RegularFontFace" FontSize="18"/>
+
+      <Color Name="TitleColor"    Color="color://comm:OffWhite"/>
+      <Color Name="DataColor"     Color="color://comm:LightBlue"/>
+      <Image Image="resx://Library/Library.Resources/V3_Controls_Common_Stars_1" Name="RatingOne"/>
+      <Image Image="resx://Library/Library.Resources/V3_Controls_Common_Stars_2" Name="RatingTwo"/>
+      <Image Image="resx://Library/Library.Resources/V3_Controls_Common_Stars_3" Name="RatingThree"/>
+      <Image Image="resx://Library/Library.Resources/V3_Controls_Common_Stars_4" Name="RatingFour"/>
+      <Image Image="resx://Library/Library.Resources/V3_Controls_Common_Stars_5" Name="RatingFive"/>
+      <Image Image="resx://Library/Library.Resources/V3_Controls_Common_Stars_6" Name="RatingSix"/>
+      <Image Image="resx://Library/Library.Resources/V3_Controls_Common_Stars_7" Name="RatingSeven"/>
+      <Image Image="resx://Library/Library.Resources/V3_Controls_Common_Stars_8" Name="RatingEight"/>
+    </Properties>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[GalleryPage]"/>
+          <IsValid Source="[GalleryPage.SelectedItemCommand]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[GalleryPageItem]" Value="[GalleryPage.SelectedItemCommand!shell:GalleryItem]"/>
+        </Actions>
+      </Rule>
+
+      <Changed Source="[GalleryPageItem]">
+        <Conditions>
+          <Equality ConditionOp="NotEquals" Source="[GalleryPageItem.MetadataTop]" Value=""/>
+        </Conditions>
+        <Actions>
+          <Set Target="[DetailsDate.Content]" Value="[GalleryPageItem.MetadataTop]"/>
+          <Set Target="[ExtendedDetails.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[GalleryPageItem]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[GalleryPageItem.StarRating]" Value="1"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Stars.Content]" Value="[RatingOne]"/>
+          <Set Target="[ExtendedDetails.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[GalleryPageItem]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[GalleryPageItem.StarRating]" Value="2"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Stars.Content]" Value="[RatingTwo]"/>
+          <Set Target="[ExtendedDetails.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[GalleryPageItem]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[GalleryPageItem.StarRating]" Value="3"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Stars.Content]" Value="[RatingThree]"/>
+          <Set Target="[ExtendedDetails.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[GalleryPageItem]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[GalleryPageItem.StarRating]" Value="4"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Stars.Content]" Value="[RatingFour]"/>
+          <Set Target="[ExtendedDetails.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[GalleryPageItem]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[GalleryPageItem.StarRating]" Value="5"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Stars.Content]" Value="[RatingFive]"/>
+          <Set Target="[ExtendedDetails.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[GalleryPageItem]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[GalleryPageItem.StarRating]" Value="6"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Stars.Content]" Value="[RatingSix]"/>
+          <Set Target="[ExtendedDetails.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[GalleryPageItem]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[GalleryPageItem.StarRating]" Value="7"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Stars.Content]" Value="[RatingSeven]"/>
+          <Set Target="[ExtendedDetails.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[GalleryPageItem]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[GalleryPageItem.StarRating]" Value="8"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Stars.Content]" Value="[RatingEight]"/>
+          <Set Target="[ExtendedDetails.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[GalleryPageItem]" ConditionLogicalOp="And">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[GalleryPageItem.MetadataTop]" Value=""/>
+          <Equality ConditionOp="Equals" Source="[GalleryPageItem.StarRating]" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ExtendedDetails.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[GalleryPageItem]">
+        <Actions>
+          <Set Target="[TitleAgain.Content]" Value="[GalleryPageItem.Description]"/>
+          <Set Target="[TitleDetails.Content]" Value="[GalleryPageItem.Metadata]"/>
+          <Invoke Target="[UpperPanel.ForceContentChange]"/>
+          <Invoke Target="[LowerPanel.ForceContentChange]"/>
+        </Actions>
+      </Changed>
+    </Rules>
+
+    <Content>
+      <Panel Layout="VerticalFlow" Margins="0,12,0,0">
+        <Children>
+          <Panel Name="UpperPanel">
+            <Children>
+
+              <Text Name="Title" Font="[TitleFont]" Color="[TitleColor]" Content="Housesitter" WordWrap="true" MaximumLines="2" Visible="false"/>
+              <Text Name="TitleAgain" Font="[TitleFont]" Color="[TitleColor]" Content="Housesitter" WordWrap="true" MaximumLines="2"/>
+
+            </Children>
+          </Panel>
+
+          <Panel Name="LowerPanel">
+            <Layout>
+              <FlowLayout Orientation="Vertical"/>
+            </Layout>
+            <Children>
+
+              <Panel Layout="HorizontalFlow" Name="ExtendedDetails" Visible="false">
+                <Children>
+                  <Graphic Name="Stars" Content="null" MaximumSize="119,22" Margins="0,3,0,0">
+                  </Graphic>
+                  <Text Name="DetailsDate" Visible="true" Font="[DataFont]" Color="[TitleColor]" WordWrap="true" MaximumLines="1"/>
+                </Children>
+              </Panel>
+              <Text Name="TitleDetails" Font="[DataFont]" Color="[DataColor]" Content="62  OXYGEN Tue, May 08  11:00 AM" WordWrap="true" MaximumLines="3" MaximumSize="600,0"/>
+
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+
+  </UI>
+
+</Mcml>

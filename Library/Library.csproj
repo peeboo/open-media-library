@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2D747049-9A5C-4FFB-919F-1FD47BC18B3D}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -116,6 +116,29 @@
     <Compile Include="Code\TreeView.cs" />
     <Compile Include="Code\UISettings.cs" />
     <Compile Include="Code\Filters.cs" />
+    <Compile Include="Code\V3\ContentPage.cs" />
+    <Compile Include="Code\V3\Controls\AreaOfInterestLayoutInput.cs" />
+    <Compile Include="Code\V3\Controls\BrowseModel.cs" />
+    <Compile Include="Code\V3\Controls\BrowsePivot.cs" />
+    <Compile Include="Code\V3\Controls\RelativeEdge.cs" />
+    <Compile Include="Code\V3\Controls\ScrollIntoViewDisposition.cs" />
+    <Compile Include="Code\V3\Controls\CustomSelectionPolicy.cs" />
+    <Compile Include="Code\V3\Controls\FlowLayout.cs" />
+    <Compile Include="Code\V3\Controls\IBrowsePivot.cs" />
+    <Compile Include="Code\V3\Controls\IBrowseSearchList.cs" />
+    <Compile Include="Code\V3\Controls\InvariantString.cs" />
+    <Compile Include="Code\V3\Controls\ISelectable.cs" />
+    <Compile Include="Code\V3\Controls\ISelectionPolicy.cs" />
+    <Compile Include="Code\V3\Controls\IThumbnailCommand.cs" />
+    <Compile Include="Code\V3\Controls\MajorMinor.cs" />
+    <Compile Include="Code\V3\Controls\MarkupVisibleAttribute.cs" />
+    <Compile Include="Code\V3\Controls\MergeAnimation.cs" />
+    <Compile Include="Code\V3\Controls\PIPHelper.cs" />
+    <Compile Include="Code\V3\Controls\PrivateObjectReflector.cs" />
+    <Compile Include="Code\V3\Controls\ThumbnailCommand.cs" />
+    <Compile Include="Code\V3\Controls\WrappedIndexTransformer.cs" />
+    <Compile Include="Code\V3\GalleryItem.cs" />
+    <Compile Include="Code\V3\GalleryPage.cs" />
     <Compile Include="Code\Views\AlphaView.cs" />
     <Compile Include="Code\Views\LabeledList.cs" />
     <Compile Include="Code\Views\MovieViews.cs" />
@@ -174,6 +197,95 @@
     <Content Include="Images\Settings.png" />
     <Content Include="Images\watched-icon.png" />
     <Content Include="Markup\About.mcml" />
+    <Content Include="Markup\V3\Controls\Background\Background.mcml" />
+    <Content Include="Markup\V3\Controls\Background\Images\V3.Controls.Background.Animated.png" />
+    <Content Include="Markup\V3\Controls\Background\Images\V3.Controls.Background.Layer1.png" />
+    <Content Include="Markup\V3\Controls\Background\Images\V3.Controls.Background.Layer2.png" />
+    <Content Include="Markup\V3\Controls\Background\Images\V3.Controls.Background.Layer3.png" />
+    <Content Include="Markup\V3\Controls\Background\Images\V3.Controls.Background.Static.png" />
+    <Content Include="Markup\V3\Controls\Background\Images\V3.Controls.Background.Shard1.png" />
+    <Content Include="Markup\V3\Controls\BrowseGalleryItem\BrowseGalleryItem.mcml" />
+    <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage5Row4x3.png" />
+    <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.GalleryItemShadow.png" />
+    <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.InsertCD.png" />
+    <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.InsertCDFocus.png" />
+    <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage1Row4x3.png" />
+    <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage1RowPoster.png" />
+    <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage1RowSquare.png" />
+    <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage2RowPoster.png" />
+    <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage3Row4x3.png" />
+    <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage5RowSquare.png" />
+    <Content Include="Markup\V3\Controls\BrowseGallery\BrowseGallery.mcml" />
+    <Content Include="Markup\V3\Controls\BrowseGallery\Images\V3.Controls.BrowseGallery.ListViewStrip.png" />
+    <Content Include="Markup\V3\Controls\BrowseGallery\Images\V3.Controls.BrowseGallery.ListViewStripTop.png" />
+    <Content Include="Markup\V3\Controls\Common\Colors.mcml" />
+    <Content Include="Markup\V3\Controls\Common\Animations.mcml" />
+    <Content Include="Markup\V3\Controls\Common\Constants.mcml" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Epg.Results.Cell.Background.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Scroll.Down.Disabled.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Scroll.Down.Focus.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Scroll.Down.NoFocus.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Scroll.Down.Pressed.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Scroll.Up.Disabled.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Scroll.Up.Focus.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Scroll.Up.NoFocus.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Scroll.Up.Pressed.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Button.Full.PressedHighlight.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Button.Full.FocusOverlay.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Button.Full.Focus.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Browse.TitleShadow.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Browse.TitleShadowListView.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Browse.Selector.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Selector.FocusLoop.Glow.BottomLeft.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Selector.FocusLoop.Glow.Glass.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Selector.FocusLoop.Glow.TopLeft.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Selector.FocusLoop.Glow.TopRight.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Selector.FocusLoop.HotSpot.Horizontal.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Selector.FocusLoop.HotSpot.Vertical.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Pivot.Arrow.Left.Dim.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Pivot.Arrow.Left.Dormant.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Pivot.Arrow.Left.Nofocus.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Pivot.Arrow.Left.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Pivot.Arrow.Right.Dim.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Pivot.Arrow.Right.Dormant.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Pivot.Arrow.Right.Nofocus.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Pivot.Arrow.Right.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Browse.Cmd.FocusLoop.Blue.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Browse.Cmd.FocusLoop.Small.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Browse.Cmd.FocusLoop.TopLeft.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Stars.0.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Stars.1.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Stars.2.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Stars.3.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Stars.4.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Stars.5.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Stars.6.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Stars.7.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Stars.8.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Button.Left.Focus.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Button.Left.Focus.Overlay.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Button.Pressed.Highlight.png" />
+    <Content Include="Markup\V3\Controls\Common\Styles.mcml" />
+    <Content Include="Markup\V3\Controls\Common\FontNames.mcml" />
+    <Content Include="Markup\V3\Controls\Common\Fonts.mcml" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.BrowseCmd.Settings.Dormant.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.BrowseCmd.Settings.Focus.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.BrowseCmd.Settings.png" />
+    <Content Include="Markup\V3\Controls\Common\Sounds\V3.Controls.Common.Focus_a.wav" />
+    <Content Include="Markup\V3\Controls\Common\Sounds\V3.Controls.Common.MiniSelect_a.wav" />
+    <Content Include="Markup\V3\Controls\Common\Sounds\V3.Controls.Common.Select_a.wav" />
+    <Content Include="Markup\V3\Controls\BrowseAnimations.mcml" />
+    <Content Include="Markup\V3\Controls\BrowseGroupedGallery.mcml" />
+    <Content Include="Markup\V3\Controls\BrowseJumpControl.mcml" />
+    <Content Include="Markup\V3\Controls\BrowsePivots.mcml" />
+    <Content Include="Markup\V3\Controls\BrowseCommand.mcml" />
+    <Content Include="Markup\V3\Controls\BrowseDetails.mcml" />
+    <Content Include="Markup\V3\Controls\GroupedListView.mcml" />
+    <Content Include="Markup\V3\Controls\FocusAnimation.mcml" />
+    <Content Include="Markup\V3\Controls\StaticText.mcml" />
+    <Content Include="Markup\V3\Globals.mcml" />
+    <Content Include="Markup\V3\GalleryPage.mcml" />
+    <Content Include="Markup\V3\Scroller.mcml" />
     <Content Include="Markup\Control\AlphaFilter.mcml" />
     <Content Include="Markup\Control\ContextMenu.mcml" />
     <Content Include="Markup\Control\DiskChooserContext.mcml" />
@@ -215,7 +327,6 @@
     <Content Include="Markup\Menu.mcml" />
     <Content Include="Markup\LayoutV2\NewMenu.mcml" />
     <Content Include="Markup\RadioButtonGroup.mcml" />
-    <Content Include="Markup\Scan Wizard\ScanNewItems.mcml" />
     <Content Include="Markup\SelectDirectoriesToScan.mcml" />
     <Content Include="Markup\SelectFilesToImport.mcml" />
     <Content Include="Markup\SelectImporter.mcml" />
@@ -416,9 +527,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>%25windir%25\eHome\McmlVerifier.exe -verbose -assemblyredirect:"$(FullyQualifiedOutputPath)" -directory:"$(ProjectDir)Markup"
-
-"$(DevEnvDir)..\..\..\Microsoft SDKs\Windows\v6.0\Bin\GacUtil.exe" /i "$(TargetPath)" /f</PostBuildEvent>
+    <PostBuildEvent>"$(DevEnvDir)..\..\..\Microsoft SDKs\Windows\v6.0\Bin\GacUtil.exe" /i "$(TargetPath)" /f</PostBuildEvent>
     <PreBuildEvent>$(SolutionDir)\BuildVersionUpdater\$(OutDir)\BuildVersionUpdater.exe</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
