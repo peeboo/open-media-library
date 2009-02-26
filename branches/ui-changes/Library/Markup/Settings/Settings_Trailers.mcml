@@ -1,0 +1,244 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:cor="assembly://MsCorLib/System"
+      xmlns:a="assembly://Library/Library"
+      xmlns:c="resx://Library/Library.Resources/Controls"
+      xmlns:settingsItem="resx://Library/Library.Resources/Settings_Item_Temp"
+      xmlns:me="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/Base" />
+  <Aggregate Source="resx://Library/Library.Resources/Controls" />
+
+  <UI Name="Settings">
+    <Properties>
+      <a:Settings Name="Settings" Settings="$Required" />
+      <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <a:SettingsUIWrapper Name="ClassSettingsUIWrapper"/>
+      
+      <Command Name="CommandSave" Description="Save"/>
+      <Command Name="CommandCancel" Description="Cancel"/>
+      <Command Name="CommandBack"/>
+    </Properties>
+
+    <Locals>
+      <Size Name="SizeSpinner" Size="275,51" />
+    </Locals>
+
+    <Rules>
+      <Changed Source="[CommandSave.Invoked]">
+        <Actions>
+          <Invoke Target="[Settings.SaveSettings]" />
+          <Invoke Target="[Application.GoToBackPage]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[CommandCancel.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.GoToBackPage]"/>
+        </Actions>
+      </Changed>
+
+      <!-- todo: handle ask save settings -->
+      <Changed Source="[CommandBack.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.GoToBackPage]"/>
+        </Actions>
+      </Changed>
+    </Rules>
+    
+    <Content>
+      <Panel Name="PanelMain"
+             Layout="Form">
+        <Children>
+          <!--Header-->
+          <Panel Layout="Form">
+            <LayoutInput>
+              <FormLayoutInput  Top="Parent, 0" Left="Parent, 0" Bottom="Parent, .16" Right="Parent, 1"/>
+            </LayoutInput>
+
+            <Children>
+              <Clip Orientation="Vertical"
+                   FadeSize="60"
+                   NearOffset="-60">
+                <LayoutInput>
+                  <FormLayoutInput  Left="Parent, .13" Bottom="Parent, .88" />
+                </LayoutInput>
+                <Children>
+                  <Text Font="font://me:FontLarge"
+                        Content="settings"
+                        Color="LightBlue"/>
+                  </Children>
+              </Clip>
+
+              <Text    Name="TextActiveViewName"
+                       Font="font://me:FontLarge"
+                       Color="White"
+                       Content="Trailers">
+                <LayoutInput>
+                  <FormLayoutInput  Left="Parent, .37" Bottom="Parent, .83" />
+                </LayoutInput>
+                <Animations>
+                  <Animation Type="Show" CenterPointPercent="0.50,0.50,0.50" CenterPointOffset="-800,400,0">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0.0" Value="0" Interpolation="Linear" RelativeTo="Current" />
+                      <AlphaKeyframe Time=".1" Value="0" Interpolation="Linear" RelativeTo="Current" />
+                      <AlphaKeyframe Time=".25" Value="1" Interpolation="Linear" RelativeTo="Final" />
+
+                      <PositionKeyframe Time="0.0" Value="0,0,0" Interpolation="Linear" RelativeTo="Current" />
+                      <PositionKeyframe Time=".15" Value="0,-50,0" Interpolation="Linear" RelativeTo="Final" />
+                      <PositionKeyframe Time=".25" Value="0,0,0" Interpolation="Linear" RelativeTo="Final" />
+
+                      <ScaleKeyframe Time="0.0" Value=".5,.5,0" Interpolation="SCurve" RelativeTo="Current" />
+                      <ScaleKeyframe Time=".25" Value="1,1,1" Interpolation="SCurve" RelativeTo="Final" />
+                    </Keyframes>
+                  </Animation>
+                  
+                  <Animation Type="ContentChangeShow" CenterPointPercent="0.50,0.50,0.50" CenterPointOffset="-800,400,0">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0.0" Value="0" Interpolation="Linear" RelativeTo="Current" />
+                      <AlphaKeyframe Time=".1" Value="0" Interpolation="Linear" RelativeTo="Current" />
+                      <AlphaKeyframe Time=".25" Value="1" Interpolation="Linear" RelativeTo="Final" />
+
+                      <PositionKeyframe Time="0.0" Value="0,0,0" Interpolation="Linear" RelativeTo="Current" />
+                      <PositionKeyframe Time=".15" Value="0,-50,0" Interpolation="Linear" RelativeTo="Final" />
+                      <PositionKeyframe Time=".25" Value="0,0,0" Interpolation="Linear" RelativeTo="Final" />
+
+
+                      <ScaleKeyframe Time="0.0" Value=".5,.5,0" Interpolation="SCurve" RelativeTo="Current" />
+                      <ScaleKeyframe Time=".25" Value="1,1,1" Interpolation="SCurve" RelativeTo="Final" />
+                    </Keyframes>
+                  </Animation>
+
+                  <Animation Type="Hide" >
+                    <Keyframes>
+                      <AlphaKeyframe Time="0.0" Value="1" Interpolation="Linear" RelativeTo="Current" />
+                      <AlphaKeyframe Time=".2" Value="0" Interpolation="Linear" RelativeTo="Final" />
+
+                      <ScaleKeyframe Time="0.0" Value="1,1,0" Interpolation="SCurve" RelativeTo="Current" />
+                      <ScaleKeyframe Time=".2" Value="2,2,1" Interpolation="SCurve" RelativeTo="Final" />
+                    </Keyframes>
+                  </Animation>
+                </Animations>
+               
+              </Text>
+            </Children>
+          </Panel>
+          
+          <!-- save close --> 
+           <Panel Name="PanelSaveCancel">
+                <LayoutInput>
+                  <FormLayoutInput  Top="Parent, .2" Left="Parent, .15" Bottom="Parent, .55"/>
+                </LayoutInput>
+                
+                <Layout>
+                  <FlowLayout Orientation="Vertical" Spacing="10,0"/>
+                </Layout>
+
+                <Animations>
+                  <Animation Type="Show" CenterPointPercent="0.50,0.50,0.50" CenterPointOffset="400,400,0">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0.0" Value="0" Interpolation="Linear" RelativeTo="Current" />
+                      <AlphaKeyframe Time=".25" Value="1" Interpolation="Linear" RelativeTo="Final" />
+
+                      <PositionKeyframe Time="0.0" Value="0,0,0" Interpolation="SCurve" RelativeTo="Current" />
+                      <PositionKeyframe Time=".15" Value="0,-85,0" Interpolation="SCurve" RelativeTo="Final" />
+                      <PositionKeyframe Time=".25" Value="0,0,0" Interpolation="SCurve" RelativeTo="Final" />
+
+                      <ScaleKeyframe Time="0.0" Value=".5,.5,0" Interpolation="SCurve" RelativeTo="Current" />
+                      <ScaleKeyframe Time=".25" Value="1,1,1" Interpolation="SCurve" RelativeTo="Final" />
+                    </Keyframes>
+                  </Animation>
+
+                  <Animation Type="Hide" CenterPointPercent="0.50,0.50,0.50">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0.0" Value="1" Interpolation="Linear" RelativeTo="Current" />
+                      <AlphaKeyframe Time=".15" Value="0" Interpolation="Linear" RelativeTo="Final" />
+
+                      <PositionKeyframe Time="0.0" Value="0,0,0" Interpolation="SCurve" RelativeTo="Current" />
+                      <PositionKeyframe Time=".12" Value="0,-85,0" Interpolation="SCurve" RelativeTo="Final" />
+                      <PositionKeyframe Time=".2" Value="0,0,0" Interpolation="SCurve" RelativeTo="Final" />
+                      
+                      <ScaleKeyframe Time="0.0" Value="1,1,0" Interpolation="Linear" RelativeTo="Current" />
+                      <ScaleKeyframe Time=".2" Value="0,0,0" Interpolation="Linear" RelativeTo="Final" />
+                    </Keyframes>
+                  </Animation>
+                </Animations>
+
+                <Children>
+                  <c:SimpleButton Name="ButtonSave"
+                                  Command="[CommandSave]"
+                                  Text="[CommandSave.Description]"
+                                  BoolHandleBack="true"
+                                  CommandBack="[CommandBack]"/>
+
+                  <c:SimpleButton Name="ButtonCancel"
+                                  Command="[CommandCancel]"
+                                  Text="[CommandCancel.Description]"
+                                  BoolHandleBack="true"
+                                  CommandBack="[CommandBack]"/>
+                </Children>
+              </Panel>
+       
+        <!--Trailers-->
+        <Panel Name="PanelTrailers" 
+               Layout="VerticalFlow">
+          <LayoutInput>
+            <FormLayoutInput  Top="Parent, .2" Left="Parent, .4" Bottom="Parent, .8"/>
+          </LayoutInput>
+          <Animations>
+            <Animation Type="Show" CenterPointPercent="0.50,0.50,0.50">
+              <Keyframes>
+                <AlphaKeyframe Time="0.0" Value="0" Interpolation="Linear" RelativeTo="Current" />
+                <AlphaKeyframe Time=".25" Value="1" Interpolation="Linear" RelativeTo="Final" />
+
+                <ScaleKeyframe Time="0.0" Value=".1,.1,0" Interpolation="SCurve" RelativeTo="Current" />
+                <ScaleKeyframe Time=".25" Value="1,1,1" Interpolation="SCurve" RelativeTo="Final" />
+              </Keyframes>
+            </Animation>
+
+            <Animation Type="Hide" CenterPointPercent="0.50,0.50,0.50">
+              <Keyframes>
+                <AlphaKeyframe Time="0.0" Value="1" Interpolation="Linear" RelativeTo="Current" />
+                <AlphaKeyframe Time=".15" Value="0" Interpolation="Linear" RelativeTo="Final" />
+
+                <ScaleKeyframe Time="0.0" Value="1,1,0" Interpolation="Linear" RelativeTo="Current" />
+                <ScaleKeyframe Time=".2" Value="0,0,0" Interpolation="Linear" RelativeTo="Final" />
+              </Keyframes>
+            </Animation>
+          </Animations>
+          <Children>
+            <Text Content="Trailers Definition" 
+                  Color="LightBlue" 
+                  Font="font://me:Font"/>
+            <c:SimpleSpinner Name="TrailersDefinition" 
+                             Model="[Settings.TrailersDefinition]" 
+                             Size="51,51"
+                             BoolHandleBack="true"
+                             CommandBack="[CommandBack]"/>
+          </Children>
+        </Panel>
+
+          <!--Footer-->
+          <Panel Layout="Form">
+            <LayoutInput>
+              <FormLayoutInput  Top="Parent, .75" Left="Parent, 0" Bottom="Parent, 1" Right="Parent, 1"/>
+            </LayoutInput>
+
+            <Children>
+              <NowPlaying ShowFullMetadata="OnFocus"
+                          SnapToDefaultPosition="true">
+                <LayoutInput>
+                  <FormLayoutInput  Bottom="Parent, 1" Left="Parent, 0"/>
+                </LayoutInput>
+              </NowPlaying>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+      
+    </Content>
+  </UI>
+
+  <Font Name="FontXLarge" FontName="global://me:RegularFontName" FontSize="34" />
+  <Font Name="FontLarge" FontName="global://me:RegularFontName" FontSize="28" />
+  <Font Name="FontRegular" FontName="global://me:RegularFontName" FontSize="20" />
+</Mcml>
