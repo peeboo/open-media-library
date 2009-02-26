@@ -448,6 +448,7 @@ namespace Library
             {
                 item.DefaultImage = new Image("file://" + t.FrontCoverPath);
             }
+            item.Description = t.Name;
 
 
             return item;
