@@ -167,7 +167,7 @@
                   <Panel Name="GalleryPanel" MouseInteractive="true" FocusOrder="0">
                     <Children>
                       <view:CoverArtWithAlpha Name="ViewCoverArtWithAlpha" MovieBrowser="[MovieBrowser]" UISettings="[UISettings]" Visible="False"/>
-                      <view:CoverArt Name="ViewCoverArt" MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
+                      <view:CoverArt Name="ViewCoverArt" Application="[Application]" MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
                       <view:ListView Name="ViewList" MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
                     </Children>
 

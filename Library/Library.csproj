@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2D747049-9A5C-4FFB-919F-1FD47BC18B3D}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -109,6 +109,7 @@
     <Compile Include="Code\OMLUpdater.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\ExternalPlayer.cs" />
+    <Compile Include="Code\SettingsUIWrapper.cs" />
     <Compile Include="Code\Setup.cs" />
     <Compile Include="Code\TheMovieDbBackDropDownloader.cs" />
     <Compile Include="Code\TreeNode.cs" />
@@ -290,6 +291,17 @@
     <Content Include="Markup\Control\ContextMenu.mcml" />
     <Content Include="Markup\Control\DiskChooserContext.mcml" />
     <Content Include="Markup\Control\MovieDescription.mcml" />
+    <Content Include="Markup\MovieDetailsPopup\MovieDetailsPopup.mcml" />
+    <Content Include="Markup\Settings\Settings_Appearance_GalleryView.mcml" />
+    <Content Include="Markup\Settings\Settings_Appearance_DetailView.mcml" />
+    <Content Include="Markup\Settings\Settings_Appearance_General.mcml" />
+    <Content Include="Markup\Settings\Settings_About.mcml" />
+    <Content Include="Markup\Settings\Settings_Trailers.mcml" />
+    <Content Include="Markup\Settings\Settings_Filters.mcml" />
+    <Content Include="Markup\Settings\Settings_ExternalInterface.mcml" />
+    <Content Include="Markup\Settings\Settings_Appearance.mcml" />
+    <Content Include="Markup\Settings\Settings_Item_Temp.mcml" />
+    <Content Include="Markup\Settings\Settings_Main.mcml" />
     <Content Include="Markup\Details\DetailsPage.mcml" />
     <Content Include="Markup\Details\DetailsPage_Boxes.mcml" />
     <Content Include="Markup\IntroPage.mcml" />
@@ -461,6 +473,7 @@
     <None Include="Resources\spinnerarrowbackdisabled1.png" />
     <None Include="Resources\SampleBackground_1024_768.jpg" />
     <None Include="Resources\nightmare_wp_05_1024.jpg" />
+    <Content Include="Resources\overlays.background.bottom.dark.PNG" />
     <Content Include="Resources\SpinnerArrowBackDormant.png" />
     <None Include="Resources\spinnerarrowbackdormant1.png" />
     <None Include="Resources\spinnerarrowbackdormant2.png" />

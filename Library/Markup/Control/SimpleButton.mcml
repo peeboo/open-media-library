@@ -11,6 +11,10 @@
 
             <ICommand Name="Command" ICommand="$Required" />
             <cor:Boolean Name="IsNavigatingCommand" Boolean="false" />
+          
+            <cor:Boolean Name="BoolHandleBack" Boolean="false"/>
+            <Command Name="CommandBack"/>
+
             <cor:String Name="Text" String="" />
             <Size Name="Size" Size="251,51" />
             <Font Name="Font" Font="font://me:Font" />
@@ -21,18 +25,21 @@
         </Properties>
 
         <Locals>
+            <ClickHandler Name="Clicker"/>
 
-            <ClickHandler Name="Clicker" />
-
+          <KeyHandler Key="Backspace" Name="KeyBackspace"  Handle="[BoolHandleBack]"/>
+          <ShortcutHandler Shortcut="Back" Name="ShortcutBack"  Handle="[BoolHandleBack]"/>
         </Locals>
 
         <Rules>
-
             <Binding Source="[Command]" Target="[Clicker.Command]" />
             <Binding Source="[Command.Available]" Target="[Input.KeyInteractive]" />
             <Binding Source="[Input.KeyFocus]" Target="[imgFocusOverlay.Visible]" />
             <Binding Source="[Font]" Target="[Label.Font]" />
             <Binding Source="[Text]" Target="[Label.Content]" />
+            <Binding Source="[CommandBack]" Target="[KeyBackspace.Command]"/>
+             <Binding Source="[CommandBack]" Target="[ShortcutBack.Command]" />
+            
             <Default Target="[Input.KeyInteractive]" Value="true" />
 
             <Rule>

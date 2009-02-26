@@ -200,6 +200,12 @@ namespace Library
             get { return _titles; }
         }
 
+        public bool ShowDetailsPopup
+        {
+            get { return true; }
+        }
+        
+
         public OMLApplication()
             : this(null, null)
         {
@@ -267,7 +273,7 @@ namespace Library
         {
             DebugLine("[OMLApplication] MediaExperience Property {0} changed", property);
         }
-
+        
         // this is the context from the Media Center menu
         public void Startup(string context)
         {
@@ -288,6 +294,7 @@ namespace Library
             return;
 #endif
 #if LAYOUT_V3
+            
             //this is temp to test controls
             OMLProperties properties = new OMLProperties();
             properties.Add("Application", this);
@@ -311,7 +318,7 @@ namespace Library
             settingsCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings_Dormant");
             settingsCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings_Focus");
             //no invoke for now
-            //settingsCmd.Invoked += new EventHandler(settingsCmd_Invoked);
+            settingsCmd.Invoked += new EventHandler(this.SettingsHandler);
             gallery.Model.Commands.Add(settingsCmd);
 
             //the pivots
@@ -454,6 +461,7 @@ namespace Library
             return item;
         }
 
+        
         public void Uninitialize()
         {
             ExtenderDVDPlayer.Uninitialize(_titles);
@@ -487,12 +495,157 @@ namespace Library
             }
         }
 
+        public void GoToBackPage()
+        {
+            DebugLine("[OMLApplication] GoToBackPage()");
+            if (_session != null)
+            {
+                _session.BackPage();
+            }
+        }
+
+        public void SettingsHandler(object sender, EventArgs e)
+        {
+            _session.GoToPage("resx://Library/Library.Resources/Settings_Main", CreateProperties(true, true, null));
+        }
+
         public void GoToSettingsPage(MovieGallery gallery)
         {
             DebugLine("[OMLApplication] GoToSettingsPage()");
             if (_session != null)
             {
-                _session.GoToPage("resx://Library/Library.Resources/Settings", CreateProperties(true, true, gallery));
+               _session.GoToPage("resx://Library/Library.Resources/Settings", CreateProperties(true, true, gallery));
+            }
+        }
+
+        public void GoToSettings_AppearancePage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_AppearancePage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_Appearance", properties);
+            }
+        }
+
+        public void GoToSettings_Appearance_GeneralPage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_Appearance_GeneralPage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_Appearance_General", properties);
+            }
+        }
+
+        public void GoToSettings_Appearance_DetailViewPage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_Appearance_GeneralPage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_Appearance_DetailView", properties);
+            }
+        }
+
+        public void GoToSettings_Appearance_GalleryViewPage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_Appearance_GalleryViewPage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_Appearance_GalleryView", properties);
+            }
+        }
+
+        public void GoToSettings_ExternalInterfacePage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_ExternalInterfacePage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_ExternalInterface", properties);
+            }
+        }
+
+        public void GoToSettings_FiltersPage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_FiltersPage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_Filters", properties);
+            }
+        }
+
+        public void GoToSettings_TrailersPage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_TrailersPage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_Trailers", properties);
+            }
+        }
+
+        public void GoToSettings_AboutPage()
+        {
+            DebugLine("[OMLApplication] GoToSettings_AboutPage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_About", properties);
             }
         }
 
@@ -608,6 +761,7 @@ namespace Library
             // If we have no page session, just spit out a trace statement.
             if (_session != null)
             {
+                //FirePropertyChanged("ShowDetailsPopup");
                 switch (Properties.Settings.Default.DetailsView)
                 {
                     case "Background Boxes":

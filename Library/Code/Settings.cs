@@ -199,10 +199,10 @@ namespace Library
             SaveImpersonationSettings();
             SaveExternalPlayers();
 
-            OMLApplication.ExecuteSafe(delegate
-            {
-                OMLApplication.Current.Startup(null);
-            });
+            //OMLApplication.ExecuteSafe(delegate
+            //{
+            //    OMLApplication.Current.Startup(null);
+            //});
         }
 
         

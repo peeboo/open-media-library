@@ -19,14 +19,15 @@
       <cor:Boolean Name="PasswordMasked" Boolean="false"/>
 
       <Size Name="Size" Size="250, 51" />
-
+      <cor:Boolean Name="BoolHandleBack" Boolean="false"/>
+      <Command Name="CommandBack"/>
     </Properties>
 
     <Locals>
-
       <!-- React to "typing" input. -->
       <TypingHandler Name="TypingHandler" EditableText="[EditableText]"/>
-
+      <KeyHandler Key="Backspace" Name="KeyBackspace" Command="[CommandBack]"  Handle="[BoolHandleBack]"/>
+      <ShortcutHandler Shortcut="Back" Name="ShortcutBack" Command="[CommandBack]"  Handle="[BoolHandleBack]"/>
     </Locals>
 
     <Rules>

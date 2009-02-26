@@ -2,12 +2,15 @@
       xmlns:cor="assembly://MsCorLib/System"
       xmlns:srb="resx://Library/Library.Resources/SimpleRadioButton"
       xmlns:me="Me">
-
+  <Aggregate Source="resx://Library/Library.Resources/Base" />
+  
   <UI Name="RadioButtonGroup">
 
 		<Properties>
       <Choice Name="Model"
               Choice="$Required" />
+      <cor:Boolean Name="BoolHandleBack" Boolean="false"/>
+      <Command Name="CommandBack"/>
 		</Properties>
 
 		<Rules>
@@ -28,6 +31,15 @@
                           ItemAlignment="Near"
                           AllowWrap="true" />
             </Layout>
+
+            <Animations>
+              <Animation Type="Move">
+                <Keyframes>
+                  <PositionKeyframe Time="0" Value="0,0,0" RelativeTo="Current"/>
+                  <PositionKeyframe Time=".25" Value="1,1,1" RelativeTo="Final" Interpolation="SCurve"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
           </Repeater>
 
         </Children>
@@ -36,9 +48,14 @@
 
     <Content Name="RadioButton">
       <srb:SimpleRadioButton Model="[Model]"
-                            Option="[RepeatedItem!cor:String]" Index="[RepeatedItemIndex]" />
+                             Option="[RepeatedItem!cor:String]" 
+                             Index="[RepeatedItemIndex]" 
+                             BoolHandleBack="[BoolHandleBack]"
+                             FontLabel="font://me:FontRegular"
+                             CommandBack="[CommandBack]"/>
     </Content>
 
   </UI>
 
+  <Font Name="FontRegular" FontName="global://me:RegularFontName" FontSize="20" />
 </Mcml>
