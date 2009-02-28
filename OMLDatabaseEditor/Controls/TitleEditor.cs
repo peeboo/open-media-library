@@ -136,11 +136,16 @@ namespace OMLDatabaseEditor.Controls
                 foreach (string image in images)
                 {
                     PictureBox pb = new PictureBox();
+                    if (image == _dvdTitle.BackDropImage)
+                    {
+                        pb.BorderStyle = BorderStyle.Fixed3D;
+                        pb.BackColor = Color.Green;
+                    }
                     pb.ImageLocation = image;
                     pb.Height = 150;
                     pb.Dock = DockStyle.Fill;
                     pb.SizeMode = PictureBoxSizeMode.Zoom;
-                    //if (pb.Image == null) continue;
+                    pb.MouseClick += new MouseEventHandler(pbFanart_MouseClick);
                     tblBackdrops.Controls.Add(pb);
                 }
             }
@@ -558,6 +563,44 @@ namespace OMLDatabaseEditor.Controls
                     Cursor = Cursors.Default;
                 }
             }
+        }
+
+        private void pbFanart_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (_dvdTitle == null) return;
+            if (e.Button == MouseButtons.Right)
+            {
+                contextBackdrop.Tag = sender;
+                if ((sender as PictureBox).ImageLocation == _dvdTitle.BackDropImage)
+                {
+                    clearSingleBackdropToolStripMenuItem.Visible = true;
+                    setSingleBackdropToolStripMenuItem.Visible = false;
+                }
+                else
+                {
+                    clearSingleBackdropToolStripMenuItem.Visible = false;
+                    setSingleBackdropToolStripMenuItem.Visible = true;
+                }
+                contextBackdrop.Show(sender as PictureBox, e.Location);
+            }
+        }
+
+        private void setSingleBackdropToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Set selected image as single backdrop
+            PictureBox pb = (sender as ToolStripMenuItem).Owner.Tag as PictureBox;
+            _dvdTitle.BackDropImage = pb.ImageLocation;
+            TitleChanges(null, EventArgs.Empty);
+            LoadBackdrops();
+        }
+
+        private void clearSingleBackdropToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Clear single backdrop
+            PictureBox pb = (sender as ToolStripItem).Owner.Tag as PictureBox;
+            _dvdTitle.BackDropImage = string.Empty;
+            TitleChanges(null, EventArgs.Empty);
+            LoadBackdrops();
         }
     }
 
