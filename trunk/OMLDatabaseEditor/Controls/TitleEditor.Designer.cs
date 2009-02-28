@@ -201,11 +201,9 @@
             // numProductionYear
             // 
             this.numProductionYear.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "ProductionYear", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.numProductionYear.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "ProductionYear", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.numProductionYear.Location = new System.Drawing.Point(120, 136);
             this.numProductionYear.Name = "numProductionYear";
-            this.numProductionYear.Properties.Mask.EditMask = "([123][0-9])?[0-9][0-9]";
-            this.numProductionYear.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.RegEx;
-            this.numProductionYear.Properties.Mask.UseMaskAsDisplayFormat = true;
             this.numProductionYear.Size = new System.Drawing.Size(100, 20);
             this.numProductionYear.TabIndex = 5;
             this.numProductionYear.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
@@ -1014,7 +1012,7 @@
             this.setSingleBackdropToolStripMenuItem,
             this.clearSingleBackdropToolStripMenuItem});
             this.contextBackdrop.Name = "contextBackdrop";
-            this.contextBackdrop.Size = new System.Drawing.Size(203, 70);
+            this.contextBackdrop.Size = new System.Drawing.Size(203, 48);
             // 
             // setSingleBackdropToolStripMenuItem
             // 
