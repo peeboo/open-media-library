@@ -106,6 +106,9 @@
             this.imageWatcherFront = new System.IO.FileSystemWatcher();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.pnlMain = new DevExpress.XtraEditors.PanelControl();
+            this.contextBackdrop = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.setSingleBackdropToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearSingleBackdropToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tpVisual.SuspendLayout();
@@ -149,6 +152,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlMain)).BeginInit();
             this.pnlMain.SuspendLayout();
+            this.contextBackdrop.SuspendLayout();
             this.SuspendLayout();
             // 
             // xtraTabControl1
@@ -1004,6 +1008,28 @@
             this.pnlMain.Size = new System.Drawing.Size(526, 526);
             this.pnlMain.TabIndex = 3;
             // 
+            // contextBackdrop
+            // 
+            this.contextBackdrop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setSingleBackdropToolStripMenuItem,
+            this.clearSingleBackdropToolStripMenuItem});
+            this.contextBackdrop.Name = "contextBackdrop";
+            this.contextBackdrop.Size = new System.Drawing.Size(203, 70);
+            // 
+            // setSingleBackdropToolStripMenuItem
+            // 
+            this.setSingleBackdropToolStripMenuItem.Name = "setSingleBackdropToolStripMenuItem";
+            this.setSingleBackdropToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.setSingleBackdropToolStripMenuItem.Text = "Set as single backdrop";
+            this.setSingleBackdropToolStripMenuItem.Click += new System.EventHandler(this.setSingleBackdropToolStripMenuItem_Click);
+            // 
+            // clearSingleBackdropToolStripMenuItem
+            // 
+            this.clearSingleBackdropToolStripMenuItem.Name = "clearSingleBackdropToolStripMenuItem";
+            this.clearSingleBackdropToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.clearSingleBackdropToolStripMenuItem.Text = "Clear as single backdrop";
+            this.clearSingleBackdropToolStripMenuItem.Click += new System.EventHandler(this.clearSingleBackdropToolStripMenuItem_Click);
+            // 
             // TitleEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1057,6 +1083,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlMain)).EndInit();
             this.pnlMain.ResumeLayout(false);
+            this.contextBackdrop.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1139,5 +1166,8 @@
         private DevExpress.XtraEditors.LabelControl labelControl21;
         private System.Windows.Forms.ToolStripMenuItem updateFromMetadataToolStripMenuItem1;
         private System.Windows.Forms.TableLayoutPanel tblBackdrops;
+        private System.Windows.Forms.ContextMenuStrip contextBackdrop;
+        private System.Windows.Forms.ToolStripMenuItem setSingleBackdropToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearSingleBackdropToolStripMenuItem;
     }
 }
