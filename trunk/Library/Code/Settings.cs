@@ -73,27 +73,42 @@ namespace Library
 
                 try
                 {
-                    string chosenPlayer = _externalPlayerSelection.Chosen as string;
+                    string chosenBluRayPlayer = _externalPlayerSelectionBluRay.Chosen as string;
+                    ExternalPlayer.KnownPlayers bluRayPlayer = (ExternalPlayer.KnownPlayers)Enum.Parse(typeof(ExternalPlayer.KnownPlayers), chosenBluRayPlayer);
 
-                    ExternalPlayer.KnownPlayers player = (ExternalPlayer.KnownPlayers)Enum.Parse(typeof(ExternalPlayer.KnownPlayers), chosenPlayer);
-
-                    if (player != ExternalPlayer.KnownPlayers.None)
-                    {                        
-                        if (!string.IsNullOrEmpty(_externalPlayerPath.Value) &&
-                            _externalPlayerPath.Value.Trim().Length != 0)
+                    if (bluRayPlayer != ExternalPlayer.KnownPlayers.None)
+                    {
+                        if (!string.IsNullOrEmpty(_externalPlayerPathBluRay.Value) &&
+                            _externalPlayerPathBluRay.Value.Trim().Length != 0)
                         {
-                            mappings.Add(VideoFormat.BLURAY.ToString() + "|" + ((int)player).ToString() + "|" + _externalPlayerPath.Value.Trim());
-                            mappings.Add(VideoFormat.HDDVD.ToString() + "|" + ((int)player).ToString() + "|" + _externalPlayerPath.Value.Trim());
-                        }
-
-                        if (!_useExternalPlayerOnlyForHD.Value &&
-                            !string.IsNullOrEmpty(_externalPlayerPath.Value) &&
-                            _externalPlayerPath.Value.Trim().Length != 0)
-                        {
-                            mappings.Add(VideoFormat.ALL.ToString() + "|" + ((int)player).ToString() + "|" + _externalPlayerPath.Value.Trim());
+                            mappings.Add(VideoFormat.BLURAY.ToString() + "|" + ((int)bluRayPlayer).ToString() + "|" + _externalPlayerPathBluRay.Value.Trim());
                         }
                     }
 
+                    string chosenHDDVDPlayer = _externalPlayerSelectionHDDVD.Chosen as string;
+                    ExternalPlayer.KnownPlayers hddvdPlayer = (ExternalPlayer.KnownPlayers)Enum.Parse(typeof(ExternalPlayer.KnownPlayers), chosenHDDVDPlayer);
+
+                    if (hddvdPlayer != ExternalPlayer.KnownPlayers.None)
+                    {
+                        if (!string.IsNullOrEmpty(_externalPlayerPathHDDVD.Value) &&
+                            _externalPlayerPathHDDVD.Value.Trim().Length != 0)
+                        {
+                            mappings.Add(VideoFormat.HDDVD.ToString() + "|" + ((int)hddvdPlayer).ToString() + "|" + _externalPlayerPathHDDVD.Value.Trim());
+                        }
+                    }
+
+                    string chosenAllPlayer = _externalPlayerSelectionAll.Chosen as string;
+                    ExternalPlayer.KnownPlayers allPlayer = (ExternalPlayer.KnownPlayers)Enum.Parse(typeof(ExternalPlayer.KnownPlayers), chosenAllPlayer);
+
+                    if (allPlayer != ExternalPlayer.KnownPlayers.None)
+                    {
+                        if (!string.IsNullOrEmpty(_externalPlayerPathAll.Value) &&
+                            _externalPlayerPathAll.Value.Trim().Length != 0)
+                        {
+                            mappings.Add(VideoFormat.ALL.ToString() + "|" + ((int)allPlayer).ToString() + "|" + _externalPlayerPathAll.Value.Trim());
+                        }
+                    }
+                    
                     _omlSettings.ExternalPlayerMapping = mappings;
                     ExternalPlayer.RefreshExternalPlayerList();
                 }
@@ -473,6 +488,8 @@ namespace Library
         private void SetupExternalPlayers()
         {
             ExternalPlayerItem bluRayPlayer = ExternalPlayer.GetExternalForFormat(VideoFormat.BLURAY);
+            ExternalPlayerItem allPlayers = ExternalPlayer.GetExternalForFormat(VideoFormat.ALL);
+            ExternalPlayerItem hddvdPlayer = ExternalPlayer.GetExternalForFormat(VideoFormat.HDDVD);
 
             List<string> externalPlayerChoices = new List<string>();
             foreach (string player in Enum.GetNames(typeof(ExternalPlayer.KnownPlayers)))
@@ -480,11 +497,21 @@ namespace Library
                 externalPlayerChoices.Add(player);
             }
 
-            _externalPlayerSelection.Options = externalPlayerChoices;
+            _externalPlayerSelectionAll.Options = externalPlayerChoices;
+            _externalPlayerSelectionBluRay.Options = externalPlayerChoices;
+            _externalPlayerSelectionHDDVD.Options = externalPlayerChoices;
 
-            _externalPlayerSelection.Chosen = (bluRayPlayer == null)
+            _externalPlayerSelectionBluRay.Chosen = (bluRayPlayer == null)
                                                  ? ExternalPlayer.KnownPlayers.None.ToString()
                                                  : bluRayPlayer.PlayerType.ToString();
+
+            _externalPlayerSelectionAll.Chosen = (allPlayers == null)
+                                                 ? ExternalPlayer.KnownPlayers.None.ToString()
+                                                 : allPlayers.PlayerType.ToString();
+
+            _externalPlayerSelectionHDDVD.Chosen = (hddvdPlayer == null)
+                                                 ? ExternalPlayer.KnownPlayers.None.ToString()
+                                                 : hddvdPlayer.PlayerType.ToString();
 
             List<string> localFixedDrivesOptions = new List<string>();
             foreach (DriveInfo dInfo in GetFileSystemDrives())
@@ -492,11 +519,14 @@ namespace Library
                 localFixedDrivesOptions.Add(dInfo.Name);
             }
 
+            _localFixedDrivesBluRay.Options = localFixedDrivesOptions;
+            _localFixedDrivesHDDVD.Options = localFixedDrivesOptions;
+            _localFixedDrivesAll.Options = localFixedDrivesOptions;
             _LocalFixedDrives.Options = localFixedDrivesOptions;
 
-            _useExternalPlayerOnlyForHD.Chosen = !ExternalPlayer.ExternalPlayerExistForType(VideoFormat.ALL);
-
-            _externalPlayerPath.Value = (bluRayPlayer != null) ? bluRayPlayer.Path : string.Empty;
+            _externalPlayerPathBluRay.Value = (bluRayPlayer != null) ? bluRayPlayer.Path : string.Empty;
+            _externalPlayerPathHDDVD.Value = (hddvdPlayer != null) ? hddvdPlayer.Path : string.Empty;
+            _externalPlayerPathAll.Value = (allPlayers != null) ? allPlayers.Path : string.Empty;
         }
         private void SetupImpersonationSettings()
         {
@@ -657,10 +687,20 @@ namespace Library
             get { return _LocalFixedDrives; }
         }
 
-        public BooleanChoice UseExternalPlayerOnlyForHD
+        public Choice LocalFixedDrivesBluRay
         {
-            get { return _useExternalPlayerOnlyForHD; }
+            get { return _localFixedDrivesBluRay; }
         }
+
+        public Choice LocalFixedDrivesHDDVD
+        {
+            get { return _localFixedDrivesHDDVD; }
+        }
+
+        public Choice LocalFixedDrivesAll
+        {
+            get { return _localFixedDrivesAll; }
+        }        
       
         #endregion
         public EditableText MountingToolPath
@@ -680,20 +720,54 @@ namespace Library
             }
         }
         
-        public EditableText ExternalPlayerPath
+        public EditableText ExternalPlayerPathBluRay
         {
             get
             {
-                if (_externalPlayerPath == null)
+                if (_externalPlayerPathBluRay == null)
                 {
-                    _externalPlayerPath = new EditableText();
+                    _externalPlayerPathBluRay = new EditableText();
                 }
-                return _externalPlayerPath;
+                return _externalPlayerPathBluRay;
             }
             set
             {
-                _externalPlayerPath = value;
-                FirePropertyChanged("ExternalPlayerPath");
+                _externalPlayerPathBluRay = value;
+                FirePropertyChanged("ExternalPlayerPathBluRay");
+            }
+        }
+
+        public EditableText ExternalPlayerPathHDDVD
+        {
+            get
+            {
+                if (_externalPlayerPathHDDVD == null)
+                {
+                    _externalPlayerPathHDDVD = new EditableText();
+                }
+                return _externalPlayerPathHDDVD;
+            }
+            set
+            {
+                _externalPlayerPathHDDVD = value;
+                FirePropertyChanged("ExternalPlayerPathHDDVD");
+            }
+        }
+
+        public EditableText ExternalPlayerPathAll
+        {
+            get
+            {
+                if (_externalPlayerPathAll == null)
+                {
+                    _externalPlayerPathAll = new EditableText();
+                }
+                return _externalPlayerPathAll;
+            }
+            set
+            {
+                _externalPlayerPathAll = value;
+                FirePropertyChanged("ExternalPlayerPathAll");
             }
         }
 
@@ -764,15 +838,36 @@ namespace Library
             }
         }
 
-        public Choice ExternalPlayerSelection
+        public Choice ExternalPlayerSelectionAll
         {
-            get { return _externalPlayerSelection; }
+            get { return _externalPlayerSelectionAll; }
             set
             {
-                _externalPlayerSelection = value;
-                FirePropertyChanged("ExternalPlayerSelection");
+                _externalPlayerSelectionAll = value;
+                FirePropertyChanged("ExternalPlayerSelectionAll");
             }
         }
+
+        public Choice ExternalPlayerSelectionBluRay
+        {
+            get { return _externalPlayerSelectionBluRay; }
+            set
+            {
+                _externalPlayerSelectionBluRay = value;
+                FirePropertyChanged("ExternalPlayerSelectionBluRay");
+            }
+        }
+
+        public Choice ExternalPlayerSelectionHDDVD
+        {
+            get { return _externalPlayerSelectionHDDVD; }
+            set
+            {
+                _externalPlayerSelectionHDDVD = value;
+                FirePropertyChanged("ExternalPlayerSelectionHDDVD");
+            }
+        }
+
 
         public Choice MainPageBackDropInterval
         {
@@ -867,14 +962,14 @@ namespace Library
         private const string DefaultPowerDVD8Path = @"Program Files\CyberLink\PowerDVD8\PowerDVD8.exe";
         private const string DefaultWinDVD9Path = @"Program Files\Corel\DVD9\WinDVD.exe";
 
-        public void LocateExternalPlayerExecutable()
+        public void LocateExternalPlayerExecutable(Choice selector, EditableText textBox, Choice localFixedDrive)
         {
-            string driveLetterToScan = LocalFixedDrives.Chosen as String;
+            string driveLetterToScan = localFixedDrive.Chosen as String;
             DriveInfo dInfo = new DriveInfo(driveLetterToScan);
 
             string startPath = null;
 
-            switch ((ExternalPlayer.KnownPlayers)Enum.Parse(typeof(ExternalPlayer.KnownPlayers), _externalPlayerSelection.Chosen.ToString()))
+            switch ((ExternalPlayer.KnownPlayers)Enum.Parse(typeof(ExternalPlayer.KnownPlayers), selector.Chosen.ToString()))
             {               
                 case ExternalPlayer.KnownPlayers.WinDVD9:
                     startPath = DefaultWinDVD9Path;
@@ -897,7 +992,7 @@ namespace Library
 
             if (File.Exists(Path.Combine(dInfo.RootDirectory.FullName, startPath)))
             {
-                ExternalPlayerPath.Value = Path.Combine(dInfo.RootDirectory.FullName, startPath);
+                textBox.Value = Path.Combine(dInfo.RootDirectory.FullName, startPath);
             }
             else
             {
@@ -913,7 +1008,7 @@ namespace Library
                     if (exePath.Length > 0)
                     {
                         OMLApplication.DebugLine("[Settings] Found Image Mounter: {0}", exePath);
-                        ExternalPlayerPath.Value = exePath;
+                        textBox.Value = exePath;
                     }
                     else
                     {
@@ -1012,7 +1107,11 @@ namespace Library
 
         private string exePath = string.Empty;
         EditableText _mountingToolPath = new EditableText();
-        EditableText _externalPlayerPath = new EditableText();
+        
+        EditableText _externalPlayerPathBluRay = new EditableText();
+        EditableText _externalPlayerPathHDDVD = new EditableText();
+        EditableText _externalPlayerPathAll = new EditableText();
+
         OMLSettings _omlSettings = new OMLSettings();
         Choice _virtualDrive = new Choice();
         Choice _movieView = new Choice();
@@ -1028,10 +1127,19 @@ namespace Library
         Choice _startPage = new Choice();
         Choice _startPageSubFilter;
         Choice _uiLanguage = new Choice();
-        Choice _ImageMountingSelection = new Choice();
-        Choice _externalPlayerSelection = new Choice();
-        Choice _trailersDefinition = new Choice();
+        Choice _ImageMountingSelection = new Choice();       
+        
+        Choice _externalPlayerSelectionAll = new Choice();
+        Choice _externalPlayerSelectionBluRay = new Choice();
+        Choice _externalPlayerSelectionHDDVD = new Choice();
+
+        Choice _localFixedDrivesBluRay = new Choice();
+        Choice _localFixedDrivesHDDVD = new Choice();
+        Choice _localFixedDrivesAll = new Choice();
+
         Choice _LocalFixedDrives = new Choice();
+
+        Choice _trailersDefinition = new Choice();        
         Choice _filtersToShow = new Choice();
         EditableText _transcodeBufferDelay = new EditableText();
         EditableText _impersonationUsername = new EditableText();
@@ -1053,7 +1161,6 @@ namespace Library
         BooleanChoice _showFilterParentalRating = new BooleanChoice();
         BooleanChoice _showFilterCountry = new BooleanChoice();
         BooleanChoice _showFilterRuntime = new BooleanChoice();
-        BooleanChoice _useExternalPlayerOnlyForHD = new BooleanChoice();
         BooleanChoice _showFilterUnwatched = new BooleanChoice();
         BooleanChoice _debugTranscoding = new BooleanChoice();
         //BooleanChoice _useMaximizer = new BooleanChoice();
