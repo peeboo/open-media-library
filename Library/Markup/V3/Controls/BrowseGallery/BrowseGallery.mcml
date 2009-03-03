@@ -8,6 +8,7 @@
 
   <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseGroupedGallery"/>
   <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseJumpControl"/>
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseListViewItem"/>
 
   <Image Name="Browse.ListViewStrip"    Source="resx://Library/Library.Resources/V3_Controls_BrowseGallery_ListViewStrip" />
   <Image Name="Browse.ListViewStripTop" Source="resx://Library/Library.Resources/V3_Controls_BrowseGallery_ListViewStripTop" />
@@ -52,6 +53,21 @@
       <cor:Boolean Name="ShowListViewStrip" Boolean="false"/>
 
       <Inset Name="GalleryPadding"   Inset="0, 0, 0, 0"/>
+
+      <!-- listview defaults-->
+      <!--ScrollingLayout Name="ScrollLayout" Orientation="Horizontal" Prefetch="2.0" PreferredAreaOfInterest="RepeatedItemAreaOfInterest"/>
+      <ScrollIntoViewDisposition Name="DefaultScrollDisposition" LockedPosition="0.0" LockedAlignment="0.0"/-->
+      <Inset Name="ListViewGalleryPadding" Inset="0, 40, 0, 30"/>
+      <cor:Boolean Name="ListViewShowGallerySelector" Boolean="false"/>
+      <Animation Name="ListViewMoveAnimation" Animation="animation://comm:ListViewItem.Move"/>
+      <cor:Single Name="ListViewMetadataDelayTime" Single="0.25"/>
+      <!--cor:UInt32 Name="KeyRepeatSpeed" UInt32="350"/-->
+      <!--cor:Int32 Name="ScrollInterval" Int32="700"/-->
+      <ILayout Name="ListViewFlowLayout" ILayout="global://me:ListViewDefaultLayout"/>
+      <AnchorEdge Name="ListViewJILVerticalAnchor" AnchorEdge="Parent, 1, 100"/>
+      <Size Name="ListViewItemSize" Size="462, 59"/>
+      <Size Name="GroupedListViewItemSize" Size="462, 53"/>
+      <!-- end listview defaults-->
 
       <!-- Keyboard: EndPadding = (3 x item size) + (2 x spacing) = (366 + 4) = 370 -->
       <shell:ScrollIntoViewDisposition Name="DefaultScrollDisposition" BeginPadding="0" EndPadding="370" EndPaddingRelativeTo="Near"/>
@@ -143,6 +159,29 @@
     </Locals>
 
     <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Model.ContentItemTemplate]" ConditionOp="Equals" Value="ListViewItem"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ShowGallerySelector]" Value="[ListViewShowGallerySelector]"/>
+          <Set Target="[GalleryPadding]" Value="[ListViewGalleryPadding]"/>
+          <Set Target="[MoveAnimation]" Value="[ListViewMoveAnimation]"/>
+          <Set Target="[MetadataDelayTime]" Value="[ListViewMetadataDelayTime]"/>
+          <!--Set Target="[FlowLayout]" Value="[ListViewFlowLayout]"/-->
+          <Set Target="[Repeater.Layout]" Value="[ListViewFlowLayout]"/>
+          
+          <Set Target="[JILVerticalAnchor]" Value="[ListViewJILVerticalAnchor]"/>
+          <Set Target="[ShowListViewStrip]" Value="true"/>
+
+          <Set Target="[TopStripTopEdge.Offset]" Value="-140"/>
+          <Set Target="[TopStripBottomEdge.Offset]" Value="-40"/>
+          <Set Target="[BottomStripTopEdge.Offset]" Value="0"/>
+          <Set Target="[BottomStripBottomEdge.Offset]" Value="100"/>
+          <Set Target="[GalleryPanel.Padding]" Value="0, 40, 0, 0"/>
+        </Actions>
+      </Rule>
+      
       <Binding Source="[Page.JILtext]" Target="[Typer.EditableText]"/>
       <Changed Source="[Typer.DisplayValue]">
         <Conditions>
@@ -312,6 +351,15 @@
                  Target="[GalleryLayout]" Value="[Model.ContentItemTemplate]"/>
 
       <!-- If the ContentItemTemplate changes, all our repeated content is invalid.  Re-repeat everything. -->
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[Model.ContentItemTemplate]" ConditionOp="NotEquals" Value="null"/>
+          <Modified Source="[Model.ContentItemTemplate]" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Repeater.ForceRefresh]"/>
+        </Actions>
+      </Rule-->
       <!--Changed Source="[ContentItemTemplate]">
                 <Actions>
                     <Invoke Target="[Repeater.ForceRefresh]"/>
@@ -565,10 +613,12 @@
             <Children>
 
               <!-- @ the scroller needs focus padding? -->
-              <Scroller MouseInteractive="false" Name="ScrollerGrid" Orientation="Horizontal" MaximumSize="0,0" ScrollingData="[ScrollData]" Prefetch="1.0" FocusPadding="0" Margins="0,0,0,0" Navigation="FlowVertical">
+              <!--Scroller MouseInteractive="false" Name="ScrollerGrid" Orientation="Horizontal" MaximumSize="0,0" ScrollingData="[ScrollData]" Prefetch="1.0" FocusPadding="0" Margins="0,0,0,0" Navigation="FlowVertical"-->
+              <Scroller MouseInteractive="false" Name="ScrollerGrid" Orientation="Horizontal" MaximumSize="0,0" ScrollingData="[ScrollData]" FocusPadding="0" Margins="0,0,0,0" Navigation="FlowVertical">
                 <Children>
                   <!-- @ -->
-                  <Repeater MouseInteractive="false" Name="Repeater" ContentName="[Model.ContentItemTemplate]" Layout="[FlowLayout]" DiscardOffscreenVisuals="true" Navigation="PreferFocusOrder,FlowVertical">
+                  <!--Repeater MouseInteractive="false" Name="Repeater" ContentName="[Model.ContentItemTemplate]" Layout="[FlowLayout]" DiscardOffscreenVisuals="true" Navigation="PreferFocusOrder,FlowVertical"-->
+                  <Repeater MouseInteractive="false" Name="Repeater" ContentName="[Model.ContentItemTemplate]" Layout="[FlowLayout]" Navigation="PreferFocusOrder,FlowVertical">
                     <Animations>
                       <Animation Animation="[MoveAnimation]"/>
                     </Animations>
@@ -612,6 +662,18 @@
       </me:twoRowGalleryItemPoster>
     </Content>
 
+    <Content Name="fiveRowGalleryItem">
+      <me:fiveRowGalleryItem Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+                      Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
+      </me:fiveRowGalleryItem>
+    </Content>
+
+    <Content Name="ListViewItem">
+      <me:ListViewItem Page="[Page]" Model="[RepeatedItem!ICommand]" 
+                      Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
+      </me:ListViewItem>
+    </Content>
+    
     <Content Name="twoRowGalleryItem4x3">
       <me:twoRowGalleryItemPosterZ Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
@@ -721,5 +783,5 @@
   </UI>
   <!-- This is at the end so it won't break the Intellisense parsing -->
   <GridLayout Name="GalleryDefaultLayout" Orientation="Vertical" AllowWrap="true" Spacing="2, 2" Repeat="WhenTooBig" RepeatGap="70"/>
-
+  <GridLayout Name="ListViewDefaultLayout" Orientation="Vertical" AllowWrap="true" Spacing="50, 2" Repeat="WhenTooBig" RepeatGap="200"/>
 </Mcml>

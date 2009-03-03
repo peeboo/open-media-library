@@ -20,6 +20,8 @@ namespace Library.Code.V3
             : base(owner)
         {
         }
+
+        public MovieItem InternalMovieItem;
         // Fields
         private int itemId;
         private string metadata;

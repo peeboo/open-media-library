@@ -729,7 +729,7 @@
     </Properties>
   </UI>
 
-  <UI Name="5RowGalleryItem" BaseUI="me:GalleryItem">
+  <UI Name="fiveRowGalleryItem" BaseUI="me:GalleryItem">
     <Properties>
       <Size       Name="ThumbSize"               Size="72, 72"/>
       <Font       Name="GalleryItemOverlayLabel" FontName="global://comm:MainFontFace" FontSize="12"/>
