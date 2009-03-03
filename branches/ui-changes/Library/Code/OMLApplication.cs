@@ -324,53 +324,80 @@ namespace Library
             //the pivots
             gallery.Model.Pivots = new Choice(gallery, "desc", new ArrayListDataSet(gallery));
 
-            //titles
-            
-            #region titles
+            //twoRowGalleryItemPoster
+            #region oneRowGalleryItemPoster
             VirtualList galleryList = new VirtualList(gallery, null);
             foreach (Title t in _titles)
             {
                 galleryList.Add(this.CreateGalleryItem(t));
             }
 
-            
-            Library.Code.V3.BrowsePivot p = new Library.Code.V3.BrowsePivot(gallery, "titles", "loading titles...", galleryList);
+
+            Library.Code.V3.BrowsePivot p = new Library.Code.V3.BrowsePivot(gallery, "one row", "loading titles...", galleryList);
             p.ContentLabel = "OML";
             p.SupportsJIL = true;
             p.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
-            //added 1 or 2 row logic
-            if (galleryList.Count > 20)
-                p.ContentItemTemplate = "twoRowGalleryItemPoster";
-            else
-                p.ContentItemTemplate = "oneRowGalleryItemPoster";
+            p.ContentItemTemplate = "oneRowGalleryItemPoster";
             p.DetailTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseDetails#Details";
             gallery.Model.Pivots.Options.Add(p);
-            #endregion titles
+            #endregion oneRowGalleryItemPoster
 
-            //titles
-            #region genres
+            //twoRowGalleryItemPoster
+            #region twoRowGalleryItemPoster
             VirtualList galleryListGenres = new VirtualList(gallery, null);
             foreach (Title t in _titles)
             {
                 galleryListGenres.Add(this.CreateGalleryItem(t));
             }
 
-            Library.Code.V3.BrowsePivot p2 = new Library.Code.V3.BrowsePivot(gallery, "genres", "loading genres...", galleryListGenres);
+            Library.Code.V3.BrowsePivot p2 = new Library.Code.V3.BrowsePivot(gallery, "two row", "loading genres...", galleryListGenres);
             p2.ContentLabel = "OML";
-            p2.SupportsJIL = false;
+            p2.SupportsJIL = true;
             p2.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
-            //added 1 or 2 row logic
-            //if (galleryListGenres.Count > 20)
-            //    p2.ContentItemTemplate = "twoRowGalleryItemPoster";
-            //else
-                p2.ContentItemTemplate = "oneRowGalleryItemPoster";
+            p2.ContentItemTemplate = "twoRowGalleryItemPoster";
             p2.DetailTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseDetails#Details";
             gallery.Model.Pivots.Options.Add(p2);
-            #endregion genres
+            #endregion twoRowGalleryItemPoster
+
+            //ListViewItem
+            #region ListViewItem
+            VirtualList galleryListListViewItem = new VirtualList(gallery, null);
+            foreach (Title t in _titles)
+            {
+                galleryListListViewItem.Add(this.CreateGalleryItem(t));
+            }
+
+            Library.Code.V3.BrowsePivot p3 = new Library.Code.V3.BrowsePivot(gallery, "list", "loading genres...", galleryListListViewItem);
+            p3.ContentLabel = "OML";
+            p3.SupportsJIL = true;
+            p3.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            p3.ContentItemTemplate = "ListViewItem";
+            p3.DetailTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseDetails#Details";
+            gallery.Model.Pivots.Options.Add(p3);
+            #endregion ListViewItem
+
+            //threeRowGalleryItemPoster
+            #region ListViewItem
+            //VirtualList galleryListthreeRowGalleryItemPoster = new VirtualList(gallery, null);
+            //foreach (Title t in _titles)
+            //{
+            //    galleryListthreeRowGalleryItemPoster.Add(this.CreateGalleryItem(t));
+            //}
+
+            //Library.Code.V3.BrowsePivot p4 = new Library.Code.V3.BrowsePivot(gallery, "three row", "loading genres...", galleryListthreeRowGalleryItemPoster);
+            //p4.ContentLabel = "OML";
+            //p4.SupportsJIL = true;
+            //p4.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            //p4.ContentItemTemplate = "ListViewItem";
+            //p4.DetailTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseDetails#Details";
+            //gallery.Model.Pivots.Options.Add(p4);
+            #endregion threeRowGalleryItemPoster
 
             //properties.Add("Gallery", new GalleryV2(properties, _titles));
             properties.Add("Page", gallery);
+            //_session.GoToPage(@"resx://Library/Library.Resources/V3_Controls_BrowseListViewItem", properties);
             _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
+            _page = gallery;
             return;
 #endif
 
@@ -428,11 +455,13 @@ namespace Library
             }
         }
 
+        Library.Code.V3.GalleryPage _page;
         internal Library.Code.V3.GalleryItem CreateGalleryItem(Title t)
         {
-
+            
             Library.Code.V3.GalleryItem item = new Library.Code.V3.GalleryItem();
 
+            item.InternalMovieItem = new MovieItem(t, null);
             item.ItemType = 0;
             string imageName = null;
             string moviePath = null;
@@ -457,6 +486,17 @@ namespace Library
             }
             item.Description = t.Name;
 
+            item.Invoked += delegate(object sender, EventArgs args)
+            {
+                if (this._page != null)
+                    this._page.PageState.TransitionState = Library.Code.V3.PageTransitionState.NavigatingAwayForward;
+
+                Library.Code.V3.GalleryItem galleryItem = (Library.Code.V3.GalleryItem)sender;
+
+                // Navigate to a details page for this item.
+                MovieDetailsPage page = galleryItem.InternalMovieItem.CreateDetailsPage(galleryItem.InternalMovieItem);
+                OMLApplication.Current.GoToDetails(page);
+            };
 
             return item;
         }

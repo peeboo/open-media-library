@@ -1343,6 +1343,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] V3_Controls_BrowseListViewItem {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_BrowseListViewItem", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] V3_Controls_BrowsePivots {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_BrowsePivots", resourceCulture);
@@ -1506,6 +1513,13 @@ namespace Library {
         internal static System.IO.UnmanagedMemoryStream V3_Controls_Common_MiniSelect_a {
             get {
                 return ResourceManager.GetStream("V3_Controls_Common_MiniSelect_a", resourceCulture);
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_NowPlayingPIP_BBackgroundMask {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_NowPlayingPIP_BBackgroundMask", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
