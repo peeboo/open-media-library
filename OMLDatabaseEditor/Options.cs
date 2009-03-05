@@ -134,7 +134,14 @@ namespace OMLDatabaseEditor
                 if (GenreDirty)
                 {
                     bDirty = true;
-                    Properties.Settings.Default.gsValidGenres.Clear();
+                    if (Properties.Settings.Default.gsValidGenres == null)
+                    {
+                        Properties.Settings.Default.gsValidGenres = new StringCollection();
+                    }
+                    else
+                    {
+                        Properties.Settings.Default.gsValidGenres.Clear();
+                    }
                     Properties.Settings.Default.gsValidGenres.AddRange(GenreList.ToArray());
                 }
                 if (TagsDirty)
