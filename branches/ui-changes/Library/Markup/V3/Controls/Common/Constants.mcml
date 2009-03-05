@@ -1,6 +1,6 @@
 <Mcml xmlns       ="http://schemas.microsoft.com/2006/mcml"
       xmlns:cor   ="assembly://MsCorLib/System">
-  <Inset Name="StandardButtonTextMargins"/>
+  <Inset Name="StandardButtonTextMargins" Inset="16,0,8,0"/>
 
   <cor:Single Name="StartTextAlpha" Single="0.25"/>
   <cor:Single Name="StartTextItemFadeAmount" Single="0.8"/>

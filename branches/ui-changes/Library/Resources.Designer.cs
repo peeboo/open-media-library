@@ -1350,9 +1350,37 @@ namespace Library {
             }
         }
         
+        internal static byte[] V3_Controls_BrowsePivotItem {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_BrowsePivotItem", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] V3_Controls_BrowsePivots {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_BrowsePivots", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_BrowsePivotsREWORK {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_BrowsePivotsREWORK", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_Button {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Button", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_CheckBox {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_CheckBox", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -1469,6 +1497,41 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_Controls_Common_Button_RadioButtonBullet {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Button_RadioButtonBullet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Button_RadioButtonBullet_Focus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Button_RadioButtonBullet_Focus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Button_RadioButtonBullet_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Button_RadioButtonBullet_NoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Button_RadioButtonOutline_Focus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Button_RadioButtonOutline_Focus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Button_RadioButtonOutline_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Button_RadioButtonOutline_NoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static byte[] V3_Controls_Common_Colors {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Common_Colors", resourceCulture);
@@ -1483,9 +1546,44 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_Controls_Common_ContextMenu_Button_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_ContextMenu_Button_NoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Edit_Caret {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Edit_Caret", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Edit_Mirror_Caret {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Edit_Mirror_Caret", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap V3_Controls_Common_Epg_Results_Cell_Background {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Common_Epg_Results_Cell_Background", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Find_EditBox {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Find_EditBox", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Find_EditBox_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Find_EditBox_NoFocus", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1510,15 +1608,134 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_RadioButton_Disabled {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_RadioButton_Disabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_RadioButton_Dormant {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_RadioButton_Dormant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_RadioButton_Focus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_RadioButton_Focus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_RadioButton_FocusOverlay {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_RadioButton_FocusOverlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_RadioButton_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_RadioButton_NoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_RadioButton_Select_Disabled {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_RadioButton_Select_Disabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_RadioButton_Select_Dormant {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_RadioButton_Select_Dormant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_RadioButton_Select_Focus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_RadioButton_Select_Focus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_RadioButton_Select_FocusOverlay {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_RadioButton_Select_FocusOverlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_RadioButton_Select_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_RadioButton_Select_NoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_Tile_Disabled {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_Tile_Disabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_Tile_Focus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_Tile_Focus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_Tile_FocusOverlay {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_Tile_FocusOverlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_Tile_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_Tile_NoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_Tile_Select_Disabled {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_Tile_Select_Disabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_Tile_Select_Focus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_Tile_Select_Focus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_GlobalSettings_Tile_Select_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_GlobalSettings_Tile_Select_NoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.IO.UnmanagedMemoryStream V3_Controls_Common_MiniSelect_a {
             get {
                 return ResourceManager.GetStream("V3_Controls_Common_MiniSelect_a", resourceCulture);
             }
         }
         
-        internal static System.Drawing.Bitmap V3_Controls_Common_NowPlayingPIP_BBackgroundMask {
+        internal static System.Drawing.Bitmap V3_Controls_Common_NowPlayingPIP_BackgroundMask {
             get {
-                object obj = ResourceManager.GetObject("V3_Controls_Common_NowPlayingPIP_BBackgroundMask", resourceCulture);
+                object obj = ResourceManager.GetObject("V3_Controls_Common_NowPlayingPIP_BackgroundMask", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1683,6 +1900,76 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_Controls_Common_Spinner_Arrow_Back_Disabled {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Spinner_Arrow_Back_Disabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Spinner_Arrow_Back_Dormant {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Spinner_Arrow_Back_Dormant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Spinner_Arrow_Back_Focus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Spinner_Arrow_Back_Focus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Spinner_Arrow_Back_FocusOverlay {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Spinner_Arrow_Back_FocusOverlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Spinner_Arrow_Back_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Spinner_Arrow_Back_NoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Spinner_Arrow_Forward_Disabled {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Spinner_Arrow_Forward_Disabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Spinner_Arrow_Forward_Dormant {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Spinner_Arrow_Forward_Dormant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Spinner_Arrow_Forward_Focus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Spinner_Arrow_Forward_Focus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Spinner_Arrow_Forward_FocusOverlay {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Spinner_Arrow_Forward_FocusOverlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Spinner_Arrow_Forward_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Spinner_Arrow_Forward_NoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap V3_Controls_Common_Stars_0 {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Common_Stars_0", resourceCulture);
@@ -1753,6 +2040,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] V3_Controls_Edit {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Edit", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] V3_Controls_FocusAnimation {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_FocusAnimation", resourceCulture);
@@ -1763,6 +2057,41 @@ namespace Library {
         internal static byte[] V3_Controls_GroupedListView {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_GroupedListView", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_MenuRadioButton {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_MenuRadioButton", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_RadioButton {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_RadioButton", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_RadioGroup {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_RadioGroup", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_ScrollControl {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_ScrollControl", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_Spinner {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Spinner", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -1784,13 +2113,6 @@ namespace Library {
         internal static byte[] V3_Globals {
             get {
                 object obj = ResourceManager.GetObject("V3_Globals", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static byte[] V3_Scroller {
-            get {
-                object obj = ResourceManager.GetObject("V3_Scroller", resourceCulture);
                 return ((byte[])(obj));
             }
         }

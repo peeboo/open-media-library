@@ -395,7 +395,7 @@ namespace Library
 
             //properties.Add("Gallery", new GalleryV2(properties, _titles));
             properties.Add("Page", gallery);
-            //_session.GoToPage(@"resx://Library/Library.Resources/V3_Controls_BrowseListViewItem", properties);
+            //_session.GoToPage(@"resx://Library/Library.Resources/V3_Controls_RadioGroup", properties);
             _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
             _page = gallery;
             return;
