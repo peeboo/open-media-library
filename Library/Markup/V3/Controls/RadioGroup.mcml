@@ -1,0 +1,68 @@
+<Mcml xmlns ="http://schemas.microsoft.com/2006/mcml" 
+      xmlns:cor ="assembly://MSCorLib/System" 
+      xmlns:comm="resx://Library/Library.Resources/V3_Globals" 
+      xmlns:rb ="resx://Library/Library.Resources/V3_Controls_RadioButton" 
+      xmlns:mrb ="resx://Library/Library.Resources/V3_Controls_MenuRadioButton" 
+      xmlns:me ="Me">
+  <UI Name="TestRadioGroup">
+    <Properties>
+      <Choice Name="SampleChoice">
+        <Options>
+          <Command Name="SampleButton1" Description="Cast + More"/>
+          <Command Name="SampleButton2" Description="Record"/>
+          <Command Name="SampleButton3" Description="Advanced Record"/>
+          <Command Name="SampleButton4" Description="Other Showings"/>
+        </Options>
+      </Choice>
+    </Properties>
+    <Content>
+      <Panel Layout="Center">
+        <Children>
+          <Panel Layout="VerticalFlow">
+            <Children>
+              <me:RadioGroup Model="[SampleChoice]"/>
+              <me:MenuRadioGroup Model="[SampleChoice]"/>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  
+  <UI Name="RadioGroup">
+    <Properties>
+      <Choice Name="Model" Choice="$Required"/>
+      <Font Name="GroupLabelFont" Font="font://comm:ButtonText"/>
+      <Color Name="GroupLabelColor" Color="color://comm:OffWhite"/>
+      <cor:Boolean Name="ShowGroupLabel" Boolean="false"/>
+      <Inset Name="GroupLabelMargins" Inset="0, 0, 0, 3"/>
+      <Inset Name="ItemSpacing" Inset="0, 0, 0, 0"/>
+      <Inset Name="ItemLabelMargins" Inset="15, 5, 10, 5"/>
+      <Font Name="Font" Font="font://comm:ButtonText"/>
+      <Size Name="TileSize" Size="50, 50"/>
+      <ILayout Name="FlowLayout" ILayout="global://me:DefaultLayout"/>
+    </Properties>
+    <Rules>
+      <Binding Source="[Model.Description]" Target="[Label.Content]"/>
+      <Binding Source="[Model.Options]" Target="[Repeater.Source]"/>
+    </Rules>
+    <Content>
+      <Panel Name="RootPanel" Layout="VerticalFlow" Navigation="TabGroup, Column">
+        <Children>
+          <Text Name="Label" Color="[GroupLabelColor]" Font="[GroupLabelFont]" Margins="[GroupLabelMargins]" Visible="[ShowGroupLabel]"/>
+          <Repeater Name="Repeater" ContentName="RadioButton" Layout="[FlowLayout]"/>
+        </Children>
+      </Panel>
+    </Content>
+    <Content Name="RadioButton">
+      <rb:RadioButton Model="[Model]" Option="[RepeatedItem]" Font="[Font]" TileSize="[TileSize]" Margins="[ItemSpacing]" LabelMargins="[ItemLabelMargins]"/>
+    </Content>
+  </UI>
+  <UI Name="MenuRadioGroup" BaseUI="me:RadioGroup">
+    <Content Name="RadioButton">
+      <mrb:MenuRadioButton Model="[Model]" Option="[RepeatedItem]" Font="[Font]" Margins="[ItemSpacing]"/>
+    </Content>
+  </UI>
+  <FlowLayout Name="DefaultLayout" Orientation="Vertical" AllowWrap="true"/>
+  <!--LegacyVerticalFlowLayout Name="DefaultLayout" AllowWrap="true"/-->
+</Mcml>

@@ -1,7 +1,7 @@
 <Mcml
   xmlns="http://schemas.microsoft.com/2006/mcml"
   xmlns:cor="assembly://MScorLib/System"
-  xmlns:scr="resx://Library/Library.Resources/V3_Scroller"
+  xmlns:scr="resx://Library/Library.Resources/V3_Controls_ScrollControl"
   xmlns:styles="resx://Library/Library.Resources/V3_Controls_Common_Styles"
   xmlns:z ="assembly://Library/Library.Code.V3"
   xmlns:me="Me">
