@@ -369,9 +369,9 @@ namespace Library.Code.V3
         protected bool _visible;
 
         // Events
-        public event EventHandler<Microsoft.MediaCenter.UI.EventArgs<NavigationDirection>> NavigatedAway;
+        public event EventHandler<EventArgs<NavigationDirection>> NavigatedAway;
 
-        public event EventHandler<Microsoft.MediaCenter.UI.EventArgs<NavigationDirection>> NavigatedTo;
+        public event EventHandler<EventArgs<NavigationDirection>> NavigatedTo;
 
         // Methods
         public SlideDeck()
@@ -562,7 +562,7 @@ namespace Library.Code.V3
             }
         }
 
-        public virtual void OnNavigatedAway(object sender, Microsoft.MediaCenter.UI.EventArgs<NavigationDirection> e)
+        public virtual void OnNavigatedAway(object sender, EventArgs<NavigationDirection> e)
         {
             this.NavigateAwayDirection = e.Value;
             this._visible = false;
@@ -583,7 +583,7 @@ namespace Library.Code.V3
         {
         }
 
-        public virtual void OnNavigatedTo(object sender, Microsoft.MediaCenter.UI.EventArgs<NavigationDirection> e)
+        public virtual void OnNavigatedTo(object sender, EventArgs<NavigationDirection> e)
         {
             this.Initialize();
             this.NavigateToDirection = e.Value;
@@ -919,8 +919,8 @@ namespace Library.Code.V3
     public interface INavigationEventSink
     {
         // Methods
-        void OnNavigatedAway(object sender, Microsoft.MediaCenter.UI.EventArgs<NavigationDirection> e);
-        void OnNavigatedTo(object sender, Microsoft.MediaCenter.UI.EventArgs<NavigationDirection> e);
+        void OnNavigatedAway(object sender, EventArgs<NavigationDirection> e);
+        void OnNavigatedTo(object sender, EventArgs<NavigationDirection> e);
 
         // Properties
         NavigationDirection NavigateAwayDirection { get; }
@@ -930,9 +930,31 @@ namespace Library.Code.V3
     public interface INavigationEventSource
     {
         // Events
-        event EventHandler<Microsoft.MediaCenter.UI.EventArgs<NavigationDirection>> NavigatedAway;
-        event EventHandler<Microsoft.MediaCenter.UI.EventArgs<NavigationDirection>> NavigatedTo;
+        event EventHandler<EventArgs<NavigationDirection>> NavigatedAway;
+        event EventHandler<EventArgs<NavigationDirection>> NavigatedTo;
     }
+
+    public class EventArgs<A> : EventArgs
+    {
+        // Fields
+        private A _value;
+
+        // Methods
+        public EventArgs(A value)
+        {
+            this._value = value;
+        }
+
+        // Properties
+        public A Value
+        {
+            get
+            {
+                return this._value;
+            }
+        }
+    }
+
 
     public class ContextObjectStateEventArgs : EventArgs
     {
