@@ -1,0 +1,173 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml" xmlns:cor ="assembly://MSCorLib/System" xmlns:movies="assembly://ehshell/MediaCenter.Movies" xmlns:video ="assembly://ehshell/MediaCenter.Video" xmlns:draw ="assembly://Microsoft.MediaCenter.UI/Microsoft.MediaCenter.UI.Drawing" xmlns:comm ="res://Microsoft.MediaCenter.Shell!Globals.mcml" xmlns:ctl ="res://Microsoft.MediaCenter.Shell!Controls.mcml" xmlns:slide ="res://Microsoft.MediaCenter.Shell!Slide.mcml" xmlns:base ="res://ehres!Slide.Movie.Details.mcml" xmlns:details ="res://ehres!Slide.Details.mcml" xmlns:me ="Me">
+  <UI Name="Slide_Details_Movie_SimilarMovies" BaseUI="base:Movie_Details_Base">
+    <Properties>
+      <cor:String Name="SlideTitle" String="res://ehres!Movie_Details_SimilarMovies" />
+      <cor:String Name="NoDataString" String="res://ehres!Movie_Details_NoSimilarMovies" />
+    </Properties>
+    <Locals>
+      <ScrollingData Name="ScrollingData" PageSizedScrollStep="false" />
+      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="false" HandlerStage="Bubbled" HandleHomeEndKeys="true" />
+    </Locals>
+    <Rules>
+      <Binding Source="[SlideDeck.SimilarMovies.Options]" Target="[SimilarMoviesRepeater.Source]" />
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.SimilarMovies.Options]" InitialEvaluate="true" />
+          <Equality Source="[SlideDeck.SimilarMovies.Options.Count]" ConditionOp="GreaterThan" Value="0" />
+        </Conditions>
+        <Actions>
+          <Set Target="[HasData.Value]" Value="true" />
+        </Actions>
+      </Rule>
+      <Binding Source="[ScrollingData.CanScrollUp]" Target="[MainScroller.ShowNear]" />
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
+      <Default Target="[ScrollingData.Repeater]" Value="[SimilarMoviesRepeater]" />
+    </Rules>
+    <Content>
+      <Panel Layout="Anchor">
+        <Children>
+          <Clip FadeSize="20" Orientation="Horizontal" Padding="42,0,0,0" Margins="-42,0,0,0">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent,0,82" Top="Parent,0,18" Right="Parent,1,-42"/>
+            </LayoutInput>
+            <Children>
+              <base:SlideTitlePanel Name="SlideTitlePanel" SlideDeck="[SlideDeck]" />
+            </Children>
+          </Clip>
+          <base:MediaStaticInfoPanel Name="MediaStaticInfoPanel" SlideDeck="[SlideDeck]"/>
+          <base:NavPanel Name="NavPanel" SlideDeck="[SlideDeck]"/>
+          <base:CommandsPanel Name="CommandsPanel" SlideDeck="[SlideDeck]" FocusOrder="0"/>
+          <base:MediaPosterPanel Name="MediaPosterPanel" SlideDeck="[SlideDeck]"/>
+          <base:ProgramInfoPanel Name="ProgramInfoPanel" SlideDeck="[SlideDeck]"/>
+          <base:BrandLogoPanel Name="BrandLogoPanel" SlideDeck="[SlideDeck]"/>
+          <Graphic Name="SlideBackgroundStripe" Content="res://ehres!Slide.Background.Stripe.png" MaximumSize="0,263"/>
+          <Panel Name="DynamicSlidePanel" Layout="Anchor" >
+            <Children>
+              <ctl:AccessibleText Name="NoDataText" AccessibleName="res://ehres!Acc_No_Data_Label" Content="">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent,0,50" Top="Parent,0,50" />
+                </LayoutInput>
+              </ctl:AccessibleText>
+              <Scroller Name="MainScroller" Orientation="Vertical" FadeSize="-5" ScrollingData="[ScrollingData]" FocusPadding="10">
+                <Children>
+                  <Repeater Name="SimilarMoviesRepeater">
+                    <Animations>
+                      <Animation Animation="animation://details:Selection.Move" />
+                    </Animations>
+                    <Layout>
+                      <FlowLayout Orientation="Vertical" Spacing="0,8"/>
+                    </Layout>
+                    <Content>
+                      <me:MovieTile DataItem="[RepeatedItem!movies:MovieDataItem]">
+                        <LayoutInput>
+                          <AnchorLayoutInput Left="Parent,0" Right="Parent,1" />
+                        </LayoutInput>
+                      </me:MovieTile>
+                    </Content>
+                  </Repeater>
+                </Children>
+              </Scroller>
+              <slide:VerticalScrollingChevrons Name="Chevrons" ScrollData="[ScrollingData]">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="MainScroller,0.5,-18" Top="MainScroller,0,-37" Bottom="MainScroller,1,37"/>
+                </LayoutInput>
+              </slide:VerticalScrollingChevrons>
+              <Panel Name="Footer">
+                <LayoutInput>
+                  <AnchorLayoutInput Bottom="Parent,1,-17"/>
+                </LayoutInput>
+              </Panel>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="MovieTile" BaseUI="slide:DeepFocusPanel">
+    <Properties>
+      <movies:MovieDataItem Name="DataItem" MovieDataItem="$Required" />
+      <Font Name="TitleFont" FontName="global://comm:MainFontFace" FontSize="21" />
+      <Font Name="SubtitleFont" FontName="global://comm:MainFontFace" FontSize="18" />
+      <cor:String Name="FocusAreaName" String="DetailsContent" />
+    </Properties>
+    <Locals>
+      <ClickHandler Name="ClickHandler"/>
+      <KeyHandler Name="EnterHandler" Key="Enter"/>
+    </Locals>
+    <Rules>
+      <Default Target="[Accessible.Name]" Value="[DataItem.Title]" />
+      <Default Target="[Accessible.Role]" Value="PushButton" />
+      <Default Target="[Accessible.DefaultAction]" Value="res://ehres!Acc_DefaultAction_Button"/>
+      <Default Target="[Accessible.DefaultActionCommand]" Value="[DataItem]"/>
+      <Default Target="[ClickHandler.Command]" Value="[DataItem]" />
+      <Default Target="[EnterHandler.Command]" Value="[DataItem]" />
+      <Default Target="[Accessible.IsPressed]" Value="false"/>
+      <Binding Target="[Accessible.IsUnavailable]" Source="[DataItem.Available]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Rule>
+        <Conditions>
+          <Modified Source="[ClickHandler.Clicking]"/>
+          <Equality Source="[ClickHandler.Clicking]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Accessible.IsPressed]" Value="true"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[EnterHandler.Pressing]"/>
+          <Equality Source="[EnterHandler.Pressing]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Accessible.IsPressed]" Value="true"/>
+        </Actions>
+      </Rule>
+      <Binding Target="[Accessible.IsPressed]" Source="[ClickHandler.Clicking]"/>
+      <Binding Target="[Accessible.IsFocusable]" Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]" Source="[Input.KeyFocus]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[Tile.Scale]" Value="1,1,1" />
+          <Set Target="[Tile.Margins]" Value="-20,-4,0,4" />
+          <Set Target="[MovieName.Alpha]" Value="1.0" />
+        </Actions>
+      </Condition>
+      <Condition Source="[ClickHandler.Clicking]" SourceValue="true">
+        <Actions>
+          <Invoke Target="[DataItem.Invoke]" />
+        </Actions>
+      </Condition>
+      <Binding Source="[DataItem.Image.Values.#Default!Image]" Target="[MoviePoster.Content]">
+        <Conditions>
+          <Modified Source="[DataItem.Image]" InitialEvaluate="true"/>
+          <IsValid Source="[DataItem.Image]" />
+        </Conditions>
+      </Binding>
+      <Binding Source="[DataItem.Title]" Target="[MovieName.Content]" />
+      <Binding Source="[MovieName.Content]" Target="[MovieName.AccessibleValue]"/>
+      <Default Target="[MoviePoster.Content]" Value="res://ehres!Movie.Icon.Default.png" />
+    </Rules>
+    <Content>
+      <Panel Name="Tile" Scale="0.9,0.9,1" Layout="Anchor" Margins="0,0,0,0">
+        <Animations>
+          <Animation Animation="animation://details:Selection.Scale" />
+          <Animation Animation="animation://details:Selection.Move" />
+        </Animations>
+        <Children>
+          <Panel Name="Foreground" Margins="0,0,0,0">
+            <Layout>
+              <FlowLayout Spacing="16,0" Orientation="Horizontal" StripAlignment="Near" ItemAlignment="Center"/>
+            </Layout>
+            <Children>
+              <Graphic Name="MoviePoster" Margins="0,0,0,0" MaximumSize="98,134" MaintainAspectRatio="true" AcquiringImage="res://ehres!Movie.Icon.Default.png" />
+              <ctl:AccessibleText Name="MovieName" AccessibleName="res://ehres!Movie_Details_Title_AccessibleName" Content="" Color="color://comm:OffWhite" Font="[TitleFont]" MaximumLines="2" WordWrap="true" Alpha="0.7"></ctl:AccessibleText>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+</Mcml>

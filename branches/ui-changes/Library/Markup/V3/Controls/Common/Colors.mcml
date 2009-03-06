@@ -47,4 +47,6 @@
 
   <Color Name="LinkSpecifier"           Color="255,   0, 255,   0"/>
 
+  <Color Name="DetailsBlack70Percent" Color="178, 16, 16, 16"/>
+  <Color Name="MediumBlue98Percent" Color="250, 60, 112, 162"/>
 </Mcml>

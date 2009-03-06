@@ -395,9 +395,55 @@ namespace Library
 
             //properties.Add("Gallery", new GalleryV2(properties, _titles));
             properties.Add("Page", gallery);
-            //_session.GoToPage(@"resx://Library/Library.Resources/V3_Controls_RadioGroup", properties);
+
+
+            Library.Code.V3.MovieDetailsSlideDeck deck = new Library.Code.V3.MovieDetailsSlideDeck();
+            //Choice c = new Choice();
+            VirtualList Options = new VirtualList();
+            Library.Code.V3.SlideBlueprint bp = new Library.Code.V3.SlideBlueprint(@"resx://Library/Library.Resources/V3_Slide_Movie_Details_Synopsis", "Synopsis", DateTime.MinValue, DateTime.Now);
+            Library.Code.V3.SlideBlueprint bp2 = new Library.Code.V3.SlideBlueprint(@"resx://Library/Library.Resources/V3_Slide_Movie_Details_Actions", "Actions", DateTime.MinValue, DateTime.Now);
+            Options.Add(bp);
+            Options.Add(bp2);
+            deck.Options = Options;
+            deck.Commands = new ArrayListDataSet();
+            
+            //dummy up some cmds
+            Library.Code.V3.ThumbnailCommand deleteCmd = new Library.Code.V3.ThumbnailCommand(deck);
+            deleteCmd.Description = "Delete";
+            deleteCmd.DefaultImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Remove");
+            deleteCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Remove_Dormant");
+            deleteCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Remove_Focus");
+            deck.Commands.Add(deleteCmd);
+
+            Library.Code.V3.ThumbnailCommand playCmd = new Library.Code.V3.ThumbnailCommand(deck);
+            playCmd.Description = "Play";
+            playCmd.DefaultImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Play");
+            playCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Play_Dormant");
+            playCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Play_Focus");
+            deck.Commands.Add(playCmd);
+
+            deck.Description = "descrip";
+            deck.Synopsis = "this is a syn adfge rh rhyr yhyr hr hr ge ge gtwt rgwe tgew gr ewg weg ewg wetg wrt g rhtytjuhytgfr er gtwrt her  etju ktjy hgt efr erfgetw";
+            deck.AdditionalCommands = new ArrayListDataSet();
+            deck.CommandPopOverlay = new Command();
+            deck.CommandPopOverlay.Invoked += new EventHandler(CommandPopOverlay_Invoked);
+            deck.CommandClearOverlays = new Command();
+            deck.CommandClearOverlays.Invoked += new EventHandler(CommandClearOverlays_Invoked);
+            deck.CommandPushOverlay = new Command();
+            deck.CommandPushOverlay.Invoked += new EventHandler(CommandPushOverlay_Invoked);
+
+            //deck.AdditionalCommands.Add(cmd);
+            properties.Add("SlideDeck", deck);
+            properties.Add("CommandPopOverlay", deck.CommandPopOverlay);
+            properties.Add("CommandClearOverlays", deck.CommandClearOverlays);
+            properties.Add("CommandPushOverlay", deck.CommandPushOverlay);
+
+            deck.Context = "hi";
+            //_session.GoToPage(@"resx://Library/Library.Resources/V3_SlideDeck_Movie_Details", properties);
+
             _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
             _page = gallery;
+            _deck = deck;
             return;
 #endif
 
@@ -455,6 +501,23 @@ namespace Library
             }
         }
 
+        void CommandPushOverlay_Invoked(object sender, EventArgs e)
+        {
+            
+        }
+
+        void CommandClearOverlays_Invoked(object sender, EventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        Library.Code.V3.MovieDetailsSlideDeck _deck;
+        void CommandPopOverlay_Invoked(object sender, EventArgs e)
+        {
+            //throw new NotImplementedException();
+            
+        }
+
         Library.Code.V3.GalleryPage _page;
         internal Library.Code.V3.GalleryItem CreateGalleryItem(Title t)
         {
@@ -488,14 +551,15 @@ namespace Library
 
             item.Invoked += delegate(object sender, EventArgs args)
             {
-                if (this._page != null)
-                    this._page.PageState.TransitionState = Library.Code.V3.PageTransitionState.NavigatingAwayForward;
+                _deck.CommandPushOverlay.Invoke();
+                //if (this._page != null)
+                //    this._page.PageState.TransitionState = Library.Code.V3.PageTransitionState.NavigatingAwayForward;
 
-                Library.Code.V3.GalleryItem galleryItem = (Library.Code.V3.GalleryItem)sender;
+                //Library.Code.V3.GalleryItem galleryItem = (Library.Code.V3.GalleryItem)sender;
 
-                // Navigate to a details page for this item.
-                MovieDetailsPage page = galleryItem.InternalMovieItem.CreateDetailsPage(galleryItem.InternalMovieItem);
-                OMLApplication.Current.GoToDetails(page);
+                //// Navigate to a details page for this item.
+                //MovieDetailsPage page = galleryItem.InternalMovieItem.CreateDetailsPage(galleryItem.InternalMovieItem);
+                //OMLApplication.Current.GoToDetails(page);
             };
 
             return item;

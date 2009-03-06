@@ -1,0 +1,211 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml" 
+      xmlns:cor="assembly://MsCorLib/System" 
+      xmlns:shell="assembly://Microsoft.MediaCenter.Shell/Microsoft.MediaCenter.Shell" 
+      xmlns:me="Me">
+  <Animation Name="Template.ContentHide" Type="ContentChangeHide">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" Value="0,0,0" RelativeTo="Current"/>
+      <PositionKeyframe Time="0.5" Value="-800,0,0"/>
+      <AlphaKeyframe Time="0.0" Value="1.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.5" Value="0.5"/>
+      <ScaleKeyframe Time="0.0" Value="1.0,1.0,0" RelativeTo="Current"/>
+      <ScaleKeyframe Time="0.5" Value="0.5,0.5,0"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Template.ContentShow" Type="ContentChangeShow">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" Value="800,0,0"/>
+      <PositionKeyframe Time="0.5" Value="0,0,0" RelativeTo="Final"/>
+      <AlphaKeyframe Time="0.0" Value="0.5"/>
+      <AlphaKeyframe Time="0.5" Value="1.0" RelativeTo="Final"/>
+      <ScaleKeyframe Time="0.0" Value="0.5,0.5,0"/>
+      <ScaleKeyframe Time="0.5" Value="1.0,1.0,0" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <UI Name="Controller">
+    <Properties>
+      <shell:TurboScrollController Name="TurboController" TurboScrollController="null"/>
+    </Properties>
+  </UI>
+  <UI Name="Background" BaseUI="me:Controller"/>
+  <UI Name="Foreground" BaseUI="me:Controller"/>
+  <UI Name="Mask"/>
+  <UI Name="BaseTemplate" BaseUI="me:Controller">
+    <Properties>
+      <shell:TurboScrollMarker Name="TurboMarker" TurboScrollMarker="null"/>
+    </Properties>
+    <Rules>
+      <Binding Target="[TurboMarker]" Source="[TurboController.ChosenMarker]">
+        <Conditions>
+          <IsValid Source="[TurboController]"/>
+        </Conditions>
+      </Binding>
+      <Default Target="[TurboMarker]" Value="null"/>
+    </Rules>
+  </UI>
+  <UI Name="Position" BaseUI="me:Controller">
+    <Locals>
+      <MathTransformer Name="_Math"/>
+      <cor:Single Name="_Position" Single="0"/>
+      <cor:Int32 Name="_Index" Int32="0"/>
+    </Locals>
+    <Rules>
+      <Default Target="[Accessible.Name]" Value="res://ehres!Acc_Name_TurboScroll_Position"/>
+      <Default Target="[Accessible.Role]" Value="ScrollBar"/>
+      <Binding Target="[Accessible.Value]" Source="[_Index.ToString]"/>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[TurboController.ChosenMarker]"/>
+          <Equality Source="[TurboController.Target.Options.Count]" ConditionOp="GreaterThan" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[_Math.DivideInt]" Value="[TurboController.Target.Options.Count]"/>
+        </Actions>
+      </Rule>
+      <Binding Target="[MySlider.Forward]" Source="[TurboController.Forward]"/>
+      <Binding Target="[_Index]" Source="[TurboController.ChosenMarker.Index]">
+        <Conditions>
+          <IsValid Source="[TurboController.ChosenMarker]"/>
+        </Conditions>
+      </Binding>
+      <Binding Target="[_Position]" Source="[_Index!cor:Single]" Transformer="[_Math]"/>
+      <Binding Target="[MySlider.Value]" Source="[_Position]" />
+    </Rules>
+    <Content>
+      <me:Slider Name="MySlider"/>
+    </Content>
+  </UI>
+  <UI Name="Slider">
+    <Properties>
+      <cor:Single Name="Value" Single="0"/>
+      <cor:Boolean Name="Forward" Boolean="true"/>
+    </Properties>
+    <Locals>
+      <AnchorLayoutInput Name="ShuttlePosition" Left="MyBar,0,0" Top="MyBar,0,-3" Bottom="MyBar,1,3" ContributesToWidth="true" />
+      <AnchorLayoutInput Name="NullPosition" />
+      <cor:Single Name="OldValue" />
+      <Animation Name="ShuttleMove" Type="Move">
+        <Keyframes>
+          <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="EaseIn,0.5,0.5" />
+          <PositionKeyframe Time="1.0" RelativeTo="Final" />
+        </Keyframes>
+      </Animation>
+      <cor:Int32 Name="_Wrapping" Int32="0"/>
+      <Image Name="PositionIndicatorBar" Image="res://ehres!TurboScroll.PositionIndicator.Bar.png"/>
+      <Image Name="PositionIndicatorThumb" Image="res://ehres!TurboScroll.PositionIndicator.Thumb.png"/>
+    </Locals>
+    <Rules>
+      <Default Target="[Accessible.Name]" Value="res://ehres!Acc_Name_TurboScroll_Slider"/>
+      <Default Target="[Accessible.Role]" Value="Slider"/>
+      <Binding Target="[Accessible.Value]" Source="[Value.ToString]"/>
+      <Rule>
+        <Conditions>
+          <Equality Source="[_Wrapping]" ConditionOp="Equals" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[MyShuttle.AttachAnimation]" animation="[ShuttleMove]" InvokePolicy="Synchronous"/>
+          <Set Target="[_Wrapping]" Value="-1"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Forward]" Value="true"/>
+          <Equality Source="[Value]" ConditionOp="LessThan" Value="[OldValue]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[_Wrapping]" Value="1"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Forward]" Value="false"/>
+          <Equality Source="[Value]" ConditionOp="GreaterThan" Value="[OldValue]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[_Wrapping]" Value="1"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[_Wrapping]" ConditionOp="Equals" Value="1"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[MyShuttle.DetachAnimation]" type="Move" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Value]" />
+        </Conditions>
+        <Actions>
+          <Set Target="[OldValue]" Value="[Value]" />
+          <Set Target="[ShuttlePosition.Left.Percent]" Value="[Value]" />
+          <Set Target="[MyShuttle.LayoutInput]" Value="[NullPosition]" ExclusiveApply="false" />
+          <Set Target="[MyShuttle.LayoutInput]" Value="[ShuttlePosition]" ExclusiveApply="false" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Value]"/>
+          <Equality Source="[_Wrapping]" ConditionOp="GreaterThan" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[_Wrapping]" Value="[_Wrapping]">
+            <Transformer>
+              <MathTransformer SubtractInt="1"/>
+            </Transformer>
+          </Set>
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <Panel Layout="Anchor">
+        <LayoutInput>
+          <AnchorLayoutInput Left="Parent,0" Right="Parent,1"/>
+        </LayoutInput>
+        <Children>
+          <Graphic Name="MyShuttle" Image="[PositionIndicatorThumb]" LayoutInput="[ShuttlePosition]"/>
+          <Graphic Name="MyBar" Image="[PositionIndicatorBar]" >
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent,0" Right="Parent,1,-30"/>
+            </LayoutInput>
+          </Graphic>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="Template" BaseUI="me:BaseTemplate">
+    <Properties>
+      <Animation Name="ContentHide" Animation="animation://me:Template.ContentHide"/>
+      <Animation Name="ContentShow" Animation="animation://me:Template.ContentShow"/>
+    </Properties>
+    <Locals>
+      <TransformAnimation Name="_ContentShow" Source="[ContentShow]" Filter="Position"/>
+      <TransformAnimation Name="_ContentHide" Source="[ContentHide]" Filter="Position"/>
+    </Locals>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[TurboController]"/>
+          <Modified Source="[TurboController.Forward]" InitialEvaluate="true"/>
+          <Equality Source="[TurboController.Forward]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[_ContentHide.Magnitude]" Value="1"/>
+          <Set Target="[_ContentShow.Magnitude]" Value="1"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[TurboController]"/>
+          <Modified Source="[TurboController.Forward]" InitialEvaluate="true"/>
+          <Equality Source="[TurboController.Forward]" ConditionOp="Equals" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[_ContentHide.Magnitude]" Value="-1"/>
+          <Set Target="[_ContentShow.Magnitude]" Value="-1"/>
+        </Actions>
+      </Rule>
+    </Rules>
+  </UI>
+</Mcml>
