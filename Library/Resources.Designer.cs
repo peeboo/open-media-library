@@ -1161,6 +1161,20 @@ namespace Library {
             }
         }
         
+        internal static byte[] V3_Controls {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_AccessibleText {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_AccessibleText", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] V3_Controls_Background {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Background", resourceCulture);
@@ -1210,6 +1224,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] V3_Controls_BreadCrumb {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_BreadCrumb", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] V3_Controls_BrowseAnimations {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_BrowseAnimations", resourceCulture);
@@ -1220,6 +1241,13 @@ namespace Library {
         internal static byte[] V3_Controls_BrowseCommand {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_BrowseCommand", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_BrowseCommandOLD {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_BrowseCommandOLD", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -1392,6 +1420,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_Controls_Common_AudioLogo {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_AudioLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap V3_Controls_Common_Browse_Cmd_FocusLoop_Blue {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Common_Browse_Cmd_FocusLoop_Blue", resourceCulture);
@@ -1409,6 +1444,48 @@ namespace Library {
         internal static System.Drawing.Bitmap V3_Controls_Common_Browse_Cmd_FocusLoop_TopLeft {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Common_Browse_Cmd_FocusLoop_TopLeft", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Browse_Cmd_Play {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Browse_Cmd_Play", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Browse_Cmd_Play_Dormant {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Browse_Cmd_Play_Dormant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Browse_Cmd_Play_Focus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Browse_Cmd_Play_Focus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Browse_Cmd_Remove {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Browse_Cmd_Remove", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Browse_Cmd_Remove_Dormant {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Browse_Cmd_Remove_Dormant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Browse_Cmd_Remove_Focus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Browse_Cmd_Remove_Focus", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1727,6 +1804,20 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_Controls_Common_MetaData_HDTV {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_MetaData_HDTV", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_MetaData_Interactive {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_MetaData_Interactive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.IO.UnmanagedMemoryStream V3_Controls_Common_MiniSelect_a {
             get {
                 return ResourceManager.GetStream("V3_Controls_Common_MiniSelect_a", resourceCulture);
@@ -1736,6 +1827,13 @@ namespace Library {
         internal static System.Drawing.Bitmap V3_Controls_Common_NowPlayingPIP_BackgroundMask {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Common_NowPlayingPIP_BackgroundMask", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Overlays_Background_Dark {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Overlays_Background_Dark", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1896,6 +1994,76 @@ namespace Library {
         internal static System.Drawing.Bitmap V3_Controls_Common_Selector_FocusLoop_HotSpot_Vertical {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Common_Selector_FocusLoop_HotSpot_Vertical", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Slide_Background_Commands {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Slide_Background_Commands", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Slide_Background_Stripe {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Slide_Background_Stripe", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Slide_BreadCrumb {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Slide_BreadCrumb", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Slide_BreadCrumb_Selected {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Slide_BreadCrumb_Selected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Slide_Chevron_Left {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Slide_Chevron_Left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Slide_Chevron_Right {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Slide_Chevron_Right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Slide_Reflection_Bottom {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Slide_Reflection_Bottom", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Slide_Reflection_Top {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Slide_Reflection_Top", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Slide_Shadow_Left {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Slide_Shadow_Left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Slide_Shadow_Right {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Slide_Shadow_Right", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -2068,6 +2236,20 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_Controls_Movie_Icon_Default {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Movie_Icon_Default", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_NavPanel {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_NavPanel", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] V3_Controls_RadioButton {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_RadioButton", resourceCulture);
@@ -2089,9 +2271,37 @@ namespace Library {
             }
         }
         
+        internal static byte[] V3_Controls_Slide {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Slide", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_SlideAnimations {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_SlideAnimations", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_SlideDeck {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_SlideDeck", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] V3_Controls_Spinner {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Spinner", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_StaticGraphic {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_StaticGraphic", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -2113,6 +2323,69 @@ namespace Library {
         internal static byte[] V3_Globals {
             get {
                 object obj = ResourceManager.GetObject("V3_Globals", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Slide_Details {
+            get {
+                object obj = ResourceManager.GetObject("V3_Slide_Details", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Slide_Movie_Details {
+            get {
+                object obj = ResourceManager.GetObject("V3_Slide_Movie_Details", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Slide_Movie_Details_Actions {
+            get {
+                object obj = ResourceManager.GetObject("V3_Slide_Movie_Details_Actions", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Slide_Movie_Details_Cast {
+            get {
+                object obj = ResourceManager.GetObject("V3_Slide_Movie_Details_Cast", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Slide_Movie_Details_Extras {
+            get {
+                object obj = ResourceManager.GetObject("V3_Slide_Movie_Details_Extras", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Slide_Movie_Details_SimilarMovies {
+            get {
+                object obj = ResourceManager.GetObject("V3_Slide_Movie_Details_SimilarMovies", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Slide_Movie_Details_Synopsis {
+            get {
+                object obj = ResourceManager.GetObject("V3_Slide_Movie_Details_Synopsis", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_SlideDeck_Details {
+            get {
+                object obj = ResourceManager.GetObject("V3_SlideDeck_Details", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_SlideDeck_Movie_Details {
+            get {
+                object obj = ResourceManager.GetObject("V3_SlideDeck_Movie_Details", resourceCulture);
                 return ((byte[])(obj));
             }
         }

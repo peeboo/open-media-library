@@ -60,6 +60,7 @@
   </UI>
   <UI Name="Button" BaseUI="me:ButtonBase">
     <Properties>
+      <cor:Boolean Name="KeyInteractive" Boolean="true"/>
       <ICommand Name="Model" ICommand="$Required"/>
       <!--ISelectionPolicy Name="SelectionPolicy" ISelectionPolicy="null"/-->
       <cor:String Name="AccessibilityName" String="null"/>

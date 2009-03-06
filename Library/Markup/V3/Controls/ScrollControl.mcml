@@ -276,6 +276,7 @@
       <Image   Name="DisabledImage"       Image="null"/>
       <Image   Name="FocusOverlayImage"   Image="resx://Library/Library.Resources/V3_Controls_Common_Button_Left_Focus_Overlay"/>
       <Image   Name="PressedImage"        Image="resx://Library/Library.Resources/V3_Controls_Common_Button_Pressed_Highlight"/>
+      <cor:Boolean Name="HideIfUnableToScroll" Boolean="true"/>
     </Properties>
     <Locals>
       <ClickHandler Name="Clicker"/>

@@ -1,0 +1,487 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml" 
+      xmlns:cor ="assembly://MSCorLib/System" 
+      xmlns:shl ="assembly://Library/Library.Code.V3" 
+      xmlns:base ="resx://Library/Library.Resources/V3_Controls_Slide" 
+      xmlns:comm ="resx://Library/Library.Resources/V3_Globals" 
+      xmlns:ctl ="resx://Library/Library.Resources/V3_Controls" 
+      xmlns:nav ="resx://Library/Library.Resources/V3_Controls_NavPanel" 
+      xmlns:bc ="resx://Library/Library.Resources/V3_Controls_BrowseCommand" 
+      xmlns:anim="resx://Library/Library.Resources/V3_Controls_SlideAnimations" 
+      xmlns:me ="Me">
+  
+  <UI Name="Details_RulesLayout" BaseUI="base:Slide_Base">
+    <Properties>
+      <shl:DetailsSlideDeck Name="SlideDeck" DetailsSlideDeck="$Required" />
+      <AnchorLayoutInput Name="DynamicPanelAnchor" Left="Parent,0" Top="Parent,0,355" Right="Parent,1" Bottom="Parent,1" />
+      <Inset Name="DynamicPanelMargins" Inset="86,13,86,13" />
+      <AnchorLayoutInput Name="SlideTitlePanelAnchor" Left="Parent,0,85" Top="Parent,0,18" />
+      <AnchorLayoutInput Name="MediaStaticInfoPanelAnchor" Left="Parent,0" Top="Parent,0,153" />
+      <AnchorLayoutInput Name="NavPanelAnchor" Top="Parent,0,136" Right="Parent,1,-42"/>
+      <AnchorLayoutInput Name="CommandsPanelAnchor" Left="Parent,0,48" Top="Parent,0,279" />
+      <AnchorLayoutInput Name="MediaPosterPanelAnchor" Top="Parent,0,177" Right="Parent,1,-42"/>
+      <AnchorLayoutInput Name="ProgramInfoPanelAnchor" Top="Parent,0,191" Right="MediaPosterPanel,0,-13"/>
+      <AnchorLayoutInput Name="BrandLogoPanelAnchor" Top="Parent,0,275" Right="MediaPosterPanel,0,-13"/>
+      <AnchorLayoutInput Name="SlideBackgroundAnchor" Left="Parent,0" Top="Parent,0" Right="Parent,1"/>
+      <cor:String Name="SlideTitle" String="No Slide Name Specified (Rules Layout)" />
+    </Properties>
+    <Rules>
+      <Default Target="[Accessible.Name]" Value="[SlideTitle]" />
+      <Default Target="[DynamicSlidePanel.Margins]" Value="[DynamicPanelMargins]" />
+      <Default Target="[DynamicSlidePanel.LayoutInput]" Value="[DynamicPanelAnchor]" />
+      <Default Target="[DynamicSlidePanel.MaximumSize]" Value="700,0" />
+      <Default Target="[SlideTitlePanel.LayoutInput]" Value="[SlideTitlePanelAnchor]" />
+      <Default Target="[MediaStaticInfoPanel.LayoutInput]" Value="[MediaStaticInfoPanelAnchor]" />
+      <Default Target="[NavPanel.LayoutInput]" Value="[NavPanelAnchor]" />
+      <Default Target="[CommandsPanel.LayoutInput]" Value="[CommandsPanelAnchor]"/>
+      <Default Target="[MediaPosterPanel.LayoutInput]" Value="[MediaPosterPanelAnchor]"/>
+      <Default Target="[ProgramInfoPanel.LayoutInput]" Value="[ProgramInfoPanelAnchor]"/>
+      <Default Target="[BrandLogoPanel.LayoutInput]" Value="[BrandLogoPanelAnchor]"/>
+      <Default Target="[SlideBackgroundStripe.LayoutInput]" Value="[SlideBackgroundAnchor]"/>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[DynamicSlidePanel]"/>
+          <Modified Source="[AnimationSlideOut]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[MediaStaticInfoPanel.AttachAnimation]" animation="[AnimationSnapOut]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[SlideTitlePanel.AttachAnimation]" animation="[AnimationSnapOut]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[NavPanel.AttachAnimation]" animation="[AnimationSnapOut]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[CommandsPanel.AttachAnimation]" animation="[AnimationSnapOut]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MediaPosterPanel.AttachAnimation]" animation="[AnimationSnapOut]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ProgramInfoPanel.AttachAnimation]" animation="[AnimationSnapOut]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[BrandLogoPanel.AttachAnimation]" animation="[AnimationSnapOut]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[SlideBackgroundStripe.AttachAnimation]" animation="[AnimationSnapOut]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[DynamicSlidePanel]"/>
+          <Modified Source="[AnimationSlideIn]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[MediaStaticInfoPanel.AttachAnimation]" animation="[AnimationSnapIn]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[SlideTitlePanel.AttachAnimation]" animation="[AnimationSnapIn]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[NavPanel.AttachAnimation]" animation="[AnimationSnapIn]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[CommandsPanel.AttachAnimation]" animation="[AnimationSnapIn]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MediaPosterPanel.AttachAnimation]" animation="[AnimationSnapIn]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ProgramInfoPanel.AttachAnimation]" animation="[AnimationSnapIn]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[BrandLogoPanel.AttachAnimation]" animation="[AnimationSnapIn]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[SlideBackgroundStripe.AttachAnimation]" animation="[AnimationSnapIn]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <Panel>
+        <Children>
+          <Panel Name="MediaStaticInfoPanel" />
+          <me:SlideTitlePanel Name="SlideTitlePanel" SlideDeck="[SlideDeck]" />
+          <base:NavPanel Name="NavPanel" SlideDeck="[SlideDeck]"/>
+          <me:CommandsPanel Name="CommandsPanel" SlideDeck="[SlideDeck]" />
+          <Panel Name="MediaPosterPanel" />
+          <Panel Name="ProgramInfoPanel" />
+          <Panel Name="BrandLogoPanel" />
+          <Graphic Name="SlideBackgroundStripe"/>
+          <Panel Name="DynamicSlidePanel" />
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="Details_TemplateLayout" BaseUI="base:Slide_Base">
+    <Properties>
+      <shl:DetailsSlideDeck Name="SlideDeck" DetailsSlideDeck="$Required" />
+      <cor:String Name="SlideTitle" String="No Slide Name Specified (Template Layout)" />
+    </Properties>
+    <Rules>
+      <Default Target="[Accessible.Name]" Value="[SlideTitle]" />
+      <Rule>
+        <Conditions>
+          <Modified Source="[AnimationSlideOut]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[NoAnimPanel.AttachAnimation]" animation="[AnimationSnapOut]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[AnimationSlideIn]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[NoAnimPanel.AttachAnimation]" animation="[AnimationSnapIn]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[AnimationSlideOut]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideTitlePanel.AttachAnimation]" animation="[AnimationSlideOut]" InvokePolicy="Synchronous" ExclusiveApply="false" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[AnimationSlideIn]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideTitlePanel.AttachAnimation]" animation="[AnimationSlideIn]" InvokePolicy="Synchronous" ExclusiveApply="false" />
+        </Actions>
+      </Rule>
+      <Changed Source="[SlideDeck]">
+        <Actions>
+          <Set Target="[CommandsPanel.SlideDeck]" Value="[SlideDeck]" />
+          <Set Target="[MediaPosterPanel.SlideDeck]" Value="[SlideDeck]" />
+          <Set Target="[ProgramInfoPanel.SlideDeck]" Value="[SlideDeck]" />
+          <Set Target="[BrandLogoPanel.SlideDeck]" Value="[SlideDeck]" />
+          <Set Target="[MediaStaticInfoPanel.SlideDeck]" Value="[SlideDeck]" />
+          <Set Target="[SlideTitlePanel.SlideDeck]" Value="[SlideDeck]" />
+          <Set Target="[SlideContentPanel.SlideDeck]" Value="[SlideDeck]" />
+        </Actions>
+      </Changed>
+    </Rules>
+    <Content>
+      <Panel Layout="Anchor">
+        <Children>
+          <Panel Name="DynamicSlidePanel" Margins="86,20,86,13">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent,0" Top="Parent,0,355" Right="Parent,1" Bottom="Parent,1" />
+            </LayoutInput>
+            <Children>
+              <base:SlidePanel Name="SlideContentPanel" SlideDeck="[SlideDeck]" />
+            </Children>
+          </Panel>
+          <Panel Name="StaticSlidePanel">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent,0" Top="Parent,0" Right="Parent,1" />
+            </LayoutInput>
+            <Children>
+              <me:SlideTitlePanel Name="SlideTitlePanel" Layout="Anchor" SlideDeck="[SlideDeck]">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent,0,85" Top="Parent,0,20" />
+                </LayoutInput>
+              </me:SlideTitlePanel>
+              <Panel Name="NoAnimPanel" Layout="Anchor">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent,0,85" Top="Parent,0,18" />
+                </LayoutInput>
+                <Children>
+                  <base:NavPanel Name="NavPanel" SlideDeck="[SlideDeck]">
+                    <LayoutInput>
+                      <AnchorLayoutInput Top="Parent,0,136" Right="Parent,1,-42"/>
+                    </LayoutInput>
+                  </base:NavPanel>
+                  <base:SlidePanel Name="MediaPosterPanel" SlideDeck="[SlideDeck]">
+                    <LayoutInput>
+                      <AnchorLayoutInput Top="Parent,0,177" Right="Parent,1,-42"/>
+                    </LayoutInput>
+                  </base:SlidePanel>
+                  <base:SlidePanel Name="ProgramInfoPanel" SlideDeck="[SlideDeck]">
+                    <LayoutInput>
+                      <AnchorLayoutInput Top="Parent,0,191" Right="MediaPosterPanel,0,-13"/>
+                    </LayoutInput>
+                  </base:SlidePanel>
+                  <base:SlidePanel Name="BrandLogoPanel" SlideDeck="[SlideDeck]">
+                    <LayoutInput>
+                      <AnchorLayoutInput Top="Parent,0,275" Right="MediaPosterPanel,0,-13"/>
+                    </LayoutInput>
+                  </base:SlidePanel>
+                  <base:SlidePanel Name="MediaStaticInfoPanel" SlideDeck="[SlideDeck]" Margins="86,0,0,0">
+                    <LayoutInput>
+                      <AnchorLayoutInput Left="Parent,0" Top="Parent,0,153" />
+                    </LayoutInput>
+                  </base:SlidePanel>
+                  <me:CommandsPanel Name="CommandsPanel" SlideDeck="[SlideDeck]">
+                    <LayoutInput>
+                      <AnchorLayoutInput Left="Parent,0,48" Top="Parent,0,279" />
+                    </LayoutInput>
+                  </me:CommandsPanel>
+                  <Graphic Name="SlideBackgroundStripe" Content="resx://Library/Library.Resources/V3_Controls_Common_Slide_Background_Stripe" MaximumSize="0,263">
+                    <LayoutInput>
+                      <AnchorLayoutInput Left="Parent,0" Top="Parent,0" Right="Parent,1"/>
+                    </LayoutInput>
+                  </Graphic>
+                </Children>
+              </Panel>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="SlideTitlePanel">
+    <Properties>
+      <shl:OverlaySlideDeck Name="SlideDeck" OverlaySlideDeck="$Required" />
+      <Font Name="SelectedItemFont" FontName="global://comm:LightFontFace" FontSize="48"/>
+      <Font Name="ItemFont" FontName="global://comm:LightFontFace" FontSize="30"/>
+      <cor:Single Name="FadeSize" Single="50" />
+      <Color Name="ItemColor" Color="color://comm:OffWhite"/>
+      <Inset Name="ItemMargins" Inset="0,0,30,6"/>
+    </Properties>
+    <Locals>
+      <ScrollingData Name="ScrollingData" LockedPosition="0" LockedAlignment="0" />
+      <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled" />
+      <FlowLayout Name="FlowLayout" Orientation="Horizontal" Repeat="WhenTooBig" RepeatGap="0,0" Spacing="0,0" ItemAlignment="Far"/>
+    </Locals>
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[ListRepeater]"/>
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.Options]" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ListRepeater.ForceContentChange]" InvokePolicy="Synchronous" />
+          <Invoke Target="[Scroller.ForceContentChange]" InvokePolicy="Synchronous" />
+        </Actions>
+      </Rule>
+      <Binding Source="[SlideDeck.ChosenIndex]" Target="[ListRepeater.DefaultFocusIndex]" />
+      <Binding Source="[SlideDeck.Options]" Target="[ListRepeater.Source]" />
+    </Rules>
+    <Content>
+      <Clip Name="SlideTitlePanel" Orientation="Vertical" ShowNear="false" ShowFar="true" FadeSize="[FadeSize]" FarOffset="0">
+        <LayoutInput>
+          <AnchorLayoutInput Left="Parent,0" Bottom="Parent,1" Horizontal="Far" Vertical="Far" />
+        </LayoutInput>
+        <Children>
+          <!--Scroller Name="Scroller" Orientation="Horizontal" ScrollingData="[ScrollingData]" Navigation="ContainHorizontal" PreferredAreaOfInterest="Selected"-->
+          <Scroller Name="Scroller" Orientation="Horizontal" ScrollingData="[ScrollingData]" Navigation="ContainHorizontal">
+            <Children>
+              <Repeater Name="ListRepeater" Source="[SlideDeck.Options]" Layout="[FlowLayout]">
+                <Content>
+                  <me:ListItem TitleId="[RepeatedItem!shl:SlideBlueprint.Title!cor:String]" Index="[RepeatedItemIndex]" SlideDeck="[SlideDeck]" Color="[ItemColor]" Font="[ItemFont]" SelectedFont="[SelectedItemFont]" ItemMargins="[ItemMargins]"/>
+                </Content>
+              </Repeater>
+            </Children>
+          </Scroller>
+        </Children>
+      </Clip>
+    </Content>
+  </UI>
+  <UI Name="ListItem">
+    <Properties>
+      <cor:String Name="TitleId" String="$Required"/>
+      <Index Name="Index" Index="$Required" />
+      <shl:OverlaySlideDeck Name="SlideDeck" OverlaySlideDeck="$Required" />
+      <Font Name="Font" Font="$Required"/>
+      <Font Name="SelectedFont" Font="$Required"/>
+      <Color Name="Color" Color="color://comm:OffWhite"/>
+      <Inset Name="ItemMargins" Inset="0,0,0,0"/>
+      <Inset Name="SelectedItemMargins" Inset="0,18,30,0"/>
+    </Properties>
+    <Locals>
+      <!--AreaOfInterestLayoutInput Name="AreaOfInterest" Id="Selected"/-->
+      <shl:AreaOfInterestLayoutInput Name="AreaOfInterest" Id="Selected"/>
+      <ClickHandler Name="Clicker"/>
+    </Locals>
+    <Rules>
+      <!--Default Target="[Input.KeyInteractive]" Value="false"/-->
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+      <Default Target="[Input.CreateInterestOnFocus]" Value="true"/>
+      <!--Default Target="[Input.CreateInterestTarget]" Value="AreaOfInterest"/-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[SlideDeck.ChosenIndex]" Value="[Index.Value!cor:Int32]" />
+        </Conditions>
+        <Actions>
+          <!--Invoke Target="[TextSlideName.SetLayoutInput]" oNewValue="[AreaOfInterest]" InvokePolicy="Synchronous"/-->
+          <!--Set Target="[TextSlideName.LayoutInput]" Value="[AreaOfInterest]" /-->
+          <Invoke Target="[TextSlideName.NavigateInto]" InvokePolicy="Synchronous"/>
+          <!--Set Target="[Input.KeyInteractive]" Value="false"/-->
+          <!--Invoke Target="[Placeholder.NavigateInto]" InvokePolicy="Synchronous"/-->
+          <Set Target="[TextSlideName.Font]" Value="[SelectedFont]"/>
+          <Set Target="[TextSlideName.Margins]" Value="[SelectedItemMargins]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[SlideDeck.ChosenIndex]" Value="[Index.Value!cor:Int32]" ConditionOp="NotEquals" />
+        </Conditions>
+        <Actions>
+          <!--Set Target="[Input.KeyInteractive]" Value="true"/-->
+          <!--Invoke Target="[TextSlideName.SetLayoutInput]" idInput="[AreaOfInterest!ILayoutData.Data]" oNewValue="null" InvokePolicy="Synchronous"/-->
+          <!--Invoke Target="[TextSlideName.NavigateInto]" InvokePolicy="Synchronous"/-->
+          <Set Target="[TextSlideName.Font]" Value="[Font]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.DeepMouseFocus]" Value="true"/>
+          <Equality Source="[Clicker.Clicking]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SlideDeck.ChosenIndex]" Value="[Index.SourceValue]"/>
+        </Actions>
+      </Rule>
+      <Changed Source="[TitleId]" InitialEvaluate="true">
+        <Actions>
+          <Invoke Target="[SlideDeck.GetString]" id="[TitleId]" ResultTarget="[TextSlideName.Content]" InvokePolicy="Synchronous" />
+        </Actions>
+      </Changed>
+    </Rules>
+    <Content>
+      <Text Name="TextSlideName" Font="[Font]" Color="[Color]" Margins="[ItemMargins]"/>
+      <!--me:SlideFocusPlaceholder Name="Placeholder" MinimumSize="1,1" MaximumSize="1,1"/-->
+    </Content>
+  </UI>
+  <UI Name="CommandsPanel" BaseUI="base:DeepFocusPanel">
+    <Properties>
+      <shl:DetailsSlideDeck Name="SlideDeck" DetailsSlideDeck="$Required" />
+      <FlowLayout Name="SlideLayout" Orientation="Vertical" StripAlignment="Near"/>
+    </Properties>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.Commands]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[CommandList.DataSource]" Value="[SlideDeck.Commands]" />
+          <Invoke Target="[CommandList.ForceRefresh]" />
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <bc:CommandList Name="CommandList" DataSource="[SlideDeck.Commands]" FocusArea="[FocusArea]" InListMaker="false" TransitionState="[TransitionState]" ReversedFocusOrder="true" CommandLayout="[SlideLayout]"/>
+      <!--bc:CommandList Name="CommandList" DataSource="[SlideDeck.Commands]" FocusArea="[FocusArea]" InListMaker="false" TransitionState="[TransitionState]"/-->
+    </Content>
+  </UI>
+  <UI Name="ActionTile">
+    <Properties>
+      <Command Name="Command" Command="$Required"/>
+      <Font Name="Font" FontName="global://comm:RegularFontFace" FontSize="24"/>
+      <Font Name="FocusFont" FontName="global://comm:MainFontFace" FontSize="24"/>
+      <Color Name="Color" Color="color://comm:OffWhite"/>
+      <cor:String Name="FocusAreaName" String="DetailsContent" />
+      <AccessibleRole Name="AccessibilityRole" AccessibleRole="PushButton"/>
+    </Properties>
+    <Locals>
+      <ClickHandler Name="ClickHandler" Command="[Command]" HandleEnterSpaceKeys="true" HandlePrimaryMouseButton="true" HandlerStage="Bubbled"/>
+      <KeyHandler Name="EnterHandler" Key="Enter"/>
+    </Locals>
+    <Rules>
+      <Default Target="[Accessible.Name]" Value="[Command.Description]"/>
+      <Default Target="[Accessible.Role]" Value="[AccessibilityRole]"/>
+      <Default Target="[Accessible.DefaultAction]" Value="DefaultAction Button"/>
+      <Default Target="[Accessible.DefaultActionCommand]" Value="[Command]"/>
+      <Binding Source="[Command.Available]" Target="[Tile.Visible]" />
+      <Default Target="[Accessible.IsPressed]" Value="false"/>
+      <Binding Target="[Accessible.IsUnavailable]" Source="[Command.Available]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Rule>
+        <Conditions>
+          <Modified Source="[ClickHandler.Clicking]"/>
+          <Equality Source="[ClickHandler.Clicking]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Accessible.IsPressed]" Value="true"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[EnterHandler.Pressing]"/>
+          <Equality Source="[EnterHandler.Pressing]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Accessible.IsPressed]" Value="true"/>
+        </Actions>
+      </Rule>
+      <Binding Target="[Accessible.IsPressed]" Source="[ClickHandler.Clicking]"/>
+      <Binding Target="[Accessible.IsFocusable]" Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]" Source="[Input.KeyFocus]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[ActionText.Font]" Value="[FocusFont]"/>
+          <Set Target="[ActionText.Alpha]" Value="1.0"/>
+          <Set Target="[Tile.Margins]" Value="-20,0,0,0" />
+        </Actions>
+      </Condition>
+      <Binding Source="[Command.Description]" Target="[ActionText.Content]">
+        <Conditions>
+          <Equality Source="[Command.Available]" Value="true" />
+        </Conditions>
+      </Binding>
+    </Rules>
+    <Content>
+      <Panel Name="Tile" Margins="0,0,0,0" Layout="Anchor">
+        <Animations>
+          <Animation Animation="animation://me:Selection.Move" />
+        </Animations>
+        <Children>
+          <Text Name="ActionText" Font="[Font]" Color="[Color]" Alpha="0.7">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent,0" Top="Parent,0"/>
+            </LayoutInput>
+            <Animations>
+              <Animation Animation="animation://me:Selection.Move" />
+            </Animations>
+          </Text>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="SlideFocusPlaceholder">
+    <Rules>
+      <!--
+              If the user sends focus somewhere else, then don't let them come back to us
+            -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" ConditionOp="ChangedTo" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="false"/>
+        </Actions>
+
+      </Rule>
+
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+
+    </Rules>
+
+    <Content>
+      <Panel Name="Placeholder"/>
+    </Content>
+  </UI>
+  <Animation Name="ShowTile" Type="Show">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>
+      <AlphaKeyframe Time="0.15" Value="1.0" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="HideTile" Type="Hide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="1.0" RelativeTo="Current" Interpolation="Log, 4.0"/>
+      <AlphaKeyframe Time="0.15" Value="0.0" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Selection.Move" Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>
+      <PositionKeyframe Time="0.15" RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
+  <Animation Name="Selection.Scroll" Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>
+      <PositionKeyframe Time="0.15" RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
+  <Animation Name="Selection.GainFocus" Type="GainFocus">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>
+      <PositionKeyframe Time="0.15" RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
+  <Animation Name="Selection.LoseFocus" Type="LoseFocus">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>
+      <PositionKeyframe Time="0.15" RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
+  <Animation Name="Selection.Scale" Type="Scale">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0" />
+      <ScaleKeyframe Time="0.15" RelativeTo="Final" />
+    </Keyframes>
+  </Animation>
+</Mcml>
