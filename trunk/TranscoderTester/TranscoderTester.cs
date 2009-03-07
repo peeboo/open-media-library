@@ -272,7 +272,7 @@ namespace TranscoderTester
             MediaSource source = new MediaSource(disk);
             AddTextString("Starting transcode job on " + source.Disk);
             var host = TranscodingNotifyingService.NewTranscodingServiceProxy();
-            host.Channel.Transcode(source);
+            host.Channel.Transcode(source, Environment.UserName);
             AddTextString("");
         }
 
