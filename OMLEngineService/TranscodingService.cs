@@ -13,20 +13,49 @@ namespace OMLEngineService
 {
     public class TranscodingService : ITranscodingService
     {
-        public void Transcode(MediaSource source)
+        public void Transcode(MediaSource source, string mcxuser)
         {
+            // Modified to ensure a user will only transcode one file at a time.
             string key = source.Key;
             lock (sTranscoders)
+            {
                 if (sTranscoders.ContainsKey(key))
                 {
+                    // Transcoding service is/was allready transcoding the file
                     Utilities.DebugLine("Transcode [Already Processing]: {0}, status={1}", source, sTranscoders[key].Status);
-                    if (sTranscoders[key].Status == TranscodingStatus.Stopped)
-                        sTranscoders[key] = new Transcoder(source);
-                    else
+
+                    if ((sTranscoders[key].Status == TranscodingStatus.BufferReady) ||
+                        (sTranscoders[key].Status == TranscodingStatus.Done) ||
+                        (sTranscoders[key].Status == TranscodingStatus.Initializing))
+                    {
                         NotifyAll(key, sTranscoders[key].Status);
+                        return;
+                    }
                 }
-                else
-                    sTranscoders[key] = new Transcoder(source);
+            }
+
+            // This file if not allready being transcoded. Check user is not allready transcoding
+            lock (sUserSession)
+            {
+                if (sUserSession.ContainsKey(mcxuser))
+                {
+                    // Allready transcoding, cancel the job
+                    Utilities.DebugLine("Transcode [User allready transcoding]: {0}", mcxuser);
+                    if (sTranscoders.ContainsKey(sUserSession[mcxuser]))
+                    {
+                        if ((sTranscoders[sUserSession[mcxuser]].Status == TranscodingStatus.BufferReady) ||
+                            (sTranscoders[sUserSession[mcxuser]].Status == TranscodingStatus.Initializing))
+                        {
+                            Cancel(sUserSession[mcxuser]);
+                        }
+                    }
+                    sUserSession.Remove(mcxuser);
+                }
+            }
+
+            // Start transcoding session
+            sTranscoders[key] = new Transcoder(source);
+            sUserSession[mcxuser] = key;
         }
 
         public void Cancel(string key)
@@ -56,21 +85,25 @@ namespace OMLEngineService
 
         public void RegisterNotifyer(string url, bool register)
         {
+            Utilities.DebugLine("RegisterNotifyer({0}, {1}) #{2}", url, register, sProxies.Count);
+
             lock (sProxies)
                 if (register)
                 {
                     if (sProxies.ContainsKey(url) == false)
+                    {
                         sProxies[url] = true;
+                        Utilities.DebugLine("RegisterNotifyer Success({0}, {1}) #{2}", url, register, sProxies.Count);
+                    }
                 }
                 else
                     sProxies.Remove(url);
-            Utilities.DebugLine("RegisterNotifyer({0}, {1}) #{2}", url, register, sProxies.Count);
         }
 
         #region -- Implementation --
         internal static void NotifyAll(string key, TranscodingStatus status)
         {
-            Utilities.DebugLine("NotifyAll({0}, {1})", key, status);
+            Utilities.DebugLine("NotifyAll({0}, {1}) #{2}", key, status, sProxies.Count);
             lock (sProxies)
                 foreach (var uri in new List<string>(sProxies.Keys))
                 {
@@ -105,6 +138,7 @@ namespace OMLEngineService
         }
 
         static IDictionary<string, Transcoder> sTranscoders = new Dictionary<string, Transcoder>();
+        static IDictionary<string, string> sUserSession = new Dictionary<string, string>();
         static IDictionary<string, bool> sProxies = new Dictionary<string, bool>();
         #endregion
     }
@@ -180,6 +214,7 @@ namespace OMLEngineService
                 if (Status != TranscodingStatus.Error && Status != TranscodingStatus.Done && Status != TranscodingStatus.Stopped)
                 {
                     Status = TranscodingStatus.Stopped;
+                    TranscodingProcess.Exited -= TranscodingProcess_Exited;
                     Process.Kill();
                 }
         }

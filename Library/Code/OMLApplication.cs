@@ -178,7 +178,7 @@ namespace Library
             set
             {
                 isStartingTranscodingJob = value;
-                FirePropertyChanged("IsStartingTranscodingJob");
+                //FirePropertyChanged("IsStartingTranscodingJob");
             }
         }
 
