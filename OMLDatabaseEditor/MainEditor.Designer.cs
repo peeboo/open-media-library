@@ -66,8 +66,10 @@ namespace OMLDatabaseEditor
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.metaDataSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.manageMetadataMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.moveDisksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.transcoderDiagnosticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.indexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -99,7 +101,6 @@ namespace OMLDatabaseEditor
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
-            this.transcoderDiagnosticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -383,6 +384,7 @@ namespace OMLDatabaseEditor
             this.optionsToolStripMenuItem,
             this.toolStripSeparator1,
             this.metaDataSettingsToolStripMenuItem,
+            this.manageMetadataMappingsToolStripMenuItem,
             this.toolStripSeparator4,
             this.moveDisksToolStripMenuItem,
             this.transcoderDiagnosticsToolStripMenuItem});
@@ -393,39 +395,53 @@ namespace OMLDatabaseEditor
             // customizeToolStripMenuItem
             // 
             this.customizeToolStripMenuItem.Name = "customizeToolStripMenuItem";
-            this.customizeToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.customizeToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.customizeToolStripMenuItem.Text = "&Customize";
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(194, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(229, 6);
             // 
             // metaDataSettingsToolStripMenuItem
             // 
             this.metaDataSettingsToolStripMenuItem.Name = "metaDataSettingsToolStripMenuItem";
-            this.metaDataSettingsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.metaDataSettingsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.metaDataSettingsToolStripMenuItem.Text = "MetaData Settings";
             this.metaDataSettingsToolStripMenuItem.Click += new System.EventHandler(this.metaDataSettingsToolStripMenuItem_Click);
+            // 
+            // manageMetadataMappingsToolStripMenuItem
+            // 
+            this.manageMetadataMappingsToolStripMenuItem.Name = "manageMetadataMappingsToolStripMenuItem";
+            this.manageMetadataMappingsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.manageMetadataMappingsToolStripMenuItem.Text = "Preferred MetaData Mappings";
+            this.manageMetadataMappingsToolStripMenuItem.Click += new System.EventHandler(this.manageMetadataMappingsToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(194, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(229, 6);
             // 
             // moveDisksToolStripMenuItem
             // 
             this.moveDisksToolStripMenuItem.Name = "moveDisksToolStripMenuItem";
-            this.moveDisksToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.moveDisksToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.moveDisksToolStripMenuItem.Text = "Move Disks...";
             this.moveDisksToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
+            // 
+            // transcoderDiagnosticsToolStripMenuItem
+            // 
+            this.transcoderDiagnosticsToolStripMenuItem.Name = "transcoderDiagnosticsToolStripMenuItem";
+            this.transcoderDiagnosticsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.transcoderDiagnosticsToolStripMenuItem.Text = "Transcoder Diagnostics";
+            this.transcoderDiagnosticsToolStripMenuItem.Click += new System.EventHandler(this.transcoderDiagnosticsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -719,13 +735,6 @@ namespace OMLDatabaseEditor
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
             // 
-            // transcoderDiagnosticsToolStripMenuItem
-            // 
-            this.transcoderDiagnosticsToolStripMenuItem.Name = "transcoderDiagnosticsToolStripMenuItem";
-            this.transcoderDiagnosticsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.transcoderDiagnosticsToolStripMenuItem.Text = "Transcoder Diagnostics";
-            this.transcoderDiagnosticsToolStripMenuItem.Click += new System.EventHandler(this.transcoderDiagnosticsToolStripMenuItem_Click);
-            // 
             // MainEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -837,6 +846,7 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem fromPreferredSourcesToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem fromPreferredSourcesToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem transcoderDiagnosticsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem manageMetadataMappingsToolStripMenuItem;
     }
 }
 

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -171,6 +171,12 @@
     </Compile>
     <Compile Include="ListEditor.Designer.cs">
       <DependentUpon>ListEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MetadataMappings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MetadataMappings.Designer.cs">
+      <DependentUpon>MetadataMappings.cs</DependentUpon>
     </Compile>
     <Compile Include="MetadataSelect.cs">
       <SubType>Form</SubType>
@@ -369,6 +375,9 @@
     <EmbeddedResource Include="DownloadingBackDropsForm.resx">
       <DependentUpon>DownloadingBackDropsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MetadataMappings.resx">
+      <DependentUpon>MetadataMappings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MetadataSelect.resx">
       <DependentUpon>MetadataSelect.cs</DependentUpon>
