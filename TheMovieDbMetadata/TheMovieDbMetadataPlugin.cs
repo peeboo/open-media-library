@@ -434,7 +434,10 @@ namespace TheMovieDbMetadata
                         {
                             string[] folders = backDropUrl.Split('/');
                             string filename = folders[folders.Length - 2] + folders[folders.Length - 1];
-                            web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, filename).ToString());
+                            if (!File.Exists(Path.Combine(t.BackDropFolder, filename).ToString()))
+                            {
+                                web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, filename).ToString());
+                            }
                         }
                     }
                     catch
