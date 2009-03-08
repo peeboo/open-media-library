@@ -213,24 +213,27 @@ namespace OMLDatabaseEditor.Controls
 
         private void EditPicture(string imagePath)
         {
-            ProcessStartInfo psi = new ProcessStartInfo();
-            // Don't use the system's shell
-            //psi.UseShellExecute = false;
-            psi.UseShellExecute = true;
-            psi.FileName = imagePath;
-            if (psi.Verbs.Contains("Edit"))
+            if (!imagePath.Contains("nocover.jpg"))
             {
-                psi.Verb = "Edit";
-                Process.Start(psi);
-                return;
+                ProcessStartInfo psi = new ProcessStartInfo();
+                // Don't use the system's shell
+                //psi.UseShellExecute = false;
+                psi.UseShellExecute = true;
+                psi.FileName = imagePath;
+                if (psi.Verbs.Contains("Edit"))
+                {
+                    psi.Verb = "Edit";
+                    Process.Start(psi);
+                    return;
+                }
+                else if (psi.Verbs.Contains("edit"))
+                {
+                    psi.Verb = "edit";
+                    Process.Start(psi);
+                    return;
+                }
+                XtraMessageBox.Show("No editor found for this image file type", "Edit Image", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            else if (psi.Verbs.Contains("edit"))
-            {
-                psi.Verb = "edit";
-                Process.Start(psi);
-                return;
-            }
-            XtraMessageBox.Show("No editor found for this image file type", "Edit Image", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void btnDisks_Click(object sender, EventArgs e)

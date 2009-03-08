@@ -24,7 +24,6 @@ namespace OMLDatabaseEditor
         public void RenderMetaDataMappings()
         {
             // Add possible properties to the dialog
-            AddMappingProprty("BoxArt");
             AddMappingProprty("FanArt");
             AddMappingProprty("Genres");
 
