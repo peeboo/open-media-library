@@ -23,32 +23,53 @@ namespace OMLDatabaseEditor
 
         public void RenderMetaDataMappings()
         {
-            //MainEditor._titleCollection.MetadataMap[_propertyName] = pluginResult.PluginName;
-            
+            // Add possible properties to the dialog
+            AddMappingProprty("BoxArt");
+            AddMappingProprty("FanArt");
+            AddMappingProprty("Genres");
+
+
             int i = 0;
             foreach (KeyValuePair<string, string> map in MainEditor._titleCollection.MetadataMap)
             {
-                LabelControl lblProperty = new LabelControl();
-                lblProperty.Name = "lblProperty" + i;
-                lblProperty.Text = map.Key;
-                lblProperty.Dock = DockStyle.Fill;
-                tableLayoutPanel1.Controls.Add(lblProperty);
-                ComboBoxEdit cbeMetaProvider = new ComboBoxEdit();
-                cbeMetaProvider.Name = "cbeMapping" + i;
-                cbeMetaProvider.Text = map.Value;
-                cbeMetaProvider.Properties.Items.Add("");
-                foreach (IOMLMetadataPlugin plugin in MainEditor._metadataPlugins)
-                {
-                    cbeMetaProvider.Properties.Items.Add(plugin.PluginName);
-                }
-                cbeMetaProvider.Dock = DockStyle.Fill;
-                tableLayoutPanel1.Controls.Add(cbeMetaProvider);
+                AddMappingToDialog(i, map.Key, map.Value);
                 i++;
+            }
+        }
+
+
+        private void AddMappingToDialog(int no, string property, string value)
+        {
+            LabelControl lblProperty = new LabelControl();
+            lblProperty.Name = "lblProperty" + no;
+            lblProperty.Text = property;
+            lblProperty.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Controls.Add(lblProperty);
+            ComboBoxEdit cbeMetaProvider = new ComboBoxEdit();
+            cbeMetaProvider.Name = "cbeMapping" + no;
+            cbeMetaProvider.Text = value;
+            cbeMetaProvider.Properties.Items.Add("");
+            foreach (IOMLMetadataPlugin plugin in MainEditor._metadataPlugins)
+            {
+                cbeMetaProvider.Properties.Items.Add(plugin.PluginName);
+            }
+
+            cbeMetaProvider.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Controls.Add(cbeMetaProvider);
+        }
+
+        private void AddMappingProprty(string property)
+        {
+            if (!MainEditor._titleCollection.MetadataMap.ContainsKey(property))
+            {
+                MainEditor._titleCollection.MetadataMap[property] = "";
             }
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            MainEditor._titleCollection.MetadataMap.Clear();
+
             Control[] controls;
             int i = 0;
             while ( (controls = tableLayoutPanel1.Controls.Find("lblProperty" + i, false)).Length != 0)
@@ -60,10 +81,6 @@ namespace OMLDatabaseEditor
                 if (cbeMapping.Text != "")
                 {
                     MainEditor._titleCollection.MetadataMap[lblProperty.Text] = cbeMapping.Text;
-                }
-                else
-                {
-                    MainEditor._titleCollection.MetadataMap.Remove(lblProperty.Text);
                 }
 
                 i++;

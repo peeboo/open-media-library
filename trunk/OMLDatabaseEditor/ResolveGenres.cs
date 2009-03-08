@@ -57,6 +57,13 @@ namespace OMLDatabaseEditor
                 cbeGenre.Name = "cbeGenre" + i;
                 cbeGenre.Text = map.DestinationGenre;
                 cbeGenre.Properties.Items.AddRange(_genreList);
+                
+                // Add the genre from the plugin into the combo box if not allready there.
+                if (!_genreList.Contains(map.SourceGenre))
+                {
+                    cbeGenre.Properties.Items.Add(map.SourceGenre);
+                }
+
                 cbeGenre.Dock = DockStyle.Fill;
                 tableLayoutPanel1.Controls.Add(cbeGenre);
                 RadioGroup grpActions = new RadioGroup();

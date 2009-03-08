@@ -2151,34 +2151,42 @@ namespace OMLEngine
         // copy front cover image and set the menu cover too (resized version)
         public bool CopyFrontCoverFromFile(string source, bool deleteSource)
         {
-            try
+            if (!string.IsNullOrEmpty(source))
             {
-                File.Copy(source, GetDefaultFrontCoverName(), true);
-                if (deleteSource) File.Delete(source);
-                FrontCoverPath = GetDefaultFrontCoverName();
-                BuildResizedMenuImage();
-                return true;
+                try
+                {
+                    File.Copy(source, GetDefaultFrontCoverName(), true);
+                    if (deleteSource) File.Delete(source);
+                    FrontCoverPath = GetDefaultFrontCoverName();
+                    BuildResizedMenuImage();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
-            catch
-            {
-                return false;
-            }
+            return false;
         }
 
         public bool CopyBackCoverFromFile(string source, bool deleteSource)
         {
-            try
+            if (!string.IsNullOrEmpty(source))
             {
-                File.Copy(source, GetDefaultBackCoverName(), true);
-                if (deleteSource) File.Delete(source);
-                BackCoverPath = GetDefaultBackCoverName();
-                
-                return true;
+                try
+                {
+                    File.Copy(source, GetDefaultBackCoverName(), true);
+                    if (deleteSource) File.Delete(source);
+                    BackCoverPath = GetDefaultBackCoverName();
+
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
-            catch
-            {
-                return false;
-            }
+            return false;
         }
 
         public string GetDefaultNoCoverName()
