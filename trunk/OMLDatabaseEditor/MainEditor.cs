@@ -1041,5 +1041,12 @@ namespace OMLDatabaseEditor
                 }
             }
         }
+
+        private void manageMetadataMappingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MetadataMappings mdm = new MetadataMappings();
+            mdm.ShowDialog();
+            _titleCollection.saveTitleCollection();
+        }
     }
 }
