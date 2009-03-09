@@ -1055,7 +1055,7 @@ namespace OMLDatabaseEditor
 
         private void manageMetadataMappingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MetadataMappings mdm = new MetadataMappings();
+            MetadataMappings mdm = new MetadataMappings(this.titleEditor);
             mdm.ShowDialog();
             _titleCollection.saveTitleCollection();
         }

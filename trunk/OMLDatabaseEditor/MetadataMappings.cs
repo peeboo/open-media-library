@@ -14,22 +14,81 @@ namespace OMLDatabaseEditor
     public partial class MetadataMappings : DevExpress.XtraEditors.XtraForm
     {    
         //List<MetaDMapping> _genreMapping = new List<GenreMapping>();
-
-        public MetadataMappings()
+        SortedDictionary<string, string> UnusedProperties = new SortedDictionary<string, string>();
+        SortedDictionary<string, string> UsedProperties = new SortedDictionary<string, string>();
+        OMLDatabaseEditor.Controls.TitleEditor titleeditor;
+        public MetadataMappings(OMLDatabaseEditor.Controls.TitleEditor ptitleeditor)
         {
+            titleeditor = ptitleeditor;
             InitializeComponent();
             RenderMetaDataMappings();
         }
 
         public void RenderMetaDataMappings()
-        {
+        { 
+            // Build properties not assigned to a metadata provider
+            // --------------------------------------------------
+
             // Add possible properties to the dialog
             AddMappingProprty("FanArt");
             AddMappingProprty("Genres");
 
+            // Scan titleeditor for bound controls
+            foreach (Control c in titleeditor.Controls) 
+            {
+                if (c is DevExpress.XtraEditors.PanelControl)
+                {
+                    foreach (Control d in c.Controls)
+                    {
+                        if (d is DevExpress.XtraTab.XtraTabControl)
+                        {
+                            DevExpress.XtraTab.XtraTabControl tabctrl = d as DevExpress.XtraTab.XtraTabControl;
+                            foreach (DevExpress.XtraTab.XtraTabPage tabpage in tabctrl.TabPages)
+                            {
+                                foreach (Control g in tabpage.Controls)
+                                {
+                                    if (g is DevExpress.XtraEditors.TextEdit)
+                                    {
+                                        //c.DataBindings[0].BindingMemberInfo.BindingMember;
+                                        if (g.DataBindings.Count > 0)
+                                        {
+                                            AddMappingProprty(g.DataBindings[0].BindingMemberInfo.BindingMember);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-            int i = 0;
+            // remove OML Specifics
+            UnusedProperties.Remove("WatchedCount");
+            UnusedProperties.Remove("UserStarRating");
+            UnusedProperties.Remove("SortName");
+            UnusedProperties.Remove("ImporterSource");
+            UnusedProperties.Remove("DateAdded");
+
+
+
+            // Build properties assigned to a metadata provider
+            // ----------------------------------------------
             foreach (KeyValuePair<string, string> map in MainEditor._titleCollection.MetadataMap)
+            {
+                UsedProperties[map.Key] = map.Value;
+            } 
+          
+
+            // Add all properties into the dialog box
+            // --------------------------------------
+            int i = 0;
+            foreach (KeyValuePair<string, string> map in UsedProperties)
+            {
+                AddMappingToDialog(i, map.Key, map.Value);
+                i++;
+            }
+        
+            foreach (KeyValuePair<string, string> map in UnusedProperties)
             {
                 AddMappingToDialog(i, map.Key, map.Value);
                 i++;
@@ -61,7 +120,7 @@ namespace OMLDatabaseEditor
         {
             if (!MainEditor._titleCollection.MetadataMap.ContainsKey(property))
             {
-                MainEditor._titleCollection.MetadataMap[property] = "";
+                UnusedProperties[property] = "";
             }
         }
 
