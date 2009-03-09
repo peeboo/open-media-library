@@ -191,6 +191,12 @@
                     <!--<ServiceControl Id="OMLFWServiceControl" Name="OMLFWService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
                   </Component>
+                  <Directory Id ="HELPDIRECTORY" Name="Help">
+                    <Component Id="Open_Media_Library_User_Manual.pdf" Guid="699C7762-E52E-4761-81C3-52B01231A2D2" Win64="yes" DiskId="1">
+                      <File Name="Open_Media_Library_User_Manual.pdf" KeyPath="no"
+                            Source="..\..\Documentation\Open_Media_Library_User_Manual.pdf" Checksum="no" Vital="yes"/>
+                    </Component>
+                  </Directory>
                   <Directory Id="PLUGINSDIRECTORY" Name="Plugins">
                         <Component Id="DVDProfilerPlugin.dll" Guid="b7f12ef4-e500-4d0e-bfbe-d77eae64176c" Win64="yes" DiskId="1">
                             <File Name="DVDProfilerPlugin.dll"
@@ -280,6 +286,14 @@
                                   WorkingDirectory="APPLICATIONROOTDIRECTORY"/>
                         <RegistryValue Root="HKCU" Key="Software\OpenMediaLibrary\ImporterShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
                     </Component>
+                  <Component Id="UserManualShortcut" Guid="">
+                    <Shortcut Id="UserManualStartMenuShortcut"
+                              Name="User Manual"
+                              Description="OML User Manual"
+                              Target="[HELPDIRECTORY]Open_Media_Library_User_Manual.pdf"
+                              WorkingDirectory="HELPDIRECTORY"/>
+                    <RegistryValue Root="HKCU" Key="Software\OpenMediaLibrary\UserManualShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+                  </Component>
                 </Directory>
             </Directory>
         </Directory>
@@ -362,12 +376,14 @@
 			<ComponentRef Id="MediaInfo.dll"/>
 			<ComponentRef Id="TranscoderTester.exe"/>
             <ComponentRef Id="Maximizer.exe"/>
+      <ComponentRef Id="Open_Media_Library_User_Manual.pdf"/>
 
       <!-- Start Menu Shortcuts -->
             <ComponentRef Id="DatabaseEditorShortcut" />
             <ComponentRef Id="ImporterShortcut" />
+      <ComponentRef Id="UserManualShortcut" />
 
-            <!-- Registry Keys -->
+      <!-- Registry Keys -->
             <ComponentRef Id="registry"/>
             <ComponentRef Id="registryFWS"/>
         </Feature>
