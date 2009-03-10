@@ -270,11 +270,15 @@
       <!--AreaOfInterestLayoutInput Name="AreaOfInterest" Id="Selected"/-->
       <shl:AreaOfInterestLayoutInput Name="AreaOfInterest" Id="Selected"/>
       <ClickHandler Name="Clicker"/>
+      <DockLayoutInput Name="Left"   Position="Left"   Alignment="Near"/>
+      <FormLayoutInput Name="Left2" Left="Parent,0" Horizontal="Near"/>
+      <FormLayoutInput Name="Left3" Left="Parent,1" Horizontal="Far"/>
+      <AnchorLayoutInput Name="Left4" Left="0,0" Top="Parent,0" Horizontal="Near"/>
     </Locals>
     <Rules>
       <!--Default Target="[Input.KeyInteractive]" Value="false"/-->
-      <Default Target="[Input.KeyInteractive]" Value="true"/>
-      <Default Target="[Input.CreateInterestOnFocus]" Value="true"/>
+      <!--Default Target="[Input.KeyInteractive]" Value="true"/>
+      <Default Target="[Input.CreateInterestOnFocus]" Value="true"/-->
       <!--Default Target="[Input.CreateInterestTarget]" Value="AreaOfInterest"/-->
       <Rule>
         <Conditions>
@@ -283,9 +287,10 @@
         <Actions>
           <!--Invoke Target="[TextSlideName.SetLayoutInput]" oNewValue="[AreaOfInterest]" InvokePolicy="Synchronous"/-->
           <!--Set Target="[TextSlideName.LayoutInput]" Value="[AreaOfInterest]" /-->
-          <Invoke Target="[TextSlideName.NavigateInto]" InvokePolicy="Synchronous"/>
+          <!--Set Target="[TextSlideName.LayoutInput]" Value="[Left2]"  InvokePolicy="Synchronous"/-->
+          <!--Invoke Target="[TextSlideName.NavigateInto]" InvokePolicy="Synchronous"/-->
           <!--Set Target="[Input.KeyInteractive]" Value="false"/-->
-          <!--Invoke Target="[Placeholder.NavigateInto]" InvokePolicy="Synchronous"/-->
+          <Invoke Target="[Placeholder.NavigateInto]" InvokePolicy="Synchronous"/>
           <Set Target="[TextSlideName.Font]" Value="[SelectedFont]"/>
           <Set Target="[TextSlideName.Margins]" Value="[SelectedItemMargins]"/>
         </Actions>
@@ -295,6 +300,7 @@
           <Equality Source="[SlideDeck.ChosenIndex]" Value="[Index.Value!cor:Int32]" ConditionOp="NotEquals" />
         </Conditions>
         <Actions>
+          <!--Set Target="[TextSlideName.LayoutInput]" Value="[Left3]"  InvokePolicy="Synchronous"/-->
           <!--Set Target="[Input.KeyInteractive]" Value="true"/-->
           <!--Invoke Target="[TextSlideName.SetLayoutInput]" idInput="[AreaOfInterest!ILayoutData.Data]" oNewValue="null" InvokePolicy="Synchronous"/-->
           <!--Invoke Target="[TextSlideName.NavigateInto]" InvokePolicy="Synchronous"/-->
@@ -317,8 +323,12 @@
       </Changed>
     </Rules>
     <Content>
-      <Text Name="TextSlideName" Font="[Font]" Color="[Color]" Margins="[ItemMargins]"/>
-      <!--me:SlideFocusPlaceholder Name="Placeholder" MinimumSize="1,1" MaximumSize="1,1"/-->
+      <Panel>
+        <Children>
+          <Text Name="TextSlideName" Font="[Font]" Color="[Color]" Margins="[ItemMargins]"/>
+          <me:SlideFocusPlaceholder Name="Placeholder" MinimumSize="1,1" MaximumSize="1,1"/>
+        </Children>
+      </Panel>
     </Content>
   </UI>
   <UI Name="CommandsPanel" BaseUI="base:DeepFocusPanel">
@@ -426,7 +436,7 @@
             -->
       <Rule ConditionLogicalOp="Or">
         <Conditions>
-          <Equality Source="[Input.KeyFocus]" ConditionOp="ChangedTo" Value="false"/>
+          <Equality Source="[Input.KeyFocus]" ConditionOp="ChangedTo" Value="true"/>
         </Conditions>
         <Actions>
           <Set Target="[Input.KeyInteractive]" Value="false"/>
@@ -434,6 +444,16 @@
 
       </Rule>
 
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" ConditionOp="ChangedTo" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="true"/>
+        </Actions>
+
+      </Rule>
+      
       <Default Target="[Input.KeyInteractive]" Value="true"/>
 
     </Rules>

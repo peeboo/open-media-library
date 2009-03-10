@@ -92,6 +92,7 @@
       <AnchorEdge Name="JILVerticalAnchor" AnchorEdge="Parent, 1, 70"/>
 
       <cor:Random Name="Random"/>
+      <shell:RepeaterHelper Name="RepeaterHelper"></shell:RepeaterHelper>
     </Properties>
 
     <Locals>
@@ -159,9 +160,11 @@
     </Locals>
 
     <Rules>
-      <Rule>
+      <Rule ConditionLogicalOp="Or">
         <Conditions>
           <Equality Source="[Model.ContentItemTemplate]" ConditionOp="Equals" Value="ListViewItem"/>
+          <Equality Source="[Model.ContentItemTemplate]" ConditionOp="Equals" Value="ListViewItem4x3"/>
+          <Equality Source="[Model.ContentItemTemplate]" ConditionOp="Equals" Value="ListViewItemPoster"/>
         </Conditions>
         <Actions>
           <Set Target="[ShowGallerySelector]" Value="[ListViewShowGallerySelector]"/>
@@ -181,7 +184,28 @@
           <Set Target="[GalleryPanel.Padding]" Value="0, 40, 0, 0"/>
         </Actions>
       </Rule>
-      
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Model.ContentItemTemplate]" ConditionOp="NotEquals" Value="ListViewItem"/>
+          <Equality Source="[Model.ContentItemTemplate]" ConditionOp="NotEquals" Value="ListViewItem4x3"/>
+          <Equality Source="[Model.ContentItemTemplate]" ConditionOp="NotEquals" Value="ListViewItemPoster"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ShowGallerySelector]" Value="true"/>
+          <Set Target="[MoveAnimation]" Value="animation://me:Browse.Gallery.Item.Move"/>
+          <Set Target="[MetadataDelayTime]" Value="0.133"/>
+          <Set Target="[Repeater.Layout]" Value="[FlowLayout]"/>
+
+          <Set Target="[JILVerticalAnchor]" Value="Parent, 1, 70"/>
+          <Set Target="[ShowListViewStrip]" Value="false"/>
+
+          <Set Target="[TopStripTopEdge.Offset]" Value="-140"/>
+          <Set Target="[TopStripBottomEdge.Offset]" Value="-40"/>
+          <Set Target="[BottomStripTopEdge.Offset]" Value="30"/>
+          <Set Target="[BottomStripBottomEdge.Offset]" Value="130"/>
+          <Set Target="[GalleryPanel.Padding]" Value="0, 0, 0, 0"/>
+        </Actions>
+      </Rule>
       <Binding Source="[Page.JILtext]" Target="[Typer.EditableText]"/>
       <Changed Source="[Typer.DisplayValue]">
         <Conditions>
@@ -351,6 +375,23 @@
                  Target="[GalleryLayout]" Value="[Model.ContentItemTemplate]"/>
 
       <!-- If the ContentItemTemplate changes, all our repeated content is invalid.  Re-repeat everything. -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Model.ContentItemTemplate]" ConditionOp="NotEquals" Value="null"/>
+          <Modified Source="[Model.ContentItemTemplate]" />
+        </Conditions>
+        <Actions>
+          <!--Set Target="[GalleryLayout]" Value="[Model.ContentItemTemplate]"/-->
+          <Set Target="[Repeater.ContentName]" Value="[Model.ContentItemTemplate]"/>
+          <Invoke Target="[RepeaterHelper.ForceRefresh]" Repeater="[Repeater]"/>
+          <!--Invoke Target="[Scroller.ForceContentChange]"/-->
+        </Actions>
+      </Rule>
+      <!--Changed Source="[Model.ContentItemTemplate]">
+                <Actions>
+                  <Invoke Target="[RepeaterHelper.ForceRefresh]" Repeater="[Repeater]"/>
+                </Actions>
+            </Changed-->
       <!--Rule>
         <Conditions>
           <Equality Source="[Model.ContentItemTemplate]" ConditionOp="NotEquals" Value="null"/>
@@ -671,6 +712,18 @@
     <Content Name="ListViewItem">
       <me:ListViewItem Page="[Page]" Model="[RepeatedItem!ICommand]" 
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
+      </me:ListViewItem>
+    </Content>
+
+    <Content Name="ListViewItem4x3">
+      <me:ListViewItem Page="[Page]" Model="[RepeatedItem!ICommand]"
+                      Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" LeftContentTemplate="@resx://Library/Library.Resources/V3_Controls_BrowseListViewItem#RecordedTVListViewItemThumbnail">
+      </me:ListViewItem>
+    </Content>
+
+    <Content Name="ListViewItemPoster">
+      <me:ListViewItem Page="[Page]" Model="[RepeatedItem!ICommand]"
+                      Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" LeftContentTemplate="@resx://Library/Library.Resources/V3_Controls_BrowseListViewItem#MovieListViewItemThumbnail">
       </me:ListViewItem>
     </Content>
     

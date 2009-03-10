@@ -241,7 +241,7 @@
           </Set>
         </Actions>
       </Rule>
-      <Rule>
+      <!--Rule>
         <Conditions>
           <Equality Source="[SlideDeck.CopyStatusText]" ConditionOp="Equals" Value=""/>
           <Equality Source="[SlideDeck.StartTime.Year]" Value="1" ConditionOp="GreaterThan"/>
@@ -249,11 +249,11 @@
         <Actions>
           <Set Target="[NextShowing.Visible]" Value="true" />
         </Actions>
-      </Rule>
+      </Rule-->
       <Binding Source="[NextShowingStartDate.Content]" Target="[NextShowingStartDate.AccessibleValue]"/>
       <Binding Source="[NextShowingStartTime.Content]" Target="[NextShowingStartTime.AccessibleValue]"/>
       <Binding Source="[NextShowingEndTime.Content]" Target="[NextShowingEndTime.AccessibleValue]"/>
-      <Binding Source="[SlideDeck.Duration]" Target="[Duration.Content]">
+      <!--Binding Source="[SlideDeck.Duration]" Target="[Duration.Content]">
         <Conditions>
           <Equality ConditionOp="Equals" Source="[NextShowing.Visible]" Value="false"/>
           <Equality ConditionOp="Equals" Source="[SlideDeck.CopyStatusText]" Value=""/>
@@ -262,8 +262,9 @@
         <Transformer>
           <TimeSpanTransformer Format="Words,RoundToMinute"/>
         </Transformer>
-      </Binding>
-      <Binding Source="[Duration.Content]" Target="[Duration.AccessibleValue]"/>
+      </Binding-->
+      <Binding Source="[SlideDeck.Duration]" Target="[Duration.Content]"/>
+      <!--Binding Source="[Duration.Content]" Target="[Duration.AccessibleValue]"/-->
       <!--Binding Source="[SlideDeck.StarRatingImage!draw:BaseImage]" Target="[StarRating.Image]">
         <Conditions>
           <IsValid Source="[SlideDeck.StarRatingImage]"/>

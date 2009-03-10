@@ -211,7 +211,7 @@
   <UI Name="DetailsPane">
     <Properties>
       <z:DetailsPage Name="Page" DetailsPage="$Required"/>
-      <Image Name="MovieDefaultImage" Image="res://ehres!MOVIE.ICON.DEFAULT.png"/>
+      <Image Name="MovieDefaultImage" Image="resx://Library/Library.Resources/V3_Controls_Movie_Icon_Default"/>
     </Properties>
     <Rules>
       <!--Condition Source="[Page.Background]" SourceValue="null">

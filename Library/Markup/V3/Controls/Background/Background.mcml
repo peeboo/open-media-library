@@ -39,6 +39,7 @@
   <UI Name="AnimatedBackground" BaseUI="me:BackgroundBase">
     <Properties>
       <Image Name="Image"       Image="resx://Library/Library.Resources/V3_Controls_Background_Animated" Flippable="true"/>
+      <Image Name="FanArt"/>
       <Image Name="Shard1Image" Source="resx://Library/Library.Resources/V3_Controls_Background_Shard1" Flippable="true"/>
       <Image Name="Layer1Image" Source="resx://Library/Library.Resources/V3_Controls_Background_Layer1" Flippable="true"/>
       <Image Name="Layer2Image" Source="resx://Library/Library.Resources/V3_Controls_Background_Layer2" Flippable="true"/>
@@ -188,7 +189,7 @@
       </Scroller>
     </Content>
   </UI>
-
+  
   <Animation Name="Launch.Shard1" Type="Idle" Loop="-1" CenterPointPercent="0.5, 0.5, 1.0">
     <Keyframes>
       <PositionKeyframe Time="0.0" Value="-750, -200, 0" RelativeTo="Final"/>

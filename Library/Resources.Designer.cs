@@ -1392,9 +1392,9 @@ namespace Library {
             }
         }
         
-        internal static byte[] V3_Controls_BrowsePivotsREWORK {
+        internal static byte[] V3_Controls_BrowsePivotsNEW {
             get {
-                object obj = ResourceManager.GetObject("V3_Controls_BrowsePivotsREWORK", resourceCulture);
+                object obj = ResourceManager.GetObject("V3_Controls_BrowsePivotsNEW", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -1831,9 +1831,58 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_Controls_Common_Overlays_Background_Bottom_Dark {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Overlays_Background_Bottom_Dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Overlays_Background_Bottom_Light {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Overlays_Background_Bottom_Light", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap V3_Controls_Common_Overlays_Background_Dark {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Common_Overlays_Background_Dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Overlays_Background_Top_Dark {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Overlays_Background_Top_Dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Overlays_Background_Top_Light {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Overlays_Background_Top_Light", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Overlays_Divider_Horizontal {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Overlays_Divider_Horizontal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Overlays_Outline {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Overlays_Outline", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Overlays_Shadow {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Overlays_Shadow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -2204,6 +2253,13 @@ namespace Library {
         internal static byte[] V3_Controls_Common_Styles {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Common_Styles", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_Controls_ContextMenu {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_ContextMenu", resourceCulture);
                 return ((byte[])(obj));
             }
         }
