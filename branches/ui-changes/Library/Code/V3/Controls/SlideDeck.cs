@@ -196,7 +196,7 @@ namespace Library.Code.V3
 
         public Microsoft.MediaCenter.UI.Image StarRatingImage
         {
-            get { return null; }
+            get { return new Microsoft.MediaCenter.UI.Image(@"resx://Library/Library.Resources/V3_Controls_Common_Stars_5"); }
         }
 
         public string RecordingStatusText
@@ -226,7 +226,7 @@ namespace Library.Code.V3
         {
             get
             {
-                return "100";
+                return "PG-13, 100 minutes";
             }
         }
 
@@ -297,7 +297,7 @@ namespace Library.Code.V3
         {
             get
             {
-                return "this is a test";
+                return "this is the review";
             }
             set
             {
@@ -337,7 +337,7 @@ namespace Library.Code.V3
         {
             get
             {
-                return "this is a test";
+                return "";
             }
             set
             {

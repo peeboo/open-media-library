@@ -1,43 +1,51 @@
-<Mcml xmlns="http://schemas.microsoft.com/2006/mcml" xmlns:cor ="assembly://MsCorLib/System" xmlns:shell="assembly://Microsoft.MediaCenter.Shell/Microsoft.MediaCenter.Shell" xmlns:ctl ="res://Microsoft.MediaCenter.Shell!Controls.mcml" xmlns:comm="res://Microsoft.MediaCenter.Shell!Globals.mcml" xmlns:draw ="assembly://Microsoft.MediaCenter.UI/Microsoft.MediaCenter.UI.Drawing" xmlns:me="Me">
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml" 
+      xmlns:cor ="assembly://MsCorLib/System" 
+      xmlns:shell="assembly://Library/Library.Code.V3" 
+      xmlns:ctl ="resx://Library/Library.Resources/V3_Controls" 
+      xmlns:comm="resx://Library/Library.Resources/V3_Globals" 
+      xmlns:draw ="assembly://Microsoft.MediaCenter.UI/Microsoft.MediaCenter.UI.Drawing" 
+      xmlns:me="Me">
+  
   <Font Name="ContextualThumbnailText" FontName="global://comm:MainFontFace" FontSize="16" />
   <Font Name="ContextualListItemText" FontName="global://comm:MainFontFace" FontSize="24" />
-  <UI Name="ContextMenu" Code="ListView" Behavior="shell:MenuControl">
+  <!--UI Name="ContextMenu" Code="ListView" Behavior="shell:MenuControl"-->
+  <UI Name="ContextMenu">
     <Properties>
       <shell:ContextMenuData Name="MenuData" ContextMenuData="$Required"/>
-      <shell:ImageSet Name="OverlaysBackgroundBottomDark" ImageSet="global://comm:Overlays.Background.Bottom.Dark"/>
-      <shell:ImageSet Name="OverlaysBackgroundBottomLight" ImageSet="global://comm:Overlays.Background.Bottom.Light"/>
-      <shell:ImageSet Name="OverlaysBackgroundTopLight" ImageSet="global://comm:Overlays.Background.Top.Light"/>
-      <shell:ImageSet Name="OverlaysBackgroundTopDark" ImageSet="global://comm:Overlays.Background.Top.Dark"/>
+      <Image Name="OverlaysBackgroundBottomDark" Image="resx://Library/Library.Resources/V3_Controls_Common_Overlays_Background_Bottom_Dark"/>
+      <Image Name="OverlaysBackgroundBottomLight" Image="resx://Library/Library.Resources/V3_Controls_Common_Overlays_Background_Bottom_Light"/>
+      <Image Name="OverlaysBackgroundTopLight" Image="resx://Library/Library.Resources/V3_Controls_Common_Overlays_Background_Top_Light"/>
+      <Image Name="OverlaysBackgroundTopDark" Image="resx://Library/Library.Resources/V3_Controls_Common_Overlays_Background_Top_Dark"/>
     </Properties>
     <Locals>
       <Environment Name="Environment"/>
     </Locals>
     <Rules>
-      <Binding Source="[Input.DeepKeyFocus]" Target="[MenuData.HasFocus]">
+      <!--Binding Source="[Input.DeepKeyFocus]" Target="[MenuData.HasFocus]">
         <Conditions>
           <IsValid Source="[MenuData]"/>
         </Conditions>
-      </Binding>
+      </Binding-->
       <Rule>
         <Conditions>
           <IsValid Source="[MenuData.SharedItems]"/>
           <Equality Source="[MenuData.SharedItems.Count]" Value="0" ConditionOp="GreaterThan"/>
         </Conditions>
         <Actions>
-          <Set Target="[BottomImage.Image]" Value="[OverlaysBackgroundBottomDark.Values.#Default!Image]"/>
+          <Set Target="[BottomImage.Content]" Value="[OverlaysBackgroundBottomDark]"/>
         </Actions>
       </Rule>
-      <Default Target="[BottomImage.Image]" Value="[OverlaysBackgroundBottomLight.Values.#Default!Image]"/>
+      <Default Target="[BottomImage.Content]" Value="[OverlaysBackgroundBottomLight]"/>
       <Rule>
         <Conditions>
           <IsValid Source="[MenuData.UniqueItems]"/>
           <Equality Source="[MenuData.UniqueItems.Count]" Value="0" ConditionOp="GreaterThan"/>
         </Conditions>
         <Actions>
-          <Set Target="[TopImage.Image]" Value="[OverlaysBackgroundTopLight.Values.#Default!Image]"/>
+          <Set Target="[TopImage.Content]" Value="[OverlaysBackgroundTopLight]"/>
         </Actions>
       </Rule>
-      <Rule>
+      <!--Rule>
         <Conditions>
           <Equality Source="[Environment.Is2DAnimationExperience]" Value="true"/>
         </Conditions>
@@ -45,21 +53,21 @@
           <Invoke Target="[ContextMenuPanel.DetachAnimation]" type="Hide" ExclusiveApply="false" InvokePolicy="Synchronous" />
           <Invoke Target="[ContextMenuPanel.DetachAnimation]" type="Show" ExclusiveApply="false" InvokePolicy="Synchronous" />
         </Actions>
-      </Rule>
-      <Rule>
+      </Rule-->
+      <!--Rule>
         <Conditions>
           <Equality Source="[Environment.RenderingDeviceType]" Value="Gdi"/>
         </Conditions>
         <Actions>
           <Set Target="[BottomImage.Padding]" Value="9, 0, 9, 7"/>
         </Actions>
-      </Rule>
-      <Default Target="[TopImage.Image]" Value="[OverlaysBackgroundTopDark.Values.#Default!Image]"/>
+      </Rule-->
+      <Default Target="[TopImage.Content]" Value="[OverlaysBackgroundTopDark]"/>
       <Binding Target="[Accessible.IsFocusable]" Source="[Input.KeyInteractive]"/>
       <Binding Target="[Accessible.IsFocused]" Source="[Input.KeyFocus]"/>
-      <Default Target="[Accessible.Name]" Value="res://ehres!Acc_Name_ContextMenu"/>
+      <Default Target="[Accessible.Name]" Value="Acc_Name_ContextMenu"/>
       <Default Target="[Accessible.Role]" Value="MenuPopup"/>
-      <Default Target="[Input.Model]" Value="[MenuData]"/>
+      <!--Default Target="[Input.Model]" Value="[MenuData]"/-->
       <Binding Source="[MenuData.SharedItems]" Target="[SharedRepeater.Source]"/>
       <Binding Source="[MenuData.UniqueItems]" Target="[UniqueRepeater.Source]"/>
     </Rules>
@@ -70,9 +78,10 @@
           <Animation Animation="animation://comm:Menu.Hide"/>
         </Animations>
         <Children>
-          <Graphic Name="Background" Image="metaimage://comm:Overlays.Outline" SizingPolicy="SizeToChildren" Padding="5, 5, 5, 5" MaximumSize="287, 0">
+          <Graphic Name="Background" Content="resx://Library/Library.Resources/V3_Controls_Common_Overlays_Outline" SizingPolicy="SizeToChildren" Padding="5, 5, 5, 5" MaximumSize="287, 0">
             <Layout>
-              <FlowLayout Orientation="Vertical" ItemAlignment="Fill" StopOnEmptyItem="false"/>
+              <!--FlowLayout Orientation="Vertical" ItemAlignment="Fill" StopOnEmptyItem="false"/-->
+              <FlowLayout Orientation="Vertical" ItemAlignment="Fill"/>
             </Layout>
             <Children>
               <Graphic Name="TopImage" Padding="9, 9, 9, 9">
@@ -82,7 +91,8 @@
                 <Children>
                   <Repeater Name="UniqueRepeater" Layout="VerticalFlow">
                     <Content>
-                      <me:ContextMenuButton Model="[RepeatedItem!Command]" IconImage="[RepeatedItem!shell:MenuItem.IconImage]"/>
+                      <!--me:ContextMenuButton Model="[RepeatedItem!Command]" IconImage="[RepeatedItem!shell:MenuItem.IconImage]"/-->
+                      <me:ContextMenuButton Model="[RepeatedItem!Command]" IconImage="[RepeatedItem!shell:ThumbnailCommand.DefaultImage]"/>
                     </Content>
                     <Divider>
                       <me:ContextMenuButtonDivider />
@@ -97,7 +107,7 @@
                 <Children>
                   <Repeater Name="SharedRepeater" Layout="VerticalFlow">
                     <Content>
-                      <me:ContextMenuButton Model="[RepeatedItem!Command]" IconImage="[RepeatedItem!shell:MenuItem.IconImage]"/>
+                      <me:ContextMenuButton Model="[RepeatedItem!Command]" IconImage="[RepeatedItem!shell:ThumbnailCommand.DefaultImage]"/>
                     </Content>
                     <Divider>
                       <me:ContextMenuButtonDivider />
@@ -107,9 +117,11 @@
               </Graphic>
             </Children>
           </Graphic>
-          <Graphic Image="metaimage://comm:Overlays.Shadow" SizingPolicy="SizeToConstraint" SkipCutOut="true">
+          <!--Graphic Content="resx://Library/Library.Resources/V3_Controls_Common_Overlays_Shadow" SizingPolicy="SizeToConstraint" SkipCutOut="true"-->
+          <Graphic Content="resx://Library/Library.Resources/V3_Controls_Common_Overlays_Shadow" SizingPolicy="SizeToConstraint">
             <LayoutInput>
-              <AnchorLayoutInput Top="Background,0" Bottom="Background,1,45" Left="Background,0" Right="Background,1,37" ContributesToWidth="false" ContributesToHeight="false"/>
+              <!--AnchorLayoutInput Top="Background,0" Bottom="Background,1,45" Left="Background,0" Right="Background,1,37" ContributesToWidth="false" ContributesToHeight="false"/-->
+              <AnchorLayoutInput Top="Background,0" Bottom="Background,1,0" Left="Background,0" Right="Background,1,37" ContributesToWidth="false" ContributesToHeight="false"/>
             </LayoutInput>
           </Graphic>
         </Children>
@@ -119,12 +131,12 @@
   <UI Name="ContextMenuButton" >
     <Properties>
       <ICommand Name="Model" ICommand="$Required"/>
-      <draw:BaseImage Name="IconImage" BaseImage="null"/>
+      <Image Name="IconImage" Image="null"/>
     </Properties>
     <Locals>
       <Environment Name="Environment"/>
     </Locals>
-    <Rules>
+    <!--Rules>
       <Binding Source="[Model]" Target="[CMButtonItem.Model]" />
       <Rule>
         <Conditions>
@@ -135,7 +147,7 @@
           <Invoke Target="[CMButtonItem.DetachAnimation]" type="Hide" ExclusiveApply="false" InvokePolicy="Synchronous"/>
         </Actions>
       </Rule>
-    </Rules>
+    </Rules-->
     <Content>
       <ctl:Button Name="CMButtonItem" IconImage="[IconImage]" Model="[Model]" NoFocusImage="null" DisabledImage="null" NoFocusColor="color://comm:OffWhite" AccessibilityRole="MenuItem">
         <Animations>
@@ -149,7 +161,7 @@
     <Locals>
       <Environment Name="Environment"/>
     </Locals>
-    <Rules>
+    <!--Rules>
       <Rule>
         <Conditions>
           <Equality Source="[Environment.Is2DAnimationExperience]" Value="true"/>
@@ -159,9 +171,9 @@
           <Invoke Target="[CMDivider.DetachAnimation]" type="Hide" ExclusiveApply="false" InvokePolicy="Synchronous"/>
         </Actions>
       </Rule>
-    </Rules>
+    </Rules-->
     <Content>
-      <Graphic Name="CMDivider" Image="res://ehres!Overlays.Divider.Horizontal.png" Padding="2, 0, 0, 0" Margins="0, 1, 0, 1">
+      <Graphic Name="CMDivider" Content="resx://Library/Library.Resources/V3_Controls_Common_Overlays_Divider_Horizontal" Padding="2, 0, 0, 0" Margins="0, 1, 0, 1">
         <Animations>
           <Animation Animation="animation://comm:MenuItem.Show"/>
           <Animation Animation="animation://comm:MenuItem.Hide"/>
@@ -169,14 +181,19 @@
       </Graphic>
     </Content>
   </UI>
-  <UI Name="ContextMenuHost" Code="shell:ContextMenuHostView">
+  <!--UI Name="ContextMenuHost" Code="shell:ContextMenuHostView"-->
+  <UI Name="ContextMenuHost">
     <Properties>
       <shell:ContextMenuData Name="MenuData" ContextMenuData="$Required"/>
+      <ICommand Name="CommandContextPopOverlay" ICommand="null"/>
     </Properties>
     <Locals>
       <Environment Name="Environment"/>
+      <KeyHandler Name="KeyEsc" Key="Escape" HandlerStage="Routed" Handle="true" Command="[CommandContextPopOverlay]" />
+      <ShortcutHandler Name="Back" Shortcut="Back" HandlerStage="Routed" Handle="true" Command="[CommandContextPopOverlay]" />
+      <ShortcutHandler Name="Clear" Shortcut="Clear" HandlerStage="Routed" Handle="true" Command="[CommandContextPopOverlay]" />
     </Locals>
-    <Rules>
+    <!--Rules>
       <Rule>
         <Conditions>
           <Equality Source="[Environment.Is2DAnimationExperience]" Value="true"/>
@@ -186,20 +203,35 @@
           <Invoke Target="[ContextItem.DetachAnimation]" type="Show" ExclusiveApply="false" InvokePolicy="Synchronous" />
         </Actions>
       </Rule>
-    </Rules>
+    </Rules-->
     <Content>
-      <Panel Name="Margins" Padding="30, 34, 58, 58">
-        <Layout>
-          <shell:ContextMenuLayout ContextualItemMargins="25, 0, 25, 0"/>
-        </Layout>
+      <Panel Layout="Fill">
         <Children>
-          <Host Name="ContextItem" Source="me:GalleryItem.ContextualView">
-            <Animations>
-              <Animation Animation="animation://me:ContextualItem.Show"/>
-              <Animation Animation="animation://me:ContextualItem.Hide"/>
-            </Animations>
-          </Host>
-          <me:ContextMenu MenuData="[MenuData]" />
+          <Panel>
+            <Layout>
+              <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
+            </Layout>
+            <Children>
+              <Panel Name="Margins" Padding="30, 34, 58, 58" Margins="25, 0, 25, 0">
+                <!--Layout>
+          <shell:ContextMenuLayout ContextualItemMargins="25, 0, 25, 0"/>
+        </Layout-->
+                <LayoutInput>
+                  <AnchorLayoutInput Horizontal="Far" Vertical="Far"/>
+                </LayoutInput>
+                <Children>
+                  <Host Name="ContextItem" Source="me:GalleryItem.ContextualView">
+                    <Animations>
+                      <Animation Animation="animation://me:ContextualItem.Show"/>
+                      <Animation Animation="animation://me:ContextualItem.Hide"/>
+                    </Animations>
+                  </Host>
+                  <me:ContextMenu MenuData="[MenuData]" />
+                </Children>
+              </Panel>
+            </Children>
+          </Panel>
+          <me:ActiveContext DismissCmd="[CommandContextPopOverlay]"/>
         </Children>
       </Panel>
     </Content>
@@ -209,12 +241,13 @@
       <Image Name="Image" Image="null"/>
       <cor:String Name="Text" String=""/>
       <FormatTransformer Name="TextTransformer" ToUpper="true"/>
-      <Image Name="NoThumbnailImage" Image="res://ehres!Browse.NoImage.png"/>
+      <!--Image Name="NoThumbnailImage" Image="res://ehres!Browse.NoImage.png"/-->
+      <Image Name="NoThumbnailImage" Image="null"/>
     </Properties>
     <Rules>
       <Condition Source="[Image]" ConditionOp="NotEquals" SourceValue="null">
         <Actions>
-          <Set Target="[Thumb.Image]" Value="[Image]"/>
+          <Set Target="[Thumb.Content]" Value="[Image]"/>
           <Set Target="[Label.Visible]" Value="false"/>
         </Actions>
       </Condition>
@@ -227,7 +260,7 @@
           <Animation Animation="animation://me:ThumbnailContextualItem.Hide"/>
         </Animations>
         <Children>
-          <Graphic Name="Thumb" Image="[NoThumbnailImage]" MaintainAspectRatio="true" SizingPolicy="SizeToConstraint" CenterPointPercent="0.5,0.5,1.0"/>
+          <Graphic Name="Thumb" Content="[NoThumbnailImage]" MaintainAspectRatio="true" SizingPolicy="SizeToConstraint" CenterPointPercent="0.5,0.5,1.0"/>
           <Text Name="Label" Visible="true" Margins="8, 6, 0, 0" Color="color://comm:GalleryItemLabel" WordWrap="true">
             <Font>
               <Font FontName="global://comm:RegularFontFace" FontSize="16"/>
@@ -316,6 +349,40 @@
       <Panel Layout="Fill"/>
     </Content>
   </UI>
+  <UI Name="ActiveContext">
+    <Locals>
+      <ClickHandler Name="Clicker"/>
+      <ScrollingData Name="ScrollData"/>
+    </Locals>
+    <Properties>
+      <ICommand Name="DismissCmd" ICommand="$Required"/>
+    </Properties>
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="false" />
+      <!--Default Target="[Input.MouseInteractive]" Value="true" /-->
+      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false" />
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[Clicker.Clicking]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[DismissCmd.Invoke]"/>
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <Scroller Name="MainPanel">
+        <Children>
+          <Panel MaximumSize="1366, 0">
+            <Children>
+              <ColorFill Content="Transparent" Layout="Fill" />
+            </Children>
+          </Panel>
+        </Children>
+      </Scroller>
+    </Content>
+  </UI>
+  
   <Animation Name="ContextualItem.Show" Type="Show">
     <Keyframes>
       <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="SCurve" RelativeTo="Absolute"/>

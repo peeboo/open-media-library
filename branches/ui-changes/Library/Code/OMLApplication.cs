@@ -34,6 +34,7 @@ namespace Library
         private int iCurrentBackgroundImage = 0;
         private int iTotalBackgroundImages = 0;
         public System.Timers.Timer mainBackgroundTimer;
+        private Library.Code.V3.MoreInfoHooker2 hooker;
 
         public void FixRepeatRate(object scroller, uint val)
         {
@@ -224,6 +225,10 @@ namespace Library
 
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
         {
+            #if LAYOUT_V3
+            this.hooker = new Library.Code.V3.MoreInfoHooker2();
+            #endif
+
             this._session = session;
             AddInHost.Current.MediaCenterEnvironment.PropertyChanged +=new PropertyChangedEventHandler(MediaCenterEnvironment_PropertyChanged);
 
@@ -294,7 +299,12 @@ namespace Library
             return;
 #endif
 #if LAYOUT_V3
+            //hooker.ButtonPressed += new Library.Code.V3.MoreInfoHooker2.RemoteControlDeviceEventHandler(hooker_ButtonPressed);
+            //hooker.remo
+            //Library.Code.V3.KeystrokeParser kp = new Library.Code.V3.KeystrokeParser();
             
+            SetPrimaryBackgroundImage();
+            //primaryBackgroundImage
             //this is temp to test controls
             OMLProperties properties = new OMLProperties();
             properties.Add("Application", this);
@@ -311,6 +321,9 @@ namespace Library
             //commands at top of screen
             gallery.Model.Commands = new ArrayListDataSet(gallery);
 
+            //create the context menu
+            Library.Code.V3.ContextMenuData ctx = new Library.Code.V3.ContextMenuData();
+
             //create the settings cmd
             Library.Code.V3.ThumbnailCommand settingsCmd = new Library.Code.V3.ThumbnailCommand(gallery);
             settingsCmd.Description = "settings";
@@ -320,6 +333,23 @@ namespace Library
             //no invoke for now
             settingsCmd.Invoked += new EventHandler(this.SettingsHandler);
             gallery.Model.Commands.Add(settingsCmd);
+
+
+            //some ctx items
+            Library.Code.V3.ThumbnailCommand viewListCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            viewListCmd.Description = "View List";
+            viewListCmd.Invoked += new EventHandler(viewListCmd_Invoked);
+            Library.Code.V3.ThumbnailCommand viewSmallCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            viewSmallCmd.Invoked += new EventHandler(viewSmallCmd_Invoked);
+            viewSmallCmd.Description = "View Small";
+            ctx.SharedItems.Add(viewListCmd);
+            ctx.SharedItems.Add(viewSmallCmd);
+            ctx.SharedItems.Add(settingsCmd);
+            //ctx.UniqueItems.Add(settingsCmd);
+            Command CommandContextPopOverlay = new Command();
+            properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
+
+            properties.Add("MenuData", ctx);
 
             //the pivots
             gallery.Model.Pivots = new Choice(gallery, "desc", new ArrayListDataSet(gallery));
@@ -388,7 +418,7 @@ namespace Library
             //p4.ContentLabel = "OML";
             //p4.SupportsJIL = true;
             //p4.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
-            //p4.ContentItemTemplate = "ListViewItem";
+            //p4.ContentItemTemplate = "ListViewItemPoster";
             //p4.DetailTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseDetails#Details";
             //gallery.Model.Pivots.Options.Add(p4);
             #endregion threeRowGalleryItemPoster
@@ -501,6 +531,42 @@ namespace Library
             }
         }
 
+        void viewListCmd_Invoked(object sender, EventArgs e)
+        {
+            Library.Code.V3.BrowsePivot p = (Library.Code.V3.BrowsePivot)this._page.Model.Pivots.Chosen;
+            base.FirePropertyChanged("MoreInfo");
+            p.ContentItemTemplate = "ListViewItem";
+        }
+
+        void viewSmallCmd_Invoked(object sender, EventArgs e)
+        {
+            Library.Code.V3.BrowsePivot p = (Library.Code.V3.BrowsePivot)this._page.Model.Pivots.Chosen;
+            base.FirePropertyChanged("MoreInfo");
+            p.ContentItemTemplate = "twoRowGalleryItemPoster";
+        }
+
+        //void hooker_ButtonPressed(object sender, Library.Code.V3.RemoteControlEventArgs e)
+        //{
+        //    //throw new NotImplementedException();
+        //    this.CatchMoreInfo();
+        //}
+
+        public void CatchMoreInfo()
+        {
+            if (this._moreInfo == true)
+                this._moreInfo = false;
+            else
+                this._moreInfo = true;
+            base.FirePropertyChanged("MoreInfo");
+        }
+
+        private bool _moreInfo = false;
+        public bool MoreInfo
+        {
+            get { return this._moreInfo; }
+            set { this._moreInfo = value; }
+        }
+
         void CommandPushOverlay_Invoked(object sender, EventArgs e)
         {
             
@@ -532,7 +598,7 @@ namespace Library
             item.MetadataTop = releaseDate.Year.ToString();
 
 
-            item.Description = "This is a Test";
+            //item.Description = "This is a Test";
             item.ItemId = 1;
             string starRating = "5";
             item.StarRating = starRating;
@@ -565,6 +631,24 @@ namespace Library
             return item;
         }
 
+        //public DetailsPage CreateDetailsPage(int movieId)
+        //{
+        //    DetailsPage page = new DetailsPage();
+        //    DataRow movieData = this.GetMovieData(movieId);
+        //    MovieMetadata metadata = this.ExtractMetadata(movieData, movieId);
+        //    page.Description = "movie details";
+        //    page.Title = metadata.Title;
+        //    page.Summary = metadata.Summary;
+        //    page.Background = LoadImage(metadata.ImagePath);
+        //    string cast = string.Empty;
+        //    foreach (string actor in metadata.Actors)
+        //    {
+        //        DataSetHelpers.AppendCommaSeparatedValue(ref cast, actor);
+        //    }
+        //    page.Metadata = string.Format(Resources.Movies_Details_Metadata, new object[] { metadata.Genre, cast, metadata.Length, metadata.CountryShortName, metadata.ReleaseDate.Year });
+        //    this.CreateDetailsCommands(page, movieData, movieId);
+        //    return page;
+        //}
         
         public void Uninitialize()
         {

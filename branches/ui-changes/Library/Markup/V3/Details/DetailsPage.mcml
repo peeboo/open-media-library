@@ -1,17 +1,17 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
-	  xmlns:z="assembly://TestHarness/TestHarness"
+	  xmlns:shl="assembly://Library/Library.Code.V3"
 	  xmlns:sys="assembly://mscorlib/System"
-	  xmlns:styles="resx://TestHarness/TestHarness.Resources/Styles"
-	  xmlns:core="resx://TestHarness/TestHarness.Resources/CoreControls"
-    xmlns:pip="resx://TestHarness/TestHarness.Resources/GalleryPage"
-      xmlns:scr="resx://TestHarness/TestHarness.Resources/Scroller"
+	  xmlns:styles="resx://Library/Library.Resources/V3_Controls"
+	  xmlns:core="resx://Library/Library.Resources/V3_Globals"
+    xmlns:pip="resx://Library/Library.Resources/V3_GalleryPage"
+      xmlns:scr="resx://Library/Library.Resources/V3_Controls_ScrollControl"
 	  xmlns:me="Me">
 
   <!-- A details page -->
   <UI Name="DetailsPage">
     <Properties>
-      <z:DetailsPage Name="Page" DetailsPage="$Required"/>
-      <z:Application Name="Application" Application="$Required"/>
+      <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
+      <shl:Application Name="Application" Application="$Required"/>
     </Properties>
 
     <Locals>
@@ -197,8 +197,8 @@
   <!-- The primary display area of a details page -->
   <UI Name="DetailsPane">
     <Properties>
-      <z:DetailsPage Name="Page" DetailsPage="$Required"/>
-      <Image Name="MovieDefaultImage" Image="res://ehres!MOVIE.ICON.DEFAULT.png"/>
+      <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
+      <Image Name="MovieDefaultImage" Image="resx://Library/Library.Resources/V3_Controls_Movie_Icon_Default"/>
     </Properties>
     <Rules>
       <Condition Source="[Page.Background]" SourceValue="null">

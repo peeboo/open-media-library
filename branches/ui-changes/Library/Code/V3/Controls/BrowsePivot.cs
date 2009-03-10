@@ -95,7 +95,11 @@ namespace Library.Code.V3
             }
             set
             {
-                this.m_stContentItemTemplate = value;
+                if (this.m_stContentItemTemplate != value)
+                {
+                    this.m_stContentItemTemplate = value;
+                    base.FirePropertyChanged("ContentItemTemplate");
+                }
             }
         }
 

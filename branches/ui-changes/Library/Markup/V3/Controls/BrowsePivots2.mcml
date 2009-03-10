@@ -148,18 +148,18 @@
       <!--new -->
       <Condition Source="[RightHandler.Pressing]" SourceValue="true">
         <Actions>
-          <Set Target="[NavigationDirection.Value]" Value="right"/>
-          <PlayAnimation Target="[RightArrow]" Animation="animation://me:Browse.Pivots.Arrow.Right.Jiggle"/>
+          <!--Set Target="[NavigationDirection.Value]" Value="right"/>
+          <PlayAnimation Target="[RightArrow]" Animation="animation://me:Browse.Pivots.Arrow.Right.Jiggle"/-->
           <Invoke Target="[ScrollDownCommand.Invoke]"/>
-          <Invoke Target="[ScrollData.ScrollDown]"/>
+          <!--Invoke Target="[ScrollData.ScrollDown]"/-->
         </Actions>
       </Condition>
       <Condition Source="[LeftHandler.Pressing]" SourceValue="true">
         <Actions>
-          <Set Target="[NavigationDirection.Value]" Value="left"/>
-          <PlayAnimation Target="[LeftArrow]" Animation="animation://me:Browse.Pivots.Arrow.Left.Jiggle"/>
+          <!--Set Target="[NavigationDirection.Value]" Value="left"/>
+          <PlayAnimation Target="[LeftArrow]" Animation="animation://me:Browse.Pivots.Arrow.Left.Jiggle"/-->
           <Invoke Target="[ScrollUpCommand.Invoke]"/>
-          <Invoke Target="[ScrollData.ScrollUp]"/>
+          <!--Invoke Target="[ScrollData.ScrollUp]"/-->
         </Actions>
       </Condition>
       <Changed Source="[PivotInvoked.Invoked]">
@@ -471,7 +471,7 @@
                   <Animation Animation="animation://me:Browse.Pivots.Panel.Move"/>
                 </Animations>
                 <Children>
-                  <Repeater Name="Repeater" MouseInteractive="true" DiscardOffscreenVisuals="true" Visible="true" Layout="[FlowLayout]">
+                  <Repeater Name="Repeater" MouseInteractive="true" DiscardOffscreenVisuals="true" Visible="true" Layout="[FlowLayout]" Navigation="RememberFocus">
                     <Content>
                       <me:PivotButton Option="[RepeatedItem!shl:BrowsePivot]" Pivots="[Pivots]" PivotInvoked="[PivotInvoked]"
                                     SelectedIndex="[SelectedIndex]" Index="[RepeatedItemIndex]" FocusArea="[FocusArea]"

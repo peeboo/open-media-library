@@ -122,6 +122,7 @@
       <Command Name="ScrollDownCommand"/>
 
       <!--FlowLayout Name="FlowLayout" Orientation="Horizontal" Repeat="Always" RepeatGap="0,0" Spacing="0,0"/-->
+      <FlowLayout Name="FlowLayout" Orientation="Horizontal" RepeatGap="0,0" Spacing="0,0" ItemAlignment="Center" Repeat="Always"/>
       <MajorMinor Name="ItemGap" MajorMinor="62,0"/>
       <MajorMinor Name="LoopGap" MajorMinor="220,0"/>
 
@@ -159,8 +160,8 @@
 
       <Default Target="[ScrollData.Repeater]" Value="[Repeater]"/>
 
-      <!--Binding Source="[LoopGap]" Target="[FlowLayout.RepeatGap]"/>
-      <Binding Source="[ItemGap]" Target="[FlowLayout.Spacing]"/-->
+      <Binding Source="[LoopGap]" Target="[FlowLayout.RepeatGap]"/>
+      <Binding Source="[ItemGap]" Target="[FlowLayout.Spacing]"/>
       <Binding Source="[ScrollData]" Target="[Scroller.ScrollingData]"/>
 
       <Default Target="[Input.Enabled]" Value="true"/>
@@ -185,7 +186,7 @@
       <!-- Don't wrap or calculate width if we have a small set of pivots -->
       <Condition Source="[Pivots.Options.Count]" ConditionOp="LessThan" SourceValue="13">
         <Actions>
-          <!--Set Target="[FlowLayout.Repeat]" Value="Never"/-->
+          <Set Target="[FlowLayout.Repeat]" Value="Never"/>
           <Set Target="[SelectedIndex.MinValue]" Value="0"/>
           <Set Target="[SelectedIndex.MaxValue]" Value="[Pivots.Options.Count]">
             <Transformer>
@@ -368,7 +369,7 @@
       <Condition Source="[RightHandler.Pressing]" SourceValue="true">
         <Actions>
           <Invoke Target="[ScrollDownCommand.Invoke]"/>
-          <Invoke Target="[ScrollData.ScrollDown]"/>
+          <!--Invoke Target="[ScrollData.ScrollDown]"/-->
         </Actions>
       </Condition>
 
@@ -401,7 +402,7 @@
       <Condition Source="[LeftHandler.Pressing]" SourceValue="true">
         <Actions>
           <Invoke Target="[ScrollUpCommand.Invoke]"/>
-          <Invoke Target="[ScrollData.ScrollUp]"/>
+          <!--Invoke Target="[ScrollData.ScrollUp]"/-->
         </Actions>
       </Condition>
 
@@ -673,11 +674,12 @@
                 <Children>
                   <!--me:PivotFocusPlaceholder Layout="Fill" MaximumSize="100,10"></me:PivotFocusPlaceholder-->
                   <!--Repeater Name="Repeater" MouseInteractive="true" DiscardOffscreenVisuals="true" Visible="true" Layout="[FlowLayout]"-->
-                  <Repeater Name="Repeater" MouseInteractive="true" DiscardOffscreenVisuals="false" Visible="true" Layout="HorizontalFlow" DefaultFocusIndex="0" Navigation="RememberFocus">
+                  <!--Repeater Name="Repeater" MouseInteractive="true" Visible="true" Layout="HorizontalFlow" DefaultFocusIndex="0" Navigation="RememberFocus"-->
+                  <Repeater Name="Repeater" MouseInteractive="true" Visible="true" DefaultFocusIndex="0" Navigation="RememberFocus" Layout="[FlowLayout]">
                     <!-- new -->
-                    <Layout>
+                    <!--Layout>
                       <FlowLayout Orientation="Horizontal" RepeatGap="100,0" Spacing="130,0" ItemAlignment="Center" Repeat="Never"/>
-                    </Layout>
+                    </Layout-->
                     <!-- end new -->
                     <Content>
 

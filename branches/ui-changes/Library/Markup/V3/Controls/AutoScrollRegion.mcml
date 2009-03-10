@@ -49,7 +49,7 @@
       <Binding Target="[Accessible.IsPressed]" Source="[AutoScroll.IsActive]"/>
       <Binding Target="[Accessible.IsFocusable]" Source="[Input.Enabled]"/>
       <Binding Target="[Accessible.IsFocused]" Source="[Input.MouseFocus]"/>
-      <Default Target="[Accessible.DefaultAction]" Value="res://ehres!Acc_DefaultAction_Button"/>
+      <Default Target="[Accessible.DefaultAction]" Value="Button"/>
       <Default Target="[Accessible.Role]" Value="[AccessibilityRole]"/>
       <Changed Source="[Clicker.Invoked]">
         <Actions>

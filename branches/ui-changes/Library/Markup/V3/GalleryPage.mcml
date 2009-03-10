@@ -14,6 +14,7 @@
   <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseGallery"/>
   <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem"/>
   <Aggregate Source="resx://Library/Library.Resources/V3_SlideDeck_Movie_Details"/>
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_ContextMenu"/>
 
 
   <Image Name="Browse.TitleShadow" Source="resx://Library/Library.Resources/V3_Controls_Common_Browse_TitleShadow" NineGrid="100, 0, 100, 62" Flippable="true"/>
@@ -23,23 +24,77 @@
   <UI Name="GalleryPage">
     <Properties>
       <shell:MovieDetailsSlideDeck Name="SlideDeck" MovieDetailsSlideDeck="$Required" />
+      <shell:ContextMenuData Name="MenuData" ContextMenuData="$Required" />
       <shell:GalleryPage Name="Page" GalleryPage="$Required"/>
       <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <!--wireup for slidedeck-->
       <Command Command="$Required" Name="CommandPopOverlay"/>
       <Command Command="$Required" Name="CommandClearOverlays"/>
       <Command Command="$Required" Name="CommandPushOverlay"/>
+      <!--end wireup for slidedeck-->
+      <!-- wireup for context-->
+      <Command Command="$Required" Name="CommandContextPopOverlay"/>
+      <!--end wireup for context-->
     </Properties>
     <Locals>
       <ShortcutHandler Name="BackHandler" Shortcut="Back" Handle="false" HandlerStage="Bubbled"/>
+
+      <cor:Boolean Name="ContextMenuVisible" Boolean="false"/>
+      <cor:Boolean Name="SlideMenuVisible" Boolean="false"/>
+      <EditableText   Name="FocusArea" Value="none"/>
     </Locals>
     <Rules>
+      <!-- wireup for the Details menu -->
+      <Binding Target="[ContextMenu.Visible]" Source="[ContextMenuVisible]"/>
+      <Binding Target="[SlideMenu.Visible]" Source="[SlideMenuVisible]"/>
+      <Binding Target="[Content.FocusArea]" Source="[FocusArea]"/>
+
+      <Changed Source="[FocusArea.Value]">
+        <Actions>
+          <DebugTrace Message="FocusArea.Value: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[FocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Changed>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Modified Source="[Application.MoreInfo]"/>
+          <Equality Source="[ContextMenuVisible]" Value="false" />
+          <Equality Source="[SlideMenuVisible]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ContextMenuVisible]" Value="true"/>
+          <Set Target="[FocusArea.Value]" Value="Context"/>
+          <Invoke Target="[ContextMenu.NavigateInto]" />
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Modified Source="[Application.MoreInfo]"/>
+          <Equality Source="[ContextMenuVisible]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ContextMenuVisible]" Value="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[CommandContextPopOverlay.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ContextMenuVisible]" Value="false"/>
+        </Actions>
+      </Rule>
+        <!-- wireup for details slide-->
       <Rule ConditionLogicalOp="Or">
         <Conditions>
           <Modified Source="[CommandPopOverlay.Invoked]"/>
           <Modified Source="[CommandClearOverlays.Invoked]"/>
         </Conditions>
         <Actions>
-          <Set Target="[SlipNSlide.Visible]" Value="false"/>
+          <Set Target="[SlideMenuVisible]" Value="false"/>
         </Actions>
       </Rule>
       <Rule>
@@ -47,7 +102,9 @@
           <Modified Source="[CommandPushOverlay.Invoked]"/>
         </Conditions>
         <Actions>
-          <Set Target="[SlipNSlide.Visible]" Value="true"/>
+          <Set Target="[SlideMenuVisible]" Value="true"/>
+          <Set Target="[FocusArea.Value]" Value="Context"/>
+          <Invoke Target="[SlideMenu.NavigateInto]" />
         </Actions>
       </Rule>
       <Rule>
@@ -67,6 +124,12 @@
           <Set Target="[Page.PageState.TransitionState]" Value="[Page.PageStateEx.TransitionState]"/>
         </Actions>
       </Rule>
+      <!-- Only show the left content if we were given a template -->
+      <Condition Source="[Application.PrimaryBackgroundImage]" ConditionOp="NotEquals" SourceValue="null">
+        <Actions>
+          <Set Target="[Background.Source]" Value="comm:FanArtBackground"/>
+        </Actions>
+      </Condition>
     </Rules>
     <Content>
       <Panel>
@@ -84,9 +147,14 @@
           </Animation>
         </Animations>
         <Children>
-          <me:SlideDeck_Movie_Details Name="SlipNSlide" Visible="false" SlideDeck="[SlideDeck]" CommandPopOverlay="[CommandPopOverlay]" CommandClearOverlays="[CommandClearOverlays]"/>
-          <me:Browse Page="[Page]" Application="[Application]" Model="[Page.Model]" PageState="[Page.PageState]"/>
-          <comm:AnimatedBackground/>
+          <me:ContextMenuHost Name="ContextMenu" CommandContextPopOverlay="[CommandContextPopOverlay]" Visible="[ContextMenuVisible]" MenuData="[MenuData]">
+            <!--LayoutInput>
+              <FormLayoutInput Right="Parent,1,-20" Bottom="Parent,1,-20" ContributesToHeight="false" ContributesToWidth="false"/>
+            </LayoutInput-->
+          </me:ContextMenuHost>
+          <me:SlideDeck_Movie_Details Name="SlideMenu" Visible="[SlideMenuVisible]" SlideDeck="[SlideDeck]" CommandPopOverlay="[CommandPopOverlay]" CommandClearOverlays="[CommandClearOverlays]"/>
+          <me:Browse Name="Content" Page="[Page]" Application="[Application]" Model="[Page.Model]" PageState="[Page.PageState]" FocusArea="[FocusArea]"/>
+          <comm:AnimatedBackground Name="Background" FanArt="[Application.PrimaryBackgroundImage]"/>
         </Children>
       </Panel>
     </Content>
@@ -105,6 +173,7 @@
 
       <cor:Boolean Name="InListMaker" Boolean="false"/>
       <EditableText Name="CurrentState"/>
+      <EditableText   Name="FocusArea" Value="none"/>
     </Properties>
 
     <Locals>
@@ -118,7 +187,7 @@
       <IntRangedValue Name="ItemIndexOverride"/>
       <!-- used by galleries that override the count/index UI -->
       <BooleanChoice  Name="IsOneRow"/>
-      <EditableText   Name="FocusArea" Value="none"/>
+      <!--EditableText   Name="FocusArea" Value="none"/-->
       <!-- tracks the focus on a gross scale -->
       <EditableText   Name="NavigationDirection" Value="none"/>
       <!-- Used to trigger directional animations -->
@@ -141,7 +210,15 @@
         </Actions>
       </Rule>
 
+      <!--Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="PIP"/>
+        </Actions>
+      </Condition-->
       <Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" ConditionOp="NotEquals" Value="Context"/>
+        </Conditions>
         <Actions>
           <Set Target="[FocusArea.Value]" Value="PIP"/>
         </Actions>
@@ -317,6 +394,7 @@
         <Conditions>
           <Equality Source="[FocusArea.Value]" Value="Pivot"/>
           <Equality Source="[FocusArea.Value]" Value="Command"/>
+          <Equality Source="[FocusArea.Value]" Value="Context"/>
         </Conditions>
         <Actions>
           <Set Target="[FocusEnabler.Value]" Value="false"/>
@@ -359,13 +437,25 @@
 
     <Rules>
       <!-- If the PIP has the focus dim the entire navigation area -->
-      <Condition Source="[FocusArea.Value]" SourceValue="PIP">
+      <!--Condition Source="[FocusArea.Value]" SourceValue="PIP">
         <Actions>
           <Set Target="[NavAreaPanel.Margins]" Value="23, 55, -23, -15"/>
           <Set Target="[NavAreaPanel.Scale]" Value="0.95, 0.95, 1.0"/>
           <Set Target="[NavAreaPanel.Alpha]" Value="0.6"/>
         </Actions>
-      </Condition>
+      </Condition-->
+
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" Value="PIP"/>
+          <Equality Source="[FocusArea.Value]" Value="Context"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NavAreaPanel.Margins]" Value="23, 55, -23, -15"/>
+          <Set Target="[NavAreaPanel.Scale]" Value="0.95, 0.95, 1.0"/>
+          <Set Target="[NavAreaPanel.Alpha]" Value="0.6"/>
+        </Actions>
+      </Rule>
 
       <!-- The command list instance is changed on navigating back to the page as they may have changed, so force resetting the commands. -->
       <Changed Source="[Model.Commands]">
@@ -960,6 +1050,11 @@
           <Set Target="[Content.Model]" Value="[Model.Pivots.Chosen!shell:IBrowsePivot]"/>
         </Actions>
       </Changed>
+      <Changed Source="[Model.Pivots.Chosen!shell:IBrowsePivot.ContentItemTemplate]">
+                <Actions>
+                  <Invoke Target="[Content.ForceContentChange]"/>
+                </Actions>
+            </Changed>
     </Rules>
 
     <Content>
@@ -1196,7 +1291,7 @@
               <Font FontName="global://comm:MainFontFace" FontSize="18"/>
             </Font>
           </statictext:StaticText>
-          <statictext:StaticText Color="color://comm:LightBlue" Content="res://ehres!Browse_ItemsCounter_Separator" Margins="-6, -5, -6, 0">
+          <statictext:StaticText Color="color://comm:LightBlue" Content=" | " Margins="-6, -5, -6, 0">
             <Font>
               <Font FontName="global://comm:RegularFontFace" FontSize="21"/>
             </Font>

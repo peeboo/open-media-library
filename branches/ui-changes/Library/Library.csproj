@@ -68,6 +68,7 @@
     </Reference>
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -121,7 +122,10 @@
     <Compile Include="Code\V3\Controls\AreaOfInterestLayoutInput.cs" />
     <Compile Include="Code\V3\Controls\BrowseModel.cs" />
     <Compile Include="Code\V3\Controls\BrowsePivot.cs" />
+    <Compile Include="Code\V3\Controls\ContextMenuData.cs" />
+    <Compile Include="Code\V3\Controls\MoreInfoHooker.cs" />
     <Compile Include="Code\V3\Controls\RelativeEdge.cs" />
+    <Compile Include="Code\V3\Controls\RepeaterHelper.cs" />
     <Compile Include="Code\V3\Controls\ScrollIntoViewDisposition.cs" />
     <Compile Include="Code\V3\Controls\CustomSelectionPolicy.cs" />
     <Compile Include="Code\V3\Controls\FlowLayout.cs" />
@@ -227,6 +231,13 @@
     <Content Include="Markup\V3\Controls\Common\Animations.mcml" />
     <Content Include="Markup\V3\Controls\Common\Constants.mcml" />
     <Content Include="Markup\V3\Controls\Common\Copy of Colors.mcml" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Overlays.Divider.Horizontal.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Overlays.Shadow.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Overlays.Outline.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Overlays.Background.Bottom.Dark.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Overlays.Background.Bottom.Light.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Overlays.Background.Top.Dark.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Overlays.Background.Top.Light.png" />
     <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Browse.Cmd.Play.Dormant.png" />
     <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Browse.Cmd.Play.Focus.png" />
     <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Browse.Cmd.Play.png" />

@@ -148,7 +148,7 @@
       </Binding>
       <Binding Source="[DataItem.Title]" Target="[MovieName.Content]" />
       <Binding Source="[MovieName.Content]" Target="[MovieName.AccessibleValue]"/>
-      <Default Target="[MoviePoster.Content]" Value="res://ehres!Movie.Icon.Default.png" />
+      <Default Target="[MoviePoster.Content]" Value="resx://Library/Library.Resources/V3_Controls_Movie_Icon_Default" />
     </Rules>
     <Content>
       <Panel Name="Tile" Scale="0.9,0.9,1" Layout="Anchor" Margins="0,0,0,0">
@@ -162,7 +162,7 @@
               <FlowLayout Spacing="16,0" Orientation="Horizontal" StripAlignment="Near" ItemAlignment="Center"/>
             </Layout>
             <Children>
-              <Graphic Name="MoviePoster" Margins="0,0,0,0" MaximumSize="98,134" MaintainAspectRatio="true" AcquiringImage="res://ehres!Movie.Icon.Default.png" />
+              <Graphic Name="MoviePoster" Margins="0,0,0,0" MaximumSize="98,134" MaintainAspectRatio="true" AcquiringImage="resx://Library/Library.Resources/V3_Controls_Movie_Icon_Default" />
               <ctl:AccessibleText Name="MovieName" AccessibleName="res://ehres!Movie_Details_Title_AccessibleName" Content="" Color="color://comm:OffWhite" Font="[TitleFont]" MaximumLines="2" WordWrap="true" Alpha="0.7"></ctl:AccessibleText>
             </Children>
           </Panel>
