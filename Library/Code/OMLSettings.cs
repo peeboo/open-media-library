@@ -121,7 +121,7 @@ namespace Library
                 Properties.Settings.Default.ExternalPlayerMapping = value;
                 Properties.Settings.Default.Save();
             }
-        }
+        }        
 
         public StringCollection MainFiltersToShow
         {
@@ -168,6 +168,17 @@ namespace Library
                 Properties.Settings.Default.Save();
             }
         }
+
+        public string DetailsView
+        {
+            get { return Properties.Settings.Default.DetailsView; }
+            set
+            {
+                Properties.Settings.Default.DetailsView = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         public string ActorView
         {
             get { return Properties.Settings.Default.ActorView; }
@@ -688,6 +699,45 @@ namespace Library
             set
             {
                 Properties.Settings.Default.DebugTranscoding = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public float MainPageBackDropAlphaValue
+        {
+            get { return Properties.Settings.Default.MainPageBackDropAlpha; }
+            set
+            {
+                Properties.Settings.Default.MainPageBackDropAlpha = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public int MainPageBackDropIntervalValue
+        {
+            get { return Properties.Settings.Default.MainPageBackDropRotationInSeconds; }
+            set
+            {
+                Properties.Settings.Default.MainPageBackDropRotationInSeconds = value;
+                Properties.Settings.Default.Save();
+                if (OMLApplication.Current.mainBackgroundTimer != null)
+                {
+                    OMLApplication.Current.mainBackgroundTimer.Stop();
+                    OMLApplication.Current.mainBackgroundTimer.Enabled = false;
+                    OMLApplication.Current.mainBackgroundTimer.Interval =
+                        Properties.Settings.Default.MainPageBackDropRotationInSeconds * 1000;
+                    OMLApplication.Current.mainBackgroundTimer.Enabled = true;
+                    OMLApplication.Current.mainBackgroundTimer.Start();
+                }
+            }
+        }
+
+        public float DetailsPageBackDropAlphaValue
+        {
+            get { return Properties.Settings.Default.DetailsPageBackDropAlpha; }
+            set
+            {
+                Properties.Settings.Default.DetailsPageBackDropAlpha = value;
                 Properties.Settings.Default.Save();
             }
         }

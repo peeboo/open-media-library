@@ -442,7 +442,7 @@ namespace Library
         private string CreatePlayListFromAllDisks()
         {
             if (!Directory.Exists(FileSystemWalker.TempPlayListDirectory))
-                FileSystemWalker.CreateTempPlayListDirectory();
+                FileSystemWalker.createTempPlayListDirectory();
 
             WindowsPlayListManager playlist = new WindowsPlayListManager();
 
@@ -672,6 +672,65 @@ namespace Library
         public override string ToString()
         {
             return "MovieItem:" + this._titleObj;
+        }
+
+        public string FanArtFilePath
+        {
+            get
+            {
+                try
+                {
+                    string folder = string.Empty;
+                    if (!string.IsNullOrEmpty(_titleObj.FileLocation))
+                    {
+                        folder = (Directory.Exists(_titleObj.FileLocation))
+                            ? _titleObj.FileLocation
+                            : Path.GetDirectoryName(_titleObj.FileLocation);
+                    }
+                    else
+                    {
+                        if (_titleObj.Disks.Count > 0 && !string.IsNullOrEmpty(_titleObj.Disks[0].Path))
+                        {
+                            folder = (Directory.Exists(_titleObj.Disks[0].Path))
+                                ? _titleObj.Disks[0].Path
+                                : Path.GetDirectoryName(_titleObj.Disks[0].Path);
+                        }
+                    }
+
+                    if (folder.Length > 0)
+                    {
+                        OMLApplication.DebugLine("[MovieItem] Checking for fanart file: {0}",
+                            Path.Combine(folder, "fanart.jpg"));
+
+                        if (File.Exists(Path.Combine(folder, "fanart.jpg")))
+                            return Path.Combine(folder, "fanart.jpg");
+
+                        if (File.Exists(Path.Combine(folder, "backdrop.jpg")))
+                            return Path.Combine(folder, "backdrop.jpg");
+                    }
+                    else
+                        OMLApplication.DebugLine("[MovieItem] No valid path found to look for fanart in");
+                }
+                catch (Exception e)
+                {
+                    OMLApplication.DebugLine("Error attempting to locate fanart image: {0}", e.Message);
+                }
+
+                return null;
+            }        
+        }
+
+        public Image MovieBackgroundImage
+        {            
+            get
+            {
+                string path = FanArtFilePath;
+
+                if (!string.IsNullOrEmpty(path) && File.Exists(path))
+                    return new Image(string.Format("file://{0}", path));
+
+                return null;
+            }
         }
     }
 }

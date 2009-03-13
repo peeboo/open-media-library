@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Timers;
 using Microsoft.MediaCenter.UI;
+using System.Text;
 
 using OMLEngine;
 //using OMLGetDVDInfo;
@@ -25,7 +27,11 @@ namespace Library
         private ContextMenu _dvdContextMenu;
         private bool _showDVDContextMenu = false;
         private Image _fullCover;
-        private bool _playClicked = false;
+        private bool _playClicked = false;        
+        private Image backgroundImage;
+        private Single fanAlphaFadeOverride;
+        
+        private List<Image> backgroundImages = null;
         #endregion
 
         #region Public Properties
@@ -44,7 +50,9 @@ namespace Library
         /// <summary>
         /// A multiline summary of the object.
         /// </summary>
-        public string Summary { get { return _movieDetails.Synopsis; } }        
+        public string Summary { get { return _movieDetails.Synopsis; } }
+        public bool HasFanArtImage { get { return backgroundImages != null && backgroundImages.Count != 0; } }
+        public bool RotateFanArt { get { return backgroundImages != null && backgroundImages.Count > 1; } }
 
         public bool ShowDVDContextMenu
         {
@@ -53,6 +61,16 @@ namespace Library
             {
                 _showDVDContextMenu = value;
                 FirePropertyChanged("ShowDVDContextMenu");
+            }
+        }
+
+        public Single FanAlphaFadeOverride
+        {
+            get { return fanAlphaFadeOverride; }
+            set
+            {
+                fanAlphaFadeOverride = value;
+                FirePropertyChanged("FanAlphaFadeOverride");
             }
         }
 
@@ -129,7 +147,49 @@ namespace Library
                 else
                     return "";
             }
-        }      
+        }
+
+        public string SubHeading
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder();
+                
+                string year = ReleaseYear;
+                string genres = GenresAsString;
+                string rating = Rating;
+                string length = Length;
+
+                if (!string.IsNullOrEmpty(year))
+                    sb.Append(year);
+
+                if (!string.IsNullOrEmpty(genres))
+                {
+                    if ( sb.Length != 0)
+                        sb.Append(", ");
+
+                    sb.Append(genres);
+                }
+
+                if(!string.IsNullOrEmpty(rating))
+                {
+                    if ( sb.Length != 0)
+                        sb.Append(", ");
+
+                    sb.Append(rating);
+                }
+
+                if (!string.IsNullOrEmpty(length))
+                {
+                    if (sb.Length != 0)
+                        sb.Append(", ");
+
+                    sb.Append(length);
+                }
+
+                return sb.ToString();
+            }
+        }
 
         public IList<string> Genres
         {
@@ -187,19 +247,31 @@ namespace Library
                 }
                 return res;
             }
-        }               
+        }                
         
         #endregion
 
         public MovieDetailsPage(MovieItem item)
         {
             LoadDetails(item);
+            SetBackgroundImage();
         }
 
         public override string ToString()
         {
             return "MovieDetailsPage:" + this._movieDetails;
         }
+
+        public Image BackgroundImage
+        {
+            get { return backgroundImage; }
+            set
+            {
+                backgroundImage = value;
+                FirePropertyChanged("BackgroundImage");
+            }
+        }
+
 
         private void LoadDetails(MovieItem item)
         {            
@@ -431,6 +503,71 @@ namespace Library
                     TitleCollectionManager.ClearWatchedCount(_movieDetails.TitleObject);
                 }
             });
+        }
+
+        private void SetBackgroundImage()
+        {
+            // only setup the background images once
+            if (backgroundImages != null)
+                return;
+
+            backgroundImages = new List<Image>(1);
+
+            if (!string.IsNullOrEmpty(_movieDetails.TitleObject.BackDropImage))
+            {                
+                if (File.Exists(Path.GetFullPath(_movieDetails.TitleObject.BackDropImage)))
+                {
+                    backgroundImages.Add(new Image(
+                        string.Format("file://{0}", Path.GetFullPath(_movieDetails.TitleObject.BackDropImage))));
+
+                    // set the background image
+                    BackgroundImage = backgroundImages[0];
+                    
+                    return;
+                }                
+            }
+
+            // a specific file was NOT found, time to go hunting
+
+            OMLApplication.DebugLine("[MovieDetailsPage] Looking for fanart!");
+
+            // if the /FanArt folder doesn't exist - that means no background images
+            string fanArtSrcDir = _movieDetails.TitleObject.BackDropFolder;
+            //string pdFanArtDir = @"C:\ProgramData\OpenMediaLibrary\FanArt\" + _movieDetails.TitleObject.Name.ToString();
+            if (string.IsNullOrEmpty(fanArtSrcDir)) //|| !Directory.Exists(fanArtSrcDir))
+            {
+            //    fanArtSrcDir = pdFanArtDir;
+            //    if (!Directory.Exists(pdFanArtDir))
+                    return;
+            }
+
+            foreach (string file in
+                Directory.GetFiles(fanArtSrcDir, "*.jpg", SearchOption.TopDirectoryOnly))
+            {
+                OMLApplication.DebugLine("[MovieDetailsPage] loading fanart image {0}", file);
+
+                backgroundImages.Add(new Image(string.Format("file://{0}", file)));
+            }
+
+            // oops - no images found in the fanart folder
+            if (backgroundImages.Count == 0)
+                return;
+
+            // set the background image
+            BackgroundImage = backgroundImages[0];            
+        }
+
+        public void RotateBackground()
+        {
+            if (backgroundImages == null || backgroundImages.Count == 0)
+                return;
+
+            int currentIndex = backgroundImages.IndexOf(BackgroundImage);
+
+            if (currentIndex == -1 || currentIndex == backgroundImages.Count - 1)
+                BackgroundImage = backgroundImages[0];
+            else
+                BackgroundImage = backgroundImages[currentIndex + 1];
         }
     }
 

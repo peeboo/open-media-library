@@ -7,10 +7,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using DevExpress.Utils;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 
 using OMLEngine;
+using OMLSDK;
 
 namespace OMLDatabaseEditor
 {
@@ -90,6 +92,23 @@ namespace OMLDatabaseEditor
             // I disabled this line because gsValidGenres is not just empty, its undef
             GenreList.Sort();
             lbGenres.DataSource = GenreList;
+
+            this.ceFoldersAsTitles.Checked = OMLEngine.Properties.Settings.Default.FoldersAreTitles;
+            this.cePrependParentFolder.Checked = OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName;
+            cePrependParentFolder.Enabled = this.ceFoldersAsTitles.Checked;
+
+            foreach (IOMLMetadataPlugin plugin in MainEditor._metadataPlugins)
+            {
+                cmbDefaultMetadataPlugin.Properties.Items.Add(plugin.PluginName);
+            }
+            cmbDefaultMetadataPlugin.SelectedItem = Properties.Settings.Default.gsDefaultMetadataPlugin;
+
+            ceTitledFanArtFolder.Checked = OMLEngine.Properties.Settings.Default.gbTitledFanArtFolder;
+            beTitledFanArtPath.EditValue = OMLEngine.Properties.Settings.Default.gsTitledFanArtPath;
+            if (string.IsNullOrEmpty(beTitledFanArtPath.EditValue.ToString())) beTitledFanArtPath.EditValue = OMLEngine.FileSystemWalker.FanArtDirectory;
+
+            beTitledFanArtPath.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            beTitledFanArtPath.MaskBox.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
         }
 
         private void SimpleButtonClick(object sender, EventArgs e)
@@ -122,7 +141,14 @@ namespace OMLDatabaseEditor
                 if (GenreDirty)
                 {
                     bDirty = true;
-                    Properties.Settings.Default.gsValidGenres.Clear();
+                    if (Properties.Settings.Default.gsValidGenres == null)
+                    {
+                        Properties.Settings.Default.gsValidGenres = new StringCollection();
+                    }
+                    else
+                    {
+                        Properties.Settings.Default.gsValidGenres.Clear();
+                    }
                     Properties.Settings.Default.gsValidGenres.AddRange(GenreList.ToArray());
                 }
                 if (TagsDirty)
@@ -131,10 +157,40 @@ namespace OMLDatabaseEditor
                     String Tags = String.Join("|", TagList.ToArray());
                     Properties.Settings.Default.gsTags = Tags;
                 }
+
+                // TODO - needs tidying, do not save on evert OMLEngine change, might need to add another dirty flag
+                if (OMLEngine.Properties.Settings.Default.gbTitledFanArtFolder != this.ceTitledFanArtFolder.Checked)
+                {
+                    bDirty = true;
+                    OMLEngine.Properties.Settings.Default.gbTitledFanArtFolder = this.ceTitledFanArtFolder.Checked;
+                    OMLEngine.Properties.Settings.Default.Save();
+                }
+
+                if (OMLEngine.Properties.Settings.Default.gbTitledFanArtFolder &&
+                    OMLEngine.Properties.Settings.Default.gsTitledFanArtPath != (string)beTitledFanArtPath.EditValue)
+                {
+                    bDirty = true;
+                    OMLEngine.Properties.Settings.Default.gsTitledFanArtPath = (string)this.beTitledFanArtPath.EditValue;
+                    OMLEngine.Properties.Settings.Default.Save();
+                }
+
+                bDirty = true;
+                Properties.Settings.Default.gsDefaultMetadataPlugin = (string)cmbDefaultMetadataPlugin.SelectedItem;
+
                 if (bDirty)
                 {
                     OptionsDirty = bDirty;
                     Properties.Settings.Default.Save();
+                }
+                if (OMLEngine.Properties.Settings.Default.FoldersAreTitles != this.ceFoldersAsTitles.Checked)
+                {
+                    OMLEngine.Properties.Settings.Default.FoldersAreTitles = this.ceFoldersAsTitles.Checked;
+                    OMLEngine.Properties.Settings.Default.Save();
+                }
+                if (OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName != this.cePrependParentFolder.Checked)
+                {
+                    OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName = this.cePrependParentFolder.Checked;
+                    OMLEngine.Properties.Settings.Default.Save();
                 }
             }
             else if (sender == this.sbCancel)
@@ -232,6 +288,68 @@ namespace OMLDatabaseEditor
                 }
                 lbGenres.Refresh();
             }
+        }
+
+        private void lbGenres_MouseClick(object sender, MouseEventArgs e)
+        {
+            lbGenres.SelectedIndex = lbGenres.IndexFromPoint(e.Location);
+            if (e.Button == MouseButtons.Right)
+            {
+                string genre = lbGenres.SelectedItem as string;
+                TitleCollection collection = MainEditor._titleCollection;
+                IEnumerable<KeyValuePair<string, string>> matches = collection.GenreMap.Where(kvp => kvp.Value == genre);
+                cmGenreMappings.Items.Clear();
+                foreach (KeyValuePair<string, string> match in matches)
+                {
+                    ToolStripMenuItem item = new ToolStripMenuItem(match.Key);
+                    item.Tag = match.Value;
+                    item.Click += new EventHandler(item_Click);
+                    cmGenreMappings.Items.Add(item);
+                }
+                cmGenreMappings.Show(lbGenres, e.Location);
+            }
+        }
+
+        void item_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            if (XtraMessageBox.Show(String.Format("Are you sure you want to remove the mapping of {0} to {1}?", item.Text, item.Tag), "Remove Mapping", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                MainEditor._titleCollection.GenreMap.Remove(item.Text);
+                MainEditor._titleCollection.saveTitleCollection();
+            }
+        }
+
+        private void lbGenres_DrawItem(object sender, ListBoxDrawItemEventArgs e)
+        {
+            IEnumerable<KeyValuePair<string, string>> matches = MainEditor._titleCollection.GenreMap.Where(kvp => kvp.Value == (string)e.Item);
+            if (matches.Count() > 0)
+            {
+                AppearanceObject appearance = (AppearanceObject)e.Appearance.Clone();
+                appearance.Font = new Font(appearance.Font, FontStyle.Bold);
+                e.Appearance.Combine(appearance);
+            }
+        }
+
+        private void ceFoldersAsTitles_CheckStateChanged(object sender, EventArgs e)
+        {
+            cePrependParentFolder.Enabled = this.ceFoldersAsTitles.Checked;
+        }
+
+        private void beTitledFanArtPath_ButtonClick(object sender, ButtonPressedEventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.Description = @"Titled FanArt Path";
+            fbd.SelectedPath = OMLEngine.Properties.Settings.Default.gsTitledFanArtPath;
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                beTitledFanArtPath.EditValue = fbd.SelectedPath;
+            }
+        }
+
+        private void ceTitledFanArtFolder_CheckStateChanged(object sender, EventArgs e)
+        {
+            beTitledFanArtPath.Enabled = this.ceTitledFanArtFolder.Checked;
         }
     }
 }

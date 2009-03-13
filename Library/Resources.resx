@@ -166,9 +166,6 @@
   <data name="nodirector" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\nocover1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Application" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\application.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ButtonDisabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\buttondisabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -505,9 +502,6 @@
   <data name="AlphaFilter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\control\alphafilter.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="DetailsPage3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\detailspage3.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="CoverArt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\views\coverart.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -535,9 +529,6 @@
   <data name="IntroPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Markup\IntroPage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Application2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\application2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="boxart01" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\boxart01.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -564,5 +555,23 @@
   </data>
   <data name="FirstRunSetup" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Markup\FirstRunSetup.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SampleBackDrop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\appleseedexmachina1080x25.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Application" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Application.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SettingsIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Settings.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Application2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\Application2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DetailsPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\details\detailspage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="DetailsPage_Boxes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\details\detailspage_boxes.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

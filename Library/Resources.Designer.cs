@@ -410,9 +410,16 @@ namespace Library {
             }
         }
         
-        internal static byte[] DetailsPage3 {
+        internal static byte[] DetailsPage {
             get {
-                object obj = ResourceManager.GetObject("DetailsPage3", resourceCulture);
+                object obj = ResourceManager.GetObject("DetailsPage", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] DetailsPage_Boxes {
+            get {
+                object obj = ResourceManager.GetObject("DetailsPage_Boxes", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -840,6 +847,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap SampleBackDrop {
+            get {
+                object obj = ResourceManager.GetObject("SampleBackDrop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap SampleBackground2_1024_768 {
             get {
                 object obj = ResourceManager.GetObject("SampleBackground2_1024_768", resourceCulture);
@@ -885,6 +899,13 @@ namespace Library {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap SettingsIcon {
+            get {
+                object obj = ResourceManager.GetObject("SettingsIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

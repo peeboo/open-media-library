@@ -41,7 +41,7 @@ namespace VMCDVDLibraryPlugin
             return true;
         }
         private static double MajorVersion = 0.9;
-        private static double MinorVersion = 0.1;
+        private static double MinorVersion = 0.3;
         protected override double GetVersionMajor()
         {
             return MajorVersion;
@@ -99,77 +99,149 @@ namespace VMCDVDLibraryPlugin
                 foreach (string currentFolder in dirList)
                 {
                     Utilities.DebugLine("DVDImporter: folder " + currentFolder);
-                    if (currentFolder.Contains("MSDVR"))
-                    {
-                        // bool b = true;
-                    }
-                    Title dvd = GetDVDMetaData(currentFolder);
-                    string[] fileNames = null;
-                    try
-                    {
-                        fileNames = Directory.GetFiles(currentFolder);
-                    }
-                    catch
-                    {
-                        fileNames = null;
-                    }
-
-                    if (dvd != null)
-                    {
-                        // if any video files are found in the DVD folder assume they are trailers
-                        if (fileNames != null)
-                        {
-                            foreach (string video in fileNames)
-                            {
-                                string extension = Path.GetExtension(video).ToUpper();
-                                if (SupportedVideoExtensions.Contains(extension))
-                                {
-                                    dvd.AddTrailer(video);
-                                }
-                            }
-                        }
-                        AddTitle(dvd);
-                        moviePaths.Add(dvd.Disks[0].Path);
-                    }// found dvd
+                    if (currentFolder.ToUpperInvariant().Contains("fanart".ToUpperInvariant()))
+                        Utilities.DebugLine("[DVDImporter] Skipping fanart directory");
                     else
                     {
-                        if( fileNames != null )
+                        Title dvd = GetDVDMetaData(currentFolder);
+                        string[] fileNames = null;
+                        try
                         {
-                            foreach (string video in fileNames)
+                            fileNames = Directory.GetFiles(currentFolder);
+                        }
+                        catch
+                        {
+                            fileNames = null;
+                        }
+
+                        if (dvd != null)
+                        {
+                            // if any video files are found in the DVD folder assume they are trailers
+                            if (fileNames != null)
                             {
-                                string extension = Path.GetExtension(video).ToUpper().Substring(1);
-                                extension = extension.Replace("-", "");
-                                if (SupportedVideoExtensions.Contains(extension))
+                                foreach (string video in fileNames)
+                                {
+                                    string extension = Path.GetExtension(video).ToUpper();
+                                    if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
+                                    {
+                                        foreach (VideoFormat format in Enum.GetValues(typeof(VideoFormat)))
+                                        {
+                                            if (Enum.GetName(typeof(VideoFormat), format).ToLowerInvariant() == extension)
+                                            {
+                                                dvd.Trailers.Add(video);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            AddTitle(dvd);
+                        }// found dvd
+                        else
+                        {
+                            if (fileNames != null && fileNames.Length > 0)
+                            {
+                                if (OMLEngine.Properties.Settings.Default.FoldersAreTitles)
                                 {
                                     Title newVideo = new Title();
-                                    newVideo.Name = GetSuggestedMovieName(Path.GetFileNameWithoutExtension(video));
-                                    Disk disk = new Disk();
-                                    disk.Path = video;
-                                    disk.Name = "Disk 1";
-                                    disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
 
-                                    string pathWithNoExtension = Path.GetDirectoryName(video) + "\\" + Path.GetFileNameWithoutExtension(video);
-                                    if (File.Exists(pathWithNoExtension + ".jpg"))
+                                    // Create the title name
+                                    DirectoryInfo di = new DirectoryInfo(currentFolder);
+                                    newVideo.Name = "";
+                                    if (OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName)
                                     {
-                                        SetFrontCoverImage(ref newVideo, pathWithNoExtension + ".jpg");
+                                        // If AddParentFolderToTitleName is true then check if the parent folder
+                                        // Is the startfolder. If not add parent folder to name
+                                        DirectoryInfo st = new DirectoryInfo(startFolder);
+                                        if (st.Name != di.Parent.Name)
+                                        {
+                                            newVideo.Name = di.Parent.Name + " - ";
+                                        }
                                     }
-                                    else if (File.Exists(video + ".jpg"))
+                                    newVideo.Name += (new DirectoryInfo(currentFolder)).Name;
+
+                                    int diskNumber = 1;
+                                    foreach (string video in fileNames)
                                     {
-                                        SetFrontCoverImage(ref newVideo, video + ".jpg");
-                                    }
-                                    else if (File.Exists(Path.GetDirectoryName(video) + "\\folder.jpg"))
-                                    {
-                                        SetFrontCoverImage(ref newVideo, Path.GetDirectoryName(video) + "\\folder.jpg");
+                                        try
+                                        {
+                                            string extension = Path.GetExtension(video).ToUpper().Substring(1);
+                                            extension = extension.Replace("-", "");
+
+
+                                            if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
+                                            {
+                                                Disk disk = new Disk();
+                                                disk.Path = video;
+                                                disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
+                                                disk.Name = string.Format("Disk {0}", diskNumber++);
+                                                newVideo.Disks.Add(disk);
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Utilities.DebugLine("[DVDLibraryImporter] Problem importing file " + video + " : " + ex.Message);
+                                        }
                                     }
 
-                                    newVideo.AddDisk(disk);
-                                    AddTitle(newVideo);
+                                    if (File.Exists(Path.Combine(currentFolder, "folder.jpg")))
+                                        SetFrontCoverImage(ref newVideo, Path.Combine(currentFolder, "folder.jpg"));
 
+                                    if (newVideo.Disks.Count > 0)
+                                    {
+                                        // There is one or more valid disks for this title. Add it.
+                                        string temp = newVideo.BackDropFolder; // This initialises the fanart folder forcing a search for fanart
+                                        AddTitle(newVideo);
+                                    }
+                                }
+                                else
+                                {
+                                    foreach (string video in fileNames)
+                                    {
+                                        try
+                                        {
+                                            string extension = Path.GetExtension(video).ToUpper().Substring(1);
+                                            extension = extension.Replace("-", "");
+
+                                            if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
+                                            {
+                                                // this isn't 100% safe since there are videoformats that don't map 1-1 to extensions                                    
+                                                VideoFormat videoFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
+
+                                                Title newVideo = new Title();
+                                                newVideo.Name = GetSuggestedMovieName(Path.GetFileNameWithoutExtension(video));
+                                                Disk disk = new Disk();
+                                                disk.Path = video;
+                                                disk.Name = "Disk 1";
+                                                disk.Format = videoFormat;
+
+                                                string pathWithNoExtension = Path.GetDirectoryName(video) + "\\" + Path.GetFileNameWithoutExtension(video);
+                                                if (File.Exists(pathWithNoExtension + ".jpg"))
+                                                {
+                                                    SetFrontCoverImage(ref newVideo, pathWithNoExtension + ".jpg");
+                                                }
+                                                else if (File.Exists(video + ".jpg"))
+                                                {
+                                                    SetFrontCoverImage(ref newVideo, video + ".jpg");
+                                                }
+                                                else if (File.Exists(Path.GetDirectoryName(video) + "\\folder.jpg"))
+                                                {
+                                                    SetFrontCoverImage(ref newVideo, Path.GetDirectoryName(video) + "\\folder.jpg");
+                                                }
+
+                                                newVideo.Disks.Add(disk);
+                                                string temp = newVideo.BackDropFolder; // This initialises the fanart folder forcing a search for fanart
+                                                AddTitle(newVideo);
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Utilities.DebugLine("[DVDLibraryImporter] Problem importing file " + video + " : " + ex.Message);
+                                        }
+                                    }
                                     moviePaths.Add(video);
                                 }
                             }
                         }
-
                     }
                 } // loop through the sub folders
 
@@ -253,7 +325,7 @@ namespace VMCDVDLibraryPlugin
 
                         case DirectoryType.DVD_Ripped:
                             disk.Format = VideoFormat.DVD;
-                            disk.Path = Path.Combine(folderName, "VIDEO_TS");
+                            disk.Path = folderName;
                             break;
                     }                    
 
@@ -452,6 +524,7 @@ namespace VMCDVDLibraryPlugin
 
         private string GetSuggestedMovieName(string fullPath)
         {
+            //string suggestedName = Path.GetDirectoryName(fullPath);
             string suggestedName = Path.GetFileName(fullPath);
             suggestedName = suggestedName.Trim();
             suggestedName = suggestedName.Replace('_', ' ');
@@ -462,6 +535,9 @@ namespace VMCDVDLibraryPlugin
 
         private void GetSubFolders(string startFolder, List<string> folderList)
         {
+            // First check if root is a dvd / bluray disk structure
+            if (GetDirectoryType(startFolder) != DirectoryType.Normal) { return; }
+
             DirectoryInfo[] diArr = null;
             try
             {
@@ -469,12 +545,15 @@ namespace VMCDVDLibraryPlugin
                 diArr = di.GetDirectories();
                 foreach (DirectoryInfo folder in diArr)
                 {
-                    folderList.Add(folder.FullName);
-
-                    // ignore subdirectories of movie folders
-                    if (GetDirectoryType(folder.FullName) == DirectoryType.Normal)
+                    if (folder.Name[0] != '.')
                     {
-                        GetSubFolders(folder.FullName, folderList);
+                        folderList.Add(folder.FullName);
+
+                        // ignore subdirectories of movie folders
+                        if (GetDirectoryType(folder.FullName) == DirectoryType.Normal)
+                        {
+                            GetSubFolders(folder.FullName, folderList);
+                        }
                     }
                 }
 
@@ -517,43 +596,5 @@ namespace VMCDVDLibraryPlugin
         private void UpdateTitleFromOMLXML(Title t)
         {
         }
-
-        HashSet<string> SupportedVideoExtensions = new HashSet<string>() 
-        {
-        "ASF",
-        "AVC",
-        "AVI", // DivX, Xvid, etc
-        "B5T", // BlindWrite image
-        "B6T", // BlindWrite image
-        "BIN", // using an image loader lib and load/play this as a DVD
-        "BWT", // BlindWrite image
-        "CCD", // CloneCD image
-        "CDI", // DiscJuggler Image
-        "CUE", // cue sheet
-        "DVR-MS", // MPG
-        "DVRMS", // MPG
-        "H264", // AVC OR MP4
-        "IMG", // using an image loader lib and load/play this as a DVD
-        "ISO", // Standard ISO image
-        "ISZ", // Compressed ISO image
-        "M2TS", // mpeg2 transport stream
-        "MDF", // using an image loader lib and load/play this as a DVD
-        "MDS", // Media Descriptor file
-        "MKV", // Likely h264
-        "MOV", // Quicktime
-        "MPG",
-        "MPEG",
-        "MP4", // DivX, AVC, or H264
-        "NRG", // Nero image
-        "OGM", // Similar to MKV
-        "PDI", // Instant CD/DVD image
-        "TS", // MPEG2
-        "UIF",
-        "WMV",
-        //"VOB", // MPEG2 - make sure it's not part of a DVD
-        "WVX", // wtf is this?
-        "ASX", // wtf is this?
-        "WPL" // playlist file?
-        };
     }
 }

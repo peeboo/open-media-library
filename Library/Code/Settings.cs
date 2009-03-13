@@ -38,7 +38,9 @@ namespace Library
             Utilities.DebugLine("[Settings] Loading Transcoding Settings");
             SetupTranscoding();
             Utilities.DebugLine("[Settings] Setting up external player Settings");
-            SetupExternalPlayers();            
+            SetupExternalPlayers();
+            Utilities.DebugLine("[Settings] Setting up impersonation Settings");
+            SetupImpersonationSettings();
         }       
 
         private void SaveMountingTools()
@@ -71,20 +73,42 @@ namespace Library
 
                 try
                 {
-                    if (!string.IsNullOrEmpty(_blueRayPlayerPath.Value) &&
-                        _blueRayPlayerPath.Value.Trim().Length != 0)
+                    string chosenBluRayPlayer = _externalPlayerSelectionBluRay.Chosen as string;
+                    ExternalPlayer.KnownPlayers bluRayPlayer = (ExternalPlayer.KnownPlayers)Enum.Parse(typeof(ExternalPlayer.KnownPlayers), chosenBluRayPlayer);
+
+                    if (bluRayPlayer != ExternalPlayer.KnownPlayers.None)
                     {
-                        mappings.Add(VideoFormat.BLURAY.ToString() + "|" + _blueRayPlayerPath.Value.Trim());
-                        mappings.Add(VideoFormat.HDDVD.ToString() + "|" + _blueRayPlayerPath.Value.Trim());
+                        if (!string.IsNullOrEmpty(_externalPlayerPathBluRay.Value) &&
+                            _externalPlayerPathBluRay.Value.Trim().Length != 0)
+                        {
+                            mappings.Add(VideoFormat.BLURAY.ToString() + "|" + ((int)bluRayPlayer).ToString() + "|" + _externalPlayerPathBluRay.Value.Trim());
+                        }
                     }
 
-                    if (_useExternalPlayer.Value && 
-                        !string.IsNullOrEmpty(_externalPlayerPath.Value) &&
-                        _externalPlayerPath.Value.Trim().Length != 0 )
+                    string chosenHDDVDPlayer = _externalPlayerSelectionHDDVD.Chosen as string;
+                    ExternalPlayer.KnownPlayers hddvdPlayer = (ExternalPlayer.KnownPlayers)Enum.Parse(typeof(ExternalPlayer.KnownPlayers), chosenHDDVDPlayer);
+
+                    if (hddvdPlayer != ExternalPlayer.KnownPlayers.None)
                     {
-                        mappings.Add(VideoFormat.ALL.ToString() + "|" + _externalPlayerPath.Value.Trim());
+                        if (!string.IsNullOrEmpty(_externalPlayerPathHDDVD.Value) &&
+                            _externalPlayerPathHDDVD.Value.Trim().Length != 0)
+                        {
+                            mappings.Add(VideoFormat.HDDVD.ToString() + "|" + ((int)hddvdPlayer).ToString() + "|" + _externalPlayerPathHDDVD.Value.Trim());
+                        }
                     }
 
+                    string chosenAllPlayer = _externalPlayerSelectionAll.Chosen as string;
+                    ExternalPlayer.KnownPlayers allPlayer = (ExternalPlayer.KnownPlayers)Enum.Parse(typeof(ExternalPlayer.KnownPlayers), chosenAllPlayer);
+
+                    if (allPlayer != ExternalPlayer.KnownPlayers.None)
+                    {
+                        if (!string.IsNullOrEmpty(_externalPlayerPathAll.Value) &&
+                            _externalPlayerPathAll.Value.Trim().Length != 0)
+                        {
+                            mappings.Add(VideoFormat.ALL.ToString() + "|" + ((int)allPlayer).ToString() + "|" + _externalPlayerPathAll.Value.Trim());
+                        }
+                    }
+                    
                     _omlSettings.ExternalPlayerMapping = mappings;
                     ExternalPlayer.RefreshExternalPlayerList();
                 }
@@ -125,11 +149,15 @@ namespace Library
                 _omlSettings.CoverArtSpacingVertical = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
                 _omlSettings.CoverArtSpacingHorizontal = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
                 _omlSettings.MovieView = _movieView.Chosen as string;
+                _omlSettings.DetailsView = _detailsView.Chosen as string;
                 _omlSettings.ShowMovieDetails = (bool)_showMovieDetails.Chosen;
                 _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
                 _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
                 _omlSettings.UseOnScreenAlphaJumper = (bool)_useOnScreenAlpha.Chosen;
                 _omlSettings.ShowWatchedIcon = (bool)_showWatchedIcon.Chosen;
+                _omlSettings.MainPageBackDropAlphaValue = (float)_mainPageBackDropAlpha.Chosen;
+                _omlSettings.MainPageBackDropIntervalValue = (int)_mainPageBackDropInterval.Chosen;
+                _omlSettings.DetailsPageBackDropAlphaValue = (float)_detailsPageBackDropAlpha.Chosen;
             });
         }
         private void SaveUILanguage()
@@ -166,6 +194,15 @@ namespace Library
                     _omlSettings.TranscodeBufferDelay = transcodeBufferDelay;
             });
         }
+        private void SaveImpersonationSettings()
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                OMLEngine.Properties.Settings.Default.ImpersonationUsername = _impersonationUsername.Value;
+                OMLEngine.Properties.Settings.Default.ImpersonationPassword = _impersonationPassword.Value;
+                OMLEngine.Properties.Settings.Default.Save();
+            });
+        }
         public void SaveSettings()
         {
             SaveMountingTools();
@@ -174,6 +211,7 @@ namespace Library
             SaveTrailers();
             SaveFilterSettings();
             SaveTranscoding();
+            SaveImpersonationSettings();
             SaveExternalPlayers();
 
             OMLApplication.ExecuteSafe(delegate
@@ -181,6 +219,8 @@ namespace Library
                 OMLApplication.Current.Startup(null);
             });
         }
+
+        
 
         private void SetupMountingTools()
         {
@@ -274,6 +314,13 @@ namespace Library
             _movieSort.Options = items;
             _movieSort.Chosen = _omlSettings.MovieSort;
 
+            List<string> detailViews = new List<string>();
+            detailViews.Add("Original");
+            detailViews.Add("Background Boxes");
+
+            _detailsView.Options = detailViews;
+            _detailsView.Chosen = _omlSettings.DetailsView;
+
             List<string> starPageItems = new List<string>();
             starPageItems.Add(Filter.Home);
             starPageItems.Add(Filter.Unwatched);
@@ -328,6 +375,10 @@ namespace Library
 
             _trailersDefinition.Options = trailerDefinitionOptions;
             _trailersDefinition.Chosen = _omlSettings.TrailersDefinition.ToString();
+
+            SetupMainPageBackDropAlpha();
+            SetupDetailsPageBackDropAlpha();
+            SetupMainPageBackDropInterval();
         }
 
         private void SetupFilters()
@@ -372,6 +423,53 @@ namespace Library
             _uiLanguage.Chosen = selected;
         }
 
+        private void SetupMainPageBackDropAlpha()
+        {
+            List<float> alphaOptions = new List<float>();
+            alphaOptions.Add(0.1F);
+            alphaOptions.Add(0.2F);
+            alphaOptions.Add(0.3F);
+            alphaOptions.Add(0.4F);
+            alphaOptions.Add(0.5F);
+            alphaOptions.Add(0.6F);
+            alphaOptions.Add(0.7F);
+            alphaOptions.Add(0.8F);
+            alphaOptions.Add(0.9F);
+            alphaOptions.Add(1.0F);
+
+            _mainPageBackDropAlpha.Options = alphaOptions;
+            _mainPageBackDropAlpha.Chosen = _omlSettings.MainPageBackDropAlphaValue;
+        }
+
+        private void SetupMainPageBackDropInterval()
+        {
+            List<int> intervalOptions = new List<int>();
+            intervalOptions.Add(5);
+            intervalOptions.Add(10);
+            intervalOptions.Add(15);
+            intervalOptions.Add(20);
+            _mainPageBackDropInterval.Options = intervalOptions;
+            _mainPageBackDropInterval.Chosen = _omlSettings.MainPageBackDropIntervalValue;
+        }
+
+        private void SetupDetailsPageBackDropAlpha()
+        {
+            List<float> alphaOptions = new List<float>();
+            alphaOptions.Add(0.1F);
+            alphaOptions.Add(0.2F);
+            alphaOptions.Add(0.3F);
+            alphaOptions.Add(0.4F);
+            alphaOptions.Add(0.5F);
+            alphaOptions.Add(0.6F);
+            alphaOptions.Add(0.7F);
+            alphaOptions.Add(0.8F);
+            alphaOptions.Add(0.9F);
+            alphaOptions.Add(1.0F);
+
+            _detailsPageBackDropAlpha.Options = alphaOptions;
+            _detailsPageBackDropAlpha.Chosen = _omlSettings.DetailsPageBackDropAlphaValue;
+        }
+
         private void SetupTrailers()
         {
             List<string> trailerFormats = new List<string>();
@@ -406,20 +504,51 @@ namespace Library
 
         private void SetupExternalPlayers()
         {
+            ExternalPlayerItem bluRayPlayer = ExternalPlayer.GetExternalForFormat(VideoFormat.BLURAY);
+            ExternalPlayerItem allPlayers = ExternalPlayer.GetExternalForFormat(VideoFormat.ALL);
+            ExternalPlayerItem hddvdPlayer = ExternalPlayer.GetExternalForFormat(VideoFormat.HDDVD);
+
+            List<string> externalPlayerChoices = new List<string>();
+            foreach (string player in Enum.GetNames(typeof(ExternalPlayer.KnownPlayers)))
+            {
+                externalPlayerChoices.Add(player);
+            }
+
+            _externalPlayerSelectionAll.Options = externalPlayerChoices;
+            _externalPlayerSelectionBluRay.Options = externalPlayerChoices;
+            _externalPlayerSelectionHDDVD.Options = externalPlayerChoices;
+
+            _externalPlayerSelectionBluRay.Chosen = (bluRayPlayer == null)
+                                                 ? ExternalPlayer.KnownPlayers.None.ToString()
+                                                 : bluRayPlayer.PlayerType.ToString();
+
+            _externalPlayerSelectionAll.Chosen = (allPlayers == null)
+                                                 ? ExternalPlayer.KnownPlayers.None.ToString()
+                                                 : allPlayers.PlayerType.ToString();
+
+            _externalPlayerSelectionHDDVD.Chosen = (hddvdPlayer == null)
+                                                 ? ExternalPlayer.KnownPlayers.None.ToString()
+                                                 : hddvdPlayer.PlayerType.ToString();
+
             List<string> localFixedDrivesOptions = new List<string>();
             foreach (DriveInfo dInfo in GetFileSystemDrives())
             {
                 localFixedDrivesOptions.Add(dInfo.Name);
             }
 
+            _localFixedDrivesBluRay.Options = localFixedDrivesOptions;
+            _localFixedDrivesHDDVD.Options = localFixedDrivesOptions;
+            _localFixedDrivesAll.Options = localFixedDrivesOptions;
             _LocalFixedDrives.Options = localFixedDrivesOptions;
 
-            _blueRayPlayerPath.Value = ExternalPlayer.GetExternalPlayerPath(VideoFormat.BLURAY);
-            _useExternalPlayer.Chosen = ExternalPlayer.ExternalPlayerExistForType(VideoFormat.ALL);
-
-            _externalPlayerPath.Value = ( (bool)_useExternalPlayer.Chosen == true )
-                                    ? ExternalPlayer.GetExternalPlayerPath(VideoFormat.ALL)
-                                    : string.Empty;            
+            _externalPlayerPathBluRay.Value = (bluRayPlayer != null) ? bluRayPlayer.Path : string.Empty;
+            _externalPlayerPathHDDVD.Value = (hddvdPlayer != null) ? hddvdPlayer.Path : string.Empty;
+            _externalPlayerPathAll.Value = (allPlayers != null) ? allPlayers.Path : string.Empty;
+        }
+        private void SetupImpersonationSettings()
+        {
+            _impersonationUsername.Value = OMLEngine.Properties.Settings.Default.ImpersonationUsername;
+            _impersonationPassword.Value = OMLEngine.Properties.Settings.Default.ImpersonationPassword;
         }
 
         #region properties
@@ -533,7 +662,11 @@ namespace Library
         public Choice MovieView
         {
             get { return _movieView; }
+        }
 
+        public Choice DetailsView
+        {
+            get { return _detailsView; }
         }
 
         public Choice MovieSort
@@ -571,9 +704,19 @@ namespace Library
             get { return _LocalFixedDrives; }
         }
 
-        public BooleanChoice UseExternalPlayer
+        public Choice LocalFixedDrivesBluRay
         {
-            get { return _useExternalPlayer; }
+            get { return _localFixedDrivesBluRay; }
+        }
+
+        public Choice LocalFixedDrivesHDDVD
+        {
+            get { return _localFixedDrivesHDDVD; }
+        }
+
+        public Choice LocalFixedDrivesAll
+        {
+            get { return _localFixedDrivesAll; }
         }        
       
         #endregion
@@ -593,38 +736,55 @@ namespace Library
                 FirePropertyChanged("MountingToolPath");
             }
         }
-
-        public EditableText BlueRayPlayerPath
+        
+        public EditableText ExternalPlayerPathBluRay
         {
             get
             {
-                if (_blueRayPlayerPath == null)
+                if (_externalPlayerPathBluRay == null)
                 {
-                    _blueRayPlayerPath = new EditableText();
+                    _externalPlayerPathBluRay = new EditableText();
                 }
-                return _blueRayPlayerPath;
+                return _externalPlayerPathBluRay;
             }
             set
             {
-                _blueRayPlayerPath = value;
-                FirePropertyChanged("BluRayPlayerPath");
+                _externalPlayerPathBluRay = value;
+                FirePropertyChanged("ExternalPlayerPathBluRay");
             }
         }
 
-        public EditableText ExternalPlayerPath
+        public EditableText ExternalPlayerPathHDDVD
         {
             get
             {
-                if (_externalPlayerPath == null)
+                if (_externalPlayerPathHDDVD == null)
                 {
-                    _externalPlayerPath = new EditableText();
+                    _externalPlayerPathHDDVD = new EditableText();
                 }
-                return _externalPlayerPath;
+                return _externalPlayerPathHDDVD;
             }
             set
             {
-                _externalPlayerPath = value;
-                FirePropertyChanged("ExternalPlayerPath");
+                _externalPlayerPathHDDVD = value;
+                FirePropertyChanged("ExternalPlayerPathHDDVD");
+            }
+        }
+
+        public EditableText ExternalPlayerPathAll
+        {
+            get
+            {
+                if (_externalPlayerPathAll == null)
+                {
+                    _externalPlayerPathAll = new EditableText();
+                }
+                return _externalPlayerPathAll;
+            }
+            set
+            {
+                _externalPlayerPathAll = value;
+                FirePropertyChanged("ExternalPlayerPathAll");
             }
         }
 
@@ -642,6 +802,38 @@ namespace Library
             {
                 _transcodeBufferDelay = value;
                 FirePropertyChanged("TranscodingBufferDelay");
+            }
+        }
+
+        public EditableText ImpersonationUsername
+        {
+            get
+            {
+                if (_impersonationUsername == null)
+                    _impersonationUsername = new EditableText();
+
+                return _impersonationUsername;
+            }
+            set
+            {
+                _impersonationUsername = value;
+                FirePropertyChanged("ImpersonationUsername");
+            }
+        }
+
+        public EditableText ImpersonationPassword
+        {
+            get
+            {
+                if (_impersonationPassword == null)
+                    _impersonationPassword = new EditableText();
+
+                return _impersonationPassword;
+            }
+            set
+            {
+                _impersonationPassword = value;
+                FirePropertyChanged("ImpersonationPassword");
             }
         }
 
@@ -663,8 +855,67 @@ namespace Library
             }
         }
 
+        public Choice ExternalPlayerSelectionAll
+        {
+            get { return _externalPlayerSelectionAll; }
+            set
+            {
+                _externalPlayerSelectionAll = value;
+                FirePropertyChanged("ExternalPlayerSelectionAll");
+            }
+        }
+
+        public Choice ExternalPlayerSelectionBluRay
+        {
+            get { return _externalPlayerSelectionBluRay; }
+            set
+            {
+                _externalPlayerSelectionBluRay = value;
+                FirePropertyChanged("ExternalPlayerSelectionBluRay");
+            }
+        }
+
+        public Choice ExternalPlayerSelectionHDDVD
+        {
+            get { return _externalPlayerSelectionHDDVD; }
+            set
+            {
+                _externalPlayerSelectionHDDVD = value;
+                FirePropertyChanged("ExternalPlayerSelectionHDDVD");
+            }
+        }
+
+
+        public Choice MainPageBackDropInterval
+        {
+            get { return _mainPageBackDropInterval; }
+            set
+            {
+                _mainPageBackDropInterval = value;
+                FirePropertyChanged("MainPageBackDropInterval");
+            }
+        }
+        public Choice MainPageBackDropAlpha
+        {
+            get { return _mainPageBackDropAlpha; }
+            set
+            {
+                _mainPageBackDropAlpha = value;
+                FirePropertyChanged("MainPageBackDropAlpha");
+            }
+        }
+        public Choice DetailsPageBackDropAlpha
+        {
+            get { return _detailsPageBackDropAlpha; }
+            set
+            {
+                _detailsPageBackDropAlpha = value;
+                FirePropertyChanged("DetailsPageBackDropAlpha");
+            }
+        }
+
         private const string DefaultDaemonToolsPath = @"Program Files\DAEMON Tools Lite\daemon.exe";
-        private const string DefaultVirtualCloneDrivePath = @"Program Files\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";
+        private const string DefaultVirtualCloneDrivePath = @"Program Files\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";        
 
         public void LocateSelectedMounter()
         {           
@@ -724,42 +975,69 @@ namespace Library
             }
         }
 
-        public void LocateTotalMediaTheatrePluginExecutable()
-        {
-            string DriveLetterToScan = LocalFixedDrives.Chosen as String;
-            DriveInfo dInfo;
+        private const string DefaultTMTPath = @"Program Files\Arcsoft\umcedvdplayer.exe";
+        private const string DefaultPowerDVD8Path = @"Program Files\CyberLink\PowerDVD8\PowerDVD8.exe";
+        private const string DefaultWinDVD9Path = @"Program Files\Corel\DVD9\WinDVD.exe";
 
-            dInfo = new DriveInfo(DriveLetterToScan);
-            if (File.Exists(Path.Combine(dInfo.RootDirectory.FullName, @"Program Files\Arcsoft\umcedvdplayer.exe")))
+        public void LocateExternalPlayerExecutable(Choice selector, EditableText textBox, Choice localFixedDrive)
+        {
+            string driveLetterToScan = localFixedDrive.Chosen as String;
+            DriveInfo dInfo = new DriveInfo(driveLetterToScan);
+
+            string startPath = null;
+
+            switch ((ExternalPlayer.KnownPlayers)Enum.Parse(typeof(ExternalPlayer.KnownPlayers), selector.Chosen.ToString()))
+            {               
+                case ExternalPlayer.KnownPlayers.WinDVD9:
+                    startPath = DefaultWinDVD9Path;
+                    break;
+
+                case ExternalPlayer.KnownPlayers.PowerDVD8:
+                    startPath = DefaultPowerDVD8Path;
+                    break;
+
+                case ExternalPlayer.KnownPlayers.TotalMediaTheater:
+                    startPath = DefaultTMTPath;
+                    break;
+
+                // don't do anything if there's no mounting tool selected
+                case ExternalPlayer.KnownPlayers.None:
+                case ExternalPlayer.KnownPlayers.Other:
+                default:
+                    return;
+            }
+
+            if (File.Exists(Path.Combine(dInfo.RootDirectory.FullName, startPath)))
             {
-                BlueRayPlayerPath.Value = Path.Combine(dInfo.RootDirectory.FullName, @"Program Files\Arcsoft\umcedvdplayer.exe");
+                textBox.Value = Path.Combine(dInfo.RootDirectory.FullName, startPath);
             }
             else
             {
+                // let's scan all the folders for it
                 OMLApplication.Current.IsBusy = true;
                 Application.DeferredInvokeOnWorkerThread(delegate
                 {
-                    exePath = ScanAllFoldersForExecutable(dInfo.RootDirectory.FullName, "umcedvdplayer.exe");
+                    exePath = ScanAllFoldersForExecutable(dInfo.RootDirectory.FullName, Path.GetFileName(startPath));
+
                 }, delegate
                 {
                     OMLApplication.Current.IsBusy = false;
-
                     if (exePath.Length > 0)
                     {
-                        OMLApplication.DebugLine("[Settings] Found Total Media Theatre Plugin: {0}", exePath);
-                        BlueRayPlayerPath.Value = exePath;
+                        OMLApplication.DebugLine("[Settings] Found Image Mounter: {0}", exePath);
+                        textBox.Value = exePath;
                     }
                     else
                     {
                         AddInHost.Current.MediaCenterEnvironment.Dialog(
-                            string.Format("The Total Media Theatre plugin was not" +
-                                          " found on the [{0}] drive.", DriveLetterToScan),
-                            "Failed to Find TMT Plugin",
+                            string.Format("The external player was not" +
+                                          " found on the [{0}] drive.", driveLetterToScan),
+                            "Failed to Find External Player",
                             Microsoft.MediaCenter.DialogButtons.Ok,
                             5, true);
                     }
                 }, null);
-            }
+            }            
         }
 
         public static void CleanupImagesFolder()
@@ -846,15 +1124,18 @@ namespace Library
 
         private string exePath = string.Empty;
         EditableText _mountingToolPath = new EditableText();
-        EditableText _blueRayPlayerPath = new EditableText();
-        EditableText _externalPlayerPath = new EditableText();
+        
+        EditableText _externalPlayerPathBluRay = new EditableText();
+        EditableText _externalPlayerPathHDDVD = new EditableText();
+        EditableText _externalPlayerPathAll = new EditableText();
+
         OMLSettings _omlSettings = new OMLSettings();
         Choice _virtualDrive = new Choice();
         Choice _movieView = new Choice();
         Choice _movieSort = new Choice();
         Choice _coverArtRows = new Choice();
         Choice _coverArtSpacing = new Choice();
-        Choice _movieDetailsTransitionType = new Choice();
+        Choice _detailsView = new Choice();
         BooleanChoice _showMovieDetails = new BooleanChoice();
         BooleanChoice _dimUnselectedCovers = new BooleanChoice();
         BooleanChoice _useOriginalCoverArt = new BooleanChoice();
@@ -863,11 +1144,23 @@ namespace Library
         Choice _startPage = new Choice();
         Choice _startPageSubFilter = new Choice();
         Choice _uiLanguage = new Choice();
-        Choice _ImageMountingSelection = new Choice();
-        Choice _trailersDefinition = new Choice();
+        Choice _ImageMountingSelection = new Choice();       
+        
+        Choice _externalPlayerSelectionAll = new Choice();
+        Choice _externalPlayerSelectionBluRay = new Choice();
+        Choice _externalPlayerSelectionHDDVD = new Choice();
+
+        Choice _localFixedDrivesBluRay = new Choice();
+        Choice _localFixedDrivesHDDVD = new Choice();
+        Choice _localFixedDrivesAll = new Choice();
+
         Choice _LocalFixedDrives = new Choice();
+
+        Choice _trailersDefinition = new Choice();        
         Choice _filtersToShow = new Choice();
         EditableText _transcodeBufferDelay = new EditableText();
+        EditableText _impersonationUsername = new EditableText();
+        EditableText _impersonationPassword = new EditableText();
         BooleanChoice _showFilterGenres = new BooleanChoice();
         BooleanChoice _transcodeAVIFiles = new BooleanChoice();
         BooleanChoice _transcodeMKVFiles = new BooleanChoice();
@@ -885,8 +1178,11 @@ namespace Library
         BooleanChoice _showFilterParentalRating = new BooleanChoice();
         BooleanChoice _showFilterCountry = new BooleanChoice();
         BooleanChoice _showFilterRuntime = new BooleanChoice();
-        BooleanChoice _useExternalPlayer = new BooleanChoice();
         BooleanChoice _showFilterUnwatched = new BooleanChoice();
         BooleanChoice _debugTranscoding = new BooleanChoice();
+        //BooleanChoice _useMaximizer = new BooleanChoice();
+        Choice _mainPageBackDropAlpha = new Choice();
+        Choice _mainPageBackDropInterval = new Choice();
+        Choice _detailsPageBackDropAlpha = new Choice();
     }
 }

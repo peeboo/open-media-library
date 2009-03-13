@@ -33,10 +33,12 @@ namespace OMLDatabaseEditor
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblCurrentStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.pgbProgress = new System.Windows.Forms.ToolStripProgressBar();
+            this.statusText = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromScratchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromPreferredSourcesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportCurrentMovieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,6 +47,7 @@ namespace OMLDatabaseEditor
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteSelectedMoviesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteAllMoviesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.regenerateThumbnailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentMovieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,6 +66,10 @@ namespace OMLDatabaseEditor
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.metaDataSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.manageMetadataMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.moveDisksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.transcoderDiagnosticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.indexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,6 +84,8 @@ namespace OMLDatabaseEditor
             this.lbMovies = new DevExpress.XtraEditors.ListBoxControl();
             this.cmsMoviesList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miMetadataMulti = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromPreferredSourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.navBarGroupControlContainer2 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.lbMetadata = new DevExpress.XtraEditors.ListBoxControl();
             this.navBarGroupControlContainer3 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
@@ -87,12 +96,11 @@ namespace OMLDatabaseEditor
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.newMovieSplitButton = new System.Windows.Forms.ToolStripSplitButton();
             this.fromScratchToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromPreferredSourcesToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
-            this.moveDisksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -117,7 +125,8 @@ namespace OMLDatabaseEditor
             this.statusStrip.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblCurrentStatus,
-            this.pgbProgress});
+            this.pgbProgress,
+            this.statusText});
             this.statusStrip.Location = new System.Drawing.Point(0, 719);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode;
@@ -135,6 +144,12 @@ namespace OMLDatabaseEditor
             this.pgbProgress.Name = "pgbProgress";
             this.pgbProgress.Size = new System.Drawing.Size(100, 16);
             this.pgbProgress.Visible = false;
+            // 
+            // statusText
+            // 
+            this.statusText.Name = "statusText";
+            this.statusText.Size = new System.Drawing.Size(730, 17);
+            this.statusText.Spring = true;
             // 
             // menuStrip
             // 
@@ -169,7 +184,8 @@ namespace OMLDatabaseEditor
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fromScratchToolStripMenuItem});
+            this.fromScratchToolStripMenuItem,
+            this.fromPreferredSourcesToolStripMenuItem1});
             this.newToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripMenuItem.Image")));
             this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
@@ -179,9 +195,16 @@ namespace OMLDatabaseEditor
             // fromScratchToolStripMenuItem
             // 
             this.fromScratchToolStripMenuItem.Name = "fromScratchToolStripMenuItem";
-            this.fromScratchToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.fromScratchToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.fromScratchToolStripMenuItem.Text = "From Scratch";
             this.fromScratchToolStripMenuItem.Click += new System.EventHandler(this.fromScratchToolStripMenuItem_Click);
+            // 
+            // fromPreferredSourcesToolStripMenuItem1
+            // 
+            this.fromPreferredSourcesToolStripMenuItem1.Name = "fromPreferredSourcesToolStripMenuItem1";
+            this.fromPreferredSourcesToolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
+            this.fromPreferredSourcesToolStripMenuItem1.Text = "From Preferred Sources";
+            this.fromPreferredSourcesToolStripMenuItem1.Click += new System.EventHandler(this.fromMetaDataToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -228,6 +251,7 @@ namespace OMLDatabaseEditor
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.deleteToolStripMenuItem,
+            this.deleteSelectedMoviesToolStripMenuItem,
             this.deleteAllMoviesToolStripMenuItem,
             this.regenerateThumbnailToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
@@ -241,6 +265,13 @@ namespace OMLDatabaseEditor
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
             this.deleteToolStripMenuItem.Text = "&Delete Current Movie";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // deleteSelectedMoviesToolStripMenuItem
+            // 
+            this.deleteSelectedMoviesToolStripMenuItem.Name = "deleteSelectedMoviesToolStripMenuItem";
+            this.deleteSelectedMoviesToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.deleteSelectedMoviesToolStripMenuItem.Text = "Delete Selected Movies";
+            this.deleteSelectedMoviesToolStripMenuItem.Click += new System.EventHandler(this.deleteSelectedMoviesToolStripMenuItem_Click);
             // 
             // deleteAllMoviesToolStripMenuItem
             // 
@@ -352,8 +383,10 @@ namespace OMLDatabaseEditor
             this.optionsToolStripMenuItem,
             this.toolStripSeparator1,
             this.metaDataSettingsToolStripMenuItem,
+            this.manageMetadataMappingsToolStripMenuItem,
             this.toolStripSeparator4,
-            this.moveDisksToolStripMenuItem});
+            this.moveDisksToolStripMenuItem,
+            this.transcoderDiagnosticsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
@@ -361,27 +394,53 @@ namespace OMLDatabaseEditor
             // customizeToolStripMenuItem
             // 
             this.customizeToolStripMenuItem.Name = "customizeToolStripMenuItem";
-            this.customizeToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.customizeToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.customizeToolStripMenuItem.Text = "&Customize";
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(167, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(229, 6);
             // 
             // metaDataSettingsToolStripMenuItem
             // 
             this.metaDataSettingsToolStripMenuItem.Name = "metaDataSettingsToolStripMenuItem";
-            this.metaDataSettingsToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.metaDataSettingsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.metaDataSettingsToolStripMenuItem.Text = "MetaData Settings";
             this.metaDataSettingsToolStripMenuItem.Click += new System.EventHandler(this.metaDataSettingsToolStripMenuItem_Click);
+            // 
+            // manageMetadataMappingsToolStripMenuItem
+            // 
+            this.manageMetadataMappingsToolStripMenuItem.Name = "manageMetadataMappingsToolStripMenuItem";
+            this.manageMetadataMappingsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.manageMetadataMappingsToolStripMenuItem.Text = "Preferred MetaData Mappings";
+            this.manageMetadataMappingsToolStripMenuItem.Click += new System.EventHandler(this.manageMetadataMappingsToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(229, 6);
+            // 
+            // moveDisksToolStripMenuItem
+            // 
+            this.moveDisksToolStripMenuItem.Name = "moveDisksToolStripMenuItem";
+            this.moveDisksToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.moveDisksToolStripMenuItem.Text = "Move Disks...";
+            this.moveDisksToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
+            // 
+            // transcoderDiagnosticsToolStripMenuItem
+            // 
+            this.transcoderDiagnosticsToolStripMenuItem.Name = "transcoderDiagnosticsToolStripMenuItem";
+            this.transcoderDiagnosticsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.transcoderDiagnosticsToolStripMenuItem.Text = "Transcoder Diagnostics";
+            this.transcoderDiagnosticsToolStripMenuItem.Click += new System.EventHandler(this.transcoderDiagnosticsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -513,15 +572,32 @@ namespace OMLDatabaseEditor
             // cmsMoviesList
             // 
             this.cmsMoviesList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.miMetadataMulti});
+            this.miMetadataMulti,
+            this.deleteToolStripMenuItem1});
             this.cmsMoviesList.Name = "cmsMoviesList";
-            this.cmsMoviesList.Size = new System.Drawing.Size(166, 26);
+            this.cmsMoviesList.Size = new System.Drawing.Size(166, 48);
             // 
             // miMetadataMulti
             // 
+            this.miMetadataMulti.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fromPreferredSourcesToolStripMenuItem});
             this.miMetadataMulti.Name = "miMetadataMulti";
             this.miMetadataMulti.Size = new System.Drawing.Size(165, 22);
             this.miMetadataMulti.Text = "Update metadata";
+            // 
+            // fromPreferredSourcesToolStripMenuItem
+            // 
+            this.fromPreferredSourcesToolStripMenuItem.Name = "fromPreferredSourcesToolStripMenuItem";
+            this.fromPreferredSourcesToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.fromPreferredSourcesToolStripMenuItem.Text = "From Preferred Sources";
+            this.fromPreferredSourcesToolStripMenuItem.Click += new System.EventHandler(this.fromPreferredSourcesToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem1
+            // 
+            this.deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
+            this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
+            this.deleteToolStripMenuItem1.Text = "Delete";
+            this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteSelectedMoviesToolStripMenuItem_Click);
             // 
             // navBarGroupControlContainer2
             // 
@@ -608,7 +684,8 @@ namespace OMLDatabaseEditor
             // 
             this.newMovieSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.newMovieSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fromScratchToolStripMenuItem1});
+            this.fromScratchToolStripMenuItem1,
+            this.fromPreferredSourcesToolStripMenuItem2});
             this.newMovieSplitButton.Image = global::OMLDatabaseEditor.Properties.Resources.NewDocumentHS;
             this.newMovieSplitButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.newMovieSplitButton.Name = "newMovieSplitButton";
@@ -618,9 +695,16 @@ namespace OMLDatabaseEditor
             // fromScratchToolStripMenuItem1
             // 
             this.fromScratchToolStripMenuItem1.Name = "fromScratchToolStripMenuItem1";
-            this.fromScratchToolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
+            this.fromScratchToolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
             this.fromScratchToolStripMenuItem1.Text = "From Scratch";
             this.fromScratchToolStripMenuItem1.Click += new System.EventHandler(this.fromScratchToolStripMenuItem_Click);
+            // 
+            // fromPreferredSourcesToolStripMenuItem2
+            // 
+            this.fromPreferredSourcesToolStripMenuItem2.Name = "fromPreferredSourcesToolStripMenuItem2";
+            this.fromPreferredSourcesToolStripMenuItem2.Size = new System.Drawing.Size(197, 22);
+            this.fromPreferredSourcesToolStripMenuItem2.Text = "From Preferred Sources";
+            this.fromPreferredSourcesToolStripMenuItem2.Click += new System.EventHandler(this.fromMetaDataToolStripMenuItem_Click);
             // 
             // saveToolStripButton
             // 
@@ -649,18 +733,6 @@ namespace OMLDatabaseEditor
             // defaultLookAndFeel1
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
-            // 
-            // moveDisksToolStripMenuItem
-            // 
-            this.moveDisksToolStripMenuItem.Name = "moveDisksToolStripMenuItem";
-            this.moveDisksToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
-            this.moveDisksToolStripMenuItem.Text = "Move Disks...";
-            this.moveDisksToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(167, 6);
             // 
             // MainEditor
             // 
@@ -767,6 +839,14 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem filterByTagToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem moveDisksToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteSelectedMoviesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem fromPreferredSourcesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel statusText;
+        private System.Windows.Forms.ToolStripMenuItem fromPreferredSourcesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem fromPreferredSourcesToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem transcoderDiagnosticsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem manageMetadataMappingsToolStripMenuItem;
     }
 }
 

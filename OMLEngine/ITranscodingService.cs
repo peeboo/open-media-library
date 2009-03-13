@@ -9,7 +9,7 @@ namespace OMLEngineService
     public interface ITranscodingService
     {
         [OperationContract(IsOneWay = true)]
-        void Transcode(MediaSource source);
+        void Transcode(MediaSource source, string mcxuser);
 
         [OperationContract(IsOneWay = true)]
         void Cancel(string key);

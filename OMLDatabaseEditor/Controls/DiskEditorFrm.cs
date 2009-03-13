@@ -55,5 +55,14 @@ namespace OMLDatabaseEditor.Controls
         {
             diskEditor.SaveChanges();
         }
+
+        private void btnDiskInfo_Click(object sender, EventArgs e)
+        {
+            if (lbDisks.SelectedItem != null)
+            {
+                DiskInfoFrm di = new DiskInfoFrm(lbDisks.SelectedItem as Disk);
+                di.ShowDialog();
+            }
+        }
     }
 }

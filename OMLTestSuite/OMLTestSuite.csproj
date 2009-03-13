@@ -56,17 +56,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DiskInfoTest.cs" />
+    <Compile Include="DVDLibraryImporterTest.cs" />
     <Compile Include="DVDProfilerTest.cs" />
     <Compile Include="MEncoderCommandBuilderTest.cs" />
     <Compile Include="MovieCollectorzTest.cs" />
     <Compile Include="MoviePlayerDVDTest.cs" />
     <Compile Include="MyMoviesPluginTest.cs" />
+    <Compile Include="NetFlixMetadataTest.cs" />
     <Compile Include="OMLFileWatcherTest.cs" />
     <Compile Include="OMLXMLImporterTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TitleCollectionManagerTest.cs" />
+    <Compile Include="TheMovieDbMetadataPluginTest.cs" />
     <Compile Include="TitleCollectionTest.cs" />
     <Compile Include="TitleTest.cs" />
     <Compile Include="TranscodeTest.cs" />
@@ -89,6 +93,10 @@
       <Project>{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}</Project>
       <Name>MyMoviesPlugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NetFlixMetadata\NetFlixMetadata.csproj">
+      <Project>{11275660-18A4-4B39-BA5D-0451E1B5DBCE}</Project>
+      <Name>NetFlixMetadata</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
       <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
       <Name>OMLEngine</Name>
@@ -108,6 +116,14 @@
     <ProjectReference Include="..\OMLXMLImporter\OMLXMLImporter.csproj">
       <Project>{3F757A9F-BA85-4B16-AD94-334D332F3DEB}</Project>
       <Name>OMLXMLImporter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TheMovieDbMetadata\TheMovieDbMetadata.csproj">
+      <Project>{BD6F6DBB-B6D8-4EC3-939A-62BC58CC19B1}</Project>
+      <Name>TheMovieDbMetadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VMCDVDLibraryPlugin\VMCDVDLibraryPlugin.csproj">
+      <Project>{CEEBFC5A-9CAB-40D1-A453-8C30A13F0CD4}</Project>
+      <Name>VMCDVDLibraryPlugin</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

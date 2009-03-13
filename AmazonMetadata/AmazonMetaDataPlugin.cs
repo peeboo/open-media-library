@@ -47,6 +47,7 @@ namespace AmazonMetadata
             get { return "Amazon"; }
         }
 
+
         // Must call this before any other plugin method
         // parameters is optional -use it if you want to get parameters passed in
         // here we can accept the Locale parameter but we'll use the default if not
@@ -184,6 +185,13 @@ namespace AmazonMetadata
             return PluginName;
         }
 
-        
+        public bool SupportsBackDrops()
+        {
+            return false;
+        }
+
+        public void DownloadBackDropsForTitle(Title t, int index)
+        {
+        }
     }
 }

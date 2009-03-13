@@ -48,7 +48,11 @@ namespace Library
                 if (path.StartsWith("\\\\"))
                     path = path.Substring(2);
 
-                return PlayMovie("DVD://" + path);
+                path = path.Replace("\\", "/");
+
+                path = string.Format("DVD://{0}", path);
+                OMLApplication.DebugLine("[MoviePlayerDVD] Actual play string being passed to PlayMovie: {0}", path);
+                return PlayMovie(path);
             }
             return false;
         }
@@ -62,7 +66,7 @@ namespace Library
         {
             string playString = string.Empty;
             playString = string.Format("DVD://{0}", FileScanner.GetPlayStringForPath(path));
-            playString = playString.Replace('\\', '/');
+            playString = playString.Replace("\\", "/");
 
             if (titleNumber > 0)
             {
@@ -78,7 +82,7 @@ namespace Library
         {
             string playString = string.Empty;
             playString = string.Format("DVD://{0}", FileScanner.GetPlayStringForPath(path));
-            playString = playString.Replace('\\', '/');
+            playString = playString.Replace("\\", "/");
 
             if (titleNumber < 1)
                 titleNumber = 1;

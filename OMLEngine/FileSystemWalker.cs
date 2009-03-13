@@ -32,7 +32,17 @@ namespace OMLEngine
 
         public static string TempPlayListDirectory
         {
-            get { return Path.Combine(PublicRootDirectory, "TempPlaylists"); }
+            get { return Path.Combine(PublicRootDirectory, @"TempPlaylists"); }
+        }
+
+        public static string MainBackDropDirectory
+        {
+            get { return Path.Combine(PublicRootDirectory, @"MainBackDrops"); }
+        }
+
+        public static string FanArtDirectory
+        {
+            get { return Path.Combine(PublicRootDirectory, @"FanArt"); }
         }
 
         /// <summary>
@@ -51,6 +61,15 @@ namespace OMLEngine
             get { return Path.Combine(RootDirectory, @"Plugins"); }
         }
 
+        public static bool FanArtDirectoryExists
+        {
+            get { return Directory.Exists(FanArtDirectory); }
+        }
+
+        public static void createFanArtDirectory()
+        {
+            Directory.CreateDirectory(FanArtDirectory);
+        }
         /// <summary>
         /// Location where all debug and other logs are created
         /// </summary>
@@ -75,6 +94,11 @@ namespace OMLEngine
             get { return Path.Combine(RootDirectory, @"Translations"); }
         }
 
+
+        public static bool MainBackDropDirExists
+        {
+            get { return Directory.Exists(MainBackDropDirectory); }
+        }
         /// <summary>
         /// Checks to ensure that the Root directory exists
         /// </summary>
@@ -134,6 +158,15 @@ namespace OMLEngine
             get { return Directory.Exists(TranslationsDirectory); }
         }
 
+        public static bool TempPlayListDirExists
+        {
+            get { return Directory.Exists(TempPlayListDirectory); }
+        }
+
+        public static void createMainBackDropDirectory()
+        {
+            Directory.CreateDirectory(MainBackDropDirectory);
+        }
 
         /// <summary>
         /// Creates the root directory if it doesn't already exist
@@ -148,7 +181,7 @@ namespace OMLEngine
             Directory.CreateDirectory(PublicRootDirectory);
         }
 
-        public static void CreateTempPlayListDirectory()
+        public static void createTempPlayListDirectory()
         {
             Directory.CreateDirectory(TempPlayListDirectory);
         }

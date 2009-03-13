@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.ServiceModel;
 using OMLEngineService;
 using System.Security.AccessControl;
+using System.Runtime.InteropServices;
 
 namespace OMLEngine
 {
@@ -194,10 +195,41 @@ namespace OMLEngine
         static string _database_filename;
         private Dictionary<string, Title> _moviesByFilename = new Dictionary<string, Title>();
         private Dictionary<int, Title> _moviesByItemId = new Dictionary<int, Title>();
+        private Dictionary<string, string> _genreMap = new Dictionary<string, string>();
+        private Dictionary<string, string> _metadataMap = new Dictionary<string, string>();
 
         public string DBFilename
         {
             get { return _database_filename; }
+        }
+
+        public Dictionary<string, string> GenreMap
+        {
+            get { return _genreMap; }
+        }
+
+        public Dictionary<string, string> MetadataMap
+        {
+            get { return _metadataMap; }
+        }
+
+        public string PluginForProperty(string propertyName)
+        {
+            KeyValuePair<string, string> match = _metadataMap.SingleOrDefault(kvp => kvp.Key == propertyName);
+            return match.Value;
+        }
+
+        public Dictionary<string, List<string>> PropertiesByPlugin()
+        {
+            Dictionary<string, List<string>> result = new Dictionary<string, List<string>>();
+            foreach (KeyValuePair<string, string> map in _metadataMap)
+            {
+                if (result.ContainsKey(map.Value))
+                    result[map.Value].Add(map.Key);
+                else
+                    result[map.Value] = new List<string>() { map.Key };
+            }
+            return result;
         }
 
         public Dictionary<int, Title> MoviesByItemId
@@ -351,6 +383,39 @@ namespace OMLEngine
             }
         }
 
+        public List<string> GetAllVideoResolutions
+        {
+            get
+            {
+                List<string> resolutions = (from title in _list
+                                        orderby title.VideoResolution ascending
+                                        select title.VideoResolution).Distinct().ToList<string>();
+                return resolutions;
+            }
+        }
+
+        public List<string> GetAllVideoStandards
+        {
+            get
+            {
+                List<string> standards = (from title in _list
+                                            orderby title.VideoStandard ascending
+                                            select title.VideoStandard).Distinct().ToList<string>();
+                return standards;
+            }
+        }
+
+        public List<string> GetAllImporterSources
+        {
+            get
+            {
+                List<string> importerz = (from title in _list
+                                          orderby title.ImporterSource ascending
+                                          select title.ImporterSource).Distinct().ToList<string>();
+                return importerz;
+            }
+        }
+
         public List<string> GetFolders
         {
             get
@@ -423,6 +488,34 @@ namespace OMLEngine
             if (newTitle.Disks.Count > 0)
                 _moviesByFilename.Remove(GetDiskHash(newTitle.Disks));
             _list.Remove(newTitle);
+            DeleteImageNoException(newTitle.FrontCoverPath);
+            DeleteImageNoException(newTitle.FrontCoverMenuPath);
+            DeleteImageNoException(newTitle.BackCoverPath);
+            DeleteImageNoException(newTitle.BackDropImage);
+        }
+
+        public static void DeleteImageNoException(string path)
+        {
+            try
+            {
+                File.Delete(path);
+            }
+            catch (Exception e)
+            {
+                OMLEngine.Utilities.DebugLine("[TitleCollection] DeleteImageNoException(" + path + ") : failed deleting image because " + e.Message);
+            }
+        }
+
+        public static void ClearMirrorDataFiles()
+        {
+            string[] userFolders = Directory.GetDirectories(@"C:\Users");
+            foreach (string userFolder in userFolders)
+            {
+                if (File.Exists(userFolder + @"AppData\Local\VirtualStore\ProgramData\OpenMediaLibrary\oml.dat"))
+                {
+                    File.Delete(userFolder + @"AppData\Local\VirtualStore\ProgramData\OpenMediaLibrary\oml.dat");
+                }
+            }
         }
 
         private string GetDiskHash(IEnumerable<Disk> disks)
@@ -624,7 +717,8 @@ namespace OMLEngine
                     //REMOVE DUPLICATES HERE FROM THE PRIMARY COLLECTION!!!!
                     bformatter.Serialize(stream, title);
                 }
-
+                bformatter.Serialize(stream, _genreMap);
+                bformatter.Serialize(stream, _metadataMap);
                 stream.Close();
                 return true;
             }
@@ -693,6 +787,8 @@ namespace OMLEngine
                         //Utilities.DebugLine("[TitleCollection] Adding Title: "+t.Name);
                         Add(t);
                     }
+                    _genreMap = (Dictionary<string, string>)bf.Deserialize(stm);
+                    _metadataMap = (Dictionary<string, string>)bf.Deserialize(stm);
                     stm.Close();
                     Utilities.DebugLine("[TitleCollection] Loaded: " + numTitles + " titles");
                     return true;
@@ -729,9 +825,10 @@ namespace OMLEngine
             foreach (string image in imageFiles)
             {
                 int id;
-                string strId = image.Substring(1, image.IndexOf('.') - 1);
                 try
                 {
+                    string strId = string.Join("", System.Text.RegularExpressions.Regex.Split(Path.GetFileName(image), @"[^\d]"));
+
                     Int32.TryParse(strId, out id);
                     if (tc.GetTitleById(id) == null)
                     {
@@ -739,7 +836,10 @@ namespace OMLEngine
                         {
                             FileInfo fInfo = new FileInfo(Path.Combine(FileSystemWalker.ImageDirectory, image));
                             long size = fInfo.Length;
-                            File.Delete(Path.Combine(FileSystemWalker.ImageDirectory, image));
+
+                            //File.Delete(Path.Combine(FileSystemWalker.ImageDirectory, image));
+                            Utilities.DebugLine("Trying to delete file: {0}", image);
+                            Win32APIFunctions.DeleteFilesToRecycleBin(image);
                             bytesRemoved += size;
                         }
                         catch (Exception e)
@@ -762,13 +862,51 @@ namespace OMLEngine
             List<Title> tc = (List <Title>)info.GetValue("TitleCollection", typeof(TitleCollection));
             foreach (Title title in tc)
                 Add(title);
+            _genreMap = info.GetValue("GenreMap", typeof(Dictionary<string, string>)) as Dictionary<string, string>;
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             Utilities.DebugLine("[TitleCollection] GetObjectData()");
             info.AddValue("TitleCollection", _list);
+            info.AddValue("GenreMap", _genreMap);
         }
         #endregion
+    }
+
+    class Win32APIFunctions
+    {
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 1)]
+        public struct SHFILEOPSTRUCT
+        {
+            public IntPtr hwnd;
+            [MarshalAs(UnmanagedType.U4)]
+            public int wFunc;
+            public string pFrom;
+            public string pTo;
+            public short fFlags;
+            [MarshalAs(UnmanagedType.Bool)]
+            public bool fAnyOperationsAborted;
+            public IntPtr hNameMappings;
+            public string lpszProgressTitle;
+        }
+
+        [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+        static extern int SHFileOperation(ref SHFILEOPSTRUCT FileOp);
+        const int FO_DELETE = 3;
+        const int FOF_ALLOWUNDO = 0x40;
+        const int FOF_NOCONFIRMATION = 0x10; //Don't prompt the user.; 
+
+        public static void DeleteFilesToRecycleBin(string filename)
+        {
+            SHFILEOPSTRUCT shf = new SHFILEOPSTRUCT();
+            shf.wFunc = FO_DELETE;
+            shf.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION;
+            shf.pFrom = filename + "\0";
+            int result = SHFileOperation(ref shf);
+
+            if (result != 0)
+                Utilities.DebugLine("error: {0} while moving file {1} to recycle bin", result, filename);
+        }
     }
 }

@@ -34,12 +34,14 @@ namespace OMLDatabaseEditor
                 {
                     _list.Remove((string)item);
                 }
+                (this.BindingContext[_list] as CurrencyManager).Refresh();
+                lbItems.Refresh();
             }
         }
 
         public void SetMRULists()
         {
-            if ((this.Text == "Genres") && (Properties.Settings.Default.gbUseGenreList))
+            if ((this.Text == "Genres") && (Properties.Settings.Default.gbUseGenreList) && Properties.Settings.Default.gsValidGenres != null)
             {
                 string[] aGenres = new string[0];
                 if (Properties.Settings.Default.gsValidGenres != null)
@@ -80,6 +82,7 @@ namespace OMLDatabaseEditor
                     }
                 }
                 _list.Add(cbeItem.Text);
+                (this.BindingContext[_list] as CurrencyManager).Refresh();
                 lbItems.Refresh();
 
                 cbeItem.Text = "";

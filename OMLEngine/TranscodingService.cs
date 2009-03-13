@@ -46,7 +46,7 @@ namespace OMLEngineService
         {
             Utilities.DebugLine("[TranscodingAPI] Transcode", Source);
             using (var host = TranscodingNotifyingService.NewTranscodingServiceProxy())
-                host.Channel.Transcode(Source);
+                host.Channel.Transcode(Source, Environment.UserName);
         }
 
         public void Cancel()
@@ -63,7 +63,7 @@ namespace OMLEngineService
             Utilities.DebugLine("[TranscodingAPI] Stop", Source);
             while (wait && IsRunning)
                 Thread.Sleep(500);
-            TranscodingNotifyingService.Stop();
+            //TranscodingNotifyingService.Stop();
         }
     }
 
@@ -72,6 +72,7 @@ namespace OMLEngineService
     public class TranscodingNotifyingService : ITranscodingNotifyingService
     {
         static ServiceHost sHost;
+        static string sURI;
 
         public static string GetNotifierUri()
         {
@@ -81,16 +82,19 @@ namespace OMLEngineService
         public static void Start()
         {
             if (sHost != null)
-                return;
+            {
+                Stop();
+                //return;
+            }
 
-            string uri = GetNotifierUri();
-            sHost = new ServiceHost(typeof(TranscodingNotifyingService), new Uri(uri));
-            sHost.AddServiceEndpoint(typeof(ITranscodingNotifyingService), WCFUtilites.NetTcpBinding(), uri);
+            sURI = GetNotifierUri();
+            sHost = new ServiceHost(typeof(TranscodingNotifyingService), new Uri(sURI));
+            sHost.AddServiceEndpoint(typeof(ITranscodingNotifyingService), WCFUtilites.NetTcpBinding(), sURI);
             sHost.Open();
-            Utilities.DebugLine("[TranscodingNotifier] Starting WCF notifying service: {0}", GetNotifierUri());
+            Utilities.DebugLine("[TranscodingNotifier] Starting WCF notifying service: {0}", sURI);
 
             using (var host = NewTranscodingServiceProxy())
-                host.Channel.RegisterNotifyer(uri, true);
+                host.Channel.RegisterNotifyer(sURI, true);
         }
 
         public static MyClientBase<ITranscodingService> NewTranscodingServiceProxy()
@@ -109,9 +113,9 @@ namespace OMLEngineService
                 return;
 
             using (var host = NewTranscodingServiceProxy())
-                host.Channel.RegisterNotifyer(GetNotifierUri(), false);
+                host.Channel.RegisterNotifyer(sURI, false);
 
-            Utilities.DebugLine("[TranscodingNotifier] Stopping WCF notifying service: {0}", GetNotifierUri());
+            Utilities.DebugLine("[TranscodingNotifier] Stopping WCF notifying service: {0}", sURI);
             sHost.Close();
             sHost = null;
         }
