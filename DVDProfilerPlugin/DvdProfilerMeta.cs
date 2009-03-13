@@ -21,6 +21,15 @@ namespace DVDProfilerPlugin
         XPathDocument document;
         private Title foundTitle = null;
 
+        public bool SupportsBackDrops()
+        {
+            return false;
+        }
+
+        public void DownloadBackDropsForTitle(Title t, int index)
+        {
+        }
+
         public string PluginName { get { return "DVDProfiler"; } }
 
         // these 2 methods must be called in sequence
