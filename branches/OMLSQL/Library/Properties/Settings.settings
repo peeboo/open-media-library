@@ -294,10 +294,25 @@
     <Setting Name="ShowWatchedIcon" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="MovieDetailsTransitionType" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Zoom and Spin</Value>
+    <Setting Name="MainPageBackDropAlpha" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0.3</Value>
     </Setting>
     <Setting Name="HasRunSetup" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DetailsPageBackDropAlpha" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0.3</Value>
+    </Setting>
+    <Setting Name="MainPageBackDropFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="MainPageBackDropRotationInSeconds" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="DetailsView" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Background Boxes</Value>
+    </Setting>
+    <Setting Name="UseVideoBackDrops" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

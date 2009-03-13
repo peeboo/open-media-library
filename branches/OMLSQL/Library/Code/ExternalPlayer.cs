@@ -11,17 +11,32 @@ using OMLGetDVDInfo;
 
 namespace Library
 {
+    public class ExternalPlayerItem
+    {
+        public string Path;
+        public ExternalPlayer.KnownPlayers PlayerType;
+    }
+
     /// <summary>
     /// Allows the user to specify a player outside of VMC for playing their video files
     /// </summary>
     public class ExternalPlayer : IPlayMovie
     {
-        private static Dictionary<VideoFormat, string> _typeToExternalPlayer = null;
+        public enum KnownPlayers
+        {
+            None,
+            TotalMediaTheater,
+            PowerDVD8,
+            WinDVD9,
+            Other,
+        }
+
+        private static Dictionary<VideoFormat, ExternalPlayerItem> _typeToExternalPlayer = null;
         private static object _lockObject = new object();
         private string _mediaPath;
         private VideoFormat _videoFormat;
 
-        private static Dictionary<VideoFormat, string> TypeToExternalPlayer
+        private static Dictionary<VideoFormat, ExternalPlayerItem> TypeToExternalPlayer
         {
             get
             {
@@ -34,25 +49,36 @@ namespace Library
                             // generate dictionary
                             if (Properties.Settings.Default.ExternalPlayerMapping != null)
                             {
-                                _typeToExternalPlayer = 
-                                    new Dictionary<VideoFormat, string>(Properties.Settings.Default.ExternalPlayerMapping.Count);
+                                _typeToExternalPlayer =
+                                    new Dictionary<VideoFormat, ExternalPlayerItem>(Properties.Settings.Default.ExternalPlayerMapping.Count);
 
                                 foreach (string pair in Properties.Settings.Default.ExternalPlayerMapping)
                                 {
-                                    int seperatorIndex = pair.IndexOf('|');
-                                    if (seperatorIndex == -1 || pair.Length < seperatorIndex + 2)
+                                    string[] parts = pair.Split('|');
+
+                                    if (parts.Length != 3)
                                     {
                                         OMLApplication.DebugLine("[ExternalPlayer] External player string in incorrect format " + pair);
                                         continue;
                                     }
 
                                     VideoFormat format;
-                                    string type = pair.Substring(0, seperatorIndex);
-                                    string path = pair.Substring(seperatorIndex + 1);
+                                    KnownPlayers player;
+
+                                    string type = parts[0];
+                                    string playerString = parts[1];
+                                    string path = parts[2];
 
                                     try
                                     {
                                         format = (VideoFormat) Enum.Parse(typeof(VideoFormat), type, true);
+
+                                        int playerInt;
+
+                                        if (!int.TryParse(playerString, out playerInt))
+                                            continue;
+
+                                        player = (KnownPlayers)playerInt;
                                     }
                                     catch
                                     {
@@ -60,11 +86,11 @@ namespace Library
                                         continue;
                                     }
 
-                                    _typeToExternalPlayer.Add(format, path);
+                                    _typeToExternalPlayer.Add(format, new ExternalPlayerItem() { Path = path, PlayerType = player });
                                 }
                             }
                             else
-                                _typeToExternalPlayer = new Dictionary<VideoFormat, string>(0);   
+                                _typeToExternalPlayer = new Dictionary<VideoFormat, ExternalPlayerItem>(0);   
                         }
                     }
                 }
@@ -84,12 +110,68 @@ namespace Library
         }
 
         /// <summary>
+        /// Returns the path to the IFO file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private string GetIfoPath(string path)
+        {
+            if (!Directory.Exists(path))
+                return path;
+
+            if (Directory.Exists(Path.Combine(path, "VIDEO_TS")))
+            {
+                path = Path.Combine(path, "VIDEO_TS");
+            }
+
+            if (File.Exists(Path.Combine(path, "video_ts.ifo")))
+            {
+                path = Path.Combine(path, "video_ts.ifo");
+            }
+
+            return path;
+        }
+
+        /// <summary>
+        /// Returns the largest m2ts file for playing in the folder
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private string GetLargestM2TSPath(string path)
+        {
+            if (!Directory.Exists(path))
+                return path;
+
+            if (!Directory.Exists(Path.Combine(path, "BDMV\\STREAM")))           
+                return path;
+
+            path = Path.Combine(path, "BDMV\\STREAM");
+
+            long fileSize = 0;
+
+            // scan for the largest
+            foreach (string file in Directory.GetFiles(path, "*.m2ts"))
+            {
+                FileInfo fi = new FileInfo(file);
+                if (fi.Length > fileSize)
+                {
+                    path = file;
+                    fileSize = fi.Length;
+                }
+            }
+
+            return path;
+        }
+
+        /// <summary>
         /// Launches the external player
         /// </summary>
         /// <returns></returns>
         public bool PlayMovie()
         {
-            string path = GetExternalPlayerPath(_videoFormat);
+            ExternalPlayerItem player = GetExternalForFormat(_videoFormat);
+
+            string path = player.Path;
 
             // make sure the external player really cares about this
             if (string.IsNullOrEmpty(path))
@@ -98,33 +180,75 @@ namespace Library
             // validate the player exists
             if (!File.Exists(path))
                 return false;
-            
-            // solomon : apparently some external players want you to point to the \BDMV path
-            // this may not work for all players so i'm adding this in now and if it becomes
-            // a problem we'll need to add it as config switch down the road
-            if (_videoFormat == VideoFormat.BLURAY &&
-                !File.Exists(Path.Combine(_mediaPath, "index.bdmv")) &&
-                File.Exists(Path.Combine(_mediaPath, "BDMV\\index.bdmv")))
-            {
-                _mediaPath = Path.Combine(_mediaPath, "BDMV");
-            }
-            // TMT is picky and will only play a ripped HDDVD if it ends in a backslash when
-            // pointing to a folder
-            else if (_videoFormat == VideoFormat.HDDVD &&
-                Directory.Exists(_mediaPath) &&
-                !_mediaPath.EndsWith("\\"))
-            {
-                _mediaPath += "\\";
-            }
 
-            OMLApplication.DebugLine("Calling external application \"" + path + "\" \"" + _mediaPath + "\"");
+            // setup the special rules per player type
+            bool useMaximizer = false;
+
+            switch (player.PlayerType)
+            {
+                case KnownPlayers.PowerDVD8:
+                    useMaximizer = true;
+
+                    if (_videoFormat == VideoFormat.DVD)
+                    {
+                        _mediaPath = GetIfoPath(_mediaPath);
+                    }
+                    else if (_videoFormat == VideoFormat.BLURAY)
+                    {
+                        _mediaPath = GetLargestM2TSPath(_mediaPath);
+                    }                   
+
+                    break;                
+
+                case KnownPlayers.TotalMediaTheater:
+                    useMaximizer = false;
+
+                    if (_videoFormat == VideoFormat.BLURAY &&
+                            !File.Exists(Path.Combine(_mediaPath, "index.bdmv")) &&
+                            File.Exists(Path.Combine(_mediaPath, "BDMV\\index.bdmv")))
+                    {
+                        _mediaPath = Path.Combine(_mediaPath, "BDMV");
+                    }
+                    else if (_videoFormat == VideoFormat.HDDVD &&
+                                Directory.Exists(_mediaPath) &&
+                                !_mediaPath.EndsWith("\\"))
+                    {
+                        _mediaPath += "\\";
+                    }
+                    break;
+
+                case KnownPlayers.Other:
+                    useMaximizer = true;
+                    break;
+
+                case KnownPlayers.WinDVD9:
+                    useMaximizer = true;
+                    break;                    
+            }                        
 
             OMLApplication.ExecuteSafe(delegate
             {
-                Process process = new Process();
-                process.StartInfo.FileName = path;
-                process.StartInfo.Arguments = "\"" + _mediaPath + "\"";
-                process.Start();
+                // if the maximizer app can be found use that
+                string maximizerPath = Path.Combine(OMLEngine.FileSystemWalker.RootDirectory, "Maximizer.exe");
+
+                if (useMaximizer && File.Exists(maximizerPath))
+                {                
+                    OMLApplication.DebugLine("Calling Maximizer application \"" + path + "\" \"" + _mediaPath + "\"");
+                    Process process = new Process();
+                    process.StartInfo.FileName = maximizerPath;
+                    process.StartInfo.Arguments = string.Format("\"{0}\" \"{1}\"", path, _mediaPath);
+                    process.StartInfo.CreateNoWindow = true;
+                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    process.Start();
+                }
+                else
+                {
+                    OMLApplication.DebugLine("Calling external application \"" + path + "\" \"" + _mediaPath + "\"");
+                    Process process = new Process();
+                    process.StartInfo.FileName = path;
+                    process.StartInfo.Arguments = "\"" + _mediaPath + "\"";
+                    process.Start();
+                }
             });
                         
             return true;
@@ -137,7 +261,7 @@ namespace Library
         /// <returns></returns>
         public static bool ExternalPlayerExistForType(VideoFormat format)
         {
-            bool keyExists = TypeToExternalPlayer.ContainsKey(format) && File.Exists(TypeToExternalPlayer[format]);
+            bool keyExists = TypeToExternalPlayer.ContainsKey(format) && File.Exists(TypeToExternalPlayer[format].Path);
 
             // if we didn't find the type - see if the all override was used
             if (!keyExists)
@@ -159,13 +283,13 @@ namespace Library
         /// </summary>
         /// <param name="format"></param>
         /// <returns></returns>
-        public static string GetExternalPlayerPath(VideoFormat format)
+        public static ExternalPlayerItem GetExternalForFormat(VideoFormat format)
         {
-            string playerPath;
+            ExternalPlayerItem playerPath;
 
             if (!TypeToExternalPlayer.TryGetValue(format, out playerPath))
                 if (!TypeToExternalPlayer.TryGetValue(VideoFormat.ALL, out playerPath))
-                    playerPath = string.Empty;
+                    return null;
 
             return playerPath;
         }

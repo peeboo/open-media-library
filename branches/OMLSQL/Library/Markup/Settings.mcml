@@ -22,9 +22,7 @@
       <Command Name="SaveSettings"
                Description="Save Settings"/>
       <Command Name="AboutOML"
-               Description="About OML"/>
-      <Command Name="ScanForTMTCommand"
-               Description="Scan For TMT Plugin"/>
+               Description="About OML"/>      
       <Command Name="ScanForMounter"
                Description="Scan For Mounting tool"/>
       <Command Name="RemoveUnusedImagesCommand"
@@ -48,6 +46,9 @@
 
       <ScrollingData Name="ScrollDataFilters"/>
       <ScrollingHandler Name="ScrollHandlerFilters"/>
+
+      <ScrollingData Name="ScrollDataExternal" BeginPadding="80" EndPadding="20"/>
+      <ScrollingHandler Name="ScrollHandlerExternal"/>
 
       <Size Name="ChoiceSpinnerSize" Size="275,51" />
     </Locals>
@@ -73,13 +74,7 @@
         <Actions>
           <Invoke Target="[Settings.CleanupImagesFolder]"/>
         </Actions>  
-      </Changed>
-      
-      <Changed Source="[ScanForTMTCommand.Invoked]">
-        <Actions>
-          <Invoke Target="[Settings.LocateTotalMediaTheatrePluginExecutable]"/>
-        </Actions>
-      </Changed>
+      </Changed>          
 
       <Changed Source="[ScanForMounter.Invoked]">
         <Actions>
@@ -239,10 +234,7 @@
         <Actions>
           <Set Target="[Tabs.ChosenIndex]" Value="0" />
         </Actions>
-      </Condition>
-
-      <Condition Source="[UseExternalPlayer.Checked.Value]" SourceValue="true" Target="[ExternalPlayer.Visible]" Value="true" />
-      <Condition Source="[UseExternalPlayer.Checked.Value]" SourceValue="false" Target="[ExternalPlayer.Visible]" Value="false" />
+      </Condition>      
 
       <Changed Source="[Settings.StartPage.Chosen]">
         <Actions>
@@ -280,6 +272,9 @@
 
       <Default Target="[ScrollHandlerUI.ScrollingData]" Value="[ScrollDataUI]"/>
       <Default Target="[ScrollHandlerFilters.ScrollingData]" Value="[ScrollDataFilters]"/>
+      <Default Target="[ScrollHandlerExternal.ScrollingData]" Value="[ScrollDataExternal]"/>
+      <Binding Source="[Settings.MainPageBackDropAlpha.Chosen!cor:Single]" Target="[SampleMainBackDropImage.Alpha]"/>
+      <Binding Source="[Settings.DetailsPageBackDropAlpha.Chosen!cor:Single]" Target="[SampleDetailsBackDropImage.Alpha]"/>
     </Rules>
 
     <Content>
@@ -330,6 +325,13 @@
                         <Children>
                           <Text Content="Movie Gallery View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
                           <c:SimpleSpinner Name="MovieView" Model="[Settings.MovieView]" Size="[ChoiceSpinnerSize]" />
+                        </Children>
+                      </Panel>
+
+                      <Panel Layout="VerticalFlow" Navigation="Group">
+                        <Children>
+                          <Text Content="Details View" Color="White" Font="font://me:Font" Margins="0,20,0,0"/>
+                          <c:SimpleSpinner Name="DetailsView" Model="[Settings.DetailsView]" Size="[ChoiceSpinnerSize]" />
                         </Children>
                       </Panel>
 
@@ -422,7 +424,25 @@
                               <c:SimpleSpinner Name="CoverArtSpacing" Model="[Settings.CoverArtSpacing]" Size="151,51" />
                             </Children>
                           </Panel>
-                          
+
+                          <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="4" Navigation="Group">
+                            <Children>
+                              <Text Content="Menu Page: Alpha Level" Color="White" Font="Calibri, 14"/>
+                              <Graphic Name="SampleMainBackDropImage" Content="image://me:SampleBackDrop" MaintainAspectRatio="true" SizingPolicy="SizeToContent" />
+                              <c:SimpleSpinner Name="MainPageBackDropAlpha" Model="[Settings.MainPageBackDropAlpha]" Size="151,51" />
+                              <Text Content="If using random MainPage backdrops, rotate the image how often in seconds" Color="White" Font="Calibri, 14"/>
+                              <c:SimpleSpinner Name="MainPageBackDropInterval" Model="[Settings.MainPageBackDropInterval]" Size="151,51" />
+                            </Children>
+                          </Panel>
+
+                          <Panel Layout="VerticalFlow" Margins="0,0,50,0" FocusOrder="5" Navigation="Group">
+                            <Children>
+                              <Text Content="Details Page: Alpha Level" Color="White" Font="Calibri, 14"/>
+                              <Graphic Name="SampleDetailsBackDropImage" Content="image://me:SampleBackDrop" MaintainAspectRatio="true" SizingPolicy="SizeToContent" />
+                              <c:SimpleSpinner Name="DetailsPageBackDropAlpha" Model="[Settings.DetailsPageBackDropAlpha]" Size="151,51" />
+                            </Children>
+                          </Panel>
+
                         </Children>
                       </Scroller>
                     </Children>
@@ -604,39 +624,33 @@
               </Scroller>
               
               <!-- ExternalPlayers -->
-              <Panel Name="ExternalPlayers" Layout="VerticalFlow" Visible="false" Navigation="Group">
-                <Children>
-                  <Panel Layout="VerticalFlow" Navigation="Group">
-                    <Children>
-                      <Text Content="Scan Drive for Total Media Theatre Plugin" Color="White" Font="font://me:SmallFont"/>
-                      <Panel Layout="HorizontalFlow">
-                        <Children>
-                          <c:SimpleSpinner Name="LocalFixedDrives" Model="[Settings.LocalFixedDrives]" Size="51,51" />
-                          <c:SimpleButton Name="ScanForTMTButton" Command="[ScanForTMTCommand]" FocusOrder="1" Text="Begin Scan"/>
-                        </Children>
-                      </Panel>
-                      <Text Content="External HD/BluRay Player" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
-                      <c:SimpleEditbox Size="700,51" Name="BluRayPlayer" EditableText="[Settings.BlueRayPlayerPath]" />
+              <Scroller Name="ExternalPlayers" ScrollingData="[ScrollDataExternal]" MaximumSize="0,475" MinimumSize="0,475" FadeSize="-10" Orientation="Vertical" Navigation="Group,Column" Visible="false">
+                <LayoutInput>
+                  <FormLayoutInput Left="Parent,0" Top="Parent,.25" Horizontal="Center"/>
+                </LayoutInput>
+                <Children>                 
 
-                      <Panel Layout="HorizontalFlow" Margins="0,40,0,0" Navigation="Group">
-                        <Children>
-                          <c:SimpleCheckbox Name="UseExternalPlayer" Checked="[Settings.UseExternalPlayer]" Margins="0,0,10,0" />
-                          <Text Content="Use External Player for all other media types" Color="White" Font="font://me:SmallFont"/>
-                        </Children>
-                      </Panel>
+                  <Text Content="Blu-Ray Movies" Color="White" Font="font://me:MediumFont" Margins="0,0,0,10"/>
+                  <me:ExternalPlayerSelector Name="BluRayExternal" Drives="[Settings.LocalFixedDrivesBluRay]" EditText="[Settings.ExternalPlayerPathBluRay]" PlayerSelection="[Settings.ExternalPlayerSelectionBluRay]" UISettings="[UISettings]" Settings="[Settings]" Application="[Application]" MovieBrowser="[MovieBrowser]"  />
 
-                      <c:SimpleEditbox Size="700,51" Name="ExternalPlayer" EditableText="[Settings.ExternalPlayerPath]" />
+                  <Text Content="HD-DVD Movies" Color="White" Font="font://me:MediumFont" Margins="0,20,0,10"/>
+                  <me:ExternalPlayerSelector Name="HDDVDExternal" Drives="[Settings.LocalFixedDrivesHDDVD]" EditText="[Settings.ExternalPlayerPathHDDVD]" PlayerSelection="[Settings.ExternalPlayerSelectionHDDVD]" UISettings="[UISettings]" Settings="[Settings]" Application="[Application]" MovieBrowser="[MovieBrowser]"  />
 
-                    </Children>
-                  </Panel>
+                  <Text Content="All Other Types" Color="White" Font="font://me:MediumFont" Margins="0,20,0,10"/>
+                  <me:ExternalPlayerSelector Name="AllExternal" Drives="[Settings.LocalFixedDrivesAll]" EditText="[Settings.ExternalPlayerPathAll]" PlayerSelection="[Settings.ExternalPlayerSelectionAll]" UISettings="[UISettings]" Settings="[Settings]" Application="[Application]" MovieBrowser="[MovieBrowser]"  />
+
                 </Children>
-              </Panel>
+              </Scroller>
 
               <!-- ExtenderTranscoding -->
               <Panel Name="ExtenderTranscoding" Layout="VerticalFlow" Visible="false" Navigation="Group">
                 <Children>
                   <Panel Layout="VerticalFlow" Navigation="Group,Column">
                     <Children>
+                      <Text Content="Impersonation Username" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                      <c:SimpleEditbox Size="700,51" Name="ImpersonationUsername" EditableText="[Settings.ImpersonationUsername]" />
+                      <Text Content="Impersonation Password" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+                      <c:SimpleEditbox Size="700,51" Name="ImpersonationPassword" EditableText="[Settings.ImpersonationPassword]" PasswordMasked="true" />
                       <Text Content="Number of Seconds to Delay Transcoding" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
                       <c:SimpleEditbox Size="700,51" Name="TranscodingBufferDelay" EditableText="[Settings.TranscodingBufferDelay]" />
                       <Panel Layout="VerticalFlow" Margins="0,40,0,0" Navigation="Group">
@@ -692,7 +706,7 @@
                       <c:SimpleButton Name="Save Settings" Command="[SaveSettings]" FocusOrder="1" Text="Save Settings" Margins="0,20,10,0" />
                       <!-- <c:SimpleButton Name="Import Movies" Command="[BeginSetupCommand]" Text="Import Movies" Margins="0,20,10,0"/> -->
                       <c:SimpleButton Name="About OML" Command="[AboutOML]" FocusOrder="2" Text="About OML" Margins="0,20,10,0"/>
-                      <c:SimpleButton Name="Show Sample Layout" Size="25,51" Command="[ShowSampleLayoutCommand]" FocusOrder="2" Text="." Margins="0,20,10,0"/>
+                      <!--<c:SimpleButton Name="Show Sample Layout" Size="25,51" Command="[ShowSampleLayoutCommand]" FocusOrder="2" Text="." Margins="0,20,10,0"/>-->
                     </Children>
                   </Panel>
                 </Children>
@@ -715,7 +729,61 @@
       </ColorFill>
     </Content>
   </UI>
-  <Font Name="Font" FontName="global://me:RegularFontName" FontSize="16" />
-  <Font Name="SmallFont" FontName="global://me:RegularFontName" FontSize="20" />
+
+  <UI Name="ExternalPlayerSelector">
+    <Properties>
+      <a:Settings Name="Settings" Settings="$Required" />
+      <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+      <a:UISettings Name="UISettings" UISettings="$Required" />
+      <Choice Choice="$Required" Name="PlayerSelection" />
+      <EditableText EditableText="$Required"  Name="EditText"/>
+      <Choice Choice="$Required" Name="Drives" />
+    </Properties>
+
+    <Locals>
+      <Command Name="ScanForTMTCommand" Description="Scan For TMT Plugin"/>
+    </Locals>
+
+    <Rules>
+      <Changed Source="[ScanForTMTCommand.Invoked]">
+        <Actions>
+          <Invoke Target="[Settings.LocateExternalPlayerExecutable]" selector="[PlayerSelection]" textBox="[EditText]" localFixedDrive="[Drives]" />
+        </Actions>
+      </Changed>
+    </Rules>
+    
+    <Content>
+      <Panel Layout="HorizontalFlow" Margins="0,0,0,0" Navigation="Row">
+        <Children>
+
+          <Panel Layout="VerticalFlow" Margins="0,0,30,0" Navigation="Column">
+            <Children>
+              <Text Content="Select the external player you wish to use" Color="White" Font="font://me:SmallFont"/>
+              <rbg:RadioButtonGroup Model="[PlayerSelection]" />
+            </Children>
+          </Panel>
+
+          <Panel Layout="VerticalFlow" Navigation="Group,Column">
+            <Children>
+              <Text Content="Scan Drive for selected external player" Color="White" Font="font://me:SmallFont"/>
+              <Panel Layout="HorizontalFlow" Navigation="Row,Group">
+                <Children>
+                  <c:SimpleSpinner Name="LocalFixedDrives" Model="[Drives]" Size="51,51" />
+                  <c:SimpleButton Name="ScanForTMTButton" Command="[ScanForTMTCommand]" FocusOrder="1" Text="Begin Scan"/>
+                </Children>
+              </Panel>
+              <Text Content="Path to player" Color="White" Font="font://me:SmallFont" Margins="0,20,0,0"/>
+              <c:SimpleEditbox Size="700,51" Name="BluRayPlayer" EditableText="[EditText]" />
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <Font Name="Font" FontName="global://me:RegularFontName" FontSize="14" />
+  <Font Name="SmallFont" FontName="global://me:RegularFontName" FontSize="16" />
+  <Font Name="MediumFont" FontName="global://me:RegularFontName" FontSize="20" />
   <Image Name="ListboxNoFocus" Source="resx://Library/Library.Resources/ListboxNoFocus" />
+  <Image Name="SampleBackDrop" Source="resx://Library/Library.Resources/SampleBackDrop"/>
 </Mcml>

@@ -53,8 +53,13 @@ namespace OMLDatabaseEditor
                         //     colOptionValue.Items.Add(possibleValue);
                         // }
                         string currentValueDescription = "";
-                        if (option.PossibleValues.ContainsKey(option.Value))
-                            currentValueDescription = option.PossibleValues[option.Value];
+                        if (option.PossibleValues != null && option.PossibleValues.Count > 0)
+                        {
+                            if (option.PossibleValues.ContainsKey(option.Value))
+                                currentValueDescription = option.PossibleValues[option.Value];
+                        } else {
+                            currentValueDescription = option.Value;
+                        }
                         row.CreateCells(grdOptions, option.Name, option.Value, currentValueDescription);
                         row.Tag = option;
                         grdOptions.Rows.Add(row);

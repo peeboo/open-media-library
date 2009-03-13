@@ -13,6 +13,20 @@ namespace OMLDatabaseEditor
         Title[] _titles = null;
         int _selectedTitle = -1;
         bool _overwriteMetadata;
+        MainEditor _openerForm;
+        public string _lastMetaPluginName;
+
+        public string LastMetaPluginName
+        {
+            get { return _lastMetaPluginName; }
+            set { _lastMetaPluginName = value; }
+        }
+
+        public string ReSearchText
+        {
+            get { return reSearchTitle.Text; }
+            set { reSearchTitle.Text = value; }
+        }
 
         public bool OverwriteMetadata
         {
@@ -25,6 +39,11 @@ namespace OMLDatabaseEditor
             get { return _selectedTitle; }
         }
 
+        public frmSearchResult(MainEditor opener)
+        {
+            _openerForm = opener;
+            InitializeComponent();
+        }
         public frmSearchResult()
         {
             InitializeComponent();
@@ -63,7 +82,7 @@ namespace OMLDatabaseEditor
             return ret;
         }
 
-        private string MakeStringFromDictionary(Dictionary<string,string> list)
+        private string MakeStringFromDictionary(Dictionary<string, string> list)
         {
             string ret = "";
             if (list != null)
@@ -79,6 +98,8 @@ namespace OMLDatabaseEditor
 
         public DialogResult ShowResults(Title[] titles)
         {
+            _titles = null;
+            grdTitles.Rows.Clear();
             _titles = titles;
             if (titles != null)
             {
@@ -109,7 +130,7 @@ namespace OMLDatabaseEditor
         {
             if (grdTitles.SelectedRows != null && grdTitles.SelectedRows.Count > 0)
             {
-                if (chkUpdateMissingDataOnly.Checked) 
+                if (chkUpdateMissingDataOnly.Checked)
                     _overwriteMetadata = false;
                 else
                     _overwriteMetadata = true;
@@ -125,6 +146,35 @@ namespace OMLDatabaseEditor
         private void grdTitles_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void reSearchSubmitButton_Click(object sender, EventArgs e)
+        {
+            submitNewTitleSearch();
+        }
+
+        private void reSearchTitleKeypress(Object o, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                submitNewTitleSearch();
+                e.Handled = true;
+            }
+        }
+
+        private void submitNewTitleSearch()
+        {
+            try
+            {
+                if (_openerForm != null)
+                {
+                    bool reSearch = _openerForm.StartMetadataImport(_lastMetaPluginName, false, reSearchTitle.Text, this);
+                }
+            }
+            catch
+            {
+                Cursor = Cursors.Default;
+            }
         }
     }
 }

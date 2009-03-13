@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.IO;
+using System.Collections.Generic;
 
 using OMLGetDVDInfo;
 using OMLEngine.FileSystem;
@@ -126,10 +127,34 @@ namespace OMLEngine
         }
         #endregion
 
+        #region DiskInfo
+        [NonSerialized]
+        public List<DIFeature> _diskFeatures;
+        public List<DIFeature> DiskFeatures
+        {
+            get
+            {
+                if (_diskFeatures == null)
+                {
+                //    DiskFeatures = new List<DIFeature>();
+                //}
+                DiskInfo di = new DiskInfo(Name, Path, Format);
+                _diskFeatures = di.DiskFeatures;
+                }
+                return _diskFeatures;
+            }
+            set
+            { 
+            }
+        }
+        #endregion
+
+
         public Disk()         
         {
             _disk = new OMLEngine.Dao.Disk();
         }
+
 
         public Disk(string name, string path, VideoFormat format) 
             : this(name, path, format, null)
@@ -163,14 +188,14 @@ namespace OMLEngine
             _disk = new OMLEngine.Dao.Disk();
             Name = info.GetString("name");
             Path = info.GetString("path");
-            FindPath();
+            //FindPath();
             Format = GetFormatFromPath(Path);
             if (info.MemberCount > 3)
                 ExtraOptions = info.GetString("extraOptions");
         }
 
         static string sBasePaths = System.Configuration.ConfigurationSettings.AppSettings["BasePaths"];
-        void FindPath()
+        public void FindPath()
         {
             if (Directory.Exists(Path) || File.Exists(Path))
                 return;

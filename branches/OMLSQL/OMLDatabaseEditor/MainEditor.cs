@@ -4,9 +4,11 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 using DevExpress.XtraEditors;
 using DevExpress.Skins;
@@ -89,6 +91,9 @@ namespace OMLDatabaseEditor
                 metadataItem.Click += new EventHandler(this.miMetadataMulti_Click);
                 miMetadataMulti.DropDownItems.Add(metadataItem);
             }
+
+            if (String.IsNullOrEmpty(Properties.Settings.Default.gsDefaultMetadataPlugin))
+                fromPreferredSourcesToolStripMenuItem.Visible = false;
 
             // Set up filter lists
             ToolStripMenuItem item;
@@ -267,12 +272,9 @@ namespace OMLDatabaseEditor
             if (titleEditor.EditedTitle != null && titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges)
             {
                 result = XtraMessageBox.Show("You have unsaved changes to " + titleEditor.EditedTitle.Name + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
-                if (result == DialogResult.Cancel)
+                if (result == DialogResult.Yes)
                 {
                     lbMovies.SelectedValue = titleEditor.EditedTitle.Id;
-                }
-                else if (result == DialogResult.Yes)
-                {
                     SaveChanges();
                 }
             }
@@ -363,56 +365,218 @@ namespace OMLDatabaseEditor
 
         private bool StartMetadataImport(IOMLMetadataPlugin plugin, bool coverArtOnly)
         {
+            return StartMetadataImport(plugin, coverArtOnly, titleEditor.EditedTitle.Name, null);
+        }
+
+        internal bool StartMetadataImport(string pluginName, bool coverArtOnly, string titleNameSearch, Form targetForm)
+        {
+            foreach (IOMLMetadataPlugin plugin in _metadataPlugins)
+            {
+                if (plugin.PluginName == pluginName) return StartMetadataImport(plugin, coverArtOnly, titleNameSearch, targetForm);
+            }
+            return false;
+        }
+
+        internal bool StartMetadataImport(IOMLMetadataPlugin plugin, bool coverArtOnly, string titleNameSearch, Form targetForm)
+        {
             try
             {
-                if (titleEditor.EditedTitle != null)
+                if (titleNameSearch != null)
                 {
                     Cursor = Cursors.WaitCursor;
-                    plugin.SearchForMovie(titleEditor.EditedTitle.Name);
-                    frmSearchResult searchResultForm = new frmSearchResult();
-                    Cursor = Cursors.Default;
-                    DialogResult result = searchResultForm.ShowResults(plugin.GetAvailableTitles());
-                    if (result == DialogResult.OK)
+                    if (plugin != null)
                     {
-                        Title t = plugin.GetTitle(searchResultForm.SelectedTitleIndex);
-                        if (t != null)
+                        // Update movie based on specified plugin
+                        plugin.SearchForMovie(titleNameSearch);
+                        frmSearchResult searchResultForm;
+                        if (targetForm == null) searchResultForm = new frmSearchResult(this);
+                        else searchResultForm = targetForm as frmSearchResult;
+                        searchResultForm.ReSearchText = titleNameSearch;
+                        searchResultForm.LastMetaPluginName = (string)plugin.PluginName;
+                        Cursor = Cursors.Default;
+                        DialogResult result = searchResultForm.ShowResults(plugin.GetAvailableTitles());
+                        if (result == DialogResult.OK)
                         {
-                            if (coverArtOnly)
+                            Title t = plugin.GetTitle(searchResultForm.SelectedTitleIndex);
+                            if (t != null)
                             {
-                                if (!String.IsNullOrEmpty(t.FrontCoverPath))
+                                LoadFanartFromPlugin(plugin, t);
+
+                                if (coverArtOnly)
                                 {
                                     titleEditor.EditedTitle.CopyFrontCoverFromFile(t.FrontCoverPath, true);
+                                    titleEditor.EditedTitle.CopyBackCoverFromFile(t.BackCoverPath, true);
+                                }
+                                else
+                                {
+                                    titleEditor.EditedTitle.CopyMetadata(t, searchResultForm.OverwriteMetadata);
                                 }
                             }
-                            else
+                            CheckGenresAgainstSupported(titleEditor.EditedTitle);
+                            titleEditor.RefreshEditor();
+                            return true;
+                        }
+                        else
+                            return false;
+                    }
+                    else
+                    {
+                        // Import metadata based on field mappings and configured default plugin
+                        Dictionary<string, List<string>> mappings = _titleCollection.PropertiesByPlugin();
+                        // Loop through configured mappings
+                        Type tTitle = typeof(Title);
+                        IOMLMetadataPlugin metadata;
+                        Title title;
+                        bool loadedfanart = false;
+
+                        foreach (KeyValuePair<string, List<string>> map in mappings)
+                        {
+                            try
                             {
-                                titleEditor.EditedTitle.CopyMetadata(t, searchResultForm.OverwriteMetadata);
+                                if (map.Key == Properties.Settings.Default.gsDefaultMetadataPlugin) continue;
+                                metadata = _metadataPlugins.First(p => p.PluginName == map.Key);
+                                metadata.SearchForMovie(titleNameSearch);
+                                title = metadata.GetBestMatch();
+                                if (title != null)
+                                {
+                                    Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using plugin " + map.Key);
+                                    foreach (string property in map.Value)
+                                    {
+                                        switch (property)
+                                        {
+                                            case "FanArt":
+                                                loadedfanart = true;
+                                                LoadFanartFromPlugin(metadata, title);
+                                                break;
+                                            case "Genres":
+                                                titleEditor.EditedTitle.Genres.Clear();
+                                                titleEditor.EditedTitle.Genres.AddRange(title.Genres);
+                                                break;
+                                            default:
+                                                Utilities.DebugLine("[OMLDatabaseEditor] Using value for " + property + " from plugin " + map.Key);
+                                                System.Reflection.PropertyInfo prop = tTitle.GetProperty(property);
+                                                prop.SetValue(titleEditor.EditedTitle, prop.GetValue(title, null), null);
+                                                break;
+                                        }
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Utilities.DebugLine("[OMLDatabaseEditor] Processing date from {0} Caused an Exception {1}", map.Key, ex);
+
                             }
                         }
+                        // Use default plugin for remaining fields
+                        metadata = _metadataPlugins.First(p => p.PluginName == Properties.Settings.Default.gsDefaultMetadataPlugin);
+                        metadata.SearchForMovie(titleNameSearch);
+                        title = metadata.GetBestMatch();
+                        if (title != null)
+                        {
+                            if (!loadedfanart) { LoadFanartFromPlugin(metadata, title); }
+ 
+                            Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using default plugin " + metadata.PluginName);
+                            titleEditor.EditedTitle.CopyMetadata(title, false);
+                        }
+
+                        Cursor = Cursors.Default;
+                        CheckGenresAgainstSupported(titleEditor.EditedTitle);
                         titleEditor.RefreshEditor();
                         return true;
                     }
-                    else
-                        return false;
                 }
                 return false;
             }
-            catch
+            catch (Exception ex)
             {
+                Utilities.DebugLine("[OMLDatabaseEditor] Exception {0}", ex);
                 Cursor = Cursors.Default;
                 return false;
             }
         }
 
+        private void LoadFanartFromPlugin(IOMLMetadataPlugin metadata, Title title)
+        {
+            if (metadata.SupportsBackDrops())
+            {
+                // Is the fanart folder for the edited title defined
+                if (string.IsNullOrEmpty(titleEditor.EditedTitle.BackDropFolder))
+                    titleEditor.EditedTitle.BackDropFolder = title.CreateFanArtFolder(titleEditor.EditedTitle.BasePath());
+
+                if (!string.IsNullOrEmpty(titleEditor.EditedTitle.BackDropFolder))
+                {
+                    DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
+                    dbdForm.Show();
+                    metadata.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
+                    dbdForm.Hide();
+                    dbdForm.Dispose();
+                }
+                else
+                {
+                    XtraMessageBox.Show("A disk must be assigned to this title. Assign a disk then update the metadata.", "Could not download Fan Art!");
+                }
+            }
+        }
+
+        private void CheckGenresAgainstSupported(Title title)
+        {
+            List<String> genreList = new List<String>();
+            if (Properties.Settings.Default.gsValidGenres != null
+            && Properties.Settings.Default.gsValidGenres.Count > 0)
+            {
+                int genreCount = Properties.Settings.Default.gsValidGenres.Count;
+                String[] arrGenre = new String[genreCount];
+                Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
+                genreList.AddRange(arrGenre);
+                Dictionary<string, string> genreIssuesList = new Dictionary<string, string>();
+                Dictionary<string, string> genreChanges = new Dictionary<string, string>();
+                foreach (string genre in title.Genres)
+                {
+                    string newGenre = genre.Trim();
+                    if (!genreList.Contains(newGenre))
+                    {
+                        if (_titleCollection.GenreMap.ContainsKey(newGenre))
+                        {
+                            // Mapping already exists for genre
+                            genreChanges[genre] = _titleCollection.GenreMap[genre];
+                        }
+                        else
+                        {
+                            if (newGenre.EndsWith("Film", true, CultureInfo.InvariantCulture))
+                                newGenre = newGenre.Replace(" Film", "");
+                            if (genreList.Contains(newGenre))
+                                genreIssuesList[genre] = newGenre;
+                            else
+                            {
+                                string match = genreList.FirstOrDefault(s => s.Split(' ').Intersect(newGenre.Split(' ')).Count() != 0);
+                                genreIssuesList[genre] = match;
+                            }
+                        }
+                    }
+                }
+                foreach (string genre in genreChanges.Keys)
+                {
+                    title.Genres.Remove(genre);
+                    // Mapping contains empty string when user wants a specific genre ignored.
+                    if (!String.IsNullOrEmpty(genreChanges[genre]) && !title.Genres.Contains(genreChanges[genre]))
+                        title.Genres.Add(genreChanges[genre]);
+                }
+                if (genreIssuesList.Keys.Count > 0)
+                {
+                    ResolveGenres resolveGenres = new ResolveGenres(genreIssuesList, title);
+                    resolveGenres.ShowDialog();
+                }
+            }
+        }
+
         private void SaveChanges()
         {
-            if (titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges)
+            if ((titleEditor.EditedTitle != null) && (titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges))
             {
                 Title editedTitle = titleEditor.EditedTitle;
                 Title collectionTitle = TitleCollectionManager.GetTitle(editedTitle.Id);
-                if (collectionTitle == null)
+                if (titleEditor.IsNew())
                 {
-                    // Title doesn't exist so we'll add it
                     if (editedTitle.MetadataSourceID == String.Empty)
                     {
                         DialogResult result = XtraMessageBox.Show("Would you like to retrieve metadata on this movie?", "Get data", MessageBoxButtons.YesNo);
@@ -437,9 +601,10 @@ namespace OMLDatabaseEditor
                     TitleCollectionManager.SaveTitleUpdates();
                 }
                 
-                titleEditor.ClearEditor();
+                titleEditor.SaveChanges();
                 LoadMovies();
             }
+            TitleCollection.ClearMirrorDataFiles();
         }
 
         private void ToggleSaveState(bool enabled)
@@ -483,6 +648,7 @@ namespace OMLDatabaseEditor
                     if (options.OptionsDirty)
                     {
                         this.titleEditor.SetMRULists();
+                        fromPreferredSourcesToolStripMenuItem.Visible = !String.IsNullOrEmpty(Properties.Settings.Default.gsDefaultMetadataPlugin);
                     }
                 }
             }
@@ -517,6 +683,10 @@ namespace OMLDatabaseEditor
                             if (title.FrontCoverMenuPath.StartsWith(fromFolder))
                             {
                                 title.FrontCoverMenuPath = title.FrontCoverMenuPath.Replace(fromFolder, toFolder);
+                            }
+                            if (title.BackCoverPath.StartsWith(fromFolder))
+                            {
+                                title.BackCoverPath = title.BackCoverPath.Replace(fromFolder, toFolder);
                             }
                         }
                     }
@@ -612,14 +782,21 @@ namespace OMLDatabaseEditor
         {
             if (_loading) return;
             Cursor = Cursors.WaitCursor;
-            SaveCurrentMovie();
+            if (SaveCurrentMovie() == DialogResult.Cancel)
+            {
+                _loading = true; //bypasses second save movie dialog
+                lbMovies.SelectedItem = _titleCollection.GetTitleById(titleEditor.EditedTitle.InternalItemID);
+                _loading = false;
+            }
+            else
+            {
+                Title selectedTitle = lbMovies.SelectedItem as Title;
+                if (selectedTitle == null) return;
 
-            Title selectedTitle = lbMovies.SelectedItem as Title;
-            if (selectedTitle == null) return;
-
-            titleEditor.LoadDVD(selectedTitle);
-            this.Text = APP_TITLE + " - " + selectedTitle.Name;
-            ToggleSaveState(false);
+                titleEditor.LoadDVD(selectedTitle);
+                this.Text = APP_TITLE + " - " + selectedTitle.Name;
+                ToggleSaveState(false);
+            }
             Cursor = Cursors.Default;
         }
 
@@ -690,8 +867,14 @@ namespace OMLDatabaseEditor
             IOMLMetadataPlugin plugin = selectedItem.Tag as IOMLMetadataPlugin;
 
             //BaseListBoxControl.SelectedItemCollection collection = lbMovies.SelectedItems;
+            pgbProgress.Visible = true;
+            pgbProgress.Maximum = lbMovies.SelectedItems.Count;
+            pgbProgress.Value = 0;
             foreach (Title title in lbMovies.SelectedItems)
             {
+                pgbProgress.Value++;
+                statusText.Text = "Getting metadata for " + title.Name;
+                Application.DoEvents();
                 titleEditor.LoadDVD(title);
                 this.Text = APP_TITLE + " - " + title.Name;
                 ToggleSaveState(false);
@@ -706,6 +889,34 @@ namespace OMLDatabaseEditor
                     TitleCollectionManager.SaveTitleUpdates();
                 }
             }
+            statusText.Text = "Finished updating metadata";
+            pgbProgress.Visible = false;
+            Application.DoEvents();
+        }
+
+        private void fromPreferredSourcesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pgbProgress.Visible = true;
+            pgbProgress.Maximum = lbMovies.SelectedItems.Count;
+            pgbProgress.Value = 0;
+            foreach (Title title in lbMovies.SelectedItems)
+            {
+                pgbProgress.Value++;
+                statusText.Text = "Getting metadata for " + title.Name;
+                Application.DoEvents();
+                titleEditor.LoadDVD(title);
+                this.Text = APP_TITLE + " - " + title.Name;
+                ToggleSaveState(false);
+
+                if (StartMetadataImport(null, false))
+                {
+                    _titleCollection.Replace(titleEditor.EditedTitle);
+                    _titleCollection.saveTitleCollection();
+                }
+            }
+            statusText.Text = "Finished updating metadata";
+            pgbProgress.Visible = false;
+            Application.DoEvents();
         }
 
         private void exportCurrentMovieToolStripMenuItem_Click(object sender, EventArgs e)
@@ -860,6 +1071,58 @@ namespace OMLDatabaseEditor
                 coll.RenameDATCollection();
                 LoadMovies();
             }
+        }
+
+        private void deleteSelectedMoviesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Title title in lbMovies.SelectedItems)
+            {
+                if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.InternalItemID == title.InternalItemID)
+                    titleEditor.ClearEditor();
+                _titleCollection.Remove(title);
+            }
+            _titleCollection.saveTitleCollection();
+            LoadMovies();
+        }
+
+        private void transcoderDiagnosticsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string mediafile = "";
+            // Search for a movie file in selected title/titles
+            foreach (Title title in lbMovies.SelectedItems)
+            {
+                foreach (Disk disk in title.Disks)
+                {
+                    if (disk.Path != "")
+                    {
+                        if (mediafile == "")
+                        {
+                            mediafile = disk.Path;
+                        }
+                    }
+
+                }
+            }
+            if (mediafile != "")
+            {
+                try
+                {
+                    Process pr = new Process();
+                    pr.StartInfo.FileName = @"c:\program files\openmedialibrary\TranscoderTester.exe";
+                    pr.StartInfo.Arguments = "\"" + mediafile + "\"";
+                    pr.Start();
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        private void manageMetadataMappingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MetadataMappings mdm = new MetadataMappings(this.titleEditor);
+            mdm.ShowDialog();
+            _titleCollection.saveTitleCollection();
         }
     }
 }

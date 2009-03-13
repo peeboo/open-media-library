@@ -32,6 +32,10 @@ namespace OMLSDK
     {
         string PluginName { get; }
 
+        // string MainFanArtDir { get; set; }
+
+        // bool UseMainFanArtDir { set; }
+
         // these 2 methods must be called in sequence
         bool Initialize( Dictionary<string,string> parameters );
         bool SearchForMovie( string movieName );
@@ -45,11 +49,57 @@ namespace OMLSDK
         Title[] GetAvailableTitles();    // could be just summaries
         Title GetTitle(int index);      // get the actual Title
 
+        // ultimately this should use the generic base type option
+        //List<OMLMetadataOptionBase> GetOptions();
         List<OMLMetadataOption> GetOptions();
         bool SetOptionValue(string option, string value);
+
+        bool SupportsBackDrops();
+
+        void DownloadBackDropsForTitle(Title t, int index);
     }
 
-    public class OMLMetadataOption
+    /*
+        public interface IOMLMetaDataOption
+        {
+            string Name { get; set; }
+            string Value { get; set; }
+            string Description { get; set; }
+            string AllowOnlyPossibleValues { get; set; }
+        }
+     
+        public class OMLMetadataOptionBase
+        {
+            public string Name
+            {
+                get { return _optionName; }
+                set { _optionName = value; }
+            }
+
+            public string Value
+            {
+                get { return _optionValue; }
+                set { _optionValue = value; }
+            }
+
+            public OMLMetadataOptionBase()
+            {
+                _optionName = String.Empty;
+                _optionValue = String.Empty;
+            }
+
+            public OMLMetadataOptionBase(string optionName, string optionvalue)
+            {
+                _optionValue = optionvalue;
+                _optionName = optionName;
+            }
+
+            string _optionValue;
+            string _optionName;
+        }
+    */
+
+    public class OMLMetadataOption //: OMLMetadataOptionBase
     {
 
         public string Name
@@ -86,4 +136,7 @@ namespace OMLSDK
         bool _allowOnlyPossibleValues = true;
 
     }
+
+    // Should have Option Types for selecting Folders and Files
+
 }

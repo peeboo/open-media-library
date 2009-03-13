@@ -7,12 +7,14 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
 using OMLEngine;
+using OMLSDK;
 
 namespace OMLDatabaseEditor.Controls
 {
@@ -65,6 +67,7 @@ namespace OMLDatabaseEditor.Controls
             Status = TitleStatus.Normal;
             imageWatcherFront.Path = Path.GetDirectoryName(_dvdTitle.FrontCoverPath);
             imageWatcherFront.Filter = "F*.jpg";
+            LoadBackdrops();
             _isLoading = false;
         }
 
@@ -78,6 +81,22 @@ namespace OMLDatabaseEditor.Controls
             _dvdTitle = null;
             titleSource.DataSource = typeof(Title);
             Status = TitleStatus.Normal;
+        }
+
+        public bool IsNew()
+        {
+            return MainEditor._titleCollection.GetTitleById(_dvdTitle.InternalItemID) == null;
+        }
+
+        public void SaveChanges()
+        {
+            titleSource.CurrencyManager.Refresh();
+            if (IsNew())
+                MainEditor._titleCollection.Add(_dvdTitle);
+            else
+                MainEditor._titleCollection.Replace(_dvdTitle);
+            MainEditor._titleCollection.saveTitleCollection();
+            ClearEditor();
         }
 
         private void _titleChanged(EventArgs e)
@@ -108,12 +127,38 @@ namespace OMLDatabaseEditor.Controls
             _titleNameChanged(new TitleNameChangedEventArgs(txtName.Text));
         }
 
+        private void LoadBackdrops()
+        {
+            tblBackdrops.Controls.Clear();
+
+            if (Directory.Exists(_dvdTitle.BackDropFolder))
+            {
+                string[] images = Directory.GetFiles(_dvdTitle.BackDropFolder);
+                foreach (string image in images)
+                {
+                    PictureBox pb = new PictureBox();
+                    if (image == _dvdTitle.BackDropImage)
+                    {
+                        pb.BorderStyle = BorderStyle.Fixed3D;
+                        pb.BackColor = Color.Green;
+                    }
+                    pb.ImageLocation = image;
+                    pb.Height = 150;
+                    pb.Dock = DockStyle.Fill;
+                    pb.SizeMode = PictureBoxSizeMode.Zoom;
+                    pb.MouseClick += new MouseEventHandler(pbFanart_MouseClick);
+                    tblBackdrops.Controls.Add(pb);
+                }
+            }
+        }
+
         private void EditList(string name, IList<string> listToEdit)
         {
             ListEditor editor = new ListEditor(name, listToEdit);
             List<string> original = listToEdit.ToList<string>();
             editor.ShowDialog();
-            if (listToEdit.Union(original).Count<string>() != original.Count)
+            int commonCount = listToEdit.Intersect(original).Count<string>();
+            if (commonCount != listToEdit.Count || commonCount != original.Count)
             {
                 TitleChanges(null, null);
             }
@@ -159,6 +204,7 @@ namespace OMLDatabaseEditor.Controls
                         break;
                     case 3: //Actors
                         lbPeople.DataSource = EditedTitle.ActingRolesBinding;
+                        lbPeople.Tag = "ActingRoles";
                         lbPeople.DisplayMember = "Display";
                         IEnumerable<FilteredCollection> actors = TitleCollectionManager.GetAllPeople(null, PeopleRole.Actor);
                         foreach (FilteredCollection actorItem in actors)
@@ -169,6 +215,7 @@ namespace OMLDatabaseEditor.Controls
                         break;
                     case 4: //Non-Actors
                         lbPeople.DataSource = EditedTitle.NonActingRolesBinding;
+                        lbPeople.Tag = "NonActingRoles";
                         lbPeople.DisplayMember = "Display";
                         break;
                 }
@@ -181,18 +228,27 @@ namespace OMLDatabaseEditor.Controls
 
         private void EditPicture(string imagePath)
         {
-            ProcessStartInfo psi = new ProcessStartInfo();
-            // Don't use the system's shell
-            //psi.UseShellExecute = false;
-            psi.UseShellExecute = true;
-            psi.FileName = imagePath;
-            if (psi.Verbs.Contains<string>("edit"))
+            if (!imagePath.Contains("nocover.jpg"))
             {
-                psi.Verb = "edit";
-                Process.Start(psi);
-                return;
+                ProcessStartInfo psi = new ProcessStartInfo();
+                // Don't use the system's shell
+                //psi.UseShellExecute = false;
+                psi.UseShellExecute = true;
+                psi.FileName = imagePath;
+                if (psi.Verbs.Contains("Edit"))
+                {
+                    psi.Verb = "Edit";
+                    Process.Start(psi);
+                    return;
+                }
+                else if (psi.Verbs.Contains("edit"))
+                {
+                    psi.Verb = "edit";
+                    Process.Start(psi);
+                    return;
+                }
+                XtraMessageBox.Show("No editor found for this image file type", "Edit Image", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            XtraMessageBox.Show("No editor found for this image file type", "Edit Image", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void btnDisks_Click(object sender, EventArgs e)
@@ -200,31 +256,13 @@ namespace OMLDatabaseEditor.Controls
             if (EditedTitle != null)
             {
                 DiskEditorFrm diskEditor = new DiskEditorFrm(EditedTitle.Disks);
+                List<Disk> original = EditedTitle.Disks.ToList<Disk>();
                 diskEditor.ShowDialog();
-                TitleChanges(null, EventArgs.Empty);
-            }
-        }
-
-        private void pbCovers_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (_dvdTitle == null) return;
-            if (e.Button == MouseButtons.Right)
-            {
-                contextImage.Tag = sender;
-                contextImage.Show(sender as PictureBox, e.Location);
-            }
-        }
-
-        private void selectImageToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (openCoverFile.ShowDialog() == DialogResult.OK)
-            {
-                PictureBox pb = contextImage.Tag as PictureBox;
-                if (pb.Name.Contains("Front"))
-                    _dvdTitle.CopyFrontCoverFromFile(openCoverFile.FileName, false);
-                else
-                    _dvdTitle.CopyBackCoverFromFile(openCoverFile.FileName, false);
-                titleSource.ResetCurrentItem();
+                int commonCount = EditedTitle.Disks.Intersect(original).Count<Disk>();
+                if (commonCount != EditedTitle.Disks.Count || commonCount != original.Count)
+                {
+                    TitleChanges(null, EventArgs.Empty);
+                }
             }
         }
 
@@ -283,8 +321,11 @@ namespace OMLDatabaseEditor.Controls
         private void imageWatcherFront_Changed(object sender, FileSystemEventArgs e)
         {
             // Update scaled menu image
-            if (e.ChangeType == WatcherChangeTypes.Changed && e.Name == Path.GetFileName(_dvdTitle.FrontCoverPath))
-                _dvdTitle.BuildResizedMenuImage();
+            if (_dvdTitle != null)
+            {
+                if (e.ChangeType == WatcherChangeTypes.Changed && e.Name == Path.GetFileName(_dvdTitle.FrontCoverPath))
+                    _dvdTitle.BuildResizedMenuImage();
+            }
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -377,6 +418,12 @@ namespace OMLDatabaseEditor.Controls
                 teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
                 teParentalRating.MaskBox.AutoCompleteCustomSource.AddRange(Properties.Settings.Default.gsMPAARatings.Split('|'));
             }
+            else
+            {
+                teParentalRating.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                teParentalRating.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllParentalRatings.ToArray());
+            }
 
             txtStudio.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtStudio.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
@@ -392,6 +439,18 @@ namespace OMLDatabaseEditor.Controls
             txtCountryOfOrigin.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
             foreach (string name in from t in TitleCollectionManager.GetAllCountryOfOrigin(null) select t.Name)
                 txtCountryOfOrigin.MaskBox.AutoCompleteCustomSource.Add(name);
+
+            teVideoResolution.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            teVideoResolution.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            teVideoResolution.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllVideoResolutions.ToArray());
+
+            teVideoStandard.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            teVideoStandard.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            teVideoStandard.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllVideoStandards.ToArray());
+
+            teImporter.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            teImporter.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            teImporter.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllImporterSources.ToArray());
 
         }
 
@@ -437,6 +496,134 @@ namespace OMLDatabaseEditor.Controls
             } else {
                 return false;
             }
+        }
+
+        private void pbCovers_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (_dvdTitle == null) return;
+            if (e.Button == MouseButtons.Right)
+            {
+                contextImage.Tag = sender;
+                contextImage.Show(sender as PictureBox, e.Location);
+            }
+        }
+
+        private void selectImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openCoverFile.ShowDialog() == DialogResult.OK)
+            {
+                PictureBox pb = contextImage.Tag as PictureBox;
+                if (pb.Name.Contains("Front"))
+                    _dvdTitle.CopyFrontCoverFromFile(openCoverFile.FileName, false);
+                else if (pb.Name.Contains("Backdrop"))
+                    _dvdTitle.BackDropImage = openCoverFile.FileName;
+                else
+                    _dvdTitle.CopyBackCoverFromFile(openCoverFile.FileName, false);
+                titleSource.ResetCurrentItem();
+            }
+        }
+
+        private void deleteImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PictureBox pb = contextImage.Tag as PictureBox;
+            if (pb.Name.Contains("Front"))
+            {
+                TitleCollection.DeleteImageNoException(_dvdTitle.FrontCoverPath);
+                TitleCollection.DeleteImageNoException(_dvdTitle.FrontCoverMenuPath);
+                _dvdTitle.FrontCoverMenuPath = string.Empty;
+                _dvdTitle.FrontCoverPath = string.Empty;
+            }
+            else
+            {
+                TitleCollection.DeleteImageNoException(_dvdTitle.BackCoverPath);
+                _dvdTitle.BackCoverPath = string.Empty;
+            }
+            titleSource.ResetCurrentItem();
+        }
+
+        private void updateFromMetadataToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            PictureBox pb = contextImage.Tag as PictureBox;
+            Cursor = Cursors.WaitCursor;
+            string propertyName = pb.DataBindings[0].BindingMemberInfo.BindingMember;
+            MetadataSelect mdSelect = new MetadataSelect(_dvdTitle, propertyName, PropertyTypeEnum.Image);
+            if (mdSelect.ShowDialog() == DialogResult.OK)
+                TitleChanges(null, EventArgs.Empty);
+            PropertyInfo pInfo = _dvdTitle.GetType().GetProperty(propertyName);
+            pb.ImageLocation = (string)pInfo.GetValue(_dvdTitle, null);
+            Cursor = Cursors.Default;
+        }
+
+        private void field_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.D)
+            {
+                if (sender is Control)
+                {
+                    Cursor = Cursors.WaitCursor;
+                    BaseEdit ctrl = sender as BaseEdit;
+                    string propertyName;
+                    if (ctrl != null)
+                        propertyName = ctrl.DataBindings[0].BindingMemberInfo.BindingMember;
+                    else
+                        propertyName = (string)(sender as Control).Tag;
+                    MetadataSelect mdSelect = null;
+                    PropertyTypeEnum propType = PropertyTypeEnum.String;
+                    if (sender is SpinEdit)
+                        propType = PropertyTypeEnum.Number;
+                    else if (sender is PictureBox)
+                        propType = PropertyTypeEnum.Image;
+                    else if (sender is DateEdit)
+                        propType = PropertyTypeEnum.Date;
+                    else if (sender is ListBoxControl)
+                        propType = PropertyTypeEnum.List;
+                    mdSelect = new MetadataSelect(_dvdTitle, propertyName, propType);
+                    if (mdSelect.ShowDialog() == DialogResult.OK)
+                        TitleChanges(null, EventArgs.Empty);
+                    if (ctrl != null) (ctrl.BindingManager as CurrencyManager).Refresh();
+                    if (sender is ListBoxControl)
+                        TogglePeople(rgPeople.SelectedIndex);
+                    Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        private void pbFanart_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (_dvdTitle == null) return;
+            if (e.Button == MouseButtons.Right)
+            {
+                contextBackdrop.Tag = sender;
+                if ((sender as PictureBox).ImageLocation == _dvdTitle.BackDropImage)
+                {
+                    clearSingleBackdropToolStripMenuItem.Visible = true;
+                    setSingleBackdropToolStripMenuItem.Visible = false;
+                }
+                else
+                {
+                    clearSingleBackdropToolStripMenuItem.Visible = false;
+                    setSingleBackdropToolStripMenuItem.Visible = true;
+                }
+                contextBackdrop.Show(sender as PictureBox, e.Location);
+            }
+        }
+
+        private void setSingleBackdropToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Set selected image as single backdrop
+            PictureBox pb = (sender as ToolStripMenuItem).Owner.Tag as PictureBox;
+            _dvdTitle.BackDropImage = pb.ImageLocation;
+            TitleChanges(null, EventArgs.Empty);
+            LoadBackdrops();
+        }
+
+        private void clearSingleBackdropToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Clear single backdrop
+            PictureBox pb = (sender as ToolStripItem).Owner.Tag as PictureBox;
+            _dvdTitle.BackDropImage = string.Empty;
+            TitleChanges(null, EventArgs.Empty);
+            LoadBackdrops();
         }
     }
 

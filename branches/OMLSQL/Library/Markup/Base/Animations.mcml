@@ -135,6 +135,13 @@
       <PositionKeyframe Time="0" RelativeTo="Final" Value="0,200,0"/>
       <PositionKeyframe Time=".25" RelativeTo="Final" Value="1,1,1"/>
     </Keyframes>
+  </Animation>  
+
+  <Animation Type="Hide" Name="HideToBottom">
+    <Keyframes>
+      <PositionKeyframe Time="0" RelativeTo="Current" Value="1,1,1"/>
+      <PositionKeyframe Time=".25" RelativeTo="Current" Value="1,200,1"/>
+    </Keyframes>
   </Animation>
 
   <Animation Name="FadeIn" Type="Show">
@@ -151,6 +158,15 @@
       <ScaleKeyframe Time=".25" RelativeTo="Current" Value="1.05,1.05,1.05" Interpolation="SCurve" />
       <ScaleKeyframe Time=".35" RelativeTo="Current" Value="1,1,1" />
       <AlphaKeyframe Time=".35" RelativeTo="Absolute" Value="1"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="QuickMove" Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0" RelativeTo="Current" Value="1,1,1"/>
+      <PositionKeyframe Time=".25" RelativeTo="Final" Value="1,1,1"/>
+      <SizeKeyframe Time="0" RelativeTo="Current" Value="1,1,1"/>
+      <SizeKeyframe Time=".25" RelativeTo="Final" Value="1,1,1"/>
     </Keyframes>
   </Animation>
 

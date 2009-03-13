@@ -220,5 +220,20 @@ namespace Library
         {
             get { return Properties.Settings.Default.UseOnScreenAlphaJumper; }
         }
+
+        public float MainPageBackDropAlpha
+        {
+            get { return Properties.Settings.Default.MainPageBackDropAlpha; }
+        }
+
+        public int MainPageBackDropInterval
+        {
+            get { return Properties.Settings.Default.MainPageBackDropRotationInSeconds; }
+        }
+
+        public float DetailsPageBackDropAlpha
+        {
+            get { return Properties.Settings.Default.DetailsPageBackDropAlpha; }
+        }
     }
 }

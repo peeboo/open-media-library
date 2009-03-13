@@ -25,6 +25,7 @@ namespace TheMovieDbMetadata
 
     public class TheMovieDbMetadata : IOMLMetadataPlugin
     {
+        IList<string> BackDrops = null;
         private const string API_KEY = "1376bf98794bda0c2495bd500a37f689";
         private const string API_URL_SEARCH = "http://api.themoviedb.org/2.0/Movie.search";
         private const string API_URL_INFO = "http://api.themoviedb.org/2.0/Movie.getInfo";
@@ -32,6 +33,7 @@ namespace TheMovieDbMetadata
         private List<TheMovieDbResult> results = null;
 
         public string PluginName { get { return "themoviedb.org"; } }
+
 
         // these 2 methods must be called in sequence
         public bool Initialize(Dictionary<string, string> parameters)
@@ -51,9 +53,15 @@ namespace TheMovieDbMetadata
         // get the best match
         public Title GetBestMatch()
         {
-            return (results != null && results.Count != 0)
-                ? results[0].Title
-                : null;                
+            if (results != null)
+            {
+                if (results.Count != 0)
+                {
+                    // load up the big image
+                    return GetMovieDetails(results[0].Id);
+                }
+            }
+            return null;             
         }
 
         // or choose among all the titles
@@ -88,6 +96,7 @@ namespace TheMovieDbMetadata
         /// <returns></returns>
         private TheMovieDbResult GetTitleFromMovieNode(XmlTextReader reader)
         {
+            this.BackDrops = null;
             bool notMovie = false;
             TheMovieDbResult result = new TheMovieDbResult();
 
@@ -122,9 +131,7 @@ namespace TheMovieDbMetadata
                         case "release":
                             DateTime releasedDate;
                             if (DateTime.TryParse(GetElementValue(reader), CultureInfo.CreateSpecificCulture("en-GB"), DateTimeStyles.AssumeUniversal, out releasedDate))
-                            {
                                 result.Title.ReleaseDate = releasedDate;
-                            }
                             break;
 
                         case "poster":
@@ -144,6 +151,16 @@ namespace TheMovieDbMetadata
 
                                 result.ImageUrlThumb = GetElementValue(reader);
                             }                            
+                            break;
+
+                        case "backdrop":
+                            if (IsAttributeValue(reader, "original"))
+                            {
+                                if (this.BackDrops == null)
+                                    this.BackDrops = new List<string>();
+
+                                this.BackDrops.Add(GetElementValue(reader));
+                            }
                             break;
 
                         case "runtime":
@@ -262,6 +279,7 @@ namespace TheMovieDbMetadata
                 using (Stream resStream = response.GetResponseStream())
                 {
                     XmlTextReader reader = new XmlTextReader(resStream);
+                    reader.WhitespaceHandling = WhitespaceHandling.None;
 
                     while (reader.Read())
                     {
@@ -306,6 +324,7 @@ namespace TheMovieDbMetadata
                 using (Stream resStream = response.GetResponseStream())
                 {
                     XmlTextReader reader = new XmlTextReader(resStream);
+                    reader.WhitespaceHandling = WhitespaceHandling.None;
 
                     while (reader.Read())
                     {
@@ -393,6 +412,41 @@ namespace TheMovieDbMetadata
                 {
                     File.Delete(tempFileName);                    
                 }                
+            }
+        }
+
+        public bool SupportsBackDrops()
+        {
+            return true;
+        }
+
+        public void DownloadBackDropsForTitle(Title t, int index)
+        {
+            if (results.Count >= index)
+            {
+                if (this.BackDrops == null)
+                    return;
+
+                WebClient web = new WebClient();                
+                
+                foreach (string backDropUrl in this.BackDrops)
+                {
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(backDropUrl))
+                        {
+                            string[] folders = backDropUrl.Split('/');
+                            string filename = folders[folders.Length - 2] + folders[folders.Length - 1];
+                            if (!File.Exists(Path.Combine(t.BackDropFolder, filename).ToString()))
+                            {
+                                web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, filename).ToString());
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
             }
         }
     }

@@ -11,7 +11,7 @@ using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Reflection;
 using System.Threading;
-
+using System.Timers;
 
 using OMLEngine;
 using OMLEngine.Settings;
@@ -30,6 +30,72 @@ namespace Library
         private int currentFocusedItemIndex = 0;
         private int currentItemIndexPosition = 0;
         private int currentAngleDegrees;
+        private Image primaryBackgroundImage;
+        private int iCurrentBackgroundImage = 0;
+        private int iTotalBackgroundImages = 0;
+        public System.Timers.Timer mainBackgroundTimer;
+
+        private void SetPrimaryBackgroundImage()
+        {
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.MainPageBackDropFile))
+            {
+                if (primaryBackgroundImage == null)
+                {
+                    string lockedFileName = Properties.Settings.Default.MainPageBackDropFile;
+                    if (File.Exists(Path.Combine(FileSystemWalker.MainBackDropDirectory, lockedFileName)))
+                    {
+                        primaryBackgroundImage = new Image(
+                            string.Format("file://{0}", Path.Combine(FileSystemWalker.MainBackDropDirectory, lockedFileName))
+                        );
+                        return;
+                    }
+                }
+            }
+
+            // a specific file is NOT set for the main backdrop, lets see how many we find.
+            DirectoryInfo dirInfo = new DirectoryInfo(FileSystemWalker.MainBackDropDirectory);
+            FileInfo[] files = dirInfo.GetFiles("*.jpg", SearchOption.TopDirectoryOnly);
+            iTotalBackgroundImages = files.Length;
+            if (iTotalBackgroundImages > 0)
+            {
+                if (iCurrentBackgroundImage >= iTotalBackgroundImages)
+                    iCurrentBackgroundImage = 0;
+
+                PrimaryBackgroundImage = new Image(string.Format("file://{0}",
+                        Path.Combine(FileSystemWalker.MainBackDropDirectory,
+                        files[iCurrentBackgroundImage].FullName)));
+                iCurrentBackgroundImage++;
+                if (mainBackgroundTimer == null)
+                {
+                    mainBackgroundTimer = new System.Timers.Timer();
+                    mainBackgroundTimer.AutoReset = true;
+                    mainBackgroundTimer.Elapsed += new ElapsedEventHandler(mainBackgroundTimer_Elapsed);
+                    int rotationInSeconds = Properties.Settings.Default.MainPageBackDropRotationInSeconds;
+                    double rotationInMilliseconds = rotationInSeconds * 1000;
+                    mainBackgroundTimer.Interval = rotationInMilliseconds;
+                    mainBackgroundTimer.Enabled = true;
+                    mainBackgroundTimer.Start();
+                    GC.KeepAlive(mainBackgroundTimer);
+                }
+
+                return;
+            }
+        }
+
+        void mainBackgroundTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            SetPrimaryBackgroundImage();
+        }
+
+        public Image PrimaryBackgroundImage
+        {
+            get { return primaryBackgroundImage; }
+            set
+            {
+                primaryBackgroundImage = value;
+                FirePropertyChanged("PrimaryBackgroundImage");
+            }
+        }
 
         public string RevisionNumber
         {
@@ -113,7 +179,7 @@ namespace Library
             set
             {
                 isStartingTranscodingJob = value;
-                FirePropertyChanged("IsStartingTranscodingJob");
+                //FirePropertyChanged("IsStartingTranscodingJob");
             }
         }       
 
@@ -123,9 +189,21 @@ namespace Library
             DebugLine("[OMLApplication] Empty Constructor called");
         }
 
+        ~OMLApplication()
+        {
+            if (mainBackgroundTimer != null)
+            {
+                mainBackgroundTimer.Stop();
+                mainBackgroundTimer.Enabled = false;
+                mainBackgroundTimer.Dispose();
+            }
+        }
+
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
         {           
             this._session = session;
+            AddInHost.Current.MediaCenterEnvironment.PropertyChanged +=new PropertyChangedEventHandler(MediaCenterEnvironment_PropertyChanged);
+
             try { // borrowed from vmcNetFlix project on google-code
                 bool isConsole = false;
                 if (host.MediaCenterEnvironment.Capabilities.ContainsKey("Console"))
@@ -166,6 +244,11 @@ namespace Library
             _nowPlayingMovieName = "Playing an unknown movie";
         }
 
+        void MediaExperience_PropertyChanged(IPropertyObject sender, string property)
+        {
+            DebugLine("[OMLApplication] MediaExperience Property {0} changed", property);
+        }
+
         // this is the context from the Media Center menu
         public void Startup(string context)
         {
@@ -188,6 +271,16 @@ namespace Library
             //OMLUpdater updater = new OMLUpdater();
             //ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
 
+            // DISABLE THIS UNTIL ITS READY -- DJShultz 01/13/2009
+            //OMLUpdater updater = new OMLUpdater();
+            //ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
+
+            //TheMovieDbBackDropDownloader downloader = new TheMovieDbBackDropDownloader();
+            //foreach (Title t in Titles)
+            //{
+            //    downloader.SearchForTitle(t);
+            //}
+            SetPrimaryBackgroundImage();
             switch (context)
             {
                 case "Menu":
@@ -379,7 +472,17 @@ namespace Library
             // If we have no page session, just spit out a trace statement.
             if (_session != null)
             {
-                _session.GoToPage("resx://Library/Library.Resources/DetailsPage3", properties);
+                switch (Properties.Settings.Default.DetailsView)
+                {
+                    case "Background Boxes":
+                        _session.GoToPage("resx://Library/Library.Resources/DetailsPage_Boxes", properties);
+                        break;
+
+                    case "Original":
+                    default:
+                        _session.GoToPage("resx://Library/Library.Resources/DetailsPage", properties);
+                        break;
+                }                
             }
         }
 
@@ -467,6 +570,15 @@ namespace Library
             return properties;
         }
 
+        static public void MediaCenterEnvironment_PropertyChanged(IPropertyObject sender, string property)
+        {
+            DebugLine("[OMLApplication] Property {0} changed on the MediaCenterEnvironment", property);
+        }
+
+        static public void AddInHost_PropertyChanged(IPropertyObject sender, string property)
+        {
+            DebugLine("[OMLApplication] Property {0} changed on the AddInHost", property);
+        }
         // private data
         private string _nowPlayingMovieName;
         private PlayState _nowPlayingStatus;

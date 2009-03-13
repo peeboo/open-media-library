@@ -74,6 +74,7 @@
     <Compile Include="Code\AppleTrailers.cs" />
     <Compile Include="Code\GroupColor.cs" />
     <Compile Include="Code\ContextMenu.cs" />
+    <Compile Include="Code\Impersonator.cs" />
     <Compile Include="Code\LayoutV2\BaseGallery.cs" />
     <Compile Include="Code\MountingTool.cs" />
     <Compile Include="Code\DirectoryTreeNode.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\ExternalPlayer.cs" />
     <Compile Include="Code\Setup.cs" />
+    <Compile Include="Code\TheMovieDbBackDropDownloader.cs" />
     <Compile Include="Code\TreeNode.cs" />
     <Compile Include="Code\TreeNodeEventArgs.cs" />
     <Compile Include="Code\TreeView.cs" />
@@ -147,7 +149,9 @@
     <None Include="Setup\Setup.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\application2.png" />
+    <Content Include="Images\appleseedexmachina1080x25.jpg" />
+    <Content Include="Images\Application.png" />
+    <Content Include="Images\Application2.png" />
     <Content Include="Images\Blu-RayMovieDisk.png" />
     <Content Include="Images\boxart01.jpg" />
     <None Include="Images\boxart02.jpg" />
@@ -167,13 +171,15 @@
     <None Include="Images\overlays.divider.vertical.png" />
     <None Include="Images\overlays.outline.png" />
     <None Include="Images\overlays.shadow.png" />
+    <Content Include="Images\Settings.png" />
     <Content Include="Images\watched-icon.png" />
     <Content Include="Markup\About.mcml" />
     <Content Include="Markup\Control\AlphaFilter.mcml" />
     <Content Include="Markup\Control\ContextMenu.mcml" />
     <Content Include="Markup\Control\DiskChooserContext.mcml" />
     <Content Include="Markup\Control\MovieDescription.mcml" />
-    <Content Include="Markup\DetailsPage3.mcml" />
+    <Content Include="Markup\Details\DetailsPage.mcml" />
+    <Content Include="Markup\Details\DetailsPage_Boxes.mcml" />
     <Content Include="Markup\FirstRunSetup.mcml" />
     <Content Include="Markup\IntroPage.mcml" />
     <Content Include="Markup\LayoutV2\BasePage.mcml" />
@@ -235,7 +241,6 @@
     <Content Include="OldMarkup\MovieGallery.Old.mcml" />
     <Content Include="OMLInfo.xml" />
     <Content Include="Registration.xml" />
-    <Content Include="Images\Application.png" />
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -418,6 +423,7 @@
     <PostBuildEvent>%25windir%25\eHome\McmlVerifier.exe -verbose -assemblyredirect:"$(FullyQualifiedOutputPath)" -directory:"$(ProjectDir)Markup"
 
 "$(DevEnvDir)..\..\..\Microsoft SDKs\Windows\v6.0\Bin\GacUtil.exe" /i "$(TargetPath)" /f</PostBuildEvent>
+    <PreBuildEvent>$(SolutionDir)\BuildVersionUpdater\$(OutDir)\BuildVersionUpdater.exe</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

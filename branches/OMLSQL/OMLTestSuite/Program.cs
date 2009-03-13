@@ -31,6 +31,19 @@ namespace OMLTestSuite
             Console.ReadLine();
             return;
 
+            DiskInfoTest dit = new DiskInfoTest();
+            //dit.TestLookup("AVI", @"G:\Films\Father Ted\Series 1\FatherTed Episode 5.divx", OMLEngine.VideoFormat.AVI);
+            //dit.TestLookup("AVI", @"G:\Films\Star Wars 1 - mkv\Star Wars Episode I - The Phontom Menace (1080p).mkv", OMLEngine.VideoFormat.AVI);
+
+            TheMovieDbMetadataPluginTest tmdmpt = new TheMovieDbMetadataPluginTest();
+            tmdmpt.TEST_BASE_CASE();
+
+            NetFlixMetadataTest nfmdt = new NetFlixMetadataTest();
+            nfmdt.TEST_LOGIN();
+
+            DVDLibraryImporterTest vdlit = new DVDLibraryImporterTest();
+            vdlit.TEST_HONORS_OMLENGINE_SETTING_FOLDER_IS_TITLE();
+
             OMLFileWatcherTest fwt = new OMLFileWatcherTest();
             fwt.TEST_BASE_CASE();
 #if WCF_TEST

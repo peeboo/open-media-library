@@ -38,6 +38,12 @@ namespace Library
         /// <returns></returns>
         static public IPlayMovie CreateMoviePlayer(MediaSource source)
         {
+            // this is an attempt to determine the physical location of the media if it was moved unexpectedly.
+            // The following function call is responsible for quite a bit of slow down and the user community
+            //  strongly believes that the app should not be responsible for auto-correcting movie locations.
+            //  For what it's worth I agree so I'm commenting it out for now.
+            // source.Disk.FindPath();
+
             string mediaPath = null;
             VideoFormat mediaFormat = VideoFormat.UNKNOWN;
 
@@ -48,7 +54,7 @@ namespace Library
                 // This is for transcoding debugging
                 if (Properties.Settings.Default.DebugTranscoding)
                 {
-                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created: {0}", source);
+                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created (debug): {0}", source);
                     return new TranscodePlayer(source);
                 }
 
@@ -93,7 +99,7 @@ namespace Library
                 }
                 else if (OMLApplication.Current.IsExtender && NeedsTranscode(mediaFormat)) // if it needs to be transcoded
                 {
-                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created: {0}", source);
+                    OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created ({1}): {0}", source, mediaFormat);
                     return new TranscodePlayer(source);
                 }
                 else if (mediaFormat == VideoFormat.DVD && FileScanner.IsDVD(mediaPath)) // play the dvd

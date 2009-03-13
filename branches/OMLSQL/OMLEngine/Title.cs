@@ -30,6 +30,9 @@ namespace OMLEngine
         private Disk _selectedDisk = null;
         private Dao.Title _title;
         private bool _peopleProcesed = false;
+        private string _backDropImage = string.Empty;
+        private int _productionYear = 0;
+        private string _fanartfolder = string.Empty;
 
         private Dictionary<string, string> _nonActingRoles = new Dictionary<string, string>(); // name, role (ie. Vangelis, Music)        
         private Dictionary<string, string> _actingRoles = null; // actor, role                                       
@@ -51,6 +54,23 @@ namespace OMLEngine
         #region properties       
 
         #region Unknown Properties
+        public int ProductionYear
+        {
+            get { return _productionYear; }
+            set { _productionYear = value; }
+        }
+
+        public string BackDropImage
+        {
+            get
+            {
+                if (_backDropImage == string.Empty)
+                    return NoCoverPath;
+                return _backDropImage;
+            }
+            set { _backDropImage = value; }
+        }
+
         public Disk SelectedDisk
         {
             get { return _selectedDisk; }
@@ -332,6 +352,23 @@ namespace OMLEngine
             }
         }
 
+        public string PathSafeName
+        {
+            get
+            {
+                string chars = string.Empty;
+                foreach (Char ch in Path.GetInvalidFileNameChars())
+                {
+                    int ach = (int)ch;
+                    chars += String.Format(@"\x{0}|", ach.ToString(@"x").PadLeft(2, '0'));
+                }
+                if (chars.Length > 0)
+                    chars = chars.Remove(chars.Length - 1);
+                string rslt = System.Text.RegularExpressions.Regex.Replace(Name, chars, "");
+                return rslt;
+            }
+        }
+
         /// <summary>
         /// Internal id of the Title
         /// </summary>
@@ -364,6 +401,10 @@ namespace OMLEngine
             }
         }
 
+        public string NoCoverPath
+        {
+            get { return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg"; }
+        }
         /// <summary>
         /// Name of the source from which meta-data was gathered (MyMovies, DVD Profiler, etc.)
         /// </summary>
@@ -387,7 +428,7 @@ namespace OMLEngine
             get
             {
                 if (string.IsNullOrEmpty(_title.FrontCoverPath))
-                    return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
+                    return NoCoverPath;
 
                 return _title.FrontCoverPath;
             }
@@ -418,7 +459,7 @@ namespace OMLEngine
             get 
             {
                 if (string.IsNullOrEmpty(_title.BackCoverPath))
-                    return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
+                    return NoCoverPath;
 
                 return _title.BackCoverPath; 
             }
@@ -614,6 +655,7 @@ namespace OMLEngine
 
                 return _directors; 
             }
+            set { _directors = value; }
         }
         /// <summary>
         /// List of Person objects that wrote the title
@@ -627,6 +669,7 @@ namespace OMLEngine
 
                 return _writers; 
             }
+            set { _writers = value; }
         }
 
         /// <summary>
@@ -641,6 +684,7 @@ namespace OMLEngine
 
                 return _producers; 
             }
+            set { _producers = value; }
         }
 
         public decimal PercentComplete
@@ -684,228 +728,6 @@ namespace OMLEngine
 
             _peopleProcesed = true;
         }
-
-        #region serialization methods
-
-        /*private DateTime GetSerializedDateTime(SerializationInfo info, string id)
-        {
-            try
-            {
-                return info.GetDateTime(id);
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception in GetSerializedDateTime: " + e.Message);
-                return new DateTime(0);
-            }
-        }
-
-        private VideoFormat GetSerializedVideoFormat(SerializationInfo info, string id)
-        {
-            try
-            {
-                return (VideoFormat)info.GetValue(id, typeof(VideoFormat));
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception in GetSerializedVideoFormat: " + e.Message);
-                return VideoFormat.DVD;
-            }
-        }
-
-        private bool GetSerializedBoolean(SerializationInfo info, string id)
-        {
-            try
-            {
-                return info.GetBoolean(id);
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception in GetSerializedBoolean: " + e.Message);
-                return false;
-            }
-        }
-
-        private int GetSerializedInt(SerializationInfo info, string id)
-        {
-            try
-            {
-                return (int)info.GetValue(id, typeof(int));
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception in GetSerializedInt: " + e.Message);
-                return 0;
-            }
-        }
-
-        private string GetSerializedString(SerializationInfo info, string id)
-        {
-            try
-            {
-                string result = info.GetString(id);
-                return (result == null ? String.Empty : result.Trim());
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception in GetSerializedString: " + e.Message);
-                return String.Empty;
-            }
-        }
-
-        private  T GetSerializedList<T>(SerializationInfo info, string id) where T : new()
-        {
-            try
-            {
-                T result = (T)info.GetValue(id, typeof(T));
-                return (result == null ? new T() : result);
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception in GetSerializedList: " + e.Message);
-                return new T();
-            }
-        }*/
-
-        /// <summary>
-        /// Constructor used for loading from database file
-        /// </summary>
-        /// <param name="info">SerializationInfo object</param>
-        /// <param name="ctxt">StreamingContext object</param>
-        /*public Title(SerializationInfo info, StreamingContext ctxt)
-        {
-            //Utilities.DebugLine("[Title] Loading Title from Serialization");
-            _fileLocation = GetSerializedString(info, "file_location");
-            _videoFormat = GetSerializedVideoFormat(info, "video_format");
-            _needsTranscode = GetSerializedBoolean(info, "transcode_to_extender");
-            _name = GetSerializedString(info,"name");
-            _itemId = GetSerializedInt( info,"itemid");
-            _metadataSourceId = GetSerializedString(info,"sourceid");
-            _sourceName = GetSerializedString(info,"sourcename");
-            _frontCoverPath = GetSerializedString(info,"front_boxart_path");
-            _frontCoverMenuPath = GetSerializedString(info, "front_boxart_menu_path");
-            _backCoverPath = GetSerializedString(info,"back_boxart_path");
-            _synopsis = GetSerializedString(info,"synopsis");
-            _studio = GetSerializedString(info,"distributor");
-            _countryOfOrigin = GetSerializedString(info,"country_of_origin");
-            _officialWebsiteURL = GetSerializedString(info,"official_website_url");
-            _dateAdded = GetSerializedDateTime(info, "date_added");
-            _importerSource = GetSerializedString(info,"importer_source");
-            _runtime = GetSerializedInt(info, "runtime");
-            _parentalRating = GetSerializedString(info, "mpaa_rating");
-            
-
-            _releaseDate = GetSerializedDateTime(info, "release_date");
-            _actors = GetSerializedList<List<Person>>(info, "actors");
-            _producers = GetSerializedList<List<string>>(info, "producers");
-            _writers = GetSerializedList<List<Person>>(info, "writers");
-            _directors = GetSerializedList<List<Person>>(info, "directors");
-            _audioTracks = GetSerializedList<List<string>>(info, "language_formats");
-            _genres = GetSerializedList<List<string>>(info, "genres");
-
-            _userStarRating = GetSerializedInt(info,"user_star_rating");
-            _aspectRatio = GetSerializedString(info,"aspect_ratio");
-            _videoStandard = GetSerializedString(info,"video_standard");
-            _UPC = GetSerializedString(info,"upc");
-            _originalName = GetSerializedString(info,"original_name");
-            _tags = GetSerializedList<List<string>>(info, "tags");
-            _additionalFields = GetSerializedList<Dictionary<string, string>>(info, "additional_fields");
-            _actingRoles = GetSerializedList<Dictionary<string, string>>(info, "acting_roles");
-            _nonActingRoles = GetSerializedList<Dictionary<string, string>>(info, "nonacting_roles");
-            _photos = GetSerializedList<List<string>>(info, "photos");
-            _trailers = GetSerializedList<List<string>>(info, "trailers");
-            _children = GetSerializedList<List<int>>(info, "children");
-            _parent = GetSerializedInt( info,"parent");
-            _sortName = GetSerializedString(info, "sort_name");
-            _parentalRatingReason = GetSerializedString(info, "mpaa_rating_reason");
-            _videoDetails = GetSerializedString(info, "video_details");
-            _subtitles = GetSerializedList<List<string>>(info, "subtitles");
-            _disks = GetSerializedList<List<Disk>>(info, "disks");
-            CleanDuplicateDisks();
-            if (_videoFormat == VideoFormat.DVD)
-            {
-                if (_videoStandard == "PAL")
-                    _videoResolution = "720x576";
-                else
-                    _videoResolution = "720x480";
-            }
-            _videoResolution = GetSerializedString(info, "video_resolution");
-            _extraFeatures = GetSerializedList<List<string>>(info, "extra_features");
-            _watchedCount = GetSerializedInt(info, "watched_count");
-        }*/
-
-        /*void CleanDuplicateDisks()
-        {
-            foreach (Disk d in new List<Disk>(this._disks))
-            {
-                int i = _disks.IndexOf(d);
-                if (i < 0)
-                    continue;
-                while (true) {
-                    int oi = _disks.IndexOf(d, i+1);
-                    if (oi < 0)
-                        break;
-                    _disks.RemoveAt(oi);
-                }
-            }
-        }*/
-
-        /// <summary>
-        /// Used for serializing the title object (required for the ISerializable interface)
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="ctxt"></param>
-        /*public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
-        {
-            //Utilities.DebugLine("[Title] Adding Title ("+_name+") to Serialization data");
-            info.AddValue("file_location", _fileLocation);
-            info.AddValue("disks", _disks);
-            info.AddValue("video_format", _videoFormat);
-            info.AddValue("transcode_to_extender", _needsTranscode);
-            info.AddValue("name", _name);
-            info.AddValue("itemid", _itemId);
-            info.AddValue("sourceid", _metadataSourceId);
-            info.AddValue("sourcename", _sourceName);
-            info.AddValue("front_boxart_path", _frontCoverPath);
-            info.AddValue("front_boxart_menu_path", _frontCoverMenuPath);
-            info.AddValue("back_boxart_path", _backCoverPath);
-            info.AddValue("synopsis", _synopsis);
-            info.AddValue("distributor", _studio);
-            info.AddValue("country_of_origin", _countryOfOrigin);
-            info.AddValue("official_website_url", _officialWebsiteURL);
-            info.AddValue("date_added", _dateAdded);
-            info.AddValue("importer_source", _importerSource);
-            info.AddValue("runtime", _runtime);
-            info.AddValue("mpaa_rating", _parentalRating);
-            info.AddValue("release_date", _releaseDate);
-            info.AddValue("actors", _actors);
-            info.AddValue("producers", _producers);
-            info.AddValue("writers", _writers);
-            info.AddValue("directors", _directors);
-            info.AddValue("language_formats", _audioTracks);
-            info.AddValue("genres", _genres);
-            info.AddValue("user_star_rating", _userStarRating);
-            info.AddValue("aspect_ratio", _aspectRatio);
-            info.AddValue("video_standard", _videoStandard);
-            info.AddValue("upc", _UPC);
-            info.AddValue("original_name", _originalName);
-            info.AddValue("tags", _tags);
-            info.AddValue("additional_fields", _additionalFields);
-            info.AddValue("acting_roles", _actingRoles);
-            info.AddValue("nonacting_roles", _nonActingRoles);
-            info.AddValue("photos", _photos);
-            info.AddValue("trailers", _trailers);
-            info.AddValue("children", _children);
-            info.AddValue("parent", _parent);
-            info.AddValue("sort_name", _sortName);
-            info.AddValue("mpaa_rating_reason", _parentalRatingReason);
-            info.AddValue("video_details", _videoDetails);
-            info.AddValue("subtitles", _subtitles);
-            info.AddValue("video_resolution", _videoResolution);
-            info.AddValue("extra_features", _extraFeatures);
-            info.AddValue("watched_count", _watchedCount);
-        }*/
-        #endregion
 
         /// <summary>
         /// Generic Constructor - used to add a new title to the db
@@ -1380,7 +1202,6 @@ namespace OMLEngine
                             }
                             navigator.MoveToParent();
                         }
-
                         
                         if (navigator.MoveToChild("ParentalRating", XmlNameSpace))
                         {
@@ -1415,6 +1236,18 @@ namespace OMLEngine
                             navigator.MoveToParent();
                         }
 
+                        if (navigator.MoveToChild("ProductionYear", XmlNameSpace))
+                        {
+                            if (!String.IsNullOrEmpty(navigator.Value))
+                            {
+                                int productionYear;
+                                if (int.TryParse(navigator.Value, out productionYear))
+                                {
+                                    t.ProductionYear = productionYear;
+                                }
+                            }
+                            navigator.MoveToParent();
+                        }
                         
                         if (navigator.MoveToChild("Genres", XmlNameSpace))
                         {
@@ -1842,67 +1675,6 @@ namespace OMLEngine
             return t;*/
         }
 
-        // for paths that don't exist, try to guess
-        // replace the folder for the path with the folder where oml.xml file was found
-        /*private static string FixupDiskPath(string path, string omlXmlFile)
-        {
-            path = path.Trim();
-            if (File.Exists(path) || Directory.Exists(path))
-                return path;
-
-            string omlxmlFileFolder = Path.GetDirectoryName(omlXmlFile);
-            string omlxmlFileStripped = omlXmlFile.Replace(".OML.XML", "");
-
-            if (path.Length > 0)
-            {
-                string pathFilename = Path.GetFileName(path);
-
-                string fixedPath = omlxmlFileFolder + "\\" + pathFilename;
-                if (File.Exists(fixedPath) || Directory.Exists(fixedPath))
-                {
-                    return fixedPath;
-                }
-            }
-
-            return path;
-        }*/
-
-        // for paths that don't exist, try to guess
-        // replace the folder for the path with the folder where oml.xml file was found
-        /*private static string FixupImagePath(string path, string omlXmlFile, string suffix)
-        {
-            path = path.Trim();
-            if (File.Exists(path)) return path;
-
-            string omlxmlFileFolder = Path.GetDirectoryName(omlXmlFile);
-            string omlxmlFileStripped = omlXmlFile.Replace(".OML.XML", "");
-            string omlxmlFileStrippedTwice = omlxmlFileFolder + "\\" + Path.GetFileNameWithoutExtension(omlxmlFileStripped);
-
-            // try just the filename + the folder of the oml.xml file
-            if (path.Length > 0)
-            {
-                string pathFilename = Path.GetFileName(path);
-
-                string fixedPath = omlxmlFileFolder + "\\" + pathFilename;
-                if (File.Exists(fixedPath))
-                {
-                    return fixedPath;
-                }
-            }
-
-            // now try the standard folder.jpg, moviename.jpg, moviename.extension.jpg
-            // in the oml.xml file directory. The moviename is everything before .oml.xml
-            if (File.Exists(omlxmlFileStripped + suffix))
-                return omlxmlFileStripped + suffix;
-            else if (File.Exists(omlxmlFileStrippedTwice + suffix))
-                return omlxmlFileStrippedTwice + suffix;
-            else if (File.Exists(omlxmlFileFolder + "\\folder" + suffix))
-                return omlxmlFileFolder + "\\folder" + suffix;
-
-
-            return path;
-        }*/
-        
 //<?xml version="1.0" encoding="utf-8"?>
 //<OMLTitle xmlns="http://www.openmedialibrary.org/">
         
@@ -1986,6 +1758,7 @@ namespace OMLEngine
                 writer.WriteElementString("ParentalRating", _parentalRating);
                 writer.WriteElementString("ParentalRatingReason", _parentalRatingReason);
                 writer.WriteElementString("ReleaseDate", _releaseDate.ToString());
+                writer.WriteElementString("ProductionYear", _productionYear.ToString());
 
 
 
@@ -2154,6 +1927,7 @@ namespace OMLEngine
             if ( t.Runtime > 0) Runtime = t.Runtime;
             if (t.ReleaseDate != null) ReleaseDate = t.ReleaseDate;
             if (t.UserStarRating > 0) UserStarRating = t.UserStarRating;
+            if (t.ProductionYear > 0) ProductionYear = t.ProductionYear;
 
             if (t._directors != null && t._directors.Count > 0)
             {
@@ -2308,100 +2082,67 @@ namespace OMLEngine
 
             if (!String.IsNullOrEmpty(t.FrontCoverPath))
             {
-                if (overWrite || String.IsNullOrEmpty(FrontCoverPath))
+                if (overWrite || String.IsNullOrEmpty(FrontCoverPath) || FrontCoverPath == GetDefaultNoCoverName())
                 {
                     CopyFrontCoverFromFile(t.FrontCoverPath, true);
                 }
-            }        
+            }
+
+            if (!String.IsNullOrEmpty(t.BackCoverPath))
+            {
+                if (overWrite || String.IsNullOrEmpty(BackCoverPath) || BackCoverPath == GetDefaultNoCoverName())
+                {
+                    CopyBackCoverFromFile(t.BackCoverPath, true);
+                }
+            }
+
         }
-
-        /*public bool SaveFrontCoverToFile(string dest)
-        {
-            try
-            {
-                if (!String.IsNullOrEmpty(FrontCoverPath) && File.Exists(FrontCoverPath))
-                {
-                    if (!FrontCoverPath.Equals(dest, StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        File.Copy(FrontCoverPath, dest, true);
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-               
-            }
-            catch
-            {
-                return false;            
-        }*/
-
-        /*public bool SaveBackCoverToFile(string dest)
-        {
-            try
-            {
-                if (!String.IsNullOrEmpty(BackCoverPath) && File.Exists(BackCoverPath))
-                {
-                    if (!BackCoverPath.Equals(dest, StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        File.Copy(BackCoverPath, dest, true);
-                        return false;
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-        }*/
-
 
         // copy front cover image and set the menu cover too (resized version)
         public bool CopyFrontCoverFromFile(string source, bool deleteSource)
         {
-            try
+            if (!string.IsNullOrEmpty(source))
             {
-                File.Copy(source, GetDefaultFrontCoverName(), true);
-                if (deleteSource) File.Delete(source);
-                FrontCoverPath = GetDefaultFrontCoverName();
-                BuildResizedMenuImage();
-                return true;
+                try
+                {
+                    File.Copy(source, GetDefaultFrontCoverName(), true);
+                    if (deleteSource) File.Delete(source);
+                    FrontCoverPath = GetDefaultFrontCoverName();
+                    BuildResizedMenuImage();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
-            catch
-            {
-                return false;
-            }
+            return false;
         }
 
         public bool CopyBackCoverFromFile(string source, bool deleteSource)
         {
-            try
+            if (!string.IsNullOrEmpty(source))
             {
-                File.Copy(source, GetDefaultBackCoverName(), true);
-                if (deleteSource) File.Delete(source);
-                BackCoverPath = GetDefaultBackCoverName();
-                
-                return true;
+                try
+                {
+                    File.Copy(source, GetDefaultBackCoverName(), true);
+                    if (deleteSource) File.Delete(source);
+                    BackCoverPath = GetDefaultBackCoverName();
+
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
-            catch
-            {
-                return false;
-            }
-        }        
+            return false;
+        }
+
+        public string GetDefaultNoCoverName()
+        {
+            return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
+        }
         
         public string GetDefaultFrontCoverName()
         {
@@ -2637,6 +2378,125 @@ namespace OMLEngine
 
         }
         #endregion
+
+        public string BasePath()
+        {
+            string folder = string.Empty;
+            if (!string.IsNullOrEmpty(FileLocation))
+                if (Directory.Exists(FileLocation))
+                    folder = FileLocation;
+                else
+                    folder = Path.GetDirectoryName(FileLocation);
+            else
+            {
+                if (Disks.Count > 0)
+                {
+                    if (Disks[0].Path.Length > 0)
+                        if (Directory.Exists(Disks[0].Path))
+                            folder = Disks[0].Path;
+                        else
+                            folder = Path.GetDirectoryName(Disks[0].Path);
+                }
+            }
+
+            if (folder.Length > 0)
+            {
+                try
+                {
+                    if (Directory.Exists(folder))
+                    {
+                        if (folder.ToUpperInvariant().EndsWith("VIDEO_TS"))
+                            folder = Path.GetDirectoryName(folder);
+                        return folder;
+                    }
+
+                    return null;
+                }
+                catch (Exception e)
+                {
+                    Utilities.DebugLine("[Title] Error Looking for folder: {0}", e.Message);
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// This returns the fanartfolder if _fanartfolder is defined. If not it will try to see
+        /// if there is a fanart folder allready in existance under the movie folder first then
+        /// the centralised folder. _fanartfolder is then set to this ready for serialisation.
+        /// 
+        /// This routine uses a primitive token to represent basepath of the movie and this is
+        /// substituted when required. This means if the movie is moved and the basepath changed,
+        /// this will return the correct fanart folder.
+        /// 
+        /// </summary>
+        public string BackDropFolder
+        {
+            get {
+                // Is there allready a fan art folder defined
+                if (!string.IsNullOrEmpty(_fanartfolder))
+                {
+                    if (!string.IsNullOrEmpty(this.BasePath()))
+                    {
+                        // Perform token substitution.
+                        return _fanartfolder.Replace("{basepath}", this.BasePath());
+                    }
+                    else
+                    {
+                        return _fanartfolder;
+                    }
+                }
+
+                // Check for an existing fanart folder under the movie/disk folder
+                if (!string.IsNullOrEmpty(this.BasePath()))
+                {
+                    if (Directory.Exists(Path.Combine(this.BasePath(), @"FanArt")))
+                    {
+                        _fanartfolder = @"{basepath}\FanArt";
+                        return _fanartfolder.Replace("{basepath}", this.BasePath());
+                    }
+                }
+
+                // Check for an existing fanart folder under the centralised folder
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.gsTitledFanArtPath))
+                {
+                    string MainFanArtDir = System.IO.Path.Combine(Properties.Settings.Default.gsTitledFanArtPath, PathSafeName);
+                    if (Directory.Exists(MainFanArtDir))
+                    {
+                        _fanartfolder = MainFanArtDir;
+                        return _fanartfolder;
+                    }
+                }
+                return null;
+
+            }
+            set { _fanartfolder = value; }
+        }
+
+        public string CreateFanArtFolder(string basepath)
+        {
+            if (string.IsNullOrEmpty(_fanartfolder))
+            {
+                if (Properties.Settings.Default.gbTitledFanArtFolder)
+                {
+                    // Centralised Fan Art
+                    string MainFanArtDir = Properties.Settings.Default.gsTitledFanArtPath;
+                    if (!Directory.Exists(MainFanArtDir)) Directory.CreateDirectory(MainFanArtDir);
+                    _fanartfolder = System.IO.Path.Combine(MainFanArtDir, PathSafeName);
+                }
+                else
+                {
+                    // Fan art local to movie
+                    if (string.IsNullOrEmpty(basepath))
+                    {
+                        return null;
+                    }
+                    _fanartfolder = Path.Combine(basepath, @"FanArt");
+                }
+            }
+            if (!Directory.Exists(_fanartfolder)) Directory.CreateDirectory(_fanartfolder);
+            return _fanartfolder;
+        }       
     }
 
     public class Role

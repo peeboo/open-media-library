@@ -10,6 +10,7 @@ namespace Library
 {
     public class MyAddIn : IAddInModule, IAddInEntryPoint
     {
+        private Impersonator imp;
         private static HistoryOrientedPageSession s_session;
         OMLApplication app;
         string _id;
@@ -33,6 +34,9 @@ namespace Library
 
         public void Uninitialize()
         {
+            if (OMLApplication.Current.IsExtender && this.imp != null)
+                this.imp.Leave();
+
             OMLApplication.Current.Uninitialize();
             OMLApplication.DebugLine("[Launch] Uninitialize");
         }
@@ -47,6 +51,19 @@ namespace Library
             {
                 OMLApplication.DebugLine("[Launch] No Application found, creating...");
                 app = new OMLApplication(s_session, host);
+            }
+
+            try
+            {
+                if (OMLApplication.Current.IsExtender)
+                {
+                    this.imp = new Impersonator();
+                    this.imp.Enter();
+                }
+            }
+            catch (Exception ex)
+            {
+                OMLApplication.DebugLine("Exception during this.imp.Enter(): {0}", ex);
             }
 
             app.Startup(_id);

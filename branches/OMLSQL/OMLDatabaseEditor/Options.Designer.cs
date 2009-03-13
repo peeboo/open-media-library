@@ -28,11 +28,19 @@ namespace OMLDatabaseEditor
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.tpOptions = new DevExpress.XtraTab.XtraTabPage();
+            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
+            this.beTitledFanArtPath = new DevExpress.XtraEditors.ButtonEdit();
+            this.ceTitledFanArtFolder = new DevExpress.XtraEditors.CheckEdit();
+            this.cmbDefaultMetadataPlugin = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
+            this.cePrependParentFolder = new DevExpress.XtraEditors.CheckEdit();
             this.ceUseGenreList = new DevExpress.XtraEditors.CheckEdit();
             this.ceUseMPAAList = new DevExpress.XtraEditors.CheckEdit();
+            this.ceFoldersAsTitles = new DevExpress.XtraEditors.CheckEdit();
             this.tpSkins = new DevExpress.XtraTab.XtraTabPage();
             this.lbcSkins = new DevExpress.XtraEditors.ListBoxControl();
             this.tpMPAAList = new DevExpress.XtraTab.XtraTabPage();
@@ -47,12 +55,18 @@ namespace OMLDatabaseEditor
             this.beTags = new DevExpress.XtraEditors.ButtonEdit();
             this.sbCancel = new DevExpress.XtraEditors.SimpleButton();
             this.sbOK = new DevExpress.XtraEditors.SimpleButton();
+            this.cmGenreMappings = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tpOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.beTitledFanArtPath.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceTitledFanArtFolder.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cmbDefaultMetadataPlugin.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cePrependParentFolder.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseMPAAList.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceFoldersAsTitles.Properties)).BeginInit();
             this.tpSkins.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbcSkins)).BeginInit();
             this.tpMPAAList.SuspendLayout();
@@ -102,11 +116,74 @@ namespace OMLDatabaseEditor
             // 
             // tpOptions
             // 
+            this.tpOptions.Controls.Add(this.labelControl3);
+            this.tpOptions.Controls.Add(this.beTitledFanArtPath);
+            this.tpOptions.Controls.Add(this.ceTitledFanArtFolder);
+            this.tpOptions.Controls.Add(this.cmbDefaultMetadataPlugin);
+            this.tpOptions.Controls.Add(this.labelControl2);
+            this.tpOptions.Controls.Add(this.cePrependParentFolder);
             this.tpOptions.Controls.Add(this.ceUseGenreList);
             this.tpOptions.Controls.Add(this.ceUseMPAAList);
+            this.tpOptions.Controls.Add(this.ceFoldersAsTitles);
             this.tpOptions.Name = "tpOptions";
             this.tpOptions.Size = new System.Drawing.Size(346, 271);
             this.tpOptions.Text = "Options";
+            // 
+            // labelControl3
+            // 
+            this.labelControl3.Location = new System.Drawing.Point(9, 155);
+            this.labelControl3.Name = "labelControl3";
+            this.labelControl3.Size = new System.Drawing.Size(91, 13);
+            this.labelControl3.TabIndex = 8;
+            this.labelControl3.Text = "Titled FanArt Path:";
+            // 
+            // beTitledFanArtPath
+            // 
+            this.beTitledFanArtPath.Enabled = false;
+            this.beTitledFanArtPath.Location = new System.Drawing.Point(106, 152);
+            this.beTitledFanArtPath.Name = "beTitledFanArtPath";
+            this.beTitledFanArtPath.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.beTitledFanArtPath.Size = new System.Drawing.Size(204, 20);
+            this.beTitledFanArtPath.TabIndex = 7;
+            this.beTitledFanArtPath.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.beTitledFanArtPath_ButtonClick);
+            // 
+            // ceTitledFanArtFolder
+            // 
+            this.ceTitledFanArtFolder.Location = new System.Drawing.Point(7, 127);
+            this.ceTitledFanArtFolder.Name = "ceTitledFanArtFolder";
+            this.ceTitledFanArtFolder.Properties.Caption = "Titled FanArt Folders";
+            this.ceTitledFanArtFolder.Size = new System.Drawing.Size(259, 18);
+            this.ceTitledFanArtFolder.TabIndex = 6;
+            this.ceTitledFanArtFolder.CheckStateChanged += new System.EventHandler(this.ceTitledFanArtFolder_CheckStateChanged);
+            // 
+            // cmbDefaultMetadataPlugin
+            // 
+            this.cmbDefaultMetadataPlugin.Location = new System.Drawing.Point(135, 101);
+            this.cmbDefaultMetadataPlugin.Name = "cmbDefaultMetadataPlugin";
+            this.cmbDefaultMetadataPlugin.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
+            this.cmbDefaultMetadataPlugin.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cmbDefaultMetadataPlugin.Properties.NullText = "Not Specified";
+            this.cmbDefaultMetadataPlugin.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
+            this.cmbDefaultMetadataPlugin.Size = new System.Drawing.Size(175, 20);
+            this.cmbDefaultMetadataPlugin.TabIndex = 5;
+            // 
+            // labelControl2
+            // 
+            this.labelControl2.Location = new System.Drawing.Point(9, 104);
+            this.labelControl2.Name = "labelControl2";
+            this.labelControl2.Size = new System.Drawing.Size(119, 13);
+            this.labelControl2.TabIndex = 4;
+            this.labelControl2.Text = "Default Metadata Plugin:";
+            // 
+            // cePrependParentFolder
+            // 
+            this.cePrependParentFolder.Location = new System.Drawing.Point(7, 76);
+            this.cePrependParentFolder.Name = "cePrependParentFolder";
+            this.cePrependParentFolder.Properties.Caption = "Prepend Parent Folder to Title on folder scan";
+            this.cePrependParentFolder.Size = new System.Drawing.Size(259, 18);
+            this.cePrependParentFolder.TabIndex = 3;
             // 
             // ceUseGenreList
             // 
@@ -123,6 +200,15 @@ namespace OMLDatabaseEditor
             this.ceUseMPAAList.Properties.Caption = "Use MPAA Auto Complete List";
             this.ceUseMPAAList.Size = new System.Drawing.Size(259, 18);
             this.ceUseMPAAList.TabIndex = 0;
+            // 
+            // ceFoldersAsTitles
+            // 
+            this.ceFoldersAsTitles.Location = new System.Drawing.Point(7, 52);
+            this.ceFoldersAsTitles.Name = "ceFoldersAsTitles";
+            this.ceFoldersAsTitles.Properties.Caption = "Folders are Titles";
+            this.ceFoldersAsTitles.Size = new System.Drawing.Size(259, 18);
+            this.ceFoldersAsTitles.TabIndex = 2;
+            this.ceFoldersAsTitles.CheckStateChanged += new System.EventHandler(this.ceFoldersAsTitles_CheckStateChanged);
             // 
             // tpSkins
             // 
@@ -187,9 +273,9 @@ namespace OMLDatabaseEditor
             // 
             this.labelControl1.Location = new System.Drawing.Point(6, 3);
             this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(206, 13);
+            this.labelControl1.Size = new System.Drawing.Size(330, 13);
             this.labelControl1.TabIndex = 7;
-            this.labelControl1.Text = "Changes to genres take affect immediately";
+            this.labelControl1.Text = "Changes to genres take affect immediately. Bold indicates mappings.";
             // 
             // btnGenre
             // 
@@ -215,6 +301,8 @@ namespace OMLDatabaseEditor
             this.lbGenres.Size = new System.Drawing.Size(340, 226);
             this.lbGenres.SortOrder = System.Windows.Forms.SortOrder.Ascending;
             this.lbGenres.TabIndex = 5;
+            this.lbGenres.DrawItem += new DevExpress.XtraEditors.ListBoxDrawItemEventHandler(this.lbGenres_DrawItem);
+            this.lbGenres.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lbGenres_MouseClick);
             this.lbGenres.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbGenres_KeyDown);
             // 
             // tpTags
@@ -271,6 +359,11 @@ namespace OMLDatabaseEditor
             this.sbOK.Text = "&OK";
             this.sbOK.Click += new System.EventHandler(this.SimpleButtonClick);
             // 
+            // cmGenreMappings
+            // 
+            this.cmGenreMappings.Name = "cmGenreMappings";
+            this.cmGenreMappings.Size = new System.Drawing.Size(61, 4);
+            // 
             // Options
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -286,8 +379,14 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
             this.xtraTabControl1.ResumeLayout(false);
             this.tpOptions.ResumeLayout(false);
+            this.tpOptions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.beTitledFanArtPath.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceTitledFanArtFolder.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cmbDefaultMetadataPlugin.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cePrependParentFolder.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseMPAAList.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceFoldersAsTitles.Properties)).EndInit();
             this.tpSkins.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbcSkins)).EndInit();
             this.tpMPAAList.ResumeLayout(false);
@@ -314,6 +413,7 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraEditors.SimpleButton sbCancel;
         private DevExpress.XtraEditors.SimpleButton sbOK;
         private DevExpress.XtraEditors.CheckEdit ceUseMPAAList;
+        private DevExpress.XtraEditors.CheckEdit ceFoldersAsTitles;
         private DevExpress.XtraTab.XtraTabPage tpMPAAList;
         private DevExpress.XtraEditors.ListBoxControl lbcMPAA;
         private DevExpress.XtraEditors.ButtonEdit beMPAA;
@@ -325,5 +425,12 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraTab.XtraTabPage tpTags;
         private DevExpress.XtraEditors.ListBoxControl lbcTags;
         private DevExpress.XtraEditors.ButtonEdit beTags;
+        private System.Windows.Forms.ContextMenuStrip cmGenreMappings;
+        private DevExpress.XtraEditors.CheckEdit cePrependParentFolder;
+        private DevExpress.XtraEditors.ComboBoxEdit cmbDefaultMetadataPlugin;
+        private DevExpress.XtraEditors.LabelControl labelControl2;
+        private DevExpress.XtraEditors.CheckEdit ceTitledFanArtFolder;
+        private DevExpress.XtraEditors.LabelControl labelControl3;
+        private DevExpress.XtraEditors.ButtonEdit beTitledFanArtPath;
     }
 }

@@ -1063,13 +1063,13 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Zoom and Spin")]
-        public string MovieDetailsTransitionType {
+        [global::System.Configuration.DefaultSettingValueAttribute("0.3")]
+        public float MainPageBackDropAlpha {
             get {
-                return ((string)(this["MovieDetailsTransitionType"]));
+                return ((float)(this["MainPageBackDropAlpha"]));
             }
             set {
-                this["MovieDetailsTransitionType"] = value;
+                this["MainPageBackDropAlpha"] = value;
             }
         }
         
@@ -1082,6 +1082,66 @@ namespace Library.Properties {
             }
             set {
                 this["HasRunSetup"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.3")]
+        public float DetailsPageBackDropAlpha {
+            get {
+                return ((float)(this["DetailsPageBackDropAlpha"]));
+            }
+            set {
+                this["DetailsPageBackDropAlpha"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MainPageBackDropFile {
+            get {
+                return ((string)(this["MainPageBackDropFile"]));
+            }
+            set {
+                this["MainPageBackDropFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int MainPageBackDropRotationInSeconds {
+            get {
+                return ((int)(this["MainPageBackDropRotationInSeconds"]));
+            }
+            set {
+                this["MainPageBackDropRotationInSeconds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Background Boxes")]
+        public string DetailsView {
+            get {
+                return ((string)(this["DetailsView"]));
+            }
+            set {
+                this["DetailsView"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseVideoBackDrops {
+            get {
+                return ((bool)(this["UseVideoBackDrops"]));
+            }
+            set {
+                this["UseVideoBackDrops"] = value;
             }
         }
     }
