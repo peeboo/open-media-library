@@ -1,5 +1,6 @@
 ﻿using System;
 using OMLEngine;
+using OMLEngine.FileSystem;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
@@ -20,9 +21,9 @@ namespace Library
 
         public bool PlayMovie()
         {
-            if (MediaData.IsHDDVD(_mediaPath))
+            if (FileScanner.IsHDDVD(_mediaPath))
             {
-                string media = MediaData.GetPlayStringForPath(_mediaPath);
+                string media = FileScanner.GetPlayStringForPath(_mediaPath);
                 media = "HDDVD://" + media;
                 media.Replace('\\', '/');
                 if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, media, false))

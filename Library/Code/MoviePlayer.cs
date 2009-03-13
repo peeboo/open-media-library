@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using OMLEngine;
+using OMLEngine.FileSystem;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
@@ -86,12 +87,12 @@ namespace Library
                     OMLApplication.DebugLine("[MoviePlayerFactory] ExtenderDVDPlayer created: {0}", source);
                     return new ExtenderDVDPlayer(source);
                 }
-                else if (OMLApplication.Current.IsExtender && mediaFormat == VideoFormat.BLURAY && MediaData.IsBluRay(mediaPath))
+                else if (OMLApplication.Current.IsExtender && mediaFormat == VideoFormat.BLURAY && FileScanner.IsBluRay(mediaPath))
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] ExtenderBlurayPlayer created: {0}", source);
                     return new TranscodeBluRayPlayer(source);
                 }
-                else if (OMLApplication.Current.IsExtender && mediaFormat == VideoFormat.HDDVD && MediaData.IsHDDVD(mediaPath))
+                else if (OMLApplication.Current.IsExtender && mediaFormat == VideoFormat.HDDVD && FileScanner.IsHDDVD(mediaPath))
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] ExtenderHDDVDPlayer created: {0}", source);
                     return new TranscodeHDDVDPlayer(source);
@@ -101,17 +102,17 @@ namespace Library
                     OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created ({1}): {0}", source, mediaFormat);
                     return new TranscodePlayer(source);
                 }
-                else if (mediaFormat == VideoFormat.DVD && MediaData.IsDVD(mediaPath)) // play the dvd
+                else if (mediaFormat == VideoFormat.DVD && FileScanner.IsDVD(mediaPath)) // play the dvd
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] DVDMoviePlayer created: {0}", source);
                     return new DVDPlayer(source, mediaPath);
                 }
-                else if (mediaFormat == VideoFormat.BLURAY && MediaData.IsBluRay(mediaPath))
+                else if (mediaFormat == VideoFormat.BLURAY && FileScanner.IsBluRay(mediaPath))
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] BluRayPlayer created: {0}", source);
                     return new BluRayPlayer(source, mediaPath);
                 }
-                else if (mediaFormat == VideoFormat.HDDVD && MediaData.IsHDDVD(mediaPath))
+                else if (mediaFormat == VideoFormat.HDDVD && FileScanner.IsHDDVD(mediaPath))
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] HDDVDPlayer created: {0}", source);
                     return new HDDVDPlayer(source, mediaPath);
@@ -151,11 +152,11 @@ namespace Library
                 mountedPath += ":\\";
 
                 // now that we've mounted it let's see what it is
-                videoFormat = (MediaData.IsDVD(mountedPath))
+                videoFormat = (FileScanner.IsDVD(mountedPath))
                                    ? VideoFormat.DVD
-                                   : (MediaData.IsBluRay(mountedPath))
+                                   : (FileScanner.IsBluRay(mountedPath))
                                         ? VideoFormat.BLURAY
-                                        : (MediaData.IsHDDVD(mountedPath))
+                                        : (FileScanner.IsHDDVD(mountedPath))
                                             ? VideoFormat.HDDVD
                                             : VideoFormat.UNKNOWN;
 

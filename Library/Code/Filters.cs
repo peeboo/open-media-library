@@ -7,6 +7,7 @@ using Microsoft.MediaCenter.UI;
 using System.Diagnostics;
 using OMLEngine;
 
+
 namespace Library
 {
     /// <summary>
@@ -56,6 +57,9 @@ namespace Library
 
     public class Filter
     {
+        private MovieGallery _gallery;
+        private string _name = null;
+
         public const string About = "About";
         public const string Settings = "Settings";
         public const string Genres = "Genres";
@@ -77,130 +81,258 @@ namespace Library
 
         public const string AllItems = " All ";
 
+        TitleFilterType filterType = TitleFilterType.All;
+        List<TitleFilter> existingFilters;
+
+        public MovieGallery Gallery
+        {
+            get { return _gallery; }
+        }
+
         public string Name
         {
-            get { return _name; }
-            set { _name = value; }
+            get 
+            {
+                if (_name == null)
+                    _name = FilterTypeToString(filterType);
+
+                return _name; 
+            }
         }
 
-        public List<GalleryItem> Items
+        public string Title
         {
-            get { return _items; }
-            set { _items = value; }
+            get { return _gallery.Title + " > " + Name; }
         }
 
-        public Dictionary<string, VirtualList> ItemMovieRelation
-        {
-            get { return _itemMovieRelation; }
-            set { _itemMovieRelation = value; }
+        public IList<GalleryItem> GetGalleryItems()
+        {            
+            List<GalleryItem> items = new List<GalleryItem>();
+            items.Add(new GalleryItem(_gallery, AllItems, AllItems, this));
+
+            IEnumerable<FilteredCollection> filteredItems = null;
+
+            switch (filterType)
+            {
+                case TitleFilterType.Genre:
+                    filteredItems = TitleCollectionManager.GetAllGenres(existingFilters);
+                    break;
+
+                case TitleFilterType.ParentalRating:
+                    filteredItems = TitleCollectionManager.GetAllParentalRatings(existingFilters);
+                    break;
+
+                case TitleFilterType.VideoFormat:
+                    filteredItems = TitleCollectionManager.GetAllVideoFormats(existingFilters);
+                    break;
+
+                case TitleFilterType.Runtime:
+                    filteredItems = TitleCollectionManager.GetAllRuntimes(existingFilters);
+                    break;
+
+                case TitleFilterType.Year:
+                    filteredItems = TitleCollectionManager.GetAllYears(existingFilters);
+                    break;
+
+                case TitleFilterType.Country:
+                    filteredItems = TitleCollectionManager.GetAllCountries(existingFilters);
+                    break;
+
+                case TitleFilterType.Tag:
+                    filteredItems = TitleCollectionManager.GetAllTags(existingFilters);
+                    break;
+
+                case TitleFilterType.Director:
+                    filteredItems = TitleCollectionManager.GetAllPeople(existingFilters, PeopleRole.Director);
+                    break;
+
+                case TitleFilterType.Actor:
+                    filteredItems = TitleCollectionManager.GetAllPeople(existingFilters, PeopleRole.Actor);
+                    break;
+
+                case TitleFilterType.UserRating:
+                    filteredItems = TitleCollectionManager.GetAllUserRatings(existingFilters);
+                    break;
+
+                case TitleFilterType.DateAdded:
+                    filteredItems = TitleCollectionManager.GetAllDateAdded(existingFilters);
+                    break;
+
+                default:
+                    throw new ArgumentException("Unknown filter type");
+            }
+
+            if (filteredItems != null)
+            {
+                foreach (FilteredCollection item in filteredItems)
+                {
+                    GalleryItem galleryItem = new GalleryItem(_gallery, item.Name, item.Name, this, item.Count);
+                    if (!string.IsNullOrEmpty(item.ImagePath))
+                    {
+                        galleryItem.MenuCoverArt = MovieItem.LoadImage(item.ImagePath);
+                    }
+
+                    items.Add(galleryItem);
+                }
+            }
+
+            return items;
         }
 
-        public string GalleryView
+        public string GetViewForFilter()
         {
-            get { return _galleryView; }
-            set { _galleryView = value; }
+            switch (filterType)
+            {
+                case TitleFilterType.Genre:
+                    return "ListWithCover";
+
+                default:
+                    return "List";
+            }
         }
 
-        public Filter(string name, MovieGallery gallery, string galleryView, bool bSort, string sortFunction)
+        public static string FilterTypeToString(TitleFilterType filter)
         {
-            _allowSort = bSort;
-            _name = name;
+            switch (filter)
+            {
+                case TitleFilterType.Genre:
+                    return Genres;
+                case TitleFilterType.Director:
+                    return Director;
+                case TitleFilterType.Actor:
+                    return Actor;
+                case TitleFilterType.Runtime:
+                    return Runtime;
+                case TitleFilterType.Country:
+                    return Country;
+                case TitleFilterType.ParentalRating:
+                    return ParentRating;
+                case TitleFilterType.Tag:
+                    return Tags;
+                case TitleFilterType.UserRating:
+                    return UserRating;
+                case TitleFilterType.Year:
+                    return Year;
+                case TitleFilterType.DateAdded:
+                    return DateAdded;
+                case TitleFilterType.VideoFormat:
+                    return VideoFormat;
+                case TitleFilterType.Unwatched:
+                    return Unwatched;
+            }
+
+            return AllItems;
+        }
+
+        /// <summary>
+        /// Takes the given filter string and returns a filter type
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static TitleFilterType FilterStringToTitleType(string filter)
+        {
+            switch (filter)
+            {
+                case Genres:
+                    return TitleFilterType.Genre;
+                case Director:
+                    return TitleFilterType.Director;
+                case Actor:
+                    return TitleFilterType.Actor;
+                case Runtime:
+                    return TitleFilterType.Runtime;
+                case Country:
+                    return TitleFilterType.Country;                    
+                case ParentRating:
+                    return TitleFilterType.ParentalRating;
+                case Tags:
+                    return TitleFilterType.Tag;
+                case UserRating:
+                    return TitleFilterType.UserRating;
+                case Year:
+                    return TitleFilterType.Year;
+                case DateAdded:
+                    return TitleFilterType.DateAdded;
+                case VideoFormat:
+                    return TitleFilterType.VideoFormat;
+                case Unwatched:
+                    return TitleFilterType.Unwatched;
+            }
+
+            return TitleFilterType.All;
+        }
+
+        public static bool ShowFilterType(TitleFilterType filter)
+        {
+            switch (filter)
+            {
+                case TitleFilterType.Actor:
+                    return Properties.Settings.Default.ShowFilterActors;
+
+                case TitleFilterType.Country:
+                    return Properties.Settings.Default.ShowFilterCountry;
+
+                case TitleFilterType.DateAdded:
+                    return Properties.Settings.Default.ShowFilterDateAdded;
+
+                case TitleFilterType.Director:
+                    return Properties.Settings.Default.ShowFilterDirectors;
+
+                case TitleFilterType.Genre:
+                    return Properties.Settings.Default.ShowFilterGenres;
+
+                case TitleFilterType.ParentalRating:
+                    return Properties.Settings.Default.ShowFilterParentalRating;
+
+                case TitleFilterType.Runtime:
+                    return Properties.Settings.Default.ShowFilterRuntime;
+
+                case TitleFilterType.Tag:
+                    return Properties.Settings.Default.ShowFilterTags;
+
+                case TitleFilterType.UserRating:
+                    return Properties.Settings.Default.ShowFilterUserRating;
+
+                case TitleFilterType.VideoFormat:
+                    return Properties.Settings.Default.ShowFilterFormat;
+
+                case TitleFilterType.Year:
+                    return Properties.Settings.Default.ShowFilterYear;
+            }
+
+            return false;
+        }
+
+        public Filter(MovieGallery gallery, TitleFilterType filterType, List<TitleFilter> existingFilters)
+        {
+            this.filterType = filterType;
+            this.existingFilters = existingFilters;
+
             _gallery = gallery;
-            _galleryView = galleryView;
-            _currentSort = SortByNameAscending;
-            Initialize(sortFunction);
-            AddItem(AllItems);
-        }
-
-        private void Initialize(string sortFunction)
-        {
-            _sortFunctionLookup.Add("NameAscending", SortByNameAscending);
-            _sortFunctionLookup.Add("NameDescending", SortByNameDescending);
-            _sortFunctionLookup.Add("CountAscending", SortByItemCountAscending);
-            _sortFunctionLookup.Add("CountDescending", SortByItemCountDescending);
-            if (sortFunction.Trim() != String.Empty)
-            {
-                if (_sortFunctionLookup.ContainsKey(sortFunction))
-                    _currentSort = _sortFunctionLookup[sortFunction];
-            }
-        }
-
-        /// <summary>
-        /// Adds an empty item to our lists. Use this to create the items first in a certain order before adding the movies
-        /// </summary>
-        /// <param name="item">The item.</param>
-        public void AddItem(string item)
-        {
-            if (!_itemMovieRelation.ContainsKey(item))
-            {
-                VirtualList movies = new VirtualList(_gallery, null);
-                _itemMovieRelation.Add(item, movies);
-                _items.Add(new GalleryItem(_gallery, item, item, this));
-            }
-        }
-
-        /// <summary>
-        /// Adds a movie to the filter - assumes this movie is unique within the filter
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="movie"></param>
-        public void AddMovie(string item, MovieItem movie)
-        {
-            AddMovie(item, movie, true);
-        }
-
-        /// <summary>
-        /// Adds the movie corresponding to the item.
-        /// </summary>
-        /// <param name="item">The item.</param>
-        /// <param name="movie">The movie.</param>
-        /// <param name="allowDuplicates">if false will check the collection before 
-        /// adding the movie to see it already exists</param>
-        public void AddMovie(string item, MovieItem movie, bool allowDuplicates)
-        {
-            if (_itemMovieRelation.ContainsKey(item))
-            {
-                VirtualList movies = (VirtualList)_itemMovieRelation[item];
-                                
-                // the allowDuplicates key will be a perf savings when we know it won't be a duplicate
-                if (allowDuplicates || (!movies.Contains(movie)))
-                    movies.Add(movie);
-            }
-            else
-            {
-                VirtualList movies = new VirtualList(_gallery, null);
-                movies.Add(movie);
-                _itemMovieRelation.Add(item, movies);
-                _items.Add(new GalleryItem(_gallery, item, item, this));
-            }
-        }
-
-        public void Sort()
-        {
-            if (_allowSort && _currentSort != null) _items.Sort(_currentSort);
-        }
+        }                                  
 
         public MovieGallery CreateGallery(string filter)
         {
-            Trace.TraceInformation("MovieGallery.CreateFilteredCollection");
-            MovieGallery movies = new MovieGallery(_gallery.Title + " > " + filter);
-            if (_itemMovieRelation.ContainsKey(filter))
-            {
-                foreach (MovieItem movie in _itemMovieRelation[filter])
-                {
-                    MovieItem newMovie = (MovieItem)movie.Clone(movies);
-                    movies.AddMovie(newMovie);
-                }
-            }
+            Trace.TraceInformation("MovieGallery.CreateFilteredCollection");      
+                  
+            List<TitleFilter> filters;
+
+            if (existingFilters != null)
+                filters = new List<TitleFilter>(existingFilters);
+            else
+                filters = new List<TitleFilter>(1);
+
+            TitleFilter newFilter = new TitleFilter(filterType, filter);
+
+            if (!filters.Contains(newFilter))
+                filters.Add(newFilter);
+
+            MovieGallery movies = new MovieGallery(filters);
+            
             movies.SortMovies();
-            //Trace.TraceInformation("MovieGallery.CreateFilteredCollection: done: directors {0} actors {1} genres {2} movies {3}", movies._directors.Count, movies._actors.Count, movies._genres.Count, movies._movies.Count);
-            foreach (KeyValuePair<string, Filter> kvp in movies.Filters)
-            {
-                kvp.Value.Sort();
-            }
+            
             return movies;
         }
-
 
         public void OnFilterSelected(object sender, EventArgs args)
         {
@@ -216,56 +348,23 @@ namespace Library
                 {
                     OMLApplication.Current.GoToTrailersPage();
                 }
+                else if (cmd.Filter.Name == Filter.Unwatched)
+                {
+                    if ( existingFilters == null )
+                        existingFilters = new List<TitleFilter>(1);
+
+                    TitleFilter newFilter = new TitleFilter(TitleFilterType.Unwatched, null);
+
+                    if (!existingFilters.Contains(newFilter))
+                        existingFilters.Add(newFilter);
+
+                    OMLApplication.Current.GoToMenu(new MovieGallery(existingFilters));
+                }
                 else
                 {
-                    OMLApplication.Current.GoToSelectionList(_gallery, Name);
-                    //OMLApplication.Current.GoToSelectionList(_gallery, Items, _gallery.Title + " > " + Name, _galleryView);
+                    OMLApplication.Current.GoToSelectionList(this);
                 }
             });
         }
-
-        private static int SortByItemCountAscending(GalleryItem m1, GalleryItem m2)
-        {
-            if (m1.ItemCount > m2.ItemCount)
-                return 1;
-            else if (m1.ItemCount < m2.ItemCount)
-                return -1;
-            else
-                return SortByNameAscending(m1, m2);
-        }
-
-        private static int SortByItemCountDescending(GalleryItem m1, GalleryItem m2)
-        {
-            if (m1.ItemCount > m2.ItemCount)
-                return -1;
-            else if (m1.ItemCount < m2.ItemCount)
-                return 1;
-            else
-                return SortByNameAscending(m1, m2);
-        }
-
-
-        private static int SortByNameAscending(GalleryItem m1, GalleryItem m2)
-        {
-            return m1.Name.CompareTo(m2.Name);
-        }
-
-        private static int SortByNameDescending(GalleryItem m1, GalleryItem m2)
-        {
-            return m2.Name.CompareTo(m1.Name);
-        }
-
-        private MovieGallery _gallery;
-        private string _name;
-
-        private Dictionary<string, VirtualList> _itemMovieRelation = new Dictionary<string, VirtualList>();
-        private List<GalleryItem> _items = new List<GalleryItem>();
-        private string _galleryView;
-        private Comparison<GalleryItem> _currentSort;
-        private Dictionary<string, Comparison<GalleryItem>> _sortFunctionLookup = new Dictionary<string, Comparison<GalleryItem>>();
-        private bool _allowSort = false;
-
     }
-
-
 }

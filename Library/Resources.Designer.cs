@@ -563,6 +563,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] FirstRunSetup {
+            get {
+                object obj = ResourceManager.GetObject("FirstRunSetup", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static System.IO.UnmanagedMemoryStream Focus {
             get {
                 return ResourceManager.GetStream("Focus", resourceCulture);
@@ -684,6 +691,13 @@ namespace Library {
         internal static byte[] ListView {
             get {
                 object obj = ResourceManager.GetObject("ListView", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] ListWithCovers {
+            get {
+                object obj = ResourceManager.GetObject("ListWithCovers", resourceCulture);
                 return ((byte[])(obj));
             }
         }

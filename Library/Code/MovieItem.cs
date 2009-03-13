@@ -85,6 +85,12 @@ namespace Library
         public Command QuickPlay
         {
             get { return _quickPlay; }
+        }        
+
+        public GalleryItem(MovieGallery owner, string name, string caption, Filter browseCategory, int forcedCount)
+            : this(owner, name, caption, browseCategory)
+        {
+            _forcedCount = forcedCount;
         }
 
         public bool Watched
@@ -143,22 +149,7 @@ namespace Library
                     movie.PlayMovie();
                 }
             });
-        }
-
-        virtual public int ItemCount
-        {
-            get
-            {
-                if (Gallery != null && Category != null && Category.ItemMovieRelation.ContainsKey(Name))
-                {
-                    return Category.ItemMovieRelation[Name].Count;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
+        }       
 
         /// <summary>
         /// Gets the description.
@@ -168,10 +159,9 @@ namespace Library
         {
             get 
             {
-                int itemCount = ItemCount;
-                if (itemCount > 0 )
+                if (_forcedCount > 0 )
                 {
-                    return Name + " (" + Convert.ToString( itemCount ) + ")";
+                    return Name + " (" + Convert.ToString( _forcedCount ) + ")";
                 }
                 else
                 {
@@ -272,6 +262,7 @@ namespace Library
         private MovieGallery _owner;
         private Filter _category;
         private Command _quickPlay;
+        private int _forcedCount = -1;
         private bool _watched;
     }
 
@@ -314,7 +305,7 @@ namespace Library
             if (_titleObj.UserStarRating > 0)
             {
                 if (SubCaption.Length > 0) SubCaption += " / ";
-                SubCaption += ((double)(_titleObj.UserStarRating / 10)).ToString("0.0");
+                SubCaption += (((double)_titleObj.UserStarRating / 10)).ToString("0.0");
             }
 
 //            if (_titleObj.Directors.Count > 0 && ((Person)_titleObj.Directors[0]).full_name.Trim().Length > 0)
@@ -372,7 +363,7 @@ namespace Library
             //}
 
             Details = _titleObj.Synopsis;
-            _actingRoles = new List<string>();
+            /*_actingRoles = new List<string>();
 
             if (title.ActingRoles.Count > 0)
             {
@@ -384,7 +375,7 @@ namespace Library
                     else
                         _actingRoles.Add(kvp.Key);
                 }
-            }
+            }*/
         }
 
         /// <summary>
@@ -421,8 +412,7 @@ namespace Library
         {
             OMLApplication.ExecuteSafe(delegate
             {
-                this.TitleObject.WatchedCount++;
-                OMLApplication.Current.SaveTitles();
+                TitleCollectionManager.IncrementWatchedCount(this.TitleObject);
             });
         }
 
@@ -477,7 +467,8 @@ namespace Library
                 if (d == ms.Disk)
                 {
                     d.ExtraOptions = ms.UpdateExtraOptions(d.ExtraOptions);
-                    OMLApplication.Current.SaveTitles();
+                    //OMLApplication.Current.SaveTitles();
+                    TitleCollectionManager.SaveTitleUpdates();
                     break;
                 }
         }
@@ -488,10 +479,9 @@ namespace Library
         /// <value>The title object.</value>
         public Title TitleObject { get { return _titleObj; } }
 
-        public List<Disk> Disks
+        public IList<Disk> Disks
         {
             get { return _titleObj.Disks; }
-            set { _titleObj.Disks = value; }
         }
 
         public List<Disk> FriendlyNamedDisks
@@ -501,14 +491,18 @@ namespace Library
                 if (_friendlyNamedDisks == null)
                 {
                     _friendlyNamedDisks = new List<Disk>();
-                    List<Disk> disks = this._titleObj.Disks;
+                    IList<Disk> disks = this._titleObj.Disks;
                     
                     bool isExtender = OMLApplication.Current.IsExtender;
                     if (isExtender)
+                    {
                         for (int i = 0; i < disks.Count; ++i)
                             foreach (MediaSource ms in (MediaSource.GetSourcesFromOptions(disks[i].Path, disks[i].ExtraOptions, true)))
                                 if (disks.Contains(ms.Disk) == false)
-                                    disks.Insert(i + 1, ms.Disk);
+                                {
+                                    _titleObj.AddTempDisk(ms.Disk);
+                                }
+                    }
 
                     foreach (Disk d in disks)
                     {
@@ -530,7 +524,7 @@ namespace Library
 
         public int itemId
         {
-            get { return _titleObj.InternalItemID; }
+            get { return _titleObj.Id; }
         }
 
         /// <summary>
@@ -539,7 +533,7 @@ namespace Library
         /// <value>The use star rating.</value>
         public int UseStarRating
         {
-            get { return _titleObj.UserStarRating; }
+            get { return _titleObj.UserStarRating.HasValue ? _titleObj.UserStarRating.Value : 0; }
         }
 
         /// <summary>
@@ -651,7 +645,7 @@ namespace Library
         /// Gets the producers.
         /// </summary>
         /// <value>The producers.</value>
-        public IList Producers
+        public IList<string> Producers
         {
             get { return _titleObj.Producers; }
             //set { _titleObj.Producers = value; }

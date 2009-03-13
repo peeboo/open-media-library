@@ -580,7 +580,7 @@ namespace OMLSDK
                             using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(coverArtImage, 200))
                             {
                                 string img_path = FileSystemWalker.ImageDirectory +
-                                              @"\MF" + t.InternalItemID + ".jpg";
+                                              @"\MF" + t.Id + ".jpg";
                                 menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
                                 t.FrontCoverMenuPath = img_path;
                             }
@@ -642,7 +642,7 @@ namespace OMLSDK
             {
                 fi = new FileInfo(imagePath);
                 string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
-                                                   "\\F" + newTitle.InternalItemID +
+                                                   "\\F" + newTitle.Id +
                                                    fi.Extension;
                 if (CopyImages && String.Compare(new_full_name,imagePath, true) != 0 )
                 {
@@ -664,7 +664,7 @@ namespace OMLSDK
             {
                 fi = new FileInfo(imagePath);
                 string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
-                                                   "\\B" + newTitle.InternalItemID +
+                                                   "\\B" + newTitle.Id +
                                                    fi.Extension;
                 if (CopyImages)
                 {

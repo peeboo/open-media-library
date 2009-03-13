@@ -69,6 +69,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBase.cs" />
+    <Compile Include="TitleCollectionManagerTest.cs" />
     <Compile Include="TheMovieDbMetadataPluginTest.cs" />
     <Compile Include="TitleCollectionTest.cs" />
     <Compile Include="TitleTest.cs" />

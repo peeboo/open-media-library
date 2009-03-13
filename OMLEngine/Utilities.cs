@@ -34,62 +34,7 @@ namespace OMLEngine
         MyMovies,
         DVDProfiler,
         MovieCollectorz
-    };
-
-    /// <summary>
-    /// Enumerator for Video Fromats
-    /// </summary>
-    public enum VideoFormat
-    {
-        // DO NOT MODIFY ORDER, INSERT IN THE MIDDLE, OR REMOVE ENTRIES, JUST ADD TO THE END!
-        // All items in this list MUST be uppercase
-
-        ASF, // WMV style
-        AVC, // AVC H264
-        AVI, // DivX, Xvid, etc
-        B5T, // BlindWrite image
-        B6T, // BlindWrite image
-        BIN, // using an image loader lib and load/play this as a DVD
-        BLURAY, // detect which drive supports this and request the disc
-        BWT, // BlindWrite image
-        CCD, // CloneCD image
-        CDI, // DiscJuggler Image
-        CUE, // cue sheet
-        DVD, // detect which drive supports this and request the disc
-        DVRMS, // MPG
-        H264, // AVC OR MP4
-        HDDVD, // detect which drive supports this and request the disc
-        IFO, // Online DVD
-        IMG, // using an image loader lib and load/play this as a DVD
-        ISO, // Standard ISO image
-        ISZ, // Compressed ISO image
-        MDF, // using an image loader lib and load/play this as a DVD
-        MDS, // Media Descriptor file
-        MKV, // Likely h264
-        MOV, // Quicktime
-        MPG,
-        MPEG,
-        MP4, // DivX, AVC, or H264
-        NRG, // Nero image
-        OFFLINEBLURAY, // detect which drive supports this and request the disc
-        OFFLINEDVD, // detect which drive supports this and request the disc
-        OFFLINEHDDVD, // detect which drive supports this and request the disc
-        OGM, // Similar to MKV
-        PDI, // Instant CD/DVD image
-        TS, // MPEG2
-        UIF,
-        UNKNOWN,
-        URL, // this is used for online content (such as streaming trailers)
-        WMV,
-        VOB, // MPEG2
-        WVX, // wtf is this?
-        ASX, // like WPL
-        WPL, // playlist file?
-        WTV, // new dvr format in vista (introduced in the tv pack 2008)
-        M2TS, // mpeg2 transport stream (moved, since it got inserted in the middle, and all new types have to be inserted at the end)
-
-        ALL, // meaning all format types - used for setting video format to external player
-    };
+    };   
 
     /// <summary>
     /// Enumerator for various TitleCollection errors
@@ -177,11 +122,12 @@ namespace OMLEngine
             return plugins;
         }
 
-        public static string FileSearchPattern()
+        /*public static string FileSearchPattern()
         {
             return "*.asf,*.avc,*.avi,*.bin,*.cue,*.dvr-ms,*.h264,*.img,*.iso,*.mdf,*.mkv" +
                    "*.mov,*.mpg,*.mpeg,*.mp4,*.ogm,*.ts,*.wmv,*.vob,video_ts,*.wtv";
-        }
+        }*/
+         
         /// <summary>
         /// Loads all valid plugins into memory
         /// </summary>
