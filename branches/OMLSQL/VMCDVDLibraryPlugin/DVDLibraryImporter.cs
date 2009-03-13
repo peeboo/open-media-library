@@ -238,7 +238,7 @@ namespace VMCDVDLibraryPlugin
                                             Utilities.DebugLine("[DVDLibraryImporter] Problem importing file " + video + " : " + ex.Message);
                                         }
                                     }
-                                    moviePaths.Add(video);
+                                    //moviePaths.Add(video); what do we do with this?
                                 }
                             }
                         }
