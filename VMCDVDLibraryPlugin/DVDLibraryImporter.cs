@@ -83,6 +83,9 @@ namespace VMCDVDLibraryPlugin
         {
             try
             {
+                List<string> moviePaths = new List<string>();
+
+
                 List<string> dirList = new List<string>();
                 List<string> fileList = new List<string>();
                 GetSubFolders(startFolder, dirList);
@@ -240,6 +243,8 @@ namespace VMCDVDLibraryPlugin
                         }
                     }
                 } // loop through the sub folders
+
+
             }
             catch (Exception ex)
             {
@@ -323,7 +328,7 @@ namespace VMCDVDLibraryPlugin
                             break;
                     }                    
 
-                    t.Disks.Add(disk);
+                    t.AddDisk(disk);
                     t.MetadataSourceName = "VMC DVD Library";
                     return t;
                 }
@@ -386,7 +391,7 @@ namespace VMCDVDLibraryPlugin
 
                         bFound = reader.ReadToFollowing("language");
                         if (bFound)
-                            t.AddLanguageFormat(reader.ReadString().Trim());
+                            t.AddAudioTrack(reader.ReadString().Trim());
 
                         bFound = reader.ReadToFollowing("releaseDate");
                         if (bFound)

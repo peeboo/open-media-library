@@ -180,6 +180,7 @@
     <Content Include="Markup\Control\MovieDescription.mcml" />
     <Content Include="Markup\Details\DetailsPage.mcml" />
     <Content Include="Markup\Details\DetailsPage_Boxes.mcml" />
+    <Content Include="Markup\FirstRunSetup.mcml" />
     <Content Include="Markup\IntroPage.mcml" />
     <Content Include="Markup\LayoutV2\BasePage.mcml" />
     <Content Include="Markup\Base\Animations.mcml" />
@@ -231,6 +232,7 @@
     <Content Include="Markup\Views\CoverArt.mcml" />
     <Content Include="Markup\Views\CoverArtWithAlpha.mcml" />
     <Content Include="Markup\Views\ListView.mcml" />
+    <Content Include="Markup\Views\ListWithCovers.mcml" />
     <Content Include="Markup\Views\Views.mcml" />
     <Content Include="OldMarkup\DetailsPage.mcml" />
     <Content Include="OldMarkup\DetailsPage2.mcml" />
@@ -247,6 +249,7 @@
     <None Include="Resources\nocover.png" />
     <None Include="Setupx64\Build.bat" />
     <None Include="Setupx64\License.rtf" />
+    <None Include="Setupx64\omlsetupx64.proj" />
     <None Include="Setupx64\Setup-en-us.wxl" />
     <None Include="Setupx64\Setup.wxs" />
     <None Include="Resources\buttonfocus.png" />
@@ -381,6 +384,7 @@
     <None Include="Resources\spinnerbluebarlargedormant1.png" />
     <None Include="Resources\spinnerbluebarlargefocus1.png" />
     <None Include="Resources\spinnerbluebarlargenofocus1.png" />
+    <None Include="Setup\omlsetupx86.proj" />
     <EmbeddedResource Include="Revision.txt" />
     <Content Include="Sounds\Error.wav" />
     <Content Include="Sounds\Focus.wav" />

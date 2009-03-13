@@ -44,7 +44,7 @@ namespace Library
         public string UserRating { get { return ((double)_movieDetails.UseStarRating / 10).ToString(); } }
         public string Title { get { return _movieDetails.Name; } }
         public Image FullCover { get { return _fullCover; } }
-        public List<string> Languages { get { return _movieDetails.TitleObject.AudioTracks; } }
+        public List<string> Languages { get { return new List<string>(_movieDetails.TitleObject.AudioTracks); } }
         public Choice DiskChoice { get { return _diskChoice; } }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace Library
             }
         }
 
-        public IList Genres
+        public IList<string> Genres
         {
             get { return _movieDetails.TitleObject.Genres; }
         }
@@ -274,8 +274,13 @@ namespace Library
 
 
         private void LoadDetails(MovieItem item)
-        {
-            _movieDetails = item;
+        {            
+            // get the title from the db will full information
+            Title title = OMLEngine.TitleCollectionManager.GetTitle(item.TitleObject.Id);
+
+            // create a new movie item to use
+            _movieDetails = new MovieItem(title, item.Gallery);            
+
             //_localMedia = null;
 
             //DVDDiskInfo debug code
@@ -491,13 +496,11 @@ namespace Library
 
                 if (watched && _movieDetails.TitleObject.WatchedCount == 0)
                 {
-                    _movieDetails.TitleObject.WatchedCount = 1;
-                    OMLApplication.Current.SaveTitles();
+                    TitleCollectionManager.IncrementWatchedCount(_movieDetails.TitleObject);
                 }
                 else if (!watched && _movieDetails.TitleObject.WatchedCount != 0)
                 {
-                    _movieDetails.TitleObject.WatchedCount = 0;
-                    OMLApplication.Current.SaveTitles();
+                    TitleCollectionManager.ClearWatchedCount(_movieDetails.TitleObject);
                 }
             });
         }
@@ -595,12 +598,10 @@ namespace Library
         }
 
         private void MovieCastCommand_Invoked(object sender, EventArgs e)
-        {
-            MovieGallery gallery = new MovieGallery(OMLApplication.Current.Titles, "Home");
-            OMLApplication.Current.GoToSelectionList(gallery, Filter.Participant, name);
+        {            
+            OMLApplication.Current.GoToMenu(new MovieGallery(new TitleFilter(TitleFilterType.Person, name)));
         }        
     }
-
 
     // since for some reason Media Center's MCML engine will not load the OMLEngine Assembly 
     // This prevents me from casting the Disks Repeater items to Disk type.

@@ -413,7 +413,7 @@ namespace Library
             }
         }
 
-        public static void Uninitialize(TitleCollection titles)
+        public static void Uninitialize(IEnumerable<Title> titles)
         {
             foreach (Title title in titles)
                 foreach (Disk disk in title.Disks)

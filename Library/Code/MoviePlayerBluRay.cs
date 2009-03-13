@@ -1,5 +1,6 @@
 ﻿using System;
 using OMLEngine;
+using OMLEngine.FileSystem;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
@@ -20,9 +21,9 @@ namespace Library
 
         public bool PlayMovie()
         {
-            if (MediaData.IsBluRay(_mediaPath))
+            if (FileScanner.IsBluRay(_mediaPath))
             {
-                string play_string = MediaData.GetPlayStringForPath(_mediaPath);
+                string play_string = FileScanner.GetPlayStringForPath(_mediaPath);
 //                play_string = "BLURAY://" + play_string;
 //                play_string.Replace('\\', '/');
                 if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, play_string, false))
