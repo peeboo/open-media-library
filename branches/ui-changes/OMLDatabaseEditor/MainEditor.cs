@@ -395,32 +395,12 @@ namespace OMLDatabaseEditor
                             Title t = plugin.GetTitle(searchResultForm.SelectedTitleIndex);
                             if (t != null)
                             {
-                                if (plugin.SupportsBackDrops())
-                                {
-                                    if (titleEditor.EditedTitle.BasePath() != null)
-                                    {
-                                        DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
-                                        dbdForm.Show();
-                                        if (Properties.Settings.Default.gbTitledFanArtFolder)
-                                        {
-                                            plugin.UseMainFanArtDir = true;
-                                            plugin.MainFanArtDir = Properties.Settings.Default.gsTitledFanArtPath;
-                                        }
-                                        plugin.DownloadBackDropsForTitle(titleEditor.EditedTitle, searchResultForm.SelectedTitleIndex);
-                                        dbdForm.Hide();
-                                        dbdForm.Dispose();
-                                    }
-                                    else
-                                    {
-                                        XtraMessageBox.Show("A disk must be assigned to this title. Assign a disk then update the metadata.", "Could not download backdrops!");
-                                    }
-                                }
+                                LoadFanartFromPlugin(plugin, t);
+
                                 if (coverArtOnly)
                                 {
-                                    if (!String.IsNullOrEmpty(t.FrontCoverPath))
-                                    {
-                                        titleEditor.EditedTitle.CopyFrontCoverFromFile(t.FrontCoverPath, true);
-                                    }
+                                    titleEditor.EditedTitle.CopyFrontCoverFromFile(t.FrontCoverPath, true);
+                                    titleEditor.EditedTitle.CopyBackCoverFromFile(t.BackCoverPath, true);
                                 }
                                 else
                                 {
@@ -442,21 +422,44 @@ namespace OMLDatabaseEditor
                         Type tTitle = typeof(Title);
                         IOMLMetadataPlugin metadata;
                         Title title;
+                        bool loadedfanart = false;
+
                         foreach (KeyValuePair<string, List<string>> map in mappings)
                         {
-                            if (map.Key == Properties.Settings.Default.gsDefaultMetadataPlugin) continue;
-                            metadata = _metadataPlugins.First(p => p.PluginName == map.Key);
-                            metadata.SearchForMovie(titleNameSearch);
-                            title = metadata.GetBestMatch();
-                            if (title != null)
+                            try
                             {
-                                Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using plugin " + map.Key); 
-                                foreach (string property in map.Value)
+                                if (map.Key == Properties.Settings.Default.gsDefaultMetadataPlugin) continue;
+                                metadata = _metadataPlugins.First(p => p.PluginName == map.Key);
+                                metadata.SearchForMovie(titleNameSearch);
+                                title = metadata.GetBestMatch();
+                                if (title != null)
                                 {
-                                    Utilities.DebugLine("[OMLDatabaseEditor] Using value for " + property + " from plugin " + map.Key);
-                                    System.Reflection.PropertyInfo prop = tTitle.GetProperty(property);
-                                    prop.SetValue(titleEditor.EditedTitle, prop.GetValue(title, null), null);
+                                    Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using plugin " + map.Key);
+                                    foreach (string property in map.Value)
+                                    {
+                                        switch (property)
+                                        {
+                                            case "FanArt":
+                                                loadedfanart = true;
+                                                LoadFanartFromPlugin(metadata, title);
+                                                break;
+                                            case "Genres":
+                                                titleEditor.EditedTitle.Genres.Clear();
+                                                titleEditor.EditedTitle.Genres.AddRange(title.Genres);
+                                                break;
+                                            default:
+                                                Utilities.DebugLine("[OMLDatabaseEditor] Using value for " + property + " from plugin " + map.Key);
+                                                System.Reflection.PropertyInfo prop = tTitle.GetProperty(property);
+                                                prop.SetValue(titleEditor.EditedTitle, prop.GetValue(title, null), null);
+                                                break;
+                                        }
+                                    }
                                 }
+                            }
+                            catch (Exception ex)
+                            {
+                                Utilities.DebugLine("[OMLDatabaseEditor] Processing date from {0} Caused an Exception {1}", map.Key, ex);
+
                             }
                         }
                         // Use default plugin for remaining fields
@@ -465,26 +468,8 @@ namespace OMLDatabaseEditor
                         title = metadata.GetBestMatch();
                         if (title != null)
                         {
-                            if (metadata.SupportsBackDrops())
-                            {
-                                if (titleEditor.EditedTitle.BasePath() != null)
-                                {
-                                    DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
-                                    dbdForm.Show();
-                                    if (Properties.Settings.Default.gbTitledFanArtFolder)
-                                    {
-                                        plugin.UseMainFanArtDir = true;
-                                        plugin.MainFanArtDir = Properties.Settings.Default.gsTitledFanArtPath;
-                                    }
-                                    metadata.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
-                                    dbdForm.Hide();
-                                    dbdForm.Dispose();
-                                }
-                                else
-                                {
-                                    XtraMessageBox.Show("A disk must be assigned to this title. Assign a disk then update the metadata.", "Could not download backdrops!");
-                                }
-                            }
+                            if (!loadedfanart) { LoadFanartFromPlugin(metadata, title); }
+ 
                             Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using default plugin " + metadata.PluginName);
                             titleEditor.EditedTitle.CopyMetadata(title, false);
                         }
@@ -497,10 +482,34 @@ namespace OMLDatabaseEditor
                 }
                 return false;
             }
-            catch
+            catch (Exception ex)
             {
+                Utilities.DebugLine("[OMLDatabaseEditor] Exception {0}", ex);
                 Cursor = Cursors.Default;
                 return false;
+            }
+        }
+
+        private void LoadFanartFromPlugin(IOMLMetadataPlugin metadata, Title title)
+        {
+            if (metadata.SupportsBackDrops())
+            {
+                // Is the fanart folder for the edited title defined
+                if (string.IsNullOrEmpty(titleEditor.EditedTitle.BackDropFolder))
+                    titleEditor.EditedTitle.BackDropFolder = title.CreateFanArtFolder(titleEditor.EditedTitle.BasePath());
+
+                if (!string.IsNullOrEmpty(titleEditor.EditedTitle.BackDropFolder))
+                {
+                    DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
+                    dbdForm.Show();
+                    metadata.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
+                    dbdForm.Hide();
+                    dbdForm.Dispose();
+                }
+                else
+                {
+                    XtraMessageBox.Show("A disk must be assigned to this title. Assign a disk then update the metadata.", "Could not download Fan Art!");
+                }
             }
         }
 
@@ -1042,6 +1051,13 @@ namespace OMLDatabaseEditor
                 {
                 }
             }
+        }
+
+        private void manageMetadataMappingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MetadataMappings mdm = new MetadataMappings(this.titleEditor);
+            mdm.ShowDialog();
+            _titleCollection.saveTitleCollection();
         }
     }
 }

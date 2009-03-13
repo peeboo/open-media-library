@@ -20,16 +20,8 @@
     <Setting Name="gsTags" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="gbTitledFanArtFolder" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="gsTitledFanArtPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">
-                </Value>
-    </Setting>
     <Setting Name="gsDefaultMetadataPlugin" Type="System.String" Scope="User">
-      <Value Profile="(Default)">
-                </Value>
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

@@ -34,18 +34,6 @@ namespace TheMovieDbMetadata
 
         public string PluginName { get { return "themoviedb.org"; } }
 
-        private bool _useMainFanArtDir = false;
-        public bool UseMainFanArtDir
-        {
-            set { _useMainFanArtDir = value; }
-        }
-
-        private string _mainFanArtDir = @"C:\ProgramData\OpenMediaLibrary\FanArt";
-        public string MainFanArtDir
-        { 
-            get { return _mainFanArtDir; }
-            set { _mainFanArtDir = value; }
-        }
 
         // these 2 methods must be called in sequence
         public bool Initialize(Dictionary<string, string> parameters)
@@ -436,22 +424,24 @@ namespace TheMovieDbMetadata
                 if (this.BackDrops == null)
                     return;
 
-                string downloadTo = t.BackDropFolder;
                 WebClient web = new WebClient();                
+                
                 foreach (string backDropUrl in this.BackDrops)
                 {
-                    if (!string.IsNullOrEmpty(backDropUrl))
+                    try
                     {
-                        if ((_useMainFanArtDir) || (!Directory.Exists(t.BackDropFolder)))
+                        if (!string.IsNullOrEmpty(backDropUrl))
                         {
-                            string pdTitleDir = System.IO.Path.Combine(MainFanArtDir, t.PathSafeName);
-                            if (!Directory.Exists(MainFanArtDir)) Directory.CreateDirectory(MainFanArtDir);
-                            if (!Directory.Exists(pdTitleDir)) Directory.CreateDirectory(pdTitleDir);
-                            downloadTo = pdTitleDir.ToString();
+                            string[] folders = backDropUrl.Split('/');
+                            string filename = folders[folders.Length - 2] + folders[folders.Length - 1];
+                            if (!File.Exists(Path.Combine(t.BackDropFolder, filename).ToString()))
+                            {
+                                web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, filename).ToString());
+                            }
                         }
-                        string filename = backDropUrl.Substring(backDropUrl.LastIndexOf('/') + 1);
-                        filename = Path.GetFileName(filename);
-                        web.DownloadFile(backDropUrl, Path.Combine(downloadTo, filename).ToString());
+                    }
+                    catch
+                    {
                     }
                 }
             }

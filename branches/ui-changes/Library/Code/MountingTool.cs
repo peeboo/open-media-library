@@ -58,17 +58,14 @@ namespace Library
             }
             Process p = StartProcess(_Path, strParams, true, true);
 
-            int timeout = 0;
-            while (!p.HasExited && (timeout < 10000))
+            if (!p.WaitForExit(15000))
             {
-                OMLApplication.DebugLine("[MountingTool] Mount waiting for 100 milliseconds");
-                System.Threading.Thread.Sleep(100);
-                timeout += 100;
-            }
+                OMLApplication.DebugLine("[MountingTool] Waited for 15000 milliseconds and the mounter didn't exit");
+            }                        
 
             string path = _Drive + ":\\";
-            timeout = 0;
-            while (timeout < 10000)
+            int timeout = 0;
+            while (timeout < 15000)
             {
                 if (System.IO.Directory.Exists(path) &&
                     System.IO.Directory.GetDirectories(path).Length != 0)
@@ -77,6 +74,9 @@ namespace Library
                 System.Threading.Thread.Sleep(250);
                 timeout += 250;
             }
+
+            // let's wait one extra second
+            System.Threading.Thread.Sleep(1000);
 
             VirtualDrive = _Drive;
             _MountedIsoFile = IsoFile;

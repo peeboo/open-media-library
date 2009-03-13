@@ -2,7 +2,7 @@
 
 <!-- These variables define the Windows Installer product version, product code and upgrade code. They   -->
 <!-- will be used later on in this file.                                                                 -->
-<?define Property_ProductVersion = "2.1.3.0" ?>
+<?define Property_ProductVersion = "3.0.0.0" ?>
 <?define Property_ProductCode = "282ffe47-5856-4f07-a5e1-617a24a9b4a5" ?>
 <?define Property_UpgradeCode = "0921ec75-fddc-46f8-bdf4-a5d697351567" ?>
 
@@ -186,6 +186,12 @@
                         <!--<ServiceControl Id="OMLFWServiceControl" Name="OMLFWService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
                     </Component>
+          <Directory Id ="HELPDIRECTORY" Name="Help">
+            <Component Id="Open_Media_Library_User_Manual.pdf" Guid="699C7762-E52E-4761-81C3-52B01231A2D2" DiskId="1">
+              <File Name="Open_Media_Library_User_Manual.pdf" KeyPath="no" 
+                    Source="..\..\Documentation\Open_Media_Library_User_Manual.pdf" Checksum="no" Vital="yes"/>
+            </Component>
+          </Directory>
                     <Directory Id="PLUGINSDIRECTORY" Name="Plugins">
                         <Component Id="DVDProfilerPlugin.dll" Guid="b7f12ef4-e500-4d0e-bfbe-d77eae64176c" DiskId="1">
                             <File Name="DVDProfilerPlugin.dll"
@@ -237,7 +243,12 @@
                               KeyPath="yes" Source="..\..\NetFlixMetadata\bin\$(var.BuildType)\NetFlixMetadata.dll"
                               Checksum="yes" Vital="yes"/>
                       </Component>
-                        <Component Id="OMLSDK.dll" Guid="26097a63-fc55-41d2-a8d5-432809de99fc" DiskId="1">
+                      <Component Id="DVDProfilerMetaData.dll" Guid="59F58BD9-03BC-484c-AED5-5737732E541C" DiskId="1">
+                        <File Name="DVDProfilerMetaData.dll"
+                              KeyPath="yes" Source="..\..\DVDProfilerMetaData\bin\$(var.BuildType)\DVDProfilerMetaData.dll"
+                              Checksum="yes" Vital="yes"/>
+                      </Component>
+                      <Component Id="OMLSDK.dll" Guid="26097a63-fc55-41d2-a8d5-432809de99fc" DiskId="1">
                             <File Name="OMLSDK.dll"
                                   KeyPath="yes" Source="..\..\OMLSDK\bin\$(var.BuildType)\OMLSDK.dll"
                                   Checksum="yes" Vital="yes" Assembly=".net"/>
@@ -270,10 +281,18 @@
                                   WorkingDirectory="APPLICATIONROOTDIRECTORY"/>
                         <RegistryValue Root="HKCU" Key="Software\OpenMediaLibrary\ImporterShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
                     </Component>
+                  <Component Id="UserManualShortcut" Guid="">
+                    <Shortcut Id="UserManualStartMenuShortcut"
+                              Name="User Manual"
+                              Description="OML User Manual"
+                              Target="[HELPDIRECTORY]Open_Media_Library_User_Manual.pdf"
+                              WorkingDirectory="HELPDIRECTORY"/>
+                    <RegistryValue Root="HKCU" Key="Software\OpenMediaLibrary\UserManualShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+                  </Component>
                 </Directory>
             </Directory>
 		</Directory>
-
+ 
         <DirectoryRef Id="TARGETDIR">
             <Component Id="registry" Guid="FDDE2AF7-995E-4b84-B8B7-2E150E7C7101" DiskId="1" KeyPath="yes">
               <RegistryKey Id="registry0" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Action="create">
@@ -332,8 +351,9 @@
             <ComponentRef Id="AmazonMetadata.dll" />
             <ComponentRef Id="TheMovieDbMetadata.dll" />
             <ComponentRef Id="NetFlixMetadata.dll"/>
-            
-            <!-- Windows programs -->
+            <ComponentRef Id="DVDProfilerMetaData.dll"/>
+
+      <!-- Windows programs -->
             <!--<ComponentRef Id="ComponentFactory.Krypton.Toolkit.DLL"/>-->
             <ComponentRef Id="DevExpress.Data.v8.2.dll"/>
             <ComponentRef Id="DevExpress.Utils.v8.2.dll"/>
@@ -349,12 +369,13 @@
 			<ComponentRef Id="MediaInfo.dll"/>
 			<ComponentRef Id="TranscoderTester.exe"/>
 			<ComponentRef Id="Maximizer.exe"/>
-            
+      <ComponentRef Id="Open_Media_Library_User_Manual.pdf"/>   
             <!-- Start Menu Shortcuts -->
             <ComponentRef Id="DatabaseEditorShortcut" />
-            <ComponentRef Id="ImporterShortcut" />
-            
-            <!-- Registry Keys -->
+      <ComponentRef Id="ImporterShortcut" />
+      <ComponentRef Id="UserManualShortcut" />
+
+      <!-- Registry Keys -->
             <ComponentRef Id="registry"/>
             <ComponentRef Id="registryFWS"/>
 		</Feature>

@@ -129,21 +129,24 @@ namespace OMLDatabaseEditor.Controls
         private void LoadBackdrops()
         {
             tblBackdrops.Controls.Clear();
-            if (_dvdTitle.BasePath() != null)
+
+            if (Directory.Exists(_dvdTitle.BackDropFolder))
             {
-                if (Directory.Exists(_dvdTitle.BackDropFolder))
+                string[] images = Directory.GetFiles(_dvdTitle.BackDropFolder);
+                foreach (string image in images)
                 {
-                    string[] images = Directory.GetFiles(_dvdTitle.BackDropFolder);
-                    foreach (string image in images)
+                    PictureBox pb = new PictureBox();
+                    if (image == _dvdTitle.BackDropImage)
                     {
-                        PictureBox pb = new PictureBox();
-                        pb.ImageLocation = image;
-                        pb.Height = 150;
-                        pb.Dock = DockStyle.Fill;
-                        pb.SizeMode = PictureBoxSizeMode.Zoom;
-                        //if (pb.Image == null) continue;
-                        tblBackdrops.Controls.Add(pb);
+                        pb.BorderStyle = BorderStyle.Fixed3D;
+                        pb.BackColor = Color.Green;
                     }
+                    pb.ImageLocation = image;
+                    pb.Height = 150;
+                    pb.Dock = DockStyle.Fill;
+                    pb.SizeMode = PictureBoxSizeMode.Zoom;
+                    pb.MouseClick += new MouseEventHandler(pbFanart_MouseClick);
+                    tblBackdrops.Controls.Add(pb);
                 }
             }
         }
@@ -153,7 +156,8 @@ namespace OMLDatabaseEditor.Controls
             ListEditor editor = new ListEditor(name, listToEdit);
             List<string> original = listToEdit.ToList<string>();
             editor.ShowDialog();
-            if (listToEdit.Union(original).Count<string>() != original.Count)
+            int commonCount = listToEdit.Intersect(original).Count<string>();
+            if (commonCount != listToEdit.Count || commonCount != original.Count)
             {
                 TitleChanges(null, null);
             }
@@ -209,24 +213,27 @@ namespace OMLDatabaseEditor.Controls
 
         private void EditPicture(string imagePath)
         {
-            ProcessStartInfo psi = new ProcessStartInfo();
-            // Don't use the system's shell
-            //psi.UseShellExecute = false;
-            psi.UseShellExecute = true;
-            psi.FileName = imagePath;
-            if (psi.Verbs.Contains("Edit"))
+            if (!imagePath.Contains("nocover.jpg"))
             {
-                psi.Verb = "Edit";
-                Process.Start(psi);
-                return;
+                ProcessStartInfo psi = new ProcessStartInfo();
+                // Don't use the system's shell
+                //psi.UseShellExecute = false;
+                psi.UseShellExecute = true;
+                psi.FileName = imagePath;
+                if (psi.Verbs.Contains("Edit"))
+                {
+                    psi.Verb = "Edit";
+                    Process.Start(psi);
+                    return;
+                }
+                else if (psi.Verbs.Contains("edit"))
+                {
+                    psi.Verb = "edit";
+                    Process.Start(psi);
+                    return;
+                }
+                XtraMessageBox.Show("No editor found for this image file type", "Edit Image", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            else if (psi.Verbs.Contains("edit"))
-            {
-                psi.Verb = "edit";
-                Process.Start(psi);
-                return;
-            }
-            XtraMessageBox.Show("No editor found for this image file type", "Edit Image", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void btnDisks_Click(object sender, EventArgs e)
@@ -234,8 +241,13 @@ namespace OMLDatabaseEditor.Controls
             if (EditedTitle != null)
             {
                 DiskEditorFrm diskEditor = new DiskEditorFrm(EditedTitle.Disks);
+                List<Disk> original = EditedTitle.Disks.ToList<Disk>();
                 diskEditor.ShowDialog();
-                TitleChanges(null, EventArgs.Empty);
+                int commonCount = EditedTitle.Disks.Intersect(original).Count<Disk>();
+                if (commonCount != EditedTitle.Disks.Count || commonCount != original.Count)
+                {
+                    TitleChanges(null, EventArgs.Empty);
+                }
             }
         }
 
@@ -554,6 +566,44 @@ namespace OMLDatabaseEditor.Controls
                     Cursor = Cursors.Default;
                 }
             }
+        }
+
+        private void pbFanart_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (_dvdTitle == null) return;
+            if (e.Button == MouseButtons.Right)
+            {
+                contextBackdrop.Tag = sender;
+                if ((sender as PictureBox).ImageLocation == _dvdTitle.BackDropImage)
+                {
+                    clearSingleBackdropToolStripMenuItem.Visible = true;
+                    setSingleBackdropToolStripMenuItem.Visible = false;
+                }
+                else
+                {
+                    clearSingleBackdropToolStripMenuItem.Visible = false;
+                    setSingleBackdropToolStripMenuItem.Visible = true;
+                }
+                contextBackdrop.Show(sender as PictureBox, e.Location);
+            }
+        }
+
+        private void setSingleBackdropToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Set selected image as single backdrop
+            PictureBox pb = (sender as ToolStripMenuItem).Owner.Tag as PictureBox;
+            _dvdTitle.BackDropImage = pb.ImageLocation;
+            TitleChanges(null, EventArgs.Empty);
+            LoadBackdrops();
+        }
+
+        private void clearSingleBackdropToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Clear single backdrop
+            PictureBox pb = (sender as ToolStripItem).Owner.Tag as PictureBox;
+            _dvdTitle.BackDropImage = string.Empty;
+            TitleChanges(null, EventArgs.Empty);
+            LoadBackdrops();
         }
     }
 
