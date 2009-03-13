@@ -32,9 +32,9 @@ namespace OMLSDK
     {
         string PluginName { get; }
 
-        string MainFanArtDir { get; set; }
+        // string MainFanArtDir { get; set; }
 
-        bool UseMainFanArtDir { set; }
+        // bool UseMainFanArtDir { set; }
 
         // these 2 methods must be called in sequence
         bool Initialize( Dictionary<string,string> parameters );

@@ -61,7 +61,7 @@ namespace Library
                 }
             });
 
-            if (OMLApplication.Current.NowPlayingMovieName == _source.Name && OMLApplication.Current.NowPlayingStatus == PlayState.Playing)
+            if (OMLApplication.Current.NowPlayingMovieName == _source.Key && OMLApplication.Current.NowPlayingStatus == PlayState.Playing)
             {
                 Utilities.DebugLine("[TranscodePlayer] Already started playing: {0}", _source);
                 return;
@@ -77,7 +77,7 @@ namespace Library
                         {
                             OMLApplication.Current.IsStartingTranscodingJob = false;
                             Utilities.DebugLine("TranscodePlayer.PlayMovie: movie '{0}', Playing file '{1}'", _source.Name, _source.GetTranscodingFileName());
-                            OMLApplication.Current.NowPlayingMovieName = _source.Name;
+                            OMLApplication.Current.NowPlayingMovieName = _source.Key;
                             OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
                             AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += this.Transport_PropertyChanged;
                             AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();

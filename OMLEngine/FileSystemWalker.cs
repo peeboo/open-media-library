@@ -39,6 +39,12 @@ namespace OMLEngine
         {
             get { return Path.Combine(PublicRootDirectory, @"MainBackDrops"); }
         }
+
+        public static string FanArtDirectory
+        {
+            get { return Path.Combine(PublicRootDirectory, @"FanArt"); }
+        }
+
         /// <summary>
         /// Location for cover art and other images to be stored
         /// </summary>
@@ -55,6 +61,15 @@ namespace OMLEngine
             get { return Path.Combine(RootDirectory, @"Plugins"); }
         }
 
+        public static bool FanArtDirectoryExists
+        {
+            get { return Directory.Exists(FanArtDirectory); }
+        }
+
+        public static void createFanArtDirectory()
+        {
+            Directory.CreateDirectory(FanArtDirectory);
+        }
         /// <summary>
         /// Location where all debug and other logs are created
         /// </summary>

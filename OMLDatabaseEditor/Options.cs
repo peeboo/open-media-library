@@ -95,8 +95,10 @@ namespace OMLDatabaseEditor
                 cmbDefaultMetadataPlugin.Properties.Items.Add(plugin.PluginName);
             }
             cmbDefaultMetadataPlugin.SelectedItem = Properties.Settings.Default.gsDefaultMetadataPlugin;
-            ceTitledFanArtFolder.Checked = Properties.Settings.Default.gbTitledFanArtFolder;
-            beTitledFanArtPath.EditValue = Properties.Settings.Default.gsTitledFanArtPath;
+
+            ceTitledFanArtFolder.Checked = OMLEngine.Properties.Settings.Default.gbTitledFanArtFolder;
+            beTitledFanArtPath.EditValue = OMLEngine.Properties.Settings.Default.gsTitledFanArtPath;
+            if (string.IsNullOrEmpty(beTitledFanArtPath.EditValue.ToString())) beTitledFanArtPath.EditValue = OMLEngine.FileSystemWalker.FanArtDirectory;
 
             beTitledFanArtPath.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             beTitledFanArtPath.MaskBox.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
@@ -132,7 +134,14 @@ namespace OMLDatabaseEditor
                 if (GenreDirty)
                 {
                     bDirty = true;
-                    Properties.Settings.Default.gsValidGenres.Clear();
+                    if (Properties.Settings.Default.gsValidGenres == null)
+                    {
+                        Properties.Settings.Default.gsValidGenres = new StringCollection();
+                    }
+                    else
+                    {
+                        Properties.Settings.Default.gsValidGenres.Clear();
+                    }
                     Properties.Settings.Default.gsValidGenres.AddRange(GenreList.ToArray());
                 }
                 if (TagsDirty)
@@ -142,17 +151,20 @@ namespace OMLDatabaseEditor
                     Properties.Settings.Default.gsTags = Tags;
                 }
 
-                if (Properties.Settings.Default.gbTitledFanArtFolder != this.ceTitledFanArtFolder.Checked)
+                // TODO - needs tidying, do not save on evert OMLEngine change, might need to add another dirty flag
+                if (OMLEngine.Properties.Settings.Default.gbTitledFanArtFolder != this.ceTitledFanArtFolder.Checked)
                 {
                     bDirty = true;
-                    Properties.Settings.Default.gbTitledFanArtFolder = this.ceTitledFanArtFolder.Checked;
+                    OMLEngine.Properties.Settings.Default.gbTitledFanArtFolder = this.ceTitledFanArtFolder.Checked;
+                    OMLEngine.Properties.Settings.Default.Save();
                 }
 
-                if (Properties.Settings.Default.gbTitledFanArtFolder && 
-                    Properties.Settings.Default.gsTitledFanArtPath != (string)beTitledFanArtPath.EditValue)
+                if (OMLEngine.Properties.Settings.Default.gbTitledFanArtFolder &&
+                    OMLEngine.Properties.Settings.Default.gsTitledFanArtPath != (string)beTitledFanArtPath.EditValue)
                 {
                     bDirty = true;
-                    Properties.Settings.Default.gsTitledFanArtPath = (string)this.beTitledFanArtPath.EditValue;
+                    OMLEngine.Properties.Settings.Default.gsTitledFanArtPath = (string)this.beTitledFanArtPath.EditValue;
+                    OMLEngine.Properties.Settings.Default.Save();
                 }
 
                 bDirty = true;
@@ -317,7 +329,7 @@ namespace OMLDatabaseEditor
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
             fbd.Description = @"Titled FanArt Path";
-            fbd.SelectedPath = Properties.Settings.Default.gsTitledFanArtPath;
+            fbd.SelectedPath = OMLEngine.Properties.Settings.Default.gsTitledFanArtPath;
             if (fbd.ShowDialog() == DialogResult.OK)
             {
                 beTitledFanArtPath.EditValue = fbd.SelectedPath;
@@ -327,7 +339,6 @@ namespace OMLDatabaseEditor
         private void ceTitledFanArtFolder_CheckStateChanged(object sender, EventArgs e)
         {
             beTitledFanArtPath.Enabled = this.ceTitledFanArtFolder.Checked;
-            Properties.Settings.Default.gbTitledFanArtFolder = this.ceTitledFanArtFolder.Checked;
         }
     }
 }

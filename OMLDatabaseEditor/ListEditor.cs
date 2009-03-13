@@ -34,6 +34,8 @@ namespace OMLDatabaseEditor
                 {
                     _list.Remove((string)item);
                 }
+                (this.BindingContext[_list] as CurrencyManager).Refresh();
+                lbItems.Refresh();
             }
         }
 
@@ -75,6 +77,7 @@ namespace OMLDatabaseEditor
                     }
                 }
                 _list.Add(cbeItem.Text);
+                (this.BindingContext[_list] as CurrencyManager).Refresh();
                 lbItems.Refresh();
 
                 cbeItem.Text = "";
