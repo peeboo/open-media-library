@@ -1,5 +1,6 @@
 ﻿using System;
 using OMLEngine;
+using OMLEngine.FileSystem;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
@@ -39,9 +40,9 @@ namespace Library
 
         public bool PlayMovie()
         {
-            if (MediaData.IsDVD(_mediaPath))
+            if (FileScanner.IsDVD(_mediaPath))
             {
-                string path = MediaData.GetPlayStringForPath(_mediaPath);
+                string path = FileScanner.GetPlayStringForPath(_mediaPath);
 
                 // the unc path requires that it start with // so remove \\ if it exists
                 if (path.StartsWith("\\\\"))
@@ -58,7 +59,7 @@ namespace Library
 
         public bool PlayMovie(int titleNumber, int chapterNumber, DateTime startTime)
         {
-            return MediaData.IsDVD(_source.MediaPath) == false;
+            return FileScanner.IsDVD(_source.MediaPath) == false;
         }
 
         public static string GeneratePlayString(string path, int titleNumber, int chapterNumber)

@@ -174,7 +174,7 @@ namespace OMLEngine
             Utilities.DebugLine("[TitleCollectionAPI] List() -> #{0}", _list.Count);
             IDictionary<int, string> ret = new Dictionary<int, string>();
             foreach (Title t in _list)
-                ret[t.InternalItemID] = t.Name;
+                ret[t.Id] = t.Name;
             return ret;
         }
 
@@ -188,7 +188,7 @@ namespace OMLEngine
     #endregion
 
     [Serializable()]
-    public class TitleCollection : ISerializable
+    public class TitleCollection : ISerializable, IEnumerable<Title>
     {
         private List<Title> _list = new List<Title>();
         static SourceDatabase _source_database_to_use;
@@ -253,10 +253,15 @@ namespace OMLEngine
             return _moviesByFilename.ContainsKey(hash);
         }
 
-        public List<Title>.Enumerator GetEnumerator()
+        public IEnumerator<Title> GetEnumerator()
         {
             return _list.GetEnumerator();
         }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }        
 
         public List<Title> Source
         {
@@ -471,15 +476,15 @@ namespace OMLEngine
             {
                 _moviesByFilename.Add(key, newTitle);
             }
-            if (!_moviesByItemId.ContainsKey(newTitle.InternalItemID))
+            if (!_moviesByItemId.ContainsKey(newTitle.Id))
             {
-                _moviesByItemId.Add(newTitle.InternalItemID, newTitle);
+                _moviesByItemId.Add(newTitle.Id, newTitle);
             }
         }
 
         public void Remove(Title newTitle)
         {
-            _moviesByItemId.Remove(newTitle.InternalItemID);
+            _moviesByItemId.Remove(newTitle.Id);
             if (newTitle.Disks.Count > 0)
                 _moviesByFilename.Remove(GetDiskHash(newTitle.Disks));
             _list.Remove(newTitle);
@@ -539,7 +544,7 @@ namespace OMLEngine
         public void Replace(Title title)
         {
             Utilities.DebugLine("[TitleCollection] Title ("+title.Name+") has been replaced");
-            Title t = GetTitleById(title.InternalItemID);
+            Title t = GetTitleById(title.Id);
 
             if (t != null)
             {
@@ -653,6 +658,16 @@ namespace OMLEngine
             Utilities.DebugLine("[TitleCollection] TitleCollection()");
         }
 
+        /// <summary>
+        /// todo : solomon : this is a test constructor to test the filter concept
+        /// </summary>
+        /// <param name="titles"></param>
+        public TitleCollection(IList<Title> titles)
+        {
+            foreach (Title title in titles)
+                Add(title);
+        }
+
         static TitleCollection()
         {
             _source_database_to_use = SourceDatabase.OML;
@@ -721,8 +736,13 @@ namespace OMLEngine
         public bool loadTitleCollection()
         {
             Utilities.DebugLine("[TitleCollection] :loadTitleCollection()");
-            Clear();
-            return _loadTitleCollectionFromOML();
+            //return _loadTitleCollectionFromOML();
+            IEnumerable<Title> titles = TitleCollectionManager.GetAllTitles();
+
+            foreach (Title title in titles)
+                Add(title);
+
+            return true;
         }
 
         public static void checkACL()
@@ -739,7 +759,7 @@ namespace OMLEngine
         /// Loads data from OML Database
         /// </summary>
         /// <returns>True on successful load</returns>
-        private bool _loadTitleCollectionFromOML()
+        public bool loadTitleCollectionFromOML()
         {
             Utilities.DebugLine("[TitleCollection] Using OML database");
             Stream stm;
@@ -779,6 +799,12 @@ namespace OMLEngine
                 }
             }
             return false;
+        }
+
+        public void RenameDATCollection()
+        {
+            if (File.Exists(_database_filename))
+                File.Move(_database_filename, _database_filename + ".bak");
         }
 
         private string CalculateMD5Hash(string input)

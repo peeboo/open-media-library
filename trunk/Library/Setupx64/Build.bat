@@ -30,7 +30,13 @@ if exist "%OUTPUTNAME%" del /f /q "%OUTPUTNAME%"
 
 REM Build the MSI for the setup package
 
-"%WIX_BUILD_LOCATION%\candle.exe" -ext WiXNetFxExtension setup.wxs -dBuildType=%BUILD_TYPE% -out "%APP_INTERMEDIATE_PATH%\setup.wixobj"
-"%WIX_BUILD_LOCATION%\light.exe" -ext WiXNetFxExtension "%APP_INTERMEDIATE_PATH%\setup.wixobj" -cultures:en-US -ext "%ProgramFilesPath%\Windows Installer XML v3\bin\WixUIExtension.dll" -ext "%ProgramFilesPath%\Windows Installer XML v3\bin\WixUtilExtension.dll" -loc setup-en-us.wxl -out "%OUTPUTNAME%"
+"%WIX_BUILD_LOCATION%\candle.exe" -ext WiXNetFxExtension -ext WiXSqlExtension -ext WiXUtilExtension setup.wxs -dBuildType=%BUILD_TYPE% -out "%APP_INTERMEDIATE_PATH%\setup.wixobj"
+"%WIX_BUILD_LOCATION%\light.exe" -ext WiXNetFxExtension -ext WiXSqlExtension -ext WiXUtilExtension "%APP_INTERMEDIATE_PATH%\setup.wixobj" -cultures:en-US -ext "%ProgramFilesPath%\Windows Installer XML v3\bin\WixUIExtension.dll" -loc setup-en-us.wxl -out "%OUTPUTNAME%"
+
+echo Building Bootstrapper file
+MSBuild omlsetupx64.proj
+
+echo Copying "%OUTPUTNAME%" to the Builds folder
+copy "%OUTPUTNAME%" ..\..\Builds\X64\
 
 popd

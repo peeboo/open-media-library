@@ -309,8 +309,7 @@ namespace OMLDatabaseEditor
             this.allMoviesToolStripMenuItem1,
             this.filterByGenreToolStripMenuItem,
             this.filterByCompletenessToolStripMenuItem,
-            this.filterByParentalRatingToolStripMenuItem,
-            this.filterByTagToolStripMenuItem});
+            this.filterByParentalRatingToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "View";
@@ -746,6 +745,7 @@ namespace OMLDatabaseEditor
             this.Name = "MainEditor";
             this.Text = "OML Movie Manager";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.MainEditor_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainEditor_FormClosing);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();

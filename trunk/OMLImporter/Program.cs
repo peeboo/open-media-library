@@ -4,15 +4,15 @@ using System.IO;
 using System.Windows.Forms;
 using OMLSDK;
 using OMLEngine;
-using System.Drawing;
+using System.Linq;
 
 namespace OMLImporter
 {
     class Program
     {
         public static double VERSION = 0.1;
-        private static TitleCollection mainTitleCollection = new TitleCollection();
-        private static Boolean isDirty = false;
+        //private static TitleCollection mainTitleCollection = new TitleCollection();
+        //private static Boolean isDirty = false;
         public static bool _copyImages = true;
         private static List<OMLPlugin> plugins = new List<OMLPlugin>();
         private const string COPY_IMAGES_KEY = "copyimages=";
@@ -63,13 +63,14 @@ namespace OMLImporter
             OMLPlugin plugin = null;
             string file_to_import = string.Empty;
             Console.WriteLine("Loading current titles...");
-            mainTitleCollection.loadTitleCollection();
+            //mainTitleCollection.loadTitleCollection();
+            IEnumerable<Title> allTitles = TitleCollectionManager.GetAllTitles();
             while (true)
             {
                 plugin = null;
                 Console.Clear();
                 PrintHeader();
-                Console.WriteLine("OML Importer: Current {0} titles in the database", mainTitleCollection.Count);
+                Console.WriteLine("OML Importer: Current {0} titles in the database", allTitles.Count());
                 Console.WriteLine("Which Importer would you like to use:");
                 int ii;
                 for (ii = 0; ii < plugins.Count; ii++)
@@ -83,8 +84,8 @@ namespace OMLImporter
                 //    Console.WriteLine(string.Format("{0}) {1} (v{2})", ii++, pi.Name, pi.Version));
                 //}
                 ii++;
-                Console.WriteLine(String.Format("{0}) Save the New Titles", ii++));
-                Console.WriteLine(String.Format("{0}) Quit (No Saving)", ii++));
+                //Console.WriteLine(String.Format("{0}) Save the New Titles", ii++));
+                Console.WriteLine(String.Format("{0}) Quit", ii++));
                 Console.WriteLine(String.Format("{0}) Remove all titles from the database (be carefull!!!)", ii++));
                 Console.WriteLine();
                 Console.Write("Choice: ");
@@ -107,7 +108,7 @@ namespace OMLImporter
                     Console.WriteLine("Done!");
                     Console.ReadLine();
                 } 
-                else if (iResp == (plugins.Count))
+                /*else if (iResp == (plugins.Count))
                 {               
                     if (isDirty) 
                     {
@@ -115,10 +116,10 @@ namespace OMLImporter
                         isDirty = !mainTitleCollection.saveTitleCollection();
                     }
                     Console.WriteLine("Complete!");
-                } 
-                else if (iResp == (plugins.Count + 1))
+                } */
+                else if (iResp == (plugins.Count))
                 {
-                    if (isDirty)
+                    /*if (isDirty)
                     {
                         Console.WriteLine("You have not saved your changes. Do you want to save before quitting? (y/n)");
                         string answer = Console.ReadLine();
@@ -128,21 +129,22 @@ namespace OMLImporter
                             mainTitleCollection.saveTitleCollection();
                             isDirty = false;
                         }
-                    }
+                    }*/
                     Console.WriteLine("Complete!");
                     return;
                 } 
-                else if (iResp == (plugins.Count + 2))
+                else if (iResp == (plugins.Count + 1))
                 {
                     Console.WriteLine("This option will delete all titles from the database immediately! This operation CANNOT be undone!");
                     Console.WriteLine("Are you sure you want to delete all the titles from the database? (please type YES)");
                     string deleteAllAnswer = Console.ReadLine();
                     if (deleteAllAnswer == "YES")
                     {
-                        Console.WriteLine("Removing all entries...");
-                        mainTitleCollection = new TitleCollection();
-                        mainTitleCollection.saveTitleCollection();
-                        isDirty = false;
+                        Console.WriteLine("Removing all entries...(this can take awhile)");
+                        //mainTitleCollection = new TitleCollection();
+                        //mainTitleCollection.saveTitleCollection();
+                        TitleCollectionManager.DeleteAllDBData();
+                        //isDirty = false;
                         Console.WriteLine("Done!");
                     }
                     else
@@ -230,12 +232,16 @@ namespace OMLImporter
                 }
                 else
                 {
-                    if (!clearBeforeImport)                    
-                        mainTitleCollection.loadTitleCollection();
+                    if (clearBeforeImport)
+                    {
+                        Console.WriteLine("Clearing out old data before import ( this can take awhile )");
+                        TitleCollectionManager.DeleteAllDBData();
+                    }
+
+                    Console.WriteLine("Beginning to import titles...");
 
                     pluginToUse.DoWork(new string[] { path });
                     LoadTitlesIntoDatabase(pluginToUse, false, true);
-                    mainTitleCollection.saveTitleCollection();
                 }
             }
 
@@ -303,7 +309,7 @@ namespace OMLImporter
 
                 foreach (Title t in titles)
                 {
-                    if (mainTitleCollection.ContainsDisks(t.Disks))
+                    if (TitleCollectionManager.ContainsDisks(t.Disks))
                     {
                         Console.WriteLine("Title {0} skipped because already in the collection", t.Name);
                         numberOfTitlesSkipped++;
@@ -319,7 +325,11 @@ namespace OMLImporter
                         switch (response.ToUpper())
                         {
                             case "Y":
-                                mainTitleCollection.Add(t);
+                                TitleCollectionManager.AddTitle(t);
+
+                                // update the image
+                                OMLPlugin.BuildResizedMenuImage(t);
+
                                 numberOfTitlesAdded++;
                                 break;
                             case "N":
@@ -327,7 +337,10 @@ namespace OMLImporter
                                 break;
                             case "A":
                                 YesToAll = true;
-                                mainTitleCollection.Add(t);
+                                TitleCollectionManager.AddTitle(t);
+
+                                // update the image
+                                OMLPlugin.BuildResizedMenuImage(t);
                                 numberOfTitlesAdded++;
                                 break;
                             default:
@@ -336,14 +349,21 @@ namespace OMLImporter
                     }
                     else
                     {
-                        mainTitleCollection.Add(t);
+                        TitleCollectionManager.AddTitle(t);
+
+                        // update the image
+                        OMLPlugin.BuildResizedMenuImage(t);
+
                         numberOfTitlesAdded++;
                     }
                 }
 
+                // save all the image updates
+                TitleCollectionManager.SaveTitleUpdates();
+
                 plugin.GetTitles().Clear();
 
-                if (numberOfTitlesAdded > 0) isDirty = true;
+                //if (numberOfTitlesAdded > 0) isDirty = true;
                 Console.WriteLine();
                 Console.WriteLine("Added " + numberOfTitlesAdded + " titles");
                 Console.WriteLine("Skipped " + numberOfTitlesSkipped + " titles");

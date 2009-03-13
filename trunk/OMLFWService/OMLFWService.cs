@@ -7,106 +7,101 @@ using System.ServiceProcess;
 using System.Timers;
 using System.Text;
 using Microsoft.Win32;
+using OMLEngine;
+using OMLEngine.Settings;
 
 namespace OMLFWService
 {
     public partial class OMLFWService : ServiceBase
     {
-        OMLFileWatcher.OMLFileWatcher fw;
-        RegistryKey rkOML;
-        List<string> watches = new List<string>();
-        string[] watch;
-        Boolean logging = false;
-        Boolean subdirs;
-        Timer _timer;
+        private const int SETTINGS_UPDATE_TIMEOUT = 30000;
+        DirectoryScanner watcher;
+        Timer timer;
+        DateTime settingsLastUpdated = DateTime.MinValue;
 
         public OMLFWService()
         {
             InitializeComponent();
 
-            fw = new OMLFileWatcher.OMLFileWatcher();
+            watcher = new DirectoryScanner();
 
-            RegistryKey rkCU = Registry.CurrentUser;
-            RegistryKey rkSoftware = rkCU.OpenSubKey(@"Software");
-            rkOML = rkSoftware.OpenSubKey(@"OpenMediaLibrary");
-
-            _timer = new Timer(60000); // 1 minute intervals
-            _timer.Elapsed +=new ElapsedEventHandler(_timer_Elapsed);
+            timer = new Timer(SETTINGS_UPDATE_TIMEOUT);
+            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
+            timer.AutoReset = true;
+            timer.Start();
 
             this.CanStop = true;
             this.CanPauseAndContinue = true;
-            this.AutoLog = true;
+            this.AutoLog = true;            
+        }
 
-            //int shouldLog = (Int32)rkOML.GetValue("logging", 0);
-            //logging = shouldLog == 0 ? false : true;
-            logging = true;
+        void timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (WatcherSettingsManager.ModifiedSince(settingsLastUpdated))
+            {
+                ReloadSettings();
+            }
+        }
+
+        private void ReloadSettings()
+        {
+            WatcherSettings settings = WatcherSettingsManager.GetSettings();
+
+            if (!settings.Enabled)
+            {
+                settingsLastUpdated = settings.LastUpdated;
+                watcher.Stop();
+                return;
+            }                        
 
             try
             {
-                foreach (string watchitem in ((string[])rkOML.GetValue("Watches")))
+                // attempt to watch some folders
+                // this will return false if the folders can't be watched at this time - 
+                // just use the 30 second timeout to try again then
+                if (watcher.WatchFolders(WatcherSettingsManager.GetWatchedFolders()))
                 {
-                    watches.Add(watchitem);
-                }
+                    settingsLastUpdated = settings.LastUpdated;
+                }                
             }
-            catch (Exception)
+            catch (Exception err)
             {
-                watches.Add("c:\\users\\public\\recorded tv;*.*");
+                DebugLineError(err, "Error setting up watch folders");
             }
-
-            foreach (string set in watches)
-            {
-                watch = set.Split(';');
-                switch (watch.Length)
-                {
-                    case 1:
-                    case 2:
-                        fw.AddWatch(watch[0], watch[1]);
-                        break;
-                    case 3:
-                        if (!Boolean.TryParse(watch[2], out subdirs))
-                        {
-                            subdirs = false;
-                        }
-                        fw.AddWatch(watch[0], watch[1], subdirs);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            rkSoftware.Close();
-            rkCU.Close();
         }
 
         protected override void OnPause()
         {
             base.OnPause();
-            fw.EnableRaisingEvents = false;
-            _timer.Stop();
+            watcher.Stop();
+            timer.Enabled = false;            
             WriteToLog(EventLogEntryType.Information, "OMLFWService Paused");
         }
 
         protected override void OnContinue()
         {
             base.OnContinue();
-            fw.EnableRaisingEvents = true;
-            _timer.Start();
+            watcher.Start();
+            timer.Enabled = true;
             WriteToLog(EventLogEntryType.Information, "OMLFWService Continued");
         }
 
         protected override void OnStart(string[] args)
         {
             // TODO: Add code here to start your service.
-            fw.EnableRaisingEvents = true;
-            _timer.Start();
+            ReloadSettings();
+            timer.Enabled = true;
             WriteToLog(EventLogEntryType.Information, "OMLFWService Started");
         }
 
         protected override void OnStop()
         {
             // TODO: Add code here to perform any tear-down necessary to stop your service.
-            fw.EnableRaisingEvents = false;
-            _timer.Stop();
+            watcher.Stop();
+            timer.Enabled = false;
             WriteToLog(EventLogEntryType.Information, "OMLFWService Stopped");
+
+            WatcherSettingsManager.CloseDBConnection();
         }
 
         private void WriteToLog(EventLogEntryType type, string msg)
@@ -123,11 +118,27 @@ namespace OMLFWService
                                    DateTime.Now.ToLongTimeString();
             evt.Source = sSource;
             evt.WriteEntry(message, type);
+        }        
+
+        /// <summary>
+        /// Sends a message to the trace log prefixed this class
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="parameters"></param>
+        private void DebugLine(string message, params object[] parameters)
+        {
+            Utilities.DebugLine("[OMLFWService] " + message, parameters);
         }
 
-        protected void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        /// <summary>
+        /// Sends an error to the tracelog that can include a message
+        /// </summary>
+        /// <param name="err"></param>
+        /// <param name="message"></param>
+        /// <param name="parameters"></param>
+        private void DebugLineError(Exception err, string message, params object[] parameters)
         {
-            WriteToLog(EventLogEntryType.Information, "OMLFWService Timer triggered");
+            Utilities.DebugLine("[OMLFWService] " + message + " '" + err.Message + "' " + err.StackTrace, parameters);
         }
     }
 

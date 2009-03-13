@@ -14,6 +14,23 @@ namespace OMLTestSuite
     {
         static void Main(string[] args)
         {
+            TitleCollectionManagerTest tcm = new TitleCollectionManagerTest();
+            
+            Console.WriteLine("Testing: Title Collection Manager SQL");
+            //tcm.TEST_DELETE_ALL_DATA();
+            //tcm.TEST_IMPORT_INTO_DATABASE();
+            //tcm.TEST_GETTING_ALL_TITLES();
+            //tcm.TEST_GET_ALL_GENRES();
+            //tcm.TEST_GET_ALL_MOVIES_FOR_ACTOR();
+            //tcm.TEST_GET_ALL_MOVIES_FOR_ACTOR_WITH_GENRE();
+            //tcm.TEST_GET_ALL_PEOPLE();
+            //tcm.TEST_GET_ALL_GENRES_GIVEN_FILTER();
+            //tcm.TEST_GET_ACTORS_UNWATCHED();
+            tcm.TEST_DISK_ALREADY_EXISTS();
+
+            Console.ReadLine();
+            return;
+
             DiskInfoTest dit = new DiskInfoTest();
             //dit.TestLookup("AVI", @"G:\Films\Father Ted\Series 1\FatherTed Episode 5.divx", OMLEngine.VideoFormat.AVI);
             //dit.TestLookup("AVI", @"G:\Films\Star Wars 1 - mkv\Star Wars Episode I - The Phontom Menace (1080p).mkv", OMLEngine.VideoFormat.AVI);

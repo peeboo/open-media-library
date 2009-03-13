@@ -238,7 +238,7 @@
 
       <Changed Source="[Settings.StartPage.Chosen]">
         <Actions>
-          <Invoke Target="[Settings.BuildSubFilterOptions]"  ResultTarget="[SubFilter.Model]" />
+          <Invoke Target="[Settings.BuildSubFilterOptions]" />
         </Actions>
       </Changed>
 
@@ -248,7 +248,13 @@
           <Set Target="[SubFilterLabel.Visible]" Value="false" />
           <Set Target="[SubFilter.Visible]" Value="false" />
         </Actions>
-      </Condition>     
+      </Condition>
+
+      <Changed Source="[Settings.StartPageSubFilter]" >
+        <Actions>
+          <Set Target="[SubFilter.Model]" Value="[Settings.StartPageSubFilter]" />
+        </Actions>
+      </Changed>      
 
       <Rule ConditionLogicalOp="And">
         <Conditions>
