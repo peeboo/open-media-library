@@ -1048,6 +1048,7 @@ namespace Library.Properties {
                 this["BrowserHeightWhenNotShowingDetails"] = value;
             }
         }
+<<<<<<< .working
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1130,6 +1131,18 @@ namespace Library.Properties {
             }
             set {
                 this["UseVideoBackDrops"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HasRunSetup {
+            get {
+                return ((bool)(this["HasRunSetup"]));
+            }
+            set {
+                this["HasRunSetup"] = value;
             }
         }
     }

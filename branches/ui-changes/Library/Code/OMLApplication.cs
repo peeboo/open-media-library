@@ -15,10 +15,11 @@ using System.Threading;
 using System.Timers;
 
 using OMLEngine;
+using OMLEngine.Settings;
 using System;
 
 namespace Library
-{
+{    
     /// <summary>
     /// Starting point for the OML
     /// </summary>
@@ -194,12 +195,7 @@ namespace Library
                 isStartingTranscodingJob = value;
                 //FirePropertyChanged("IsStartingTranscodingJob");
             }
-        }
-
-        public TitleCollection Titles
-        {
-            get { return _titles; }
-        }
+        }       
 
         public bool ShowDetailsPopup
         {
@@ -224,7 +220,7 @@ namespace Library
         }
 
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
-        {
+        {           
             #if LAYOUT_V3
             this.hooker = new Library.Code.V3.MoreInfoHooker2();
             #endif
@@ -269,8 +265,6 @@ namespace Library
             I18n.InitializeResourceManager();
             string uiCulture = Properties.Settings.Default.UILanguage;
             if (!string.IsNullOrEmpty(uiCulture)) I18n.SetCulture(new CultureInfo(uiCulture));
-            _titles = new TitleCollection();
-            _titles.loadTitleCollection();
             _nowPlayingMovieName = "Playing an unknown movie";
         }
 
@@ -487,34 +481,49 @@ namespace Library
             //    downloader.SearchForTitle(t);
             //}
             SetPrimaryBackgroundImage();
+
             switch (context)
             {
                 case "Menu":
+                    // Before running strait to the menu, check to see if we want to run the first-time setup
+                    if (!Properties.Settings.Default.HasRunSetup)
+                    {
+                        OMLApplication.DebugLine("[OMLApplication] firstrun, going to setup");
+                        GoToSetup(new MovieGallery());
+                        Properties.Settings.Default.HasRunSetup = true;
+                        Properties.Settings.Default.Save();
+                        return;
+                    }
+
                     // we want the movie library - check the startup page
                     if (Properties.Settings.Default.StartPage == Filter.Home)
                     {
                         OMLApplication.DebugLine("[OMLApplication] going to Menu Page");
-                        GoToMenu(new MovieGallery(_titles, Filter.Home));
+                        GoToMenu(new MovieGallery());
                     }
                     else
-                    {
+                    {                                                
                         // see if they've selected a subfilter
-                        if (!string.IsNullOrEmpty(Properties.Settings.Default.StartPageSubFilter))
+                        // the unwatched is a special case until we add a user setting to determine the subfilter
+                        if (!string.IsNullOrEmpty(Properties.Settings.Default.StartPageSubFilter)
+                            || Properties.Settings.Default.StartPage == Filter.Unwatched)
                         {
-                            GoToSelectionList(new MovieGallery(_titles, Filter.Home), 
-                                                Properties.Settings.Default.StartPage,
-                                                Properties.Settings.Default.StartPageSubFilter);
+                            // go to the subfilter
+                            GoToMenu(
+                                new MovieGallery(
+                                    new TitleFilter(Filter.FilterStringToTitleType(Properties.Settings.Default.StartPage),
+                                        Properties.Settings.Default.StartPageSubFilter)));
                         }
                         else
-                        {                                              
-                            // assume it's a filter page (Genre, Actor, etc)
-                            GoToSelectionList(new MovieGallery(_titles, Filter.Home), Properties.Settings.Default.StartPage);
+                        {
+                            // go to the selection list
+                            GoToSelectionList(new Filter(new MovieGallery(), Filter.FilterStringToTitleType(Properties.Settings.Default.StartPage), null));               
                         }
                     }
                     return;
                 case "Settings":
                     OMLApplication.DebugLine("[OMLApplication] going to Settings Page");
-                    GoToSettingsPage(new MovieGallery(_titles, Filter.Settings));
+                    GoToSettingsPage(new MovieGallery(TitleCollectionManager.GetAllTitles(), Filter.Settings));
                     return;
                 case "Trailers":
                     OMLApplication.DebugLine("[OMLApplication] going to Trailers Page");
@@ -522,11 +531,11 @@ namespace Library
                     return;
                 case "About":
                     OMLApplication.DebugLine("[OMLApplication] going to About Page");
-                    GoToAboutPage(new MovieGallery(_titles, Filter.About));
+                    GoToAboutPage(new MovieGallery(TitleCollectionManager.GetAllTitles(), Filter.About));
                     return;
                 default:
                     OMLApplication.DebugLine("[OMLApplication] going to Default (Menu) Page");
-                    GoToMenu(new MovieGallery(_titles, Filter.Home));
+                    GoToMenu(new MovieGallery());
                     return;
             }
         }
@@ -652,7 +661,20 @@ namespace Library
         
         public void Uninitialize()
         {
-            ExtenderDVDPlayer.Uninitialize(_titles);
+            try
+            {
+                ExtenderDVDPlayer.Uninitialize(TitleCollectionManager.GetAllTitles());
+            }
+            catch (Exception err)
+            {
+                DebugLine("Unhandled Exception: {0}", err);
+            }
+            finally
+            {
+                // close the db connections
+                TitleCollectionManager.CloseDBConnection();
+                WatcherSettingsManager.CloseDBConnection();
+            }            
         }
 
         public static OMLApplication Current
@@ -679,7 +701,7 @@ namespace Library
             DebugLine("[OMLApplication] GoToSetup()");
             if (_session != null)
             {
-                _session.GoToPage("resx://Library/Library.Resources/Setup", CreateProperties(true, false, gallery));
+                _session.GoToPage("resx://Library/Library.Resources/FirstRunSetup", CreateProperties(true, false, gallery));
             }
         }
 
@@ -851,7 +873,7 @@ namespace Library
             DebugLine("[OMLApplication] GotoAboutPage()");
             if (_session != null)
                 _session.GoToPage("resx://Library/Library.Resources/About", CreateProperties(true, false, gallery));
-        }
+        }        
 
         public void GoToMenu(MovieGallery gallery)
         {
@@ -876,61 +898,27 @@ namespace Library
             //IsBusy = true; why do this?
         }
 
-        public void GoToSelectionList(MovieGallery gallery, string filterName)
+        public void GoToSelectionList(Filter filter)
         {
-            GoToSelectionList(gallery, filterName, null);
-        }        
-        
-        public void GoToSelectionList(MovieGallery gallery, string filterName, string subFilter)
-        {
-            Filter filter = null;
+            // currently the selection list page uses the same gallery object as the previous page
+            // we shoud look into refactoring this so the selection logic is in a different object than
+            // the movie list so we can deal with selections across pages better
+            MovieGallery gallery = filter.Gallery;
 
-            // if the filter doesn't exist we'll need to create it            
-            // todo : solomon : i'm only going to do this for the perticipant filter now 
-            // but it should be considered for everything
-            if (!gallery.Filters.TryGetValue(filterName, out filter))
+            // reset the index
+            gallery.FocusIndex.Value = 0;
+
+            //DebugLine("[OMLApplication] GoToSelectionList(#{0} items, list name: {1}, gallery: {2})", list.Count, listName, galleryView);
+            Dictionary<string, object> properties = CreateProperties(true, false, gallery);
+            properties["MovieBrowser"] = gallery;
+            properties["List"] = filter.GetGalleryItems();
+            properties["ListName"] = filter.Title;
+            properties["GalleryView"] = filter.GetViewForFilter();
+
+            if (_session != null)
             {
-                filter = gallery.CreateFilter(filterName);
-            }
-
-            // if there's only one item in the subfilter - just go there
-            // the ALL filter is always first so ignore that
-            if (filter != null && filter.Items.Count <= 2 && filter.Items.Count > 0)
-                subFilter = filter.Items[filter.Items.Count - 1].Name;
-
-            // see if we're a top level filter
-            if (string.IsNullOrEmpty(subFilter) &&
-                filter != null )
-            {                                
-                string listName = gallery.Title + " > " + filter.Name;
-                IList list = filter.Items;
-                string galleryView = filter.GalleryView;
-
-                // reset the index
-                gallery.FocusIndex.Value = 0;
-
-                DebugLine("[OMLApplication] GoToSelectionList(#{0} items, list name: {1}, gallery: {2})", list.Count, listName, galleryView);
-                Dictionary<string, object> properties = CreateProperties(true, false, gallery);
-                properties["MovieBrowser"] = gallery;
-                properties["List"] = list;
-                properties["ListName"] = listName;
-                properties["GalleryView"] = galleryView;
-
-                if (_session != null)
-                {
-                    _session.GoToPage("resx://Library/Library.Resources/SelectionList", properties);
-                }
-            }
-            else  if (filter != null &&
-                !string.IsNullOrEmpty(subFilter))
-            {                                                
-                GoToMenu(filter.CreateGallery(subFilter));
-            }                        
-            else
-            {
-                OMLApplication.DebugLine("[OMLApplication] GoToSelectionList - filter {0} not found - going to Menu Page", filterName);
-                GoToMenu(new MovieGallery(_titles, Filter.Home));
-            }
+                _session.GoToPage("resx://Library/Library.Resources/SelectionList", properties);
+            }            
         }
 
         public void GoToDetails(MovieDetailsPage page)
@@ -1006,17 +994,17 @@ namespace Library
             get { return NowPlayingStatus.ToString() + ": " + NowPlayingMovieName; }
         }
 
-        public TitleCollection ReloadTitleCollection()
+        /*public TitleCollection ReloadTitleCollection()
         {
             DebugLine("[OMLApplication] ReloadTitleCollection()");
             _titles.loadTitleCollection();
             return _titles;
-        }
+        }*/
 
-        public void SaveTitles()
+        /*public void SaveTitles()
         {
-            _titles.saveTitleCollection();
-        }
+            //_titles.saveTitleCollection();
+        }*/
 
         public static void ExecuteSafe(Action action)
         {
@@ -1064,7 +1052,6 @@ namespace Library
         private static OMLApplication _singleApplicationInstance;
         private AddInHost _host;
         private HistoryOrientedPageSession _session;
-        private TitleCollection _titles;
 
         private bool _isExtender;
     }

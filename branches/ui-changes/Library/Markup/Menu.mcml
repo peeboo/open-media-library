@@ -42,7 +42,10 @@
 
             <Condition Source="[GalleryView]" SourceValue="Cover Art" Target="[ViewCoverArt.Visible]" Value="true" />
             <Condition Source="[GalleryView]" SourceValue="List" Target="[ViewList.Visible]" Value="true" />
+            <Condition Source="[GalleryView]" SourceValue="List With Covers" Target="[ListViewWithCovers.Visible]" Value="true" />
             <Condition Source="[GalleryView]" SourceValue="Cover Art With Alpha" Target="[ViewCoverArtWithAlpha.Visible]" Value="true" />
+
+
 
             <Rule>
                 <Conditions>
@@ -169,6 +172,7 @@
                       <view:CoverArtWithAlpha Name="ViewCoverArtWithAlpha" MovieBrowser="[MovieBrowser]" UISettings="[UISettings]" Visible="False"/>
                       <view:CoverArt Name="ViewCoverArt" Application="[Application]" MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
                       <view:ListView Name="ViewList" MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
+                      <view:ListWithCovers Name="ListViewWithCovers" MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
                     </Children>
 
                     <LayoutInput>

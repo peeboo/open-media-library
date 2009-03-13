@@ -109,7 +109,6 @@ namespace DVDProfilerPlugin
                 catch (Exception e) { Trace.WriteLine("Error adding row: " + e.Message); }
             }
             else Trace.WriteLine("Error saving row");
-
         }
 
         private Title LoadTitle(XPathNavigator dvdNavigator)

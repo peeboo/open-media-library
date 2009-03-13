@@ -26,7 +26,9 @@ namespace Library
 
         ~MyAddIn()
         {
-            OMLApplication.Current.Uninitialize();
+            // todo : solomon : this is blowing up because the sql object is already
+            // disposed - in general cleanup in desctructor should be avoided
+            //OMLApplication.Current.Uninitialize();
             OMLApplication.DebugLine("[Launch] Destroy");
         }
 

@@ -102,6 +102,9 @@ namespace TheMovieDbMetadata
 
             while (reader.Read())
             {
+                if (reader.Value == "Your query didn't return any results.")
+                    return null;
+
                 if (reader.NodeType == XmlNodeType.Element)
                 {
                     switch (reader.Name)

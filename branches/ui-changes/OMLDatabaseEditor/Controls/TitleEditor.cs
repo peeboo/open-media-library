@@ -54,13 +54,14 @@ namespace OMLDatabaseEditor.Controls
 
         public void LoadDVD(Title dvd)
         {
-            BinaryFormatter formatter = new BinaryFormatter();
+            /*BinaryFormatter formatter = new BinaryFormatter();
             using (MemoryStream stream = new MemoryStream())
             {
                 formatter.Serialize(stream, dvd);
                 stream.Position = 0;
                 _dvdTitle = (Title)formatter.Deserialize(stream);
-            }
+            }*/
+            _dvdTitle = dvd;
             _isLoading = true;
             titleSource.DataSource = _dvdTitle;
             Status = TitleStatus.Normal;
@@ -151,7 +152,7 @@ namespace OMLDatabaseEditor.Controls
             }
         }
 
-        private void EditList(string name, List<string> listToEdit)
+        private void EditList(string name, IList<string> listToEdit)
         {
             ListEditor editor = new ListEditor(name, listToEdit);
             List<string> original = listToEdit.ToList<string>();
@@ -173,29 +174,43 @@ namespace OMLDatabaseEditor.Controls
                     case 0: //Directors
                         lbPeople.DataSource = EditedTitle.Directors;
                         lbPeople.DisplayMember = "full_name";
-                        lbPeople.Tag = "Directors";
-                        listPersona.AddRange(MainEditor._titleCollection.GetAllDirectors.ToArray());
+                        //listPersona.AddRange(MainEditor._titleCollection.GetAllDirectors.ToArray());
+                        IEnumerable<FilteredCollection> directors = TitleCollectionManager.GetAllPeople(null, PeopleRole.Director);
+                        foreach (FilteredCollection directorItem in directors)
+                        {
+                            listPersona.Add(directorItem.Name);
+                        }
                         listPersona.Sort();
                         break;
                     case 1: //Writers
                         lbPeople.DataSource = EditedTitle.Writers;
                         lbPeople.DisplayMember = "full_name";
-                        lbPeople.Tag = "Writers";
-                        listPersona.AddRange(MainEditor._titleCollection.GetAllWriters.ToArray());
+                        IEnumerable<FilteredCollection> writers = TitleCollectionManager.GetAllPeople(null, PeopleRole.Writer);
+                        foreach (FilteredCollection writerItem in writers)
+                        {
+                            listPersona.Add(writerItem.Name);
+                        }
                         listPersona.Sort();
                         break;
                     case 2: //Producers
                         lbPeople.DataSource = EditedTitle.Producers;
                         lbPeople.DisplayMember = "";
-                        lbPeople.Tag = "Producers";
-                        listPersona.AddRange(MainEditor._titleCollection.GetAllProducers.ToArray());
+                        IEnumerable<FilteredCollection> producers = TitleCollectionManager.GetAllPeople(null, PeopleRole.Producers);
+                        foreach (FilteredCollection producerItem in producers)
+                        {
+                            listPersona.Add(producerItem.Name);
+                        }
                         listPersona.Sort();
                         break;
                     case 3: //Actors
                         lbPeople.DataSource = EditedTitle.ActingRolesBinding;
                         lbPeople.Tag = "ActingRoles";
                         lbPeople.DisplayMember = "Display";
-                        listPersona.AddRange(MainEditor._titleCollection.GetAllActors.ToArray());
+                        IEnumerable<FilteredCollection> actors = TitleCollectionManager.GetAllPeople(null, PeopleRole.Actor);
+                        foreach (FilteredCollection actorItem in actors)
+                        {
+                            listPersona.Add(actorItem.Name);
+                        }
                         listPersona.Sort();
                         break;
                     case 4: //Non-Actors
@@ -412,15 +427,18 @@ namespace OMLDatabaseEditor.Controls
 
             txtStudio.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtStudio.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            txtStudio.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllStudios.ToArray());
+            foreach (string name in from t in TitleCollectionManager.GetAllStudios(null) select t.Name)
+                txtStudio.MaskBox.AutoCompleteCustomSource.Add(name);
 
             txtAspectRatio.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtAspectRatio.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            txtAspectRatio.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllAspectRatios.ToArray());
+            foreach (string name in from t in TitleCollectionManager.GetAllAspectRatios(null) select t.Name)
+                txtAspectRatio.MaskBox.AutoCompleteCustomSource.Add(name);
 
             txtCountryOfOrigin.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtCountryOfOrigin.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            txtCountryOfOrigin.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllCountryofOrigin.ToArray());
+            foreach (string name in from t in TitleCollectionManager.GetAllCountryOfOrigin(null) select t.Name)
+                txtCountryOfOrigin.MaskBox.AutoCompleteCustomSource.Add(name);
 
             teVideoResolution.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             teVideoResolution.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
@@ -439,7 +457,9 @@ namespace OMLDatabaseEditor.Controls
         private void lbPeople_DoubleClick(object sender, EventArgs e)
         {
             List<String> listToEdit = new List<string>();
-            listToEdit.AddRange(MainEditor._titleCollection.GetAllActors.ToArray());
+            foreach (string name in from t in TitleCollectionManager.GetAllPeople(null, PeopleRole.Actor) select t.Name)
+                listToEdit.Add(name);
+
             listToEdit.Sort();
             lbcPersona.DataSource = listToEdit;
             //String name = "Actors";

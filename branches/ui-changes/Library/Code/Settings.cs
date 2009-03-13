@@ -244,26 +244,41 @@ namespace Library
         }
         
 
-        public Choice BuildSubFilterOptions()
-        {
-            Choice subFilterChoice = new Choice();
+        public void BuildSubFilterOptions()
+        {            
+            TitleFilterType filterType = Filter.FilterStringToTitleType(_startPage.Chosen.ToString());
+
+            if (filterType == TitleFilterType.Unwatched ||
+                filterType == TitleFilterType.All)
+            {
+                _startPageSubFilter.Options = new List<string>() { "" };
+                return;
+            }
 
             List<string> subFilters = new List<string>();
 
-            subFilters.Add("");
+            subFilters.Add("");            
 
-            MovieGallery gallery = new MovieGallery(OMLApplication.Current.Titles, "Temp");
+            // todo : solomon : make this less costly - every new movie gallery
+            // instance gets a full list of movies
+            MovieGallery gallery = new MovieGallery();           
 
-            if (gallery.Filters.ContainsKey(_startPage.Chosen.ToString()))
+            // get all subfilters for option
+            Filter filter = new Filter(gallery, filterType, null);
+
+            IList<GalleryItem> items = filter.GetGalleryItems();
+
+            foreach (GalleryItem item in items)
             {
-                Filter filter = gallery.Filters[_startPage.Chosen.ToString()];
-                foreach (GalleryItem item in filter.Items)
-                    subFilters.Add(item.Name);
+                subFilters.Add(item.Name);
             }
 
-            subFilterChoice.Options = subFilters;
+            _startPageSubFilter = new Choice();
 
-            return subFilterChoice;
+            _startPageSubFilter.Options = subFilters;
+            _startPageSubFilter.Chosen = _startPageSubFilter.Options[0];                       
+
+            FirePropertyChanged("StartPageSubFilter");
         }
 
         private void SetupMovieSettings()
@@ -272,6 +287,7 @@ namespace Library
             viewItems.Add(GalleryView.CoverArt);
             viewItems.Add(GalleryView.CoverArtWithAlpha);
             viewItems.Add(GalleryView.List);
+            viewItems.Add(GalleryView.ListWithCovers);
 #if LAYOUT_V2
             viewItems.Add("Folder View");
 #endif
@@ -317,9 +333,10 @@ namespace Library
             _startPage.Options = starPageItems;
             _startPage.Chosen = _omlSettings.StartPage;
 
-            _startPageSubFilter = BuildSubFilterOptions();
+            BuildSubFilterOptions();
 
             if (!string.IsNullOrEmpty(_omlSettings.StartPageSubFilter) &&
+                _startPageSubFilter.Options != null &&
                 _startPageSubFilter.Options.Contains(_omlSettings.StartPageSubFilter))
             {
                 _startPageSubFilter.Chosen = _omlSettings.StartPageSubFilter;
@@ -1125,7 +1142,7 @@ namespace Library
         BooleanChoice _useOnScreenAlpha = new BooleanChoice();
         BooleanChoice _showWatchedIcon = new BooleanChoice();
         Choice _startPage = new Choice();
-        Choice _startPageSubFilter;
+        Choice _startPageSubFilter = new Choice();
         Choice _uiLanguage = new Choice();
         Choice _ImageMountingSelection = new Choice();       
         

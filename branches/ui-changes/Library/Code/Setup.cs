@@ -293,7 +293,7 @@ namespace Library
             }
             else
             {
-                OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.InternalItemID);
+                OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.Id);
                 OMLPlugin.BuildResizedMenuImage(CurrentTitle);
                 _titleCollection.Add(CurrentTitle);
                 TotalTitlesAdded++;
@@ -324,8 +324,8 @@ namespace Library
         }
         public void gotoMenu()
         {
-            TitleCollection tc = OMLApplication.Current.ReloadTitleCollection();
-            OMLApplication.Current.GoToMenu(new MovieGallery(tc, Filter.Home));
+            //TitleCollection tc = OMLApplication.Current.ReloadTitleCollection();
+            OMLApplication.Current.GoToMenu(new MovieGallery());
         }
         public void AddAllCurrentTitles()
         {
@@ -344,7 +344,7 @@ namespace Library
                     }
                     else
                     {
-                        OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.InternalItemID);
+                        OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.Id);
                         OMLPlugin.BuildResizedMenuImage(CurrentTitle);
                         _titleCollection.Add(CurrentTitle);
                         TotalTitlesAdded++;
