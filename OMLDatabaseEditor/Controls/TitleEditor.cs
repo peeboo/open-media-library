@@ -85,17 +85,18 @@ namespace OMLDatabaseEditor.Controls
 
         public bool IsNew()
         {
-            return MainEditor._titleCollection.GetTitleById(_dvdTitle.InternalItemID) == null;
+            return TitleCollectionManager.GetTitle(_dvdTitle.Id) == null;
         }
 
         public void SaveChanges()
         {
             titleSource.CurrencyManager.Refresh();
             if (IsNew())
-                MainEditor._titleCollection.Add(_dvdTitle);
+                TitleCollectionManager.AddTitle(_dvdTitle);
             else
-                MainEditor._titleCollection.Replace(_dvdTitle);
-            MainEditor._titleCollection.saveTitleCollection();
+                //MainEditor._titleCollection.Replace(_dvdTitle);
+
+            TitleCollectionManager.SaveTitleUpdates();
             ClearEditor();
         }
 
@@ -422,7 +423,8 @@ namespace OMLDatabaseEditor.Controls
             {
                 teParentalRating.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                teParentalRating.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllParentalRatings.ToArray());
+                foreach (string name in from t in TitleCollectionManager.GetAllParentalRatings(null) select t.Name)
+                    teParentalRating.MaskBox.AutoCompleteCustomSource.Add(name);
             }
 
             txtStudio.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
@@ -442,15 +444,16 @@ namespace OMLDatabaseEditor.Controls
 
             teVideoResolution.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             teVideoResolution.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            teVideoResolution.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllVideoResolutions.ToArray());
+            foreach (string name in from t in TitleCollectionManager.GetAllAspectRatios(null) select t.Name)
+                teVideoResolution.MaskBox.AutoCompleteCustomSource.Add(name);
 
             teVideoStandard.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             teVideoStandard.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            teVideoStandard.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllVideoStandards.ToArray());
+            //teVideoStandard.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllVideoStandards.ToArray());
 
             teImporter.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             teImporter.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            teImporter.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllImporterSources.ToArray());
+            //teImporter.MaskBox.AutoCompleteCustomSource.AddRange(MainEditor._titleCollection.GetAllImporterSources.ToArray());
 
         }
 

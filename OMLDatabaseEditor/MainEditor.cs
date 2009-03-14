@@ -450,7 +450,7 @@ namespace OMLDatabaseEditor
                                                 break;
                                             case "Genres":
                                                 titleEditor.EditedTitle.Genres.Clear();
-                                                titleEditor.EditedTitle.Genres.AddRange(title.Genres);
+                                                titleEditor.EditedTitle.Genres.AddRange(title.Genres.ToArray<string>());
                                                 break;
                                             default:
                                                 Utilities.DebugLine("[OMLDatabaseEditor] Using value for " + property + " from plugin " + map.Key);
@@ -785,7 +785,7 @@ namespace OMLDatabaseEditor
             if (SaveCurrentMovie() == DialogResult.Cancel)
             {
                 _loading = true; //bypasses second save movie dialog
-                lbMovies.SelectedItem = _titleCollection.GetTitleById(titleEditor.EditedTitle.InternalItemID);
+                lbMovies.SelectedItem = TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
                 _loading = false;
             }
             else
@@ -887,31 +887,6 @@ namespace OMLDatabaseEditor
                     // todo : solomon : need to see how this update is happening since it'll update
                     // existing ones it pulls out out of the db but not new ones
                     TitleCollectionManager.SaveTitleUpdates();
-                }
-            }
-            statusText.Text = "Finished updating metadata";
-            pgbProgress.Visible = false;
-            Application.DoEvents();
-        }
-
-        private void fromPreferredSourcesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            pgbProgress.Visible = true;
-            pgbProgress.Maximum = lbMovies.SelectedItems.Count;
-            pgbProgress.Value = 0;
-            foreach (Title title in lbMovies.SelectedItems)
-            {
-                pgbProgress.Value++;
-                statusText.Text = "Getting metadata for " + title.Name;
-                Application.DoEvents();
-                titleEditor.LoadDVD(title);
-                this.Text = APP_TITLE + " - " + title.Name;
-                ToggleSaveState(false);
-
-                if (StartMetadataImport(null, false))
-                {
-                    _titleCollection.Replace(titleEditor.EditedTitle);
-                    _titleCollection.saveTitleCollection();
                 }
             }
             statusText.Text = "Finished updating metadata";

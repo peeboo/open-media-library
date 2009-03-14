@@ -189,7 +189,7 @@ namespace OMLDatabaseEditor
             if (cbDefault.Checked)
             {
                 MainEditor._titleCollection.MetadataMap[_propertyName] = pluginResult.PluginName;
-                MainEditor._titleCollection.saveTitleCollection();
+                TitleCollectionManager.SaveTitleUpdates();
             }
             DialogResult = DialogResult.OK;
         }
