@@ -685,9 +685,11 @@ namespace OMLEngine
                 return _producers; 
             }
             set { _producers = value; }
-            _backDropImage = GetSerializedString(info, "backdrop_boxart_path");
+            
+            // todo : solomon : this went wonky here
+            /*_backDropImage = GetSerializedString(info, "backdrop_boxart_path");
             _productionYear = GetSerializedInt(info, "production_year");
-            _fanartfolder = GetSerializedString(info, "fan_art_folder");
+            _fanartfolder = GetSerializedString(info, "fan_art_folder");*/
         }
 
         public decimal PercentComplete
@@ -738,9 +740,13 @@ namespace OMLEngine
         public Title() 
         {
             _title = new OMLEngine.Dao.Title();
+            
+            // todo : solomon : this went wonky here 
+            /*
             info.AddValue("backdrop_boxart_path", _backDropImage);
             info.AddValue("production_year", _productionYear);
             info.AddValue("fan_art_folder", _fanartfolder);
+             */
         }
 
         /// <summary>

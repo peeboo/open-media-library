@@ -93,6 +93,8 @@ namespace OMLDatabaseEditor
             }
         }
 
+        // todo : solomon : this got added in the merge
+        /*
         private void cbeItem_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
         {
             if (e.Button.Kind == ButtonPredefines.Plus)
@@ -122,6 +124,6 @@ namespace OMLDatabaseEditor
 
                 cbeItem.Text = "";
             }
-        }
+        }*/
     }
 }

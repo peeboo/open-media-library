@@ -65,7 +65,7 @@ namespace Library
         public static string GeneratePlayString(string path, int titleNumber, int chapterNumber)
         {
             string playString = string.Empty;
-            playString = string.Format("DVD://{0}", MediaData.GetPlayStringForPath(path));
+            playString = string.Format("DVD://{0}", FileScanner.GetPlayStringForPath(path));
             playString = playString.Replace("\\", "/");
 
             if (titleNumber > 0)
@@ -81,7 +81,7 @@ namespace Library
         public static string GeneratePlayString(string path, int titleNumber, DateTime startTime)
         {
             string playString = string.Empty;
-            playString = string.Format("DVD://{0}", MediaData.GetPlayStringForPath(path));
+            playString = string.Format("DVD://{0}", FileScanner.GetPlayStringForPath(path));
             playString = playString.Replace("\\", "/");
 
             if (titleNumber < 1)

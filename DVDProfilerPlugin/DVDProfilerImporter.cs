@@ -101,7 +101,7 @@ namespace DVDProfilerPlugin
 
         private void HandleDvd(XPathNavigator dvdNavigator)
         {
-            Title title = LoadTitle(dvdNavigator);
+            Title title = LoadTitle(dvdNavigator, true);
             GetImagesForNewTitle(title);
             if (ValidateTitle(title))
             {
@@ -111,7 +111,7 @@ namespace DVDProfilerPlugin
             else Trace.WriteLine("Error saving row");
         }
 
-        private Title LoadTitle(XPathNavigator dvdNavigator)
+        public Title LoadTitle(XPathNavigator dvdNavigator, bool lookForDiskInfo)
         {
             Title title = new Title();
             VideoFormat videoFormat = VideoFormat.DVD;
@@ -207,7 +207,9 @@ namespace DVDProfilerPlugin
                         break;
                 }
             }
-            MergeDiscInfo(title, videoFormat, discs, notes);
+            if (lookForDiskInfo)
+                MergeDiscInfo(title, videoFormat, discs, notes);
+
             ApplyTags(title, dvdNavigator);
             return title;
         }
@@ -519,7 +521,7 @@ namespace DVDProfilerPlugin
             return defaultFormat;
         }
 
-        private void GetImagesForNewTitle(Title newTitle)
+        public void GetImagesForNewTitle(Title newTitle)
         {
             string id = newTitle.MetadataSourceID;
             if (!string.IsNullOrEmpty(id))
