@@ -228,7 +228,7 @@ namespace VMCDVDLibraryPlugin
                                                     SetFrontCoverImage(ref newVideo, Path.GetDirectoryName(video) + "\\folder.jpg");
                                                 }
 
-                                                newVideo.Disks.Add(disk);
+                                                newVideo.AddDisk(disk);
                                                 string temp = newVideo.BackDropFolder; // This initialises the fanart folder forcing a search for fanart
                                                 AddTitle(newVideo);
                                             }
