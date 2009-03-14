@@ -272,7 +272,7 @@ namespace DVDProfilerPlugin
                     }
                     else
                     {
-                        title.AddActingRole(fullName, role);
+                        title.ActingRoles.Add(fullName, role);
                     }
                 }
             }
@@ -294,21 +294,21 @@ namespace DVDProfilerPlugin
                     case "Direction":
                         if (!directorsAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
                         {
-                            title.AddDirector(person);
+                            title.Directors.Add(person);
                             directorsAlreadyAdded.Add(person.full_name.ToUpperInvariant());
                         }
                         break;
                     case "Writing":
                         if (!writersAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
                         {
-                            title.AddWriter(person);
+                            title.Writers.Add(person);
                             writersAlreadyAdded.Add(person.full_name.ToUpperInvariant());
                         }
                         break;
                     case "Production":
                         if (!producersAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
                         {
-                            title.AddProducer(person.full_name);
+                            title.Producers.Add(person.full_name);
                             producersAlreadyAdded.Add(person.full_name.ToUpperInvariant());
                         }
                         break;
