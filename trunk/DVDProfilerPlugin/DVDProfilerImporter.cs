@@ -272,7 +272,7 @@ namespace DVDProfilerPlugin
                     }
                     else
                     {
-                        title.ActingRoles.Add(fullName, role);
+                        title.AddActingRole(fullName, role);
                     }
                 }
             }
@@ -294,21 +294,21 @@ namespace DVDProfilerPlugin
                     case "Direction":
                         if (!directorsAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
                         {
-                            title.Directors.Add(person);
+                            title.AddDirector(person);
                             directorsAlreadyAdded.Add(person.full_name.ToUpperInvariant());
                         }
                         break;
                     case "Writing":
                         if (!writersAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
                         {
-                            title.Writers.Add(person);
+                            title.AddWriter(person);
                             writersAlreadyAdded.Add(person.full_name.ToUpperInvariant());
                         }
                         break;
                     case "Production":
                         if (!producersAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
                         {
-                            title.Producers.Add(person.full_name);
+                            title.AddProducer(person.full_name);
                             producersAlreadyAdded.Add(person.full_name.ToUpperInvariant());
                         }
                         break;
@@ -500,8 +500,8 @@ namespace DVDProfilerPlugin
             foreach (TagDefinition tagDefinition in tagDefinitions)
             {
                 bool match = dvdNavigator.SelectSingleNode(tagDefinition.XPath) != null;
-                if (match && !string.IsNullOrEmpty(tagDefinition.Name)) title.Tags.Add(tagDefinition.Name);
-                if (!match && !string.IsNullOrEmpty(tagDefinition.ExcludedName)) title.Tags.Add(tagDefinition.ExcludedName);
+                if (match && !string.IsNullOrEmpty(tagDefinition.Name)) title.AddTag(tagDefinition.Name);
+                if (!match && !string.IsNullOrEmpty(tagDefinition.ExcludedName)) title.AddTag(tagDefinition.ExcludedName);
             }
         }
 

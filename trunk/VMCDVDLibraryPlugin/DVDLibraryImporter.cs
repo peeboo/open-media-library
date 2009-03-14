@@ -128,7 +128,7 @@ namespace VMCDVDLibraryPlugin
                                         {
                                             if (Enum.GetName(typeof(VideoFormat), format).ToLowerInvariant() == extension)
                                             {
-                                                dvd.Trailers.Add(video);
+                                                dvd.AddTrailer(video);
                                             }
                                         }
                                     }
@@ -174,7 +174,7 @@ namespace VMCDVDLibraryPlugin
                                                 disk.Path = video;
                                                 disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
                                                 disk.Name = string.Format("Disk {0}", diskNumber++);
-                                                newVideo.Disks.Add(disk);
+                                                newVideo.AddDisk(disk);
                                             }
                                         }
                                         catch (Exception ex)
