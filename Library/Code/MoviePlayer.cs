@@ -194,7 +194,7 @@ namespace Library
         static bool IsExtenderDVD_NoTranscoding(MediaSource source)
         {
             if (OMLApplication.Current.IsExtender == false || source.Format != VideoFormat.DVD 
-                || MediaData.IsDVD(source.MediaPath) == false || ExtenderDVDPlayer.CanPlay(source) == false)
+                || FileScanner.IsDVD(source.MediaPath) == false || ExtenderDVDPlayer.CanPlay(source) == false)
                 return false;
 
             // non-default audio/subtitle/chapter start: needs transcoding
