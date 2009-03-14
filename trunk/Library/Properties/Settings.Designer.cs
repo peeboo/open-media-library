@@ -1048,7 +1048,6 @@ namespace Library.Properties {
                 this["BrowserHeightWhenNotShowingDetails"] = value;
             }
         }
-<<<<<<< .working
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
