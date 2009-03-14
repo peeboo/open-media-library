@@ -22,7 +22,8 @@ Requirements
     * Go to this page, http://www.devexpress.com/Products/Free/WebRegistration/ to sign up and get the tools needed for free. This is not a must, but else you will get a popup.  If you continue to have the popup return, you can follow the steps in this link, http://www.devexpress.com/Support/Center/KB/p/A705.aspx to get rid of the popup.
 
 
-Steps to setup your build environment
+
+= Steps to setup your build environment: =
 
 1) Install Visual Studio.
 
@@ -46,7 +47,8 @@ Steps to setup your build environment
 
 
 
-Steps to build the code:
+
+= Steps to build the code: =
 
 1) Compile the project using Visual Studio 2008 . Build -> Rebuild Solution
 
