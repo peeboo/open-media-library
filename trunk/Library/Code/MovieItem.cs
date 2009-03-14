@@ -446,7 +446,7 @@ namespace Library
 
             WindowsPlayListManager playlist = new WindowsPlayListManager();
 
-            string playlistFile = Path.Combine(FileSystemWalker.TempPlayListDirectory, "AllDisks_" + this.TitleObject.InternalItemID + ".WPL");
+            string playlistFile = Path.Combine(FileSystemWalker.TempPlayListDirectory, "AllDisks_" + this.TitleObject.Id + ".WPL");
 
             foreach (Disk disk in this.TitleObject.Disks)
             {

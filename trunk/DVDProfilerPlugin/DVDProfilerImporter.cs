@@ -164,7 +164,7 @@ namespace DVDProfilerPlugin
                     case "Genres":
                         foreach (XPathNavigator genreNavigator in dvdElement.Select("Genre[. != '']"))
                         {
-                            title.Genres.Add(genreNavigator.Value);
+                            title.AddGenre(genreNavigator.Value);
                         }
                         break;
                     case "Format":
@@ -180,7 +180,7 @@ namespace DVDProfilerPlugin
                     case "Subtitles":
                         foreach (XPathNavigator subtitleNavigator in dvdElement.SelectChildren("Subtitle", string.Empty))
                         {
-                            title.Subtitles.Add(subtitleNavigator.Value);
+                            title.AddSubtitle(subtitleNavigator.Value);
                         }
                         break;
                     case "Actors":
@@ -341,7 +341,7 @@ namespace DVDProfilerPlugin
                 if (string.IsNullOrEmpty(content)) content = format;
                 else if (!string.IsNullOrEmpty(format)) content += " (" + format + ")";
 
-                if (!string.IsNullOrEmpty(content)) title.AudioTracks.Add(content);
+                if (!string.IsNullOrEmpty(content)) title.AddAudioTrack(content);
             }
         }
 
@@ -490,7 +490,7 @@ namespace DVDProfilerPlugin
                     }
                 }
 
-                title.Disks.Add(new Disk(description, path, discVideoFormat));
+                title.AddDisk(new Disk(description, path, discVideoFormat));
                 lastDiskNumber++;
             }
         }
