@@ -23,7 +23,6 @@ namespace OMLDatabaseEditor
             InitializeComponent();
 
             _title = title;
-            _titleCollection = MainEditor._titleCollection;
             if (Properties.Settings.Default.gsValidGenres != null
             && Properties.Settings.Default.gsValidGenres.Count > 0)
             {
