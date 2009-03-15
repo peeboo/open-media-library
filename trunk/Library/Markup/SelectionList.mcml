@@ -56,6 +56,9 @@
         </Actions>
       </Changed>
 
+      <Condition Source="[GalleryView]" SourceValue="ListWithCover" Target="[ListWIthCovers.Visible]" Value="true" />
+      <Condition Source="[GalleryView]" SourceValue="List" Target="[ListView.Visible]" Value="true" />
+
     </Rules>
 
     <!--<Rules>
@@ -98,7 +101,8 @@
 
           <Panel Name="GalleryPanel" MouseInteractive="true">
             <Children>
-              <view:ListView Name="MovieGallery" ShowDescription="false" MovieBrowser="[MovieBrowser]" List="[List]" JumpValue="[JumpValue]" UISettings="[UISettings]" />
+              <view:ListWithCovers Visible="false" Name="ListWIthCovers" ShowDescription="false" MovieBrowser="[MovieBrowser]" List="[List]" JumpValue="[JumpValue]" UISettings="[UISettings]" />
+              <view:ListView Visible="false" Name="ListView" ShowDescription="false" MovieBrowser="[MovieBrowser]" List="[List]" JumpValue="[JumpValue]" UISettings="[UISettings]" />
             </Children>
 
             <LayoutInput>
