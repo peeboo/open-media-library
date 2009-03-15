@@ -71,6 +71,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Dao\OMLDataSettings.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OMLDataSettings.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Dao\TitleConfig.cs" />
     <Compile Include="Dao\TitleDao.cs" />
     <Compile Include="Dao\TitleCollectionDao.cs" />
@@ -113,6 +118,7 @@
     <Compile Include="RegexUtils.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Settings\MetaDataSettings.cs" />
+    <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\WatcherSettings.cs" />
     <Compile Include="Settings\WatcherSettingsManager.cs" />
     <Compile Include="SortedArrayList.cs" />
@@ -153,8 +159,18 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Dao\OMLDataSettings.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>OMLDataSettings.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Dao\WatcherData.dbml.layout">
       <DependentUpon>WatcherData.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Dao\OMLDataSettings.dbml.layout">
+      <DependentUpon>OMLDataSettings.dbml</DependentUpon>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

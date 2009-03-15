@@ -1923,7 +1923,9 @@ namespace OMLEngine
                 if (!String.IsNullOrEmpty(src))
                     return src;
                 else
-                    return dest;
+                    if (!String.IsNullOrEmpty(dest))
+                        return dest;
+                    else return "";
             }
             else
             {

@@ -13,7 +13,6 @@ namespace OMLDatabaseEditor
 {
     public partial class MetadataMappings : DevExpress.XtraEditors.XtraForm
     {    
-        //List<MetaDMapping> _genreMapping = new List<GenreMapping>();
         SortedDictionary<string, string> UnusedProperties = new SortedDictionary<string, string>();
         SortedDictionary<string, string> UsedProperties = new SortedDictionary<string, string>();
         OMLDatabaseEditor.Controls.TitleEditor titleeditor;
@@ -25,7 +24,15 @@ namespace OMLDatabaseEditor
         }
 
         public void RenderMetaDataMappings()
-        { 
+        {   
+            // Build properties assigned to a metadata provider
+            // ----------------------------------------------
+            foreach (OMLEngine.Dao.MataDataMapping map in SettingsManager.MetaDataMap_GetMappings())
+            {
+                UsedProperties[map.MatadataProperty] = map.MetadataProvider;
+            } 
+
+
             // Build properties not assigned to a metadata provider
             // --------------------------------------------------
 
@@ -71,13 +78,13 @@ namespace OMLDatabaseEditor
 
 
 
-            // Build properties assigned to a metadata provider
-            // ----------------------------------------------
-            foreach (KeyValuePair<string, string> map in MainEditor._titleCollection.MetadataMap)
-            {
-                UsedProperties[map.Key] = map.Value;
-            } 
-          
+
+  //                 foreach (string name in from t in TitleCollectionManager.GetAllAspectRatios(null) select t.Name)
+ 
+ // teVideoResolution.MaskBox.AutoCompleteCustomSource.Add(name);
+ 
+ 
+
 
             // Add all properties into the dialog box
             // --------------------------------------
@@ -118,7 +125,8 @@ namespace OMLDatabaseEditor
 
         private void AddMappingProprty(string property)
         {
-            if (!MainEditor._titleCollection.MetadataMap.ContainsKey(property))
+            // TODO : Create SQL Tables
+            if (!UsedProperties.ContainsKey(property))
             {
                 UnusedProperties[property] = "";
             }
@@ -126,7 +134,7 @@ namespace OMLDatabaseEditor
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            MainEditor._titleCollection.MetadataMap.Clear();
+            SettingsManager.MetaDataMap_Clear();
 
             Control[] controls;
             int i = 0;
@@ -138,11 +146,16 @@ namespace OMLDatabaseEditor
 
                 if (cbeMapping.Text != "")
                 {
-                    MainEditor._titleCollection.MetadataMap[lblProperty.Text] = cbeMapping.Text;
+                    OMLEngine.Dao.MataDataMapping map = new OMLEngine.Dao.MataDataMapping();
+                    map.MatadataProperty = lblProperty.Text;
+                    map.MetadataProvider = cbeMapping.Text;
+                    SettingsManager.MetaDataMap_Add(map);
                 }
 
                 i++;
-            } 
+            }
+            //SettingsManager.Save();
+
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

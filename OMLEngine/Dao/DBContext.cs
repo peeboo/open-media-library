@@ -58,4 +58,31 @@ namespace OMLEngine.Dao
 
         public static WatcherDataDataContext InstanceOrNull { get { return db; } }        
     }
+
+    internal static class OMLDataSettingsDBContext
+    {
+        private static OMLDataSettingsDataContext db = null;
+        private static object lockObject = new object();
+
+        public static OMLDataSettingsDataContext Instance
+        {
+            get
+            {
+                if (db == null)
+                {
+                    lock (lockObject)
+                    {
+                        if (db == null)
+                        {
+                            db = new OMLDataSettingsDataContext();
+                        }
+                    }
+                }
+
+                return db;
+            }
+        }
+
+        public static OMLDataSettingsDataContext InstanceOrNull { get { return db; } }
+    }
 }
