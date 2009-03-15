@@ -33,6 +33,9 @@ namespace OMLEngine.Dao
     partial void InsertMataDataMapping(MataDataMapping instance);
     partial void UpdateMataDataMapping(MataDataMapping instance);
     partial void DeleteMataDataMapping(MataDataMapping instance);
+    partial void InsertGenreMapping(GenreMapping instance);
+    partial void UpdateGenreMapping(GenreMapping instance);
+    partial void DeleteGenreMapping(GenreMapping instance);
     #endregion
 		
 		public OMLDataSettingsDataContext() : 
@@ -70,6 +73,14 @@ namespace OMLEngine.Dao
 			get
 			{
 				return this.GetTable<MataDataMapping>();
+			}
+		}
+		
+		public System.Data.Linq.Table<GenreMapping> GenreMappings
+		{
+			get
+			{
+				return this.GetTable<GenreMapping>();
 			}
 		}
 	}
@@ -159,6 +170,116 @@ namespace OMLEngine.Dao
 					this._MetadataProvider = value;
 					this.SendPropertyChanged("MetadataProvider");
 					this.OnMetadataProviderChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[Table(Name="dbo.GenreMappings")]
+	public partial class GenreMapping : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _RowID;
+		
+		private string _GenreName;
+		
+		private string _GenreMapTo;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnRowIDChanging(int value);
+    partial void OnRowIDChanged();
+    partial void OnGenreNameChanging(string value);
+    partial void OnGenreNameChanged();
+    partial void OnGenreMapToChanging(string value);
+    partial void OnGenreMapToChanged();
+    #endregion
+		
+		public GenreMapping()
+		{
+			OnCreated();
+		}
+		
+		[Column(Storage="_RowID", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
+		public int RowID
+		{
+			get
+			{
+				return this._RowID;
+			}
+			set
+			{
+				if ((this._RowID != value))
+				{
+					this.OnRowIDChanging(value);
+					this.SendPropertyChanging();
+					this._RowID = value;
+					this.SendPropertyChanged("RowID");
+					this.OnRowIDChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_GenreName", DbType="NVarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string GenreName
+		{
+			get
+			{
+				return this._GenreName;
+			}
+			set
+			{
+				if ((this._GenreName != value))
+				{
+					this.OnGenreNameChanging(value);
+					this.SendPropertyChanging();
+					this._GenreName = value;
+					this.SendPropertyChanged("GenreName");
+					this.OnGenreNameChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_GenreMapTo", DbType="NVarChar(50)")]
+		public string GenreMapTo
+		{
+			get
+			{
+				return this._GenreMapTo;
+			}
+			set
+			{
+				if ((this._GenreMapTo != value))
+				{
+					this.OnGenreMapToChanging(value);
+					this.SendPropertyChanging();
+					this._GenreMapTo = value;
+					this.SendPropertyChanged("GenreMapTo");
+					this.OnGenreMapToChanged();
 				}
 			}
 		}
