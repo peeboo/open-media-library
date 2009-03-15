@@ -189,7 +189,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
+		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Photo
 		{
 			get
@@ -441,8 +441,6 @@ namespace OMLEngine.Dao
 		private System.Nullable<int> _WatchedCount;
 		
 		private string _MetaDataSource;
-
-        private string _MetaDataSourceItemId;
 		
 		private string _FrontCoverImage;
 		
@@ -492,6 +490,14 @@ namespace OMLEngine.Dao
 		
 		private System.Nullable<int> _GroupId;
 		
+		private string _MetaDataSourceItemId;
+		
+		private System.Nullable<int> _ProductionYear;
+		
+		private string _FanArtFolder;
+		
+		private string _PreferredBackDropImage;
+		
 		private EntitySet<Genre> _Genres;
 		
 		private EntitySet<Person> _Peoples;
@@ -514,8 +520,6 @@ namespace OMLEngine.Dao
     partial void OnWatchedCountChanged();
     partial void OnMetaDataSourceChanging(string value);
     partial void OnMetaDataSourceChanged();
-    partial void OnMetaDataSourceItemIdChanging(string value);
-    partial void OnMetaDataSourceItemIdChanged();
     partial void OnFrontCoverPathChanging(string value);
     partial void OnFrontCoverPathChanged();
     partial void OnFrontCoverMenuPathChanging(string value);
@@ -564,6 +568,14 @@ namespace OMLEngine.Dao
     partial void OnImporterSourceChanged();
     partial void OnGroupIdChanging(System.Nullable<int> value);
     partial void OnGroupIdChanged();
+    partial void OnMetaDataSourceItemIdChanging(string value);
+    partial void OnMetaDataSourceItemIdChanged();
+    partial void OnProductionYearChanging(System.Nullable<int> value);
+    partial void OnProductionYearChanged();
+    partial void OnFanArtFolderChanging(string value);
+    partial void OnFanArtFolderChanged();
+    partial void OnPreferredBackDropImageChanging(string value);
+    partial void OnPreferredBackDropImageChanged();
     #endregion
 		
 		public Title()
@@ -674,26 +686,6 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-
-        [Column(Storage = "_MetaDataSourceItemId", DbType = "NVarChar(255)")]
-        public string MetaDataSourceItemId
-        {
-            get
-            {
-                return this._MetaDataSourceItemId;
-            }
-            set
-            {
-                if ((this._MetaDataSourceItemId != value))
-                {
-                    this.OnMetaDataSourceItemIdChanging(value);
-                    this.SendPropertyChanging();
-                    this._MetaDataSourceItemId = value;
-                    this.SendPropertyChanged("MetaDataSourceItemId");
-                    this.OnMetaDataSourceItemIdChanged();
-                }
-            }
-        }
 		
 		[Column(Name="FrontCoverImagePath", Storage="_FrontCoverImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
 		public string FrontCoverPath
@@ -1175,6 +1167,86 @@ namespace OMLEngine.Dao
 			}
 		}
 		
+		[Column(Storage="_MetaDataSourceItemId", DbType="NVarChar(255)")]
+		public string MetaDataSourceItemId
+		{
+			get
+			{
+				return this._MetaDataSourceItemId;
+			}
+			set
+			{
+				if ((this._MetaDataSourceItemId != value))
+				{
+					this.OnMetaDataSourceItemIdChanging(value);
+					this.SendPropertyChanging();
+					this._MetaDataSourceItemId = value;
+					this.SendPropertyChanged("MetaDataSourceItemId");
+					this.OnMetaDataSourceItemIdChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_ProductionYear", DbType="Int")]
+		public System.Nullable<int> ProductionYear
+		{
+			get
+			{
+				return this._ProductionYear;
+			}
+			set
+			{
+				if ((this._ProductionYear != value))
+				{
+					this.OnProductionYearChanging(value);
+					this.SendPropertyChanging();
+					this._ProductionYear = value;
+					this.SendPropertyChanged("ProductionYear");
+					this.OnProductionYearChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_FanArtFolder", DbType="NVarChar(255)")]
+		public string FanArtFolder
+		{
+			get
+			{
+				return this._FanArtFolder;
+			}
+			set
+			{
+				if ((this._FanArtFolder != value))
+				{
+					this.OnFanArtFolderChanging(value);
+					this.SendPropertyChanging();
+					this._FanArtFolder = value;
+					this.SendPropertyChanged("FanArtFolder");
+					this.OnFanArtFolderChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_PreferredBackDropImage", DbType="NVarChar(255)")]
+		public string PreferredBackDropImage
+		{
+			get
+			{
+				return this._PreferredBackDropImage;
+			}
+			set
+			{
+				if ((this._PreferredBackDropImage != value))
+				{
+					this.OnPreferredBackDropImageChanging(value);
+					this.SendPropertyChanging();
+					this._PreferredBackDropImage = value;
+					this.SendPropertyChanged("PreferredBackDropImage");
+					this.OnPreferredBackDropImageChanged();
+				}
+			}
+		}
+		
 		[Association(Name="Title_Genre", Storage="_Genres", ThisKey="Id", OtherKey="TitleId")]
 		public EntitySet<Genre> Genres
 		{
@@ -1597,7 +1669,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
+		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Photo
 		{
 			get

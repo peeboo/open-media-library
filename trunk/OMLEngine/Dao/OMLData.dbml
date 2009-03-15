@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Database Name="OML" Class="OMLDataDataContext" AccessModifier="Internal" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost\SQLEXPRESS2;Initial Catalog=OML;Integrated Security=True" SettingsObjectName="OMLEngine.Properties.Settings" SettingsPropertyName="OMLConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost\SQLEXPRESS;Initial Catalog=OML;Integrated Security=True" SettingsObjectName="OMLEngine.Properties.Settings" SettingsPropertyName="OMLConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.GenreMetaData" Member="GenreMetaDatas" AccessModifier="Internal">
     <Type Name="GenreMetaData" AccessModifier="Internal">
       <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
@@ -49,6 +49,9 @@
       <Column Name="ImporterSource" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="GroupId" Type="System.Int32" DbType="int (System.Int32)" CanBeNull="true" />
       <Column Name="MetaDataSourceItemId" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ProductionYear" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FanArtFolder" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="PreferredBackDropImage" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Association Name="Title_Genre" Member="Genres" ThisKey="Id" OtherKey="TitleId" Type="Genre" />
       <Association Name="Title_Person" Member="People" Storage="_Peoples" ThisKey="Id" OtherKey="TitleId" Type="Person" />
       <Association Name="Title_Tag" Member="Tags" ThisKey="Id" OtherKey="TitleId" Type="Tag" />
