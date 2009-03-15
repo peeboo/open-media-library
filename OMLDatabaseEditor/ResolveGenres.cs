@@ -88,8 +88,8 @@ namespace OMLDatabaseEditor
                 if (grpActions.SelectedIndex == 0)
                 {
                     // ignore genre
-                    //if (!_title.Genres.Contains(map.SourceGenre))
-                    //    _title.Genres.Remove(map.SourceGenre);
+                    if (_title.Genres.Contains(map.SourceGenre))
+                        _title.RemoveGenre(map.SourceGenre);
 
                     
                     OMLEngine.Dao.GenreMapping mapping = new OMLEngine.Dao.GenreMapping();
@@ -100,8 +100,8 @@ namespace OMLDatabaseEditor
                 else
                 {
                     // map genre
-                    //if (!_title.Genres.Contains(map.SourceGenre))
-                    //    _title.Genres.Remove(map.SourceGenre);
+                    if (_title.Genres.Contains(map.SourceGenre))
+                        _title.RemoveGenre(map.SourceGenre);
                     if (!_title.Genres.Contains(cbeGenre.Text))
                         _title.AddGenre(cbeGenre.Text);
 
