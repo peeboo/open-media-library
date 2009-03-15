@@ -522,7 +522,7 @@ namespace OMLDatabaseEditor
 
         private void CheckGenresAgainstSupported(Title title)
         {
-            /*List<String> genreList = new List<String>();
+            List<String> genreList = new List<String>();
             if (Properties.Settings.Default.gsValidGenres != null
             && Properties.Settings.Default.gsValidGenres.Count > 0)
             {
@@ -537,10 +537,10 @@ namespace OMLDatabaseEditor
                     string newGenre = genre.Trim();
                     if (!genreList.Contains(newGenre))
                     {
-                        if (_titleCollection.GenreMap.ContainsKey(newGenre))
+                        if (!string.IsNullOrEmpty(SettingsManager.GenreMap_GetMapping(newGenre)))
                         {
                             // Mapping already exists for genre
-                            genreChanges[genre] = _titleCollection.GenreMap[genre];
+                            genreChanges[genre] = SettingsManager.GenreMap_GetMapping(newGenre);
                         }
                         else
                         {
@@ -568,7 +568,7 @@ namespace OMLDatabaseEditor
                     ResolveGenres resolveGenres = new ResolveGenres(genreIssuesList, title);
                     resolveGenres.ShowDialog();
                 }
-            }*/
+            }
         }
 
         private void SaveChanges()

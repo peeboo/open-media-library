@@ -62,9 +62,38 @@ namespace OMLEngine
             Dao.OMLDataSettingsDBContext.Instance.SubmitChanges();
         }
 
+        public static void MetaDataMap_Remove(string genre)
+        {
+
+        }
+
         public static void MetaDataMap_Add(OMLEngine.Dao.MataDataMapping maping)
         {
             OMLDataSettingsDBContext.Instance.MataDataMappings.InsertOnSubmit(maping);
+            OMLDataSettingsDBContext.Instance.SubmitChanges();
+        }
+
+
+        public static string GenreMap_GetMapping(string genreName)
+        {
+            var mdm = from t in OMLDataSettingsDBContext.Instance.GenreMappings
+                      where t.GenreName == genreName
+                      select t.GenreMapTo;
+
+            if (mdm.Count() == 0) { return ""; }
+
+            return mdm.ToArray()[0];
+        }
+
+
+        public static void GenreMap_Remove(string genre)
+        {
+
+        }
+
+        public static void GenreMap_Add(OMLEngine.Dao.GenreMapping maping)
+        {
+            OMLDataSettingsDBContext.Instance.GenreMappings.InsertOnSubmit(maping);
             OMLDataSettingsDBContext.Instance.SubmitChanges();
         }
 
