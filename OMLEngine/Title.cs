@@ -30,9 +30,9 @@ namespace OMLEngine
         private Disk _selectedDisk = null;
         private Dao.Title _title;
         private bool _peopleProcesed = false;
-        private string _backDropImage = string.Empty;
-        private int _productionYear = 0;
-        private string _fanartfolder = string.Empty;
+        //private string _backDropImage = string.Empty;
+        //private int _productionYear = 0;
+        //private string _fanartfolder = string.Empty;
 
         private Dictionary<string, string> _nonActingRoles = new Dictionary<string, string>(); // name, role (ie. Vangelis, Music)        
         private Dictionary<string, string> _actingRoles = null; // actor, role                                       
@@ -54,22 +54,7 @@ namespace OMLEngine
         #region properties       
 
         #region Unknown Properties
-        public int ProductionYear
-        {
-            get { return _productionYear; }
-            set { _productionYear = value; }
-        }
 
-        public string BackDropImage
-        {
-            get
-            {
-                if (_backDropImage == string.Empty)
-                    return NoCoverPath;
-                return _backDropImage;
-            }
-            set { _backDropImage = value; }
-        }
 
         public Disk SelectedDisk
         {
@@ -145,7 +130,38 @@ namespace OMLEngine
                     throw new FormatException("VideoResolution must be 20 characters or less.");
                 _title.VideoResolution = value; 
             }
-        }               
+        }
+
+        public int ProductionYear
+        {
+            get
+            {
+                if (_title.ProductionYear == null)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return (int)_title.ProductionYear;
+                }
+            }
+            set
+            {
+                _title.ProductionYear = value;
+            }
+            
+        }
+
+        public string BackDropImage
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_title.PreferredBackDropImage))
+                    return NoCoverPath;
+                return _title.PreferredBackDropImage;
+            }
+            set { _title.PreferredBackDropImage = value; }
+        }
 
         public string VideoDetails
         {
@@ -2446,16 +2462,16 @@ namespace OMLEngine
         {
             get {
                 // Is there allready a fan art folder defined
-                if (!string.IsNullOrEmpty(_fanartfolder))
+                if (!string.IsNullOrEmpty(_title.FanArtFolder))
                 {
                     if (!string.IsNullOrEmpty(this.BasePath()))
                     {
                         // Perform token substitution.
-                        return _fanartfolder.Replace("{basepath}", this.BasePath());
+                        return _title.FanArtFolder.Replace("{basepath}", this.BasePath());
                     }
                     else
                     {
-                        return _fanartfolder;
+                        return _title.FanArtFolder;
                     }
                 }
 
@@ -2464,8 +2480,8 @@ namespace OMLEngine
                 {
                     if (Directory.Exists(Path.Combine(this.BasePath(), @"FanArt")))
                     {
-                        _fanartfolder = @"{basepath}\FanArt";
-                        return _fanartfolder.Replace("{basepath}", this.BasePath());
+                        _title.FanArtFolder = @"{basepath}\FanArt";
+                        return _title.FanArtFolder.Replace("{basepath}", this.BasePath());
                     }
                 }
 
@@ -2475,26 +2491,26 @@ namespace OMLEngine
                     string MainFanArtDir = System.IO.Path.Combine(Properties.Settings.Default.gsTitledFanArtPath, PathSafeName);
                     if (Directory.Exists(MainFanArtDir))
                     {
-                        _fanartfolder = MainFanArtDir;
-                        return _fanartfolder;
+                        _title.FanArtFolder = MainFanArtDir;
+                        return _title.FanArtFolder;
                     }
                 }
                 return null;
 
             }
-            set { _fanartfolder = value; }
+            set { _title.FanArtFolder = value; }
         }
 
         public string CreateFanArtFolder(string basepath)
         {
-            if (string.IsNullOrEmpty(_fanartfolder))
+            if (string.IsNullOrEmpty(_title.FanArtFolder))
             {
                 if (Properties.Settings.Default.gbTitledFanArtFolder)
                 {
                     // Centralised Fan Art
                     string MainFanArtDir = Properties.Settings.Default.gsTitledFanArtPath;
                     if (!Directory.Exists(MainFanArtDir)) Directory.CreateDirectory(MainFanArtDir);
-                    _fanartfolder = System.IO.Path.Combine(MainFanArtDir, PathSafeName);
+                    _title.FanArtFolder = System.IO.Path.Combine(MainFanArtDir, PathSafeName);
                 }
                 else
                 {
@@ -2503,11 +2519,11 @@ namespace OMLEngine
                     {
                         return null;
                     }
-                    _fanartfolder = Path.Combine(basepath, @"FanArt");
+                    _title.FanArtFolder = Path.Combine(basepath, @"FanArt");
                 }
             }
-            if (!Directory.Exists(_fanartfolder)) Directory.CreateDirectory(_fanartfolder);
-            return _fanartfolder;
+            if (!Directory.Exists(_title.FanArtFolder)) Directory.CreateDirectory(_title.FanArtFolder);
+            return _title.FanArtFolder;
         }       
     }
 
