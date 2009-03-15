@@ -42,7 +42,9 @@ namespace OMLDatabaseEditor.Controls
 
         private void DiskMoverFrm_Load(object sender, EventArgs e)
         {
-            lbcFolders.Items.AddRange(MainEditor._titleCollection.GetFolders.ToArray());
+            // TODO SQL Version
+//            lbcFolders.Items.AddRange(MainEditor._titleCollection.GetFolders.ToArray());
+            //lbcFolders.Items.AddRange( MainEditor._titleCollection.GetFolders.ToArray());
             beDestination.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             beDestination.MaskBox.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
         }

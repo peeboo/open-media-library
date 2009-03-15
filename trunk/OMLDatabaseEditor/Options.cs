@@ -292,6 +292,8 @@ namespace OMLDatabaseEditor
 
         private void lbGenres_MouseClick(object sender, MouseEventArgs e)
         {
+            // TODO : Create SQL Version
+            /*
             lbGenres.SelectedIndex = lbGenres.IndexFromPoint(e.Location);
             if (e.Button == MouseButtons.Right)
             {
@@ -307,7 +309,7 @@ namespace OMLDatabaseEditor
                     cmGenreMappings.Items.Add(item);
                 }
                 cmGenreMappings.Show(lbGenres, e.Location);
-            }
+            }*/
         }
 
         void item_Click(object sender, EventArgs e)
@@ -315,20 +317,22 @@ namespace OMLDatabaseEditor
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             if (XtraMessageBox.Show(String.Format("Are you sure you want to remove the mapping of {0} to {1}?", item.Text, item.Tag), "Remove Mapping", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                MainEditor._titleCollection.GenreMap.Remove(item.Text);
-                MainEditor._titleCollection.saveTitleCollection();
+                // TODO : Create SQL Version
+                /*MainEditor._titleCollection.GenreMap.Remove(item.Text);
+                MainEditor._titleCollection.saveTitleCollection();*/
             }
         }
 
         private void lbGenres_DrawItem(object sender, ListBoxDrawItemEventArgs e)
         {
-            IEnumerable<KeyValuePair<string, string>> matches = MainEditor._titleCollection.GenreMap.Where(kvp => kvp.Value == (string)e.Item);
+            // TODO : Create SQL Version
+            /*IEnumerable<KeyValuePair<string, string>> matches = MainEditor._titleCollection.GenreMap.Where(kvp => kvp.Value == (string)e.Item);
             if (matches.Count() > 0)
             {
                 AppearanceObject appearance = (AppearanceObject)e.Appearance.Clone();
                 appearance.Font = new Font(appearance.Font, FontStyle.Bold);
                 e.Appearance.Combine(appearance);
-            }
+            }*/
         }
 
         private void ceFoldersAsTitles_CheckStateChanged(object sender, EventArgs e)

@@ -422,7 +422,7 @@ namespace OMLDatabaseEditor
                     else
                     {
                         // Import metadata based on field mappings and configured default plugin
-                        Dictionary<string, List<string>> mappings = _titleCollection.PropertiesByPlugin();
+                        Dictionary<string, List<string>> mappings = SettingsManager.MetaDataMap_PropertiesByPlugin();
                         // Loop through configured mappings
                         Type tTitle = typeof(Title);
                         IOMLMetadataPlugin metadata;
@@ -450,7 +450,9 @@ namespace OMLDatabaseEditor
                                                 break;
                                             case "Genres":
                                                 titleEditor.EditedTitle.Genres.Clear();
-                                                titleEditor.EditedTitle.Genres.AddRange(title.Genres.ToArray<string>());
+                                                //titleEditor.EditedTitle.Genres.AddRange(title.Genres.ToArray<string>());
+                                                foreach (string genre in title.Genres.ToArray<string>())
+                                                    titleEditor.EditedTitle.AddGenre(genre);
                                                 break;
                                             default:
                                                 Utilities.DebugLine("[OMLDatabaseEditor] Using value for " + property + " from plugin " + map.Key);
@@ -520,7 +522,7 @@ namespace OMLDatabaseEditor
 
         private void CheckGenresAgainstSupported(Title title)
         {
-            List<String> genreList = new List<String>();
+            /*List<String> genreList = new List<String>();
             if (Properties.Settings.Default.gsValidGenres != null
             && Properties.Settings.Default.gsValidGenres.Count > 0)
             {
@@ -566,7 +568,7 @@ namespace OMLDatabaseEditor
                     ResolveGenres resolveGenres = new ResolveGenres(genreIssuesList, title);
                     resolveGenres.ShowDialog();
                 }
-            }
+            }*/
         }
 
         private void SaveChanges()
@@ -659,7 +661,7 @@ namespace OMLDatabaseEditor
             }
             else if (sender == moveDisksToolStripMenuItem)
             {
-                DiskMoverFrm dsm = new DiskMoverFrm();
+                /*DiskMoverFrm dsm = new DiskMoverFrm();
                 if (dsm.ShowDialog(this) == DialogResult.OK)
                 {
                     string fromFolder = dsm.fromFolder;
@@ -691,7 +693,7 @@ namespace OMLDatabaseEditor
                         }
                     }
                     TitleCollectionManager.SaveTitleUpdates();
-                }
+                }*/
             }
         }
 
@@ -896,7 +898,7 @@ namespace OMLDatabaseEditor
 
         private void fromPreferredSourcesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            pgbProgress.Visible = true;
+            /*pgbProgress.Visible = true;
             pgbProgress.Maximum = lbMovies.SelectedItems.Count;
             pgbProgress.Value = 0;
             foreach (Title title in lbMovies.SelectedItems)
@@ -916,7 +918,7 @@ namespace OMLDatabaseEditor
             }
             statusText.Text = "Finished updating metadata";
             pgbProgress.Visible = false;
-            Application.DoEvents();
+            Application.DoEvents();*/
         }
 
         private void exportCurrentMovieToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1077,11 +1079,12 @@ namespace OMLDatabaseEditor
         {
             foreach (Title title in lbMovies.SelectedItems)
             {
-                if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.InternalItemID == title.InternalItemID)
+                if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.Id == title.Id)
                     titleEditor.ClearEditor();
-                _titleCollection.Remove(title);
+                TitleCollectionManager.DeleteTitle(title);
+                //_titleCollection.Remove(title);
             }
-            _titleCollection.saveTitleCollection();
+            //_titleCollection.saveTitleCollection();
             LoadMovies();
         }
 
@@ -1121,8 +1124,7 @@ namespace OMLDatabaseEditor
         private void manageMetadataMappingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MetadataMappings mdm = new MetadataMappings(this.titleEditor);
-            mdm.ShowDialog();
-            _titleCollection.saveTitleCollection();
+            mdm.ShowDialog();            
         }
     }
 }
