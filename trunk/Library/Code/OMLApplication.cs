@@ -11,7 +11,6 @@ using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Reflection;
 using System.Threading;
-using System.Timers;
 
 using OMLEngine;
 using OMLEngine.Settings;
@@ -33,7 +32,7 @@ namespace Library
         private Image primaryBackgroundImage;
         private int iCurrentBackgroundImage = 0;
         private int iTotalBackgroundImages = 0;
-        public System.Timers.Timer mainBackgroundTimer;
+        public Microsoft.MediaCenter.UI.Timer mainBackgroundTimer;
 
         private void SetPrimaryBackgroundImage()
         {
@@ -67,22 +66,22 @@ namespace Library
                 iCurrentBackgroundImage++;
                 if (mainBackgroundTimer == null)
                 {
-                    mainBackgroundTimer = new System.Timers.Timer();
-                    mainBackgroundTimer.AutoReset = true;
-                    mainBackgroundTimer.Elapsed += new ElapsedEventHandler(mainBackgroundTimer_Elapsed);
+                    mainBackgroundTimer = new Microsoft.MediaCenter.UI.Timer();
+                    mainBackgroundTimer.AutoRepeat = true;
+                    mainBackgroundTimer.Tick += new EventHandler(mainBackgroundTimer_Tick);
+                    mainBackgroundTimer.Tick += new EventHandler(mainBackgroundTimer_Tick);
                     int rotationInSeconds = Properties.Settings.Default.MainPageBackDropRotationInSeconds;
-                    double rotationInMilliseconds = rotationInSeconds * 1000;
+                    int rotationInMilliseconds = rotationInSeconds * 1000;
                     mainBackgroundTimer.Interval = rotationInMilliseconds;
                     mainBackgroundTimer.Enabled = true;
                     mainBackgroundTimer.Start();
-                    GC.KeepAlive(mainBackgroundTimer);
                 }
 
                 return;
             }
         }
 
-        void mainBackgroundTimer_Elapsed(object sender, ElapsedEventArgs e)
+        void mainBackgroundTimer_Tick(object sender, EventArgs e)
         {
             SetPrimaryBackgroundImage();
         }
