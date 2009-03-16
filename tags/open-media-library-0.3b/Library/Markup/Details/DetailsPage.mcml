@@ -1,0 +1,602 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
+	  xmlns:cor="assembly://MsCorLib/System"
+	  xmlns:a="assembly://Library/Library"
+    xmlns:coll="assembly://MsCorLib/System.Collections"
+    xmlns:s="resx://Library/Library.Resources/Styles"
+    xmlns:controls="resx://Library/Library.Resources/CoreControls"
+    xmlns:c="resx://Library/Library.Resources/Controls"
+	  xmlns:me="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/Base" />
+  <Aggregate Source="resx://Library/Library.Resources/DiskChooserContext"/>
+
+  <UI Name="MovieDetails3">
+    <Properties>
+      <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <a:MovieDetailsPage Name="DetailsPage" MovieDetailsPage="$Required"/>
+      <a:UISettings Name="UISettings" UISettings="$Required" />
+    </Properties>
+
+    <Locals>
+      <AnchorEdge Name="ImageLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "[UISettings.Anchor.DetailsLeftOffset]" Id="Parent"/>
+      <AnchorEdge Name="TitleTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset = "[UISettings.Anchor.DetailsTopOffset]" Id="Parent"/>
+      <AnchorEdge Name="DetailsLeftAnchor" Percent="[UISettings.Anchor.DetailsLeftAnchor]" Offset = "400" Id="Parent"/>
+      <Command Name="PlayMovie" Description="Plays the movie if there is only one disc - otherwise brings up the disc menu"/>
+
+      <ShortcutHandler Name="BackHandler" Shortcut="Back" Handle="false" HandlerStage="Routed" />
+      <KeyHandler Key="Backspace" Name="BackHandlerKey" Handle="false" HandlerStage="Routed"/>
+      
+      <Timer Name="RotateBackgrounndTimer" AutoRepeat="true" Interval="5000" Enabled="false"/>
+    </Locals>
+
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+
+      <Binding Source="[DetailsPage.BackgroundImage]" Target="[FanArtImage.Content]"/>
+
+      <Condition Source="[DetailsPage.RotateFanArt]" SourceValue="true">
+        <Actions>
+          <Invoke Target="[RotateBackgrounndTimer.Start]" />
+        </Actions>
+      </Condition>
+
+      <Changed Source="[RotateBackgrounndTimer.Tick]">
+        <Actions>
+          <Invoke Target="[DetailsPage.RotateBackground]" />
+        </Actions>
+      </Changed>
+      
+      <Condition Source="[DetailsPage.Directors.Options.Count]" SourceValue="0">
+        <Actions>
+          <Set Target="[DirectorsPanel.Visible]" Value="false" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[DetailsPage.Writers.Options.Count]" SourceValue="0">
+        <Actions>
+          <Set Target="[WritersPanel.Visible]" Value="false" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[DetailsPage.Actors.Options.Count]" SourceValue="0">
+        <Actions>
+          <Set Target="[Actors.Visible]" Value="false" />
+        </Actions>
+      </Condition>
+
+      <Changed Source="[CheckWatched.Checked.Value]">
+        <Actions>
+          <Invoke Target="[DetailsPage.UpdateWatched]" />
+        </Actions>
+      </Changed>
+
+      <Changed Source="[PlayMovie.Invoked]">
+        <Actions>
+          <Invoke Target="[DetailsPage.PlayMovie]" />
+        </Actions>
+      </Changed>
+
+      <!-- context and back button support -->
+      <Changed Source="[DetailsPage.ShowDVDContextMenu]">
+        <Actions>                    
+          <Set Target="[dvdContextMenuPanel.Visible]" Value="true"/>
+          <Invoke Target="[dvdContextMenu.NavigateInto]" />
+
+          <Set Target="[BackHandler.Handle]" Value="true"/>
+          <Set Target="[BackHandlerKey.Handle]" Value="true"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[BackHandler.Invoked]" >
+        <Actions>
+          <Set Target="[dvdContextMenuPanel.Visible]" Value="false"/>
+
+          <Set Target="[BackHandler.Handle]" Value="false"/>
+          <Set Target="[BackHandlerKey.Handle]" Value="false"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[BackHandlerKey.Invoked]" >
+        <Actions>
+          <Set Target="[dvdContextMenuPanel.Visible]" Value="false"/>
+
+          <Set Target="[BackHandler.Handle]" Value="false"/>
+          <Set Target="[BackHandlerKey.Handle]" Value="false"/>
+        </Actions>
+      </Changed>             
+      <!-- end context and back button -->
+
+      <Condition Source="[dvdContextMenuPanel.Visible]" SourceValue="true">
+        <Actions>
+          <PlayAnimation Target="[Image]" Animation="animation://me:SectionGraphicFocusOff" />
+          <PlayAnimation Target="[DVDButtons]" Animation="animation://me:SectionGraphicFocusOff" />
+          <PlayAnimation Target="[DetailsPanel]" Animation="animation://me:SectionGraphicFocusOff" />
+          <PlayAnimation Target="[ActorsPanel]" Animation="animation://me:SectionGraphicFocusOff" />
+          <PlayAnimation Target="[ExtraInofPanel]" Animation="animation://me:SectionGraphicFocusOff" />
+          <PlayAnimation Target="[WatchedCheckbox]" Animation="animation://me:SectionGraphicFocusOff" />          
+        </Actions>
+      </Condition>
+
+      <Condition Source="[dvdContextMenuPanel.Visible]" SourceValue="false">
+        <Actions>
+          <PlayAnimation Target="[Image]" Animation="animation://me:SectionGraphicFocusOn" />
+          <PlayAnimation Target="[DVDButtons]" Animation="animation://me:SectionGraphicFocusOn" />
+          <PlayAnimation Target="[DetailsPanel]" Animation="animation://me:SectionGraphicFocusOn" />
+          <PlayAnimation Target="[ActorsPanel]" Animation="animation://me:SectionGraphicFocusOn" />
+          <PlayAnimation Target="[ExtraInofPanel]" Animation="animation://me:SectionGraphicFocusOn" />
+          <PlayAnimation Target="[WatchedCheckbox]" Animation="animation://me:SectionGraphicFocusOn" />
+        </Actions>
+      </Condition>
+
+      <Changed Source="[Application.IsStartingTranscodingJob]" InitialEvaluate="false">
+        <Actions>
+          <Set Target="[transcodingMessage.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[Application.IsStartingTranscodingJob]" InitialEvaluate="true">
+        <Actions>
+          <Set Target="[transcodingMessage.Visible]" Value="false"/>
+        </Actions>
+      </Changed>
+    </Rules>
+
+    <Content>
+      <ColorFill Content="Transparent" Layout="Form" Navigation="PreferFocusOrder">
+        <Children>
+          <controls:TranscodingMessage Name="transcodingMessage" Visible="false" Application="[Application]"/>
+          <!-- play buttons -->
+          <Panel Name="DVDButtons" FocusOrder="0" Navigation="Group">            
+            <LayoutInput>
+              <FormLayoutInput Top="Parent,0.05" Right="Parent,.95"/>
+            </LayoutInput>
+            <Children>
+              <c:SimpleButton Name="PlayButton" Text="Play Movie" Command="[PlayMovie]" Size="180,51"/>
+            </Children>
+            <Animations>
+              <Animation Animation="animation://me:ShowFromRight" />
+            </Animations>
+          </Panel>
+
+          <!-- Disk chooser context menu -->
+          <Panel Name="dvdContextMenuPanel" Visible="false">
+            <Children>
+              <me:DiskChooserContext Name="dvdContextMenu" DetailsPage="[DetailsPage]" />
+            </Children>
+            <LayoutInput>
+              <FormLayoutInput Top="DVDButtons,1,5" Right="DVDButtons,1"/>
+            </LayoutInput>
+            <Animations>
+              <Animation Type="Show">
+                <Keyframes>
+                  <PositionKeyframe Time="0" RelativeTo="Final" Value="400,0,0"/>
+                  <PositionKeyframe Time=".25" RelativeTo="Final" Value="-20,0,0"/>
+                  <PositionKeyframe Time=".40" RelativeTo="Final" Value="0,0,0"/>
+                </Keyframes>
+              </Animation>
+              <Animation Type="Hide">
+                <Keyframes>
+                  <PositionKeyframe Time="0" RelativeTo="Final" Value="0,0,0"/>
+                  <PositionKeyframe Time=".25" RelativeTo="Final" Value="400,0,0"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+          </Panel>
+
+          <!-- image panel -->
+          <Panel Name="Image" Layout="VerticalFlow">
+            <LayoutInput>
+              <FormLayoutInput Left="[ImageLeftAnchor]" Top="[TitleTopAnchor]" Bottom="Parent,1"/>
+            </LayoutInput>
+
+            <Children>
+              <Text Name="Title" Content="[DetailsPage.Title]" Font="font://s:Heading" Color="color://s:HeadingColor" >
+                <Animations>
+                  <Animation Animation="animation://me:ShowFromRight" />
+                </Animations>
+              </Text>
+
+              <Panel Layout="HorizontalFlow" Margins="0,0,0,10">
+                <Children>
+                  <Text Content="[DetailsPage.SubHeading]" Font="font://s:SubHeading" Color="color://s:LabelColor" />
+                </Children>
+                <Animations>
+                  <Animation Animation="animation://me:ShowFromRight" />
+                </Animations>
+              </Panel>
+
+              <Panel Layout="VerticalFlow" CenterPointPercent=".5,.5,.5">
+                <Children>
+                  <Graphic Name="FullCover" Content="[DetailsPage.FullCover]" MinimumSize="336,480" MaximumSize="336,480" />
+                  <Clip Orientation="Vertical" FadeSize="40" NearOffset="70" MinimumSize="336,0" MaximumSize="336, 480">
+                    <Children>
+                      <Graphic Name="FullCoverFlip" CenterPointPercent=".5,.5,.5" Scale="1,-1,1"
+                           Content="[DetailsPage.FullCover]" Alpha=".4" >
+                      </Graphic>
+                    </Children>
+                  </Clip>
+                </Children>
+                <Animations>
+                  <Animation Animation="animation://me:Zoomin" />
+                </Animations>
+              </Panel>
+            </Children>            
+          </Panel>
+
+          <!-- details panel -->
+          <Panel Name="DetailsPanel" MinimumSize="500,0" FocusOrder="2" Navigation="Group">
+            <LayoutInput>
+              <FormLayoutInput Top="Parent,.14" Left="[DetailsLeftAnchor]"/>
+            </LayoutInput>
+            <Children>
+              <me:SynopsisPanel Synopsis="[DetailsPage.Summary]"/>
+            </Children>
+            <Animations>
+              <Animation Animation="animation://me:ShowFromBottom" />
+            </Animations>
+          </Panel>
+
+          <!-- actors panel -->
+          <Panel Name="ActorsPanel" Layout="VerticalFlow" Margins="20,0,0,0" MaximumSize="0,625" FocusOrder="1" Navigation="Group,Column,PreferFocusOrder,RememberFocus">
+            <LayoutInput>
+              <FormLayoutInput Top="DetailsPanel,0" Left="DetailsPanel,1"/>
+            </LayoutInput>
+            <Children>
+              <Panel Name="DirectorsPanel" Layout="VerticalFlow">
+                <Children>
+                  <Text Content="Directed By" Font="font://s:LabelFont" Color="color://s:LabelColor"/>                  
+                  
+                  <Repeater Source="[DetailsPage.Directors.Options]" Layout="VerticalFlow" Navigation="PreferFocusOrder,RememberFocus">
+                    <Content>
+                      <me:PersonRow CastCommand="[RepeatedItem!a:MovieCastCommand]" Choice="[DetailsPage.Directors]" />
+                    </Content>
+                  </Repeater>
+                                    
+                </Children>
+              </Panel>
+
+              <Panel Name="WritersPanel" Layout="VerticalFlow">
+                <Children>
+                  <Text Content="Written By" Font="font://s:LabelFont" Color="color://s:LabelColor"/>
+                  <Repeater Source="[DetailsPage.Writers.Options]" Layout="VerticalFlow" Navigation="PreferFocusOrder,RememberFocus">
+                    <Content>
+                      <me:PersonRow CastCommand="[RepeatedItem!a:MovieCastCommand]" Choice="[DetailsPage.Writers]" />
+                    </Content>
+                  </Repeater>
+                </Children>
+              </Panel>
+
+              <me:ActorsPanel Name="Actors" ActorList="[DetailsPage.Actors]" DetailsPage="[DetailsPage]" />
+            </Children>
+            <Animations>
+              <Animation Animation="animation://me:ShowFromTop" />
+            </Animations>
+          </Panel>
+
+          <!-- extra info panel-->
+          <Panel Name="ExtraInofPanel">
+            <Layout>
+              <FlowLayout Orientation="Vertical" Spacing="2,2" />
+            </Layout>
+            <LayoutInput>
+              <FormLayoutInput Left="DetailsPanel,0" Top="DetailsPanel,1.05" Right="ActorsPanel,0"/>
+            </LayoutInput>
+            <Children>
+
+              <Panel Name="ExtraInfo">
+                <Layout>
+                  <FlowLayout Orientation="Horizontal" Spacing="2,2" />
+                </Layout>
+                <Children>
+
+                  <!-- extra info panel left column -->
+                  <Panel MinimumSize="250,0" MaximumSize="250,0"  Name="LeftExtraColumn" >
+                    <Layout>
+                      <FlowLayout Orientation="Vertical" Spacing="2,2" />
+                    </Layout>
+                    <Children>
+                      <me:TextWithLabel Label="Format: " Text="[DetailsPage.MovieDetails.TitleObject.VideoFormat.ToString]" />
+                      <me:TextWithLabel Label="System: " Text="[DetailsPage.MovieDetails.TitleObject.VideoStandard]" />
+                      <me:TextWithLabel Label="Video Details: " Text="[DetailsPage.MovieDetails.TitleObject.VideoDetails]" />
+                      <me:TextWithLabel Label="Aspect Ratio: " Text="[DetailsPage.MovieDetails.TitleObject.AspectRatio]" />
+                    </Children>
+                  </Panel>
+
+                  <!-- extra info panel right column -->
+                  <Panel MinimumSize="244,0" MaximumSize="244,0">
+                    <Layout>
+                      <FlowLayout Orientation="Vertical" Spacing="2,2" />
+                    </Layout>
+                    <Children>
+                      <me:TextWithLabel Label="User Rating: " Text="[DetailsPage.UserRating]" />
+                      <me:TextWithLabel Label="Resolution: " Text="[DetailsPage.MovieDetails.TitleObject.VideoResolution]" />
+                      <me:TextWithLabel Label="Tags: " Text="[DetailsPage.TagsAsString]" />
+                    </Children>
+                  </Panel>
+                </Children>
+              </Panel>
+
+              <Panel Margins="0,0,0,0" Layout="Form">
+                <LayoutInput>
+                  <FormLayoutInput Left="ExtraInfo,0" Top="ExtraInfo,1"/>
+                </LayoutInput>
+                <Children>
+                  <Text Content="SubTitles: " Name="SubLabel"  Font="font://s:Normal" Color="color://s:LabelColor" >
+                    <LayoutInput>
+                      <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
+                    </LayoutInput>
+                  </Text>
+                  <Text Content="[DetailsPage.SubtitlesAsString]"  Font="font://s:Normal" Color="color://s:NormalColor" >
+                    <LayoutInput>
+                      <FormLayoutInput Left="SubLabel,1" Top="SubLabel,0"/>
+                    </LayoutInput>
+                  </Text>
+
+                  <Text Content="Sound: " Name="SoundLabel"  Font="font://s:Normal" Color="color://s:LabelColor" Margins="0,5,0,0" >
+                    <LayoutInput>
+                      <FormLayoutInput Left="Parent,0" Top="SubLabel,1"/>
+                    </LayoutInput>
+                  </Text>
+
+                  <Repeater Source="[DetailsPage.Languages]" Layout="VerticalFlow" Margins="0,5,0,0">
+                    <LayoutInput>
+                      <FormLayoutInput Left="SoundLabel,1" Top="SoundLabel,0" />
+                    </LayoutInput>
+                    <Content>
+                      <Text Content="[RepeatedItem!cor:String]" Font="font://s:Normal" Color="color://s:NormalColor" />
+                    </Content>
+                  </Repeater>
+                </Children>
+              </Panel>
+            </Children>
+            <Animations>
+              <Animation Animation="animation://me:ShowFromBottom" />
+            </Animations>
+          </Panel>
+
+          <!-- unwatched checkbox -->
+          <Panel Name="WatchedCheckbox" Layout="HorizontalFlow" FocusOrder="3">
+            <LayoutInput>
+              <FormLayoutInput Left="Image,0" Bottom="Parent,1,-20"/>
+            </LayoutInput>
+            <Children>
+              <c:SimpleCheckbox Name="CheckWatched" Checked="[DetailsPage.Watched]" Margins="0,0,8,0" />
+              <Text Content="Watched" Color="color://s:NormalColor" Font="font://s:Normal" Margins="0,3,0,0"/>
+            </Children>
+          </Panel>
+          <Graphic SizingPolicy="SizeToConstraint" Name="FanArtImage" Alpha="[UISettings.Gallery.DetailsPageBackDropAlpha]">
+            <Animations>
+              <Animation Type="ContentChangeHide">
+                <Keyframes>
+                  <AlphaKeyframe Time="0" Value="[UISettings.Gallery.DetailsPageBackDropAlpha!cor:Single]"/>
+                  <AlphaKeyframe Time="1" Value="0"/>
+                </Keyframes>
+              </Animation>
+              <Animation Type="ContentChangeShow">
+                <Keyframes>
+                  <AlphaKeyframe Time="0" Value="0"/>
+                  <AlphaKeyframe Time="1" Value="[UISettings.Gallery.DetailsPageBackDropAlpha!cor:Single]"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+          </Graphic>
+        </Children>
+        <Animations>
+          <Animation Animation="animation://me:FadeIn" />
+        </Animations>
+      </ColorFill>
+    </Content>
+
+    <Content Name="Divider">
+      <Text Content="/" Font="font://s:Normal" WordWrap="false" Color="color://s:NormalColor" />
+    </Content>
+  </UI>
+
+  <UI Name="SynopsisPanel" >
+    <Properties>
+      <cor:String Name="Synopsis" String="$Required"/>
+      <Font Name="Normal" FontName="Segoe Media Center" FontSize="20"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true" HandlePageCommands="true" HandlePageKeys="true" HandlerStage="Direct"/>
+      <ScrollingData Name="ScrollingData" />
+
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[Summary.Color]" Value="color://s:FocusColor"/>
+        </Actions>
+      </Condition>
+
+    </Rules>
+
+    <Content>
+      <Panel Name="SummaryPanel">
+        <!--<LayoutInput>
+          <FormLayoutInput Left="Image,1.02" Top="Parent,0.95" Right="Parent,0.95" />
+        </LayoutInput>-->
+        <Children>
+          <!-- Scroller's parent which displays background color. It offsets -->
+          <!-- the Scroller using padding and the Scroller fades the clipped -->
+          <!-- text outside itself (negative fade size).                     -->
+          <!-- This piece of the UI is MouseInteractive.                     -->
+          <ColorFill Name="Background" Content="Transparent"  MouseInteractive="true" MaximumSize="500,400">
+            <!--Padding="30,30,30,30"  Margins="30,0,30,0">-->
+            <Children>
+
+              <!-- The Scroller. It referrs to the ScrollingData too. -->
+              <Scroller Name="Scroll" Orientation="Vertical" FadeSize="5" ScrollingData="[ScrollingData]" >
+                <Children>
+                  <!-- Text to scroll. Filled with rich text (RTF) content. -->
+                  <!-- You can use Wordpad to generate RTF content.         -->
+                  <Text Name="Summary" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor" Content="[Synopsis]" >
+                    <!-- Smooth scrolling. -->
+                    <Animations>
+                      <Animation Type="Move">
+                        <Keyframes>
+                          <PositionKeyframe Time="0" Value="0,0,0" RelativeTo="Current"
+                                    Interpolation="Exp"/>
+                          <PositionKeyframe Time=".1" Value="0,0,0"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Text>
+                </Children>
+              </Scroller>
+            </Children>
+          </ColorFill>
+        </Children>        
+      </Panel>
+
+    </Content>
+  </UI>
+
+  <UI Name="ActorsPanel">
+    <Properties>
+      <Choice Name="ActorList" Choice="$Required" />
+      <a:MovieDetailsPage Name="DetailsPage" MovieDetailsPage="$Required"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true"/>
+      <!-- ScrollingData contains many ways to customize how scrolling -->
+      <!-- should behave. It has methods to change the current scroll  -->
+      <!-- position and it also reports the position. In this case,    -->
+      <!-- the default values are used for the sample.                 -->
+      <ScrollingData Name="ScrollingData"/>
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>      
+    </Rules>
+
+    <Content>
+      <Panel Layout="VerticalFlow" >
+        <Children>
+          <Text Name="Actors" Content="Actors" Font ="font://s:LabelFont" Color="color://s:LabelColor" />
+          
+          <Scroller Name="Scroll" Orientation="Vertical" FadeSize="5" ScrollingData="[ScrollingData]">
+            <Children>              
+              <Repeater Name="ActorRepater" Source="[ActorList.Options]" Layout="VerticalFlow" Navigation="PreferFocusOrder,RememberFocus" >
+                <Content>
+                  <!--<Text Name="ActorsText" Content="[RepeatedItem!a:MovieCastCommand.Name]" WordWrap="true" Font="font://s:Normal" Color="White"/>-->
+                  <me:PersonRow CastCommand="[RepeatedItem!a:MovieCastCommand]" Choice="[DetailsPage.Actors]" />
+                </Content>
+              </Repeater>
+            </Children>
+
+          </Scroller>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="PersonRow">
+    <Properties>
+      <a:MovieCastCommand Name="CastCommand" MovieCastCommand="$Required" />
+      <Choice Name="Choice" Choice="$Required"/>
+    </Properties>
+    <Locals>
+      <ClickHandler Name="Clicker"/>
+    </Locals>    
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+      <Binding Source="[CastCommand]" Target="[Clicker.Command]"/>
+
+      <Changed Source="[CastCommand.Invoked]">
+        <Actions>
+          <Set Target="[Choice.Chosen]" Value="[CastCommand]"/>
+        </Actions>
+      </Changed>
+
+      <!-- Change color on click. -->
+      <Condition Source="[Clicker.Clicking]" SourceValue="true">
+        <Actions>          
+          <PlaySound Sound="sound://me:MiniSelect" />          
+        </Actions>
+      </Condition>
+
+      <!-- Change color on key focus. -->
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <PlayAnimation Target="[PersonText]" Animation="animation://me:GotFocusList" />
+          <Set Target="[PersonText.Color]" Value="color://s:Text.Selected"/>
+          <PlaySound Sound="sound://me:Focus" />
+
+          <Set Target="[ArrowLeft.Visible]" Value="true" />
+          <Set Target="[ArrowRight.Visible]" Value="true" />
+        </Actions>
+      </Condition>
+
+      <!-- Change color on mouse focus. -->
+      <Condition Source="[Input.MouseFocus]" SourceValue="true">
+        <Actions>
+          <PlayAnimation Target="[PersonText]" Animation="animation://me:GotFocusList" />
+          <Set Target="[PersonText.Color]" Value="color://s:Text.Selected"/>
+
+          <Set Target="[ArrowLeft.Visible]" Value="true" />
+          <Set Target="[ArrowRight.Visible]" Value="true" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="false">
+        <Actions>
+          <!-- Play an animation on the cover target item. -->
+          <PlayAnimation Target="[PersonText]" Animation="animation://me:LostFocusList"/>
+          <Set Target="[PersonText.Color]" Value="color://s:NormalColor"/>
+
+          <Set Target="[ArrowLeft.Visible]" Value="false" />
+          <Set Target="[ArrowRight.Visible]" Value="false" />
+        </Actions>
+      </Condition>
+      
+    </Rules>        
+      
+    <Content>
+      <Panel Layout="HorizontalFlow">
+        <Children>
+          <Graphic Name="ArrowLeft" Content="resx://Library/Library.Resources/PivotArrowLeft" Margins="0,8,6,0" Scale="1,1,1" Visible="false"/>
+          <Text Name="PersonText" Content="[CastCommand.Name]" WordWrap="true" Font="font://s:Normal" Color="color://s:NormalColor"/>
+          <Graphic Name="ArrowRight" Content="resx://Library/Library.Resources/PivotArrowRight" Margins="15,8,0,0" Scale="1,1,1" Visible="false"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  
+  <UI Name="TextWithLabel">
+    <Properties>
+      <cor:String Name="Label" String="$Required" />
+      <cor:String Name="Text" String="$Required" />
+    </Properties>
+
+    <Rules>
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Text]" Value=""/>
+          <Equality Source="[Text]" Value="0"/>
+          <Equality Source="[Text]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LabelField.Visible]" Value="false" />
+          <Set Target="[TextField.Visible]" Value="false" />
+        </Actions>
+      </Rule>
+    </Rules>
+
+    <Content>
+      <Panel Layout="HorizontalFlow">
+        <Children>
+          <Text Name="LabelField" Content="[Label]" Font="font://s:Normal" Color="color://s:LabelColor" />
+          <Text Name="TextField" Content="[Text]" Font="font://s:Normal" Color="color://s:NormalColor" WordWrap="true" MaximumLines="3"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>  
+  
+</Mcml>

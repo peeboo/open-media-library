@@ -1,0 +1,14 @@
+<smil>
+    <head>
+        <meta name="Generator" content="Microsoft Windows Media Player -- 11.0.6000.6344"/>
+        <meta name="ItemCount" content="3"/>
+        <title>test</title>
+    </head>
+    <body>
+        <seq>
+            <media src="c:\testing\Bear.wmv"/>
+            <media src="c:\testing\Butterfly.wmv"/>
+            <media src="c:\testing\Lake.wmv"/>
+        </seq>
+    </body>
+</smil>

@@ -1,0 +1,202 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:a="assembly://Library/Library"
+	  xmlns:s="resx://Library/Library.Resources/Styles"
+      xmlns:filter="resx://Library/Library.Resources/FilterList"      
+      xmlns:c="resx://Library/Library.Resources/Controls"
+      xmlns:view="resx://Library/Library.Resources/Views"
+	  xmlns:cor="assembly://MSCorLib/System"
+      xmlns:addin="assembly://Microsoft.MediaCenter/Microsoft.MediaCenter.Hosting"
+      xmlns:alpha="resx://Library/Library.Resources/AlphaFilter"
+	  xmlns:me="Me">
+
+    <Aggregate Source="resx://Library/Library.Resources/FilterList"/>
+    <Aggregate Source="resx://Library/Library.Resources/Base" />
+
+  <UI Name="MainMenu">
+
+        <Properties>
+            <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+            <Color Name="BackgroundColor" Color="color://s:BackgroundColor"/>
+            <a:MovieGallery Name="MovieBrowser" MovieGallery="$Required"/>
+            <a:UISettings Name="UISettings" UISettings="$Required" />
+            <cor:String Name="GalleryView" String="$Required" />
+            <EditableText Name="JumpValue"/>
+            <Command Name="GoToNowPlaying" />
+        </Properties>
+
+        <Locals>
+            <addin:AddInHost Name="AddInHost"/>
+            
+                                                                        
+            <AnchorEdge Name="FiltersTopAnchor" Percent="[UISettings.Anchor.DetailsTopAnchor]" Offset ="[UISettings.Anchor.FiltersTopOffset]" Id="Parent"/>                                                                                               
+        </Locals>
+
+        <Rules>
+          <Binding Source="[Application.PrimaryBackgroundImage]" Target="[PrimaryBackgroundImage.Content]"/>
+            <Binding Source="[JumpValue.Value]" Target="[JumpInText.Content]" />
+            <!--<Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanel.Visible]" />-->
+            <!--<Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelTitle.Visible]" />-->
+            <!--<Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRuntime.Visible]" />
+            <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelRating.Visible]" />
+            <Binding Source="[UISettings.Gallery.ShowMovieDetails]" Target="[LeftPanelSummary.Visible]" />-->
+
+            <Condition Source="[GalleryView]" SourceValue="Cover Art" Target="[ViewCoverArt.Visible]" Value="true" />
+            <Condition Source="[GalleryView]" SourceValue="List" Target="[ViewList.Visible]" Value="true" />
+            <Condition Source="[GalleryView]" SourceValue="Cover Art With Alpha" Target="[ViewCoverArtWithAlpha.Visible]" Value="true" />
+
+            <Rule>
+                <Conditions>
+                    <IsValid Source="[AddInHost.Current.MediaCenterEnvironment.MediaExperience]"/>
+                </Conditions>
+                <Actions>
+                    <Set Target="[NowPlaying.Text]" Value="[Application.NowPlaying]" />
+                    <Set Target="[NowPlayingPanel.Visible]" Value="true" />
+                </Actions>
+            </Rule>
+          
+            <Changed Source="[Application.NowPlaying]" >
+                <Actions>
+                    <Set Target="[NowPlaying.Text]" Value="[Application.NowPlaying]" />
+                </Actions>
+            </Changed>
+
+            <Changed Source="[GoToNowPlaying.Invoked]" >
+                <Conditions>
+                    <IsValid Source="[AddInHost.Current.MediaCenterEnvironment.MediaExperience]"/>
+                </Conditions>
+                <Actions>
+                    <Invoke Target="[AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen]" />
+                </Actions>
+            </Changed>
+        </Rules>
+
+        <Content>
+
+              <ColorFill Name="AllContent" Content="Transparent" Layout="Form" CenterPointPercent=".25,.25,.25">                
+                <Children>
+                  <!-- TitlePanel -->
+                  <!--<Panel Name="DetailsPanel" > -->
+                  <!-- TitlePanel -->
+                  <!--
+                      <Children>-->
+
+
+                  <!-- TitlePanel -->
+                  <Panel Name="TitlePanel">
+                    <!-- TitlePanel -->
+                    <Children>
+                      <c:HeaderText Name="GalleryTitle" Text="[MovieBrowser.Title]" />
+                    </Children>
+                    <LayoutInput>
+                      <FormLayoutInput Left="Parent,0.02"  Top="Parent,0,5"/>
+                    </LayoutInput>
+                    <Animations>
+                      <Animation Animation="animation://me:ShowFromRight" />
+                    </Animations>
+                  </Panel>
+
+                  <!-- NowPlayingPanel -->
+                  <Panel Name="NowPlayingPanel" Layout="HorizontalFlow" Visible="true">
+                    <Children>
+                      <c:SimpleButton Name="NowPlaying" Text="No movie is playing" Command="[GoToNowPlaying]" Size="0,0" Font="font://s:Normal"/>
+                    </Children>
+
+                    <LayoutInput>
+                      <FormLayoutInput  Top="Parent, 0, 5" Right="Parent, 1, -10" />
+                    </LayoutInput>
+                    <Animations>
+                      <Animation Animation="animation://me:ShowFromRight" />
+                    </Animations>
+                  </Panel>                  
+                                  
+                  <!-- JumpInTextPanel -->
+                  <Panel Name="JumpInTextPanel" Layout="HorizontalFlow">
+                    <Children>
+                      <Text Name="JumpInText" Content="" Font="Verdana,40" Color="White" HorizontalAlignment="Far"/>
+                    </Children>
+                    <LayoutInput>
+                      <FormLayoutInput  Right="Parent, 0.95" Bottom="Parent,0.9"/>
+                    </LayoutInput>
+                  </Panel>
+
+                  <!-- LeftPanel -->
+                  <!--<Panel Name="LeftPanel">
+                          <Children>
+                            <Clip Orientation="Horizontal" FadeSize="50" NearOffset="20">
+                              <Children>
+                                <ColorFill Name="LeftTab" Content="Black" Alpha="[UISettings.Gallery.LeftPanelDetailsAlpha]"/>
+                              </Children>
+                            </Clip>
+                          </Children>
+                          <LayoutInput>
+                            <FormLayoutInput Left="[DetailsLeftBackgroundAnchor]" Right="[DetailsRightBackgroundAnchor]" Top="Parent,-.5,0" Bottom="Parent,1.5,1"/>
+                          </LayoutInput>
+                        </Panel>-->
+
+                  <!--</Children>
+                      </Panel>-->
+
+
+                  <!-- Filters -->
+                  <Panel Name="Filters" Layout="VerticalFlow" Navigation="Column" >
+                    <Children>
+                      <Panel>
+                        <Children>
+                          <filter:FilterList Page="[MovieBrowser]" Margins="0,-4,20,0" MinimumSize="0,32" UISettings="[UISettings]" />
+                        </Children>
+                        <Animations>
+                          <Animation Animation="animation://me:ShowFromLeft" />
+                        </Animations>
+                      </Panel>
+                      <Panel>
+                        <Children>
+                          <alpha:AlphaFilter MovieGallery="[MovieBrowser]" Visible="[UISettings.Gallery.UseOnScreenAlphaFiltering]" />
+                        </Children>
+                        <Animations>
+                          <Animation Animation="animation://me:ShowFromRight" />                            
+                        </Animations>
+                      </Panel>
+                    </Children>
+
+                    <LayoutInput>
+                      <FormLayoutInput Left="Parent,0, 25" Right="Parent,1,-5" Top="[FiltersTopAnchor]"/>
+                    </LayoutInput>
+                  </Panel>
+
+                  <!-- GalleryPanel -->
+                  <Panel Name="GalleryPanel" MouseInteractive="true" FocusOrder="0">
+                    <Children>
+                      <view:CoverArtWithAlpha Name="ViewCoverArtWithAlpha" MovieBrowser="[MovieBrowser]" UISettings="[UISettings]" Visible="False"/>
+                      <view:CoverArt Name="ViewCoverArt" MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
+                      <view:ListView Name="ViewList" MovieBrowser="[MovieBrowser]" List="[MovieBrowser.Movies]" JumpValue="[JumpValue]" UISettings="[UISettings]" Visible="False" />
+                    </Children>
+
+                    <LayoutInput>
+                      <FormLayoutInput Left="Parent,0,25" Right="Parent,1,-20" Top="Filters,1,25"/>
+                    </LayoutInput>                    
+                  </Panel>
+                  <Graphic Name="PrimaryBackgroundImage" SizingPolicy="SizeToConstraint" Alpha="[UISettings.Gallery.MainPageBackDropAlpha]">
+                    <Animations>
+                      <Animation Type="ContentChangeHide">
+                        <Keyframes>
+                          <AlphaKeyframe Time="0" Value="[UISettings.Gallery.MainPageBackDropAlpha!cor:Single]"/>
+                          <AlphaKeyframe Time="1" Value="0"/>
+                        </Keyframes>
+                      </Animation>
+                      <Animation Type="ContentChangeShow">
+                        <Keyframes>
+                          <AlphaKeyframe Time="0" Value="0"/>
+                          <AlphaKeyframe Time="1" Value="[UISettings.Gallery.MainPageBackDropAlpha!cor:Single]"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Graphic>
+                </Children>
+                <Animations>
+                  <Animation Animation="animation://me:FadeIn" />
+                </Animations>
+              </ColorFill>
+        </Content>
+
+    </UI>
+</Mcml>

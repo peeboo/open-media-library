@@ -1,0 +1,431 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2D747049-9A5C-4FFB-919F-1FD47BC18B3D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Library</RootNamespace>
+    <AssemblyName>Library</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>library.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <FullyQualifiedOutputPath>$(MSBuildProjectDirectory)\bin\Debug</FullyQualifiedOutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <FullyQualifiedOutputPath>$(MSBuildProjectDirectory)\bin\Release</FullyQualifiedOutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <StartWorkingDirectory>$(windir)\eHome</StartWorkingDirectory>
+    <StartArguments>-load:"resx://Library/Library.Resources/Test" -assemblyredirect:"$(FullyQualifiedOutputPath)" -markupredirect:"resx://Library/Library.Resources/,file://$(MSBuildProjectDirectory)\Markup\,.mcml"</StartArguments>
+    <StartAction>Program</StartAction>
+    <StartProgram>$(windir)\eHome\McmlPad.exe</StartProgram>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.MediaCenter" />
+    <Reference Include="Microsoft.MediaCenter.UI" />
+    <Reference Include="OMLSDK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=74d3b407d6cf16f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\OMLSDK\bin\Debug\OMLSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\AppleTrailers.cs" />
+    <Compile Include="Code\GroupColor.cs" />
+    <Compile Include="Code\ContextMenu.cs" />
+    <Compile Include="Code\Impersonator.cs" />
+    <Compile Include="Code\LayoutV2\BaseGallery.cs" />
+    <Compile Include="Code\MountingTool.cs" />
+    <Compile Include="Code\DirectoryTreeNode.cs" />
+    <Compile Include="Code\FolderView.cs" />
+    <Compile Include="Code\LayoutV2\GroupingView.cs" />
+    <Compile Include="Code\I18n.cs" />
+    <Compile Include="Code\LayoutV2\BasePage.cs" />
+    <Compile Include="Code\LayoutV2\GalleryV2.cs" />
+    <Compile Include="Code\LayoutV2\MovieItemV2.cs" />
+    <Compile Include="Code\LayoutV2\OMLProperties.cs" />
+    <Compile Include="Code\MoviePlayerBluRay.cs" />
+    <Compile Include="Code\MoviePlayerExtenderDVD.cs" />
+    <Compile Include="Code\MoviePlayerHDDVD.cs" />
+    <Compile Include="Code\MoviePlayerTranscodeBluRay.cs" />
+    <Compile Include="Code\MoviePlayerTranscodeHDDVD.cs" />
+    <Compile Include="Code\MoviePlayerWPL.cs" />
+    <Compile Include="Code\OMLApplication.cs" />
+    <Compile Include="Code\MovieDetailsPage.cs" />
+    <Compile Include="Code\MovieItem.cs" />
+    <Compile Include="Code\Launch.cs" />
+    <Compile Include="Code\MovieGallery.cs" />
+    <Compile Include="Code\MoviePlayer.cs" />
+    <Compile Include="Code\MoviePlayerDVD.cs" />
+    <Compile Include="Code\MoviePlayerMountImage.cs" />
+    <Compile Include="Code\MoviePlayerTranscode.cs" />
+    <Compile Include="Code\MoviePlayerUnavailable.cs" />
+    <Compile Include="Code\MoviePlayerVideo.cs" />
+    <Compile Include="Code\LayoutV2\OMLChoice.cs" />
+    <Compile Include="Code\LayoutV2\OMLCommand.cs" />
+    <Compile Include="Code\LayoutV2\OMLPage.cs" />
+    <Compile Include="Code\OMLSettings.cs" />
+    <Compile Include="Code\OMLUpdater.cs" />
+    <Compile Include="Code\Settings.cs" />
+    <Compile Include="Code\ExternalPlayer.cs" />
+    <Compile Include="Code\Setup.cs" />
+    <Compile Include="Code\TheMovieDbBackDropDownloader.cs" />
+    <Compile Include="Code\TreeNode.cs" />
+    <Compile Include="Code\TreeNodeEventArgs.cs" />
+    <Compile Include="Code\TreeView.cs" />
+    <Compile Include="Code\UISettings.cs" />
+    <Compile Include="Code\Filters.cs" />
+    <Compile Include="Code\Views\AlphaView.cs" />
+    <Compile Include="Code\Views\LabeledList.cs" />
+    <Compile Include="Code\Views\MovieViews.cs" />
+    <Compile Include="Code\VirtualDirectory.cs" />
+    <Compile Include="Code\TitleCollectionAPIProxy.cs" />
+    <Compile Include="I18nResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>I18nResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DevInstall.cmd" />
+    <None Include="library.snk" />
+    <None Include="Setup\Build.bat" />
+    <None Include="Setup\Setup-en-us.wxl" />
+    <None Include="Setup\Setup.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\appleseedexmachina1080x25.jpg" />
+    <Content Include="Images\Application.png" />
+    <Content Include="Images\Application2.png" />
+    <Content Include="Images\Blu-RayMovieDisk.png" />
+    <Content Include="Images\boxart01.jpg" />
+    <None Include="Images\boxart02.jpg" />
+    <None Include="Images\boxart03.jpg" />
+    <None Include="Images\boxart04.jpg" />
+    <None Include="Images\boxart06.jpg" />
+    <None Include="Images\boxart05.jpg" />
+    <None Include="Images\boxart07.jpg" />
+    <None Include="Images\boxart08.jpg" />
+    <Content Include="Images\EnhancedDVD.png" />
+    <Content Include="Images\Focus_Outline.png" />
+    <Content Include="Images\Folder_Closed.png" />
+    <Content Include="Images\hddvdmovie.png" />
+    <None Include="Images\overlays.background.dark.png" />
+    <None Include="Images\overlays.background.top.light.png" />
+    <None Include="Images\overlays.divider.horizontal.png" />
+    <None Include="Images\overlays.divider.vertical.png" />
+    <None Include="Images\overlays.outline.png" />
+    <None Include="Images\overlays.shadow.png" />
+    <Content Include="Images\Settings.png" />
+    <Content Include="Images\watched-icon.png" />
+    <Content Include="Markup\About.mcml" />
+    <Content Include="Markup\Control\AlphaFilter.mcml" />
+    <Content Include="Markup\Control\ContextMenu.mcml" />
+    <Content Include="Markup\Control\DiskChooserContext.mcml" />
+    <Content Include="Markup\Control\MovieDescription.mcml" />
+    <Content Include="Markup\Details\DetailsPage.mcml" />
+    <Content Include="Markup\Details\DetailsPage_Boxes.mcml" />
+    <Content Include="Markup\IntroPage.mcml" />
+    <Content Include="Markup\LayoutV2\BasePage.mcml" />
+    <Content Include="Markup\Base\Animations.mcml" />
+    <Content Include="Markup\Base\Base.mcml" />
+    <Content Include="Markup\Base\Colors.mcml" />
+    <Content Include="Markup\Base\FontNames.mcml" />
+    <Content Include="Markup\Base\Images.mcml" />
+    <Content Include="Markup\Base\Sounds.mcml" />
+    <Content Include="Markup\Button.mcml" />
+    <Content Include="Markup\Control\Controls.mcml" />
+    <Content Include="Markup\Control\ExplandCollapseButton.mcml" />
+    <Content Include="Markup\Control\GroupItem.mcml" />
+    <Content Include="Markup\Control\GroupLabel.mcml" />
+    <Content Include="Markup\Control\GroupView.mcml" />
+    <Content Include="Markup\Control\HeaderText.mcml" />
+    <Content Include="Markup\Control\ListBox.mcml" />
+    <Content Include="Markup\Control\ListBoxItem.mcml" />
+    <Content Include="Markup\Control\GalleryItem.mcml" />
+    <Content Include="Markup\Control\Pivot.mcml" />
+    <Content Include="Markup\Control\PivotItem.mcml" />
+    <Content Include="Markup\Control\SimpleButton.mcml" />
+    <Content Include="Markup\Control\SimpleCheckbox.mcml" />
+    <Content Include="Markup\Control\SimpleEditbox.mcml" />
+    <Content Include="Markup\Control\SimpleRadioButton.mcml" />
+    <Content Include="Markup\Control\SimpleRadioButtonGroup.mcml" />
+    <Content Include="Markup\Control\SimpleSpinner.mcml" />
+    <Content Include="Markup\Control\TranscodingMessage.mcml" />
+    <Content Include="Markup\Control\WaitCursor.mcml" />
+    <Content Include="Markup\CoreControls.mcml" />
+    <Content Include="Markup\FilterList.mcml" />
+    <Content Include="Markup\LayoutV2\GalleryV2.mcml" />
+    <Content Include="Markup\LayoutV2\ImageItem.mcml" />
+    <Content Include="Markup\Menu.mcml" />
+    <Content Include="Markup\LayoutV2\NewMenu.mcml" />
+    <Content Include="Markup\RadioButtonGroup.mcml" />
+    <Content Include="Markup\Scan Wizard\ScanNewItems.mcml" />
+    <Content Include="Markup\SelectDirectoriesToScan.mcml" />
+    <Content Include="Markup\SelectFilesToImport.mcml" />
+    <Content Include="Markup\SelectImporter.mcml" />
+    <Content Include="Markup\SelectionList.mcml" />
+    <Content Include="Markup\Settings.mcml" />
+    <Content Include="Markup\Setup.mcml" />
+    <Content Include="Markup\SetupBottom.mcml" />
+    <Content Include="Markup\SetupTop.mcml" />
+    <Content Include="Markup\SimpleRadioButton.mcml" />
+    <Content Include="Markup\Styles.mcml" />
+    <Content Include="Markup\TestBackground.mcml" />
+    <Content Include="Markup\Trailers.mcml" />
+    <Content Include="Markup\Views\CoverArt.mcml" />
+    <Content Include="Markup\Views\CoverArtWithAlpha.mcml" />
+    <Content Include="Markup\Views\ListView.mcml" />
+    <Content Include="Markup\Views\Views.mcml" />
+    <Content Include="OldMarkup\DetailsPage.mcml" />
+    <Content Include="OldMarkup\DetailsPage2.mcml" />
+    <Content Include="OldMarkup\MenuWithHorizontalBars.mcml" />
+    <Content Include="OldMarkup\MovieDetails.mcml" />
+    <Content Include="OldMarkup\MovieGallery.Old.mcml" />
+    <Content Include="OMLInfo.xml" />
+    <Content Include="Registration.xml" />
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Resources\nocover.png" />
+    <None Include="Setupx64\Build.bat" />
+    <None Include="Setupx64\License.rtf" />
+    <None Include="Setupx64\Setup-en-us.wxl" />
+    <None Include="Setupx64\Setup.wxs" />
+    <None Include="Resources\buttonfocus.png" />
+    <None Include="Resources\buttonnonfocus.png" />
+    <None Include="Resources\checkboxfocus.png" />
+    <None Include="Resources\checkboxnonfocus.png" />
+    <None Include="Resources\Container.png" />
+    <None Include="Resources\editboxfocus.png" />
+    <None Include="Resources\editboxnonfocus.png" />
+    <None Include="Resources\nocover1.png" />
+    <None Include="Resources\AppIcon.png" />
+    <None Include="Resources\AppIcon1.png" />
+    <Content Include="Resources\Application.png" />
+    <None Include="Resources\Application02.bmp" />
+    <Content Include="Resources\BusyBack.png" />
+    <Content Include="Resources\BusyFront.png" />
+    <Content Include="Resources\ButtonDisabled.png" />
+    <None Include="Resources\buttondisabled1.png" />
+    <None Include="Resources\buttondisabled2.png" />
+    <Content Include="Resources\ButtonDormant.png" />
+    <None Include="Resources\buttondormant1.png" />
+    <None Include="Resources\buttondormant2.png" />
+    <Content Include="Resources\ButtonLeftFocus.png" />
+    <None Include="Resources\buttonleftfocus1.png" />
+    <None Include="Resources\buttonleftfocus2.png" />
+    <Content Include="Resources\ButtonLeftFocusOverlay.png" />
+    <None Include="Resources\buttonleftfocusoverlay1.png" />
+    <None Include="Resources\buttonleftfocusoverlay2.png" />
+    <Content Include="Resources\ButtonNoFocus.png" />
+    <None Include="Resources\buttonnofocus1.png" />
+    <None Include="Resources\buttonnofocus2.png" />
+    <None Include="Resources\buttonnonfocus1.png" />
+    <Content Include="Resources\ButtonPressedAfterGlow.png" />
+    <None Include="Resources\buttonpressedafterglow1.png" />
+    <None Include="Resources\buttonpressedafterglow2.png" />
+    <Content Include="Resources\ButtonPressedHighlight.png" />
+    <None Include="Resources\buttonpressedhighlight1.png" />
+    <None Include="Resources\buttonpressedhighlight2.png" />
+    <Content Include="Resources\ButtonRadioButtonBullet.png" />
+    <None Include="Resources\buttonradiobuttonbullet1.png" />
+    <None Include="Resources\buttonradiobuttonbullet2.png" />
+    <Content Include="Resources\ButtonRadioButtonBulletFocus.png" />
+    <None Include="Resources\buttonradiobuttonbulletfocus1.png" />
+    <None Include="Resources\buttonradiobuttonbulletfocus2.png" />
+    <Content Include="Resources\ButtonRadioButtonBulletNoFocus.png" />
+    <None Include="Resources\buttonradiobuttonbulletnofocus1.png" />
+    <None Include="Resources\buttonradiobuttonbulletnofocus2.png" />
+    <Content Include="Resources\ButtonRadioButtonOutlineFocus.png" />
+    <None Include="Resources\buttonradiobuttonoutlinefocus1.png" />
+    <None Include="Resources\buttonradiobuttonoutlinefocus2.png" />
+    <Content Include="Resources\ButtonRadioButtonOutlineNoFocus.png" />
+    <None Include="Resources\buttonradiobuttonoutlinenofocus1.png" />
+    <None Include="Resources\buttonrightfocus.png" />
+    <None Include="Resources\buttonrightfocusoverlay.png" />
+    <None Include="Resources\findeditbox.png" />
+    <None Include="Resources\findeditboxnofocus.png" />
+    <None Include="Resources\findeditbox1.png" />
+    <None Include="Resources\findeditboxnofocus1.png" />
+    <None Include="Resources\buttonradiobuttonoutlinenofocus2.png" />
+    <None Include="Resources\buttonrightfocus1.png" />
+    <None Include="Resources\buttonrightfocusoverlay1.png" />
+    <None Include="Resources\findeditbox2.png" />
+    <None Include="Resources\findeditboxnofocus2.png" />
+    <Content Include="Resources\FirstRunCheckBoxCheckedDisabled.png" />
+    <None Include="Resources\firstruncheckboxcheckeddisabled1.png" />
+    <None Include="Resources\firstruncheckboxcheckeddisabled2.png" />
+    <Content Include="Resources\FirstRunCheckBoxCheckedFocus.png" />
+    <None Include="Resources\firstruncheckboxcheckedfocus1.png" />
+    <None Include="Resources\firstruncheckboxcheckedfocus2.png" />
+    <Content Include="Resources\FirstRunCheckBoxCheckedNoFocus.png" />
+    <None Include="Resources\firstruncheckboxcheckednofocus1.png" />
+    <None Include="Resources\firstruncheckboxcheckednofocus2.png" />
+    <Content Include="Resources\FirstRunCheckBoxCheckedPressed.png" />
+    <None Include="Resources\firstruncheckboxcheckedpressed1.png" />
+    <None Include="Resources\firstruncheckboxcheckedpressed2.png" />
+    <Content Include="Resources\FirstRunCheckBoxUncheckedDisabled.png" />
+    <None Include="Resources\firstruncheckboxuncheckeddisabled1.png" />
+    <None Include="Resources\firstruncheckboxuncheckeddisabled2.png" />
+    <Content Include="Resources\FirstRunCheckBoxUncheckedFocus.png" />
+    <None Include="Resources\firstruncheckboxuncheckedfocus1.png" />
+    <None Include="Resources\firstruncheckboxuncheckedfocus2.png" />
+    <Content Include="Resources\FirstRunCheckBoxUncheckedNoFocus.png" />
+    <None Include="Resources\firstruncheckboxuncheckednofocus1.png" />
+    <None Include="Resources\firstruncheckboxuncheckednofocus2.png" />
+    <Content Include="Resources\FirstRunCheckBoxUncheckedPressed.png" />
+    <None Include="Resources\firstruncheckboxuncheckedpressed1.png" />
+    <None Include="Resources\firstruncheckboxuncheckedpressed2.png" />
+    <Content Include="Resources\Focus_Outline.png" />
+    <Content Include="Resources\ListboxNoFocus.png" />
+    <None Include="Resources\PivotArrowLeftNoFocus.png" />
+    <None Include="Resources\PivotArrowRightNoFocus.png" />
+    <None Include="Resources\listboxnofocus1.png" />
+    <None Include="Resources\overlaysbuttonnofocus.png" />
+    <None Include="Resources\PivotArrowLeft.png" />
+    <None Include="Resources\PivotArrowRight.png" />
+    <None Include="Resources\spinnerarrowbackdisabled.png" />
+    <None Include="Resources\listboxnofocus2.png" />
+    <None Include="Resources\overlaysbuttonnofocus1.png" />
+    <None Include="Resources\PivotArrowLeft1.png" />
+    <None Include="Resources\PivotArrowRight1.png" />
+    <None Include="Resources\spinnerarrowbackdisabled1.png" />
+    <None Include="Resources\SampleBackground_1024_768.jpg" />
+    <None Include="Resources\nightmare_wp_05_1024.jpg" />
+    <Content Include="Resources\SpinnerArrowBackDormant.png" />
+    <None Include="Resources\spinnerarrowbackdormant1.png" />
+    <None Include="Resources\spinnerarrowbackdormant2.png" />
+    <Content Include="Resources\SpinnerArrowBackFocus.png" />
+    <None Include="Resources\spinnerarrowbackfocus1.png" />
+    <None Include="Resources\spinnerarrowbackfocusoverlay.png" />
+    <None Include="Resources\spinnerarrowbackfocus2.png" />
+    <None Include="Resources\spinnerarrowbackfocusoverlay1.png" />
+    <Content Include="Resources\SpinnerArrowBackNoFocus.png" />
+    <None Include="Resources\spinnerarrowbacknofocus1.png" />
+    <None Include="Resources\spinnerarrowforwarddisabled.png" />
+    <None Include="Resources\spinnerarrowbacknofocus2.png" />
+    <None Include="Resources\spinnerarrowforwarddisabled1.png" />
+    <Content Include="Resources\SpinnerArrowForwardDormant.png" />
+    <None Include="Resources\spinnerarrowforwarddormant1.png" />
+    <None Include="Resources\spinnerarrowforwarddormant2.png" />
+    <Content Include="Resources\SpinnerArrowForwardFocus.png" />
+    <None Include="Resources\spinnerarrowforwardfocus1.png" />
+    <None Include="Resources\spinnerarrowforwardfocusoverlay.png" />
+    <None Include="Resources\spinnerarrowforwardfocus2.png" />
+    <None Include="Resources\spinnerarrowforwardfocusoverlay1.png" />
+    <Content Include="Resources\SpinnerArrowForwardNoFocus.png" />
+    <None Include="Resources\spinnerarrowforwardnofocus1.png" />
+    <None Include="Resources\spinnerbluebarlargedormant.png" />
+    <None Include="Resources\spinnerbluebarlargefocus.png" />
+    <None Include="Resources\spinnerbluebarlargenofocus.png" />
+    <None Include="Setup\License.rtf" />
+    <None Include="Resources\spinnerarrowforwardnofocus2.png" />
+    <None Include="Resources\spinnerbluebarlargedormant1.png" />
+    <None Include="Resources\spinnerbluebarlargefocus1.png" />
+    <None Include="Resources\spinnerbluebarlargenofocus1.png" />
+    <EmbeddedResource Include="Revision.txt" />
+    <Content Include="Sounds\Error.wav" />
+    <Content Include="Sounds\Focus.wav" />
+    <Content Include="Sounds\MiniSelect.wav" />
+    <Content Include="Sounds\PageTransition.wav" />
+    <Content Include="Sounds\Select.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="I18nResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>I18nResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
+      <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
+      <Name>OMLEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OMLSDK\OMLSDK.csproj">
+      <Project>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</Project>
+      <Name>OMLSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OMLTranscoder\OMLTranscoder.csproj">
+      <Project>{A924F59C-1AF8-4B18-B3E4-E0EECB4CE225}</Project>
+      <Name>OMLTranscoder</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>%25windir%25\eHome\McmlVerifier.exe -verbose -assemblyredirect:"$(FullyQualifiedOutputPath)" -directory:"$(ProjectDir)Markup"
+
+"$(DevEnvDir)..\..\..\Microsoft SDKs\Windows\v6.0\Bin\GacUtil.exe" /i "$(TargetPath)" /f</PostBuildEvent>
+    <PreBuildEvent>$(SolutionDir)\BuildVersionUpdater\$(OutDir)\BuildVersionUpdater.exe</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
