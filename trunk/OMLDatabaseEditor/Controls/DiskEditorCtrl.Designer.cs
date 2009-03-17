@@ -116,6 +116,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(219, 20);
             this.txtName.TabIndex = 0;
+            this.txtName.Leave += new System.EventHandler(this.txtName_Leave);
             // 
             // folderDialog
             // 
