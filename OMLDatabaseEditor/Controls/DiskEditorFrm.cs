@@ -14,13 +14,13 @@ namespace OMLDatabaseEditor.Controls
 {
     public partial class DiskEditorFrm : XtraForm
     {
-        private IList<Disk> _disks;
+        Title _title;
 
-        public DiskEditorFrm(IList<Disk> disks)
+        public DiskEditorFrm(Title title)
         {
             InitializeComponent();
-            _disks = disks;
-            lbDisks.DataSource = _disks;
+            _title = title;
+            lbDisks.DataSource = _title.Disks;
         }
 
         private void lbDisks_SelectedIndexChanged(object sender, EventArgs e)
@@ -33,8 +33,8 @@ namespace OMLDatabaseEditor.Controls
         {
             if (lbDisks.SelectedItem != null)
             {
-                _disks.Remove(lbDisks.SelectedItem as Disk);
-                if (_disks.Count == 0)
+                //_disks.Remove(lbDisks.SelectedItem as Disk);
+                //if (_disks.Count == 0)
                 {
                     diskEditor.LoadDisk(null);
                     diskEditor.Visible = false;
@@ -44,9 +44,14 @@ namespace OMLDatabaseEditor.Controls
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            Disk newDisk = new Disk("Disk " + (_disks.Count + 1).ToString(), "", VideoFormat.MPG);
-            _disks.Add(newDisk);
+            Disk newDisk = new Disk("Disk " + (_title.Disks.Count + 1).ToString(), "", VideoFormat.MPG);
+            _title.AddDisk(newDisk);
+
             lbDisks.SelectedItem = newDisk;
+
+            // Kick the datasource to refresh the listbox
+            lbDisks.DataSource = _title.Disks;
+
             diskEditor.LoadDisk(newDisk);
             diskEditor.Visible = true;
         }

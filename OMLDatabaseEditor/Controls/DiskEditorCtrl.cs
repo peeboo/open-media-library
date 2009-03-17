@@ -62,6 +62,8 @@ namespace OMLDatabaseEditor.Controls
                     diskSource.EndEdit();
                 }
             }
+
+            Parent.Controls["lbDisks"].Refresh();
         }
 
         private void EditMenu()
@@ -123,6 +125,13 @@ namespace OMLDatabaseEditor.Controls
                 txtPath.Focus();
                 txtPath.SelectAll();
             }
+
+            Parent.Controls["lbDisks"].Refresh();
+        }
+
+        private void txtName_Leave(object sender, EventArgs e)
+        {
+            Parent.Controls["lbDisks"].Refresh();
         }
     }
 }

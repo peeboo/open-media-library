@@ -256,7 +256,7 @@ namespace OMLDatabaseEditor.Controls
         {
             if (EditedTitle != null)
             {
-                DiskEditorFrm diskEditor = new DiskEditorFrm(EditedTitle.Disks);
+                DiskEditorFrm diskEditor = new DiskEditorFrm(EditedTitle); //.Disks);
                 List<Disk> original = EditedTitle.Disks.ToList<Disk>();
                 diskEditor.ShowDialog();
                 int commonCount = EditedTitle.Disks.Intersect(original).Count<Disk>();
