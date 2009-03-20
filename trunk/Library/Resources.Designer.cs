@@ -2530,6 +2530,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] V3_DetailsPageCastCrew {
+            get {
+                object obj = ResourceManager.GetObject("V3_DetailsPageCastCrew", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] V3_GalleryPage {
             get {
                 object obj = ResourceManager.GetObject("V3_GalleryPage", resourceCulture);

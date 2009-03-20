@@ -245,6 +245,7 @@ namespace Library.Code.V3
             VirtualList pivotList = (VirtualList)((BrowsePivot)this.model.Pivots.Chosen).Content;
             foreach (GalleryItem item in pivotList)
             {
+                //TODO: this string is a hack
                 string s = item.Description.ToLower().Replace("the ", "").Replace("a ", "");
                 int cmpVal = s.CompareTo(searchString);
                 if (cmpVal == 0)

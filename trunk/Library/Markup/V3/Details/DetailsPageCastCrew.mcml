@@ -1,17 +1,17 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
-	  xmlns:z="assembly://TestHarness/TestHarness"
+	  xmlns:shl="assembly://Library/Library.Code.V3"
+    xmlns:omlShell ="assembly://Library/Library"
 	  xmlns:sys="assembly://mscorlib/System"
-	  xmlns:styles="resx://TestHarness/TestHarness.Resources/Styles"
-	  xmlns:core="resx://TestHarness/TestHarness.Resources/CoreControls"
-    xmlns:pip="resx://TestHarness/TestHarness.Resources/GalleryPage"
-    xmlns:listview="resx://TestHarness/TestHarness.Resources/GroupedListView"
+	  xmlns:core="resx://Library/Library.Resources/V3_Globals"
+    xmlns:pip="resx://Library/Library.Resources/V3_GalleryPage"
+    xmlns:listview="resx://Library/Library.Resources/V3_Controls_GroupedListView"
 	  xmlns:me="Me">
 
   <!-- A details page -->
   <UI Name="DetailsPageCastCrew">
     <Properties>
-      <z:DetailsPage Name="Page" DetailsPage="$Required"/>
-      <z:Application Name="Application" Application="$Required"/>
+      <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
+      <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
     </Properties>
 
     <Locals>
@@ -136,7 +136,7 @@
           <Panel Name="PIPFocusBackground" MaximumSize="1366, 0" Visible="false">
             <Children>
 
-              <Graphic Alpha=".75" Content="resx://TestHarness/TestHarness.Resources/NOWPLAYINGPIP_BACKGROUNDMASK2" Layout="Fill">
+              <Graphic Alpha=".75" Content="resx://Library/Library.Resources/V3_Controls_Common_NowPlayingPIP_BackgroundMask" Layout="Fill">
                 <Animations>
                   <!-- Standard fade out -->
                   <Animation Type="Hide">
@@ -221,7 +221,7 @@
   <!-- The primary display area of a details page -->
   <UI Name="DetailsPane">
     <Properties>
-      <z:DetailsPage Name="Page" DetailsPage="$Required"/>
+      <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
       <Image Name="MovieDefaultImage" Image="resx://Library/Library.Resources/V3_Controls_Movie_Icon_Default"/>
     </Properties>
     <Locals>
@@ -237,33 +237,33 @@
       </ArrayListDataSet>
       <ArrayListDataSet Name="ButtonMappings" Description="Button Mappings">
         <Source>
-          <z:CastCommand Name="MyCommand" Actor="Director Name" Role=" " GroupTitle="DIRECTOR"  Description="DJ Pooh" CastType="TitleAndDesc"/>
-          <z:CastCommand Name="MyCommand" Actor="Director Name" Role="Rob" GroupTitle="CAST" Description="Brian Hooks" CastType="TitleAndDesc"/>
-          <z:CastCommand Name="MyCommand" Actor="Director Name" Role="Juanita" Description="N'Bushe Wright" CastType="Desc"/>
-          <z:CastCommand Name="MyCommand" Actor="Director Name" Role="Tone" Description="Faizon Love" CastType="Desc"/>
-          <z:CastCommand Name="MyCommand" Actor="Director Name" Role="one more" Description="E-40" CastType="Desc"/>
-          <z:CastCommand Name="MyCommand" Description="G"/>
-          <z:CastCommand Name="MyCommand" Description="H"/>
-          <z:CastCommand Name="MyCommand" Description="I"/>
-          <z:CastCommand Name="MyCommand" Description="J"/>
-          <z:CastCommand Name="MyCommand" Description="K"/>
-          <z:CastCommand Name="MyCommand" Actor="Director Name" Role="final one" Description="F" CastType="Desc"/>
-          <z:CastCommand Name="MyCommand" Description="L"/>
-          <z:CastCommand Name="MyCommand" Description="M"/>
-          <z:CastCommand Name="MyCommand" Description="N"/>
-          <z:CastCommand Name="MyCommand" Description="O"/>
-          <z:CastCommand Name="MyCommand" Description="P"/>
-          <z:CastCommand Name="MyCommand" Description="Q"/>
-          <z:CastCommand Name="MyCommand" Description="R"/>
-          <z:CastCommand Name="MyCommand" Description="S"/>
-          <z:CastCommand Name="MyCommand" Description="T"/>
-          <z:CastCommand Name="MyCommand" Description="U"/>
-          <z:CastCommand Name="MyCommand" Description="V"/>
-          <z:CastCommand Name="MyCommand" Description="W"/>
-          <z:CastCommand Name="MyCommand" Description="X"/>
-          <z:CastCommand Name="MyCommand" Description="Y"/>
-          <z:CastCommand Name="MyCommand" Description="Z"/>
-          <z:CastCommand Name="MyCommand" Actor="Director Name" Role="final one" Description="F" CastType="Desc"/>
+          <shl:CastCommand Name="MyCommand" Actor="Director Name" Role=" " GroupTitle="DIRECTOR"  Description="DJ Pooh" CastType="TitleAndDesc"/>
+          <shl:CastCommand Name="MyCommand" Actor="Director Name" Role="Rob" GroupTitle="CAST" Description="Brian Hooks" CastType="TitleAndDesc"/>
+          <shl:CastCommand Name="MyCommand" Actor="Director Name" Role="Juanita" Description="N'Bushe Wright" CastType="Desc"/>
+          <shl:CastCommand Name="MyCommand" Actor="Director Name" Role="Tone" Description="Faizon Love" CastType="Desc"/>
+          <shl:CastCommand Name="MyCommand" Actor="Director Name" Role="one more" Description="E-40" CastType="Desc"/>
+          <shl:CastCommand Name="MyCommand" Description="G"/>
+          <shl:CastCommand Name="MyCommand" Description="H"/>
+          <shl:CastCommand Name="MyCommand" Description="I"/>
+          <shl:CastCommand Name="MyCommand" Description="J"/>
+          <shl:CastCommand Name="MyCommand" Description="K"/>
+          <shl:CastCommand Name="MyCommand" Actor="Director Name" Role="final one" Description="F" CastType="Desc"/>
+          <shl:CastCommand Name="MyCommand" Description="L"/>
+          <shl:CastCommand Name="MyCommand" Description="M"/>
+          <shl:CastCommand Name="MyCommand" Description="N"/>
+          <shl:CastCommand Name="MyCommand" Description="O"/>
+          <shl:CastCommand Name="MyCommand" Description="P"/>
+          <shl:CastCommand Name="MyCommand" Description="Q"/>
+          <shl:CastCommand Name="MyCommand" Description="R"/>
+          <shl:CastCommand Name="MyCommand" Description="S"/>
+          <shl:CastCommand Name="MyCommand" Description="T"/>
+          <shl:CastCommand Name="MyCommand" Description="U"/>
+          <shl:CastCommand Name="MyCommand" Description="V"/>
+          <shl:CastCommand Name="MyCommand" Description="W"/>
+          <shl:CastCommand Name="MyCommand" Description="X"/>
+          <shl:CastCommand Name="MyCommand" Description="Y"/>
+          <shl:CastCommand Name="MyCommand" Description="Z"/>
+          <shl:CastCommand Name="MyCommand" Actor="Director Name" Role="final one" Description="F" CastType="Desc"/>
           <!--Command Name="MyCommand" Description="clr"/>
           <Command Name="MyCommand" Description="spc"/>
           <Command Name="MyCommand" Description="del"/>
@@ -433,7 +433,7 @@
                               <AnchorLayoutInput Left="Parent,0" Top="Parent,0"/>
                             </LayoutInput>
                             <Children>
-                              <Graphic Name="CoverGraphic" Content="[Page.Background]" ErrorImage="[MovieDefaultImage]" />
+                              <Graphic Name="CoverGraphic" MaximumSize ="185,265" Content="[Page.Background]" ErrorImage="[MovieDefaultImage]" />
                             </Children>
                           </Panel>
                           <Text Name="TitleText" Content="[Page.Title]" MaximumLines="2" WordWrap="true" Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23">

@@ -1,6 +1,6 @@
 //#define DEBUG_EXT
 //#define LAYOUT_V2
-//#define LAYOUT_V3
+#define LAYOUT_V3
 //#define CAROUSEL
 
 using System.Collections;
@@ -1013,21 +1013,26 @@ namespace Library
             item.ItemType = 0;
             string imageName = null;
             string moviePath = null;
-            DateTime releaseDate = new DateTime(2000, 1, 1);
-            item.MetadataTop = releaseDate.Year.ToString();
+            DateTime releaseDate = Convert.ToDateTime(item.InternalMovieItem.ReleaseDate);// new DateTime(2000, 1, 1);
+            //invalid dates
+            if (releaseDate.Year != 1 && releaseDate.Year != 1900)
+                item.MetadataTop = releaseDate.Year.ToString();
+            else
+                item.MetadataTop = "";
 
 
             //item.Description = "This is a Test";
             item.ItemId = 1;
-            string starRating = "5";
+            string starRating = Convert.ToString(Math.Round((Convert.ToDouble(item.InternalMovieItem.UseStarRating) * 0.8), MidpointRounding.AwayFromZero));
             item.StarRating = starRating;
             string extendedMetadata = string.Empty;
 
 
-            item.MetadataTop = releaseDate.Year.ToString();
-
-            //item.Metadata = "PG-13, 22 minutes\r\n" + item.InternalMovieItem.Synopsis;
-            item.Metadata = "PG-13, 22 minutes";
+            item.Metadata = item.InternalMovieItem.Rating.Replace("PG13", "PG-13").Replace("NC17", "NC-17");
+            if(string.IsNullOrEmpty(item.InternalMovieItem.Rating))
+                item.Metadata="Not Rated";
+            if(item.InternalMovieItem.Runtime!="0")
+                item.Metadata += string.Format(", {0} minutes",item.InternalMovieItem.Runtime);
             item.Tagline = item.InternalMovieItem.Synopsis;
 
 
@@ -1067,86 +1072,115 @@ namespace Library
                 page.Summary = item.InternalMovieItem.Synopsis;
                 page.Background = item.DefaultImage;
                 page.Details = new Library.Code.V3.ExtendedDetails();
-                page.Details.Director = "Some Director";
-                page.Details.Cast = "actor1, actor2, actor3, actor4, actor5";
-                //page.Details.Summary = "this is a test\r\n\r\nthis is a test\r\nthis is \ra test\nitem.InternalMovieItem.Synopsis" + item.InternalMovieItem.Synopsis + System.Environment.NewLine + "hiya this is a System.Environment.NewLine" + "\rI'm a /r"+"\nI'm a /n";
-                //fixes double spacing issues
-                page.Details.Summary = item.InternalMovieItem.Synopsis.Replace("\r\n", "\n");
-                //page.Details.Summary=@"{\rtf1\ansi\deff0 This is line one\line\line This is line two\line\line\ This is line 3}";
-                //page.Details.Summary = SimpleToRTF(item.InternalMovieItem.Synopsis);
 
+                page.Details.CastArray=new ArrayListDataSet();
 
-
-
+                string directors = string.Empty;
+                int directorCount = 0;
+                foreach (string director in item.InternalMovieItem.Directors)
+                {
+                    Library.Code.V3.CastCommand directorCommand = new Library.Code.V3.CastCommand();
+                    directorCommand.Role = " ";
+                    if (directorCount == 0)
+                    {
+                        directorCommand.CastType = "TitleAndDesc";
+                        directorCommand.GroupTitle = "DIRECTOR";
+                        directorCommand.ActorId = 1;//not sure how this works in oml
+                        directorCommand.Description = director;
+                    }
+                    page.Details.CastArray.Add(directorCommand);
+                    directorCount++;
+                    AppendSeparatedValue(ref directors, director, "; ");
+                }
+                if (!string.IsNullOrEmpty(directors))
+                    page.Details.Director = string.Format("Directed By: {0}", directors);
 
                 string cast = string.Empty;
-                //foreach (string actor in metadata.Actors)
-                //{
-                //    DataSetHelpers.AppendCommaSeparatedValue(ref cast, actor);
-                //}
-                //page.Metadata = string.Format(Resources.Movies_Details_Metadata, new object[] { metadata.Genre, cast, metadata.Length, metadata.CountryShortName, metadata.ReleaseDate.Year });
-                //this.CreateDetailsCommands(page, movieData, movieId);
+                int actorCount = 0;
+                foreach (KeyValuePair<string, string> kvp in item.InternalMovieItem.TitleObject.ActingRoles)
+                {
+                    Library.Code.V3.CastCommand actorCommand = new Library.Code.V3.CastCommand();
+                    actorCommand.Description = kvp.Key;
+                    actorCommand.ActorId = 1;//not sure how this works in oml
+                    actorCommand.Role = kvp.Value;
+                    if (actorCount==0)
+                    {
+                        //add the title "CAST"
+                        actorCommand.CastType = "TitleAndDesc";
+                        actorCommand.GroupTitle = "CAST";
+                    }
+                    else
+                        actorCommand.CastType = "Desc";
+
+                    page.Details.CastArray.Add(actorCommand);
+                    actorCount++;
+                }
+
+                foreach (string castmember in item.InternalMovieItem.Actors)
+                {
+                    AppendSeparatedValue(ref cast, castmember, "; ");
+                }
+                if (!string.IsNullOrEmpty(cast))
+                    page.Details.Cast = string.Format("Cast Info: {0}", cast);
+
+                
+                if(item.StarRating!="0")
+                    page.Details.StarRating = new Image(string.Format("resx://Library/Library.Resources/V3_Controls_Common_Stars_{0}", starRating));
+
+                //DateTime releaseDate = Convert.ToDateTime(item.InternalMovieItem.ReleaseDate);// new DateTime(2000, 1, 1);
+                //strip invalid dates
+                if (releaseDate.Year != 1 && releaseDate.Year != 1900)
+                    page.Details.YearString = releaseDate.Year.ToString();
+
+                page.Details.Studio=item.InternalMovieItem.Distributor;
+                //where are genres?
+                page.Details.GenreRatingandRuntime = item.Metadata;
+
+                //fixes double spacing issues
+                page.Details.Summary = item.InternalMovieItem.Synopsis.Replace("\r\n", "\n");
                 page.Commands = new ArrayListDataSet(page);
                 //default play command
-                //string previewContent = (string)movieData["nvcLocation"];
-                //string title = (string)movieData["nvcLocalTitle"];
-                //this.CreateDetailsCommand(page, "Play", 0, previewContent, movieId, title);
                 Command playCmd = new Command();
                 playCmd.Description = "Play";
                 page.Commands.Add(playCmd);
 
+                if (page.Details.CastArray.Count > 0)
+                {
+                    foreach (Library.Code.V3.CastCommand actor in page.Details.CastArray)
+                    {
+                        //actor.Invoked += new EventHandler(actor_Invoked);
+                    }
+                    Command command = new Command();
+                    command.Description = "Cast + More";
+
+                    command.Invoked += delegate(object castSender, EventArgs castArgs)
+                    {
+                        Dictionary<string, object> castProperties = new Dictionary<string, object>();
+                        castProperties["Page"] = page;
+                        castProperties["Application"] = this;
+                        this._session.GoToPage("resx://Library/Library.Resources/V3_DetailsPageCastCrew", castProperties);
+                    };
+                    
+                    page.Commands.Add(command);
+                }
+
                 Dictionary<string, object> properties = new Dictionary<string, object>();
                 properties["Page"] = page;
                 properties["Application"] = this;
-                //if (page.Details.FanArt != null)
-                //    this._session.GoToPage("resx://Library/Library.Resources/DetailsPageFanArt", properties);
-                //else
-                this._session.GoToPage("resx://Library/Library.Resources/V3_DetailsPage", properties);
 
+                this._session.GoToPage("resx://Library/Library.Resources/V3_DetailsPage", properties);
             };
 
             return item;
         }
 
-        //v3 temp - not needed
-        private string SimpleToRTF(string st)
+        //v3 temp
+        public static void AppendSeparatedValue(ref string text, string value, string seperator)
         {
-            System.Text.StringBuilder builder = new System.Text.StringBuilder(st.Length);
-            bool flag = false;
-            //builder.Append(@"{\rtf ");
-            builder.Append(@"{\rtf1\ansi\deff0 ");
-            for (int i = 0; i < st.Length; i++)
-            {
-                char ch = st[i];
-                ushort v = ch;
-                if (ch == '\n')
-                {
-                    builder.Append(@"\par ");
-                }
-                else if (((ch < ' ') || (ch == '{')) || ((ch == '}') || (ch == '\\')))
-                {
-                    builder.Append(@"\'");
-                    builder.Append(Library.Code.V3.InvariantString.ValueToString(v, "X2"));
-                }
-                else if (ch < '\x0080')
-                {
-                    builder.Append(ch);
-                }
-                else
-                {
-                    if (!flag)
-                    {
-                        builder.Append(@"\uc1");
-                        flag = true;
-                    }
-                    builder.Append(@"\u");
-                    builder.Append(v.ToString(CultureInfo.InvariantCulture));
-                    builder.Append('?');
-                }
-            }
-            builder.Append('}');
-            st = builder.ToString();
-            return st;
+            if (String.IsNullOrEmpty(text))
+                text = value;
+            else
+                text = string.Format("{0}{1}{2}", text, seperator, value);
         }
 
         public void Uninitialize()
