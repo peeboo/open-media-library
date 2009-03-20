@@ -1,0 +1,124 @@
+<Mcml xmlns ="http://schemas.microsoft.com/2006/mcml" 
+      xmlns:cor ="assembly://MSCorLib/System" 
+      xmlns:draw="assembly://Microsoft.MediaCenter.UI/Microsoft.MediaCenter.UI.Drawing" 
+      xmlns:rb ="resx://Library/Library.Resources/V3_Controls_RadioButton" 
+      xmlns:rg ="resx://Library/Library.Resources/V3_Controls_RadioGroup" 
+      xmlns:comm="resx://Library/Library.Resources/V3_Globals" 
+      xmlns:me ="Me">
+  <UI Name="BreadcrumbTest">
+    <Properties>
+      <Choice Name="TestChoice" Wrap="true">
+        <Options>
+          <cor:String String="Option 1" />
+          <cor:String String="Option 2" />
+          <cor:String String="Option 3" />
+          <cor:String String="Option 4" />
+          <cor:String String="Option 5" />
+          <cor:String String="Option 6" />
+          <cor:String String="Option 7" />
+          <cor:String String="Option 8" />
+          <cor:String String="Option 9" />
+          <cor:String String="Option 10" />
+        </Options>
+      </Choice>
+    </Properties>
+    <Locals>
+      <KeyHandler Name="LeftKey" Key="Left">
+        <Command>
+          <InvokeCommand Target="[TestChoice.PreviousValue]" />
+        </Command>
+      </KeyHandler>
+      <KeyHandler Name="RightKey" Key="Right">
+        <Command>
+          <InvokeCommand Target="[TestChoice.NextValue]" />
+        </Command>
+      </KeyHandler>
+    </Locals>
+    <Rules>
+      <Default Target="[TestChoice.ChosenIndex]" Value="1" />
+      <Binding Source="[TestChoice]" Target="[bc.Model]" />
+    </Rules>
+    <Content>
+      <Panel Layout="Form">
+        <Children>
+          <me:BreadcrumbBar Name="bc" Model="[TestChoice]" />
+          <ColorFill Layout="Form" Margins="20,20,20,20" Content="color://comm:DarkBlue" />
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="Breadcrumb">
+    <Properties>
+      <Index Name="Index" Index="$Required" />
+      <Choice Name="Model" Choice="$Required" />
+    </Properties>
+    <Locals>
+      <Image Name="ChosenImage" Source="resx://Library/Library.Resources/V3_Controls_Common_Slide_BreadCrumb_Selected"/>
+      <Image Name="NotChosenImage" Source="resx://Library/Library.Resources/V3_Controls_Common_Slide_BreadCrumb"/>
+    </Locals>
+    <Rules>
+      <Default Target="[Accessible.Role]" Value="Pane" />
+      <Default Target="[Accessible.Name]" Value="[Index.Value!cor:Int32]">
+        <Transformer>
+          <FormatTransformer Format="{0}" />
+        </Transformer>
+      </Default>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[Model]"/>
+          <Equality Source="[Model.ChosenIndex]" Value="[Index.Value!cor:Int32]" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Item.Content]" Value="[ChosenImage]" />
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <Panel Margins="3,0,0,0">
+        <Children>
+          <Graphic Name="Item" Content="[NotChosenImage]" />
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="BreadcrumbBar" Flippable="true">
+    <Properties>
+      <Choice Name="Model" />
+    </Properties>
+    <Rules>
+      <Default Target="[Accessible.Role]" Value="Pane" />
+      <Default Target="[Accessible.Name]" Value="BreadcrumbBar" />
+      <Binding Source="[Model.ChosenIndex]" Target="[Accessible.Value]">
+        <Conditions>
+          <IsValid Source="[Model]"/>
+        </Conditions>
+        <Transformer>
+          <FormatTransformer Format="{0}" />
+        </Transformer>
+      </Binding>
+      <Binding Source="[Model.Options]" Target="[Repeater.Source]">
+        <Conditions>
+          <IsValid Source="[Model]"/>
+        </Conditions>
+      </Binding>
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Modified Source="[Model.Chosen]" />
+          <Modified Source="[Model.Options]" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Repeater.ForceContentChange]" InvokePolicy="Synchronous" />
+        </Actions>
+      </Rule>
+      <Condition Source="[Model.Options.Count]" ConditionOp="GreaterThan" SourceValue="1" Target="[Repeater.Visible]" Value="true" />
+      <Default Target="[Repeater.Visible]" Value="false" />
+    </Rules>
+    <Content>
+      <Repeater Name="Repeater" Source="[Model.Options]" Layout="HorizontalFlow">
+        <Content>
+          <me:Breadcrumb Index="[RepeatedItemIndex]" Model="[Model]" />
+        </Content>
+      </Repeater>
+    </Content>
+  </UI>
+</Mcml>

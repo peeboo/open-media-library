@@ -1,0 +1,839 @@
+<Mcml
+    xmlns     ="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor ="assembly://MsCorLib/System"
+    xmlns:coll="assembly://MsCorLib/System.Collections"
+    xmlns:std ="assembly://Microsoft.MediaCenter.Shell/Microsoft.MediaCenter.Shell"
+	  
+    xmlns:pivots="resx://Library/Library.Resources/V3_Controls_BrowsePivots"
+    xmlns:test ="assembly://Library/Library.Code.V3"
+    xmlns:me  ="Me">
+
+  <!--xmlns:styles="resx://Library/Library.Resources/V3_Controls_Common_Styles"-->
+  <UI Name="CommandHolder">
+    <Properties>
+      <coll:IList    Name="DataSource"      IList="$Required"/>
+      <EditableText  Name="FocusArea"       EditableText="$Required"/>
+      <EditableText  Name="TransitionState" EditableText="$Required"/>
+    </Properties>
+    <Locals>
+      <ClickHandler Name="Clicker"/>
+    </Locals>
+
+    <Rules>
+
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="Command"/>
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="Command"/>
+        </Actions>
+      </Condition>
+
+    </Rules>
+
+    <Content>
+      <me:CommandList DataSource="[DataSource]" FocusArea="[FocusArea]" TransitionState="[TransitionState]">
+      </me:CommandList>
+    </Content>
+  </UI>
+  <UI Name="PivotHolder">
+    <Properties>
+      <EditableText  Name="FocusArea"       EditableText="$Required"/>
+    </Properties>
+    <Locals>
+      <ClickHandler Name="Clicker"/>
+    </Locals>
+
+    <Rules>
+
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="Pivot"/>
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="Pivot"/>
+        </Actions>
+      </Condition>
+
+    </Rules>
+
+    <Content>
+      <pivots:PivotList FocusArea="[FocusArea]">
+        <Pivots>
+          <Choice Name="Options">
+            <Options>
+              <test:BrowsePivot Description="by date"/>
+              <test:BrowsePivot Description="by name"/>
+              <test:BrowsePivot Description="genres"/>
+              <test:BrowsePivot Description="search"/>
+            </Options>
+          </Choice>
+        </Pivots>
+        <NavigationDirection>
+          <EditableText Value="none"/>
+        </NavigationDirection>
+        <TransitionState>
+          <EditableText Value="Idle"/>
+        </TransitionState>
+        <ScrollData>
+          <ScrollingData LockedPosition="0.0" LockedAlignment="0.0" ScrollStep="100"/>
+        </ScrollData>
+        <Animations>
+          <Animation Animation="animation://pivots:Browse.Pivots.Panel.Show"/>
+          <Animation Animation="animation://pivots:Browse.Pivots.Panel.Alpha"/>
+        </Animations>
+      </pivots:PivotList>
+    </Content>
+  </UI>
+
+  <UI Name="CommandList">
+
+    <Properties>
+      <coll:IList    Name="DataSource"      IList="$Required"/>
+      <EditableText  Name="FocusArea"       EditableText="$Required"/>
+      <EditableText  Name="TransitionState" EditableText="$Required"/>
+      <cor:Boolean   Name="InListMaker"     Boolean="false"/>
+    </Properties>
+
+    <Rules>
+      <!-- Track that the focus has come here -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" Value="Idle"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="Command"/>
+        </Actions>
+      </Rule>
+
+      <!-- Come forward when the commands have focus -->
+      <Condition Source="[FocusArea.Value]" SourceValue="Command">
+        <Actions>
+          <Set Target="[Root.Scale]" Value="1.06, 1.06, 1.0"/>
+        </Actions>
+      </Condition>
+    </Rules>
+
+    <Content>
+      <Panel Name="Root" Scale="1.0, 1.0, 1.0">
+        <Animations>
+          <Animation Animation="animation://me:Browse.Command.Scale"/>
+        </Animations>
+        <Children>
+
+          <Repeater Name="Repeater" Source="[DataSource]">
+            <Layout>
+              <FlowLayout Orientation="Vertical" StripAlignment="Far"/>
+            </Layout>
+            <Content>
+
+              <me:CommandButton Model="[RepeatedItem!ICommand]" FocusArea="[FocusArea]" Index="[RepeatedItemIndex]" InListMaker="[InListMaker]"/>
+
+            </Content>
+          </Repeater>
+
+        </Children>
+      </Panel>
+    </Content>
+
+  </UI>
+
+
+  <UI Name="CommandButton" BaseUI="me:Button">
+    <Properties>
+      <EditableText Name="FocusArea"      EditableText="$Required"/>
+
+      <Image   Name="NoFocusImage"        Image="null"/>
+      <Image   Name="FocusImage"          Image="null"/>
+      <Image   Name="DisabledImage"       Image="null"/>
+
+      <Image   Name="FocusOverlayImage"   Image="null"/>
+      <Image   Name="PressedImage"        Image="null"/>
+
+      <Color   Name="FocusColor"          Color="color://me:OffWhite"/>
+      <Color   Name="NoFocusColor"        Color="color://me:LightBlue"/>
+      <Color   Name="DormantColor"        Color="color://me:MediumBlue"/>
+
+      <Size    Name="TileSize"            Size="750, 35"/>
+
+      <cor:Boolean Name="ShowLabelBackground" Boolean="true"/>
+      <cor:Boolean Name="AllowMarquee"        Boolean="false"/>
+      <cor:Boolean Name="AllowPressedEffect"  Boolean="false"/>
+
+      <Vector3 Name="ShrinkScale" Vector3="0.95, 0.95, 1.0"/>
+
+      <Inset Name="LabelMargins" Inset="9, 2, 0, 0"/>
+      <Inset Name="IconPadding"  Inset="0, 4, 0, 0"/>
+
+      <Font Name="FocusFont" FontName="global://me:MainFontFace"    FontSize="18"/>
+      <Font Name="Font"      FontName="global://me:RegularFontFace" FontSize="18"/>
+
+      <Index Name="Index" Index="$Required"/>
+
+      <cor:Boolean Name="InListMaker" Boolean="false"/>
+    </Properties>
+
+    <Locals>
+      <Environment Name="Environment"/>
+
+      <BooleanChoice Name="Pressed" Value="false"/>
+      <Image Name="DormantIconImage" Image="null"/>
+    </Locals>
+
+    <Rules>
+      <!-- Only do the focus animation in full color mode -->
+      <Condition Source="[Environment.ColorScheme]" SourceValue="Default"
+                   Target="[FocusLoopContentTemplate]" Value="me:CommandFocusLoop"/>
+
+      <!-- The focus is somewhere else so don't draw any attention -->
+      <Condition Source="[FocusArea.Value]" ConditionOp="NotEquals" SourceValue="Command">
+        <Actions>
+          <Set Target="[Label.Color]" Value="[DormantColor]"/>
+          <Set Target="[Icon.Content]"  Value="[DormantIconImage]"/>
+        </Actions>
+      </Condition>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[InListMaker]" Value="true"/>
+          <Modified Source="[Clicker.Clicking]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="ListMaker"/>
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <IsType Source="[Model]" Type="test:IThumbnailCommand"/>
+          <IsValid Source="[Model!test:IThumbnailCommand.DefaultImage]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[IconImage]" Value="[Model!test:IThumbnailCommand.DefaultImage]"/>
+          <Set Target="[FocusIconImage]" Value="[Model!test:IThumbnailCommand.FocusImage]"/>
+          <Set Target="[DormantIconImage]" Value="[Model!test:IThumbnailCommand.DormantImage]"/>
+        </Actions>
+      </Rule>
+
+      <!-- The item is being clicked via key or mouse, Apply the pressed look -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Clicker.Clicking]" Value="true"/>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Pressed.Value]" Value="true"/>
+          <Set Target="[LabelScalePanel.Scale]" Value="[ShrinkScale]"/>
+        </Actions>
+      </Rule>
+
+      <!-- The mouse is moved away from the item - release the pressed look -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Clicker.Clicking]" Value="false"/>
+          <Equality Source="[Pressed.Value]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Pressed.Value]" Value="false"/>
+          <Set Target="[LabelScalePanel.Scale]" Value="1.0, 1.0, 1.0"/>
+        </Actions>
+      </Rule>
+
+      <!-- The click is released inside the item - invoke the item -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]"/>
+          <Equality Source="[Pressed.Value]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Pressed.Value]" Value="false"/>
+          <Set Target="[LabelScalePanel.Scale]" Value="1.0, 1.0, 1.0"/>
+        </Actions>
+      </Rule>
+
+      <!-- Attach our animations to the elements in the Button UI -->
+      <Rule>
+        <Actions>
+          <Invoke Target="[LabelScalePanel.AttachAnimation]" animation="animation://me:Browse.Command.Shrink" InvokePolicy="Synchronous"/>
+          <Invoke Target="[Label.AttachAnimation]" animation="animation://me:Browse.Command.Content.Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Label.AttachAnimation]" animation="animation://me:Browse.Command.Content.Hide" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule>
+    </Rules>
+  </UI>
+
+
+  <UI Name="CommandFocusLoop">
+    <Content>
+
+      <Panel>
+        <Layout>
+          <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
+        </Layout>
+        <Children>
+
+          <Graphic Content="resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_FocusLoop_TopLeft">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 0, -42" Right="Parent, 1, 25" Top="Parent, 0, -22" Bottom="Parent, 1, 12"/>
+            </LayoutInput>
+            <Animations>
+              <Animation Animation="animation://me:Browse.Command.FocusLoop.TopLeft"/>
+            </Animations>
+          </Graphic>
+
+          <Graphic Content="resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_FocusLoop_Small">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 0, -7" Top="Parent, 0, 2"/>
+            </LayoutInput>
+            <Animations>
+              <Animation Animation="animation://me:Browse.Command.FocusLoop.Small"/>
+            </Animations>
+          </Graphic>
+
+          <Graphic Content="resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_FocusLoop_Blue">
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Center" Bottom="Parent, 1, -2"/>
+            </LayoutInput>
+            <Animations>
+              <Animation Animation="animation://me:Browse.Command.FocusLoop.Blue"/>
+            </Animations>
+          </Graphic>
+
+        </Children>
+      </Panel>
+
+    </Content>
+  </UI>
+
+  <UI Name="Button" BaseUI="me:ButtonBase">
+
+    <Properties>
+      <ICommand Name="Model" ICommand="$Required"/>
+      <cor:String Name="AccessibilityName" String="null"/>
+      <cor:String Name="AccessibilityDesc" String="null"/>
+
+      <AccessibleRole Name="AccessibilityRole" AccessibleRole="PushButton"/>
+    </Properties>
+
+    <Rules>
+      <!-- Accessibility -->
+      <Binding Target="[Accessible.IsUnavailable]"        Source="[Model.Available]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Target="[Accessible.IsPressed]"            Source="[Clicker.Clicking]"/>
+      <Binding Target="[Accessible.IsFocusable]"          Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]"            Source="[Input.KeyFocus]"/>
+      <Binding Target="[Accessible.Description]"          Source="[AccessibilityDesc]"/>
+      <Default Target="[Accessible.DefaultActionCommand]" Value="[Model]"/>
+      <Default Target="[Accessible.Role]"                 Value="[AccessibilityRole]"/>
+
+      <!-- Associate the Model with the Behavior -->
+      <Default Target="[Clicker.Command]" Value="[Model!ICommand]"/>
+
+      <!-- If the Command is unavailable, disable the UI -->
+      <Binding Source="[Model.Available]" Target="[Input.Enabled]"/>
+
+      <!-- if Accessibility name is not specified get it from Model.Description -->
+      <Rule >
+        <Conditions>
+          <Equality Source="[AccessibilityName]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Accessible.Name]" Value="[Model.Description]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Assign the Accessibility name if it is specified -->
+      <Default Target="[Accessible.Name]" Value="[AccessibilityName]"/>
+
+      <!-- Attach the image if an IThumbnailCommand was supplied -->
+      <Rule>
+        <Conditions>
+          <IsType Source="[Model]" Type="test:IThumbnailCommand"/>
+          <IsValid Source="[Model!test:IThumbnailCommand.DefaultImage]"/>
+        </Conditions>
+        <Actions>
+          <Set Value="[Model!test:IThumbnailCommand.DefaultImage]" Target="[IconImage]"/>
+        </Actions>
+      </Rule>
+
+      <Binding Source="[Model.Description]"  Target="[Label.Content]"/>
+
+    </Rules>
+
+  </UI>
+
+
+  <!-- This base view provides most of the implementation of Button, but leaves
+         out assumptions about the main ModelItem parameters.  This allows alternate
+         views to built on top with the button look, but perhaps have different
+         parameter assumptions (e.g. MenuRadioButton). -->
+  <UI Name="ButtonBase">
+
+    <Properties>
+
+      <Font    Name="Font"                Font="font://me:ButtonText"/>
+      <Font    Name="FocusFont"           Font="null"/>
+      <Font    Name="DisabledFont"        Font="null"/>
+      <cor:Boolean Name="ShowLabel"           Boolean="true"/>
+      <cor:Boolean Name="AllowPressedEffect"  Boolean="true"/>
+      <cor:Boolean Name="AllowMarquee"        Boolean="true"/>
+      <Size    Name="TileSize"            Size="250, 51"/>
+
+      <cor:Boolean     Name="ShowLabelBackground"      Boolean="false"/>
+
+      <Image  Name="LabelBackground"          Image="null"/>
+      <Image  Name="LabelBackgroundFocus"     Image="null"/>
+
+      <Image Name="ButtonFocus" Image="null" Flippable="true"/>
+
+      <Image  Name="NoFocusImage"        Image="null"/>
+      <Image  Name="FocusImage"          Image="resx://Library/Library.Resources/V3_Controls_Common_Button_Left_Focus"/>
+      <Image  Name="DisabledImage"       Image="null"/>
+
+      <Image  Name="FocusOverlayImage"   Image="resx://Library/Library.Resources/V3_Controls_Common_Button_Left_Focus_Overlay"/>
+      <Image  Name="PressedImage"        Image="resx://Library/Library.Resources/V3_Controls_Common_Button_Pressed_Highlight"/>
+
+      <Color      Name="NoFocusColor"        Color="color://me:LightBlue"/>
+      <Color      Name="FocusColor"          Color="color://me:OffWhite"/>
+      <Color      Name="DisabledColor"       Color="color://me:LightBlue40Percent"/>
+
+      <!-- Fill colors, if non-transparent, supercede background images -->
+      <Color      Name="NoFocusFillColor"    Color="color://me:Transparent"/>
+      <Color      Name="FocusFillColor"      Color="color://me:Transparent"/>
+      <Color      Name="DisabledFillColor"   Color="color://me:Transparent"/>
+
+      <Inset      Name="LabelMargins"        Inset="16,16,8,8"/>
+
+      <DockLayoutInput
+                  Name="LabelBorderInput"    Position="Left" Alignment="Center"/>
+      <AnchorLayoutInput Name="LabelBackgroundLayoutInput"
+                  Left="PressedGradient,0,-8" Top="PressedGradient,0,-4" Right="PressedGradient,1,8" Bottom="PressedGradient,1,4" ContributesToWidth="false" ContributesToHeight="false"/>
+
+      <cor:Boolean    Name="ShowIcon"             Boolean="true"/>
+      <Image Name="IconImage"            Image="null"/>
+      <Image Name="FocusIconImage"       Image="null"/>
+      <Image          Name="IconAcquiringImage"   Image="null"/>
+      <Image          Name="IconErrorImage"       Image="null"/>
+
+      <Size   Name="IconMinSize"/>
+      <Size   Name="IconMaxSize"/>
+      <Inset  Name="IconPadding"/>
+      <DockLayoutInput Name="IconBorderInput"      Position="Left" Alignment="Center"/>
+
+      <cor:String Name="FocusLoopContentTemplate"  String="null"/>
+
+      <!-- Is this Button the type that will cause a large action like a page navigation? -->
+      <!-- Or is it something smaller like a spinner up/down button? -->
+      <!-- This determines what sound set we use. -->
+      <cor:Boolean Name="IsNavigatingCommand" Boolean="true"/>
+
+    </Properties>
+
+    <Locals>
+
+      <ClickHandler Name="Clicker"/>
+
+    </Locals>
+
+    <Rules>
+      <!-- Accessibility -->
+      <Binding Target="[Accessible.IsFocusable]" Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]"   Source="[Input.KeyFocus]"/>
+
+      <!-- click sound -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]"/>
+          <Equality Source="[IsNavigatingCommand]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_Select_a" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]"/>
+          <Equality Source="[IsNavigatingCommand]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_MiniSelect_a" />
+        </Actions>
+      </Rule>
+
+      <!-- Pressed effect -->
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[AllowPressedEffect]" Value="true"/>
+          <Equality Source="[Clicker.Clicking]" ConditionOp="ChangedTo" Value="true"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[PressedGradient]" Animation="global://me:PressedLabelHighlight"/>
+        </Actions>
+      </Rule-->
+
+      <!-- Text color -->
+      <Condition Source="[Input.Enabled]"  SourceValue="false"
+                 Target="[Label.Color]"       Value="[DisabledColor]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true"
+                 Target="[Label.Color]"       Value="[FocusColor]"/>
+
+      <!-- Only show the icon focus animation loop if we were given a template -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[FocusLoopContentTemplate]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[IconFocusLoopHost.Visible]" Value="true"/>
+          <Set Target="[IconFocusLoopHost.Source]" Value="[FocusLoopContentTemplate]"/>
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[FocusIconImage]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Icon.Content]"  Value="[FocusIconImage]"/>
+        </Actions>
+      </Rule>
+
+      <!-- 
+            Icon image 
+            In order for multi-state icon images to work with imagesets, we need to have both the 
+            Default and Binding applied to the Icon.Image.  This way there is a default state for the icon image,
+            as well as resetting the image if it should happen to need changing with the Bind.  
+            -->
+      <Binding Source="[IconErrorImage]" Target="[Icon.ErrorImage]"/>
+      <Binding Source="[IconAcquiringImage]" Target="[Icon.AcquiringImage]"/>
+      <Binding Source="[IconImage]" Target="[Icon.Content]"/>
+      <Default Target="[Icon.Content]" Value="[IconImage]"/>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true"
+           Target="[LabelBackgroundGraphic.Content]"       Value="[LabelBackgroundFocus]"/>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.Enabled]" Value="false"/>
+          <Equality Source="[DisabledFont]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Font]" Value="[DisabledFont]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Font -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[FocusFont]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Font]" Value="[FocusFont]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Background image -->
+      <Condition Source="[Input.Enabled]"  SourceValue="false"
+           Target="[Background.Content]"  Value="[DisabledImage]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true"
+                 Target="[Background.Content]"  Value="[FocusImage]"/>
+
+      <!-- Fill color -->
+      <Condition Source="[Input.Enabled]"  SourceValue="false"
+                 Target="[Fill.Content]"  Value="[DisabledFillColor]"/>
+
+      <!-- focus sound and color -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Fill.Content]" Value="[FocusFillColor]"/>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_Focus_a" />
+        </Actions>
+      </Rule>
+
+      <Binding Source="[Input.KeyFocus]"   Target="[FocusOverlay.Visible]"/>
+      <Binding Source="[Clicker.Clicking]"   Target="[Highlight.Visible]"/>
+
+
+      <!-- Setting Label Background images from the ImageSet -->
+      <Default Target="[LabelBackgroundFocus]" Value="[ButtonFocus]" />
+
+    </Rules>
+
+    <Content>
+
+      <Panel Name="Root" MouseInteractive="true" MaximumSize="[TileSize]">
+        <Children>
+
+          <!-- Content container -->
+          <Panel Name="LabelScalePanel" Layout="Dock">
+            <Children>
+
+              <!-- Icon -->
+              <Graphic Name="Icon" LayoutInput="[IconBorderInput]" Margins="[IconPadding]" MaintainAspectRatio="true" MinimumSize="[IconMinSize]" MaximumSize="[IconMaxSize]" Visible="[ShowIcon]">
+                <Children>
+                  <me:BaseIconFocusLoopContent Name="IconFocusLoopHost" Visible="false" Source="null"/>
+                </Children>
+              </Graphic>
+
+              <!-- Text container -->
+              <Panel Name="LabelPanel" Layout="Anchor" LayoutInput="[LabelBorderInput]" Margins="[LabelMargins]" Visible="[ShowLabel]">
+                <Children>
+                  <Graphic Name="PressedGradient" SizingPolicy="SizeToChildren">
+                    <LayoutInput>
+                      <AnchorLayoutInput Vertical="Center" Horizontal="Near"/>
+                    </LayoutInput>
+                    <Children>
+
+
+
+                      <Text Name="Label" Color="[NoFocusColor]" Font="[Font]"/>
+                    </Children>
+                  </Graphic>
+
+                  <Graphic Name="LabelBackgroundGraphic" Content="[LabelBackground]" Visible="[ShowLabelBackground]" LayoutInput="[LabelBackgroundLayoutInput]" />
+                </Children>
+              </Panel>
+
+            </Children>
+          </Panel>
+
+          <!-- Highlight base -->
+          <Clip FadeSize="20" Layout="Fill">
+            <Children>
+
+              <!-- Highlight -->
+              <Graphic Name="Highlight" Content="[PressedImage]">
+                <Animations>
+                  <!-- Button highlight -->
+                  <TransformByAttributeAnimation Name="Button.PressedHighlight.Show" Filter="Position" Attribute="Width" Magnitude="1.0">
+                    <Source>
+                      <Animation Type="Show">
+                        <Keyframes>
+                          <PositionKeyframe Time="0.00" Value="-1.0,0,0" RelativeTo="Final"/>
+                          <PositionKeyframe Time="0.10" Value="0.00,0,0" RelativeTo="Final"/>
+                          <PositionKeyframe Time="0.18" Value="0.35,0,0" RelativeTo="Final"/>
+                          <PositionKeyframe Time="0.35" Value="0.55,0,0" RelativeTo="Final"/>
+                          <PositionKeyframe Time="0.60" Value="1.25,0,0" RelativeTo="Final"/>
+                          <PositionKeyframe Time="0.70" Value="1.25,0,0" RelativeTo="Final"/>
+
+                          <AlphaKeyframe Time="0.00" Value="0.00" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="0.05" Value="0.75" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="0.17" Value="0.75" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="0.40" Value="0.00" RelativeTo="Absolute"/>
+                        </Keyframes>
+                      </Animation>
+                    </Source>
+                  </TransformByAttributeAnimation>
+
+                  <!-- Button highlight - stop -->
+                  <TransformByAttributeAnimation Name="Button.PressedHighlight.Hide" Filter="Position" Attribute="Width" Magnitude="1.0">
+                    <Source>
+                      <Animation Type="Hide">
+                        <Keyframes>
+                          <PositionKeyframe Time="0.00" Value="0.0,0,0" RelativeTo="Current"/>
+                          <PositionKeyframe Time="0.10" Value="1.0,0,0" RelativeTo="Final"/>
+
+                          <AlphaKeyframe Time="0.00" RelativeTo="Current"/>
+                          <AlphaKeyframe Time="0.10" Value="0.0" RelativeTo="Absolute"/>
+                        </Keyframes>
+                      </Animation>
+                    </Source>
+                  </TransformByAttributeAnimation>
+
+                </Animations>
+              </Graphic>
+
+            </Children>
+          </Clip>
+
+          <!-- Focus overlay -->
+          <Graphic Name="FocusOverlay" Layout="Fill" Content="[FocusOverlayImage]">
+            <Animations>
+              <!-- Button focus overlay pulse -->
+              <Animation Name="Button.FocusOverlay.Idle" Loop="-1" Type="Idle">
+                <Keyframes>
+                  <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="SCurve" RelativeTo="Absolute"/>
+                  <AlphaKeyframe Time="1.5" Value="0.63" Interpolation="SCurve" RelativeTo="Absolute"/>
+                  <AlphaKeyframe Time="3.0" Value="0.0" RelativeTo="Absolute"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+          </Graphic>
+
+          <!-- Fill color -->
+          <ColorFill Name="Fill" Layout="Fill" Content="0,   0,   0,   0" MinimumSize="[TileSize]"/>
+
+          <!-- Background image -->
+          <Graphic Name="Background" Layout="Fill" Content="[NoFocusImage]" MinimumSize="[TileSize]">
+          </Graphic>
+
+        </Children>
+      </Panel>
+
+    </Content>
+  </UI>
+
+  <UI Name="BaseIconFocusLoopContent">
+  </UI>
+
+  <!-- Commands - these are applied at several levels -->
+  <Animation Name="Browse.Command.NavigateToForward" Type="Show">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute"/>
+      <AlphaKeyframe Time="1.0" Value="0.0" RelativeTo="Absolute" Interpolation="Exp"/>
+      <AlphaKeyframe Time="1.533" Value="1.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Command.NavigateToBackward" Type="Show" CenterPointPercent="0.5, 0.5, 0.0">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute"/>
+      <AlphaKeyframe Time="0.333" Value="0.0" RelativeTo="Absolute" Interpolation="Exp"/>
+      <AlphaKeyframe Time="0.5" Value="1.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Command.NavigateAwayForward" Type="Hide" CenterPointPercent="0.5, 0.5, 0.0">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.2" Value="0.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Command.NavigateAwayBackward" Type="Hide" CenterPointPercent="0.5, 0.5, 0.0">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.2" Value="0.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Command.Content.Show" Type="ContentChangeShow">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.1" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Command.Content.Hide" Type="ContentChangeHide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
+      <AlphaKeyframe Time="0.1" Value="0.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Command.Scale" Type="Scale" CenterPointPercent="0.25, 1.0, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>
+      <ScaleKeyframe Time="0.3" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Command.Shrink" Type="Scale" CenterPointPercent="0.05, 0.6, 1.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current"/>
+      <ScaleKeyframe Time="0.067" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+
+  <Animation Name="Browse.Command.FocusLoop.TopLeft" Type="Idle" Loop="-1">
+    <Keyframes>
+      <AlphaKeyframe Time="0.000" Value="0.0" RelativeTo="Absolute"/>
+      <AlphaKeyframe Time="0.267" Value="0.0" RelativeTo="Absolute" Interpolation="Log"/>
+      <AlphaKeyframe Time="1.267" Value="0.2" RelativeTo="Absolute" Interpolation="Exp"/>
+      <AlphaKeyframe Time="2.567" Value="0.0" RelativeTo="Absolute"/>
+      <AlphaKeyframe Time="3.000" Value="0.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Command.FocusLoop.Small" Type="Idle" Loop="-1">
+    <Keyframes>
+      <PositionKeyframe Time="0.000" Value="0, 2, 0" RelativeTo="Final"/>
+      <PositionKeyframe Time="0.167" Value="0, 2, 0" RelativeTo="Final"/>
+      <PositionKeyframe Time="2.567" Value="17, 0, 0" RelativeTo="Final"/>
+      <PositionKeyframe Time="3.000" Value="17, 0, 0" RelativeTo="Final"/>
+
+      <AlphaKeyframe Time="0.000" Value="0.0" RelativeTo="Absolute"/>
+      <AlphaKeyframe Time="0.167" Value="0.0" RelativeTo="Absolute" Interpolation="Log"/>
+      <AlphaKeyframe Time="1.233" Value="0.4" RelativeTo="Absolute" Interpolation="Exp"/>
+      <AlphaKeyframe Time="2.567" Value="0.0" RelativeTo="Absolute"/>
+      <AlphaKeyframe Time="3.000" Value="0.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Command.FocusLoop.Blue" Type="Idle" Loop="-1">
+    <Keyframes>
+      <AlphaKeyframe Time="0.000" Value="0.0" RelativeTo="Absolute" Interpolation="SCurve"/>
+      <AlphaKeyframe Time="1.133" Value="0.5" RelativeTo="Absolute" Interpolation="SCurve"/>
+      <AlphaKeyframe Time="2.567" Value="0.0" RelativeTo="Absolute"/>
+      <AlphaKeyframe Time="3.000" Value="0.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+
+  <Color Name="OffWhite"                Color="255, 242, 242, 242"/>
+  <Color Name="OffWhite10Percent"       Color="26,  242, 242, 242"/>
+  <Color Name="OffWhite60Percent"       Color="153, 242, 242, 242"/>
+
+  <Color Name="White20Percent"          Color="51,  255, 255, 255"/>
+  <Color Name="White40Percent"          Color="102, 255, 255, 255"/>
+  <Color Name="White60Percent"          Color="153, 255, 255, 255"/>
+  <Color Name="White80Percent"          Color="204, 255, 255, 255"/>
+
+  <Color Name="LightBlue"               Color="255, 151, 217, 255"/>
+  <Color Name="LightBlue40Percent"      Color="102, 151, 217, 255"/>
+  <Color Name="LightBlue60Percent"      Color="153, 151, 217, 255"/>
+  <Color Name="MediumBlue"              Color="255,   2, 166, 212"/>
+  <Color Name="DarkBlue"                Color="255,   5,  33,  92"/>
+  <Color Name="GuideMediumBlue"         Color="255,  84, 201, 247"/>
+
+  <Color Name="Black"                   Color="255,  16,  16, 16"/>
+  <Color Name="Yellow"                  Color="255, 255, 255, 100"/>
+
+  <Color Name="GalleryItemFill"         Color="255, 46, 135, 176"/>
+  <Color Name="GalleryItemFillFocus"	  Color="255, 46, 135, 176"/>
+  <Color Name="GalleryItemLabel"        Color="255,  5,  33,  92"/>
+  <Color Name="GalleryItemLabelFocus"   Color="255,  5,  33,  92"/>
+
+  <Color Name="GalleryFolderFill"       Color=" 40, 151, 217, 255"/>
+  <Color Name="GalleryFolderFillFocus"  Color="255,  71, 136, 174"/>
+  <Color Name="GalleryFolderLabel"      Color="255, 242, 242, 242"/>
+  <Color Name="GalleryFolderLabelFocus" Color="255, 242, 242, 242"/>
+
+  <Color Name="Transparent"             Color="0,   0,   0,   0"/>
+
+  <Color Name="ToolbarOffWhite"         Color="255, 242, 242, 242"/>
+
+  <!-- MMI Colors (TODO: Get out of Globals!) -->
+  <Color Name="MMIActiveText"           Color="255, 242, 242, 242"/>
+  <Color Name="MMIActiveShadow"         Color=" 96,   0,   0,   0" />
+  <Color Name="MMIInactiveText"         Color="255,   5,  33,  92" />
+  <Color Name="MMIInactiveShadow"       Color=" 96, 242, 242, 242"/>
+  <Color Name="MMIActiveBackground"     Color="255,   5, 100,  75"/>
+
+  <!-- Under High Contrast, "...HCInverted" colors are the inverse of expected -->
+  <Color Name="OffWhiteHCInverted"      Color="255, 242, 242, 242"/>
+  <Color Name="DarkBlueHCInverted"      Color="255,   5,  33,  92"/>
+
+  <Color Name="LinkSpecifier"           Color="255,   0, 255,   0"/>
+
+  <cor:String Name="MainFontFace"     String="Segoe Media Center Semibold"/>
+  <cor:String Name="RegularFontFace"  String="Segoe Media Center"/>
+  <cor:String Name="LightFontFace"    String="Segoe Media Center Light"/>
+
+  <Font Name="ButtonText"             FontName="global://me:MainFontFace"  FontSize="20" />
+  <Font Name="BackgroundTitleText"    FontName="global://me:MainFontFace"  FontSize="150" />
+  <Font Name="DialogTitle"            FontName="global://me:MainFontFace"  FontSize="22" />
+  <Font Name="DialogContent"          FontName="global://me:MainFontFace"  FontSize="18" />
+  <Font Name="VolumeText"             FontName="global://me:MainFontFace"  FontSize="36" />
+  <Font Name="ThumbnailButtonText"    FontName="global://me:MainFontFace"  FontSize="16" />
+</Mcml>

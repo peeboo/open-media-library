@@ -1,0 +1,756 @@
+<Mcml xmlns ="http://schemas.microsoft.com/2006/mcml" 
+      xmlns:cor ="assembly://MsCorLib/System" 
+      xmlns:comm ="res://Microsoft.MediaCenter.Shell!Globals.mcml" 
+      xmlns:browse="res://Microsoft.MediaCenter.Shell!BrowseGallery.mcml" 
+      xmlns:turbo ="res://Microsoft.MediaCenter.Shell!TurboScroll.mcml" 
+      xmlns:shell ="assembly://Microsoft.MediaCenter.Shell/Microsoft.MediaCenter.Shell" 
+      xmlns:shared="assembly://ehshell/MediaCenter.XPShared" 
+      xmlns:draw ="assembly://Microsoft.MediaCenter.UI/Microsoft.MediaCenter.UI.Drawing" 
+      xmlns:me ="Me">
+  <Font Name="Turbo.Text.Font" Font="Arial,12"/>
+  <Color Name="Turbo.Text.Color" Color="AntiqueWhite" />
+  <Font Name="Turbo.Header.Font" Font="Arial,15"/>
+  <Color Name="Turbo.Header.Color" Color="White" />
+  <Font Name="Turbo.Item.Font" FontName="global://comm:MainFontFace" FontSize="28"/>
+  <Font Name="Turbo.Label.Font" FontName="global://comm:MainFontFace" FontSize="67"/>
+  <Font Name="Turbo.Group.Font" FontName="global://comm:MainFontFace" FontSize="24"/>
+  <Animation Name="Turbo.Foreground.Hide" Type="Hide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="1.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.25" Value="0.5"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Turbo.Foreground.Show" Type="Show">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0.5"/>
+      <AlphaKeyframe Time="0.25" Value="1.0" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Turbo.Background.Hide" Type="Hide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="1.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.25" Value="0.5"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Turbo.Background.Show" Type="Show">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0.5"/>
+      <AlphaKeyframe Time="0.25" Value="1.0" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Gallery.Turbo.Hide" Type="Hide" CenterPointPercent="0.5, 0.5, 0.0">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" RelativeTo="Current"/>
+      <PositionKeyframe Time="0.3" Value="0,20,0"/>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>
+      <ScaleKeyframe Time="0.3" Value="0.95, 0.95, 1.0"/>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.3" Value="0"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Gallery.Turbo.Show" Type="Show" CenterPointPercent="0.5, 0.5, 0.0">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" RelativeTo="Current"/>
+      <PositionKeyframe Time="0.3" Value="0,0,0" RelativeTo="Final"/>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>
+      <ScaleKeyframe Time="0.3" Value="1.0, 1.0, 1.0"/>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.3" Value="1"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Turbo.Item.ContentHide" Type="ContentChangeHide" CenterPointPercent="0.0, 0.5, 0.0">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" Value="0,0,0" RelativeTo="Current"/>
+      <PositionKeyframe Time="0.5" Value="-600,0,0"/>
+      <AlphaKeyframe Time="0.0" Value="1.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.5" Value="0.0"/>
+      <ScaleKeyframe Time="0.0" Value="1.0,1.0,0" RelativeTo="Current"/>
+      <ScaleKeyframe Time="0.5" Value="0.5,0.5,0"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Turbo.Item.ContentShow" Type="ContentChangeShow" CenterPointPercent="0.0, 0.5, 0.0">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" Value="600,0,0" Interpolation="EaseIn, 1.0, 0.2"/>
+      <PositionKeyframe Time="0.5" Value="20,0,0" RelativeTo="Final"/>
+      <PositionKeyframe Time="1.0" Value="-20,0,0" RelativeTo="Final"/>
+      <AlphaKeyframe Time="0.0" Value="0.0"/>
+      <AlphaKeyframe Time="0.5" Value="1.0"/>
+      <AlphaKeyframe Time="1.0" Value="1.0"/>
+      <ScaleKeyframe Time="0.0" Value="0.5,0.5,0" Interpolation="EaseIn, 1.0, 0.25"/>
+      <ScaleKeyframe Time="0.5" Value="1.0,1.0,0"/>
+      <ScaleKeyframe Time="1.0" Value="1.0,1.0,0"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Turbo.Label.ContentHide" Type="ContentChangeHide">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" Value="0,0,0" RelativeTo="Current" Interpolation="SCurve, 0.0"/>
+      <PositionKeyframe Time="0.5" Value="-300,0,0"/>
+      <AlphaKeyframe Time="0.0" Value="1.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.5" Value="0.0"/>
+      <ColorKeyframe Time="0.0" Value="color://comm:OffWhite"/>
+      <ColorKeyframe Time="0.5" Value="color://comm:LightBlue"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Turbo.Label.ContentShow" Type="ContentChangeShow">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" Value="300,0,0" Interpolation="Log"/>
+      <PositionKeyframe Time="0.5" Value="0,0,0" RelativeTo="Final"/>
+      <AlphaKeyframe Time="0.0" Value="0.0"/>
+      <AlphaKeyframe Time="0.5" Value="1.0"/>
+      <ColorKeyframe Time="0.0" Value="color://comm:LightBlue"/>
+      <ColorKeyframe Time="0.5" Value="color://comm:OffWhite"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Turbo.Group.ContentHide" Type="ContentChangeHide">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" Value="0,0,0" RelativeTo="Current" Interpolation="SCurve, 0.0"/>
+      <PositionKeyframe Time="0.5" Value="-300,0,0"/>
+      <AlphaKeyframe Time="0.0" Value="1.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.5" Value="0.0"/>
+      <ScaleKeyframe Time="0.0" Value="1.0,1.0,0"/>
+      <ScaleKeyframe Time="0.5" Value="0.75,0.75,0"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Turbo.Group.ContentShow" Type="ContentChangeShow">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" Value="300,0,0" Interpolation="Log"/>
+      <PositionKeyframe Time="0.5" Value="0,0,0" RelativeTo="Final"/>
+      <AlphaKeyframe Time="0.0" Value="0.0"/>
+      <AlphaKeyframe Time="0.5" Value="1.0"/>
+      <ScaleKeyframe Time="0.0" Value="0.75,0.75,0"/>
+      <ScaleKeyframe Time="0.5" Value="1.0,1.0,0"/>
+    </Keyframes>
+  </Animation>
+  <UI Name="FocusPlaceHolder">
+    <Locals>
+      <ClickHandler Name="Clicker" />
+    </Locals>
+    <Content>
+      <Panel MinimumSize="1,1" />
+    </Content>
+  </UI>
+  <UI Name="TurboBaseForeground" BaseUI="turbo:Foreground">
+    <Properties>
+      <shell:IBrowseTurboScrollClient Name="TurboClient" IBrowseTurboScrollClient="null"/>
+    </Properties>
+  </UI>
+  <UI Name="TurboForeground" BaseUI="me:TurboBaseForeground">
+    <Properties>
+      <cor:String Name="DefaultItemTemplate" String="@res://Microsoft.MediaCenter.Shell!BrowseTurbo.mcml#TurboModelItem"/>
+      <cor:String Name="DefaultLabelTemplate" String="@res://Microsoft.MediaCenter.Shell!BrowseTurbo.mcml#TurboModelLabel"/>
+      <cor:String Name="DefaultGroupTemplate" String="@res://Microsoft.MediaCenter.Shell!BrowseTurbo.mcml#TurboModelGroup"/>
+    </Properties>
+    <Locals>
+      <shell:TurboScrollKeyHandler Name="TurboReverseKey" Key="Left" Forward="false" HandlerStage="Routed"/>
+      <shell:TurboScrollKeyHandler Name="TurboForwardKey" Key="Right" Forward="true" HandlerStage="Routed"/>
+      <Command Name="TurboStopCommand"/>
+    </Locals>
+    <Rules>
+      <Binding Target="[MyIndicator.TurboController]" Source="[TurboController]"/>
+      <Binding Target="[MyItem.TurboController]" Source="[TurboController]"/>
+      <Binding Target="[MyLabel.TurboController]" Source="[TurboController]"/>
+      <Binding Target="[MyGroup.TurboController]" Source="[TurboController]"/>
+      <Binding Target="[TurboReverseKey.TurboController]" Source="[TurboController]"/>
+      <Binding Target="[TurboReverseKey.StopCommand]" Source="[TurboStopCommand]"/>
+      <Binding Target="[TurboForwardKey.TurboController]" Source="[TurboController]"/>
+      <Binding Target="[TurboForwardKey.StopCommand]" Source="[TurboStopCommand]"/>
+      <Rule>
+        <Conditions>
+          <Modified Source="[TurboStopCommand.Invoked]"/>
+          <IsValid Source="[TurboController]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[TurboController.Enabled]" Value="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[TurboController.Enabled]" InitialEvaluate="true"/>
+          <IsValid Source="[TurboClient]"/>
+          <IsValid Source="[TurboClient.TurboTemplates]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[MyItem.Source]" Value="[TurboClient.TurboTemplates.ItemTemplate]"/>
+          <Set Target="[MyLabel.Source]" Value="[TurboClient.TurboTemplates.LabelTemplate]"/>
+          <Set Target="[MyGroup.Source]" Value="[TurboClient.TurboTemplates.GroupTemplate]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Actions>
+          <Set Target="[MyItem.Source]" Value="[DefaultItemTemplate]"/>
+          <Set Target="[MyLabel.Source]" Value="[DefaultLabelTemplate]"/>
+          <Set Target="[MyGroup.Source]" Value="[DefaultGroupTemplate]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[TurboController]"/>
+          <Modified Source="[TurboController.Enabled]" InitialEvaluate="true"/>
+          <Equality Source="[TurboController.Enabled]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[FocusPlaceHolder.NavigateInto]"/>
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <Panel Layout="Form">
+        <Children>
+          <me:FocusPlaceHolder Name="FocusPlaceHolder"/>
+          <Panel Layout="Center" Name="ItemContainer">
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0,-12" Right="Parent,1,-189" Top="Parent,0,-60" Bottom="Parent,0,375"/>
+            </LayoutInput>
+            <Children>
+              <me:TurboBaseItem Name="MyItem"/>
+            </Children>
+          </Panel>
+          <turbo:Position Name="MyIndicator">
+            <LayoutInput>
+              <FormLayoutInput Left="ItemContainer,0,-19" Bottom="Parent,0,335" Right="ItemContainer,1"/>
+            </LayoutInput>
+          </turbo:Position>
+          <me:TurboBaseLabel Name="MyLabel" Layout="Form" MaximumSize="0,121">
+            <LayoutInput>
+              <FormLayoutInput Left="ItemContainer,0" Top="MyIndicator,1,3" Right="ItemContainer,1"/>
+            </LayoutInput>
+          </me:TurboBaseLabel>
+          <me:TurboBaseGroup Name="MyGroup" Layout="Form">
+            <LayoutInput>
+              <FormLayoutInput Left="ItemContainer,0" Top="MyLabel,1,-45" Right="ItemContainer,1"/>
+            </LayoutInput>
+          </me:TurboBaseGroup>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="TurboBackground" BaseUI="turbo:Background">
+    <Properties>
+      <cor:String Name="LayerTemplate" String="null" />
+      <shell:IBrowsePivot Name="Model" IBrowsePivot="$Required"/>
+      <Size Name="GallerySize"/>
+      <RangedValue Name="MetadataDelay" RangedValue="$Required"/>
+      <cor:Boolean Name="InListMaker" Boolean="false" />
+    </Properties>
+    <Locals>
+      <EditableText Name="FocusArea" Value="TurboScrollGallery"/>
+      <ScrollingLayout Name="ScrollLayout" Orientation="Horizontal" Prefetch="0" PreferredAreaOfInterest="RepeatedItemAreaOfInterest"/>
+      <IntRangedValue Name="GalleryContentShift" />
+      <BooleanChoice Name="IsListView" />
+      <BooleanChoice Name="IsOneRow" />
+      <EditableText Name="TransitionState" Value="Idle"/>
+      <EditableText Name="ItemMode" Value="none"/>
+      <IntRangedValue Name="SelectedIndex" />
+      <IntRangedValue Name="TotalCount" />
+      <IntRangedValue Name="MetaDataTopShift" />
+      <IntRangedValue Name="MetaDataLeftShift" />
+      <IntRangedValue Name="SelectedGroup" Value="0"/>
+      <IntRangedValue Name="TotalCountOverride"/>
+      <IntRangedValue Name="ItemIndexOverride"/>
+      <Command Name="NavigateIntoContent" />
+      <TransformByAttributeAnimation Name="Layer1Animation" Attribute="Width" Magnitude="1" Filter="Position">
+        <Source>
+          <Animation Type="Idle" Loop="-1">
+            <Keyframes>
+              <PositionKeyframe Time="0.0" Value="0,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.0" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.25" Value="-1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.25" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.5" Value="-1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.5" Value="0" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.75" Value="1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.75" Value="0" RelativeTo="Absolute" />
+              <PositionKeyframe Time="1" Value="1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="1" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="1.25" Value="0,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="1.25" Value="1" RelativeTo="Absolute" />
+            </Keyframes>
+          </Animation>
+        </Source>
+      </TransformByAttributeAnimation>
+      <TransformByAttributeAnimation Name="Layer2Animation" Attribute="Width" Magnitude="1" Filter="Position">
+        <Source>
+          <Animation Type="Idle" Loop="-1">
+            <Keyframes>
+              <PositionKeyframe Time="0" Value="-1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.25" Value="-1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.25" Value="0" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.5" Value="1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.5" Value="0" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.75" Value="1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.75" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="1" Value="0,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="1" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="1.25" Value="-1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="1.25" Value="1" RelativeTo="Absolute" />
+            </Keyframes>
+          </Animation>
+        </Source>
+      </TransformByAttributeAnimation>
+      <TransformByAttributeAnimation Name="Layer3Animation" Attribute="Width" Magnitude="1" Filter="Position">
+        <Source>
+          <Animation Type="Idle" Loop="-1">
+            <Keyframes>
+              <PositionKeyframe Time="0" Value="-1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0" Value="0" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.25" Value="1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.25" Value="0" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.5" Value="1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.5" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.75" Value="0,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.75" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="1" Value="-1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="1" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="1.25" Value="-1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="1.25" Value="0" RelativeTo="Absolute" />
+            </Keyframes>
+          </Animation>
+        </Source>
+      </TransformByAttributeAnimation>
+      <TransformByAttributeAnimation Name="Layer4Animation" Attribute="Width" Magnitude="1" Filter="Position">
+        <Source>
+          <Animation Type="Idle" Loop="-1">
+            <Keyframes>
+              <PositionKeyframe Time="0" Value="1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0" Value="0" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.25" Value="1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.25" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.5" Value="0,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.5" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.75" Value="-1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.75" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="1" Value="-1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="1" Value="0" RelativeTo="Absolute" />
+              <PositionKeyframe Time="1.25" Value="1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="1.25" Value="0" RelativeTo="Absolute" />
+            </Keyframes>
+          </Animation>
+        </Source>
+      </TransformByAttributeAnimation>
+      <TransformByAttributeAnimation Name="Layer5Animation" Attribute="Width" Magnitude="1" Filter="Position">
+        <Source>
+          <Animation Type="Idle" Loop="-1">
+            <Keyframes>
+              <PositionKeyframe Time="0" Value="1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.25" Value="0,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.25" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.5" Value="-1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.5" Value="1" RelativeTo="Absolute" />
+              <PositionKeyframe Time="0.75" Value="-1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="0.75" Value="0" RelativeTo="Absolute" />
+              <PositionKeyframe Time="1" Value="1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="1" Value="0" RelativeTo="Absolute" />
+              <PositionKeyframe Time="1.25" Value="1,0,0" RelativeTo="Absolute" />
+              <AlphaKeyframe Time="1.25" Value="1" RelativeTo="Absolute" />
+            </Keyframes>
+          </Animation>
+        </Source>
+      </TransformByAttributeAnimation>
+    </Locals>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Modified Source="[LayerTemplate]" InitialEvaluate="true" />
+          <Equality Source="[LayerTemplate]" ConditionOp="NotEquals" Value="null" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[TSLayer1.ForceRefresh]"/>
+          <Invoke Target="[TSLayer2.ForceRefresh]"/>
+          <Invoke Target="[TSLayer3.ForceRefresh]"/>
+          <Invoke Target="[TSLayer4.ForceRefresh]"/>
+          <Invoke Target="[TSLayer5.ForceRefresh]"/>
+          <Set Target="[TSLayer1.Source]" Value="[LayerTemplate]" />
+          <Set Target="[TSLayer2.Source]" Value="[LayerTemplate]" />
+          <Set Target="[TSLayer3.Source]" Value="[LayerTemplate]" />
+          <Set Target="[TSLayer4.Source]" Value="[LayerTemplate]" />
+          <Set Target="[TSLayer5.Source]" Value="[LayerTemplate]" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Model]" InitialEvaluate="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[TSLayer1.Model]" Value="[Model]" />
+          <Set Target="[TSLayer2.Model]" Value="[Model]" />
+          <Set Target="[TSLayer3.Model]" Value="[Model]" />
+          <Set Target="[TSLayer4.Model]" Value="[Model]" />
+          <Set Target="[TSLayer5.Model]" Value="[Model]" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[TurboController.Forward]" ConditionOp="Equals" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[Layer1Animation.Magnitude]" Value="1" />
+          <Set Target="[Layer2Animation.Magnitude]" Value="1" />
+          <Set Target="[Layer3Animation.Magnitude]" Value="1" />
+          <Set Target="[Layer4Animation.Magnitude]" Value="1" />
+          <Set Target="[Layer5Animation.Magnitude]" Value="1" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Actions>
+          <Set Target="[Layer1Animation.Magnitude]" Value="-1" />
+          <Set Target="[Layer2Animation.Magnitude]" Value="-1" />
+          <Set Target="[Layer3Animation.Magnitude]" Value="-1" />
+          <Set Target="[Layer4Animation.Magnitude]" Value="-1" />
+          <Set Target="[Layer5Animation.Magnitude]" Value="-1" />
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <Panel>
+        <Children>
+          <browse:Gallery Name="TSLayer1" InputEnabled="false" Model="[Model]" TransitionState="[TransitionState]" FocusArea="[FocusArea]" Margins="0, 0, 0, 15" MinimumSize="[GallerySize]" MaximumSize="[GallerySize]" ItemMode="[ItemMode]" IsListView="[IsListView]" IsOneRow="[IsOneRow]" InListMaker="[InListMaker]" ScrollLayout="[ScrollLayout]" GalleryContentShift="[GalleryContentShift]" MetadataDelay="[MetadataDelay]" MetaDataTopShift="[MetaDataTopShift]" MetaDataLeftShift="[MetaDataLeftShift]" SelectedIndex="[SelectedIndex]" SelectedGroup="[SelectedGroup]" TotalCount="[TotalCount]" NavigateIntoContent="[NavigateIntoContent]">
+            <Animations>
+              <TransformByAttributeAnimation TransformByAttributeAnimation="[Layer1Animation]"/>
+            </Animations>
+          </browse:Gallery>
+          <browse:Gallery Name="TSLayer2" InputEnabled="false" Model="[Model]" TransitionState="[TransitionState]" FocusArea="[FocusArea]" Margins="0, 0, 0, 15" MinimumSize="[GallerySize]" MaximumSize="[GallerySize]" ItemMode="[ItemMode]" IsListView="[IsListView]" IsOneRow="[IsOneRow]" InListMaker="[InListMaker]" ScrollLayout="[ScrollLayout]" GalleryContentShift="[GalleryContentShift]" MetadataDelay="[MetadataDelay]" MetaDataTopShift="[MetaDataTopShift]" MetaDataLeftShift="[MetaDataLeftShift]" SelectedIndex="[SelectedIndex]" SelectedGroup="[SelectedGroup]" TotalCount="[TotalCount]" NavigateIntoContent="[NavigateIntoContent]">
+            <Animations>
+              <TransformByAttributeAnimation TransformByAttributeAnimation="[Layer2Animation]"/>
+            </Animations>
+          </browse:Gallery>
+          <browse:Gallery Name="TSLayer3" InputEnabled="false" Model="[Model]" TransitionState="[TransitionState]" FocusArea="[FocusArea]" Margins="0, 0, 0, 15" MinimumSize="[GallerySize]" MaximumSize="[GallerySize]" ItemMode="[ItemMode]" IsListView="[IsListView]" IsOneRow="[IsOneRow]" InListMaker="[InListMaker]" ScrollLayout="[ScrollLayout]" GalleryContentShift="[GalleryContentShift]" MetadataDelay="[MetadataDelay]" MetaDataTopShift="[MetaDataTopShift]" MetaDataLeftShift="[MetaDataLeftShift]" SelectedIndex="[SelectedIndex]" SelectedGroup="[SelectedGroup]" TotalCount="[TotalCount]" NavigateIntoContent="[NavigateIntoContent]">
+            <Animations>
+              <TransformByAttributeAnimation TransformByAttributeAnimation="[Layer3Animation]"/>
+            </Animations>
+          </browse:Gallery>
+          <browse:Gallery Name="TSLayer4" InputEnabled="false" Model="[Model]" TransitionState="[TransitionState]" FocusArea="[FocusArea]" Margins="0, 0, 0, 15" MinimumSize="[GallerySize]" MaximumSize="[GallerySize]" ItemMode="[ItemMode]" IsListView="[IsListView]" IsOneRow="[IsOneRow]" InListMaker="[InListMaker]" ScrollLayout="[ScrollLayout]" GalleryContentShift="[GalleryContentShift]" MetadataDelay="[MetadataDelay]" MetaDataTopShift="[MetaDataTopShift]" MetaDataLeftShift="[MetaDataLeftShift]" SelectedIndex="[SelectedIndex]" SelectedGroup="[SelectedGroup]" TotalCount="[TotalCount]" NavigateIntoContent="[NavigateIntoContent]">
+            <Animations>
+              <TransformByAttributeAnimation TransformByAttributeAnimation="[Layer4Animation]"/>
+            </Animations>
+          </browse:Gallery>
+          <browse:Gallery Name="TSLayer5" InputEnabled="false" Model="[Model]" TransitionState="[TransitionState]" FocusArea="[FocusArea]" Margins="0, 0, 0, 15" MinimumSize="[GallerySize]" MaximumSize="[GallerySize]" ItemMode="[ItemMode]" IsListView="[IsListView]" IsOneRow="[IsOneRow]" InListMaker="[InListMaker]" ScrollLayout="[ScrollLayout]" GalleryContentShift="[GalleryContentShift]" MetadataDelay="[MetadataDelay]" MetaDataTopShift="[MetaDataTopShift]" MetaDataLeftShift="[MetaDataLeftShift]" SelectedIndex="[SelectedIndex]" SelectedGroup="[SelectedGroup]" TotalCount="[TotalCount]" NavigateIntoContent="[NavigateIntoContent]">
+            <Animations>
+              <TransformByAttributeAnimation TransformByAttributeAnimation="[Layer5Animation]"/>
+            </Animations>
+          </browse:Gallery>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="TurboRegion">
+    <Properties>
+      <cor:Boolean Name="Forward" Boolean="true"/>
+      <ICommand Name="StartCommand" ICommand="$Required"/>
+      <ICommand Name="StopCommand" ICommand="$Required"/>
+      <shell:TurboScrollController Name="TurboController" TurboScrollController="$Required"/>
+    </Properties>
+    <Locals>
+      <shell:TurboScrollMouseHandler Name="_Handler" HandlerStage="Routed"/>
+    </Locals>
+    <Rules>
+      <Binding Target="[_Handler.TurboController]" Source="[TurboController]"/>
+      <Binding Target="[_Handler.Forward]" Source="[Forward]"/>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.MouseFocus]" ConditionOp="ChangedTo" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Input.RequestKeyFocus]"/>
+        </Actions>
+      </Rule>
+      <Default Target="[Input.KeyInteractive]" Value="false"/>
+      <Rule>
+        <Conditions>
+          <Modified Source="[_Handler.Start]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[StartCommand.Invoke]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[_Handler.Stop]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[StopCommand.Invoke]"/>
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <ColorFill Content="AliceBlue" MinimumSize="50,50"/>
+    </Content>
+  </UI>
+  <UI Name="TurboTemplate" BaseUI="turbo:Template">
+    <Properties>
+      <shell:BrowseTurboScrollMarker Name="BrowseMarker" BrowseTurboScrollMarker="null"/>
+    </Properties>
+    <Locals>
+      <IModelItem Name="Model" IModelItem="null"/>
+    </Locals>
+    <Rules>
+      <Binding Target="[BrowseMarker]" Source="[TurboMarker!shell:BrowseTurboScrollMarker]">
+        <Conditions>
+          <IsType Source="[TurboMarker]" Type="shell:BrowseTurboScrollMarker"/>
+        </Conditions>
+      </Binding>
+      <Default Target="[BrowseMarker]" Value="null"/>
+      <Binding Target="[Model]" Source="[BrowseMarker.Model]">
+        <Conditions>
+          <IsValid Source="[BrowseMarker]"/>
+        </Conditions>
+      </Binding>
+      <Default Target="[Model]" Value="null"/>
+      <Changed Source="[Model]">
+        <Conditions>
+          <IsType Source="[Model]" Type="shared:IUpdateItem"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Model!shared:IUpdateItem.Update]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Changed>
+    </Rules>
+  </UI>
+  <UI Name="TurboBaseItem" BaseUI="me:TurboTemplate">
+    <Properties>
+      <cor:String Name="Content" String="null"/>
+    </Properties>
+    <Rules>
+      <Default Target="[Content]" Value="null"/>
+      <Default Target="[Accessible.Name]" Value="res://ehres!Acc_Name_TurboScroll_Marker"/>
+      <Default Target="[Accessible.Role]" Value="ListItem"/>
+      <Binding Target="[Accessible.Value]" Source="[Content]"/>
+    </Rules>
+  </UI>
+  <UI Name="TurboBaseLabel" BaseUI="me:TurboTemplate">
+    <Properties>
+      <cor:String Name="Content" String="null"/>
+    </Properties>
+    <Rules>
+      <Default Target="[Content]" Value="null"/>
+      <Default Target="[Accessible.Name]" Value="res://ehres!Acc_Name_TurboScroll_Label"/>
+      <Default Target="[Accessible.Role]" Value="StaticText"/>
+      <Binding Target="[Accessible.Value]" Source="[Content]"/>
+    </Rules>
+  </UI>
+  <UI Name="TurboBaseGroup" BaseUI="me:TurboTemplate">
+    <Properties>
+      <cor:String Name="Content" String="null"/>
+    </Properties>
+    <Rules>
+      <Default Target="[Content]" Value="null"/>
+      <Default Target="[Accessible.Name]" Value="res://ehres!Acc_Name_TurboScroll_Group"/>
+      <Default Target="[Accessible.Role]" Value="StaticText"/>
+      <Binding Target="[Accessible.Value]" Source="[Content]"/>
+    </Rules>
+  </UI>
+  <UI Name="TurboItem" BaseUI="me:TurboBaseItem">
+    <Properties>
+      <Animation Name="ContentHide" Animation="animation://me:Turbo.Item.ContentHide"/>
+      <Animation Name="ContentShow" Animation="animation://me:Turbo.Item.ContentShow"/>
+    </Properties>
+    <Rules>
+      <Binding Target="[MyItem.Content]" Source="[Content]"/>
+    </Rules>
+    <Content>
+      <Text Name="MyItem" Color="color://comm:OffWhite" Font="font://me:Turbo.Item.Font">
+        <Animations>
+          <TransformAnimation TransformAnimation="[_ContentHide]"/>
+          <TransformAnimation TransformAnimation="[_ContentShow]"/>
+        </Animations>
+      </Text>
+    </Content>
+  </UI>
+  <UI Name="TurboLabel" BaseUI="me:TurboBaseLabel">
+    <Properties>
+      <Animation Name="ContentHide" Animation="animation://me:Turbo.Label.ContentHide"/>
+      <Animation Name="ContentShow" Animation="animation://me:Turbo.Label.ContentShow"/>
+    </Properties>
+    <Rules>
+      <Binding Target="[MyLabel.Content]" Source="[Content]"/>
+    </Rules>
+    <Content>
+      <Text Name="MyLabel" Color="color://comm:OffWhite" Font="font://me:Turbo.Label.Font">
+        <Animations>
+          <TransformAnimation TransformAnimation="[_ContentHide]"/>
+          <TransformAnimation TransformAnimation="[_ContentShow]"/>
+        </Animations>
+      </Text>
+    </Content>
+  </UI>
+  <UI Name="TurboGroup" BaseUI="me:TurboBaseGroup">
+    <Properties>
+      <Animation Name="ContentHide" Animation="animation://me:Turbo.Group.ContentHide"/>
+      <Animation Name="ContentShow" Animation="animation://me:Turbo.Group.ContentShow"/>
+    </Properties>
+    <Rules>
+      <Binding Target="[MyGroup.Content]" Source="[Content]"/>
+    </Rules>
+    <Content>
+      <Text Name="MyGroup" Color="color://comm:LightBlue" Font="font://me:Turbo.Group.Font">
+        <Animations>
+          <TransformAnimation TransformAnimation="[_ContentHide]"/>
+          <TransformAnimation TransformAnimation="[_ContentShow]"/>
+        </Animations>
+      </Text>
+    </Content>
+  </UI>
+  <UI Name="TurboThumbnail" BaseUI="me:TurboTemplate">
+    <Properties>
+      <Image Name="NoImage" Source="res://ehres!Audio.NoCover.1.Large.png"/>
+      <Animation Name="ContentHide" Animation="animation://me:Turbo.Item.ContentHide"/>
+      <Animation Name="ContentShow" Animation="animation://me:Turbo.Item.ContentShow"/>
+    </Properties>
+    <Rules>
+      <Default Target="[Accessible.Name]" Value="res://ehres!Acc_Name_TurboScroll_Marker"/>
+      <Default Target="[Accessible.Role]" Value="Graphic"/>
+      <Binding Target="[Accessible.Value]" Source="[Model.Description]">
+        <Conditions>
+          <IsValid Source="[Model]"/>
+        </Conditions>
+      </Binding>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Model]" InitialEvaluate="true"/>
+          <IsValid Source="[Model]"/>
+          <IsType Source="[Model]" Type="shell:IThumbnailCommand"/>
+          <IsValid Source="[Model!shell:IThumbnailCommand.Image]"/>
+          <IsValid Source="[Model!shell:IThumbnailCommand.Image.DefaultImage]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[MyGraphic.Image]" Value="[Model!shell:IThumbnailCommand.Image.DefaultImage]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Model]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[MyGraphic.Image]" Value="[NoImage]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Model]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[MyGraphic.ForceContentChange]"/>
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <Graphic Name="MyGraphic" Visible="true" SizingPolicy="SizeToConstraint" MaintainAspectRatio="true" MaximumSize="0,300">
+        <Animations>
+          <TransformAnimation TransformAnimation="[_ContentHide]"/>
+          <TransformAnimation TransformAnimation="[_ContentShow]"/>
+        </Animations>
+      </Graphic>
+    </Content>
+  </UI>
+  <UI Name="TurboCaptionedThumbnail" BaseUI="me:TurboThumbnail">
+    <Rules>
+      <Binding Target="[MyText.Content]" Source="[Model.Description]">
+        <Conditions>
+          <IsValid Source="[Model]"/>
+        </Conditions>
+      </Binding>
+    </Rules>
+    <Content>
+      <ColorFill Content="color://comm:GalleryFolderFillFocus" Layout="VerticalFlow">
+        <Children>
+          <Graphic Name="MyGraphic" Visible="true"/>
+          <Text Name="MyText" Font="font://me:Turbo.Item.Font" Color="color://comm:GalleryFolderLabelFocus"/>
+        </Children>
+      </ColorFill>
+    </Content>
+  </UI>
+  <UI Name="TurboModelItem" BaseUI="me:TurboItem">
+    <Rules>
+      <Binding Target="[Content]" Source="[Model.Description]">
+        <Conditions>
+          <IsValid Source="[Model]"/>
+        </Conditions>
+      </Binding>
+    </Rules>
+  </UI>
+  <UI Name="TurboModelLabel" BaseUI="me:TurboLabel">
+    <Rules>
+      <Binding Target="[Content]" Source="[Model.Description]">
+        <Conditions>
+          <IsValid Source="[Model]"/>
+        </Conditions>
+        <Transformer>
+          <shell:TurboScrollTransformer LeftPart="true" CharacterCount="2"/>
+        </Transformer>
+      </Binding>
+    </Rules>
+  </UI>
+  <UI Name="TurboModelGroup" BaseUI="me:TurboGroup">
+    <Rules>
+      <Binding Target="[Content]" Source="[BrowseMarker.Group.Description]">
+        <Conditions>
+          <IsValid Source="[BrowseMarker]"/>
+          <IsValid Source="[BrowseMarker.Group]"/>
+        </Conditions>
+      </Binding>
+    </Rules>
+  </UI>
+  <UI Name="TurboDebugItem" BaseUI="me:TurboTemplate">
+    <Rules>
+      <Binding Target="[MyIndex.Content]" Source="[TurboMarker.Index]">
+        <Conditions>
+          <IsValid Source="[TurboMarker]"/>
+        </Conditions>
+        <Transformer>
+          <FormatTransformer Format="Index: {0}"/>
+        </Transformer>
+      </Binding>
+      <Binding Target="[MyItemIndex.Content]" Source="[TurboMarker.ItemIndex]">
+        <Conditions>
+          <IsValid Source="[TurboMarker]"/>
+        </Conditions>
+        <Transformer>
+          <FormatTransformer Format="Item Index: {0}"/>
+        </Transformer>
+      </Binding>
+      <Binding Target="[MyGroupIndex.Content]" Source="[BrowseMarker.GroupIndex]">
+        <Conditions>
+          <IsValid Source="[BrowseMarker]"/>
+        </Conditions>
+        <Transformer>
+          <FormatTransformer Format="Group Index: {0}"/>
+        </Transformer>
+      </Binding>
+    </Rules>
+    <Content>
+      <ColorFill Name="MyColor" Content="color://comm:GalleryFolderFillFocus" Layout="VerticalFlow" Padding="5,5,5,5">
+        <Children>
+          <Text Color="color://comm:GalleryFolderLabelFocus" Font="font://me:Turbo.Header.Font" Content="Marker"/>
+          <Text Name="MyIndex" Color="color://comm:GalleryFolderLabelFocus" Font="font://me:Turbo.Text.Font"/>
+          <Text Name="MyItemIndex" Color="color://comm:GalleryFolderLabelFocus" Font="font://me:Turbo.Text.Font"/>
+          <Text Name="MyGroupIndex" Color="color://comm:GalleryFolderLabelFocus" Font="font://me:Turbo.Text.Font"/>
+        </Children>
+      </ColorFill>
+    </Content>
+  </UI>
+  <UI Name="TurboDebugLabel" BaseUI="me:TurboLabel">
+    <Rules>
+      <Binding Target="[Content]" Source="[TurboMarker.ItemIndex]">
+        <Conditions>
+          <IsValid Source="[TurboMarker]"/>
+        </Conditions>
+        <Transformer>
+          <FormatTransformer Format="Item Index: {0}"/>
+        </Transformer>
+      </Binding>
+    </Rules>
+  </UI>
+  <UI Name="TurboDebugGroup" BaseUI="me:TurboGroup">
+    <Rules>
+      <Binding Target="[Content]" Source="[BrowseMarker.GroupIndex]">
+        <Conditions>
+          <IsValid Source="[BrowseMarker]"/>
+        </Conditions>
+        <Transformer>
+          <FormatTransformer Format="Group Index: {0}"/>
+        </Transformer>
+      </Binding>
+    </Rules>
+  </UI>
+</Mcml>

@@ -1,0 +1,351 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml" 
+      xmlns:cor ="assembly://MSCorLib/System" 
+      xmlns:coll ="assembly://MSCorLib/System.Collections" 
+      xmlns:draw ="assembly://Microsoft.MediaCenter.UI/Microsoft.MediaCenter.UI.Drawing" 
+      xmlns:shl ="assembly://Library/Library.Code.V3" 
+      xmlns:slide ="resx://Library/Library.Resources/V3_Controls_Slide" 
+      xmlns:comm ="resx://Library/Library.Resources/V3_Globals" 
+      xmlns:ctl ="resx://Library/Library.Resources/V3_Controls" 
+      xmlns:nav ="resx://Library/Library.Resources/V3_Controls_NavPanel" 
+      xmlns:bc ="resx://Library/Library.Resources/V3_Controls_BrowseCommand" 
+      xmlns:details ="resx://Library/Library.Resources/V3_Slide_Details" 
+      xmlns:me ="Me">
+  
+  <UI Name="Movie_Details_Base" BaseUI="details:Details_RulesLayout">
+    <Properties>
+      <shl:MovieDetailsSlideDeck Name="SlideDeck" MovieDetailsSlideDeck="$Required" />
+      <cor:String Name="SlideTitle" String="synopsis" />
+      <cor:String Name="NoDataString" String="Movie_Details_NoData" />
+      <EditableText Name="FocusArea" Value="none"/>
+      <EditableText Name="NavigationDirection" Value="none"/>
+      <EditableText Name="TransitionState" Value="Idle"/>
+      <Font Name="NoDataFont" FontName="global://comm:MainFontFace" FontSize="22" />
+      <BooleanChoice Name="HasData" />
+      <BooleanChoice Name="ScrollerHasKeyFocus" />
+      <AnchorLayoutInput Name="MainScrollerAnchor" Left="Parent,0" Top="Parent,0" Right="Parent,1" Bottom="Footer,0,-74" />
+      <cor:Boolean Name="HasScrollableText" Boolean="false" />
+    </Properties>
+    <Rules>
+      <Binding Source="[NoDataString]" Target="[NoDataText.Content]" />
+      <Binding Source="[NoDataString]" Target="[NoDataText.AccessibleValue]"/>
+      <Default Target="[NoDataText.Font]" Value="[NoDataFont]" />
+      <Default Target="[NoDataText.Color]" Value="color://comm:OffWhite" />
+      <Rule>
+        <Conditions>
+          <Modified Source="[HasData.Chosen]" InitialEvaluate="true"/>
+          <Equality Source="[HasData.Value]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[NoDataText.Visible]" Value="false" />
+        </Actions>
+      </Rule>
+      <Changed Source="[ScrollerHasKeyFocus.Value]">
+        <Conditions>
+          <Equality Source="[HasScrollableText]" Value="true" />
+          <Equality Source="[ScrollerHasKeyFocus.Value]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[MainScroller.Alpha]" Value="1.0"/>
+        </Actions>
+      </Changed>
+      <Rule>
+        <Conditions>
+          <Equality Source="[HasScrollableText]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[MainScroller.KeyFocused]" Value="[ScrollerHasKeyFocus]" />
+          <Set Target="[MainScroller.Alpha]" Value="0.7"/>
+        </Actions>
+      </Rule>
+      <Default Target="[HasData.Value]" Value="false" />
+      <Default Target="[NoDataText.Visible]" Value="true" />
+      <Default Target="[MainScroller.LayoutInput]" Value="[MainScrollerAnchor]" />
+    </Rules>
+    <Content>
+      <Panel>
+        <Children>
+          <me:SlideTitlePanel Name="SlideTitlePanel" SlideDeck="[SlideDeck]" />
+          <me:MediaStaticInfoPanel Name="MediaStaticInfoPanel" SlideDeck="[SlideDeck]" />
+          <me:NavPanel Name="NavPanel" SlideDeck="[SlideDeck]"/>
+          <me:CommandsPanel Name="CommandsPanel" SlideDeck="[SlideDeck]"/>
+          <me:MediaPosterPanel Name="MediaPosterPanel" SlideDeck="[SlideDeck]"/>
+          <me:ProgramInfoPanel Name="ProgramInfoPanel" SlideDeck="[SlideDeck]"/>
+          <me:BrandLogoPanel Name="BrandLogoPanel" SlideDeck="[SlideDeck]"/>
+          <Graphic Name="SlideBackgroundStripe"/>
+          <Panel Name="DynamicSlidePanel" />
+          <ctl:AccessibleText Name="NoDataText" AccessibleName="Acc_No_Data_Label" Content=""/>
+          <slide:ScrollingTextPanel Name="MainScroller" />
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="DeepFocusPanel" BaseUI="slide:DeepFocusPanel">
+    <Properties>
+      <shl:MovieDetailsSlideDeck Name="SlideDeck" MovieDetailsSlideDeck="$Required" />
+    </Properties>
+  </UI>
+  <UI Name="CommandsPanel" BaseUI="details:CommandsPanel">
+    <Properties>
+      <shl:MovieDetailsSlideDeck Name="SlideDeck" MovieDetailsSlideDeck="$Required" />
+    </Properties>
+  </UI>
+  <UI Name="NavPanel" BaseUI="slide:NavPanel">
+    <Properties>
+      <shl:MovieDetailsSlideDeck Name="SlideDeck" MovieDetailsSlideDeck="$Required" />
+    </Properties>
+  </UI>
+  <UI Name="MediaPosterPanel">
+    <Properties>
+      <shl:MovieDetailsSlideDeck Name="SlideDeck" MovieDetailsSlideDeck="$Required" />
+    </Properties>
+    <Rules>
+      <!--Binding Source="[SlideDeck.Image.Values.#Default!Image]" Target="[MoviePoster.Content]">
+        <Conditions>
+          <Modified Source="[SlideDeck.Image]" InitialEvaluate="true"/>
+          <IsValid Source="[SlideDeck.Image]" />
+        </Conditions>
+      </Binding-->
+      <Default Target="[MoviePoster.Content]" Value="resx://Library/Library.Resources/V3_Controls_Movie_Icon_Default" />
+    </Rules>
+    <Content>
+      <Graphic Name="MoviePoster" AcquiringImage="resx://Library/Library.Resources/V3_Controls_Movie_Icon_Default" MaximumSize="125,175" MaintainAspectRatio="true"/>
+    </Content>
+  </UI>
+  <UI Name="ProgramInfoPanel">
+    <Properties>
+      <shl:MovieDetailsSlideDeck Name="SlideDeck" MovieDetailsSlideDeck="$Required" />
+      <Font Name="MiscFont" FontName="global://comm:RegularFontFace" FontSize="16" />
+    </Properties>
+    <!--Rules>
+      <Binding Target="[ChannelNumber.Content]" Source="[SlideDeck.ChannelNumber]"/>
+      <Binding Target="[ChannelCallSign.Content]" Source="[SlideDeck.ChannelCallSign]"/>
+    </Rules-->
+    <Content>
+      <Panel Layout="Anchor">
+        <Children>
+          <ctl:AccessibleText Name="ChannelNumber" Content="" AccessibleName="Movie_Details_ChannelNumber_AccessibleName" Font="[MiscFont]" Color="color://comm:OffWhite">
+            <LayoutInput>
+              <AnchorLayoutInput Top="Parent,0" Right="Parent,1"/>
+            </LayoutInput>
+          </ctl:AccessibleText>
+          <ctl:AccessibleText Name="ChannelCallSign" Content="" AccessibleName="Movie_Details_ChannelCallSign_AccessibleName" Font="[MiscFont]" Color="color://comm:OffWhite">
+            <LayoutInput>
+              <AnchorLayoutInput Top="Parent,0,31" Right="Parent,1"/>
+            </LayoutInput>
+          </ctl:AccessibleText>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="BrandLogo" BaseUI="ctl:StaticGraphic">
+    <Properties>
+      <Size Name="MaximumSize" Size="64,40"/>
+      <cor:Boolean Name="MaintainAspectRatio" Boolean="true"/>
+      <cor:String Name="AccessibilityName" String="Video_guide_brandlogo"/>
+    </Properties>
+  </UI>
+  <UI Name="BrandLogoPanel">
+    <Properties>
+      <shl:MovieDetailsSlideDeck Name="SlideDeck" MovieDetailsSlideDeck="$Required" />
+      <cor:Boolean Name="InListMaker"/>
+    </Properties>
+    <!--Rules>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[SlideDeck.DataItem.AllowAttribution]"/>
+          <Equality Source="[SlideDeck.DataItem.AllowAttribution]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[BrandLogo.Content]" Value="[SlideDeck.DataItem.AttributionImage]"/>
+          <Set Target="[BrandLogo.AccessibilityValue]" Value="[SlideDeck.DataItem.AttributionDescription]"/>
+          <Set Target="[BrandLogo.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+    </Rules-->
+    <Content>
+      <me:BrandLogo Name="BrandLogo" Content="null" Visible="false">
+        <LayoutInput>
+          <FormLayoutInput Top="Parent,0" Right="Parent,1"/>
+        </LayoutInput>
+      </me:BrandLogo>
+    </Content>
+  </UI>
+  <UI Name="SlideTitlePanel" BaseUI="details:SlideTitlePanel">
+    <Properties>
+      <shl:MovieDetailsSlideDeck Name="SlideDeck" MovieDetailsSlideDeck="$Required" />
+    </Properties>
+  </UI>
+  <UI Name="MediaStaticInfoPanel">
+    <Properties>
+      <shl:MovieDetailsSlideDeck Name="SlideDeck" MovieDetailsSlideDeck="$Required" />
+      <Font Name="TitleFont" FontName="global://comm:MainFontFace" FontSize="21"/>
+      <Font Name="SubtitleFont" FontName="global://comm:RegularFontFace" FontSize="18"/>
+    </Properties>
+    <Rules>
+      <Binding Source="[SlideDeck.IsHD]" Target="[HDLogo.Visible]" />
+      <Binding Source="[SlideDeck.IsDolbyDigital]" Target="[DolbyDigitalLogo.Visible]"/>
+      <Binding Source="[SlideDeck.IsInteractive]" Target="[InteractiveLogo.Visible]"/>
+      <Binding Source="[SlideDeck.RecordingStatusImage]" Target="[RecordingStatusImage.Content]"/>
+      <Binding Source="[SlideDeck.RecordingStatusText]" Target="[RecordingStatusText.Content]"/>
+      <Binding Source="[SlideDeck.CopyStatusText]" Target="[CopyStatusText.Content]">
+        <Conditions>
+          <Equality ConditionOp="NotEquals" Source="[SlideDeck.CopyStatusText]" Value=""/>
+        </Conditions>
+      </Binding>
+      <Binding Source="[MovieName.Content]" Target="[MovieName.AccessibleValue]"/>
+      <Binding Source="[SlideDeck.Title]" Target="[MovieName.Content]" />
+      <Binding Source="[SlideDeck.SubTitle]" Target="[SubTitle.Content]" ConditionLogicalOp="And">
+        <Conditions>
+          <IsValid Source="[SlideDeck.SubTitle]"/>
+          <Equality Source="[SlideDeck.IsMovie]" Value="false"/>
+        </Conditions>
+      </Binding>
+      <Binding Source="[SubTitle.Content]" Target="[SubTitle.AccessibleValue]"/>
+      <Binding Source="[SlideDeck.ShowingType]" Target="[ShowingType.Content]">
+        <Conditions>
+          <IsValid Source="[SlideDeck.ShowingType]"/>
+          <Equality Source="[SlideDeck.ShowingType.Length]" Value="0" ConditionOp="GreaterThan"/>
+        </Conditions>
+        <Transformer>
+          <FormatTransformer Format="({0})"/>
+        </Transformer>
+      </Binding>
+      <Binding Source="[ShowingType.Content]" Target="[ShowingType.AccessibleValue]"/>
+      <Binding Source="[SlideDeck.ReleaseYear]" Target="[ReleaseDate.Content]" ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[SlideDeck.ReleaseYear]" Value="1" ConditionOp="GreaterThan"/>
+          <Equality Source="[SlideDeck.IsMovie]" Value="true"/>
+        </Conditions>
+      </Binding>
+      <Binding Source="[ReleaseDate.Content]" Target="[ReleaseDate.AccessibleValue]"/>
+      <Rule Name="NextShowingRule" ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[SlideDeck.MovieType]" ConditionOp="Equals" Value="GuideEntry" />
+          <Equality Source="[SlideDeck.MovieType]" ConditionOp="Equals" Value="RecordedTV" />
+        </Conditions>
+        <Actions>
+          <Set Target="[NextShowingStartDate.Content]" Value="[SlideDeck.StartTime]">
+            <Transformer>
+              <DateTimeTransformer Format="ForceDayOfWeek,AbbreviateNames,ShortDate,NoYear"/>
+            </Transformer>
+          </Set>
+          <Set Target="[NextShowingStartTime.Content]" Value="[SlideDeck.StartTime]">
+            <Transformer>
+              <DateTimeTransformer Format="ShortTime"/>
+            </Transformer>
+          </Set>
+          <Set Target="[NextShowingEndTime.Content]" Value="[SlideDeck.EndTime]">
+            <Transformer>
+              <DateTimeTransformer Format="ShortTime"/>
+            </Transformer>
+          </Set>
+        </Actions>
+      </Rule>
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[SlideDeck.CopyStatusText]" ConditionOp="Equals" Value=""/>
+          <Equality Source="[SlideDeck.StartTime.Year]" Value="1" ConditionOp="GreaterThan"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NextShowing.Visible]" Value="true" />
+        </Actions>
+      </Rule-->
+      <Binding Source="[NextShowingStartDate.Content]" Target="[NextShowingStartDate.AccessibleValue]"/>
+      <Binding Source="[NextShowingStartTime.Content]" Target="[NextShowingStartTime.AccessibleValue]"/>
+      <Binding Source="[NextShowingEndTime.Content]" Target="[NextShowingEndTime.AccessibleValue]"/>
+      <!--Binding Source="[SlideDeck.Duration]" Target="[Duration.Content]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[NextShowing.Visible]" Value="false"/>
+          <Equality ConditionOp="Equals" Source="[SlideDeck.CopyStatusText]" Value=""/>
+          <Equality ConditionOp="GreaterThan" Source="[SlideDeck.Duration]" Value="0" />
+        </Conditions>
+        <Transformer>
+          <TimeSpanTransformer Format="Words,RoundToMinute"/>
+        </Transformer>
+      </Binding-->
+      <Binding Source="[SlideDeck.Duration]" Target="[Duration.Content]"/>
+      <!--Binding Source="[Duration.Content]" Target="[Duration.AccessibleValue]"/-->
+      <!--Binding Source="[SlideDeck.StarRatingImage!draw:BaseImage]" Target="[StarRating.Image]">
+        <Conditions>
+          <IsValid Source="[SlideDeck.StarRatingImage]"/>
+        </Conditions>
+      </Binding-->
+      <Binding Source="[SlideDeck.StarRatingImage]" Target="[StarRating.Content]">
+        <Conditions>
+          <IsValid Source="[SlideDeck.StarRatingImage]"/>
+        </Conditions>
+      </Binding>
+    </Rules>
+    <Content>
+      <Panel Layout="VerticalFlow" >
+        <Children>
+          <Panel Layout="VerticalFlow" >
+            <LayoutInput>
+              <AnchorLayoutInput Top="Parent,0,18" Horizontal="Near"/>
+            </LayoutInput>
+            <Children>
+              <Panel Layout="HorizontalFlow" >
+                <LayoutInput>
+                  <AnchorLayoutInput Horizontal="Near"/>
+                </LayoutInput>
+                <Children>
+                  <Panel MinimumSize="83,0" MaximumSize="83,0">
+                    <Layout>
+                      <FlowLayout Orientation="Horizontal" StripAlignment="Far" ItemAlignment="Far"/>
+                    </Layout>
+                    <Children>
+                      <Graphic Name="RecordingStatusImage" Margins="0,0,13,0" />
+                    </Children>
+                  </Panel>
+                  <ctl:AccessibleText Name="MovieName" AccessibleName="Movie Details Title AccessibleName" Font="[TitleFont]" WordWrap="false" Content="" MaximumLines="1" MaximumSize="341,0" />
+                </Children>
+              </Panel>
+              <Panel Layout="HorizontalFlow" Margins="83,0,0,0">
+                <LayoutInput>
+                  <AnchorLayoutInput Horizontal="Near"/>
+                </LayoutInput>
+                <Children>
+                  <ctl:AccessibleText Name="SubTitle" AccessibleName="Video Details SubTitle AccessibleName" Font="[SubtitleFont]" WordWrap="false" Content="" MaximumLines="1" />
+                  <ctl:AccessibleText Name="ShowingType" AccessibleName="Video Details ShowingType AccessibleName" Font="[SubtitleFont]" WordWrap="false" Content="" MaximumLines="1" />
+                </Children>
+              </Panel>
+              <Panel Layout="HorizontalFlow" Margins="83,0,0,0">
+                <Children>
+                  <ctl:AccessibleText Name="ReleaseDate" Color="color://comm:OffWhite" Font="[SubtitleFont]" AccessibleName="Video_Details_ReleaseDate_AccessibleName" Content=""/>
+                  <Graphic Name="StarRating" MaintainAspectRatio="true" Margins="8,4,0,0"/>
+                </Children>
+              </Panel>
+              <Panel Layout="HorizontalFlow" Margins="83,0,0,0">
+                <Children>
+                  <Panel Name="NextShowing" Visible="false" Layout="HorizontalFlow">
+                    <Children>
+                      <ctl:AccessibleText Name="NextShowingStartDate" Color="color://comm:OffWhite" Font="[SubtitleFont]" AccessibleName="Video_Details_NextShowingDate_AccessibleName" Content=""/>
+                      <Text Content=", " Color="color://comm:OffWhite" Font="[SubtitleFont]" />
+                      <ctl:AccessibleText Name="NextShowingStartTime" Color="color://comm:OffWhite" Font="[SubtitleFont]" AccessibleName="Video_Details_NextShowingStartTime_AccessibleName" Content=""/>
+                      <Text Content=" - " Color="color://comm:OffWhite" Font="[SubtitleFont]" />
+                      <ctl:AccessibleText Name="NextShowingEndTime" Color="color://comm:OffWhite" Font="[SubtitleFont]" AccessibleName="Video_Details_NextShowingEndTime_AccessibleName" Content=""/>
+                    </Children>
+                  </Panel>
+                  <ctl:AccessibleText Name="Duration" Color="color://comm:OffWhite" Font="[SubtitleFont]" AccessibleName="Video_Details_Duration_AccessibleName" Content=""/>
+                  <Graphic Name="HDLogo" Margins="8,7,8,0" Content="resx://Library/Library.Resources/V3_Controls_Common_MetaData_HDTV" Visible="true" />
+                  <Graphic Name="DolbyDigitalLogo" Margins="8,0,8,0" Content="resx://Library/Library.Resources/V3_Controls_Common_AudioLogo" Visible="true" />
+                  <Graphic Name="InteractiveLogo" Margins="8,0,8,0" Content="resx://Library/Library.Resources/V3_Controls_Common_MetaData_Interactive" Visible="true" />
+                </Children>
+              </Panel>
+              <Panel Layout="HorizontalFlow" Margins="83,0,0,0">
+                <Children>
+                  <ctl:AccessibleText Name="RecordingStatusText" Color="color://comm:OffWhite" Font="[SubtitleFont]" AccessibleName="Acc_Name_Guide_RecordingStatus" Content=""/>
+                </Children>
+              </Panel>
+              <Panel Layout="HorizontalFlow" Margins="83,0,0,0">
+                <Children>
+                  <ctl:AccessibleText Name="CopyStatusText" Color="color://comm:OffWhite" Font="[SubtitleFont]" AccessibleName="Acc_Name_HomeMediaSharing_CopyStatus" Content=""/>
+                </Children>
+              </Panel>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+</Mcml>
