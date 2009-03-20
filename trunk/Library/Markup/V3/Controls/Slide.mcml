@@ -1,0 +1,178 @@
+<Mcml xmlns ="http://schemas.microsoft.com/2006/mcml" 
+      xmlns:cor ="assembly://MSCorLib/System" 
+      xmlns:shl ="assembly://Library/Library.Code.V3" 
+      xmlns:comm="resx://Library/Library.Resources/V3_Globals" 
+      xmlns:ctl="resx://Library/Library.Resources/V3_Controls" 
+      xmlns:anim="resx://Library/Library.Resources/V3_Controls_SlideAnimations" 
+      xmlns:nav="resx://Library/Library.Resources/V3_Controls_NavPanel" 
+      xmlns:me ="Me">
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseAnimations"/>
+  <UI Name="Slide_Base">
+    <Properties>
+      <shl:SlideDeck Name="SlideDeck" SlideDeck="$Required" />
+      <cor:String Name="Context" String="unknown" />
+      <ICommand Name="CommandPopOverlay" ICommand="$Required"/>
+      <ICommand Name="CommandClearOverlays" ICommand="$Required"/>
+      <Font Name="FontBody" FontName="global://comm:MainFontFace" FontSize="16"/>
+      <Animation Name="AnimationSnapIn" Animation="animation://anim:Slide.Show" />
+      <Animation Name="AnimationSnapOut" Animation="animation://anim:Slide.Hide" />
+      <Animation Name="AnimationSlideIn" Animation="animation://anim:Slide.Show" />
+      <Animation Name="AnimationSlideOut" Animation="animation://anim:Slide.Hide" />
+      <cor:Single Name="BrowseGalleryTitleFadeSize" Single="global://comm:BrowseGalleryTitleFadeSize"/>
+      <cor:Single Name="BrowseGalleryTitleFarOffset" Single="global://comm:BrowseGalleryTitleFarOffset"/>
+    </Properties>
+    <Rules>
+      <!--Binding Target="[Accessible.Value]" Source="[SlideDeck.Chosen!shl:SlideBlueprint.UIName]" /-->
+      <Rule>
+        <Conditions>
+          <Modified Source="[AnimationSlideOut]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[DynamicSlidePanel.AttachAnimation]" animation="[AnimationSlideOut]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[AnimationSlideIn]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[DynamicSlidePanel.AttachAnimation]" animation="[AnimationSlideIn]" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false" />
+      <Default Target="[Accessible.Role]" Value="Pane" />
+      <Default Target="[Accessible.Name]" Value="Slide" />
+    </Rules>
+    <Content>
+      <Panel>
+        <Children>
+          <Panel Name="StaticSlidePanel" />
+          <Panel Name="DynamicSlidePanel" />
+          <nav:NavPanel Name="NavPanel" CommandPrevSlide="[SlideDeck.CommandPrevSlide]" CommandNextSlide="[SlideDeck.CommandNextSlide]" />
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="SlidePanel">
+    <Properties>
+      <shl:SlideDeck Name="SlideDeck" SlideDeck="$Required" />
+    </Properties>
+  </UI>
+  <UI Name="DeepFocusPanel">
+    <Properties>
+      <cor:String Name="FocusAreaName" String="none" />
+      <EditableText Name="FocusArea" Value="none"/>
+      <EditableText Name="NavigationDirection" Value="none"/>
+      <EditableText Name="TransitionState" Value="Idle"/>
+    </Properties>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" Value="Idle"/>
+          <Equality Source="[FocusAreaName]" ConditionOp="NotEquals" Value="none" />
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="[FocusAreaName]"/>
+        </Actions>
+      </Rule>
+    </Rules>
+  </UI>
+  <UI Name="NavPanel">
+    <Properties>
+      <shl:SlideDeck Name="SlideDeck" SlideDeck="$Required" />
+    </Properties>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.Options]" InitialEvaluate="true" />
+          <Equality Source="[SlideDeck.Options.Count]" ConditionOp="GreaterThan" Value="1" />
+        </Conditions>
+        <Actions>
+          <Set Target="[NavPanel.Visible]" Value="true" />
+        </Actions>
+      </Rule>
+      <Default Target="[NavPanel.Visible]" Value="false" />
+    </Rules>
+    <Content>
+      <nav:NavPanel Name="NavPanel" CommandPrevSlide="[SlideDeck.CommandPrevSlide]" CommandNextSlide="[SlideDeck.CommandNextSlide]"/>
+    </Content>
+  </UI>
+  <UI Name="ScrollingTextPanel" BaseUI="me:DeepFocusPanel">
+    <Properties>
+      <cor:String Name="FocusAreaName" String="Scroller" />
+      <cor:String Name="Content" String="" />
+      <cor:String Name="AccessibleName" String="Scrolling Text Pane" />
+      <Font Name="Font" FontName="global://comm:RegularFontFace" FontSize="21" />
+      <Color Name="Color" Color="color://comm:OffWhite"/>
+      <Size Name="MaximumSize" Size="700,0"/>
+      <cor:Single Name="FadeSize" Single="30" />
+      <BooleanChoice Name="KeyFocused" />
+    </Properties>
+    <Locals>
+      <ScrollingData Name="ScrollingData"/>
+      <ScrollingHandler Name="ScrollingHandler" HandleDirectionalKeys="true"/>
+    </Locals>
+    <Rules>
+      <Binding Source="[Input.KeyFocus]" Target="[KeyFocused.Value]" />
+      <Binding Source="[Content]" Target="[Text.Content]" />
+      <Binding Source="[ScrollingData.CanScrollUp]" Target="[TextScroller.ShowNear]" />
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]" />
+      <Default Target="[Accessible.Role]" Value="Pane" />
+      <Default Target="[Accessible.Name]" Value="[AccessibleName]" />
+      <Binding Source="[Content]" Target="[Accessible.Value]" />
+    </Rules>
+    <Content>
+      <Panel Layout="Anchor" >
+        <Children>
+          <Scroller Name="TextScroller" Orientation="Vertical" FadeSize="[FadeSize]" ScrollingData="[ScrollingData]" MaximumSize="[MaximumSize]" >
+            <Children>
+              <Text Name="Text" WordWrap="true" Color="[Color]" Font="[Font]" Content="scroller text content">
+                <Animations>
+                  <Animation Animation="animation://me:Repeater.Scroll.Animation" />
+                </Animations>
+              </Text>
+            </Children>
+          </Scroller>
+          <me:VerticalScrollingChevrons Name="Chevrons" ScrollData="[ScrollingData]">
+            <LayoutInput>
+              <AnchorLayoutInput Left="TextScroller,0.5,-18" Top="TextScroller,0,-37" Bottom="TextScroller,1,37"/>
+            </LayoutInput>
+          </me:VerticalScrollingChevrons>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="VerticalScrollingChevrons">
+    <Properties>
+      <ScrollingData Name="ScrollData" ScrollingData="$Required"/>
+    </Properties>
+    <Locals>
+      <Image Name="FocusImageUp" Image="resx://Library/Library.Resources/V3_Controls_Common_Scroll_Up_NoFocus"/>
+      <Image Name="FocusImageDown" Image="resx://Library/Library.Resources/V3_Controls_Common_Scroll_Down_NoFocus"/>
+    </Locals>
+    <Content>
+      <Panel Layout="Anchor" Name="Chevrons">
+        <Children>
+          <ctl:ScrollUpButton ScrollData="[ScrollData]" HideIfUnableToScroll="true" TileMaxSize="37,37" FocusImage="[FocusImageUp]" >
+            <LayoutInput>
+              <AnchorLayoutInput Vertical="Near"/>
+            </LayoutInput>
+          </ctl:ScrollUpButton>
+          <ctl:ScrollDownButton ScrollData="[ScrollData]" HideIfUnableToScroll="true" TileMaxSize="37,37" FocusImage="[FocusImageDown]">
+            <LayoutInput>
+              <AnchorLayoutInput Vertical="Far"/>
+            </LayoutInput>
+          </ctl:ScrollDownButton>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <Animation Name="Repeater.Scroll.Animation" Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="SCurve"/>
+      <PositionKeyframe Time="0.15" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+</Mcml>

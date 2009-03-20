@@ -1,0 +1,226 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+      xmlns:cor="assembly://MsCorLib/System"
+      xmlns:a="assembly://Library/Library"
+      xmlns:c="resx://Library/Library.Resources/Controls"
+      xmlns:settingsItem="resx://Library/Library.Resources/Settings_Item_Temp"
+      xmlns:me="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/Base" />
+  <Aggregate Source="resx://Library/Library.Resources/Controls" />
+
+  <UI Name="Settings">
+    <Properties>
+      <a:Settings Name="Settings" Settings="$Required" />
+      <a:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <a:SettingsUIWrapper Name="ClassSettingsUIWrapper"/>
+
+      <!-- Main Menu Commands -->
+      <Command Name="CommandAppearance" Description="Appearance"/>
+      <Command Name="CommandExternalInterface" Description="External Interface"/>
+      <Command Name="CommandFilters" Description="Filters"/>
+      <Command Name="CommandTrailers" Description="Trailers"/>
+      <Command Name="CommandAbout" Description="About"/>
+      <Command Name="CommandBack"/>
+
+      <!--
+      <Command Name="CommandSave" Description="Save"/>
+      <Command Name="CommandSave_Appearance" Description="Save"/>
+      <Command Name="CommandCancel" Description="Cancel"/>
+      <Command Name="CommandCancel_Appearance" Description="Cancel"/>
+      <Command Name="CommandCloseAllOptions"/>
+      <Command Name="CommandBack_Appearance"/>
+      <Command Name="CommandBack_ExternalInterface"/>
+      <Command Name="CommandBack_Filters"/>
+      <Command Name="CommandBack_Trailers"/>
+      <Command Name="CommandBack_About"/>
+      -->
+    </Properties>
+
+    <Locals>
+      <Size Name="SizeButtonsMain" Height="50" Width="400"/>
+    </Locals>
+
+    <Rules>
+
+      <Changed Source="[CommandBack.Invoked]">
+        <Actions>
+          <Invoke Target="[ClassSettingsUIWrapper.LoadGallery]" app="[Application]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[CommandAppearance.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.GoToSettings_AppearancePage]" classSettingsUIWrapper="[ClassSettingsUIWrapper]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[CommandExternalInterface.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.GoToSettings_ExternalInterfacePage]" classSettingsUIWrapper="[ClassSettingsUIWrapper]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[CommandFilters.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.GoToSettings_FiltersPage]" classSettingsUIWrapper="[ClassSettingsUIWrapper]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[CommandTrailers.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.GoToSettings_TrailersPage]" classSettingsUIWrapper="[ClassSettingsUIWrapper]"/>
+        </Actions>
+      </Changed>
+
+      <Changed Source="[CommandAbout.Invoked]">
+        <Actions>
+          <Invoke Target="[Application.GoToSettings_AboutPage]"/>
+        </Actions>
+      </Changed>
+    </Rules>
+
+    <Content>
+      <Panel Name="PanelMain"
+             Layout="Form">
+        <Children>
+          <!--Header-->
+          <Panel Layout="Form">
+            <LayoutInput>
+              <FormLayoutInput  Top="Parent, 0" Left="Parent, 0" Bottom="Parent, .16" Right="Parent, 1"/>
+            </LayoutInput>
+
+            <Children>
+              <Clip Orientation="Vertical"
+                   FadeSize="60"
+                   NearOffset="-60">
+                <LayoutInput>
+                  <FormLayoutInput  Left="Parent, .13" Bottom="Parent, .88" />
+                </LayoutInput>
+                <Children>
+                  <Text Font="font://me:FontLarge"
+                        Content="settings"
+                        Color="LightBlue">
+                    <!--
+                    <Animations>
+                      <Animation Type="Show" CenterPointPercent="0.50,0.50,0.50" CenterPointOffset="400,400,0">
+                        <Keyframes>
+                          <AlphaKeyframe Time="0.0" Value="0" Interpolation="Linear" RelativeTo="Current" />
+                          <AlphaKeyframe Time=".15" Value="1" Interpolation="Linear" RelativeTo="Final" />
+
+                          <ScaleKeyframe Time="0.0" Value=".5,.5,0" Interpolation="Log" RelativeTo="Current" />
+                          <ScaleKeyframe Time=".15" Value="1,1,1" Interpolation="Log" RelativeTo="Final" />
+                        </Keyframes>
+                      </Animation>
+
+                     
+                      <Animation Type="Hide" CenterPointPercent=".5,.5,0">
+                        <Keyframes>
+                          <AlphaKeyframe Time="0.0" Value="1" Interpolation="Linear" RelativeTo="Current" />
+                          <AlphaKeyframe Time="1.8" Value="0" Interpolation="Linear" RelativeTo="Final" />
+
+                          <ScaleKeyframe Time="0.0" Value="1,1,1" Interpolation="Log" RelativeTo="Current" />
+                          <ScaleKeyframe Time="2" Value="2,2,1" Interpolation="Log" RelativeTo="Final" />
+                        </Keyframes>
+                      </Animation>
+                    
+                    </Animations>
+                      -->
+                  </Text>
+                </Children>
+              </Clip>
+            </Children>
+          </Panel>
+
+          <!--Main Menu Buttons-->
+          <Panel Name="PanelButtonsMain">
+            <LayoutInput>
+              <FormLayoutInput  Top="Parent, .3" Left="Parent, .35" Bottom="Parent, .75"/>
+            </LayoutInput>
+            <Layout>
+              <FlowLayout Orientation="Vertical" Spacing="10,0"/>
+            </Layout>
+
+            <Animations>
+              <Animation Type="Show" CenterPointPercent="0.50,0.50,0.50" CenterPointOffset="-400,-400,0">
+                <Keyframes>
+                  <AlphaKeyframe Time="0.0" Value="0" Interpolation="Linear" RelativeTo="Current" />
+                  <AlphaKeyframe Time=".25" Value="1" Interpolation="Linear" RelativeTo="Final" />
+
+                  <ScaleKeyframe Time="0.0" Value=".5,.5,0" Interpolation="Linear" RelativeTo="Current" />
+                  <ScaleKeyframe Time=".25" Value="1,1,1" Interpolation="Linear" RelativeTo="Final" />
+                </Keyframes>
+              </Animation>
+
+              <Animation Type="Hide" >
+                <Keyframes>
+                  <AlphaKeyframe Time="0.0" Value="1" Interpolation="Linear" RelativeTo="Current" />
+                  <AlphaKeyframe Time=".2" Value="0" Interpolation="Linear" RelativeTo="Final" />
+
+                  <ScaleKeyframe Time="0.0" Value="1,1,0" Interpolation="Linear" RelativeTo="Current" />
+                  <ScaleKeyframe Time=".2" Value="2,2,1" Interpolation="Linear" RelativeTo="Final" />
+                </Keyframes>
+              </Animation>
+            </Animations>
+            <Children>
+              <c:SimpleButton Command="[CommandAppearance]"
+                              Text="[CommandAppearance.Description]"
+                              Size="[SizeButtonsMain]"
+                              ImageNoFocus="image://me:ButtonDormant"
+                              BoolHandleBack="true"
+                              CommandBack="[CommandBack]"/>
+              <c:SimpleButton Command="[CommandExternalInterface]"
+                              Text="[CommandExternalInterface.Description]"
+                              Size="[SizeButtonsMain]"
+                              ImageNoFocus="image://me:ButtonDormant"
+                               BoolHandleBack="true"
+                              CommandBack="[CommandBack]"/>
+              <c:SimpleButton Command="[CommandFilters]"
+                              Text="[CommandFilters.Description]"
+                              Size="[SizeButtonsMain]"
+                              ImageNoFocus="image://me:ButtonDormant"
+                               BoolHandleBack="true"
+                              CommandBack="[CommandBack]"/>
+              <c:SimpleButton Command="[CommandTrailers]"
+                              Text="[CommandTrailers.Description]"
+                              Size="[SizeButtonsMain]"
+                              ImageNoFocus="image://me:ButtonDormant"
+                              BoolHandleBack="true"
+                              CommandBack="[CommandBack]"/>
+              <c:SimpleButton Command="[CommandAbout]"
+                              Text="[CommandAbout.Description]"
+                              Size="[SizeButtonsMain]"
+                              ImageNoFocus="image://me:ButtonDormant"
+                              BoolHandleBack="true"
+                              CommandBack="[CommandBack]"/>
+            </Children>
+          </Panel>
+
+          <!--Footer-->
+          <Panel Layout="Form">
+            <LayoutInput>
+              <FormLayoutInput  Top="Parent, .75" Left="Parent, 0" Bottom="Parent, 1" Right="Parent, 1"/>
+            </LayoutInput>
+
+            <Children>
+              <NowPlaying ShowFullMetadata="OnFocus"
+                          SnapToDefaultPosition="true">
+                <LayoutInput>
+                  <FormLayoutInput  Bottom="Parent, 1" Left="Parent, 0"/>
+                </LayoutInput>
+              </NowPlaying>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+
+    </Content>
+  </UI>
+
+  <Image Name="ButtonNoFocus"           Source="resx://Library/Library.Resources/ListboxNoFocus"           NineGrid="7,7,7,7" />
+  <Image Name="ButtonLeftFocus"         Source="resx://Library/Library.Resources/ButtonLeftFocus"         NineGrid="7,7,7,7" />
+  <Image Name="ButtonDormant"           Source="resx://Library/Library.Resources/ButtonDormant"           NineGrid="7,7,7,7" />
+
+  <Font Name="FontXLarge" FontName="global://me:RegularFontName" FontSize="34" />
+  <Font Name="FontLarge" FontName="global://me:RegularFontName" FontSize="28" />
+  <Font Name="FontRegular" FontName="global://me:RegularFontName" FontSize="20" />
+</Mcml>

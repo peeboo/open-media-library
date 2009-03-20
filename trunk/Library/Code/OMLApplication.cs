@@ -1,5 +1,6 @@
 //#define DEBUG_EXT
 //#define LAYOUT_V2
+//#define LAYOUT_V3
 //#define CAROUSEL
 
 using System.Collections;
@@ -33,6 +34,21 @@ namespace Library
         private int iCurrentBackgroundImage = 0;
         private int iTotalBackgroundImages = 0;
         public Microsoft.MediaCenter.UI.Timer mainBackgroundTimer;
+        //v3 temp
+        private Library.Code.V3.MoreInfoHooker2 hooker;
+
+        //v3 temp
+        public void FixRepeatRate(object scroller, uint val)
+        {
+            PropertyInfo pi = scroller.GetType().GetProperty("View", BindingFlags.Public | BindingFlags.Instance);
+            object view = pi.GetValue(scroller, null);
+            pi = view.GetType().GetProperty("Control", BindingFlags.Public | BindingFlags.Instance);
+            object control = pi.GetValue(view, null);
+
+            pi = control.GetType().GetProperty("KeyRepeatThreshold", BindingFlags.NonPublic | BindingFlags.Instance);
+            pi.SetValue(control, val, null);
+
+        }
 
         private void SetPrimaryBackgroundImage()
         {
@@ -199,7 +215,13 @@ namespace Library
         }
 
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
-        {           
+        {
+            #if LAYOUT_V3
+            //sets up the hooks for context menu
+            this.hooker = new Library.Code.V3.MoreInfoHooker2();
+            #endif
+
+
             this._session = session;
             AddInHost.Current.MediaCenterEnvironment.PropertyChanged +=new PropertyChangedEventHandler(MediaCenterEnvironment_PropertyChanged);
 
@@ -265,6 +287,359 @@ namespace Library
             properties.Add("Gallery", new GalleryV2(properties, _titles));
             //properties.Add("Gallery", new BaseGallery(properties, _titles));
             _session.GoToPage(@"resx://Library/Library.Resources/NewMenu", properties);
+            return;
+#endif
+#if LAYOUT_V3
+            //this is the POC testing code for the v3 UI.
+            //it currently populates the basic structure with test data
+            #region v3POC
+
+            SetPrimaryBackgroundImage();
+            TitleCollection _titles =new TitleCollection();
+            _titles.loadTitleCollection();
+            //primaryBackgroundImage
+            //this is temp to test controls
+            OMLProperties properties = new OMLProperties();
+            properties.Add("Application", this);
+            properties.Add("UISettings", new UISettings());
+            properties.Add("Settings", new Settings());
+            properties.Add("I18n", I18n.Instance);
+            //v3 main gallery
+            Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage();
+            //description
+            gallery.Description = "OML";
+            //size of the galleryitems
+            gallery.ItemSize = Library.Code.V3.GalleryItemSize.Small;
+            gallery.Model = new Library.Code.V3.BrowseModel(gallery);
+            //commands at top of screen
+            gallery.Model.Commands = new ArrayListDataSet(gallery);
+
+            //create the context menu
+            Library.Code.V3.ContextMenuData ctx = new Library.Code.V3.ContextMenuData();
+
+            //create the settings cmd
+            Library.Code.V3.ThumbnailCommand settingsCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            settingsCmd.Description = "settings";
+            settingsCmd.DefaultImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings");
+            settingsCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings_Dormant");
+            settingsCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings_Focus");
+            //no invoke for now
+            //settingsCmd.Invoked += new EventHandler(this.SettingsHandler);
+            gallery.Model.Commands.Add(settingsCmd);
+
+            //create the Search cmd
+            Library.Code.V3.ThumbnailCommand searchCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            searchCmd.Description = "search";
+            searchCmd.DefaultImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Search");
+            searchCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Search_Dormant");
+            searchCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Search_Focus");
+            searchCmd.Invoked += new EventHandler(searchCmd_Invoked);
+            gallery.Model.Commands.Add(searchCmd);
+
+            //some ctx items
+            Library.Code.V3.ThumbnailCommand viewListCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            viewListCmd.Description = "View List";
+            viewListCmd.Invoked += new EventHandler(viewCmd_Invoked);
+
+            Library.Code.V3.ThumbnailCommand viewSmallCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            viewSmallCmd.Invoked += new EventHandler(viewCmd_Invoked);
+            viewSmallCmd.Description = "View Small";
+
+            Library.Code.V3.ThumbnailCommand viewLargeCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            viewLargeCmd.Invoked += new EventHandler(viewCmd_Invoked);
+            
+            viewLargeCmd.Description = "View Large";
+
+            Library.Code.V3.ThumbnailCommand viewSettingsCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            //viewSettingsCmd.Invoked += new EventHandler(this.SettingsHandler);
+            viewSettingsCmd.Description = "Settings";
+            
+
+            //ctx.SharedItems.Add(viewLargeCmd);
+            ctx.SharedItems.Add(viewSmallCmd);
+            ctx.SharedItems.Add(viewListCmd);
+            ctx.SharedItems.Add(viewSettingsCmd);
+
+            Library.Code.V3.ThumbnailCommand viewMovieDetailsCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            viewMovieDetailsCmd.Description = "Movie Details";
+
+            Library.Code.V3.ThumbnailCommand viewPlayCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            viewPlayCmd.Description = "Play";
+
+            Library.Code.V3.ThumbnailCommand viewDeleteCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            viewDeleteCmd.Description = "Delete";
+
+            ctx.UniqueItems.Add(viewMovieDetailsCmd);
+            ctx.UniqueItems.Add(viewPlayCmd);
+            ctx.UniqueItems.Add(viewDeleteCmd);
+
+            Command CommandContextPopOverlay = new Command();
+            properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
+
+            //properties.Add("MenuData", ctx);
+            gallery.ContextMenu = ctx;
+            //the pivots
+            gallery.Model.Pivots = new Choice(gallery, "desc", new ArrayListDataSet(gallery));
+
+            //twoRowGalleryItemPoster
+            #region oneRowGalleryItemPoster
+            VirtualList galleryList = new VirtualList(gallery, null);
+            foreach (Title t in _titles)
+            {
+                galleryList.Add(this.CreateGalleryItem(t));
+            }
+
+
+            Library.Code.V3.BrowsePivot p = new Library.Code.V3.BrowsePivot(gallery, "one row", "loading titles...", galleryList);
+            p.ContentLabel = "OML";
+            p.SupportsJIL = true;
+            p.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            p.ContentItemTemplate = "oneRowGalleryItemPoster";
+            p.DetailTemplate = Library.Code.V3.BrowsePivot.ExtendedDetailTemplate;
+            gallery.Model.Pivots.Options.Add(p);
+            #endregion oneRowGalleryItemPoster
+
+            //twoRowGalleryItemPoster
+            #region twoRowGalleryItemPoster
+            VirtualList galleryListGenres = new VirtualList(gallery, null);
+            foreach (Title t in _titles)
+            {
+                galleryListGenres.Add(this.CreateGalleryItem(t));
+            }
+
+            Library.Code.V3.BrowsePivot p2 = new Library.Code.V3.BrowsePivot(gallery, "two row", "loading genres...", galleryListGenres);
+            p2.ContentLabel = "OML";
+            p2.SupportsJIL = true;
+            p2.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            p2.ContentItemTemplate = "twoRowGalleryItemPoster";
+            p2.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+            gallery.Model.Pivots.Options.Add(p2);
+            #endregion twoRowGalleryItemPoster
+
+            //ListViewItem
+            #region ListViewItem
+            VirtualList galleryListListViewItem = new VirtualList(gallery, null);
+            foreach (Title t in _titles)
+            {
+                galleryListListViewItem.Add(this.CreateGalleryItem(t));
+            }
+
+            Library.Code.V3.BrowsePivot p3 = new Library.Code.V3.BrowsePivot(gallery, "list", "loading genres...", galleryListListViewItem);
+            p3.ContentLabel = "OML";
+            p3.SupportsJIL = true;
+            p3.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            p3.ContentItemTemplate = "ListViewItem";
+            p3.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+            gallery.Model.Pivots.Options.Add(p3);
+            #endregion ListViewItem
+
+            //Grouped
+            #region Grouped
+            
+            VirtualList groupedGalleryListListViewItem = new VirtualList(gallery, null);
+            int i = 1;
+            foreach (Title t in _titles)
+            {
+                i++;
+                groupedGalleryListListViewItem.Add(this.CreateGalleryItem(t));
+                if (i > 20)
+                    break;
+            }
+            Library.Code.V3.GalleryItem testtgenre = new Library.Code.V3.GalleryItem();
+            testtgenre.Description = "Comedy";
+            testtgenre.Metadata = "12 titles";
+            testtgenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_comedy");
+            //groupedGalleryListListViewItem.Add(testtgenre);
+
+            Library.Code.V3.BrowseGroup testGroup = new Library.Code.V3.BrowseGroup();//this, "Sample Group", groupedGalleryListListViewItem);
+            testGroup.Owner = gallery;
+            testGroup.Description = "Group 1";
+            testGroup.Metadata = "12 titles";
+            testGroup.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_mystery");
+            testGroup.Content = groupedGalleryListListViewItem;
+            testGroup.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
+            
+            VirtualList groupListView = new VirtualList(gallery, null);
+
+            
+            //groupListView.Add(testtgenre);
+            groupListView.Add(testGroup);
+            
+            VirtualList groupedGalleryListListViewItem2 = new VirtualList(gallery, null);
+            
+            foreach (Title t in _titles)
+            {
+                i++;
+                groupedGalleryListListViewItem2.Add(this.CreateGalleryItem(t));
+                if (i > 50)
+                    break;
+            }
+
+            Library.Code.V3.BrowseGroup testGroup2 = new Library.Code.V3.BrowseGroup();//this, "Sample Group", groupedGalleryListListViewItem);
+            testGroup2.Owner = gallery;
+            testGroup2.Description = "Group 2";
+            testGroup2.Metadata = "12 titles";
+            testGroup2.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_mystery");
+            testGroup2.Content = groupedGalleryListListViewItem2;
+            testGroup2.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
+
+
+            groupListView.Add(testGroup2);
+
+            Library.Code.V3.BrowsePivot group1 = new Library.Code.V3.BrowsePivot(gallery, "group", "grouped...", groupListView);
+            group1.ContentLabel = "OML";
+            group1.SupportsJIL = false;
+            group1.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            group1.ContentItemTemplate = "GalleryGroup";
+            group1.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+
+            gallery.Model.Pivots.Options.Add(group1);
+            #endregion grouped
+
+            //Genres test
+            #region Genres
+            VirtualList galleryListthreeRowGalleryItemPoster = new VirtualList(gallery, null);
+            Library.Code.V3.GalleryItem actionAdventureGenre = new Library.Code.V3.GalleryItem();
+            actionAdventureGenre.Description = "Action/Adventure";
+            actionAdventureGenre.Metadata = "12 titles";
+            actionAdventureGenre.DefaultImage=new Image("resx://Library/Library.Resources/Genre_Sample_actionadventure");
+            galleryListthreeRowGalleryItemPoster.Add(actionAdventureGenre);
+
+            Library.Code.V3.GalleryItem comedyGenre = new Library.Code.V3.GalleryItem();
+            comedyGenre.Description = "Comedy";
+            comedyGenre.Metadata = "12 titles";
+            comedyGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_comedy");
+            galleryListthreeRowGalleryItemPoster.Add(comedyGenre);
+
+            Library.Code.V3.GalleryItem documentaryGenre = new Library.Code.V3.GalleryItem();
+            documentaryGenre.Description = "Documentary";
+            documentaryGenre.Metadata = "12 titles";
+            documentaryGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_documentary");
+            galleryListthreeRowGalleryItemPoster.Add(documentaryGenre);
+
+            Library.Code.V3.GalleryItem dramaGenre = new Library.Code.V3.GalleryItem();
+            dramaGenre.Description = "Drama";
+            dramaGenre.Metadata = "12 titles";
+            dramaGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_drama");
+            galleryListthreeRowGalleryItemPoster.Add(dramaGenre);
+
+            Library.Code.V3.GalleryItem kidsFamilyGenre = new Library.Code.V3.GalleryItem();
+            kidsFamilyGenre.Description = "Kids/Family";
+            kidsFamilyGenre.Metadata = "12 titles";
+            kidsFamilyGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_kidsfamily");
+            galleryListthreeRowGalleryItemPoster.Add(kidsFamilyGenre);
+
+            Library.Code.V3.GalleryItem musicalGenre = new Library.Code.V3.GalleryItem();
+            musicalGenre.Description = "Musical";
+            musicalGenre.Metadata = "12 titles";
+            musicalGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_musical");
+            galleryListthreeRowGalleryItemPoster.Add(musicalGenre);
+
+            Library.Code.V3.GalleryItem mysteryGenre = new Library.Code.V3.GalleryItem();
+            mysteryGenre.Description = "Mystery";
+            mysteryGenre.Metadata = "12 titles";
+            mysteryGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_mystery");
+            galleryListthreeRowGalleryItemPoster.Add(mysteryGenre);
+
+            Library.Code.V3.GalleryItem otherGenre = new Library.Code.V3.GalleryItem();
+            otherGenre.Description = "Other";
+            otherGenre.Metadata = "12 titles";
+            otherGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_other");
+            galleryListthreeRowGalleryItemPoster.Add(otherGenre);
+
+            Library.Code.V3.GalleryItem romanceGenre = new Library.Code.V3.GalleryItem();
+            romanceGenre.Description = "Romance";
+            romanceGenre.Metadata = "12 titles";
+            romanceGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_romance");
+            galleryListthreeRowGalleryItemPoster.Add(romanceGenre);
+
+            Library.Code.V3.GalleryItem scienceFictionGenre = new Library.Code.V3.GalleryItem();
+            scienceFictionGenre.Description = "Science Fiction";
+            scienceFictionGenre.Metadata = "12 titles";
+            scienceFictionGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_sciencefiction");
+            galleryListthreeRowGalleryItemPoster.Add(scienceFictionGenre);
+
+            Library.Code.V3.GalleryItem westernGenre = new Library.Code.V3.GalleryItem();
+            westernGenre.Description = "Western";
+            westernGenre.Metadata = "12 titles";
+            westernGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_western");
+            galleryListthreeRowGalleryItemPoster.Add(westernGenre);
+
+            Library.Code.V3.GalleryItem noimageGenre = new Library.Code.V3.GalleryItem();
+            noimageGenre.Description = "No Image ergeg ergege egegeg";
+            noimageGenre.Metadata = "12 titles";
+            noimageGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_noimagegenre");
+            galleryListthreeRowGalleryItemPoster.Add(noimageGenre);
+            
+            //foreach (Title t in _titles)
+            //{
+            //    galleryListthreeRowGalleryItemPoster.Add(this.CreateGalleryItem(t));
+            //}
+
+            Library.Code.V3.BrowsePivot p4 = new Library.Code.V3.BrowsePivot(gallery, "genres", "loading genres...", galleryListthreeRowGalleryItemPoster);
+            p4.ContentLabel = "OML";
+            p4.SupportsJIL = true;
+            p4.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            p4.ContentItemTemplate = "twoRowGalleryItemGenre";
+            p4.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+            gallery.Model.Pivots.Options.Add(p4);
+            #endregion Genres
+
+            //properties.Add("Gallery", new GalleryV2(properties, _titles));
+            properties.Add("Page", gallery);
+
+
+            Library.Code.V3.MovieDetailsSlideDeck deck = new Library.Code.V3.MovieDetailsSlideDeck();
+            //Choice c = new Choice();
+            VirtualList Options = new VirtualList();
+            Library.Code.V3.SlideBlueprint bp = new Library.Code.V3.SlideBlueprint(@"resx://Library/Library.Resources/V3_Slide_Movie_Details_Synopsis", "Synopsis", DateTime.MinValue, DateTime.Now);
+            Library.Code.V3.SlideBlueprint bp2 = new Library.Code.V3.SlideBlueprint(@"resx://Library/Library.Resources/V3_Slide_Movie_Details_Actions", "Actions", DateTime.MinValue, DateTime.Now);
+            Options.Add(bp);
+            Options.Add(bp2);
+            deck.Options = Options;
+            deck.Commands = new ArrayListDataSet();
+            
+            //dummy up some cmds
+            Library.Code.V3.ThumbnailCommand deleteCmd = new Library.Code.V3.ThumbnailCommand(deck);
+            deleteCmd.Description = "Delete";
+            deleteCmd.DefaultImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Remove");
+            deleteCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Remove_Dormant");
+            deleteCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Remove_Focus");
+            deck.Commands.Add(deleteCmd);
+
+            Library.Code.V3.ThumbnailCommand playCmd = new Library.Code.V3.ThumbnailCommand(deck);
+            playCmd.Description = "Play";
+            playCmd.DefaultImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Play");
+            playCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Play_Dormant");
+            playCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Play_Focus");
+            deck.Commands.Add(playCmd);
+
+            deck.Description = "descrip";
+            deck.Synopsis = "this is a syn adfge rh rhyr yhyr hr hr ge ge gtwt rgwe tgew gr ewg weg ewg wetg wrt g rhtytjuhytgfr er gtwrt her  etju ktjy hgt efr erfgetw";
+            deck.AdditionalCommands = new ArrayListDataSet();
+            deck.CommandPopOverlay = new Command();
+            deck.CommandPopOverlay.Invoked += new EventHandler(CommandPopOverlay_Invoked);
+            deck.CommandClearOverlays = new Command();
+            deck.CommandClearOverlays.Invoked += new EventHandler(CommandClearOverlays_Invoked);
+            deck.CommandPushOverlay = new Command();
+            deck.CommandPushOverlay.Invoked += new EventHandler(CommandPushOverlay_Invoked);
+
+            //deck.AdditionalCommands.Add(cmd);
+            properties.Add("SlideDeck", deck);
+            properties.Add("CommandPopOverlay", deck.CommandPopOverlay);
+            properties.Add("CommandClearOverlays", deck.CommandClearOverlays);
+            properties.Add("CommandPushOverlay", deck.CommandPushOverlay);
+
+            deck.Context = "hi";
+            //_session.GoToPage(@"resx://Library/Library.Resources/V3_SlideDeck_Movie_Details", properties);
+
+            gallery.Model.Pivots.Chosen = p;
+            gallery.Model.Pivots.ChosenChanged += new EventHandler(Pivots_ChosenChanged);
+            _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
+            _page = gallery;
+            _deck = deck;
+
+            #endregion v3POC
             return;
 #endif
 
@@ -335,6 +710,443 @@ namespace Library
                     GoToMenu(new MovieGallery());
                     return;
             }
+        }
+
+        //v3 temp
+        void searchCmd_Invoked(object sender, EventArgs e)
+        {
+            Library.Code.V3.MoviesSearchPage page = new Library.Code.V3.MoviesSearchPage();
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+            properties["Page"] = page;
+            properties["Application"] = this;
+            this._session.GoToPage("resx://Library/Library.Resources/V3_MoviesSearchPage", properties);
+        }
+
+        //v3 temp
+        void Pivots_ChosenChanged(object sender, EventArgs e)
+        {
+            Library.Code.V3.BrowsePivot p = (Library.Code.V3.BrowsePivot)this._page.Model.Pivots.Chosen;
+
+
+            //change the buttons based on which view was invoked
+            ICommand ctx0 = (ICommand)_page.ContextMenu.SharedItems[0];
+            ICommand ctx1 = (ICommand)_page.ContextMenu.SharedItems[1];
+
+            switch (p.ContentItemTemplate)
+            {
+                case "oneRowGalleryItemPoster":
+                    ctx0.Description = "View Small";
+                    ctx1.Description = "View List";
+                    break;
+                case "twoRowGalleryItemPoster":
+                    ctx0.Description = "View Large";
+                    ctx1.Description = "View List";
+                    break;
+                case "ListViewItem":
+                    ctx0.Description = "View Large";
+                    ctx1.Description = "View Small";
+                    break;
+            }
+        }
+
+        //v3 temp
+        public void GoToBackPage()
+        {
+            DebugLine("[OMLApplication] GoToBackPage()");
+            if (_session != null)
+            {
+                _session.BackPage();
+            }
+        }
+
+        //v3 temp
+        public void SettingsHandler(object sender, EventArgs e)
+        {
+            _session.GoToPage("resx://Library/Library.Resources/Settings_Main", CreateProperties(true, true, null));
+        }
+
+        public void GoToSettings_AppearancePage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_AppearancePage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_Appearance", properties);
+            }
+        }
+
+        public void GoToSettings_Appearance_GeneralPage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_Appearance_GeneralPage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_Appearance_General", properties);
+            }
+        }
+
+        public void GoToSettings_Appearance_DetailViewPage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_Appearance_GeneralPage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_Appearance_DetailView", properties);
+            }
+        }
+
+        public void GoToSettings_Appearance_GalleryViewPage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_Appearance_GalleryViewPage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_Appearance_GalleryView", properties);
+            }
+        }
+
+        public void GoToSettings_ExternalInterfacePage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_ExternalInterfacePage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_ExternalInterface", properties);
+            }
+        }
+
+        public void GoToSettings_FiltersPage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_FiltersPage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_Filters", properties);
+            }
+        }
+
+        public void GoToSettings_TrailersPage(SettingsUIWrapper classSettingsUIWrapper)
+        {
+            DebugLine("[OMLApplication] GoToSettings_TrailersPage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Settings settings = new Settings();
+                classSettingsUIWrapper.Init(settings);
+                properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
+                properties["Settings"] = settings;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_Trailers", properties);
+            }
+        }
+
+        public void GoToSettings_AboutPage()
+        {
+            DebugLine("[OMLApplication] GoToSettings_AboutPage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/Settings_About", properties);
+            }
+        }
+
+        //v3 temp
+        void viewCmd_Invoked(object sender, EventArgs e)
+        {
+
+            Library.Code.V3.BrowsePivot p = (Library.Code.V3.BrowsePivot)this._page.Model.Pivots.Chosen;
+            base.FirePropertyChanged("MoreInfo");
+
+            ICommand invokedCmd = (ICommand)sender;
+
+            //change the buttons based on which view was invoked
+            ICommand ctx0 = (ICommand)_page.ContextMenu.SharedItems[0];
+            ICommand ctx1 = (ICommand)_page.ContextMenu.SharedItems[1];
+
+            switch (invokedCmd.Description)
+            {
+                case "View Large":
+                    p.ContentItemTemplate = "oneRowGalleryItemPoster";
+                    ctx0.Description = "View Small";
+                    ctx1.Description = "View List";
+                    break;
+                case "View Small":
+                    p.ContentItemTemplate = "twoRowGalleryItemPoster";
+                    ctx0.Description = "View Large";
+                    ctx1.Description = "View List";
+                    break;
+                case "View List":
+                    p.ContentItemTemplate = "ListViewItem";
+                    ctx0.Description = "View Large";
+                    ctx1.Description = "View Small";
+                    break;
+            }
+
+            //p.ContentItemTemplate = "ListViewItem";
+            p.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+        }
+
+        //v3 temp
+        void viewListCmd_Invoked(object sender, EventArgs e)
+        {
+            Library.Code.V3.BrowsePivot p = (Library.Code.V3.BrowsePivot)this._page.Model.Pivots.Chosen;
+            base.FirePropertyChanged("MoreInfo");
+            p.ContentItemTemplate = "ListViewItem";
+            p.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+        }
+
+        //v3 temp
+        void viewSmallCmd_Invoked(object sender, EventArgs e)
+        {
+            Library.Code.V3.BrowsePivot p = (Library.Code.V3.BrowsePivot)this._page.Model.Pivots.Chosen;
+            base.FirePropertyChanged("MoreInfo");
+            p.ContentItemTemplate = "twoRowGalleryItemPoster";
+            p.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+        }
+
+        //v3 temp
+        void viewLargeCmd_Invoked(object sender, EventArgs e)
+        {
+            Library.Code.V3.BrowsePivot p = (Library.Code.V3.BrowsePivot)this._page.Model.Pivots.Chosen;
+            base.FirePropertyChanged("MoreInfo");
+            p.ContentItemTemplate = "oneRowGalleryItemPoster";
+            p.DetailTemplate = Library.Code.V3.BrowsePivot.ExtendedDetailTemplate;
+        }
+        //void hooker_ButtonPressed(object sender, Library.Code.V3.RemoteControlEventArgs e)
+        //{
+        //    //throw new NotImplementedException();
+        //    this.CatchMoreInfo();
+        //}
+
+        //v3 temp
+        public void CatchMoreInfo()
+        {
+            if (this._moreInfo == true)
+                this._moreInfo = false;
+            else
+                this._moreInfo = true;
+            base.FirePropertyChanged("MoreInfo");
+        }
+
+        //v3 temp
+        private bool _moreInfo = false;
+        public bool MoreInfo
+        {
+            get { return this._moreInfo; }
+            set { this._moreInfo = value; }
+        }
+
+        //v3 temp
+        void CommandPushOverlay_Invoked(object sender, EventArgs e)
+        {
+
+        }
+
+        //v3 temp
+        void CommandClearOverlays_Invoked(object sender, EventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        //v3 temp
+        Library.Code.V3.MovieDetailsSlideDeck _deck;
+        void CommandPopOverlay_Invoked(object sender, EventArgs e)
+        {
+            //throw new NotImplementedException();
+
+        }
+
+        //v3 temp
+        Library.Code.V3.GalleryPage _page;
+        internal Library.Code.V3.GalleryItem CreateGalleryItem(Title t)
+        {
+
+            Library.Code.V3.GalleryItem item = new Library.Code.V3.GalleryItem();
+
+            item.InternalMovieItem = new MovieItem(t, null);
+            item.ItemType = 0;
+            string imageName = null;
+            string moviePath = null;
+            DateTime releaseDate = new DateTime(2000, 1, 1);
+            item.MetadataTop = releaseDate.Year.ToString();
+
+
+            //item.Description = "This is a Test";
+            item.ItemId = 1;
+            string starRating = "5";
+            item.StarRating = starRating;
+            string extendedMetadata = string.Empty;
+
+
+            item.MetadataTop = releaseDate.Year.ToString();
+
+            //item.Metadata = "PG-13, 22 minutes\r\n" + item.InternalMovieItem.Synopsis;
+            item.Metadata = "PG-13, 22 minutes";
+            item.Tagline = item.InternalMovieItem.Synopsis;
+
+
+            if (!string.IsNullOrEmpty(t.FrontCoverPath) && File.Exists(t.FrontCoverPath))
+            {
+                item.DefaultImage = new Image("file://" + t.FrontCoverPath);
+            }
+            item.Description = t.Name;
+
+            //TODO: not sure how to read this yet...
+            item.SimpleVideoFormat = item.InternalMovieItem.TitleObject.VideoFormat.ToString();
+
+
+            item.Invoked += delegate(object sender, EventArgs args)
+            {
+                //to test deck
+                //_deck.CommandPushOverlay.Invoke();
+
+                //to test v2
+                //if (this._page != null)
+                //    this._page.PageState.TransitionState = Library.Code.V3.PageTransitionState.NavigatingAwayForward;
+
+                //Library.Code.V3.GalleryItem galleryItem = (Library.Code.V3.GalleryItem)sender;
+
+                //// Navigate to a details page for this item.
+                //MovieDetailsPage page = galleryItem.InternalMovieItem.CreateDetailsPage(galleryItem.InternalMovieItem);
+                //OMLApplication.Current.GoToDetails(page);
+
+                //to test v3
+                Library.Code.V3.DetailsPage page = new Library.Code.V3.DetailsPage();
+                //DataRow movieData = this.GetMovieData(movieId);
+
+                //MovieMetadata metadata = this.ExtractMetadata(movieData, movieId);
+                page.Description = "movie details";
+                page.Title = item.Description;
+                //page.Summary = "this is a test\r\n\r\nthis is a test\r\nthis is a testitem.InternalMovieItem.Synopsis";
+                page.Summary = item.InternalMovieItem.Synopsis;
+                page.Background = item.DefaultImage;
+                page.Details = new Library.Code.V3.ExtendedDetails();
+                page.Details.Director = "Some Director";
+                page.Details.Cast = "actor1, actor2, actor3, actor4, actor5";
+                //page.Details.Summary = "this is a test\r\n\r\nthis is a test\r\nthis is \ra test\nitem.InternalMovieItem.Synopsis" + item.InternalMovieItem.Synopsis + System.Environment.NewLine + "hiya this is a System.Environment.NewLine" + "\rI'm a /r"+"\nI'm a /n";
+                //fixes double spacing issues
+                page.Details.Summary = item.InternalMovieItem.Synopsis.Replace("\r\n", "\n");
+                //page.Details.Summary=@"{\rtf1\ansi\deff0 This is line one\line\line This is line two\line\line\ This is line 3}";
+                //page.Details.Summary = SimpleToRTF(item.InternalMovieItem.Synopsis);
+
+
+
+
+
+                string cast = string.Empty;
+                //foreach (string actor in metadata.Actors)
+                //{
+                //    DataSetHelpers.AppendCommaSeparatedValue(ref cast, actor);
+                //}
+                //page.Metadata = string.Format(Resources.Movies_Details_Metadata, new object[] { metadata.Genre, cast, metadata.Length, metadata.CountryShortName, metadata.ReleaseDate.Year });
+                //this.CreateDetailsCommands(page, movieData, movieId);
+                page.Commands = new ArrayListDataSet(page);
+                //default play command
+                //string previewContent = (string)movieData["nvcLocation"];
+                //string title = (string)movieData["nvcLocalTitle"];
+                //this.CreateDetailsCommand(page, "Play", 0, previewContent, movieId, title);
+                Command playCmd = new Command();
+                playCmd.Description = "Play";
+                page.Commands.Add(playCmd);
+
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+                properties["Page"] = page;
+                properties["Application"] = this;
+                //if (page.Details.FanArt != null)
+                //    this._session.GoToPage("resx://Library/Library.Resources/DetailsPageFanArt", properties);
+                //else
+                this._session.GoToPage("resx://Library/Library.Resources/V3_DetailsPage", properties);
+
+            };
+
+            return item;
+        }
+
+        //v3 temp - not needed
+        private string SimpleToRTF(string st)
+        {
+            System.Text.StringBuilder builder = new System.Text.StringBuilder(st.Length);
+            bool flag = false;
+            //builder.Append(@"{\rtf ");
+            builder.Append(@"{\rtf1\ansi\deff0 ");
+            for (int i = 0; i < st.Length; i++)
+            {
+                char ch = st[i];
+                ushort v = ch;
+                if (ch == '\n')
+                {
+                    builder.Append(@"\par ");
+                }
+                else if (((ch < ' ') || (ch == '{')) || ((ch == '}') || (ch == '\\')))
+                {
+                    builder.Append(@"\'");
+                    builder.Append(Library.Code.V3.InvariantString.ValueToString(v, "X2"));
+                }
+                else if (ch < '\x0080')
+                {
+                    builder.Append(ch);
+                }
+                else
+                {
+                    if (!flag)
+                    {
+                        builder.Append(@"\uc1");
+                        flag = true;
+                    }
+                    builder.Append(@"\u");
+                    builder.Append(v.ToString(CultureInfo.InvariantCulture));
+                    builder.Append('?');
+                }
+            }
+            builder.Append('}');
+            st = builder.ToString();
+            return st;
         }
 
         public void Uninitialize()

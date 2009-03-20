@@ -1,0 +1,392 @@
+<Mcml
+    xmlns="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor ="assembly://MsCorLib/System"
+    xmlns:shl ="assembly://Library/Library.Code.V3"
+    xmlns:me  ="Me">
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseAnimations"/>  
+  <UI Name="PivotButton">
+    <Properties>
+      <cor:Boolean Name="RightHandlerInvoked" Boolean="false" />
+      <cor:Boolean Name="LeftHandlerInvoked" Boolean="false" />
+      <shl:BrowsePivot Name="Option"              BrowsePivot="$Required"/>
+      <Choice           Name="Pivots"              Choice="$Required"/>
+      <IntRangedValue   Name="SelectedIndex"       IntRangedValue="$Required"/>
+      <Index            Name="Index"               Index="$Required"/>
+      <ICommand         Name="PivotInvoked"        ICommand="$Required"/>
+      <EditableText     Name="FocusArea"           EditableText="$Required"/>
+      <EditableText     Name="NavigationDirection" EditableText="$Required"/>
+      <EditableText     Name="TransitionState"     EditableText="$Required"/>
+
+      <!--Font Name="NoFocusFont" FontName="global://comm:RegularFontFace" FontSize="18"/-->
+      <Font Name="NoFocusFont" FontName="Segoe Media Center" FontSize="18"/>
+      <!--Font Name="FocusFont"   FontName="global://comm:MainFontFace"    FontSize="22"/-->
+      <Font Name="FocusFont"   FontName="Segoe Media Center Semibold"    FontSize="22"/>
+      <!--Font Name="HoverFont"   FontName="global://comm:RegularFontFace" FontSize="18"/-->
+      <Font Name="HoverFont"   FontName="Segoe Media Center" FontSize="18"/>
+
+      <!--Color Name="TextNoFocusColor" Color="color://comm:LightBlue"/>
+      <Color Name="TextColor"        Color="color://comm:MediumBlue"/>
+      <Color Name="TextFocusColor"   Color="color://comm:OffWhite"/-->
+      <Color Name="TextNoFocusColor" Color="255, 151, 217, 255"/>
+      <Color Name="TextColor"        Color="255,   2, 166, 212"/>
+      <Color Name="TextFocusColor"   Color="255, 242, 242, 242"/>
+
+      <Inset Name="NoFocusMargins" Inset="0, 0, 0, 0"/>
+      <Inset Name="FocusMargins"   Inset="0, -4, 0, -1"/>
+
+      <Image        Name="LabelBackground"         Image="null"/>
+      <Image        Name="LabelBackgroundFocus"    Image="null"/>
+      <!--shl:ImageSet Name="LabelBackgroundImageSet" ImageSet="global://comm:Button.Label.Background"/-->
+      <Image        Name="LabelBackgroundLeftFocus"         Image="resx://Library/Library.Resources/V3_Controls_Common_Pivot_Arrow_Left"/>
+      <Image        Name="LabelBackgroundRightFocus"         Image="resx://Library/Library.Resources/V3_Controls_Common_Pivot_Arrow_Right"/>
+      <Image        Name="LabelBackgroundLeft"         Image="resx://Library/Library.Resources/V3_Controls_Common_Pivot_Arrow_Left_Dormant"/>
+      <Image        Name="LabelBackgroundRight"         Image="resx://Library/Library.Resources/V3_Controls_Common_Pivot_Arrow_Right_Nofocus"/>
+      <Image        Name="LabelBackgroundRightDormant"         Image="resx://Library/Library.Resources/V3_Controls_Common_Pivot_Arrow_Right_Dormant"/>
+
+      <IntRangedValue Name="TotalChars" IntRangedValue="$Required"/>
+      <shl:AreaOfInterestHelper Name="AreaOfInterestHelper"/>
+    </Properties>
+    <Locals>
+      <Command Name="Command" Description="Pivot Button"/>
+      <ClickHandler Name="Clicker"/>
+      <shl:AreaOfInterestLayoutInput Name="AreaOfInterest" Id="Focus"/>
+      <cor:Boolean Name="DoneCounting" Boolean="false" />
+      <MathTransformer Name="Adder"/>
+      <AnchorLayoutInput Name="tmpLayout" Vertical="Near" Horizontal="Near"/>
+      <KeyHandler Handle="false" Repeat="false" Name="RightHandler" Key="Right" />
+      <KeyHandler Handle="false" Repeat="false" Name="LeftHandler" Key="Left" />
+    </Locals>
+    <Rules>
+      <!--new -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" ConditionOp="ChangedTo" Value="true"/>
+          <Equality Source="[SelectedIndex.Value]" ConditionOp="NotEquals" Value="[Index.Value]"/>
+        </Conditions>
+        <Actions>
+          <!--Set Target="[Input.KeyInteractive]" Value="true"/-->
+          <Set Target="[SelectedIndex.Value]" Value="[Index.Value]"/>
+          <!--Set Target="[Input.KeyInteractive]" Value="false"/-->
+        </Actions>
+      </Rule>
+      <!--Condition Source="[RightHandler.Pressing]" SourceValue="true"-->
+        <Rule>
+          <Conditions>
+            <Modified Source="[RightHandler.Invoked]"/>
+            <!--Equality Source="[RightHandler.Pressing]" Value="true"/-->
+            <!--Equality Source="[SelectedIndex.Value]" ConditionOp="Equals" Value="[Index.Value]"/-->
+            <!--Equality Source="[Input.DeepKeyFocus]" ConditionOp="Equals" Value="true"/-->
+          </Conditions>
+        <!--Conditions>
+          <Equality Source="[SelectedIndex.Value]" ConditionOp="ChangedTo" Value="[Index.Value]"/>
+        </Conditions-->
+        <Actions>
+          <Set Target="[NavigationDirection.Value]" Value="subright"/>
+          <DebugTrace Message="Pivots.NavigationDirection.Value(scrollrightZ): {0} {1}:{2}">
+            <Params>
+              <ObjectPath ObjectPath="[NavigationDirection.Value]"/>
+              <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
+              <ObjectPath ObjectPath="[Index.Value]"/>
+            </Params>
+          </DebugTrace>
+          <!--Invoke Target="[Label.NavigateInto]" /-->
+          <!--Set Target="[NavigationDirection.Value]" Value="right"/-->
+          <!--Set Target="[RightHandlerInvoked]" Value="true"/-->
+          <!--PlayAnimation Target="[RightArrow]" Animation="animation://me:Browse.Pivots.Arrow.Right.Jiggle"/-->
+          <!--Invoke Target="[ScrollData.ScrollDown]"/-->
+        </Actions>
+      </Rule>
+      <!--Condition Source="[LeftHandler.Pressing]" SourceValue="true"-->
+      <Rule>
+        <Conditions>
+          <Modified Source="[LeftHandler.Invoked]"/>
+          <!--Equality Source="[LeftHandler.Pressing]" Value="true"/-->
+          <!--Equality Source="[SelectedIndex.Value]" ConditionOp="Equals" Value="[Index.Value]"/-->
+          <!--Equality Source="[Input.DeepKeyFocus]" ConditionOp="Equals" Value="true"/-->
+        </Conditions>
+        <!--Conditions>
+          <Equality Source="[SelectedIndex.Value]" ConditionOp="ChangedTo" Value="[Index.Value]"/>
+        </Conditions-->
+        <Actions>
+          <Set Target="[NavigationDirection.Value]" Value="subleft"/>
+          <DebugTrace Message="Pivots.NavigationDirection.Value(scrollleftZ): {0} {1}:{2}">
+            <Params>
+              <ObjectPath ObjectPath="[NavigationDirection.Value]"/>
+              <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
+              <ObjectPath ObjectPath="[Index.Value]"/>
+            </Params>
+          </DebugTrace>
+          <!--Invoke Target="[Label.NavigateInto]" /-->
+          <!--Set Target="[NavigationDirection.Value]" Value="left"/-->
+          <!--Set Target="[LeftHandlerInvoked]" Value="true"/-->
+          <!--PlayAnimation Target="[LeftArrow]" Animation="animation://me:Browse.Pivots.Arrow.Left.Jiggle"/-->
+          <!--Invoke Target="[ScrollData.ScrollUp]"/-->
+        </Actions>
+      </Rule>
+      <!--end new-->
+      <Binding Target="[Accessible.IsPressed]" Source="[Clicker.Clicking]"/>
+      <Binding Target="[Accessible.Name]" Source="[Option.Description]"/>
+      <Default Target="[Accessible.IsFocusable]" Value="true"/>
+      <Default Target="[Accessible.DefaultActionCommand]" Value="[Command]"/>
+      <Default Target="[Accessible.DefaultAction]" Value="res://ehres!Acc_DefaultAction_Button"/>
+      <Default Target="[Accessible.Role]" Value="PushButton"/>
+      <!--Default Target="[LabelBackgroundFocus]" Value="[LabelBackgroundImageSet.Values.#Focus!Image]"/>
+      <Default Target="[LabelBackground]" Value="[LabelBackgroundImageSet.Values.#Default!Image]"/-->
+      <Binding Source="[Option.Description]" Target="[Command.Description]">
+        <Transformer>
+          <FormatTransformer Format="Pivot Button: {0}"/>
+        </Transformer>
+      </Binding>
+      <Binding Source="[Option.Description]" Target="[Label.Content]"/>
+      <!--Default Target="[Input.KeyInteractive]" Value="false"/-->
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+      <!--new-->
+      <!--Default Target="[Input.CreateInterestOnFocus]" Value="true"/-->
+      <!--end new-->
+      <Default Target="[Clicker.Command]" Value="[Command]"/>
+      <Condition Source="[SelectedIndex.Value]" SourceValue="[Index.Value]" Target="[Clicker.HandlePrimaryMouseButton]" Value="false"/>
+      <Default Target="[Clicker.HandlePrimaryMouseButton]" Value="true"/>
+      <!--Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]" />
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="res://ehres!MiniSelect_a.wav" />
+        </Actions>
+      </Rule-->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Command.Invoked]"/>
+          <Equality Source="[SelectedIndex.Value]" Value="[Index.Value]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[PivotInvoked.Invoke]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Command.Invoked]"/>
+          <Equality Source="[SelectedIndex.Value]" ConditionOp="NotEquals" Value="[Index.Value]"/>
+          <Equality Source="[Index.Value]" ConditionOp="GreaterThan" Value="[SelectedIndex.Value]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NavigationDirection.Value]" Value="none" ExclusiveApply="false"/>
+          <Set Target="[NavigationDirection.Value]" Value="right"/>
+          <Set Target="[SelectedIndex.Value]" Value="[Index.Value]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Command.Invoked]"/>
+          <Equality Source="[SelectedIndex.Value]" ConditionOp="NotEquals" Value="[Index.Value]"/>
+          <Equality Source="[Index.Value]" ConditionOp="LessThan" Value="[SelectedIndex.Value]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NavigationDirection.Value]" Value="none" ExclusiveApply="false"/>
+          <Set Target="[NavigationDirection.Value]" Value="left"/>
+          <Set Target="[SelectedIndex.Value]" Value="[Index.Value]"/>
+        </Actions>
+      </Rule>
+      <Condition Source="[FocusArea.Value]" SourceValue="PIP">
+        <Actions>
+          <Set Target="[Label.Color]" Value="[TextColor]"/>
+        </Actions>
+      </Condition>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.MouseFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Label.DetachAnimation]" type="ContentChangeShow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Label.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous"/>
+          <Set Target="[Label.Color]" Value="[TextFocusColor]"/>
+          <Invoke Target="[Label.ForceContentChange]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.MouseFocus]" ConditionOp="ChangedTo" Value="false"/>
+          <Equality Source="[SelectedIndex.Value]" ConditionOp="NotEquals" Value="[Index.Value]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Color]" Value="[TextNoFocusColor]"/>
+          <Invoke Target="[Label.ForceContentChange]"/>
+          <Invoke Target="[Label.AttachAnimation]" animation="animation://me:Browse.Pivots.Item.ChangeShow" ExclusiveApply="false"/>
+          <Invoke Target="[Label.AttachAnimation]" animation="animation://me:Browse.Pivots.Item.ChangeHide"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Pivots.Chosen]" Value="[Option]"/>
+          <Equality Source="[FocusArea.Value]" Value="Pivot"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Color]" Value="[TextFocusColor]"/>
+          <!--Set Target="[LabelBackgroundGraphic.Image]" Value="[LabelBackgroundFocus]"/-->
+          <!--Set Target="[LabelBackgroundGraphic.Content]" Value="[LabelBackgroundFocus]"/-->
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[SelectedIndex.Value]" Value="[Index.Value]"/>
+          <Equality Source="[FocusArea.Value]" Value="Pivot"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Color]" Value="[TextFocusColor]"/>
+          <Set Target="[Accessible.IsFocused]" Value="true"/>
+          <PlaySound Sound="res://ehres!Focus_a.wav"/>
+        </Actions>
+      </Rule>
+      <Default Target="[Accessible.IsFocused]" Value="false"/>
+      <Rule>
+        <Conditions>
+          <Equality Source="[SelectedIndex.Value]" Value="[Index.Value]"/>
+          <Equality Source="[FocusArea.Value]" Value="Command"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Color]" Value="[TextColor]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[SelectedIndex.Value]" Value="[Index.Value]"/>
+          <Equality Source="[FocusArea.Value]" ConditionOp="NotEquals" Value="Pivot"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Color]" Value="[TextNoFocusColor]"/>
+        </Actions>
+      </Rule>
+      <Condition Source="[FocusArea.Value]" SourceValue="Pivot">
+        <Actions>
+          <Set Target="[Label.Color]" Value="[TextNoFocusColor]"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[Pivots.Chosen]" SourceValue="[Option]">
+        <Actions>
+          <Set Target="[Label.Font]" Value="[FocusFont]"/>
+          <Set Target="[Label.Margins]" Value="[FocusMargins]"/>
+          <Invoke Target="[Label.ForceContentChange]"/>
+        </Actions>
+      </Condition>
+      <!--Condition Source="[SelectedIndex.Value]" SourceValue="[Index.Value]">
+        <Actions>
+          <Invoke Target="[LabelPanel.SetLayoutInput]" oNewValue="[AreaOfInterest]"/>
+        </Actions>
+      </Condition>
+      <Rule>
+        <Actions>
+          <Invoke Target="[LabelPanel.SetLayoutInput]" idInput="[AreaOfInterest!ILayoutData.Data]" oNewValue="null"/>
+        </Actions>
+      </Rule-->
+      <Condition Source="[SelectedIndex.Value]" SourceValue="[Index.Value]">
+        <Actions>
+          <Invoke Target="[AreaOfInterestHelper.SetLayoutInput]" Panel="[LabelPanel]"/>
+        </Actions>
+      </Condition>
+      <Rule>
+        <Actions>
+          <!--Set Target="[LabelPanel.LayoutInput]" Value="[tmpLayout]"/-->
+          <Invoke Target="[AreaOfInterestHelper.SetLayoutInput]" Panel="[LabelPanel]" oNewValue="[tmpLayout]"/>
+          <!--Set Target="[SelectedIndex.Value]" Value="[Index.Value]"/-->
+          <!--Set Target="[Input.KeyInteractive]" Value="false" InvokePolicy="AsynchronousLowPri"/-->
+        </Actions>
+        </Rule>
+      <!--new-->
+      
+      <!--end new-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[DoneCounting]" Value="false"/>
+          <Equality Source="[Index.Value]" Value="[Index.SourceValue]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[DoneCounting]" Value="true" />
+          <Set Target="[Adder.AddInt]" Value="[Option.Description.Length]"/>
+          <Set Target="[TotalChars.Value]" Value="[TotalChars.Value]" Transformer="[Adder]"/>
+        </Actions>
+      </Rule>
+      <!--bgright fix-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[SelectedIndex.Value]" Value="[Index.Value]"/>
+          <Equality Source="[FocusArea.Value]" Value="Command"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Color]" Value="[TextColor]"/>
+          <!-- todo:fix-->
+          <Set Target="[LabelBackgroundGraphicRight.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[SelectedIndex.Value]" Value="[Index.Value]"/>
+          <Equality Source="[FocusArea.Value]" Value="Gallery"/>
+        </Conditions>
+        <Actions>
+          <!-- todo:fix-->
+          <Set Target="[LabelBackgroundGraphicRight.Visible]" Value="true"/>
+          <Set Target="[LabelBackgroundGraphicRightImg.Content]" Value="[LabelBackgroundRightDormant]"/>
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[SelectedIndex.Value]" Value="[Index.Value]"/>
+          <Equality Source="[FocusArea.Value]" Value="PIP"/>
+        </Conditions>
+        <Actions>
+          <!-- todo:fix-->
+          <Set Target="[LabelBackgroundGraphicRight.Visible]" Value="true"/>
+          <Set Target="[LabelBackgroundGraphicRightImg.Content]" Value="[LabelBackgroundRight]"/>
+        </Actions>
+      </Rule>
+      <!--hiding right arrow when navigating-->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingAwayForward"/>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingAwayBackward"/>
+        </Conditions>
+        <Actions>
+          <DebugTrace Message="navforward-backward: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
+            </Params>
+          </DebugTrace>
+          <Set Target="[LabelBackgroundGraphicRight.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <!--Panel Name="LabelPanel" Layout="Anchor"-->
+      <Panel Name="LabelPanel" Layout="Anchor">
+        <Children>
+          <!--FancyText Name="Label" MouseInteractive="true" Font="[NoFocusFont]" Color="[TextColor]" Margins="[NoFocusMargins]"-->
+          <Text Content="hi" Name="Label"  MouseInteractive="true" Font="[NoFocusFont]" Color="[TextColor]" Margins="[NoFocusMargins]">
+            <LayoutInput>
+              <AnchorLayoutInput Vertical="Near" Horizontal="Near"/>
+            </LayoutInput>
+            <Animations>
+              <Animation Animation="animation://me:Browse.Pivots.Item.ChangeShow"/>
+              <Animation Animation="animation://me:Browse.Pivots.Item.ChangeHide"/>
+            </Animations>
+          </Text>
+          <!--/FancyText-->
+          <!--Graphic Name="LabelBackgroundGraphic" Content="[LabelBackground]">
+          <LayoutInput>
+              <AnchorLayoutInput Left="Label, 0, -8" Top="Label, 0, -4" Right="Label, 1, 8" Bottom="Label, 1, 4" ContributesToWidth="false" ContributesToHeight="false"/>
+            </LayoutInput>
+          </Graphic-->
+          <Panel Name="LabelBackgroundGraphicRight" Visible="false">
+            <LayoutInput>
+              <AnchorLayoutInput ContributesToWidth="false" ContributesToHeight="false" Left="Label,1,10" Top="Label, 0,10"/>
+            </LayoutInput>
+            <Children>
+              <Graphic Name="LabelBackgroundGraphicRightImg" Content="[LabelBackgroundRight]"/>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+</Mcml>

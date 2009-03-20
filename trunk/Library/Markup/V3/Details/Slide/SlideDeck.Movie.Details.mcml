@@ -1,0 +1,152 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml" 
+      xmlns:cor ="assembly://MSCorLib/System" 
+      xmlns:movies="assembly://Library/Library.Code.V3" 
+      xmlns:base ="resx://Library/Library.Resources/V3_SlideDeck_Details" 
+      xmlns:me ="Me">
+  
+  <UI Name="SlideDeck_Movie_Details" BaseUI="base:SlideDeck_Details_Overlay">
+    <Properties>
+      <movies:MovieDetailsSlideDeck Name="SlideDeck" MovieDetailsSlideDeck="$Required" />
+    </Properties>
+    <Rules>
+      <Default Target="[SlideDeck.Wrap]" Value="true" />
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.Commands]" InitialEvaluate="true"/>
+          <Equality ConditionOp="Equals" Source="[SlideDeck.AdditionalCommands.Count]" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.DisableSlide]" name="Movie.Details.Actions" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.Commands]" InitialEvaluate="true"/>
+          <Equality ConditionOp="GreaterThan" Source="[SlideDeck.AdditionalCommands.Count]" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.EnableSlide]" name="Movie.Details.Actions" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.Review]" InitialEvaluate="true"/>
+          <IsValid Source="[SlideDeck.Review]"/>
+          <Equality ConditionOp="Equals" Source="[SlideDeck.Review.Length]" Value="0" />
+          <Equality ConditionOp="Equals" Source="[SlideDeck.HasReview]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.DisableSlide]" name="Movie.Details.Review" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.Review]" InitialEvaluate="true"/>
+          <IsValid Source="[SlideDeck.Review]"/>
+          <Equality ConditionOp="GreaterThan" Source="[SlideDeck.Review.Length]" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.EnableSlide]" name="Movie.Details.Review" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.Actors]" InitialEvaluate="true"/>
+          <IsValid Source="[SlideDeck.Actors]"/>
+          <Equality ConditionOp="Equals" Source="[SlideDeck.Actors.Count]" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.DisableSlide]" name="Movie.Details.Cast" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.Actors]" InitialEvaluate="true"/>
+          <IsValid Source="[SlideDeck.Actors]"/>
+          <Equality ConditionOp="GreaterThan" Source="[SlideDeck.Actors.Count]" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.EnableSlide]" name="Movie.Details.Cast" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.SimilarMovies]" InitialEvaluate="true"/>
+          <IsValid Source="[SlideDeck.SimilarMovies.Options]"/>
+          <Equality ConditionOp="Equals" Source="[SlideDeck.SimilarMovies.Options.Count]" Value="0" />
+          <Equality ConditionOp="Equals" Source="[SlideDeck.HasSimilarPrograms]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.DisableSlide]" name="Movie.Details.SimilarMovies" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.SimilarMovies]" InitialEvaluate="true"/>
+          <IsValid Source="[SlideDeck.SimilarMovies.Options]"/>
+          <Equality ConditionOp="GreaterThan" Source="[SlideDeck.SimilarMovies.Options.Count]" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.EnableSlide]" name="Movie.Details.SimilarMovies" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[SlideDeck.CanHaveOtherShowings]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.EnableSlide]" name="Movie.Details.OtherShowings" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[SlideDeck.CanHaveOtherShowings]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.DisableSlide]" name="Movie.Details.OtherShowings" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.OnDemandOffers]" InitialEvaluate="true"/>
+          <IsValid Source="[SlideDeck.OnDemandOffers.Options]"/>
+          <Equality ConditionOp="Equals" Source="[SlideDeck.OnDemandOffers.Options.Count]" Value="0" />
+          <Equality ConditionOp="Equals" Source="[SlideDeck.HasOnDemand]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.DisableSlide]" name="Video.Details.OnDemandOffers" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.OnDemandOffers]" InitialEvaluate="true"/>
+          <IsValid Source="[SlideDeck.OnDemandOffers.Options]"/>
+          <Equality ConditionOp="GreaterThan" Source="[SlideDeck.OnDemandOffers.Options.Count]" Value="0" />
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.EnableSlide]" name="Video.Details.OnDemandOffers" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <!--Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.DataItem]" InitialEvaluate="true"/>
+          <IsValid Source="[SlideDeck.DataItem]"/>
+          <IsType Source="[SlideDeck.DataItem]" Type="movies:DVDMovieDataItem"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.DisableSlide]" name="Video.Details.OnDemandOffers" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[SlideDeck.DataItem]" InitialEvaluate="true"/>
+          <IsValid Source="[SlideDeck.DataItem]"/>
+          <IsType Source="[SlideDeck.DataItem]" Type="movies:UriVideoDataItem"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[SlideDeck.DisableSlide]" name="Video.Details.OnDemandOffers" ExclusiveApply="false"/>
+        </Actions>
+      </Rule-->
+    </Rules>
+  </UI>
+</Mcml>

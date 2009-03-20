@@ -1,0 +1,719 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:z="assembly://TestHarness/TestHarness"
+	  xmlns:sys="assembly://mscorlib/System"
+	  xmlns:styles="resx://TestHarness/TestHarness.Resources/Styles"
+	  xmlns:core="resx://TestHarness/TestHarness.Resources/CoreControls"
+    xmlns:pip="resx://TestHarness/TestHarness.Resources/GalleryPage"
+    xmlns:Edit="resx://TestHarness/TestHarness.Resources/Edit"
+      xmlns:listview="resx://TestHarness/TestHarness.Resources/SearchListView"
+      xmlns:scr="resx://TestHarness/TestHarness.Resources/Scroller"
+      xmlns:filterbutton="resx://TestHarness/TestHarness.Resources/GuideFilterButton"
+      xmlns:filterlistbutton="resx://TestHarness/TestHarness.Resources/GuideFilteredList"
+      xmlns:focus="resx://TestHarness/TestHarness.Resources/FocusAnimation"
+	  xmlns:me="Me">
+
+  <!-- A details page -->
+  <UI Name="TitleSearch">
+    <Properties>
+      <z:SearchPage Name="Page" SearchPage="$Required"/>
+      <z:Application Name="Application" Application="$Required"/>
+    </Properties>
+
+    <Locals>
+      <sys:Boolean Name="Initialized" Boolean="false"/>
+      <!--/Locals>
+    <Locals-->
+      <Environment    Name="Environment"/>
+      <IntRangedValue Name="MetaDataTopShift" Value="0"/>
+      <IntRangedValue Name="GalleryContentShift"/>
+      <IntRangedValue Name="MetaDataLeftShift"/>
+      <IntRangedValue Name="TotalCount"/>
+      <IntRangedValue Name="TotalCountOverride"/>
+      <!-- used by galleries that override the count/index UI -->
+      <IntRangedValue Name="ItemIndexOverride"/>
+      <!-- used by galleries that override the count/index UI -->
+      <BooleanChoice  Name="IsOneRow"/>
+      <EditableText   Name="FocusArea" Value="none"/>
+      <!-- tracks the focus on a gross scale -->
+      <EditableText   Name="NavigationDirection" Value="none"/>
+      <!-- Used to trigger directional animations -->
+      <EditableText   Name="TransitionState" Value="Idle"/>
+      <!-- tracks the current transition to activate the right animations -->
+      <EditableText   Name="ItemMode" Value="none"/>
+
+      <Timer Name="TransitionTimer" Interval="0" Enabled="false" AutoRepeat="false"/>
+    </Locals>
+
+    <Rules>
+
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="PIP"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="Gallery"/>
+        </Actions>
+      </Condition>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" ConditionOp="Equals" Value="PIP"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[ContentArea]" Animation="animation://me:Browse.Gallery.Hide.Focus"/>
+          <Set Target="[ContentPanel.ShowFar]" Value="true"/>
+          <Set Target="[ContentPanel.ShowNear]" Value="false"/>
+          <Set Target="[ContentPanel.FadeSize]" Value="300"/>
+          <Set Target="[PIPFocusBackground.Visible]" Value="true"/>
+          <!--Invoke Target="[Details.AttachAnimation]" animation="animation://me:Browse.Details.Hide" InvokePolicy="Synchronous"/>
+          <Set Target="[Details.Visible]" Value="false"/>
+          <Set Target="[PreviousFocusArea.Value]" Value="[FocusArea.Value]"/-->
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" Value="Gallery"/>
+          <Equality Source="[TransitionState.Value]" Value="Idle"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[ContentArea]" Animation="animation://me:Browse.Gallery.Show.Focus"/>
+          <Set Target="[ContentPanel.FadeSize]" Value="0"/>
+          <Set Target="[PIPFocusBackground.Visible]" Value="false"/>
+          <!--Set Target="[NeedDetailsRefresh]" Value="true"/-->
+          <!--Set Target="[Details.Visible]" Value="true"/-->
+          <!--Set Target="[PreviousFocusArea.Value]" Value="[FocusArea.Value]"/-->
+        </Actions>
+      </Rule>
+    </Rules>
+    <!--Rules-->
+    <!-- If we don't have a spiffy background image, turn on the 
+				 standard background layer -->
+    <!--Condition Source="[BackgroundGraphic.Content]" SourceValue="null"
+				Target="[Background.Visible]" Value="true"/-->
+    <!--Condition Source="[CoverGraphic.Content]" SourceValue="null"
+				Target="[CoverGraphic.Visible]" Value="true"/-->
+
+    <!-- If video is currently playing, show the video layer -->
+    <!--Rule>
+        <Conditions>
+          <IsValid Source="[Application.MediaCenterEnvironment.MediaExperience.Transport.PlayState]"/>
+          <Equality Source="[Application.MediaCenterEnvironment.MediaExperience.Transport.PlayState]" Value="Playing"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Video.Visible]" Value="true"/>
+        </Actions>
+      </Rule-->
+
+    <!-- When we first navigate to this page, stop any playing video -->
+    <!--Rule>
+        <Conditions>
+          <Equality Source="[Initialized]" Value="false"/>
+          <IsValid Source="[Application.MediaCenterEnvironment.MediaExperience.Transport.PlayRate]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Application.MediaCenterEnvironment.MediaExperience.Transport.PlayRate]" Value="0"/>
+          <Set Target="[Initialized]" Value="true"/>
+        </Actions>
+      </Rule-->
+    <!--/Rules-->
+
+    <Content>
+      <Panel>
+        <Children>
+          <Panel Name="PIPFocusBackground" MaximumSize="1366, 0" Visible="false">
+            <Children>
+
+              <Graphic Alpha=".75" Content="resx://TestHarness/TestHarness.Resources/NOWPLAYINGPIP_BACKGROUNDMASK2" Layout="Fill">
+                <Animations>
+                  <!-- Standard fade out -->
+                  <Animation Type="Hide">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0.00" RelativeTo="Current" Interpolation="SCurve"/>
+                      <AlphaKeyframe Time="0.25" Value="0.0" RelativeTo="Absolute"/>
+                    </Keyframes>
+                  </Animation>
+                  <!-- Standard fade in -->
+                  <Animation Type="Show">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="SCurve" RelativeTo="Absolute"/>
+                      <AlphaKeyframe Time="0.25" Value="1.0" RelativeTo="Absolute"/>
+                    </Keyframes>
+                  </Animation>
+
+                </Animations>
+              </Graphic>
+
+            </Children>
+          </Panel>
+          <!--Panel FocusOrder="0">
+            <Children-->
+          <Clip Name="ContentPanel" FocusOrder="0" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="0.9"
+          CenterPointPercent="0.5,0.5,0.5" Scale="0.95,0.95,0.95">
+            <Layout>
+              <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="true"/>
+            </Layout>
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Near" Vertical="Near" />
+            </LayoutInput>
+            <Children>
+              <Panel Name="ContentArea">
+                <LayoutInput>
+                  <AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
+                </LayoutInput>
+                <Children>
+                  <me:DetailsPane SelectedCommand="[Page.SelectedCommand]" SearchText="[Page.SearchValue]" Page="[Page]"/>
+                </Children>
+              </Panel>
+            </Children>
+          </Clip>
+          <!--/Children>
+          </Panel-->
+
+          <!-- Placeholder for the Now Playing Inset -->
+          <Panel>
+            <Layout>
+              <AnchorLayout SizeToVerticalChildren="false"/>
+            </Layout>
+            <Children>
+
+              <pip:PIPArea Name="PIPArea" MaximumSize="861, 150" MinimumSize="861, 150" FocusArea="[FocusArea]"
+                          NavigationDirection="[NavigationDirection]" TransitionState="[TransitionState]">
+                <LayoutInput>
+                  <AnchorLayoutInput Horizontal="Near" Vertical="Far" />
+                </LayoutInput>
+              </pip:PIPArea>
+
+            </Children>
+          </Panel>
+          <!--Video Name="Video" Layout="Fill" LetterboxColor="Black" Visible="false"/-->
+          <Panel MaximumSize="1366, 0">
+            <Children>
+
+              <ColorFill Visible="false" Content="255, 8, 24, 66" Alpha=".5" Layout="Fill" Margins="0, 150, 0, 175"></ColorFill>
+
+            </Children>
+          </Panel>
+          <!--ColorFill Content="255, 8, 24, 66" Alpha=".6" Layout="HorizontalFlow" MinimumSize="1300, 443" Margins="0, 150, 0, 0"></ColorFill-->
+          <Panel MaximumSize="1366, 0" Visible="true">
+            <Children>
+
+              <Graphic Alpha=".75" Content="file://m:\genres\searchhighlight.png" Layout="Fill">
+                <Animations>
+                  <!-- Standard fade out -->
+                  <Animation Type="Hide">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0.00" RelativeTo="Current" Interpolation="SCurve"/>
+                      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute"/>
+                    </Keyframes>
+                  </Animation>
+                  <!-- Standard fade in -->
+                  <Animation Type="Show">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="SCurve" RelativeTo="Absolute"/>
+                      <AlphaKeyframe Time="0.25" Value="1.0" RelativeTo="Absolute"/>
+                    </Keyframes>
+                  </Animation>
+
+                </Animations>
+              </Graphic>
+
+            </Children>
+          </Panel>
+          <core:AnimatedBackground/>
+
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <!-- The primary display area of a details page -->
+  <UI Name="DetailsPane">
+    <Properties>
+      <z:SearchPage Name="Page" SearchPage="$Required"/>
+      <Image Name="MovieDefaultImage" Image="res://ehres!MOVIE.ICON.DEFAULT.png"/>
+      <Image Name="CellFocusBorder" Source="res://ehres!Epg.Cell.Focus.Border.png" NineGrid="7,7,7,7"/>
+      <Image Name="CellFocusShadow" Source="res://ehres!Epg.Cell.Focus.Shadow.png" NineGrid="25,25,25,25"/>
+      <Image Name="CellBackground" Source="res://ehres!Epg.Cell.Background.png"/>
+      <EditableText   Name="SearchText" EditableText="$Required"/>
+      <z:GalleryItem Name="SelectedCommand" GalleryItem="$Required"/>
+      <ScrollingData Name="ScrollingDataSpoofer"/>
+    </Properties>
+    <Locals>
+
+      <TypingHandler Name="TypingHandler" EditableText="[SearchText]" HandlerStage="Bubbled" TypingPolicy="Default"/>
+      <!-- The list that we will be repeating -->
+      <ArrayListDataSet Name="List">
+        <Source>
+          <sys:String String="X"/>
+          <sys:String String="X"/>
+          <sys:String String="B"/>
+          <sys:String String="C"/>
+          <sys:String String="X"/>
+        </Source>
+      </ArrayListDataSet>
+      <ArrayListDataSet Name="Group2" Description="Group 2">
+        <Source>
+          <Command Name="MyCommand" Description="Cliff's Wild Outdoor Adventures"/>
+          <Command Name="MyCommand" Description="Sesame Street"/>
+          <Command Name="MyCommand" Description="The Marvelous Misadventures of Flapjack"/>
+          <Command Name="MyCommand" Description="The Simpsons"/>
+          <Command Name="MyCommand" Description="Avatar: The Last Airbender"/>
+          <Command Name="MyCommand" Description="The Suite Life of Zack and Cody"/>
+          <Command Name="MyCommand" Description="Studio 60 on the Sunset Strip"/>
+          <Command Name="MyCommand" Description="El Tigre: The Adventures of Manny Rivera"/>
+          <Command Name="MyCommand" Description="Cliff's Wild Outdoor Adventures"/>
+          <Command Name="MyCommand" Description="Sesame Street"/>
+          <Command Name="MyCommand" Description="The Marvelous Misadventures of Flapjack"/>
+          <Command Name="MyCommand" Description="The Simpsons"/>
+          <Command Name="MyCommand" Description="Avatar: The Last Airbender"/>
+          <Command Name="MyCommand" Description="The Suite Life of Zack and Cody"/>
+          <Command Name="MyCommand" Description="Studio 60 on the Sunset Strip"/>
+          <Command Name="MyCommand" Description="El Tigre: The Adventures of Manny Rivera"/>
+          <Command Name="MyCommand" Description="Cliff's Wild Outdoor Adventures"/>
+          <Command Name="MyCommand" Description="Sesame Street"/>
+          <Command Name="MyCommand" Description="The Marvelous Misadventures of Flapjack"/>
+          <Command Name="MyCommand" Description="The Simpsons"/>
+          <Command Name="MyCommand" Description="Avatar: The Last Airbender"/>
+          <Command Name="MyCommand" Description="The Suite Life of Zack and Cody"/>
+          <Command Name="MyCommand" Description="Studio 60 on the Sunset Strip"/>
+          <Command Name="MyCommand" Description="El Tigre: The Adventures of Manny Rivera"/>
+        </Source>
+      </ArrayListDataSet>
+      <ArrayListDataSet Name="ButtonMappings" Description="Button Mappings">
+        <Source>
+          <!--Command Name="MyCommand" Description="a"/>
+          <Command Name="MyCommand" Description="b"/>
+          <Command Name="MyCommand" Description="c"/>
+          <Command Name="MyCommand" Description="d"/>
+          <Command Name="MyCommand" Description="e"/>
+          <Command Name="MyCommand" Description="f"/>
+          <Command Name="MyCommand" Description="g"/>
+          <Command Name="MyCommand" Description="h"/>
+          <Command Name="MyCommand" Description="i"/>
+          <Command Name="MyCommand" Description="j"/>
+          <Command Name="MyCommand" Description="k"/>
+          <Command Name="MyCommand" Description="l"/>
+          <Command Name="MyCommand" Description="m"/>
+          <Command Name="MyCommand" Description="n"/>
+          <Command Name="MyCommand" Description="o"/>
+          <Command Name="MyCommand" Description="p"/>
+          <Command Name="MyCommand" Description="q"/>
+          <Command Name="MyCommand" Description="r"/>
+          <Command Name="MyCommand" Description="s"/>
+          <Command Name="MyCommand" Description="t"/>
+          <Command Name="MyCommand" Description="u"/>
+          <Command Name="MyCommand" Description="v"/>
+          <Command Name="MyCommand" Description="w"/>
+          <Command Name="MyCommand" Description="x"/>
+          <Command Name="MyCommand" Description="y"/>
+          <Command Name="MyCommand" Description="z"/-->
+          <Command Name="MyCommand" Description="A"/>
+          <Command Name="MyCommand" Description="B"/>
+          <Command Name="MyCommand" Description="C"/>
+          <Command Name="MyCommand" Description="D"/>
+          <Command Name="MyCommand" Description="E"/>
+          <Command Name="MyCommand" Description="F"/>
+          <Command Name="MyCommand" Description="G"/>
+          <Command Name="MyCommand" Description="H"/>
+          <Command Name="MyCommand" Description="I"/>
+          <Command Name="MyCommand" Description="J"/>
+          <Command Name="MyCommand" Description="K"/>
+          <Command Name="MyCommand" Description="L"/>
+          <Command Name="MyCommand" Description="M"/>
+          <Command Name="MyCommand" Description="N"/>
+          <Command Name="MyCommand" Description="O"/>
+          <Command Name="MyCommand" Description="P"/>
+          <Command Name="MyCommand" Description="Q"/>
+          <Command Name="MyCommand" Description="R"/>
+          <Command Name="MyCommand" Description="S"/>
+          <Command Name="MyCommand" Description="T"/>
+          <Command Name="MyCommand" Description="U"/>
+          <Command Name="MyCommand" Description="V"/>
+          <Command Name="MyCommand" Description="W"/>
+          <Command Name="MyCommand" Description="X"/>
+          <Command Name="MyCommand" Description="Y"/>
+          <Command Name="MyCommand" Description="Z"/>
+          <!--Command Name="MyCommand" Description="clr"/>
+          <Command Name="MyCommand" Description="spc"/>
+          <Command Name="MyCommand" Description="del"/>
+          <Command Name="MyCommand" Description="123"/-->
+        </Source>
+      </ArrayListDataSet>
+      <Command Name="SpaceCommand" Description="space"/>
+      <Command Name="DeleteCommand" Description="delete"/>
+      <Command Name="NumberCommand" Description="123"/>
+      <Command Name="ResetCommand" Description="reset"/>
+      <Command Name="SearchCategories" Description="SEARCH CATEGORIES"/>
+    </Locals>
+    <Rules>
+      <!--Binding Target="[Results.SelectedCommand]" Source="[Page.SelectedCommand]"/-->
+      <Binding Target="[TitleText.Content]" Source="[Page.SelectedCommand.Description]"/>
+      <Binding Target="[DetailsText.Content]" Source="[Page.SelectedCommand.Metadata]"/>
+      <Binding Target="[CoverGraphic.Content]" Source="[Page.SelectedCommand.DefaultImage]"/>
+      <!--Changed Source="[Results.SelectedCommand]">
+        <Actions>
+          <Set Target="[TitleText.Content]" Value="[SelectedCommand.Description]"/>
+          <Invoke Target="[TitleText.ForceContentChange]"/>
+        </Actions>
+      </Changed-->
+      <!--Changed Source="[Page.Commands.Count]">
+        <Actions>
+          <Invoke Target="[Results.ForceRefresh]"/>
+        </Actions>
+      </Changed-->
+    </Rules>
+    <!--Rules>
+      <Changed Source="[Page.Commands.Count]">
+        <Actions>
+          <Invoke Target="[KeyRepeater.NavigateInto]" InvokePolicy="AsynchronousNormal"/>
+        </Actions>
+      </Changed>
+    </Rules-->
+    <!--Rules>
+      <Changed Source="[Page.Commands.Count]">
+        <Actions>
+          <Invoke Target="[Results.ForceRefresh]" ExclusiveApply="true" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Changed>
+    </Rules-->
+    <!--Rules>
+      <Condition Source="[Page.Background]" SourceValue="null">
+        <Actions>
+          <Set Target="[CoverGraphic.Content]" Value="[MovieDefaultImage]"/>
+        </Actions>
+      </Condition>
+    </Rules-->
+    <Content>
+      <Panel>
+        <Animations>
+          <!-- Standard fade in -->
+          <Animation Type="Show">
+            <Keyframes>
+              <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="SCurve" RelativeTo="Absolute"/>
+              <AlphaKeyframe Time="0.2" Value="1.0" RelativeTo="Absolute"/>
+            </Keyframes>
+          </Animation>
+
+          <!-- Standard fade out -->
+          <Animation Type="Hide">
+            <Keyframes>
+              <AlphaKeyframe Time="0.00" RelativeTo="Current" Interpolation="SCurve"/>
+              <AlphaKeyframe Time="0.2" Value="0.0" RelativeTo="Absolute"/>
+            </Keyframes>
+          </Animation>
+        </Animations>
+        <Children>
+          <Panel Margins="176,34,205,0">
+            <Children>
+              <Clip FadeSize="25" MaximumSize="500,70" NearOffset="-10" Orientation="Vertical">
+                <Children>
+                  <Text Content="search: title" Color="102, 151, 217, 255" Font="Segoe Media Center Light,28" Alpha=".92" CenterPointPercent="1,0,1"/>
+                </Children>
+              </Clip>
+            </Children>
+          </Panel>
+          <!-- main layout panel -->
+          <Panel Margins="205,85,205,0">
+            <Layout>
+              <FlowLayout Orientation="Horizontal"/>
+            </Layout>
+            <Animations>
+              <!-- Grow create -->
+              <!--Animation Name="StandardGrow.Show" Type="Show" CenterPointPercent="0.5, 0.5, 1.0">
+                <Keyframes>
+                  <ScaleKeyframe Time="0.0" Value="0.60, 0.60, 0.60" Interpolation="Log" RelativeTo="Absolute"/>
+                  <ScaleKeyframe Time="0.25" Value="1.0, 1.0, 1.0" RelativeTo="Absolute"/>
+
+                  <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="Log" RelativeTo="Absolute"/>
+                  <AlphaKeyframe Time="0.5" Value="1.0" RelativeTo="Absolute"/>
+                </Keyframes>
+              </Animation-->
+              <Animation Type="Show" CenterPointPercent="0.5, 0.5, 1.0">
+                <Keyframes>
+                  <ScaleKeyframe Time="0.0" Value="0.0, 0.0, 0.0" Interpolation="Log" RelativeTo="Absolute"/>
+                  <ScaleKeyframe Time="0.5" Value="1.0, 1.0, 1.0" RelativeTo="Absolute"/>
+
+                  <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="Log" RelativeTo="Absolute"/>
+                  <AlphaKeyframe Time="0.5" Value="1.0" RelativeTo="Absolute"/>
+                </Keyframes>
+              </Animation>
+              <!-- Shrink Destroy -->
+              <Animation Type="Hide" CenterPointPercent="0.5, 0.5, 1.0">
+                <Keyframes>
+                  <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
+                  <ScaleKeyframe Time="0.25" Value="0.60, 0.60, 0.60" RelativeTo="Absolute"/>
+
+                  <AlphaKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+                  <AlphaKeyframe Time="0.5" Value="0.0" RelativeTo="Absolute"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+            <Children>
+              <Panel Layout="Form" Padding="0,0,0,0">
+                <Children>
+                  <Panel Name="ButtonsHolder" MinimumSize="240,500" Margins="0,80,0,0" Layout="VerticalFlow">
+                    <LayoutInput>
+                      <FormLayoutInput Left="Parent,0" Top="Parent,0, 100"/>
+                    </LayoutInput>
+                    <Children>
+                      <Panel Margins="10, -149, 0, 0">
+                        <Children>
+                          <Edit:SearchEdit Model="[SearchText]" ContentMaxSize="500, 42" ContentMinSize="500, 42" Visible="true">
+                            <LayoutInput>
+                              <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
+                            </LayoutInput>
+                          </Edit:SearchEdit>
+                        </Children>
+                      </Panel>
+                      <!--Repeater Name="Buttons" Source="[ButtonMappings]" Layout="VerticalFlow" Margins="0,0,0,0"-->
+                      <ColorFill Name="SearchContainer" MaximumSize="300, 0" Content="Transparent" Margins="10,20,0,0">
+                        <Children>
+                          <Panel Margins="0, -400, 0, 0">
+                            <Children>
+                              <Panel Name="EpgContainer" Layout="Form">
+                                <LayoutInput>
+                                  <FormLayoutInput Left="Parent,0" Top="Parent,0" Right="Parent,1" Bottom="Parent,1"/>
+                                </LayoutInput>
+                                <Children>
+                                  <Graphic Name="Border" Content="[CellFocusBorder]" HorizontalAlignment="Fill" VerticalAlignment="Fill" SizingPolicy="SizeToConstraint" CenterPointPercent="0.5,0.5,0.5" Padding="1,1,1,1">
+                                    <LayoutInput>
+                                      <AnchorLayoutInput Left="Focus,0,-7" Top="Focus,0,-7" Right="Focus,1,3" Bottom="Focus,1,3" ContributesToWidth="false" ContributesToHeight="false"/>
+                                    </LayoutInput>
+                                    <Children>
+                                      <focus:SelectorFocusLoop>
+                                        <!--LayoutInput>
+                                          <AnchorLayoutInput Left="Parent,0,-7" Top="Parent,0,-7"
+                                                             ContributesToWidth="false" ContributesToHeight="false"/>
+                                        </LayoutInput-->
+                                      </focus:SelectorFocusLoop>
+                                      <!--ColorFill Content="Red" Layout="Fill">
+                                        <LayoutInput>
+                                          <AnchorLayoutInput Left="Parent,0,-7" Top="Parent,0,-7" Right="Parent,0,-100" Bottom="Parent,0,-100"
+                                                             ContributesToWidth="false" ContributesToHeight="false"/>
+                                        </LayoutInput>
+                                      </ColorFill-->
+                                    </Children>
+                                  </Graphic>
+                                  <Graphic Name="Shadow" Content="[CellFocusShadow]" HorizontalAlignment="Fill" VerticalAlignment="Fill" SizingPolicy="SizeToConstraint" CenterPointPercent="0.5,0.5,0.5">
+                                    <LayoutInput>
+                                      <AnchorLayoutInput Left="Focus,0,-32" Top="Focus,0,-32" Right="Focus,1,28" Bottom="Focus,1,28" ContributesToWidth="false" ContributesToHeight="false"/>
+                                    </LayoutInput>
+                                  </Graphic>
+                                  <!--core:KeyboardButton Model="[NumberCommand!Command]" Target="[SearchText]"  TileMinSize="102,51" TileMaxSize="0,0" TextMargins="15,5,5,5" /-->
+                                  <filterbutton:GuideFilterButton ButtonCommand="[SearchCategories!Command]" >
+                                    <LayoutInput>
+                                      <!--FormLayoutInput Top="Parent,0,574" Left="Parent,0,70"/-->
+                                      <FormLayoutInput Left="Parent, 0, -40" Top="KeyRepeater, 0, 0"   Bottom="ResetButton, 1, 0"  Right="KeyRepeater,0,-3"/>
+                                    </LayoutInput>
+                                  </filterbutton:GuideFilterButton>
+                                  <Repeater Name="KeyRepeater" Source="[ButtonMappings]" Margins="0,0,0,0">
+                                    <Layout>
+                                      <GridLayout AllowWrap="true" Repeat="Never" Spacing="3,3"/>
+                                      <!--GridLayout Orientation="Vertical"
+                                    Columns="1" Rows="1"
+                                    AllowWrap="true" Spacing="1,1"
+                                    MajorAlignment="Fill" MinorAlignment="Fill" ReferenceSize="51, 51"/-->
+                                    </Layout>
+                                    <Content>
+                                      <filterlistbutton:KeyboardFilteredGuide Target="[SearchText]" TileSize="51,51" LabelMargins="12, 6, 8, 0" Model="[RepeatedItem!Command]" LabelBackground="[CellBackground]">
+                                      </filterlistbutton:KeyboardFilteredGuide>
+                                    </Content>
+                                  </Repeater>
+                                  <filterlistbutton:SpaceFilteredGuide Target="[SearchText]" TileSize="105,51" LabelMargins="12, 6, 8, 0" Model="[SpaceCommand!Command]" LabelBackground="[CellBackground]">
+                                    <LayoutInput>
+                                      <!--FormLayoutInput Top="Parent,0,574" Left="Parent,0,70"/-->
+                                      <FormLayoutInput Bottom="KeyRepeater, 1, 0"  Left="Parent,0,70"/>
+                                    </LayoutInput>
+                                  </filterlistbutton:SpaceFilteredGuide>
+                                  <filterlistbutton:BackSpaceFilteredGuide Target="[SearchText]" TileSize="105,51" LabelMargins="12, 6, 8, 0" Model="[DeleteCommand!Command]" LabelBackground="[CellBackground]">
+                                    <LayoutInput>
+                                      <FormLayoutInput Bottom="KeyRepeater,1, 0" Right="KeyRepeater,1, 0"/>
+                                      <!--FormLayoutInput Top="Parent,0,574" Left="Parent,0,179"/-->
+                                    </LayoutInput>
+                                  </filterlistbutton:BackSpaceFilteredGuide>
+                                  <filterlistbutton:FilteredGuide TileSize="105,51" LabelMargins="12, 6, 8, 0" Model="[NumberCommand!Command]" LabelBackground="[CellBackground]">
+                                    <LayoutInput>
+                                      <FormLayoutInput Top="KeyRepeater,1,3" Left="KeyRepeater,0,0"/>
+                                    </LayoutInput>
+                                  </filterlistbutton:FilteredGuide>
+                                  <filterlistbutton:ResetFilteredGuide Target="[SearchText]" Name="ResetButton" TileSize="159,51" LabelMargins="12, 6, 8, 0" Model="[ResetCommand!Command]" LabelBackground="[CellBackground]">
+                                    <LayoutInput>
+                                      <FormLayoutInput Top="KeyRepeater,1,3" Right="KeyRepeater,1, 0"/>
+                                    </LayoutInput>
+                                  </filterlistbutton:ResetFilteredGuide>
+                                  <listview:ScrollingListSearch2 Name="Results" Page="[Page]" SelectedCommand="[Page.SelectedCommand]" Content="[Page.Commands]" GroupName="" SelectedCrap="f">
+                                    <LayoutInput>
+                                      <FormLayoutInput Top="KeyRepeater,0,0" Left="KeyRepeater,1, 3" Bottom="KeyRepeater,1, 100"  Right="KeyRepeater, 1, 770"/>
+                                    </LayoutInput>
+                                    <ScrollingData>
+                                      <ScrollingData/>
+                                    </ScrollingData>
+                                  </listview:ScrollingListSearch2>
+                                  <Panel>
+                                    <LayoutInput>
+                                      <FormLayoutInput Top="Results,1,20" Left="Results,0, -100" Right="Results, 1, 0" />
+                                    </LayoutInput>
+                                    <Children>
+                                      <!--Panel Name="Picture" MaximumSize ="50,50" MinimumSize ="59,59" Margins="0,0,0,0">
+                                        <LayoutInput>
+                                          <AnchorLayoutInput ContributesToHeight="false" ContributesToWidth="false" Left="Parent,0" Top="Parent,0"/>
+                                        </LayoutInput>
+                                        <Children>
+                                          <Text Content="hi"/>
+                                          <Graphic Name="CoverGraphic" Content="[Page.SelectedCommand.DefaultImage]"/!-->
+                                      <!-- ErrorImage="[MovieDefaultImage]" /-->
+                                      <!--/Children>
+                                      </Panel-->
+                                      <Panel Layout="HorizontalFlow" MaximumSize="0, 500">
+                                        <Children>
+                                          <Graphic Name="CoverGraphic" Content="[Page.SelectedCommand.DefaultImage]" Margins="0,0,20,0" MaximumSize="100,145" MinimumSize="100,145">
+                                            <Animations>
+                                              <Animation Type="Show">
+                                                <Keyframes>
+                                                  <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="Log" RelativeTo="Absolute"/>
+                                                  <AlphaKeyframe Time="0.2" Value="1.0" RelativeTo="Absolute"/>
+                                                </Keyframes>
+                                              </Animation>
+                                              <Animation Type="Hide">
+                                                <Keyframes>
+                                                  <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+                                                  <AlphaKeyframe Time="0.1" Value="0.0" RelativeTo="Absolute"/>
+                                                </Keyframes>
+                                              </Animation>
+                                              <Animation Type="ContentChangeShow">
+                                                <Keyframes>
+                                                  <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="Log" RelativeTo="Absolute"/>
+                                                  <AlphaKeyframe Time="0.1" Value="1.0" RelativeTo="Absolute"/>
+                                                </Keyframes>
+                                              </Animation>
+                                              <Animation Type="ContentChangeHide">
+                                                <Keyframes>
+                                                  <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+                                                  <AlphaKeyframe Time="0.1" Value="0.0" RelativeTo="Absolute"/>
+                                                </Keyframes>
+                                              </Animation>
+                                            </Animations>
+                                          </Graphic>
+                                          <Panel Layout="VerticalFlow" MaximumSize="0, 500">
+                                            <Children>
+                                              <Text Name="TitleText" Content="[Page.SelectedCommand.Description]" MaximumLines="2" Margins="0, 10, 0, 0" WordWrap="true" Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23">
+                                                <Animations>
+                                                  <Animation Type="Show">
+                                                    <Keyframes>
+                                                      <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="Log" RelativeTo="Absolute"/>
+                                                      <AlphaKeyframe Time="0.2" Value="1.0" RelativeTo="Absolute"/>
+                                                    </Keyframes>
+                                                  </Animation>
+                                                  <Animation Type="Hide">
+                                                    <Keyframes>
+                                                      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+                                                      <AlphaKeyframe Time="0.1" Value="0.0" RelativeTo="Absolute"/>
+                                                    </Keyframes>
+                                                  </Animation>
+                                                  <Animation Type="ContentChangeShow">
+                                                    <Keyframes>
+                                                      <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="Log" RelativeTo="Absolute"/>
+                                                      <AlphaKeyframe Time="0.2" Value="1.0" RelativeTo="Absolute"/>
+                                                    </Keyframes>
+                                                  </Animation>
+                                                  <Animation Type="ContentChangeHide">
+                                                    <Keyframes>
+                                                      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+                                                      <AlphaKeyframe Time="0.1" Value="0.0" RelativeTo="Absolute"/>
+                                                    </Keyframes>
+                                                  </Animation>
+                                                </Animations>
+                                              </Text>
+                                              <Text Name="DetailsText" Content="[Page.SelectedCommand.Description]" MaximumLines="3" WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255">
+                                                <Animations>
+                                                  <Animation Type="Show">
+                                                    <Keyframes>
+                                                      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute"/>
+                                                      <AlphaKeyframe Time="0.1" Value="0.0" Interpolation="Log" RelativeTo="Absolute"/>
+                                                      <AlphaKeyframe Time="0.3" Value="1.0" RelativeTo="Absolute"/>
+                                                    </Keyframes>
+                                                  </Animation>
+                                                  <Animation Type="Hide">
+                                                    <Keyframes>
+                                                      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+                                                      <AlphaKeyframe Time="0.1" Value="0.0" RelativeTo="Absolute"/>
+                                                    </Keyframes>
+                                                  </Animation>
+                                                  <Animation Type="ContentChangeShow">
+                                                    <Keyframes>
+                                                      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute"/>
+                                                      <AlphaKeyframe Time="0.1" Value="0.0" Interpolation="Log" RelativeTo="Absolute"/>
+                                                      <AlphaKeyframe Time="0.3" Value="1.0" RelativeTo="Absolute"/>
+                                                    </Keyframes>
+                                                  </Animation>
+                                                  <Animation Type="ContentChangeHide">
+                                                    <Keyframes>
+                                                      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+                                                      <AlphaKeyframe Time="0.1" Value="0.0" RelativeTo="Absolute"/>
+                                                    </Keyframes>
+                                                  </Animation>
+                                                </Animations>
+                                              </Text>
+                                            </Children>
+                                          </Panel>
+                                        </Children>
+                                      </Panel>
+                                    </Children>
+                                  </Panel>
+                                </Children>
+                              </Panel>
+                            </Children>
+                          </Panel>
+                        </Children>
+                      </ColorFill>
+                    </Children>
+                  </Panel>
+                  <!--Panel Margins="0,80,0,0" Layout="VerticalFlow">
+                    <LayoutInput>
+                      <FormLayoutInput Left="ButtonsHolder,1" Top="ButtonsHolder,0" Vertical="Fill" Horizontal="Fill"/>
+                    </LayoutInput>
+                    <Children>
+                      <Panel Layout="VerticalFlow" MaximumSize="0, 500">
+                        <Children>
+                          <listview:ScrollingListSearch2 Name="Results"  Content="[Group2]" GroupName="" SelectedCrap="f">
+                            <ScrollingData>
+                              <ScrollingData/>
+                            </ScrollingData>
+                          </listview:ScrollingListSearch2>
+                        </Children>
+                      </Panel>
+                      <Text Content="This is a title" MaximumLines="2" Margins="0, 10, 0, 0" WordWrap="true" Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23"/>
+                      <Text Content="sub text" MaximumLines="3" WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
+                    </Children>
+                  </Panel-->
+                </Children>
+              </Panel>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+
+  </UI>
+
+  <Animation Name="Browse.Gallery.Show.Focus" Type="Idle" CenterPointPercent="0.5, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>
+      <ScaleKeyframe Time="0.3" Value="1.0, 1.0, 1.0" RelativeTo="Absolute"/>
+
+      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.3" Value="1.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Gallery.Hide.Focus" Type="Idle" CenterPointPercent="0.5, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>
+      <ScaleKeyframe Time="0.3" Value="0.95, 0.95, 1.0" RelativeTo="Absolute"/>
+
+      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.3" Value="0.7" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+</Mcml>
