@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Database Name="OML" Class="OMLDataDataContext" AccessModifier="Internal" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost\SQLEXPRESS;Initial Catalog=OML;Integrated Security=True" SettingsObjectName="OMLEngine.Properties.Settings" SettingsPropertyName="OMLConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost\OML;Initial Catalog=OML;Integrated Security=True" SettingsObjectName="OMLEngine.Properties.Settings" SettingsPropertyName="OMLConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.GenreMetaData" Member="GenreMetaDatas" AccessModifier="Internal">
     <Type Name="GenreMetaData" AccessModifier="Internal">
       <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />

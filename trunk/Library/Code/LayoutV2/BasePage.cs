@@ -5,7 +5,7 @@ using Microsoft.MediaCenter.UI;
 
 namespace Library
 {
-    public class BasePage : ModelItem
+    public class BasePage : BaseModelItem
     {
         #region private variables
         bool _ShowWaitCursor;

@@ -5,7 +5,7 @@ using Microsoft.MediaCenter.UI;
 
 namespace Library
 {
-    public class ContextMenu : ModelItem
+    public class ContextMenu : BaseModelItem
     {
         IList localItems;
         Choice subtitleTracks;
@@ -62,7 +62,7 @@ namespace Library
         }
 
         public ContextMenu(IModelItemOwner owner)
-            : base(owner)
+            : base()
         {
             localItems = new List<ICommand>();
         }
@@ -73,7 +73,7 @@ namespace Library
         }
 
         public ContextMenu(IModelItemOwner owner, IList LocalItems)
-            : base(owner)
+            : base()
         {
             localItems = LocalItems;
         }

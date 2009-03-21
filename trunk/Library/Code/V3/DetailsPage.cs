@@ -13,7 +13,7 @@ namespace Library.Code.V3
     /// This object contains the standard set of information displayed in the 
     /// details page UI.
     /// </summary>
-    public class DetailsPage : ModelItem
+    public class DetailsPage : BaseModelItem
     {
         //get the extended details for the title
         //for slowload

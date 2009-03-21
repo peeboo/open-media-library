@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Library
 {
-    public class AlphaView : ModelItem
+    public class AlphaView : BaseModelItem
     {
         private IntRangedValue _focusSubIndex = new IntRangedValue();
 

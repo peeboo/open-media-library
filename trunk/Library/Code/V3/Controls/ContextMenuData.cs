@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace Library.Code.V3
 {
-    public class ContextMenuData : Microsoft.MediaCenter.UI.ModelItem
+    public class ContextMenuData : BaseModelItem
     {
         private IList m_listContextualItems;
         private IList m_listGlobalItems;

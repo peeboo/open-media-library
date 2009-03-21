@@ -29,7 +29,7 @@ namespace Library.Code.V3
         string Description { get; }
     }
 
-    //public class BrowseGroup : ModelItem, IBrowseGroup
+    //public class BrowseGroup : BaseModelItem, IBrowseGroup
     //{
     //    // Fields
     //    private IList m_list;

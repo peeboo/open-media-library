@@ -15,7 +15,7 @@ namespace Library
     /// This object contains the standard set of information displayed in the 
     /// details page UI.
     /// </summary>
-    public class MovieDetailsPage : ModelItem
+    public class MovieDetailsPage : BaseModelItem
     {                
         #region Private Variables        
         private Choice _actors;

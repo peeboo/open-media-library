@@ -7,7 +7,7 @@ using System.Reflection;
 namespace Library.Code.V3
 {
     [MarkupVisible]
-    public class PipHelper : ModelItem
+    public class PipHelper : BaseModelItem
     {
         private Type myType;
         private PropertyInfo pinfo;

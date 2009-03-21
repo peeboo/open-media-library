@@ -5,7 +5,7 @@ using Microsoft.MediaCenter.UI;
 
 namespace Library.Code.V3
 {
-    public class CustomSelectionPolicy : ModelItem, ISelectionPolicy
+    public class CustomSelectionPolicy : BaseModelItem, ISelectionPolicy
     {
         // Fields
         private bool m_fClearSelectionOnLostFocus;
@@ -21,7 +21,7 @@ namespace Library.Code.V3
         }
 
         public CustomSelectionPolicy(IModelItemOwner owner)
-            : base(owner)
+            : base()
         {
         }
 

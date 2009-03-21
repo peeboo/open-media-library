@@ -22,7 +22,7 @@ namespace Library
     /// <summary>
     /// Starting point for the OML
     /// </summary>
-    public class OMLApplication : ModelItem
+    public class OMLApplication : BaseModelItem
     {
         private bool isBusy = false;
         private bool isStartingTranscodingJob = false;

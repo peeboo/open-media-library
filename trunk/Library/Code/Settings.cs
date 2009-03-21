@@ -16,7 +16,7 @@ using OMLSDK;
 
 namespace Library
 {
-    public class Settings : ModelItem
+    public class Settings : BaseModelItem
     {
         public void ShowSampleLayout()
         {

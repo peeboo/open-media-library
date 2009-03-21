@@ -57,7 +57,7 @@ namespace Library.Code.V3
             this.PageStateEx = new PageStateEx();
 
             this.title = "movies";
-            _JILtext = new EditableText(this.Owner, "JIL");
+            _JILtext = new EditableText(null, "JIL");
             JILtext.Value = "";
             JILtext.Submitted += new EventHandler(JILtext_Submitted);
         }
@@ -303,12 +303,8 @@ namespace Library.Code.V3
 
         private void notifySlowSearch(object obj)
         {
-            if (!IsDisposed)
-            {
-                JILindex = (int)obj - JILCurrentindex;
-            }
+            JILindex = (int)obj - JILCurrentindex;
         }
-
 
         private void endLoadSlowSearch(object obj)
         {

@@ -11,7 +11,7 @@ using System.Xml.XPath;
 
 namespace Library
 {
-    public class TheMovieDbBackDropDownloader : ModelItem
+    public class TheMovieDbBackDropDownloader : BaseModelItem
     {
         private const string API_KEY = "1376bf98794bda0c2495bd500a37f689";
         private const string API_URL_SEARCH = "http://api.themoviedb.org/2.0/Movie.search";

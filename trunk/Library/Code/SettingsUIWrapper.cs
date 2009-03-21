@@ -7,7 +7,7 @@ using Microsoft.MediaCenter.UI;
 
 namespace Library
 {
-     public class SettingsUIWrapper:ModelItem
+     public class SettingsUIWrapper : BaseModelItem
          
     {
         Settings _settings;

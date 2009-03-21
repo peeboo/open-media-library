@@ -9,7 +9,7 @@ using System.Globalization;
 
 namespace Library.Code.V3
 {
-    public class BrowseModel : ModelItem
+    public class BrowseModel : BaseModelItem
     {
         // Fields
         private Choice m_choicePivots;
@@ -21,7 +21,7 @@ namespace Library.Code.V3
         }
 
         public BrowseModel(IModelItemOwner owner)
-            : base(owner)
+            : base()
         {
         }
 
@@ -64,7 +64,7 @@ namespace Library.Code.V3
         // Methods
         protected override object Transform(object value)
         {
-            ModelItem item = value as ModelItem;
+            IModelItem item = value as ModelItem;
             if (item != null)
             {
                 return base.Transform(item.Description);
@@ -168,7 +168,7 @@ namespace Library.Code.V3
         }
     }
 
-    public class PageState : ModelItem
+    public class PageState : BaseModelItem
     {
         // Fields
         private bool m_isCurrentPage;
@@ -216,7 +216,7 @@ namespace Library.Code.V3
         }
 
         public PageState(IModelItemOwner owner)
-            : base(owner)
+            : base()
         {
             this.m_transitionState = PageTransitionState.NavigatingToForward;
             this.eTPageState = new EditableText(this);
