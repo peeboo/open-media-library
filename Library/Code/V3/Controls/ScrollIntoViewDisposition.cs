@@ -7,7 +7,7 @@ using System.Reflection;
 namespace Library.Code.V3
 {
     [MarkupVisible]
-    public class ScrollingDataHelper : Microsoft.MediaCenter.UI.ModelItem
+    public class ScrollingDataHelper : BaseModelItem
     {
         private bool _loaded = false;
 

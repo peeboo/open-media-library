@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Library
 {
-    public class LabeledList : ModelItem
+    public class LabeledList : BaseModelItem
     {
         private VirtualList moviesVirtualList;
         private string filterLabel;

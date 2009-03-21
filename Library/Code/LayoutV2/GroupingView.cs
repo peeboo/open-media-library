@@ -5,7 +5,7 @@ using OMLEngine;
 
 namespace Library
 {
-    public class GroupingView : ModelItem
+    public class GroupingView : BaseModelItem
     {
         const int GROUPS = 20;
         const int ITEMSINGROUP = 50;

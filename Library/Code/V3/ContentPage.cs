@@ -13,7 +13,7 @@ namespace Library.Code.V3
     /// This object contains the standard set of information displayed in a
     /// content page UI (e.g. Gallery).
     /// </summary>
-    public class ContentPage : ModelItem
+    public class ContentPage : BaseModelItem
     {
         public ContentPage()
         {

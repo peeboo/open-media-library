@@ -12,7 +12,7 @@ namespace Library.Code.V3
     /// This object contains the standard set of information displayed in the 
     /// details page UI.
     /// </summary>
-    public class MoviesSearchPage : ModelItem
+    public class MoviesSearchPage : BaseModelItem
     {
         public MoviesSearchPage()
             : base()

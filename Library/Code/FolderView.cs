@@ -4,7 +4,7 @@ using OMLEngine;
 
 namespace Library
 {
-    public class FolderView : ModelItem
+    public class FolderView : BaseModelItem
     {
         #region variables
         public static Image DefaultFolderImage =

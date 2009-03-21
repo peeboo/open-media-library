@@ -7,7 +7,7 @@ using System.Reflection;
 namespace Library.Code.V3
 {
     [MarkupVisible]
-    public class EnvironmentHelper : ModelItem
+    public class EnvironmentHelper : BaseModelItem
     {
         private Type myType;
         private object environment;

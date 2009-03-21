@@ -92,7 +92,7 @@ namespace Library.Code.V3
     }
 
     [MarkupVisible]
-    public class AreaOfInterestHelper : Microsoft.MediaCenter.UI.ModelItem
+    public class AreaOfInterestHelper : BaseModelItem
     {
         public void SetLayoutInput(object Panel, object oNewValue)
         {

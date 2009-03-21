@@ -7,7 +7,7 @@ using System.Reflection;
 namespace Library.Code.V3
 {
     [MarkupVisible]
-    public class RepeaterHelper : ModelItem
+    public class RepeaterHelper : BaseModelItem
     {
         public void ForceRefresh(object Repeater)
         {

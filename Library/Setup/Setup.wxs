@@ -333,7 +333,7 @@
           <Component Id="DatabaseCreate" Guid="402F76C8-442B-4349-9922-E28ACF449A3C" KeyPath="yes">
             <sql:SqlDatabase Id="OMLDatabase"
                              Server="(local)"
-                             Instance="SQLExpress"
+                             Instance="OML"
                              Database="OML"
                              CreateOnInstall="yes"
                              ConfirmOverwrite="yes">

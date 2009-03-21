@@ -15,7 +15,7 @@ namespace Library
 {
     /// A list of movies (MovieItems)
     /// </summary>
-    public class MovieGallery : ModelItem
+    public class MovieGallery : BaseModelItem
     {
         #region Public Properties
 

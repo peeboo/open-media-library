@@ -5,7 +5,7 @@ using OMLEngine;
 
 namespace Library
 {
-    public class MovieItemV2 : ModelItem
+    public class MovieItemV2 : BaseModelItem
     {
         Title title;
         Image frontCoverImage;

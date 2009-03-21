@@ -12,7 +12,7 @@ using OMLSDK;
 
 namespace Library
 {
-    public class Setup : ModelItem
+    public class Setup : BaseModelItem
     {
         #region variables
         private Title _currentTitle;

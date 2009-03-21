@@ -4,7 +4,7 @@ using Microsoft.MediaCenter.UI;
 
 namespace Library
 {
-    public class TreeNode : ModelItem
+    public class TreeNode : BaseModelItem
     {
         private string _fullPath = string.Empty;
         private string _title = string.Empty;

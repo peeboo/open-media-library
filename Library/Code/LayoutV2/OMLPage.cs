@@ -5,7 +5,7 @@ using Microsoft.MediaCenter.UI;
 
 namespace Library
 {
-    public class OMLPage : ModelItem
+    public class OMLPage : BaseModelItem
     {
         OMLChoice menuTabs;
         OMLProperties pageProperties;

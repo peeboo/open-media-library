@@ -10,7 +10,7 @@ using Microsoft.MediaCenter.UI;
 
 namespace Library
 {
-    public class AppleTrailers : ModelItem
+    public class AppleTrailers : BaseModelItem
     {
         private static string LoFiUrl = @"http://www.apple.com/trailers/home/xml/current.xml";
         private static string HiFiUrl = @"http://www.apple.com/trailers/home/xml/current_720p.xml";
@@ -202,7 +202,7 @@ namespace Library
         }
     }
 
-    public class AppleTrailer : ModelItem
+    public class AppleTrailer : BaseModelItem
     {
         public string Title { get; set; }
         public string Runtime { get; set; }

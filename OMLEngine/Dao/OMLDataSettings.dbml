@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Database Name="OML" Class="OMLDataSettingsDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost\SQLEXPRESS;Initial Catalog=OML;Integrated Security=True" SettingsObjectName="OMLEngine.Properties.Settings" SettingsPropertyName="OMLConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost\OML;Initial Catalog=OML;Integrated Security=True" SettingsObjectName="OMLEngine.Properties.Settings" SettingsPropertyName="OMLConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.MataDataMappings" Member="MataDataMappings">
     <Type Name="MataDataMapping">
       <Column Name="RowID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
