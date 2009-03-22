@@ -95,7 +95,7 @@ namespace OMLDatabaseEditor
                     OMLEngine.Dao.GenreMapping mapping = new OMLEngine.Dao.GenreMapping();
                     mapping.GenreName = map.SourceGenre;
                     mapping.GenreMapTo = string.Empty;
-                    SettingsManager.GenreMap_Add(mapping);
+                    OMLEngine.Settings.SettingsManager.GenreMap_Add(mapping);
                 }
                 else
                 {
@@ -105,11 +105,11 @@ namespace OMLDatabaseEditor
                     if (!_title.Genres.Contains(cbeGenre.Text))
                         _title.AddGenre(cbeGenre.Text);
 
-                    SettingsManager.GenreMap_Remove(map.SourceGenre);
+                    OMLEngine.Settings.SettingsManager.GenreMap_Remove(map.SourceGenre);
                     OMLEngine.Dao.GenreMapping mapping = new OMLEngine.Dao.GenreMapping();
                     mapping.GenreName = map.SourceGenre;
                     mapping.GenreMapTo = cbeGenre.Text;
-                    SettingsManager.GenreMap_Add(mapping);
+                    OMLEngine.Settings.SettingsManager.GenreMap_Add(mapping);
                 }
                 i++;
             }

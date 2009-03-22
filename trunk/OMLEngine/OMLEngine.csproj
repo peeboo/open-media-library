@@ -86,7 +86,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WatcherData.dbml</DependentUpon>
     </Compile>
-    <Compile Include="DiskInfo.cs" />
+    <Compile Include="DatabaseManagement\DatabaseInformation.cs" />
+    <Compile Include="DatabaseManagement\DatabaseManagement.cs" />
+    <Compile Include="MediaScanner\DiskInfo.cs" />
     <Compile Include="DVDAudioTrack.cs" />
     <Compile Include="DVDChapter.cs" />
     <Compile Include="DVDDecrypterController.cs" />
@@ -101,10 +103,10 @@
     <Compile Include="Disk.cs" />
     <Compile Include="FileSystemWalker.cs" />
     <Compile Include="Genres.cs" />
-    <Compile Include="IFOUtilities.cs" />
+    <Compile Include="MediaScanner\IFOUtilities.cs" />
     <Compile Include="ITranscodingService.cs" />
     <Compile Include="MediaInfo.cs" />
-    <Compile Include="MediaInfoLib.cs" />
+    <Compile Include="MediaScanner\MediaInfoLib.cs" />
     <Compile Include="MediaLanguage.cs" />
     <Compile Include="MediaSource.cs" />
     <Compile Include="NetHelper.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\WatcherSettings.cs" />
     <Compile Include="Settings\WatcherSettingsManager.cs" />
+    <Compile Include="Settings\XMLSettingsManager.cs" />
     <Compile Include="SortedArrayList.cs" />
     <Compile Include="SubtitleStream.cs" />
     <Compile Include="Title.cs" />

@@ -44,7 +44,7 @@ namespace OMLDatabaseEditor
             // Loop through available plugins, creating instances and add them
             if (plugins != null)
             {
-                string pluginForProperty = SettingsManager.MetaDataMap_PluginForProperty(_propertyName);
+                string pluginForProperty = OMLEngine.Settings.SettingsManager.MetaDataMap_PluginForProperty(_propertyName);
                 cbDefault.Checked = String.IsNullOrEmpty(pluginForProperty);
 
                 Dictionary<string, object> dataCollection = new Dictionary<string, object>();
@@ -191,7 +191,7 @@ namespace OMLDatabaseEditor
                 OMLEngine.Dao.MataDataMapping mapping = new OMLEngine.Dao.MataDataMapping();
                 mapping.MatadataProperty = _propertyName;
                 mapping.MetadataProvider = pluginResult.PluginName;
-                SettingsManager.MetaDataMap_Add(mapping);
+                OMLEngine.Settings.SettingsManager.MetaDataMap_Add(mapping);
             }
             DialogResult = DialogResult.OK;
         }

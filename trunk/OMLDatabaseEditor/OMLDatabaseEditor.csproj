@@ -315,7 +315,19 @@
     <Compile Include="ResolveGenres.Designer.cs">
       <DependentUpon>ResolveGenres.cs</DependentUpon>
     </Compile>
+    <Compile Include="SelectDatabaseServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectDatabaseServer.Designer.cs">
+      <DependentUpon>SelectDatabaseServer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
+    <Compile Include="SplashScreen2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SplashScreen2.Designer.cs">
+      <DependentUpon>SplashScreen2.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
@@ -388,6 +400,12 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Revision.txt" />
+    <EmbeddedResource Include="SelectDatabaseServer.resx">
+      <DependentUpon>SelectDatabaseServer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SplashScreen2.resx">
+      <DependentUpon>SplashScreen2.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\DataSources\OMLEngine.Disk.datasource" />
     <None Include="Properties\DataSources\OMLEngine.Title.datasource" />
     <None Include="Resources\movieheader1.jpg" />

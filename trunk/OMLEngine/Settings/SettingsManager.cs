@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OMLEngine.Dao;
-namespace OMLEngine
+
+namespace OMLEngine.Settings
 {
-
-
     public static class SettingsManager
     {
 
