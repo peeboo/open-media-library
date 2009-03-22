@@ -79,12 +79,11 @@
                                                      IsReadOnly="True"
                                                      IsTabStop="False"/>
                                             <TextBox Grid.Column="1"
-                                                     Text="{Binding Path=Target}"
+                                                     Text="{Binding Path=Target,UpdateSourceTrigger=PropertyChanged}"
                                                      TextWrapping="Wrap"
                                                      AcceptsReturn="True" 
                                                      Background="{Binding Path=Status, Converter={StaticResource statusToBrushConverter}}"
-                                                     Foreground="{Binding Path=IsInherited, Converter={StaticResource isInheritedToBrushConverter}}"
-                                                     TextChanged="TargetTextChanged"/>
+                                                     Foreground="{Binding Path=IsInherited, Converter={StaticResource isInheritedToBrushConverter}}"/>
                                             <TextBlock Grid.Column="2"
                                                        Text="*"
                                                        VerticalAlignment="Center"
