@@ -21,6 +21,7 @@ namespace OMLEngine.Dao
                         if (db == null)
                         {
                             db = new OMLDataDataContext();
+                            db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
                         }
                     }
                 }
@@ -48,6 +49,7 @@ namespace OMLEngine.Dao
                         if (db == null)
                         {
                             db = new WatcherDataDataContext();
+                            db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
                         }
                     }
                 }
@@ -75,6 +77,7 @@ namespace OMLEngine.Dao
                         if (db == null)
                         {
                             db = new OMLDataSettingsDataContext();
+                            db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
                         }
                     }
                 }

@@ -273,6 +273,9 @@ namespace Library
         // this is the context from the Media Center menu
         public void Startup(string context)
         {
+            // Load database settings from xml file
+            OMLEngine.DatabaseManagement.DatabaseInformation.LoadSettings();
+
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
 #if CAROUSEL
             _session.GoToPage(@"resx://Library/Library.Resources/Trailers");

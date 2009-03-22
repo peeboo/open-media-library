@@ -27,7 +27,7 @@ namespace OMLDatabaseEditor
         {   
             // Build properties assigned to a metadata provider
             // ----------------------------------------------
-            foreach (OMLEngine.Dao.MataDataMapping map in SettingsManager.MetaDataMap_GetMappings())
+            foreach (OMLEngine.Dao.MataDataMapping map in OMLEngine.Settings.SettingsManager.MetaDataMap_GetMappings())
             {
                 UsedProperties[map.MatadataProperty] = map.MetadataProvider;
             } 
@@ -125,7 +125,6 @@ namespace OMLDatabaseEditor
 
         private void AddMappingProprty(string property)
         {
-            // TODO : Create SQL Tables
             if (!UsedProperties.ContainsKey(property))
             {
                 UnusedProperties[property] = "";
@@ -134,7 +133,7 @@ namespace OMLDatabaseEditor
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            SettingsManager.MetaDataMap_Clear();
+            OMLEngine.Settings.SettingsManager.MetaDataMap_Clear();
 
             Control[] controls;
             int i = 0;
@@ -149,7 +148,7 @@ namespace OMLDatabaseEditor
                     OMLEngine.Dao.MataDataMapping map = new OMLEngine.Dao.MataDataMapping();
                     map.MatadataProperty = lblProperty.Text;
                     map.MetadataProvider = cbeMapping.Text;
-                    SettingsManager.MetaDataMap_Add(map);
+                    OMLEngine.Settings.SettingsManager.MetaDataMap_Add(map);
                 }
 
                 i++;

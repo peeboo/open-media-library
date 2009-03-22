@@ -40,26 +40,96 @@ namespace OMLDatabaseEditor
         {
             OMLEngine.Utilities.RawSetup();
 
+            SplashScreen2.ShowSplashScreen();
+
             InitializeComponent();
 
             defaultLookAndFeel1.LookAndFeel.SkinName = Properties.Settings.Default.gsAppSkin;
             InitData();
         }
 
+
+        /// <summary>
+        /// Perform startup initialisation including updating the splash screen
+        /// </summary>
         private void InitData()
         {
             Cursor = Cursors.WaitCursor;
             //OMLEngine.Utilities.DebugLine("[MainEditor] InitData() : new TitleCollection()");
             //OMLEngine.Utilities.DebugLine("[MainEditor] InitData() : loadTitleCollection()");            
+
+            SplashScreen2.SetStatus(16, "Checking database.");
+            if (!ValidateDatabase())
+            {
+                SplashScreen2.CloseForm();
+                Cursor = Cursors.Default;
+                return;
+            }
+
+            SplashScreen2.SetStatus(32, "Setting up Menus.");
             SetupNewMovieAndContextMenu();
+
+            SplashScreen2.SetStatus(48, "Loading Skins.");
             GetDXSkins();
 
             _loading = true;
+            
+            SplashScreen2.SetStatus(64, "Loading Movies.");
             LoadMovies();
+
+            SplashScreen2.SetStatus(80, "Loading MRU Lists.");
             this.titleEditor.SetMRULists();
+
+            SplashScreen2.SetStatus(100,"Completed.");
+
             _loading = false;
+
+            SplashScreen2.CloseForm();
             Cursor = Cursors.Default;
         }
+
+
+        /// <summary>
+        /// Load the db connection settings and try to connect to the database.
+        /// Give option to specify alternative sql connection details if connection
+        /// attempt fails
+        /// </summary>
+        /// <returns></returns>
+        private bool ValidateDatabase()
+        {
+            // Load database settings from xml file
+            OMLEngine.DatabaseManagement.DatabaseInformation.LoadSettings();
+
+            // Run database diagnostics
+            OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
+
+            OMLEngine.DatabaseManagement.DatabaseInformation.SQLState state = dbm.CheckDatabase();
+
+            switch (state)
+            {
+                case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OK:
+                    return true;
+
+                case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.LoginFailure:
+                    if (XtraMessageBox.Show("This could be caused by the OML Server computer being unavailable. Do you want to specify the server used?", "Problem accessing database!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        SelectDatabaseServer sds = new SelectDatabaseServer();
+                        if (sds.ShowDialog() == DialogResult.OK)
+                        {
+                            OMLEngine.DatabaseManagement.DatabaseInformation.SQLServerName = sds.Server;
+                            OMLEngine.DatabaseManagement.DatabaseInformation.SQLInstanceName = sds.SQLInstance;
+                            XtraMessageBox.Show("Please restart the program for the changes to take effect!");
+                        }
+                    }
+                    return false;
+
+                    break;
+                default:
+                    XtraMessageBox.Show(state.ToString() + " : " + OMLEngine.DatabaseManagement.DatabaseInformation.LastSQLError, "Problem accessing database!");
+                    return false;
+            }
+        }
+
 
         private void GetDXSkins()
         {
@@ -422,7 +492,7 @@ namespace OMLDatabaseEditor
                     else
                     {
                         // Import metadata based on field mappings and configured default plugin
-                        Dictionary<string, List<string>> mappings = SettingsManager.MetaDataMap_PropertiesByPlugin();
+                        Dictionary<string, List<string>> mappings = OMLEngine.Settings.SettingsManager.MetaDataMap_PropertiesByPlugin();
                         // Loop through configured mappings
                         Type tTitle = typeof(Title);
                         IOMLMetadataPlugin metadata;
@@ -537,10 +607,10 @@ namespace OMLDatabaseEditor
                     string newGenre = genre.Trim();
                     if (!genreList.Contains(newGenre))
                     {
-                        if (!string.IsNullOrEmpty(SettingsManager.GenreMap_GetMapping(newGenre)))
+                        if (!string.IsNullOrEmpty(OMLEngine.Settings.SettingsManager.GenreMap_GetMapping(newGenre)))
                         {
                             // Mapping already exists for genre
-                            genreChanges[genre] = SettingsManager.GenreMap_GetMapping(newGenre);
+                            genreChanges[genre] = OMLEngine.Settings.SettingsManager.GenreMap_GetMapping(newGenre);
                         }
                         else
                         {
