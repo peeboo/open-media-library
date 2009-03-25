@@ -677,8 +677,8 @@ namespace Library
                     {                                                
                         // see if they've selected a subfilter
                         // the unwatched is a special case until we add a user setting to determine the subfilter
-                        if (!string.IsNullOrEmpty(Properties.Settings.Default.StartPageSubFilter)
-                            || Properties.Settings.Default.StartPage == Filter.Unwatched)
+                        if (!string.IsNullOrEmpty(OMLSettings.StartPageSubFilter)
+                            || OMLSettings.StartPage == Filter.Unwatched)
                         {
                             // go to the subfilter
                             GoToMenu(
