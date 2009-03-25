@@ -25,42 +25,6 @@ namespace OMLEngine.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\DAEMON Tools Lite\\daemon.exe")]
-        public string MountingToolPath {
-            get {
-                return ((string)(this["MountingToolPath"]));
-            }
-            set {
-                this["MountingToolPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("M")]
-        public string VirtualDiscDrive {
-            get {
-                return ((string)(this["VirtualDiscDrive"]));
-            }
-            set {
-                this["VirtualDiscDrive"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int VirtualDiscDriveNumber {
-            get {
-                return ((int)(this["VirtualDiscDriveNumber"]));
-            }
-            set {
-                this["VirtualDiscDriveNumber"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool CopyImages {
             get {
@@ -73,40 +37,6 @@ namespace OMLEngine.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string MyMoviesServerName {
-            get {
-                return ((string)(this["MyMoviesServerName"]));
-            }
-            set {
-                this["MyMoviesServerName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int MountingToolSelection {
-            get {
-                return ((int)(this["MountingToolSelection"]));
-            }
-            set {
-                this["MountingToolSelection"] = value;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost\\OML;Initial Catalog=OML;Integrated Security=SSPI")]
-        public string OMLConnectionString {
-            get {
-                return ((string)(this["OMLConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool FoldersAreTitles {
             get {
@@ -114,42 +44,6 @@ namespace OMLEngine.Properties {
             }
             set {
                 this["FoldersAreTitles"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UseImpersonation {
-            get {
-                return ((bool)(this["UseImpersonation"]));
-            }
-            set {
-                this["UseImpersonation"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ImpersonationUsername {
-            get {
-                return ((string)(this["ImpersonationUsername"]));
-            }
-            set {
-                this["ImpersonationUsername"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ImpersonationPassword {
-            get {
-                return ((string)(this["ImpersonationPassword"]));
-            }
-            set {
-                this["ImpersonationPassword"] = value;
             }
         }
         
@@ -186,6 +80,26 @@ namespace OMLEngine.Properties {
             }
             set {
                 this["gsTitledFanArtPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=Localhost\\OML;Initial Catalog=OML;Integrated Security=True")]
+        public string OMLConnectionString1 {
+            get {
+                return ((string)(this["OMLConnectionString1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost\\SQLEXPRESS2;Initial Catalog=OML;Integrated Security=SSPI")]
+        public string OMLConnectionString {
+            get {
+                return ((string)(this["OMLConnectionString"]));
             }
         }
     }

@@ -9,6 +9,7 @@ using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Diagnostics;
 using OMLGetDVDInfo;
+using OMLEngine.Settings;
 
 namespace Library
 {
@@ -52,7 +53,7 @@ namespace Library
             if (File.Exists(source.MediaPath) || Directory.Exists(source.MediaPath))
             {
                 // This is for transcoding debugging
-                if (Properties.Settings.Default.DebugTranscoding)
+                if (OMLSettings.DebugTranscoding)
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created (debug): {0}", source);
                     return new TranscodePlayer(source);
@@ -245,7 +246,7 @@ namespace Library
             switch (videoFormat)
             {
                 case VideoFormat.AVI:
-                    if (Properties.Settings.Default.TranscodeAVIFiles)
+                    if (OMLSettings.TranscodeAVIFiles)
                         return true;
                     else
                         return false;
@@ -268,12 +269,12 @@ namespace Library
                 case VideoFormat.H264:
                     return false;
                 case VideoFormat.MKV:
-                    if (Properties.Settings.Default.TranscodeMKVFiles)
+                    if (OMLSettings.TranscodeMKVFiles)
                         return true;
                     else
                         return false;
                 case VideoFormat.OGM:
-                    if (Properties.Settings.Default.TranscodeOGMFiles)
+                    if (OMLSettings.TranscodeOGMFiles)
                         return true;
                     else
                         return false;

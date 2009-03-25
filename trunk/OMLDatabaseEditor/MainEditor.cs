@@ -97,9 +97,6 @@ namespace OMLDatabaseEditor
         /// <returns></returns>
         private bool ValidateDatabase()
         {
-            // Load database settings from xml file
-            OMLEngine.DatabaseManagement.DatabaseInformation.LoadSettings();
-
             // Run database diagnostics
             OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
 

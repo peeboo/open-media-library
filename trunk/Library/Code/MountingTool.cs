@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 
+using OMLEngine.Settings;
+
 /* This entire library is either completely taken
  * from or heavily influenced by code from the MediaPortal
  * project as found via Krugle */
@@ -25,9 +27,9 @@ namespace Library
         public MountingTool()
         {
             OMLApplication.DebugLine("[MountingTool] MountingTool()");
-            _Path = OMLEngine.Properties.Settings.Default.MountingToolPath;
-            _Drive = OMLEngine.Properties.Settings.Default.VirtualDiscDrive;
-            _DriveNo = OMLEngine.Properties.Settings.Default.VirtualDiscDriveNumber;
+            _Path = OMLSettings.MountingToolPath;
+            _Drive = OMLSettings.VirtualDiscDrive;
+            _DriveNo = OMLSettings.VirtualDiscDriveNumber;
             OMLApplication.DebugLine("[MountingTool] All MountingTool params loaded");
         }
 
@@ -48,7 +50,7 @@ namespace Library
             UnMount();
 
             string strParams;
-            if (OMLEngine.Properties.Settings.Default.MountingToolPath.ToLower().Contains("virtual"))
+            if (OMLSettings.MountingToolPath.ToLower().Contains("virtual"))
             {
                 strParams = string.Format("/l={0} \"{1}\"", _DriveNo, IsoFile);
             }
@@ -90,7 +92,7 @@ namespace Library
             if (!System.IO.File.Exists(_Path)) return;
 
             string strParams;
-            if (OMLEngine.Properties.Settings.Default.MountingToolPath.ToLower().Contains("virtual"))
+            if (OMLSettings.MountingToolPath.ToLower().Contains("virtual"))
             {
                 // its virtual clonedrive
                 strParams = "/u";

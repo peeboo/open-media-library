@@ -27,7 +27,7 @@ namespace OMLEngine.DatabaseManagement
         private static string _OMLUserPassword;
         private static string _DatabaseName;
         
-        public static void LoadSettings()
+        static DatabaseInformation()
         {
             OMLEngine.Settings.XMLSettingsManager xmlsettings = new OMLEngine.Settings.XMLSettingsManager();
             _SQLServerName = xmlsettings.SQLServerName;

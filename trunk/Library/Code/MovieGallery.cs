@@ -10,6 +10,7 @@ using OMLEngine;
 using System.Threading;
 using System.Linq;
 using System.Text;
+using OMLEngine.Settings;
 
 namespace Library
 {
@@ -384,17 +385,14 @@ namespace Library
             _categories.Add(new NavigationCommand(Filter.Settings, delegate() { OMLApplication.Current.GoToSettingsPage(new MovieGallery()); }));           
 
             // add the trailers if they've requested to show them
-            if ( Properties.Settings.Default.ShowFilterTrailers )
+            if ( OMLSettings.ShowFilterTrailers )
                 _categories.Add(new NavigationCommand(Filter.Trailers, delegate() { OMLApplication.Current.GoToTrailersPage(); }));
 
             // add unwatched filter at the top            
-            if (Properties.Settings.Default.ShowFilterUnwatched)
+            if (OMLSettings.ShowFilterUnwatched)
                 _categories.Add(new FilterCommand(new Filter(this, TitleFilterType.Unwatched, filters)));
 
-            System.Collections.Specialized.StringCollection filtersToShow =
-                Properties.Settings.Default.MainFiltersToShow;
-
-            foreach (string filterName in filtersToShow)
+            foreach (string filterName in OMLSettings.MainFiltersToShow)
             {
                 TitleFilterType filterType = Filter.FilterStringToTitleType(filterName);
 
@@ -419,8 +417,8 @@ namespace Library
 
             CreateSortLookup();
 
-            if (_sortFunctionLookup.ContainsKey(Properties.Settings.Default.MovieSort))
-                _currentSort = _sortFunctionLookup[Properties.Settings.Default.MovieSort];
+            if (_sortFunctionLookup.ContainsKey(OMLSettings.MovieSort))
+                _currentSort = _sortFunctionLookup[OMLSettings.MovieSort];
             else
                 _currentSort = SortByNameAscending;
 
@@ -578,7 +576,7 @@ namespace Library
             try
             {
                 // OMLApplication.DebugLine("[MovieGallery] CompleteGalleryItem [index: {0}, name: {1}], load menu art", index, item.Name);
-                string imageFile = Properties.Settings.Default.UseOriginalCoverArt
+                string imageFile = OMLSettings.UseOriginalCoverArt
                     ? item.TitleObject.FrontCoverPath
                     : item.TitleObject.FrontCoverMenuPath;
                 if (!string.IsNullOrEmpty(imageFile) && File.Exists(imageFile))

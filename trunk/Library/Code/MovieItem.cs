@@ -6,6 +6,7 @@ using System.IO;
 using Microsoft.MediaCenter.UI;
 
 using OMLEngine;
+using OMLEngine.Settings;
 
 namespace Library
 {
@@ -97,7 +98,7 @@ namespace Library
         {
             get 
             {
-                return Properties.Settings.Default.ShowWatchedIcon ? _watched : false;
+                return OMLSettings.ShowWatchedIcon ? _watched : false;
             }
         }
 

@@ -96,6 +96,107 @@ namespace OMLEngine.Settings
             OMLDataSettingsDBContext.Instance.SubmitChanges();
         }
 
+        public static string GetSettingByName(string name, string instanceName)
+        {
+            Setting setting = OMLDataSettingsDBContext.Instance.Settings.SingleOrDefault(s => s.SettingName == name 
+                                && s.InstanceName == instanceName);
+
+            // if the setting isn't found for the instance fallback to the main one
+            if (setting == null)
+            {
+                setting = OMLDataSettingsDBContext.Instance.Settings.SingleOrDefault(s => s.SettingName == name 
+                                    && s.InstanceName == "main");
+            }            
+
+            return (setting == null) 
+                        ? null 
+                        : string.IsNullOrEmpty(setting.SettingValue) 
+                            ? null 
+                            : setting.SettingValue;
+        }
+
+        public static int? GetSettingByNameInt(string name, string instanceName)
+        {
+            string value = SettingsManager.GetSettingByName(name, instanceName);
+
+            if (string.IsNullOrEmpty(value))
+                return null;
+
+            int selection;
+
+            return int.TryParse(value, out selection) ? selection : -1;
+        }
+
+        public static float? GetSettingByNameFloat(string name, string instanceName)
+        {
+            string value = SettingsManager.GetSettingByName(name, instanceName);
+
+            if (string.IsNullOrEmpty(value))
+                return null;
+
+            float selection;
+
+            return float.TryParse(value, out selection) ? selection : -1;
+        }
+
+        public static bool? GetSettingByNameBool(string name, string instanceName)
+        {
+            string value = SettingsManager.GetSettingByName(name, instanceName);
+
+            if (string.IsNullOrEmpty(value))
+                return null;
+            
+            bool selection;
+
+            return bool.TryParse(value, out selection) ? selection : false;
+        }
+
+        public static IList<string> GetSettingByNameListString(string name, string instanceName)
+        {
+            string value = SettingsManager.GetSettingByName(name, instanceName);
+
+            if (string.IsNullOrEmpty(value))
+                return null;
+
+            return new List<string>(value.Split('\t'));
+        }
+
+        public static void SaveSettingByName(string name, IList<string> values, string instanceName)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (values != null && values.Count > 0)
+            {
+                for (int x = 0; x < values.Count; x++)
+                {
+                    sb.Append(values[x]);
+                    if (x != values.Count - 1)
+                        sb.Append('\t');
+                }
+            }
+
+            SaveSettingByName(name, sb.ToString(), instanceName);
+        }
+
+        public static void SaveSettingByName(string name, string value, string instanceName)
+        {
+            Setting setting = OMLDataSettingsDBContext.Instance.Settings.SingleOrDefault(s => s.SettingName == name
+                                && s.InstanceName == instanceName);
+
+            if (setting == null)
+            {
+                setting = new Setting();                
+                setting.SettingName = name;
+                setting.InstanceName = instanceName;                
+
+                OMLDataSettingsDBContext.Instance.Settings.InsertOnSubmit(setting);
+            }
+
+            setting.SettingValue = value;
+
+            OMLDataSettingsDBContext.Instance.SubmitChanges();
+        }
+
         public static void Save()
         {
             OMLDataSettingsDBContext.Instance.SubmitChanges();

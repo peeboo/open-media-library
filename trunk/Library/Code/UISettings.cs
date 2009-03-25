@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.MediaCenter.UI;
 using System.Diagnostics;
 using OMLEngine;
+using OMLEngine.Settings;
 
 namespace Library
 {
@@ -114,7 +115,7 @@ namespace Library
         {
             get
             {
-                if (Properties.Settings.Default.ShowMovieDetails)
+                if (OMLSettings.ShowMovieDetails)
                     return new Size(0, Properties.Settings.Default.BrowserHeightWhenShowingDetails);
                 else
                     return new Size(0, Properties.Settings.Default.BrowserHeightWhenNotShowingDetails);
@@ -122,7 +123,7 @@ namespace Library
         }
         public int CoverArtRows
         {
-            get { return Properties.Settings.Default.GalleryCoverArtRows; }
+            get { return OMLSettings.GalleryCoverArtRows; }
         }
 
         public int CarouselRows
@@ -132,7 +133,7 @@ namespace Library
 
         public int ListRows
         {
-            get { return Properties.Settings.Default.GalleryListRows; }
+            get { return OMLSettings.GalleryListRows; }
         }
 
         public Size CoverArtSize
@@ -140,7 +141,7 @@ namespace Library
             //TODO: get the 600 out of here into a setting. just experimenting for now
             get
             {
-                int rows = Properties.Settings.Default.GalleryCoverArtRows;
+                int rows = OMLSettings.GalleryCoverArtRows;
                 int height = (520 - rows * 2 * Properties.Settings.Default.CoverArtSpacingVertical) / rows;
                 int width = (int)(height * 0.705);
 
@@ -178,7 +179,7 @@ namespace Library
 
         public Single CoverArtAlpha
         {
-            get { if (Properties.Settings.Default.DimUnselectedCovers) return 0.5F; else return 1F; }
+            get { if (OMLSettings.DimUnselectedCovers) return 0.5F; else return 1F; }
         }
 
         public Single ScrollingLockPosition
@@ -193,12 +194,12 @@ namespace Library
 
         public bool ShowMovieDetails
         {
-            get { return Properties.Settings.Default.ShowMovieDetails; }
+            get { return OMLSettings.ShowMovieDetails; }
         }
    
         public bool DimUnselectedCovers
         {
-            get { return Properties.Settings.Default.DimUnselectedCovers; }
+            get { return OMLSettings.DimUnselectedCovers; }
         }
 
         public Vector3 FocusCoverArtScale
@@ -218,7 +219,7 @@ namespace Library
 
         public bool UseOnScreenAlphaFiltering
         {
-            get { return Properties.Settings.Default.UseOnScreenAlphaJumper; }
+            get { return OMLSettings.UseOnScreenAlphaJumper; }
         }
 
         public float MainPageBackDropAlpha
@@ -233,7 +234,7 @@ namespace Library
 
         public float DetailsPageBackDropAlpha
         {
-            get { return Properties.Settings.Default.DetailsPageBackDropAlpha; }
+            get { return OMLSettings.DetailsPageBackDropAlphaValue; }
         }
     }
 }

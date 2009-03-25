@@ -6,6 +6,8 @@ using OMLEngine;
 using OMLGetDVDInfo;
 using System.Diagnostics;
 
+using OMLEngine.Settings;
+
 namespace OMLTestSuite
 {
     [TestFixture]
@@ -14,7 +16,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_BASIC_COMMAND_BUILDER()
         {
-            string drive = OMLEngine.Properties.Settings.Default.VirtualDiscDrive.ToLower();
+            string drive = OMLSettings.VirtualDiscDrive.ToLower();
             MediaSource ms = new MediaSource(new Disk("", drive + ":", VideoFormat.DVD));
             MEncoderCommandBuilder builder = new MEncoderCommandBuilder(ms)
             {
