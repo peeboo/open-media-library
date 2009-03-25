@@ -13,7 +13,6 @@ namespace Library
         string _PageName;
         bool _ShowAnimations;
         bool _IsParentalControlActive = false;
-        OMLSettings _OMLSettings;
         I18n _I18n;
         #endregion
 
@@ -26,12 +25,7 @@ namespace Library
         public I18n I18n
         {
             get { return _I18n; }
-        }
-
-        public OMLSettings UISettings
-        {
-            get { return _OMLSettings; }
-        }
+        }       
 
         public bool IsParentalControlActive
         {
@@ -97,7 +91,6 @@ namespace Library
 
         public BasePage()
         {
-            _OMLSettings = new OMLSettings();
             _I18n = I18n.Instance;
         }
     }

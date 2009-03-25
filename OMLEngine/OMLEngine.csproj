@@ -119,7 +119,9 @@
     </Compile>
     <Compile Include="RegexUtils.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Settings\Enums.cs" />
     <Compile Include="Settings\MetaDataSettings.cs" />
+    <Compile Include="Settings\OMLSettings.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\WatcherSettings.cs" />
     <Compile Include="Settings\WatcherSettingsManager.cs" />

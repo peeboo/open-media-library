@@ -1,6 +1,6 @@
 //#define DEBUG_EXT
 //#define LAYOUT_V2
-#define LAYOUT_V3
+//#define LAYOUT_V3
 //#define CAROUSEL
 
 using System.Collections;
@@ -260,7 +260,7 @@ namespace Library
             this._host = host;
             _singleApplicationInstance = this;
             I18n.InitializeResourceManager();
-            string uiCulture = Properties.Settings.Default.UILanguage;
+            string uiCulture = OMLSettings.UILanguage;
             if (!string.IsNullOrEmpty(uiCulture)) I18n.SetCulture(new CultureInfo(uiCulture));
             _nowPlayingMovieName = "Playing an unknown movie";
         }
@@ -272,10 +272,7 @@ namespace Library
 
         // this is the context from the Media Center menu
         public void Startup(string context)
-        {
-            // Load database settings from xml file
-            OMLEngine.DatabaseManagement.DatabaseInformation.LoadSettings();
-
+        {            
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
 #if CAROUSEL
             _session.GoToPage(@"resx://Library/Library.Resources/Trailers");
@@ -671,7 +668,7 @@ namespace Library
                     }
 
                     // we want the movie library - check the startup page
-                    if (Properties.Settings.Default.StartPage == Filter.Home)
+                    if (OMLSettings.StartPage == Filter.Home)
                     {
                         OMLApplication.DebugLine("[OMLApplication] going to Menu Page");
                         GoToMenu(new MovieGallery());
@@ -686,13 +683,13 @@ namespace Library
                             // go to the subfilter
                             GoToMenu(
                                 new MovieGallery(
-                                    new TitleFilter(Filter.FilterStringToTitleType(Properties.Settings.Default.StartPage),
-                                        Properties.Settings.Default.StartPageSubFilter)));
+                                    new TitleFilter(Filter.FilterStringToTitleType(OMLSettings.StartPage),
+                                        OMLSettings.StartPageSubFilter)));
                         }
                         else
                         {
                             // go to the selection list
-                            GoToSelectionList(new Filter(new MovieGallery(), Filter.FilterStringToTitleType(Properties.Settings.Default.StartPage), null));               
+                            GoToSelectionList(new Filter(new MovieGallery(), Filter.FilterStringToTitleType(OMLSettings.StartPage), null));               
                         }
                     }
                     return;
@@ -1262,7 +1259,7 @@ namespace Library
             DebugLine("[OMLApplication] GoToMenu(Gallery, #{0} Movies)", gallery.Movies.Count);
             Dictionary<string, object> properties = CreateProperties(true, false, gallery);
 
-            if (Properties.Settings.Default.MovieView == GalleryView.CoverArtWithAlpha &&
+            if (OMLSettings.MovieView == GalleryView.CoverArtWithAlpha &&
                 gallery.Movies.Count < 30)
             {
                 // alpha falls back to cover art view if there's not enough items
@@ -1270,7 +1267,7 @@ namespace Library
             }
             else
             {
-                properties["GalleryView"] = Properties.Settings.Default.MovieView;
+                properties["GalleryView"] = OMLSettings.MovieView;
             }
 
             if (_session != null)
@@ -1319,7 +1316,7 @@ namespace Library
             // If we have no page session, just spit out a trace statement.
             if (_session != null)
             {
-                switch (Properties.Settings.Default.DetailsView)
+                switch (OMLSettings.DetailsView)
                 {
                     case "Background Boxes":
                         _session.GoToPage("resx://Library/Library.Resources/DetailsPage_Boxes", properties);

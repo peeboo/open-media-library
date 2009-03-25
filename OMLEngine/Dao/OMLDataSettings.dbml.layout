@@ -14,5 +14,11 @@
         <elementListCompartment Id="3c84480f-66a4-45db-a4bb-31ce89d3aaf3" absoluteBounds="0.51500000000000012, 2.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="1b0fb5a5-54ae-46e8-97d8-40f05c55dff2" absoluteBounds="3.375, 0.75, 2, 1.3862939453125">
+      <DataClassMoniker Name="/OMLDataSettingsDataContext/Setting" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4b547352-3ff6-44fb-baae-6cbe65b0a4d0" absoluteBounds="3.3899999999999997, 1.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

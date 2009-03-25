@@ -36,6 +36,9 @@ namespace OMLEngine.Dao
     partial void InsertGenreMapping(GenreMapping instance);
     partial void UpdateGenreMapping(GenreMapping instance);
     partial void DeleteGenreMapping(GenreMapping instance);
+    partial void InsertSetting(Setting instance);
+    partial void UpdateSetting(Setting instance);
+    partial void DeleteSetting(Setting instance);
     #endregion
 		
 		public OMLDataSettingsDataContext() : 
@@ -81,6 +84,14 @@ namespace OMLEngine.Dao
 			get
 			{
 				return this.GetTable<GenreMapping>();
+			}
+		}
+		
+		internal System.Data.Linq.Table<Setting> Settings
+		{
+			get
+			{
+				return this.GetTable<Setting>();
 			}
 		}
 	}
@@ -280,6 +291,116 @@ namespace OMLEngine.Dao
 					this._GenreMapTo = value;
 					this.SendPropertyChanged("GenreMapTo");
 					this.OnGenreMapToChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[Table(Name="dbo.Settings")]
+	internal partial class Setting : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _SettingName;
+		
+		private string _SettingValue;
+		
+		private string _InstanceName;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnSettingNameChanging(string value);
+    partial void OnSettingNameChanged();
+    partial void OnSettingValueChanging(string value);
+    partial void OnSettingValueChanged();
+    partial void OnInstanceNameChanging(string value);
+    partial void OnInstanceNameChanged();
+    #endregion
+		
+		public Setting()
+		{
+			OnCreated();
+		}
+		
+		[Column(Storage="_SettingName", DbType="NVarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string SettingName
+		{
+			get
+			{
+				return this._SettingName;
+			}
+			set
+			{
+				if ((this._SettingName != value))
+				{
+					this.OnSettingNameChanging(value);
+					this.SendPropertyChanging();
+					this._SettingName = value;
+					this.SendPropertyChanged("SettingName");
+					this.OnSettingNameChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_SettingValue", DbType="NVarChar(MAX)")]
+		public string SettingValue
+		{
+			get
+			{
+				return this._SettingValue;
+			}
+			set
+			{
+				if ((this._SettingValue != value))
+				{
+					this.OnSettingValueChanging(value);
+					this.SendPropertyChanging();
+					this._SettingValue = value;
+					this.SendPropertyChanged("SettingValue");
+					this.OnSettingValueChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_InstanceName", DbType="NVarChar(50)", CanBeNull=false, IsPrimaryKey=true)]
+		public string InstanceName
+		{
+			get
+			{
+				return this._InstanceName;
+			}
+			set
+			{
+				if ((this._InstanceName != value))
+				{
+					this.OnInstanceNameChanging(value);
+					this.SendPropertyChanging();
+					this._InstanceName = value;
+					this.SendPropertyChanged("InstanceName");
+					this.OnInstanceNameChanged();
 				}
 			}
 		}

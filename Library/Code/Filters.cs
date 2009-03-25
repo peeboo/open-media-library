@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.MediaCenter.UI;
 using System.Diagnostics;
 using OMLEngine;
+using OMLEngine.Settings;
 
 
 namespace Library
@@ -267,37 +268,37 @@ namespace Library
             switch (filter)
             {
                 case TitleFilterType.Actor:
-                    return Properties.Settings.Default.ShowFilterActors;
+                    return OMLSettings.ShowFilterActors;
 
                 case TitleFilterType.Country:
-                    return Properties.Settings.Default.ShowFilterCountry;
+                    return OMLSettings.ShowFilterCountry;
 
                 case TitleFilterType.DateAdded:
-                    return Properties.Settings.Default.ShowFilterDateAdded;
+                    return OMLSettings.ShowFilterDateAdded;
 
                 case TitleFilterType.Director:
-                    return Properties.Settings.Default.ShowFilterDirectors;
+                    return OMLSettings.ShowFilterDirectors;
 
                 case TitleFilterType.Genre:
-                    return Properties.Settings.Default.ShowFilterGenres;
+                    return OMLSettings.ShowFilterGenres;
 
                 case TitleFilterType.ParentalRating:
-                    return Properties.Settings.Default.ShowFilterParentalRating;
+                    return OMLSettings.ShowFilterParentalRating;
 
                 case TitleFilterType.Runtime:
-                    return Properties.Settings.Default.ShowFilterRuntime;
+                    return OMLSettings.ShowFilterRuntime;
 
                 case TitleFilterType.Tag:
-                    return Properties.Settings.Default.ShowFilterTags;
+                    return OMLSettings.ShowFilterTags;
 
                 case TitleFilterType.UserRating:
-                    return Properties.Settings.Default.ShowFilterUserRating;
+                    return OMLSettings.ShowFilterUserRating;
 
                 case TitleFilterType.VideoFormat:
-                    return Properties.Settings.Default.ShowFilterFormat;
+                    return OMLSettings.ShowFilterFormat;
 
                 case TitleFilterType.Year:
-                    return Properties.Settings.Default.ShowFilterYear;
+                    return OMLSettings.ShowFilterYear;
             }
 
             return false;

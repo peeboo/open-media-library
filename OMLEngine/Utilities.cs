@@ -12,6 +12,7 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.ComponentModel;
+using OMLEngine.Settings;
 
 namespace OMLEngine
 {
@@ -255,7 +256,7 @@ namespace OMLEngine
 
         public static bool HasDaemonTools()
         {
-            string daemontools_path = OMLEngine.Properties.Settings.Default.MountingToolPath;
+            string daemontools_path = OMLSettings.MountingToolPath;
             if (daemontools_path != null && daemontools_path.Length > 0)
                 return true;
 
@@ -281,7 +282,7 @@ namespace OMLEngine
 
         public static void UnmountVirtualDrive(int VirtualDiscDriveNumber)
         {
-            string mount_util_path = OMLEngine.Properties.Settings.Default.MountingToolPath;
+            string mount_util_path = OMLSettings.MountingToolPath;
 
             Process cmd = new Process();
             cmd.StartInfo.FileName = "\"" + mount_util_path + "\"";
@@ -485,8 +486,8 @@ namespace OMLEngine
         {
             // Call LogonUser to get a token for the user
             IntPtr _Token = IntPtr.Zero;
-            string username = Properties.Settings.Default.ImpersonationUsername;
-            string password = Properties.Settings.Default.ImpersonationPassword;
+            string username = OMLSettings.ImpersonationUsername;
+            string password = OMLSettings.ImpersonationPassword;
             bool loggedOn = LogonUser(
                 username,
                 System.Environment.UserDomainName,

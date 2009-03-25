@@ -10,6 +10,7 @@ using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.Hosting;
 
 using OMLEngine;
+using OMLEngine.Settings;
 using OMLGetDVDInfo;
 using System.ComponentModel;
 
@@ -138,7 +139,7 @@ namespace Library
                             videoFile = mpegFile;
                         }
                     }
-                    else if (Properties.Settings.Default.Extender_UseAsx)
+                    else if (OMLSettings.Extender_UseAsx)
                     {
                         OMLApplication.DebugLine("Multiple VOB files, and Extender_UseAsx == true, trying to use a hard-link and asx playlist approach ");
                         foreach (string vob in vobs)
@@ -147,7 +148,7 @@ namespace Library
                         if (File.Exists(GetMPEGName(mpegFolder, vobs[0])))
                             videoFile = CreateASX(mpegFolder, vts, _source.Name, vobs);
                     }
-                    else if (Properties.Settings.Default.Extender_MergeVOB)
+                    else if (OMLSettings.Extender_MergeVOB)
                     {
                         OMLApplication.DebugLine("Multiple VOB files, and Extender_MergeVOB == true, trying to use a hard-link and auto-merge into single large .VOB file approach ");
                         string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);

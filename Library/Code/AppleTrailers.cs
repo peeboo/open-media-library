@@ -53,7 +53,7 @@ namespace Library
 
         public void LoadTrailers()
         {
-            string fidelity = Properties.Settings.Default.AppleTrailerFidelity;
+            string fidelity = OMLEngine.Settings.OMLSettings.AppleTrailerFidelity;
             if (string.IsNullOrEmpty(fidelity) == true)
                 fidelity = @"Low";
 
