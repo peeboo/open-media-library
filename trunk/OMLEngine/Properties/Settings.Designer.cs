@@ -86,17 +86,7 @@ namespace OMLEngine.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=Localhost\\OML;Initial Catalog=OML;Integrated Security=True")]
-        public string OMLConnectionString1 {
-            get {
-                return ((string)(this["OMLConnectionString1"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost\\SQLEXPRESS2;Initial Catalog=OML;Integrated Security=SSPI")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost\\OML;Initial Catalog=OML;Integrated Security=SSPI")]
         public string OMLConnectionString {
             get {
                 return ((string)(this["OMLConnectionString"]));
