@@ -35,7 +35,8 @@ Requirements
 
 1) Install SQL Server Express. To do this there are 4 configuration scripts below the 'SQL Scripts' folder in the trunk source repository. Choose the most suitable for your requiments and 32/64 bit OS.
 
-For example to install the x64 version with the admin tools enter into a command prompt -
+For example to install the x64 version with the admin tools, enter into a command prompt -
+
 SQLEXPRWT_x86_ENU.exe /CONFIGURATIONFILE="c:\OML\OML\SQL Scripts\SQLConfigWithTools_x32.ini"
 
 NOTE - The exact command will depend on the installation file downloaded from microsoft and the location of the ini files.
