@@ -14,6 +14,7 @@ http://internetducttape.com/2007/03/03/howto_google_code_hosting_subversion_tort
 Requirements
   * Visual Studio 2008 (the free version [http://www.microsoft.com/express/vcsharp/ Visual C# 2008 Express Edition] will also work)
   * Windows Installer 4.5 (http://www.microsoft.com/downloadS/details.aspx?familyid=5A58B56F-60B6-4412-95B9-54D056D6F9F4&displaylang=en). Required to install SQL Server in some cases.
+  * Windows Powershell (required to install the SQL administration tools).
   * Microsoft SQL Server Express 2008 (http://www.microsoft.com/express/sql/download/). Download SQL Server 2008 Express with Tools.
   * NUNIT (http://www.nunit.org/index.php?p=download)
   * WIX 3.0 (wix.sourceforge.net)
@@ -25,25 +26,31 @@ Requirements
 
 = Steps to setup your build environment: =
 
-1) Install Visual Studio.
+1) Install Visual Studio, Media Center SDK & NUNIT.
 
-2) Install Windows Installer 4.5.
+2) For SQL prerequisites, Install Windows Installer 4.5 & Windows Powershell
 
-3) Install SQL Server Express. Choose full installation.
 
-4) Double click on 'Microsoft SQL Server Management Studio' in the Start menu. Clicking 'Connect' at the login prompt should sucessfully log you in to SQL.
+= Install SQL Server and create the database: =
 
-5) Right Hand Click on 'Databases' and select 'New Database'.
+1) Install SQL Server Express. To do this there are 4 configuration scripts below the 'SQL Scripts' folder in the trunk source repository. Choose the most suitable for your requiments and 32/64 bit OS.
 
-6) Enter 'OML' as the database name. Click 'OK' to create database.
+For example to install the x64 version with the admin tools enter into a command prompt -
+SQLEXPRWT_x86_ENU.exe /CONFIGURATIONFILE="c:\OML\OML\SQL Scripts\SQLConfigWithTools_x32.ini"
 
-7) Double click on 'Title Database.sql' under 'SQL Scripts' in the OML source folder stucture.
+NOTE - The exact command will depend on the installation file downloaded from microsoft and the location of the ini files.
 
-8) SQL Server Management Studio should now be showing the SQL creation script.
+2) Under 'Microsoft SQL Server 2008' in the start menu, click on 'SQL Server Management Studio'. Clicking 'Connect' at the login prompt should sucessfully log you in to SQL.
 
-9) Lokk for a database selection drop down on a Management Studio Toolbar. Change this from 'master' to 'OML'.
+3) Right Hand Click on 'Databases' and select 'New Database'.
 
-10) Click 'Execute' in the tool bar. The database should now be created ready for use.
+4) Enter 'OML' as the database name. Click 'OK' to create database.
+
+5) Double click on 'Title Database.sql' under 'SQL Scripts' in the OML source folder stucture.
+
+6) SQL Server Management Studio should now be showing the SQL creation script. Look for a database selection drop down on a Management Studio Toolbar. Change this from 'master' to 'OML'.
+
+7) Click 'Execute' in the tool bar. The database should now be created ready for use.
 
 
 
