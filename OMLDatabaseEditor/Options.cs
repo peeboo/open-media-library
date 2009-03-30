@@ -12,6 +12,7 @@ using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 
 using OMLEngine;
+using OMLEngine.Settings;
 using OMLSDK;
 
 namespace OMLDatabaseEditor
@@ -109,6 +110,18 @@ namespace OMLDatabaseEditor
 
             beTitledFanArtPath.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             beTitledFanArtPath.MaskBox.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
+
+            // Mounting Tools
+            foreach (string toolName in Enum.GetNames(typeof(OMLEngine.FileSystem.MountingTool.Tool)))
+            {
+                RadioGroupItem rg = new RadioGroupItem(toolName, toolName);
+                rgMountingTool.Properties.Items.Add(rg);
+            }
+
+            
+            rgMountingTool.EditValue = OMLEngine.Settings.OMLSettings.MountingToolSelection.ToString();
+            cmbMntToolVDrive.Text = OMLEngine.Settings.OMLSettings.VirtualDiscDrive;
+            teMntToolPath.Text = OMLEngine.Settings.OMLSettings.MountingToolPath;
         }
 
         private void SimpleButtonClick(object sender, EventArgs e)
@@ -192,6 +205,13 @@ namespace OMLDatabaseEditor
                     OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName = this.cePrependParentFolder.Checked;
                     OMLEngine.Properties.Settings.Default.Save();
                 }
+
+
+                OMLEngine.Settings.OMLSettings.MountingToolSelection = rgMountingTool.Text;
+                OMLEngine.Settings.OMLSettings.VirtualDiscDrive = cmbMntToolVDrive.Text;
+                OMLEngine.Settings.OMLSettings.MountingToolPath = teMntToolPath.Text;
+
+
             }
             else if (sender == this.sbCancel)
             {
@@ -354,6 +374,16 @@ namespace OMLDatabaseEditor
         private void ceTitledFanArtFolder_CheckStateChanged(object sender, EventArgs e)
         {
             beTitledFanArtPath.Enabled = this.ceTitledFanArtFolder.Checked;
+        }
+
+        private void simpleButtonScanMntTool_Click(object sender, EventArgs e)
+        {
+            OMLEngine.FileSystem.MountingTool mnt = new OMLEngine.FileSystem.MountingTool();
+            teMntToolPath.Text =
+                mnt.ScanForMountTool((OMLEngine.FileSystem.MountingTool.Tool)Enum.Parse(typeof(OMLEngine.FileSystem.MountingTool.Tool), rgMountingTool.Text), cmbMntToolScan.Text);
+
+            if (teMntToolPath.Text == "") XtraMessageBox.Show("Cannot find the selected image mounting tool!");
+
         }
     }
 }

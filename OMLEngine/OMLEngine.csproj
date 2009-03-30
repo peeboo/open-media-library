@@ -88,6 +88,7 @@
     </Compile>
     <Compile Include="DatabaseManagement\DatabaseInformation.cs" />
     <Compile Include="DatabaseManagement\DatabaseManagement.cs" />
+    <Compile Include="FileSystem\MountingTool.cs" />
     <Compile Include="MediaScanner\DiskInfo.cs" />
     <Compile Include="DVDAudioTrack.cs" />
     <Compile Include="DVDChapter.cs" />

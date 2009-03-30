@@ -241,10 +241,10 @@ namespace OMLEngine.Settings
 
         #region Image Mounting
 
-        public static int MountingToolSelection
+        public static string MountingToolSelection
         {
-            get { return SettingsManager.GetSettingByNameInt("MountingToolSelection", InstanceName) ?? 0; }
-            set { SettingsManager.SaveSettingByName("MountingToolSelection", value.ToString(), InstanceName); }
+            get { return SettingsManager.GetSettingByName("MountingToolSelection", InstanceName) ?? string.Empty; }
+            set { SettingsManager.SaveSettingByName("MountingToolSelection", value, InstanceName); }
         }
 
         public static string MountingToolPath
