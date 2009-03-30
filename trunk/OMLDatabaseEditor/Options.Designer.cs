@@ -53,6 +53,16 @@ namespace OMLDatabaseEditor
             this.tpTags = new DevExpress.XtraTab.XtraTabPage();
             this.lbcTags = new DevExpress.XtraEditors.ListBoxControl();
             this.beTags = new DevExpress.XtraEditors.ButtonEdit();
+            this.tpMountTools = new DevExpress.XtraTab.XtraTabPage();
+            this.labelControl7 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
+            this.teMntToolPath = new DevExpress.XtraEditors.TextEdit();
+            this.cmbMntToolVDrive = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.cmbMntToolScan = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.simpleButtonScanMntTool = new DevExpress.XtraEditors.SimpleButton();
+            this.rgMountingTool = new DevExpress.XtraEditors.RadioGroup();
             this.sbCancel = new DevExpress.XtraEditors.SimpleButton();
             this.sbOK = new DevExpress.XtraEditors.SimpleButton();
             this.cmGenreMappings = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -78,6 +88,11 @@ namespace OMLDatabaseEditor
             this.tpTags.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbcTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.beTags.Properties)).BeginInit();
+            this.tpMountTools.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.teMntToolPath.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolVDrive.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolScan.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rgMountingTool.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -112,7 +127,8 @@ namespace OMLDatabaseEditor
             this.tpSkins,
             this.tpMPAAList,
             this.tpGenres,
-            this.tpTags});
+            this.tpTags,
+            this.tpMountTools});
             // 
             // tpOptions
             // 
@@ -337,6 +353,144 @@ namespace OMLDatabaseEditor
             this.beTags.Size = new System.Drawing.Size(346, 20);
             this.beTags.TabIndex = 2;
             // 
+            // tpMountTools
+            // 
+            this.tpMountTools.Controls.Add(this.labelControl7);
+            this.tpMountTools.Controls.Add(this.labelControl6);
+            this.tpMountTools.Controls.Add(this.labelControl5);
+            this.tpMountTools.Controls.Add(this.labelControl4);
+            this.tpMountTools.Controls.Add(this.teMntToolPath);
+            this.tpMountTools.Controls.Add(this.cmbMntToolVDrive);
+            this.tpMountTools.Controls.Add(this.cmbMntToolScan);
+            this.tpMountTools.Controls.Add(this.simpleButtonScanMntTool);
+            this.tpMountTools.Controls.Add(this.rgMountingTool);
+            this.tpMountTools.Name = "tpMountTools";
+            this.tpMountTools.Size = new System.Drawing.Size(346, 271);
+            this.tpMountTools.Text = "Mounting Tools";
+            // 
+            // labelControl7
+            // 
+            this.labelControl7.Location = new System.Drawing.Point(9, 21);
+            this.labelControl7.Name = "labelControl7";
+            this.labelControl7.Size = new System.Drawing.Size(99, 13);
+            this.labelControl7.TabIndex = 17;
+            this.labelControl7.Text = "Which Mounting Tool";
+            // 
+            // labelControl6
+            // 
+            this.labelControl6.Location = new System.Drawing.Point(9, 166);
+            this.labelControl6.Name = "labelControl6";
+            this.labelControl6.Size = new System.Drawing.Size(92, 13);
+            this.labelControl6.TabIndex = 16;
+            this.labelControl6.Text = "Mounting Tool Path";
+            // 
+            // labelControl5
+            // 
+            this.labelControl5.Location = new System.Drawing.Point(9, 121);
+            this.labelControl5.Name = "labelControl5";
+            this.labelControl5.Size = new System.Drawing.Size(180, 13);
+            this.labelControl5.TabIndex = 15;
+            this.labelControl5.Text = "Scan drive for selected Mounting Tool";
+            // 
+            // labelControl4
+            // 
+            this.labelControl4.Location = new System.Drawing.Point(9, 211);
+            this.labelControl4.Name = "labelControl4";
+            this.labelControl4.Size = new System.Drawing.Size(58, 13);
+            this.labelControl4.TabIndex = 14;
+            this.labelControl4.Text = "Virtual Drive";
+            // 
+            // teMntToolPath
+            // 
+            this.teMntToolPath.Location = new System.Drawing.Point(24, 185);
+            this.teMntToolPath.Name = "teMntToolPath";
+            this.teMntToolPath.Size = new System.Drawing.Size(313, 20);
+            this.teMntToolPath.TabIndex = 13;
+            // 
+            // cmbMntToolVDrive
+            // 
+            this.cmbMntToolVDrive.Location = new System.Drawing.Point(24, 230);
+            this.cmbMntToolVDrive.Name = "cmbMntToolVDrive";
+            this.cmbMntToolVDrive.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cmbMntToolVDrive.Properties.Items.AddRange(new object[] {
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
+            "W",
+            "X",
+            "Y",
+            "Z"});
+            this.cmbMntToolVDrive.Size = new System.Drawing.Size(121, 20);
+            this.cmbMntToolVDrive.TabIndex = 12;
+            // 
+            // cmbMntToolScan
+            // 
+            this.cmbMntToolScan.Location = new System.Drawing.Point(24, 140);
+            this.cmbMntToolScan.Name = "cmbMntToolScan";
+            this.cmbMntToolScan.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cmbMntToolScan.Properties.Items.AddRange(new object[] {
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
+            "W",
+            "X",
+            "Y",
+            "Z"});
+            this.cmbMntToolScan.Size = new System.Drawing.Size(121, 20);
+            this.cmbMntToolScan.TabIndex = 11;
+            // 
+            // simpleButtonScanMntTool
+            // 
+            this.simpleButtonScanMntTool.Location = new System.Drawing.Point(151, 140);
+            this.simpleButtonScanMntTool.Name = "simpleButtonScanMntTool";
+            this.simpleButtonScanMntTool.Size = new System.Drawing.Size(75, 23);
+            this.simpleButtonScanMntTool.TabIndex = 10;
+            this.simpleButtonScanMntTool.Text = "Begin Scan";
+            this.simpleButtonScanMntTool.Click += new System.EventHandler(this.simpleButtonScanMntTool_Click);
+            // 
+            // rgMountingTool
+            // 
+            this.rgMountingTool.Location = new System.Drawing.Point(24, 40);
+            this.rgMountingTool.Name = "rgMountingTool";
+            this.rgMountingTool.Size = new System.Drawing.Size(121, 75);
+            this.rgMountingTool.TabIndex = 9;
+            // 
             // sbCancel
             // 
             this.sbCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -399,6 +553,12 @@ namespace OMLDatabaseEditor
             this.tpTags.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbcTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.beTags.Properties)).EndInit();
+            this.tpMountTools.ResumeLayout(false);
+            this.tpMountTools.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.teMntToolPath.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolVDrive.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolScan.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rgMountingTool.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -432,5 +592,15 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraEditors.CheckEdit ceTitledFanArtFolder;
         private DevExpress.XtraEditors.LabelControl labelControl3;
         private DevExpress.XtraEditors.ButtonEdit beTitledFanArtPath;
+        private DevExpress.XtraTab.XtraTabPage tpMountTools;
+        private DevExpress.XtraEditors.LabelControl labelControl7;
+        private DevExpress.XtraEditors.LabelControl labelControl6;
+        private DevExpress.XtraEditors.LabelControl labelControl5;
+        private DevExpress.XtraEditors.LabelControl labelControl4;
+        private DevExpress.XtraEditors.TextEdit teMntToolPath;
+        private DevExpress.XtraEditors.ComboBoxEdit cmbMntToolVDrive;
+        private DevExpress.XtraEditors.ComboBoxEdit cmbMntToolScan;
+        private DevExpress.XtraEditors.SimpleButton simpleButtonScanMntTool;
+        private DevExpress.XtraEditors.RadioGroup rgMountingTool;
     }
 }

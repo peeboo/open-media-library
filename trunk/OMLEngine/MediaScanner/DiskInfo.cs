@@ -165,8 +165,7 @@ namespace OMLEngine
                 case VideoFormat.NRG : // Nero image
                 case VideoFormat.PDI : // Instant CD/DVD image
                     // Try to mount image then find media
-                    // Mount image before identifying media. Not implemented yet!!
-                    //MountImage(name, path);
+                    MountImage(name, path);
                     break;
 
                 // Physical disks
@@ -201,18 +200,19 @@ namespace OMLEngine
             }
         }
 
-        /* Mount image before identifying media. Not implemented yet!!
-         * private void MountImage(string name, string path)
+        
+        private void MountImage(string name, string path)
         {
-            MountingTool mt = new MountingTool();
+            FileSystem.MountingTool mt = new FileSystem.MountingTool();
             string drive;
             mt.Mount(path, out drive);
             drive = drive + ":";
 
-            if (MediaData.IsDVD(drive)) { IdentifyMediaType(name, drive, VideoFormat.DVD); }
-            if (MediaData.IsHDDVD(drive)) { IdentifyMediaType(name, drive, VideoFormat.HDDVD); }
-            if (MediaData.IsBluRay(drive)) { IdentifyMediaType(name, drive, VideoFormat.BLURAY); }
-        }*/
+            if (FileSystem.FileScanner.IsDVD(drive)) { IdentifyMediaType(name, drive, VideoFormat.DVD); }
+            if (FileSystem.FileScanner.IsHDDVD(drive)) { IdentifyMediaType(name, drive, VideoFormat.HDDVD); }
+            if (FileSystem.FileScanner.IsBluRay(drive)) { IdentifyMediaType(name, drive, VideoFormat.BLURAY); }
+        }
+
 
         private void QueryDVD()
         {
