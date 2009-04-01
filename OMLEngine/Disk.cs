@@ -38,6 +38,16 @@ namespace OMLEngine
 
         public VideoFormat Format { get { return (VideoFormat)_disk.VideoFormat; } set { _disk.VideoFormat = (byte)value; } }
 
+        public int? MainFeatureXRes { get { return _disk.MainFeatureXRes; } set { _disk.MainFeatureXRes = value; } }
+
+        public int? MainFeatureYRes { get { return _disk.MainFeatureYRes; } set { _disk.MainFeatureYRes = value; } }
+
+        public string MainFeatureAspectRatio { get { return _disk.MainFeatureAspectRatio; } set { _disk.MainFeatureAspectRatio = value; } }
+
+        public double? MainFeatureFPS { get { return _disk.MainFeatureFPS; } set { _disk.MainFeatureFPS = value; } }
+
+        public int? MainFeatureLength { get { return _disk.MainFeatureLength; } set { _disk.MainFeatureLength = value; } }
+
         public string ExtraOptions 
         { 
             get { return _disk.ExtraOptions; } 

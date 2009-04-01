@@ -9,7 +9,7 @@ using OMLEngine.Settings;
 
 namespace Library
 {
-    public class MountingTool
+    public class OBSOLETEMountingTool
     {
         public enum Tool
         {
@@ -24,7 +24,7 @@ namespace Library
         private string _MountedIsoFile = string.Empty;
 
         // this can't be a static constructor since these settings can change during the session
-        public MountingTool()
+        public OBSOLETEMountingTool()
         {
             OMLApplication.DebugLine("[MountingTool] MountingTool()");
             _Path = OMLSettings.MountingToolPath;

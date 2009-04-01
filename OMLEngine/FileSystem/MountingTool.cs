@@ -5,11 +5,14 @@ using System.Text;
 using System.Diagnostics;
 using System.IO;
 
+/* This entire library is either completely taken
+ * from or heavily influenced by code from the MediaPortal
+ * project as found via Krugle */
+
 namespace OMLEngine.FileSystem
 {
     public class MountingTool
     {
-
         public enum Tool
         {
             None,
@@ -28,7 +31,7 @@ namespace OMLEngine.FileSystem
         {
             Utilities.DebugLine("[MountingTool] MountingTool()");
 
-            _Tool = (Tool)Enum.Parse(typeof(Tool), Settings.OMLSettings.MountingToolSelection);
+            _Tool = Settings.OMLSettings.MountingToolSelection;
             _Path = Settings.OMLSettings.MountingToolPath;
             _Drive = Settings.OMLSettings.VirtualDiscDrive;
             _DriveNo = Settings.OMLSettings.VirtualDiscDriveNumber;
