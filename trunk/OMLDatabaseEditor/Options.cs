@@ -13,6 +13,7 @@ using DevExpress.XtraEditors.Controls;
 
 using OMLEngine;
 using OMLEngine.Settings;
+using OMLEngine.FileSystem;
 using OMLSDK;
 
 namespace OMLDatabaseEditor
@@ -207,10 +208,10 @@ namespace OMLDatabaseEditor
                 }
 
 
-                OMLEngine.Settings.OMLSettings.MountingToolSelection = rgMountingTool.Text;
-                OMLEngine.Settings.OMLSettings.VirtualDiscDrive = cmbMntToolVDrive.Text;
-                OMLEngine.Settings.OMLSettings.MountingToolPath = teMntToolPath.Text;
-
+                MountingTool.Tool tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), rgMountingTool.Text);
+                OMLSettings.MountingToolSelection = tool;
+                OMLSettings.VirtualDiscDrive = cmbMntToolVDrive.Text;
+                OMLSettings.MountingToolPath = teMntToolPath.Text;
 
             }
             else if (sender == this.sbCancel)

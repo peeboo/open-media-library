@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OMLEngine.FileSystem;
 
 namespace OMLEngine.Settings
 {
@@ -241,10 +242,24 @@ namespace OMLEngine.Settings
 
         #region Image Mounting
 
-        public static string MountingToolSelection
+        //public static string MountingToolSelection
+        public static MountingTool.Tool MountingToolSelection
         {
-            get { return SettingsManager.GetSettingByName("MountingToolSelection", InstanceName) ?? string.Empty; }
-            set { SettingsManager.SaveSettingByName("MountingToolSelection", value, InstanceName); }
+            get {
+                string toolstring = SettingsManager.GetSettingByName("MountingToolSelection", InstanceName) ?? string.Empty;
+                if (!string.IsNullOrEmpty(toolstring))
+                {
+                    MountingTool.Tool tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), toolstring);
+                    return tool;
+                }
+                else
+                {
+                    return MountingTool.Tool.None;
+                }
+            }
+            set { 
+                SettingsManager.SaveSettingByName("MountingToolSelection", value.ToString(), InstanceName); 
+            }
         }
 
         public static string MountingToolPath

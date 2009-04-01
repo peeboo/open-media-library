@@ -128,18 +128,18 @@ namespace OMLEngine
 
     public class DiskInfo
     {
-        public string Name { get; set; }
-        public string Path { get; set; }
-        public VideoFormat Format { get; set; }
+        //public string Name { get; set; }
+        //public string Path { get; set; }
+        //public VideoFormat Format { get; set; }
         public List<DIFeature> DiskFeatures { get; set; }
 
 
 
         public DiskInfo(string name, string path, VideoFormat format)
         {
-            Name = name;
-            Path = path;
-            Format = format;
+            //Name = name;
+            //Path = path;
+            //Format = format;
             DiskFeatures = new List<DIFeature>();
 
             IdentifyMediaType(name, path, format);
@@ -174,7 +174,7 @@ namespace OMLEngine
                     break;
 
                 case VideoFormat.DVD : // detect which drive supports this and request the disc
-                    QueryDVD();
+                    QueryDVD(path);
                     break;
 
 
@@ -214,23 +214,23 @@ namespace OMLEngine
         }
 
 
-        private void QueryDVD()
+        private void QueryDVD(string path)
         {
             // Check to see if any IFO files exist
-            if (Directory.GetFiles(Path,"*.ifo").Length == 0)
+            if (Directory.GetFiles(path, "*.ifo").Length == 0)
             {
                 // No IFO Files Found
                 // Try to see if there is a VIDEO_TS folder
-                if (Directory.Exists(System.IO.Path.Combine(Path, "VIDEO_TS")))
+                if (Directory.Exists(System.IO.Path.Combine(path, "VIDEO_TS")))
                 {
-                    Path = System.IO.Path.Combine(Path, "VIDEO_TS"); 
-                    if (Directory.GetFiles(Path, "*.ifo").Length == 0)
+                    path = System.IO.Path.Combine(path, "VIDEO_TS");
+                    if (Directory.GetFiles(path, "*.ifo").Length == 0)
                     {
                         return;
                     }
                 }
             }
-            DVDDiskInfo ddi = DVDDiskInfo.ParseDVD(Path);
+            DVDDiskInfo ddi = DVDDiskInfo.ParseDVD(path);
             foreach(DVDTitle dt in ddi.Titles)
             {
                 DIFeature difeature = new DIFeature();

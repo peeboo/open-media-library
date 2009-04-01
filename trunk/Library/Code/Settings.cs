@@ -14,6 +14,7 @@ using Microsoft.MediaCenter.UI;
 using OMLEngine;
 using OMLSDK;
 using OMLEngine.Settings;
+using OMLEngine.FileSystem;
 
 namespace Library
 {
@@ -56,7 +57,7 @@ namespace Library
                     MountingTool.Tool tool;
                     string ChosenMountingSelection = _ImageMountingSelection.Chosen as string;
                     tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), ChosenMountingSelection);
-                    OMLSettings.MountingToolSelection = (int)tool;
+                    OMLSettings.MountingToolSelection = tool;
                 }
                 catch (Exception ex)
                 {
@@ -908,11 +909,44 @@ namespace Library
             }
         }
 
-        private const string DefaultDaemonToolsPath = @"Program Files\DAEMON Tools Lite\daemon.exe";
-        private const string DefaultVirtualCloneDrivePath = @"Program Files\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";        
+        //private const string DefaultDaemonToolsPath = @"Program Files\DAEMON Tools Lite\daemon.exe";
+        //private const string DefaultVirtualCloneDrivePath = @"Program Files\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";        
 
         public void LocateSelectedMounter()
-        {           
+        {
+            OMLApplication.Current.IsBusy = true;
+
+            MountingTool mnt = new MountingTool();
+            
+            string driveLetterToScan = LocalFixedDrives.Chosen as String;
+
+            MountingTool.Tool tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), _ImageMountingSelection.Chosen.ToString());
+
+            Application.DeferredInvokeOnWorkerThread(delegate
+            {
+                exePath = mnt.ScanForMountTool(tool, driveLetterToScan);
+
+            }, delegate
+            {
+                OMLApplication.Current.IsBusy = false;
+                if (exePath.Length > 0)
+                {
+                    OMLApplication.DebugLine("[Settings] Found Image Mounter: {0}", exePath);
+                    MountingToolPath.Value = exePath;
+                }
+                else
+                {
+                    AddInHost.Current.MediaCenterEnvironment.Dialog(
+                        string.Format("The image mounter was not" +
+                                      " found on the [{0}] drive.", driveLetterToScan),
+                        "Failed to Find Image Mounter",
+                        Microsoft.MediaCenter.DialogButtons.Ok,
+                        5, true);
+                }
+            }, null);
+
+
+            /*
             string driveLetterToScan = LocalFixedDrives.Chosen as String;
             DriveInfo dInfo = new DriveInfo(driveLetterToScan);
 
@@ -966,7 +1000,7 @@ namespace Library
                             5, true);
                     }
                 }, null);
-            }
+            }*/
         }
 
         private const string DefaultTMTPath = @"Program Files\Arcsoft\umcedvdplayer.exe";

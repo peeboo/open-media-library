@@ -254,16 +254,16 @@ namespace OMLEngine
             return rand_num;
         }
 
-        public static bool HasDaemonTools()
+        /*public static bool HasDaemonTools()
         {
             string daemontools_path = OMLSettings.MountingToolPath;
             if (daemontools_path != null && daemontools_path.Length > 0)
                 return true;
 
             return false;
-        }
+        }*/
 
-        public static DriveInfo DriveInfoForDrive(string VirtualDiscDrive)
+        /*public static DriveInfo DriveInfoForDrive(string VirtualDiscDrive)
         {
             if (VirtualDiscDrive == null || VirtualDiscDrive.Length < 1)
                 return null;
@@ -278,9 +278,9 @@ namespace OMLEngine
                 }
             }
             return null;
-        }
+        }*/
 
-        public static void UnmountVirtualDrive(int VirtualDiscDriveNumber)
+        /*public static void UnmountVirtualDrive(int VirtualDiscDriveNumber)
         {
             string mount_util_path = OMLSettings.MountingToolPath;
 
@@ -294,7 +294,7 @@ namespace OMLEngine
 
             cmd.Start();
             Thread.Sleep(10);
-        }
+        }*/
 
         public static void DebugLine(string msg, params object[] paramArray)
         {

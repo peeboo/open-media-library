@@ -966,6 +966,17 @@ namespace OMLEngine
             _disks = null;
         }
 
+        public void RemoveDisk(Disk disk)
+        {
+            if (disk == null)
+                return;
+
+            if (!Disks.Contains(disk))
+                return;
+
+            _title.Disks.Remove(disk.DaoDisk);
+        }
+
         /// <summary>
         /// Add a disk that won't be persisted to the database
         /// </summary>
