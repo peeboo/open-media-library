@@ -12,8 +12,11 @@ namespace OMLDatabaseEditor.Controls
 {
     public partial class DiskInfoFrm : DevExpress.XtraEditors.XtraForm
     {
-        public DiskInfoFrm(Disk _disk)
+        Disk _disk;
+
+        public DiskInfoFrm(Disk disk)
         {
+            _disk = disk;
             InitializeComponent();
             //OMLEngine.DiskInfo di = new OMLEngine.DiskInfo(_disk.Name, _disk.Path, _disk.Format);
 
@@ -22,10 +25,14 @@ namespace OMLDatabaseEditor.Controls
             topNode.Text = _disk.Path;
             tvDiskInfo.Nodes.Add(topNode);
 
+            int FeatureNo = 0;
+            int VideoStreamNo = 0;
+            int AudioStreamNo = 0;
+
             foreach (DIFeature df in _disk.DiskFeatures)
             {
                 TreeNode featureNode = new TreeNode();
-                featureNode.Name = df.Name;
+                featureNode.Name = "Feature," + FeatureNo.ToString() + "," + df.Name;
                 featureNode.Text = df.Name;
                 topNode.Nodes.Add(featureNode);
 
@@ -60,19 +67,21 @@ namespace OMLDatabaseEditor.Controls
                 foreach (DIVideoStream vd in df.VideoStreams)
                 {
                     TreeNode videostream = new TreeNode();
-                    videostream.Name = vd.Name;
+                    videostream.Name = "VideoStream," + FeatureNo.ToString() + "," + VideoStreamNo.ToString() + "," + vd.Name;
                     videostream.Text = vd.Name;
                     video.Nodes.Add(videostream);
-                    if (vd.TitleID != 0) { videostream.Nodes.Add("Title ID : " + vd.TitleID); }
-                    if (vd.AspectRatio != "") { videostream.Nodes.Add("Aspect Ratio : " + vd.AspectRatio); }
-                    if (vd.Bitrate != 0) { videostream.Nodes.Add("Bitrate : " + vd.Bitrate.ToString() + "kbps"); }
+
+                    if (vd.TitleID != 0) { videostream.Nodes.Add(videostream.Name, "Title ID : " + vd.TitleID); }
+                    if (vd.AspectRatio != "") { videostream.Nodes.Add(videostream.Name, "Aspect Ratio : " + vd.AspectRatio); }
+                    if (vd.Bitrate != 0) { videostream.Nodes.Add(videostream.Name, "Bitrate : " + vd.Bitrate.ToString() + "kbps"); }
                     if (vd.Format != null)
                     {
-                        if (vd.Format.ToString() != "") { videostream.Nodes.Add("Format : " + vd.Format); }
+                        if (vd.Format.ToString() != "") { videostream.Nodes.Add(videostream.Name, "Format : " + vd.Format); }
                     }
-                    if (vd.FrameRate != 0) { videostream.Nodes.Add("Framerate : " + vd.FrameRate.ToString() + "fps"); }
-                    if (vd.Resolution.Width != 0) { videostream.Nodes.Add("Picture Size : " + vd.Resolution.Width.ToString() + "x" + vd.Resolution.Height.ToString()); }
-                    if (vd.ScanType != "") { videostream.Nodes.Add("Scan Type : " + vd.ScanType); }
+                    if (vd.FrameRate != 0) { videostream.Nodes.Add(videostream.Name, "Framerate : " + vd.FrameRate.ToString() + "fps"); }
+                    if (vd.Resolution.Width != 0) { videostream.Nodes.Add(videostream.Name, "Picture Size : " + vd.Resolution.Width.ToString() + "x" + vd.Resolution.Height.ToString()); }
+                    if (vd.ScanType != "") { videostream.Nodes.Add(videostream.Name, "Scan Type : " + vd.ScanType); }
+                    VideoStreamNo++;
                 }
 
                 TreeNode audio = new TreeNode();
@@ -104,8 +113,51 @@ namespace OMLDatabaseEditor.Controls
                     if (ad.SampleFreq != 0) { audiostream.Nodes.Add("Sample Frequency : " + ad.SampleFreq.ToString()); }
                     if (ad.Channels != 0) { audiostream.Nodes.Add("Channels : " + ad.Channels.ToString()); }
                     if (ad.Bitrate != 0) { audiostream.Nodes.Add("Bitrate : " + ad.Bitrate.ToString() + "kbps (" + ad.BitrateMode + ")"); }
+                    AudioStreamNo++;
                  }
+
+                FeatureNo++;
             }
+        }
+
+        private void sbSetAsMainFeature_Click(object sender, EventArgs e)
+        {
+            int Feature;
+            int VideoStream;
+            int AudioStream;
+
+            string selectedNodeName = tvDiskInfo.SelectedNode.Name;
+            string [] pars = selectedNodeName.Split(',');
+            switch (pars[0])
+            {
+                case "Feature":
+                    Feature = Convert.ToInt32(pars[1]);
+                    VideoStream = 0;
+                    AudioStream = 0;
+                    break;
+                case "VideoStream":
+                    Feature = Convert.ToInt32(pars[1]);
+                    VideoStream = Convert.ToInt32(pars[2]);
+                    AudioStream = 0;
+                    break;
+                case "AudioStream":
+                    Feature = Convert.ToInt32(pars[1]);
+                    VideoStream = 0;
+                    AudioStream = Convert.ToInt32(pars[2]);
+                    break;
+                default:
+                    Feature = 0;
+                    VideoStream = 0;
+                    AudioStream = 0;
+                    break;
+            }
+
+            
+            _disk.MainFeatureXRes = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].Resolution.Width;
+            _disk.MainFeatureYRes = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].Resolution.Height;
+            _disk.MainFeatureAspectRatio = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].AspectRatio;
+            _disk.MainFeatureFPS = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].FrameRate;
+            _disk.MainFeatureLength = _disk.DiskFeatures[Feature].Duration.Hours * 60 + _disk.DiskFeatures[Feature].Duration.Minutes;
         }
     }
 }
