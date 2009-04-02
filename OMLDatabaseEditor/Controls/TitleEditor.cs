@@ -260,7 +260,8 @@ namespace OMLDatabaseEditor.Controls
                 List<Disk> original = EditedTitle.Disks.ToList<Disk>();
                 diskEditor.ShowDialog();
                 int commonCount = EditedTitle.Disks.Intersect(original).Count<Disk>();
-                if (commonCount != EditedTitle.Disks.Count || commonCount != original.Count)
+                if ((commonCount != EditedTitle.Disks.Count || commonCount != original.Count) ||
+                    (diskEditor.DiskDirty))
                 {
                     TitleChanges(null, EventArgs.Empty);
                 }

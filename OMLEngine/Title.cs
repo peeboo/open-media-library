@@ -975,6 +975,8 @@ namespace OMLEngine
                 return;
 
             _title.Disks.Remove(disk.DaoDisk);
+
+            _disks = null;
         }
 
         /// <summary>

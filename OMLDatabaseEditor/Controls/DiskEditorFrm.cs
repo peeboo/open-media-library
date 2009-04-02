@@ -15,6 +15,7 @@ namespace OMLDatabaseEditor.Controls
     public partial class DiskEditorFrm : XtraForm
     {
         Title _title;
+        public bool DiskDirty { set; get; }
 
         public DiskEditorFrm(Title title)
         {
@@ -33,12 +34,19 @@ namespace OMLDatabaseEditor.Controls
         {
             if (lbDisks.SelectedItem != null)
             {
+                _title.RemoveDisk(lbDisks.SelectedItem as Disk);
+
+                // Kick the datasource to refresh the listbox
+                lbDisks.DataSource = _title.Disks;
+
                 //_disks.Remove(lbDisks.SelectedItem as Disk);
-                //if (_disks.Count == 0)
+                if (_title.Disks.Count == 0)
                 {
                     diskEditor.LoadDisk(null);
                     diskEditor.Visible = false;
                 }
+
+                DiskDirty = true;
             }
         }
 
@@ -54,6 +62,8 @@ namespace OMLDatabaseEditor.Controls
 
             diskEditor.LoadDisk(newDisk);
             diskEditor.Visible = true;
+
+            DiskDirty = true;
         }
 
         private void DiskEditorFrm_FormClosing(object sender, FormClosingEventArgs e)
@@ -66,7 +76,11 @@ namespace OMLDatabaseEditor.Controls
             if (lbDisks.SelectedItem != null)
             {
                 DiskInfoFrm di = new DiskInfoFrm(lbDisks.SelectedItem as Disk);
-                di.ShowDialog();
+                if (di.ShowDialog() == DialogResult.OK)
+                {
+                    // Disk is dirty
+                    DiskDirty = true;
+                }
             }
         }
     }
