@@ -32,7 +32,8 @@ namespace OMLEngine
             {
                 if (!string.IsNullOrEmpty(value) && value.Length > 255)
                     throw new FormatException("Disk path must be 255 characters or less.");
-                _disk.Path = value; 
+                _disk.Path = value;
+                _diskFeatures = null;
             } 
         }
 
