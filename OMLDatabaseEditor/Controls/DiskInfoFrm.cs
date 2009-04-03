@@ -13,10 +13,12 @@ namespace OMLDatabaseEditor.Controls
     public partial class DiskInfoFrm : DevExpress.XtraEditors.XtraForm
     {
         Disk _disk;
+        Title _title;
 
-        public DiskInfoFrm(Disk disk)
+        public DiskInfoFrm(Title title, Disk disk)
         {
             _disk = disk;
+            _title = title;
             InitializeComponent();
             //OMLEngine.DiskInfo di = new OMLEngine.DiskInfo(_disk.Name, _disk.Path, _disk.Format);
 
@@ -122,42 +124,56 @@ namespace OMLDatabaseEditor.Controls
 
         private void sbSetAsMainFeature_Click(object sender, EventArgs e)
         {
-            int Feature;
-            int VideoStream;
-            int AudioStream;
-
-            string selectedNodeName = tvDiskInfo.SelectedNode.Name;
-            string [] pars = selectedNodeName.Split(',');
-            switch (pars[0])
+            try
             {
-                case "Feature":
-                    Feature = Convert.ToInt32(pars[1]);
-                    VideoStream = 0;
-                    AudioStream = 0;
-                    break;
-                case "VideoStream":
-                    Feature = Convert.ToInt32(pars[1]);
-                    VideoStream = Convert.ToInt32(pars[2]);
-                    AudioStream = 0;
-                    break;
-                case "AudioStream":
-                    Feature = Convert.ToInt32(pars[1]);
-                    VideoStream = 0;
-                    AudioStream = Convert.ToInt32(pars[2]);
-                    break;
-                default:
-                    Feature = 0;
-                    VideoStream = 0;
-                    AudioStream = 0;
-                    break;
-            }
+                int Feature;
+                int VideoStream;
+                int AudioStream;
 
-            
-            _disk.MainFeatureXRes = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].Resolution.Width;
-            _disk.MainFeatureYRes = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].Resolution.Height;
-            _disk.MainFeatureAspectRatio = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].AspectRatio;
-            _disk.MainFeatureFPS = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].FrameRate;
-            _disk.MainFeatureLength = _disk.DiskFeatures[Feature].Duration.Hours * 60 + _disk.DiskFeatures[Feature].Duration.Minutes;
+                string selectedNodeName = tvDiskInfo.SelectedNode.Name;
+                string[] pars = selectedNodeName.Split(',');
+                switch (pars[0])
+                {
+                    case "Feature":
+                        Feature = Convert.ToInt32(pars[1]);
+                        VideoStream = 0;
+                        AudioStream = 0;
+                        break;
+                    case "VideoStream":
+                        Feature = Convert.ToInt32(pars[1]);
+                        VideoStream = Convert.ToInt32(pars[2]);
+                        AudioStream = 0;
+                        break;
+                    case "AudioStream":
+                        Feature = Convert.ToInt32(pars[1]);
+                        VideoStream = 0;
+                        AudioStream = Convert.ToInt32(pars[2]);
+                        break;
+                    default:
+                        Feature = 0;
+                        VideoStream = 0;
+                        AudioStream = 0;
+                        break;
+                }
+
+
+                _disk.MainFeatureXRes = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].Resolution.Width;
+                _disk.MainFeatureYRes = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].Resolution.Height;
+                _disk.MainFeatureAspectRatio = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].AspectRatio;
+                _disk.MainFeatureFPS = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].FrameRate;
+                _disk.MainFeatureLength = _disk.DiskFeatures[Feature].Duration.Hours * 60 + _disk.DiskFeatures[Feature].Duration.Minutes;
+
+                if (OMLEngine.Settings.OMLSettings.ScanDiskRollInfoToTitle)
+                {
+                    _title.VideoResolution = _disk.MainFeatureXRes.ToString() + "x" + _disk.MainFeatureYRes.ToString();
+                    _title.AspectRatio = _disk.MainFeatureAspectRatio;
+                    //_disk.MainFeatureFPS = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].FrameRate;
+                    _title.Runtime = _disk.MainFeatureLength ?? 0;
+                }
+            }
+            catch
+            {
+            }
         }
     }
 }

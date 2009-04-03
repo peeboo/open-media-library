@@ -62,17 +62,17 @@ namespace OMLDatabaseEditor.Controls
             this.sbSetAsMainFeature.Name = "sbSetAsMainFeature";
             this.sbSetAsMainFeature.Size = new System.Drawing.Size(75, 23);
             this.sbSetAsMainFeature.TabIndex = 2;
-            this.sbSetAsMainFeature.Text = "Update Title";
+            this.sbSetAsMainFeature.Text = "Update Disk";
             this.sbSetAsMainFeature.Click += new System.EventHandler(this.sbSetAsMainFeature_Click);
             // 
             // labelControl1
             // 
             this.labelControl1.Location = new System.Drawing.Point(12, 312);
             this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(448, 13);
+            this.labelControl1.Size = new System.Drawing.Size(447, 13);
             this.labelControl1.TabIndex = 3;
-            this.labelControl1.Text = "To update the titles\' resolution, aspect ratio && length, select a feature and cl" +
-                "ick \'Update Title\'.";
+            this.labelControl1.Text = "To update the disks\' resolution, aspect ratio && length, select a feature and cli" +
+                "ck \'Update Disk\'.";
             // 
             // DiskInfoFrm
             // 

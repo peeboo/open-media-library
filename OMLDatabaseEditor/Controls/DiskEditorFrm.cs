@@ -26,7 +26,7 @@ namespace OMLDatabaseEditor.Controls
 
         private void lbDisks_SelectedIndexChanged(object sender, EventArgs e)
         {
-            diskEditor.LoadDisk(lbDisks.SelectedItem as Disk);
+            diskEditor.LoadDisk(_title, lbDisks.SelectedItem as Disk);
             diskEditor.Visible = true;
         }
 
@@ -42,7 +42,7 @@ namespace OMLDatabaseEditor.Controls
                 //_disks.Remove(lbDisks.SelectedItem as Disk);
                 if (_title.Disks.Count == 0)
                 {
-                    diskEditor.LoadDisk(null);
+                    diskEditor.LoadDisk(null, null);
                     diskEditor.Visible = false;
                 }
 
@@ -60,7 +60,7 @@ namespace OMLDatabaseEditor.Controls
             // Kick the datasource to refresh the listbox
             lbDisks.DataSource = _title.Disks;
 
-            diskEditor.LoadDisk(newDisk);
+            diskEditor.LoadDisk(_title, newDisk);
             diskEditor.Visible = true;
 
             DiskDirty = true;
@@ -75,7 +75,7 @@ namespace OMLDatabaseEditor.Controls
         {
             if (lbDisks.SelectedItem != null)
             {
-                DiskInfoFrm di = new DiskInfoFrm(lbDisks.SelectedItem as Disk);
+                DiskInfoFrm di = new DiskInfoFrm(_title, lbDisks.SelectedItem as Disk);
                 if (di.ShowDialog() == DialogResult.OK)
                 {
                     // Disk is dirty

@@ -264,6 +264,7 @@ namespace OMLDatabaseEditor.Controls
                     (diskEditor.DiskDirty))
                 {
                     TitleChanges(null, EventArgs.Empty);
+                    RefreshEditor();
                 }
             }
         }

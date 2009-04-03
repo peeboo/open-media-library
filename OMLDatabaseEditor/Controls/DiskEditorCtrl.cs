@@ -17,6 +17,7 @@ namespace OMLDatabaseEditor.Controls
     public partial class DiskEditorCtrl : UserControl
     {
         private Disk _currentDisk;
+        private Title _currentTitle;
 
         public DiskEditorCtrl()
         {
@@ -26,9 +27,10 @@ namespace OMLDatabaseEditor.Controls
             txtPath.MaskBox.AutoCompleteSource = AutoCompleteSource.FileSystem;
         }
 
-        public void LoadDisk(Disk disk)
+        public void LoadDisk(Title title, Disk disk)
         {
             _currentDisk = disk;
+            _currentTitle = title;
             if (disk == null)
                 diskSource.DataSource = typeof(Disk);
             else
@@ -50,6 +52,7 @@ namespace OMLDatabaseEditor.Controls
                     txtPath.Text = folderDialog.SelectedPath;
                     _currentDisk.Format = _currentDisk.GetFormatFromPath(folderDialog.SelectedPath);
                     diskSource.EndEdit();
+                    AutoScanDisk();
                 }
             }
             else
@@ -60,6 +63,7 @@ namespace OMLDatabaseEditor.Controls
                     txtPath.Text = fileDialog.FileName;
                     _currentDisk.Format = _currentDisk.GetFormatFromPath(fileDialog.FileName);
                     diskSource.EndEdit();
+                    AutoScanDisk();
                 }
             }
 
@@ -110,6 +114,7 @@ namespace OMLDatabaseEditor.Controls
             if (File.Exists(txtPath.Text))
             {
                 _currentDisk.Format = _currentDisk.GetFormatFromPath(txtPath.Text);
+                AutoScanDisk();
             }
             else if (Directory.Exists(txtPath.Text))
             {
@@ -117,7 +122,10 @@ namespace OMLDatabaseEditor.Controls
                 if (_currentDisk.Format == VideoFormat.UNKNOWN)
                     XtraMessageBox.Show("The new path does not contain a DVD, Blu-ray or HDDVD movie", "Error");
                 else
+                {
                     cbDVD.Checked = true;
+                    AutoScanDisk();
+                }
             }
             else
             {
@@ -127,6 +135,47 @@ namespace OMLDatabaseEditor.Controls
             }
 
             Parent.Controls["lbDisks"].Refresh();
+        }
+
+        private void AutoScanDisk()
+        {
+            try
+            {
+                // Auto scan disk
+                if (OMLEngine.Settings.OMLSettings.AutoScanDiskOnAdding)
+                {
+                    int Feature = 0;
+                    int Length = 0;
+                    for (int i = 0; i < _currentDisk.DiskFeatures.Count; i++)
+                    {
+                        int calclength = _currentDisk.DiskFeatures[Feature].Duration.Hours * 60 + _currentDisk.DiskFeatures[Feature].Duration.Minutes;
+                        if (calclength > Length)
+                        {
+                            Length = calclength;
+                            Feature = i;
+                        }
+
+                    }
+                    _currentDisk.MainFeatureXRes = _currentDisk.DiskFeatures[Feature].VideoStreams[0].Resolution.Width;
+                    _currentDisk.MainFeatureYRes = _currentDisk.DiskFeatures[Feature].VideoStreams[0].Resolution.Height;
+                    _currentDisk.MainFeatureAspectRatio = _currentDisk.DiskFeatures[Feature].VideoStreams[0].AspectRatio;
+                    _currentDisk.MainFeatureFPS = _currentDisk.DiskFeatures[Feature].VideoStreams[0].FrameRate;
+                    _currentDisk.MainFeatureLength = _currentDisk.DiskFeatures[Feature].Duration.Hours * 60 + _currentDisk.DiskFeatures[Feature].Duration.Minutes;
+
+                    if (OMLEngine.Settings.OMLSettings.ScanDiskRollInfoToTitle)
+                    {
+                        _currentTitle.VideoResolution = _currentDisk.MainFeatureXRes.ToString() + "x" + _currentDisk.MainFeatureYRes.ToString();
+                        _currentTitle.AspectRatio = _currentDisk.MainFeatureAspectRatio;
+                        //_disk.MainFeatureFPS = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].FrameRate;
+                        _currentTitle.Runtime = _currentDisk.MainFeatureLength ?? 0;
+                    }
+
+                    (Parent as DiskEditorFrm).DiskDirty = true;
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         private void txtName_Leave(object sender, EventArgs e)

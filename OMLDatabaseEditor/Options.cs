@@ -112,6 +112,10 @@ namespace OMLDatabaseEditor
             beTitledFanArtPath.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             beTitledFanArtPath.MaskBox.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
 
+            ceAutoScanDiskOnAdd.Checked = OMLEngine.Settings.OMLSettings.AutoScanDiskOnAdding;
+            ceScanDiskRollInfoToTitle.Checked = OMLEngine.Settings.OMLSettings.ScanDiskRollInfoToTitle;
+
+
             // Mounting Tools
             foreach (string toolName in Enum.GetNames(typeof(OMLEngine.FileSystem.MountingTool.Tool)))
             {
@@ -206,6 +210,10 @@ namespace OMLDatabaseEditor
                     OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName = this.cePrependParentFolder.Checked;
                     OMLEngine.Properties.Settings.Default.Save();
                 }
+
+
+                OMLEngine.Settings.OMLSettings.AutoScanDiskOnAdding = ceAutoScanDiskOnAdd.Checked;
+                OMLEngine.Settings.OMLSettings.ScanDiskRollInfoToTitle = ceScanDiskRollInfoToTitle.Checked;
 
 
                 MountingTool.Tool tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), rgMountingTool.Text);
