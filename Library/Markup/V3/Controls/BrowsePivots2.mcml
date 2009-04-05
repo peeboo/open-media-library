@@ -64,6 +64,24 @@
       <cor:Boolean Name="CalculateWidth" Boolean="true" />
     </Locals>
     <Rules>
+      <Changed Source="[Input.DeepKeyFocus]">
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <DebugTrace Message="DEBUG Pivots.ChosenIndex: {0}::SelectedIndex.Value: {1}">
+            <Params>
+              <ObjectPath ObjectPath="[Pivots.ChosenIndex]"/>
+              <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
+            </Params>
+          </DebugTrace>
+          <Set Target="[FocusArea.Value]" Value="Pivot"/>
+          <!--Set Target="[FocusArea.Value]" Value="Pivot"/>
+          <Set Target="[TransitionState.Value]" Value="NavigatingToBackward"/-->
+          <Invoke Target="[Repeater.NavigateIntoIndex]" index="[Pivots.ChosenIndex]"/>
+          <!--Set Target="[TransitionState.Value]" Value="Idle" InvokePolicy="AsynchronousNormal"/-->
+        </Actions>
+      </Changed>
       <Rule>
         <Conditions>
           <IsValid Source="[ScrollData]"/>
@@ -581,7 +599,7 @@
               <AnchorLayoutInput Left="Focus, 1, 10" Horizontal="Near" Top="Scroller, 0, 10" ContributesToWidth="false" ContributesToHeight="false"/>
             </LayoutInput>
           </Graphic>
-          <Scroller Name="Scroller" Orientation="Horizontal" FadeSize="10" NearOffset="-210" FarOffset="0">
+          <Scroller Name="Scroller" Orientation="Horizontal" FadeSize="10" NearOffset="-210" FarOffset="0" Navigation="RememberFocus">
             <LayoutInput>
               <AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
             </LayoutInput>

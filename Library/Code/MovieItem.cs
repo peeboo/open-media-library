@@ -254,6 +254,8 @@ namespace Library
             }
         }
 
+        public int ForcedCount { get { return _forcedCount; } }
+
         private string _name;
         private string _sortName;
         private string _caption;

@@ -84,7 +84,7 @@
                     </Layout>
                     <Content>
                       <!-- The item to repeat -->
-                      <me:ScrollingList Content="[RepeatedItem!cor:String]" SelectedCrap="f">
+                      <me:ScrollingList Content="[RepeatedItem!cor:String]">
                         <ScrollingData>
                           <ScrollingData/>
                         </ScrollingData>
@@ -107,7 +107,6 @@
     <Properties>
       <ArrayListDataSet Name="Content" ArrayListDataSet="$Required"/>
       <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
-      <cor:String Name="SelectedCrap" String="$Required"/>
       <PropertySet Description="desc" Name="MyPropertySet">
         <Entries>
           <IntRangedValue Name="SelectedIndex"></IntRangedValue>
@@ -122,7 +121,6 @@
 
     <Locals>
       <ScrollingHandler Name="ScrollingHandler" ScrollingData="[ScrollingData]"/>
-      <cor:String Name="xSelectedCrap" String="ffff"/>
       <Command Name="MyCommand" Description="this is a test" />
     </Locals>
 

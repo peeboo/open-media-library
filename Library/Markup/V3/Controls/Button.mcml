@@ -118,6 +118,9 @@
   </UI>
   <UI Name="ButtonBase">
     <Properties>
+      <EditableText Name="SubFocusArea" Value="none"/>
+      <Color Name="NoFocusColorActive" Color="color://comm:OffWhite"/>
+      <Color Name="NoFocusColorInactive" Color="color://comm:LightBlue"/>
       <Image Name="ButtonFocus" Image="resx://Library/Library.Resources/V3_Controls_Background_Static" Flippable="true"/>
       <Font Name="Font" Font="font://comm:ButtonText"/>
       <Font Name="FocusFont" Font="null"/>
@@ -270,6 +273,36 @@
       <!--Default Target="[LabelBackgroundFocus]" Value="[LabelBackgroundImageSet.Values.#Focus!Image]" />
       <Default Target="[LabelBackground]" Value="[LabelBackgroundImageSet.Values.#Default!Image]" /-->
       <Default Target="[LabelBackgroundFocus]" Value="[ButtonFocus]" />
+
+      <Changed Source="[SubFocusArea.Value]">
+        <Conditions>
+          <Equality Source="[SubFocusArea.Value]" Value="NoFocusColorInactive"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NoFocusColor]" Value="[NoFocusColorInactive]"/>
+          <Set Target="[Label.Color]" Value="[NoFocusColor]"/>
+          <DebugTrace Message="INTERNALSubFocusArea.Value: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[SubFocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Changed>
+      
+      <Changed Source="[SubFocusArea.Value]">
+        <Conditions>
+          <Equality Source="[SubFocusArea.Value]" Value="NoFocusColorActive"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NoFocusColor]" Value="[NoFocusColorActive]"/>
+          <Set Target="[Label.Color]" Value="[NoFocusColor]"/>
+          <DebugTrace Message="INTERNALSubFocusArea.Value: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[SubFocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Changed>
     </Rules>
     <Content>
       <Panel Name="Root" MouseInteractive="true">

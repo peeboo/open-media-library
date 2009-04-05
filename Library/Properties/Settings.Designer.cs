@@ -452,6 +452,42 @@ namespace Library.Properties {
             set {
                 this["MainPageBackDropAlpha"] = value;
             }
+        }                
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool MediaChangersEnabled {
+            get {
+                return ((bool)(this["MediaChangersEnabled"]));
+            }
+            set {
+                this["MediaChangersEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool MediaChangersDetect {
+            get {
+                return ((bool)(this["MediaChangersDetect"]));
+            }
+            set {
+                this["MediaChangersDetect"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool MediaChangersRetrieveMetaData {
+            get {
+                return ((bool)(this["MediaChangersRetrieveMetaData"]));
+            }
+            set {
+                this["MediaChangersRetrieveMetaData"] = value;
+            }
         }
     }
 }

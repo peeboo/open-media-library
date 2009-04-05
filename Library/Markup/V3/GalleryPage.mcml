@@ -897,6 +897,7 @@
         <Actions>
           <PlayAnimation Target="[ContentArea]" Animation="animation://me:Browse.Gallery.Show.Focus"/>
           <Set Target="[ContentPanel.FadeSize]" Value="0"/>
+          <Set Target="[ContentPanel.Alpha]" Value="1"/>
           <Set Target="[NeedDetailsRefresh]" Value="true"/>
           <Set Target="[Details.Visible]" Value="true"/>
           <Set Target="[PreviousFocusArea.Value]" Value="Gallery"/>
@@ -911,6 +912,7 @@
         <Actions>
           <PlayAnimation Target="[ContentArea]" Animation="animation://me:Browse.Gallery.Hide.Focus"/>
           <Set Target="[ContentPanel.FadeSize]" Value="300"/>
+          <Set Target="[ContentPanel.Alpha]" Value=".9"/>
           <Invoke Target="[Details.AttachAnimation]" animation="animation://me:Browse.Details.Hide" InvokePolicy="Synchronous"/>
           <Set Target="[Details.Visible]" Value="false"/>
           <Set Target="[PreviousFocusArea.Value]" Value="[FocusArea.Value]"/>
@@ -927,6 +929,7 @@
           <Set Target="[ContentPanel.ShowFar]" Value="true"/>
           <Set Target="[ContentPanel.ShowNear]" Value="false"/>
           <Set Target="[ContentPanel.FadeSize]" Value="300"/>
+          <Set Target="[ContentPanel.Alpha]" Value=".9"/>
           <Invoke Target="[Details.AttachAnimation]" animation="animation://me:Browse.Details.Hide" InvokePolicy="Synchronous"/>
           <Set Target="[Details.Visible]" Value="false"/>
           <Set Target="[PreviousFocusArea.Value]" Value="[FocusArea.Value]"/>
@@ -941,6 +944,7 @@
         <Actions>
           <PlayAnimation Target="[ContentArea]" Animation="animation://me:Browse.Gallery.Show.Focus"/>
           <Set Target="[ContentPanel.FadeSize]" Value="0"/>
+          <Set Target="[ContentPanel.Alpha]" Value="1"/>
           <Set Target="[NeedDetailsRefresh]" Value="true"/>
           <Set Target="[Details.Visible]" Value="true"/>
           <Set Target="[PreviousFocusArea.Value]" Value="[FocusArea.Value]"/>
@@ -1199,7 +1203,9 @@
 
           <!-- TODO: Integrate the browse title gradient with the panel.ccarea title gradient below, per cglein-->
 
-          <Clip Name="ContentPanel" Margins="[ContentPanelMargins]" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="0.9"
+          <!--Clip Name="ContentPanel" Margins="[ContentPanelMargins]" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="0.9"
+  CenterPointPercent="0.5,0.5,0.5" Scale="0.95,0.95,0.95"-->
+          <Clip Name="ContentPanel" Margins="[ContentPanelMargins]" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="1"
   CenterPointPercent="0.5,0.5,0.5" Scale="0.95,0.95,0.95">
             <Layout>
               <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="true"/>

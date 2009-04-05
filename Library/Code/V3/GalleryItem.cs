@@ -21,7 +21,7 @@ namespace Library.Code.V3
         {
         }
 
-        public MovieItem InternalMovieItem;
+        public Library.MovieItem InternalMovieItem;
 
         //hd/dvd/blu-ray icon
         private string simpleVideoFormat;

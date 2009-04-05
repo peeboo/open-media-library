@@ -5,31 +5,6 @@ using Library.Code.V3;
 
 namespace Library.Code.V3
 {
-    public class PageStateEx
-    {
-        public PageTransitionState TransitionState
-        {
-            get
-            {
-                if (this.transitionState == PageTransitionState.NavigatingToForward)
-                {
-                    this.transitionState = PageTransitionState.NavigatingToBackward;
-                    return PageTransitionState.NavigatingToForward;
-                }
-                else
-                {
-                    return PageTransitionState.NavigatingToBackward;
-                }
-            }
-        }
-        private PageTransitionState transitionState = PageTransitionState.NavigatingToForward;
-    }
-    [Microsoft.MediaCenter.UI.MarkupVisible]
-    public class GalleryPageSeries : GalleryPage
-    {
-
-    }
-
     /// <summary>
     /// This object contains the standard set of information displayed in the 
     /// gallery page UI.
@@ -44,6 +19,435 @@ namespace Library.Code.V3
         /// many rows to display.
         /// </summary>
         /// 
+        public GalleryPage(System.Collections.Generic.IEnumerable<OMLEngine.Title> _titles, string galleryName)
+            : this()
+        {
+            #region v3POC
+
+            //SetPrimaryBackgroundImage();
+            //OMLEngine.TitleCollection _titles = new OMLEngine.TitleCollection();
+            //_titles.loadTitleCollection();
+            //primaryBackgroundImage
+            //this is temp to test controls
+            OMLProperties properties = new OMLProperties();
+            properties.Add("Application", OMLApplication.Current);
+            properties.Add("UISettings", new UISettings());
+            properties.Add("Settings", new Settings());
+            properties.Add("I18n", I18n.Instance);
+            //v3 main gallery
+            Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage();
+            //description
+            gallery.Description = galleryName;
+            //size of the galleryitems
+            //DEPRECATED
+            //gallery.ItemSize = Library.Code.V3.GalleryItemSize.Small;
+
+            gallery.Model = new Library.Code.V3.BrowseModel(gallery);
+            //commands at top of screen
+            gallery.Model.Commands = new ArrayListDataSet(gallery);
+
+            //create the context menu
+            Library.Code.V3.ContextMenuData ctx = new Library.Code.V3.ContextMenuData();
+
+            //create the settings cmd
+            Library.Code.V3.ThumbnailCommand settingsCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            settingsCmd.Description = "settings";
+            settingsCmd.DefaultImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings");
+            settingsCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings_Dormant");
+            settingsCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings_Focus");
+            //no invoke for now
+            //settingsCmd.Invoked += new EventHandler(settingsCmd_Invoked);
+            gallery.Model.Commands.Add(settingsCmd);
+
+            //create the Search cmd
+            Library.Code.V3.ThumbnailCommand searchCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            searchCmd.Description = "search";
+            searchCmd.DefaultImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Search");
+            searchCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Search_Dormant");
+            searchCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Search_Focus");
+            //searchCmd.Invoked += new EventHandler(searchCmd_Invoked);
+            gallery.Model.Commands.Add(searchCmd);
+
+            //some ctx items
+            Library.Code.V3.ThumbnailCommand viewListCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            viewListCmd.Description = "View List";
+            //viewListCmd.Invoked += new EventHandler(viewCmd_Invoked);
+
+            Library.Code.V3.ThumbnailCommand viewSmallCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            //viewSmallCmd.Invoked += new EventHandler(viewCmd_Invoked);
+            viewSmallCmd.Description = "View Small";
+
+            Library.Code.V3.ThumbnailCommand viewLargeCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            //viewLargeCmd.Invoked += new EventHandler(viewCmd_Invoked);
+
+            viewLargeCmd.Description = "View Large";
+
+            Library.Code.V3.ThumbnailCommand viewSettingsCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            //viewSettingsCmd.Invoked += new EventHandler(this.SettingsHandler);
+            viewSettingsCmd.Description = "Settings";
+
+
+            //ctx.SharedItems.Add(viewLargeCmd);
+            ctx.SharedItems.Add(viewSmallCmd);
+            ctx.SharedItems.Add(viewListCmd);
+            ctx.SharedItems.Add(viewSettingsCmd);
+
+            Library.Code.V3.ThumbnailCommand viewMovieDetailsCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            viewMovieDetailsCmd.Description = "Movie Details";
+
+            Library.Code.V3.ThumbnailCommand viewPlayCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            viewPlayCmd.Description = "Play";
+
+            Library.Code.V3.ThumbnailCommand viewDeleteCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            viewDeleteCmd.Description = "Delete";
+
+            ctx.UniqueItems.Add(viewMovieDetailsCmd);
+            ctx.UniqueItems.Add(viewPlayCmd);
+            ctx.UniqueItems.Add(viewDeleteCmd);
+
+            Command CommandContextPopOverlay = new Command();
+            properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
+
+            //properties.Add("MenuData", ctx);
+            gallery.ContextMenu = ctx;
+            //the pivots
+            gallery.Model.Pivots = new Choice(gallery, "desc", new ArrayListDataSet(gallery));
+
+            //twoRowChangerData
+
+            //#region oneRowChangerData
+            //if (this.mediaChangers != null && this.mediaChangers.KnownDiscs.Count > 0)
+            //{
+            //    VirtualList changerGalleryList = new VirtualList(gallery, null);
+            //    foreach (Library.Code.V3.DiscDataEx t in this.mediaChangers.KnownDiscs)
+            //    {
+            //        //galleryList.Add(this.CreateGalleryItem(t));
+            //        if (t.DiscType == DiscType.MovieDvd)
+            //            changerGalleryList.Add(new Library.Code.V3.DVDChangerItem(t, changerGalleryList));
+            //    }
+
+
+            //    Library.Code.V3.BrowsePivot changerPivot = new Library.Code.V3.BrowsePivot(gallery, "changer", "loading titles...", changerGalleryList);
+            //    changerPivot.ContentLabel = "OML";
+            //    changerPivot.SupportsJIL = true;
+            //    changerPivot.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            //    changerPivot.ContentItemTemplate = "oneRowGalleryItemPoster";
+            //    changerPivot.DetailTemplate = Library.Code.V3.BrowsePivot.ExtendedDetailTemplate;
+            //    gallery.Model.Pivots.Options.Add(changerPivot);
+            //}
+            //#endregion oneRowChangerData
+
+            //twoRowGalleryItemPoster
+            #region oneRowGalleryItemPoster
+            VirtualList galleryList = new VirtualList(gallery, null);
+            foreach (OMLEngine.Title t in _titles)
+            {
+                //galleryList.Add(this.CreateGalleryItem(t));
+                galleryList.Add(new Library.Code.V3.MovieItem(t, galleryList));
+            }
+
+
+            Library.Code.V3.BrowsePivot p = new Library.Code.V3.BrowsePivot(gallery, "one row", "loading titles...", galleryList);
+            p.ContentLabel = galleryName;
+            p.SupportsJIL = true;
+            p.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            p.ContentItemTemplate = "oneRowGalleryItemPoster";
+            p.DetailTemplate = Library.Code.V3.BrowsePivot.ExtendedDetailTemplate;
+            gallery.Model.Pivots.Options.Add(p);
+            #endregion oneRowGalleryItemPoster
+
+
+
+            ////twoRowGalleryItemPoster
+            //#region twoRowGalleryItemPoster
+            //VirtualList galleryListGenres = new VirtualList(gallery, null);
+            //foreach (OMLEngine.Title t in _titles)
+            //{
+            //    galleryListGenres.Add(new Library.Code.V3.MovieItem(t, galleryListGenres));
+            //}
+
+            //Library.Code.V3.BrowsePivot p2 = new Library.Code.V3.BrowsePivot(gallery, "two row", "loading genres...", galleryListGenres);
+            //p2.ContentLabel = galleryName;
+            //p2.SupportsJIL = true;
+            //p2.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            //p2.ContentItemTemplate = "twoRowGalleryItemPoster";
+            //p2.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+            //gallery.Model.Pivots.Options.Add(p2);
+            //#endregion twoRowGalleryItemPoster
+
+            ////ListViewItem
+            //#region ListViewItem
+            //VirtualList galleryListListViewItem = new VirtualList(gallery, null);
+            //foreach (OMLEngine.Title t in _titles)
+            //{
+            //    galleryListListViewItem.Add(new Library.Code.V3.MovieItem(t, galleryListListViewItem));
+            //}
+
+            //Library.Code.V3.BrowsePivot p3 = new Library.Code.V3.BrowsePivot(gallery, "list", "loading genres...", galleryListListViewItem);
+            //p3.ContentLabel = galleryName;
+            //p3.SupportsJIL = true;
+            //p3.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            //p3.ContentItemTemplate = "ListViewItem";
+            //p3.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+            //gallery.Model.Pivots.Options.Add(p3);
+            //#endregion ListViewItem
+
+            ////Grouped
+            //#region Grouped
+
+            //VirtualList groupedGalleryListListViewItem = new VirtualList(gallery, null);
+            //int i = 1;
+            //foreach (OMLEngine.Title t in _titles)
+            //{
+            //    i++;
+            //    groupedGalleryListListViewItem.Add(new Library.Code.V3.MovieItem(t, groupedGalleryListListViewItem));
+            //    if (i > 20)
+            //        break;
+            //}
+            //Library.Code.V3.GalleryItem testtgenre = new Library.Code.V3.GalleryItem();
+            //testtgenre.Description = "Comedy";
+            //testtgenre.Metadata = "12 titles";
+            //testtgenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_comedy");
+            ////groupedGalleryListListViewItem.Add(testtgenre);
+
+            //Library.Code.V3.BrowseGroup testGroup = new Library.Code.V3.BrowseGroup();//this, "Sample Group", groupedGalleryListListViewItem);
+            //testGroup.Owner = gallery;
+            //testGroup.Description = "Group 1";
+            //testGroup.Metadata = "12 titles";
+            //testGroup.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_mystery");
+            //testGroup.Content = groupedGalleryListListViewItem;
+            //testGroup.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
+
+            //VirtualList groupListView = new VirtualList(gallery, null);
+
+
+            ////groupListView.Add(testtgenre);
+            //groupListView.Add(testGroup);
+
+            //VirtualList groupedGalleryListListViewItem2 = new VirtualList(gallery, null);
+
+            //foreach (OMLEngine.Title t in _titles)
+            //{
+            //    i++;
+            //    groupedGalleryListListViewItem2.Add(new Library.Code.V3.MovieItem(t, groupedGalleryListListViewItem2));
+            //    if (i > 50)
+            //        break;
+            //}
+
+            //Library.Code.V3.BrowseGroup testGroup2 = new Library.Code.V3.BrowseGroup();//this, "Sample Group", groupedGalleryListListViewItem);
+            //testGroup2.Owner = gallery;
+            //testGroup2.Description = "Group 2";
+            //testGroup2.Metadata = "12 titles";
+            //testGroup2.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_mystery");
+            //testGroup2.Content = groupedGalleryListListViewItem2;
+            //testGroup2.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
+
+
+            //groupListView.Add(testGroup2);
+
+            //Library.Code.V3.BrowsePivot group1 = new Library.Code.V3.BrowsePivot(gallery, "group", "grouped...", groupListView);
+            //group1.ContentLabel = galleryName;
+            //group1.SupportsJIL = false;
+            //group1.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            //group1.ContentItemTemplate = "GalleryGroup";
+            //group1.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+
+            //gallery.Model.Pivots.Options.Add(group1);
+            //#endregion grouped
+
+            ////Genres test
+            //#region Genres
+            //VirtualList galleryListthreeRowGalleryItemPoster = new VirtualList(gallery, null);
+            //Library.Code.V3.GalleryItem actionAdventureGenre = new Library.Code.V3.GalleryItem();
+            //actionAdventureGenre.Description = "Action/Adventure";
+            //actionAdventureGenre.Metadata = "12 titles";
+            //actionAdventureGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_actionadventure");
+            //galleryListthreeRowGalleryItemPoster.Add(actionAdventureGenre);
+
+            //Library.Code.V3.GalleryItem comedyGenre = new Library.Code.V3.GalleryItem();
+            //comedyGenre.Description = "Comedy";
+            //comedyGenre.Metadata = "12 titles";
+            //comedyGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_comedy");
+            //galleryListthreeRowGalleryItemPoster.Add(comedyGenre);
+
+            //Library.Code.V3.GalleryItem documentaryGenre = new Library.Code.V3.GalleryItem();
+            //documentaryGenre.Description = "Documentary";
+            //documentaryGenre.Metadata = "12 titles";
+            //documentaryGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_documentary");
+            //galleryListthreeRowGalleryItemPoster.Add(documentaryGenre);
+
+            //Library.Code.V3.GalleryItem dramaGenre = new Library.Code.V3.GalleryItem();
+            //dramaGenre.Description = "Drama";
+            //dramaGenre.Metadata = "12 titles";
+            //dramaGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_drama");
+            //galleryListthreeRowGalleryItemPoster.Add(dramaGenre);
+
+            //Library.Code.V3.GalleryItem kidsFamilyGenre = new Library.Code.V3.GalleryItem();
+            //kidsFamilyGenre.Description = "Kids/Family";
+            //kidsFamilyGenre.Metadata = "12 titles";
+            //kidsFamilyGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_kidsfamily");
+            //galleryListthreeRowGalleryItemPoster.Add(kidsFamilyGenre);
+
+            //Library.Code.V3.GalleryItem musicalGenre = new Library.Code.V3.GalleryItem();
+            //musicalGenre.Description = "Musical";
+            //musicalGenre.Metadata = "12 titles";
+            //musicalGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_musical");
+            //galleryListthreeRowGalleryItemPoster.Add(musicalGenre);
+
+            //Library.Code.V3.GalleryItem mysteryGenre = new Library.Code.V3.GalleryItem();
+            //mysteryGenre.Description = "Mystery";
+            //mysteryGenre.Metadata = "12 titles";
+            //mysteryGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_mystery");
+            //galleryListthreeRowGalleryItemPoster.Add(mysteryGenre);
+
+            //Library.Code.V3.GalleryItem otherGenre = new Library.Code.V3.GalleryItem();
+            //otherGenre.Description = "Other";
+            //otherGenre.Metadata = "12 titles";
+            //otherGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_other");
+            //galleryListthreeRowGalleryItemPoster.Add(otherGenre);
+
+            //Library.Code.V3.GalleryItem romanceGenre = new Library.Code.V3.GalleryItem();
+            //romanceGenre.Description = "Romance";
+            //romanceGenre.Metadata = "12 titles";
+            //romanceGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_romance");
+            //galleryListthreeRowGalleryItemPoster.Add(romanceGenre);
+
+            //Library.Code.V3.GalleryItem scienceFictionGenre = new Library.Code.V3.GalleryItem();
+            //scienceFictionGenre.Description = "Science Fiction";
+            //scienceFictionGenre.Metadata = "12 titles";
+            //scienceFictionGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_sciencefiction");
+            //galleryListthreeRowGalleryItemPoster.Add(scienceFictionGenre);
+
+            //Library.Code.V3.GalleryItem westernGenre = new Library.Code.V3.GalleryItem();
+            //westernGenre.Description = "Western";
+            //westernGenre.Metadata = "12 titles";
+            //westernGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_western");
+            //galleryListthreeRowGalleryItemPoster.Add(westernGenre);
+
+            //Library.Code.V3.GalleryItem noimageGenre = new Library.Code.V3.GalleryItem();
+            //noimageGenre.Description = "No Image ergeg ergege egegeg";
+            //noimageGenre.Metadata = "12 titles";
+            //noimageGenre.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_noimagegenre");
+            //galleryListthreeRowGalleryItemPoster.Add(noimageGenre);
+
+            ////foreach (Title t in _titles)
+            ////{
+            ////    galleryListthreeRowGalleryItemPoster.Add(this.CreateGalleryItem(t));
+            ////}
+
+            //Library.Code.V3.BrowsePivot p4 = new Library.Code.V3.BrowsePivot(gallery, "genres", "loading genres...", galleryListthreeRowGalleryItemPoster);
+            //p4.ContentLabel = galleryName;
+            //p4.SupportsJIL = true;
+            //p4.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            //p4.ContentItemTemplate = "twoRowGalleryItemGenre";
+            //p4.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+            //gallery.Model.Pivots.Options.Add(p4);
+            //#endregion Genres
+
+            // add OML filters
+            //System.Collections.Specialized.StringCollection filtersToShow =
+            //    Properties.Settings.Default.MainFiltersToShow;
+
+            //foreach (string filterName in filtersToShow)
+            //{
+            //    OMLEngine.TitleFilterType filterType = Filter.FilterStringToTitleType(filterName);
+            //    Filter f = new Filter(null, filterType, null);//new MovieGallery()
+
+            //    if (Filter.ShowFilterType(filterType))
+            //    {
+
+            //        ////IEnumerable<Title> titles = TitleCollectionManager.GetAllTitles();
+            //        //IEnumerable<Title> titles;
+            //        //if (filterType == TitleFilterType.DateAdded || filterType == TitleFilterType.VideoFormat)
+            //        //{
+            //        //    titles = TitleCollectionManager.GetAllTitles(); 
+            //        //}
+            //        //else
+            //        //{
+            //        //    titles = TitleCollectionManager.GetFilteredTitles(filterType, filterName);
+            //        //}
+
+            //        //VirtualList filteredGalleryList = new VirtualList(gallery, null);
+            //        //foreach (Title t in titles)
+            //        //{
+            //        //    //galleryList.Add(this.CreateGalleryItem(t));
+            //        //    filteredGalleryList.Add(new Library.Code.V3.MovieItem(t, filteredGalleryList));
+            //        //}
+            //        VirtualList filteredGalleryList = new VirtualList(gallery, null);
+            //        System.Collections.Generic.IList<Library.GalleryItem> filteredTitles = f.GetGalleryItems();
+            //        foreach (Library.GalleryItem item in filteredTitles)
+            //        {
+            //            filteredGalleryList.Add(new Library.Code.V3.MovieItem(item, filteredGalleryList));
+            //        }
+
+
+
+            //        Library.Code.V3.BrowsePivot filteredPivot = new Library.Code.V3.BrowsePivot(gallery, Filter.FilterTypeToString(filterType).ToLower(), "loading titles...", filteredGalleryList);
+            //        filteredPivot.ContentLabel = "OML";
+            //        filteredPivot.SupportsJIL = true;
+            //        filteredPivot.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            //        filteredPivot.ContentItemTemplate = "ListViewItem";
+            //        filteredPivot.DetailTemplate = Library.Code.V3.BrowsePivot.ExtendedDetailTemplate;
+            //        gallery.Model.Pivots.Options.Add(filteredPivot);
+            //    }
+            //}
+            //end add OML filters
+            //properties.Add("Gallery", new GalleryV2(properties, _titles));
+            properties.Add("Page", gallery);
+
+
+            Library.Code.V3.MovieDetailsSlideDeck deck = new Library.Code.V3.MovieDetailsSlideDeck();
+            //Choice c = new Choice();
+            VirtualList Options = new VirtualList();
+            Library.Code.V3.SlideBlueprint bp = new Library.Code.V3.SlideBlueprint(@"resx://Library/Library.Resources/V3_Slide_Movie_Details_Synopsis", "Synopsis", DateTime.MinValue, DateTime.Now);
+            Library.Code.V3.SlideBlueprint bp2 = new Library.Code.V3.SlideBlueprint(@"resx://Library/Library.Resources/V3_Slide_Movie_Details_Actions", "Actions", DateTime.MinValue, DateTime.Now);
+            Options.Add(bp);
+            Options.Add(bp2);
+            deck.Options = Options;
+            deck.Commands = new ArrayListDataSet();
+
+            //dummy up some cmds
+            Library.Code.V3.ThumbnailCommand deleteCmd = new Library.Code.V3.ThumbnailCommand(deck);
+            deleteCmd.Description = "Delete";
+            deleteCmd.DefaultImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Remove");
+            deleteCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Remove_Dormant");
+            deleteCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Remove_Focus");
+            deck.Commands.Add(deleteCmd);
+
+            Library.Code.V3.ThumbnailCommand playCmd = new Library.Code.V3.ThumbnailCommand(deck);
+            playCmd.Description = "Play";
+            playCmd.DefaultImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Play");
+            playCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Play_Dormant");
+            playCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Play_Focus");
+            deck.Commands.Add(playCmd);
+
+            deck.Description = "descrip";
+            deck.Synopsis = "this is a syn adfge rh rhyr yhyr hr hr ge ge gtwt rgwe tgew gr ewg weg ewg wetg wrt g rhtytjuhytgfr er gtwrt her  etju ktjy hgt efr erfgetw";
+            deck.AdditionalCommands = new ArrayListDataSet();
+            deck.CommandPopOverlay = new Command();
+            //deck.CommandPopOverlay.Invoked += new EventHandler(CommandPopOverlay_Invoked);
+            deck.CommandClearOverlays = new Command();
+            //deck.CommandClearOverlays.Invoked += new EventHandler(CommandClearOverlays_Invoked);
+            deck.CommandPushOverlay = new Command();
+            //deck.CommandPushOverlay.Invoked += new EventHandler(CommandPushOverlay_Invoked);
+
+            //deck.AdditionalCommands.Add(cmd);
+            properties.Add("SlideDeck", deck);
+            properties.Add("CommandPopOverlay", deck.CommandPopOverlay);
+            properties.Add("CommandClearOverlays", deck.CommandClearOverlays);
+            properties.Add("CommandPushOverlay", deck.CommandPushOverlay);
+
+            deck.Context = "hi";
+            //_session.GoToPage(@"resx://Library/Library.Resources/V3_SlideDeck_Movie_Details", properties);
+
+            //gallery.Model.Pivots.Chosen = p2;
+            //gallery.Model.Pivots.ChosenChanged += new EventHandler(Pivots_ChosenChanged);
+            OMLApplication.Current.Session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
+            //_page = gallery;
+            //_deck = deck;
+
+            #endregion v3POC
+        }
 
         public GalleryPage()
             : base()
@@ -62,6 +466,9 @@ namespace Library.Code.V3
             JILtext.Submitted += new EventHandler(JILtext_Submitted);
         }
 
+        /// <summary>
+        /// CacheSelectedValue handles the selection when navigating back to the page
+        /// </summary>
         private IntRangedValue cachedSelectedValue;
         public IntRangedValue CachedSelectedValue
         {
@@ -75,6 +482,9 @@ namespace Library.Code.V3
             }
         }
 
+        /// <summary>
+        /// default context menu data for the gallery
+        /// </summary>
         private ContextMenuData contextMenu;
         public ContextMenuData ContextMenu
         {
@@ -94,6 +504,9 @@ namespace Library.Code.V3
             //Application.Current.Session.BackPage();
         }
 
+        /// <summary>
+        /// the PageState for the gallery
+        /// </summary>
         private PageState pageState;
         public PageState PageState
         {
@@ -107,6 +520,9 @@ namespace Library.Code.V3
             }
         }
 
+        /// <summary>
+        /// the PageState for the gallery
+        /// </summary>
         private PageStateEx pageStateEx;
         public PageStateEx PageStateEx
         {
@@ -120,6 +536,9 @@ namespace Library.Code.V3
             }
         }
 
+        /// <summary>
+        /// holds pivots and commands for the gallery
+        /// </summary>
         private BrowseModel model;
         public BrowseModel Model
         {
@@ -130,24 +549,6 @@ namespace Library.Code.V3
                 {
                     model = value;
                     FirePropertyChanged("Model");
-                }
-            }
-        }
-
-        private VirtualList content2;
-        public VirtualList Content2
-        {
-            get { return content2; }
-            set
-            {
-                if (content2 != value)
-                {
-                    content2 = value;
-                    FirePropertyChanged("Content2");
-                    if (content2 != null && content2.Count > 0 && content2[0] is ThumbnailCommand)
-                    {
-                        this.SelectedItem = (ThumbnailCommand)content2[0];
-                    }
                 }
             }
         }
@@ -237,6 +638,11 @@ namespace Library.Code.V3
             }
         }
 
+        /// <summary>
+        /// Used for JIL
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <returns></returns>
         #region SlowSearch
 
         private int doSearch(string searchString)
@@ -245,23 +651,19 @@ namespace Library.Code.V3
             VirtualList pivotList = (VirtualList)((BrowsePivot)this.model.Pivots.Chosen).Content;
             foreach (GalleryItem item in pivotList)
             {
-                //TODO: this string is a hack
+                //TODO: this string stripping is a hack for OML 
+                //we really need to loop through the sortTitle instead
                 string s = item.Description.ToLower().Replace("the ", "").Replace("a ", "");
                 int cmpVal = s.CompareTo(searchString);
                 if (cmpVal == 0)
                 { // the values are the same
                     jump = pivotList.IndexOf(item);
-                    //need to invoke on UI thread
-                    //JILindex = jump - JILCurrentindex;
                     break;
                     //direct match
                 }
                 else if (cmpVal > 0)
                 {
-                    //jump = pivotList.IndexOf(item) + 1;
                     jump = pivotList.IndexOf(item);
-                    //need to invoke on UI thread
-                    //JILindex = jump - JILCurrentindex - 1;
                     break;
                 }
             }
@@ -359,4 +761,27 @@ namespace Library.Code.V3
         oneRowGalleryItem4x3
     }
 
+    /// <summary>
+    /// Maintains PageState for the object to handle navigation based transitions 
+    /// </summary>
+    /// 
+    public class PageStateEx
+    {
+        public PageTransitionState TransitionState
+        {
+            get
+            {
+                if (this.transitionState == PageTransitionState.NavigatingToForward)
+                {
+                    this.transitionState = PageTransitionState.NavigatingToBackward;
+                    return PageTransitionState.NavigatingToForward;
+                }
+                else
+                {
+                    return PageTransitionState.NavigatingToBackward;
+                }
+            }
+        }
+        private PageTransitionState transitionState = PageTransitionState.NavigatingToForward;
+    }
 }
