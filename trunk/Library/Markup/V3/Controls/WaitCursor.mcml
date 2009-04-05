@@ -1,8 +1,4 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml" 
-      xmlns:cor="assembly://mscorlib/System" 
-      xmlns:anim="assembly://Microsoft.MediaCenter.UI/Microsoft.MediaCenter.UI.Animations" 
-      xmlns:shell="assembly://Microsoft.MediaCenter.Shell/Microsoft.MediaCenter.Shell" 
-      xmlns:comm="res://Microsoft.MediaCenter.Shell!Globals.mcml" 
       xmlns:me="Me">
 
   <UI Name="WaitCursorHost">
@@ -15,21 +11,21 @@
     </Content>
   </UI>
   
-  <UI Name="WaitCursor" Code="shell:WaitCursorView">
+  <UI Name="WaitCursor">
     <Content>
       <Panel>
         <Animations>
-          <NonIntensiveAnimation Source="animation://me:WaitCursor.Show"/>
-          <NonIntensiveAnimation Source="animation://me:WaitCursor.Hide"/>
+          <Animation Animation="animation://me:WaitCursor.Show"/>
+          <Animation Animation="animation://me:WaitCursor.Hide"/>
         </Animations>
         <Children>
-          <Graphic Image="res://ehres!Busy.Front.png">
+          <Graphic Content="resx://Library/Library.Resources/V3_Controls_Busy_Front">
             <Animations>
-              <NonIntensiveAnimation Source="animation://me:WaitCursor.Rotate.Show"/>
-              <NonIntensiveAnimation Source="animation://me:WaitCursor.Rotate.Hide"/>
+              <Animation Animation="animation://me:WaitCursor.Rotate.Show"/>
+              <Animation Animation="animation://me:WaitCursor.Rotate.Hide"/>
             </Animations>
           </Graphic>
-          <Graphic Image="res://ehres!Busy.Back.png"/>
+          <Graphic Content="resx://Library/Library.Resources/V3_Controls_Busy_Back"/>
         </Children>
       </Panel>
     </Content>

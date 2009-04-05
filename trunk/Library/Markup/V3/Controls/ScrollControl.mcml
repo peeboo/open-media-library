@@ -9,6 +9,7 @@
       <cor:String Name="ScrollContent" String="$Required"/>
       <Color Name="NoFocusColor" Color="255, 151, 217, 255"/>
       <Color Name="FocusColor" Color="255, 242, 242, 242"/>
+      <Font Name="Font" FontName="Segoe Media Center Semibold" FontSize="19" />
       <cor:Boolean Name="IsHidden" Boolean="false"/>
       <IntRangedValue Name="CounterHidden"/>
     </Properties>
@@ -100,7 +101,7 @@
                       </Animation>
                     </Animations>
                     <Children>
-                      <Text Name="TheText" Content="[ScrollContent]" Color="[FocusColor]" Font="Segoe Media Center Semibold, 19" WordWrap="true"/>
+                      <Text Name="TheText" Content="[ScrollContent]" Color="[FocusColor]" Font="[Font]" WordWrap="true"/>
                     </Children>
                   </Panel>
                 </Children>

@@ -1,6 +1,6 @@
 //#define DEBUG_EXT
 //#define LAYOUT_V2
-//#define LAYOUT_V3
+#define LAYOUT_V3
 //#define CAROUSEL
 
 using System.Collections;
@@ -84,7 +84,6 @@ namespace Library
                 {
                     mainBackgroundTimer = new Microsoft.MediaCenter.UI.Timer();
                     mainBackgroundTimer.AutoRepeat = true;
-                    mainBackgroundTimer.Tick += new EventHandler(mainBackgroundTimer_Tick);
                     mainBackgroundTimer.Tick += new EventHandler(mainBackgroundTimer_Tick);
                     int rotationInSeconds = Properties.Settings.Default.MainPageBackDropRotationInSeconds;
                     int rotationInMilliseconds = rotationInSeconds * 1000;
@@ -214,6 +213,14 @@ namespace Library
             }
         }
 
+
+        private Library.Code.V3.MediaChangeManager mediaChangers;
+        public Library.Code.V3.MediaChangeManager MediaChangers
+        {
+            get
+            { return this.mediaChangers; }
+        }
+
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
         {
             #if LAYOUT_V3
@@ -290,6 +297,28 @@ namespace Library
             return;
 #endif
 #if LAYOUT_V3
+
+            this.mediaChangers = new Library.Code.V3.MediaChangeManager();
+            
+            //System.Collections.ObjectModel.Collection<MediaChanger> changers=MediaCenterEnvironment.MediaChangers;
+            //System.Collections.ObjectModel.Collection<DiscData> discs = changers[0].GetSlotDiscData();
+            //System.Collections.ObjectModel.Collection<DiscData> discs2 = changers[0].GetDriveDiscData();
+
+            //foreach (DiscData disc in discs)
+            //{
+            //    if (disc.DiscType == DiscType.MovieDvd)
+            //    {
+            //        string s = disc.DiscId;
+            //        //System.Xml.XmlDocument doc = this.GetDVDInfo(s);
+            //        Console.WriteLine(string.Format("DISCNAME:{0}", disc.VolumeLabel));
+            //    }
+            //    if (disc.DiscType == DiscType.Unknown)
+            //    {
+            //        changers[0].UnloadDisc(0);
+            //        changers[0].LoadDisc(disc.Address, 0);
+            //        changers[0].RescanDisc(0);
+            //    }
+            //}
             //this is the POC testing code for the v3 UI.
             //it currently populates the basic structure with test data
             #region v3POC
@@ -309,7 +338,9 @@ namespace Library
             //description
             gallery.Description = "OML";
             //size of the galleryitems
-            gallery.ItemSize = Library.Code.V3.GalleryItemSize.Small;
+            //DEPRECATED
+            //gallery.ItemSize = Library.Code.V3.GalleryItemSize.Small;
+
             gallery.Model = new Library.Code.V3.BrowseModel(gallery);
             //commands at top of screen
             gallery.Model.Commands = new ArrayListDataSet(gallery);
@@ -325,6 +356,7 @@ namespace Library
             settingsCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings_Focus");
             //no invoke for now
             //settingsCmd.Invoked += new EventHandler(this.SettingsHandler);
+            settingsCmd.Invoked += new EventHandler(settingsCmd_Invoked);
             gallery.Model.Commands.Add(settingsCmd);
 
             //create the Search cmd
@@ -381,16 +413,19 @@ namespace Library
             //the pivots
             gallery.Model.Pivots = new Choice(gallery, "desc", new ArrayListDataSet(gallery));
 
+
+
             //twoRowGalleryItemPoster
             #region oneRowGalleryItemPoster
             VirtualList galleryList = new VirtualList(gallery, null);
             foreach (Title t in _titles)
             {
-                galleryList.Add(this.CreateGalleryItem(t));
+                //galleryList.Add(this.CreateGalleryItem(t));
+                galleryList.Add(new Library.Code.V3.MovieItem(t, galleryList));
             }
 
 
-            Library.Code.V3.BrowsePivot p = new Library.Code.V3.BrowsePivot(gallery, "one row", "loading titles...", galleryList);
+            Library.Code.V3.BrowsePivot p = new Library.Code.V3.BrowsePivot(gallery, "one row", "No titles were found.", galleryList);
             p.ContentLabel = "OML";
             p.SupportsJIL = true;
             p.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
@@ -399,15 +434,17 @@ namespace Library
             gallery.Model.Pivots.Options.Add(p);
             #endregion oneRowGalleryItemPoster
 
+
+
             //twoRowGalleryItemPoster
             #region twoRowGalleryItemPoster
             VirtualList galleryListGenres = new VirtualList(gallery, null);
             foreach (Title t in _titles)
             {
-                galleryListGenres.Add(this.CreateGalleryItem(t));
+                galleryListGenres.Add(new Library.Code.V3.MovieItem(t, galleryListGenres));
             }
 
-            Library.Code.V3.BrowsePivot p2 = new Library.Code.V3.BrowsePivot(gallery, "two row", "loading genres...", galleryListGenres);
+            Library.Code.V3.BrowsePivot p2 = new Library.Code.V3.BrowsePivot(gallery, "two row", "No titles were found.", galleryListGenres);
             p2.ContentLabel = "OML";
             p2.SupportsJIL = true;
             p2.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
@@ -421,10 +458,10 @@ namespace Library
             VirtualList galleryListListViewItem = new VirtualList(gallery, null);
             foreach (Title t in _titles)
             {
-                galleryListListViewItem.Add(this.CreateGalleryItem(t));
+                galleryListListViewItem.Add(new Library.Code.V3.MovieItem(t, galleryListListViewItem));
             }
 
-            Library.Code.V3.BrowsePivot p3 = new Library.Code.V3.BrowsePivot(gallery, "list", "loading genres...", galleryListListViewItem);
+            Library.Code.V3.BrowsePivot p3 = new Library.Code.V3.BrowsePivot(gallery, "list", "No titles were found.", galleryListListViewItem);
             p3.ContentLabel = "OML";
             p3.SupportsJIL = true;
             p3.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
@@ -441,7 +478,7 @@ namespace Library
             foreach (Title t in _titles)
             {
                 i++;
-                groupedGalleryListListViewItem.Add(this.CreateGalleryItem(t));
+                groupedGalleryListListViewItem.Add(new Library.Code.V3.MovieItem(t, groupedGalleryListListViewItem));
                 if (i > 20)
                     break;
             }
@@ -470,7 +507,7 @@ namespace Library
             foreach (Title t in _titles)
             {
                 i++;
-                groupedGalleryListListViewItem2.Add(this.CreateGalleryItem(t));
+                groupedGalleryListListViewItem2.Add(new Library.Code.V3.MovieItem(t, groupedGalleryListListViewItem2));
                 if (i > 50)
                     break;
             }
@@ -486,7 +523,7 @@ namespace Library
 
             groupListView.Add(testGroup2);
 
-            Library.Code.V3.BrowsePivot group1 = new Library.Code.V3.BrowsePivot(gallery, "group", "grouped...", groupListView);
+            Library.Code.V3.BrowsePivot group1 = new Library.Code.V3.BrowsePivot(gallery, "group", "No titles were found.", groupListView);
             group1.ContentLabel = "OML";
             group1.SupportsJIL = false;
             group1.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
@@ -576,7 +613,7 @@ namespace Library
             //    galleryListthreeRowGalleryItemPoster.Add(this.CreateGalleryItem(t));
             //}
 
-            Library.Code.V3.BrowsePivot p4 = new Library.Code.V3.BrowsePivot(gallery, "genres", "loading genres...", galleryListthreeRowGalleryItemPoster);
+            Library.Code.V3.BrowsePivot p4 = new Library.Code.V3.BrowsePivot(gallery, "genres", "No titles were found.", galleryListthreeRowGalleryItemPoster);
             p4.ContentLabel = "OML";
             p4.SupportsJIL = true;
             p4.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
@@ -584,6 +621,82 @@ namespace Library
             p4.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
             gallery.Model.Pivots.Options.Add(p4);
             #endregion Genres
+
+            // add OML filters
+            //System.Collections.Specialized.StringCollection filtersToShow =
+            //    Properties.Settings.Default.MainFiltersToShow;
+            IList<string> filtersToShow = OMLSettings.MainFiltersToShow;
+
+            foreach (string filterName in filtersToShow)
+            {
+                TitleFilterType filterType = Filter.FilterStringToTitleType(filterName);
+                Filter f = new Filter(null, filterType, null);//new MovieGallery()
+                
+                if (Filter.ShowFilterType(filterType))
+                {
+                    
+                    ////IEnumerable<Title> titles = TitleCollectionManager.GetAllTitles();
+                    //IEnumerable<Title> titles;
+                    //if (filterType == TitleFilterType.DateAdded || filterType == TitleFilterType.VideoFormat)
+                    //{
+                    //    titles = TitleCollectionManager.GetAllTitles(); 
+                    //}
+                    //else
+                    //{
+                    //    titles = TitleCollectionManager.GetFilteredTitles(filterType, filterName);
+                    //}
+
+                    //VirtualList filteredGalleryList = new VirtualList(gallery, null);
+                    //foreach (Title t in titles)
+                    //{
+                    //    //galleryList.Add(this.CreateGalleryItem(t));
+                    //    filteredGalleryList.Add(new Library.Code.V3.MovieItem(t, filteredGalleryList));
+                    //}
+                    VirtualList filteredGalleryList = new VirtualList(gallery, null);
+                    IList<GalleryItem> filteredTitles = f.GetGalleryItems();
+                    foreach (GalleryItem item in filteredTitles)
+                    {
+                        //this is a temp hack
+                        if(item.Name!=" All ")
+                            filteredGalleryList.Add(new Library.Code.V3.MovieItem(item, filteredGalleryList));
+                    }
+
+
+
+                    Library.Code.V3.BrowsePivot filteredPivot = new Library.Code.V3.BrowsePivot(gallery, Filter.FilterTypeToString(filterType).ToLower(), "No titles were found.", filteredGalleryList);
+                    filteredPivot.ContentLabel = "OML";
+                    filteredPivot.SupportsJIL = true;
+                    filteredPivot.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+                    filteredPivot.ContentItemTemplate = "ListViewItem";
+                    filteredPivot.DetailTemplate = Library.Code.V3.BrowsePivot.ExtendedDetailTemplate;
+                    gallery.Model.Pivots.Options.Add(filteredPivot);
+                }
+            }
+            //end add OML filters
+
+            //oneRowChangerData
+
+            #region oneRowChangerData
+            if (this.mediaChangers != null && this.mediaChangers.KnownDiscs.Count > 0)
+            {
+                VirtualList changerGalleryList = new VirtualList(gallery, null);
+                foreach (Library.Code.V3.DiscDataEx t in this.mediaChangers.KnownDiscs)
+                {
+                    //galleryList.Add(this.CreateGalleryItem(t));
+                    if (t.DiscType == DiscType.MovieDvd)
+                        changerGalleryList.Add(new Library.Code.V3.DVDChangerItem(t, changerGalleryList));
+                }
+
+
+                Library.Code.V3.BrowsePivot changerPivot = new Library.Code.V3.BrowsePivot(gallery, "changer", "No titles were found.", changerGalleryList);
+                changerPivot.ContentLabel = "OML";
+                changerPivot.SupportsJIL = true;
+                changerPivot.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+                changerPivot.ContentItemTemplate = "oneRowGalleryItemPoster";
+                changerPivot.DetailTemplate = Library.Code.V3.BrowsePivot.ExtendedDetailTemplate;
+                gallery.Model.Pivots.Options.Add(changerPivot);
+            }
+            #endregion oneRowChangerData
 
             //properties.Add("Gallery", new GalleryV2(properties, _titles));
             properties.Add("Page", gallery);
@@ -709,6 +822,21 @@ namespace Library
                     OMLApplication.DebugLine("[OMLApplication] going to Default (Menu) Page");
                     GoToMenu(new MovieGallery());
                     return;
+            }
+        }
+
+        void settingsCmd_Invoked(object sender, EventArgs e)
+        {
+            DebugLine("[OMLApplication] GoToSettings_AppearancePage()");
+            if (_session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Library.Code.V3.MediaChangerManagerPage page = new Library.Code.V3.MediaChangerManagerPage();
+                properties["Page"] = page;
+                properties["Application"] = this;
+
+                _session.GoToPage("resx://Library/Library.Resources/V3_MediaChangerManagerSettings", properties);
             }
         }
 
@@ -1004,175 +1132,6 @@ namespace Library
 
         //v3 temp
         Library.Code.V3.GalleryPage _page;
-        internal Library.Code.V3.GalleryItem CreateGalleryItem(Title t)
-        {
-
-            Library.Code.V3.GalleryItem item = new Library.Code.V3.GalleryItem();
-
-            item.InternalMovieItem = new MovieItem(t, null);
-            item.ItemType = 0;
-            string imageName = null;
-            string moviePath = null;
-            DateTime releaseDate = Convert.ToDateTime(item.InternalMovieItem.ReleaseDate);// new DateTime(2000, 1, 1);
-            //invalid dates
-            if (releaseDate.Year != 1 && releaseDate.Year != 1900)
-                item.MetadataTop = releaseDate.Year.ToString();
-            else
-                item.MetadataTop = "";
-
-
-            //item.Description = "This is a Test";
-            item.ItemId = 1;
-            string starRating = Convert.ToString(Math.Round((Convert.ToDouble(item.InternalMovieItem.UseStarRating) * 0.8), MidpointRounding.AwayFromZero));
-            item.StarRating = starRating;
-            string extendedMetadata = string.Empty;
-
-
-            item.Metadata = item.InternalMovieItem.Rating.Replace("PG13", "PG-13").Replace("NC17", "NC-17");
-            if(string.IsNullOrEmpty(item.InternalMovieItem.Rating))
-                item.Metadata="Not Rated";
-            if(item.InternalMovieItem.Runtime!="0")
-                item.Metadata += string.Format(", {0} minutes",item.InternalMovieItem.Runtime);
-            item.Tagline = item.InternalMovieItem.Synopsis;
-
-
-            if (!string.IsNullOrEmpty(t.FrontCoverPath) && File.Exists(t.FrontCoverPath))
-            {
-                item.DefaultImage = new Image("file://" + t.FrontCoverPath);
-            }
-            item.Description = t.Name;
-
-            //TODO: not sure how to read this yet...
-            item.SimpleVideoFormat = item.InternalMovieItem.TitleObject.VideoFormat.ToString();
-
-
-            item.Invoked += delegate(object sender, EventArgs args)
-            {
-                //to test deck
-                //_deck.CommandPushOverlay.Invoke();
-
-                //to test v2
-                //if (this._page != null)
-                //    this._page.PageState.TransitionState = Library.Code.V3.PageTransitionState.NavigatingAwayForward;
-
-                //Library.Code.V3.GalleryItem galleryItem = (Library.Code.V3.GalleryItem)sender;
-
-                //// Navigate to a details page for this item.
-                //MovieDetailsPage page = galleryItem.InternalMovieItem.CreateDetailsPage(galleryItem.InternalMovieItem);
-                //OMLApplication.Current.GoToDetails(page);
-
-                //to test v3
-                Library.Code.V3.DetailsPage page = new Library.Code.V3.DetailsPage();
-                //DataRow movieData = this.GetMovieData(movieId);
-
-                //MovieMetadata metadata = this.ExtractMetadata(movieData, movieId);
-                page.Description = "movie details";
-                page.Title = item.Description;
-                //page.Summary = "this is a test\r\n\r\nthis is a test\r\nthis is a testitem.InternalMovieItem.Synopsis";
-                page.Summary = item.InternalMovieItem.Synopsis;
-                page.Background = item.DefaultImage;
-                page.Details = new Library.Code.V3.ExtendedDetails();
-
-                page.Details.CastArray=new ArrayListDataSet();
-
-                string directors = string.Empty;
-                int directorCount = 0;
-                foreach (string director in item.InternalMovieItem.Directors)
-                {
-                    Library.Code.V3.CastCommand directorCommand = new Library.Code.V3.CastCommand();
-                    directorCommand.Role = " ";
-                    if (directorCount == 0)
-                    {
-                        directorCommand.CastType = "TitleAndDesc";
-                        directorCommand.GroupTitle = "DIRECTOR";
-                        directorCommand.ActorId = 1;//not sure how this works in oml
-                        directorCommand.Description = director;
-                    }
-                    page.Details.CastArray.Add(directorCommand);
-                    directorCount++;
-                    AppendSeparatedValue(ref directors, director, "; ");
-                }
-                if (!string.IsNullOrEmpty(directors))
-                    page.Details.Director = string.Format("Directed By: {0}", directors);
-
-                string cast = string.Empty;
-                int actorCount = 0;
-                foreach (KeyValuePair<string, string> kvp in item.InternalMovieItem.TitleObject.ActingRoles)
-                {
-                    Library.Code.V3.CastCommand actorCommand = new Library.Code.V3.CastCommand();
-                    actorCommand.Description = kvp.Key;
-                    actorCommand.ActorId = 1;//not sure how this works in oml
-                    actorCommand.Role = kvp.Value;
-                    if (actorCount==0)
-                    {
-                        //add the title "CAST"
-                        actorCommand.CastType = "TitleAndDesc";
-                        actorCommand.GroupTitle = "CAST";
-                    }
-                    else
-                        actorCommand.CastType = "Desc";
-
-                    page.Details.CastArray.Add(actorCommand);
-                    actorCount++;
-                }
-
-                foreach (string castmember in item.InternalMovieItem.Actors)
-                {
-                    AppendSeparatedValue(ref cast, castmember, "; ");
-                }
-                if (!string.IsNullOrEmpty(cast))
-                    page.Details.Cast = string.Format("Cast Info: {0}", cast);
-
-                
-                if(item.StarRating!="0")
-                    page.Details.StarRating = new Image(string.Format("resx://Library/Library.Resources/V3_Controls_Common_Stars_{0}", starRating));
-
-                //DateTime releaseDate = Convert.ToDateTime(item.InternalMovieItem.ReleaseDate);// new DateTime(2000, 1, 1);
-                //strip invalid dates
-                if (releaseDate.Year != 1 && releaseDate.Year != 1900)
-                    page.Details.YearString = releaseDate.Year.ToString();
-
-                page.Details.Studio=item.InternalMovieItem.Distributor;
-                //where are genres?
-                page.Details.GenreRatingandRuntime = item.Metadata;
-
-                //fixes double spacing issues
-                page.Details.Summary = item.InternalMovieItem.Synopsis.Replace("\r\n", "\n");
-                page.Commands = new ArrayListDataSet(page);
-                //default play command
-                Command playCmd = new Command();
-                playCmd.Description = "Play";
-                page.Commands.Add(playCmd);
-
-                if (page.Details.CastArray.Count > 0)
-                {
-                    foreach (Library.Code.V3.CastCommand actor in page.Details.CastArray)
-                    {
-                        //actor.Invoked += new EventHandler(actor_Invoked);
-                    }
-                    Command command = new Command();
-                    command.Description = "Cast + More";
-
-                    command.Invoked += delegate(object castSender, EventArgs castArgs)
-                    {
-                        Dictionary<string, object> castProperties = new Dictionary<string, object>();
-                        castProperties["Page"] = page;
-                        castProperties["Application"] = this;
-                        this._session.GoToPage("resx://Library/Library.Resources/V3_DetailsPageCastCrew", castProperties);
-                    };
-                    
-                    page.Commands.Add(command);
-                }
-
-                Dictionary<string, object> properties = new Dictionary<string, object>();
-                properties["Page"] = page;
-                properties["Application"] = this;
-
-                this._session.GoToPage("resx://Library/Library.Resources/V3_DetailsPage", properties);
-            };
-
-            return item;
-        }
 
         //v3 temp
         public static void AppendSeparatedValue(ref string text, string value, string seperator)

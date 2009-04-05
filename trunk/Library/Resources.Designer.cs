@@ -1511,10 +1511,59 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_Controls_Busy_Back {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Busy_Back", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Busy_Front {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Busy_Front", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static byte[] V3_Controls_Button {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Button", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_ChangerEject_Tile_Disabled {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_ChangerEject_Tile_Disabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_ChangerEject_Tile_Dormant {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_ChangerEject_Tile_Dormant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_ChangerEject_Tile_Focus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_ChangerEject_Tile_Focus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_ChangerEject_Tile_FocusOverlay {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_ChangerEject_Tile_FocusOverlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_ChangerEject_Tile_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_ChangerEject_Tile_NoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -1665,6 +1714,20 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_Controls_Common_Button_FirstRun_Dormant_Full {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Button_FirstRun_Dormant_Full", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Button_FirstRun_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Button_FirstRun_NoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap V3_Controls_Common_Button_Full_Focus {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Common_Button_Full_Focus", resourceCulture);
@@ -1696,6 +1759,13 @@ namespace Library {
         internal static System.Drawing.Bitmap V3_Controls_Common_Button_Left_Focus_Overlay {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_Common_Button_Left_Focus_Overlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Common_Button_NoFocus_Full {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Common_Button_NoFocus_Full", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -2460,6 +2530,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_Controls_Radio_DividerLine {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Radio_DividerLine", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static byte[] V3_Controls_RadioButton {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_RadioButton", resourceCulture);
@@ -2523,6 +2600,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] V3_Controls_WaitCursor {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_WaitCursor", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] V3_DetailsPage {
             get {
                 object obj = ResourceManager.GetObject("V3_DetailsPage", resourceCulture);
@@ -2547,6 +2631,20 @@ namespace Library {
         internal static byte[] V3_Globals {
             get {
                 object obj = ResourceManager.GetObject("V3_Globals", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_MediaChangerManagerPage {
+            get {
+                object obj = ResourceManager.GetObject("V3_MediaChangerManagerPage", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_MediaChangerManagerSettings {
+            get {
+                object obj = ResourceManager.GetObject("V3_MediaChangerManagerSettings", resourceCulture);
                 return ((byte[])(obj));
             }
         }

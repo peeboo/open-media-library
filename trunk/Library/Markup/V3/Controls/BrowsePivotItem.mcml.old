@@ -3,7 +3,7 @@
     xmlns:cor ="assembly://MsCorLib/System"
     xmlns:shl ="assembly://Library/Library.Code.V3"
     xmlns:me  ="Me">
-  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseAnimations"/>  
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseAnimations"/>
   <UI Name="PivotButton">
     <Properties>
       <cor:Boolean Name="RightHandlerInvoked" Boolean="false" />
@@ -106,13 +106,13 @@
         </Actions>
       </Rule>
       <!--Condition Source="[RightHandler.Pressing]" SourceValue="true"-->
-        <Rule>
-          <Conditions>
-            <Modified Source="[RightHandler.Invoked]"/>
-            <!--Equality Source="[RightHandler.Pressing]" Value="true"/-->
-            <!--Equality Source="[SelectedIndex.Value]" ConditionOp="Equals" Value="[Index.Value]"/-->
-            <!--Equality Source="[Input.DeepKeyFocus]" ConditionOp="Equals" Value="true"/-->
-          </Conditions>
+      <Rule>
+        <Conditions>
+          <Modified Source="[RightHandler.Invoked]"/>
+          <!--Equality Source="[RightHandler.Pressing]" Value="true"/-->
+          <!--Equality Source="[SelectedIndex.Value]" ConditionOp="Equals" Value="[Index.Value]"/-->
+          <!--Equality Source="[Input.DeepKeyFocus]" ConditionOp="Equals" Value="true"/-->
+        </Conditions>
         <!--Conditions>
           <Equality Source="[SelectedIndex.Value]" ConditionOp="ChangedTo" Value="[Index.Value]"/>
         </Conditions-->
@@ -326,9 +326,9 @@
           <!--Set Target="[SelectedIndex.Value]" Value="[Index.Value]"/-->
           <!--Set Target="[Input.KeyInteractive]" Value="false" InvokePolicy="AsynchronousLowPri"/-->
         </Actions>
-        </Rule>
+      </Rule>
       <!--new-->
-      
+
       <!--end new-->
       <Rule>
         <Conditions>

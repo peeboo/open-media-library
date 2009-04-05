@@ -85,6 +85,8 @@ namespace Library
         TitleFilterType filterType = TitleFilterType.All;
         List<TitleFilter> existingFilters;
 
+        public TitleFilterType FilterType { get { return this.filterType; } }
+
         public MovieGallery Gallery
         {
             get { return _gallery; }

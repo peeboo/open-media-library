@@ -148,6 +148,49 @@
     </Content>
   </UI>
 
+  <UI Name="ButtonsHolder">
+    <Properties>
+      <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
+    </Properties>
+    <Locals>
+      <Color Name="ButtonNoFocusColor" Color="color://core:OffWhite"/>
+      <EditableText Name="SubFocusArea" Value="none"/>
+    </Locals>
+    <Rules>
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
+        <Actions>
+          <Set Target="[SubFocusArea.Value]" Value="NoFocusColorInactive" ExclusiveApply="true"/>
+          <DebugTrace Message="Input.DeepKeyFocus: {0};{1}">
+            <Params>
+              <ObjectPath ObjectPath="[Input.DeepKeyFocus]"/>
+              <ObjectPath ObjectPath="[SubFocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Condition>
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[SubFocusArea.Value]" Value="NoFocusColorActive" ExclusiveApply="true"/>
+          <DebugTrace Message="Input.DeepKeyFocus: {0};{1}">
+            <Params>
+              <ObjectPath ObjectPath="[Input.DeepKeyFocus]"/>
+              <ObjectPath ObjectPath="[SubFocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Condition>
+    </Rules>
+    <Content>
+      <Repeater Name="Buttons" Source="[Page.Commands]" Navigation="RememberFocus,FlowVertical" Layout="VerticalFlow" Margins="0,0,0,0">
+        <LayoutInput>
+          <AnchorLayoutInput Top="Parent,0" Horizontal="Near"/>
+        </LayoutInput>
+        <Content>
+          <ctl:Button Model="[RepeatedItem!Command]" SubFocusArea="[SubFocusArea]" NoFocusColor="[ButtonNoFocusColor]"/>
+        </Content>
+      </Repeater>
+    </Content>
+  </UI>
   <!-- The primary display area of a details page -->
   <UI Name="DetailsPane">
     <Properties>
@@ -227,12 +270,17 @@
             <Children>
               <Panel Layout="Form" Padding="0,0,0,0">
                 <Children>
-                  <Panel Name="ButtonsHolder" MinimumSize="240,500" Margins="0,80,0,0" Layout="VerticalFlow">
+                  <me:ButtonsHolder Page="[Page]" Name="ButtonsHolder" MinimumSize="240,500" Margins="0,80,0,0" Layout="VerticalFlow">
+                    <LayoutInput>
+                      <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
+                    </LayoutInput>
+                  </me:ButtonsHolder>
+                  <!--Panel Name="ButtonsHolder" MinimumSize="240,500" Margins="0,80,0,0" Layout="VerticalFlow">
                     <LayoutInput>
                       <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
                     </LayoutInput>
                     <Children>
-                      <Repeater Name="Buttons" Source="[Page.Commands]" Layout="VerticalFlow" Margins="0,0,0,0">
+                      <Repeater Name="Buttons" Source="[Page.Commands]" Navigation="RememberFocus,FlowVertical" Layout="VerticalFlow" Margins="0,0,0,0">
                         <LayoutInput>
                           <AnchorLayoutInput Top="Parent,0" Horizontal="Near"/>
                         </LayoutInput>
@@ -241,7 +289,7 @@
                         </Content>
                       </Repeater>
                     </Children>
-                  </Panel>
+                  </Panel-->
                   <!--Panel Name="Picture" MaximumSize ="400,578" MinimumSize ="185,265" Margins="45,0,0,0"-->
                   <Panel Name="Picture" MaximumSize ="230,330" MinimumSize ="185,265" Margins="45,0,0,0">
                     <LayoutInput>
@@ -273,6 +321,11 @@
                       </Text>
                       <Text Name="DetailsGenreRatingandRuntime" Content="[Page.Details.GenreRatingandRuntime]" MaximumLines="2" WordWrap="true" Font="Segoe Media Center Semibold,16" Color="255, 151, 217, 255">
                         <LayoutInput>
+                          <AnchorLayoutInput Left="Parent,0" Bottom="DetailsVideoFormat,0"/>
+                        </LayoutInput>
+                      </Text>
+                      <Text Name="DetailsVideoFormat" Content="Video Format Information" MaximumLines="1" WordWrap="true" Font="Segoe Media Center Semibold,16" Color="255, 151, 217, 255">
+                        <LayoutInput>
                           <AnchorLayoutInput Left="Parent,0" Bottom="DetailsStudio,0"/>
                         </LayoutInput>
                       </Text>
@@ -293,14 +346,14 @@
                           <AnchorLayoutInput Left="Parent,0" Top="Parent,0"/>
                         </LayoutInput>
                       </Text>
-                      <Text Visible="true" Name="DetailsCast" Content="[Page.Details.Cast]" MaximumLines="3" WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255">
+                      <Text Visible="true" Name="DetailsCast" Content="[Page.Details.Cast]" MaximumLines="2" WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255">
                         <LayoutInput>
                           <AnchorLayoutInput Left="Parent,0" Top="DetailsDirector,1"/>
                         </LayoutInput>
                       </Text>
-                      <scr:ScrollPanel ScrollContent="[Page.Details.Summary]">
+                      <scr:ScrollPanel Font="Segoe Media Center Semibold, 21" ScrollContent="[Page.Details.Summary]">
                         <LayoutInput>
-                          <AnchorLayoutInput Bottom="Parent,1"  Left="Parent,0" Top="DetailsCast,1"/>
+                          <AnchorLayoutInput Bottom="Parent,1, -32"  Left="Parent,0" Top="DetailsCast,1, 12"/>
                         </LayoutInput>
                       </scr:ScrollPanel>
                     </Children>

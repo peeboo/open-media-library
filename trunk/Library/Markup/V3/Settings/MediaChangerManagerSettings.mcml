@@ -1,19 +1,20 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
 	  xmlns:shl="assembly://Library/Library.Code.V3"
-    xmlns:omlShell ="assembly://Library/Library"
+      xmlns:omlShell ="assembly://Library/Library"
 	  xmlns:sys="assembly://mscorlib/System"
+	  xmlns:ctl="resx://Library/Library.Resources/V3_Controls"
 	  xmlns:core="resx://Library/Library.Resources/V3_Globals"
     xmlns:pip="resx://Library/Library.Resources/V3_GalleryPage"
-    xmlns:listview="resx://Library/Library.Resources/V3_Controls_GroupedListView"
+      xmlns:scr="resx://Library/Library.Resources/V3_Controls_ScrollControl"
+      xmlns:chk="resx://Library/Library.Resources/V3_Controls_CheckBox"
 	  xmlns:me="Me">
 
   <!-- A details page -->
-  <UI Name="DetailsPageCastCrew">
+  <UI Name="DetailsPage">
     <Properties>
-      <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
+      <shl:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
       <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
     </Properties>
-
     <Locals>
       <sys:Boolean Name="Initialized" Boolean="false"/>
       <Environment    Name="Environment"/>
@@ -33,12 +34,10 @@
       <EditableText   Name="TransitionState" Value="Idle"/>
       <!-- tracks the current transition to activate the right animations -->
       <EditableText   Name="ItemMode" Value="none"/>
-
-      <Timer Name="TransitionTimer" Interval="0" Enabled="false" AutoRepeat="false"/>
+      <!-- dirty handler-->
+      <ShortcutHandler Name="BackHandler" Shortcut="Back" Handle="true" HandlerStage="Bubbled"/>
     </Locals>
-
     <Rules>
-
       <Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
         <Actions>
           <Set Target="[FocusArea.Value]" Value="PIP"/>
@@ -49,7 +48,6 @@
           <Set Target="[FocusArea.Value]" Value="Gallery"/>
         </Actions>
       </Condition>
-
       <Rule>
         <Conditions>
           <Equality Source="[FocusArea.Value]" ConditionOp="Equals" Value="PIP"/>
@@ -81,6 +79,16 @@
       </Condition>
 
       <Binding Target="[Background.FanArt]" Source="[Application.PrimaryBackgroundImage]"/>
+      <!-- dirty handler-->
+      <Rule>
+        <Conditions>
+          <Modified Source="[BackHandler.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Page.ConfirmSave]"/>
+        </Actions>
+      </Rule>
+      <!--end dirty handler-->
     </Rules>
     <Content>
       <Panel>
@@ -146,40 +154,64 @@
 
             </Children>
           </Panel>
-          <core:AnimatedBackground Name="Background" FanArt="[Application.PrimaryBackgroundImage]">
-            <Animations>
-              <Animation Type="Show">
-                <Keyframes>
-                  <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="Linear"  RelativeTo="Absolute"/>
-                  <AlphaKeyframe Time="2.01" Value="1.0" RelativeTo="Absolute"/>
-                </Keyframes>
-              </Animation>
-              <Animation Type="Hide">
-                <Keyframes>
-                  <AlphaKeyframe Time="0.00" RelativeTo="Current" Interpolation="SCurve"/>
-                  <AlphaKeyframe Time="1.01" Value="0.0" RelativeTo="Absolute"/>
-                </Keyframes>
-              </Animation>
-            </Animations>
-          </core:AnimatedBackground>
+          <core:AnimatedBackground Name="Background" FanArt="[Application.PrimaryBackgroundImage]"/>
 
         </Children>
       </Panel>
     </Content>
   </UI>
 
+  <UI Name="ButtonsHolder">
+    <Properties>
+      <shl:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
+    </Properties>
+    <Locals>
+      <Color Name="ButtonNoFocusColor" Color="color://core:OffWhite"/>
+      <EditableText Name="SubFocusArea" Value="none"/>
+    </Locals>
+    <Rules>
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
+        <Actions>
+          <Set Target="[SubFocusArea.Value]" Value="NoFocusColorInactive" ExclusiveApply="true"/>
+          <DebugTrace Message="Input.DeepKeyFocus: {0};{1}">
+            <Params>
+              <ObjectPath ObjectPath="[Input.DeepKeyFocus]"/>
+              <ObjectPath ObjectPath="[SubFocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Condition>
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[SubFocusArea.Value]" Value="NoFocusColorActive" ExclusiveApply="true"/>
+          <DebugTrace Message="Input.DeepKeyFocus: {0};{1}">
+            <Params>
+              <ObjectPath ObjectPath="[Input.DeepKeyFocus]"/>
+              <ObjectPath ObjectPath="[SubFocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Condition>
+    </Rules>
+    <Content>
+      <Repeater Name="Buttons" Source="[Page.Commands]" Navigation="RememberFocus,FlowVertical" Layout="VerticalFlow" Margins="0,0,0,0">
+        <LayoutInput>
+          <AnchorLayoutInput Top="Parent,0" Horizontal="Near"/>
+        </LayoutInput>
+        <Content>
+          <ctl:Button Model="[RepeatedItem!Command]" SubFocusArea="[SubFocusArea]" NoFocusColor="[ButtonNoFocusColor]"/>
+        </Content>
+      </Repeater>
+    </Content>
+  </UI>
   <!-- The primary display area of a details page -->
   <UI Name="DetailsPane">
     <Properties>
-      <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
-      <Image Name="MovieDefaultImage" Image="resx://Library/Library.Resources/V3_Controls_Movie_Icon_Default"/>
+      <shl:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
     </Properties>
     <Rules>
-      <Condition Source="[Page.Background]" SourceValue="null">
-        <Actions>
-          <Set Target="[CoverGraphic.Content]" Value="[MovieDefaultImage]"/>
-        </Actions>
-      </Condition>
+      <Binding Target="[ChkEnableMediaChangers.Model]" Source="[Page.EnableMediaChangers]"/>
+      <Binding Target="[SubOptions.Enabled]" Source="[ChkEnableMediaChangers.Model]"/>
     </Rules>
     <Content>
       <Panel>
@@ -188,7 +220,7 @@
           <Animation Type="Show">
             <Keyframes>
               <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="SCurve" RelativeTo="Absolute"/>
-              <AlphaKeyframe Time="1.01" Value="1.0" RelativeTo="Absolute"/>
+              <AlphaKeyframe Time="0.5" Value="1.0" RelativeTo="Absolute"/>
             </Keyframes>
           </Animation>
 
@@ -196,7 +228,7 @@
           <Animation Type="Hide">
             <Keyframes>
               <AlphaKeyframe Time="0.00" RelativeTo="Current" Interpolation="SCurve"/>
-              <AlphaKeyframe Time="1.01" Value="0.0" RelativeTo="Absolute"/>
+              <AlphaKeyframe Time="0.2" Value="0.0" RelativeTo="Absolute"/>
             </Keyframes>
           </Animation>
         </Animations>
@@ -205,14 +237,14 @@
             <Children>
               <Clip FadeSize="25" MaximumSize="500,70" NearOffset="-40" Orientation="Vertical">
                 <Children>
-                  <!--Text Content="movie detailsx" Color="203,255,255,255" Font="Segoe Media Center Light,28" Alpha=".75" CenterPointPercent="1,0,1"/-->
-                  <Text Content="cast + more" Color="102, 151, 217, 255" Font="Segoe Media Center Light,28" Alpha=".92" CenterPointPercent="1,0,1"/>
+                  <!--Text Content="movie details" Color="203,255,255,255" Font="Segoe Media Center Light,28" Alpha=".75" CenterPointPercent="1,0,1"/-->
+                  <Text Content="settings" Color="102, 151, 217, 255" Font="Segoe Media Center Light,28" Alpha=".92" CenterPointPercent="1,0,1"/>
                 </Children>
               </Clip>
             </Children>
           </Panel>
           <!-- main layout panel -->
-          <Panel Margins="505,20,205,0">
+          <Panel Margins="205,85,205,0">
             <Layout>
               <FlowLayout Orientation="Horizontal"/>
             </Layout>
@@ -220,11 +252,11 @@
               <!-- Grow create -->
               <Animation Type="Show" CenterPointPercent="0.5, 0.5, 1.0">
                 <Keyframes>
-                  <ScaleKeyframe Time="0.0" Value="0.0, 0.0, 0.0" Interpolation="Log"/>
-                  <ScaleKeyframe Time=".70" Value="1.0, 1.0, 1.0" RelativeTo="Absolute"/>
+                  <ScaleKeyframe Time="0.0" Value="0.0, 0.0, 0.0" Interpolation="Log" RelativeTo="Absolute"/>
+                  <ScaleKeyframe Time="0.5" Value="1.0, 1.0, 1.0" RelativeTo="Absolute"/>
 
-                  <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="Log"/>
-                  <AlphaKeyframe Time=".70" Value="1.0" RelativeTo="Absolute"/>
+                  <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="Log" RelativeTo="Absolute"/>
+                  <AlphaKeyframe Time="0.5" Value="1.0" RelativeTo="Absolute"/>
                 </Keyframes>
               </Animation>
               <!-- Shrink Destroy -->
@@ -241,34 +273,30 @@
             <Children>
               <Panel Layout="Form" Padding="0,0,0,0">
                 <Children>
-                  <Panel Name="ButtonsHolder" MinimumSize="240,500" Margins="0,0,0,0" Layout="VerticalFlow">
+                  <me:ButtonsHolder Page="[Page]" Name="ButtonsHolder" MinimumSize="240,500" Margins="0,80,0,0" Layout="VerticalFlow">
                     <LayoutInput>
                       <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
                     </LayoutInput>
+                  </me:ButtonsHolder>
+                  <Panel Margins="45,15,0,30" Layout="Form">
+                    <LayoutInput>
+                      <FormLayoutInput Left="ButtonsHolder,1" Top="ButtonsHolder, 0" Vertical="Fill" Horizontal="Fill"/>
+                    </LayoutInput>
                     <Children>
-                      <Panel Layout="Anchor" Margins="0,0,0,0" FocusOrder="0">
+                      <Text Content="MEDIA CHANGER OPTIONS" MaximumLines="1" WordWrap="false"  Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23">
+                        <LayoutInput>
+                          <AnchorLayoutInput Left="Parent,0" Top="Parent,0, -55"/>
+                        </LayoutInput>
+                      </Text>
+                      <Panel Layout="VerticalFlow">
+                        <LayoutInput>
+                          <AnchorLayoutInput Left="Parent,0, 60" Top="Parent,0, 70"/>
+                        </LayoutInput>
                         <Children>
-                          <Panel Scale=".7,.7,.7" Name="Picture" Margins="0,0,0,0">
-                            <LayoutInput>
-                              <AnchorLayoutInput Left="Parent,0" Top="Parent,0"/>
-                            </LayoutInput>
-                            <Children>
-                              <Graphic Name="CoverGraphic" MaximumSize ="185,265" Content="[Page.Background]" ErrorImage="[MovieDefaultImage]" />
-                            </Children>
-                          </Panel>
-                          <Text Name="TitleText" Content="[Page.Title]" MaximumLines="2" WordWrap="true" Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23">
-                            <LayoutInput>
-                              <AnchorLayoutInput Left="Picture,1, -20" Top="Picture,0, 20"/>
-                            </LayoutInput>
-                          </Text>
-                          <listview:ScrollingListCast Page="[Page]" Content="[Page.Details.CastArray]" GroupName="" Navigation="RememberFocus,Column">
-                            <LayoutInput>
-                              <AnchorLayoutInput Bottom="Parent,1, -45"  Top="Picture,1, -25"  Left="Parent,0, 0"/>
-                            </LayoutInput>
-                            <ScrollingData>
-                              <ScrollingData/>
-                            </ScrollingData>
-                          </listview:ScrollingListCast>
+                          <Text Content="OML can support media changers like the Sony VGP-XL1B or Niveus Ice Vault. If you are having issues seeing your media changer within OML please ensure your changer is supported and available within the rest of Media Center." WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
+                          <chk:CheckBox Name="ChkEnableMediaChangers" Margins="10,0,0,0" Model="[Page.EnableMediaChangers]"/>
+                          <Graphic Content="resx://Library/Library.Resources/V3_Controls_Radio_DividerLine" Margins="-150,15,0,10" MinimumSize="620,3"/>
+                          <me:SubOptions Name="SubOptions" Page="[Page]"/>
                         </Children>
                       </Panel>
                     </Children>
@@ -280,7 +308,50 @@
         </Children>
       </Panel>
     </Content>
-
+  </UI>
+    <UI Name="SubOptions">
+      <Properties>
+        <shl:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
+        <BooleanChoice  Name="Enabled" Value="false"/>
+        <BooleanChoice  Name="EnableDeepScan" Description="Detect new DVDs added to your changer" Value="true"/>
+        <BooleanChoice  Name="EnableMetadata" Description="Retrieve MetaData from Microsoft" Value="true"/>
+        <Command Name="ManageDiscs" Description="Manage Discs"/>
+        <Image Name="ButtonNoFocusImage" Source="resx://Library/Library.Resources/V3_Controls_Common_Button_FirstRun_NoFocus" NineGrid="5,5,5,5"/>
+      </Properties>
+      <Rules>
+        <!--Default Target="[Input.Enabled]" Value="false" /-->
+        <!--Binding Target="[Input.Enabled]" Source="[Enabled.Value]"/-->
+        <Changed Source="[Enabled.Value]" InitialEvaluate="true">
+          <Conditions>
+            <Equality Source="[Enabled.Value]" Value="true"/>
+          </Conditions>
+          <Actions>
+            <Set Target="[Input.Enabled]" Value="true" />
+            <Set Target="[Input.KeyInteractive]" Value="true" />
+            <Set Target="[Root.Alpha]" Value="1" />
+          </Actions>
+        </Changed>
+        <Changed Source="[Enabled.Value]" InitialEvaluate="true">
+          <Conditions>
+            <Equality Source="[Enabled.Value]" Value="false"/>
+          </Conditions>
+          <Actions>
+            <Set Target="[Input.Enabled]" Value="false" />
+            <Set Target="[Input.KeyInteractive]" Value="false" />
+            <Set Target="[Root.Alpha]" Value=".4" />
+          </Actions>
+        </Changed>
+      </Rules>
+      <Content>
+        <Panel Name="Root" Layout="VerticalFlow" Alpha=".4">
+          <Children>
+            <Text Name="AllowText" Content="Allow OML to:" MaximumLines="2" WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
+            <chk:CheckBox Name="CheckBoxEnableDeepScan" Margins="10,0,0,0" Model="[Page.DetectMediaChangers]"/>
+            <chk:CheckBox Margins="10,0,0,0" Model="[Page.RetrieveMetaData]"/>
+            <ctl:Button Model="[Page.ManageChangers]" TileSize="590,51" Margins="10,50,0,0" NoFocusImage="[ButtonNoFocusImage]"/>
+          </Children>
+        </Panel>
+      </Content>
   </UI>
   <Animation Name="Browse.Gallery.Show.Focus" Type="Idle" CenterPointPercent="0.5, 0.5, 0.0">
     <Keyframes>

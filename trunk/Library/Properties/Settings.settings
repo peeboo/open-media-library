@@ -104,11 +104,23 @@
     <Setting Name="HasRunSetup" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+<<<<<<< .mine
+    <Setting Name="MediaChangersEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="MediaChangersDetect" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="MediaChangersRetrieveMetaData" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+=======
     <Setting Name="MainPageBackDropRotationInSeconds" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="MainPageBackDropAlpha" Type="System.Single" Scope="User">
       <Value Profile="(Default)">0.3</Value>
     </Setting>
+>>>>>>> .r1340
   </Settings>
 </SettingsFile>

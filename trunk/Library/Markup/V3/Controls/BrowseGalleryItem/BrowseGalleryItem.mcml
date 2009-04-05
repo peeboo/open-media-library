@@ -952,7 +952,7 @@
             </Params>
           </DebugTrace>
           <Set Target="[OverlayContentHost.Visible]" Value="true"/>
-          <Set Target="[OverlayContentHost.Source]" Value="me:DiscItemOverlay"/>
+          <Set Target="[OverlayContentHost.Source]" Value="me:DVDOverlay"/>
         </Actions>
       </Rule>
       <Rule ConditionLogicalOp="And">
@@ -968,7 +968,7 @@
             </Params>
           </DebugTrace>
           <Set Target="[OverlayContentHost.Visible]" Value="true"/>
-          <Set Target="[OverlayContentHost.Source]" Value="me:DiscItemOverlay"/>
+          <Set Target="[OverlayContentHost.Source]" Value="me:DVDOverlay"/>
         </Actions>
       </Rule>
     </Rules>
@@ -997,7 +997,7 @@
             </Params>
           </DebugTrace>
           <Set Target="[OverlayContentHost.Visible]" Value="true"/>
-          <Set Target="[OverlayContentHost.Source]" Value="me:DiscItemOverlay"/>
+          <Set Target="[OverlayContentHost.Source]" Value="me:DVDOverlay"/>
         </Actions>
       </Rule>
       <Rule ConditionLogicalOp="And">
@@ -1013,7 +1013,7 @@
             </Params>
           </DebugTrace>
           <Set Target="[OverlayContentHost.Visible]" Value="true"/>
-          <Set Target="[OverlayContentHost.Source]" Value="me:DiscItemOverlay"/>
+          <Set Target="[OverlayContentHost.Source]" Value="me:DVDOverlay"/>
         </Actions>
       </Rule>
     </Rules>
@@ -1096,6 +1096,32 @@
           </Children>
         </Panel>
     </Content>
+  </UI>
+
+  <UI Name="DVDOverlay" BaseUI="me:DiscItemOverlay">
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[ParentKeyFocus]" ConditionOp="Equals" Value="false"/>
+          <!--Equality Source="[Model!movies:DVDMovieDataItem.IsInDrive]" ConditionOp="Equals" Value="true"/-->
+        </Conditions>
+        <Actions>
+          <Set Target="[DiscImage.Visible]" Value="true"/>
+          <Set Target="[DiscImage.Content]" Value="[InsertedDisc]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[ParentKeyFocus]" ConditionOp="Equals" Value="true"/>
+          <!--Equality Source="[Model!movies:DVDMovieDataItem.IsInDrive]" ConditionOp="Equals" Value="true"/-->
+        </Conditions>
+        <Actions>
+          <Set Target="[DiscImage.Visible]" Value="true"/>
+          <Set Target="[DiscImage.Content]" Value="[InsertedDiscFocus]"/>
+        </Actions>
+      </Rule>
+      <Default Target="[DiscImage.Visible]" Value="false" />
+    </Rules>
   </UI>
   
 </Mcml>

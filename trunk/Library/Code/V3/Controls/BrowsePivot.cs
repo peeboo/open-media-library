@@ -21,6 +21,19 @@ namespace Library.Code.V3
         private string m_stDetailTemplate;
         private string m_stNoContentText;
 
+        private ContextMenuData m_contextMenu;
+        public ContextMenuData ContextMenu
+        {
+            get
+            {
+                return m_contextMenu;
+            }
+            set
+            {
+                this.m_contextMenu = value;
+            }
+        }
+
         private bool supportsJIL = false;
         public override bool SupportsJIL
         {

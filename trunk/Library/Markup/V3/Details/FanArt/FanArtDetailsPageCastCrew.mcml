@@ -314,7 +314,7 @@
                         </LayoutInput>
                       </Text>
                       <!-- scroll here -->
-                      <listview:ScrollingListCast Page="[Page]" Content="[Page.Details.CastArray]" GroupName="" SelectedCrap="f">
+                      <listview:ScrollingListCast Page="[Page]" Content="[Page.Details.CastArray]" GroupName="">
                         <LayoutInput>
                           <AnchorLayoutInput Bottom="Parent,1, 0"  Top="DetailsTitle,1, 3"  Left="Parent,0, 0"/>
                         </LayoutInput>

@@ -5,12 +5,15 @@
 	  xmlns:core="resx://Library/Library.Resources/V3_Globals"
     xmlns:pip="resx://Library/Library.Resources/V3_GalleryPage"
     xmlns:listview="resx://Library/Library.Resources/V3_Controls_GroupedListView"
+    xmlns:ctl="resx://Library/Library.Resources/V3_Controls"
+    xmlns:radio="resx://Library/Library.Resources/V3_Controls_RadioGroup"
+    xmlns:wait="resx://Library/Library.Resources/V3_Controls_WaitCursor"
 	  xmlns:me="Me">
 
   <!-- A details page -->
   <UI Name="DetailsPageCastCrew">
     <Properties>
-      <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
+      <shl:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
       <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
     </Properties>
 
@@ -38,6 +41,8 @@
     </Locals>
 
     <Rules>
+
+      <Binding Source="[Page.IsBusy]" Target="[WaitCursor.Visible]" />
 
       <Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
         <Actions>
@@ -85,6 +90,7 @@
     <Content>
       <Panel>
         <Children>
+          <wait:WaitCursorHost Name="WaitCursor" Visible="false"/>
           <Panel Name="PIPFocusBackground" MaximumSize="1366, 0" Visible="false">
             <Children>
 
@@ -168,18 +174,80 @@
     </Content>
   </UI>
 
+  <UI Name="ButtonsHolder">
+    <Properties>
+      <shl:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
+    </Properties>
+    <Locals>
+      <Color Name="ButtonNoFocusColor" Color="color://core:OffWhite"/>
+      <EditableText Name="SubFocusArea" Value="none"/>
+    </Locals>
+    <Rules>
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
+        <Actions>
+          <Set Target="[SubFocusArea.Value]" Value="NoFocusColorInactive" ExclusiveApply="true"/>
+          <DebugTrace Message="Input.DeepKeyFocus: {0};{1}">
+            <Params>
+              <ObjectPath ObjectPath="[Input.DeepKeyFocus]"/>
+              <ObjectPath ObjectPath="[SubFocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Condition>
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[SubFocusArea.Value]" Value="NoFocusColorActive" ExclusiveApply="true"/>
+          <DebugTrace Message="Input.DeepKeyFocus: {0};{1}">
+            <Params>
+              <ObjectPath ObjectPath="[Input.DeepKeyFocus]"/>
+              <ObjectPath ObjectPath="[SubFocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Condition>
+    </Rules>
+    <Content>
+      <Panel Layout="VerticalFlow">
+        <Children>
+          <radio:MenuRadioGroup Model="[Page.SortCommands]"/>
+          <Repeater Name="Buttons" Source="[Page.ManagerCommands]" Navigation="RememberFocus,FlowVertical" Layout="VerticalFlow" Margins="0,0,0,0">
+            <LayoutInput>
+              <AnchorLayoutInput Top="Parent,0" Horizontal="Near"/>
+            </LayoutInput>
+            <Content>
+              <ctl:Button Model="[RepeatedItem!Command]" SubFocusArea="[SubFocusArea]" NoFocusColor="[ButtonNoFocusColor]"/>
+            </Content>
+          </Repeater>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  
   <!-- The primary display area of a details page -->
   <UI Name="DetailsPane">
     <Properties>
-      <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
-      <Image Name="MovieDefaultImage" Image="resx://Library/Library.Resources/V3_Controls_Movie_Icon_Default"/>
+      <shl:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
     </Properties>
     <Rules>
-      <Condition Source="[Page.Background]" SourceValue="null">
+      <Binding Target="[Discs.Content]" Source="[Page.DiscArray]"/>
+      <Changed Source="[Page.DiscArray]" InitialEvaluate="true">
         <Actions>
-          <Set Target="[CoverGraphic.Content]" Value="[MovieDefaultImage]"/>
+          <Set Target="[Discs.Content]" Value="[Page.DiscArray]"/>
         </Actions>
-      </Condition>
+      </Changed>
+      <Changed Source="[Page.SelectedDisc]" InitialEvaluate="false">
+        <Actions>
+          <Set Target="[DiscTitle.Content]" Value="[Page.SelectedDisc.Description]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[Page.ShowErrorMessage]" InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[Page.ShowErrorMessage]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Discs.Source]" Value="me:EmptyContentMessage"/>
+        </Actions>
+      </Changed>
     </Rules>
     <Content>
       <Panel>
@@ -206,13 +274,13 @@
               <Clip FadeSize="25" MaximumSize="500,70" NearOffset="-40" Orientation="Vertical">
                 <Children>
                   <!--Text Content="movie detailsx" Color="203,255,255,255" Font="Segoe Media Center Light,28" Alpha=".75" CenterPointPercent="1,0,1"/-->
-                  <Text Content="cast + more" Color="102, 151, 217, 255" Font="Segoe Media Center Light,28" Alpha=".92" CenterPointPercent="1,0,1"/>
+                  <Text Content="manage discs" Color="102, 151, 217, 255" Font="Segoe Media Center Light,28" Alpha=".92" CenterPointPercent="1,0,1"/>
                 </Children>
               </Clip>
             </Children>
           </Panel>
           <!-- main layout panel -->
-          <Panel Margins="505,20,205,0">
+          <Panel Margins="205,120,205,0">
             <Layout>
               <FlowLayout Orientation="Horizontal"/>
             </Layout>
@@ -241,34 +309,38 @@
             <Children>
               <Panel Layout="Form" Padding="0,0,0,0">
                 <Children>
-                  <Panel Name="ButtonsHolder" MinimumSize="240,500" Margins="0,0,0,0" Layout="VerticalFlow">
+                  <me:ButtonsHolder Page="[Page]" Name="ButtonsHolder" MinimumSize="240,500" Margins="0,48,0,0" Layout="VerticalFlow">
                     <LayoutInput>
                       <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
                     </LayoutInput>
+                  </me:ButtonsHolder>
+                  <Panel Margins="45,15,0,30" Layout="Form">
+                    <LayoutInput>
+                      <FormLayoutInput Left="ButtonsHolder,1" Top="ButtonsHolder, 0" Vertical="Fill" Horizontal="Fill"/>
+                    </LayoutInput>
                     <Children>
-                      <Panel Layout="Anchor" Margins="0,0,0,0" FocusOrder="0">
+                      <Text Name="DiscTitle" Content="MEDIA CHANGER OPTIONS" MaximumLines="1" WordWrap="false"  Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23">
+                        <LayoutInput>
+                          <AnchorLayoutInput Left="Parent,0" Top="Parent,0, -95"/>
+                        </LayoutInput>
+                      </Text>
+                      <Panel Layout="VerticalFlow">
+                        <LayoutInput>
+                          <AnchorLayoutInput Left="Parent,0, 0" Top="Parent,0, 25"/>
+                        </LayoutInput>
                         <Children>
-                          <Panel Scale=".7,.7,.7" Name="Picture" Margins="0,0,0,0">
-                            <LayoutInput>
-                              <AnchorLayoutInput Left="Parent,0" Top="Parent,0"/>
-                            </LayoutInput>
+                          <Panel Layout="Anchor" Margins="0,0,0,0" FocusOrder="0">
                             <Children>
-                              <Graphic Name="CoverGraphic" MaximumSize ="185,265" Content="[Page.Background]" ErrorImage="[MovieDefaultImage]" />
+                              <listview:ScrollingListDiscs Page="[Page]" Name="Discs" Content="[Page.DiscArray]" GroupName="" Navigation="RememberFocus,Column">
+                                <LayoutInput>
+                                  <AnchorLayoutInput Bottom="Parent,1, -45"  Top="Parent,0, -45"  Left="Parent,0, 0"/>
+                                </LayoutInput>
+                                <ScrollingData>
+                                  <ScrollingData/>
+                                </ScrollingData>
+                              </listview:ScrollingListDiscs>
                             </Children>
                           </Panel>
-                          <Text Name="TitleText" Content="[Page.Title]" MaximumLines="2" WordWrap="true" Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23">
-                            <LayoutInput>
-                              <AnchorLayoutInput Left="Picture,1, -20" Top="Picture,0, 20"/>
-                            </LayoutInput>
-                          </Text>
-                          <listview:ScrollingListCast Page="[Page]" Content="[Page.Details.CastArray]" GroupName="" Navigation="RememberFocus,Column">
-                            <LayoutInput>
-                              <AnchorLayoutInput Bottom="Parent,1, -45"  Top="Picture,1, -25"  Left="Parent,0, 0"/>
-                            </LayoutInput>
-                            <ScrollingData>
-                              <ScrollingData/>
-                            </ScrollingData>
-                          </listview:ScrollingListCast>
                         </Children>
                       </Panel>
                     </Children>
@@ -282,6 +354,23 @@
     </Content>
 
   </UI>
+
+  <UI Name="EmptyContentMessage">
+    <Properties>
+      <shl:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
+    </Properties>
+    <Content>
+      <Panel Layout="VerticalFlow">
+        <LayoutInput>
+          <AnchorLayoutInput Left="Parent,0, 60" Top="Parent,0, 70"/>
+        </LayoutInput>
+        <Children>
+          <Text Content="[Page.ErrorMessage]" WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  
   <Animation Name="Browse.Gallery.Show.Focus" Type="Idle" CenterPointPercent="0.5, 0.5, 0.0">
     <Keyframes>
       <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>

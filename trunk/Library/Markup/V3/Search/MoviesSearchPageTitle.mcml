@@ -543,7 +543,7 @@
                                       <FormLayoutInput Top="KeyRepeater,1,3" Right="KeyRepeater,1, 0"/>
                                     </LayoutInput>
                                   </filterlistbutton:ResetFilteredGuide>
-                                  <listview:ScrollingListSearch2 Name="Results" Page="[Page]" SelectedCommand="[Page.SelectedCommand]" Content="[Page.Commands]" GroupName="" SelectedCrap="f">
+                                  <listview:ScrollingListSearch2 Name="Results" Page="[Page]" SelectedCommand="[Page.SelectedCommand]" Content="[Page.Commands]" GroupName="">
                                     <LayoutInput>
                                       <FormLayoutInput Top="KeyRepeater,0,0" Left="KeyRepeater,1, 3" Bottom="KeyRepeater,1, 100"  Right="KeyRepeater, 1, 770"/>
                                     </LayoutInput>
@@ -670,24 +670,6 @@
                       </ColorFill>
                     </Children>
                   </Panel>
-                  <!--Panel Margins="0,80,0,0" Layout="VerticalFlow">
-                    <LayoutInput>
-                      <FormLayoutInput Left="ButtonsHolder,1" Top="ButtonsHolder,0" Vertical="Fill" Horizontal="Fill"/>
-                    </LayoutInput>
-                    <Children>
-                      <Panel Layout="VerticalFlow" MaximumSize="0, 500">
-                        <Children>
-                          <listview:ScrollingListSearch2 Name="Results"  Content="[Group2]" GroupName="" SelectedCrap="f">
-                            <ScrollingData>
-                              <ScrollingData/>
-                            </ScrollingData>
-                          </listview:ScrollingListSearch2>
-                        </Children>
-                      </Panel>
-                      <Text Content="This is a title" MaximumLines="2" Margins="0, 10, 0, 0" WordWrap="true" Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23"/>
-                      <Text Content="sub text" MaximumLines="3" WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
-                    </Children>
-                  </Panel-->
                 </Children>
               </Panel>
             </Children>

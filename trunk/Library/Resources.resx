@@ -1228,4 +1228,46 @@
   <data name="V3_DetailsPageCastCrew" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\v3\details\detailspagecastcrew.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="V3_Controls_Busy_Back" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.busy.back.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_Busy_Front" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.busy.front.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_ChangerEject_Tile_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.changereject.tile.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_ChangerEject_Tile_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.changereject.tile.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_ChangerEject_Tile_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.changereject.tile.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_ChangerEject_Tile_FocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.changereject.tile.focusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_ChangerEject_Tile_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.changereject.tile.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_Common_Button_FirstRun_Dormant_Full" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.common.button.firstrun.dormant.full.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_Common_Button_FirstRun_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.common.button.firstrun.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_Common_Button_NoFocus_Full" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.common.button.nofocus.full.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_Radio_DividerLine" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.radio.dividerline.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_WaitCursor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\waitcursor.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_MediaChangerManagerPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\mediachangermanagerpage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_MediaChangerManagerSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\mediachangermanagersettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
