@@ -82,8 +82,8 @@
     <Type Name="Tag" AccessModifier="Internal">
       <Column Name="TitleId" Storage="_MovieId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Association Name="Title_Tag" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" />
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="true" />
+      <Association Name="Title_Tag" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.Disks" Member="Disks" AccessModifier="Internal">
@@ -91,7 +91,7 @@
       <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Path" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="VideoFormat" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
-      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="true" />
       <Column Name="TitleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ExtraOptions" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="MainFeatureXRes" Type="System.Int32" DbType="Int" CanBeNull="true" />
@@ -99,7 +99,7 @@
       <Column Name="MainFeatureAspectRatio" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
       <Column Name="MainFeatureFPS" Type="System.Double" DbType="Float" CanBeNull="true" />
       <Column Name="MainFeatureLength" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Title_Disk" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" />
+      <Association Name="Title_Disk" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" DeleteOnNull="true" />
     </Type>
   </Table>
 </Database>

@@ -2501,9 +2501,9 @@ namespace OMLEngine
                 }
 
                 // Check for an existing fanart folder under the centralised folder
-                if (!string.IsNullOrEmpty(Properties.Settings.Default.gsTitledFanArtPath))
+                if (!string.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.TitledFanArtPath))
                 {
-                    string MainFanArtDir = System.IO.Path.Combine(Properties.Settings.Default.gsTitledFanArtPath, PathSafeName);
+                    string MainFanArtDir = System.IO.Path.Combine(OMLEngine.Settings.OMLSettings.TitledFanArtPath, PathSafeName);
                     if (Directory.Exists(MainFanArtDir))
                     {
                         _title.FanArtFolder = MainFanArtDir;
@@ -2520,10 +2520,10 @@ namespace OMLEngine
         {
             if (string.IsNullOrEmpty(_title.FanArtFolder))
             {
-                if (Properties.Settings.Default.gbTitledFanArtFolder)
+                if (OMLEngine.Settings.OMLSettings.TitledFanArtFolder)
                 {
                     // Centralised Fan Art
-                    string MainFanArtDir = Properties.Settings.Default.gsTitledFanArtPath;
+                    string MainFanArtDir = OMLEngine.Settings.OMLSettings.TitledFanArtPath;
                     if (!Directory.Exists(MainFanArtDir)) Directory.CreateDirectory(MainFanArtDir);
                     _title.FanArtFolder = System.IO.Path.Combine(MainFanArtDir, PathSafeName);
                 }

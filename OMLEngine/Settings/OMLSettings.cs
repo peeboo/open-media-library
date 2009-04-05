@@ -406,6 +406,80 @@ namespace OMLEngine.Settings
         {
             get { return SettingsManager.GetSettingByName("AppleTrailerFidelity", InstanceName) ?? "Hi"; }
             set { SettingsManager.SaveSettingByName("AppleTrailerFidelity", value, InstanceName); }
-        }                                    
+        }
+
+
+        #region DBEditor
+
+        public static string DBEditorSkin
+        {
+            get { return SettingsManager.GetSettingByName("DBEditorSkin", InstanceName) ?? "Blue"; }
+            set { SettingsManager.SaveSettingByName("DBEditorSkin", value, InstanceName); }
+        }
+
+        public static bool TreatFoldersAsTitles
+        {
+            // File scanner import setting
+            get { return SettingsManager.GetSettingByNameBool("TreatFoldersAsTitles", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("TreatFoldersAsTitles", value.ToString(), InstanceName); }
+        }
+
+        public static bool AddParentFoldersToTitleName
+        {
+            // File scanner import setting
+            get { return SettingsManager.GetSettingByNameBool("AddParentFoldersToTitleName", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("AddParentFoldersToTitleName", value.ToString(), InstanceName); }
+        }
+
+        public static bool UseMPAAList
+        {
+            get { return SettingsManager.GetSettingByNameBool("UseMPAAList", InstanceName) ?? true; }
+            set { SettingsManager.SaveSettingByName("UseMPAAList", value.ToString(), InstanceName); }
+        }
+
+        public static bool UseGenreList
+        {
+            get { return SettingsManager.GetSettingByNameBool("UseGenreList", InstanceName) ?? true; }
+            set { SettingsManager.SaveSettingByName("UseGenreList", value.ToString(), InstanceName); }
+        }
+
+        public static string DefaultMetadataPlugin
+        {
+            get { return SettingsManager.GetSettingByName("DefaultMetadataPlugin", InstanceName) ?? ""; }
+            set { SettingsManager.SaveSettingByName("DefaultMetadataPlugin", value, InstanceName); }
+        }
+
+        public static bool TitledFanArtFolder
+        {
+            get { return SettingsManager.GetSettingByNameBool("TitledFanArtFolder", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("TitledFanArtFolder", value.ToString(), InstanceName); }
+        }
+
+        public static string TitledFanArtPath
+        {
+            get { return SettingsManager.GetSettingByName("TitledFanArtPath", InstanceName) ?? ""; }
+            set { SettingsManager.SaveSettingByName("TitledFanArtPath", value, InstanceName); }
+        }
+        #endregion
+
+        public static string MPAARatings
+        {
+            get { return SettingsManager.GetSettingByName("MPAARatings", InstanceName) ?? "NR|G|PG-13|PG|R|NC-17"; }
+            set { SettingsManager.SaveSettingByName("MPAARatings", value, InstanceName); }
+        }
+
+        
+        public static string Tags
+        {
+            get { return SettingsManager.GetSettingByName("Tags", InstanceName) ?? ""; }
+            set { SettingsManager.SaveSettingByName("Tags", value, InstanceName); }
+        }
+         
+        //public static string AppleTrailerFidelity
+        //{
+        //    get { return SettingsManager.GetSettingByName("AppleTrailerFidelity", InstanceName) ?? "Hi"; }
+        //    set { SettingsManager.SaveSettingByName("AppleTrailerFidelity", value, InstanceName); }
+        //} 
+ 
     }
 }

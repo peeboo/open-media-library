@@ -140,14 +140,14 @@ namespace VMCDVDLibraryPlugin
                         {
                             if (fileNames != null && fileNames.Length > 0)
                             {
-                                if (OMLEngine.Properties.Settings.Default.FoldersAreTitles)
+                                if (OMLEngine.Settings.OMLSettings.TreatFoldersAsTitles)
                                 {
                                     Title newVideo = new Title();
 
                                     // Create the title name
                                     DirectoryInfo di = new DirectoryInfo(currentFolder);
                                     newVideo.Name = "";
-                                    if (OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName)
+                                    if (OMLEngine.Settings.OMLSettings.AddParentFoldersToTitleName)
                                     {
                                         // If AddParentFolderToTitleName is true then check if the parent folder
                                         // Is the startfolder. If not add parent folder to name

@@ -1760,7 +1760,7 @@ namespace OMLEngine.Dao
 		
 		private string _Name;
 		
-		private long _Id;
+		private System.Nullable<long> _Id;
 		
 		private EntityRef<Title> _Title;
 		
@@ -1772,7 +1772,7 @@ namespace OMLEngine.Dao
     partial void OnTitleIdChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnIdChanging(long value);
+    partial void OnIdChanging(System.Nullable<long> value);
     partial void OnIdChanged();
     #endregion
 		
@@ -1827,7 +1827,7 @@ namespace OMLEngine.Dao
 		}
 		
 		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public long Id
+		public System.Nullable<long> Id
 		{
 			get
 			{
@@ -1846,7 +1846,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Association(Name="Title_Tag", Storage="_Title", ThisKey="TitleId", OtherKey="Id", IsForeignKey=true)]
+		[Association(Name="Title_Tag", Storage="_Title", ThisKey="TitleId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true)]
 		public Title Title
 		{
 			get
@@ -1913,7 +1913,7 @@ namespace OMLEngine.Dao
 		
 		private byte _VideoFormat;
 		
-		private long _Id;
+		private System.Nullable<long> _Id;
 		
 		private int _TitleId;
 		
@@ -1941,7 +1941,7 @@ namespace OMLEngine.Dao
     partial void OnPathChanged();
     partial void OnVideoFormatChanging(byte value);
     partial void OnVideoFormatChanged();
-    partial void OnIdChanging(long value);
+    partial void OnIdChanging(System.Nullable<long> value);
     partial void OnIdChanged();
     partial void OnTitleIdChanging(int value);
     partial void OnTitleIdChanged();
@@ -2026,7 +2026,7 @@ namespace OMLEngine.Dao
 		}
 		
 		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public long Id
+		public System.Nullable<long> Id
 		{
 			get
 			{
@@ -2189,7 +2189,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Association(Name="Title_Disk", Storage="_Title", ThisKey="TitleId", OtherKey="Id", IsForeignKey=true)]
+		[Association(Name="Title_Disk", Storage="_Title", ThisKey="TitleId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true)]
 		public Title Title
 		{
 			get

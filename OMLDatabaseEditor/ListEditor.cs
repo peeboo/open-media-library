@@ -41,7 +41,7 @@ namespace OMLDatabaseEditor
 
         public void SetMRULists()
         {
-            if ((this.Text == "Genres") && (Properties.Settings.Default.gbUseGenreList) && Properties.Settings.Default.gsValidGenres != null)
+            if ((this.Text == "Genres") && (OMLEngine.Settings.OMLSettings.UseGenreList) && Properties.Settings.Default.gsValidGenres != null)
             {
                 string[] aGenres = new string[0];
                 if (Properties.Settings.Default.gsValidGenres != null)
@@ -54,7 +54,7 @@ namespace OMLDatabaseEditor
             }
             else if ((this.Text == "Tags"))
             {
-                cbeItem.Properties.Items.AddRange(Properties.Settings.Default.gsTags.Split('|'));
+                cbeItem.Properties.Items.AddRange(OMLEngine.Settings.OMLSettings.Tags.Split('|'));
             }
         }
 
@@ -89,7 +89,7 @@ namespace OMLDatabaseEditor
             }
             else if ((this.Text == "Tags"))
             {
-                cbeItem.Properties.Items.AddRange(Properties.Settings.Default.gsTags.Split('|'));
+                cbeItem.Properties.Items.AddRange(OMLEngine.Settings.OMLSettings.Tags.Split('|'));
             }
         }
 

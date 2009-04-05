@@ -278,7 +278,30 @@ namespace OMLDatabaseEditor.Controls
         private void btnTags_Click(object sender, EventArgs e)
         {
             if (_dvdTitle != null)
-                EditList("Tags", _dvdTitle.Tags);
+            {
+                List<string> originalitems = new List<string>();
+                List<string> items = new List<string>();
+                originalitems.AddRange(_dvdTitle.Tags);
+                items.AddRange(_dvdTitle.Tags);
+                EditList("Tags", items);
+
+                foreach (string item in originalitems.Except(items))
+                {
+                    if (_dvdTitle.Tags.Contains(item))
+                    {
+                        _dvdTitle.RemoveTag(item);
+                    }
+
+                }
+
+                foreach (string item in items)
+                {
+                    if (!_dvdTitle.Tags.Contains(item))
+                    {
+                        _dvdTitle.AddTag(item);
+                    }
+                }
+            }
         }
 
         private void btnExtras_Click(object sender, EventArgs e)
@@ -410,7 +433,7 @@ namespace OMLDatabaseEditor.Controls
 
         public void SetMRULists()
         {
-            if (Properties.Settings.Default.gbUseMPAAList)
+            if (OMLEngine.Settings.OMLSettings.UseMPAAList)
             {
                 // MaskBox is a hidden property
                 // It is explained on the DevExpress Website at:
@@ -419,7 +442,7 @@ namespace OMLDatabaseEditor.Controls
                 //
                 teParentalRating.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 teParentalRating.MaskBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                teParentalRating.MaskBox.AutoCompleteCustomSource.AddRange(Properties.Settings.Default.gsMPAARatings.Split('|'));
+                teParentalRating.MaskBox.AutoCompleteCustomSource.AddRange(OMLEngine.Settings.OMLSettings.MPAARatings.Split('|'));
             }
             else
             {
