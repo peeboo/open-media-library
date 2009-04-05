@@ -484,17 +484,19 @@ namespace OMLEngine
                 return;
 
             // see if the tag exists
-            Dao.Tag daoTag = Dao.TitleCollectionDao.GetTagByTagName(tag);
+            // Don't think this is required
+            // Dao.Tag daoTag = Dao.TitleCollectionDao.GetTagByTagName(tag);
 
-            if (daoTag == null)
-            {
-                daoTag = new OMLEngine.Dao.Tag();
-                daoTag.Name = tag;
+            //if (daoTag == null)
+            //{
+            Dao.Tag daoTag = new OMLEngine.Dao.Tag();
+            daoTag.TitleId = title.Id;
+            daoTag.Name = tag;
 
                 // save the genre
-                Dao.DBContext.Instance.Tags.InsertOnSubmit(daoTag);
-                Dao.DBContext.Instance.SubmitChanges();
-            }
+                //Dao.DBContext.Instance.Tags.InsertOnSubmit(daoTag);
+                //Dao.DBContext.Instance.SubmitChanges();
+            //}
 
             title.DaoTitle.Tags.Add(daoTag);
         }

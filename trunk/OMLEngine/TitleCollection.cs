@@ -508,13 +508,19 @@ namespace OMLEngine
 
         public static void ClearMirrorDataFiles()
         {
-            string[] userFolders = Directory.GetDirectories(@"C:\Users");
-            foreach (string userFolder in userFolders)
+            try
             {
-                if (File.Exists(userFolder + @"AppData\Local\VirtualStore\ProgramData\OpenMediaLibrary\oml.dat"))
+                string[] userFolders = Directory.GetDirectories(@"C:\Users");
+                foreach (string userFolder in userFolders)
                 {
-                    File.Delete(userFolder + @"AppData\Local\VirtualStore\ProgramData\OpenMediaLibrary\oml.dat");
+                    if (File.Exists(userFolder + @"AppData\Local\VirtualStore\ProgramData\OpenMediaLibrary\oml.dat"))
+                    {
+                        File.Delete(userFolder + @"AppData\Local\VirtualStore\ProgramData\OpenMediaLibrary\oml.dat");
+                    }
                 }
+            }
+            catch
+            {
             }
         }
 

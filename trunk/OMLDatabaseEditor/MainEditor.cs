@@ -44,7 +44,7 @@ namespace OMLDatabaseEditor
 
             InitializeComponent();
 
-            defaultLookAndFeel1.LookAndFeel.SkinName = Properties.Settings.Default.gsAppSkin;
+            defaultLookAndFeel1.LookAndFeel.SkinName = OMLEngine.Settings.OMLSettings.DBEditorSkin;
             InitData();
         }
 
@@ -159,7 +159,7 @@ namespace OMLDatabaseEditor
                 miMetadataMulti.DropDownItems.Add(metadataItem);
             }
 
-            if (String.IsNullOrEmpty(Properties.Settings.Default.gsDefaultMetadataPlugin))
+            if (String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))
                 fromPreferredSourcesToolStripMenuItem.Visible = false;
 
             // Set up filter lists
@@ -500,7 +500,7 @@ namespace OMLDatabaseEditor
                         {
                             try
                             {
-                                if (map.Key == Properties.Settings.Default.gsDefaultMetadataPlugin) continue;
+                                if (map.Key == OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin) continue;
                                 metadata = _metadataPlugins.First(p => p.PluginName == map.Key);
                                 metadata.SearchForMovie(titleNameSearch);
                                 title = metadata.GetBestMatch();
@@ -537,7 +537,7 @@ namespace OMLDatabaseEditor
                             }
                         }
                         // Use default plugin for remaining fields
-                        metadata = _metadataPlugins.First(p => p.PluginName == Properties.Settings.Default.gsDefaultMetadataPlugin);
+                        metadata = _metadataPlugins.First(p => p.PluginName == OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin);
                         metadata.SearchForMovie(titleNameSearch);
                         title = metadata.GetBestMatch();
                         if (title != null)
@@ -717,7 +717,7 @@ namespace OMLDatabaseEditor
                     if (options.OptionsDirty)
                     {
                         this.titleEditor.SetMRULists();
-                        fromPreferredSourcesToolStripMenuItem.Visible = !String.IsNullOrEmpty(Properties.Settings.Default.gsDefaultMetadataPlugin);
+                        fromPreferredSourcesToolStripMenuItem.Visible = !String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin);
                     }
                 }
             }

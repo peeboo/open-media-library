@@ -37,7 +37,7 @@ namespace OMLDatabaseEditor
         {
             int genreCount = 0;
             this.lbcSkins.DataSource = ((MainEditor)this.Owner).DXSkins;
-            String skin = Properties.Settings.Default.gsAppSkin;
+            String skin = OMLEngine.Settings.OMLSettings.DBEditorSkin;
             int idx = this.lbcSkins.FindItem(skin);
             if (idx < 0)
             {
@@ -45,14 +45,14 @@ namespace OMLDatabaseEditor
                 idx = this.lbcSkins.FindItem(skin);
             }
             this.lbcSkins.SetSelected(idx, true);
-            this.ceUseMPAAList.Checked = Properties.Settings.Default.gbUseMPAAList;
+            this.ceUseMPAAList.Checked = OMLSettings.UseMPAAList;
             MPAAList = new List<String>();
-            MPAAList.AddRange(Properties.Settings.Default.gsMPAARatings.Split('|'));
+            MPAAList.AddRange(OMLSettings.MPAARatings.Split('|'));
             MPAAList.Sort();
             this.lbcMPAA.DataSource = MPAAList;
 
             TagList = new List<string>();
-            if (String.IsNullOrEmpty(Properties.Settings.Default.gsTags.Trim()))
+            if (String.IsNullOrEmpty(OMLSettings.Tags.Trim()))
             {
                 //TagList.AddRange(MainEditor._titleCollection.GetAllTags); NEEDS_TO_BE_RESOLVED
             }
@@ -60,14 +60,14 @@ namespace OMLDatabaseEditor
             {
                 // TagList.AddRange(MainEditor._titleCollection.GetAllTags.Union(Properties.Settings.Default.gsTags.Split('|'))); NEEDS_TO_BE_RESOLVED
             }
-            int iTags = Properties.Settings.Default.gsTags.Split('|').Count();
+            int iTags = OMLSettings.Tags.Split('|').Count();
             if (iTags < TagList.Count()) TagsDirty = true;
             TagList.Sort();
             lbcTags.DataSource = TagList;
 
-            this.ceUseGenreList.Checked = Properties.Settings.Default.gbUseGenreList;
+            this.ceUseGenreList.Checked = OMLSettings.UseGenreList;
             GenreList = new List<String>();
-            if (Properties.Settings.Default.gsValidGenres != null 
+            if (Properties.Settings.Default.gsValidGenres != null
             && Properties.Settings.Default.gsValidGenres.Count > 0)
             {
                 genreCount = Properties.Settings.Default.gsValidGenres.Count;
@@ -95,25 +95,25 @@ namespace OMLDatabaseEditor
             GenreList.Sort();
             lbGenres.DataSource = GenreList;
 
-            this.ceFoldersAsTitles.Checked = OMLEngine.Properties.Settings.Default.FoldersAreTitles;
-            this.cePrependParentFolder.Checked = OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName;
+            this.ceFoldersAsTitles.Checked = OMLSettings.TreatFoldersAsTitles;
+            this.cePrependParentFolder.Checked = OMLSettings.AddParentFoldersToTitleName;
             cePrependParentFolder.Enabled = this.ceFoldersAsTitles.Checked;
 
             foreach (IOMLMetadataPlugin plugin in MainEditor._metadataPlugins)
             {
                 cmbDefaultMetadataPlugin.Properties.Items.Add(plugin.PluginName);
             }
-            cmbDefaultMetadataPlugin.SelectedItem = Properties.Settings.Default.gsDefaultMetadataPlugin;
+            cmbDefaultMetadataPlugin.SelectedItem = OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin;
 
-            ceTitledFanArtFolder.Checked = OMLEngine.Properties.Settings.Default.gbTitledFanArtFolder;
-            beTitledFanArtPath.EditValue = OMLEngine.Properties.Settings.Default.gsTitledFanArtPath;
+            ceTitledFanArtFolder.Checked = OMLSettings.TitledFanArtFolder;
+            beTitledFanArtPath.EditValue = OMLSettings.TitledFanArtPath;
             if (string.IsNullOrEmpty(beTitledFanArtPath.EditValue.ToString())) beTitledFanArtPath.EditValue = OMLEngine.FileSystemWalker.FanArtDirectory;
 
             beTitledFanArtPath.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             beTitledFanArtPath.MaskBox.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
 
-            ceAutoScanDiskOnAdd.Checked = OMLEngine.Settings.OMLSettings.AutoScanDiskOnAdding;
-            ceScanDiskRollInfoToTitle.Checked = OMLEngine.Settings.OMLSettings.ScanDiskRollInfoToTitle;
+            ceAutoScanDiskOnAdd.Checked = OMLSettings.AutoScanDiskOnAdding;
+            ceScanDiskRollInfoToTitle.Checked = OMLSettings.ScanDiskRollInfoToTitle;
 
 
             // Mounting Tools
@@ -124,9 +124,9 @@ namespace OMLDatabaseEditor
             }
 
             
-            rgMountingTool.EditValue = OMLEngine.Settings.OMLSettings.MountingToolSelection.ToString();
-            cmbMntToolVDrive.Text = OMLEngine.Settings.OMLSettings.VirtualDiscDrive;
-            teMntToolPath.Text = OMLEngine.Settings.OMLSettings.MountingToolPath;
+            rgMountingTool.EditValue = OMLSettings.MountingToolSelection.ToString();
+            cmbMntToolVDrive.Text = OMLSettings.VirtualDiscDrive;
+            teMntToolPath.Text = OMLSettings.MountingToolPath;
         }
 
         private void SimpleButtonClick(object sender, EventArgs e)
@@ -135,26 +135,26 @@ namespace OMLDatabaseEditor
             {
                 Boolean bDirty = false;
                 String skin = (String)this.lbcSkins.SelectedValue;
-                if (skin != Properties.Settings.Default.gsAppSkin)
+                if (skin != OMLSettings.DBEditorSkin)
                 {
                     bDirty = true;
-                    Properties.Settings.Default.gsAppSkin = skin;
+                    OMLSettings.DBEditorSkin = skin;
                 }
-                if (Properties.Settings.Default.gbUseMPAAList != this.ceUseMPAAList.Checked)
+                if (OMLSettings.UseMPAAList != this.ceUseMPAAList.Checked)
                 {
                     bDirty = true;
-                    Properties.Settings.Default.gbUseMPAAList = this.ceUseMPAAList.Checked;
+                    OMLSettings.UseMPAAList = this.ceUseMPAAList.Checked;
                 }
                 if (MPAAdirty)
                 {
                     bDirty = true;
                     String MPAAs = String.Join("|", MPAAList.ToArray());
-                    Properties.Settings.Default.gsMPAARatings = MPAAs;
+                    OMLEngine.Settings.OMLSettings.MPAARatings = MPAAs;
                 }
-                if (Properties.Settings.Default.gbUseGenreList != this.ceUseGenreList.Checked)
+                if (OMLSettings.UseGenreList != this.ceUseGenreList.Checked)
                 {
                     bDirty = true;
-                    Properties.Settings.Default.gbUseGenreList = this.ceUseGenreList.Checked;
+                    OMLSettings.UseGenreList = this.ceUseGenreList.Checked;
                 }
                 if (GenreDirty)
                 {
@@ -173,47 +173,43 @@ namespace OMLDatabaseEditor
                 {
                     bDirty = true;
                     String Tags = String.Join("|", TagList.ToArray());
-                    Properties.Settings.Default.gsTags = Tags;
+                    OMLSettings.Tags = Tags;
                 }
 
                 // TODO - needs tidying, do not save on evert OMLEngine change, might need to add another dirty flag
-                if (OMLEngine.Properties.Settings.Default.gbTitledFanArtFolder != this.ceTitledFanArtFolder.Checked)
+                if (OMLSettings.TitledFanArtFolder != this.ceTitledFanArtFolder.Checked)
                 {
                     bDirty = true;
-                    OMLEngine.Properties.Settings.Default.gbTitledFanArtFolder = this.ceTitledFanArtFolder.Checked;
-                    OMLEngine.Properties.Settings.Default.Save();
+                    OMLSettings.TitledFanArtFolder = this.ceTitledFanArtFolder.Checked;
                 }
 
-                if (OMLEngine.Properties.Settings.Default.gbTitledFanArtFolder &&
-                    OMLEngine.Properties.Settings.Default.gsTitledFanArtPath != (string)beTitledFanArtPath.EditValue)
+                if (OMLSettings.TitledFanArtFolder &&
+                    OMLSettings.TitledFanArtPath != (string)beTitledFanArtPath.EditValue)
                 {
                     bDirty = true;
-                    OMLEngine.Properties.Settings.Default.gsTitledFanArtPath = (string)this.beTitledFanArtPath.EditValue;
-                    OMLEngine.Properties.Settings.Default.Save();
+                    OMLSettings.TitledFanArtPath = (string)this.beTitledFanArtPath.EditValue;
                 }
 
                 bDirty = true;
-                Properties.Settings.Default.gsDefaultMetadataPlugin = (string)cmbDefaultMetadataPlugin.SelectedItem;
+                OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin = (string)cmbDefaultMetadataPlugin.SelectedItem;
 
                 if (bDirty)
                 {
                     OptionsDirty = bDirty;
                     Properties.Settings.Default.Save();
                 }
-                if (OMLEngine.Properties.Settings.Default.FoldersAreTitles != this.ceFoldersAsTitles.Checked)
+                if (OMLSettings.TreatFoldersAsTitles != this.ceFoldersAsTitles.Checked)
                 {
-                    OMLEngine.Properties.Settings.Default.FoldersAreTitles = this.ceFoldersAsTitles.Checked;
-                    OMLEngine.Properties.Settings.Default.Save();
+                    OMLSettings.TreatFoldersAsTitles = this.ceFoldersAsTitles.Checked;
                 }
-                if (OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName != this.cePrependParentFolder.Checked)
+                if (OMLSettings.AddParentFoldersToTitleName != this.cePrependParentFolder.Checked)
                 {
-                    OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName = this.cePrependParentFolder.Checked;
-                    OMLEngine.Properties.Settings.Default.Save();
+                    OMLSettings.AddParentFoldersToTitleName = this.cePrependParentFolder.Checked;
                 }
 
 
-                OMLEngine.Settings.OMLSettings.AutoScanDiskOnAdding = ceAutoScanDiskOnAdd.Checked;
-                OMLEngine.Settings.OMLSettings.ScanDiskRollInfoToTitle = ceScanDiskRollInfoToTitle.Checked;
+                OMLSettings.AutoScanDiskOnAdding = ceAutoScanDiskOnAdd.Checked;
+                OMLSettings.ScanDiskRollInfoToTitle = ceScanDiskRollInfoToTitle.Checked;
 
 
                 MountingTool.Tool tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), rgMountingTool.Text);
@@ -224,7 +220,7 @@ namespace OMLDatabaseEditor
             }
             else if (sender == this.sbCancel)
             {
-                String skin = Properties.Settings.Default.gsAppSkin;
+                String skin = OMLEngine.Settings.OMLSettings.DBEditorSkin;
                 ((MainEditor)this.Owner).defaultLookAndFeel1.LookAndFeel.SkinName = skin;
             }
             this.Close();
@@ -373,7 +369,7 @@ namespace OMLDatabaseEditor
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
             fbd.Description = @"Titled FanArt Path";
-            fbd.SelectedPath = OMLEngine.Properties.Settings.Default.gsTitledFanArtPath;
+            fbd.SelectedPath = OMLSettings.TitledFanArtPath;
             if (fbd.ShowDialog() == DialogResult.OK)
             {
                 beTitledFanArtPath.EditValue = fbd.SelectedPath;
