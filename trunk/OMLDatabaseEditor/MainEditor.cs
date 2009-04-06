@@ -644,22 +644,25 @@ namespace OMLDatabaseEditor
             {
                 Title editedTitle = titleEditor.EditedTitle;
                 Title collectionTitle = TitleCollectionManager.GetTitle(editedTitle.Id);
-                if (titleEditor.IsNew())
+
+                //if (editedTitle.MetadataSourceID == String.Empty)
+                if (string.IsNullOrEmpty(editedTitle.MetadataSourceName))
                 {
-                    if (editedTitle.MetadataSourceID == String.Empty)
+                    DialogResult result = XtraMessageBox.Show("Would you like to retrieve metadata on this movie?", "Get data", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.Yes)
                     {
-                        DialogResult result = XtraMessageBox.Show("Would you like to retrieve metadata on this movie?", "Get data", MessageBoxButtons.YesNo);
-                        if (result == DialogResult.Yes)
-                        {
-                            LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
-                            MetaDataPluginSelect selectPlugin = new MetaDataPluginSelect(_metadataPlugins);
-                            selectPlugin.ShowDialog();
-                            IOMLMetadataPlugin plugin = selectPlugin.SelectedPlugin();
-                            StartMetadataImport(plugin, false);
-                        }
+                        LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
+                        MetaDataPluginSelect selectPlugin = new MetaDataPluginSelect(_metadataPlugins);
+                        selectPlugin.ShowDialog();
+                        IOMLMetadataPlugin plugin = selectPlugin.SelectedPlugin();
+                        StartMetadataImport(plugin, false);
+                    }
+                    else
+                    {
+                        editedTitle.MetadataSourceName = "Manual Title";
                     }
                     //_titleCollection.Add(editedTitle);
-                    TitleCollectionManager.AddTitle(editedTitle);
+                    //TitleCollectionManager.AddTitle(editedTitle);
                 }
                 else
                 {
@@ -667,6 +670,8 @@ namespace OMLDatabaseEditor
                     //_titleCollection.Replace(editedTitle);
                     // todo : solomon : i think a save should just work here unless this is working
                     // off a copy
+
+                // This gets called by titleEditor.SaveChanges(); anyway
                     TitleCollectionManager.SaveTitleUpdates();
                 }
                 
@@ -811,6 +816,10 @@ namespace OMLDatabaseEditor
             Title newMovie = new Title();
             newMovie.Name = "New Movie";
             newMovie.DateAdded = DateTime.Now;
+
+            // Add the title now to get the title ID
+            TitleCollectionManager.AddTitle(newMovie);
+
             titleEditor.LoadDVD(newMovie);
             ToggleSaveState(true);
         }
@@ -827,6 +836,10 @@ namespace OMLDatabaseEditor
                 Title newTitle = new Title();
                 newTitle.DateAdded = DateTime.Now;
                 newTitle.Name = name;
+
+                // Add the title now to get the title ID
+                TitleCollectionManager.AddTitle(newTitle);
+
                 titleEditor.LoadDVD(newTitle);
                 StartMetadataImport(plugin, false);
                 this.Text = APP_TITLE + " - " + titleEditor.EditedTitle.Name + "*";

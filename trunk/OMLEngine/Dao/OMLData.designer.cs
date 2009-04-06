@@ -260,7 +260,7 @@ namespace OMLEngine.Dao
 		
 		private long _GenreMetaDataId;
 		
-		private long _Id;
+		private System.Nullable<long> _Id;
 		
 		private EntityRef<GenreMetaData> _GenreMetaData;
 		
@@ -274,7 +274,7 @@ namespace OMLEngine.Dao
     partial void OnTitleIdChanged();
     partial void OnGenreMetaDataIdChanging(long value);
     partial void OnGenreMetaDataIdChanged();
-    partial void OnIdChanging(long value);
+    partial void OnIdChanging(System.Nullable<long> value);
     partial void OnIdChanged();
     #endregion
 		
@@ -334,7 +334,7 @@ namespace OMLEngine.Dao
 		}
 		
 		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public long Id
+		public System.Nullable<long> Id
 		{
 			get
 			{
@@ -371,7 +371,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Association(Name="Title_Genre", Storage="_Title", ThisKey="TitleId", OtherKey="Id", IsForeignKey=true)]
+		[Association(Name="Title_Genre", Storage="_Title", ThisKey="TitleId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true)]
 		public Title Title
 		{
 			get
@@ -1384,7 +1384,7 @@ namespace OMLEngine.Dao
 		
 		private long _BioId;
 		
-		private long _Id;
+		private System.Nullable<long> _Id;
 		
 		private EntityRef<BioData> _BioData;
 		
@@ -1404,7 +1404,7 @@ namespace OMLEngine.Dao
     partial void OnRoleChanged();
     partial void OnBioIdChanging(long value);
     partial void OnBioIdChanged();
-    partial void OnIdChanging(long value);
+    partial void OnIdChanging(System.Nullable<long> value);
     partial void OnIdChanged();
     #endregion
 		
@@ -1524,7 +1524,7 @@ namespace OMLEngine.Dao
 		}
 		
 		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public long Id
+		public System.Nullable<long> Id
 		{
 			get
 			{
@@ -1561,7 +1561,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Association(Name="Title_Person", Storage="_Title", ThisKey="TitleId", OtherKey="Id", IsForeignKey=true)]
+		[Association(Name="Title_Person", Storage="_Title", ThisKey="TitleId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true)]
 		public Title Title
 		{
 			get

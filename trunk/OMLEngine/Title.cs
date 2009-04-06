@@ -950,6 +950,27 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public void RemoveAllGenres()
+        {
+            // enumerate the genres for this title, then remove them
+            List<Dao.Genre> allgenres = new List<OMLEngine.Dao.Genre>();
+            foreach (Dao.Genre daoGenre in _title.Genres)
+            {
+                allgenres.Add(daoGenre);
+            }
+
+            foreach (Dao.Genre daoGenre in allgenres)
+            {
+                _title.Genres.Remove(daoGenre);
+            }
+
+            _genres = null;
+        }
+
+
+        /// <summary>
         /// Adds a disk to the collection
         /// </summary>
         /// <param name="disk"></param>
@@ -1968,7 +1989,7 @@ namespace OMLEngine
             VideoDetails = CopyStringValue(t.VideoDetails, VideoDetails, overWrite);
             
             if ( t.Runtime > 0) Runtime = t.Runtime;
-            if (t.ReleaseDate != null) ReleaseDate = t.ReleaseDate;
+            if ((t.ReleaseDate != null) && (t.ReleaseDate.Year > 1900) && (t.ReleaseDate.Year < 2080)) ReleaseDate = t.ReleaseDate;
             if (t.UserStarRating > 0) UserStarRating = t.UserStarRating;
             if (t.ProductionYear > 0) ProductionYear = t.ProductionYear;
 
@@ -2026,16 +2047,15 @@ namespace OMLEngine
                 }
             }
 
-            if (t._genres != null && t._genres.Count > 0)
+            if (t.Genres != null && t.Genres.Count > 0)
             {
-                if (_genres == null) _genres = new List<string>();
-                if (overWrite || _genres.Count == 0)
+                if (overWrite || Genres.Count == 0)
                 {
+                    RemoveAllGenres();
 
-                    _genres.Clear();
-                    foreach (string p in t._genres)
+                    foreach (string p in t.Genres)
                     {
-                        _genres.Add(p);
+                        AddGenre(p);
                     }
                 }
             }
