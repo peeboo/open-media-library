@@ -83,17 +83,18 @@ namespace OMLDatabaseEditor.Controls
             Status = TitleStatus.Normal;
         }
 
-        public bool IsNew()
+        /*public bool IsNew()
         {
             return TitleCollectionManager.GetTitle(_dvdTitle.Id) == null;
-        }
+        }*/
 
         public void SaveChanges()
         {
             titleSource.CurrencyManager.Refresh();
-            if (IsNew())
-                TitleCollectionManager.AddTitle(_dvdTitle);
-            else
+            // Title is allready added in order to create title ID, so no need to AddTitle.
+            //if (IsNew())
+            //    TitleCollectionManager.AddTitle(_dvdTitle);
+            //else
                 //MainEditor._titleCollection.Replace(_dvdTitle);
 
             TitleCollectionManager.SaveTitleUpdates();
@@ -272,7 +273,17 @@ namespace OMLDatabaseEditor.Controls
         private void btnGenres_Click(object sender, EventArgs e)
         {
             if (_dvdTitle != null)
-                EditList("Genres", _dvdTitle.Genres);
+            {
+                List<string> items = new List<string>();
+                items.AddRange(_dvdTitle.Genres);
+                EditList("Genres", items);
+                _dvdTitle.RemoveAllGenres();
+
+                foreach (string item in items)
+                {
+                    _dvdTitle.AddGenre(item);
+                }
+            }
         }
 
         private void btnTags_Click(object sender, EventArgs e)

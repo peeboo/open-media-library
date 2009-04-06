@@ -12,9 +12,9 @@
     <Type Name="Genre" AccessModifier="Internal">
       <Column Name="TitleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="GenreMetaDataId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="true" />
       <Association Name="GenreMetaData_Genre" Member="MetaData" Storage="_GenreMetaData" ThisKey="GenreMetaDataId" OtherKey="Id" Type="GenreMetaData" IsForeignKey="true" />
-      <Association Name="Title_Genre" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" />
+      <Association Name="Title_Genre" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.Titles" Member="Titles" AccessModifier="Internal">
@@ -65,9 +65,9 @@
       <Column Name="Sort" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
       <Column Name="Role" Type="System.Byte" DbType="TinyInt" CanBeNull="false" />
       <Column Name="BioId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="true" />
       <Association Name="BioData_Person" Member="MetaData" Storage="_BioData" ThisKey="BioId" OtherKey="Id" Type="BioData" IsForeignKey="true" />
-      <Association Name="Title_Person" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" />
+      <Association Name="Title_Person" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.BioData" Member="BioDatas" AccessModifier="Internal">
