@@ -379,7 +379,7 @@ namespace OMLDatabaseEditor.Controls
                         EditedTitle.Writers.Remove(item as Person);
                         break;
                     case 2: //Producers
-                        EditedTitle.Producers.Remove(item as string);
+                        EditedTitle.Producers.Remove(item as Person);
                         break;
                     case 3: //Actors
                         EditedTitle.ActingRoles.Remove(((Role)item).PersonName);
@@ -420,7 +420,7 @@ namespace OMLDatabaseEditor.Controls
                         EditedTitle.AddWriter(new Person(frmPerson.PersonName));
                         break;
                     case 2: //Producers
-                        EditedTitle.AddProducer(frmPerson.PersonName);
+                        EditedTitle.AddProducer(new Person(frmPerson.PersonName));
                         break;
                     case 3: //Actors
                         EditedTitle.AddActingRole(frmPerson.PersonName, frmPerson.PersonRole);

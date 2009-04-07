@@ -46,7 +46,7 @@ namespace OMLTestSuite
             t.AddGenre("Comedy");
             t.AddAudioTrack("English");
             t.AddAudioTrack("French");
-            t.AddProducer("Sony");
+            t.AddProducer(new Person("Sony"));
             t.AddWriter(new Person("Timothy"));
 
             Assert.AreEqual("Widescreen", t.AspectRatio);

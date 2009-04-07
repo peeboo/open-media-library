@@ -158,7 +158,7 @@ namespace DVDProfilerMetaData
                         }
                         else if (CreditType == "Production")
                         {
-                            t.AddProducer(fullName);
+                            t.AddProducer(new Person(fullName));
                         }
                     }
                 }

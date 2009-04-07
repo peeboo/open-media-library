@@ -308,7 +308,7 @@ namespace DVDProfilerPlugin
                     case "Production":
                         if (!producersAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
                         {
-                            title.Producers.Add(person.full_name);
+                            title.Producers.Add(person);
                             producersAlreadyAdded.Add(person.full_name.ToUpperInvariant());
                         }
                         break;
