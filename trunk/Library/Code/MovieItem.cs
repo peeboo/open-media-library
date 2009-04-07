@@ -648,9 +648,18 @@ namespace Library
         /// Gets the producers.
         /// </summary>
         /// <value>The producers.</value>
-        public IList<string> Producers
+        public IList Producers
         {
-            get { return _titleObj.Producers; }
+            get
+            {
+                List<string> producer_names = new List<string>();
+                foreach (Person p in _titleObj.Producers)
+                {
+                    producer_names.Add(p.full_name);
+                }
+                return producer_names;
+            }
+            //get { return _titleObj.Producers; }
             //set { _titleObj.Producers = value; }
         }
 

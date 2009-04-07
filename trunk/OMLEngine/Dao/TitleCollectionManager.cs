@@ -420,8 +420,23 @@ namespace OMLEngine
             title.DaoTitle.Genres.Add(new Dao.Genre { MetaData = meta });
         }
 
+        public static void RemoveAllPersons(Title title, PeopleRole type)
+        {
+            var deletePersons = from d in Dao.DBContext.Instance.Persons
+                                where d.Role == (byte)type
+                                select d;
+
+            foreach (Dao.Person daoperson in deletePersons)
+            {
+                title.DaoTitle.People.Remove(daoperson);
+            }
+        }
+
         public static void AddPersonToTitle(Title title, string name, PeopleRole type)
         {
+            if (name.Length > 255)
+                throw new FormatException(type.ToString() + " name must be 255 characters or less.");
+
             if (string.IsNullOrEmpty(name))
                 return;
 
@@ -446,7 +461,12 @@ namespace OMLEngine
             AddActorToTitle(title, actor, role, PeopleRole.Actor);
         }
 
-        public static void AddActorToTitle(Title title, string actor, string role, PeopleRole type)
+        public static void AddNonActorToTitle(Title title, string actor, string role)
+        {
+            AddActorToTitle(title, actor, role, PeopleRole.NonActing);
+        }
+
+        private static void AddActorToTitle(Title title, string actor, string role, PeopleRole type)
         {
             if (actor.Length > 255)
                 throw new FormatException("Actor must be 255 characters or less.");

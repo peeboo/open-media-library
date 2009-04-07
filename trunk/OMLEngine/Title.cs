@@ -40,7 +40,7 @@ namespace OMLEngine
         private List<string> _tags = null;
         private List<Person> _directors = null;
         private List<Person> _writers = null;
-        private List<string> _producers = null;
+        private List<Person> _producers = null;
         private List<Disk> _disks = null;
         private List<string> _genres = null;
         private List<string> _audioTracks = null;
@@ -646,18 +646,7 @@ namespace OMLEngine
             }            
         }        
 
-        public void AddNonActingRole(string name, string role)
-        {
-            if (name == null || role == null) return;
-            if (_nonActingRoles != null && !_nonActingRoles.ContainsKey(name))
-            {
-
-            }
-            if (!_nonActingRoles.ContainsKey(name))
-            {
-                _nonActingRoles.Add(name, role);
-            }
-        }       
+    
         
         /// <summary>
         /// List of Person objects that directed the title (usually one Person)
@@ -691,7 +680,7 @@ namespace OMLEngine
         /// <summary>
         /// List of people/companies that produced the title
         /// </summary>
-        public List<string> Producers
+        public List<Person> Producers
         {
             get 
             {
@@ -719,7 +708,7 @@ namespace OMLEngine
         {
             _actingRoles = new Dictionary<string, string>();
             _writers = new List<Person>();
-            _producers = new List<string>();
+            _producers = new List<Person>();
             _directors = new List<Person>();
 
             foreach (Dao.Person person in _title.People)
@@ -738,7 +727,7 @@ namespace OMLEngine
                         break;
 
                     case PeopleRole.Producers:
-                        _producers.Add(person.MetaData.FullName);
+                        _producers.Add(new Person(person.MetaData.FullName));
                         break;
 
                     case PeopleRole.Writer:
@@ -774,22 +763,36 @@ namespace OMLEngine
             _title = title;
         }
 
+        #region People Management
         public void AddActingRole(string actor, string role)
         {
-            if (actor.Length > 255)
-                throw new FormatException("Actor must be 255 characters or less.");
-            if (role.Length > 255)
-                throw new FormatException("Role must be 255 characters or less.");
+            if (!ActingRoles.ContainsKey(actor))
+            {
+                TitleCollectionManager.AddActorToTitle(this, actor, role);
+                // reset the internal collection
+                _peopleProcesed = false;
+            }
+        }
 
-            if (string.IsNullOrEmpty(actor) && string.IsNullOrEmpty(role))
-                return;
+        public void RemoveAllActingRoles()
+        {
+            TitleCollectionManager.RemoveAllPersons(this, PeopleRole.Actor);
+            _peopleProcesed = false;
+        }
 
-            if (ActingRoles.ContainsKey(actor))
-                return;
-
-            TitleCollectionManager.AddActorToTitle(this, actor, role);
-            
-            // reset the internal collection
+        public void AddNonActingRole(string name, string role)
+        {
+            if (!NonActingRoles.ContainsKey(name))
+            {
+                TitleCollectionManager.AddNonActorToTitle(this, name, role);
+                // reset the internal collection
+                _peopleProcesed = false;
+            }
+        }  
+ 
+        public void RemoveAllNonActingRoles()
+        {
+            TitleCollectionManager.RemoveAllPersons(this, PeopleRole.NonActing);
             _peopleProcesed = false;
         }
 
@@ -799,34 +802,57 @@ namespace OMLEngine
         /// <param name="director">Person object to add</param>
         public void AddDirector(Person director)
         {
-            /*if ( Directors.Contains(
-            /*
-            if (director == null) return;
-            _directors.Add(director);
-             */
+            if (!Directors.Contains(director))
+            {
+                TitleCollectionManager.AddPersonToTitle(this, director.full_name, PeopleRole.Director);
+                // reset the internal collection
+                _peopleProcesed = false;
+            }
         }
+
+        public void RemoveAllDirectors()
+        {
+            TitleCollectionManager.RemoveAllPersons(this, PeopleRole.Director);
+            _peopleProcesed = false;
+        }
+
         /// <summary>
         /// Add a Person object to the writers list
         /// </summary>
         /// <param name="writer">Person object to add</param>
         public void AddWriter(Person writer)
         {
-            /*
-            if (writer == null) return;
-            _writers.Add(writer);
-             */
+            if (!Directors.Contains(writer))
+            {
+                TitleCollectionManager.AddPersonToTitle(this, writer.full_name, PeopleRole.Writer);
+                _peopleProcesed = false;
+            }
+        }
+
+        public void RemoveAllWriters()
+        {
+            TitleCollectionManager.RemoveAllPersons(this, PeopleRole.Writer);
+            _peopleProcesed = false;
         }
         /// <summary>
         /// Add a string (person name or company name) to the producers list
         /// </summary>
         /// <param name="producer">string name to add</param>
-        public void AddProducer(string producer)
+        public void AddProducer(Person producer)
         {
-            /*
-            if (producer == null) return;
-            _producers.Add(producer);
-             */
-        }                       
+            if (!Directors.Contains(producer))
+            {
+                TitleCollectionManager.AddPersonToTitle(this, producer.full_name, PeopleRole.Producers);
+                _peopleProcesed = false;
+            }
+        }
+
+        public void RemoveAllProducers()
+        {
+            TitleCollectionManager.RemoveAllPersons(this, PeopleRole.Producers);
+            _peopleProcesed = false;
+        }
+        #endregion
 
         /// <summary>
         /// Add an audio track
@@ -1993,13 +2019,12 @@ namespace OMLEngine
             if (t.UserStarRating > 0) UserStarRating = t.UserStarRating;
             if (t.ProductionYear > 0) ProductionYear = t.ProductionYear;
 
-            if (t._directors != null && t._directors.Count > 0)
+            if (t.Directors!= null && t.Directors.Count > 0)
             {
-                if (_directors == null) _directors = new List<Person>();
-                if (overWrite || _directors.Count == 0)
+                if (overWrite || Directors.Count == 0)
                 {
-                    _directors.Clear();
-                    foreach (Person p in t._directors)
+                    RemoveAllDirectors();
+                    foreach (Person p in t.Directors)
                     {
                         AddDirector(new Person(p.full_name));
                     }
@@ -2007,27 +2032,24 @@ namespace OMLEngine
             }
 
 
-            if (t._writers != null && t._writers.Count > 0)
+            if (t.Writers != null && t.Writers.Count > 0)
             {
-                if (_writers == null) _writers = new List<Person>();
-                if (overWrite || _writers.Count == 0)
+                if (overWrite || Writers.Count == 0)
                 {
-                    _writers.Clear();
+                    RemoveAllWriters();
                     foreach (Person p in t._writers)
                     {
                         AddWriter(new Person(p.full_name));
                     }
                 }
-
             }
 
-            if (t._producers != null && t._producers.Count > 0)
+            if (t.Producers != null && t.Producers.Count > 0)
             {
-                if (_producers == null) _producers = new List<string>();
-                if (overWrite || _producers.Count == 0)
+                if (overWrite || Producers.Count == 0)
                 {
-                    _producers.Clear();
-                    foreach (string p in t._producers)
+                    RemoveAllProducers();
+                    foreach (Person p in t.Producers)
                     {
                         AddProducer(p);
                     }
@@ -2052,7 +2074,6 @@ namespace OMLEngine
                 if (overWrite || Genres.Count == 0)
                 {
                     RemoveAllGenres();
-
                     foreach (string p in t.Genres)
                     {
                         AddGenre(p);
@@ -2074,29 +2095,26 @@ namespace OMLEngine
                 }
             }
 
-            if (t._actingRoles != null && t._actingRoles.Count > 0)
+            if (t.ActingRoles != null && t.ActingRoles.Count > 0)
             {
-                if (_actingRoles == null) _actingRoles = new Dictionary<string, string>();
-                if (overWrite || _actingRoles.Count == 0)
+                if (overWrite || ActingRoles.Count == 0)
                 {
-                    _actingRoles.Clear();
-                    foreach (KeyValuePair<string, string> p in t._actingRoles)
+                    RemoveAllActingRoles();
+                    foreach (KeyValuePair<string, string> p in t.ActingRoles)
                     {
-                        _actingRoles.Add(p.Key, p.Value);
+                        AddActingRole(p.Key, p.Value);
                     }
                 }
             }
 
-            if (t._nonActingRoles != null && t._nonActingRoles.Count > 0)
+            if (t.NonActingRoles != null && t.NonActingRoles.Count > 0)
             {
-                if (_nonActingRoles == null) _nonActingRoles = new Dictionary<string, string>();
                 if (overWrite || _nonActingRoles.Count == 0)
                 {
-
-                    _nonActingRoles.Clear();
-                    foreach (KeyValuePair<string, string> p in t._nonActingRoles)
+                    RemoveAllNonActingRoles();
+                    foreach (KeyValuePair<string, string> p in t.NonActingRoles)
                     {
-                        _nonActingRoles.Add(p.Key, p.Value);
+                        AddNonActingRole(p.Key, p.Value);
                     }
                 }
             }            
@@ -2362,9 +2380,9 @@ namespace OMLEngine
             
 
             ReleaseDate = GetSerializedDateTime(info, "release_date");
-            _producers = GetSerializedList<List<string>>(info, "producers");
-            foreach (string p in _producers)
-                TitleCollectionManager.AddPersonToTitle(this, p, PeopleRole.Producers);
+            _producers = GetSerializedList<List<Person>>(info, "producers");
+            foreach (Person p in _producers)
+                TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Producers);
             _writers = GetSerializedList<List<Person>>(info, "writers");
             foreach (Person p in _writers)
                 TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Writer);
@@ -2390,7 +2408,7 @@ namespace OMLEngine
                 TitleCollectionManager.AddActorToTitle(this, key, _actingRoles[key]);
             _nonActingRoles = GetSerializedList<Dictionary<string, string>>(info, "nonacting_roles");
             foreach (string key in _nonActingRoles.Keys)
-                TitleCollectionManager.AddActorToTitle(this, key, _nonActingRoles[key], PeopleRole.NonActing);
+                TitleCollectionManager.AddNonActorToTitle(this, key, _nonActingRoles[key]);
             _trailers = GetSerializedList<List<string>>(info, "trailers");
             _title.Trailers = Dao.TitleDao.GetDelimitedStringFromCollection(_trailers);
             SortName = GetSerializedString(info, "sort_name");

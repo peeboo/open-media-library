@@ -222,7 +222,7 @@ namespace TheMovieDbMetadata
                                             break;                                        
 
                                         case "producer":
-                                            result.Title.AddProducer(GetElementValue(reader));
+                                            result.Title.AddProducer(new Person(GetElementValue(reader)));
                                             break;                                        
 
                                         case "original_music_composer":

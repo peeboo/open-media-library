@@ -332,7 +332,7 @@ namespace OMLEngine
                 List<string> producers = (from title in _list
                                           from producer in title.Producers
                                           orderby producer ascending
-                                          select producer).Distinct().ToList<string>();
+                                          select producer.full_name).Distinct().ToList<string>();
                 return producers;
             }
         }

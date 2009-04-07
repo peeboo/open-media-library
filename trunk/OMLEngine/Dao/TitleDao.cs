@@ -107,9 +107,9 @@ namespace OMLEngine.Dao
             }
 
             // add the producers
-            foreach (string name in title.Producers)
+            foreach (OMLEngine.Person name in title.Producers)
             {
-                Person person = CreatePerson(name, null, PeopleRole.Producers, existingPeople);
+                Person person = CreatePerson(name.full_name, null, PeopleRole.Producers, existingPeople);
 
                 // maintain the order
                 person.Sort = (short)(actorIndex++);
@@ -203,8 +203,8 @@ namespace OMLEngine.Dao
             foreach (OMLEngine.Person person in title.Directors)
                 names.Add(person.full_name);
 
-            foreach (string person in title.Producers)
-                names.Add(person);
+            foreach (OMLEngine.Person person in title.Producers)
+                names.Add(person.full_name);
 
             // now that we have all the people - query to see who exists
             var actors = from actor in DBContext.Instance.BioDatas
