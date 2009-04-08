@@ -78,6 +78,13 @@ namespace OMLEngine.FileSystem
             return EnumerateServers(pRsrc, ResourceScope.RESOURCE_GLOBALNET, ResourceType.RESOURCETYPE_DISK, ResourceUsage.RESOURCEUSAGE_ALL, ResourceDisplayType.RESOURCEDISPLAYTYPE_SHARE);
         }
 
+        public static IEnumerable<string> GetAllAvailableNetworkDevices()
+        {
+            NETRESOURCE pRsrc = new NETRESOURCE();
+
+            return EnumerateServers(pRsrc, ResourceScope.RESOURCE_GLOBALNET, ResourceType.RESOURCETYPE_DISK, ResourceUsage.RESOURCEUSAGE_ALL, ResourceDisplayType.RESOURCEDISPLAYTYPE_SERVER);
+        }
+
         private static IEnumerable<string> EnumerateServers(NETRESOURCE pRsrc, ResourceScope scope, ResourceType type, ResourceUsage usage, ResourceDisplayType displayType)
         {            
             uint bufferSize = 16384;
