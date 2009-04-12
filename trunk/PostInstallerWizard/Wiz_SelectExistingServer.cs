@@ -15,5 +15,15 @@ namespace PostInstallerWizard
         {
             InitializeComponent();
         }
+
+        public void ShowAdvancedFields(bool advanced)
+        {
+            labelInstanceName.Visible = advanced;
+            labelSAPwd.Visible = advanced;
+            teInstance.Visible = advanced;
+            teSAPwd.Visible = advanced;
+   
+        }
+
     }
 }

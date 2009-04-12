@@ -231,6 +231,87 @@ namespace OMLEngine.DatabaseManagement
         }
 
 
+        public void CreateOMLUser()
+        {
+            bool retval = false;
+
+            // Create database connection to OML and open it
+            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
+
+            if (sqlConn != null)
+            {
+                CreateOMLUser(sqlConn);
+            }
+            sqlConn.Close();
+            //return retval;
+        }
+
+
+        public bool CreateOMLDatabase()
+        {
+            bool retval = false;
+
+            // Create database connection to OML and open it
+            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
+
+            if (sqlConn != null)
+            {
+                // Launch backup job
+                string sql = @"CREATE DATABASE [OML] ON  PRIMARY " +
+                    @"( NAME = N'OML', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL10.OML\MSSQL\DATA\OML.mdf' , SIZE = 3072KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB ) " +
+                    @" LOG ON  " +
+                    @"( NAME = N'OML_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL10.OML\MSSQL\DATA\OML_log.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%) ";
+
+                if (ExecuteNonQuery(sqlConn, sql))
+                {
+                    retval = true;
+
+                    ExecuteNonQuery(sqlConn, "ALTER DATABASE [OML] SET COMPATIBILITY_LEVEL = 100");
+
+                    ExecuteNonQuery(sqlConn, "ALTER DATABASE [OML] SET ANSI_NULL_DEFAULT OFF ");
+
+                    ExecuteNonQuery(sqlConn, "ALTER DATABASE [OML] SET ANSI_NULLS OFF ");
+
+                    ExecuteNonQuery(sqlConn, "ALTER DATABASE [OML] SET ANSI_PADDING OFF ");
+
+                    ExecuteNonQuery(sqlConn, "ALTER DATABASE [OML] SET ANSI_WARNINGS OFF ");
+
+                    ExecuteNonQuery(sqlConn, "ALTER DATABASE [OML] SET AUTO_CLOSE OFF ");
+
+                    ExecuteNonQuery(sqlConn, "ALTER DATABASE [OML] SET AUTO_CREATE_STATISTICS ON ");
+
+                    ExecuteNonQuery(sqlConn, "ALTER DATABASE [OML] SET AUTO_SHRINK OFF ");
+
+                    ExecuteNonQuery(sqlConn, "ALTER DATABASE [OML] SET AUTO_UPDATE_STATISTICS ON ");
+
+                    ExecuteNonQuery(sqlConn, "ALTER DATABASE [OML] SET CURSOR_CLOSE_ON_COMMIT OFF ");
+
+                    ExecuteNonQuery(sqlConn, "ALTER DATABASE [OML] SET RECOVERY SIMPLE ");
+
+                    ExecuteNonQuery(sqlConn, "ALTER DATABASE [OML] SET  MULTI_USER ");
+
+                }
+            }
+            sqlConn.Close();
+            return retval;
+        }
+
+
+        public void RunSQLScript(string filname)
+        { 
+            // Create database connection to OML and open it
+            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
+
+            if (sqlConn != null)
+            {
+
+                string sql = System.IO.File.ReadAllText(filname);
+                ExecuteNonQuery(sqlConn, sql);
+            }
+            sqlConn.Close();
+        }
+
+
         private SqlConnection OpenDatabase(string connectionstring)
         {
             SqlConnection sqlConn = new System.Data.SqlClient.SqlConnection(connectionstring);

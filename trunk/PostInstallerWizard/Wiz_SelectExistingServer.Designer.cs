@@ -28,62 +28,55 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.teInstance = new System.Windows.Forms.TextBox();
+            this.teSAPwd = new System.Windows.Forms.TextBox();
+            this.labelSAPwd = new System.Windows.Forms.Label();
+            this.labelInstanceName = new System.Windows.Forms.Label();
+            this.labelServername = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.cbServers = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
-            // textBox3
+            // teInstance
             // 
-            this.textBox3.Location = new System.Drawing.Point(100, 60);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 11;
+            this.teInstance.Location = new System.Drawing.Point(100, 60);
+            this.teInstance.Name = "teInstance";
+            this.teInstance.Size = new System.Drawing.Size(100, 20);
+            this.teInstance.TabIndex = 11;
             // 
-            // textBox2
+            // teSAPwd
             // 
-            this.textBox2.Location = new System.Drawing.Point(100, 85);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 10;
+            this.teSAPwd.Location = new System.Drawing.Point(100, 85);
+            this.teSAPwd.Name = "teSAPwd";
+            this.teSAPwd.Size = new System.Drawing.Size(100, 20);
+            this.teSAPwd.TabIndex = 10;
             // 
-            // textBox1
+            // labelSAPwd
             // 
-            this.textBox1.Location = new System.Drawing.Point(100, 34);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 9;
+            this.labelSAPwd.AutoSize = true;
+            this.labelSAPwd.Location = new System.Drawing.Point(21, 88);
+            this.labelSAPwd.Name = "labelSAPwd";
+            this.labelSAPwd.Size = new System.Drawing.Size(70, 13);
+            this.labelSAPwd.TabIndex = 8;
+            this.labelSAPwd.Text = "SA Password";
             // 
-            // label3
+            // labelInstanceName
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 88);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(70, 13);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "SA Password";
+            this.labelInstanceName.AutoSize = true;
+            this.labelInstanceName.Location = new System.Drawing.Point(15, 63);
+            this.labelInstanceName.Name = "labelInstanceName";
+            this.labelInstanceName.Size = new System.Drawing.Size(79, 13);
+            this.labelInstanceName.TabIndex = 7;
+            this.labelInstanceName.Text = "Instance Name";
             // 
-            // label2
+            // labelServername
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 63);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(79, 13);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "Instance Name";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(25, 37);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(69, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Server Name";
+            this.labelServername.AutoSize = true;
+            this.labelServername.Location = new System.Drawing.Point(25, 37);
+            this.labelServername.Name = "labelServername";
+            this.labelServername.Size = new System.Drawing.Size(69, 13);
+            this.labelServername.TabIndex = 6;
+            this.labelServername.Text = "Server Name";
             // 
             // label4
             // 
@@ -94,17 +87,25 @@
             this.label4.TabIndex = 12;
             this.label4.Text = "Please enter the details of the server you wish to use?";
             // 
+            // cbServers
+            // 
+            this.cbServers.FormattingEnabled = true;
+            this.cbServers.Location = new System.Drawing.Point(100, 34);
+            this.cbServers.Name = "cbServers";
+            this.cbServers.Size = new System.Drawing.Size(100, 21);
+            this.cbServers.TabIndex = 13;
+            // 
             // Wiz_SelectExistingServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.cbServers);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.teInstance);
+            this.Controls.Add(this.teSAPwd);
+            this.Controls.Add(this.labelSAPwd);
+            this.Controls.Add(this.labelInstanceName);
+            this.Controls.Add(this.labelServername);
             this.Name = "Wiz_SelectExistingServer";
             this.Size = new System.Drawing.Size(300, 150);
             this.ResumeLayout(false);
@@ -114,12 +115,12 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelSAPwd;
+        private System.Windows.Forms.Label labelInstanceName;
+        private System.Windows.Forms.Label labelServername;
         private System.Windows.Forms.Label label4;
+        public System.Windows.Forms.ComboBox cbServers;
+        public System.Windows.Forms.TextBox teInstance;
+        public System.Windows.Forms.TextBox teSAPwd;
     }
 }
