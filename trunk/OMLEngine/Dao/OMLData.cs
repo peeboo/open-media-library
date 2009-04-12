@@ -1,8 +1,8 @@
-using System;
-using System.Linq;
-
 namespace OMLEngine.Dao
 {
+    using System;
+    using System.Linq;
+
     partial class OMLDataDataContext
     {
     }

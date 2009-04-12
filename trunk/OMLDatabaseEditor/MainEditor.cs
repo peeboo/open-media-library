@@ -418,7 +418,7 @@ namespace OMLDatabaseEditor
             }
             catch (Exception e)
             {
-                XtraMessageBox.Show("Exception in LoadTitlesIntoDatabase: %1", e.Message);
+                XtraMessageBox.Show("Exception in LoadTitlesIntoDatabase: {0}", e.Message);
                 Utilities.DebugLine("[OMLImporter] Exception in LoadTitlesIntoDatabase: " + e.Message);
             }
         }
@@ -928,14 +928,14 @@ namespace OMLDatabaseEditor
 
         private void currentMovieToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (titleEditor.EditedTitle != null)
-                titleEditor.EditedTitle.BuildResizedMenuImage();
+            //if (titleEditor.EditedTitle != null)
+                //titleEditor.EditedTitle.BuildResizedMenuImage();
         }
 
         private void allMoviesToolStripMenuItem_Click(object sender, EventArgs e)
         {            
-            foreach (Title t in TitleCollectionManager.GetAllTitles())
-                t.BuildResizedMenuImage();
+            //foreach (Title t in TitleCollectionManager.GetAllTitles())
+                //t.BuildResizedMenuImage();
 
             // saves all the updates
             TitleCollectionManager.SaveTitleUpdates();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Drawing;
 
 namespace OMLEngine.FileSystem
 {
@@ -42,6 +43,107 @@ namespace OMLEngine.FileSystem
             string name = (File.Exists(path)) ? info.Parent.Name : info.Name;                                   
 
             return name.Replace("  ", " ");
+        }
+
+        /// <summary>
+        /// Given a path turns the image into a byte array.  Will return NULL if the operation cannot be done. 
+        /// The image is expected to be a JPG
+        /// </summary>
+        /// <param name="imagePath"></param>
+        /// <returns></returns>
+        public static byte[] ImageToByteArray(string imagePath)
+        {
+            byte[] returnArray = null;
+            if (!string.IsNullOrEmpty(imagePath) &&
+                    File.Exists(imagePath))
+            {
+                try
+                {
+                    using (Image image = Image.FromFile(imagePath))
+                    {
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            returnArray = ms.ToArray();
+                        }
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Utilities.DebugLine("[FileHelper.ImageToByteArray] Exception: " + ex.Message);
+                    returnArray = null;
+                }
+            }
+
+            return returnArray;
+        }
+
+        public static Image ByteArrayToImage(byte[] array)
+        {
+            Image image = null;
+
+            try
+            {
+                image = Image.FromStream(new MemoryStream(array));
+            }
+            catch(Exception ex)
+            {
+                Utilities.DebugLine("[FileHelper.ByteArrayToImage] Exception: " + ex.Message);
+                image = null;
+            }
+
+            return image;
+        }
+
+        /// <summary>
+        /// Given an id, will return the image path.  Will return NULL if it can't be found.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static string GetImagePathFromId(int id)
+        {
+            try
+            {
+                // first check to see if the image exists in our cache folder
+                string imagePath = Path.Combine(FileSystemWalker.ImageDirectory, "ch" + id.ToString() + ".jpg");
+
+                if (File.Exists(imagePath))
+                    return imagePath;
+
+                // if it's not cached - check SQL
+                using (Image image = ImageManager.GetImageById(id))
+                {
+
+                    if (image == null)
+                        return null;
+
+                    // save the image
+                    image.Save(imagePath);
+
+                    return imagePath;
+                }
+            }
+            catch(Exception ex)
+            {
+                Utilities.DebugLine("[FileHelper.GetImagePathFromId] Exception: " + ex.Message);
+                return null;
+            }
+        }
+
+        public static void DeleteCachedImage(int id)
+        {
+            try
+            {
+                string imagePath = Path.Combine(FileSystemWalker.ImageDirectory, "ch" + id.ToString() + ".jpg");
+
+                if (File.Exists(imagePath))
+                    File.Delete(imagePath);
+
+            }
+            catch(Exception ex)
+            {
+                Utilities.DebugLine("[FileHelper.DeleteCachedImage] Exception: " + ex.Message);
+            }
         }
     }
 }

@@ -26,7 +26,7 @@ namespace OMLEngine.Dao
         {
             DBContext.Instance.Titles.InsertOnSubmit(title);
             DBContext.Instance.SubmitChanges();
-        }
+        }        
 
         public static Title GetTitleById(int id)
         {
@@ -53,6 +53,17 @@ namespace OMLEngine.Dao
                       select t.MetaDataSourceItemId;
 
             return metaDataIds.Except(ids);
+        }
+
+        public static int AddImage(byte[] imageStream)
+        {
+            DBImage dbImage = new OMLEngine.Dao.DBImage();
+            dbImage.Image = imageStream;
+
+            DBContext.Instance.DBImages.InsertOnSubmit(dbImage);
+            DBContext.Instance.SubmitChanges();
+
+            return dbImage.Id;
         }
 
         /// <summary>
@@ -673,12 +684,43 @@ namespace OMLEngine.Dao
             return ((VideoFormat)key).ToString();
         }
 
+        public static DBImage GetImageBydId(int id)
+        {
+            return Dao.DBContext.Instance.DBImages.SingleOrDefault(i => i.Id == id);
+        }
+
+        private static void SetDeleteImage(int id)
+        {
+            DBImage image = GetImageBydId(id);
+
+            if (image != null)
+            {
+                // delete the image from cache
+                FileSystem.FileHelper.DeleteCachedImage(id);
+
+                // set it to be deleted in SQL
+                DBContext.Instance.DBImages.DeleteOnSubmit(image);
+            }
+        }
+
         /// <summary>
         /// Deletes the given title
         /// </summary>
         /// <param name="title"></param>
         public static void DeleteTitle(Title title)
         {
+            // delete the front image
+            if ( title.FrontCoverImageId != null )
+            {
+                SetDeleteImage(title.FrontCoverImageId.Value);                
+            }
+
+            // delete the back image
+            if (title.BackCoverImageId != null)
+            {
+                SetDeleteImage(title.BackCoverImageId.Value);                
+            }
+
             foreach (Disk disk in title.Disks)
                 DBContext.Instance.Disks.DeleteOnSubmit(disk);
 

@@ -358,11 +358,11 @@ namespace OMLDatabaseEditor.Controls
         private void imageWatcherFront_Changed(object sender, FileSystemEventArgs e)
         {
             // Update scaled menu image
-            if (_dvdTitle != null)
+            /*if (_dvdTitle != null)
             {
                 if (e.ChangeType == WatcherChangeTypes.Changed && e.Name == Path.GetFileName(_dvdTitle.FrontCoverPath))
                     _dvdTitle.BuildResizedMenuImage();
-            }
+            }*/
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)

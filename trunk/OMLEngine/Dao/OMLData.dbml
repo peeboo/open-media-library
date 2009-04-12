@@ -52,6 +52,8 @@
       <Column Name="ProductionYear" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="FanArtFolder" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="PreferredBackDropImage" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="FrontCoverImageId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BackCoverImageId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Title_Genre" Member="Genres" ThisKey="Id" OtherKey="TitleId" Type="Genre" />
       <Association Name="Title_Person" Member="People" Storage="_Peoples" ThisKey="Id" OtherKey="TitleId" Type="Person" />
       <Association Name="Title_Tag" Member="Tags" ThisKey="Id" OtherKey="TitleId" Type="Tag" />
@@ -100,6 +102,12 @@
       <Column Name="MainFeatureFPS" Type="System.Double" DbType="Float" CanBeNull="true" />
       <Column Name="MainFeatureLength" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Title_Disk" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DBImages" Member="DBImages" AccessModifier="Internal">
+    <Type Name="DBImage" AccessModifier="Internal">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Image" Type="System.Data.Linq.Binary" DbType="Image NOT NULL" CanBeNull="false" UpdateCheck="Never" />
     </Type>
   </Table>
 </Database>

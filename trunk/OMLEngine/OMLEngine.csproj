@@ -63,13 +63,14 @@
   <ItemGroup>
     <Compile Include="AudioStream.cs" />
     <Compile Include="Dao\DBContext.cs" />
+    <Compile Include="Dao\ImageManager.cs" />
     <Compile Include="Dao\OMLData.cs">
       <DependentUpon>OMLData.dbml</DependentUpon>
     </Compile>
     <Compile Include="Dao\OMLData.designer.cs">
-      <DependentUpon>OMLData.dbml</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>OMLData.dbml</DependentUpon>
     </Compile>
     <Compile Include="Dao\OMLDataSettings.designer.cs">
       <AutoGen>True</AutoGen>
@@ -142,8 +143,8 @@
     <None Include="app.config" />
     <None Include="Dao\OMLData.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>OMLData.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>OMLData.designer.cs</LastGenOutput>
     </None>
     <None Include="library.snk" />
     <None Include="Properties\Settings.settings">
