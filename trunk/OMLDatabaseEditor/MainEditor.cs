@@ -403,8 +403,6 @@ namespace OMLDatabaseEditor
                     else
                     {                        
                         TitleCollectionManager.AddTitle(t);
-
-                        OMLPlugin.BuildResizedMenuImage(t);
                         numberOfTitlesAdded++;
                     }
                 }

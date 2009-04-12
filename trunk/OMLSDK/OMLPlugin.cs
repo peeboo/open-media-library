@@ -560,39 +560,7 @@ namespace OMLSDK
                     return true;
             }
             return false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="t"></param>
-        public static void BuildResizedMenuImage(Title t)
-        {
-            /*try
-            {
-                if (t.FrontCoverPath.Length > 0)
-                {
-                    using (Image coverArtImage = Utilities.ReadImageFromFile(t.FrontCoverPath))
-                    {
-
-                        if (coverArtImage != null)
-                        {
-                            using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(coverArtImage, 200))
-                            {
-                                string img_path = FileSystemWalker.ImageDirectory +
-                                              @"\MF" + t.Id + ".jpg";
-                                menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
-                                t.FrontCoverMenuPath = img_path;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Utilities.DebugLine("[OMLPlugin] Exception: " + ex.Message);
-            }*/
-        }
+        }        
 
         /*
         public void SetAspectRatio(Title t)

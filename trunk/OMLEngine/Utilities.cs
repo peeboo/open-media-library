@@ -330,7 +330,7 @@ namespace OMLEngine
         // Image resizing methods taken from a public post on forums.msdn.microsoft.com
         // Written by user: PeacError on Wed. Nov 1st, 2006
         // Link: http://forums.msdn.microsoft.com/en-US/csharpgeneral/thread/33d0acc4-bf4c-475b-9b43-0fa1093c1e19/
-        public static Image ScaleImageByPercentage(Image img, double percent)
+        /*public static Image ScaleImageByPercentage(Image img, double percent)
         {
             double fractionalPercentage = (percent / 100.0);
             int outputWidth = (int)(img.Width * fractionalPercentage);
@@ -419,7 +419,7 @@ namespace OMLEngine
                 }
             }
             return ret;
-        }
+        }*/
 
         /*
         public static Size ResolutionOfVideoFile(string fileName)

@@ -39,9 +39,6 @@ namespace OMLTestSuite
             {                
                 // save the title - this also generates it an id
                 TitleCollectionManager.AddTitle(title);
-
-                // update the image
-                OMLPlugin.BuildResizedMenuImage(title);
             }
 
             // save all the image updates
@@ -237,6 +234,16 @@ namespace OMLTestSuite
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
                                         items.Count()));
+        }
+
+        [Test]
+        public void TEST_SAVE_SETTINGS()
+        {
+            Console.WriteLine(OMLSettings.MovieView.ToString());
+
+            //OMLSettings.MovieView = MovieView.List;
+
+            Console.WriteLine(OMLSettings.MovieView.ToString());
         }
 
         [Test]
