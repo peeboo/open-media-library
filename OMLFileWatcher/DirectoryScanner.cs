@@ -165,9 +165,6 @@ namespace OMLFileWatcher
                         // save the title to the database
                         TitleCollectionManager.AddTitle(title);
 
-                        // resize the images
-                        OMLPlugin.BuildResizedMenuImage(title);
-
                         updated = true;
                         adddedCount++;
                     }
