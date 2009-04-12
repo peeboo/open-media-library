@@ -475,12 +475,12 @@ namespace OMLEngine.Dao
             var filteredTitles = from t in GetFilteredTitlesWrapper(filters)
                                                 from g in t.Genres
                                                 join b in DBContext.Instance.GenreMetaDatas on g.GenreMetaDataId equals b.Id
-                                                select new { GenreName = b.Name, Path = t.FrontCoverPath };
+                                                select new { GenreName = b.Name, Path = t.FrontCoverImageId };
 
             return from t in filteredTitles
                    group t by t.GenreName into g
                    orderby g.Key ascending
-                   select new FilteredCollection() { Name = g.Key, Count = g.Count(), ImagePath = 
+                   select new FilteredCollection() { Name = g.Key, Count = g.Count(), ImageId = 
                        (from title in filteredTitles
                         where title.GenreName == g.Key
                         select title.Path).First() };
@@ -696,7 +696,7 @@ namespace OMLEngine.Dao
             if (image != null)
             {
                 // delete the image from cache
-                FileSystem.FileHelper.DeleteCachedImage(id);
+                ImageManager.DeleteCachedImage(id);
 
                 // set it to be deleted in SQL
                 DBContext.Instance.DBImages.DeleteOnSubmit(image);

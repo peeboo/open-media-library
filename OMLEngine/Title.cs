@@ -30,6 +30,10 @@ namespace OMLEngine
         private Disk _selectedDisk = null;
         private Dao.Title _title;
         private bool _peopleProcesed = false;
+        private string _frontCoverMenuPath = null;
+        private string _frontCoverPath = null;
+        private string _backCoverPath = null;
+
         //private string _backDropImage = string.Empty;
         //private int _productionYear = 0;
         //private string _fanartfolder = string.Empty;
@@ -157,7 +161,7 @@ namespace OMLEngine
             get
             {
                 if (string.IsNullOrEmpty(_title.PreferredBackDropImage))
-                    return NoCoverPath;
+                    return ImageManager.NoCoverPath;
                 return _title.PreferredBackDropImage;
             }
             set { _title.PreferredBackDropImage = value; }
@@ -416,11 +420,7 @@ namespace OMLEngine
                 _title.MetaDataSource = value; 
             }
         }
-
-        public string NoCoverPath
-        {
-            get { return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg"; }
-        }
+       
         /// <summary>
         /// Name of the source from which meta-data was gathered (MyMovies, DVD Profiler, etc.)
         /// </summary>
@@ -435,8 +435,6 @@ namespace OMLEngine
             }
         }
 
-        private string _frontCoverPath = null;
-
         /// <summary>
         /// Pull path to the cover art image, 
         /// default the the front cover menu art image to this as well
@@ -445,17 +443,8 @@ namespace OMLEngine
         {
             get
             {
-                if (_frontCoverPath == null)
-                {
-                    if (_title.FrontCoverImageId == null)
-                    {
-                        _frontCoverPath = NoCoverPath;
-                    }
-                    else
-                    {
-                        _frontCoverPath = FileSystem.FileHelper.GetImagePathFromId(_title.FrontCoverImageId.Value) ?? NoCoverPath;
-                    }
-                }                
+                if (_frontCoverPath == null)                
+                    _frontCoverPath = ImageManager.GetImagePathById(_title.FrontCoverImageId, ImageSize.Original);                                    
 
                 return _frontCoverPath;
             }
@@ -465,28 +454,14 @@ namespace OMLEngine
                     throw new FormatException("FrontCoverPath must be 255 characters or less.");
                 _title.FrontCoverPath = value; 
             }
-        }
-
-        private string _frontCoverMenuPath = null;
+        }        
 
         public string FrontCoverMenuPath
         {
             get 
-            {
-                if (_frontCoverMenuPath == null)
-                {
-                    _frontCoverMenuPath = Path.Combine(FileSystemWalker.ImageDirectory, "FC" + Id.ToString() + ".jpg");
-
-                    if (!System.IO.File.Exists(_frontCoverMenuPath))
-                    {
-                        if (FrontCoverPath != NoCoverPath)
-                        {
-                            ImageManager.ResizeImage(FrontCoverPath, _frontCoverMenuPath, 200);
-                        }
-                        else
-                            _frontCoverMenuPath = NoCoverPath;
-                    }
-                }
+            {               
+                if ( _frontCoverMenuPath == null )
+                    _frontCoverMenuPath = ImageManager.GetImagePathById(_title.FrontCoverImageId, ImageSize.Small);                
 
                 return _frontCoverMenuPath; 
             
@@ -497,7 +472,7 @@ namespace OMLEngine
                     throw new FormatException("FrontCoverMenuPath must be 255 characters or less.");
                 _title.FrontCoverMenuPath = value; 
             }
-        }
+        }        
 
         /// <summary>
         /// Full path to the rear cover art image
@@ -506,10 +481,10 @@ namespace OMLEngine
         {
             get 
             {
-                if (string.IsNullOrEmpty(_title.BackCoverPath))
-                    return NoCoverPath;
+                if (_backCoverPath == null)
+                    _backCoverPath = ImageManager.GetImagePathById(_title.BackCoverImageId, ImageSize.Original);
 
-                return _title.BackCoverPath; 
+                return _backCoverPath;                 
             }
             set 
             {

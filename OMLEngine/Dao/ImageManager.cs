@@ -10,13 +10,27 @@ using Dao = OMLEngine.Dao;
 
 namespace OMLEngine
 {
+    public enum ImageSize : int
+    {
+        Original = 0,
+        Medium = 1,
+        Small = 2,
+    }
+
     public static class ImageManager
     {
+        private static readonly string[] imagePrefixes = new string[] { "or", "me", "sm" };
+
+        public static string NoCoverPath
+        {
+            get { return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg"; }
+        }
+
         public static void SaveImages(Title title)
         {
             if (title.DaoTitle.FrontCoverImageId == null)
             {
-                byte[] image = FileSystem.FileHelper.ImageToByteArray(title.DaoTitle.FrontCoverPath);
+                byte[] image = ImageToByteArray(title.DaoTitle.FrontCoverPath);
 
                 if (image != null)
                 {
@@ -26,7 +40,7 @@ namespace OMLEngine
 
             if (title.DaoTitle.BackCoverImageId == null)
             {
-                byte[] image = FileSystem.FileHelper.ImageToByteArray(title.DaoTitle.BackCoverPath);
+                byte[] image = ImageToByteArray(title.DaoTitle.BackCoverPath);
 
                 if (image != null)
                 {
@@ -43,11 +57,98 @@ namespace OMLEngine
 
             if (dbImage != null)
             {
-                image = FileSystem.FileHelper.ByteArrayToImage(dbImage.Image.ToArray());
+                image = ByteArrayToImage(dbImage.Image.ToArray());
             }
 
             return image;
-        }        
+        }
+
+        /// <summary>
+        /// Will return the proper image path for a given id.  If the image doesn't exist you will
+        /// get the path for the NoImage image.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public static string GetImagePathById(int id, ImageSize size)
+        {
+            return GetImagePathById((int?)id, size);
+        }
+        
+        /// <summary>
+        /// Will return the proper image path for a given id.  If the image doesn't exist you will
+        /// get the path for the NoImage image.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public static string GetImagePathById(int? id, ImageSize size)
+        {
+            if (id == null)
+                return NoCoverPath;
+
+            try
+            {
+                string returnPath = null;
+
+                string prefix = null;
+                int resizeSize = 0;
+
+                switch (size)
+                {
+                    case ImageSize.Medium:
+                        prefix = imagePrefixes[(int)ImageSize.Medium];
+                        resizeSize = 400;
+                        break;
+
+                    case ImageSize.Small:
+                        prefix = imagePrefixes[(int)ImageSize.Small];
+                        resizeSize = 200;
+                        break;
+
+                    case ImageSize.Original:
+                    default:
+                        prefix = imagePrefixes[(int)ImageSize.Original]; ;
+                        resizeSize = -1;
+                        break;
+                }
+
+                returnPath = Path.Combine(FileSystemWalker.ImageDirectory, prefix + id.ToString() + ".jpg");
+
+                // if the file hasn't been cached yet - retrieve it and cache it
+                if (!File.Exists(returnPath))
+                {
+                    string originalPath = Path.Combine(FileSystemWalker.ImageDirectory, imagePrefixes[(int)ImageSize.Original] + id.ToString() + ".jpg"); ;
+
+                    // make sure the original is saved on the disk
+                    if (!File.Exists(originalPath))
+                    {
+                        // grab the image from the db
+                        using (Image image = GetImageById(id.Value))
+                        {
+                            // save it out
+                            if (image != null)
+                                image.Save(originalPath);
+                            else
+                                returnPath = null;
+                        }
+                    }
+
+                    // if we're not looking for the original image we need to save the resized version
+                    if (size != ImageSize.Original && returnPath != null)
+                    {
+                        ResizeImage(originalPath, returnPath, resizeSize);
+                    }
+                }
+
+                return returnPath ?? NoCoverPath;
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[Title.GetImagePathById] Exception: " + ex.Message);
+                return NoCoverPath;
+            }
+        }
 
         /// <summary>
         /// resizes an image to the given path.
@@ -118,6 +219,75 @@ namespace OMLEngine
             }
 
             return outputImage;
+        }        
+
+        /// <summary>
+        /// Given a path turns the image into a byte array.  Will return NULL if the operation cannot be done. 
+        /// The image is expected to be a JPG
+        /// </summary>
+        /// <param name="imagePath"></param>
+        /// <returns></returns>
+        public static byte[] ImageToByteArray(string imagePath)
+        {
+            byte[] returnArray = null;
+            if (!string.IsNullOrEmpty(imagePath) &&
+                    File.Exists(imagePath))
+            {
+                try
+                {
+                    using (Image image = Image.FromFile(imagePath))
+                    {
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            returnArray = ms.ToArray();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utilities.DebugLine("[FileHelper.ImageToByteArray] Exception: " + ex.Message);
+                    returnArray = null;
+                }
+            }
+
+            return returnArray;
+        }
+
+        public static Image ByteArrayToImage(byte[] array)
+        {
+            Image image = null;
+
+            try
+            {
+                image = Image.FromStream(new MemoryStream(array));
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[FileHelper.ByteArrayToImage] Exception: " + ex.Message);
+                image = null;
+            }
+
+            return image;
+        }        
+
+        public static void DeleteCachedImage(int id)
+        {
+            try
+            {
+                foreach (string prefix in imagePrefixes)
+                {
+                    string imagePath = Path.Combine(FileSystemWalker.ImageDirectory, prefix + id.ToString() + ".jpg");
+
+                    if (File.Exists(imagePath))
+                        File.Delete(imagePath);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[FileHelper.DeleteCachedImage] Exception: " + ex.Message);
+            }
         }
     }
 }
