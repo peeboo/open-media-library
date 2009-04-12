@@ -560,9 +560,27 @@ namespace OMLEngine
 
     public class FilteredCollection : IComparable
     {
-        public string Name { get; set; }
-        public int Count { get; set; }
-        public string ImagePath { get; set; }
+        private string imagePath = string.Empty;        
+
+        public string Name { get; internal set; }
+        public int Count { get; internal set; }
+        public int? ImageId { get; internal set; }
+
+        public string ImagePath
+        {
+            get
+            {
+                if (imagePath == string.Empty)
+                {
+                    if (ImageId != null)
+                    {
+                        imagePath = ImageManager.GetImagePathById(ImageId.Value, ImageSize.Small);
+                    }
+                }
+
+                return (string.IsNullOrEmpty(imagePath)) ? null : imagePath;
+            }
+        }
 
         public int CompareTo(object other)
         {
