@@ -34,11 +34,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(30, 73);
+            this.label1.Location = new System.Drawing.Point(12, 56);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(80, 13);
+            this.label1.Size = new System.Drawing.Size(275, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Congratulations";
+            this.label1.Text = "Congratulations Open Media Library is now ready for use.";
             // 
             // Wiz_End
             // 

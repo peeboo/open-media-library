@@ -1,19 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
 namespace PostInstallerWizard
 {
-    public partial class Wiz_ReviewSettings : UserControl
+    public partial class PleaseWait : Form
     {
-        public Wiz_ReviewSettings()
+        public PleaseWait()
         {
             InitializeComponent();
+        }
+
+        public void SetMessage(string message)
+        {
+            label1.Text = message;
+            label1.Invalidate();
+            label1.Update();
         }
     }
 }

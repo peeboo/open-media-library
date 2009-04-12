@@ -36,14 +36,14 @@
             // 
             // WizPanel
             // 
-            this.WizPanel.Location = new System.Drawing.Point(61, 66);
+            this.WizPanel.Location = new System.Drawing.Point(24, 64);
             this.WizPanel.Name = "WizPanel";
-            this.WizPanel.Size = new System.Drawing.Size(300, 150);
+            this.WizPanel.Size = new System.Drawing.Size(340, 150);
             this.WizPanel.TabIndex = 0;
             // 
             // buttonNext
             // 
-            this.buttonNext.Location = new System.Drawing.Point(216, 263);
+            this.buttonNext.Location = new System.Drawing.Point(174, 243);
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size(75, 23);
             this.buttonNext.TabIndex = 1;
@@ -53,7 +53,7 @@
             // 
             // buttonBack
             // 
-            this.buttonBack.Location = new System.Drawing.Point(135, 263);
+            this.buttonBack.Location = new System.Drawing.Point(93, 243);
             this.buttonBack.Name = "buttonBack";
             this.buttonBack.Size = new System.Drawing.Size(75, 23);
             this.buttonBack.TabIndex = 2;
@@ -64,7 +64,7 @@
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(331, 263);
+            this.buttonCancel.Location = new System.Drawing.Point(289, 243);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 3;
@@ -76,16 +76,17 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(423, 298);
+            this.ClientSize = new System.Drawing.Size(386, 284);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonBack);
             this.Controls.Add(this.buttonNext);
             this.Controls.Add(this.WizPanel);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "OML Database Configuration";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.ResumeLayout(false);
 

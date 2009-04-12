@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("PostInstallerWizard")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("S A Brain")]
+[assembly: AssemblyCompany("OML")]
 [assembly: AssemblyProduct("PostInstallerWizard")]
-[assembly: AssemblyCopyright("Copyright © S A Brain 2009")]
+[assembly: AssemblyCopyright("Copyright © OML 2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

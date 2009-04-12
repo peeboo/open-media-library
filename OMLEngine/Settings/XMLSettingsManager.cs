@@ -7,7 +7,7 @@ using System.IO;
 
 namespace OMLEngine.Settings
 {
-    class XMLSettingsManager
+    public class XMLSettingsManager
     {
         public string SQLServerName { get; set; }
         public string SQLInstanceName { get; set; }
