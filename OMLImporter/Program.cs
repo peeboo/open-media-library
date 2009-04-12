@@ -370,7 +370,7 @@ namespace OMLImporter
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception in LoadTitlesIntoDatabase: %1", e.Message);
+                Console.WriteLine("Exception in LoadTitlesIntoDatabase: {0}", e.Message);
             }
             //tc.saveTitleCollection();
             //Console.WriteLine("Complete");

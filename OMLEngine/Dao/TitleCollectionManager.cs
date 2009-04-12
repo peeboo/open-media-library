@@ -20,10 +20,13 @@ namespace OMLEngine
             // will be added
             Dao.TitleDao.SetupCollectionsToBeAdded(title);
 
+            // save the images to SQL
+            ImageManager.SaveImages(title);
+
             // todo : solomon : do your duplicate logic here
             Dao.TitleCollectionDao.AddTitle(title.DaoTitle);
             return true;
-        }
+        }               
 
         /// <summary>
         /// Persists any pending updates to the database
@@ -34,6 +37,19 @@ namespace OMLEngine
             // todo : solomon : add error handing and logging here
             Dao.DBContext.Instance.SubmitChanges();            
             return true;
+        }
+
+        /// <summary>
+        /// deletes all the images
+        /// </summary>
+        public static void DeleteAllImages()
+        {
+            var images = from d in Dao.DBContext.Instance.DBImages
+                               select d;
+
+            Dao.DBContext.Instance.DBImages.DeleteAllOnSubmit(images);
+
+            Dao.DBContext.Instance.SubmitChanges();
         }
 
         /// <summary>
@@ -104,6 +120,7 @@ namespace OMLEngine
             TitleCollectionManager.DeleteAllTitles();
             TitleCollectionManager.DeleteAllPeopleData();
             TitleCollectionManager.DeleteAllGenreMetaData();
+            TitleCollectionManager.DeleteAllImages();
         }
 
         /// <summary>

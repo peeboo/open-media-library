@@ -435,6 +435,8 @@ namespace OMLEngine
             }
         }
 
+        private string _frontCoverPath = null;
+
         /// <summary>
         /// Pull path to the cover art image, 
         /// default the the front cover menu art image to this as well
@@ -443,10 +445,19 @@ namespace OMLEngine
         {
             get
             {
-                if (string.IsNullOrEmpty(_title.FrontCoverPath))
-                    return NoCoverPath;
+                if (_frontCoverPath == null)
+                {
+                    if (_title.FrontCoverImageId == null)
+                    {
+                        _frontCoverPath = NoCoverPath;
+                    }
+                    else
+                    {
+                        _frontCoverPath = FileSystem.FileHelper.GetImagePathFromId(_title.FrontCoverImageId.Value) ?? NoCoverPath;
+                    }
+                }                
 
-                return _title.FrontCoverPath;
+                return _frontCoverPath;
             }
             set 
             {
@@ -456,9 +467,30 @@ namespace OMLEngine
             }
         }
 
+        private string _frontCoverMenuPath = null;
+
         public string FrontCoverMenuPath
         {
-            get { return _title.FrontCoverMenuPath; }
+            get 
+            {
+                if (_frontCoverMenuPath == null)
+                {
+                    _frontCoverMenuPath = Path.Combine(FileSystemWalker.ImageDirectory, "FC" + Id.ToString() + ".jpg");
+
+                    if (!System.IO.File.Exists(_frontCoverMenuPath))
+                    {
+                        if (FrontCoverPath != NoCoverPath)
+                        {
+                            ImageManager.ResizeImage(FrontCoverPath, _frontCoverMenuPath, 200);
+                        }
+                        else
+                            _frontCoverMenuPath = NoCoverPath;
+                    }
+                }
+
+                return _frontCoverMenuPath; 
+            
+            }
             set 
             {
                 if (value.Length > 255)
@@ -2189,7 +2221,7 @@ namespace OMLEngine
                     File.Copy(source, GetDefaultFrontCoverName(), true);
                     if (deleteSource) File.Delete(source);
                     FrontCoverPath = GetDefaultFrontCoverName();
-                    BuildResizedMenuImage();
+                    //BuildResizedMenuImage();
                     return true;
                 }
                 catch
@@ -2240,31 +2272,7 @@ namespace OMLEngine
             return OMLEngine.FileSystemWalker.ImageDirectory + "\\MF" + Id + ".jpg";
         }
 
-        public void BuildResizedMenuImage()
-        {
-            try
-            {
-                if ( !String.IsNullOrEmpty(FrontCoverPath) && File.Exists(FrontCoverPath) )
-                {
-                    using (Image coverArtImage = Utilities.ReadImageFromFile(FrontCoverPath))
-                    {
-                        if (coverArtImage != null)
-                        {
-                            using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(coverArtImage, 200))
-                            {
-                                string img_path = GetDefaultFrontCoverMenuName();
-                                menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
-                                FrontCoverMenuPath = img_path;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Utilities.DebugLine("[Title.BuildResizedMenuImage] Exception: " + ex.Message);
-            }
-        }
+        
 
         public override string ToString()
         {

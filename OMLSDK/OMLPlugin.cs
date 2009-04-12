@@ -568,7 +568,7 @@ namespace OMLSDK
         /// <param name="t"></param>
         public static void BuildResizedMenuImage(Title t)
         {
-            try
+            /*try
             {
                 if (t.FrontCoverPath.Length > 0)
                 {
@@ -591,7 +591,7 @@ namespace OMLSDK
             catch (Exception ex)
             {
                 Utilities.DebugLine("[OMLPlugin] Exception: " + ex.Message);
-            }
+            }*/
         }
 
         /*
