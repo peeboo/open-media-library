@@ -44,7 +44,6 @@ namespace OMLDatabaseEditor
 
             InitializeComponent();
 
-            defaultLookAndFeel1.LookAndFeel.SkinName = OMLEngine.Settings.OMLSettings.DBEditorSkin;
             InitData();
         }
 
@@ -65,6 +64,8 @@ namespace OMLDatabaseEditor
                 Cursor = Cursors.Default;
                 return;
             }
+
+            defaultLookAndFeel1.LookAndFeel.SkinName = OMLEngine.Settings.OMLSettings.DBEditorSkin;
 
             SplashScreen2.SetStatus(32, "Setting up Menus.");
             SetupNewMovieAndContextMenu();

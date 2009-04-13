@@ -326,7 +326,6 @@
 
     <ComponentGroup Id="ClientGroup">
       <ComponentRef Id="Library.dll" />
-      <ComponentRef Id="OMLEngine.dll" />
       <ComponentRef Id="OMLFileWatcher.dll"/>
       <ComponentRef Id="OMLTranscoder.dll"/>
       <ComponentRef Id="Registration.xml" />
@@ -342,7 +341,6 @@
       <ComponentRef Id="MyMoviesPlugin.dll" />
       <ComponentRef Id="MyMoviesToOML.xsl" />
       <ComponentRef Id="OMLSDK.dll" />
-
       <ComponentRef Id="VMCDVDLibraryPlugin.dll" />
       <ComponentRef Id="OMLXMLImporter.dll" />
       <ComponentRef Id="AmazonMetadata.dll" />
@@ -381,6 +379,7 @@
     </ComponentGroup>
     
     <ComponentGroup Id="CommonComponents">
+      <ComponentRef Id="OMLEngine.dll" />
       <ComponentRef Id="PostInstallerWizard.exe"/>
     </ComponentGroup>
 
