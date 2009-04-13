@@ -36,11 +36,18 @@ namespace PostInstallerWizard
         public Form1()
         {
             ServerInstall = false;
+
+            if ((File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLEXPR_x86_ENU.exe")) ||
+                (File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLEXPR_x64_ENU.exe")))
+            {
+                ServerInstall = true;
+            }
+
             if (Environment.GetCommandLineArgs().Length > 1)
             {
-                if (string.Compare(Environment.GetCommandLineArgs()[1], "server",true) == 0)
+                if (string.Compare(Environment.GetCommandLineArgs()[1], "client", true) == 0)
                 {
-                    ServerInstall = true;
+                    ServerInstall = false;
                 }
             }
 
@@ -139,6 +146,7 @@ namespace PostInstallerWizard
                     }
                     else
                     {
+                        WriteSettings();
                         RunSQLSetup();
                         ConfigureSQL();
                         buttonNext.Text = "Finish";
@@ -157,6 +165,7 @@ namespace PostInstallerWizard
             {
                 if ((WizSelectServer as Wiz_SelectServer).rbInstall.Checked == true)
                 {
+                    WriteSettings();
                     RunSQLSetup();
                     ConfigureSQL();
                     buttonNext.Text = "Finish";
@@ -308,7 +317,7 @@ namespace PostInstallerWizard
 
         private bool CheckSQLExists()
         {
-            const string instance = "MSSQL$OML9";
+            const string instance = "MSSQL$OML";
 
             try
             {
@@ -335,18 +344,18 @@ namespace PostInstallerWizard
         {
             Process pr = new Process();
 
-            if (File.Exists(@"SQLInstaller\SQLEXPR_x86_ENU.exe"))
+            if (File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLEXPR_x86_ENU.exe"))
             {
-                pr.StartInfo.FileName = @"SQLInstaller\SQLEXPR_x86_ENU.exe";
+                pr.StartInfo.FileName = Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLEXPR_x86_ENU.exe";
                 pr.StartInfo.Arguments = "/CONFIGURATIONFILE=\"" + Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLConfigNoTools_x32.ini\"";
                 pr.Start();
                 pr.WaitForExit();
                 return true;
             }
             else
-                if (File.Exists(@"SQLInstaller\SQLEXPR_x64_ENU.exe"))
+                if (File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLEXPR_x64_ENU.exe"))
                 {
-                    pr.StartInfo.FileName = @"SQLInstaller\SQLEXPR_x86_ENU.exe";
+                    pr.StartInfo.FileName = Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLEXPR_x64_ENU.exe";
                     pr.StartInfo.Arguments = "/CONFIGURATIONFILE=\"" + Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLConfigNoTools_x64.ini\"";
                     pr.Start();
                     pr.WaitForExit();

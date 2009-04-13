@@ -55,12 +55,16 @@
       <Publish Dialog="ExitDialog"
                Control="Finish"
                Event="DoAction"
-               Value="LaunchPSWClient">1</Publish>
+               Value="LaunchApplication">1</Publish>
     </UI>
+    
+    <Property Id="WixShellExecTarget" Value="[#PostInstallerWizard.exe]" />
 
-    <CustomAction Id="LaunchPSWClient"
-          FileKey="PostInstallerWizard.exe"
-          ExeCommand=""/>
+    <CustomAction Id="LaunchApplication"
+        BinaryKey="WixCA"
+        DllEntry="WixShellExec"
+        Impersonate="yes" />
+
   </Product>
 </Wix>
 

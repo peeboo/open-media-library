@@ -291,8 +291,9 @@ namespace OMLEngine.DatabaseManagement
                     ExecuteNonQuery(sqlConn, "ALTER DATABASE [OML] SET  MULTI_USER ");
 
                 }
+                sqlConn.Close();
             }
-            sqlConn.Close();
+
             return retval;
         }
 
@@ -304,9 +305,15 @@ namespace OMLEngine.DatabaseManagement
 
             if (sqlConn != null)
             {
-
                 string sql = System.IO.File.ReadAllText(filname);
-                ExecuteNonQuery(sqlConn, sql);
+
+                string[] commands = sql.Split(
+                    new string[] { "GO\r\n", "GO ", "GO\t" }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string c in commands)
+                {
+                    ExecuteNonQuery(sqlConn, c);
+
+                }
             }
             sqlConn.Close();
         }
