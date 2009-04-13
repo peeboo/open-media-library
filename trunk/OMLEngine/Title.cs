@@ -59,7 +59,6 @@ namespace OMLEngine
 
         #region Unknown Properties
 
-
         public Disk SelectedDisk
         {
             get { return _selectedDisk; }
@@ -433,7 +432,7 @@ namespace OMLEngine
                     throw new FormatException("ImporterSource must be 255 characters or less.");
                 _title.ImporterSource = value; 
             }
-        }
+        }        
 
         /// <summary>
         /// Pull path to the cover art image, 
@@ -443,6 +442,9 @@ namespace OMLEngine
         {
             get
             {
+                if (_title.UpdatedFrontCoverPath != null)
+                    return _title.UpdatedFrontCoverPath;
+
                 if (_frontCoverPath == null)                
                     _frontCoverPath = ImageManager.GetImagePathById(_title.FrontCoverImageId, ImageSize.Original);                                    
 
@@ -452,7 +454,8 @@ namespace OMLEngine
             {
                 if (value.Length > 255)
                     throw new FormatException("FrontCoverPath must be 255 characters or less.");
-                _title.FrontCoverPath = value; 
+
+                _title.UpdatedFrontCoverPath = value;                
             }
         }        
 
@@ -465,13 +468,7 @@ namespace OMLEngine
 
                 return _frontCoverMenuPath; 
             
-            }
-            set 
-            {
-                if (value.Length > 255)
-                    throw new FormatException("FrontCoverMenuPath must be 255 characters or less.");
-                _title.FrontCoverMenuPath = value; 
-            }
+            }           
         }        
 
         /// <summary>
@@ -481,6 +478,9 @@ namespace OMLEngine
         {
             get 
             {
+                if (_title.UpdatedBackCoverPath != null)
+                    return _title.UpdatedBackCoverPath;
+
                 if (_backCoverPath == null)
                     _backCoverPath = ImageManager.GetImagePathById(_title.BackCoverImageId, ImageSize.Original);
 
@@ -490,7 +490,8 @@ namespace OMLEngine
             {
                 if (value.Length > 255)
                     throw new FormatException("BackCoverPath must be 255 characters or less.");
-                _title.BackCoverPath = value; 
+
+                _title.UpdatedBackCoverPath = value;                  
             }
         }
 
@@ -751,7 +752,7 @@ namespace OMLEngine
         /// </summary>
         public Title() 
         {
-            _title = new OMLEngine.Dao.Title();
+            _title = new OMLEngine.Dao.Title();            
             
             // todo : solomon : this went wonky here 
             /*
@@ -2168,86 +2169,23 @@ namespace OMLEngine
                 }
             }
 
-            if (!String.IsNullOrEmpty(t.FrontCoverPath))
+            if (!String.IsNullOrEmpty(t.DaoTitle.UpdatedFrontCoverPath))
             {
-                if (overWrite || String.IsNullOrEmpty(FrontCoverPath) || FrontCoverPath == GetDefaultNoCoverName())
+                if (overWrite || String.IsNullOrEmpty(FrontCoverPath) || FrontCoverPath == ImageManager.NoCoverPath)
                 {
-                    CopyFrontCoverFromFile(t.FrontCoverPath, true);
+                    FrontCoverPath = t.DaoTitle.UpdatedFrontCoverPath;
                 }
             }
 
-            if (!String.IsNullOrEmpty(t.BackCoverPath))
+            if (!String.IsNullOrEmpty(t.DaoTitle.UpdatedBackCoverPath))
             {
-                if (overWrite || String.IsNullOrEmpty(BackCoverPath) || BackCoverPath == GetDefaultNoCoverName())
+                if (overWrite || String.IsNullOrEmpty(BackCoverPath) || BackCoverPath == ImageManager.NoCoverPath)
                 {
-                    CopyBackCoverFromFile(t.BackCoverPath, true);
+                    BackCoverPath = t.DaoTitle.UpdatedBackCoverPath;
                 }
             }
 
-        }
-
-        // copy front cover image and set the menu cover too (resized version)
-        public bool CopyFrontCoverFromFile(string source, bool deleteSource)
-        {
-            if (!string.IsNullOrEmpty(source))
-            {
-                try
-                {
-                    File.Copy(source, GetDefaultFrontCoverName(), true);
-                    if (deleteSource) File.Delete(source);
-                    FrontCoverPath = GetDefaultFrontCoverName();
-                    //BuildResizedMenuImage();
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-            return false;
-        }
-
-        public bool CopyBackCoverFromFile(string source, bool deleteSource)
-        {
-            if (!string.IsNullOrEmpty(source))
-            {
-                try
-                {
-                    File.Copy(source, GetDefaultBackCoverName(), true);
-                    if (deleteSource) File.Delete(source);
-                    BackCoverPath = GetDefaultBackCoverName();
-
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-            return false;
-        }
-
-        public string GetDefaultNoCoverName()
-        {
-            return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
-        }
-        
-        public string GetDefaultFrontCoverName()
-        {
-            return OMLEngine.FileSystemWalker.ImageDirectory + "\\F" + Id + ".jpg";
-        }
-
-        public string GetDefaultBackCoverName()
-        {
-            return OMLEngine.FileSystemWalker.ImageDirectory + "\\B" + Id + ".jpg";
-        }
-
-        public string GetDefaultFrontCoverMenuName()
-        {
-            return OMLEngine.FileSystemWalker.ImageDirectory + "\\MF" + Id + ".jpg";
-        }
-
-        
+        }                
 
         public override string ToString()
         {
@@ -2350,7 +2288,7 @@ namespace OMLEngine
             MetadataSourceID = GetSerializedString(info,"sourceid");
             MetadataSourceName = GetSerializedString(info,"sourcename");
             FrontCoverPath = GetSerializedString(info,"front_boxart_path");
-            FrontCoverMenuPath = GetSerializedString(info, "front_boxart_menu_path");
+            //FrontCoverMenuPath = GetSerializedString(info, "front_boxart_menu_path");
             BackCoverPath = GetSerializedString(info,"back_boxart_path");
             Synopsis = GetSerializedString(info,"synopsis");
             Studio = GetSerializedString(info,"distributor");
