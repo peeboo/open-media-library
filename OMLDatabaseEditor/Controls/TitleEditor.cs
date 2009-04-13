@@ -65,8 +65,11 @@ namespace OMLDatabaseEditor.Controls
             _isLoading = true;
             titleSource.DataSource = _dvdTitle;
             Status = TitleStatus.Normal;
-            imageWatcherFront.Path = Path.GetDirectoryName(_dvdTitle.FrontCoverPath);
-            imageWatcherFront.Filter = "F*.jpg";
+                        
+            // todo : solomon : i'm not sure what this code is for but it's crashing right now if you delete a cover image
+            //imageWatcherFront.Path = Path.GetDirectoryName(_dvdTitle.FrontCoverPath);
+            //imageWatcherFront.Filter = "F*.jpg";            
+
             LoadBackdrops();
             _isLoading = false;
         }
@@ -553,11 +556,18 @@ namespace OMLDatabaseEditor.Controls
             {
                 PictureBox pb = contextImage.Tag as PictureBox;
                 if (pb.Name.Contains("Front"))
-                    _dvdTitle.CopyFrontCoverFromFile(openCoverFile.FileName, false);
+                {
+                    _dvdTitle.FrontCoverPath = openCoverFile.FileName;
+                }
                 else if (pb.Name.Contains("Backdrop"))
+                {
                     _dvdTitle.BackDropImage = openCoverFile.FileName;
+                }
                 else
-                    _dvdTitle.CopyBackCoverFromFile(openCoverFile.FileName, false);
+                {
+                    _dvdTitle.FrontCoverPath = openCoverFile.FileName;
+                }
+
                 titleSource.ResetCurrentItem();
             }
         }
@@ -566,15 +576,11 @@ namespace OMLDatabaseEditor.Controls
         {
             PictureBox pb = contextImage.Tag as PictureBox;
             if (pb.Name.Contains("Front"))
-            {
-                TitleCollection.DeleteImageNoException(_dvdTitle.FrontCoverPath);
-                TitleCollection.DeleteImageNoException(_dvdTitle.FrontCoverMenuPath);
-                _dvdTitle.FrontCoverMenuPath = string.Empty;
+            {                
                 _dvdTitle.FrontCoverPath = string.Empty;
             }
             else
-            {
-                TitleCollection.DeleteImageNoException(_dvdTitle.BackCoverPath);
+            {                
                 _dvdTitle.BackCoverPath = string.Empty;
             }
             titleSource.ResetCurrentItem();

@@ -32,5 +32,16 @@ namespace OMLEngine.Dao
                 return score / possible;
             }
         }
+
+        public string UpdatedFrontCoverPath { get; set; }
+        public string UpdatedBackCoverPath { get; set; }
+
+        public override string ToString()
+        {
+            if (_Name != null)
+                return _Name;
+            else
+                return base.ToString();
+        }
     }
 }

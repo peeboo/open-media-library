@@ -24,29 +24,24 @@ namespace OMLEngine
         public static string NoCoverPath
         {
             get { return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg"; }
-        }
+        }        
 
-        public static void SaveImages(Title title)
+        public static int? AddImageToDB(string imagePath)
         {
-            if (title.DaoTitle.FrontCoverImageId == null)
-            {
-                byte[] image = ImageToByteArray(title.DaoTitle.FrontCoverPath);
+            if (!File.Exists(imagePath))
+                return null;
 
-                if (image != null)
-                {
-                    title.DaoTitle.FrontCoverImageId = Dao.TitleCollectionDao.AddImage(image);
-                }
+            int? returnId = null;
+
+            byte[] image = ImageManager.ImageToByteArray(imagePath);
+
+            if (image != null)
+            {
+                // save it to the db and store the id
+                returnId = Dao.TitleCollectionDao.AddImage(image);
             }
 
-            if (title.DaoTitle.BackCoverImageId == null)
-            {
-                byte[] image = ImageToByteArray(title.DaoTitle.BackCoverPath);
-
-                if (image != null)
-                {
-                    title.DaoTitle.BackCoverImageId = Dao.TitleCollectionDao.AddImage(image);
-                }
-            }
+            return returnId;
         }
 
         public static Image GetImageById(int id)
@@ -269,7 +264,13 @@ namespace OMLEngine
             }
 
             return image;
-        }        
+        }
+
+        public static void DeleteImage(int id)
+        {
+            Dao.TitleCollectionDao.SetDeleteImage(id);
+            Dao.DBContext.Instance.SubmitChanges();
+        }
 
         public static void DeleteCachedImage(int id)
         {

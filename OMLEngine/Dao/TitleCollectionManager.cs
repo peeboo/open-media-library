@@ -20,20 +20,64 @@ namespace OMLEngine
             // will be added
             Dao.TitleDao.SetupCollectionsToBeAdded(title);
 
-            // save the images to SQL
-            ImageManager.SaveImages(title);
+            // setup all the images
+            UpdatesImagesForTitle(title.DaoTitle);
 
             // todo : solomon : do your duplicate logic here
             Dao.TitleCollectionDao.AddTitle(title.DaoTitle);
             return true;
-        }               
+        }
+
+        private static void UpdatesImagesForTitle(Dao.Title title)
+        {
+            // if there's a new front cover image path
+            if (title.UpdatedFrontCoverPath != null)
+            {
+                // delete the old one if it exists
+                if (title.FrontCoverImageId != null)
+                    ImageManager.DeleteImage(title.FrontCoverImageId.Value);
+
+                // add the new one
+                title.FrontCoverImageId = ImageManager.AddImageToDB(title.UpdatedFrontCoverPath);
+
+                // clear it out
+                title.UpdatedFrontCoverPath = null;
+            }
+
+            // if there's a new front cover image path
+            if (title.UpdatedBackCoverPath != null)
+            {
+                // delete the old one if it exists
+                if (title.BackCoverImageId != null)
+                    ImageManager.DeleteImage(title.BackCoverImageId.Value);
+
+                // add the new one
+                title.BackCoverImageId = ImageManager.AddImageToDB(title.UpdatedBackCoverPath);
+
+                // clear it out
+                title.UpdatedBackCoverPath = null;
+            }
+        }
 
         /// <summary>
         /// Persists any pending updates to the database
         /// </summary>
         /// <returns></returns>
         public static bool SaveTitleUpdates()
-        {            
+        {
+            System.Data.Linq.ChangeSet changeset = Dao.DBContext.Instance.GetChangeSet();
+
+            // updates all the pending image changes
+            foreach (object title in changeset.Updates)
+            {
+                Dao.Title daoTitle = title as Dao.Title;
+
+                if (daoTitle != null)
+                {
+                    UpdatesImagesForTitle(daoTitle);
+                }
+            }            
+
             // todo : solomon : add error handing and logging here
             Dao.DBContext.Instance.SubmitChanges();            
             return true;

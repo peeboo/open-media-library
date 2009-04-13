@@ -180,9 +180,9 @@ namespace OMLDatabaseEditor
             if (sender is PictureEdit)
             {
                 if (_propertyName == "FrontCoverPath")
-                    _title.CopyFrontCoverFromFile((string)pluginResult.Value, true);
+                    _title.FrontCoverPath = (string)pluginResult.Value;
                 else
-                    _title.CopyBackCoverFromFile((string)pluginResult.Value, true);
+                    _title.BackCoverPath = (string)pluginResult.Value;
             }
             else
                 _propertyInfo.SetValue(_title, pluginResult.Value, null);

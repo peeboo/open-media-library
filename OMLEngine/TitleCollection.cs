@@ -487,24 +487,8 @@ namespace OMLEngine
             _moviesByItemId.Remove(newTitle.Id);
             if (newTitle.Disks.Count > 0)
                 _moviesByFilename.Remove(GetDiskHash(newTitle.Disks));
-            _list.Remove(newTitle);
-            DeleteImageNoException(newTitle.FrontCoverPath);
-            DeleteImageNoException(newTitle.FrontCoverMenuPath);
-            DeleteImageNoException(newTitle.BackCoverPath);
-            DeleteImageNoException(newTitle.BackDropImage);
-        }
-
-        public static void DeleteImageNoException(string path)
-        {
-            try
-            {
-                File.Delete(path);
-            }
-            catch (Exception e)
-            {
-                OMLEngine.Utilities.DebugLine("[TitleCollection] DeleteImageNoException(" + path + ") : failed deleting image because " + e.Message);
-            }
-        }
+            _list.Remove(newTitle);            
+        }        
 
         public static void ClearMirrorDataFiles()
         {

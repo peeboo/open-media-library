@@ -687,9 +687,9 @@ namespace OMLEngine.Dao
         public static DBImage GetImageBydId(int id)
         {
             return Dao.DBContext.Instance.DBImages.SingleOrDefault(i => i.Id == id);
-        }
+        }        
 
-        private static void SetDeleteImage(int id)
+        public static void SetDeleteImage(int id)
         {
             DBImage image = GetImageBydId(id);
 

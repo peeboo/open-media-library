@@ -469,8 +469,8 @@ namespace OMLDatabaseEditor
 
                                 if (coverArtOnly)
                                 {
-                                    titleEditor.EditedTitle.CopyFrontCoverFromFile(t.FrontCoverPath, true);
-                                    titleEditor.EditedTitle.CopyBackCoverFromFile(t.BackCoverPath, true);
+                                    titleEditor.EditedTitle.FrontCoverPath = t.FrontCoverPath;
+                                    titleEditor.EditedTitle.FrontCoverPath = t.BackCoverPath;
                                 }
                                 else
                                 {
