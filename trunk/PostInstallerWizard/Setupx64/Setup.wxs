@@ -265,7 +265,7 @@
                       WorkingDirectory="APPLICATIONROOTDIRECTORY"/>
             <RegistryValue Root="HKCU" Key="Software\OpenMediaLibrary\ImporterShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
           </Component>
-          <Component Id="UserManualShortcut" Guid="">
+          <Component Id="UserManualShortcut" Win64="yes" Guid="">
             <Shortcut Id="UserManualStartMenuShortcut"
                       Name="User Manual"
                       Description="OML User Manual"
@@ -277,7 +277,7 @@
       </Directory>
     </Directory>
     <DirectoryRef Id="TARGETDIR">
-      <Component Id="registry" Guid="FDDE2AF7-995E-4b84-B8B7-2E150E7C7101" DiskId="1" KeyPath="yes">
+      <Component Id="registry" Guid="FDDE2AF7-995E-4b84-B8B7-2E150E7C7101" DiskId="1" KeyPath="yes" Win64="yes">
         <RegistryKey Id="registry0" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" Action="create">
           <RegistryValue Id="reg1" Type="string" Name="Title" Value="Media Library" Action="write"/>
           <RegistryValue Id="reg2" Type="string" Name="Category" Value="OML\Media Library" Action="write"/>
@@ -292,7 +292,7 @@
         </RegistryKey>
         <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey" Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\Services\Movies\{543d0438-b10d-43d8-a20d-f0c96db4e6bd}" />
       </Component>
-      <Component Id="registryFWS" Guid="1A746A98-A8D4-4e5e-B41F-5E6D6B8B5DFD" DiskId="1">
+      <Component Id="registryFWS" Guid="1A746A98-A8D4-4e5e-B41F-5E6D6B8B5DFD" DiskId="1" Win64="yes">
         <RegistryKey Id="registryFWS0" Root="HKCU" Key="Software\OpenMediaLibrary" Action="createAndRemoveOnUninstall">
           <RegistryValue Id="registryFWS1" Type="integer" Name="logging" Value="1"/>
           <RegistryValue Id="registryFWS2" Type="multiString" Name="Watches" Value="c:\\users\\public\\recorded tv;*.*" />
