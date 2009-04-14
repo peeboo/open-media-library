@@ -805,7 +805,7 @@ namespace OMLEngine
             return (Convert.ToBase64String(hash));            
         }
 
-        public static long CleanUnusedImages()
+        /*public static long CleanUnusedImages()
         {
             long bytesRemoved = 0;
             string[] imageFiles = Directory.GetFiles(FileSystemWalker.ImageDirectory);
@@ -843,7 +843,7 @@ namespace OMLEngine
                 }
             }
             return bytesRemoved;
-        }
+        }*/
 
         #region serialization methods
         public TitleCollection(SerializationInfo info, StreamingContext ctxt)
