@@ -1074,7 +1074,7 @@ namespace Library
             OMLApplication.Current.IsBusy = true;
             Application.DeferredInvokeOnWorkerThread(delegate
             {
-                bytesRemoved = TitleCollection.CleanUnusedImages();
+                bytesRemoved = ImageManager.CleanupCachedImages();
             }, delegate
             {
                 OMLApplication.Current.IsBusy = false;

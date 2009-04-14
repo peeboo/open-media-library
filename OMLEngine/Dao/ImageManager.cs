@@ -286,16 +286,26 @@ namespace OMLEngine
         /// Deletes the given image from the filesystem cache
         /// </summary>
         /// <param name="id"></param>
-        public static void DeleteCachedImage(int id)
+        /// <returns>The bytes removed</returns>
+        public static long DeleteCachedImage(int id)
         {
+            long totalBytesRemoved = 0;
+
             try
             {
                 foreach (string prefix in imagePrefixes)
-                {
+                {                    
                     string imagePath = Path.Combine(FileSystemWalker.ImageDirectory, prefix + id.ToString() + ".jpg");
 
-                    if (File.Exists(imagePath))
-                        File.Delete(imagePath);
+                    if (!File.Exists(imagePath))
+                        continue;
+
+                    FileInfo file = new FileInfo(imagePath);
+                    long size = file.Length;
+
+                    File.Delete(imagePath);
+
+                    totalBytesRemoved += size;
                 }
 
             }
@@ -303,15 +313,20 @@ namespace OMLEngine
             {
                 Utilities.DebugLine("[FileHelper.DeleteCachedImage] Exception: " + ex.Message);
             }
+
+            return totalBytesRemoved;
         }
 
         /// <summary>
         /// Cleans up all the unused cached images
         /// </summary>
-        public static void CleanupCachedImages()
+        public static long CleanupCachedImages()
         {
+            long totalBytesRemove = 0;
+
             Dictionary<int, int> ids = new Dictionary<int, int>();
 
+            // get a list of all the unique ids
             foreach (string file in Directory.GetFiles(FileSystemWalker.ImageDirectory, "*.jpg"))
             {
                 int index = file.LastIndexOf("\\");
@@ -337,8 +352,10 @@ namespace OMLEngine
 
             foreach (int id in deleteIds)
             {
-                DeleteCachedImage(id);
+                totalBytesRemove += DeleteCachedImage(id);
             }
+
+            return totalBytesRemove;
         }
     }
 }
