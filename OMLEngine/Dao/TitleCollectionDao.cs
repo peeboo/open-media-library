@@ -631,7 +631,7 @@ namespace OMLEngine.Dao
         {
             IEnumerable<int> days = from t in GetFilteredTitlesWrapper(filters)
                        where t.DateAdded.HasValue
-                       select (DateTime.Now - t.DateAdded.Value).Days;
+                       select (int)(DateTime.Now - t.DateAdded.Value).TotalDays;
 
             return from d in days
                    from r in TitleConfig.DATE_ADDED_RANGE
