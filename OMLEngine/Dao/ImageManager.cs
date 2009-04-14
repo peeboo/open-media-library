@@ -19,6 +19,7 @@ namespace OMLEngine
 
     public static class ImageManager
     {
+        // these prefix's need to stay 2 characters long
         private static readonly string[] imagePrefixes = new string[] { "or", "me", "sm" };
 
         public static string NoCoverPath
@@ -249,6 +250,11 @@ namespace OMLEngine
             return returnArray;
         }
 
+        /// <summary>
+        /// Turns an image into a byte array
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
         public static Image ByteArrayToImage(byte[] array)
         {
             Image image = null;
@@ -266,12 +272,20 @@ namespace OMLEngine
             return image;
         }
 
+        /// <summary>
+        /// Deletes the given image from the database and from the filesystem cache
+        /// </summary>
+        /// <param name="id"></param>
         public static void DeleteImage(int id)
         {
             Dao.TitleCollectionDao.SetDeleteImage(id);
             Dao.DBContext.Instance.SubmitChanges();
         }
 
+        /// <summary>
+        /// Deletes the given image from the filesystem cache
+        /// </summary>
+        /// <param name="id"></param>
         public static void DeleteCachedImage(int id)
         {
             try
@@ -288,6 +302,42 @@ namespace OMLEngine
             catch (Exception ex)
             {
                 Utilities.DebugLine("[FileHelper.DeleteCachedImage] Exception: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Cleans up all the unused cached images
+        /// </summary>
+        public static void CleanupCachedImages()
+        {
+            Dictionary<int, int> ids = new Dictionary<int, int>();
+
+            foreach (string file in Directory.GetFiles(FileSystemWalker.ImageDirectory, "*.jpg"))
+            {
+                int index = file.LastIndexOf("\\");
+
+                string idName = file.Substring(index + 3).Replace(".jpg", "");
+                int id;
+
+                if (int.TryParse(idName, out id))
+                {
+                    ids[id] = id;
+                }
+            }
+
+            // turn it into a list
+            IEnumerable<int> allIds = new List<int>(ids.Values);
+
+            // select all the images
+            IEnumerable<int> dbImages = from i in Dao.DBContext.Instance.DBImages
+                                        select i.Id;
+
+            // grab all the extra id's
+            IEnumerable<int> deleteIds = allIds.Except(dbImages);
+
+            foreach (int id in deleteIds)
+            {
+                DeleteCachedImage(id);
             }
         }
     }
