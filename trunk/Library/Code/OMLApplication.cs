@@ -324,8 +324,8 @@ namespace Library
             #region v3POC
 
             SetPrimaryBackgroundImage();
-            TitleCollection _titles =new TitleCollection();
-            _titles.loadTitleCollection();
+            List<Title> titles = new List<Title>(TitleCollectionManager.GetAllTitles());
+
             //primaryBackgroundImage
             //this is temp to test controls
             OMLProperties properties = new OMLProperties();
@@ -418,7 +418,7 @@ namespace Library
             //twoRowGalleryItemPoster
             #region oneRowGalleryItemPoster
             VirtualList galleryList = new VirtualList(gallery, null);
-            foreach (Title t in _titles)
+            foreach (Title t in titles)
             {
                 //galleryList.Add(this.CreateGalleryItem(t));
                 galleryList.Add(new Library.Code.V3.MovieItem(t, galleryList));
@@ -439,7 +439,7 @@ namespace Library
             //twoRowGalleryItemPoster
             #region twoRowGalleryItemPoster
             VirtualList galleryListGenres = new VirtualList(gallery, null);
-            foreach (Title t in _titles)
+            foreach (Title t in titles)
             {
                 galleryListGenres.Add(new Library.Code.V3.MovieItem(t, galleryListGenres));
             }
@@ -456,7 +456,7 @@ namespace Library
             //ListViewItem
             #region ListViewItem
             VirtualList galleryListListViewItem = new VirtualList(gallery, null);
-            foreach (Title t in _titles)
+            foreach (Title t in titles)
             {
                 galleryListListViewItem.Add(new Library.Code.V3.MovieItem(t, galleryListListViewItem));
             }
@@ -475,7 +475,7 @@ namespace Library
             
             VirtualList groupedGalleryListListViewItem = new VirtualList(gallery, null);
             int i = 1;
-            foreach (Title t in _titles)
+            foreach (Title t in titles)
             {
                 i++;
                 groupedGalleryListListViewItem.Add(new Library.Code.V3.MovieItem(t, groupedGalleryListListViewItem));
@@ -503,8 +503,8 @@ namespace Library
             groupListView.Add(testGroup);
             
             VirtualList groupedGalleryListListViewItem2 = new VirtualList(gallery, null);
-            
-            foreach (Title t in _titles)
+
+            foreach (Title t in titles)
             {
                 i++;
                 groupedGalleryListListViewItem2.Add(new Library.Code.V3.MovieItem(t, groupedGalleryListListViewItem2));
