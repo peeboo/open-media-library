@@ -35,7 +35,7 @@ namespace OMLEngine
             {
                 // delete the old one if it exists
                 if (title.FrontCoverImageId != null)
-                    ImageManager.DeleteImage(title.FrontCoverImageId.Value);
+                    ImageManager.DeleteImage(title.FrontCoverImageId.Value);                
 
                 // add the new one
                 title.FrontCoverImageId = ImageManager.AddImageToDB(title.UpdatedFrontCoverPath);
@@ -59,6 +59,37 @@ namespace OMLEngine
             }
         }
 
+        private static void UpdateCollectionsForTitle(Dao.Title title)
+        {
+            // if the genres were modified see how they've changed
+            if (title.UpdatedGenres != null)
+            {
+                // see if there are any genres to add
+                
+                // grab all the original genres
+                IEnumerable<string> originalGenres = from g in title.Genres
+                                                     select g.MetaData.Name;
+
+                List<string> added = new List<string>(title.UpdatedGenres.Where(t => !originalGenres.Contains(t)));
+                List<string> removed = new List<string>(originalGenres.Where(t => !title.UpdatedGenres.Contains(t)));
+
+                // remove ones no longer used
+                foreach (string remove in removed)
+                {
+                    Dao.Genre genre = title.Genres.SingleOrDefault(g => g.MetaData.Name == remove);
+
+                    if (genre != null)
+                        title.Genres.Remove(genre);
+                }
+
+                // add the new ones
+                foreach (string add in added)
+                {
+                    AddGenreToTitle(title, add);
+                }
+            }
+        }
+
         /// <summary>
         /// Persists any pending updates to the database
         /// </summary>
@@ -75,6 +106,7 @@ namespace OMLEngine
                 if (daoTitle != null)
                 {
                     UpdatesImagesForTitle(daoTitle);
+                    UpdateCollectionsForTitle(daoTitle);
                 }
             }            
 
@@ -460,7 +492,7 @@ namespace OMLEngine
         /// </summary>
         /// <param name="title"></param>
         /// <param name="genre"></param>
-        public static void AddGenreToTitle(Title title, string genre)
+        private static void AddGenreToTitle(Dao.Title title, string genre)
         {
             if (string.IsNullOrEmpty(genre))
                 return;
@@ -475,10 +507,9 @@ namespace OMLEngine
 
                 // save the genre
                 Dao.DBContext.Instance.GenreMetaDatas.InsertOnSubmit(meta);
-                Dao.DBContext.Instance.SubmitChanges();
             }
 
-            title.DaoTitle.Genres.Add(new Dao.Genre { MetaData = meta });
+            title.Genres.Add(new Dao.Genre { MetaData = meta });
         }
 
         public static void RemoveAllPersons(Title title, PeopleRole type)
