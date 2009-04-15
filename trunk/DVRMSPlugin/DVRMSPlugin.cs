@@ -144,7 +144,7 @@ namespace DVRMSPlugin
                         if (File.Exists(cover))
                         {
                             Utilities.DebugLine("[DVRMSPlugin] Setting CoverArt: " + Path.GetFullPath(cover));
-                            SetFrontCoverImage(ref newTitle, Path.GetFullPath(cover));
+                            newTitle.FrontCoverPath = Path.GetFullPath(cover);
                             //newTitle.FrontCoverPath = cover;
                         }
                         else
