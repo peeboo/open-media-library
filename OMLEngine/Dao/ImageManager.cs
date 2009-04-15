@@ -19,6 +19,8 @@ namespace OMLEngine
 
     public static class ImageManager
     {
+        private const int MAX_IMAGE_HEIGHT = 800;
+
         // these prefix's need to stay 2 characters long
         private static readonly string[] imagePrefixes = new string[] { "or", "me", "sm" };
 
@@ -34,13 +36,45 @@ namespace OMLEngine
 
             int? returnId = null;
 
-            byte[] image = ImageManager.ImageToByteArray(imagePath);
-
-            if (image != null)
+            if (!string.IsNullOrEmpty(imagePath) &&
+                    File.Exists(imagePath))
             {
-                // save it to the db and store the id
-                returnId = Dao.TitleCollectionDao.AddImage(image);
-            }
+                try
+                {
+                    using (Image image = Image.FromFile(imagePath))
+                    {
+                        Image scaledImage = null;
+
+                        try
+                        {                            
+                            // if the image is too big - scale it down
+                            if (image.Height > MAX_IMAGE_HEIGHT)
+                            {
+                                scaledImage = ScaleImageByHeight(image, MAX_IMAGE_HEIGHT);
+                            }
+                            
+                            byte[] imageArray = (scaledImage != null )  ? ImageManager.ImageToByteArray(scaledImage)
+                                                                        : ImageManager.ImageToByteArray(image);
+
+                            if (imageArray != null)
+                            {
+                                // save it to the db and store the id
+                                returnId = Dao.TitleCollectionDao.AddImage(imageArray);
+                            }
+                        }
+                        finally
+                        {
+                            if (scaledImage != null)
+                                scaledImage.Dispose();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utilities.DebugLine("[ImageManager.AddImageToDB] Exception: " + ex.Message);
+                    returnId = null;
+                }
+            }            
 
             return returnId;
         }
@@ -223,28 +257,22 @@ namespace OMLEngine
         /// </summary>
         /// <param name="imagePath"></param>
         /// <returns></returns>
-        public static byte[] ImageToByteArray(string imagePath)
+        public static byte[] ImageToByteArray(Image image)
         {
             byte[] returnArray = null;
-            if (!string.IsNullOrEmpty(imagePath) &&
-                    File.Exists(imagePath))
+            try
             {
-                try
+
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    using (Image image = Image.FromFile(imagePath))
-                    {
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                            returnArray = ms.ToArray();
-                        }
-                    }
+                    image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    returnArray = ms.ToArray();
                 }
-                catch (Exception ex)
-                {
-                    Utilities.DebugLine("[FileHelper.ImageToByteArray] Exception: " + ex.Message);
-                    returnArray = null;
-                }
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[FileHelper.ImageToByteArray] Exception: " + ex.Message);
+                returnArray = null;
             }
 
             return returnArray;

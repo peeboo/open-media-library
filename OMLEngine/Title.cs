@@ -455,7 +455,10 @@ namespace OMLEngine
                 if (value.Length > 255)
                     throw new FormatException("FrontCoverPath must be 255 characters or less.");
 
-                _title.UpdatedFrontCoverPath = value;                
+                if (File.Exists(value))
+                {
+                    _title.UpdatedFrontCoverPath = value;
+                }
             }
         }        
 

@@ -55,13 +55,13 @@ namespace MovieCollectorzPlugin
                 newTitle.MetadataSourceID = GetChildNodesValue(nav, "id");
                 if (nav.MoveToChild("coverfront", ""))
                 {
-                    SetFrontCoverImage(ref newTitle, nav.Value);
+                    newTitle.FrontCoverPath = nav.Value;
                     nav.MoveToParent();
                 }
 
                 if (nav.MoveToChild("coverback", ""))
                 {
-                    SetBackCoverImage(ref newTitle, nav.Value);
+                    newTitle.BackCoverPath = nav.Value;
                     nav.MoveToParent();
                 }
 

@@ -182,7 +182,7 @@ namespace MyMoviesPlugin
                     if (File.Exists(finalImagePath))
                     {
                         Utilities.DebugLine("[MyMoviesImporter] This file appears to be valid, we'll set it on the title");
-                        SetFrontCoverImage(ref newTitle, finalImagePath);
+                        newTitle.FrontCoverPath = finalImagePath;
                     }
                     navigator.MoveToParent();
                 }
@@ -193,7 +193,7 @@ namespace MyMoviesPlugin
                     if (File.Exists(imagePath))
                     {
                         Utilities.DebugLine("[MyMoviesImporter] Found Back cover image");
-                        SetBackCoverImage(ref newTitle, imagePath);
+                        newTitle.BackCoverPath = imagePath;
                     }
                     navigator.MoveToParent();
                 }

@@ -587,63 +587,7 @@ namespace OMLSDK
             }
              
         }
-        */
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="from_location"></param>
-        /// <param name="to_location"></param>
-        /// <returns></returns>
-        public static string CopyImage(string from_location, string to_location)
-        {
-            FileInfo fi = new FileInfo(from_location);
-            fi.CopyTo(to_location, true);
-            return fi.Name;
-        }
-        public void SetFrontCoverImage(ref Title newTitle, string imagePath)
-        {
-            if (!File.Exists(imagePath)) return;
-
-            FileInfo fi;
-            try
-            {
-                fi = new FileInfo(imagePath);
-                string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
-                                                   "\\F" + newTitle.Id +
-                                                   fi.Extension;
-                if (CopyImages && String.Compare(new_full_name,imagePath, true) != 0 )
-                {
-                    CopyImage(imagePath, new_full_name);
-                    imagePath = new_full_name;
-                }
-
-                newTitle.FrontCoverPath = imagePath;
-            }
-            catch (Exception e) { Utilities.DebugLine("[OMLPlugin] " + e.Message); }
-        }
-
-        public void SetBackCoverImage(ref Title newTitle, string imagePath)
-        {
-            if (!File.Exists(imagePath)) return;
-
-            FileInfo fi;
-            try
-            {
-                fi = new FileInfo(imagePath);
-                string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
-                                                   "\\B" + newTitle.Id +
-                                                   fi.Extension;
-                if (CopyImages)
-                {
-                    CopyImage(imagePath, new_full_name);
-                    imagePath = new_full_name;
-                }
-
-                newTitle.BackCoverPath = imagePath;
-            }
-            catch (Exception e) { Utilities.DebugLine("[OMLPlugin] " + e.Message); }
-        }
+        */        
     }
 
     public class PlugInFileEventArgs : System.EventArgs

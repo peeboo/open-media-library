@@ -184,7 +184,7 @@ namespace VMCDVDLibraryPlugin
                                     }
 
                                     if (File.Exists(Path.Combine(currentFolder, "folder.jpg")))
-                                        SetFrontCoverImage(ref newVideo, Path.Combine(currentFolder, "folder.jpg"));
+                                        newVideo.FrontCoverPath = Path.Combine(currentFolder, "folder.jpg");
 
                                     if (newVideo.Disks.Count > 0)
                                     {
@@ -217,15 +217,15 @@ namespace VMCDVDLibraryPlugin
                                                 string pathWithNoExtension = Path.GetDirectoryName(video) + "\\" + Path.GetFileNameWithoutExtension(video);
                                                 if (File.Exists(pathWithNoExtension + ".jpg"))
                                                 {
-                                                    SetFrontCoverImage(ref newVideo, pathWithNoExtension + ".jpg");
+                                                    newVideo.FrontCoverPath = pathWithNoExtension + ".jpg";
                                                 }
                                                 else if (File.Exists(video + ".jpg"))
                                                 {
-                                                    SetFrontCoverImage(ref newVideo, video + ".jpg");
+                                                    newVideo.FrontCoverPath = video + ".jpg";
                                                 }
                                                 else if (File.Exists(Path.GetDirectoryName(video) + "\\folder.jpg"))
                                                 {
-                                                    SetFrontCoverImage(ref newVideo, Path.GetDirectoryName(video) + "\\folder.jpg");
+                                                    newVideo.FrontCoverPath = Path.GetDirectoryName(video) + "\\folder.jpg";
                                                 }
 
                                                 newVideo.AddDisk(disk);
@@ -430,7 +430,7 @@ namespace VMCDVDLibraryPlugin
                             imageFileName = movieFolder + "\\folder.jpg";
                         }
 
-                        SetFrontCoverImage(ref t, imageFileName);
+                        t.FrontCoverPath = imageFileName;
 
                         bFound = reader.ReadToFollowing("duration");
                         if (bFound)
