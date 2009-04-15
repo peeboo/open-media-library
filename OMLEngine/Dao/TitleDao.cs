@@ -14,7 +14,7 @@ namespace OMLEngine.Dao
             Title daoTitle = title.DaoTitle;
 
             // add the genres
-            /*foreach (string genre in title.Genres)
+            foreach (string genre in title.Genres)
             {
                 // see if we've added this genre locally already
                 Genre daoGenre = daoTitle.Genres.FirstOrDefault(t => t.MetaData.Name.Equals(genre));
@@ -39,7 +39,7 @@ namespace OMLEngine.Dao
 
                 // add the genre to the title
                 daoTitle.Genres.Add(daoGenre);
-            }*/
+            }
 
             // add the tags
             /*foreach (string name in title.Tags)

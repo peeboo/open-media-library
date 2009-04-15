@@ -46,7 +46,6 @@ namespace OMLEngine
         private List<Person> _writers = null;
         private List<Person> _producers = null;
         private List<Disk> _disks = null;
-        private List<string> _genres = null;
         private List<string> _audioTracks = null;
         private List<string> _subtitles = null;
         private List<string> _trailers = null;
@@ -635,14 +634,14 @@ namespace OMLEngine
             get 
             {
                 // lazy load the genres
-                if (_genres == null)
+                if (DaoTitle.UpdatedGenres == null)
                 {
-                    _genres = new List<string>(_title.Genres.Count);
+                    DaoTitle.UpdatedGenres = new List<string>(_title.Genres.Count);
                     foreach (Dao.Genre genre in _title.Genres)
-                        _genres.Add(genre.MetaData.Name);
+                        DaoTitle.UpdatedGenres.Add(genre.MetaData.Name);
                 }
 
-                return _genres.AsReadOnly(); 
+                return DaoTitle.UpdatedGenres.AsReadOnly(); 
             }
         }
 
@@ -952,9 +951,8 @@ namespace OMLEngine
             if (Genres.Contains(genre))
                 return;
 
-            TitleCollectionManager.AddGenreToTitle(this, genre);
-
-            _genres = null;
+            // add the genre to the local collection
+            DaoTitle.UpdatedGenres.Add(genre);
         }
 
         /// <summary>
@@ -966,24 +964,10 @@ namespace OMLEngine
             if (string.IsNullOrEmpty(genre))
                 return;
 
-            if (!Tags.Contains(genre))
+            if (!Genres.Contains(genre))
                 return;
 
-            Dao.Genre foundGenre = null;
-
-            foreach (Dao.Genre daoGenre in _title.Genres)
-            {
-                if (daoGenre.MetaData.Name == genre)
-                {
-                    foundGenre = daoGenre;
-                    break;
-                }
-            }
-
-            if (foundGenre != null)
-                _title.Genres.Remove(foundGenre);
-
-            _genres = null;
+            DaoTitle.UpdatedGenres.Remove(genre);        
         }
 
         /// <summary>
@@ -991,19 +975,7 @@ namespace OMLEngine
         /// </summary>
         public void RemoveAllGenres()
         {
-            // enumerate the genres for this title, then remove them
-            List<Dao.Genre> allgenres = new List<OMLEngine.Dao.Genre>();
-            foreach (Dao.Genre daoGenre in _title.Genres)
-            {
-                allgenres.Add(daoGenre);
-            }
-
-            foreach (Dao.Genre daoGenre in allgenres)
-            {
-                _title.Genres.Remove(daoGenre);
-            }
-
-            _genres = null;
+            DaoTitle.UpdatedGenres = new List<string>();
         }
 
 
@@ -2315,9 +2287,9 @@ namespace OMLEngine
                 TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Director);
             _audioTracks = GetSerializedList<List<string>>(info, "language_formats");
             _title.AudioTracks = Dao.TitleDao.GetDelimitedStringFromCollection(_audioTracks);
-            _genres = GetSerializedList<List<string>>(info, "genres");
-            foreach (string g in _genres)
-                TitleCollectionManager.AddGenreToTitle(this, g);
+            DaoTitle.UpdatedGenres = GetSerializedList<List<string>>(info, "genres");
+            /*foreach (string g in DaoTitle.UpdatedGenres)
+                DaoTitle. .AddGenreToTitle(this, g);*/
 
             UserStarRating = GetSerializedInt(info,"user_star_rating");
             AspectRatio = GetSerializedString(info,"aspect_ratio");

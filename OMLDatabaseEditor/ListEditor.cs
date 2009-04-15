@@ -66,7 +66,8 @@ namespace OMLDatabaseEditor
 
                 if (this.Text == "Genres")
                 {
-                    if (!Properties.Settings.Default.gsValidGenres.Contains(cbeItem.Text))
+                    if (Properties.Settings.Default.gsValidGenres != null &&
+                        !Properties.Settings.Default.gsValidGenres.Contains(cbeItem.Text))
                     {
                         DialogResult result = XtraMessageBox.Show("You are attempting to add a genre that is not in the allowed list. Would you like to add it to the list?\r\nClick \"Yes\" to add it to the list, \"No\" to add it to the movie but not the allowed list or \"Cancel\" to do nothing.", "Allowed Genre Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                         switch (result)
