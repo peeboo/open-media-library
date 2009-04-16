@@ -12,8 +12,7 @@ namespace OMLImporter
     {
         public static double VERSION = 0.1;
         //private static TitleCollection mainTitleCollection = new TitleCollection();
-        //private static Boolean isDirty = false;
-        public static bool _copyImages = true;
+        //private static Boolean isDirty = false;        
         private static List<OMLPlugin> plugins = new List<OMLPlugin>();
         private const string COPY_IMAGES_KEY = "copyimages=";
         private const string CLEAR_BEFORE_IMPORT_KEY = "clearallbeforeimport=";
@@ -100,9 +99,7 @@ namespace OMLImporter
                 --iResp;
                 if (iResp < plugins.Count)
                 {
-                    plugin = plugins[iResp];
-                    if (plugin.CanCopyImages) AskIfShouldCopyImages();
-                    plugin.CopyImages = Program._copyImages;
+                    plugin = plugins[iResp];                                        
                     plugin.DoWork(plugin.GetWork());
                     LoadTitlesIntoDatabase(plugin, true, false);
                     Console.WriteLine("Done!");
@@ -218,10 +215,7 @@ namespace OMLImporter
             }
             else
             {
-                // use the found plugin
-                if (pluginToUse.CanCopyImages)
-                    pluginToUse.CopyImages = copyImages;
-
+                // use the found plugin                
                 if (pluginToUse.IsSingleFileImporter() && !File.Exists(path))
                 {
                     Console.WriteLine(pluginToUse.Name + " requires an import file which it can't find (" + path + ")");
@@ -252,29 +246,10 @@ namespace OMLImporter
         {
             OMLPlugin plugin = (OMLPlugin) sender;
             Console.WriteLine("Loading file " + e.FileName + " using " + plugin.Name + " importer");
-        }
-
-        public static void AskIfShouldCopyImages()
-        {
-            Console.WriteLine("Should we copy images to the OML images directory? (y/n)");
-            string response = Console.ReadLine();
-            response = response.Substring(0, 1);
-            switch (response.ToUpper())
-            {
-                case "N":
-                    Program._copyImages = false;
-                    break;
-                case "Y":
-                    Program._copyImages = true;
-                    break;
-                default:
-                    break;
-            }
-        }
+        }       
 
         public static bool ImportFile(OMLPlugin plugin, string fileName)
         {
-            plugin.CopyImages = Program._copyImages;
             return plugin.Load(fileName);
         }
 

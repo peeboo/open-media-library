@@ -11,8 +11,7 @@ namespace OMLSDK
     public class OMLPlugin : IOMLPlugin
     {
         List<Title> titles;
-        private int totalRowsAdded = 0;
-        private Boolean _copyImages = false;
+        private int totalRowsAdded = 0;        
         public static string MyMoviesXslTransform =
             Path.Combine(FileSystemWalker.PluginsDirectory, @"MyMoviesToOML.xsl");
         List<string> errors;
@@ -26,14 +25,7 @@ namespace OMLSDK
         public void AddError(string errStr, params object[] paramArray)
         {
             errors.Add(string.Format(errStr, paramArray));
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        public Boolean CanCopyImages
-        {
-            get { return GetCanCopyImages(); }
-        }
+        }        
 
         /// <summary>
         /// 
@@ -57,16 +49,7 @@ namespace OMLSDK
         public Boolean CanProcessFile
         {
             get { return GetProcessFile(); }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public Boolean CopyImages
-        {
-            get { return GetCopyImages(); }
-            set { _copyImages = value; }
-        }
+        }        
 
         /// <summary>
         /// 
@@ -300,7 +283,7 @@ namespace OMLSDK
         /// <returns></returns>
         public virtual bool Load(string filename)
         {
-            return Load(filename, CopyImages);
+            return Load(filename);
         }
 
         /// <summary>
@@ -383,18 +366,7 @@ namespace OMLSDK
         protected virtual double GetVersionMinor()
         {
             return 0.0;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="filename"></param>
-        /// <param name="ShouldCopyImages"></param>
-        /// <returns></returns>
-        public virtual bool Load(string filename, bool ShouldCopyImages)
-        {
-            throw new Exception(@"You must implement this method in your class.");
-        }
+        }        
 
         /// <summary>
         /// 
@@ -425,19 +397,7 @@ namespace OMLSDK
 
         #endregion
 
-        #region Overridable Stubs for readonly properties
-
-        /// <summary>
-        /// Returns a boolean if the plugin can copy images
-        /// </summary>
-        /// <returns>Default: false</returns>
-        protected virtual Boolean GetCanCopyImages() { return false; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        protected virtual Boolean GetCopyImages() { return _copyImages; }
+        #region Overridable Stubs for readonly properties             
 
         /// <summary>
         /// 

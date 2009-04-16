@@ -901,9 +901,7 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.WaitCursor;
             OMLPlugin importer = lbImport.SelectedItem as OMLPlugin;
             if (importer != null)
-            {
-                importer.CopyImages = true;
-
+            {                
                 lblCurrentStatus.Text = "Importing movies";
                 pgbProgress.Visible = true;
                 string[] work = importer.GetWork();
