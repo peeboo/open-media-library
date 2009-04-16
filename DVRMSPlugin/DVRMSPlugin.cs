@@ -28,12 +28,7 @@ namespace DVRMSPlugin
         public override bool IsSingleFileImporter()
         {
             return false;
-        }
-
-        protected override bool GetCopyImages()
-        {
-            return false;
-        }
+        }        
 
         protected override double GetVersionMajor()
         {
@@ -76,7 +71,7 @@ namespace DVRMSPlugin
             return true;
         }
 
-        public override bool Load(string filename, bool ShouldCopyImages)
+        public override bool Load(string filename)
         {
             string fPath = System.IO.Path.GetDirectoryName(filename);
             ProcessDir(fPath);

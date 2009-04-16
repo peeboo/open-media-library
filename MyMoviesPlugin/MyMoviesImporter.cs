@@ -37,7 +37,7 @@ namespace MyMoviesPlugin
         }
         public override void ProcessFile(string file)
         {            
-            Utilities.DebugLine("[MyMoviesImporter] created[filename("+file+"), ShouldCopyImages("+CopyImages+")]");
+            Utilities.DebugLine("[MyMoviesImporter] created[filename("+file+")]");
 
             currentFile = file;
             if (File.Exists(currentFile))
@@ -81,11 +81,7 @@ namespace MyMoviesPlugin
         protected override double GetVersionMinor()
         {
             return MinorVersion;
-        }
-        protected override bool GetCanCopyImages()
-        {
-            return true;
-        }
+        }        
         protected override string GetMenu()
         {
             return "MyMovies";

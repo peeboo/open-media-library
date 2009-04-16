@@ -24,9 +24,7 @@ namespace OMLTestSuite
         public void TEST_BASE_CASE()
         {
             TitleCollection tc = new TitleCollection(@"..\..\..\Sample Files\testOML.dat");
-            MyMoviesImporter importer = new MyMoviesImporter();
-            bool ShouldCopyImages = false;
-            importer.CopyImages = ShouldCopyImages;
+            MyMoviesImporter importer = new MyMoviesImporter();                        
             importer.ProcessFile(@"..\..\..\Sample Files\MyMovies.xml");
 
             foreach (Title t in importer.GetTitles())
