@@ -44,6 +44,23 @@ namespace OMLEngine.FileSystem
 
             return name.Replace("  ", " ");
         }
-        
+
+        /*
+        public string PathSafeName
+        {
+            get
+            {
+                string chars = string.Empty;
+                foreach (Char ch in Path.GetInvalidFileNameChars())
+                {
+                    int ach = (int)ch;
+                    chars += String.Format(@"\x{0}|", ach.ToString(@"x").PadLeft(2, '0'));
+                }
+                if (chars.Length > 0)
+                    chars = chars.Remove(chars.Length - 1);
+                string rslt = System.Text.RegularExpressions.Regex.Replace(Name, chars, "");
+                return rslt;
+            }
+        }*/        
     }
 }

@@ -17,6 +17,14 @@ namespace OMLEngine
         Small = 2,
     }
 
+    public enum ImageType : byte
+    {
+        FrontCoverImage = 0,
+        BackCoverImage = 1,
+        FanartImage = 2,
+        BackdropImage = 3
+    }
+
     public static class ImageManager
     {
         private const int MAX_IMAGE_HEIGHT = 800;
@@ -28,7 +36,7 @@ namespace OMLEngine
         {
             get { return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg"; }
         }        
-
+        
         public static int? AddImageToDB(string imagePath)
         {
             if (!File.Exists(imagePath))
@@ -104,6 +112,47 @@ namespace OMLEngine
         {
             return GetImagePathById((int?)id, size);
         }
+
+        /// <summary>
+        /// Returns the image id for the given cached image url
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        internal static int? GetIdFromImagePath(string path)
+        {
+            if (!path.StartsWith(FileSystemWalker.ImageDirectory))
+                return null;
+
+            string idString = path.Substring(FileSystemWalker.ImageDirectory.Length + 3).Replace(".jpg", "");
+
+            int returnId;
+
+            return (int.TryParse(idString, out returnId)) ? (int?)returnId : null;
+        }
+
+        internal static string ConstructImagePathById(int id, ImageSize size)
+        {
+            string prefix = null;
+            int resizeSize = 0;
+
+            switch (size)
+            {
+                case ImageSize.Medium:
+                    prefix = imagePrefixes[(int)ImageSize.Medium];                    
+                    break;
+
+                case ImageSize.Small:
+                    prefix = imagePrefixes[(int)ImageSize.Small];                    
+                    break;
+
+                case ImageSize.Original:
+                default:
+                    prefix = imagePrefixes[(int)ImageSize.Original]; ;                    
+                    break;
+            }
+
+            return Path.Combine(FileSystemWalker.ImageDirectory, prefix + id.ToString() + ".jpg");
+        }
         
         /// <summary>
         /// Will return the proper image path for a given id.  If the image doesn't exist you will
@@ -118,32 +167,26 @@ namespace OMLEngine
                 return NoCoverPath;
 
             try
-            {
-                string returnPath = null;
-
-                string prefix = null;
+            {                                
                 int resizeSize = 0;
 
                 switch (size)
                 {
-                    case ImageSize.Medium:
-                        prefix = imagePrefixes[(int)ImageSize.Medium];
+                    case ImageSize.Medium:                        
                         resizeSize = 400;
                         break;
 
-                    case ImageSize.Small:
-                        prefix = imagePrefixes[(int)ImageSize.Small];
+                    case ImageSize.Small:                        
                         resizeSize = 200;
                         break;
 
                     case ImageSize.Original:
-                    default:
-                        prefix = imagePrefixes[(int)ImageSize.Original]; ;
+                    default:                    
                         resizeSize = -1;
                         break;
                 }
 
-                returnPath = Path.Combine(FileSystemWalker.ImageDirectory, prefix + id.ToString() + ".jpg");
+                string returnPath = ConstructImagePathById(id.Value, size);
 
                 // if the file hasn't been cached yet - retrieve it and cache it
                 if (!File.Exists(returnPath))
@@ -381,6 +424,19 @@ namespace OMLEngine
             foreach (int id in deleteIds)
             {
                 totalBytesRemove += DeleteCachedImage(id);
+            }
+
+            string[] files = Directory.GetFiles(FileSystemWalker.ImageDownloadDirectory, "*.*");
+            foreach (string file in files)
+            {
+                FileInfo info = new FileInfo(file);                
+
+                try
+                {
+                    info.Delete();
+                    totalBytesRemove += info.Length;
+                }
+                catch { }
             }
 
             return totalBytesRemove;

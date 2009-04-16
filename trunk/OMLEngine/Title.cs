@@ -105,20 +105,8 @@ namespace OMLEngine
             set
             {
                 _title.ProductionYear = value;
-            }
-            
-        }
-
-        public string BackDropImage
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_title.PreferredBackDropImage))
-                    return ImageManager.NoCoverPath;
-                return _title.PreferredBackDropImage;
-            }
-            set { _title.PreferredBackDropImage = value; }
-        }
+            }            
+        }       
 
         public string VideoDetails
         {
@@ -325,24 +313,7 @@ namespace OMLEngine
                     throw new FormatException("Name must be 255 characters or less.");
                 _title.Name = value; 
             }
-        }
-
-        public string PathSafeName
-        {
-            get
-            {
-                string chars = string.Empty;
-                foreach (Char ch in Path.GetInvalidFileNameChars())
-                {
-                    int ach = (int)ch;
-                    chars += String.Format(@"\x{0}|", ach.ToString(@"x").PadLeft(2, '0'));
-                }
-                if (chars.Length > 0)
-                    chars = chars.Remove(chars.Length - 1);
-                string rslt = System.Text.RegularExpressions.Regex.Replace(Name, chars, "");
-                return rslt;
-            }
-        }
+        }        
 
         /// <summary>
         /// Internal id of the Title
@@ -397,12 +368,15 @@ namespace OMLEngine
         public string FrontCoverPath
         {
             get
-            {
+            {                                
                 if (_title.UpdatedFrontCoverPath != null)
                     return _title.UpdatedFrontCoverPath;
 
-                if (_frontCoverPath == null)                
-                    _frontCoverPath = ImageManager.GetImagePathById(_title.FrontCoverImageId, ImageSize.Original);                                    
+                if (_frontCoverPath == null)
+                {
+                    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == ImageType.FrontCoverImage);
+                    _frontCoverPath = ImageManager.GetImagePathById((frontCover == null) ? (int?)null : frontCover.ImageId, ImageSize.Original);                                                        
+                }
 
                 return _frontCoverPath;
             }
@@ -418,15 +392,20 @@ namespace OMLEngine
             }
         }        
 
+        /// <summary>
+        /// The small version of the front cover image
+        /// </summary>
         public string FrontCoverMenuPath
         {
             get 
-            {               
-                if ( _frontCoverMenuPath == null )
-                    _frontCoverMenuPath = ImageManager.GetImagePathById(_title.FrontCoverImageId, ImageSize.Small);                
-
-                return _frontCoverMenuPath; 
+            {
+                if (_frontCoverMenuPath == null)
+                {
+                    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == ImageType.FrontCoverImage);
+                    _frontCoverMenuPath = ImageManager.GetImagePathById((frontCover == null) ? (int?)null : frontCover.ImageId, ImageSize.Small);             
+                }
             
+                return _frontCoverMenuPath;             
             }           
         }        
 
@@ -436,12 +415,12 @@ namespace OMLEngine
         public string BackCoverPath
         {
             get 
-            {
+            {                                
                 if (_title.UpdatedBackCoverPath != null)
                     return _title.UpdatedBackCoverPath;
 
-                if (_backCoverPath == null)
-                    _backCoverPath = ImageManager.GetImagePathById(_title.BackCoverImageId, ImageSize.Original);
+                Dao.ImageMapping backCover = _title.Images.FirstOrDefault(i => i.ImageType == ImageType.BackCoverImage);
+                _backCoverPath = ImageManager.GetImagePathById((backCover == null) ? (int?)null : backCover.ImageId, ImageSize.Original);                                                        
 
                 return _backCoverPath;                 
             }
@@ -451,6 +430,24 @@ namespace OMLEngine
                     throw new FormatException("BackCoverPath must be 255 characters or less.");
 
                 _title.UpdatedBackCoverPath = value;                  
+            }
+        }
+
+        public IList<string> FanArtPaths
+        {
+            get
+            {
+                if (DaoTitle.UpdatedFanArtPaths == null)
+                {
+                    DaoTitle.UpdatedFanArtPaths = new List<string>();                    
+
+                    foreach (Dao.ImageMapping mapping in _title.Images.Where(t => t.ImageType == ImageType.FanartImage))
+                    {
+                        DaoTitle.UpdatedFanArtPaths.Add(ImageManager.GetImagePathById(mapping.ImageId, ImageSize.Original));
+                    }
+                }
+
+                return DaoTitle.UpdatedFanArtPaths.AsReadOnly();
             }
         }
 
@@ -665,7 +662,7 @@ namespace OMLEngine
             get { return _title.PercentComplete; }
         }        
 
-        #endregion
+        #endregion        
 
         private void SetupPeopleCollections()
         {
@@ -879,6 +876,37 @@ namespace OMLEngine
             DaoTitle.UpdatedProducers = new List<Person>();
         }
         #endregion
+
+        /// <summary>
+        /// Adds a fanart image to the title
+        /// </summary>
+        /// <param name="path"></param>
+        public void AddFanArtImage(string path)
+        {
+            if( string.IsNullOrEmpty(path))
+                return;
+
+            if (FanArtPaths.Contains(path))
+                return;
+
+            if ( File.Exists(path))
+                DaoTitle.UpdatedFanArtPaths.Add(path);
+        }
+
+        /// <summary>
+        /// Removes a fanart image from the title
+        /// </summary>
+        /// <param name="path"></param>
+        public void RemoveFanArtImage(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            if (!FanArtPaths.Contains(path))
+                return;
+
+            DaoTitle.UpdatedFanArtPaths.Remove(path);
+        }
 
         /// <summary>
         /// Add an audio track
@@ -2366,126 +2394,7 @@ namespace OMLEngine
         {
 
         }
-        #endregion
-
-        public string BasePath()
-        {
-            string folder = string.Empty;
-            if (!string.IsNullOrEmpty(FileLocation))
-                if (Directory.Exists(FileLocation))
-                    folder = FileLocation;
-                else
-                    folder = Path.GetDirectoryName(FileLocation);
-            else
-            {
-                if (Disks.Count > 0)
-                {
-                    if (Disks[0].Path.Length > 0)
-                        if (Directory.Exists(Disks[0].Path))
-                            folder = Disks[0].Path;
-                        else
-                            folder = Path.GetDirectoryName(Disks[0].Path);
-                }
-            }
-
-            if (folder.Length > 0)
-            {
-                try
-                {
-                    if (Directory.Exists(folder))
-                    {
-                        if (folder.ToUpperInvariant().EndsWith("VIDEO_TS"))
-                            folder = Path.GetDirectoryName(folder);
-                        return folder;
-                    }
-
-                    return null;
-                }
-                catch (Exception e)
-                {
-                    Utilities.DebugLine("[Title] Error Looking for folder: {0}", e.Message);
-                }
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// This returns the fanartfolder if _fanartfolder is defined. If not it will try to see
-        /// if there is a fanart folder allready in existance under the movie folder first then
-        /// the centralised folder. _fanartfolder is then set to this ready for serialisation.
-        /// 
-        /// This routine uses a primitive token to represent basepath of the movie and this is
-        /// substituted when required. This means if the movie is moved and the basepath changed,
-        /// this will return the correct fanart folder.
-        /// 
-        /// </summary>
-        public string BackDropFolder
-        {
-            get {
-                // Is there allready a fan art folder defined
-                if (!string.IsNullOrEmpty(_title.FanArtFolder))
-                {
-                    if (!string.IsNullOrEmpty(this.BasePath()))
-                    {
-                        // Perform token substitution.
-                        return _title.FanArtFolder.Replace("{basepath}", this.BasePath());
-                    }
-                    else
-                    {
-                        return _title.FanArtFolder;
-                    }
-                }
-
-                // Check for an existing fanart folder under the movie/disk folder
-                if (!string.IsNullOrEmpty(this.BasePath()))
-                {
-                    if (Directory.Exists(Path.Combine(this.BasePath(), @"FanArt")))
-                    {
-                        _title.FanArtFolder = @"{basepath}\FanArt";
-                        return _title.FanArtFolder.Replace("{basepath}", this.BasePath());
-                    }
-                }
-
-                // Check for an existing fanart folder under the centralised folder
-                if (!string.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.TitledFanArtPath))
-                {
-                    string MainFanArtDir = System.IO.Path.Combine(OMLEngine.Settings.OMLSettings.TitledFanArtPath, PathSafeName);
-                    if (Directory.Exists(MainFanArtDir))
-                    {
-                        _title.FanArtFolder = MainFanArtDir;
-                        return _title.FanArtFolder;
-                    }
-                }
-                return null;
-
-            }
-            set { _title.FanArtFolder = value; }
-        }
-
-        public string CreateFanArtFolder(string basepath)
-        {
-            if (string.IsNullOrEmpty(_title.FanArtFolder))
-            {
-                if (OMLEngine.Settings.OMLSettings.TitledFanArtFolder)
-                {
-                    // Centralised Fan Art
-                    string MainFanArtDir = OMLEngine.Settings.OMLSettings.TitledFanArtPath;
-                    if (!Directory.Exists(MainFanArtDir)) Directory.CreateDirectory(MainFanArtDir);
-                    _title.FanArtFolder = System.IO.Path.Combine(MainFanArtDir, PathSafeName);
-                }
-                else
-                {
-                    // Fan art local to movie
-                    if (string.IsNullOrEmpty(basepath))
-                    {
-                        return null;
-                    }
-                    _title.FanArtFolder = Path.Combine(basepath, @"FanArt");
-                }
-            }
-            if (!Directory.Exists(_title.FanArtFolder)) Directory.CreateDirectory(_title.FanArtFolder);
-            return _title.FanArtFolder;
-        }       
+        #endregion        
     }
 
     public class Role

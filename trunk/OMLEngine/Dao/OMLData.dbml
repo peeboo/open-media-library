@@ -24,9 +24,6 @@
       <Column Name="SortName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="true" />
       <Column Name="WatchedCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="MetaDataSource" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="FrontCoverImagePath" Member="FrontCoverPath" Storage="_FrontCoverImage" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="MenuImagePath" Member="FrontCoverMenuPath" Storage="_MenuImage" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="BackCoverImagePath" Member="BackCoverPath" Storage="_BackCoverImage" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="Runtime" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
       <Column Name="ParentalRating" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
       <Column Name="Synopsis" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
@@ -50,14 +47,11 @@
       <Column Name="GroupId" Type="System.Int32" DbType="int (System.Int32)" CanBeNull="true" />
       <Column Name="MetaDataSourceItemId" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="ProductionYear" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="FanArtFolder" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="PreferredBackDropImage" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="FrontCoverImageId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="BackCoverImageId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Title_Genre" Member="Genres" ThisKey="Id" OtherKey="TitleId" Type="Genre" />
       <Association Name="Title_Person" Member="People" Storage="_Peoples" ThisKey="Id" OtherKey="TitleId" Type="Person" />
       <Association Name="Title_Tag" Member="Tags" ThisKey="Id" OtherKey="TitleId" Type="Tag" />
       <Association Name="Title_Disk" Member="Disks" ThisKey="Id" OtherKey="TitleId" Type="Disk" />
+      <Association Name="Title_ImageMapping" Member="Images" ThisKey="Id" OtherKey="TitleId" Type="ImageMapping" />
     </Type>
   </Table>
   <Table Name="dbo.People" Member="Persons" AccessModifier="Internal">
@@ -108,6 +102,16 @@
     <Type Name="DBImage" AccessModifier="Internal">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Image" Type="System.Data.Linq.Binary" DbType="Image NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Association Name="DBImage_ImageMapping" Member="ImageMappings" ThisKey="Id" OtherKey="ImageId" Type="ImageMapping" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ImageMappings" Member="ImageMappings" AccessModifier="Internal">
+    <Type Name="ImageMapping" AccessModifier="Internal">
+      <Column Name="TitleId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ImageId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ImageType" Type="OMLEngine.ImageType" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="Title_ImageMapping" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" />
+      <Association Name="DBImage_ImageMapping" Member="DBImage" ThisKey="ImageId" OtherKey="Id" Type="DBImage" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

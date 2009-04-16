@@ -475,7 +475,9 @@ namespace OMLEngine.Dao
             var filteredTitles = from t in GetFilteredTitlesWrapper(filters)
                                                 from g in t.Genres
                                                 join b in DBContext.Instance.GenreMetaDatas on g.GenreMetaDataId equals b.Id
-                                                select new { GenreName = b.Name, Path = t.FrontCoverImageId };
+                                                join c in DBContext.Instance.ImageMappings on t.Id equals c.ImageId 
+                                                    where c.ImageType == ImageType.FrontCoverImage
+                                                select new { GenreName = b.Name, Path = c.ImageId };
 
             return from t in filteredTitles
                    group t by t.GenreName into g
@@ -687,16 +689,19 @@ namespace OMLEngine.Dao
         public static DBImage GetImageBydId(int id)
         {
             return Dao.DBContext.Instance.DBImages.SingleOrDefault(i => i.Id == id);
-        }        
+        }
 
-        public static void SetDeleteImage(int id)
+        public static void SetDeleteImage(int imageId)
         {
-            DBImage image = GetImageBydId(id);
+            SetDeleteImage(GetImageBydId(imageId));
+        }
 
+        public static void SetDeleteImage(DBImage image)
+        {            
             if (image != null)
             {
                 // delete the image from cache
-                ImageManager.DeleteCachedImage(id);
+                ImageManager.DeleteCachedImage(image.Id);
 
                 // set it to be deleted in SQL
                 DBContext.Instance.DBImages.DeleteOnSubmit(image);
@@ -709,16 +714,12 @@ namespace OMLEngine.Dao
         /// <param name="title"></param>
         public static void DeleteTitle(Title title)
         {
-            // delete the front image
-            if ( title.FrontCoverImageId != null )
+            // delete all the images            
+            foreach (Dao.ImageMapping mapping in title.Images)
             {
-                SetDeleteImage(title.FrontCoverImageId.Value);                
-            }
+                SetDeleteImage(mapping.DBImage);
 
-            // delete the back image
-            if (title.BackCoverImageId != null)
-            {
-                SetDeleteImage(title.BackCoverImageId.Value);                
+                DBContext.Instance.ImageMappings.DeleteOnSubmit(mapping);
             }
 
             foreach (Disk disk in title.Disks)

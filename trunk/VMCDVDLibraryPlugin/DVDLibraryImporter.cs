@@ -189,7 +189,7 @@ namespace VMCDVDLibraryPlugin
                                     if (newVideo.Disks.Count > 0)
                                     {
                                         // There is one or more valid disks for this title. Add it.
-                                        string temp = newVideo.BackDropFolder; // This initialises the fanart folder forcing a search for fanart
+                                        //string temp = newVideo.BackDropFolder; // This initialises the fanart folder forcing a search for fanart
                                         AddTitle(newVideo);
                                     }
                                 }
@@ -229,7 +229,7 @@ namespace VMCDVDLibraryPlugin
                                                 }
 
                                                 newVideo.AddDisk(disk);
-                                                string temp = newVideo.BackDropFolder; // This initialises the fanart folder forcing a search for fanart
+                                                //string temp = newVideo.BackDropFolder; // This initialises the fanart folder forcing a search for fanart
                                                 AddTitle(newVideo);
                                             }
                                         }

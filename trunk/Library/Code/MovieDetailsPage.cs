@@ -511,7 +511,7 @@ namespace Library
             if (backgroundImages != null)
                 return;
 
-            backgroundImages = new List<Image>(1);
+            /*backgroundImages = new List<Image>(1);
 
             if (!string.IsNullOrEmpty(_movieDetails.TitleObject.BackDropImage))
             {                
@@ -525,25 +525,24 @@ namespace Library
                     
                     return;
                 }                
-            }
+            }*/
 
             // a specific file was NOT found, time to go hunting
 
             OMLApplication.DebugLine("[MovieDetailsPage] Looking for fanart!");
 
             // if the /FanArt folder doesn't exist - that means no background images
-            string fanArtSrcDir = _movieDetails.TitleObject.BackDropFolder;
+            //string fanArtSrcDir = _movieDetails.TitleObject.BackDropFolder;
             //string pdFanArtDir = @"C:\ProgramData\OpenMediaLibrary\FanArt\" + _movieDetails.TitleObject.Name.ToString();
-            if (string.IsNullOrEmpty(fanArtSrcDir)) //|| !Directory.Exists(fanArtSrcDir))
-            {
+            //if (string.IsNullOrEmpty(fanArtSrcDir)) //|| !Directory.Exists(fanArtSrcDir))
+            //{
             //    fanArtSrcDir = pdFanArtDir;
             //    if (!Directory.Exists(pdFanArtDir))
-                    return;
-            }
+                    //return;
+            //}
 
-            foreach (string file in
-                Directory.GetFiles(fanArtSrcDir, "*.jpg", SearchOption.TopDirectoryOnly))
-            {
+            foreach (string file in _movieDetails.TitleObject.FanArtPaths)                
+            {                
                 OMLApplication.DebugLine("[MovieDetailsPage] loading fanart image {0}", file);
 
                 backgroundImages.Add(new Image(string.Format("file://{0}", file)));

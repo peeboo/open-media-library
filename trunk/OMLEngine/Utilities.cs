@@ -205,6 +205,9 @@ namespace OMLEngine
             if (!FileSystemWalker.ImageDirExists)
                 FileSystemWalker.createImageDirectory();
 
+            if (!FileSystemWalker.ImageDownloadDirExists)
+                FileSystemWalker.createImageDownloadDirectory();
+
             if (!FileSystemWalker.LogDirExists)
                 FileSystemWalker.createLogDirectory();
 

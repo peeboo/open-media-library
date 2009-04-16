@@ -53,6 +53,11 @@ namespace OMLEngine
             get { return Path.Combine(PublicRootDirectory, @"Images"); }
         }
 
+        public static string ImageDownloadDirectory
+        {
+            get { return Path.Combine(PublicRootDirectory, @"DownloadImages"); }
+        }
+
         /// <summary>
         /// Location where all plugin dlls should be stored
         /// </summary>
@@ -120,6 +125,11 @@ namespace OMLEngine
         public static bool ImageDirExists
         {
             get { return Directory.Exists(ImageDirectory); }
+        }
+
+        public static bool ImageDownloadDirExists
+        {
+            get { return Directory.Exists(ImageDownloadDirectory); }
         }
 
         /// <summary>
@@ -192,6 +202,11 @@ namespace OMLEngine
         public static void createImageDirectory()
         {
             Directory.CreateDirectory(ImageDirectory);
+        }
+
+        public static void createImageDownloadDirectory()
+        {
+            Directory.CreateDirectory(ImageDownloadDirectory);
         }
 
         /// <summary>
