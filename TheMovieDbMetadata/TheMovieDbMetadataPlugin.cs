@@ -421,7 +421,7 @@ namespace TheMovieDbMetadata
         }
 
         public void DownloadBackDropsForTitle(Title t, int index)
-        {
+        {            
             if (results.Count >= index)
             {
                 if (this.BackDrops == null)
@@ -434,13 +434,11 @@ namespace TheMovieDbMetadata
                     try
                     {
                         if (!string.IsNullOrEmpty(backDropUrl))
-                        {
-                            string[] folders = backDropUrl.Split('/');
-                            string filename = folders[folders.Length - 2] + folders[folders.Length - 1];
-                            if (!File.Exists(Path.Combine(t.BackDropFolder, filename).ToString()))
-                            {
-                                web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, filename).ToString());
-                            }
+                        {                            
+                            string filename = Path.Combine(FileSystemWalker.ImageDownloadDirectory, Guid.NewGuid().ToString());                            
+                            web.DownloadFile(backDropUrl, filename);
+
+                            t.AddFanArtImage(filename);
                         }
                     }
                     catch

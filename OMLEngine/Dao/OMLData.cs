@@ -22,7 +22,7 @@ namespace OMLEngine.Dao
                 if (ReleaseDate != DateTime.MinValue) score++;
                 if (!String.IsNullOrEmpty(Synopsis.Trim())) score++;
                 if (Genres.Count > 0) score++;
-                if (!String.IsNullOrEmpty(FrontCoverPath.Trim())) score++;
+                if (Images.FirstOrDefault(t=> t.ImageType == ImageType.FrontCoverImage) != null) score++;
                 if (!String.IsNullOrEmpty(AspectRatio.Trim())) score++;
                 if (!String.IsNullOrEmpty(CountryOfOrigin.Trim())) score++;
                 if (!String.IsNullOrEmpty(VideoResolution.Trim())) score++;
@@ -44,7 +44,9 @@ namespace OMLEngine.Dao
 
         public List<OMLEngine.Person> UpdatedDirectors { get; set; }
         public List<OMLEngine.Person> UpdatedWriters { get; set; }
-        public List<OMLEngine.Person> UpdatedProducers { get; set; }        
+        public List<OMLEngine.Person> UpdatedProducers { get; set; }
+
+        public List<string> UpdatedFanArtPaths { get; set; }
 
         public override string ToString()
         {

@@ -566,23 +566,12 @@ namespace OMLDatabaseEditor
         private void LoadFanartFromPlugin(IOMLMetadataPlugin metadata, Title title)
         {
             if (metadata.SupportsBackDrops())
-            {
-                // Is the fanart folder for the edited title defined
-                if (string.IsNullOrEmpty(titleEditor.EditedTitle.BackDropFolder))
-                    titleEditor.EditedTitle.BackDropFolder = title.CreateFanArtFolder(titleEditor.EditedTitle.BasePath());
-
-                if (!string.IsNullOrEmpty(titleEditor.EditedTitle.BackDropFolder))
-                {
-                    DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
-                    dbdForm.Show();
-                    metadata.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
-                    dbdForm.Hide();
-                    dbdForm.Dispose();
-                }
-                else
-                {
-                    XtraMessageBox.Show("A disk must be assigned to this title. Assign a disk then update the metadata.", "Could not download Fan Art!");
-                }
+            {                
+                DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
+                dbdForm.Show();
+                metadata.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
+                dbdForm.Hide();
+                dbdForm.Dispose();                
             }
         }
 

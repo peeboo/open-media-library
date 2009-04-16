@@ -32,13 +32,30 @@ namespace OMLEngine
         {
             // if there's a new front cover image path
             if (title.UpdatedFrontCoverPath != null)
-            {
+            {                                
                 // delete the old one if it exists
-                if (title.FrontCoverImageId != null)
-                    ImageManager.DeleteImage(title.FrontCoverImageId.Value);                
+                for (int i = title.Images.Count - 1; i >= 0; i--)
+                {
+                    if (title.Images[i].ImageType == (byte) ImageType.FrontCoverImage)
+                    {
+                        Dao.TitleCollectionDao.SetDeleteImage(title.Images[i].ImageId);
+                        Dao.DBContext.Instance.ImageMappings.DeleteOnSubmit(title.Images[i]);
+                        title.Images.RemoveAt(i);
+                    }
+                } 
 
                 // add the new one
-                title.FrontCoverImageId = ImageManager.AddImageToDB(title.UpdatedFrontCoverPath);
+                int? id = ImageManager.AddImageToDB(title.UpdatedFrontCoverPath);
+
+                // if we got an id back let's associate it
+                if (id != null)
+                {
+                    Dao.ImageMapping image = new OMLEngine.Dao.ImageMapping();
+                    image.ImageId = id.Value;
+                    image.ImageType = (byte)ImageType.FrontCoverImage;                    
+
+                    title.Images.Add(image);
+                }
 
                 // clear it out
                 title.UpdatedFrontCoverPath = null;
@@ -48,14 +65,75 @@ namespace OMLEngine
             if (title.UpdatedBackCoverPath != null)
             {
                 // delete the old one if it exists
-                if (title.BackCoverImageId != null)
-                    ImageManager.DeleteImage(title.BackCoverImageId.Value);
+                for (int i = title.Images.Count - 1; i >= 0; i--)
+                {
+                    if (title.Images[i].ImageType == ImageType.BackCoverImage)
+                    {
+                        Dao.TitleCollectionDao.SetDeleteImage(title.Images[i].ImageId);
+                        Dao.DBContext.Instance.ImageMappings.DeleteOnSubmit(title.Images[i]);
+                        title.Images.RemoveAt(i);
+                    }
+                }                
 
                 // add the new one
-                title.BackCoverImageId = ImageManager.AddImageToDB(title.UpdatedBackCoverPath);
+                int? id = ImageManager.AddImageToDB(title.UpdatedBackCoverPath);
+
+                // if we got an id back let's associate it
+                if (id != null)
+                {
+                    Dao.ImageMapping image = new OMLEngine.Dao.ImageMapping();
+                    image.ImageId = id.Value;
+                    image.ImageType = ImageType.BackCoverImage;                    
+
+                    title.Images.Add(image);
+                }                
 
                 // clear it out
                 title.UpdatedBackCoverPath = null;
+            }
+
+            if (title.UpdatedFanArtPaths != null)
+            {
+                IEnumerable<string> originalCoverArt = from t in title.Images
+                                                       where t.ImageType == ImageType.FanartImage
+                                                       select ImageManager.ConstructImagePathById(t.ImageId, ImageSize.Original);
+
+                List<string> added = new List<string>(title.UpdatedFanArtPaths.Where(t => !originalCoverArt.Contains(t)));
+                List<string> removed = new List<string>(originalCoverArt.Where(t => !title.UpdatedFanArtPaths.Contains(t)));
+
+                // remove ones no longer used
+                foreach (string remove in removed)
+                {
+                    int? id = ImageManager.GetIdFromImagePath(remove);
+                    if (id != null)
+                    {
+                        Dao.ImageMapping mapping = title.Images.FirstOrDefault(t => t.ImageId == id.Value);
+
+                        if (mapping != null)
+                        {
+                            Dao.TitleCollectionDao.SetDeleteImage(mapping.DBImage);
+                            Dao.DBContext.Instance.ImageMappings.DeleteOnSubmit(mapping);
+                            title.Images.Remove(mapping);
+                        }
+                    }                    
+                }                
+
+                // add the new ones
+                foreach (string add in added)
+                {
+                    int? id = ImageManager.AddImageToDB(add);
+
+                    if (id != null)
+                    {
+                        Dao.ImageMapping mapping = new Dao.ImageMapping();
+                        mapping.ImageId = id.Value;
+                        mapping.ImageType = ImageType.FanartImage;
+
+                        title.Images.Add(mapping);
+                    }
+                }
+
+                title.UpdatedFanArtPaths = null;
             }
         }        
 
@@ -89,10 +167,15 @@ namespace OMLEngine
         /// </summary>
         public static void DeleteAllImages()
         {
+            var mappings = from m in Dao.DBContext.Instance.ImageMappings
+                           select m;
+
+            Dao.DBContext.Instance.ImageMappings.DeleteAllOnSubmit(mappings);
+
             var images = from d in Dao.DBContext.Instance.DBImages
                                select d;
 
-            Dao.DBContext.Instance.DBImages.DeleteAllOnSubmit(images);
+            Dao.DBContext.Instance.DBImages.DeleteAllOnSubmit(images);            
 
             Dao.DBContext.Instance.SubmitChanges();
         }
@@ -162,10 +245,13 @@ namespace OMLEngine
         /// </summary>
         public static void DeleteAllDBData()
         {
+            TitleCollectionManager.DeleteAllImages();
+
             TitleCollectionManager.DeleteAllTitles();
             TitleCollectionManager.DeleteAllPeopleData();
-            TitleCollectionManager.DeleteAllGenreMetaData();
-            TitleCollectionManager.DeleteAllImages();
+            TitleCollectionManager.DeleteAllGenreMetaData();            
+
+            ImageManager.CleanupCachedImages();
         }
 
         /// <summary>

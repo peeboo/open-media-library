@@ -136,24 +136,20 @@ namespace OMLDatabaseEditor.Controls
         {
             tblBackdrops.Controls.Clear();
 
-            if (Directory.Exists(_dvdTitle.BackDropFolder))
+            foreach (string image in _dvdTitle.FanArtPaths)
             {
-                string[] images = Directory.GetFiles(_dvdTitle.BackDropFolder);
-                foreach (string image in images)
+                PictureBox pb = new PictureBox();
+                /*if (image == _dvdTitle.BackDropImage)
                 {
-                    PictureBox pb = new PictureBox();
-                    if (image == _dvdTitle.BackDropImage)
-                    {
-                        pb.BorderStyle = BorderStyle.Fixed3D;
-                        pb.BackColor = Color.Green;
-                    }
-                    pb.ImageLocation = image;
-                    pb.Height = 150;
-                    pb.Dock = DockStyle.Fill;
-                    pb.SizeMode = PictureBoxSizeMode.Zoom;
-                    pb.MouseClick += new MouseEventHandler(pbFanart_MouseClick);
-                    tblBackdrops.Controls.Add(pb);
-                }
+                    pb.BorderStyle = BorderStyle.Fixed3D;
+                    pb.BackColor = Color.Green;
+                }*/
+                pb.ImageLocation = image;
+                pb.Height = 150;
+                pb.Dock = DockStyle.Fill;
+                pb.SizeMode = PictureBoxSizeMode.Zoom;
+                pb.MouseClick += new MouseEventHandler(pbFanart_MouseClick);
+                tblBackdrops.Controls.Add(pb);
             }
         }
 
@@ -561,7 +557,7 @@ namespace OMLDatabaseEditor.Controls
                 }
                 else if (pb.Name.Contains("Backdrop"))
                 {
-                    _dvdTitle.BackDropImage = openCoverFile.FileName;
+                    //_dvdTitle.BackDropImage = openCoverFile.FileName;
                 }
                 else
                 {
@@ -639,7 +635,7 @@ namespace OMLDatabaseEditor.Controls
             if (e.Button == MouseButtons.Right)
             {
                 contextBackdrop.Tag = sender;
-                if ((sender as PictureBox).ImageLocation == _dvdTitle.BackDropImage)
+                /*if ((sender as PictureBox).ImageLocation == _dvdTitle.BackDropImage)
                 {
                     clearSingleBackdropToolStripMenuItem.Visible = true;
                     setSingleBackdropToolStripMenuItem.Visible = false;
@@ -648,27 +644,29 @@ namespace OMLDatabaseEditor.Controls
                 {
                     clearSingleBackdropToolStripMenuItem.Visible = false;
                     setSingleBackdropToolStripMenuItem.Visible = true;
-                }
+                }*/
                 contextBackdrop.Show(sender as PictureBox, e.Location);
             }
         }
 
         private void setSingleBackdropToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            /*
             // Set selected image as single backdrop
             PictureBox pb = (sender as ToolStripMenuItem).Owner.Tag as PictureBox;
             _dvdTitle.BackDropImage = pb.ImageLocation;
             TitleChanges(null, EventArgs.Empty);
             LoadBackdrops();
+             * */
         }
 
         private void clearSingleBackdropToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Clear single backdrop
-            PictureBox pb = (sender as ToolStripItem).Owner.Tag as PictureBox;
+            /*PictureBox pb = (sender as ToolStripItem).Owner.Tag as PictureBox;
             _dvdTitle.BackDropImage = string.Empty;
             TitleChanges(null, EventArgs.Empty);
-            LoadBackdrops();
+            LoadBackdrops();*/
         }
     }
 

@@ -54,6 +54,9 @@ namespace OMLEngine.Dao
     partial void InsertDBImage(DBImage instance);
     partial void UpdateDBImage(DBImage instance);
     partial void DeleteDBImage(DBImage instance);
+    partial void InsertImageMapping(ImageMapping instance);
+    partial void UpdateImageMapping(ImageMapping instance);
+    partial void DeleteImageMapping(ImageMapping instance);
     #endregion
 		
 		public OMLDataDataContext() : 
@@ -147,6 +150,14 @@ namespace OMLEngine.Dao
 			get
 			{
 				return this.GetTable<DBImage>();
+			}
+		}
+		
+		internal System.Data.Linq.Table<ImageMapping> ImageMappings
+		{
+			get
+			{
+				return this.GetTable<ImageMapping>();
 			}
 		}
 	}
@@ -453,12 +464,6 @@ namespace OMLEngine.Dao
 		
 		private string _MetaDataSource;
 		
-		private string _FrontCoverImage;
-		
-		private string _MenuImage;
-		
-		private string _BackCoverImage;
-		
 		private System.Nullable<short> _Runtime;
 		
 		private string _ParentalRating;
@@ -505,14 +510,6 @@ namespace OMLEngine.Dao
 		
 		private System.Nullable<int> _ProductionYear;
 		
-		private string _FanArtFolder;
-		
-		private string _PreferredBackDropImage;
-		
-		private System.Nullable<int> _FrontCoverImageId;
-		
-		private System.Nullable<int> _BackCoverImageId;
-		
 		private EntitySet<Genre> _Genres;
 		
 		private EntitySet<Person> _Peoples;
@@ -520,6 +517,8 @@ namespace OMLEngine.Dao
 		private EntitySet<Tag> _Tags;
 		
 		private EntitySet<Disk> _Disks;
+		
+		private EntitySet<ImageMapping> _Images;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -535,12 +534,6 @@ namespace OMLEngine.Dao
     partial void OnWatchedCountChanged();
     partial void OnMetaDataSourceChanging(string value);
     partial void OnMetaDataSourceChanged();
-    partial void OnFrontCoverPathChanging(string value);
-    partial void OnFrontCoverPathChanged();
-    partial void OnFrontCoverMenuPathChanging(string value);
-    partial void OnFrontCoverMenuPathChanged();
-    partial void OnBackCoverPathChanging(string value);
-    partial void OnBackCoverPathChanged();
     partial void OnRuntimeChanging(System.Nullable<short> value);
     partial void OnRuntimeChanged();
     partial void OnParentalRatingChanging(string value);
@@ -587,14 +580,6 @@ namespace OMLEngine.Dao
     partial void OnMetaDataSourceItemIdChanged();
     partial void OnProductionYearChanging(System.Nullable<int> value);
     partial void OnProductionYearChanged();
-    partial void OnFanArtFolderChanging(string value);
-    partial void OnFanArtFolderChanged();
-    partial void OnPreferredBackDropImageChanging(string value);
-    partial void OnPreferredBackDropImageChanged();
-    partial void OnFrontCoverImageIdChanging(System.Nullable<int> value);
-    partial void OnFrontCoverImageIdChanged();
-    partial void OnBackCoverImageIdChanging(System.Nullable<int> value);
-    partial void OnBackCoverImageIdChanged();
     #endregion
 		
 		public Title()
@@ -603,6 +588,7 @@ namespace OMLEngine.Dao
 			this._Peoples = new EntitySet<Person>(new Action<Person>(this.attach_Peoples), new Action<Person>(this.detach_Peoples));
 			this._Tags = new EntitySet<Tag>(new Action<Tag>(this.attach_Tags), new Action<Tag>(this.detach_Tags));
 			this._Disks = new EntitySet<Disk>(new Action<Disk>(this.attach_Disks), new Action<Disk>(this.detach_Disks));
+			this._Images = new EntitySet<ImageMapping>(new Action<ImageMapping>(this.attach_Images), new Action<ImageMapping>(this.detach_Images));
 			OnCreated();
 		}
 		
@@ -702,66 +688,6 @@ namespace OMLEngine.Dao
 					this._MetaDataSource = value;
 					this.SendPropertyChanged("MetaDataSource");
 					this.OnMetaDataSourceChanged();
-				}
-			}
-		}
-		
-		[Column(Name="FrontCoverImagePath", Storage="_FrontCoverImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
-		public string FrontCoverPath
-		{
-			get
-			{
-				return this._FrontCoverImage;
-			}
-			set
-			{
-				if ((this._FrontCoverImage != value))
-				{
-					this.OnFrontCoverPathChanging(value);
-					this.SendPropertyChanging();
-					this._FrontCoverImage = value;
-					this.SendPropertyChanged("FrontCoverPath");
-					this.OnFrontCoverPathChanged();
-				}
-			}
-		}
-		
-		[Column(Name="MenuImagePath", Storage="_MenuImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
-		public string FrontCoverMenuPath
-		{
-			get
-			{
-				return this._MenuImage;
-			}
-			set
-			{
-				if ((this._MenuImage != value))
-				{
-					this.OnFrontCoverMenuPathChanging(value);
-					this.SendPropertyChanging();
-					this._MenuImage = value;
-					this.SendPropertyChanged("FrontCoverMenuPath");
-					this.OnFrontCoverMenuPathChanged();
-				}
-			}
-		}
-		
-		[Column(Name="BackCoverImagePath", Storage="_BackCoverImage", DbType="nvarchar(255)", UpdateCheck=UpdateCheck.Never)]
-		public string BackCoverPath
-		{
-			get
-			{
-				return this._BackCoverImage;
-			}
-			set
-			{
-				if ((this._BackCoverImage != value))
-				{
-					this.OnBackCoverPathChanging(value);
-					this.SendPropertyChanging();
-					this._BackCoverImage = value;
-					this.SendPropertyChanged("BackCoverPath");
-					this.OnBackCoverPathChanged();
 				}
 			}
 		}
@@ -1226,86 +1152,6 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_FanArtFolder", DbType="NVarChar(255)")]
-		public string FanArtFolder
-		{
-			get
-			{
-				return this._FanArtFolder;
-			}
-			set
-			{
-				if ((this._FanArtFolder != value))
-				{
-					this.OnFanArtFolderChanging(value);
-					this.SendPropertyChanging();
-					this._FanArtFolder = value;
-					this.SendPropertyChanged("FanArtFolder");
-					this.OnFanArtFolderChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_PreferredBackDropImage", DbType="NVarChar(255)")]
-		public string PreferredBackDropImage
-		{
-			get
-			{
-				return this._PreferredBackDropImage;
-			}
-			set
-			{
-				if ((this._PreferredBackDropImage != value))
-				{
-					this.OnPreferredBackDropImageChanging(value);
-					this.SendPropertyChanging();
-					this._PreferredBackDropImage = value;
-					this.SendPropertyChanged("PreferredBackDropImage");
-					this.OnPreferredBackDropImageChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_FrontCoverImageId", DbType="Int")]
-		public System.Nullable<int> FrontCoverImageId
-		{
-			get
-			{
-				return this._FrontCoverImageId;
-			}
-			set
-			{
-				if ((this._FrontCoverImageId != value))
-				{
-					this.OnFrontCoverImageIdChanging(value);
-					this.SendPropertyChanging();
-					this._FrontCoverImageId = value;
-					this.SendPropertyChanged("FrontCoverImageId");
-					this.OnFrontCoverImageIdChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_BackCoverImageId", DbType="Int")]
-		public System.Nullable<int> BackCoverImageId
-		{
-			get
-			{
-				return this._BackCoverImageId;
-			}
-			set
-			{
-				if ((this._BackCoverImageId != value))
-				{
-					this.OnBackCoverImageIdChanging(value);
-					this.SendPropertyChanging();
-					this._BackCoverImageId = value;
-					this.SendPropertyChanged("BackCoverImageId");
-					this.OnBackCoverImageIdChanged();
-				}
-			}
-		}
-		
 		[Association(Name="Title_Genre", Storage="_Genres", ThisKey="Id", OtherKey="TitleId")]
 		public EntitySet<Genre> Genres
 		{
@@ -1355,6 +1201,19 @@ namespace OMLEngine.Dao
 			set
 			{
 				this._Disks.Assign(value);
+			}
+		}
+		
+		[Association(Name="Title_ImageMapping", Storage="_Images", ThisKey="Id", OtherKey="TitleId")]
+		public EntitySet<ImageMapping> Images
+		{
+			get
+			{
+				return this._Images;
+			}
+			set
+			{
+				this._Images.Assign(value);
 			}
 		}
 		
@@ -1421,6 +1280,18 @@ namespace OMLEngine.Dao
 		}
 		
 		private void detach_Disks(Disk entity)
+		{
+			this.SendPropertyChanging();
+			entity.Title = null;
+		}
+		
+		private void attach_Images(ImageMapping entity)
+		{
+			this.SendPropertyChanging();
+			entity.Title = this;
+		}
+		
+		private void detach_Images(ImageMapping entity)
 		{
 			this.SendPropertyChanging();
 			entity.Title = null;
@@ -2313,6 +2184,8 @@ namespace OMLEngine.Dao
 		
 		private System.Data.Linq.Binary _Image;
 		
+		private EntitySet<ImageMapping> _ImageMappings;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -2325,6 +2198,7 @@ namespace OMLEngine.Dao
 		
 		public DBImage()
 		{
+			this._ImageMappings = new EntitySet<ImageMapping>(new Action<ImageMapping>(this.attach_ImageMappings), new Action<ImageMapping>(this.detach_ImageMappings));
 			OnCreated();
 		}
 		
@@ -2364,6 +2238,223 @@ namespace OMLEngine.Dao
 					this._Image = value;
 					this.SendPropertyChanged("Image");
 					this.OnImageChanged();
+				}
+			}
+		}
+		
+		[Association(Name="DBImage_ImageMapping", Storage="_ImageMappings", ThisKey="Id", OtherKey="ImageId")]
+		public EntitySet<ImageMapping> ImageMappings
+		{
+			get
+			{
+				return this._ImageMappings;
+			}
+			set
+			{
+				this._ImageMappings.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_ImageMappings(ImageMapping entity)
+		{
+			this.SendPropertyChanging();
+			entity.DBImage = this;
+		}
+		
+		private void detach_ImageMappings(ImageMapping entity)
+		{
+			this.SendPropertyChanging();
+			entity.DBImage = null;
+		}
+	}
+	
+	[Table(Name="dbo.ImageMappings")]
+	internal partial class ImageMapping : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _TitleId;
+		
+		private int _ImageId;
+		
+		private OMLEngine.ImageType _ImageType;
+		
+		private EntityRef<Title> _Title;
+		
+		private EntityRef<DBImage> _DBImage;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnTitleIdChanging(int value);
+    partial void OnTitleIdChanged();
+    partial void OnImageIdChanging(int value);
+    partial void OnImageIdChanged();
+    partial void OnImageTypeChanging(OMLEngine.ImageType value);
+    partial void OnImageTypeChanged();
+    #endregion
+		
+		public ImageMapping()
+		{
+			this._Title = default(EntityRef<Title>);
+			this._DBImage = default(EntityRef<DBImage>);
+			OnCreated();
+		}
+		
+		[Column(Storage="_TitleId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int TitleId
+		{
+			get
+			{
+				return this._TitleId;
+			}
+			set
+			{
+				if ((this._TitleId != value))
+				{
+					if (this._Title.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTitleIdChanging(value);
+					this.SendPropertyChanging();
+					this._TitleId = value;
+					this.SendPropertyChanged("TitleId");
+					this.OnTitleIdChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_ImageId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ImageId
+		{
+			get
+			{
+				return this._ImageId;
+			}
+			set
+			{
+				if ((this._ImageId != value))
+				{
+					if (this._DBImage.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnImageIdChanging(value);
+					this.SendPropertyChanging();
+					this._ImageId = value;
+					this.SendPropertyChanged("ImageId");
+					this.OnImageIdChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_ImageType", DbType="TinyInt NOT NULL", CanBeNull=false)]
+		public OMLEngine.ImageType ImageType
+		{
+			get
+			{
+				return this._ImageType;
+			}
+			set
+			{
+				if ((this._ImageType != value))
+				{
+					this.OnImageTypeChanging(value);
+					this.SendPropertyChanging();
+					this._ImageType = value;
+					this.SendPropertyChanged("ImageType");
+					this.OnImageTypeChanged();
+				}
+			}
+		}
+		
+		[Association(Name="Title_ImageMapping", Storage="_Title", ThisKey="TitleId", OtherKey="Id", IsForeignKey=true)]
+		public Title Title
+		{
+			get
+			{
+				return this._Title.Entity;
+			}
+			set
+			{
+				Title previousValue = this._Title.Entity;
+				if (((previousValue != value) 
+							|| (this._Title.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Title.Entity = null;
+						previousValue.Images.Remove(this);
+					}
+					this._Title.Entity = value;
+					if ((value != null))
+					{
+						value.Images.Add(this);
+						this._TitleId = value.Id;
+					}
+					else
+					{
+						this._TitleId = default(int);
+					}
+					this.SendPropertyChanged("Title");
+				}
+			}
+		}
+		
+		[Association(Name="DBImage_ImageMapping", Storage="_DBImage", ThisKey="ImageId", OtherKey="Id", IsForeignKey=true)]
+		public DBImage DBImage
+		{
+			get
+			{
+				return this._DBImage.Entity;
+			}
+			set
+			{
+				DBImage previousValue = this._DBImage.Entity;
+				if (((previousValue != value) 
+							|| (this._DBImage.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._DBImage.Entity = null;
+						previousValue.ImageMappings.Remove(this);
+					}
+					this._DBImage.Entity = value;
+					if ((value != null))
+					{
+						value.ImageMappings.Add(this);
+						this._ImageId = value.Id;
+					}
+					else
+					{
+						this._ImageId = default(int);
+					}
+					this.SendPropertyChanged("DBImage");
 				}
 			}
 		}
