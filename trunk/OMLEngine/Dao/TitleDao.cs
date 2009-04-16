@@ -42,7 +42,7 @@ namespace OMLEngine.Dao
             }
 
             // add the tags
-            /*foreach (string name in title.Tags)
+            foreach (string name in title.Tags)
             {
                 // see if we've added this tag locally already
                 Tag tag = daoTitle.Tags.FirstOrDefault(t => t.Name.Equals(name));
@@ -58,12 +58,12 @@ namespace OMLEngine.Dao
                 {
                     // if it doesn't exist create a new one
                     tag = new Tag();
-                    tag.Name = name;
+                    tag.Name = name;                    
                 }
 
                 // add the tag
                 daoTitle.Tags.Add(tag);
-            }*/
+            }
 
             // grab from the db who we know about already
             Dictionary<string, BioData> existingPeople = GetAllExistingPeople(title);
@@ -139,6 +139,88 @@ namespace OMLEngine.Dao
 
             // add the trailers             
             daoTitle.Trailers = GetDelimitedStringFromCollection(title.Trailers);*/
+        }
+
+        public static void UpdateCollectionsForTitle(Dao.Title title)
+        {
+            // if the genres were modified see how they've changed
+            if (title.UpdatedGenres != null)
+            {
+                // see if there are any genres to add
+
+                // grab all the original genres
+                IEnumerable<string> originalGenres = from g in title.Genres
+                                                     select g.MetaData.Name;
+
+                List<string> added = new List<string>(title.UpdatedGenres.Where(t => !originalGenres.Contains(t)));
+                List<string> removed = new List<string>(originalGenres.Where(t => !title.UpdatedGenres.Contains(t)));
+
+                // remove ones no longer used
+                foreach (string remove in removed)
+                {
+                    Dao.Genre genre = title.Genres.SingleOrDefault(g => g.MetaData.Name == remove);
+
+                    if (genre != null)
+                        title.Genres.Remove(genre);
+                }
+
+                // add the new ones
+                foreach (string add in added)
+                {
+                    AddGenreToTitle(title, add);
+                }
+            }
+
+            if (title.UpdatedTags != null)
+            {
+                IEnumerable<string> originalTags = from t in title.Tags
+                                                   select t.Name;
+
+                List<string> added = new List<string>(title.UpdatedTags.Where(t => !originalTags.Contains(t)));
+                List<string> removed = new List<string>(originalTags.Where(t => !title.UpdatedTags.Contains(t)));
+
+                foreach (string remove in removed)
+                {
+                    Dao.Tag tag = title.Tags.SingleOrDefault(t => t.Name == remove);
+
+                    if (tag != null)
+                        title.Tags.Remove(tag);
+                }
+
+                foreach (string add in added)
+                {
+                    Dao.Tag daoTag = new OMLEngine.Dao.Tag();
+                    daoTag.TitleId = title.Id;
+                    daoTag.Name = add;
+
+                    title.Tags.Add(daoTag);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds a genre to a title
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="genre"></param>
+        private static void AddGenreToTitle(Dao.Title title, string genre)
+        {
+            if (string.IsNullOrEmpty(genre))
+                return;
+
+            // see if the genre exists
+            Dao.GenreMetaData meta = Dao.TitleCollectionDao.GetGenreMetaDataByName(genre);
+
+            if (meta == null)
+            {
+                meta = new OMLEngine.Dao.GenreMetaData();
+                meta.Name = genre;
+
+                // save the genre
+                Dao.DBContext.Instance.GenreMetaDatas.InsertOnSubmit(meta);
+            }
+
+            title.Genres.Add(new Dao.Genre { MetaData = meta });
         }
 
         /// <summary>

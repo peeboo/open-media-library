@@ -37,6 +37,7 @@ namespace OMLEngine.Dao
         public string UpdatedFrontCoverPath { get; set; }
         public string UpdatedBackCoverPath { get; set; }
         public List<string> UpdatedGenres { get; set; }
+        public List<string> UpdatedTags { get; set; }
 
         public override string ToString()
         {
