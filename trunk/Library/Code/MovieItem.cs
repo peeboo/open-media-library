@@ -617,9 +617,9 @@ namespace Library
             get
             {
                 List<string> actor_names = new List<string>();
-                foreach (KeyValuePair<string,string> kvp  in _titleObj.ActingRoles)
+                foreach (Role kvp  in _titleObj.ActingRoles)
                 {
-                    actor_names.Add(kvp.Key);
+                    actor_names.Add(kvp.PersonName);
                 }
                 return actor_names;
             }

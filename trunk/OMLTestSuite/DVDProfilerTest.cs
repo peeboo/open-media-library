@@ -31,8 +31,9 @@ namespace OMLTestSuite
                                                  "First4 Middle4 Last4 (1984)"
                                              };
             var missing = (from name in expectedNames
-                           where !title.ActingRoles.ContainsKey(name)
+                           where !title.ActingRoles.Select(p => p.PersonName).Contains(name)
                            select name).FirstOrDefault();
+
             Assert.IsNull(missing, "Name missing from cast: " + missing);
         }
 
@@ -48,8 +49,8 @@ namespace OMLTestSuite
                                     };
             var missing = (from expected in expectedRoles
                            where
-                               !title.ActingRoles.ContainsKey(expected.Key) ||
-                               title.ActingRoles[expected.Key] != expected.Value
+                               !title.ActingRoles.Select(p => p.PersonName).Contains(expected.Key) ||
+                               title.ActingRoles.FirstOrDefault(p => p.PersonName == expected.Key).RoleName != expected.Value
                            select new {Name = expected.Key, Role = expected.Value}).FirstOrDefault();
             Assert.IsNull(missing, "Unexpected name/role combination");
         }

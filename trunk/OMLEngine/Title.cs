@@ -14,7 +14,7 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.IO;
 using System.Drawing;
-
+using System.Linq;
 using Dao = OMLEngine.Dao;
 
 namespace OMLEngine
@@ -32,18 +32,8 @@ namespace OMLEngine
         private bool _peopleProcesed = false;
         private string _frontCoverMenuPath = null;
         private string _frontCoverPath = null;
-        private string _backCoverPath = null;
+        private string _backCoverPath = null;        
 
-        //private string _backDropImage = string.Empty;
-        //private int _productionYear = 0;
-        //private string _fanartfolder = string.Empty;
-
-        private Dictionary<string, string> _nonActingRoles = new Dictionary<string, string>(); // name, role (ie. Vangelis, Music)        
-        private Dictionary<string, string> _actingRoles = null; // actor, role                                       
-        
-        private List<Person> _directors = null;
-        private List<Person> _writers = null;
-        private List<Person> _producers = null;
         private List<Disk> _disks = null;
         private List<string> _audioTracks = null;
         private List<string> _subtitles = null;
@@ -70,41 +60,7 @@ namespace OMLEngine
         {
             get { return _extraFeatures; }
             set { _extraFeatures = value; }
-        }       
-
-        public List<Role> NonActingRolesBinding
-        {
-            get
-            {
-                SetupPeopleCollections();
-                List<Role> roles = new List<Role>();
-                foreach (string person in _nonActingRoles.Keys)
-                {
-                    roles.Add(new Role(person, _nonActingRoles[person]));
-                }
-                return roles;
-            }
-        }
-
-        public Dictionary<string, string> NonActingRoles
-        {
-            get { return _nonActingRoles; }
-            set { _nonActingRoles = value; }
-        }
-
-        public List<Role> ActingRolesBinding
-        {
-            get
-            {
-                SetupPeopleCollections();
-                List<Role> roles = new List<Role>();
-                foreach (string person in _actingRoles.Keys)
-                {
-                    roles.Add(new Role(person, _actingRoles[person]));
-                }
-                return roles;
-            }
-        }              
+        }                         
 
         #endregion        
 
@@ -646,66 +602,62 @@ namespace OMLEngine
             }
         }
 
-        public Dictionary<string, string> ActingRoles
+        public IList<Role> NonActingRoles
+        {
+            get
+            {
+                SetupPeopleCollections();
+
+                return DaoTitle.UpdatedNonActingRoles.AsReadOnly();
+            }    
+        }            
+
+        public IList<Role> ActingRoles
         {
             get 
             {
-                if (!_peopleProcesed)
-                    SetupPeopleCollections();
+                SetupPeopleCollections();
 
-                return _actingRoles; 
+                return DaoTitle.UpdatedActors.AsReadOnly(); 
             }            
-        }        
-
-    
+        }            
         
         /// <summary>
         /// List of Person objects that directed the title (usually one Person)
         /// </summary>
-        public List<Person> Directors
+        public IList<Person> Directors
         {
             get 
-            {
-                if (!_peopleProcesed)
-                    SetupPeopleCollections();
+            {                
+                SetupPeopleCollections();
 
-                return _directors; 
-            }
-            set { _directors = value; }
+                return DaoTitle.UpdatedDirectors.AsReadOnly(); 
+            }            
         }
         /// <summary>
         /// List of Person objects that wrote the title
         /// </summary>
-        public List<Person> Writers
+        public IList<Person> Writers
         {
             get 
-            {
-                if (!_peopleProcesed)
-                    SetupPeopleCollections();
+            {                
+                SetupPeopleCollections();
 
-                return _writers; 
-            }
-            set { _writers = value; }
+                return DaoTitle.UpdatedWriters.AsReadOnly(); 
+            }            
         }
 
         /// <summary>
         /// List of people/companies that produced the title
         /// </summary>
-        public List<Person> Producers
+        public IList<Person> Producers
         {
             get 
             {
-                if (!_peopleProcesed)
-                    SetupPeopleCollections();
+                SetupPeopleCollections();
 
-                return _producers; 
-            }
-            set { _producers = value; }
-            
-            // todo : solomon : this went wonky here
-            /*_backDropImage = GetSerializedString(info, "backdrop_boxart_path");
-            _productionYear = GetSerializedInt(info, "production_year");
-            _fanartfolder = GetSerializedString(info, "fan_art_folder");*/
+                return DaoTitle.UpdatedProducers.AsReadOnly(); 
+            }            
         }
 
         public decimal PercentComplete
@@ -717,32 +669,37 @@ namespace OMLEngine
 
         private void SetupPeopleCollections()
         {
-            _actingRoles = new Dictionary<string, string>();
-            _writers = new List<Person>();
-            _producers = new List<Person>();
-            _directors = new List<Person>();
+            if (_peopleProcesed)
+                return;
 
+            DaoTitle.UpdatedActors = new List<Role>();
+            DaoTitle.UpdatedDirectors = new List<Person>();
+            DaoTitle.UpdatedWriters = new List<Person>();
+            DaoTitle.UpdatedProducers = new List<Person>();
+            DaoTitle.UpdatedNonActingRoles = new List<Role>();
+            
             foreach (Dao.Person person in _title.People)
             {
                 switch ((PeopleRole)person.Role)
                 {
-                    case PeopleRole.Actor:                        
-                        // todo : solomon : we need to move this off a dictionary 
-                        // duplicates should be allowed
-                        if (! _actingRoles.ContainsKey(person.MetaData.FullName) )
-                            _actingRoles.Add(person.MetaData.FullName, person.CharacterName);
+                    case PeopleRole.Actor:                                                                        
+                        DaoTitle.UpdatedActors.Add(new Role(person.MetaData.FullName, person.CharacterName));
                         break;
 
                     case PeopleRole.Director:
-                        _directors.Add(new Person(person.MetaData.FullName));
+                        DaoTitle.UpdatedDirectors.Add(new Person(person.MetaData.FullName));                        
                         break;
 
                     case PeopleRole.Producers:
-                        _producers.Add(new Person(person.MetaData.FullName));
+                        DaoTitle.UpdatedProducers.Add(new Person(person.MetaData.FullName));        
                         break;
 
                     case PeopleRole.Writer:
-                        _writers.Add(new Person(person.MetaData.FullName));
+                        DaoTitle.UpdatedWriters.Add(new Person(person.MetaData.FullName));                        
+                        break;
+
+                    case PeopleRole.NonActing:
+                        DaoTitle.UpdatedNonActingRoles.Add(new Role(person.MetaData.FullName, person.CharacterName));
                         break;
                 }
             }
@@ -776,35 +733,57 @@ namespace OMLEngine
 
         #region People Management
         public void AddActingRole(string actor, string role)
-        {
-            if (!ActingRoles.ContainsKey(actor))
-            {
-                TitleCollectionManager.AddActorToTitle(this, actor, role);
-                // reset the internal collection
-                _peopleProcesed = false;
+        {            
+            SetupPeopleCollections();                      
+
+            if (!DaoTitle.UpdatedActors.Exists(p => p.PersonName.Equals(actor, StringComparison.OrdinalIgnoreCase)))
+            {                
+                DaoTitle.UpdatedActors.Add(new Role(actor, role));
+            }
+        }
+
+        public void RemoveActingRole(string actor)
+        {            
+            SetupPeopleCollections();            
+
+            Role role = DaoTitle.UpdatedActors.Find(p => p.PersonName == actor);
+
+            if (role != null)
+            {                               
+                DaoTitle.UpdatedActors.Remove(role);
             }
         }
 
         public void RemoveAllActingRoles()
         {
-            TitleCollectionManager.RemoveAllPersons(this, PeopleRole.Actor);
-            _peopleProcesed = false;
+            DaoTitle.UpdatedActors = new List<Role>();
         }
 
         public void AddNonActingRole(string name, string role)
         {
-            if (!NonActingRoles.ContainsKey(name))
+            SetupPeopleCollections();
+
+            if (!DaoTitle.UpdatedNonActingRoles.Exists(p => p.PersonName.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                TitleCollectionManager.AddNonActorToTitle(this, name, role);
-                // reset the internal collection
-                _peopleProcesed = false;
+                DaoTitle.UpdatedActors.Add(new Role(name, role));
             }
-        }  
+        }
+
+        public void RemoveNonActingRole(string actor)
+        {
+            SetupPeopleCollections();
+
+            Role role = DaoTitle.UpdatedNonActingRoles.Find(p => p.PersonName == actor);
+
+            if (role != null)
+            {
+                DaoTitle.UpdatedNonActingRoles.Remove(role);
+            }
+        }
  
         public void RemoveAllNonActingRoles()
         {
-            TitleCollectionManager.RemoveAllPersons(this, PeopleRole.NonActing);
-            _peopleProcesed = false;
+            DaoTitle.UpdatedNonActingRoles = new List<Role>();
         }
 
         /// <summary>
@@ -812,19 +791,30 @@ namespace OMLEngine
         /// </summary>
         /// <param name="director">Person object to add</param>
         public void AddDirector(Person director)
-        {
-            if (!Directors.Contains(director))
+        {            
+            SetupPeopleCollections();            
+
+            if (!(DaoTitle.UpdatedDirectors.Exists(p => p.full_name.Equals(director.full_name, StringComparison.OrdinalIgnoreCase))))
             {
-                TitleCollectionManager.AddPersonToTitle(this, director.full_name, PeopleRole.Director);
-                // reset the internal collection
-                _peopleProcesed = false;
+                DaoTitle.UpdatedDirectors.Add(director);
+            }            
+        }
+
+        public void RemoveDirector(string name)
+        {            
+            SetupPeopleCollections();
+
+            Person person = DaoTitle.UpdatedDirectors.Find(p => p.full_name == name);
+
+            if (person != null)
+            {
+                DaoTitle.UpdatedDirectors.Remove(person);
             }
         }
 
         public void RemoveAllDirectors()
         {
-            TitleCollectionManager.RemoveAllPersons(this, PeopleRole.Director);
-            _peopleProcesed = false;
+            DaoTitle.UpdatedDirectors = new List<Person>();                        
         }
 
         /// <summary>
@@ -832,36 +822,61 @@ namespace OMLEngine
         /// </summary>
         /// <param name="writer">Person object to add</param>
         public void AddWriter(Person writer)
-        {
-            if (!Directors.Contains(writer))
+        {            
+            SetupPeopleCollections();
+
+            if (!(DaoTitle.UpdatedWriters.Exists(p => p.full_name.Equals(writer.full_name, StringComparison.OrdinalIgnoreCase))))
             {
-                TitleCollectionManager.AddPersonToTitle(this, writer.full_name, PeopleRole.Writer);
-                _peopleProcesed = false;
+                DaoTitle.UpdatedDirectors.Add(writer);
+            }      
+        }
+
+        public void RemoveWriter(string name)
+        {            
+            SetupPeopleCollections();
+
+            Person person = DaoTitle.UpdatedWriters.Find(p => p.full_name == name);
+
+            if (person != null)
+            {
+                DaoTitle.UpdatedWriters.Remove(person);
             }
         }
 
         public void RemoveAllWriters()
         {
-            TitleCollectionManager.RemoveAllPersons(this, PeopleRole.Writer);
-            _peopleProcesed = false;
+            DaoTitle.UpdatedWriters = new List<Person>();
         }
+
         /// <summary>
         /// Add a string (person name or company name) to the producers list
         /// </summary>
         /// <param name="producer">string name to add</param>
         public void AddProducer(Person producer)
         {
-            if (!Directors.Contains(producer))
+            SetupPeopleCollections();
+
+            if (!(DaoTitle.UpdatedProducers.Exists(p => p.full_name.Equals(producer.full_name, StringComparison.OrdinalIgnoreCase))))
             {
-                TitleCollectionManager.AddPersonToTitle(this, producer.full_name, PeopleRole.Producers);
-                _peopleProcesed = false;
+                DaoTitle.UpdatedProducers.Add(producer);
+            }    
+        }
+
+        public void RemoveProducer(string name)
+        {
+            SetupPeopleCollections();
+
+            Person person = DaoTitle.UpdatedProducers.Find(p => p.full_name == name);
+
+            if (person != null)
+            {
+                DaoTitle.UpdatedProducers.Remove(person);
             }
         }
 
         public void RemoveAllProducers()
         {
-            TitleCollectionManager.RemoveAllPersons(this, PeopleRole.Producers);
-            _peopleProcesed = false;
+            DaoTitle.UpdatedProducers = new List<Person>();
         }
         #endregion
 
@@ -2004,7 +2019,7 @@ namespace OMLEngine
                 if (overWrite || Writers.Count == 0)
                 {
                     RemoveAllWriters();
-                    foreach (Person p in t._writers)
+                    foreach (Person p in t.Writers)
                     {
                         AddWriter(new Person(p.full_name));
                     }
@@ -2068,21 +2083,21 @@ namespace OMLEngine
                 if (overWrite || ActingRoles.Count == 0)
                 {
                     RemoveAllActingRoles();
-                    foreach (KeyValuePair<string, string> p in t.ActingRoles)
+                    foreach (Role p in t.ActingRoles)
                     {
-                        AddActingRole(p.Key, p.Value);
+                        AddActingRole(p.PersonName, p.RoleName);
                     }
                 }
             }
 
             if (t.NonActingRoles != null && t.NonActingRoles.Count > 0)
             {
-                if (overWrite || _nonActingRoles.Count == 0)
+                if (overWrite || NonActingRoles.Count == 0)
                 {
                     RemoveAllNonActingRoles();
-                    foreach (KeyValuePair<string, string> p in t.NonActingRoles)
+                    foreach (Role p in t.NonActingRoles)
                     {
-                        AddNonActingRole(p.Key, p.Value);
+                        AddNonActingRole(p.PersonName, p.RoleName);
                     }
                 }
             }            
@@ -2261,15 +2276,19 @@ namespace OMLEngine
             
 
             ReleaseDate = GetSerializedDateTime(info, "release_date");
-            _producers = GetSerializedList<List<Person>>(info, "producers");
-            foreach (Person p in _producers)
-                TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Producers);
-            _writers = GetSerializedList<List<Person>>(info, "writers");
-            foreach (Person p in _writers)
-                TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Writer);
-            _directors = GetSerializedList<List<Person>>(info, "directors");
-            foreach (Person p in _directors)
-                TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Director);
+            DaoTitle.UpdatedProducers = GetSerializedList<List<Person>>(info, "producers");
+            //foreach (Person p in _producers)
+                //TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Producers);
+
+            DaoTitle.UpdatedWriters = GetSerializedList<List<Person>>(info, "writers");
+            
+            //foreach (Person p in _writers)
+                //TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Writer);
+            
+            DaoTitle.UpdatedDirectors = GetSerializedList<List<Person>>(info, "directors");
+            //foreach (Person p in _directors)
+                //TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Director);
+
             _audioTracks = GetSerializedList<List<string>>(info, "language_formats");
             _title.AudioTracks = Dao.TitleDao.GetDelimitedStringFromCollection(_audioTracks);
             DaoTitle.UpdatedGenres = GetSerializedList<List<string>>(info, "genres");
@@ -2284,12 +2303,20 @@ namespace OMLEngine
             DaoTitle.UpdatedTags = GetSerializedList<List<string>>(info, "tags");
             //foreach (string t in _tags)
                 //TitleCollectionManager.AddTagToTitle(this, t);
-            _actingRoles = GetSerializedList<Dictionary<string, string>>(info, "acting_roles");
-            foreach (string key in _actingRoles.Keys)
-                TitleCollectionManager.AddActorToTitle(this, key, _actingRoles[key]);
-            _nonActingRoles = GetSerializedList<Dictionary<string, string>>(info, "nonacting_roles");
-            foreach (string key in _nonActingRoles.Keys)
-                TitleCollectionManager.AddNonActorToTitle(this, key, _nonActingRoles[key]);
+            Dictionary<string, string> actors = GetSerializedList<Dictionary<string, string>>(info, "acting_roles");
+
+            DaoTitle.UpdatedActors = new List<Role>();
+            foreach (string actor in actors.Keys)
+                DaoTitle.UpdatedActors.Add(new Role(actor, actors[actor]));
+            //DaoTitle.UpdatedActors = GetSerializedList<Dictionary<string, string>>(info, "acting_roles");
+            //foreach (string key in _actingRoles.Keys)
+                //TitleCollectionManager.AddActorToTitle(this, key, _actingRoles[key]);
+            Dictionary<string, string>  nonActingRoles = GetSerializedList<Dictionary<string, string>>(info, "nonacting_roles");
+
+            DaoTitle.UpdatedNonActingRoles = new List<Role>();
+            foreach (string key in nonActingRoles.Keys)
+                DaoTitle.UpdatedNonActingRoles.Add(new Role(key, nonActingRoles[key]));
+
             _trailers = GetSerializedList<List<string>>(info, "trailers");
             _title.Trailers = Dao.TitleDao.GetDelimitedStringFromCollection(_trailers);
             SortName = GetSerializedString(info, "sort_name");

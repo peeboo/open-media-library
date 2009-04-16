@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using OMLSDK;
 using OMLEngine;
 using NUnit.Framework;
+using System.Linq;
 
 namespace OMLTestSuite
 {
@@ -71,7 +72,7 @@ namespace OMLTestSuite
             Assert.AreEqual(VideoFormat.WPL, t.Disks[0].Format);
             Assert.AreEqual("NTSC", t.VideoStandard);
             Assert.AreEqual(2, t.ActingRoles.Count);
-            ICollection<string> actors = t.ActingRoles.Keys;
+            IEnumerable<string> actors = t.ActingRoles.Select(a => a.PersonName);
             Assert.That(actors.Contains("Translucent"));
             Assert.That(actors.Contains("taranu"));
             //Assert.AreEqual("KingManon", ((Person)t.Crew[0]).full_name);

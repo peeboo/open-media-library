@@ -99,9 +99,16 @@ namespace OMLImporter
                 --iResp;
                 if (iResp < plugins.Count)
                 {
-                    plugin = plugins[iResp];                                        
-                    plugin.DoWork(plugin.GetWork());
-                    LoadTitlesIntoDatabase(plugin, true, false);
+                    plugin = plugins[iResp];
+
+                    DateTime startTime = DateTime.Now;
+                    Console.WriteLine("Begin time: " + startTime);
+
+                    plugin.DoWork(plugin.GetWork());                                        
+                    LoadTitlesIntoDatabase(plugin, true, true);
+
+                    Console.WriteLine("End time: " + DateTime.Now.ToString() + " Total seconds: " + (DateTime.Now - startTime).TotalSeconds);
+
                     Console.WriteLine("Done!");
                     Console.ReadLine();
                 } 

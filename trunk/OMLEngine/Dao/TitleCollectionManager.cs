@@ -466,68 +466,7 @@ namespace OMLEngine
             {
                 title.DaoTitle.People.Remove(daoperson);
             }
-        }
-
-        public static void AddPersonToTitle(Title title, string name, PeopleRole type)
-        {
-            if (name.Length > 255)
-                throw new FormatException(type.ToString() + " name must be 255 characters or less.");
-
-            if (string.IsNullOrEmpty(name))
-                return;
-
-            Dao.BioData bioData = Dao.TitleCollectionDao.GetPersonBioDataByName(name);
-
-            if (bioData == null)
-            {
-                bioData = new OMLEngine.Dao.BioData();
-                bioData.FullName = name;
-                Dao.DBContext.Instance.BioDatas.InsertOnSubmit(bioData);
-                Dao.DBContext.Instance.SubmitChanges();
-            }
-
-            Dao.Person person = new OMLEngine.Dao.Person();
-            person.MetaData = bioData;
-            person.Role = (byte)type;
-            title.DaoTitle.People.Add(person);
-        }
-
-        public static void AddActorToTitle(Title title, string actor, string role)
-        {
-            AddActorToTitle(title, actor, role, PeopleRole.Actor);
-        }
-
-        public static void AddNonActorToTitle(Title title, string actor, string role)
-        {
-            AddActorToTitle(title, actor, role, PeopleRole.NonActing);
-        }
-
-        private static void AddActorToTitle(Title title, string actor, string role, PeopleRole type)
-        {
-            if (actor.Length > 255)
-                throw new FormatException("Actor must be 255 characters or less.");
-            if (role.Length > 255)
-                throw new FormatException("Role must be 255 characters or less.");
-
-            if (string.IsNullOrEmpty(actor))
-                return;
-
-            Dao.BioData bioData = Dao.TitleCollectionDao.GetPersonBioDataByName(actor);
-
-            if (bioData == null)
-            {
-                bioData = new OMLEngine.Dao.BioData();
-                bioData.FullName = actor;
-                Dao.DBContext.Instance.BioDatas.InsertOnSubmit(bioData);
-                Dao.DBContext.Instance.SubmitChanges();
-            }
-
-            Dao.Person person = new OMLEngine.Dao.Person();
-            person.MetaData = bioData;
-            person.CharacterName = role;
-            person.Role = (byte)type;
-            title.DaoTitle.People.Add(person);
-        }        
+        }                          
 
         /// <summary>
         /// Closes any open db connections
