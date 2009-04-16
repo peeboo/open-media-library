@@ -208,7 +208,7 @@ namespace OMLDatabaseEditor.Controls
                         listPersona.Sort();
                         break;
                     case 3: //Actors
-                        lbPeople.DataSource = EditedTitle.ActingRolesBinding;
+                        lbPeople.DataSource = EditedTitle.ActingRoles;
                         lbPeople.Tag = "ActingRoles";
                         lbPeople.DisplayMember = "Display";
                         IEnumerable<FilteredCollection> actors = TitleCollectionManager.GetAllPeople(null, PeopleRole.Actor);
@@ -219,7 +219,7 @@ namespace OMLDatabaseEditor.Controls
                         listPersona.Sort();
                         break;
                     case 4: //Non-Actors
-                        lbPeople.DataSource = EditedTitle.NonActingRolesBinding;
+                        lbPeople.DataSource = EditedTitle.NonActingRoles;
                         lbPeople.Tag = "NonActingRoles";
                         lbPeople.DisplayMember = "Display";
                         break;
@@ -376,19 +376,19 @@ namespace OMLDatabaseEditor.Controls
                 switch (rgPeople.SelectedIndex)
                 {
                     case 0: //Directors
-                        EditedTitle.Directors.Remove(item as Person);
+                        EditedTitle.RemoveDirector((item as Person).full_name);
                         break;
                     case 1: //Writers
-                        EditedTitle.Writers.Remove(item as Person);
+                        EditedTitle.RemoveWriter((item as Person).full_name);
                         break;
                     case 2: //Producers
-                        EditedTitle.Producers.Remove(item as Person);
+                        EditedTitle.RemoveProducer((item as Person).full_name);
                         break;
                     case 3: //Actors
-                        EditedTitle.ActingRoles.Remove(((Role)item).PersonName);
+                        EditedTitle.RemoveActingRole(((Role)item).PersonName);
                         break;
                     case 4: //Non-Actors
-                        EditedTitle.NonActingRoles.Remove(((Role)item).PersonName);
+                        EditedTitle.RemoveNonActingRole(((Role)item).PersonName);
                         break;
                 }
             }

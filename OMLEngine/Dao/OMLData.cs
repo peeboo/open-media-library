@@ -38,6 +38,13 @@ namespace OMLEngine.Dao
         public string UpdatedBackCoverPath { get; set; }
         public List<string> UpdatedGenres { get; set; }
         public List<string> UpdatedTags { get; set; }
+        
+        public List<Role> UpdatedActors { get; set; }
+        public List<Role> UpdatedNonActingRoles { get; set; }
+
+        public List<OMLEngine.Person> UpdatedDirectors { get; set; }
+        public List<OMLEngine.Person> UpdatedWriters { get; set; }
+        public List<OMLEngine.Person> UpdatedProducers { get; set; }        
 
         public override string ToString()
         {

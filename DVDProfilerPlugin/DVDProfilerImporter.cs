@@ -255,25 +255,8 @@ namespace DVDProfilerPlugin
                 string role = actorNavigator.GetAttribute("Role", string.Empty) ?? string.Empty;
                 string fullName = ReadFullName(actorNavigator);
                 if (!string.IsNullOrEmpty(fullName)) // Skip dividers
-                {
-                    if (title.ActingRoles.ContainsKey(fullName))
-                    {
-                        string currentRole = title.ActingRoles[fullName];
-                        string newRole = currentRole;
-                        if (string.IsNullOrEmpty(currentRole))
-                        {
-                            newRole = role;
-                        }
-                        else if (!currentRole.Contains(role))
-                        {
-                            newRole = currentRole + "/" + role;
-                        }
-                        title.ActingRoles[fullName] = newRole;
-                    }
-                    else
-                    {
-                        title.ActingRoles.Add(fullName, role);
-                    }
+                {                    
+                    title.AddActingRole(fullName, role);                    
                 }
             }
         }
@@ -281,7 +264,6 @@ namespace DVDProfilerPlugin
         // Collection/DVD/Credits/*
         private void HandleCredits(Title title, XPathNavigator creditsNavigator)
         {
-            List<string> directorsAlreadyAdded = new List<string>();
             List<string> writersAlreadyAdded = new List<string>();
             List<string> producersAlreadyAdded = new List<string>();
 
@@ -291,26 +273,14 @@ namespace DVDProfilerPlugin
                 Person person = new Person(ReadFullName(creditNavigator));
                 switch (creditType)
                 {
-                    case "Direction":
-                        if (!directorsAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
-                        {
-                            title.Directors.Add(person);
-                            directorsAlreadyAdded.Add(person.full_name.ToUpperInvariant());
-                        }
+                    case "Direction":                        
+                        title.AddDirector(person);                                                    
                         break;
                     case "Writing":
-                        if (!writersAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
-                        {
-                            title.Writers.Add(person);
-                            writersAlreadyAdded.Add(person.full_name.ToUpperInvariant());
-                        }
+                        title.AddWriter(person);                        
                         break;
                     case "Production":
-                        if (!producersAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
-                        {
-                            title.Producers.Add(person);
-                            producersAlreadyAdded.Add(person.full_name.ToUpperInvariant());
-                        }
+                        title.AddProducer(person);                        
                         break;
                 }
             }

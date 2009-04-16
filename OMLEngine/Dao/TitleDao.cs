@@ -71,9 +71,9 @@ namespace OMLEngine.Dao
             int actorIndex = 0;
 
             // add the actors
-            foreach (string actor in title.ActingRoles.Keys)
+            foreach (Role actor in title.DaoTitle.UpdatedActors)
             {
-                Person person = CreatePerson(actor, title.ActingRoles[actor], PeopleRole.Actor, existingPeople);
+                Person person = CreatePerson(actor.PersonName, actor.RoleName, PeopleRole.Actor, existingPeople);
 
                 // maintain the order
                 person.Sort = (short)(actorIndex++);
@@ -83,7 +83,7 @@ namespace OMLEngine.Dao
             }
 
             // add the directors
-            foreach (OMLEngine.Person director in title.Directors)
+            foreach (OMLEngine.Person director in title.DaoTitle.UpdatedDirectors)
             {
                 Person person = CreatePerson(director.full_name, null, PeopleRole.Director, existingPeople);
 
@@ -95,7 +95,7 @@ namespace OMLEngine.Dao
             }
 
             // add the writers
-            foreach (OMLEngine.Person writer in title.Writers)
+            foreach (OMLEngine.Person writer in title.DaoTitle.UpdatedWriters)
             {
                 Person person = CreatePerson(writer.full_name, null, PeopleRole.Writer, existingPeople);
 
@@ -107,7 +107,7 @@ namespace OMLEngine.Dao
             }
 
             // add the producers
-            foreach (OMLEngine.Person name in title.Producers)
+            foreach (OMLEngine.Person name in title.DaoTitle.UpdatedProducers)
             {
                 Person person = CreatePerson(name.full_name, null, PeopleRole.Producers, existingPeople);
 
@@ -143,6 +143,49 @@ namespace OMLEngine.Dao
 
         public static void UpdateCollectionsForTitle(Dao.Title title)
         {
+            if (title.UpdatedActors != null)
+            {
+                IEnumerable<string> originalActors = from a in title.People
+                                                     where a.Role == (byte)PeopleRole.Actor
+                                                     select a.MetaData.FullName;
+
+                List<string> added = new List<string>(title.UpdatedActors.Where(t => !originalActors.Contains(t.PersonName)).Select(t => t.PersonName));
+                List<string> removed = new List<string>(originalActors.Where(t => !title.UpdatedActors.Select(r => r.PersonName).Contains(t)));
+
+                // remove ones no longer used
+                foreach (string remove in removed)
+                {
+                    Dao.Person person = title.People.SingleOrDefault(p => p.MetaData.FullName == remove && p.Role == (byte)PeopleRole.Actor);
+
+                    if (person != null)
+                        title.People.Remove(person);
+                }
+
+                Dictionary<string, string> actorLookup = new Dictionary<string, string>();
+                title.UpdatedActors.ForEach(t => actorLookup.Add(t.PersonName, t.RoleName));
+
+                // add the new ones
+                foreach (string add in added)
+                {
+                    AddActorToTitle(title, add, actorLookup[add], PeopleRole.Actor);                    
+                }
+            }
+
+            if (title.UpdatedDirectors != null)
+            {
+                ProcessPersonList(title, title.UpdatedDirectors, PeopleRole.Director);                
+            }
+
+            if (title.UpdatedWriters != null)
+            {
+                ProcessPersonList(title, title.UpdatedWriters, PeopleRole.Writer);
+            }
+
+            if (title.UpdatedProducers != null)
+            {
+                ProcessPersonList(title, title.UpdatedProducers, PeopleRole.Producers);
+            }
+
             // if the genres were modified see how they've changed
             if (title.UpdatedGenres != null)
             {
@@ -197,6 +240,58 @@ namespace OMLEngine.Dao
                 }
             }
         }
+
+        private static void ProcessPersonList(Dao.Title title, List<OMLEngine.Person> updatedList, PeopleRole role)
+        {
+            IEnumerable<string> originals = from a in title.People
+                                                  where a.Role == (byte)role
+                                                  select a.MetaData.FullName;
+
+            List<string> added = new List<string>(updatedList.Where(t => !originals.Contains(t.full_name)).Select(t => t.full_name));
+            List<string> removed = new List<string>(originals.Where(t => !updatedList.Select(r => r.full_name).Contains(t)));
+
+            // remove ones no longer used
+            foreach (string remove in removed)
+            {
+                Dao.Person person = title.People.SingleOrDefault(p => p.MetaData.FullName == remove && p.Role == (byte)role);
+
+                if (person != null)
+                    title.People.Remove(person);
+            }
+
+            // add the new ones
+            foreach (string add in added)
+            {
+                AddActorToTitle(title, add, null, role);
+            }
+        }
+
+        private static void AddActorToTitle(Dao.Title title, string actor, string role, PeopleRole type)
+        {
+            if (actor.Length > 255)
+                throw new FormatException("Actor must be 255 characters or less.");
+            if (role != null && role.Length > 255)
+                throw new FormatException("Role must be 255 characters or less.");
+
+            if (string.IsNullOrEmpty(actor))
+                return;
+
+            Dao.BioData bioData = Dao.TitleCollectionDao.GetPersonBioDataByName(actor);
+
+            if (bioData == null)
+            {
+                bioData = new OMLEngine.Dao.BioData();
+                bioData.FullName = actor;
+                Dao.DBContext.Instance.BioDatas.InsertOnSubmit(bioData);
+                Dao.DBContext.Instance.SubmitChanges();
+            }
+
+            Dao.Person person = new OMLEngine.Dao.Person();
+            person.MetaData = bioData;
+            person.CharacterName = role;
+            person.Role = (byte)type;
+            title.People.Add(person);
+        }        
 
         /// <summary>
         /// Adds a genre to a title
@@ -276,8 +371,8 @@ namespace OMLEngine.Dao
         {
             List<string> names = new List<string>(title.ActingRoles.Count + title.Writers.Count + title.Directors.Count + title.Producers.Count);
 
-            foreach (string person in title.ActingRoles.Keys)
-                names.Add(person);
+            foreach (Role person in title.ActingRoles)
+                names.Add(person.PersonName);
 
             foreach (OMLEngine.Person person in title.Writers)
                 names.Add(person.full_name);

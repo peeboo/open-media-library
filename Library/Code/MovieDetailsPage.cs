@@ -318,9 +318,9 @@ namespace Library
         {
             List<MovieCastCommand> actors = new List<MovieCastCommand>(_movieDetails.TitleObject.ActingRoles.Count);
 
-            foreach (string actor in _movieDetails.TitleObject.ActingRoles.Keys)
+            foreach (Role actor in _movieDetails.TitleObject.ActingRoles)
             {
-                actors.Add(new MovieCastCommand(actor, _movieDetails.TitleObject.ActingRoles[actor]));
+                actors.Add(new MovieCastCommand(actor.PersonName, actor.RoleName));
             }
 
             _actors = new Choice(this, "Actors", actors);

@@ -114,13 +114,13 @@ namespace Library.Code.V3
 
                 string cast = string.Empty;
                 int actorCount = 0;
-                foreach (KeyValuePair<string, string> kvp in this.InternalMovieItem.TitleObject.ActingRoles)
+                foreach (Role kvp in this.InternalMovieItem.TitleObject.ActingRoles)
                 {
                     Library.Code.V3.CastCommand actorCommand = new Library.Code.V3.CastCommand();
-                    actorCommand.Description = kvp.Key;
+                    actorCommand.Description = kvp.PersonName;
                     actorCommand.ActorId = 1;//not sure how this works in oml
                     actorCommand.Invoked += new EventHandler(actorCommand_Invoked);
-                    actorCommand.Role = kvp.Value;
+                    actorCommand.Role = kvp.RoleName;
                     if (actorCount == 0)
                     {
                         //add the title "CAST"

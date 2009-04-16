@@ -277,9 +277,7 @@ namespace MyMoviesPlugin
             }
             #endregion
 
-            newTitle.Runtime = Int32.Parse(GetChildNodesValue(navigator, "RunningTime"));
-
-            List<string> directorsAlreadyAdded = new List<string>();
+            newTitle.Runtime = Int32.Parse(GetChildNodesValue(navigator, "RunningTime"));            
 
             #region persons
             if (navigator.MoveToChild("Persons", ""))
@@ -304,37 +302,15 @@ namespace MyMoviesPlugin
                                 {
                                     case "Actor":
                                         Utilities.DebugLine("[MyMoviesImporter] actor {0}, {1}", name, role);
-                                        
-                                        if (newTitle.ActingRoles.ContainsKey(name))
-                                        {
-                                            string currentRole = newTitle.ActingRoles[name];
-                                            string newRole = currentRole;
-                                            if (string.IsNullOrEmpty(currentRole))
-                                            {
-                                                newRole = role;
-                                            }
-                                            else if (!currentRole.Contains(role))
-                                            {
-                                                newRole = currentRole + "/" + role;
-                                            }
-                                            newTitle.ActingRoles[name] = newRole;
-                                        }
-                                        else
-                                        {
-                                            newTitle.ActingRoles.Add(name, role);
-                                        }
+
+                                        newTitle.AddActingRole(name, role);
                                         break;
                                     case "Director":
                                         Utilities.DebugLine("[MyMoviesImporter] director {0}", name);
-
-                                        Person p = new Person(name);
-
-                                        if (!directorsAlreadyAdded.Contains(p.full_name.ToUpperInvariant()))
-                                        {
-                                            newTitle.Directors.Add(p);
-                                            directorsAlreadyAdded.Add(p.full_name.ToUpperInvariant());
-                                        }                                                                               
+                                        
+                                        newTitle.AddDirector(new Person(name));
                                         break;
+
                                     default:
                                         break;
                                 }

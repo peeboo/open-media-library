@@ -273,8 +273,8 @@ namespace OMLEngine
            get {
                List<string> actors = (from title in _list 
                                    from actor in title.ActingRoles 
-                                   orderby actor.Key ascending
-                                   select actor.Key).Distinct().ToList<string>();
+                                   orderby actor.PersonName ascending
+                                   select actor.PersonName).Distinct().ToList<string>();
                 return actors;
             }
         }

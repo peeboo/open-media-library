@@ -68,6 +68,20 @@ namespace OMLDatabaseEditor
             return ret;
         }
 
+        private string MakeStringFromRoleList(IList<Role> list)
+        {
+            string ret = "";
+            if (list != null)
+            {
+                foreach (Role p in list)
+                {
+                    if (ret.Length > 0) ret += ", ";
+                    ret += p.PersonName;
+                }
+            }
+            return ret;
+        }
+
         private string MakeStringFromPersonList(IList<Person> list)
         {
             string ret = "";
@@ -118,7 +132,7 @@ namespace OMLDatabaseEditor
                         if (t.ReleaseDate.Year > 1900)
                             releaseDate = t.ReleaseDate.Year.ToString();
 
-                        grdTitles.Rows.Add(i.ToString(), coverArt, t.Name, t.Synopsis, releaseDate, MakeStringFromList(t.Genres), MakeStringFromPersonList(t.Directors), MakeStringFromDictionary(t.ActingRoles));
+                        grdTitles.Rows.Add(i.ToString(), coverArt, t.Name, t.Synopsis, releaseDate, MakeStringFromList(t.Genres), MakeStringFromPersonList(t.Directors), MakeStringFromRoleList(t.ActingRoles));
                         i++;
                     }
                 }
