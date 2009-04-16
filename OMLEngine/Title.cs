@@ -40,8 +40,7 @@ namespace OMLEngine
 
         private Dictionary<string, string> _nonActingRoles = new Dictionary<string, string>(); // name, role (ie. Vangelis, Music)        
         private Dictionary<string, string> _actingRoles = null; // actor, role                                       
-
-        private List<string> _tags = null;
+        
         private List<Person> _directors = null;
         private List<Person> _writers = null;
         private List<Person> _producers = null;
@@ -226,13 +225,15 @@ namespace OMLEngine
             get 
             {
                 // lazy load the tags
-                if (_tags == null)
+                if (DaoTitle.UpdatedTags == null)
                 {
-                    _tags = new List<string>(_title.Tags.Count);
+                    DaoTitle.UpdatedTags = new List<string>(_title.Tags.Count);
+
                     foreach (Dao.Tag tag in _title.Tags)
-                        _tags.Add(tag.Name);
+                        DaoTitle.UpdatedTags.Add(tag.Name);
                 }
-                return _tags.AsReadOnly();
+
+                return DaoTitle.UpdatedTags.AsReadOnly();
             }
         }        
 
@@ -971,13 +972,12 @@ namespace OMLEngine
         }
 
         /// <summary>
-        /// 
+        /// Removes all the genres from the title
         /// </summary>
         public void RemoveAllGenres()
         {
             DaoTitle.UpdatedGenres = new List<string>();
         }
-
 
         /// <summary>
         /// Adds a disk to the collection
@@ -1042,9 +1042,7 @@ namespace OMLEngine
             if (Tags.Contains(tag))
                 return;
 
-            TitleCollectionManager.AddTagToTitle(this, tag);
-
-            _tags = null;
+            DaoTitle.UpdatedTags.Add(tag);            
         }
 
         /// <summary>
@@ -1059,21 +1057,7 @@ namespace OMLEngine
             if (!Tags.Contains(tag))
                 return;
 
-            Dao.Tag foundTag = null;
-
-            foreach (Dao.Tag daoTag in _title.Tags)
-            {
-                if (daoTag.Name == tag)
-                {
-                    foundTag = daoTag;
-                    break;
-                }
-            }
-
-            if (foundTag != null)
-                _title.Tags.Remove(foundTag);
-
-            _tags = null;
+            DaoTitle.UpdatedTags.Remove(tag);            
         }
 
         public override bool Equals(object obj)
@@ -2056,7 +2040,8 @@ namespace OMLEngine
             {
                 if (overWrite || Genres.Count == 0)
                 {
-                    RemoveAllGenres();
+                    DaoTitle.UpdatedGenres.Clear();
+
                     foreach (string p in t.Genres)
                     {
                         AddGenre(p);
@@ -2064,16 +2049,16 @@ namespace OMLEngine
                 }
             }
 
-            if (t._tags != null && t._tags.Count > 0)
+            if (t.Tags != null && t.Tags.Count > 0)
             {
-                if (_tags == null) _tags = new List<string>();
-                if (overWrite || _tags.Count == 0)
-                {
+                if (null == DaoTitle.UpdatedTags) DaoTitle.UpdatedTags = new List<string>();
 
-                    _tags.Clear();
-                    foreach (string p in t._tags)
+                if (overWrite || DaoTitle.UpdatedTags.Count == 0)
+                {
+                    DaoTitle.UpdatedTags.Clear();
+                    foreach (string p in t.DaoTitle.UpdatedTags)
                     {
-                        _tags.Add(p);
+                        DaoTitle.UpdatedTags.Add(p);
                     }
                 }
             }
@@ -2296,9 +2281,9 @@ namespace OMLEngine
             VideoStandard = GetSerializedString(info,"video_standard");
             UPC = GetSerializedString(info,"upc");
             OriginalName = GetSerializedString(info,"original_name");
-            _tags = GetSerializedList<List<string>>(info, "tags");
-            foreach (string t in _tags)
-                TitleCollectionManager.AddTagToTitle(this, t);
+            DaoTitle.UpdatedTags = GetSerializedList<List<string>>(info, "tags");
+            //foreach (string t in _tags)
+                //TitleCollectionManager.AddTagToTitle(this, t);
             _actingRoles = GetSerializedList<Dictionary<string, string>>(info, "acting_roles");
             foreach (string key in _actingRoles.Keys)
                 TitleCollectionManager.AddActorToTitle(this, key, _actingRoles[key]);
