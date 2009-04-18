@@ -86,6 +86,7 @@ namespace OMLEngine.Dao
         public static IEnumerable<Title> GetAllTitles()
         {
             var titles = from t in DBContext.Instance.Titles
+                         orderby t.SortName
                          select t;
 
             return titles;
@@ -99,6 +100,7 @@ namespace OMLEngine.Dao
         {
             var titles = from t in DBContext.Instance.Titles
                          where t.WatchedCount == 0 || t.WatchedCount == null
+                         orderby t.SortName
                          select t;
 
             return titles;
@@ -192,7 +194,10 @@ namespace OMLEngine.Dao
                 }
             }
 
-            return results;
+            // sort the results
+            return from t in results
+                   orderby t.SortName
+                   select t;
         }
 
         /// <summary>
@@ -597,7 +602,7 @@ namespace OMLEngine.Dao
             return from t in GetFilteredTitlesWrapper(filters)
                    where t.ReleaseDate != null
                    group t by t.ReleaseDate.Value.Year into g
-                   orderby g.Key ascending
+                   orderby g.Key descending
                    select new FilteredCollection() { Name = g.Key.ToString(), Count = g.Count() };
         }        
 
@@ -660,7 +665,7 @@ namespace OMLEngine.Dao
         public static IEnumerable<FilteredTitleCollection> GetAllAlphaIndex(List<TitleFilter> filters)
         {
             IEnumerable<char> firstLetters = from t in GetFilteredTitlesWrapper(filters)
-                                          select GetProperIndex(t.SortName.ToUpper()[0]);
+                                             select GetProperIndex(t.SortName.ToUpper()[0]);
 
             return from l in firstLetters
                    group l by l into g

@@ -132,14 +132,11 @@ namespace OMLEngine
         {
             get 
             {
-                if (String.IsNullOrEmpty(_title.SortName))
-                    return _title.Name;
-                else
-                    return _title.SortName; 
+                return _title.SortName;                
             }
             set 
             {
-                if (value.Length > 255)
+                if (string.IsNullOrEmpty(value) || value.Length > 255)
                     throw new FormatException("SortName must be 255 characters or less.");
                 _title.SortName = value; 
             }

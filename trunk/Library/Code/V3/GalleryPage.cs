@@ -653,7 +653,15 @@ namespace Library.Code.V3
             {
                 //TODO: this string stripping is a hack for OML 
                 //we really need to loop through the sortTitle instead
-                string s = item.Description.ToLower().Replace("the ", "").Replace("a ", "");
+                string s = null;
+                if (item.SortName.StartsWith("the ", StringComparison.OrdinalIgnoreCase))
+                    s = item.SortName.Substring(4);
+                else if (item.SortName.StartsWith(" a", StringComparison.OrdinalIgnoreCase))
+                    s = item.SortName.Substring(2);
+
+                if (s == null)
+                    s = item.SortName;
+                
                 int cmpVal = s.CompareTo(searchString);
                 if (cmpVal == 0)
                 { // the values are the same

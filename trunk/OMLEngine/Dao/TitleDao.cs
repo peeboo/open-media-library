@@ -13,6 +13,10 @@ namespace OMLEngine.Dao
         {
             Title daoTitle = title.DaoTitle;
 
+            // patch up the sort name if it's missing
+            if (string.IsNullOrEmpty(daoTitle.SortName))
+                daoTitle.SortName = daoTitle.Name;
+
             // add the genres
             foreach (string genre in title.Genres)
             {

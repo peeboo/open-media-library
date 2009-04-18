@@ -42,6 +42,8 @@ namespace Library.Code.V3
         private int itemId;
         private string metadata;
 
+        public string SortName { get; set; }
+
         // Properties
         public int ItemId
         {
