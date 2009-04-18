@@ -56,6 +56,7 @@ namespace Library.Code.V3
             this.StarRating = starRating;
             string extendedMetadata = string.Empty;
 
+            this.SortName = title.SortName;
 
             this.Metadata = this.InternalMovieItem.Rating.Replace("PG13", "PG-13").Replace("NC17", "NC-17");
             if (string.IsNullOrEmpty(this.InternalMovieItem.Rating))
