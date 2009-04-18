@@ -824,7 +824,7 @@ namespace OMLEngine
 
             if (!(DaoTitle.UpdatedWriters.Exists(p => p.full_name.Equals(writer.full_name, StringComparison.OrdinalIgnoreCase))))
             {
-                DaoTitle.UpdatedDirectors.Add(writer);
+                DaoTitle.UpdatedWriters.Add(writer);
             }      
         }
 
