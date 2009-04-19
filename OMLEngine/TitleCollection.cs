@@ -14,6 +14,9 @@ using System.Runtime.InteropServices;
 
 namespace OMLEngine
 {       
+    /// <summary>
+    /// This class is used to de-serialize the old OML dat file so it can be inserted into the new SQL store
+    /// </summary>
     public class LegacyTitleCollection 
     {
         private List<Title> _list = new List<Title>();        
