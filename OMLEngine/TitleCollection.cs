@@ -777,8 +777,9 @@ namespace OMLEngine
                         //Utilities.DebugLine("[TitleCollection] Adding Title: "+t.Name);
                         Add(t);
                     }
-                    _genreMap = (Dictionary<string, string>)bf.Deserialize(stm);
-                    _metadataMap = (Dictionary<string, string>)bf.Deserialize(stm);
+                    // todo : solomon : these are blowing it up
+                    //_genreMap = (Dictionary<string, string>)bf.Deserialize(stm);
+                    //_metadataMap = (Dictionary<string, string>)bf.Deserialize(stm);
                     stm.Close();
                     Utilities.DebugLine("[TitleCollection] Loaded: " + numTitles + " titles");
                     return true;
