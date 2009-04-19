@@ -22,20 +22,8 @@ namespace OMLEngineService
             this.CanPauseAndContinue = false;
             this.AutoLog = true;
 
-            titles = GetCurrentTitles();
-        }
-
-        private List<Title> GetCurrentTitles()
-        {
-            TitleCollection tc = new TitleCollection();
-            tc.loadTitleCollection();
-            List<Title> titles = new List<Title>();
-            foreach (Title t in tc)
-            {
-                titles.Add(t);
-            }
-            return titles;
-        }
+            titles = new List<Title>(TitleCollectionManager.GetAllTitles());
+        }        
 
         #region overridden control methods (start, stop, pause, continue, etc)
         protected override void OnStart(string[] args)
@@ -46,7 +34,7 @@ namespace OMLEngineService
             WriteToLog(EventLogEntryType.Information, "OMLEngineService Start");
 
             _transcodingServiceHost = WCFUtilites.StartService(EventSource, typeof(TranscodingService));
-            _titleCollectionServiceHost = WCFUtilites.StartService(EventSource, typeof(TitleCollectionAPI));
+            //_titleCollectionServiceHost = WCFUtilites.StartService(EventSource, typeof(TitleCollectionAPI));
         }
 
         protected override void OnStop()

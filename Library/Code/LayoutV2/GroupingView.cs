@@ -13,7 +13,7 @@ namespace Library
         private List<OMLChoice> groupList;
         //private VirtualList movieItems;
 
-        public GroupingView(TitleCollection tc, string filterString)
+        public GroupingView(string filterString)
         {
             groupList = new List<OMLChoice>();
 
@@ -22,10 +22,10 @@ namespace Library
                 OMLChoice ch = new OMLChoice();
                 ch.Description = string.Format("Choice {0}", i);
                 List<GalleryItem> items = new List<GalleryItem>();
-                foreach (Title title in tc)
+                /*foreach (Title title in tc.Source)
                 {
                     items.Add(new MovieItem(title, null));
-                }
+                }*/
                 ch.Options = items;
                 groupList.Add(ch);
             }

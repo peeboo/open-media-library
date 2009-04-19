@@ -14,8 +14,7 @@ namespace OMLDatabaseEditor
     public partial class ResolveGenres : DevExpress.XtraEditors.XtraForm
     {
         List<GenreMapping> _genreMapping = new List<GenreMapping>();
-        List<String> _genreList = new List<String>();
-        TitleCollection _titleCollection;
+        List<String> _genreList = new List<String>();        
         Title _title;
 
         public ResolveGenres(Dictionary<string, string> genreIssueList, Title title)
