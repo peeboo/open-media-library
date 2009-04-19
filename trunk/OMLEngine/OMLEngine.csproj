@@ -61,6 +61,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Settings\UserFilter.cs" />
+    <Compile Include="Trailers\AppleTrailer.cs" />
+    <Compile Include="Trailers\AppleTrailers.cs" />
     <Compile Include="AudioStream.cs" />
     <Compile Include="Dao\DBContext.cs" />
     <Compile Include="Dao\ImageManager.cs" />

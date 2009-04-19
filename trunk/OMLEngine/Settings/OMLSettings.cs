@@ -160,6 +160,40 @@ namespace OMLEngine.Settings
             set { SettingsManager.SaveSettingByName("MainFiltersToShow", value, InstanceName); }
         }
 
+        /// <summary>
+        /// Custom users filters that can exist on the main view
+        /// </summary>
+        public static IList<UserFilter> UserFilters
+        {
+            get
+            {
+                IList<string> userFilterStrings = SettingsManager.GetSettingByNameListString("UserFilters", InstanceName) ?? new List<string>() { };
+
+                List<UserFilter> userFilters = new List<UserFilter>(userFilterStrings.Count);
+
+                foreach (string filter in userFilterStrings)
+                {
+                    userFilters.Add(new UserFilter(filter));
+                }
+
+                return userFilters.AsReadOnly();
+            }
+            set
+            {
+                List<string> serializedFilters = new List<string>();
+
+                foreach (UserFilter filter in value)
+                {
+                    string serializedFilter = filter.ToString();
+
+                    if (! string.IsNullOrEmpty(serializedFilter))
+                        serializedFilters.Add(filter.ToString());
+                }
+
+                SettingsManager.SaveSettingByName("UserFilters", serializedFilters, InstanceName);
+            }
+        }
+
         public static bool ShowFilterGenres
         {
             get { return SettingsManager.GetSettingByNameBool("ShowFilterGenres", InstanceName) ?? true; }

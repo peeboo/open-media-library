@@ -384,5 +384,30 @@ namespace OMLTestSuite
 
             settings.SetMetaDataPlugins(new MetaDataSettings[] { new MetaDataSettings("DVDProfiler", keys) });
         }
+
+        public void TEST_CLEANUP_IMAGES()
+        {
+            ImageManager.CleanupCachedImages();
+        }
+
+        public void TEST_USER_FILTERS()
+        {
+            /*UserFilter filter = new UserFilter("Horror Movies", new TitleFilter[] { new TitleFilter(TitleFilterType.Genre, "Horror"), new TitleFilter(TitleFilterType.Genre, "Comedy") });
+
+            foreach (Title title in filter.GetFilteredTitles())
+            {
+                Console.WriteLine(title.Name);
+            }
+
+            OMLSettings.UserFilters = new UserFilter[] { filter };*/
+
+            foreach (UserFilter filter in OMLSettings.UserFilters)
+            {
+                foreach (Title title in filter.GetFilteredTitles())
+                {
+                    Console.WriteLine(title.Name);
+                }
+            }
+        }
     }
 }
