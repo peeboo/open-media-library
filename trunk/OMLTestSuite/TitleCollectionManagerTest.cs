@@ -392,22 +392,17 @@ namespace OMLTestSuite
 
         public void TEST_USER_FILTERS()
         {
-            /*UserFilter filter = new UserFilter("Horror Movies", new TitleFilter[] { new TitleFilter(TitleFilterType.Genre, "Horror"), new TitleFilter(TitleFilterType.Genre, "Comedy") });
+            UserFilter filter = new UserFilter("Horror Comedies", new TitleFilter[] { new TitleFilter(TitleFilterType.Genre, "Horror"), new TitleFilter(TitleFilterType.Genre, "Comedy") });            
+            
+            OMLSettings.UserFilters = new UserFilter[] { filter };
 
-            foreach (Title title in filter.GetFilteredTitles())
-            {
-                Console.WriteLine(title.Name);
-            }
-
-            OMLSettings.UserFilters = new UserFilter[] { filter };*/
-
-            foreach (UserFilter filter in OMLSettings.UserFilters)
+            /*foreach (UserFilter filter in OMLSettings.UserFilters)
             {
                 foreach (Title title in filter.GetFilteredTitles())
                 {
                     Console.WriteLine(title.Name);
                 }
-            }
+            }*/
         }
     }
 }
