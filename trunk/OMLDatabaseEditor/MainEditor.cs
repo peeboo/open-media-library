@@ -665,8 +665,7 @@ namespace OMLDatabaseEditor
                 
                 titleEditor.SaveChanges();
                 LoadMovies();
-            }
-            TitleCollection.ClearMirrorDataFiles();
+            }            
         }
 
         private void ToggleSaveState(bool enabled)
@@ -1126,16 +1125,20 @@ namespace OMLDatabaseEditor
         private void MainEditor_Load(object sender, EventArgs e)
         {
             // If the old DAT file still exists ask the user if they want to import those titles.
-            TitleCollection coll = new TitleCollection();
-            if (coll.loadTitleCollectionFromOML())
+            LegacyTitleCollection coll = new LegacyTitleCollection();
+            if (coll.OMLDatExists)
             {
                 if (XtraMessageBox.Show("Would you like to convert your existing movie collection?", "Convert collection", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    foreach (Title title in coll)
+                    coll.LoadTitleCollectionFromOML();
+
+
+                    foreach (Title title in coll.Source)
                     {
                         TitleCollectionManager.AddTitle(title);
                     }
                 }
+
                 coll.RenameDATCollection();
                 LoadMovies();
             }

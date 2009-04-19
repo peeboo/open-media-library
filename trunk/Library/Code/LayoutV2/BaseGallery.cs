@@ -9,14 +9,12 @@ namespace Library
 {
     public class BaseGallery : OMLPage
     {
-        GroupingView gView;
-        TitleCollection titleCollection;
+        GroupingView gView;        
 
-        public BaseGallery(OMLProperties props, TitleCollection tc) : base(props)
+        public BaseGallery(OMLProperties props) : base(props)
         {
-            PageName = "Main";
-            titleCollection = tc;
-            gView = new GroupingView(tc, Filter.Genres);
+            PageName = "Main";           
+            gView = new GroupingView(Filter.Genres);
             FirePropertyChanged("View");
         }
 

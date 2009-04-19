@@ -10,7 +10,7 @@ namespace Library
 {
     public class GalleryV2 : OMLPage
     {
-        private TitleCollection collection;
+        //private TitleCollection collection;
         private Dictionary<string, Filter> _filters = new Dictionary<string,Filter>();
         private VirtualList allMoviesVL;
         private VirtualList moviesByGenreVL;
@@ -52,10 +52,10 @@ namespace Library
             }
         }
 
-        public GalleryV2(OMLProperties props, TitleCollection tc)
+        public GalleryV2(OMLProperties props)
             : base(props)
         {
-            collection = tc;
+            //collection = tc;
             buildVirtualLists();
             groupView = new Choice();
 
@@ -73,14 +73,14 @@ namespace Library
 
         private void buildVirtualLists()
         {
-            if (collection.Count == 0)
-                return;
+            //if (collection.Source.Count == 0)
+                //return;
 
             allMoviesVL = new VirtualList(this, null);
-            foreach (Title t in collection)
-            {
-                allMoviesVL.Add(new MovieItemV2(t));
-            }
+            //foreach (Title t in collection.Source)
+            //{
+                //allMoviesVL.Add(new MovieItemV2(t));
+            //}
         }
     }
 }
