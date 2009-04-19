@@ -2301,24 +2301,18 @@ namespace OMLEngine
             
 
             ReleaseDate = GetSerializedDateTime(info, "release_date");
-            DaoTitle.UpdatedProducers = GetSerializedList<List<Person>>(info, "producers");
-            //foreach (Person p in _producers)
-                //TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Producers);
+            
+            DaoTitle.UpdatedProducers = new List<Person>();            
+            List<string> producers = GetSerializedList<List<string>>(info, "producers");
+            producers.ForEach(p => DaoTitle.UpdatedProducers.Add(new Person(p)));
 
-            DaoTitle.UpdatedWriters = GetSerializedList<List<Person>>(info, "writers");
-            
-            //foreach (Person p in _writers)
-                //TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Writer);
-            
-            DaoTitle.UpdatedDirectors = GetSerializedList<List<Person>>(info, "directors");
-            //foreach (Person p in _directors)
-                //TitleCollectionManager.AddPersonToTitle(this, p.full_name, PeopleRole.Director);
+            DaoTitle.UpdatedWriters = GetSerializedList<List<Person>>(info, "writers");            
+
+            DaoTitle.UpdatedDirectors = GetSerializedList<List<Person>>(info, "directors");                                   
 
             _audioTracks = GetSerializedList<List<string>>(info, "language_formats");
             _title.AudioTracks = Dao.TitleDao.GetDelimitedStringFromCollection(_audioTracks);
-            DaoTitle.UpdatedGenres = GetSerializedList<List<string>>(info, "genres");
-            /*foreach (string g in DaoTitle.UpdatedGenres)
-                DaoTitle. .AddGenreToTitle(this, g);*/
+            DaoTitle.UpdatedGenres = GetSerializedList<List<string>>(info, "genres");            
 
             UserStarRating = GetSerializedInt(info,"user_star_rating");
             AspectRatio = GetSerializedString(info,"aspect_ratio");
@@ -2326,16 +2320,13 @@ namespace OMLEngine
             UPC = GetSerializedString(info,"upc");
             OriginalName = GetSerializedString(info,"original_name");
             DaoTitle.UpdatedTags = GetSerializedList<List<string>>(info, "tags");
-            //foreach (string t in _tags)
-                //TitleCollectionManager.AddTagToTitle(this, t);
+            
             Dictionary<string, string> actors = GetSerializedList<Dictionary<string, string>>(info, "acting_roles");
 
             DaoTitle.UpdatedActors = new List<Role>();
             foreach (string actor in actors.Keys)
                 DaoTitle.UpdatedActors.Add(new Role(actor, actors[actor]));
-            //DaoTitle.UpdatedActors = GetSerializedList<Dictionary<string, string>>(info, "acting_roles");
-            //foreach (string key in _actingRoles.Keys)
-                //TitleCollectionManager.AddActorToTitle(this, key, _actingRoles[key]);
+            
             Dictionary<string, string>  nonActingRoles = GetSerializedList<Dictionary<string, string>>(info, "nonacting_roles");
 
             DaoTitle.UpdatedNonActingRoles = new List<Role>();
