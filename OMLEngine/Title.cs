@@ -1128,7 +1128,7 @@ namespace OMLEngine
             return Name.CompareTo(otherT.Name);
         }
 
-        static public Title CreateFromXML(string fileName, bool copyImages)
+        static public Title CreateFromXML(string fileName)
         {
             return new Title();
             /*Title t = new Title();
