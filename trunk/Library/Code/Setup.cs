@@ -293,8 +293,7 @@ namespace Library
             }
             else
             {
-                OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.Id);
-                OMLPlugin.BuildResizedMenuImage(CurrentTitle);
+                OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.Id);                
                 //_titleCollection.Add(CurrentTitle);
                 TotalTitlesAdded++;
             }
@@ -344,8 +343,7 @@ namespace Library
                     }
                     else
                     {
-                        OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.Id);
-                        OMLPlugin.BuildResizedMenuImage(CurrentTitle);
+                        OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.Id);                        
                         //_titleCollection.Add(CurrentTitle);
                         TotalTitlesAdded++;
                     }
@@ -392,7 +390,6 @@ namespace Library
                                             foreach (FileInfo fInfo in fileInfos)
                                             {
                                                 OMLApplication.DebugLine("[Setup UI] File Found: " + fInfo.Name);
-                                                plugin.CopyImages = ShouldCopyImages.Value;
                                                 plugin.DoWork(new string[] { fInfo.FullName });
                                             }
                                         }
@@ -401,8 +398,7 @@ namespace Library
                             }
                             else
                             {
-                                OMLApplication.DebugLine("[Setup UI] Processing path: " + node.FullPath);
-                                plugin.CopyImages = ShouldCopyImages.Value;
+                                OMLApplication.DebugLine("[Setup UI] Processing path: " + node.FullPath);                                
                                 plugin.DoWork(new string[] { node.FullPath });
                             }
                         }
