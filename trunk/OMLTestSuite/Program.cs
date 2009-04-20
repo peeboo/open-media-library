@@ -26,7 +26,10 @@ namespace OMLTestSuite
             //tcm.TEST_GET_ALL_PEOPLE();
             //tcm.TEST_GET_ALL_GENRES_GIVEN_FILTER();
             //tcm.TEST_GET_ACTORS_UNWATCHED();
-            tcm.TEST_DISK_ALREADY_EXISTS();
+            //tcm.TEST_DISK_ALREADY_EXISTS();
+            //tcm.TEST_SAVE_SETTINGS();
+            //tcm.TEST_CLEANUP_IMAGES();
+            //tcm.TEST_USER_FILTERS();
 
             Console.ReadLine();
             return;
@@ -106,11 +109,11 @@ namespace OMLTestSuite
             tt.TEST_BASE_CASE();
             tt.TEST_LOAD_FROM_XML();
 
-            TitleCollectionTest tct = new TitleCollectionTest();
-            Console.WriteLine("Testing: TitleCollection");
-            tct.TEST_BASE_CASE();
-            tct.TEST_FIND_FOR_ID();
-            tct.TEST_SOURCE_DATABASE_TO_USE();
+            //TitleCollectionTest tct = new TitleCollectionTest();
+            //Console.WriteLine("Testing: TitleCollection");
+            //tct.TEST_BASE_CASE();
+            //tct.TEST_FIND_FOR_ID();
+            //tct.TEST_SOURCE_DATABASE_TO_USE();
 #endif
 
             MEncoderCommandBuilderTest mecbt = new MEncoderCommandBuilderTest();
