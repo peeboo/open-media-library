@@ -298,7 +298,7 @@ namespace Library
 #endif
 #if LAYOUT_V3
 
-            System.Diagnostics.Debug.Assert(false);
+            //System.Diagnostics.Debug.Assert(false);
             
             this.mediaChangers = new Library.Code.V3.MediaChangeManager();
             
