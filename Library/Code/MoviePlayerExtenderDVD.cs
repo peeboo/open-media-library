@@ -60,7 +60,7 @@ namespace Library
 
             if (IsNTFS(videoTSDir))
             {
-                string mpegFolder = Path.Combine(videoTSDir, "Extender-MyMovies");
+                string mpegFolder = Path.Combine(FileSystemWalker.ExtenderCacheDirectory, Guid.NewGuid().ToString());
 
                 if (Directory.Exists(mpegFolder) == false)
                     Directory.CreateDirectory(mpegFolder);
@@ -122,7 +122,7 @@ namespace Library
                         return false;
                     }
 
-                    string mpegFolder = Path.Combine(videoTSDir, "Extender-MyMovies");
+                    string mpegFolder = Path.Combine(FileSystemWalker.ExtenderCacheDirectory, Guid.NewGuid().ToString());
                     if (Directory.Exists(mpegFolder) == false)
                     {
                         OMLApplication.DebugLine("ExtenderDVDPlayer.PlayMovie: creating folder '{0}'", mpegFolder);
@@ -394,31 +394,22 @@ namespace Library
             GetVolumeInformation(Directory.GetDirectoryRoot(rootPath), IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, sb, 255);
             return sb.ToString().CompareTo("NTFS") == 0;
         }
-        #endregion
+        #endregion        
 
-        public static void Uninitialize(MediaSource ms)
+        public static void Uninitialize()
         {
-            if (ms.Format != VideoFormat.DVD)
-                return;
-
-            string videoTSDir = ms.VIDEO_TS;
-            if (videoTSDir == null || IsNTFS(videoTSDir) == false)
-                return;
-
-            string mpegFolder = Path.Combine(videoTSDir, "Extender-MyMovies");
-            if (Directory.Exists(mpegFolder))
+            try
             {
-                OMLApplication.DebugLine("ExtenderDVDPlayer.Uninitialize: deleting folder '{0}'", mpegFolder);
-                try { Directory.Delete(mpegFolder, true); }
-                catch { }
+                foreach (string directory in Directory.GetDirectories(FileSystemWalker.ExtenderCacheDirectory))
+                {
+                    try
+                    {
+                        Directory.Delete(directory, true);
+                    }
+                    catch { }                    
+                }
             }
-        }
-
-        public static void Uninitialize(IEnumerable<Title> titles)
-        {
-            foreach (Title title in titles)
-                foreach (Disk disk in title.Disks)
-                    Uninitialize(new MediaSource(disk));
+            catch { }
         }
     }
 

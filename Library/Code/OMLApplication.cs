@@ -1148,7 +1148,7 @@ namespace Library
         {
             try
             {
-                ExtenderDVDPlayer.Uninitialize(TitleCollectionManager.GetAllTitles());
+                ExtenderDVDPlayer.Uninitialize();
             }
             catch (Exception err)
             {

@@ -223,6 +223,9 @@ namespace OMLEngine
             if (!FileSystemWalker.FanArtDirectoryExists)
                 FileSystemWalker.createFanArtDirectory();
 
+            if (!FileSystemWalker.ExtenderCacheDirectoryExists)
+                FileSystemWalker.CreateExtenderCacheDirectory();
+
             return true;
         }
 
