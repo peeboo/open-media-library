@@ -64,17 +64,17 @@ NOTE - The exact command will depend on the installation file downloaded from mi
 
 Note: This has to be done on a pc with Vista Media Center and the Media Center SDK 5.3 installed.
 
-2) using a cmd prompt go into the Library\Setup (or Setup64) dir and run Build.bat
+2) using a cmd prompt go into the postinstaller\Library\Setup (or Setup64) dir and run Build.bat
 
 Note: This will require wix 3.0 to be installed.
 
-3) run the installer located in the Library/bin/Release folder.
+3) run the installer located in the postinstaller\bin\Release folder.
 
-4) copy the OMLEngine\OML.config file to \program files\openmedialibrary and edit to your needs
+4) Once you have the program installed you will have a post installation prompt appear.  You will need to choose the server that your database is installed on.
 
-5) run the OMLImporter.exe located in OMLImporter\bin\(debug or release)\ and follow its direction.  It will ask which importer to use (mymovies, dvd profiler and/or movie collectorz).  An open file dialog will appear, select your xml file.  This will take a moment to import your titles into oml.
+5) The first time that you open up the DBEditor program after installing the program, it will create the database.  You may get an error about no user - if so close out and reenter.
 
-At this point you should be good to go.  If your not seeing what something similar to what I posted the please post the files located in \program files\openmedialibrary\logs and your \program files\openmedialibrary\oml.dat file on our forums and we'll take a look at whats going on.  (Note, it wont be a high priority, but we'll get to it). 
+At this point you should be good to go.  If your not seeing something similar to what has been posted please post the files located in \program data\openmedialibrary\logs and your \program files\openmedialibrary\oml.dat file on our forums and we'll take a look at whats going on.  (Note, it wont be a high priority, but we'll get to it). 
 
 = Troubleshooting =
 
