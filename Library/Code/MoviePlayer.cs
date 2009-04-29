@@ -235,6 +235,7 @@ namespace Library
                 case VideoFormat.IMG:
                 case VideoFormat.ISO:
                 case VideoFormat.MDF:
+                case VideoFormat.NRG:
                     return true;
                 default:
                     return false;
