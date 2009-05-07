@@ -371,7 +371,7 @@ namespace OMLEngine
 
                 if (_frontCoverPath == null)
                 {
-                    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == ImageType.FrontCoverImage);
+                    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.FrontCoverImage);
                     _frontCoverPath = ImageManager.GetImagePathById((frontCover == null) ? (int?)null : frontCover.ImageId, ImageSize.Original);                                                        
                 }
 
@@ -398,7 +398,7 @@ namespace OMLEngine
             {
                 if (_frontCoverMenuPath == null)
                 {
-                    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == ImageType.FrontCoverImage);
+                    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.FrontCoverImage);
                     _frontCoverMenuPath = ImageManager.GetImagePathById((frontCover == null) ? (int?)null : frontCover.ImageId, ImageSize.Small);             
                 }
             
@@ -416,7 +416,7 @@ namespace OMLEngine
                 if (_title.UpdatedBackCoverPath != null)
                     return _title.UpdatedBackCoverPath;
 
-                Dao.ImageMapping backCover = _title.Images.FirstOrDefault(i => i.ImageType == ImageType.BackCoverImage);
+                Dao.ImageMapping backCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.BackCoverImage);
                 _backCoverPath = ImageManager.GetImagePathById((backCover == null) ? (int?)null : backCover.ImageId, ImageSize.Original);                                                        
 
                 return _backCoverPath;                 
@@ -438,7 +438,7 @@ namespace OMLEngine
                 {
                     DaoTitle.UpdatedFanArtPaths = new List<string>();                    
 
-                    foreach (Dao.ImageMapping mapping in _title.Images.Where(t => t.ImageType == ImageType.FanartImage))
+                    foreach (Dao.ImageMapping mapping in _title.Images.Where(t => t.ImageType == (byte)ImageType.FanartImage))
                     {
                         DaoTitle.UpdatedFanArtPaths.Add(ImageManager.GetImagePathById(mapping.ImageId, ImageSize.Original));
                     }

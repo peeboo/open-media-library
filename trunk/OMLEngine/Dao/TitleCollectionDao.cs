@@ -481,7 +481,7 @@ namespace OMLEngine.Dao
                                                 from g in t.Genres
                                                 join b in DBContext.Instance.GenreMetaDatas on g.GenreMetaDataId equals b.Id
                                                 join c in DBContext.Instance.ImageMappings on t.Id equals c.TitleId                                                 
-                                                    where c.ImageType == ImageType.FrontCoverImage
+                                                    where c.ImageType == (byte)ImageType.FrontCoverImage
                                                 select new { GenreName = b.Name, Path = c.ImageId };
 
             return from t in filteredTitles

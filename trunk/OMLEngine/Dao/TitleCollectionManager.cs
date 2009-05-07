@@ -67,7 +67,7 @@ namespace OMLEngine
                 // delete the old one if it exists
                 for (int i = title.Images.Count - 1; i >= 0; i--)
                 {
-                    if (title.Images[i].ImageType == ImageType.BackCoverImage)
+                    if (title.Images[i].ImageType == (byte)ImageType.BackCoverImage)
                     {
                         Dao.TitleCollectionDao.SetDeleteImage(title.Images[i].ImageId);
                         Dao.DBContext.Instance.ImageMappings.DeleteOnSubmit(title.Images[i]);
@@ -83,7 +83,7 @@ namespace OMLEngine
                 {
                     Dao.ImageMapping image = new OMLEngine.Dao.ImageMapping();
                     image.ImageId = id.Value;
-                    image.ImageType = ImageType.BackCoverImage;                    
+                    image.ImageType = (byte)ImageType.BackCoverImage;                    
 
                     title.Images.Add(image);
                 }                
@@ -95,7 +95,7 @@ namespace OMLEngine
             if (title.UpdatedFanArtPaths != null)
             {
                 IEnumerable<string> originalCoverArt = from t in title.Images
-                                                       where t.ImageType == ImageType.FanartImage
+                                                       where t.ImageType == (byte)ImageType.FanartImage
                                                        select ImageManager.ConstructImagePathById(t.ImageId, ImageSize.Original);
 
                 List<string> added = new List<string>(title.UpdatedFanArtPaths.Where(t => !originalCoverArt.Contains(t)));
@@ -127,7 +127,7 @@ namespace OMLEngine
                     {
                         Dao.ImageMapping mapping = new Dao.ImageMapping();
                         mapping.ImageId = id.Value;
-                        mapping.ImageType = ImageType.FanartImage;
+                        mapping.ImageType = (byte)ImageType.FanartImage;
 
                         title.Images.Add(mapping);
                     }
