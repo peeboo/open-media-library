@@ -22,7 +22,7 @@ namespace OMLEngine.Dao
                 if (ReleaseDate != DateTime.MinValue) score++;
                 if (!String.IsNullOrEmpty(Synopsis.Trim())) score++;
                 if (Genres.Count > 0) score++;
-                if (Images.FirstOrDefault(t=> t.ImageType == ImageType.FrontCoverImage) != null) score++;
+                if (Images.FirstOrDefault(t=> t.ImageType == (byte)ImageType.FrontCoverImage) != null) score++;
                 if (!String.IsNullOrEmpty(AspectRatio.Trim())) score++;
                 if (!String.IsNullOrEmpty(CountryOfOrigin.Trim())) score++;
                 if (!String.IsNullOrEmpty(VideoResolution.Trim())) score++;
@@ -32,7 +32,7 @@ namespace OMLEngine.Dao
 
                 return score / possible;
             }
-        }
+        }        
 
         public string UpdatedFrontCoverPath { get; set; }
         public string UpdatedBackCoverPath { get; set; }

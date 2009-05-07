@@ -109,7 +109,7 @@
     <Type Name="ImageMapping" AccessModifier="Internal">
       <Column Name="TitleId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="ImageId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="ImageType" Type="OMLEngine.ImageType" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="ImageType" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
       <Association Name="Title_ImageMapping" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" />
       <Association Name="DBImage_ImageMapping" Member="DBImage" ThisKey="ImageId" OtherKey="Id" Type="DBImage" IsForeignKey="true" />
     </Type>
