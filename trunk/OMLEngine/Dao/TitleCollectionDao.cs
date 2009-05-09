@@ -86,6 +86,7 @@ namespace OMLEngine.Dao
         public static IEnumerable<Title> GetAllTitles()
         {
             var titles = from t in DBContext.Instance.Titles
+                         where t.ParentTitleId.CompareTo(t.Id) == 0
                          orderby t.SortName
                          select t;
 
@@ -99,7 +100,7 @@ namespace OMLEngine.Dao
         public static IEnumerable<Title> GetUnwatchedTitles()
         {
             var titles = from t in DBContext.Instance.Titles
-                         where t.WatchedCount == 0 || t.WatchedCount == null
+                         where t.WatchedCount == 0 || t.WatchedCount == null && (t.ParentTitleId.CompareTo(t.Id) == 0)
                          orderby t.SortName
                          select t;
 
