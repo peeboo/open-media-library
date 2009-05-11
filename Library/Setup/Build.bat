@@ -31,15 +31,12 @@ if exist "%APP_INTERMEDIATE_PATH%\*.wixobj" del /f /q "%APP_INTERMEDIATE_PATH%\*
 if exist "%OUTPUTNAMECLIENT%" del /f /q "%OUTPUTNAMECLIENT%"
 if exist "%OUTPUTNAMESERVER%" del /f /q "%OUTPUTNAMESERVER%"
 
-REM Build the MSI for the setup package
 
+
+REM Build the MSI for the client package
+echo Building Client installer
 "%WIX_BUILD_LOCATION%\candle.exe" -ext WiXNetFxExtension -ext WiXUtilExtension setupclient.wxs setup.wxs -dBuildType=%BUILD_TYPE% -out %APP_INTERMEDIATE_PATH%\
 "%WIX_BUILD_LOCATION%\light.exe" -ext WiXNetFxExtension -ext WixUIExtension -ext WiXUtilExtension "%APP_INTERMEDIATE_PATH%\setupclient.wixobj" "%APP_INTERMEDIATE_PATH%\setup.wixobj" -cultures:en-US -loc setup-en-us.wxl -out "%OUTPUTNAMECLIENT%"
-
-"%WIX_BUILD_LOCATION%\candle.exe" -ext WiXNetFxExtension -ext WiXUtilExtension setupserver.wxs setup.wxs -dBuildType=%BUILD_TYPE% -out %APP_INTERMEDIATE_PATH%\
-"%WIX_BUILD_LOCATION%\light.exe" -ext WiXNetFxExtension -ext WixUIExtension -ext WiXUtilExtension "%APP_INTERMEDIATE_PATH%\setupserver.wixobj" "%APP_INTERMEDIATE_PATH%\setup.wixobj" -cultures:en-US -loc setup-en-us.wxl -out "%OUTPUTNAMESERVER%"
-
-
 
 echo Building Bootstrapper file
 REM Commented out for now
@@ -48,6 +45,19 @@ REM MSBuild omlsetupx86.proj
 echo Copying "%OUTPUTNAMECLIENT%" to the Builds folder
 copy "%OUTPUTNAMECLIENT%" ..\..\Builds\X86\
 
+
+IF EXIST ..\..\PostInstallerWizard\SQLInstallers\SQLEXPR_x86_ENU.exe GOTO BUILDSERVER
+GOTO EXIT
+
+:BUILDSERVER
+REM Build the MSI for the server package
+echo Building Server installer
+"%WIX_BUILD_LOCATION%\candle.exe" -ext WiXNetFxExtension -ext WiXUtilExtension setupserver.wxs setup.wxs -dBuildType=%BUILD_TYPE% -out %APP_INTERMEDIATE_PATH%\
+"%WIX_BUILD_LOCATION%\light.exe" -ext WiXNetFxExtension -ext WixUIExtension -ext WiXUtilExtension "%APP_INTERMEDIATE_PATH%\setupserver.wixobj" "%APP_INTERMEDIATE_PATH%\setup.wixobj" -cultures:en-US -loc setup-en-us.wxl -out "%OUTPUTNAMESERVER%"
+
 echo Copying "%OUTPUTNAMESERVER%" to the Builds folder
 copy "%OUTPUTNAMESERVER%" ..\..\Builds\X86\
+
+
+:EXIT
 popd
