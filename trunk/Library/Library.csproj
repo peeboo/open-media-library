@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2D747049-9A5C-4FFB-919F-1FD47BC18B3D}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -671,6 +671,10 @@
     <None Include="Resources\spinnerbluebarlargenofocus1.png" />
     <None Include="Setup\omlsetupx86.proj" />
     <EmbeddedResource Include="Revision.txt" />
+    <Content Include="Setupx64\SetupClient.wxs" />
+    <Content Include="Setupx64\SetupServer.wxs" />
+    <Content Include="Setup\SetupClient.wxs" />
+    <Content Include="Setup\SetupServer.wxs" />
     <Content Include="Sounds\Error.wav" />
     <Content Include="Sounds\Focus.wav" />
     <Content Include="Sounds\MiniSelect.wav" />
