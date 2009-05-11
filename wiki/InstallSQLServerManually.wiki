@@ -1,5 +1,9 @@
-= Install SQL Server and create the database Manaually: =
+#summary Install SQL Server and create the database manually
+#labels sql
 
+= Install SQL Server and create the database Manually: =
+
+The OML 'server' installers should automatically perform these steps.
 
 1) Install SQL Server Express. To assist with the correct setup, there are 4 configuration scripts below the 'SQL Scripts' folder in the trunk source repository. Choose the most suitable for your requiments and 32/64 bit OS.
 
