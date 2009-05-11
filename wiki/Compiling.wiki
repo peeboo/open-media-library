@@ -15,12 +15,15 @@ Requirements
   * Visual Studio 2008 (the free version [http://www.microsoft.com/express/vcsharp/ Visual C# 2008 Express Edition] will also work)
   * Windows Installer 4.5 (http://www.microsoft.com/downloadS/details.aspx?familyid=5A58B56F-60B6-4412-95B9-54D056D6F9F4&displaylang=en). Required to install SQL Server in some cases.
   * Windows Powershell (required to install the SQL administration tools).
-  * Microsoft SQL Server Express 2008 (http://www.microsoft.com/express/sql/download/). Download SQL Server 2008 Express with Tools.
   * NUNIT (http://www.nunit.org/index.php?p=download)
   * WIX 3.0 (wix.sourceforge.net)
   * Media Center SDK 5.3 (http://www.microsoft.com/downloads/details.aspx?FamilyID=A43EA0B7-B85F-4612-AA08-3BF128C5873E&displaylang=en)
   * Dxperience (http://www.devexpress.com/go/DevExpressDownload_DXperience.aspx)
     * Go to this page, http://www.devexpress.com/Products/Free/WebRegistration/ to sign up and get the tools needed for free. This is not a must, but else you will get a popup.  If you continue to have the popup return, you can follow the steps in this link, http://www.devexpress.com/Support/Center/KB/p/A705.aspx to get rid of the popup.
+
+SQLServer Requirements
+
+There are many versions of SQL Server available, browse to http://www.microsoft.com/express/sql/download to download. If you are an advanced user or developer you should download the 'SQL Server 2008 Express with Tools' version and install it manually using the procedure described in http://code.google.com/p/open-media-library/wiki/InstallSQLServerManually. Otherwise if you are simply building the code to create an installer download the 'SQL Server 2008 Express (Runtime Only)' version and place in PostInstallerWizard\SQLInstallers. This allows creation of the installer with the SQL installer embedded within.
 
 
 
@@ -31,32 +34,6 @@ Requirements
 2) For SQL prerequisites, Install Windows Installer 4.5 & Windows Powershell
 
 
-= Install SQL Server and create the database: =
-
-1) Install SQL Server Express. To assist with the correct setup, there are 4 configuration scripts below the 'SQL Scripts' folder in the trunk source repository. Choose the most suitable for your requiments and 32/64 bit OS.
-
-For example to install the x32 version with the admin tools, enter into a command prompt -
-
-SQLEXPRWT_x86_ENU.exe /CONFIGURATIONFILE="c:\OML\OML\SQL Scripts\SQLConfigWithTools_x32.ini"
-
-NOTE - The exact command will depend on the installation file downloaded from microsoft and the location of the ini files.
-
-2) Under 'Microsoft SQL Server 2008' in the start menu, click on 'SQL Server Management Studio'.
-
-3) Click 'Connect' at the login prompt should sucessfully log you in to SQL.
-
-4) Right Hand Click on 'Databases' and select 'New Database'.
-
-5) Enter 'OML' as the database name. Click 'OK' to create database.
-
-6) In Windows Explorer, double click on 'Title Database.sql' under 'SQL Scripts' in the OML source folder stucture.
-
-7) SQL Server Management Studio should now be showing the SQL creation script. Look for a database selection drop down on a Management Studio Toolbar. Change this from 'master' to 'OML'.
-
-8) Click 'Execute' in the tool bar. The database should now be created ready for use.
-
-
-
 
 = Steps to build the code: =
 
@@ -64,13 +41,13 @@ NOTE - The exact command will depend on the installation file downloaded from mi
 
 Note: This has to be done on a pc with Vista Media Center and the Media Center SDK 5.3 installed.
 
-2) using a cmd prompt go into the postinstaller\Library\Setup (or Setup64) dir and run Build.bat
+2) using a cmd prompt go into the Library\Setup (or Setup64) dir and run Build.bat
 
 Note: This will require wix 3.0 to be installed.
 
-3) run the installer located in the postinstaller\bin\Release folder.
+3) run the installer located in the Library\bin\Release folder.
 
-4) Once you have the program installed you will have a post installation prompt appear.  You will need to choose the server that your database is installed on.
+4) Once you have the program installed you will have a post installation prompt appear. This will for server installs run through installing SQL and configure the databse or for client installs give the option to specify the server that your database is installed on.
 
 5) The first time that you open up the DBEditor program after installing the program, it will create the database.  You may get an error about no user - if so close out and reenter.
 
