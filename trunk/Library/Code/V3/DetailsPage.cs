@@ -5,6 +5,7 @@ using Microsoft.MediaCenter.UI;
 using System.Text;
 using System.Threading;
 using System.Data;
+using System.Collections.Generic;
 
 
 namespace Library.Code.V3
@@ -15,8 +16,6 @@ namespace Library.Code.V3
     /// </summary>
     public class DetailsPage : BaseModelItem
     {
-        //get the extended details for the title
-        //for slowload
 
         public void FastLoadData()
         {
@@ -223,7 +222,7 @@ namespace Library.Code.V3
 
     public class ExtendedDetails
     {
-
+        public List<Image> FanArtImages = null;
         //new
         private string summary = "";
         public string Summary

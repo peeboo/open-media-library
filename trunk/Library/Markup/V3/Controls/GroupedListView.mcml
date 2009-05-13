@@ -5,6 +5,7 @@
   xmlns:styles="resx://Library/Library.Resources/V3_Controls_Common_Styles"
   xmlns:z ="assembly://Library/Library.Code.V3"
   xmlns:ctl="resx://Library/Library.Resources/V3_Controls"
+  xmlns:chk="resx://Library/Library.Resources/V3_Controls_CheckBox"
   xmlns:me="Me">
   <UI Name="FocusLocking">
 
@@ -131,6 +132,156 @@
         </Children>
       </Panel>
     </Content>
+  </UI>
+
+  <UI Name="ScrollingListCheckBoxes">
+
+    <Properties>
+      <z:FilterSettings Name="Page" FilterSettings="$Required"/>
+      <ArrayListDataSet Name="Content" ArrayListDataSet="$Required"/>
+      <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
+      <ScrollingData Name="ScrollingDataSpoofer"/>
+      <cor:String Name="GroupName" String="$Required"/>
+      <cor:String Name="TitleString" String=""/>
+      <cor:String Name="DetailsString" String=""/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <Image Name="CellBackground" Source="resx://Library/Library.Resources/V3_Controls_Common_Epg_Results_Cell_Background"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" ScrollingData="[ScrollingData]" HandleHomeEndKeys="true"
+                        HandlePageKeys="true"/>
+      <Command Name="MyCommand" Description="A Baby Story" />
+      <cor:Int32 Name="SelectedIndex" />
+      <ShortcutHandler Name="PageDownHandler" Shortcut="PageDown" HandlerStage="Bubbled" Handle="true"/>
+      <ShortcutHandler Name="PageUpHandler" Shortcut="PageUp" HandlerStage="Bubbled" Handle="true"/>
+      <KeyHandler Name="HomeHandler" Key="Home" HandlerStage="Bubbled" Handle="true"/>
+      <KeyHandler Name="EndHandler" Key="End" HandlerStage="Bubbled" Handle="true"/>
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[ListRepeater]"/>
+      <Default Target="[bbb.Content]" Value="[GroupName]"/>
+      <Binding Target="[ScrollMe.TotalCount]" Source="[Content.Count]"/>
+      <Binding Target="[ScrollMe.ItemIndex]" Source="[FocusedIndex.Value]"/>
+      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false"/>
+      <Default Target="[ScrollingDataSpoofer]" Value="[ScrollingData]"/>
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="GreaterThan" Source="[FocusedIndex.Value]" Value="1"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]"/>
+
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[Content.Count]" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="false" />
+        </Actions>
+      </Changed>
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="GreaterThan" Source="[Content.Count]" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="true" />
+        </Actions>
+      </Changed>
+      <Changed Source="[PageDownHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.PageDown]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[PageUpHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.PageUp]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[HomeHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[EndHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.End]"/>
+        </Actions>
+      </Changed>
+      <Default Target="[theScroller.ScrollingData]" Value="[ScrollingData]"/>
+      <Binding Target="[ListRepeater.Source]" Source="[Content]">
+        <Conditions>
+          <IsValid Source="[Content]"/>
+        </Conditions>
+      </Binding>
+    </Rules>
+    <Content>
+      <Panel Layout="VerticalFlow" MaximumSize="625,0">
+        <Children>
+          <!-- The Scroller -->
+          <Scroller Name="theScroller"  Orientation="Vertical" FadeSize="-1" MaximumSize="0,301" MinimumSize="0,301">
+            <Children>
+              <Panel Visible="true">
+                <Children>
+                  <Text Name="bbb" Color="255, 151, 217, 255" Visible="true" Content="zffffffff">
+                  </Text>
+                </Children>
+              </Panel>
+              <Repeater Name="ListRepeater" DefaultFocusIndex="0">
+                <Layout>
+                  <FlowLayout Orientation="Vertical" Spacing="0,0"/>
+                </Layout>
+                <Animations>
+                  <Animation Type="Move">
+                    <Keyframes>
+                      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="SCurve"/>
+                      <PositionKeyframe Time="0.25" RelativeTo="Final" Value="0, -5, 0"/>
+                      <PositionKeyframe Time="0.55" RelativeTo="Final" Value="0, 0, 0"/>
+                    </Keyframes>
+                  </Animation>
+                </Animations>
+                <Content>
+
+                  <!-- The item to repeat -->
+                  <me:CheckBoxListView FocusedIndex="[FocusedIndex]" ItemIndex="[RepeatedItemIndex.Value]" Model="[RepeatedItem!BooleanChoice]"/>
+
+                </Content>
+              </Repeater>
+            </Children>
+          </Scroller>
+          <Panel Margins="0,10,5,0">
+            <Layout>
+              <FlowLayout HideOffscreenItems="false" Orientation="Horizontal" ItemAlignment="Far" FillStrip="false" StripAlignment="Far"/>
+            </Layout>
+            <Children>
+              <scr:ScrollControlItem Name="ScrollMe" ItemIndex="0" TotalCount="0" ScrollData="[ScrollingData]"></scr:ScrollControlItem>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="CheckBoxListView" BaseUI="chk:CheckBox">
+    <Properties>
+      <cor:Int32 Name="ItemIndex" Int32="0"/>
+      <IntRangedValue Name="FocusedIndex"/>
+    </Properties>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusedIndex.Value]" Value="[ItemIndex]"/>
+        </Actions>
+      </Rule>
+    </Rules>
   </UI>
 
   <UI Name="ScrollingListDiscs">

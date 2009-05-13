@@ -387,7 +387,45 @@ namespace OMLEngine
                     _title.UpdatedFrontCoverPath = value;
                 }
             }
-        }        
+        }
+
+        //hacked in...
+        public string GetFrontCoverMenuPathSlow()
+        {
+            if (_frontCoverMenuPath != null)
+            {
+                _frontCoverMenuPath = ImageManager.GetImagePathByIdSlow(frontCoverInt, _frontCoverMenuPath, tmpImg, ImageSize.Small);
+                this.tmpImg = null;
+            }
+            return _frontCoverMenuPath;    
+        }
+
+        private int frontCoverInt;
+        private System.Data.Linq.Binary tmpImg;
+
+        public string GetFrontCoverMenuPathFast()
+        {
+
+            if (_frontCoverMenuPath == null)
+            {
+                try
+                {
+                    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.FrontCoverImage);
+                    _frontCoverMenuPath = ImageManager.GetImagePathByIdFast((frontCover == null) ? (int?)null : frontCover.ImageId, ImageSize.Small);
+                    if (!string.IsNullOrEmpty(_frontCoverMenuPath) && !File.Exists(_frontCoverMenuPath) && frontCover != null)
+                    {
+                        //store the image data-blows up if I don't cache local...
+                        this.tmpImg = frontCover.DBImage.Image;
+                        this.frontCoverInt = frontCover.DBImage.Id;
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+            
+            return _frontCoverMenuPath;    
+        }
 
         /// <summary>
         /// The small version of the front cover image
@@ -396,11 +434,11 @@ namespace OMLEngine
         {
             get 
             {
-                if (_frontCoverMenuPath == null)
-                {
-                    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.FrontCoverImage);
-                    _frontCoverMenuPath = ImageManager.GetImagePathById((frontCover == null) ? (int?)null : frontCover.ImageId, ImageSize.Small);             
-                }
+                //if (_frontCoverMenuPath == null)
+                //{
+                //    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.FrontCoverImage);
+                //    _frontCoverMenuPath = ImageManager.GetImagePathByIdSlow(frontCoverInt,_frontCoverMenuPath, tmpImg, ImageSize.Small);             
+                //}
             
                 return _frontCoverMenuPath;             
             }           

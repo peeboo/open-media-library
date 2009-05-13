@@ -104,7 +104,6 @@
     <Setting Name="HasRunSetup" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-<<<<<<< .mine
     <Setting Name="MediaChangersEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -114,13 +113,35 @@
     <Setting Name="MediaChangersRetrieveMetaData" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-=======
     <Setting Name="MainPageBackDropRotationInSeconds" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="MainPageBackDropAlpha" Type="System.Single" Scope="User">
       <Value Profile="(Default)">0.3</Value>
     </Setting>
->>>>>>> .r1340
+    <Setting Name="GalleryPivotChosen" Type="System.String" Scope="User">
+      <Value Profile="(Default)">titles</Value>
+    </Setting>
+    <Setting Name="EnableMainPageBackDrop" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="GallerySelectedView" Type="System.String" Scope="User">
+      <Value Profile="(Default)">poster</Value>
+    </Setting>
+    <Setting Name="GalleryEnableTwoRow" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="GalleryEnableThreeRow" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="GalleryTwoRowMin" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">25</Value>
+    </Setting>
+    <Setting Name="GalleryThreeRowMin" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">500</Value>
+    </Setting>
+    <Setting Name="GalleryEnableAlphaJump" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

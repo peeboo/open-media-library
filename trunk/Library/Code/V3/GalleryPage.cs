@@ -2,6 +2,7 @@
 using System.Collections;
 using Microsoft.MediaCenter.UI;
 using Library.Code.V3;
+using System.Collections.Generic;
 
 namespace Library.Code.V3
 {
@@ -13,12 +14,326 @@ namespace Library.Code.V3
     [Microsoft.MediaCenter.UI.MarkupVisible]
     public class GalleryPage : ContentPage
     {
+        private Boolean applicationIdle=false;
+        public Boolean ApplicationIdle
+        {
+            get
+            {
+                return this.applicationIdle;
+            }
+            set
+            {
+                if (applicationIdle != value)
+                {
+                    applicationIdle = value;
+                    FirePropertyChanged("ApplicationIdle");
+                }
+            }
+        }
+
+        public void StartApplicationIdle()
+        {
+            this.applicationIdle = false;
+            Microsoft.MediaCenter.UI.Application.Idle += new EventHandler(Application_Idle);
+        }
+
+        void Application_Idle(object sender, EventArgs e)
+        {
+            Microsoft.MediaCenter.UI.Application.Idle -= new EventHandler(Application_Idle);
+            this.ApplicationIdle = true;
+        }
+
+        public GalleryPage(List<OMLEngine.TitleFilter> filter, string galleryName)
+            : this()
+        {
+            
+            //description
+            this.Description = galleryName;
+            this.Filters = filter;
+            this.Model = new Library.Code.V3.BrowseModel(this);
+            this.Model.Pivots = new Choice(this, "desc", new ArrayListDataSet(this));
+            this.CreateContextMenu();
+            this.CreateCommands();
+            this.CreateViews();
+            this.CreateFilters();
+        }
+
         /// <summary>
-        /// The desired size for a galley item.  This will be interpreted by the 
-        /// UI to control what size to allow for the thumbnails as well as how 
-        /// many rows to display.
+        /// generic context menu for gallery
         /// </summary>
-        /// 
+        private void CreateContextMenu()
+        {
+            this.contextMenu=new Library.Code.V3.ContextMenuData();
+            Library.Code.V3.ThumbnailCommand viewSettingsCmd = new Library.Code.V3.ThumbnailCommand(this);
+            viewSettingsCmd.Invoked += new EventHandler(this.settingsCmd_Invoked);
+            viewSettingsCmd.Description = "Settings";
+            this.contextMenu.SharedItems.Add(viewSettingsCmd);
+
+            Library.Code.V3.ThumbnailCommand viewSearchCmd = new Library.Code.V3.ThumbnailCommand(this);
+            viewSettingsCmd.Invoked += new EventHandler(this.searchCmd_Invoked);
+            viewSearchCmd.Description = "Search";
+            this.contextMenu.SharedItems.Add(viewSearchCmd);
+        }
+
+        private bool IsFilterDoubled(OMLEngine.TitleFilterType type)
+        {
+            if (this.Filters == null)
+                return false;
+            foreach (OMLEngine.TitleFilter f in this.Filters)
+            {
+                if (f.FilterType == type)
+                    return true;
+            }
+            return false;
+        }
+        private void CreateFilters()
+        {
+            IList<string> filtersToShow = OMLEngine.Settings.OMLSettings.MainFiltersToShow;
+
+            //filters with no dd rules
+            //year
+            //date added
+            //user rating
+            //parental rating
+            //format
+
+
+            foreach (string filterName in filtersToShow)
+            {
+                OMLEngine.TitleFilterType filterType = Filter.FilterStringToTitleType(filterName);
+                Filter f = new Filter(null, filterType, this.Filters);//new MovieGallery()
+
+                if (Filter.ShowFilterType(filterType))
+                {
+                    //should we show the year filter
+                    Library.Code.V3.FilterPivot filteredPivot;
+                    switch (filterType)
+                    {
+                        case OMLEngine.TitleFilterType.Year:
+                            if (!this.IsFilterDoubled(filterType))
+                            {
+                                this.CreateYearFilter();
+                            }
+                            break;
+                        case OMLEngine.TitleFilterType.ParentalRating:
+                            if (!this.IsFilterDoubled(filterType))
+                            {
+                                filteredPivot = new Library.Code.V3.FilterPivot(this, Filter.FilterTypeToString(filterType).ToLower(), "No titles were found.", this.Filters, filterType);
+                                this.Model.Pivots.Options.Add(filteredPivot);
+                            }
+                            break;
+                        case OMLEngine.TitleFilterType.VideoFormat:
+                            if (!this.IsFilterDoubled(filterType))
+                            {
+                                filteredPivot = new Library.Code.V3.FilterPivot(this, Filter.FilterTypeToString(filterType).ToLower(), "No titles were found.", this.Filters, filterType);
+                                this.Model.Pivots.Options.Add(filteredPivot);
+                            }
+                            break;
+                        case OMLEngine.TitleFilterType.DateAdded:
+                            if (!this.IsFilterDoubled(filterType))
+                            {
+                                this.CreateDateAddedFilter();
+                            }
+                            break;
+                        case OMLEngine.TitleFilterType.UserRating:
+                            if (!this.IsFilterDoubled(filterType))
+                            {
+                                filteredPivot = new Library.Code.V3.FilterPivot(this, Filter.FilterTypeToString(filterType).ToLower(), "No titles were found.", this.Filters, filterType);
+                                this.Model.Pivots.Options.Add(filteredPivot);
+                            }
+                            break;
+                        default:
+                            filteredPivot = new Library.Code.V3.FilterPivot(this, Filter.FilterTypeToString(filterType).ToLower(), "No titles were found.", this.Filters, filterType);
+                            this.Model.Pivots.Options.Add(filteredPivot);
+                            break;
+                    }
+
+                    //determine our default pivot
+                    if (this.filters == null || this.filters.Count == 0)
+                    {
+                        foreach (Library.Code.V3.BrowsePivot pivot in this.Model.Pivots.Options)
+                        {
+                            if (pivot.Description == Properties.Settings.Default.GalleryPivotChosen)
+                                this.Model.Pivots.Chosen = pivot;
+                        }
+                        this.Model.Pivots.ChosenChanged += new EventHandler(Pivots_ChosenChanged);
+                    }
+                }
+            }
+        }
+
+        void Pivots_ChosenChanged(object sender, EventArgs e)
+        {
+            Library.Code.V3.BrowsePivot p = (Library.Code.V3.BrowsePivot)this.Model.Pivots.Chosen;
+            
+            //set our last pivot
+            //needs refactor
+            Microsoft.MediaCenter.UI.Application.DeferredInvokeOnWorkerThread
+                (
+                delegate
+                        {
+                            Properties.Settings.Default.GalleryPivotChosen = p.Description;
+                            Properties.Settings.Default.Save();
+                        }, 
+                        delegate 
+                        {
+                            FirePropertyChanged("ContextMenu");
+                        }, null);
+        }
+
+        //I'm sure these could go somewhere else!
+        public IEnumerable<OMLEngine.Title> SortByDate(IEnumerable<OMLEngine.Title> titles)
+        {
+            List<OMLEngine.Title> sortedList = new List<OMLEngine.Title>(titles);
+            sortedList.Sort(delegate(OMLEngine.Title x, OMLEngine.Title y) { return x.DateAdded.CompareTo(y.DateAdded); });
+            return sortedList;
+        }
+        public IEnumerable<OMLEngine.Title> SortByName(IEnumerable<OMLEngine.Title> titles)
+        {
+            List<OMLEngine.Title> sortedList = new List<OMLEngine.Title>(titles);
+            sortedList.Sort(delegate(OMLEngine.Title x, OMLEngine.Title y) { return x.SortName.CompareTo(y.SortName); });
+            return sortedList;
+        }
+
+        private void CreateViews()
+        {
+            this.CreateTitleView();
+        }
+
+        private void CreateTitleView()
+        {
+            Library.Code.V3.TitlesPivot titlePivot = new Library.Code.V3.TitlesPivot(this, "title", "No titles were found.", this.filters);
+            titlePivot.ContentLabel = "OML";
+            titlePivot.SupportsJIL = true;
+            titlePivot.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            titlePivot.ContentItemTemplate = "oneRowGalleryItemPoster";
+            titlePivot.DetailTemplate = Library.Code.V3.BrowsePivot.ExtendedDetailTemplate;
+            this.Model.Pivots.Options.Add(titlePivot);
+            //setting this as the default chosen pivot
+            this.Model.Pivots.Chosen = titlePivot;
+        }
+
+        private void CreateYearFilter()
+        {
+            OMLEngine.TitleFilterType filterType = Filter.FilterStringToTitleType("Year");
+            Filter f = new Filter(null, filterType, null);
+            VirtualList filteredGalleryList = new VirtualList(this, null);
+            IList<Library.GalleryItem> filteredTitles = f.GetGalleryItems();
+            foreach (Library.GalleryItem item in filteredTitles)
+            {
+                //this is a temp hack
+                if (item.Name != " All ")
+                {
+                    //am I being silly here copying this?
+                    List<OMLEngine.TitleFilter> newFilter = new List<OMLEngine.TitleFilter>();
+                    foreach (OMLEngine.TitleFilter filt in this.filters)
+                    {
+                        newFilter.Add(filt);
+                    }
+                    newFilter.Add(new OMLEngine.TitleFilter(OMLEngine.TitleFilterType.Year, item.Name));
+
+                    Library.Code.V3.YearBrowseGroup testGroup2 = new Library.Code.V3.YearBrowseGroup(newFilter);
+                    testGroup2.Owner = this;
+                    //tmp hack for unknown dates
+                    if (item.Name == "1900")
+                        testGroup2.Description = "UNKNOWN";
+                    else
+                        testGroup2.Description = item.Name;
+                    testGroup2.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_mystery");
+                    testGroup2.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
+                    filteredGalleryList.Add(testGroup2);
+                }
+            }
+
+            Library.Code.V3.BrowsePivot yearGroup = new Library.Code.V3.BrowsePivot(this, "year", "No titles were found.", filteredGalleryList);
+            yearGroup.ContentLabel = this.Description;
+            yearGroup.SupportsJIL = false;
+            yearGroup.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            yearGroup.ContentItemTemplate = "GalleryGroup";
+            yearGroup.SubContentItemTemplate = "twoRowPoster";//needs to pull from the total count to decide...
+            yearGroup.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+
+            this.Model.Pivots.Options.Add(yearGroup);
+        }
+
+        private void CreateDateAddedFilter()
+        {
+            Library.Code.V3.YearPivot yearGroup = new YearPivot(this, "date added", "No titles were found.", this.filters);
+            yearGroup.ContentLabel = this.Description;
+            this.Model.Pivots.Options.Add(yearGroup);
+        }
+
+        private List<OMLEngine.TitleFilter> filters = new List<OMLEngine.TitleFilter>();
+        public List<OMLEngine.TitleFilter> Filters
+        {
+            get { return this.filters; }
+            set { this.filters = value; }
+        }
+        /// <summary>
+        /// Loads the default commands
+        /// </summary>
+        private void CreateCommands()
+        {
+            this.Model.Commands = new ArrayListDataSet(this);
+
+            //create the settings cmd
+            Library.Code.V3.ThumbnailCommand settingsCmd = new Library.Code.V3.ThumbnailCommand(this);
+            settingsCmd.Description = "settings";
+            settingsCmd.DefaultImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings");
+            settingsCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings_Dormant");
+            settingsCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_BrowseCmd_Settings_Focus");
+            //no invoke for now
+            //settingsCmd.Invoked += new EventHandler(this.SettingsHandler);
+            settingsCmd.Invoked += new EventHandler(settingsCmd_Invoked);
+            this.Model.Commands.Add(settingsCmd);
+
+            //create the Search cmd
+            Library.Code.V3.ThumbnailCommand searchCmd = new Library.Code.V3.ThumbnailCommand(this);
+            searchCmd.Description = "search";
+            searchCmd.DefaultImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Search");
+            searchCmd.DormantImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Search_Dormant");
+            searchCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Search_Focus");
+            searchCmd.Invoked += new EventHandler(searchCmd_Invoked);
+            this.Model.Commands.Add(searchCmd);
+        }
+
+        /// <summary>
+        /// Navigates to the settings page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void settingsCmd_Invoked(object sender, EventArgs e)
+        {
+            if (OMLApplication.Current.Session != null)
+            {
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                Library.Code.V3.SettingsManager page = new Library.Code.V3.SettingsManager();
+                properties["Page"] = page;
+                properties["Application"] = OMLApplication.Current;
+
+                OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_Settings_SettingsManager", properties);
+            }
+        }
+
+        /// <summary>
+        /// Navigates to the search page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void searchCmd_Invoked(object sender, EventArgs e)
+        {
+            if (OMLApplication.Current.Session != null)
+            {
+                Library.Code.V3.MoviesSearchPage page = new Library.Code.V3.MoviesSearchPage();
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+                properties["Page"] = page;
+                properties["Application"] = OMLApplication.Current;
+                OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_MoviesSearchPage", properties);
+            }
+        }
+
+        //gotta remove this-fired only from actor invoke on movieitem
         public GalleryPage(System.Collections.Generic.IEnumerable<OMLEngine.Title> _titles, string galleryName)
             : this()
         {
@@ -32,7 +347,7 @@ namespace Library.Code.V3
             OMLProperties properties = new OMLProperties();
             properties.Add("Application", OMLApplication.Current);
             properties.Add("UISettings", new UISettings());
-            properties.Add("Settings", new Settings());
+            properties.Add("Settings", new Library.Settings());
             properties.Add("I18n", I18n.Instance);
             //v3 main gallery
             Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage();
@@ -490,18 +805,18 @@ namespace Library.Code.V3
         {
             get
             {
-                return this.contextMenu;
+                //return this.contextMenu;
+                //if our pivot has a ctx menu-lets use that
+                if (this.model.Pivots.Chosen!=null && ((BrowsePivot)this.model.Pivots.Chosen).ContextMenu != null)
+                    return ((BrowsePivot)this.model.Pivots.Chosen).ContextMenu;
+                else
+                    return this.contextMenu;
+
             }
             set
             {
                 this.contextMenu = value;
             }
-        }
-
-        public void BackHandlerEvent()
-        {
-            //TODO: implement in OML
-            //Application.Current.Session.BackPage();
         }
 
         /// <summary>
@@ -647,35 +962,40 @@ namespace Library.Code.V3
 
         private int doSearch(string searchString)
         {
-            int jump = 0;
-            VirtualList pivotList = (VirtualList)((BrowsePivot)this.model.Pivots.Chosen).Content;
-            foreach (GalleryItem item in pivotList)
-            {
-                //TODO: this string stripping is a hack for OML 
-                //we really need to loop through the sortTitle instead
-                string s = null;
-                if (item.SortName.StartsWith("the ", StringComparison.OrdinalIgnoreCase))
-                    s = item.SortName.Substring(4);
-                else if (item.SortName.StartsWith(" a", StringComparison.OrdinalIgnoreCase))
-                    s = item.SortName.Substring(2);
-
-                if (s == null)
-                    s = item.SortName;
+            return ((BrowsePivot)this.model.Pivots.Chosen).DoSearch(searchString);
+            //int jump = 0;
+            //VirtualList pivotList = (VirtualList)((BrowsePivot)this.model.Pivots.Chosen).Content;
+            //foreach (GalleryItem item in pivotList)
+            //{
+            //    //TODO: this string stripping is a hack for OML 
+            //    //this needs to be pushed over to the actual pivot-sorta finished
+            //    //see FindContentItem in basebrowsepivot
+            //    //right now its against the vlist which is broken because of the slowload of the vlist
+            //    string s = null;
+            //    if (item != null)
+            //    {
+            //        if (item.Description.StartsWith("the ", StringComparison.OrdinalIgnoreCase))
+            //            s = item.Description.Substring(4);
+            //        else if (item.Description.StartsWith(" a", StringComparison.OrdinalIgnoreCase))
+            //            s = item.Description.Substring(2);
+            //    }
+            //    if (s == null)
+            //        s = item.SortName;
                 
-                int cmpVal = s.CompareTo(searchString);
-                if (cmpVal == 0)
-                { // the values are the same
-                    jump = pivotList.IndexOf(item);
-                    break;
-                    //direct match
-                }
-                else if (cmpVal > 0)
-                {
-                    jump = pivotList.IndexOf(item);
-                    break;
-                }
-            }
-            return jump;
+            //    int cmpVal = s.CompareTo(searchString);
+            //    if (cmpVal == 0)
+            //    { // the values are the same
+            //        jump = pivotList.IndexOf(item);
+            //        break;
+            //        //direct match
+            //    }
+            //    else if (cmpVal > 0)
+            //    {
+            //        jump = pivotList.IndexOf(item);
+            //        break;
+            //    }
+            //}
+            //return jump;
         }
         public void SlowSearch(string searchString)
         {

@@ -29,6 +29,16 @@
     </Properties>
     <Locals>
       <!-- new-->
+      <!--AnchorLayoutInput Left="Focus, 1, 10" Horizontal="Near" Top="Scroller, 0, 10" 
+                         ContributesToWidth="false" ContributesToHeight="false"/-->
+      <AnchorLayoutInput Name="RightArrowLayoutInputDefault" Horizontal="Near" ContributesToWidth="false" ContributesToHeight="false">
+        <Left>
+          <AnchorEdge Id="Focus" Percent="1" Offset="10"/>
+        </Left>
+        <Top>
+          <AnchorEdge Id="Scroller" Percent="0" Offset="10"/>
+        </Top>
+      </AnchorLayoutInput>
       <shl:ScrollIntoViewDisposition Name="shlScrollIntoViewDisposition" LockedPosition="0.0" LockedAlignment="0.0"/>
       <KeyHandler Handle="true" HandlerStage="Direct" Name="RightHandler" Key="Right" />
       <KeyHandler Handle="true" HandlerStage="Direct" Name="LeftHandler" Key="Left" />
@@ -75,10 +85,11 @@
               <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
             </Params>
           </DebugTrace>
+          <Set Target="[Repeater.DefaultFocusIndex]" Value="[Pivots.ChosenIndex]"/>
           <Set Target="[FocusArea.Value]" Value="Pivot"/>
           <!--Set Target="[FocusArea.Value]" Value="Pivot"/>
           <Set Target="[TransitionState.Value]" Value="NavigatingToBackward"/-->
-          <Invoke Target="[Repeater.NavigateIntoIndex]" index="[Pivots.ChosenIndex]"/>
+          <!--Invoke Target="[Repeater.NavigateIntoIndex]" index="[Pivots.ChosenIndex]"/-->
           <!--Set Target="[TransitionState.Value]" Value="Idle" InvokePolicy="AsynchronousNormal"/-->
         </Actions>
       </Changed>
@@ -91,7 +102,7 @@
           <Invoke Target="[ScrollingDataHelper.SetScrollIntoViewDisposition]" ScrollingData="[ScrollData]" ScrollIntoViewDisposition="[shlScrollIntoViewDisposition]"/>
         </Actions>
       </Rule>
-      
+
       <Binding Source="[LoopGap]" Target="[FlowLayout.RepeatGap]"/>
       <Binding Source="[ItemGap]" Target="[FlowLayout.Spacing]"/>
       <Binding Source="[ScrollData]" Target="[Scroller.ScrollingData]"/>
@@ -123,6 +134,17 @@
         </Actions>
       </Condition>
       <Binding Source="[Pivots.Options]" Target="[Repeater.Source]"/>
+      <!--If someone beneath us gets mouse focus, but no one has key focus, we should ask for focus.-->
+      <!--This is essentially adding Input.KeyFocusOnMouseEnter behavior, but for "deep mouse enter".-->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Input.DeepMouseFocus]"/>
+          <Equality Source="[Input.DeepKeyFocus]" ConditionOp="NotEquals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="Pivot"/>
+        </Actions>
+      </Rule>
       <!--Rule>
         <Conditions>
           <Modified Source="[Input.DeepMouseFocus]"/>
@@ -183,11 +205,11 @@
           <Equality Source="[NavigationDirection.Value]" ConditionOp="ChangedTo" Value="subright"/>
         </Conditions>
         <Actions>
-          <DebugTrace Message="RIGHT: {0}">
+          <!--DebugTrace Message="RIGHT: {0}">
             <Params>
               <ObjectPath ObjectPath="[NavigationDirection.Value]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <Invoke Target="[ScrollDownCommand.Invoke]"/>
         </Actions>
       </Changed>
@@ -196,11 +218,11 @@
           <Equality Source="[NavigationDirection.Value]" ConditionOp="ChangedTo" Value="subleft"/>
         </Conditions>
         <Actions>
-          <DebugTrace Message="LEFT: {0}">
+          <!--DebugTrace Message="LEFT: {0}">
             <Params>
               <ObjectPath ObjectPath="[NavigationDirection.Value]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <Invoke Target="[ScrollUpCommand.Invoke]"/>
         </Actions>
       </Changed>
@@ -238,9 +260,9 @@
             </Params>
           </DebugTrace>
           <Set Target="[NavigationDirection.Value]" Value="right"/-->
-          <!--PlayAnimation Target="[RightArrow]" Animation="animation://me:Browse.Pivots.Arrow.Right.Jiggle"/-->
+      <!--PlayAnimation Target="[RightArrow]" Animation="animation://me:Browse.Pivots.Arrow.Right.Jiggle"/-->
       <!--Invoke Target="[ScrollDownCommand.Invoke]"/-->
-          <!--Invoke Target="[ScrollData.ScrollDown]"/-->
+      <!--Invoke Target="[ScrollData.ScrollDown]"/-->
       <!--/Actions>
       </Condition>
       <Condition Source="[LeftHandler.Pressing]" SourceValue="true">
@@ -251,9 +273,9 @@
             </Params>
           </DebugTrace>
           <Set Target="[NavigationDirection.Value]" Value="left"/-->
-          <!--PlayAnimation Target="[LeftArrow]" Animation="animation://me:Browse.Pivots.Arrow.Left.Jiggle"/-->
+      <!--PlayAnimation Target="[LeftArrow]" Animation="animation://me:Browse.Pivots.Arrow.Left.Jiggle"/-->
       <!--Invoke Target="[ScrollUpCommand.Invoke]"/-->
-          <!--Invoke Target="[ScrollData.ScrollUp]"/-->
+      <!--Invoke Target="[ScrollData.ScrollUp]"/-->
       <!--/Actions>
       </Condition-->
       <Changed Source="[PivotInvoked.Invoked]">
@@ -345,13 +367,13 @@
         </Conditions>
         <Actions>
           <!--Invoke Target="[SelectedIndex.NextValue]"/-->
-          <Set Target="[NavigationDirection.Value]" Value="none" ExclusiveApply="false"/>
+          <!--Set Target="[NavigationDirection.Value]" Value="none" ExclusiveApply="false"/-->
           <Set Target="[NavigationDirection.Value]" Value="right"/>
-          <DebugTrace Message="Pivots.NavigationDirection.Value(scrollrightinv): {0}">
+          <!--DebugTrace Message="Pivots.NavigationDirection.Value(scrollrightinv): {0}">
             <Params>
               <ObjectPath ObjectPath="[NavigationDirection.Value]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <PlayAnimation Target="[RightArrow]" Animation="animation://me:Browse.Pivots.Arrow.Right.Jiggle"/>
         </Actions>
       </Rule>
@@ -361,13 +383,13 @@
         </Conditions>
         <Actions>
           <!--Invoke Target="[SelectedIndex.PreviousValue]"/-->
-          <Set Target="[NavigationDirection.Value]" Value="none" ExclusiveApply="false"/>
+          <!--Set Target="[NavigationDirection.Value]" Value="none" ExclusiveApply="false"/-->
           <Set Target="[NavigationDirection.Value]" Value="left"/>
-          <DebugTrace Message="Pivots.NavigationDirection.Value(scrollleftinv): {0}">
+          <!--DebugTrace Message="Pivots.NavigationDirection.Value(scrollleftinv): {0}">
             <Params>
               <ObjectPath ObjectPath="[NavigationDirection.Value]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <PlayAnimation Target="[LeftArrow]" Animation="animation://me:Browse.Pivots.Arrow.Left.Jiggle"/>
         </Actions>
       </Rule>
@@ -377,22 +399,25 @@
         </Conditions>
         <Actions>
           <!-- todo:fix-->
-          <DebugTrace Message="detachRIGHT: {0}">
+          <!--DebugTrace Message="detachRIGHT: {0}">
             <Params>
               <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <Invoke Target="[RightArrow.DetachAnimation]" type="Move"/>
+          <Invoke Target="[LeftArrow.DetachAnimation]" type="Move"/>
         </Actions>
       </Rule>
       <Changed Source="[SelectedIndex.Value]">
         <Actions>
-          <DebugTrace Message="SelectedIndex.Value rightarrow attach: {0}">
+          <!--DebugTrace Message="SelectedIndex.Value rightarrow attach: {0}">
             <Params>
               <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
             </Params>
-          </DebugTrace>
-          <PlayAnimation Target="[LeftArrow]" Animation="animation://me:Browse.Pivots.Arrow.Move"/>
+          </DebugTrace-->
+          <!--PlayAnimation Target="[LeftArrow]" Animation="animation://me:Browse.Pivots.Arrow.Move"/-->
+          <Invoke Target="[LeftArrow.AttachAnimation]" animation="animation://me:Browse.Pivots.Arrow.Move" InvokePolicy="Synchronous"/>
+          <Invoke Target="[LeftArrow.DetachAnimation]" type="Move" InvokePolicy="AsynchronousLowPri"/>
           <Invoke Target="[RightArrow.AttachAnimation]" animation="animation://me:Browse.Pivots.Arrow.Move" InvokePolicy="Synchronous"/>
           <Invoke Target="[RightArrow.DetachAnimation]" type="Move" InvokePolicy="AsynchronousLowPri"/>
         </Actions>
@@ -442,23 +467,23 @@
       </Rule>
       <Condition Source="[TransitionState.Value]" SourceValue="NavigatingToForward">
         <Actions>
-          <DebugTrace Message="navforward: {0}">
+          <!--DebugTrace Message="navforward: {0}">
             <Params>
               <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <Invoke Target="[LeftArrow.AttachAnimation]" animation="animation://me:Browse.Pivots.Arrow.NavigateToForward" InvokePolicy="Synchronous"/>
-          <!--Invoke Target="[RightArrow.AttachAnimation]" animation="animation://me:Browse.Pivots.Arrow.NavigateToForward" InvokePolicy="Synchronous"/-->
+          <Invoke Target="[RightArrow.AttachAnimation]" animation="animation://me:Browse.Pivots.Arrow.NavigateToForward" InvokePolicy="Synchronous"/>
           <Invoke Target="[Repeater.AttachAnimation]" animation="animation://me:Browse.Pivots.Panel.NavigateToForward" InvokePolicy="Synchronous"/>
         </Actions>
       </Condition>
       <Condition Source="[TransitionState.Value]" SourceValue="NavigatingToBackward">
         <Actions>
-          <DebugTrace Message="navbackward: {0}">
+          <!--DebugTrace Message="navbackward: {0}">
             <Params>
               <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <Invoke Target="[LeftArrow.AttachAnimation]" animation="animation://me:Browse.Pivots.Arrow.NavigateToBackward" InvokePolicy="Synchronous"/>
           <Invoke Target="[RightArrow.AttachAnimation]" animation="animation://me:Browse.Pivots.Arrow.NavigateToBackward" InvokePolicy="Synchronous"/>
           <Invoke Target="[Repeater.AttachAnimation]" animation="animation://me:Browse.Pivots.Panel.NavigateToBackward" InvokePolicy="Synchronous"/>
@@ -470,11 +495,11 @@
           <Equality Source="[TransitionState.Value]" Value="NavigatingAwayBackward"/>
         </Conditions>
         <Actions>
-          <DebugTrace Message="navforward-backward: {0}">
+          <!--DebugTrace Message="navforward-backward: {0}">
             <Params>
               <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <Invoke Target="[LeftArrow.AttachAnimation]" animation="animation://me:Browse.Pivots.Arrow.NavigateAway" InvokePolicy="Synchronous"/>
           <Invoke Target="[RightArrow.AttachAnimation]" animation="animation://me:Browse.Pivots.Arrow.NavigateAway" InvokePolicy="Synchronous"/>
         </Actions>
@@ -594,10 +619,10 @@
               <AnchorLayoutInput Left="Scroller, 0, -999" Right="Scroller, 0, -10" Horizontal="Far" Top="Scroller, 0, 10" ContributesToWidth="false" ContributesToHeight="false"/>
             </LayoutInput>
           </Graphic>
-          <Graphic Name="RightArrow" Content="[PivotArrowRightNoFocus]">
-            <LayoutInput>
+          <Graphic Name="RightArrow" Content="[PivotArrowRightNoFocus]" LayoutInput="[RightArrowLayoutInputDefault]">
+            <!--LayoutInput>
               <AnchorLayoutInput Left="Focus, 1, 10" Horizontal="Near" Top="Scroller, 0, 10" ContributesToWidth="false" ContributesToHeight="false"/>
-            </LayoutInput>
+            </LayoutInput-->
           </Graphic>
           <Scroller Name="Scroller" Orientation="Horizontal" FadeSize="10" NearOffset="-210" FarOffset="0" Navigation="RememberFocus">
             <LayoutInput>
@@ -609,7 +634,7 @@
                   <Animation Animation="animation://me:Browse.Pivots.Panel.Move"/>
                 </Animations>
                 <Children>
-                  <Repeater Name="Repeater" MouseInteractive="true" DiscardOffscreenVisuals="true" Visible="true" Layout="[FlowLayout]" Navigation="RememberFocus">
+                  <Repeater DefaultFocusIndex="[Pivots.ChosenIndex]" Name="Repeater" MouseInteractive="true" DiscardOffscreenVisuals="true" Visible="true" Layout="[FlowLayout]" Navigation="PreferFocusOrder">
                     <Content>
                       <me:PivotButton Option="[RepeatedItem!shl:BrowsePivot]" Pivots="[Pivots]" PivotInvoked="[PivotInvoked]"
                                     SelectedIndex="[SelectedIndex]" Index="[RepeatedItemIndex]" FocusArea="[FocusArea]"

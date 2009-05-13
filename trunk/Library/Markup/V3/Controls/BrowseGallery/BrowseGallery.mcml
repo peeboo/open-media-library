@@ -4,6 +4,8 @@
     xmlns:shell ="assembly://Library/Library.Code.V3"
     xmlns:omlShell ="assembly://Library/Library"
     xmlns:comm="resx://Library/Library.Resources/V3_Globals"
+    xmlns:wait="resx://Library/Library.Resources/V3_Controls_WaitCursor"
+    xmlns:ctl="resx://Library/Library.Resources/V3_Controls_AutoScrollRegion"
     xmlns:me    ="Me">
 
   <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseGroupedGallery"/>
@@ -13,6 +15,231 @@
   <Image Name="Browse.ListViewStrip"    Source="resx://Library/Library.Resources/V3_Controls_BrowseGallery_ListViewStrip" />
   <Image Name="Browse.ListViewStripTop" Source="resx://Library/Library.Resources/V3_Controls_BrowseGallery_ListViewStripTop" />
 
+  <UI Name="GroupedGalleryTest">
+
+    <Properties>
+      <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <shell:IBrowsePivot   Name="Model"         IBrowsePivot="$Required"/>
+      <shell:GalleryPage Name="Page" GalleryPage="null"/>
+      <IntRangedValue Name="SelectedIndex"       IntRangedValue="$Required"/>
+      <IntRangedValue Name="TotalCount"          IntRangedValue="$Required"/>
+      <IntRangedValue Name="MetaDataTopShift"    IntRangedValue="$Required" />
+      <IntRangedValue Name="GalleryContentShift" IntRangedValue="$Required" />
+      <IntRangedValue Name="MetaDataLeftShift"   IntRangedValue="$Required" />
+      <EditableText   Name="FocusArea"           EditableText="$Required"/>
+      <RangedValue    Name="MetadataDelay"       RangedValue="$Required"/>
+      <EditableText   Name="ItemMode"            EditableText="$Required"/>
+      <BooleanChoice  Name="IsListView"          BooleanChoice="$Required" />
+      <BooleanChoice  Name="IsOneRow"            BooleanChoice="$Required" />
+      <EditableText   Name="TransitionState"     EditableText="$Required"/>
+
+      <IntRangedValue Name="SelectedGroup" Value="0"/>
+      <!-- used to pass the selected group index around in a grouped gallery -->
+      <IntRangedValue Name="TotalCountOverride"/>
+      <!-- used by galleries that override the count/index UI -->
+      <IntRangedValue Name="ItemIndexOverride"/>
+      <!-- used by galleries that override the count/index UI -->
+
+      <cor:Boolean    Name="InListMaker"      Boolean="false" />
+
+      <Command        Name="NavigateIntoContent"  Command="$Required"/>
+      <cor:String     Name="DefaultContentItemTemplate" String="me:GalleryGroup"/>
+      <cor:String     Name="DefaultGalleryLayout" String="twoRowGalleryItemPoster"/>
+
+      <!-- Item layout -->
+
+      <cor:Boolean Name="ShowScrollControl" Boolean="true"/>
+      <cor:Boolean Name="DiscardOffscreenVisuals" Boolean="true"/>
+      <cor:Boolean Name="ShowGallerySelector" Boolean="true"/>
+      <cor:Boolean Name="ShowListViewStrip" Boolean="false"/>
+
+      <Inset Name="GalleryPadding"   Inset="0, 0, 0, 0"/>
+
+      <!-- listview defaults-->
+      <!--ScrollingLayout Name="ScrollLayout" Orientation="Horizontal" Prefetch="2.0" PreferredAreaOfInterest="RepeatedItemAreaOfInterest"/>
+      <ScrollIntoViewDisposition Name="DefaultScrollDisposition" LockedPosition="0.0" LockedAlignment="0.0"/-->
+      <Inset Name="ListViewGalleryPadding" Inset="0, 40, 0, 30"/>
+      <cor:Boolean Name="ListViewShowGallerySelector" Boolean="false"/>
+      <Animation Name="ListViewMoveAnimation" Animation="animation://comm:ListViewItem.Move"/>
+      <cor:Single Name="ListViewMetadataDelayTime" Single="0.25"/>
+      <!--cor:UInt32 Name="KeyRepeatSpeed" UInt32="350"/-->
+      <!--cor:Int32 Name="ScrollInterval" Int32="700"/-->
+      <ILayout Name="ListViewFlowLayout" ILayout="global://me:ListViewDefaultLayout"/>
+      <AnchorEdge Name="ListViewJILVerticalAnchor" AnchorEdge="Parent, 1, 100"/>
+      <Size Name="ListViewItemSize" Size="462, 59"/>
+      <Size Name="GroupedListViewItemSize" Size="462, 53"/>
+      <!-- end listview defaults-->
+
+      <!-- Keyboard: EndPadding = (3 x item size) + (2 x spacing) = (366 + 4) = 370 -->
+      <shell:ScrollIntoViewDisposition Name="DefaultScrollDisposition" BeginPadding="0" EndPadding="370" EndPaddingRelativeTo="Near"/>
+
+      <!-- Mouse: Just barely enough to make sure you don't get a half an item selected.
+                 BeginPadding = 244 (from RootPadding) - 52 (AutoScroll) = 192 -->
+      <shell:ScrollIntoViewDisposition Name="MouseScrollDisposition" BeginPadding="-192" EndPadding="52" EndPaddingRelativeTo="Far"/>
+
+      <!-- Autoscroll: Just keep focus on screen, no more. -->
+      <!-- The numbers here are different because autoscroll mode uses a dynamic locking mode. -->
+      <shell:ScrollIntoViewDisposition Name="AutoScrollDisposition" BeginPadding="0" EndPadding="0" EndPaddingRelativeTo="Far"/>
+
+
+      <Animation Name="MoveAnimation" Animation="animation://me:Browse.Gallery.Item.Move"/>
+
+      <cor:Single   Name="MetadataDelayTime" Single="0.133"/>
+      <cor:UInt32   Name="KeyRepeatSpeed" UInt32="200"/>
+      <cor:Int32    Name="DelayInterval"  Int32="500"/>
+      <cor:Int32    Name="ScrollInterval" Int32="200"/>
+      <EditableText Name="KeyAxis" Value="none"/>
+
+      <AnchorEdge Name="JILVerticalAnchor" AnchorEdge="Parent, 1, 70"/>
+
+      <cor:Random Name="Random"/>
+      <shell:RepeaterHelper Name="RepeaterHelper"></shell:RepeaterHelper>
+
+      <FlowLayout Name="FlowLayout" Orientation="Horizontal" Spacing="0, 0" Repeat="WhenTooBig" RepeatGap="70, 0" MissingItemPolicy="SizeToAverage" MinimumSampleSize="3"/>
+      <ILayout Name="UnGroupedFlowLayout" ILayout="global://me:GalleryDefaultLayout"/>
+      <shell:AreaOfInterestHelper Name="AreaOfInterestHelper"/>
+    </Properties>
+
+    <Locals>
+      <Environment Name="Environment"/>
+
+      <BooleanChoice  Name="IsGrouped"/>
+      <cor:String Name="ContentItemTemplate" String="null"/>
+      <cor:String Name="GalleryLayout" String="oneRowGalleryItemPoster"/>
+
+      <ScrollingData Name="ScrollData" ScrollStep="90" BeginPadding="0" EndPadding="370" EndPaddingRelativeTo="Near"/>
+      <BooleanChoice Name="AutoScrollRegionActive"/>
+      <Command Name="ScrollUpCommand"/>
+      <Command Name="ScrollDownCommand"/>
+      <Command Name="PageUpCommand"/>
+      <Command Name="PageDownCommand"/>
+      <Size Name="AutoScrollSize" Size="52,0"/>
+
+      <!-- This helper will let us only specify different templates for grouped items. -->
+      <!--shell:RepeatHelper Name="RepeatHelper">
+                <Mappings>
+                    <shell:ContentMapping Type="shell:IBrowseGroup" ContentName="GroupItem"/>
+                </Mappings>
+            </shell:RepeatHelper-->
+
+      <!-- This helper will set FocusOrder for initial focus -->
+      <!--RepeaterFocusHelper Name="FocusOrderHelper"/-->
+
+      <AnchorEdge Name="TopStripTopEdge" Id="Parent" Percent="0" Offset="-140" />
+      <AnchorEdge Name="TopStripBottomEdge" Id="Parent" Percent="0" Offset="-40" />
+      <AnchorEdge Name="BottomStripTopEdge" Id="Parent" Percent="1" Offset="30" />
+      <AnchorEdge Name="BottomStripBottomEdge" Id="Parent" Percent="1" Offset="130" />
+
+      <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
+
+      <!-- This is used to pass all these values as a single property down into the various gallery UI objects.
+                 It keeps the declarations short and allows a much simpler edit to add a new value since the UIs
+                 in between only pass the PropertySet and don't care what's in it. -->
+      <PropertySet Name="ItemProperties">
+        <Entries>
+          <IntRangedValue Name="SelectedIndex"       IntRangedValue="[SelectedIndex]"/>
+          <IntRangedValue Name="SelectedGroup"       IntRangedValue="[SelectedGroup]"/>
+          <IntRangedValue Name="MetaDataTopShift"    IntRangedValue="[MetaDataTopShift]"/>
+          <IntRangedValue Name="GalleryContentShift" IntRangedValue="[GalleryContentShift]"/>
+          <IntRangedValue Name="MetaDataLeftShift"   IntRangedValue="[MetaDataLeftShift]"/>
+          <IntRangedValue Name="TotalCount"          IntRangedValue="[TotalCount]"/>
+          <BooleanChoice  Name="IsOneRow"            BooleanChoice="[IsOneRow]"/>
+          <EditableText   Name="TransitionState"     EditableText="[TransitionState]"/>
+          <EditableText   Name="ItemMode"            EditableText="[ItemMode]"/>
+          <EditableText   Name="FocusArea"           EditableText="[FocusArea]"/>
+          <EditableText   Name="KeyAxis"             EditableText="[KeyAxis]"/>
+          <cor:Boolean    Name="InListMaker"         Boolean="[InListMaker]"/>
+          <cor:Random     Name="Random"              Random="[Random]"/>
+        </Entries>
+      </PropertySet>
+
+      <!-- Default group details for the non-grouped case. -->
+      <PropertySet Name="GroupProperties">
+        <Entries>
+          <IntRangedValue Name="GroupIndex" Value="0"/>
+          <IntRangedValue Name="GroupCount" Value="0"/>
+        </Entries>
+      </PropertySet>
+      <TypingHandler Name="Typer" HandlerStage="Bubbled" MaxLength="4" TypingPolicy="TripleTap"/>
+      <Timer Name="JILtimer" AutoRepeat="false" Interval="1500" />
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollData]"/>
+      <!-- @ -->
+      <Default Target="[ScrollData.Repeater]" Value="[Repeater]"/>
+      <!-- @ -->
+      <Default Target="[Repeater.Source]" Value="[Model.Content]"/>
+    </Rules>
+    <Content>
+
+      <Panel Name="GalleryPanel" Padding="[GalleryPadding]">
+        <Layout>
+          <AnchorLayout SizeToHorizontalChildren="false"/>
+        </Layout>
+        <Children>
+          <wait:WaitCursorHost Name="WaitCursor" Visible="false" Margins="-224,0,0,0"/>
+          <Graphic Name="ListViewStripTop" Content="image://me:Browse.ListViewStripTop" Visible="false">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 0, -224" Top="[TopStripTopEdge]" Right="Parent, 1" Bottom="[TopStripBottomEdge]"
+                                 ContributesToHeight="false" ContributesToWidth="false" />
+            </LayoutInput>
+            <Animations>
+              <Animation Animation="animation://me:Browse.Gallery.Strip.NavigateAway"/>
+            </Animations>
+          </Graphic>
+
+          <Graphic Name="ListViewStripBottom" Content="image://me:Browse.ListViewStrip" Visible="false">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 0, -224" Top="[BottomStripTopEdge]" Right="Parent, 1" Bottom="[BottomStripBottomEdge]"
+                                 ContributesToHeight="false" ContributesToWidth="false" />
+            </LayoutInput>
+            <Animations>
+              <Animation Animation="animation://me:Browse.Gallery.Strip.NavigateAway"/>
+            </Animations>
+          </Graphic>
+
+          <!-- Scrolling content -->
+          <!-- @ the secret is margins -->
+          <Panel Name="Scroller">
+            <Layout>
+              <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
+            </Layout>
+            <Children>
+
+              <!-- @ the scroller needs focus padding? -->
+              <!--Scroller MouseInteractive="false" Name="ScrollerGrid" Orientation="Horizontal" MaximumSize="0,0" ScrollingData="[ScrollData]" Prefetch="1.0" FocusPadding="0" Margins="0,0,0,0" Navigation="FlowVertical"-->
+              <Scroller MouseInteractive="false" Name="ScrollerGrid" Navigation="ContainHorizontal,Group" MaximumSize="0,445" Orientation="Horizontal" Prefetch="1">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent,0,200" Vertical="Center"/>
+                </LayoutInput>
+                <Children>
+                  <!-- @ -->
+                  <!--Repeater MouseInteractive="false" Name="Repeater" ContentName="[Model.ContentItemTemplate]" Layout="[FlowLayout]" DiscardOffscreenVisuals="true" Navigation="PreferFocusOrder,FlowVertical"-->
+                  <Repeater MouseInteractive="false" Name="Repeater" ContentName="[Model.ContentItemTemplate]" Navigation="FlowVertical,Group" MaximumSize="0,445" DiscardOffscreenVisuals="false">
+                    <LayoutInput>
+                      <AnchorLayoutInput Vertical="Near" Horizontal="Near"/>
+                    </LayoutInput>
+                    <Layout>
+                      <FlowLayout AllowWrap="false" Orientation="Horizontal" Repeat="Always" HideOffscreenItems="false" RepeatGap="5,0" Spacing="5,0"/>
+                    </Layout>
+                  </Repeater>
+                </Children>
+              </Scroller>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+
+    </Content>
+    <Content Name="GalleryGroup">
+      <me:GalleryGroup Page="[Page]" Application="[Application]" Model="[RepeatedItem!shell:BrowseGroup]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+                      MyIndex="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" Pivot="[Model]" SelectedGroup="[SelectedGroup]" SelectedIndex="[SelectedIndex]">
+      </me:GalleryGroup>
+    </Content>
+
+  </UI>
+  
   <UI Name="Gallery">
 
     <Properties>
@@ -96,6 +323,7 @@
 
       <FlowLayout Name="GroupedFlowLayout" Orientation="Horizontal" Spacing="0, 0" Repeat="WhenTooBig" RepeatGap="70, 0" MissingItemPolicy="SizeToAverage" MinimumSampleSize="3"/>
       <ILayout Name="UnGroupedFlowLayout" ILayout="global://me:GalleryDefaultLayout"/>
+      <shell:AreaOfInterestHelper Name="AreaOfInterestHelper"/>
     </Properties>
 
     <Locals>
@@ -105,7 +333,7 @@
       <cor:String Name="ContentItemTemplate" String="null"/>
       <cor:String Name="GalleryLayout" String="oneRowGalleryItemPoster"/>
 
-      <ScrollingData Name="ScrollData" ScrollStep="90" BeginPadding="0" EndPadding="800"/>
+      <ScrollingData Name="ScrollData" ScrollStep="90" BeginPadding="0" EndPadding="370" EndPaddingRelativeTo="Near"/>
       <BooleanChoice Name="AutoScrollRegionActive"/>
       <Command Name="ScrollUpCommand"/>
       <Command Name="ScrollDownCommand"/>
@@ -163,13 +391,21 @@
     </Locals>
 
     <Rules>
+      <Binding Source="[Model.IsBusy]" Target="[WaitCursor.Visible]" />
+      <!--Binding Source="[ScrollerGrid]" Target="[RepeaterHelper.Scroller]"/-->
+      <!--Binding Source="[ScrollerGrid]" Target="[RepeaterHelper.Scroller]"/-->
       <Rule>
         <Conditions>
           <Equality Source="[Model.ContentItemTemplate]" ConditionOp="Equals" Value="GalleryGroup"/>
         </Conditions>
         <Actions>
+          <!--Invoke Target="[RepeaterHelper.SetScrollingLayout]" Panel="[Scroller]"/-->
+          <!--Invoke Target="[RepeaterHelper.SetLayoutInput]" Panel="[Repeater]"/-->
+          <!--Invoke Target="[RepeaterHelper.SetFlowLayout]" Panel="[GroupedFlowLayout]"/-->
+          <!--Invoke Target="[RepeaterHelper.BindTargetViewItem]" SourceScroller="[Scroller]" TargetScrollData="[ScrollData]"/-->
           <Set Target="[IsGrouped.Value]" Value="true"/>
           <Set Target="[FlowLayout]" Value="[GroupedFlowLayout]"/>
+          <!--Invoke Target="[Label.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous"/-->
         </Actions>
       </Rule>
 
@@ -180,6 +416,8 @@
         <Actions>
           <Set Target="[IsGrouped.Value]" Value="false"/>
           <Set Target="[FlowLayout]" Value="[UnGroupedFlowLayout]"/>
+          <!--Invoke Target="[RepeaterHelper.SetScrollingLayout]" Panel="[Scroller]"/>
+          <Invoke Target="[RepeaterHelper.SetLayoutInput]" Panel="[Repeater]"/-->
         </Actions>
       </Rule>
       
@@ -188,6 +426,7 @@
           <Equality Source="[Model.ContentItemTemplate]" ConditionOp="Equals" Value="ListViewItem"/>
           <Equality Source="[Model.ContentItemTemplate]" ConditionOp="Equals" Value="ListViewItem4x3"/>
           <Equality Source="[Model.ContentItemTemplate]" ConditionOp="Equals" Value="ListViewItemPoster"/>
+          <Equality Source="[Model.ContentItemTemplate]" ConditionOp="Equals" Value="ListViewItemGrouped"/>
         </Conditions>
         <Actions>
           <Set Target="[ShowGallerySelector]" Value="[ListViewShowGallerySelector]"/>
@@ -212,6 +451,7 @@
           <Equality Source="[Model.ContentItemTemplate]" ConditionOp="NotEquals" Value="ListViewItem"/>
           <Equality Source="[Model.ContentItemTemplate]" ConditionOp="NotEquals" Value="ListViewItem4x3"/>
           <Equality Source="[Model.ContentItemTemplate]" ConditionOp="NotEquals" Value="ListViewItemPoster"/>
+          <Equality Source="[Model.ContentItemTemplate]" ConditionOp="NotEquals" Value="ListViewItemGrouped"/>
         </Conditions>
         <Actions>
           <Set Target="[ShowGallerySelector]" Value="true"/>
@@ -479,6 +719,61 @@
         </Actions>
       </Rule>
 
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.IsMouseActive]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <DebugTrace Message="ISMOUSEACTIVE: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[Application.IsMouseActive]"/>
+            </Params>
+          </DebugTrace>
+          <Set Target="[ScrollData.BeginPadding]" Value="-192" />
+          <Set Target="[ScrollData.EndPadding]" Value="52" />
+          <Set Target="[ScrollData.EndPaddingRelativeTo]" Value="Far" />
+          <!--Set Target="[ScrollData.LockedPosition]" Value="-1" /-->
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.IsMouseActive]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <DebugTrace Message="ISMOUSEACTIVE: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[Application.IsMouseActive]"/>
+            </Params>
+          </DebugTrace>
+          <Set Target="[ScrollData.BeginPadding]" Value="0" />
+          <Set Target="[ScrollData.EndPadding]" Value="370" />
+          <Set Target="[ScrollData.EndPaddingRelativeTo]" Value="Near" />
+          <!--Set Target="[ScrollData.LockedPosition]" Value=".1" /-->
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.IsMouseActive]" Value="false"/>
+          <IsValid Source="[Page]"/>
+          <IsValid Source="[Page!shell:GalleryPage.SelectedItemCommand]"/>
+          <!--IsType Source="[Page!shell:GalleryPage.SelectedItemCommand]" Type="shell:GalleryItem"/-->
+        </Conditions>
+        <Actions>
+          <DebugTrace Message="SECONDISMOUSEACTIVE: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[Application.IsMouseActive]"/>
+            </Params>
+          </DebugTrace>
+          <!--Invoke Target="[AreaOfInterestHelper.RequestFocus]" Panel="[Page!shell:GalleryPage.SelectedItemCommand]" InvokePolicy="AsynchronousLowPri"/-->
+          <!--Invoke Target="[Page!shell:GalleryPage.SelectedItemCommand.NavigateInto]"/-->
+          <!--Invoke Target="[Repeater.NavigateIntoIndex]" index="0" /-->
+          <!--Invoke Target="[Repeater.NavigateIntoIndex]" index="[SelectedIndex.Value]" >
+            <Transformer>
+              <MathTransformer Add="1"/>
+            </Transformer>
+          </Invoke-->
+        </Actions>
+      </Rule>
       <!-- Change scroll disposition when the mouse is active. -->
       <!--Rule>
               <Conditions>
@@ -633,7 +928,7 @@
           <AnchorLayout SizeToHorizontalChildren="false"/>
         </Layout>
         <Children>
-
+          <wait:WaitCursorHost Name="WaitCursor" Visible="false" Margins="-224,0,0,0"/>
           <Graphic Name="ListViewStripTop" Content="image://me:Browse.ListViewStripTop" Visible="false">
             <LayoutInput>
               <AnchorLayoutInput Left="Parent, 0, -224" Top="[TopStripTopEdge]" Right="Parent, 1" Bottom="[TopStripBottomEdge]"
@@ -654,21 +949,21 @@
             </Animations>
           </Graphic>
 
-          <!--ctl:AutoScrollRegion ScrollData="[ScrollData]" ScrollCommand="[ScrollUpCommand]" ClickCommand="[PageUpCommand]" LayoutPosition="Left"
+          <ctl:AutoScrollRegion ScrollData="[ScrollData]" ScrollCommand="[ScrollUpCommand]" ClickCommand="[PageUpCommand]" LayoutPosition="Left"
                                           MaximumSize="[AutoScrollSize]" AutoScrollRegionActive="[AutoScrollRegionActive]"
                                           DelayInterval="[DelayInterval]" ScrollInterval="[ScrollInterval]">
-                        <LayoutInput>
-                            <AnchorLayoutInput Left="Scroller, 0, -224" ContributesToHeight="false" />
-                        </LayoutInput>
-                    </ctl:AutoScrollRegion>
+            <LayoutInput>
+              <AnchorLayoutInput Left="Scroller, 0, -224" ContributesToHeight="false" />
+            </LayoutInput>
+          </ctl:AutoScrollRegion>
 
-                    <ctl:AutoScrollRegion ScrollData="[ScrollData]" ScrollCommand="[ScrollDownCommand]" ClickCommand="[PageDownCommand]" LayoutPosition="Right"
-                                          MaximumSize="[AutoScrollSize]" AutoScrollRegionActive="[AutoScrollRegionActive]"
-                                          DelayInterval="[DelayInterval]" ScrollInterval="[ScrollInterval]">
-                        <LayoutInput>
-                            <AnchorLayoutInput Right="Parent, 1" ContributesToHeight="false"/>
-                        </LayoutInput>
-                    </ctl:AutoScrollRegion-->
+          <ctl:AutoScrollRegion ScrollData="[ScrollData]" ScrollCommand="[ScrollDownCommand]" ClickCommand="[PageDownCommand]" LayoutPosition="Right"
+                                MaximumSize="[AutoScrollSize]" AutoScrollRegionActive="[AutoScrollRegionActive]"
+                                DelayInterval="[DelayInterval]" ScrollInterval="[ScrollInterval]">
+            <LayoutInput>
+              <AnchorLayoutInput Right="Parent, 1" ContributesToHeight="false"/>
+            </LayoutInput>
+          </ctl:AutoScrollRegion>
 
           <!-- Jump in list -->
           <me:JumpControl Name="JILdisplay" Content="[Page.JILtext.Value]" Pivot="[Model]" NavigateIntoContent="[NavigateIntoContent]">
@@ -679,7 +974,7 @@
 
           <!-- Scrolling content -->
           <!-- @ the secret is margins -->
-          <Panel Name="Scroller" Layout="HorizontalFlow" Margins="-25,0,0,0">
+          <Panel Name="Scroller" Layout="HorizontalFlow" Margins="0,0,0,0">
             <LayoutInput>
               <AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
             </LayoutInput>
@@ -687,11 +982,11 @@
 
               <!-- @ the scroller needs focus padding? -->
               <!--Scroller MouseInteractive="false" Name="ScrollerGrid" Orientation="Horizontal" MaximumSize="0,0" ScrollingData="[ScrollData]" Prefetch="1.0" FocusPadding="0" Margins="0,0,0,0" Navigation="FlowVertical"-->
-              <Scroller MouseInteractive="false" Name="ScrollerGrid" Orientation="Horizontal" MaximumSize="0,0" ScrollingData="[ScrollData]" FocusPadding="0" Margins="0,0,0,0" Navigation="FlowVertical">
+              <Scroller MouseInteractive="false" Name="ScrollerGrid" Orientation="Horizontal" MaximumSize="0,0" ScrollingData="[ScrollData]" FocusPadding="0" Margins="0,0,0,0" Navigation="FlowHorizontal" Prefetch="1.5">
                 <Children>
                   <!-- @ -->
                   <!--Repeater MouseInteractive="false" Name="Repeater" ContentName="[Model.ContentItemTemplate]" Layout="[FlowLayout]" DiscardOffscreenVisuals="true" Navigation="PreferFocusOrder,FlowVertical"-->
-                  <Repeater MouseInteractive="false" Name="Repeater" ContentName="[Model.ContentItemTemplate]" Layout="[FlowLayout]" Navigation="PreferFocusOrder,FlowVertical">
+                  <Repeater MouseInteractive="false" Name="Repeater" ContentName="[Model.ContentItemTemplate]" Layout="[FlowLayout]" Navigation="RememberFocus,FlowVertical" DiscardOffscreenVisuals="false">
                     <Animations>
                       <Animation Animation="[MoveAnimation]"/>
                     </Animations>
@@ -718,67 +1013,85 @@
     </Content>
 
     <Content Name="Item">
-      <me:Switcher Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]" Source="@resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem#oneRowGalleryItemPoster"
+      <me:Switcher Page="[Page]" Application="[Application]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]" Source="@resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem#oneRowGalleryItemPoster"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
       </me:Switcher>
     </Content>
 
     <Content Name="oneRowGalleryItemPoster">
-      <me:oneRowGalleryItemPoster Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+      <me:oneRowGalleryItemPoster Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
       </me:oneRowGalleryItemPoster>
     </Content>
 
     <Content Name="GalleryGroup">
-      <me:GalleryGroup Page="[Page]" Model="[RepeatedItem!shell:BrowseGroup]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+      <me:GalleryGroup Page="[Page]" Application="[Application]" Model="[RepeatedItem!shell:BrowseGroup]" SelectionPolicy="[Model.ContentSelectionPolicy]"
                       MyIndex="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" Pivot="[Model]" SelectedGroup="[SelectedGroup]" SelectedIndex="[SelectedIndex]">
       </me:GalleryGroup>
     </Content>
+
+    <Content Name="ListViewGroup">
+      <me:ListViewGroup Page="[Page]" Application="[Application]" Model="[RepeatedItem!shell:BrowseGroup]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+                      MyIndex="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" Pivot="[Model]" SelectedGroup="[SelectedGroup]" SelectedIndex="[SelectedIndex]">
+      </me:ListViewGroup>
+    </Content>
     
     <Content Name="twoRowGalleryItemPoster">
-      <me:twoRowGalleryItemPoster Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+      <me:twoRowGalleryItemPoster Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
       </me:twoRowGalleryItemPoster>
     </Content>
 
+    <Content Name="threeRowGalleryItemPoster">
+      <me:threeRowGalleryItemPoster Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+                      Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
+      </me:threeRowGalleryItemPoster>
+    </Content>
+    
     <Content Name="fiveRowGalleryItem">
-      <me:fiveRowGalleryItem Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+      <me:fiveRowGalleryItem Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
       </me:fiveRowGalleryItem>
     </Content>
 
+    <Content Name="ListViewItemGrouped">
+      <me:ListViewItem Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]"
+                      Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" RightContentTemplate="@resx://Library/Library.Resources/V3_Controls_BrowseListViewItem#RecordedTVListViewItemRightBase">
+      </me:ListViewItem>
+    </Content>
+    
     <Content Name="ListViewItem">
-      <me:ListViewItem Page="[Page]" Model="[RepeatedItem!ICommand]" 
+      <me:ListViewItem Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" 
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
       </me:ListViewItem>
     </Content>
 
     <Content Name="ListViewItem4x3">
-      <me:ListViewItem Page="[Page]" Model="[RepeatedItem!ICommand]"
+      <me:ListViewItem Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" LeftContentTemplate="@resx://Library/Library.Resources/V3_Controls_BrowseListViewItem#RecordedTVListViewItemThumbnail">
       </me:ListViewItem>
     </Content>
 
     <Content Name="ListViewItemPoster">
-      <me:ListViewItem Page="[Page]" Model="[RepeatedItem!ICommand]"
+      <me:ListViewItem Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" LeftContentTemplate="@resx://Library/Library.Resources/V3_Controls_BrowseListViewItem#MovieListViewItemThumbnail">
       </me:ListViewItem>
     </Content>
     
     <Content Name="twoRowGalleryItemGenre">
-      <me:twoRowGenreItem Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+      <me:twoRowGenreItem Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
       </me:twoRowGenreItem>
     </Content>
 
     <Content Name="oneRowGalleryItem4x3">
-      <me:oneRowGalleryItem4x3 Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+      <me:oneRowGalleryItem4x3 Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
       </me:oneRowGalleryItem4x3>
     </Content>
 
     <Content Name="oneRowGalleryItem4x3NoDetails">
-      <me:oneRowGalleryItem4x3NoDetails Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+      <me:oneRowGalleryItem4x3NoDetails Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
       </me:oneRowGalleryItem4x3NoDetails>
     </Content>
@@ -824,6 +1137,7 @@
   <UI Name="Switcher">
     <Properties>
       <!-- @ -->
+      <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
       <shell:GalleryPage Name="Page"/>
       <Size       Name="ThumbSize"        Size="136, 191"/>
       <Image      Name="NoThumbnailImage" Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage2RowPoster"/>

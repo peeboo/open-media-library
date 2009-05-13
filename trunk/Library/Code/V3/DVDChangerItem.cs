@@ -51,7 +51,10 @@ namespace Library.Code.V3
         private void AddComplete(IAsyncResult itfAR)
         {
             DvdInfo dvd = DvdInfo.EndGetDvdInfo(itfAR);
-            this.DefaultImage = new Image(dvd.LargeCoverUrl);
+            string imgPath = dvd.LargeCoverUrl;
+            if (!string.IsNullOrEmpty(imgPath) && imgPath.IndexOf("http") != 0 && imgPath.IndexOf("file") != 0)
+                imgPath = string.Format("file://{0}", imgPath);
+            this.DefaultImage = new Image(imgPath);
             this.SimpleVideoFormat = "DVD";
             if (!string.IsNullOrEmpty(dvd.ReleaseDate))
                 this.MetadataTop = dvd.ReleaseDate;
@@ -208,7 +211,12 @@ namespace Library.Code.V3
                 this.Description = disc.VolumeLabel;
                      
             //slow load the rest
-            DvdInfo.BeginGetDvdInfo(disc.DiscId, new AsyncCallback(AddComplete), null); 
+            try
+            {
+                DvdInfo.BeginGetDvdInfo(disc.DiscId, new AsyncCallback(AddComplete), null);
+            }
+            catch { }
+
         }
 
         private DiscDataEx disc;
@@ -1032,7 +1040,16 @@ namespace Library.Code.V3
             {
                 throw requestData.Exception;
             }
-            return requestData.DvdInfo;
+            try
+            {
+                //do we have a connection?
+                return requestData.DvdInfo;
+            }
+            catch(Exception ex)
+            {
+                //no connection
+                throw new ArgumentException(ex.Message);
+            }
         }
 
         public void EnsureImageIsCached()
@@ -1304,7 +1321,7 @@ namespace Library.Code.V3
             {
                 if (string.IsNullOrEmpty(s_sBasePath))
                 {
-                    s_sBasePath = "DvdCoverCache";// DVDSettings.Settings.AltCacheLocation;
+                    //s_sBasePath = "DvdCoverCache";// DVDSettings.Settings.AltCacheLocation;
                     if (!string.IsNullOrEmpty(s_sBasePath))
                     {
                         return s_sBasePath;

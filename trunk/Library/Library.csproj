@@ -118,6 +118,13 @@
     <Compile Include="Code\TreeView.cs" />
     <Compile Include="Code\UISettings.cs" />
     <Compile Include="Code\Filters.cs" />
+    <Compile Include="Code\V3\BackgroundProcessor.cs" />
+    <Compile Include="Code\V3\Controls\LegacyHorizontalFlowLayoutHelper.cs" />
+    <Compile Include="Code\V3\FilterPivot.cs" />
+    <Compile Include="Code\V3\Settings\BackgroundSettings.cs" />
+    <Compile Include="Code\V3\Settings\GallerySettings.cs" />
+    <Compile Include="Code\V3\Settings\GeneralSettings.cs" />
+    <Compile Include="Code\V3\YearBrowseGroup.cs" />
     <Compile Include="Code\V3\ContentPage.cs" />
     <Compile Include="Code\V3\Controls\AreaOfInterestLayoutInput.cs" />
     <Compile Include="Code\V3\Controls\BrowseGroup.cs" />
@@ -127,11 +134,13 @@
     <Compile Include="Code\V3\Controls\CustomSelectionPolicy.cs" />
     <Compile Include="Code\V3\Controls\EnvironmentHelper.cs" />
     <Compile Include="Code\V3\Controls\FlowLayout.cs" />
+    <Compile Include="Code\V3\Controls\HistoryOrientedPageSessionEx.cs" />
     <Compile Include="Code\V3\Controls\IBrowsePivot.cs" />
     <Compile Include="Code\V3\Controls\IBrowseSearchList.cs" />
     <Compile Include="Code\V3\Controls\InvariantString.cs" />
     <Compile Include="Code\V3\Controls\ISelectable.cs" />
     <Compile Include="Code\V3\Controls\ISelectionPolicy.cs" />
+    <Compile Include="Code\V3\Controls\IsMouseActiveHooker.cs" />
     <Compile Include="Code\V3\Controls\IThumbnailCommand.cs" />
     <Compile Include="Code\V3\Controls\MajorMinor.cs" />
     <Compile Include="Code\V3\Controls\MarkupVisibleAttribute.cs" />
@@ -148,6 +157,8 @@
     <Compile Include="Code\V3\Controls\SlideMarkupFinder.cs" />
     <Compile Include="Code\V3\Controls\ThumbnailCommand.cs" />
     <Compile Include="Code\V3\Controls\WrappedIndexTransformer.cs" />
+    <Compile Include="Code\V3\YearPivot.cs" />
+    <Compile Include="Code\V3\SettingsManager.cs" />
     <Compile Include="Code\V3\DetailsPage.cs" />
     <Compile Include="Code\V3\DVDChangerItem.cs" />
     <Compile Include="Code\V3\GalleryItem.cs" />
@@ -155,6 +166,14 @@
     <Compile Include="Code\V3\MediaChangerManagerPage.cs" />
     <Compile Include="Code\V3\MovieItem.cs" />
     <Compile Include="Code\V3\MoviesSearchPage.cs" />
+    <Compile Include="Code\V3\Settings\ExternalPlayerSettings.cs" />
+    <Compile Include="Code\V3\Settings\ExtenderSettings.cs" />
+    <Compile Include="Code\V3\Settings\TrailersSettings.cs" />
+    <Compile Include="Code\V3\Settings\LanguageSettings.cs" />
+    <Compile Include="Code\V3\Settings\ImageMountingSettings.cs" />
+    <Compile Include="Code\V3\Settings\OptimizationSettings.cs" />
+    <Compile Include="Code\V3\Settings\FilterSettings.cs" />
+    <Compile Include="Code\V3\TitlesPivot.cs" />
     <Compile Include="Code\Views\AlphaView.cs" />
     <Compile Include="Code\Views\LabeledList.cs" />
     <Compile Include="Code\Views\MovieViews.cs" />
@@ -188,6 +207,7 @@
     <None Include="Setup\Setup.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\appleseedexmachina.jpg" />
     <Content Include="Images\appleseedexmachina1080x25.jpg" />
     <Content Include="Images\Application.png" />
     <Content Include="Images\Application2.png" />
@@ -307,6 +327,7 @@
     <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage5Row4x3.png" />
     <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage5RowSquare.png" />
     <Content Include="Markup\V3\Controls\BrowseGallery\BrowseGallery.mcml" />
+    <None Include="Markup\V3\Controls\BrowseGallery\BrowseGallery.mcml.old" />
     <Content Include="Markup\V3\Controls\BrowseGallery\Images\V3.Controls.BrowseGallery.ListViewStrip.png" />
     <Content Include="Markup\V3\Controls\BrowseGallery\Images\V3.Controls.BrowseGallery.ListViewStripTop.png" />
     <Content Include="Markup\V3\Controls\BrowseGroupedGallery.mcml" />
@@ -326,6 +347,18 @@
     <Content Include="Markup\V3\Controls\Common\Copy of Colors.mcml" />
     <Content Include="Markup\V3\Controls\Common\FontNames.mcml" />
     <Content Include="Markup\V3\Controls\Common\Fonts.mcml" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Bottom.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Bottom.Pressed.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Bottom.Reset.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Left.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Left.Pressed.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Left.Rest.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Right.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Right.Pressed.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Right.Rest.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Top.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Top.Pressed.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Top.Rest.png" />
     <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Busy.Back.png" />
     <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Busy.Front.png" />
     <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Common.Button.FirstRun.NoFocus.png" />
@@ -464,6 +497,7 @@
     <Content Include="Markup\V3\Controls\ContextMenu.mcml" />
     <Content Include="Markup\V3\Controls\Controls.mcml" />
     <None Include="Markup\V3\Controls\BrowsePivotItem.mcml.old" />
+    <None Include="Markup\V3\Controls\BrowseGroupedGallery.mcml.old" />
     <Content Include="Markup\V3\Controls\ListViewItem.mcml" />
     <Content Include="Markup\V3\Controls\ListBox.mcml" />
     <Content Include="Markup\V3\Controls\Edit.mcml" />
@@ -486,6 +520,19 @@
     <Content Include="Markup\V3\Details\DetailsPageCastCrew.mcml" />
     <Content Include="Markup\V3\Details\FanArt\FanArtDetailsPage.mcml" />
     <Content Include="Markup\V3\Details\FanArt\FanArtDetailsPageCastCrew.mcml" />
+    <Content Include="Markup\V3\Details\FanArt\Images\V3.FanArtDetails.BackSplash.png" />
+    <Content Include="Markup\V3\Loader.mcml" />
+    <Content Include="Markup\V3\Settings\BackgroundSettings.mcml" />
+    <Content Include="Markup\V3\Settings\GallerySettings.mcml" />
+    <Content Include="Markup\V3\Settings\GeneralSettings.mcml" />
+    <Content Include="Markup\V3\Settings\ExtenderSettingsImpersonation.mcml" />
+    <Content Include="Markup\V3\Settings\ExtenderSettingsTranscode.mcml" />
+    <Content Include="Markup\V3\Settings\ExtenderSettings.mcml" />
+    <Content Include="Markup\V3\Settings\TrailersSettings.mcml" />
+    <Content Include="Markup\V3\Settings\LanguageSettings.mcml" />
+    <Content Include="Markup\V3\Settings\ImageMountingSettings.mcml" />
+    <Content Include="Markup\V3\Settings\OptimizationSettings.mcml" />
+    <Content Include="Markup\V3\Settings\FilterSettings.mcml" />
     <Content Include="Markup\V3\Settings\MediaChangerManagerSettings.mcml" />
     <Content Include="Markup\V3\Details\MediaChangerManager\MediaChangerManagerPage.mcml" />
     <Content Include="Markup\V3\Details\Slide\Slide.Details.mcml" />
@@ -514,6 +561,7 @@
     <Content Include="Markup\V3\Search\MoviesSearchPage.mcml" />
     <Content Include="Markup\V3\Search\MoviesSearchPageTitle.mcml" />
     <Content Include="Markup\V3\Settings\MediaChangerManagerPage.mcml" />
+    <Content Include="Markup\V3\Settings\SettingsManager.mcml" />
     <Content Include="Markup\Views\CoverArt.mcml" />
     <Content Include="Markup\Views\CoverArtWithAlpha.mcml" />
     <Content Include="Markup\Views\ListView.mcml" />

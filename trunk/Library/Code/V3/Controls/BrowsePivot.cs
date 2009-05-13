@@ -3,12 +3,62 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.MediaCenter.UI;
 using System.Collections;
+using System.Collections.Specialized;
 
 namespace Library.Code.V3
 {
     [MarkupVisible]
     public class BrowsePivot : BaseBrowsePivot, IBrowsePivot
     {
+        private Boolean supportsItemContext = false;
+        public Boolean SupportsItemContext
+        {
+            get { return supportsItemContext; }
+            set
+            {
+                supportsItemContext = value;
+                FirePropertyChanged("SupportsItemContext");
+            }
+        }
+
+        public virtual int DoSearch(string searchString)
+        {
+            return 0;
+        }
+        public void beginLoadContent(object pivot)
+        {
+            //testing a slow load...
+            //System.Threading.Thread.Sleep(5000);
+
+            List<OMLEngine.Title> titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetAllTitles());
+            Application.DeferredInvoke(delegate
+                {
+                    foreach (OMLEngine.Title t in titles)
+                    {
+                        this.m_listContent.Add(new Library.Code.V3.MovieItem(t, this));
+                    }
+                });
+        }
+
+        public void endLoadContent(object pivot)
+        {
+            if (!IsDisposed)
+            {
+                if (this.Content.Count > 25)
+                {
+                    this.ContentItemTemplate = "twoRowGalleryItemPoster";
+                    this.DetailTemplate = BrowsePivot.StandardDetailTemplate;
+                }
+                else
+                {
+                    this.ContentItemTemplate = "oneRowGalleryItemPoster";
+                    this.DetailTemplate = BrowsePivot.ExtendedDetailTemplate;
+                }
+                this.FirePropertyChanged("Content");
+                this.IsBusy = false;
+            }
+        }
+
         // Fields
         private Choice m_choiceSort;
         //private ContentMapping[] m_contentItemMappings;
@@ -20,6 +70,17 @@ namespace Library.Code.V3
         private string m_stContentUnderlayTemplate;
         private string m_stDetailTemplate;
         private string m_stNoContentText;
+
+        private Boolean isBusy = false;
+        public Boolean IsBusy
+        {
+            get { return isBusy; }
+            set
+            {
+                isBusy = value;
+                FirePropertyChanged("IsBusy");
+            }
+        }
 
         private ContextMenuData m_contextMenu;
         public ContextMenuData ContextMenu
@@ -84,7 +145,7 @@ namespace Library.Code.V3
         //    }
         //}
 
-        public IList Content
+        public virtual IList Content
         {
             get
             {
@@ -100,6 +161,8 @@ namespace Library.Code.V3
             }
         }
 
+        public NameValueCollection SupportedContentItemTemplates = new NameValueCollection();
+
         public string ContentItemTemplate
         {
             get
@@ -111,7 +174,28 @@ namespace Library.Code.V3
                 if (this.m_stContentItemTemplate != value)
                 {
                     this.m_stContentItemTemplate = value;
+                    UpdateContext(this.m_stContentItemTemplate);
                     base.FirePropertyChanged("ContentItemTemplate");
+                }
+            }
+        }
+
+        public virtual void UpdateContext(string newTemplate)
+        {
+        }
+        private string m_stSubContentItemTemplate;
+        public string SubContentItemTemplate
+        {
+            get
+            {
+                return this.m_stSubContentItemTemplate;
+            }
+            set
+            {
+                if (this.m_stSubContentItemTemplate != value)
+                {
+                    this.m_stSubContentItemTemplate = value;
+                    base.FirePropertyChanged("SubContentItemTemplate");
                 }
             }
         }
@@ -168,7 +252,7 @@ namespace Library.Code.V3
             }
             set
             {
-                if (this.m_stNoContentText != value)
+                if (this.m_stDetailTemplate != value)
                 {
                     this.m_stDetailTemplate = value;
                     base.FirePropertyChanged("DetailTemplate");
@@ -301,10 +385,12 @@ namespace Library.Code.V3
         }
     }
 
+    public delegate int FindContentItemHandler(IBrowsePivot pivot, string strSearch);
+
     public abstract class BaseBrowsePivot : ModelItem, IBrowseSearchList
     {
         // Fields
-        //private FindContentItemHandler m_findDelegate;
+        private FindContentItemHandler m_findDelegate;
 
         // Methods
         public BaseBrowsePivot(IModelItemOwner owner)
@@ -328,10 +414,10 @@ namespace Library.Code.V3
             {
                 throw new InvalidOperationException("BaseBrowsePivot.FindContentItem requires the derived class be an IBrowsePivot.");
             }
-            //if (this.m_findDelegate != null)
-            //{
-            //    return this.m_findDelegate(pivot, strSearch);
-            //}
+            if (this.m_findDelegate != null)
+            {
+                return this.m_findDelegate(pivot, strSearch);
+            }
             return FindContentItem(pivot, strSearch);
         }
 
@@ -400,21 +486,21 @@ namespace Library.Code.V3
         }
 
         // Properties
-        //public FindContentItemHandler FindContentItemHandler
-        //{
-        //    get
-        //    {
-        //        return this.m_findDelegate;
-        //    }
-        //    set
-        //    {
-        //        if (this.m_findDelegate != value)
-        //        {
-        //            this.m_findDelegate = value;
-        //            base.FirePropertyChanged("FindContentItemHandler");
-        //        }
-        //    }
-        //}
+        public FindContentItemHandler FindContentItemHandler
+        {
+            get
+            {
+                return this.m_findDelegate;
+            }
+            set
+            {
+                if (this.m_findDelegate != value)
+                {
+                    this.m_findDelegate = value;
+                    base.FirePropertyChanged("FindContentItemHandler");
+                }
+            }
+        }
 
         public virtual bool SupportsJIL
         {

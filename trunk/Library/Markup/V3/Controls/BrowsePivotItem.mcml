@@ -59,18 +59,29 @@
     <Rules>
 
       <!-- new hack-->
+      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false"/>
+      <Rule>
+        <Conditions>
+          <Equality Source="[SelectedIndex.Value]" ConditionOp="Equals" Value="[Index.Value]"/>
+          <Equality Source="[FocusArea.Value]" ConditionOp="NotEquals" Value="Pivot"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.Enabled]" Value="true"/>
+          <Invoke Target="[AreaOfInterestHelper.SetLayoutInput]" Panel="[LabelPanel]"/>
+        </Actions>
+      </Rule>
       <Rule>
         <Conditions>
           <!--Equality Source="[SelectedIndex.Value]" ConditionOp="NotEquals" Value="[Index.Value]"/-->
           <Equality Source="[FocusArea.Value]" ConditionOp="NotEquals" Value="Pivot"/>
         </Conditions>
         <Actions>
-          <Set Target="[Input.Enabled]" Value="false"/>
-          <DebugTrace Message="PIVOTFOCUS{0}">
+          <Set Target="[Input.Enabled]" Value="true"/>
+          <!--DebugTrace Message="PIVOTFOCUS{0}">
             <Params>
               <ObjectPath ObjectPath="[Input.KeyInteractive]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
         </Actions>
       </Rule>
       <Rule>
@@ -79,11 +90,11 @@
         </Conditions>
         <Actions>
           <Set Target="[Input.Enabled]" Value="true"/>
-          <DebugTrace Message="PIVOTFOCUS{0}">
+          <!--DebugTrace Message="PIVOTFOCUS{0}">
             <Params>
               <ObjectPath ObjectPath="[Input.KeyInteractive]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
         </Actions>
       </Rule>
       <!-- end new hack-->
@@ -95,12 +106,12 @@
         </Conditions>
         <Actions>
           <!--Set Target="[Input.KeyInteractive]" Value="true"/-->
-          <DebugTrace Message="SELECTEDINDEX{0}:INDEX{1}">
+          <!--DebugTrace Message="SELECTEDINDEX{0}:INDEX{1}">
             <Params>
               <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
               <ObjectPath ObjectPath="[Index.Value]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <Set Target="[SelectedIndex.Value]" Value="[Index.Value]"/>
           <!--Set Target="[Input.KeyInteractive]" Value="false"/-->
         </Actions>
@@ -118,13 +129,13 @@
         </Conditions-->
         <Actions>
           <Set Target="[NavigationDirection.Value]" Value="subright"/>
-          <DebugTrace Message="Pivots.NavigationDirection.Value(scrollrightZ): {0} {1}:{2}">
+          <!--DebugTrace Message="Pivots.NavigationDirection.Value(scrollrightZ): {0} {1}:{2}">
             <Params>
               <ObjectPath ObjectPath="[NavigationDirection.Value]"/>
               <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
               <ObjectPath ObjectPath="[Index.Value]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <!--Invoke Target="[Label.NavigateInto]" /-->
           <!--Set Target="[NavigationDirection.Value]" Value="right"/-->
           <!--Set Target="[RightHandlerInvoked]" Value="true"/-->
@@ -145,13 +156,13 @@
         </Conditions-->
         <Actions>
           <Set Target="[NavigationDirection.Value]" Value="subleft"/>
-          <DebugTrace Message="Pivots.NavigationDirection.Value(scrollleftZ): {0} {1}:{2}">
+          <!--DebugTrace Message="Pivots.NavigationDirection.Value(scrollleftZ): {0} {1}:{2}">
             <Params>
               <ObjectPath ObjectPath="[NavigationDirection.Value]"/>
               <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
               <ObjectPath ObjectPath="[Index.Value]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <!--Invoke Target="[Label.NavigateInto]" /-->
           <!--Set Target="[NavigationDirection.Value]" Value="left"/-->
           <!--Set Target="[LeftHandlerInvoked]" Value="true"/-->
@@ -177,10 +188,10 @@
       <!--Default Target="[Input.KeyInteractive]" Value="false"/-->
       <Default Target="[Input.KeyInteractive]" Value="true"/>
       <!--new-->
-      <!--Default Target="[Input.CreateInterestOnFocus]" Value="true"/-->
+      <Default Target="[Input.CreateInterestOnFocus]" Value="true"/>
       <!--end new-->
       <Default Target="[Clicker.Command]" Value="[Command]"/>
-      <Condition Source="[SelectedIndex.Value]" SourceValue="[Index.Value]" Target="[Clicker.HandlePrimaryMouseButton]" Value="false"/>
+      <!--Condition Source="[SelectedIndex.Value]" SourceValue="[Index.Value]" Target="[Clicker.HandlePrimaryMouseButton]" Value="false"/-->
       <Default Target="[Clicker.HandlePrimaryMouseButton]" Value="true"/>
       <!--Rule>
         <Conditions>
@@ -192,16 +203,45 @@
       </Rule-->
       <Rule>
         <Conditions>
+          <Modified Source="[Clicker.Clicking]"/>
+          <Equality Source="[SelectedIndex.Value]" Value="[Index.Value]"/>
+        </Conditions>
+        <Actions>
+          <!--Invoke Target="[LabelPanel.NavigateInto]" InvokePolicy="Synchronous"/-->
+          <Invoke Target="[AreaOfInterestHelper.SetLayoutInput]" Panel="[LabelPanel]"/>
+          <!--Invoke Target="[PivotInvoked.Invoke]"/-->
+          <Set Target="[FocusArea.Value]" Value="Gallery"/>
+          <DebugTrace Message="Clicker Clicking: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
+            </Params>
+          </DebugTrace>
+          <!--Invoke Target="[AreaOfInterestHelper.SetLayoutInput]" Panel="[LabelPanel]" oNewValue="[tmpLayout]"/>
+          <Invoke Target="[AreaOfInterestHelper.SetLayoutInput]" Panel="[LabelPanel]"/-->
+        </Actions>
+      </Rule>
+      <!--Rule>
+        <Conditions>
           <Modified Source="[Command.Invoked]"/>
           <Equality Source="[SelectedIndex.Value]" Value="[Index.Value]"/>
         </Conditions>
         <Actions>
-          <Invoke Target="[PivotInvoked.Invoke]"/>
-        </Actions>
-      </Rule>
+          <Invoke Target="[LabelPanel.NavigateInto]" InvokePolicy="Synchronous"/-->
+          <!--Invoke Target="[AreaOfInterestHelper.SetLayoutInput]" Panel="[LabelPanel]"/-->
+          <!--Invoke Target="[PivotInvoked.Invoke]"/-->
+          <!--Set Target="[FocusArea.Value]" Value="Gallery"/>
+          <DebugTrace Message="Command Invoked: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
+            </Params>
+          </DebugTrace-->
+          <!--Invoke Target="[AreaOfInterestHelper.SetLayoutInput]" Panel="[LabelPanel]" oNewValue="[tmpLayout]"/>
+          <Invoke Target="[AreaOfInterestHelper.SetLayoutInput]" Panel="[LabelPanel]"/-->
+        <!--/Actions>
+      </Rule-->
       <Rule>
         <Conditions>
-          <Modified Source="[Command.Invoked]"/>
+          <Modified Source="[Clicker.Clicking]"/>
           <Equality Source="[SelectedIndex.Value]" ConditionOp="NotEquals" Value="[Index.Value]"/>
           <Equality Source="[Index.Value]" ConditionOp="GreaterThan" Value="[SelectedIndex.Value]"/>
         </Conditions>
@@ -213,7 +253,7 @@
       </Rule>
       <Rule>
         <Conditions>
-          <Modified Source="[Command.Invoked]"/>
+          <Modified Source="[Clicker.Clicking]"/>
           <Equality Source="[SelectedIndex.Value]" ConditionOp="NotEquals" Value="[Index.Value]"/>
           <Equality Source="[Index.Value]" ConditionOp="LessThan" Value="[SelectedIndex.Value]"/>
         </Conditions>
@@ -314,19 +354,19 @@
           <Invoke Target="[LabelPanel.SetLayoutInput]" idInput="[AreaOfInterest!ILayoutData.Data]" oNewValue="null"/>
         </Actions>
       </Rule-->
-      <Condition Source="[SelectedIndex.Value]" SourceValue="[Index.Value]">
+      <!--Condition Source="[SelectedIndex.Value]" SourceValue="[Index.Value]">
         <Actions>
           <Invoke Target="[AreaOfInterestHelper.SetLayoutInput]" Panel="[LabelPanel]"/>
         </Actions>
-      </Condition>
-      <Rule>
-        <Actions>
+      </Condition-->
+      <!--Rule>
+        <Actions-->
           <!--Set Target="[LabelPanel.LayoutInput]" Value="[tmpLayout]"/-->
-          <Invoke Target="[AreaOfInterestHelper.SetLayoutInput]" Panel="[LabelPanel]" oNewValue="[tmpLayout]"/>
+          <!--Invoke Target="[AreaOfInterestHelper.SetLayoutInput]" Panel="[LabelPanel]" oNewValue="[tmpLayout]"/-->
           <!--Set Target="[SelectedIndex.Value]" Value="[Index.Value]"/-->
           <!--Set Target="[Input.KeyInteractive]" Value="false" InvokePolicy="AsynchronousLowPri"/-->
-        </Actions>
-        </Rule>
+        <!--/Actions>
+        </Rule-->
       <!--new-->
       
       <!--end new-->
@@ -346,11 +386,12 @@
         <Conditions>
           <Equality Source="[SelectedIndex.Value]" Value="[Index.Value]"/>
           <Equality Source="[FocusArea.Value]" Value="Command"/>
+          <Equality Source="[TransitionState.Value]" Value="Idle"/>
         </Conditions>
         <Actions>
           <Set Target="[Label.Color]" Value="[TextColor]"/>
           <!-- todo:fix-->
-          <Set Target="[LabelBackgroundGraphicRight.Visible]" Value="true"/>
+          <Set Target="[LabelBackgroundGraphicRight.Visible]" Value="false"/>
         </Actions>
       </Rule>
 
@@ -358,10 +399,11 @@
         <Conditions>
           <Equality Source="[SelectedIndex.Value]" Value="[Index.Value]"/>
           <Equality Source="[FocusArea.Value]" Value="Gallery"/>
+          <Equality Source="[TransitionState.Value]" Value="Idle"/>
         </Conditions>
         <Actions>
           <!-- todo:fix-->
-          <Set Target="[LabelBackgroundGraphicRight.Visible]" Value="true"/>
+          <Set Target="[LabelBackgroundGraphicRight.Visible]" Value="false"/>
           <Set Target="[LabelBackgroundGraphicRightImg.Content]" Value="[LabelBackgroundRightDormant]"/>
         </Actions>
       </Rule>
@@ -370,10 +412,11 @@
         <Conditions>
           <Equality Source="[SelectedIndex.Value]" Value="[Index.Value]"/>
           <Equality Source="[FocusArea.Value]" Value="PIP"/>
+          <Equality Source="[TransitionState.Value]" Value="Idle"/>
         </Conditions>
         <Actions>
           <!-- todo:fix-->
-          <Set Target="[LabelBackgroundGraphicRight.Visible]" Value="true"/>
+          <Set Target="[LabelBackgroundGraphicRight.Visible]" Value="false"/>
           <Set Target="[LabelBackgroundGraphicRightImg.Content]" Value="[LabelBackgroundRight]"/>
         </Actions>
       </Rule>
@@ -384,12 +427,12 @@
           <Equality Source="[TransitionState.Value]" Value="NavigatingAwayBackward"/>
         </Conditions>
         <Actions>
-          <DebugTrace Message="navforward-backward: {0}">
+          <!--DebugTrace Message="navforward-backward: {0}">
             <Params>
               <ObjectPath ObjectPath="[SelectedIndex.Value]"/>
             </Params>
-          </DebugTrace>
-          <Set Target="[LabelBackgroundGraphicRight.Visible]" Value="true"/>
+          </DebugTrace-->
+          <Set Target="[LabelBackgroundGraphicRight.Visible]" Value="false"/>
         </Actions>
       </Rule>
     </Rules>

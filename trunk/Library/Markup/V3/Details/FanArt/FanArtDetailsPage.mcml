@@ -1,17 +1,18 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
-	  xmlns:z="assembly://TestHarness/TestHarness"
+	  xmlns:shl="assembly://Library/Library.Code.V3"
+      xmlns:omlShell ="assembly://Library/Library"
 	  xmlns:sys="assembly://mscorlib/System"
-	  xmlns:styles="resx://TestHarness/TestHarness.Resources/Styles"
-	  xmlns:core="resx://TestHarness/TestHarness.Resources/CoreControls"
-    xmlns:pip="resx://TestHarness/TestHarness.Resources/GalleryPage"
-      xmlns:scr="resx://TestHarness/TestHarness.Resources/Scroller"
+	  xmlns:ctl="resx://Library/Library.Resources/V3_Controls"
+	  xmlns:core="resx://Library/Library.Resources/V3_Globals"
+    xmlns:pip="resx://Library/Library.Resources/V3_GalleryPage"
+      xmlns:scr="resx://Library/Library.Resources/V3_Controls_ScrollControl"
 	  xmlns:me="Me">
 
   <!-- A details page -->
   <UI Name="FanArtDetailsPage">
     <Properties>
-      <z:DetailsPage Name="Page" DetailsPage="$Required"/>
-      <z:Application Name="Application" Application="$Required"/>
+      <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
+      <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
     </Properties>
     <Locals>
       <sys:Boolean Name="Initialized" Boolean="false"/>
@@ -91,7 +92,7 @@
           <Panel Name="PIPFocusBackground" MaximumSize="1366, 0" Visible="false">
             <Children>
 
-              <Graphic Alpha=".75" Content="resx://TestHarness/TestHarness.Resources/NOWPLAYINGPIP_BACKGROUNDMASK2" Layout="Fill">
+              <Graphic Alpha=".75" Content="resx://Library/Library.Resources/V3_Controls_Common_NowPlayingPIP_BackgroundMask" Layout="Fill">
                 <Animations>
                   <!-- Standard fade out -->
                   <Animation Type="Hide">
@@ -153,7 +154,7 @@
           <Panel Name="FanArtBackgroundOverlay" MaximumSize="1366, 0" Visible="true">
             <Children>
 
-              <Graphic Alpha="1" Content="file://m:\genres\titlebacksplash.png" Layout="Fill">
+              <Graphic Alpha="1" Content="resx://Library/Library.Resources/V3_FanArtDetails_BackSplash" Layout="Fill">
                 <Animations>
                   <!-- Standard fade out -->
                   <Animation Type="Hide">
@@ -210,7 +211,7 @@
   <!-- The primary display area of a details page -->
   <UI Name="DetailsPane">
     <Properties>
-      <z:DetailsPage Name="Page" DetailsPage="$Required"/>
+      <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
       <Image Name="MovieDefaultImage" Image="resx://Library/Library.Resources/V3_Controls_Movie_Icon_Default"/>
     </Properties>
     <Rules>
@@ -276,7 +277,7 @@
             <Children>
               <Panel Layout="Form" Padding="0,0,0,0">
                 <Children>
-                  <Panel Name="ButtonsHolder" DebugOutline="Red" MinimumSize="280,500" MaximumSize="280,500" Margins="0,0,0,0" Layout="Form">
+                  <!--Panel Name="ButtonsHolder" DebugOutline="Red" MinimumSize="280,500" MaximumSize="280,500" Margins="0,0,0,0" Layout="Form">
                     <LayoutInput>
                       <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
                     </LayoutInput>
@@ -292,15 +293,12 @@
                         </Content>
                       </Repeater>
                     </Children>
-                  </Panel>
-                  <!--Panel Name="Picture" MaximumSize ="400,578" MinimumSize ="185,265" Margins="45,0,0,0">
-                    <LayoutInput>
-                      <FormLayoutInput Left="ButtonsHolder,1" Top="Parent,0"/>
-                    </LayoutInput>
-                    <Children>
-                      <Graphic Name="CoverGraphic" Content="[Page.Background]" ErrorImage="[MovieDefaultImage]" />
-                    </Children>
                   </Panel-->
+                  <me:ButtonsHolder Page="[Page]" Name="ButtonsHolder" MinimumSize="240,500" Margins="0,80,0,0" Layout="VerticalFlow">
+                    <LayoutInput>
+                      <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
+                    </LayoutInput>
+                  </me:ButtonsHolder>
                   <Panel Margins="20,0,0,0" DebugOutline="Green" Layout="Form" Padding="0,0,0,0">
                     <LayoutInput>
                       <FormLayoutInput Left="ButtonsHolder,1" Top="Parent, 0" Vertical="Near" Horizontal="Fill"/>
@@ -370,6 +368,51 @@
     </Content>
 
   </UI>
+
+  <UI Name="ButtonsHolder">
+    <Properties>
+      <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
+    </Properties>
+    <Locals>
+      <Color Name="ButtonNoFocusColor" Color="color://core:OffWhite"/>
+      <EditableText Name="SubFocusArea" Value="none"/>
+    </Locals>
+    <Rules>
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
+        <Actions>
+          <Set Target="[SubFocusArea.Value]" Value="NoFocusColorInactive" ExclusiveApply="true"/>
+          <DebugTrace Message="Input.DeepKeyFocus: {0};{1}">
+            <Params>
+              <ObjectPath ObjectPath="[Input.DeepKeyFocus]"/>
+              <ObjectPath ObjectPath="[SubFocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Condition>
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[SubFocusArea.Value]" Value="NoFocusColorActive" ExclusiveApply="true"/>
+          <DebugTrace Message="Input.DeepKeyFocus: {0};{1}">
+            <Params>
+              <ObjectPath ObjectPath="[Input.DeepKeyFocus]"/>
+              <ObjectPath ObjectPath="[SubFocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Condition>
+    </Rules>
+    <Content>
+      <Repeater Name="Buttons" Source="[Page.Commands]" Navigation="RememberFocus,FlowVertical" Layout="VerticalFlow" Margins="0,0,0,0">
+        <LayoutInput>
+          <AnchorLayoutInput Top="Parent,0" Horizontal="Near"/>
+        </LayoutInput>
+        <Content>
+          <ctl:Button Model="[RepeatedItem!Command]" SubFocusArea="[SubFocusArea]" NoFocusColor="[ButtonNoFocusColor]"/>
+        </Content>
+      </Repeater>
+    </Content>
+  </UI>
+  
   <Animation Name="Browse.Gallery.Show.Focus" Type="Idle" CenterPointPercent="0.5, 0.5, 0.0">
     <Keyframes>
       <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>

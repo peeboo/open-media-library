@@ -105,7 +105,7 @@
 
             </Children>
           </Panel>
-          <Clip Name="ContentPanel" FocusOrder="0" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha=".9"
+          <Clip Name="ContentPanel" FocusOrder="0" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="1"
           CenterPointPercent="0.5,0.5,0.5">
             <!--Scale="0.95,0.95,0.95"-->
             <Layout>
@@ -197,8 +197,35 @@
       <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
       <Image Name="MovieDefaultImage" Image="resx://Library/Library.Resources/V3_Controls_Movie_Icon_Default"/>
     </Properties>
+    <Locals>
+      <Inset Name="Margins43" Inset="20,40,5,0"/>
+      <Inset Name="Margins169" Inset="176,40,205,0"/>
+      <Inset Name="ContentMargins43" Inset="55,85,25,0"/>
+      <Inset Name="ContentMargins169" Inset="205,85,205,0"/>
+      <Environment Name="Environment" />
+    </Locals>
     <Rules>
-      <Condition Source="[Page.Background]" SourceValue="null">
+      <Rule>
+        <Conditions>
+          <Equality Source="[Environment.IsWidescreen]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[MainPanel.Margins]" Value="[Margins169]" />
+          <Set Target="[ContentPanel.Margins]" Value="[ContentMargins169]" />
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Environment.IsWidescreen]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[MainPanel.Margins]" Value="[Margins43]" />
+          <Set Target="[ContentPanel.Margins]" Value="[ContentMargins43]" />
+        </Actions>
+      </Rule>
+
+    <Condition Source="[Page.Background]" SourceValue="null">
         <Actions>
           <Set Target="[CoverGraphic.Content]" Value="[MovieDefaultImage]"/>
         </Actions>
@@ -230,18 +257,18 @@
           </Animation>
         </Animations>
         <Children>
-          <Panel Margins="176,34,205,0">
+          <Panel Name="MainPanel" Margins="176,34,205,0">
             <Children>
               <Clip FadeSize="25" MaximumSize="500,70" NearOffset="-40" Orientation="Vertical">
                 <Children>
                   <!--Text Content="movie details" Color="203,255,255,255" Font="Segoe Media Center Light,28" Alpha=".75" CenterPointPercent="1,0,1"/-->
-                  <Text Content="movie details" Color="102, 151, 217, 255" Font="Segoe Media Center Light,28" Alpha=".92" CenterPointPercent="1,0,1"/>
+                  <Text Content="movie details" Color="102, 151, 217, 255" Font="Segoe Media Center Light,29" Alpha=".92" CenterPointPercent="1,0,1"/>
                 </Children>
               </Clip>
             </Children>
           </Panel>
           <!-- main layout panel -->
-          <Panel Margins="205,85,205,0">
+          <Panel Name="ContentPanel" Margins="205,85,205,0">
             <Layout>
               <FlowLayout Orientation="Horizontal"/>
             </Layout>

@@ -810,6 +810,13 @@
       <PositionKeyframe Time="0.4" RelativeTo="Final"/>
     </Keyframes>
   </Animation>
+  <Animation Name="Browse.Gallery.Item.Thumb.Move.GainFocus.Mouse" Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" RelativeTo="Current"/>
+      <PositionKeyframe Time="0.02" RelativeTo="Current" Interpolation="Log, 8"/>
+      <PositionKeyframe Time="0.04" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
   <Animation Name="Browse.Gallery.Item.Thumb.Move.LoseFocus" Type="Move">
     <Keyframes>
       <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
@@ -835,6 +842,12 @@
       <ScaleKeyframe Time="0.4" RelativeTo="Final"/>
     </Keyframes>
   </Animation>
+  <Animation Name="Browse.Gallery.Item.Thumb.Scale.GainFocus.Mouse" Type="Scale">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current"/>
+      <ScaleKeyframe Time="0.01" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
   <Animation Name="Browse.Gallery.Item.Thumb.Scale.LoseFocus" Type="Scale" CenterPointPercent="0.5, 0.5, 0.0">
     <Keyframes>
       <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
@@ -852,6 +865,13 @@
       <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
       <AlphaKeyframe Time="0.2" RelativeTo="Current" Interpolation="Log, 8"/>
       <AlphaKeyframe Time="0.4" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Gallery.Item.Thumb.Alpha.GainFocus.Mouse" Type="Alpha">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.02" RelativeTo="Current" Interpolation="Log, 8"/>
+      <AlphaKeyframe Time="0.04" RelativeTo="Final"/>
     </Keyframes>
   </Animation>
   <Animation Name="Browse.Gallery.Item.Thumb.Alpha.LoseFocus" Type="Alpha">

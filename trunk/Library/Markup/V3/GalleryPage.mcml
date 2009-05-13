@@ -59,7 +59,7 @@
       <Binding Target="[SlideMenu.Visible]" Source="[SlideMenuVisible]"/>
       <Binding Target="[Content.FocusArea]" Source="[FocusArea]"/>
 
-      <Changed Source="[Application.PrimaryBackgroundImage]">
+      <!--Changed Source="[Application.PrimaryBackgroundImage]">
         <Actions>
           <DebugTrace Message="Application.PrimaryBackgroundImage: {0}">
             <Params>
@@ -67,9 +67,9 @@
             </Params>
           </DebugTrace>
         </Actions>
-      </Changed>
-      
-      <Changed Source="[FocusArea.Value]">
+      </Changed-->
+
+      <!--Changed Source="[FocusArea.Value]">
         <Actions>
           <DebugTrace Message="FocusArea.Value: {0}">
             <Params>
@@ -77,7 +77,7 @@
             </Params>
           </DebugTrace>
         </Actions>
-      </Changed>
+      </Changed-->
       <Rule ConditionLogicalOp="And">
         <Conditions>
           <Modified Source="[Application.MoreInfo]"/>
@@ -85,6 +85,7 @@
           <Equality Source="[ItemContextMenuVisible]" Value="false" />
           <Equality Source="[SlideMenuVisible]" Value="false" />
           <Equality Source="[FocusArea.Value]" Value="Gallery"/>
+          <Equality Source="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.SupportsItemContext]" Value="true"/>
         </Conditions>
         <Actions>
           <Set Target="[ItemContextMenuVisible]" Value="true"/>
@@ -92,19 +93,34 @@
           <Invoke Target="[ItemContextMenu.NavigateInto]" />
         </Actions>
       </Rule>
-        <Rule ConditionLogicalOp="And">
-          <Conditions>
-            <Modified Source="[Application.MoreInfo]"/>
-            <Equality Source="[ContextMenuVisible]" Value="false" />
-            <Equality Source="[ItemContextMenuVisible]" Value="false" />
-            <Equality Source="[SlideMenuVisible]" Value="false" />
-            <Equality Source="[FocusArea.Value]" ConditionOp="NotEquals" Value="Gallery"/>
-          </Conditions>
-          <Actions>
-            <Set Target="[ContextMenuVisible]" Value="true"/>
-            <Set Target="[FocusArea.Value]" Value="Context"/>
-            <Invoke Target="[ContextMenu.NavigateInto]" />
-          </Actions>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Modified Source="[Application.MoreInfo]"/>
+          <Equality Source="[ContextMenuVisible]" Value="false" />
+          <Equality Source="[ItemContextMenuVisible]" Value="false" />
+          <Equality Source="[SlideMenuVisible]" Value="false" />
+          <Equality Source="[FocusArea.Value]" ConditionOp="Equals" Value="Gallery"/>
+          <Equality Source="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.SupportsItemContext]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ContextMenuVisible]" Value="true"/>
+          <Set Target="[FocusArea.Value]" Value="Context"/>
+          <Invoke Target="[ContextMenu.NavigateInto]" />
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Modified Source="[Application.MoreInfo]"/>
+          <Equality Source="[ContextMenuVisible]" Value="false" />
+          <Equality Source="[ItemContextMenuVisible]" Value="false" />
+          <Equality Source="[SlideMenuVisible]" Value="false" />
+          <Equality Source="[FocusArea.Value]" ConditionOp="NotEquals" Value="Gallery"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ContextMenuVisible]" Value="true"/>
+          <Set Target="[FocusArea.Value]" Value="Context"/>
+          <Invoke Target="[ContextMenu.NavigateInto]" />
+        </Actions>
       </Rule>
       <Rule ConditionLogicalOp="And">
         <Conditions>
@@ -198,15 +214,17 @@
           <Modified Source="[Page!shell:GalleryPage.SelectedItemCommand]"/>
         </Conditions>
         <Actions>
-          <DebugTrace Message="ItemContextMenu.Model: {0}">
+          <!--DebugTrace Message="ItemContextMenu.Model: {0}">
             <Params>
               <ObjectPath ObjectPath="[Page!shell:GalleryPage.SelectedItemCommand.Description]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <Set Target="[ItemContextMenu.Model]" Value="[Page!shell:GalleryPage.SelectedItemCommand]"/>
         </Actions>
       </Rule>
       <!--Binding Target="[ContextMenu.Model]" Source="[Page!shell:GalleryPage.SelectedItemCommand]"/-->
+      <Binding Target="[ContextMenu.MenuData]" Source="[Page!shell:GalleryPage.ContextMenu]"/>
+      <Binding Target="[ItemContextMenu.MenuData]" Source="[Page!shell:GalleryPage.ContextMenu]"/>
     </Rules>
     <Content>
       <Panel>
@@ -285,7 +303,7 @@
       </Rule>
 
       <Binding Target="[NavigationArea.NavigationDirection]" Source="[NavigationDirection]"/>
-      <Changed Source="[NavigationDirection.Value]">
+      <!--Changed Source="[NavigationDirection.Value]">
         <Actions>
           <DebugTrace Message="NavigationDirection.Value: {0}">
             <Params>
@@ -293,7 +311,7 @@
             </Params>
           </DebugTrace>
         </Actions>
-      </Changed>
+      </Changed-->
       
       <!--Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
         <Actions>
@@ -331,7 +349,7 @@
           <Invoke Target="[TransitionTimer.Start]" InvokePolicy="AsynchronousLowPri"/>
         </Actions>
       </Rule>
-      <Rule>
+      <!--Rule>
         <Conditions>
           <Equality Source="[PageState.TransitionState]" Value="NavigatingToBackward"/>
         </Conditions>
@@ -341,6 +359,29 @@
           <Set Target="[Everything.Visible]" Value="true" InvokePolicy="AsynchronousLowPri"/>
           <Set Target="[TransitionState.Value]" Value="NavigatingToBackward"/>
           <Set Target="[TransitionTimer.Interval]" Value="0"/>
+          <Invoke Target="[TransitionTimer.Start]" InvokePolicy="AsynchronousLowPri"/>
+        </Actions>
+      </Rule-->
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[PageState.TransitionState]" Value="NavigatingToBackward"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Page.StartApplicationIdle]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Page.ApplicationIdle]" InitialEvaluate="true"/>
+          <Equality Source="[Page.ApplicationIdle]" ConditionOp="ChangedTo" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="none"/>
+          <Set Target="[ItemMode.Value]" Value="none"/>
+          <Set Target="[Everything.Visible]" Value="true" InvokePolicy="AsynchronousLowPri"/>
+          <Set Target="[TransitionState.Value]" Value="NavigatingToBackward"/>
+          <Set Target="[TransitionTimer.Interval]" Value="60"/>
           <Invoke Target="[TransitionTimer.Start]" InvokePolicy="AsynchronousLowPri"/>
         </Actions>
       </Rule>
@@ -587,7 +628,7 @@
       <Panel MaximumSize="[NavSize]" MinimumSize="[NavSize]" Navigation="ContainHorizontal">
         <Children>
           <!-- changed padding from 40 to 37-this is probably a hack-->
-          <Panel Name="NavAreaPanel" Margins="0, 37, 0, 0" Scale="1.0, 1.0, 1.0" Alpha="1.0">
+          <Panel Name="NavAreaPanel" Margins="0, 40, 0, 0" Scale="1.0, 1.0, 1.0" Alpha="1.0">
             <Layout>
               <FlowLayout Orientation="Vertical"/>
             </Layout>
@@ -764,9 +805,21 @@
         </Actions>
       </Condition>
       <Default Target="[TitleShadow.Content]" Value="image://me:Browse.TitleShadow"/>
+      
+      <!-- Select the appropriate animations based on the method of control -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.IsMouseActive]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Selector.AttachAnimation]" animation="animation://me:Browse.Gallery.Selector.Hide.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Selector.AttachAnimation]" animation="animation://me:Browse.Gallery.Selector.Move.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
       <Rule ConditionLogicalOp="Or">
         <Conditions>
           <Equality Source="[TransitionState.Value]" Value="NavigatingToForward"/>
+          <Equality Source="[Application.IsMouseActive]" Value="false"/>
         </Conditions>
         <Actions>
           <Invoke Target="[Selector.AttachAnimation]" animation="animation://me:Browse.Gallery.Selector.Hide.Key.Up" InvokePolicy="Synchronous" ExclusiveApply="false"/>
@@ -823,11 +876,11 @@
       <Changed Source="[MetaDataTopShift.Value]">
         <Actions>
           <Set Target="[DetailsMetadataLayoutInput.Top.Offset]" Value="[MetaDataTopShift.Value]" ExclusiveApply="false"/>
-          <DebugTrace Message="MetaDataTopShift.Value: {0}">
+          <!--DebugTrace Message="MetaDataTopShift.Value: {0}">
             <Params>
               <ObjectPath ObjectPath="[MetaDataTopShift.Value]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
         </Actions>
       </Changed>
 
@@ -973,11 +1026,11 @@
           <Set Target="[SelectedIndex.Value]" Value="0"/>
           <Invoke Target="[Content.ForceRefresh]"/>
           <Invoke Target="[Details.ForceRefresh]"/>
-          <DebugTrace Message="NEEDSDETAILSREFRESH2: {0}">
+          <!--DebugTrace Message="NEEDSDETAILSREFRESH2: {0}">
             <Params>
               <ObjectPath ObjectPath="[Model.Pivots.Chosen!shell:IBrowsePivot.DetailTemplate]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
         </Actions>
       </Rule>
 
@@ -998,11 +1051,11 @@
           <Set Target="[Details.SelectionPolicy]" Value="[Model.Pivots.Chosen!shell:IBrowsePivot.ContentSelectionPolicy]"/>
           <Set Target="[Details.DetailTemplate]" Value="[Model.Pivots.Chosen!shell:IBrowsePivot.DetailTemplate]"/>
           <Invoke Target="[Details.ForceRefresh]"/>
-          <DebugTrace Message="NEEDSDETAILSREFRESH: {0}">
+          <!--DebugTrace Message="NEEDSDETAILSREFRESH: {0}">
             <Params>
               <ObjectPath ObjectPath="[Model.Pivots.Chosen!shell:IBrowsePivot.DetailTemplate]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
         </Actions>
       </Condition>
 
@@ -1165,7 +1218,7 @@
 
     <Content>
       <!--changed padding from 10 to -13 this is probably a hack-->
-      <Panel Navigation="ContainHorizontal" Padding="0,-13,0,0">
+      <Panel Navigation="ContainHorizontal" Padding="0,0,0,0">
         <!--@padding was added-->
         <Layout>
           <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
@@ -1205,8 +1258,7 @@
 
           <!--Clip Name="ContentPanel" Margins="[ContentPanelMargins]" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="0.9"
   CenterPointPercent="0.5,0.5,0.5" Scale="0.95,0.95,0.95"-->
-          <Clip Name="ContentPanel" Margins="[ContentPanelMargins]" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="1"
-  CenterPointPercent="0.5,0.5,0.5" Scale="0.95,0.95,0.95">
+          <Clip Name="ContentPanel" Margins="[ContentPanelMargins]" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="1"><!--scale needs to be removed-->
             <Layout>
               <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="true"/>
             </Layout>
@@ -1276,7 +1328,7 @@
 
                   <!-- Content -->
                   <me:Gallery Name="Content" Page="[Page]" Application="[Application]" Model="[Model.Pivots.Chosen!shell:IBrowsePivot]" TransitionState="[TransitionState]"
-                              FocusArea="[FocusArea]" Margins="0, 0, 0, 15" MinimumSize="[GallerySize]" MaximumSize="[GallerySize]" MetadataDelay="[KeyDelay]"
+                              FocusArea="[FocusArea]" Margins="0, 0, 0, 0" MinimumSize="[GallerySize]" MaximumSize="[GallerySize]" MetadataDelay="[KeyDelay]"
                               MetaDataTopShift="[MetaDataTopShift]" ItemMode="[ItemMode]" IsListView="[IsListView]" IsOneRow="[IsOneRow]"
                               InListMaker="[InListMaker]" GalleryContentShift="[GalleryContentShift]" MetaDataLeftShift="[MetaDataLeftShift]"
                               SelectedIndex="[SelectedIndex]" SelectedGroup="[SelectedGroup]" TotalCount="[TotalCount]"
@@ -1435,11 +1487,11 @@
         </Conditions>
         <Actions>
           <Set Target="[Details.Source]" Value="[Model.Pivots.Chosen!shell:IBrowsePivot.DetailTemplate]"/>
-          <DebugTrace Message="Details.Source: {0}">
+          <!--DebugTrace Message="Details.Source: {0}">
             <Params>
               <ObjectPath ObjectPath="[Model.Pivots.Chosen!shell:IBrowsePivot.DetailTemplate]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
         </Actions>
       </Rule>
       <!--Binding Source="[DetailTemplate]" Target="[Details.Source]"/-->

@@ -11,7 +11,7 @@ namespace Library
     public class MyAddIn : IAddInModule, IAddInEntryPoint
     {
         private Impersonator imp;
-        private static HistoryOrientedPageSession s_session;
+        private static Library.Code.V3.HistoryOrientedPageSessionEx s_session;
         OMLApplication app;
         string _id;
 
@@ -41,16 +41,20 @@ namespace Library
             OMLApplication.DebugLine("[Launch] Uninitialize");
         }
 
-        public void Launch(AddInHost host)
+        private void GoToLoader()
+        {
+            s_session.GoToPageWithoutHistory("resx://Library/Library.Resources/V3_Loader", new Dictionary<string, object>());
+        }
+
+        private void BeginStart(object host)
         {
             OMLApplication.DebugLine("[Launch] Launch called");
-            DeleteOldRegistryKey(host);
-            s_session = new HistoryOrientedPageSession();
+            DeleteOldRegistryKey((AddInHost)host);
 
             if (app == null)
             {
                 OMLApplication.DebugLine("[Launch] No Application found, creating...");
-                app = new OMLApplication(s_session, host);
+                app = new OMLApplication(s_session, (AddInHost)host);
             }
 
             try
@@ -67,6 +71,13 @@ namespace Library
             }
 
             app.Startup(_id);
+        }
+
+        public void Launch(AddInHost host)
+        {
+            s_session = new Library.Code.V3.HistoryOrientedPageSessionEx();
+            GoToLoader();
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.BeginStart), (object)host, new TimeSpan(1));
         }
 
         private void DeleteOldRegistryKey(AddInHost host)
