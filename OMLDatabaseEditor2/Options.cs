@@ -35,7 +35,7 @@ namespace OMLDatabaseEditor
 
         private void Options_Load(object sender, EventArgs e)
         {
-            //int genreCount = 0;
+            int genreCount = 0;
             this.lbcSkins.DataSource = ((MainEditor)this.Owner).DXSkins;
             String skin = OMLEngine.Settings.OMLSettings.DBEditorSkin;
             int idx = this.lbcSkins.FindItem(skin);
@@ -67,27 +67,28 @@ namespace OMLDatabaseEditor
 
             this.ceUseGenreList.Checked = OMLSettings.UseGenreList;
             GenreList = new List<String>();
-            if (SettingsManager.GetAllGenres.Count() > 0)
+            if (Properties.Settings.Default.gsValidGenres != null
+            && Properties.Settings.Default.gsValidGenres.Count > 0)
             {
-                GenreList.AddRange(SettingsManager.GetAllGenres);
+                genreCount = Properties.Settings.Default.gsValidGenres.Count;
+                String[] arrGenre = new String[genreCount];
+                Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
+                GenreList.AddRange(arrGenre);
             }
             else
             {
                 if (XtraMessageBox.Show("No allowable genres have been defined. Would you like to load them from your current movie collection?", "No Genres", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    //Properties.Settings.Default.gsValidGenres = new StringCollection();
+                    Properties.Settings.Default.gsValidGenres = new StringCollection();
 
                     IEnumerable<FilteredCollection> genres = TitleCollectionManager.GetAllGenres(null);
-                    //string[] genreNames = new string[genres.Count()];
+                    string[] genreNames = new string[genres.Count()];
 
-                    //int index = 0;
+                    int index = 0;
                     foreach (FilteredCollection genre in genres)
-                    {
-                        GenreList.Add(genre.Name);
+                        genreNames[index++] = genre.Name;
 
-                        //genreNames[index++] = genre.Name;
-                    }
-                    //Properties.Settings.Default.gsValidGenres.AddRange(genreNames);
+                    Properties.Settings.Default.gsValidGenres.AddRange(genreNames);
                 }
             }
             // I disabled this line because gsValidGenres is not just empty, its undef
@@ -157,16 +158,16 @@ namespace OMLDatabaseEditor
                 }
                 if (GenreDirty)
                 {
-                    List<string> allgenres = SettingsManager.GetAllGenres;
-                    foreach(string genre in GenreList)
+                    bDirty = true;
+                    if (Properties.Settings.Default.gsValidGenres == null)
                     {
-                        if (!allgenres.Contains(genre)) SettingsManager.AddGenreMetaData(genre);
+                        Properties.Settings.Default.gsValidGenres = new StringCollection();
                     }
-                    foreach(string genre in allgenres)
+                    else
                     {
-                        if (!GenreList.Contains(genre)) SettingsManager.RemoveGenreMetaData(genre);
+                        Properties.Settings.Default.gsValidGenres.Clear();
                     }
-                    TitleCollectionManager.SaveTitleUpdates();
+                    Properties.Settings.Default.gsValidGenres.AddRange(GenreList.ToArray());
                 }
                 if (TagsDirty)
                 {
@@ -308,6 +309,7 @@ namespace OMLDatabaseEditor
                     }
                     GenreList.Remove(genre);
                     GenreDirty = true;
+                    //Properties.Settings.Default.gsValidGenres.Remove(genre);
                 }
                 lbGenres.Refresh();
             }
@@ -350,7 +352,6 @@ namespace OMLDatabaseEditor
         {
             // TODO : Create SQL Version
             /*IEnumerable<KeyValuePair<string, string>> matches = MainEditor._titleCollection.GenreMap.Where(kvp => kvp.Value == (string)e.Item);
-             
             if (matches.Count() > 0)
             {
                 AppearanceObject appearance = (AppearanceObject)e.Appearance.Clone();

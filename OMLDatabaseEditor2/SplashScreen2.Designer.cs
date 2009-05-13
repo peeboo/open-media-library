@@ -28,6 +28,7 @@ namespace OMLDatabaseEditor
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SplashScreen2));
             this.progressBarControl1 = new DevExpress.XtraEditors.ProgressBarControl();
             this.labelControlStatus = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).BeginInit();
@@ -35,7 +36,7 @@ namespace OMLDatabaseEditor
             // 
             // progressBarControl1
             // 
-            this.progressBarControl1.Location = new System.Drawing.Point(12, 345);
+            this.progressBarControl1.Location = new System.Drawing.Point(12, 349);
             this.progressBarControl1.Name = "progressBarControl1";
             this.progressBarControl1.Size = new System.Drawing.Size(417, 18);
             this.progressBarControl1.TabIndex = 0;
@@ -48,7 +49,7 @@ namespace OMLDatabaseEditor
             this.labelControlStatus.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.labelControlStatus.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this.labelControlStatus.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
-            this.labelControlStatus.Location = new System.Drawing.Point(12, 324);
+            this.labelControlStatus.Location = new System.Drawing.Point(12, 328);
             this.labelControlStatus.Name = "labelControlStatus";
             this.labelControlStatus.Size = new System.Drawing.Size(417, 18);
             this.labelControlStatus.TabIndex = 1;
@@ -59,7 +60,7 @@ namespace OMLDatabaseEditor
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayoutStore = System.Windows.Forms.ImageLayout.Stretch;
-            this.BackgroundImageStore = global::OMLDatabaseEditor2.Properties.Resources.Application;
+            this.BackgroundImageStore = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImageStore")));
             this.ClientSize = new System.Drawing.Size(441, 375);
             this.ControlBox = false;
             this.Controls.Add(this.labelControlStatus);

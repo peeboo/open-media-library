@@ -233,7 +233,7 @@ namespace OMLDatabaseEditor
 
         private void LoadMovies()
         {
-            if (mainNav.ActiveGroup != groupMovies) return;
+            if (mainNav.ActiveGroup != groupMediaTree) return;
             Cursor = Cursors.WaitCursor;
             if (allMoviesToolStripMenuItem1.Checked)
             {
@@ -285,6 +285,24 @@ namespace OMLDatabaseEditor
 
         private void PopulateMovieList(List<Title> titles)
         {
+            TreeNode rootmovies = new TreeNode("Movies");
+            TreeNode roottv = new TreeNode("TV");
+
+            treeMedia.Nodes.Add(rootmovies);
+            treeMedia.Nodes.Add(roottv);
+  
+            TreeNode tn1 = new TreeNode("Star Wars");
+            rootmovies.Nodes.Add(tn1);
+
+            TreeNode tn2 = new TreeNode("Red Dwarf");
+            roottv.Nodes.Add(tn2);
+            TreeNode tn3 = new TreeNode("Series 1");
+            tn2.Nodes.Add(tn3);
+            TreeNode tn4 = new TreeNode("Series 2");
+            tn2.Nodes.Add(tn4);
+
+
+
             lbMovies.Items.Clear();
             //_titleCollection.SortBy("SortName", true);
 
@@ -577,7 +595,7 @@ namespace OMLDatabaseEditor
 
         private void CheckGenresAgainstSupported(Title title)
         {
-            List<String> genreList = new List<String>();
+     /*       List<String> genreList = new List<String>();
  //           if (Properties.Settings.Default.gsValidGenres != null
  //           && Properties.Settings.Default.gsValidGenres.Count > 0)
             int genreCount = OMLEngine.Settings.SettingsManager.GetAllGenres.Count();
@@ -624,7 +642,7 @@ namespace OMLDatabaseEditor
                     ResolveGenres resolveGenres = new ResolveGenres(genreIssuesList, title);
                     resolveGenres.ShowDialog();
                 }
-            }
+            }*/
         }
 
         private void SaveChanges()
@@ -1214,7 +1232,7 @@ namespace OMLDatabaseEditor
         {
             if (navBarControl1.OptionsNavPane.NavPaneState == DevExpress.XtraNavBar.NavPaneState.Collapsed)
             {
-                splitContainerControl2.SplitterPosition = 40;
+                splitContainerControl2.SplitterPosition = 38;
             }
             else
             {

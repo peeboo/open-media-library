@@ -8,8 +8,8 @@
     <ProjectGuid>{2488F54D-DA71-4C8D-B992-179B314C3FE7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OMLDatabaseEditor2</RootNamespace>
-    <AssemblyName>OMLDatabaseEditor2</AssemblyName>
+    <RootNamespace>OMLDatabaseEditor</RootNamespace>
+    <AssemblyName>OMLDatabaseEditor</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>Application.ico</ApplicationIcon>
@@ -384,6 +384,9 @@
     <Content Include="Resources\applications-multimedia.png" />
     <Content Include="Resources\emblem-symbolic-link.png" />
     <Content Include="Resources\movieheader.jpg" />
+    <None Include="Resources\splashimage.bmp" />
+    <Content Include="Resources\splashimage.jpg" />
+    <None Include="Resources\splashscreen.bmp" />
     <Content Include="Resources\text-html.png" />
     <Content Include="Resources\video-x-generic.png" />
     <EmbeddedResource Include="Controls\DiskInfoFrm.resx">

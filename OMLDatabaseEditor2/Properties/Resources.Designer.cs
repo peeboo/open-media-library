@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OMLDatabaseEditor2.Properties {
+namespace OMLDatabaseEditor.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace OMLDatabaseEditor2.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OMLDatabaseEditor2.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OMLDatabaseEditor.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -112,6 +112,13 @@ namespace OMLDatabaseEditor2.Properties {
         internal static System.Drawing.Bitmap saveHS {
             get {
                 object obj = ResourceManager.GetObject("saveHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap splashimage {
+            get {
+                object obj = ResourceManager.GetObject("splashimage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
