@@ -4,12 +4,31 @@
     xmlns:coll="assembly://MsCorLib/System.Collections"
     xmlns:shell ="assembly://Library/Library.Code.V3"
     xmlns:comm="resx://Library/Library.Resources/V3_Globals"
+    xmlns:omlShell ="assembly://Library/Library"
     xmlns:me="Me">
 
   <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem"/>
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseListViewItem"/>
 
+  <UI Name="ListViewGroup" BaseUI="me:GalleryGroup">
+    <Properties>
+      <!--LegacyVerticalFlowLayout Name="LabelFlowLayout"/-->
+      <FlowLayout Name="LabelFlowLayout" Orientation="Vertical" AllowWrap="true"/>
+      <Font Name="GroupLabelFontNoFocus" FontName="global://comm:MainFontFace" FontSize="16"/>
+      <Color Name="GroupLabelColorNoFocus" Color="color://comm:MediumBlue"/>
+      <Inset Name="GroupLabelColorMargins" Inset="-18, 0, 0, 0"/>
+      <cor:Int32 Name="LabelRotation" Int32="0"/>
+      <Size Name="GroupedListViewItemSize"/>
+    </Properties>
+    <Content Name="Item">
+      <!--me:ListViewItem Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[ContentItemTemplate]" Index="[RepeatedItemIndex]" TileSize="[GroupedListViewItemSize]" ItemProperties="[ItemProperties]"/-->
+      <me:ListViewItem Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]"/>
+    </Content>
+  </UI>
+  
   <UI Name="GalleryGroup">
     <Properties>
+      <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
       <!--shell:IBrowseGroup Name="Model"               IBrowseGroup="$Required"/-->
       <shell:BrowseGroup Name="Model"               BrowseGroup="$Required"/>
       <shell:IBrowsePivot Name="Pivot"               IBrowsePivot="$Required"/>
@@ -27,11 +46,14 @@
       <cor:Int32          Name="LabelRotation"                 Int32="90"/>
 
       <cor:String         Name="OverlayContentTemplate"   String="null"/>
+
+      <cor:Int32          Name="ListViewLabelRotation"         Int32="0"/>
+      <cor:Int32          Name="PosterLabelRotation"           Int32="90"/>
     </Properties>
 
     <Locals>
-      <ScrollingData Name="ScrollData" ScrollStep="90" BeginPadding="0" EndPadding="800"/>
-      <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/>
+      <!--ScrollingData Name="ScrollData" ScrollStep="90" BeginPadding="0" EndPadding="800"/>
+      <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/-->
       <Environment         Name="Environment"/>
       <cor:Int32       Name="OffsetIndex" Int32="0"/>
       <MathTransformer Name="OffsetCalc" Absolute="true"/>
@@ -51,9 +73,29 @@
       <TransformAnimation Name="TransitionToBackward" Source="animation://me:Browse.Gallery.Group.Label.NavigateToBackward"/>
       <TransformAnimation Name="TransitionAwayForward" Source="animation://me:Browse.Gallery.Group.Label.NavigateAwayForward"/>
       <TransformAnimation Name="TransitionAwayBackward" Source="animation://me:Browse.Gallery.Group.Label.NavigateAwayBackward"/>
+      <!--ScrollingHandler Name="ScrollingHandler" HandleHomeEndKeys="true"
+                        HandleDirectionalKeys="true" HandlePageKeys="true"/>
+      <ScrollingData Name="ScrollingData" /-->
+
     </Locals>
 
     <Rules>
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[Pivot!shell:BrowsePivot.SubContentItemTemplate]" ConditionOp="NotEquals" Value="ListViewItem"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LabelRotation]" Value="[ListViewLabelRotation]"/>
+        </Actions>
+      </Rule-->
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[Pivot!shell:BrowsePivot.SubContentItemTemplate]" ConditionOp="NotEquals" Value="ListViewItem"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LabelRotation]" Value="[PosterLabelRotation]"/>
+        </Actions>
+      </Rule-->
       <!--Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollData]"/-->
       <!-- @ -->
       <!--Default Target="[ScrollData.Repeater]" Value="[Repeater]"/-->
@@ -230,36 +272,47 @@
           <Invoke Target="[GroupLabel.AttachAnimation]" animation="[TransitionAwayBackward]" InvokePolicy="Synchronous"/>
         </Actions>
       </Condition>
+    
+    <Condition Source="[Model.Description]" SourceValue="subgroup">
+      <Actions>
+        <Set Target="[MarginPanel.Margins]" Value="0, 0, 0, 0"/>
+      </Actions>
+    </Condition>
     </Rules>
-
     <Content>
 
       <!--Panel Margins="30, 0, 0, 0" Layout="[LabelFlowLayout]"-->
-      <Panel Margins="30, 0, 0, 0" Layout="HorizontalFlow">
+      <Panel Name="MarginPanel" Margins="30, 0, 0, 0" Layout="HorizontalFlow">
         <Children>
+          <!--Scroller MouseInteractive="false" Name="ScrollerGrid" Orientation="Horizontal" MaximumSize="0,0" ScrollingData="[ScrollingData]" FocusPadding="0" Margins="0,0,0,0" Navigation="FlowVertical" Prefetch="1.0">
+            <Children-->
 
-          <Panel Name="GroupLabel" Padding="0, 0, 5, 0">
-            <Layout>
-              <RotateLayout AngleDegrees="[LabelRotation]"/>
-            </Layout>
-            <Children>
+              <Panel Name="GroupLabel" Padding="0, 0, 5, 0">
+                <Layout>
+                  <RotateLayout AngleDegrees="[LabelRotation]"/>
+                </Layout>
+                <Children>
 
-              <me:BaseContentLabel Name="Label" Model="[Model]" Source="[Model.ContentLabelTemplate]"
-                      MaximumSize="300,0"   Margins="[GroupLabelColorMargins]"/>
+                  <me:BaseContentLabel Name="Label" Model="[Model]" Source="[Model.ContentLabelTemplate]"
+                          MaximumSize="300,0"   Margins="[GroupLabelColorMargins]"/>
 
-            </Children>
-          </Panel>
-          <Repeater Name="Repeater" Source="[Model.Content]" ContentName="Item" Navigation="RememberFocus, FlowVertical">
-            <Layout>
-              <GridLayout Orientation="Vertical" AllowWrap="true" Spacing="2, 2"/>
-            </Layout>
-          </Repeater>
+                </Children>
+              </Panel>
+              <Repeater Name="Repeater" Source="[Model.Content]" ContentName="[Pivot!shell:BrowsePivot.SubContentItemTemplate]" Navigation="RememberFocus, FlowVertical">
+                <Layout>
+                  <GridLayout Orientation="Vertical" AllowWrap="true" Spacing="2, 2"/>
+                </Layout>
+              </Repeater>
+            <!--/Children>
+          </Scroller-->
         </Children>
       </Panel>
 
     </Content>
-
-    <Content Name="Item">
+    <Content Name="xtwoRowPoster">
+      <me:Item/>
+    </Content>
+    <Content Name="oneRowPoster">
 
       <!-- Same as Gallery's definition, minus the possibility of a label. -->
       <!--me:GalleryItem Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[ContentItemTemplate]"
@@ -268,14 +321,90 @@
       <!--me:oneRowGalleryItemPoster Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[Pivot.ContentItemTemplate]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
       </me:oneRowGalleryItemPoster-->
-      <me:twoRowGalleryItemPoster Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]"
+      <me:oneRowGalleryItemPoster Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]"
+                      Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
+      </me:oneRowGalleryItemPoster>
+      <!--Text Content="[RepeatedItem!ICommand.Description]"/-->
+
+    </Content>
+    <Content Name="twoRowPoster">
+
+      <!-- Same as Gallery's definition, minus the possibility of a label. -->
+      <!--me:GalleryItem Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[ContentItemTemplate]"
+                      ShowLabel="false" Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]"
+                      OverlayContentTemplate="[OverlayContentTemplate]"/-->
+      <!--me:oneRowGalleryItemPoster Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[Pivot.ContentItemTemplate]"
+                      Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
+      </me:oneRowGalleryItemPoster-->
+      <me:twoRowGalleryItemPoster Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
       </me:twoRowGalleryItemPoster>
       <!--Text Content="[RepeatedItem!ICommand.Description]"/-->
 
     </Content>
+    <Content Name="ListViewItem">
+      <me:ListViewItem Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
+      </me:ListViewItem>
+    </Content>
   </UI>
 
+  <UI Name="Item">
+
+    <Properties>
+      <cor:String Name="Value" String="0"/>
+    </Properties>
+
+
+    <Rules>
+      <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false"/>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true" ConditionOp="Equals">
+        <Actions>
+          <Set Target="[ItemPanel.Scale]" Value="1.3,1.3,1.3"/>
+          <Set Target="[ItemColor.Content]" Value="Red"/>
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="false" ConditionOp="Equals">
+        <Actions>
+          <Set Target="[ItemPanel.Scale]" Value="1.0,1.0,1.0"/>
+          <Set Target="[ItemColor.Content]" Value="LightBlue"/>
+        </Actions>
+      </Condition>
+
+    </Rules>
+
+
+    <Content>
+      <Panel Name="ItemPanel" MaximumSize="131, 184">
+        <Layout>
+          <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
+        </Layout>
+        <Animations>
+          <Animation Type="Scale" CenterPointPercent="0.5,0.5,1">
+            <Keyframes>
+              <ScaleKeyframe RelativeTo="Current" Value="1,1,1" Time="0.0" Interpolation="Linear"/>
+              <ScaleKeyframe Time="0.2" Value="1,1,1" Interpolation="Linear"/>
+            </Keyframes>
+          </Animation>
+        </Animations>
+        <Children>
+
+          <Text Content="[Value]">
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Center" Vertical="Center"/>
+            </LayoutInput>
+          </Text>
+
+          <ColorFill Name="ItemColor" Layout="Fill"/>
+        </Children>
+      </Panel>
+    </Content>
+
+  </UI>
+  
   <UI Name="BaseContentLabel">
     <Properties>
       <shell:IBrowseGroup Name="Model"                IBrowseGroup="$Required"/>
@@ -321,6 +450,17 @@
 
     <Content>
       <Text Name="Label" Font="[GroupLabelFontNoFocus]" Color="[GroupLabelColorNoFocus]"/>
+    </Content>
+  </UI>
+
+  <UI Name="NoTextContentLabel" BaseUI="me:BaseContentLabel">
+    <Properties>
+      <Font  Name="GroupLabelFontNoFocus"         FontName="global://comm:MainFontFace" FontSize="18"/>
+      <Color Name="GroupLabelColorNoFocus"        Color="color://comm:LightBlue"/>
+      <Color Name="GroupLabelColorFocus"          Color="color://comm:MediumBlue"/>
+    </Properties>
+    <Content>
+      <Text Name="Label" Visible="false"/>
     </Content>
   </UI>
 </Mcml>

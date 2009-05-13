@@ -256,6 +256,7 @@ namespace Library.Code.V3
 
         public MediaChangerManagerPage()
         {
+
             this.managerCommands = new ArrayListDataSet(this);
 
             //save command

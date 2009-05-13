@@ -172,6 +172,7 @@ namespace Library
                     GalleryItem galleryItem = new GalleryItem(_gallery, item.Name, item.Name, this, item.Count);
                     if (!string.IsNullOrEmpty(item.ImagePath))
                     {
+                        //TODO:ASYNC this
                         galleryItem.MenuCoverArt = MovieItem.LoadImage(item.ImagePath);
                     }
 

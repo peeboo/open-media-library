@@ -154,15 +154,19 @@ namespace Library.Code.V3
         // Enormous list construction.
         //
 
-        public EnormoList()
+        private ArrayListDataSet internalArray;
+        public EnormoList(ArrayListDataSet internalSet)
         {
-            VisualReleaseBehavior = ReleaseBehavior.Dispose;
-            EnableSlowDataRequests = true;
+            this.internalArray = internalSet;
+            VisualReleaseBehavior = ReleaseBehavior.KeepReference;
+            EnableSlowDataRequests = false;
+            this.StoreQueryResults = true;
+            this.Count = internalArray.Count;
         }
 
         protected override void OnRequestItem(int index, ItemRequestCallback callback)
         {
-            ThumbnailData t = new ThumbnailData(this, index.ToString(CultureInfo.CurrentUICulture));
+            MovieItem t = (MovieItem)this.internalArray[index];//ThumbnailData(this, index.ToString(CultureInfo.CurrentUICulture));
             callback(this, index, t);
         }
 
@@ -181,10 +185,10 @@ namespace Library.Code.V3
 
         private static void AcquireSlowData(object args)
         {
-            ThreadPriority priority = Thread.CurrentThread.Priority;
+            //ThreadPriority priority = Thread.CurrentThread.Priority;
             try
             {
-                Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+                //Thread.CurrentThread.Priority = ThreadPriority.Lowest;
 
                 SlowDataResult result = (SlowDataResult)args;
 
@@ -193,7 +197,7 @@ namespace Library.Code.V3
             }
             finally
             {
-                Thread.CurrentThread.Priority = priority;
+                //Thread.CurrentThread.Priority = priority;
             }
         }
 
@@ -212,8 +216,9 @@ namespace Library.Code.V3
                 return;
             }
 
-            ThumbnailData t = (ThumbnailData)this[result.Index];
-            t.SetPicture(result.PicturePath);
+            MovieItem t = (MovieItem)this[result.Index];
+            t.DefaultImage = new Image("file://" + result.PicturePath);
+            //t.SetPicture(result.PicturePath);
         }
 
         private class SlowDataResult

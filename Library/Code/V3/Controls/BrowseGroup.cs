@@ -21,7 +21,7 @@ namespace Library.Code.V3
         //}
 
         // Properties
-        public IList Content
+        public virtual IList Content
         {
             get
             {
@@ -57,6 +57,13 @@ namespace Library.Code.V3
             }
         }
 
+        public static string NoContentLabelTemplate
+        {
+            get
+            {
+                return "resx://Library/Library.Resources/V3_Controls_BrowseGroupedGallery#NoTextContentLabel";
+            }
+        }
     }
 
  

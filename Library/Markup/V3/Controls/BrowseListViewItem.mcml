@@ -6,6 +6,7 @@
     xmlns:shel ="assembly://Library/Library.Code.V3"
     xmlns:comm="resx://Library/Library.Resources/V3_Globals"
     xmlns:focus="resx://Library/Library.Resources/V3_Controls_FocusAnimation"
+    xmlns:omlShell ="assembly://Library/Library"
     xmlns:me="Me">
   <!-- xmlns:comm="res://Microsoft.MediaCenter.Shell!Globals.mcml"
     xmlns:b   ="res://Microsoft.MediaCenter.Shell!Button.mcml" -->
@@ -141,7 +142,7 @@
                           Spacing="5,5" Columns="1"/>
             </Layout>
             <Content>
-              <me:ListViewItem Model="[MyCommand]" Index="[RepeatedItemIndex]" ItemProperties="[MyPropertySet]"/>
+              <me:ListViewItem Application="null" Model="[MyCommand]" Index="[RepeatedItemIndex]" ItemProperties="[MyPropertySet]"/>
             </Content>
           </Repeater>
         </Children>
@@ -153,6 +154,7 @@
   <UI Name="ListViewItem">
     <Properties>
       <!-- new -->
+      <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
       <shel:GalleryPage Name="Page"/>
       <!--shel:ISelectionPolicy Name="SelectionPolicy"/-->
       <PropertySet      Name="GroupProperties"/>
@@ -1613,6 +1615,146 @@
               <AnchorLayoutInput Top="Thumb, 0, 0" Left="Thumb, 0, 0" Bottom="Thumb, 1, 0" Right="Thumb, 1, 0" ContributesToWidth="false" ContributesToHeight="false"/>
             </LayoutInput>
           </ColorFill>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="ItemCountGalleryItemUnderlay" BaseUI="me:BaseListItemOverlayContent">
+    <Properties>
+      <Font Name="EpisodeCountLabel" FontName="global://comm:RegularFontFace" FontSize="16"/>
+      <Color Name="EpisodeCountLabelColor" Color="color://comm:LightBlue"/>
+    </Properties>
+    <Rules>
+      <Condition Source="[ParentKeyFocus]" ConditionOp="Equals" SourceValue="true">
+        <Actions>
+          <Set Target="[EpisodeCount.Visible]" Value="false"/>
+        </Actions>
+      </Condition>
+      <!--Rule>
+        <Conditions>
+          <Modified Source="[Model!video:RecordedTVBrowseItemBucketBase.RecordingCountInfo]" />
+        </Conditions>
+        <Actions>
+          <Set Target="[EpisodeCount.Content]" Value="[Model!video:RecordedTVBrowseItemBucketBase.RecordingCountInfo]"/>
+        </Actions>
+      </Rule>
+      <Default Target="[EpisodeCount.Content]" Value="[Model!video:RecordedTVBrowseItemBucketBase.RecordingCountInfo]"/-->
+    </Rules>
+    <Content>
+      <Panel>
+        <Layout>
+          <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false" />
+        </Layout>
+        <Children>
+          <Text Name="EpisodeCount" Font="[EpisodeCountLabel]" Color="[EpisodeCountLabelColor]" Visible="true">
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Near" Vertical="Far" Left="Parent, 0, 5" Bottom="Parent, 1,-15"/>
+            </LayoutInput>
+            <Content>(5)</Content>
+          </Text>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="RecordedTVListViewItemRightBase" BaseUI="me:BaseListItemOverlayContent">
+    <Properties>
+      <Font Name="OverlayTextFont" FontName="global://comm:RegularFontFace" FontSize="18"/>
+      <Color Name="FocusColor" Color="color://comm:OffWhite"/>
+      <Color Name="NoFocusColor" Color="color://comm:LightBlue60Percent"/>
+    </Properties>
+    <Locals>
+      <Environment Name="Environment"/>
+    </Locals>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="instant"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="slow"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="fast"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+          <!--Equality Source="[Environment.Is2DAnimationExperience]" Value="false"/-->
+        </Conditions>
+        <Actions>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="mouse"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[ParentKeyFocus]" ConditionOp="ChangedTo" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayText.Color]" Value="[FocusColor]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[ParentKeyFocus]" ConditionOp="ChangedTo" Value="false"/>
+          <!--Equality Source="[Environment.Is2DAnimationExperience]" Value="false"/-->
+        </Conditions>
+        <Actions>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Move.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Size.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Set Target="[OverlayText.Color]" Value="[NoFocusColor]"/>
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <Panel Padding="10, 0, 0, 0" Layout="Anchor">
+        <Children>
+          <Text Name="OverlayText" Font="[OverlayTextFont]" Color="[NoFocusColor]" Visible="true">
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Near" Vertical="Center" Top="Parent, 0, 0" Left="Parent, 0, 10" Bottom="Parent, 1, 0"/>
+            </LayoutInput>
+            <Content>(6)</Content>
+          </Text>
         </Children>
       </Panel>
     </Content>

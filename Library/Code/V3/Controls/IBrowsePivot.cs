@@ -10,6 +10,8 @@ namespace Library.Code.V3
     {
         // Properties
         //ContentMapping[] AdditionalContentItemMappings { get; }
+        Boolean SupportsItemContext { get; set; }
+        Boolean IsBusy { get; set; }
         IList Content { get; }
         string ContentItemTemplate { get; }
         string ContentLabel { get; }
@@ -19,5 +21,6 @@ namespace Library.Code.V3
         string DetailTemplate { get; }
         string EmptyContentText { get; }
         Choice SortOptions { get; }
+        ContextMenuData ContextMenu { get; }
     }
 }

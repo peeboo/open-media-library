@@ -110,7 +110,7 @@
 
             </Children>
           </Panel>
-          <Clip Name="ContentPanel" FocusOrder="0" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha=".9"
+          <Clip Name="ContentPanel" FocusOrder="0" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="1"
           CenterPointPercent="0.5,0.5,0.5">
             <!--Scale="0.95,0.95,0.95"-->
             <Layout>

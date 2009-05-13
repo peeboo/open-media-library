@@ -1270,4 +1270,91 @@
   <data name="V3_MediaChangerManagerSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\v3\settings\mediachangermanagersettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="V3_FanArtDetailsPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\details\fanart\fanartdetailspage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_FanArtDetails_BackSplash" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\details\fanart\images\v3.fanartdetails.backsplash.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Settings_FilterSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\filtersettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_Settings_SettingsManager" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\settingsmanager.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_ExtenderSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\extendersettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_ExtenderSettingsImpersonation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\extendersettingsimpersonation.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_ExtenderSettingsTranscode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\extendersettingstranscode.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_ImageMountingSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\imagemountingsettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_LanguageSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\languagesettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_OptimizationSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\optimizationsettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_TrailersSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\trailerssettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_Controls_AutoScrollRegion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\autoscrollregion.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_Controls_AutoScroll_Chevron_Bottom" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.bottom.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_AutoScroll_Chevron_Bottom_Pressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.bottom.pressed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_AutoScroll_Chevron_Bottom_Reset" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.bottom.reset.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_AutoScroll_Chevron_Left" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.left.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_AutoScroll_Chevron_Left_Pressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.left.pressed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_AutoScroll_Chevron_Left_Rest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.left.rest.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_AutoScroll_Chevron_Right" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.right.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_AutoScroll_Chevron_Right_Pressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.right.pressed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_AutoScroll_Chevron_Right_Rest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.right.rest.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_AutoScroll_Chevron_Top" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.top.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_AutoScroll_Chevron_Top_Pressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.top.pressed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_AutoScroll_Chevron_Top_Rest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.top.rest.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Loader" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\loader.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_GeneralSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\generalsettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_BackgroundSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\backgroundsettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_GallerySettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\gallerysettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="V3_SampleBackDrop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\appleseedexmachina.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

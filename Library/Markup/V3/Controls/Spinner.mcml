@@ -11,17 +11,17 @@
       <IntRangedValue Name="SampleRangedValue3" MinValue="-10" MaxValue="5" Value="-1"/>
     </Properties>
     <Content>
-      <Panel Layout="Center">
+      <ColorFill Layout="Center" Content="255,   5,  33,  92">
         <Children>
           <Panel Layout="VerticalFlow">
             <Children>
               <me:Spinner Model="[SampleRangedValue1]"/>
-              <me:Spinner Model="[SampleRangedValue2]"/>
-              <me:Spinner Model="[SampleRangedValue3]" ShowLabel="false"/>
+              <me:Spinner Model="[SampleRangedValue2]" LabelMinSize="520,50" LabelMaxSize="520,50" />
+              <me:Spinner Model="[SampleRangedValue3]" LabelMinSize="443,50"  NoFocusImage="null" FocusImage="null" DisabledImage="null" />
             </Children>
           </Panel>
         </Children>
-      </Panel>
+      </ColorFill>
     </Content>
   </UI>
   
@@ -42,6 +42,9 @@
       <Color Name="NoFocusColor" Color="color://comm:LightBlue"/>
       <Color Name="FocusColor" Color="color://comm:OffWhite"/>
       <Color Name="DisabledColor" Color="color://comm:LightBlue40Percent"/>
+      <Image Name="SpinnerBluebarLargeDormant"        Source="resx://Library/Library.Resources/SpinnerBluebarLargeDormant"/>
+      <Image Name="SpinnerBluebarLargeFocus"          Source="resx://Library/Library.Resources/SpinnerBluebarLargeFocus"/>
+      <Image Name="SpinnerBluebarLargeNoFocus"        Source="resx://Library/Library.Resources/SpinnerBluebarLargeNoFocus"/>
     </Properties>
     <Locals>
       <InvokeCommand Name="PreviousValue" Target="[Model.PreviousValue]" Description="-"/>
@@ -68,6 +71,23 @@
       <Binding Source="[Model.Description]" Target="[Label.Content]"/>
       <Default Target="[Accessible.Value]" Value="[ValueLabel.Content]"/>
       <Default Target="[Accessible.Role]" Value="SpinButton"/>
+      <Condition Source="[Model.HasPreviousValue]" ConditionOp="Equals" SourceValue="false">
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ButtonNext.NavigateInto]" />
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Model.HasNextValue]" ConditionOp="Equals" SourceValue="false">
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ButtonPrevious.NavigateInto]" />
+        </Actions>
+      </Condition>
     </Rules>
     <Content>
       <Panel>
@@ -78,15 +98,23 @@
           <Graphic Name="Background" Content="[NoFocusImage]" Padding="[BackgroundPadding]" Layout="Anchor">
             <Children>
               <!--FancyText-->
-              <Text Name="ValueLabel" Color="[NoFocusColor]" Font="[Font]" MinimumSize="[LabelMinSize]" MaximumSize="[LabelMaxSize]">
+              <Panel MinimumSize="[LabelMinSize]" MaximumSize="[LabelMaxSize]" Padding="5,5,5,5">
                 <LayoutInput>
                   <AnchorLayoutInput Right="Buttons, 0"/>
                 </LayoutInput>
-              </Text>
+                <Children>
+                  <Graphic Name="ValueBackground" Content="[SpinnerBluebarLargeFocus]" MaintainAspectRatio="false" HorizontalAlignment="Fill" VerticalAlignment="Fill">
+                    <Children>
+                      <Text Margins="5,5,5,5" Name="ValueLabel" Color="[NoFocusColor]" Font="[Font]">
+                      </Text>
+                    </Children>
+                  </Graphic>
+                </Children>
+              </Panel>
               <Panel Name="Buttons" Layout="HorizontalFlow">
                 <Children>
-                  <b:Button Model="[PreviousValue]" TileSize="[TileSize]" NoFocusImage="resx://Library/Library.Resources/V3_Controls_Common_Spinner_Arrow_Back_NoFocus" FocusImage="resx://Library/Library.Resources/V3_Controls_Common_Spinner_Arrow_Back_Focus" DisabledImage="resx://Library/Library.Resources/V3_Controls_Common_Spinner_Arrow_Back_Disabled" Margins="[ButtonMargins]" ShowLabel="false" IsNavigatingCommand="false"/>
-                  <b:Button Model="[NextValue]" TileSize="[TileSize]" NoFocusImage="resx://Library/Library.Resources/V3_Controls_Common_Spinner_Arrow_Forward_NoFocus" FocusImage="resx://Library/Library.Resources/V3_Controls_Common_Spinner_Arrow_Forward_Focus" DisabledImage="resx://Library/Library.Resources/V3_Controls_Common_Spinner_Arrow_Forward_Disabled" Margins="[ButtonMargins]" ShowLabel="false" IsNavigatingCommand="false"/>
+                  <b:Button Name="ButtonPrevious" Model="[PreviousValue]" TileSize="[TileSize]" NoFocusImage="resx://Library/Library.Resources/V3_Controls_Common_Spinner_Arrow_Back_NoFocus" FocusImage="resx://Library/Library.Resources/V3_Controls_Common_Spinner_Arrow_Back_Focus" DisabledImage="resx://Library/Library.Resources/V3_Controls_Common_Spinner_Arrow_Back_Disabled" Margins="[ButtonMargins]" ShowLabel="false" IsNavigatingCommand="false"/>
+                  <b:Button Name="ButtonNext" Model="[NextValue]" TileSize="[TileSize]" NoFocusImage="resx://Library/Library.Resources/V3_Controls_Common_Spinner_Arrow_Forward_NoFocus" FocusImage="resx://Library/Library.Resources/V3_Controls_Common_Spinner_Arrow_Forward_Focus" DisabledImage="resx://Library/Library.Resources/V3_Controls_Common_Spinner_Arrow_Forward_Disabled" Margins="[ButtonMargins]" ShowLabel="false" IsNavigatingCommand="false"/>
                 </Children>
               </Panel>
             </Children>

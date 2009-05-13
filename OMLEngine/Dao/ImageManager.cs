@@ -123,7 +123,7 @@ namespace OMLEngine
             if (!path.StartsWith(FileSystemWalker.ImageDirectory))
                 return null;
 
-            string idString = path.Substring(FileSystemWalker.ImageDirectory.Length + 3).Replace(".jpg", "");
+            string idString = path.Substring(FileSystemWalker.ImageDirectory.Length + 3).Replace(".png", "");
 
             int returnId;
 
@@ -151,9 +151,102 @@ namespace OMLEngine
                     break;
             }
 
-            return Path.Combine(FileSystemWalker.ImageDirectory, prefix + id.ToString() + ".jpg");
+            return Path.Combine(FileSystemWalker.ImageDirectory, prefix + id.ToString() + ".png");
         }
-        
+
+        /// <summary>
+        /// So we can manage the load of these
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public static string GetImagePathByIdFast(int? id, ImageSize size)
+        {
+            if (id == null)
+                return NoCoverPath;
+
+            string returnPath = ConstructImagePathById(id.Value, size);
+
+            return returnPath;
+        }
+
+        public static string GetImagePathByIdSlow(int? id, string returnPath, System.Data.Linq.Binary tmpImg, ImageSize size)
+        {
+            if (id == null)
+                return NoCoverPath;
+
+            try
+            {
+                int resizeSize = 0;
+
+                switch (size)
+                {
+                    case ImageSize.Medium:
+                        resizeSize = 400;
+                        break;
+
+                    case ImageSize.Small:
+                        resizeSize = 200;
+                        break;
+
+                    case ImageSize.Original:
+                    default:
+                        resizeSize = -1;
+                        break;
+                }
+
+                //string returnPath = ConstructImagePathById(id.Value, size);
+
+                // if the file hasn't been cached yet - retrieve it and cache it
+                if (!File.Exists(returnPath))
+                {
+                    //string originalPath = Path.Combine(FileSystemWalker.ImageDirectory, imagePrefixes[(int)ImageSize.Original] + id.ToString() + ".png"); ;
+
+                    //// make sure the original is saved on the disk
+                    //if (!File.Exists(originalPath))
+                    //{
+                        //// grab the image from the db
+                        //Image tmpImg2 = ImageManager.GetImageById(id.Value);
+                        //if (tmpImg2 != null)
+                        //    ResizeImage(tmpImg2, returnPath, resizeSize);
+                        ////tmpImg2.Save(originalPath);
+                        //else
+                        //    returnPath = null;
+                    using(Image image=ByteArrayToImage(tmpImg.ToArray()))
+                    {
+                        // grab the image from the db
+                        //Image tmpImg2 = ImageManager.GetImageById(id.Value);
+                        if (image != null)
+                            ResizeImage(image, returnPath, resizeSize);
+                        else
+                            returnPath = null;
+                    }
+                        //using (Image image = ByteArrayToImage(tmpImg.ToArray()))
+                        //{
+                        //    // save it out
+                        //    if (image != null)
+                        //        image.Save(originalPath);
+                        //    else
+                        //        returnPath = null;
+                        //}
+                    //}
+
+                    // if we're not looking for the original image we need to save the resized version
+                    //if (size != ImageSize.Original && returnPath != null)
+                    //{
+                    //    ResizeImage(originalPath, returnPath, resizeSize);
+                    //}
+                }
+
+                return returnPath ?? NoCoverPath;
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[Title.GetImagePathById] Exception: " + ex.Message);
+                return NoCoverPath;
+            }
+        }
+
         /// <summary>
         /// Will return the proper image path for a given id.  If the image doesn't exist you will
         /// get the path for the NoImage image.
@@ -191,7 +284,7 @@ namespace OMLEngine
                 // if the file hasn't been cached yet - retrieve it and cache it
                 if (!File.Exists(returnPath))
                 {
-                    string originalPath = Path.Combine(FileSystemWalker.ImageDirectory, imagePrefixes[(int)ImageSize.Original] + id.ToString() + ".jpg"); ;
+                    string originalPath = Path.Combine(FileSystemWalker.ImageDirectory, imagePrefixes[(int)ImageSize.Original] + id.ToString() + ".png"); ;
 
                     // make sure the original is saved on the disk
                     if (!File.Exists(originalPath))
@@ -243,10 +336,33 @@ namespace OMLEngine
                     {
                         using (Image menuCoverArtImage = ScaleImageByHeight(image, size))
                         {
-                            menuCoverArtImage.Save(resizedImagePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            menuCoverArtImage.Save(resizedImagePath, System.Drawing.Imaging.ImageFormat.Png);
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[Title.BuildResizedMenuImage] Exception: " + ex.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool ResizeImage(Image image, string resizedImagePath, int size)
+        {
+            try
+            {
+                
+                    if (image != null)
+                    {
+                        using (Image menuCoverArtImage = ScaleImageByHeight(image, size))
+                        {
+                            menuCoverArtImage.Save(resizedImagePath, System.Drawing.Imaging.ImageFormat.Png);
+                        }
+                    }
+                
             }
             catch (Exception ex)
             {
@@ -280,9 +396,9 @@ namespace OMLEngine
 
             using (Graphics graphics = Graphics.FromImage(outputImage))
             {
-                graphics.CompositingQuality = CompositingQuality.Default;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
                 graphics.InterpolationMode = InterpolationMode.High;
-                graphics.SmoothingMode = SmoothingMode.Default;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
                 graphics.DrawImage(img,
                                    new Rectangle(0, 0, outputWidth, outputHeight),
                                    new Rectangle(0, 0, img.Width, img.Height),
@@ -308,7 +424,7 @@ namespace OMLEngine
 
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                     returnArray = ms.ToArray();
                 }
             }
@@ -366,7 +482,7 @@ namespace OMLEngine
             {
                 foreach (string prefix in imagePrefixes)
                 {                    
-                    string imagePath = Path.Combine(FileSystemWalker.ImageDirectory, prefix + id.ToString() + ".jpg");
+                    string imagePath = Path.Combine(FileSystemWalker.ImageDirectory, prefix + id.ToString() + ".png");
 
                     if (!File.Exists(imagePath))
                         continue;
@@ -398,11 +514,11 @@ namespace OMLEngine
             Dictionary<int, int> ids = new Dictionary<int, int>();
 
             // get a list of all the unique ids
-            foreach (string file in Directory.GetFiles(FileSystemWalker.ImageDirectory, "*.jpg"))
+            foreach (string file in Directory.GetFiles(FileSystemWalker.ImageDirectory, "*.png"))
             {
                 int index = file.LastIndexOf("\\");
 
-                string idName = file.Substring(index + 3).Replace(".jpg", "");
+                string idName = file.Substring(index + 3).Replace(".png", "");
                 int id;
 
                 if (int.TryParse(idName, out id))

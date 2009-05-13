@@ -8,19 +8,22 @@ xmlns:comm="res://Microsoft.MediaCenter.Shell!Globals.mcml"-->
 
   <UI Name="TestEdit">
     <Properties>
-      <EditableText Name="SampleEditableText"/>
+      <EditableText Name="SampleEditableText" Value="4"/>
+      <EditableText Name="SampleEditableText2" Value="00"/>
     </Properties>
     <Content>
-      <Panel Layout="Center">
+      <ColorFill Layout="Center" Content="255,   5,  33,  92">
         <Children>
 
-          <Panel Layout="VerticalFlow">
+          <Panel Layout="HorizontalFlow">
             <Children>
-              <me:Edit Model="[SampleEditableText]"/>
+              <me:Edit ContentMinSize="50,32" ContentMaxSize="50,32" Model="[SampleEditableText]"/>
+              <Text Content=" : "/>
+              <me:Edit Model="[SampleEditableText2]"/>
             </Children>
           </Panel>
         </Children>
-      </Panel>
+      </ColorFill>
     </Content>
   </UI>
   

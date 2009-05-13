@@ -55,7 +55,7 @@ namespace Library.Code.V3
 
         // Properties
         private Image defaultImage = null;
-        public Image DefaultImage
+        public virtual Image DefaultImage
         {
             get
             {

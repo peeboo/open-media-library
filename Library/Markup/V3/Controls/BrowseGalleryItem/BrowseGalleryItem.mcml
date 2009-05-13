@@ -3,6 +3,7 @@
     xmlns:cor ="assembly://MsCorLib/System"
     xmlns:shell ="assembly://Library/Library.Code.V3"
     xmlns:comm="resx://Library/Library.Resources/V3_Globals"
+    xmlns:omlShell ="assembly://Library/Library"
     xmlns:me="Me">
 
   <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseAnimations"/>
@@ -14,6 +15,7 @@
   <UI Name="GalleryItem">
     <Properties>
       <!-- @ -->
+      <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
       <shell:GalleryPage Name="Page"/>
       <Size       Name="ThumbSize"        Size="136, 191"/>
       <Image      Name="NoThumbnailImage" Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage2RowPoster"/>
@@ -267,11 +269,31 @@
       <Rule>
         <Conditions>
           <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[Application.IsMouseActive]" Value="false"/>
         </Conditions>
         <Actions>
           <Invoke Target="[OuterTile.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Move.GainFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Scale.GainFocus" InvokePolicy="Synchronous"/>
           <Invoke Target="[Thumb.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Alpha.GainFocus" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule>
+
+      <!-- Apply the animations that play when it's mouse based navigation -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[Application.IsMouseActive]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <!--Invoke Target="[OuterTile.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Move.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/-->
+          <Invoke Target="[OuterTile.DetachAnimation]" type="Move"/>
+          <!--Invoke Target="[MousePanel.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Scale.GainFocus.Mouse" InvokePolicy="Synchronous"/-->
+          <!--Invoke Target="[MousePanel.DetachAnimation]" type="Scale"/-->
+          <!--Invoke Target="[Thumb.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Alpha.GainFocus.Mouse" InvokePolicy="Synchronous"/-->
+          <!--Invoke Target="[Thumb.DetachAnimation]" type="Alpha"/-->
+          <!--Invoke Target="[OuterTile.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Move.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/-->
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Scale.Mouse" InvokePolicy="Synchronous"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Alpha.Mouse" InvokePolicy="Synchronous"/>
         </Actions>
       </Rule>
 
@@ -394,12 +416,12 @@
           <Set Target="[Tile.Scale]" Value="1.0, 1.0, 1.0"/>
           <Set Target="[ItemMode.Value]" Value="[LocalMode.Value]"/>
           <Set Target="[Page.CachedSelectedValue.Value]" Value="[Index.Value]"/>
-          <DebugTrace Message="{0}/{1}">
+          <!--DebugTrace Message="{0}/{1}">
             <Params>
               <ObjectPath ObjectPath="[Index.Value]"/>
               <ObjectPath ObjectPath="[Page.CachedSelectedValue.Value]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
         </Actions>
       </Condition>
       <!-- The item has been selected, set up the appropriate visual reaction -->
@@ -504,7 +526,29 @@
           <Equality Source="[Index.Value]" Value="[Page.CachedSelectedValue.Value]"/>
         </Conditions>
         <Actions>
-          <Set Target="[TransitionAnimation.Delay]" Value=".21"/>
+          <!--Set Target="[TransitionAnimation.Delay]" Value=".21"/-->
+          <!-- keeps the jiggle outa the shift up/down of the item-->
+          <!--Set Target="[TransitionAnimation.Delay]" Value=".35"/-->
+          <Set Target="[DelayMultiplier.Multiply]" Value="[RippleDelay]"/>
+          <Set Target="[TransitionAnimation.Delay]" Value=".5"/>
+
+          <Set Target="[DelayTicks]" Value="[IndexOffset]" Transformer="[ModTransformer]" ExclusiveApply="false"/>
+          <!--Set Target="[Adder.AddInt]" Value="[Random.Next]">
+            <Transformer>
+              <MathTransformer Mod="15"/>
+            </Transformer>
+          </Set-->
+          <!--Set Target="[Adder.SubtractInt]" Value="7" ExclusiveApply="false"/-->
+          <Set Target="[DelayTicks]" Value="[DelayTicks]" Transformer="[Adder]"/>
+
+          <Set Target="[Adder.SubtractInt]" Value="0"/>
+          <Set Target="[Adder.Add]" Value="[DelayTicks]">
+            <Transformer>
+              <MathTransformer Multiply="0.02" Absolute="true" Type="Single"/>
+            </Transformer>
+          </Set>
+
+          <Set Target="[TransitionAnimation.Delay]" Value="[TransitionAnimation.Delay]" Transformer="[Adder]"/>
           <Set Target="[TransitionAnimation.Source]" Value="animation://me:Browse.Gallery.Item.Select.NavigateToBackward" ExclusiveApply="true" InvokePolicy="Synchronous"/>
         </Actions>
       </Rule>
@@ -920,7 +964,7 @@
 
   <UI Name="oneRowGalleryItemPoster" BaseUI="me:GalleryItem">
     <Properties>
-      <Size        Name="ThumbSize"                Size="193, 265"/>
+      <Size        Name="ThumbSize"                Size="183, 253"/>
       <Size        Name="TileSize"                 Size="0, 330"/>
       <Size        Name="LabelTileSize"            Size="180, 60"/>
       <cor:Boolean Name="ShowLabel"                Boolean="true"/>
@@ -946,11 +990,11 @@
           <Equality Source="[Model!shell:GalleryItem.SimpleVideoFormat]" ConditionOp="Equals" Value="DVD"/>
         </Conditions>
         <Actions>
-          <DebugTrace Message="Model!shell:GalleryItem.SimpleVideoFormat: {0}">
+          <!--DebugTrace Message="Model!shell:GalleryItem.SimpleVideoFormat: {0}">
             <Params>
               <ObjectPath ObjectPath="[Model!shell:GalleryItem.SimpleVideoFormat]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <Set Target="[OverlayContentHost.Visible]" Value="true"/>
           <Set Target="[OverlayContentHost.Source]" Value="me:DVDOverlay"/>
         </Actions>
@@ -962,11 +1006,11 @@
           <Equality Source="[Model!shell:GalleryItem.SimpleVideoFormat]" ConditionOp="Equals" Value="BLURAY"/>
         </Conditions>
         <Actions>
-          <DebugTrace Message="Model!shell:GalleryItem.SimpleVideoFormat: {0}">
+          <!--DebugTrace Message="Model!shell:GalleryItem.SimpleVideoFormat: {0}">
             <Params>
               <ObjectPath ObjectPath="[Model!shell:GalleryItem.SimpleVideoFormat]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <Set Target="[OverlayContentHost.Visible]" Value="true"/>
           <Set Target="[OverlayContentHost.Source]" Value="me:DVDOverlay"/>
         </Actions>
@@ -976,7 +1020,8 @@
 
   <UI Name="twoRowGalleryItemPoster" BaseUI="me:GalleryItem">
     <Properties>
-      <Size       Name="ThumbSize"        Size="136, 191"/>
+      <!--Size       Name="ThumbSize"        Size="136, 191"/-->
+      <Size       Name="ThumbSize"        Size="131, 184"/>
       <Image      Name="NoThumbnailImage" Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage2RowPoster"/>
       <cor:Int32  Name="NumberOfRows"     Int32="2"/>
       <cor:Single Name="RippleDelay"      Single="0.015"/>
@@ -991,11 +1036,11 @@
           <Equality Source="[Model!shell:GalleryItem.SimpleVideoFormat]" ConditionOp="Equals" Value="DVD"/>
         </Conditions>
         <Actions>
-          <DebugTrace Message="Model!shell:GalleryItem.SimpleVideoFormat: {0}">
+          <!--DebugTrace Message="Model!shell:GalleryItem.SimpleVideoFormat: {0}">
             <Params>
               <ObjectPath ObjectPath="[Model!shell:GalleryItem.SimpleVideoFormat]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <Set Target="[OverlayContentHost.Visible]" Value="true"/>
           <Set Target="[OverlayContentHost.Source]" Value="me:DVDOverlay"/>
         </Actions>
@@ -1007,11 +1052,11 @@
           <Equality Source="[Model!shell:GalleryItem.SimpleVideoFormat]" ConditionOp="Equals" Value="BLURAY"/>
         </Conditions>
         <Actions>
-          <DebugTrace Message="Model!shell:GalleryItem.SimpleVideoFormat: {0}">
+          <!--DebugTrace Message="Model!shell:GalleryItem.SimpleVideoFormat: {0}">
             <Params>
               <ObjectPath ObjectPath="[Model!shell:GalleryItem.SimpleVideoFormat]"/>
             </Params>
-          </DebugTrace>
+          </DebugTrace-->
           <Set Target="[OverlayContentHost.Visible]" Value="true"/>
           <Set Target="[OverlayContentHost.Source]" Value="me:DVDOverlay"/>
         </Actions>
@@ -1023,16 +1068,28 @@
     </Locals>
   </UI>
 
+  <UI Name="threeRowGalleryItemPoster" BaseUI="me:twoRowGalleryItemPoster">
+    <Properties>
+      <Size       Name="ThumbSize"        Size="87, 123"/>
+      <Image      Name="NoThumbnailImage" Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage2RowPoster"/>
+      <cor:Int32  Name="NumberOfRows"     Int32="3"/>
+      <cor:Single Name="RippleDelay"      Single="0.015"/>
+      <cor:Int32   Name="ItemMetaDataTopOffset"    Int32="-5"/>
+    </Properties>
+  </UI>
+  
   <UI Name="twoRowGenreItem" BaseUI="me:GalleryItem">
     <Properties>
       <Image      Name="NoThumbnailImage" Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage2RowPoster"/>
       <Size        Name="ThumbSize"                Size="235, 176"/>
+      <!--Size        Name="ThumbSize"                Size="208, 156"/-->
       <Size        Name="LabelTileSize"            Size="190, 60"/>
       <cor:Int32   Name="NumberOfRows"             Int32="2"/>
       <cor:Single  Name="RippleDelay"              Single="0.04"/>
       <cor:Int32   Name="ItemMetaDataTopOffset"    Int32="-35"/>
       <cor:Int32    Name="ItemMetaDataLeftOffset"   Int32="-25"/>
       <cor:String   Name="OverlayContentTemplate"   String="@resx://Library/Library.Resources/V3_Controls_BrowseGallery#TitleItemOverlay"/>
+      <cor:String   Name="UnderlayContentTemplate"   String="@resx://Library/Library.Resources/V3_Controls_BrowseGallery#TitleItemUnderlay"/>
     </Properties>
 
     <Locals>
@@ -1066,6 +1123,53 @@
 
   </UI>
 
+  <UI Name="TitleItemUnderlay" BaseUI="me:BaseGalleryItemOverlayContent">
+    <Locals>
+      <Font Name="GalleryItemOverlayLabel"      FontName="global://comm:MainFontFace" FontSize="16"/>
+      <AnchorLayoutInput Name="OverlayTextLayout" Vertical="Far" Left="Parent, 0" Right="Parent, 1"/>
+      <Color Name="OverlayColor" Color="212, 65, 138, 173"/>
+    </Locals>
+    <!--Rules>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Model.Description]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabel.Content]" Value="[Model.Description]"/>
+        </Actions>
+      </Rule>
+    </Rules-->
+    <Content>
+      <Panel>
+        <Layout>
+          <FlowLayout Orientation="Vertical" Spacing="0,0"/>
+        </Layout>
+        <Children>
+          <Panel MaximumSize="0,101">
+            <Layout>
+              <FlowLayout Orientation="Horizontal" Spacing="2,0" AllowWrap="false"/>
+            </Layout>
+            <Children>
+              <Graphic Content="file://C:\ProgramData\OpenMediaLibrary\F210731730.jpg" MinimumSize="0,0" MaximumSize="73,100" HorizontalAlignment="Near" VerticalAlignment="Far"/>
+              <Graphic Content="file://C:\ProgramData\OpenMediaLibrary\F210731730.jpg" MinimumSize="0,0" MaximumSize="85,100" HorizontalAlignment="Center" VerticalAlignment="Far"/>
+              <Graphic Content="file://C:\ProgramData\OpenMediaLibrary\F210731730.jpg" MinimumSize="0,0" MaximumSize="73,100" HorizontalAlignment="Near" VerticalAlignment="Far"/>
+            </Children>
+          </Panel>
+          <Panel MaximumSize="0,75">
+            <Layout>
+              <FlowLayout Orientation="Horizontal" Spacing="2,2" AllowWrap="false"/>
+            </Layout>
+            <Children>
+              <Graphic Content="file://C:\ProgramData\OpenMediaLibrary\F588129005.jpg" MinimumSize="0,0" MaximumSize="73,74" HorizontalAlignment="Near" VerticalAlignment="Near"/>
+              <Graphic Content="file://C:\ProgramData\OpenMediaLibrary\F588129005.jpg" MinimumSize="0,0" MaximumSize="85,74" HorizontalAlignment="Center" VerticalAlignment="Near"/>
+              <Graphic Content="file://C:\ProgramData\OpenMediaLibrary\F210731730.jpg" MinimumSize="0,0" MaximumSize="73,74" HorizontalAlignment="Near" VerticalAlignment="Near"/>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  
   <UI Name="TitleItemOverlay" BaseUI="me:BaseGalleryItemOverlayContent">
     <Locals>
       <Font Name="GalleryItemOverlayLabel"      FontName="global://comm:MainFontFace" FontSize="16"/>
