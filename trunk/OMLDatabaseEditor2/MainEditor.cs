@@ -233,7 +233,7 @@ namespace OMLDatabaseEditor
 
         private void LoadMovies()
         {
-            if (mainNav.ActiveGroup != groupMediaTree) return;
+            if ((mainNav.ActiveGroup != groupMediaTree) && (mainNav.ActiveGroup != groupMovies)) return;
             Cursor = Cursors.WaitCursor;
             if (allMoviesToolStripMenuItem1.Checked)
             {
@@ -285,11 +285,14 @@ namespace OMLDatabaseEditor
 
         private void PopulateMovieList(List<Title> titles)
         {
+            TreeNode root = new TreeNode("All Media");
+            treeMedia.Nodes.Add(root);
+
             TreeNode rootmovies = new TreeNode("Movies");
             TreeNode roottv = new TreeNode("TV");
 
-            treeMedia.Nodes.Add(rootmovies);
-            treeMedia.Nodes.Add(roottv);
+            root.Nodes.Add(rootmovies);
+            root.Nodes.Add(roottv);
   
             TreeNode tn1 = new TreeNode("Star Wars");
             rootmovies.Nodes.Add(tn1);
@@ -301,7 +304,7 @@ namespace OMLDatabaseEditor
             TreeNode tn4 = new TreeNode("Series 2");
             tn2.Nodes.Add(tn4);
 
-
+            lbTitles.DataSource = titles;
 
             lbMovies.Items.Clear();
             //_titleCollection.SortBy("SortName", true);
@@ -1239,5 +1242,41 @@ namespace OMLDatabaseEditor
                 splitContainerControl2.SplitterPosition = navBarControl1.OptionsNavPane.ExpandedWidth + 4;
             }
         }
+
+        private void lbTitles_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            bool Selected = false;
+            Pen pen;
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            {
+                Selected = true;
+            }
+
+            int x = e.Bounds.X;
+            int y = e.Bounds.Y;
+            int w = e.Bounds.Width;
+            int h = e.Bounds.Height;
+            //e.
+            //Rectangle rectImage = new Rectangle(e.Bounds.X + 1, e.Bounds.Y + 1, e.Bounds.Width - 2, e.Bounds.Height - 2);
+            //rectImage.Width = (int)Math.Round(myImage.Width * ((double)e.Bounds.Height / myImage.Height));
+            e.Graphics.DrawLine(new Pen(Color.LightGray),new Point(0,y + h - 1), new Point(e.Bounds.Width, y + h - 1));
+                
+              //  .DrawRectangle(pen, rectImage);
+            //e.Graphics.DrawImage(myImage, rectImage);
+
+            //if (Selected)
+            //{
+             //   e.BackColor = Color.LightBlue;
+              //  e.Graphics.DrawString(((Title)lbTitles.Items[e.Index]).Name, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold), new SolidBrush(Color.Black), e.Bounds);
+            //}
+                              
+            e.DrawBackground();
+            e.Graphics.DrawString(((Title)lbTitles.Items[e.Index]).Name, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), e.Bounds);
+            e.Graphics.DrawString(((Title)lbTitles.Items[e.Index]).ReleaseDate.ToShortDateString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new PointF(w - 60, y ));
+            e.Graphics.DrawString(((Title)lbTitles.Items[e.Index]).Runtime.ToString() + " minutes", new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Gray), new PointF(0, y + 12));
+            e.DrawFocusRectangle();
+        }
+
+
     }
 }
