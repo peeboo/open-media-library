@@ -105,7 +105,8 @@ namespace OMLDatabaseEditor
             this.navBarControl1 = new DevExpress.XtraNavBar.NavBarControl();
             this.groupTitles = new DevExpress.XtraNavBar.NavBarGroup();
             this.navBarGroupControlContainer7 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
-            this.titlePanel = new System.Windows.Forms.Panel();
+            this.textEdit1 = new DevExpress.XtraEditors.TextEdit();
+            this.lbTitles = new System.Windows.Forms.ListBox();
             this.titleEditor = new OMLDatabaseEditor.Controls.TitleEditor();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.newMovieSplitButton = new System.Windows.Forms.ToolStripSplitButton();
@@ -137,6 +138,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.navBarControl1)).BeginInit();
             this.navBarControl1.SuspendLayout();
             this.navBarGroupControlContainer7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -600,7 +602,7 @@ namespace OMLDatabaseEditor
             // 
             this.navBarGroupControlContainer1.Controls.Add(this.lbMovies);
             this.navBarGroupControlContainer1.Name = "navBarGroupControlContainer1";
-            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(149, 367);
+            this.navBarGroupControlContainer1.Size = new System.Drawing.Size(175, 304);
             this.navBarGroupControlContainer1.TabIndex = 0;
             // 
             // lbMovies
@@ -611,7 +613,7 @@ namespace OMLDatabaseEditor
             this.lbMovies.Location = new System.Drawing.Point(0, 0);
             this.lbMovies.Name = "lbMovies";
             this.lbMovies.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lbMovies.Size = new System.Drawing.Size(149, 367);
+            this.lbMovies.Size = new System.Drawing.Size(175, 304);
             this.lbMovies.TabIndex = 0;
             this.lbMovies.ValueMember = "InternalItemID";
             this.lbMovies.DrawItem += new DevExpress.XtraEditors.ListBoxDrawItemEventHandler(this.lbMovies_DrawItem);
@@ -770,7 +772,7 @@ namespace OMLDatabaseEditor
             this.splitContainerControl2.Panel2.Controls.Add(this.titleEditor);
             this.splitContainerControl2.Panel2.Text = "Panel2";
             this.splitContainerControl2.Size = new System.Drawing.Size(602, 657);
-            this.splitContainerControl2.SplitterPosition = 172;
+            this.splitContainerControl2.SplitterPosition = 195;
             this.splitContainerControl2.TabIndex = 3;
             this.splitContainerControl2.Text = "splitContainerControl2";
             // 
@@ -785,13 +787,14 @@ namespace OMLDatabaseEditor
             this.navBarControl1.Groups.AddRange(new DevExpress.XtraNavBar.NavBarGroup[] {
             this.groupTitles});
             this.navBarControl1.HideGroupCaptions = true;
-            this.navBarControl1.Location = new System.Drawing.Point(0, 0);
+            this.navBarControl1.Location = new System.Drawing.Point(0, 1);
             this.navBarControl1.Name = "navBarControl1";
             this.navBarControl1.OptionsNavPane.AnimationFramesCount = 1;
             this.navBarControl1.OptionsNavPane.ExpandedWidth = 135;
+            this.navBarControl1.OptionsNavPane.ShowExpandButton = false;
             this.navBarControl1.OptionsNavPane.ShowOverflowPanel = false;
             this.navBarControl1.OptionsNavPane.ShowSplitter = false;
-            this.navBarControl1.Size = new System.Drawing.Size(172, 657);
+            this.navBarControl1.Size = new System.Drawing.Size(195, 654);
             this.navBarControl1.TabIndex = 0;
             this.navBarControl1.Text = "navBarControl1";
             this.navBarControl1.View = new DevExpress.XtraNavBar.ViewInfo.SkinNavigationPaneViewInfoRegistrator();
@@ -809,26 +812,42 @@ namespace OMLDatabaseEditor
             // 
             // navBarGroupControlContainer7
             // 
-            this.navBarGroupControlContainer7.Controls.Add(this.titlePanel);
+            this.navBarGroupControlContainer7.Controls.Add(this.textEdit1);
+            this.navBarGroupControlContainer7.Controls.Add(this.lbTitles);
             this.navBarGroupControlContainer7.Name = "navBarGroupControlContainer7";
-            this.navBarGroupControlContainer7.Size = new System.Drawing.Size(170, 629);
+            this.navBarGroupControlContainer7.Size = new System.Drawing.Size(193, 626);
             this.navBarGroupControlContainer7.TabIndex = 0;
             // 
-            // titlePanel
+            // textEdit1
             // 
-            this.titlePanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.titlePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.titlePanel.Location = new System.Drawing.Point(0, 0);
-            this.titlePanel.Name = "titlePanel";
-            this.titlePanel.Size = new System.Drawing.Size(170, 629);
-            this.titlePanel.TabIndex = 0;
+            this.textEdit1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textEdit1.Location = new System.Drawing.Point(3, 3);
+            this.textEdit1.Name = "textEdit1";
+            this.textEdit1.Size = new System.Drawing.Size(187, 20);
+            this.textEdit1.TabIndex = 2;
+            // 
+            // lbTitles
+            // 
+            this.lbTitles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbTitles.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.lbTitles.FormattingEnabled = true;
+            this.lbTitles.ItemHeight = 34;
+            this.lbTitles.Location = new System.Drawing.Point(0, 40);
+            this.lbTitles.MinimumSize = new System.Drawing.Size(100, 4);
+            this.lbTitles.Name = "lbTitles";
+            this.lbTitles.Size = new System.Drawing.Size(194, 582);
+            this.lbTitles.TabIndex = 1;
+            this.lbTitles.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbTitles_DrawItem);
             // 
             // titleEditor
             // 
             this.titleEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.titleEditor.Location = new System.Drawing.Point(0, 0);
             this.titleEditor.Name = "titleEditor";
-            this.titleEditor.Size = new System.Drawing.Size(424, 657);
+            this.titleEditor.Size = new System.Drawing.Size(401, 657);
             this.titleEditor.Status = OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.Normal;
             this.titleEditor.TabIndex = 3;
             // 
@@ -940,6 +959,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.navBarControl1)).EndInit();
             this.navBarControl1.ResumeLayout(false);
             this.navBarGroupControlContainer7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -1027,13 +1047,14 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraNavBar.NavBarControl navBarControl1;
         private DevExpress.XtraNavBar.NavBarGroup groupTitles;
         private DevExpress.XtraNavBar.NavBarGroupControlContainer navBarGroupControlContainer7;
-        private System.Windows.Forms.Panel titlePanel;
         private DevExpress.XtraNavBar.NavBarGroup groupTags;
         private DevExpress.XtraNavBar.NavBarGroupControlContainer navBarGroupControlContainer8;
         private DevExpress.XtraNavBar.NavBarGroupControlContainer navBarGroupControlContainer5;
         private DevExpress.XtraNavBar.NavBarGroupControlContainer navBarGroupControlContainer6;
         private DevExpress.XtraNavBar.NavBarGroup groupPeople;
         private DevExpress.XtraNavBar.NavBarGroup groupGenres;
+        private System.Windows.Forms.ListBox lbTitles;
+        private DevExpress.XtraEditors.TextEdit textEdit1;
     }
 }
 

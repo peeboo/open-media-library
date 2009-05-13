@@ -36,7 +36,7 @@ namespace OMLDatabaseEditor
             // 
             // progressBarControl1
             // 
-            this.progressBarControl1.Location = new System.Drawing.Point(12, 349);
+            this.progressBarControl1.Location = new System.Drawing.Point(12, 26);
             this.progressBarControl1.Name = "progressBarControl1";
             this.progressBarControl1.Size = new System.Drawing.Size(417, 18);
             this.progressBarControl1.TabIndex = 0;
@@ -49,7 +49,7 @@ namespace OMLDatabaseEditor
             this.labelControlStatus.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.labelControlStatus.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this.labelControlStatus.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
-            this.labelControlStatus.Location = new System.Drawing.Point(12, 328);
+            this.labelControlStatus.Location = new System.Drawing.Point(12, 5);
             this.labelControlStatus.Name = "labelControlStatus";
             this.labelControlStatus.Size = new System.Drawing.Size(417, 18);
             this.labelControlStatus.TabIndex = 1;
