@@ -105,6 +105,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVDProfilerMetaData", "DVDP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostInstallerWizard", "PostInstallerWizard\PostInstallerWizard.csproj", "{CEB6EE1F-6162-4A1F-907F-DF092F425E8D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLDatabaseEditor2", "OMLDatabaseEditor2\OMLDatabaseEditor2.csproj", "{2488F54D-DA71-4C8D-B992-179B314C3FE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -477,6 +479,18 @@ Global
 		{CEB6EE1F-6162-4A1F-907F-DF092F425E8D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CEB6EE1F-6162-4A1F-907F-DF092F425E8D}.Release|x64.ActiveCfg = Release|Any CPU
 		{CEB6EE1F-6162-4A1F-907F-DF092F425E8D}.Release|x86.ActiveCfg = Release|Any CPU
+		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Release|x64.ActiveCfg = Release|Any CPU
+		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
