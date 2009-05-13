@@ -41,12 +41,16 @@ namespace OMLDatabaseEditor
 
         public void SetMRULists()
         {
-            if ((this.Text == "Genres") && (OMLEngine.Settings.OMLSettings.UseGenreList))
+            if ((this.Text == "Genres") && (OMLEngine.Settings.OMLSettings.UseGenreList) && Properties.Settings.Default.gsValidGenres != null)
             {
-                foreach (string genre in OMLEngine.Settings.SettingsManager.GetAllGenres)
+                string[] aGenres = new string[0];
+                if (Properties.Settings.Default.gsValidGenres != null)
                 {
-                    cbeItem.Properties.Items.Add(genre);
+                    aGenres = new string[Properties.Settings.Default.gsValidGenres.Count];
+                    Properties.Settings.Default.gsValidGenres.CopyTo(aGenres, 0);
                 }
+
+                cbeItem.Properties.Items.AddRange(aGenres);
             }
             else if ((this.Text == "Tags"))
             {
@@ -62,14 +66,14 @@ namespace OMLDatabaseEditor
 
                 if (this.Text == "Genres")
                 {
-                    if (!OMLEngine.Settings.SettingsManager.GetAllGenres.Contains(cbeItem.Text))
+                    if (Properties.Settings.Default.gsValidGenres != null &&
+                        !Properties.Settings.Default.gsValidGenres.Contains(cbeItem.Text))
                     {
                         DialogResult result = XtraMessageBox.Show("You are attempting to add a genre that is not in the allowed list. Would you like to add it to the list?\r\nClick \"Yes\" to add it to the list, \"No\" to add it to the movie but not the allowed list or \"Cancel\" to do nothing.", "Allowed Genre Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                         switch (result)
                         {
                             case DialogResult.Yes:
-                                OMLEngine.Settings.SettingsManager.AddGenreMetaData(cbeItem.Text);
-                                //Properties.Settings.Default.gsValidGenres.Add(cbeItem.Text);
+                                Properties.Settings.Default.gsValidGenres.Add(cbeItem.Text);
                                 break;
                             case DialogResult.No:
                                 break;

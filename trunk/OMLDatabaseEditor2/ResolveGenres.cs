@@ -22,9 +22,13 @@ namespace OMLDatabaseEditor
             InitializeComponent();
 
             _title = title;
-            if (OMLEngine.Settings.SettingsManager.GetAllGenres.Count > 0)
+            if (Properties.Settings.Default.gsValidGenres != null
+            && Properties.Settings.Default.gsValidGenres.Count > 0)
             {
-                _genreList.AddRange(OMLEngine.Settings.SettingsManager.GetAllGenres);
+                int genreCount = Properties.Settings.Default.gsValidGenres.Count;
+                String[] arrGenre = new String[genreCount];
+                Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
+                _genreList.AddRange(arrGenre);
             }
 
             foreach (string key in genreIssueList.Keys)

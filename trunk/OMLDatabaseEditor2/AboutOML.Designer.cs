@@ -56,7 +56,7 @@
             // 
             this.logoPictureBox.BackColor = System.Drawing.Color.MintCream;
             resources.ApplyResources(this.logoPictureBox, "logoPictureBox");
-            this.logoPictureBox.Image = global::OMLDatabaseEditor2.Properties.Resources.Application;
+            this.logoPictureBox.Image = global::OMLDatabaseEditor.Properties.Resources.Application;
             this.logoPictureBox.Name = "logoPictureBox";
             this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 5);
             this.logoPictureBox.TabStop = false;
