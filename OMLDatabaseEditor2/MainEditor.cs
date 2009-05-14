@@ -45,6 +45,13 @@ namespace OMLDatabaseEditor
             InitializeComponent();
 
             InitData();
+            
+            splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Dock = DockStyle.Fill;
+
+            splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
+            splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = false;
+            splitContainerNavigator.Panel2.Controls["genreEditor1"].Visible = false;
+
         }
 
 
@@ -867,6 +874,46 @@ namespace OMLDatabaseEditor
             else
                 LoadImporters();
             _loading = false;
+
+            if (e.Group == groupMediaTree)
+            {
+                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Dock = DockStyle.Fill;
+                
+                splitContainerNavigator.Panel2.Controls["genreEditor1"].Visible = false;
+                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
+                splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = false;
+            }
+            
+            if (e.Group == groupPeople)
+            {
+                splitContainerNavigator.Panel2.Controls["personEditor1"].Dock = DockStyle.Fill;
+
+                splitContainerNavigator.Panel2.Controls["genreEditor1"].Visible = false;
+                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
+                splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = true;
+
+                lbPeople.Items.Clear();
+                foreach (string name in from t in TitleCollectionManager.GetAllPeople(null, PeopleRole.Actor) select t.Name)
+                    lbPeople.Items.Add(name);
+                foreach (string name in from t in TitleCollectionManager.GetAllPeople(null, PeopleRole.Director) select t.Name)
+                    lbPeople.Items.Add(name);
+                foreach (string name in from t in TitleCollectionManager.GetAllPeople(null, PeopleRole.NonActing) select t.Name)
+                    lbPeople.Items.Add(name);
+                foreach (string name in from t in TitleCollectionManager.GetAllPeople(null, PeopleRole.Producers) select t.Name)
+                    lbPeople.Items.Add(name);
+                foreach (string name in from t in TitleCollectionManager.GetAllPeople(null, PeopleRole.Writer) select t.Name)
+                    lbPeople.Items.Add(name);
+                
+            }
+
+            if (e.Group == groupGenres)
+            {
+                splitContainerNavigator.Panel2.Controls["genreEditor1"].Dock = DockStyle.Fill;
+
+                splitContainerNavigator.Panel2.Controls["genreEditor1"].Visible = true;
+                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
+                splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = false;
+            }
         }
 
         private void lbMovies_SelectedIndexChanged(object sender, EventArgs e)
@@ -1222,11 +1269,11 @@ namespace OMLDatabaseEditor
         {
             if (mainNav.OptionsNavPane.NavPaneState == DevExpress.XtraNavBar.NavPaneState.Collapsed)
             {
-                splitContainerControl1.SplitterPosition = 50;
+                splitContainerNavigator.SplitterPosition = 50;
             }
             else
             {
-                splitContainerControl1.SplitterPosition = mainNav.OptionsNavPane.ExpandedWidth + 4;
+                splitContainerNavigator.SplitterPosition = mainNav.OptionsNavPane.ExpandedWidth + 4;
             }
 
         }
@@ -1235,45 +1282,78 @@ namespace OMLDatabaseEditor
         {
             if (navBarControl1.OptionsNavPane.NavPaneState == DevExpress.XtraNavBar.NavPaneState.Collapsed)
             {
-                splitContainerControl2.SplitterPosition = 38;
+                splitContainerTitles.SplitterPosition = 38;
             }
             else
             {
-                splitContainerControl2.SplitterPosition = navBarControl1.OptionsNavPane.ExpandedWidth + 4;
+                splitContainerTitles.SplitterPosition = navBarControl1.OptionsNavPane.ExpandedWidth + 4;
             }
         }
 
         private void lbTitles_DrawItem(object sender, DrawItemEventArgs e)
         {
-            bool Selected = false;
-            Pen pen;
-            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
-            {
-                Selected = true;
-            }
+            Title currentTitle = ((Title)lbTitles.Items[e.Index]);
 
             int x = e.Bounds.X;
             int y = e.Bounds.Y;
             int w = e.Bounds.Width;
             int h = e.Bounds.Height;
-            //e.
-            //Rectangle rectImage = new Rectangle(e.Bounds.X + 1, e.Bounds.Y + 1, e.Bounds.Width - 2, e.Bounds.Height - 2);
-            //rectImage.Width = (int)Math.Round(myImage.Width * ((double)e.Bounds.Height / myImage.Height));
-            e.Graphics.DrawLine(new Pen(Color.LightGray),new Point(0,y + h - 1), new Point(e.Bounds.Width, y + h - 1));
-                
-              //  .DrawRectangle(pen, rectImage);
-            //e.Graphics.DrawImage(myImage, rectImage);
 
-            //if (Selected)
-            //{
-             //   e.BackColor = Color.LightBlue;
-              //  e.Graphics.DrawString(((Title)lbTitles.Items[e.Index]).Name, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold), new SolidBrush(Color.Black), e.Bounds);
-            //}
-                              
+            //e.Graphics.DrawLine(new Pen(Color.LightGray),new Point(0,y + h - 1), new Point(e.Bounds.Width, y + h - 1));
+                
+            StringFormat stf = new StringFormat();
+            stf.Trimming = StringTrimming.EllipsisCharacter;
+            stf.FormatFlags = StringFormatFlags.NoWrap;
             e.DrawBackground();
-            e.Graphics.DrawString(((Title)lbTitles.Items[e.Index]).Name, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), e.Bounds);
-            e.Graphics.DrawString(((Title)lbTitles.Items[e.Index]).ReleaseDate.ToShortDateString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new PointF(w - 60, y ));
-            e.Graphics.DrawString(((Title)lbTitles.Items[e.Index]).Runtime.ToString() + " minutes", new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Gray), new PointF(0, y + 12));
+            e.Graphics.DrawString(currentTitle.Name, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x,y + 2 ,w - 65,h), stf);
+            e.Graphics.DrawString(currentTitle.ReleaseDate.ToShortDateString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(w - 60, y + 2, w, h), stf);
+            e.Graphics.DrawString(currentTitle.Runtime.ToString() + " minutes, " + currentTitle.Studio, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Gray), new RectangleF(8,y + 16, w - 40,h), stf);
+//e.Graphics.DrawString(
+
+            Color c1 = Color.Coral;
+            Color c2 = Color.Crimson;
+
+            
+            
+            //if (currentTitle.PercentComplete != null)
+            {
+                if (currentTitle.PercentComplete <= .3M)
+                {
+                }
+                else if (currentTitle.PercentComplete <= .4M)
+                {
+                    c1 = Color.CornflowerBlue;
+                    c2 = Color.CadetBlue;
+                }
+                else if (currentTitle.PercentComplete <= .5M)
+                {
+                    c1 = Color.MediumSpringGreen;
+                    c2 = Color.LightSeaGreen;
+                }
+                else if (currentTitle.PercentComplete <= .6M)
+                {
+                    c1 = Color.Yellow;
+                    c2 = Color.Gold;
+                }
+                else if (currentTitle.PercentComplete <= .7M)
+                {
+                    c1 = Color.Silver;
+                    c2 = Color.SkyBlue;
+                }
+                else if (currentTitle.PercentComplete <= .8M)
+                {
+                    c1 = Color.SkyBlue;
+                    c2 = Color.White;
+                }
+            }
+
+            LinearGradientBrush bb = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), c1, c2, 2);
+
+            e.Graphics.FillEllipse(bb,new Rectangle(x + w - 30, y + 16, 14,14));
+            e.Graphics.DrawEllipse(new Pen(Color.Black), new Rectangle(x + w - 30, y + 16, 14, 14));
+
+            e.Graphics.DrawLine(new Pen(Color.LightGray), 0, y + h - 1, w, y + h - 1); 
+            
             e.DrawFocusRectangle();
         }
 

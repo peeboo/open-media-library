@@ -77,7 +77,7 @@ namespace OMLDatabaseEditor
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filterByTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
+            this.splitContainerNavigator = new DevExpress.XtraEditors.SplitContainerControl();
             this.mainNav = new DevExpress.XtraNavBar.NavBarControl();
             this.groupMediaTree = new DevExpress.XtraNavBar.NavBarGroup();
             this.navBarGroupControlContainer4 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
@@ -93,6 +93,7 @@ namespace OMLDatabaseEditor
             this.navBarGroupControlContainer3 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.lbImport = new DevExpress.XtraEditors.ListBoxControl();
             this.navBarGroupControlContainer5 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
+            this.lbPeople = new DevExpress.XtraEditors.ListBoxControl();
             this.navBarGroupControlContainer6 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.navBarGroupControlContainer8 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.groupPeople = new DevExpress.XtraNavBar.NavBarGroup();
@@ -101,11 +102,13 @@ namespace OMLDatabaseEditor
             this.groupMovies = new DevExpress.XtraNavBar.NavBarGroup();
             this.groupMetadata = new DevExpress.XtraNavBar.NavBarGroup();
             this.groupImport = new DevExpress.XtraNavBar.NavBarGroup();
-            this.splitContainerControl2 = new DevExpress.XtraEditors.SplitContainerControl();
+            this.genreEditor1 = new OMLDatabaseEditor.Controls.GenreEditor();
+            this.personEditor1 = new OMLDatabaseEditor.Controls.PersonEditor();
+            this.splitContainerTitles = new DevExpress.XtraEditors.SplitContainerControl();
             this.navBarControl1 = new DevExpress.XtraNavBar.NavBarControl();
             this.groupTitles = new DevExpress.XtraNavBar.NavBarGroup();
             this.navBarGroupControlContainer7 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
-            this.textEdit1 = new DevExpress.XtraEditors.TextEdit();
+            this.buttonEdit1 = new DevExpress.XtraEditors.ButtonEdit();
             this.lbTitles = new System.Windows.Forms.ListBox();
             this.titleEditor = new OMLDatabaseEditor.Controls.TitleEditor();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
@@ -121,8 +124,8 @@ namespace OMLDatabaseEditor
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
-            this.splitContainerControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerNavigator)).BeginInit();
+            this.splitContainerNavigator.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainNav)).BeginInit();
             this.mainNav.SuspendLayout();
             this.navBarGroupControlContainer4.SuspendLayout();
@@ -133,12 +136,14 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.lbMetadata)).BeginInit();
             this.navBarGroupControlContainer3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbImport)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl2)).BeginInit();
-            this.splitContainerControl2.SuspendLayout();
+            this.navBarGroupControlContainer5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lbPeople)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerTitles)).BeginInit();
+            this.splitContainerTitles.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.navBarControl1)).BeginInit();
             this.navBarControl1.SuspendLayout();
             this.navBarGroupControlContainer7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buttonEdit1.Properties)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -511,7 +516,7 @@ namespace OMLDatabaseEditor
             // 
             // toolStripContainer1.ContentPanel
             // 
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainerControl1);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainerNavigator);
             this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(793, 661);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
@@ -525,20 +530,22 @@ namespace OMLDatabaseEditor
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.menuStrip);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip);
             // 
-            // splitContainerControl1
+            // splitContainerNavigator
             // 
-            this.splitContainerControl1.AutoSize = true;
-            this.splitContainerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerControl1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerControl1.Name = "splitContainerControl1";
-            this.splitContainerControl1.Panel1.Controls.Add(this.mainNav);
-            this.splitContainerControl1.Panel1.Text = "Panel1";
-            this.splitContainerControl1.Panel2.Controls.Add(this.splitContainerControl2);
-            this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(793, 661);
-            this.splitContainerControl1.SplitterPosition = 181;
-            this.splitContainerControl1.TabIndex = 6;
-            this.splitContainerControl1.Text = "splitContainerControl1";
+            this.splitContainerNavigator.AutoSize = true;
+            this.splitContainerNavigator.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerNavigator.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerNavigator.Name = "splitContainerNavigator";
+            this.splitContainerNavigator.Panel1.Controls.Add(this.mainNav);
+            this.splitContainerNavigator.Panel1.Text = "Panel1";
+            this.splitContainerNavigator.Panel2.Controls.Add(this.genreEditor1);
+            this.splitContainerNavigator.Panel2.Controls.Add(this.personEditor1);
+            this.splitContainerNavigator.Panel2.Controls.Add(this.splitContainerTitles);
+            this.splitContainerNavigator.Panel2.Text = "Panel2";
+            this.splitContainerNavigator.Size = new System.Drawing.Size(793, 661);
+            this.splitContainerNavigator.SplitterPosition = 181;
+            this.splitContainerNavigator.TabIndex = 6;
+            this.splitContainerNavigator.Text = "splitContainerControl1";
             // 
             // mainNav
             // 
@@ -689,9 +696,18 @@ namespace OMLDatabaseEditor
             // 
             // navBarGroupControlContainer5
             // 
+            this.navBarGroupControlContainer5.Controls.Add(this.lbPeople);
             this.navBarGroupControlContainer5.Name = "navBarGroupControlContainer5";
-            this.navBarGroupControlContainer5.Size = new System.Drawing.Size(175, 328);
+            this.navBarGroupControlContainer5.Size = new System.Drawing.Size(175, 304);
             this.navBarGroupControlContainer5.TabIndex = 4;
+            // 
+            // lbPeople
+            // 
+            this.lbPeople.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbPeople.Location = new System.Drawing.Point(0, 0);
+            this.lbPeople.Name = "lbPeople";
+            this.lbPeople.Size = new System.Drawing.Size(175, 304);
+            this.lbPeople.TabIndex = 0;
             // 
             // navBarGroupControlContainer6
             // 
@@ -760,21 +776,34 @@ namespace OMLDatabaseEditor
             this.groupImport.LargeImage = global::OMLDatabaseEditor.Properties.Resources.emblem_symbolic_link;
             this.groupImport.Name = "groupImport";
             // 
-            // splitContainerControl2
+            // genreEditor1
             // 
-            this.splitContainerControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerControl2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerControl2.Name = "splitContainerControl2";
-            this.splitContainerControl2.Panel1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
-            this.splitContainerControl2.Panel1.Controls.Add(this.navBarControl1);
-            this.splitContainerControl2.Panel1.Text = "Panel1";
-            this.splitContainerControl2.Panel2.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
-            this.splitContainerControl2.Panel2.Controls.Add(this.titleEditor);
-            this.splitContainerControl2.Panel2.Text = "Panel2";
-            this.splitContainerControl2.Size = new System.Drawing.Size(602, 657);
-            this.splitContainerControl2.SplitterPosition = 195;
-            this.splitContainerControl2.TabIndex = 3;
-            this.splitContainerControl2.Text = "splitContainerControl2";
+            this.genreEditor1.Location = new System.Drawing.Point(298, 209);
+            this.genreEditor1.Name = "genreEditor1";
+            this.genreEditor1.Size = new System.Drawing.Size(183, 150);
+            this.genreEditor1.TabIndex = 5;
+            // 
+            // personEditor1
+            // 
+            this.personEditor1.Location = new System.Drawing.Point(13, 209);
+            this.personEditor1.Name = "personEditor1";
+            this.personEditor1.Size = new System.Drawing.Size(234, 213);
+            this.personEditor1.TabIndex = 4;
+            // 
+            // splitContainerTitles
+            // 
+            this.splitContainerTitles.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerTitles.Name = "splitContainerTitles";
+            this.splitContainerTitles.Panel1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            this.splitContainerTitles.Panel1.Controls.Add(this.navBarControl1);
+            this.splitContainerTitles.Panel1.Text = "Panel1";
+            this.splitContainerTitles.Panel2.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            this.splitContainerTitles.Panel2.Controls.Add(this.titleEditor);
+            this.splitContainerTitles.Panel2.Text = "Panel2";
+            this.splitContainerTitles.Size = new System.Drawing.Size(392, 184);
+            this.splitContainerTitles.SplitterPosition = 195;
+            this.splitContainerTitles.TabIndex = 3;
+            this.splitContainerTitles.Text = "splitContainerControl2";
             // 
             // navBarControl1
             // 
@@ -794,7 +823,7 @@ namespace OMLDatabaseEditor
             this.navBarControl1.OptionsNavPane.ShowExpandButton = false;
             this.navBarControl1.OptionsNavPane.ShowOverflowPanel = false;
             this.navBarControl1.OptionsNavPane.ShowSplitter = false;
-            this.navBarControl1.Size = new System.Drawing.Size(195, 654);
+            this.navBarControl1.Size = new System.Drawing.Size(195, 181);
             this.navBarControl1.TabIndex = 0;
             this.navBarControl1.Text = "navBarControl1";
             this.navBarControl1.View = new DevExpress.XtraNavBar.ViewInfo.SkinNavigationPaneViewInfoRegistrator();
@@ -812,20 +841,22 @@ namespace OMLDatabaseEditor
             // 
             // navBarGroupControlContainer7
             // 
-            this.navBarGroupControlContainer7.Controls.Add(this.textEdit1);
+            this.navBarGroupControlContainer7.Controls.Add(this.buttonEdit1);
             this.navBarGroupControlContainer7.Controls.Add(this.lbTitles);
             this.navBarGroupControlContainer7.Name = "navBarGroupControlContainer7";
-            this.navBarGroupControlContainer7.Size = new System.Drawing.Size(193, 626);
+            this.navBarGroupControlContainer7.Size = new System.Drawing.Size(193, 153);
             this.navBarGroupControlContainer7.TabIndex = 0;
             // 
-            // textEdit1
+            // buttonEdit1
             // 
-            this.textEdit1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.buttonEdit1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textEdit1.Location = new System.Drawing.Point(3, 3);
-            this.textEdit1.Name = "textEdit1";
-            this.textEdit1.Size = new System.Drawing.Size(187, 20);
-            this.textEdit1.TabIndex = 2;
+            this.buttonEdit1.Location = new System.Drawing.Point(3, 3);
+            this.buttonEdit1.Name = "buttonEdit1";
+            this.buttonEdit1.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, global::OMLDatabaseEditor.Properties.Resources.searchicon, null)});
+            this.buttonEdit1.Size = new System.Drawing.Size(187, 23);
+            this.buttonEdit1.TabIndex = 3;
             // 
             // lbTitles
             // 
@@ -834,11 +865,11 @@ namespace OMLDatabaseEditor
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lbTitles.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.lbTitles.FormattingEnabled = true;
-            this.lbTitles.ItemHeight = 34;
+            this.lbTitles.ItemHeight = 36;
             this.lbTitles.Location = new System.Drawing.Point(0, 40);
             this.lbTitles.MinimumSize = new System.Drawing.Size(100, 4);
             this.lbTitles.Name = "lbTitles";
-            this.lbTitles.Size = new System.Drawing.Size(194, 582);
+            this.lbTitles.Size = new System.Drawing.Size(194, 112);
             this.lbTitles.TabIndex = 1;
             this.lbTitles.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbTitles_DrawItem);
             // 
@@ -847,9 +878,11 @@ namespace OMLDatabaseEditor
             this.titleEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.titleEditor.Location = new System.Drawing.Point(0, 0);
             this.titleEditor.Name = "titleEditor";
-            this.titleEditor.Size = new System.Drawing.Size(401, 657);
+            this.titleEditor.Size = new System.Drawing.Size(191, 184);
             this.titleEditor.Status = OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.Normal;
             this.titleEditor.TabIndex = 3;
+            this.titleEditor.TitleChanged += new OMLDatabaseEditor.Controls.TitleEditor.TitleChangeEventHandler(this.titleEditor_TitleChanged);
+            this.titleEditor.TitleNameChanged += new OMLDatabaseEditor.Controls.TitleEditor.TitleNameChangeEventHandler(this.titleEditor_TitleNameChanged);
             // 
             // toolStrip
             // 
@@ -942,8 +975,8 @@ namespace OMLDatabaseEditor
             this.toolStripContainer1.TopToolStripPanel.PerformLayout();
             this.toolStripContainer1.ResumeLayout(false);
             this.toolStripContainer1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).EndInit();
-            this.splitContainerControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerNavigator)).EndInit();
+            this.splitContainerNavigator.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mainNav)).EndInit();
             this.mainNav.ResumeLayout(false);
             this.navBarGroupControlContainer4.ResumeLayout(false);
@@ -954,12 +987,14 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.lbMetadata)).EndInit();
             this.navBarGroupControlContainer3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbImport)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl2)).EndInit();
-            this.splitContainerControl2.ResumeLayout(false);
+            this.navBarGroupControlContainer5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.lbPeople)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerTitles)).EndInit();
+            this.splitContainerTitles.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.navBarControl1)).EndInit();
             this.navBarControl1.ResumeLayout(false);
             this.navBarGroupControlContainer7.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buttonEdit1.Properties)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -1018,7 +1053,7 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem exportAllMoviesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSplitButton newMovieSplitButton;
         private System.Windows.Forms.ToolStripMenuItem fromScratchToolStripMenuItem1;
-        private DevExpress.XtraEditors.SplitContainerControl splitContainerControl1;
+        private DevExpress.XtraEditors.SplitContainerControl splitContainerNavigator;
         public DevExpress.LookAndFeel.DefaultLookAndFeel defaultLookAndFeel1;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem filterByGenreToolStripMenuItem;
@@ -1042,7 +1077,7 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraNavBar.NavBarGroup groupMediaTree;
         private DevExpress.XtraNavBar.NavBarGroupControlContainer navBarGroupControlContainer4;
         private System.Windows.Forms.TreeView treeMedia;
-        private DevExpress.XtraEditors.SplitContainerControl splitContainerControl2;
+        private DevExpress.XtraEditors.SplitContainerControl splitContainerTitles;
         private OMLDatabaseEditor.Controls.TitleEditor titleEditor;
         private DevExpress.XtraNavBar.NavBarControl navBarControl1;
         private DevExpress.XtraNavBar.NavBarGroup groupTitles;
@@ -1054,7 +1089,10 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraNavBar.NavBarGroup groupPeople;
         private DevExpress.XtraNavBar.NavBarGroup groupGenres;
         private System.Windows.Forms.ListBox lbTitles;
-        private DevExpress.XtraEditors.TextEdit textEdit1;
+        private OMLDatabaseEditor.Controls.PersonEditor personEditor1;
+        private OMLDatabaseEditor.Controls.GenreEditor genreEditor1;
+        private DevExpress.XtraEditors.ListBoxControl lbPeople;
+        private DevExpress.XtraEditors.ButtonEdit buttonEdit1;
     }
 }
 

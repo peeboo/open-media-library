@@ -146,11 +146,23 @@
     <Compile Include="Controls\ExtenderDVDMenu.Designer.cs">
       <DependentUpon>ExtenderDVDMenu.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\GenreEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\GenreEditor.Designer.cs">
+      <DependentUpon>GenreEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NonFatalErrors.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\NonFatalErrors.Designer.cs">
       <DependentUpon>NonFatalErrors.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PersonEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PersonEditor.Designer.cs">
+      <DependentUpon>PersonEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\PersonEditorFrm.cs">
       <SubType>Form</SubType>
@@ -385,8 +397,7 @@
     <Content Include="Resources\emblem-symbolic-link.png" />
     <Content Include="Resources\movieheader.jpg" />
     <None Include="Resources\splashimage.bmp" />
-    <Content Include="Resources\splashimage.jpg" />
-    <None Include="Resources\splashscreen.bmp" />
+    <None Include="Resources\searchicon.bmp" />
     <Content Include="Resources\text-html.png" />
     <Content Include="Resources\video-x-generic.png" />
     <EmbeddedResource Include="Controls\DiskInfoFrm.resx">
@@ -396,6 +407,12 @@
     <EmbeddedResource Include="Controls\DiskMoverFrm.resx">
       <DependentUpon>DiskMoverFrm.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\GenreEditor.resx">
+      <DependentUpon>GenreEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PersonEditor.resx">
+      <DependentUpon>PersonEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DownloadingBackDropsForm.resx">
       <DependentUpon>DownloadingBackDropsForm.cs</DependentUpon>
