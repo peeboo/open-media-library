@@ -3,6 +3,7 @@ using System.Collections;
 using Microsoft.MediaCenter.UI;
 using Library.Code.V3;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Library.Code.V3
 {
@@ -52,6 +53,7 @@ namespace Library.Code.V3
             this.Filters = filter;
             this.Model = new Library.Code.V3.BrowseModel(this);
             this.Model.Pivots = new Choice(this, "desc", new ArrayListDataSet(this));
+            this.Description = this.TitleFromFilter();
             this.CreateContextMenu();
             this.CreateCommands();
             this.CreateViews();
@@ -119,6 +121,7 @@ namespace Library.Code.V3
                             if (!this.IsFilterDoubled(filterType))
                             {
                                 filteredPivot = new Library.Code.V3.FilterPivot(this, Filter.FilterTypeToString(filterType).ToLower(), "No titles were found.", this.Filters, filterType);
+                                filteredPivot.ContentLabel = this.Description;
                                 this.Model.Pivots.Options.Add(filteredPivot);
                             }
                             break;
@@ -126,6 +129,7 @@ namespace Library.Code.V3
                             if (!this.IsFilterDoubled(filterType))
                             {
                                 filteredPivot = new Library.Code.V3.FilterPivot(this, Filter.FilterTypeToString(filterType).ToLower(), "No titles were found.", this.Filters, filterType);
+                                filteredPivot.ContentLabel = this.Description;
                                 this.Model.Pivots.Options.Add(filteredPivot);
                             }
                             break;
@@ -139,11 +143,13 @@ namespace Library.Code.V3
                             if (!this.IsFilterDoubled(filterType))
                             {
                                 filteredPivot = new Library.Code.V3.FilterPivot(this, Filter.FilterTypeToString(filterType).ToLower(), "No titles were found.", this.Filters, filterType);
+                                filteredPivot.ContentLabel = this.Description;
                                 this.Model.Pivots.Options.Add(filteredPivot);
                             }
                             break;
                         default:
                             filteredPivot = new Library.Code.V3.FilterPivot(this, Filter.FilterTypeToString(filterType).ToLower(), "No titles were found.", this.Filters, filterType);
+                            filteredPivot.ContentLabel = this.Description;
                             this.Model.Pivots.Options.Add(filteredPivot);
                             break;
                     }
@@ -200,10 +206,34 @@ namespace Library.Code.V3
             this.CreateTitleView();
         }
 
+        private string TitleFromFilter()
+        {
+            string title = string.Empty;
+            if (filters != null && filters.Count != 0)
+            {
+                // create the title given the list of filters
+                StringBuilder sb = new StringBuilder(filters.Count * 10);
+                sb.Append(Filter.Home);
+                foreach (OMLEngine.TitleFilter filter in this.filters)
+                {
+                    sb.Append(" > ");
+                    if (!string.IsNullOrEmpty(filter.FilterText))
+                        sb.Append(filter.FilterText);
+                    else
+                        sb.Append(filter.FilterType.ToString());
+                }
+                title = sb.ToString();
+            }
+            else
+            {
+                title = Filter.Home;
+            }
+            return title;
+        }
         private void CreateTitleView()
         {
             Library.Code.V3.TitlesPivot titlePivot = new Library.Code.V3.TitlesPivot(this, "title", "No titles were found.", this.filters);
-            titlePivot.ContentLabel = "OML";
+            titlePivot.ContentLabel = this.Description;
             titlePivot.SupportsJIL = true;
             titlePivot.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
             titlePivot.ContentItemTemplate = "oneRowGalleryItemPoster";
@@ -252,7 +282,7 @@ namespace Library.Code.V3
             yearGroup.ContentItemTemplate = "GalleryGroup";
             yearGroup.SubContentItemTemplate = "twoRowPoster";//needs to pull from the total count to decide...
             yearGroup.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
-
+            yearGroup.ContentLabel = this.Description;
             this.Model.Pivots.Options.Add(yearGroup);
         }
 
