@@ -87,15 +87,20 @@ namespace OMLEngine
             return returnId;
         }
 
-        public static Image GetImageById(int id)
+        private static Image GetImageByIdThreadSafe(int id)
         {
             Image image = null;
 
-            Dao.DBImage dbImage = Dao.TitleCollectionDao.GetImageBydId(id);
-
-            if (dbImage != null)
+            using (Dao.OMLDataDataContext dbContext = new Dao.OMLDataDataContext())
             {
-                image = ByteArrayToImage(dbImage.Image.ToArray());
+                dbContext.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
+                
+                Dao.DBImage dbImage = dbContext.DBImages.SingleOrDefault(i => i.Id == id);
+
+                if (dbImage != null)
+                {
+                    image = ByteArrayToImage(dbImage.Image.ToArray());
+                }
             }
 
             return image;
@@ -155,12 +160,12 @@ namespace OMLEngine
         }
 
         /// <summary>
-        /// So we can manage the load of these
+        /// Constructs an image path but doesn't grab images if they're not found
         /// </summary>
         /// <param name="id"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        public static string GetImagePathByIdFast(int? id, ImageSize size)
+        public static string ConstructImagePathById(int? id, ImageSize size)
         {
             if (id == null)
                 return NoCoverPath;
@@ -168,88 +173,11 @@ namespace OMLEngine
             string returnPath = ConstructImagePathById(id.Value, size);
 
             return returnPath;
-        }
-
-        public static string GetImagePathByIdSlow(int? id, string returnPath, System.Data.Linq.Binary tmpImg, ImageSize size)
-        {
-            if (id == null)
-                return NoCoverPath;
-
-            try
-            {
-                int resizeSize = 0;
-
-                switch (size)
-                {
-                    case ImageSize.Medium:
-                        resizeSize = 400;
-                        break;
-
-                    case ImageSize.Small:
-                        resizeSize = 200;
-                        break;
-
-                    case ImageSize.Original:
-                    default:
-                        resizeSize = -1;
-                        break;
-                }
-
-                //string returnPath = ConstructImagePathById(id.Value, size);
-
-                // if the file hasn't been cached yet - retrieve it and cache it
-                if (!File.Exists(returnPath))
-                {
-                    //string originalPath = Path.Combine(FileSystemWalker.ImageDirectory, imagePrefixes[(int)ImageSize.Original] + id.ToString() + ".png"); ;
-
-                    //// make sure the original is saved on the disk
-                    //if (!File.Exists(originalPath))
-                    //{
-                        //// grab the image from the db
-                        //Image tmpImg2 = ImageManager.GetImageById(id.Value);
-                        //if (tmpImg2 != null)
-                        //    ResizeImage(tmpImg2, returnPath, resizeSize);
-                        ////tmpImg2.Save(originalPath);
-                        //else
-                        //    returnPath = null;
-                    using(Image image=ByteArrayToImage(tmpImg.ToArray()))
-                    {
-                        // grab the image from the db
-                        //Image tmpImg2 = ImageManager.GetImageById(id.Value);
-                        if (image != null)
-                            ResizeImage(image, returnPath, resizeSize);
-                        else
-                            returnPath = null;
-                    }
-                        //using (Image image = ByteArrayToImage(tmpImg.ToArray()))
-                        //{
-                        //    // save it out
-                        //    if (image != null)
-                        //        image.Save(originalPath);
-                        //    else
-                        //        returnPath = null;
-                        //}
-                    //}
-
-                    // if we're not looking for the original image we need to save the resized version
-                    //if (size != ImageSize.Original && returnPath != null)
-                    //{
-                    //    ResizeImage(originalPath, returnPath, resizeSize);
-                    //}
-                }
-
-                return returnPath ?? NoCoverPath;
-            }
-            catch (Exception ex)
-            {
-                Utilities.DebugLine("[Title.GetImagePathById] Exception: " + ex.Message);
-                return NoCoverPath;
-            }
-        }
+        }        
 
         /// <summary>
-        /// Will return the proper image path for a given id.  If the image doesn't exist you will
-        /// get the path for the NoImage image.
+        /// Will return the proper image path for a given id.  Will roundtrip to the DB if the images 
+        /// is missing on the drive.  If the image doesn't exist you will get the path for the NoImage image.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="size"></param>
@@ -290,7 +218,7 @@ namespace OMLEngine
                     if (!File.Exists(originalPath))
                     {
                         // grab the image from the db
-                        using (Image image = GetImageById(id.Value))
+                        using (Image image = GetImageByIdThreadSafe(id.Value))
                         {
                             // save it out
                             if (image != null)
@@ -311,7 +239,7 @@ namespace OMLEngine
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("[Title.GetImagePathById] Exception: " + ex.Message);
+                Utilities.DebugLine("[Title.GetImagePathById] Exception: " + ex.Message);                
                 return NoCoverPath;
             }
         }
@@ -556,6 +484,21 @@ namespace OMLEngine
             }
 
             return totalBytesRemove;
+        }
+
+        public static int? GetImageIdForTitleThreadSafe(int titleId, ImageType imageType)
+        {
+            using (Dao.OMLDataDataContext context = new OMLEngine.Dao.OMLDataDataContext())
+            {
+                context.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
+
+                int imageId = (from a in context.ImageMappings
+                                  where a.TitleId == titleId
+                                  where a.ImageType == (byte)imageType
+                                  select a.ImageId).FirstOrDefault();
+
+                return imageId;
+            }
         }
     }
 }

@@ -52,10 +52,6 @@
   <ItemGroup>
     <Reference Include="Microsoft.MediaCenter" />
     <Reference Include="Microsoft.MediaCenter.UI" />
-    <Reference Include="OMLSDK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=74d3b407d6cf16f1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\OMLSDK\bin\Debug\OMLSDK.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -118,7 +114,6 @@
     <Compile Include="Code\TreeView.cs" />
     <Compile Include="Code\UISettings.cs" />
     <Compile Include="Code\Filters.cs" />
-    <Compile Include="Code\V3\BackgroundProcessor.cs" />
     <Compile Include="Code\V3\Controls\LegacyHorizontalFlowLayoutHelper.cs" />
     <Compile Include="Code\V3\FilterPivot.cs" />
     <Compile Include="Code\V3\Settings\BackgroundSettings.cs" />
@@ -745,6 +740,10 @@
     <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
       <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
       <Name>OMLEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OMLSDK\OMLSDK.csproj">
+      <Project>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</Project>
+      <Name>OMLSDK</Name>
     </ProjectReference>
     <ProjectReference Include="..\OMLSDK\OMLSDK.csproj">
       <Project>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</Project>

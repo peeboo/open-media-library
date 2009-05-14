@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackgroundProcessor.cs" />
     <Compile Include="Settings\UserFilter.cs" />
     <Compile Include="Trailers\AppleTrailer.cs" />
     <Compile Include="Trailers\AppleTrailers.cs" />
