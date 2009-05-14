@@ -23,7 +23,7 @@ namespace OMLEngine
     [XmlRootAttribute("OMLTitle", Namespace = "http://www.openmedialibrary.org/", IsNullable = false)]
     public class Title : IComparable, ISerializable
     {
-        #region locals        
+        #region locals
         //private static string XmlNameSpace = "http://www.openmedialibrary.org/";
         //private bool _needsTranscode = false;        
 
@@ -32,18 +32,18 @@ namespace OMLEngine
         private bool _peopleProcesed = false;
         private string _frontCoverMenuPath = null;
         private string _frontCoverPath = null;
-        private string _backCoverPath = null;        
+        private string _backCoverPath = null;
 
         private List<Disk> _disks = null;
         private List<string> _audioTracks = null;
         private List<string> _subtitles = null;
         private List<string> _trailers = null;
-           
+
         private List<string> _extraFeatures = new List<string>();
 
         #endregion
 
-        #region properties       
+        #region properties
 
         #region Unknown Properties
 
@@ -60,9 +60,9 @@ namespace OMLEngine
         {
             get { return _extraFeatures; }
             set { _extraFeatures = value; }
-        }                         
+        }
 
-        #endregion        
+        #endregion
 
         /// <summary>
         /// Unique id from the Source of our title info (MyMovies, DVD Profiler, etc).
@@ -81,11 +81,11 @@ namespace OMLEngine
         public string VideoResolution
         {
             get { return _title.VideoResolution; }
-            set 
+            set
             {
                 if (value.Length > 20)
                     throw new FormatException("VideoResolution must be 20 characters or less.");
-                _title.VideoResolution = value; 
+                _title.VideoResolution = value;
             }
         }
 
@@ -105,40 +105,40 @@ namespace OMLEngine
             set
             {
                 _title.ProductionYear = value;
-            }            
-        }       
+            }
+        }
 
         public string VideoDetails
         {
             get { return _title.VideoDetails; }
-            set 
+            set
             {
-                _title.VideoDetails = value; 
+                _title.VideoDetails = value;
             }
         }
 
         public string ParentalRatingReason
         {
             get { return _title.ParentalRatingReason; }
-            set 
+            set
             {
                 if (value.Length > 255)
                     throw new FormatException("ParentalRatingReason must be 255 characters or less.");
-                _title.ParentalRatingReason = value; 
+                _title.ParentalRatingReason = value;
             }
         }
 
         public string SortName
         {
-            get 
+            get
             {
-                return _title.SortName;                
+                return _title.SortName;
             }
-            set 
+            set
             {
                 if (string.IsNullOrEmpty(value) || value.Length > 255)
                     throw new FormatException("SortName must be 255 characters or less.");
-                _title.SortName = value; 
+                _title.SortName = value;
             }
         }
 
@@ -149,11 +149,11 @@ namespace OMLEngine
         public string OriginalName
         {
             get { return _title.OriginalName; }
-            set 
+            set
             {
                 if (value.Length > 255)
                     throw new FormatException("OriginalName must be 255 characters or less.");
-                _title.OriginalName = value; 
+                _title.OriginalName = value;
             }
         }
 
@@ -163,7 +163,7 @@ namespace OMLEngine
         /// <value>The tags.</value>
         public IList<string> Tags
         {
-            get 
+            get
             {
                 // lazy load the tags
                 if (DaoTitle.UpdatedTags == null)
@@ -176,7 +176,7 @@ namespace OMLEngine
 
                 return DaoTitle.UpdatedTags.AsReadOnly();
             }
-        }        
+        }
 
         /// <summary>
         /// Gets or sets the video standard (NTSC, PAL).
@@ -185,11 +185,11 @@ namespace OMLEngine
         public string VideoStandard
         {
             get { return _title.VideoStandard; }
-            set 
+            set
             {
                 if (value.Length > 10)
                     throw new FormatException("VideoStandard must be 10 characters or less.");
-                _title.VideoStandard = value; 
+                _title.VideoStandard = value;
             }
         }
 
@@ -200,11 +200,11 @@ namespace OMLEngine
         public string AspectRatio
         {
             get { return _title.AspectRatio; }
-            set 
+            set
             {
                 if (value.Length > 10)
                     throw new FormatException("AspectRatio must be 10 characters or less.");
-                _title.AspectRatio = value; 
+                _title.AspectRatio = value;
             }
         }
 
@@ -215,11 +215,11 @@ namespace OMLEngine
         public string UPC
         {
             get { return _title.UPC; }
-            set 
+            set
             {
                 if (value.Length > 100)
                     throw new FormatException("UPC must be 100 characters or less.");
-                _title.UPC = value; 
+                _title.UPC = value;
             }
         }
 
@@ -230,15 +230,15 @@ namespace OMLEngine
         public int? UserStarRating
         {
             get { return _title.UserRating ?? 0; }
-            set 
-            { 
-                _title.UserRating = ( value == null ) 
-                                            ? (byte?)null 
+            set
+            {
+                _title.UserRating = (value == null)
+                                            ? (byte?)null
                                             : (value > 100) ?
-                                                (byte)100 
-                                                : (value < 0) 
-                                                    ? (byte)0 
-                                                    : (byte)value; 
+                                                (byte)100
+                                                : (value < 0)
+                                                    ? (byte)0
+                                                    : (byte)value;
             }
         }
 
@@ -256,15 +256,15 @@ namespace OMLEngine
         /// </summary>
         public string FileLocation
         {
-            get 
+            get
             {
                 if (_title.Disks.Count == 1)
                     return (_title.Disks[0].Path);
                 else
                     return (String.Empty);
-            
+
             }
-        }        
+        }
 
         /// <summary>
         /// disks for the title
@@ -292,7 +292,7 @@ namespace OMLEngine
             get
             {
                 if (_title.Disks.Count > 0)
-                    return (VideoFormat) _title.Disks[0].VideoFormat;
+                    return (VideoFormat)_title.Disks[0].VideoFormat;
                 else
                     return VideoFormat.UNKNOWN;
             }
@@ -304,13 +304,13 @@ namespace OMLEngine
         public string Name
         {
             get { return _title.Name; }
-            set 
+            set
             {
                 if (value.Length > 255)
                     throw new FormatException("Name must be 255 characters or less.");
-                _title.Name = value; 
+                _title.Name = value;
             }
-        }        
+        }
 
         /// <summary>
         /// Internal id of the Title
@@ -329,34 +329,34 @@ namespace OMLEngine
             get { return _title.GroupId ?? _title.Id; }
             set { _title.GroupId = value; }
         }
-        
+
         /// <summary>
         /// Name of the source for our info (MyMovies, DVD Profiler, etc)
         /// </summary>
         public string MetadataSourceName
         {
             get { return _title.MetaDataSource; }
-            set 
+            set
             {
                 if (value.Length > 200)
                     throw new FormatException("MetaDataSourceName must be 200 characters or less.");
-                _title.MetaDataSource = value; 
+                _title.MetaDataSource = value;
             }
         }
-       
+
         /// <summary>
         /// Name of the source from which meta-data was gathered (MyMovies, DVD Profiler, etc.)
         /// </summary>
         public string ImporterSource
         {
             get { return _title.ImporterSource; }
-            set 
+            set
             {
                 if (value.Length > 255)
                     throw new FormatException("ImporterSource must be 255 characters or less.");
-                _title.ImporterSource = value; 
+                _title.ImporterSource = value;
             }
-        }        
+        }
 
         /// <summary>
         /// Pull path to the cover art image, 
@@ -365,19 +365,19 @@ namespace OMLEngine
         public string FrontCoverPath
         {
             get
-            {                                
+            {
                 if (_title.UpdatedFrontCoverPath != null)
                     return _title.UpdatedFrontCoverPath;
 
                 if (_frontCoverPath == null)
                 {
                     Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.FrontCoverImage);
-                    _frontCoverPath = ImageManager.GetImagePathById((frontCover == null) ? (int?)null : frontCover.ImageId, ImageSize.Original);                                                        
+                    _frontCoverPath = ImageManager.GetImagePathById((frontCover == null) ? (int?)null : frontCover.ImageId, ImageSize.Original);
                 }
 
                 return _frontCoverPath;
             }
-            set 
+            set
             {
                 if (value.Length > 255)
                     throw new FormatException("FrontCoverPath must be 255 characters or less.");
@@ -389,82 +389,110 @@ namespace OMLEngine
             }
         }
 
-        //hacked in...
-        public string GetFrontCoverMenuPathSlow()
+
+        #region Async Menu Cover Art
+
+        public delegate void DelegateFrontCoverPath();        
+        private static BackgroundProcessor<Title> imageProcessor;
+        private static object threadLocker = new object();
+        private object pathUpdateLocker = new object();
+        private DelegateFrontCoverPath callback;        
+
+        private static void ProcessorCallback(Title title)
         {
-            if (_frontCoverMenuPath != null)
+            if (title._frontCoverMenuPath == null)
             {
-                _frontCoverMenuPath = ImageManager.GetImagePathByIdSlow(frontCoverInt, _frontCoverMenuPath, tmpImg, ImageSize.Small);
-                this.tmpImg = null;
-            }
-            return _frontCoverMenuPath;    
-        }
-
-        private int frontCoverInt;
-        private System.Data.Linq.Binary tmpImg;
-
-        public string GetFrontCoverMenuPathFast()
-        {
-
-            if (_frontCoverMenuPath == null)
-            {
-                try
+                lock (title.pathUpdateLocker)
                 {
-                    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.FrontCoverImage);
-                    _frontCoverMenuPath = ImageManager.GetImagePathByIdFast((frontCover == null) ? (int?)null : frontCover.ImageId, ImageSize.Small);
-                    if (!string.IsNullOrEmpty(_frontCoverMenuPath) && !File.Exists(_frontCoverMenuPath) && frontCover != null)
+                    if (title._frontCoverMenuPath == null)
                     {
-                        //store the image data-blows up if I don't cache local...
-                        this.tmpImg = frontCover.DBImage.Image;
-                        this.frontCoverInt = frontCover.DBImage.Id;
+                        title.GetFrontCoverMenuPathSlow();
                     }
                 }
-                catch (Exception ex)
+            }
+
+            if (title.callback != null)
+                title.callback.Invoke();
+        }        
+
+        public void BeginGetFrontCoverMenuPath(DelegateFrontCoverPath callback)
+        {
+            if (imageProcessor == null)
+            {
+                lock (threadLocker)
                 {
+                    if (imageProcessor == null)
+                    {
+                        imageProcessor = new BackgroundProcessor<Title>(4, Title.ProcessorCallback, "ImageProcessor");
+                    }
                 }
             }
-            
-            return _frontCoverMenuPath;    
-        }
+
+            imageProcessor.Enqueue(this);
+            this.callback += callback;            
+        }        
+
+        #endregion
+
 
         /// <summary>
-        /// The small version of the front cover image
+        /// Will returns the front cover menu path and roundtrip to the database if need be.
+        /// Thread Safe.
+        /// </summary>
+        /// <returns></returns>
+        public string GetFrontCoverMenuPathSlow()
+        {
+            if (_frontCoverMenuPath == null)
+            {                                
+                int? frontCoverId = ImageManager.GetImageIdForTitleThreadSafe(this.Id, ImageType.FrontCoverImage);
+                _frontCoverMenuPath = ImageManager.GetImagePathById(frontCoverId, ImageSize.Small);                             
+            }
+
+            return _frontCoverMenuPath;
+        }               
+
+        /// <summary>
+        /// The small version of the front cover image.  Will be NULL if the image hasn't been retrieved from the database yet.
+        /// 
         /// </summary>
         public string FrontCoverMenuPath
         {
             get 
             {
-                //if (_frontCoverMenuPath == null)
-                //{
-                //    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.FrontCoverImage);
-                //    _frontCoverMenuPath = ImageManager.GetImagePathByIdSlow(frontCoverInt,_frontCoverMenuPath, tmpImg, ImageSize.Small);             
-                //}
-            
-                return _frontCoverMenuPath;             
-            }           
-        }        
+                if (_frontCoverMenuPath == null)
+                {
+                    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.FrontCoverImage);
+                    string path = ImageManager.ConstructImagePathById((frontCover == null) ? (int?)null : frontCover.ImageId, ImageSize.Small);
+
+                    if (File.Exists(path))
+                        _frontCoverMenuPath = path;
+                }
+
+                return _frontCoverMenuPath; 
+            }
+        }
 
         /// <summary>
         /// Full path to the rear cover art image
         /// </summary>
         public string BackCoverPath
         {
-            get 
-            {                                
+            get
+            {
                 if (_title.UpdatedBackCoverPath != null)
                     return _title.UpdatedBackCoverPath;
 
                 Dao.ImageMapping backCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.BackCoverImage);
-                _backCoverPath = ImageManager.GetImagePathById((backCover == null) ? (int?)null : backCover.ImageId, ImageSize.Original);                                                        
+                _backCoverPath = ImageManager.GetImagePathById((backCover == null) ? (int?)null : backCover.ImageId, ImageSize.Original);
 
-                return _backCoverPath;                 
+                return _backCoverPath;
             }
-            set 
+            set
             {
                 if (value.Length > 255)
                     throw new FormatException("BackCoverPath must be 255 characters or less.");
 
-                _title.UpdatedBackCoverPath = value;                  
+                _title.UpdatedBackCoverPath = value;
             }
         }
 
@@ -474,7 +502,7 @@ namespace OMLEngine
             {
                 if (DaoTitle.UpdatedFanArtPaths == null)
                 {
-                    DaoTitle.UpdatedFanArtPaths = new List<string>();                    
+                    DaoTitle.UpdatedFanArtPaths = new List<string>();
 
                     foreach (Dao.ImageMapping mapping in _title.Images.Where(t => t.ImageType == (byte)ImageType.FanartImage))
                     {
@@ -492,7 +520,7 @@ namespace OMLEngine
         public int Runtime
         {
             get { return _title.Runtime ?? 0; }
-            set { _title.Runtime = (short) value; }
+            set { _title.Runtime = (short)value; }
         }
 
         /// <summary>
@@ -501,11 +529,11 @@ namespace OMLEngine
         public string ParentalRating
         {
             get { return _title.ParentalRating ?? string.Empty; }
-            set 
+            set
             {
                 if (value.Length > 20)
                     throw new FormatException("ParentalRating must be 20 characters or less.");
-                _title.ParentalRating = value; 
+                _title.ParentalRating = value;
             }
         }
 
@@ -524,11 +552,11 @@ namespace OMLEngine
         public string Studio
         {
             get { return _title.Studio ?? string.Empty; }
-            set 
+            set
             {
                 if (value.Length > 255)
                     throw new FormatException("Studio must be 255 characters or less.");
-                _title.Studio = value; 
+                _title.Studio = value;
             }
         }
         /// <summary>
@@ -537,11 +565,11 @@ namespace OMLEngine
         public string CountryOfOrigin
         {
             get { return _title.CountryOfOrigin ?? string.Empty; }
-            set 
+            set
             {
                 if (value.Length > 255)
                     throw new FormatException("CountryOfOrigin must be 255 characters or less.");
-                _title.CountryOfOrigin = value; 
+                _title.CountryOfOrigin = value;
             }
         }
         /// <summary>
@@ -550,11 +578,11 @@ namespace OMLEngine
         public string OfficialWebsiteURL
         {
             get { return _title.WebsiteUrl ?? string.Empty; }
-            set 
+            set
             {
                 if (value.Length > 255)
                     throw new FormatException("OfficialWebsiteURL must be 255 characters or less.");
-                _title.WebsiteUrl = value; 
+                _title.WebsiteUrl = value;
             }
         }
 
@@ -574,20 +602,20 @@ namespace OMLEngine
         {
             get { return _title.DateAdded ?? DateTime.MinValue; }
             set { _title.DateAdded = value; }
-        }        
+        }
 
         /// <summary>
         /// List of languages (English, Spanish, French, DTS, DD5.1, DD2.0, etc)
         /// </summary>
         public IList<string> AudioTracks
         {
-            get 
+            get
             {
                 // lazy load the audio tracks
                 if (_audioTracks == null)
                     _audioTracks = Dao.TitleDao.DelimitedDBStringToCollection(_title.AudioTracks);
 
-                return _audioTracks.AsReadOnly(); 
+                return _audioTracks.AsReadOnly();
             }
         }
 
@@ -620,7 +648,7 @@ namespace OMLEngine
         /// </summary>
         public IList<string> Genres
         {
-            get 
+            get
             {
                 // lazy load the genres
                 if (DaoTitle.UpdatedGenres == null)
@@ -630,7 +658,7 @@ namespace OMLEngine
                         DaoTitle.UpdatedGenres.Add(genre.MetaData.Name);
                 }
 
-                return DaoTitle.UpdatedGenres.AsReadOnly(); 
+                return DaoTitle.UpdatedGenres.AsReadOnly();
             }
         }
 
@@ -641,42 +669,42 @@ namespace OMLEngine
                 SetupPeopleCollections();
 
                 return DaoTitle.UpdatedNonActingRoles.AsReadOnly();
-            }    
-        }            
+            }
+        }
 
         public IList<Role> ActingRoles
         {
-            get 
+            get
             {
                 SetupPeopleCollections();
 
-                return DaoTitle.UpdatedActors.AsReadOnly(); 
-            }            
-        }            
-        
+                return DaoTitle.UpdatedActors.AsReadOnly();
+            }
+        }
+
         /// <summary>
         /// List of Person objects that directed the title (usually one Person)
         /// </summary>
         public IList<Person> Directors
         {
-            get 
-            {                
+            get
+            {
                 SetupPeopleCollections();
 
-                return DaoTitle.UpdatedDirectors.AsReadOnly(); 
-            }            
+                return DaoTitle.UpdatedDirectors.AsReadOnly();
+            }
         }
         /// <summary>
         /// List of Person objects that wrote the title
         /// </summary>
         public IList<Person> Writers
         {
-            get 
-            {                
+            get
+            {
                 SetupPeopleCollections();
 
-                return DaoTitle.UpdatedWriters.AsReadOnly(); 
-            }            
+                return DaoTitle.UpdatedWriters.AsReadOnly();
+            }
         }
 
         /// <summary>
@@ -684,20 +712,20 @@ namespace OMLEngine
         /// </summary>
         public IList<Person> Producers
         {
-            get 
+            get
             {
                 SetupPeopleCollections();
 
-                return DaoTitle.UpdatedProducers.AsReadOnly(); 
-            }            
+                return DaoTitle.UpdatedProducers.AsReadOnly();
+            }
         }
 
         public decimal PercentComplete
         {
             get { return _title.PercentComplete; }
-        }        
+        }
 
-        #endregion        
+        #endregion
 
         private void SetupPeopleCollections()
         {
@@ -709,25 +737,25 @@ namespace OMLEngine
             DaoTitle.UpdatedWriters = new List<Person>();
             DaoTitle.UpdatedProducers = new List<Person>();
             DaoTitle.UpdatedNonActingRoles = new List<Role>();
-            
+
             foreach (Dao.Person person in _title.People)
             {
                 switch ((PeopleRole)person.Role)
                 {
-                    case PeopleRole.Actor:                                                                        
+                    case PeopleRole.Actor:
                         DaoTitle.UpdatedActors.Add(new Role(person.MetaData.FullName, person.CharacterName));
                         break;
 
                     case PeopleRole.Director:
-                        DaoTitle.UpdatedDirectors.Add(new Person(person.MetaData.FullName));                        
+                        DaoTitle.UpdatedDirectors.Add(new Person(person.MetaData.FullName));
                         break;
 
                     case PeopleRole.Producers:
-                        DaoTitle.UpdatedProducers.Add(new Person(person.MetaData.FullName));        
+                        DaoTitle.UpdatedProducers.Add(new Person(person.MetaData.FullName));
                         break;
 
                     case PeopleRole.Writer:
-                        DaoTitle.UpdatedWriters.Add(new Person(person.MetaData.FullName));                        
+                        DaoTitle.UpdatedWriters.Add(new Person(person.MetaData.FullName));
                         break;
 
                     case PeopleRole.NonActing:
@@ -742,10 +770,10 @@ namespace OMLEngine
         /// <summary>
         /// Generic Constructor - used to add a new title to the db
         /// </summary>
-        public Title() 
+        public Title()
         {
-            _title = new OMLEngine.Dao.Title();            
-            
+            _title = new OMLEngine.Dao.Title();
+
             // todo : solomon : this went wonky here 
             /*
             info.AddValue("backdrop_boxart_path", _backDropImage);
@@ -765,23 +793,23 @@ namespace OMLEngine
 
         #region People Management
         public void AddActingRole(string actor, string role)
-        {            
-            SetupPeopleCollections();                      
+        {
+            SetupPeopleCollections();
 
             if (!DaoTitle.UpdatedActors.Exists(p => p.PersonName.Equals(actor, StringComparison.OrdinalIgnoreCase)))
-            {                
+            {
                 DaoTitle.UpdatedActors.Add(new Role(actor, role));
             }
         }
 
         public void RemoveActingRole(string actor)
-        {            
-            SetupPeopleCollections();            
+        {
+            SetupPeopleCollections();
 
             Role role = DaoTitle.UpdatedActors.Find(p => p.PersonName == actor);
 
             if (role != null)
-            {                               
+            {
                 DaoTitle.UpdatedActors.Remove(role);
             }
         }
@@ -812,7 +840,7 @@ namespace OMLEngine
                 DaoTitle.UpdatedNonActingRoles.Remove(role);
             }
         }
- 
+
         public void RemoveAllNonActingRoles()
         {
             DaoTitle.UpdatedNonActingRoles = new List<Role>();
@@ -823,17 +851,17 @@ namespace OMLEngine
         /// </summary>
         /// <param name="director">Person object to add</param>
         public void AddDirector(Person director)
-        {            
-            SetupPeopleCollections();            
+        {
+            SetupPeopleCollections();
 
             if (!(DaoTitle.UpdatedDirectors.Exists(p => p.full_name.Equals(director.full_name, StringComparison.OrdinalIgnoreCase))))
             {
                 DaoTitle.UpdatedDirectors.Add(director);
-            }            
+            }
         }
 
         public void RemoveDirector(string name)
-        {            
+        {
             SetupPeopleCollections();
 
             Person person = DaoTitle.UpdatedDirectors.Find(p => p.full_name == name);
@@ -846,7 +874,7 @@ namespace OMLEngine
 
         public void RemoveAllDirectors()
         {
-            DaoTitle.UpdatedDirectors = new List<Person>();                        
+            DaoTitle.UpdatedDirectors = new List<Person>();
         }
 
         /// <summary>
@@ -854,17 +882,17 @@ namespace OMLEngine
         /// </summary>
         /// <param name="writer">Person object to add</param>
         public void AddWriter(Person writer)
-        {            
+        {
             SetupPeopleCollections();
 
             if (!(DaoTitle.UpdatedWriters.Exists(p => p.full_name.Equals(writer.full_name, StringComparison.OrdinalIgnoreCase))))
             {
                 DaoTitle.UpdatedWriters.Add(writer);
-            }      
+            }
         }
 
         public void RemoveWriter(string name)
-        {            
+        {
             SetupPeopleCollections();
 
             Person person = DaoTitle.UpdatedWriters.Find(p => p.full_name == name);
@@ -891,7 +919,7 @@ namespace OMLEngine
             if (!(DaoTitle.UpdatedProducers.Exists(p => p.full_name.Equals(producer.full_name, StringComparison.OrdinalIgnoreCase))))
             {
                 DaoTitle.UpdatedProducers.Add(producer);
-            }    
+            }
         }
 
         public void RemoveProducer(string name)
@@ -918,13 +946,13 @@ namespace OMLEngine
         /// <param name="path"></param>
         public void AddFanArtImage(string path)
         {
-            if( string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(path))
                 return;
 
             if (FanArtPaths.Contains(path))
                 return;
 
-            if ( File.Exists(path))
+            if (File.Exists(path))
                 DaoTitle.UpdatedFanArtPaths.Add(path);
         }
 
@@ -1046,7 +1074,7 @@ namespace OMLEngine
             if (!Genres.Contains(genre))
                 return;
 
-            DaoTitle.UpdatedGenres.Remove(genre);        
+            DaoTitle.UpdatedGenres.Remove(genre);
         }
 
         /// <summary>
@@ -1120,7 +1148,7 @@ namespace OMLEngine
             if (Tags.Contains(tag))
                 return;
 
-            DaoTitle.UpdatedTags.Add(tag);            
+            DaoTitle.UpdatedTags.Add(tag);
         }
 
         /// <summary>
@@ -1135,7 +1163,7 @@ namespace OMLEngine
             if (!Tags.Contains(tag))
                 return;
 
-            DaoTitle.UpdatedTags.Remove(tag);            
+            DaoTitle.UpdatedTags.Remove(tag);
         }
 
         public override bool Equals(object obj)
@@ -1808,9 +1836,9 @@ namespace OMLEngine
             return t;*/
         }
 
-//<?xml version="1.0" encoding="utf-8"?>
-//<OMLTitle xmlns="http://www.openmedialibrary.org/">
-        
+        //<?xml version="1.0" encoding="utf-8"?>
+        //<OMLTitle xmlns="http://www.openmedialibrary.org/">
+
         public bool SerializeToXMLFile(string fileName)
         {
             return true;
@@ -2058,13 +2086,13 @@ namespace OMLEngine
             SortName = CopyStringValue(t.SortName, SortName, overWrite);
             ParentalRatingReason = CopyStringValue(t.ParentalRatingReason, ParentalRatingReason, overWrite);
             VideoDetails = CopyStringValue(t.VideoDetails, VideoDetails, overWrite);
-            
-            if ( t.Runtime > 0) Runtime = t.Runtime;
+
+            if (t.Runtime > 0) Runtime = t.Runtime;
             if ((t.ReleaseDate != null) && (t.ReleaseDate.Year > 1900) && (t.ReleaseDate.Year < 2080)) ReleaseDate = t.ReleaseDate;
             if (t.UserStarRating > 0) UserStarRating = t.UserStarRating;
             if (t.ProductionYear > 0) ProductionYear = t.ProductionYear;
 
-            if (t.Directors!= null && t.Directors.Count > 0)
+            if (t.Directors != null && t.Directors.Count > 0)
             {
                 if (overWrite || Directors.Count == 0)
                 {
@@ -2163,7 +2191,7 @@ namespace OMLEngine
                         AddNonActingRole(p.PersonName, p.RoleName);
                     }
                 }
-            }            
+            }
 
             if (t._trailers != null && t._trailers.Count > 0)
             {
@@ -2223,7 +2251,7 @@ namespace OMLEngine
                 }
             }
 
-        }                
+        }
 
         public override string ToString()
         {
@@ -2298,7 +2326,7 @@ namespace OMLEngine
             }
         }
 
-        private  T GetSerializedList<T>(SerializationInfo info, string id) where T : new()
+        private T GetSerializedList<T>(SerializationInfo info, string id) where T : new()
         {
             try
             {
@@ -2321,51 +2349,51 @@ namespace OMLEngine
         {
             _title = new OMLEngine.Dao.Title();
             //Utilities.DebugLine("[Title] Loading Title from Serialization");
-            Name = GetSerializedString(info,"name");
+            Name = GetSerializedString(info, "name");
             //Id = GetSerializedInt( info,"itemid");
-            MetadataSourceID = GetSerializedString(info,"sourceid");
-            MetadataSourceName = GetSerializedString(info,"sourcename");
-            FrontCoverPath = GetSerializedString(info,"front_boxart_path");
+            MetadataSourceID = GetSerializedString(info, "sourceid");
+            MetadataSourceName = GetSerializedString(info, "sourcename");
+            FrontCoverPath = GetSerializedString(info, "front_boxart_path");
             //FrontCoverMenuPath = GetSerializedString(info, "front_boxart_menu_path");
-            BackCoverPath = GetSerializedString(info,"back_boxart_path");
-            Synopsis = GetSerializedString(info,"synopsis");
-            Studio = GetSerializedString(info,"distributor");
-            CountryOfOrigin = GetSerializedString(info,"country_of_origin");
-            OfficialWebsiteURL = GetSerializedString(info,"official_website_url");
+            BackCoverPath = GetSerializedString(info, "back_boxart_path");
+            Synopsis = GetSerializedString(info, "synopsis");
+            Studio = GetSerializedString(info, "distributor");
+            CountryOfOrigin = GetSerializedString(info, "country_of_origin");
+            OfficialWebsiteURL = GetSerializedString(info, "official_website_url");
             DateAdded = GetSerializedDateTime(info, "date_added");
-            ImporterSource = GetSerializedString(info,"importer_source");
+            ImporterSource = GetSerializedString(info, "importer_source");
             Runtime = GetSerializedInt(info, "runtime");
             ParentalRating = GetSerializedString(info, "mpaa_rating");
-            
+
 
             ReleaseDate = GetSerializedDateTime(info, "release_date");
-            
-            DaoTitle.UpdatedProducers = new List<Person>();            
+
+            DaoTitle.UpdatedProducers = new List<Person>();
             List<string> producers = GetSerializedList<List<string>>(info, "producers");
             producers.ForEach(p => DaoTitle.UpdatedProducers.Add(new Person(p)));
 
-            DaoTitle.UpdatedWriters = GetSerializedList<List<Person>>(info, "writers");            
+            DaoTitle.UpdatedWriters = GetSerializedList<List<Person>>(info, "writers");
 
-            DaoTitle.UpdatedDirectors = GetSerializedList<List<Person>>(info, "directors");                                   
+            DaoTitle.UpdatedDirectors = GetSerializedList<List<Person>>(info, "directors");
 
             _audioTracks = GetSerializedList<List<string>>(info, "language_formats");
             _title.AudioTracks = Dao.TitleDao.GetDelimitedStringFromCollection(_audioTracks);
-            DaoTitle.UpdatedGenres = GetSerializedList<List<string>>(info, "genres");            
+            DaoTitle.UpdatedGenres = GetSerializedList<List<string>>(info, "genres");
 
-            UserStarRating = GetSerializedInt(info,"user_star_rating");
-            AspectRatio = GetSerializedString(info,"aspect_ratio");
-            VideoStandard = GetSerializedString(info,"video_standard");
-            UPC = GetSerializedString(info,"upc");
-            OriginalName = GetSerializedString(info,"original_name");
+            UserStarRating = GetSerializedInt(info, "user_star_rating");
+            AspectRatio = GetSerializedString(info, "aspect_ratio");
+            VideoStandard = GetSerializedString(info, "video_standard");
+            UPC = GetSerializedString(info, "upc");
+            OriginalName = GetSerializedString(info, "original_name");
             DaoTitle.UpdatedTags = GetSerializedList<List<string>>(info, "tags");
-            
+
             Dictionary<string, string> actors = GetSerializedList<Dictionary<string, string>>(info, "acting_roles");
 
             DaoTitle.UpdatedActors = new List<Role>();
             foreach (string actor in actors.Keys)
                 DaoTitle.UpdatedActors.Add(new Role(actor, actors[actor]));
-            
-            Dictionary<string, string>  nonActingRoles = GetSerializedList<Dictionary<string, string>>(info, "nonacting_roles");
+
+            Dictionary<string, string> nonActingRoles = GetSerializedList<Dictionary<string, string>>(info, "nonacting_roles");
 
             DaoTitle.UpdatedNonActingRoles = new List<Role>();
             foreach (string key in nonActingRoles.Keys)
@@ -2381,7 +2409,7 @@ namespace OMLEngine
             _disks = GetSerializedList<List<Disk>>(info, "disks");
             foreach (Disk d in _disks)
                 _title.Disks.Add(d.DaoDisk);
-            
+
             CleanDuplicateDisks();
             if (VideoFormat == VideoFormat.DVD)
             {
@@ -2402,8 +2430,9 @@ namespace OMLEngine
                 int i = _disks.IndexOf(d);
                 if (i < 0)
                     continue;
-                while (true) {
-                    int oi = _disks.IndexOf(d, i+1);
+                while (true)
+                {
+                    int oi = _disks.IndexOf(d, i + 1);
                     if (oi < 0)
                         break;
                     _disks.RemoveAt(oi);
@@ -2420,7 +2449,7 @@ namespace OMLEngine
         {
 
         }
-        #endregion        
+        #endregion
     }
 
     public class Role

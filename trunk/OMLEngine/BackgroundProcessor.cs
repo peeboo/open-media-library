@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Diagnostics;
 
-namespace Library.Code.V3
+namespace OMLEngine
 {
     public class BackgroundProcessor<T> : IDisposable where T : class
     {

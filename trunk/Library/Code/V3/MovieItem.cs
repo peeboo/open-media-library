@@ -9,14 +9,7 @@ using Microsoft.MediaCenter.UI;
 namespace Library.Code.V3
 {
     public class MovieItem : GalleryItem
-    {
-        private static BackgroundProcessor<MovieItem> imageProcessor = new BackgroundProcessor<MovieItem>(4, MovieItem.ProcessorCallback, "ImageCacher");
-
-        private static void ProcessorCallback(MovieItem movieitem)
-        {
-            movieitem.SetImage(movieitem.TitleObject.GetFrontCoverMenuPathSlow());
-            Microsoft.MediaCenter.UI.Application.DeferredInvoke(movieitem.CacheImageDone, null);
-        }
+    {        
         private void CacheImageDone(object nothing)
         {
             FirePropertyChanged("DefaultImage");
@@ -244,50 +237,33 @@ namespace Library.Code.V3
                     base.FirePropertyChanged("DefaultImage");
                 }
             }
-        }
+        }        
+
         private void SetDefaultImage()
-        {
-            //if (!string.IsNullOrEmpty(this.InternalMovieItem.TitleObject.FrontCoverMenuPath) && File.Exists(this.InternalMovieItem.TitleObject.FrontCoverMenuPath))
-            //{
-            //    this.DefaultImage = new Image("file://" + this.InternalMovieItem.TitleObject.FrontCoverMenuPath);
-            //}
-            //return;
+        {            
             this.imagechkd = true;
+
             if (this._titleObj != null)
             {
-                string imgPath = this._titleObj.GetFrontCoverMenuPathFast();
+                string imgPath = this._titleObj.FrontCoverMenuPath;
                 if (!string.IsNullOrEmpty(imgPath))
-                {
-                    if (File.Exists(imgPath))
-                    {
-                        this.DefaultImage = new Image("file://" + imgPath);
-                    }
-                    else
-                    {
-                        imageProcessor.Enqueue(this);
-                        //imageProcessor.Inject(this);
-                        //need to queue it!
-                        //Microsoft.MediaCenter.UI.Application.DeferredInvokeOnWorkerThread(
-                        //    delegate
-                        //    {
-                        //        System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Lowest;
-                        //        imgPath=this.InternalMovieItem.TitleObject.GetFrontCoverMenuPathSlow();
-                        //        if (File.Exists(imgPath))
-                        //        {
-                        //            this.m_defaultImage = new Image("file://" + imgPath);
-                        //        }
-                        //    },
-                        //    delegate 
-                        //    {
-                        //        if (this.m_defaultImage!= null)
-                        //        {
-                        //            FirePropertyChanged("DefaultImage");
-                        //        }
-                        //    },
-                        ////    null);
-
-                    }
+                {                    
+                    this.DefaultImage = new Image("file://" + imgPath);                    
                 }
+                else
+                {
+                    this._titleObj.BeginGetFrontCoverMenuPath(delegate
+                    {
+                        string path = _titleObj.FrontCoverMenuPath;
+
+                        if (!string.IsNullOrEmpty(path))
+                        {
+                            SetImage(path);
+                            Microsoft.MediaCenter.UI.Application.DeferredInvoke(CacheImageDone, null);
+                        }                        
+                    });
+                }
+
             }
         }
 
