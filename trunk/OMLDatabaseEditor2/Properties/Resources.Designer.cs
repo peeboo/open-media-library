@@ -116,6 +116,13 @@ namespace OMLDatabaseEditor.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap searchicon {
+            get {
+                object obj = ResourceManager.GetObject("searchicon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap splashimage {
             get {
                 object obj = ResourceManager.GetObject("splashimage", resourceCulture);
