@@ -10,29 +10,41 @@ namespace OMLEngine.Dao
 
     partial class Title
     {
+        private decimal percentComplete = -1;
+
         public decimal PercentComplete
         {
             get
             {
-                decimal score = 0;
-                decimal possible = 12;
+                if (percentComplete == -1)
+                {
+                    decimal score = 0;
+                    decimal possible = 12;
 
-                if (!String.IsNullOrEmpty(Studio)) score++;
-                if (Runtime > 0) score++;
-                if (ReleaseDate != DateTime.MinValue) score++;
-                if (!String.IsNullOrEmpty(Synopsis)) score++;
-                if (Genres.Count > 0) score++;
-                if (Images.FirstOrDefault(t=> t.ImageType == (byte)ImageType.FrontCoverImage) != null) score++;
-                if (!String.IsNullOrEmpty(AspectRatio)) score++;
-                if (!String.IsNullOrEmpty(CountryOfOrigin)) score++;
-                if (!String.IsNullOrEmpty(VideoResolution)) score++;
-                if (!String.IsNullOrEmpty(VideoStandard)) score++;
-                if (People.Where(p => p.Role == (byte)PeopleRole.Actor).Count() > 0) score++;
-                if (People.Where(p => p.Role == (byte)PeopleRole.Director).Count() > 0) score++;
+                    if (!String.IsNullOrEmpty(Studio)) score++;
+                    if (Runtime > 0) score++;
+                    if (ReleaseDate != DateTime.MinValue) score++;
+                    if (!String.IsNullOrEmpty(Synopsis)) score++;
+                    if (Genres.Count > 0) score++;
+                    if (Images.FirstOrDefault(t => t.ImageType == (byte)ImageType.FrontCoverImage) != null) score++;
+                    if (!String.IsNullOrEmpty(AspectRatio)) score++;
+                    if (!String.IsNullOrEmpty(CountryOfOrigin)) score++;
+                    if (!String.IsNullOrEmpty(VideoResolution)) score++;
+                    if (!String.IsNullOrEmpty(VideoStandard)) score++;
+                    if (People.Where(p => p.Role == (byte)PeopleRole.Actor).Count() > 0) score++;
+                    if (People.Where(p => p.Role == (byte)PeopleRole.Director).Count() > 0) score++;
 
-                return score / possible;
+                    percentComplete = score / possible;
+                }
+
+                return percentComplete;
             }
-        }        
+        }
+
+        internal void ResetPercentComplete()
+        {
+            percentComplete = -1;
+        }
 
         public string UpdatedFrontCoverPath { get; set; }
         public string UpdatedBackCoverPath { get; set; }
