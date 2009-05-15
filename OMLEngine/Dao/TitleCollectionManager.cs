@@ -23,6 +23,9 @@ namespace OMLEngine
             // setup all the images
             UpdatesImagesForTitle(title.DaoTitle);
 
+            // reset the % complete
+            title.DaoTitle.ResetPercentComplete();
+
             // todo : solomon : do your duplicate logic here
             Dao.TitleCollectionDao.AddTitle(title.DaoTitle);
             return true;
@@ -154,8 +157,10 @@ namespace OMLEngine
                 {
                     UpdatesImagesForTitle(daoTitle);
                     Dao.TitleDao.UpdateCollectionsForTitle(daoTitle);
+
+                    daoTitle.ResetPercentComplete();
                 }
-            }            
+            }                         
 
             // todo : solomon : add error handing and logging here
             Dao.DBContext.Instance.SubmitChanges();            
