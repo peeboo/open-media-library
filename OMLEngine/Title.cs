@@ -392,7 +392,7 @@ namespace OMLEngine
 
         #region Async Menu Cover Art
 
-        public delegate void DelegateFrontCoverPath();        
+        public delegate void DelegateFrontCoverPath(Title title);        
         private static BackgroundProcessor<Title> imageProcessor;
         private static object threadLocker = new object();
         private object pathUpdateLocker = new object();
@@ -412,7 +412,7 @@ namespace OMLEngine
             }
 
             if (title.callback != null)
-                title.callback.Invoke();
+                title.callback.Invoke(title);
         }        
 
         public void BeginGetFrontCoverMenuPath(DelegateFrontCoverPath callback)
