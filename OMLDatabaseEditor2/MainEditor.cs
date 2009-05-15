@@ -34,6 +34,8 @@ namespace OMLDatabaseEditor
         private AppearanceObject Percent70 = null;
         private AppearanceObject Percent80 = null;
         private List<Title> _movieList;
+        private Dictionary<int, TreeNode> _mediaTree;
+        private Dictionary<int, int> _parentchildRelationship; // titleid, parentid
         public List<String> DXSkins;
 
         public MainEditor()
@@ -290,9 +292,60 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.Default;
         }
 
+        private void PopulateMediaTree(List<Title> titles)
+        {
+            if (_mediaTree == null)
+            {
+                _mediaTree = new Dictionary<int, TreeNode>();
+            }
+            else
+            {
+                _mediaTree.Clear();
+            }
+
+            if (_parentchildRelationship == null)
+            {
+                _parentchildRelationship = new Dictionary<int, int>();
+            }
+            else
+            {
+                _parentchildRelationship.Clear();
+            }
+
+            treeMedia.Nodes.Clear();
+
+
+             TreeNode root = new TreeNode("All Media");
+             treeMedia.Nodes.Add(root);
+
+            foreach (Title title in titles)
+            {
+                TreeNode tn = new TreeNode(title.Name);
+                _mediaTree[title.Id] = tn;
+                _parentchildRelationship[title.Id] = title.ParentTitleId;
+                if (title.Id == -2147483647) { root.Nodes.Add(tn); }
+            }
+
+
+            foreach (KeyValuePair<int, TreeNode> kvp in _mediaTree)
+            {
+                if (kvp.Key != _parentchildRelationship[kvp.Key])
+                {
+                    // This title has a parent.
+                    if (_mediaTree.ContainsKey(_parentchildRelationship[kvp.Key]))
+                    {
+                        _mediaTree[_parentchildRelationship[kvp.Key]].Nodes.Add(_mediaTree[kvp.Key]);
+                    }
+                }
+            }
+
+            //root.Nodes.Add()
+        }
+
         private void PopulateMovieList(List<Title> titles)
         {
-            TreeNode root = new TreeNode("All Media");
+            PopulateMediaTree(titles);
+         /*   TreeNode root = new TreeNode("All Media");
             treeMedia.Nodes.Add(root);
 
             TreeNode rootmovies = new TreeNode("Movies");
@@ -309,7 +362,7 @@ namespace OMLDatabaseEditor
             TreeNode tn3 = new TreeNode("Series 1");
             tn2.Nodes.Add(tn3);
             TreeNode tn4 = new TreeNode("Series 2");
-            tn2.Nodes.Add(tn4);
+            tn2.Nodes.Add(tn4);*/
 
             lbTitles.DataSource = titles;
 
