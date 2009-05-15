@@ -321,6 +321,12 @@ namespace OMLEngine
             private set { _title.Id = value; }
         }
 
+        public int ParentTitleId
+        {
+            get { return _title.ParentTitleId; }
+            set { _title.ParentTitleId = value; }
+        }
+
         /// <summary>
         /// The id that this title is a group member of
         /// </summary>

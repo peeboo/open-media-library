@@ -14,6 +14,11 @@ namespace OMLTestSuite
     {
         static void Main(string[] args)
         {
+            CreateTestTitles ctt = new CreateTestTitles();
+            ctt.CreateTitles();
+            Console.ReadKey();
+            return;
+
             TitleCollectionManagerTest tcm = new TitleCollectionManagerTest();
             
             Console.WriteLine("Testing: Title Collection Manager SQL");
