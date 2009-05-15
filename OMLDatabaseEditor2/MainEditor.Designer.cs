@@ -216,27 +216,27 @@ namespace OMLDatabaseEditor
             this.newToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripMenuItem.Image")));
             this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.newToolStripMenuItem.Text = "&New Movie";
             // 
             // fromScratchToolStripMenuItem
             // 
             this.fromScratchToolStripMenuItem.Name = "fromScratchToolStripMenuItem";
-            this.fromScratchToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.fromScratchToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.fromScratchToolStripMenuItem.Text = "From Scratch";
             this.fromScratchToolStripMenuItem.Click += new System.EventHandler(this.fromScratchToolStripMenuItem_Click);
             // 
             // fromPreferredSourcesToolStripMenuItem1
             // 
             this.fromPreferredSourcesToolStripMenuItem1.Name = "fromPreferredSourcesToolStripMenuItem1";
-            this.fromPreferredSourcesToolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
+            this.fromPreferredSourcesToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             this.fromPreferredSourcesToolStripMenuItem1.Text = "From Preferred Sources";
             this.fromPreferredSourcesToolStripMenuItem1.Click += new System.EventHandler(this.fromMetaDataToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(183, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(191, 6);
             // 
             // saveToolStripMenuItem
             // 
@@ -244,33 +244,33 @@ namespace OMLDatabaseEditor
             this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.saveToolStripMenuItem.Text = "&Save Movie";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
             // 
             // exportCurrentMovieToolStripMenuItem
             // 
             this.exportCurrentMovieToolStripMenuItem.Name = "exportCurrentMovieToolStripMenuItem";
-            this.exportCurrentMovieToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.exportCurrentMovieToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.exportCurrentMovieToolStripMenuItem.Text = "Export Current Movie";
             this.exportCurrentMovieToolStripMenuItem.Click += new System.EventHandler(this.exportCurrentMovieToolStripMenuItem_Click);
             // 
             // exportAllMoviesToolStripMenuItem
             // 
             this.exportAllMoviesToolStripMenuItem.Name = "exportAllMoviesToolStripMenuItem";
-            this.exportAllMoviesToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.exportAllMoviesToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.exportAllMoviesToolStripMenuItem.Text = "Export All Movies";
             this.exportAllMoviesToolStripMenuItem.Click += new System.EventHandler(this.exportAllMoviesToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(183, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(191, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
             // 
@@ -289,21 +289,21 @@ namespace OMLDatabaseEditor
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             this.deleteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.deleteToolStripMenuItem.Text = "&Delete Current Movie";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // deleteSelectedMoviesToolStripMenuItem
             // 
             this.deleteSelectedMoviesToolStripMenuItem.Name = "deleteSelectedMoviesToolStripMenuItem";
-            this.deleteSelectedMoviesToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.deleteSelectedMoviesToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.deleteSelectedMoviesToolStripMenuItem.Text = "Delete Selected Movies";
             this.deleteSelectedMoviesToolStripMenuItem.Click += new System.EventHandler(this.deleteSelectedMoviesToolStripMenuItem_Click);
             // 
             // deleteAllMoviesToolStripMenuItem
             // 
             this.deleteAllMoviesToolStripMenuItem.Name = "deleteAllMoviesToolStripMenuItem";
-            this.deleteAllMoviesToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.deleteAllMoviesToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.deleteAllMoviesToolStripMenuItem.Text = "Delete All Movies";
             this.deleteAllMoviesToolStripMenuItem.Click += new System.EventHandler(this.deleteAllMoviesToolStripMenuItem_Click);
             // 
@@ -313,20 +313,20 @@ namespace OMLDatabaseEditor
             this.currentMovieToolStripMenuItem,
             this.allMoviesToolStripMenuItem});
             this.regenerateThumbnailToolStripMenuItem.Name = "regenerateThumbnailToolStripMenuItem";
-            this.regenerateThumbnailToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.regenerateThumbnailToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.regenerateThumbnailToolStripMenuItem.Text = "Regenerate Thumbnails";
             // 
             // currentMovieToolStripMenuItem
             // 
             this.currentMovieToolStripMenuItem.Name = "currentMovieToolStripMenuItem";
-            this.currentMovieToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.currentMovieToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.currentMovieToolStripMenuItem.Text = "Current Movie";
             this.currentMovieToolStripMenuItem.Click += new System.EventHandler(this.currentMovieToolStripMenuItem_Click);
             // 
             // allMoviesToolStripMenuItem
             // 
             this.allMoviesToolStripMenuItem.Name = "allMoviesToolStripMenuItem";
-            this.allMoviesToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.allMoviesToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.allMoviesToolStripMenuItem.Text = "All Movies";
             this.allMoviesToolStripMenuItem.Click += new System.EventHandler(this.allMoviesToolStripMenuItem_Click);
             // 
@@ -347,14 +347,14 @@ namespace OMLDatabaseEditor
             this.allMoviesToolStripMenuItem1.CheckOnClick = true;
             this.allMoviesToolStripMenuItem1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.allMoviesToolStripMenuItem1.Name = "allMoviesToolStripMenuItem1";
-            this.allMoviesToolStripMenuItem1.Size = new System.Drawing.Size(199, 22);
+            this.allMoviesToolStripMenuItem1.Size = new System.Drawing.Size(207, 22);
             this.allMoviesToolStripMenuItem1.Text = "All Movies";
             this.allMoviesToolStripMenuItem1.Click += new System.EventHandler(this.filterTitles_Click);
             // 
             // filterByGenreToolStripMenuItem
             // 
             this.filterByGenreToolStripMenuItem.Name = "filterByGenreToolStripMenuItem";
-            this.filterByGenreToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.filterByGenreToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.filterByGenreToolStripMenuItem.Text = "Filter By Genre";
             // 
             // filterByCompletenessToolStripMenuItem
@@ -364,14 +364,14 @@ namespace OMLDatabaseEditor
             this.toolStripMenuItem3,
             this.toolStripMenuItem4});
             this.filterByCompletenessToolStripMenuItem.Name = "filterByCompletenessToolStripMenuItem";
-            this.filterByCompletenessToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.filterByCompletenessToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.filterByCompletenessToolStripMenuItem.Text = "Filter By Completeness";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.CheckOnClick = true;
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(96, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(104, 22);
             this.toolStripMenuItem2.Text = "25%";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.filterTitles_Click);
             // 
@@ -379,7 +379,7 @@ namespace OMLDatabaseEditor
             // 
             this.toolStripMenuItem3.CheckOnClick = true;
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(96, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(104, 22);
             this.toolStripMenuItem3.Text = "50%";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.filterTitles_Click);
             // 
@@ -387,14 +387,14 @@ namespace OMLDatabaseEditor
             // 
             this.toolStripMenuItem4.CheckOnClick = true;
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(96, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(104, 22);
             this.toolStripMenuItem4.Text = "75%";
             this.toolStripMenuItem4.Click += new System.EventHandler(this.filterTitles_Click);
             // 
             // filterByParentalRatingToolStripMenuItem
             // 
             this.filterByParentalRatingToolStripMenuItem.Name = "filterByParentalRatingToolStripMenuItem";
-            this.filterByParentalRatingToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.filterByParentalRatingToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.filterByParentalRatingToolStripMenuItem.Text = "Filter By Parental Rating";
             // 
             // toolsToolStripMenuItem
@@ -415,51 +415,51 @@ namespace OMLDatabaseEditor
             // customizeToolStripMenuItem
             // 
             this.customizeToolStripMenuItem.Name = "customizeToolStripMenuItem";
-            this.customizeToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.customizeToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
             this.customizeToolStripMenuItem.Text = "&Customize";
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(229, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(237, 6);
             // 
             // metaDataSettingsToolStripMenuItem
             // 
             this.metaDataSettingsToolStripMenuItem.Name = "metaDataSettingsToolStripMenuItem";
-            this.metaDataSettingsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.metaDataSettingsToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
             this.metaDataSettingsToolStripMenuItem.Text = "MetaData Settings";
             this.metaDataSettingsToolStripMenuItem.Click += new System.EventHandler(this.metaDataSettingsToolStripMenuItem_Click);
             // 
             // manageMetadataMappingsToolStripMenuItem
             // 
             this.manageMetadataMappingsToolStripMenuItem.Name = "manageMetadataMappingsToolStripMenuItem";
-            this.manageMetadataMappingsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.manageMetadataMappingsToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
             this.manageMetadataMappingsToolStripMenuItem.Text = "Preferred MetaData Mappings";
             this.manageMetadataMappingsToolStripMenuItem.Click += new System.EventHandler(this.manageMetadataMappingsToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(229, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(237, 6);
             // 
             // moveDisksToolStripMenuItem
             // 
             this.moveDisksToolStripMenuItem.Name = "moveDisksToolStripMenuItem";
-            this.moveDisksToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.moveDisksToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
             this.moveDisksToolStripMenuItem.Text = "Move Disks...";
             this.moveDisksToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
             // 
             // transcoderDiagnosticsToolStripMenuItem
             // 
             this.transcoderDiagnosticsToolStripMenuItem.Name = "transcoderDiagnosticsToolStripMenuItem";
-            this.transcoderDiagnosticsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.transcoderDiagnosticsToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
             this.transcoderDiagnosticsToolStripMenuItem.Text = "Transcoder Diagnostics";
             this.transcoderDiagnosticsToolStripMenuItem.Click += new System.EventHandler(this.transcoderDiagnosticsToolStripMenuItem_Click);
             // 
@@ -478,30 +478,30 @@ namespace OMLDatabaseEditor
             // contentsToolStripMenuItem
             // 
             this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
-            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.contentsToolStripMenuItem.Text = "&Contents";
             // 
             // indexToolStripMenuItem
             // 
             this.indexToolStripMenuItem.Name = "indexToolStripMenuItem";
-            this.indexToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.indexToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.indexToolStripMenuItem.Text = "&Index";
             // 
             // searchToolStripMenuItem
             // 
             this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-            this.searchToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.searchToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.searchToolStripMenuItem.Text = "&Search";
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(119, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(127, 6);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
             // 
@@ -604,6 +604,7 @@ namespace OMLDatabaseEditor
             this.treeMedia.Name = "treeMedia";
             this.treeMedia.Size = new System.Drawing.Size(175, 304);
             this.treeMedia.TabIndex = 0;
+            this.treeMedia.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeMedia_AfterSelect);
             // 
             // navBarGroupControlContainer1
             // 
@@ -632,27 +633,27 @@ namespace OMLDatabaseEditor
             this.miMetadataMulti,
             this.deleteToolStripMenuItem1});
             this.cmsMoviesList.Name = "cmsMoviesList";
-            this.cmsMoviesList.Size = new System.Drawing.Size(166, 48);
+            this.cmsMoviesList.Size = new System.Drawing.Size(170, 48);
             // 
             // miMetadataMulti
             // 
             this.miMetadataMulti.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fromPreferredSourcesToolStripMenuItem});
             this.miMetadataMulti.Name = "miMetadataMulti";
-            this.miMetadataMulti.Size = new System.Drawing.Size(165, 22);
+            this.miMetadataMulti.Size = new System.Drawing.Size(169, 22);
             this.miMetadataMulti.Text = "Update metadata";
             // 
             // fromPreferredSourcesToolStripMenuItem
             // 
             this.fromPreferredSourcesToolStripMenuItem.Name = "fromPreferredSourcesToolStripMenuItem";
-            this.fromPreferredSourcesToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.fromPreferredSourcesToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.fromPreferredSourcesToolStripMenuItem.Text = "From Preferred Sources";
             this.fromPreferredSourcesToolStripMenuItem.Click += new System.EventHandler(this.fromPreferredSourcesToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem1
             // 
             this.deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
-            this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
+            this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(169, 22);
             this.deleteToolStripMenuItem1.Text = "Delete";
             this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteSelectedMoviesToolStripMenuItem_Click);
             // 
@@ -872,6 +873,7 @@ namespace OMLDatabaseEditor
             this.lbTitles.Size = new System.Drawing.Size(194, 112);
             this.lbTitles.TabIndex = 1;
             this.lbTitles.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbTitles_DrawItem);
+            this.lbTitles.SelectedIndexChanged += new System.EventHandler(this.lbTitles_SelectedIndexChanged);
             // 
             // titleEditor
             // 
@@ -913,14 +915,14 @@ namespace OMLDatabaseEditor
             // fromScratchToolStripMenuItem1
             // 
             this.fromScratchToolStripMenuItem1.Name = "fromScratchToolStripMenuItem1";
-            this.fromScratchToolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
+            this.fromScratchToolStripMenuItem1.Size = new System.Drawing.Size(205, 22);
             this.fromScratchToolStripMenuItem1.Text = "From Scratch";
             this.fromScratchToolStripMenuItem1.Click += new System.EventHandler(this.fromScratchToolStripMenuItem_Click);
             // 
             // fromPreferredSourcesToolStripMenuItem2
             // 
             this.fromPreferredSourcesToolStripMenuItem2.Name = "fromPreferredSourcesToolStripMenuItem2";
-            this.fromPreferredSourcesToolStripMenuItem2.Size = new System.Drawing.Size(197, 22);
+            this.fromPreferredSourcesToolStripMenuItem2.Size = new System.Drawing.Size(205, 22);
             this.fromPreferredSourcesToolStripMenuItem2.Text = "From Preferred Sources";
             this.fromPreferredSourcesToolStripMenuItem2.Click += new System.EventHandler(this.fromMetaDataToolStripMenuItem_Click);
             // 
