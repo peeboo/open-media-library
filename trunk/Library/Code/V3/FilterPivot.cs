@@ -38,42 +38,65 @@ namespace Library.Code.V3
             ((VirtualList)this.m_listContent).RequestItemHandler = new RequestItemHandler(this.GetItem);
         }
 
+        void viewSearchCmd_Invoked(object sender, EventArgs e)
+        {
+            OMLApplication.Current.CatchMoreInfo();
+            if (this.Owner is GalleryPage)
+                ((GalleryPage)this.Owner).searchCmd_Invoked(sender, e);
+        }
+
+        void viewSettingsCmd_Invoked(object sender, EventArgs e)
+        {
+            OMLApplication.Current.CatchMoreInfo();
+            if (this.Owner is GalleryPage)
+                ((GalleryPage)this.Owner).settingsCmd_Invoked(sender, e);
+        }
+
         private void SetupContextMenu()
         {
             #region ctx menu
             //create the context menu
             Library.Code.V3.ContextMenuData ctx = new Library.Code.V3.ContextMenuData();
             //some ctx items
-            Library.Code.V3.ThumbnailCommand viewFirstCmd = new Library.Code.V3.ThumbnailCommand(this);
-            viewFirstCmd.Description = "Some Desc Holder";
-            //viewFirstCmd.Invoked += new EventHandler(viewCmd_Invoked);
+            //Library.Code.V3.ThumbnailCommand viewFirstCmd = new Library.Code.V3.ThumbnailCommand(this);
+            //viewFirstCmd.Description = "Some Desc Holder";
+            ////viewFirstCmd.Invoked += new EventHandler(viewCmd_Invoked);
 
-            Library.Code.V3.ThumbnailCommand viewSecondCmd = new Library.Code.V3.ThumbnailCommand(this);
-            //viewSecondCmd.Invoked += new EventHandler(viewCmd_Invoked);
-            viewSecondCmd.Description = "View List";
+            //Library.Code.V3.ThumbnailCommand viewSecondCmd = new Library.Code.V3.ThumbnailCommand(this);
+            ////viewSecondCmd.Invoked += new EventHandler(viewCmd_Invoked);
+            //viewSecondCmd.Description = "View List";
 
+
+            //Library.Code.V3.ThumbnailCommand viewSettingsCmd = new Library.Code.V3.ThumbnailCommand(this);
+            ////viewSettingsCmd.Invoked += new EventHandler(this.settingsCmd_Invoked);
+            //viewSettingsCmd.Description = "Settings";
 
             Library.Code.V3.ThumbnailCommand viewSettingsCmd = new Library.Code.V3.ThumbnailCommand(this);
-            //viewSettingsCmd.Invoked += new EventHandler(this.settingsCmd_Invoked);
+            viewSettingsCmd.Invoked += new EventHandler(viewSettingsCmd_Invoked);
             viewSettingsCmd.Description = "Settings";
 
-
-            ctx.SharedItems.Add(viewFirstCmd);
-            ctx.SharedItems.Add(viewSecondCmd);
+            Library.Code.V3.ThumbnailCommand viewSearchCmd = new Library.Code.V3.ThumbnailCommand(this);
+            viewSearchCmd.Invoked += new EventHandler(this.viewSearchCmd_Invoked);
+            viewSearchCmd.Description = "Search";
             ctx.SharedItems.Add(viewSettingsCmd);
+            ctx.SharedItems.Add(viewSearchCmd);
 
-            Library.Code.V3.ThumbnailCommand viewMovieDetailsCmd = new Library.Code.V3.ThumbnailCommand(this);
-            viewMovieDetailsCmd.Description = "Movie Details";
+            //ctx.SharedItems.Add(viewFirstCmd);
+            //ctx.SharedItems.Add(viewSecondCmd);
+            //ctx.SharedItems.Add(viewSettingsCmd);
 
-            Library.Code.V3.ThumbnailCommand viewPlayCmd = new Library.Code.V3.ThumbnailCommand(this);
-            viewPlayCmd.Description = "Play";
+            //Library.Code.V3.ThumbnailCommand viewMovieDetailsCmd = new Library.Code.V3.ThumbnailCommand(this);
+            //viewMovieDetailsCmd.Description = "Movie Details";
 
-            Library.Code.V3.ThumbnailCommand viewDeleteCmd = new Library.Code.V3.ThumbnailCommand(this);
-            viewDeleteCmd.Description = "Delete";
+            //Library.Code.V3.ThumbnailCommand viewPlayCmd = new Library.Code.V3.ThumbnailCommand(this);
+            //viewPlayCmd.Description = "Play";
 
-            ctx.UniqueItems.Add(viewMovieDetailsCmd);
-            ctx.UniqueItems.Add(viewPlayCmd);
-            ctx.UniqueItems.Add(viewDeleteCmd);
+            //Library.Code.V3.ThumbnailCommand viewDeleteCmd = new Library.Code.V3.ThumbnailCommand(this);
+            //viewDeleteCmd.Description = "Delete";
+
+            //ctx.UniqueItems.Add(viewMovieDetailsCmd);
+            //ctx.UniqueItems.Add(viewPlayCmd);
+            //ctx.UniqueItems.Add(viewDeleteCmd);
 
             //Command CommandContextPopOverlay = new Command();
             //properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);

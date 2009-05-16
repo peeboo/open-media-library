@@ -76,6 +76,7 @@
       </Condition>
 
       <Binding Target="[Background.FanArt]" Source="[Application.PrimaryBackgroundImage]"/>
+      <Binding Target="[Background.FanArtAlpha]" Source="[Application.PrimaryBackgroundImageAlpha]"/>
     </Rules>
     <Content>
       <Panel>

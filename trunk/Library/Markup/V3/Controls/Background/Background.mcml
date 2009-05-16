@@ -40,6 +40,7 @@
     <Properties>
       <Image Name="Image"       Image="resx://Library/Library.Resources/V3_Controls_Background_Animated" Flippable="true"/>
       <Image Name="FanArt"/>
+      <cor:Single Name="FanArtAlpha"/>
       <Image Name="Shard1Image" Source="resx://Library/Library.Resources/V3_Controls_Background_Shard1" Flippable="true"/>
       <Image Name="Layer1Image" Source="resx://Library/Library.Resources/V3_Controls_Background_Layer1" Flippable="true"/>
       <Image Name="Layer2Image" Source="resx://Library/Library.Resources/V3_Controls_Background_Layer2" Flippable="true"/>
@@ -193,6 +194,7 @@
   <UI Name="FanArtBackgroundGallery" BaseUI="me:BackgroundBase">
     <Properties>
       <Image Name="FanArt" Image="$Required" Flippable="false"/>
+      <cor:Single Name="FanArtAlpha"/>
       <Image Name="Image"       Image="resx://Library/Library.Resources/V3_Controls_Background_Animated" Flippable="true"/>
       <Image Name="Shard1Image" Source="resx://Library/Library.Resources/V3_Controls_Background_Shard1" Flippable="true"/>
       <Image Name="Layer1Image" Source="resx://Library/Library.Resources/V3_Controls_Background_Layer1" Flippable="true"/>
@@ -274,7 +276,7 @@
                 </Children>
               </Clip>
               <Graphic Visible="true" Alpha=".8" Content="resx://Library/Library.Resources/V3_Controls_Background_Overlay2" MinimumSize="1366, 0" MaintainAspectRatio="true" />
-              <Graphic Name="FanArtImage" Content="[FanArt]" Alpha=".9" MinimumSize="1366, 0" MaintainAspectRatio="true" >
+              <Graphic Name="FanArtImage" Content="[FanArt]" Alpha="[FanArtAlpha]" MinimumSize="1366, 0" MaintainAspectRatio="true" >
                 <Animations>
                   <Animation Type="ContentChangeHide">
                     <Keyframes>

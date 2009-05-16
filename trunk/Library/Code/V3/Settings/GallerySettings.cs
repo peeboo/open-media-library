@@ -95,10 +95,11 @@ namespace Library.Code.V3
             //selectedViewList.Add(@"Show titles in a list");
             //selectedViewList.Add(@"Show titles as posters");
             this.selectedViewOptions.Options = selectedViewList;
-            if(Properties.Settings.Default.GallerySelectedView=="list")
-                this.selectedViewOptions.ChosenIndex = 0;
-            else
-                this.selectedViewOptions.ChosenIndex = 1;
+            //if(Properties.Settings.Default.GallerySelectedView=="list")
+            //    this.selectedViewOptions.ChosenIndex = 0;
+            //else
+            //    this.selectedViewOptions.ChosenIndex = 1;
+            this.selectedViewOptions.ChosenIndex = Properties.Settings.Default.GallerySelectedView;
             this.enablePosterOptions = new BooleanChoice(this);
             this.enablePosterOptions.Value = false;
             if (this.selectedViewOptions.ChosenIndex == 1)
@@ -196,6 +197,19 @@ namespace Library.Code.V3
         /// <returns></returns>
         public bool IsDirty()
         {
+            if (this.EnableAlphaJump.Value != Properties.Settings.Default.GalleryEnableAlphaJump)
+                return true;
+            if (this.EnableThreeRow.Value != Properties.Settings.Default.GalleryEnableThreeRow)
+                return true;
+            if (this.EnableTwoRow.Value != Properties.Settings.Default.GalleryEnableTwoRow)
+                return true;
+            if (Properties.Settings.Default.GallerySelectedView != this.selectedViewOptions.ChosenIndex)
+                return true;
+            if(Convert.ToInt32(this.twoRowOptions.Chosen.ToString().Replace(" items",""))!=Properties.Settings.Default.GalleryTwoRowMin)
+                return true;
+            if (Convert.ToInt32(this.threeRowOptions.Chosen.ToString().Replace(" items", "")) != Properties.Settings.Default.GalleryThreeRowMin)
+                return true;
+
             return false;
         }
 
@@ -204,7 +218,14 @@ namespace Library.Code.V3
         /// </summary>
         public void Save()
         {
-            //Properties.Settings.Default.Save();
+            Properties.Settings.Default.GalleryEnableAlphaJump = this.EnableAlphaJump.Value;
+            Properties.Settings.Default.GalleryEnableThreeRow = this.EnableThreeRow.Value;
+            Properties.Settings.Default.GalleryEnableTwoRow = this.EnableTwoRow.Value;
+            Properties.Settings.Default.GallerySelectedView = this.selectedViewOptions.ChosenIndex;
+            Properties.Settings.Default.GalleryTwoRowMin = Convert.ToInt32(this.twoRowOptions.Chosen.ToString().Replace(" items", ""));
+            Properties.Settings.Default.GalleryThreeRowMin = Convert.ToInt32(this.threeRowOptions.Chosen.ToString().Replace(" items", ""));
+
+            Properties.Settings.Default.Save();
         }
 
         /// <summary>

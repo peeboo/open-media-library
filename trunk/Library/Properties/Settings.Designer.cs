@@ -516,10 +516,10 @@ namespace Library.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("poster")]
-        public string GallerySelectedView {
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int GallerySelectedView {
             get {
-                return ((string)(this["GallerySelectedView"]));
+                return ((int)(this["GallerySelectedView"]));
             }
             set {
                 this["GallerySelectedView"] = value;
