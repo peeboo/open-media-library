@@ -88,6 +88,7 @@
       </Condition>
 
       <Binding Target="[Background.FanArt]" Source="[Application.PrimaryBackgroundImage]"/>
+      <Binding Target="[Background.FanArtAlpha]" Source="[Application.PrimaryBackgroundImageAlpha]"/>
       <!-- dirty handler-->
       <Rule>
         <Conditions>

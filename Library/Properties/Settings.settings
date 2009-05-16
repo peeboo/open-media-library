@@ -125,8 +125,8 @@
     <Setting Name="EnableMainPageBackDrop" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="GallerySelectedView" Type="System.String" Scope="User">
-      <Value Profile="(Default)">poster</Value>
+    <Setting Name="GallerySelectedView" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="GalleryEnableTwoRow" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

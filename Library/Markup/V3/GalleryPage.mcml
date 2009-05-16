@@ -196,6 +196,7 @@
       </Condition>
 
       <Binding Target="[Background.FanArt]" Source="[Application.PrimaryBackgroundImage]"/>
+      <Binding Target="[Background.FanArtAlpha]" Source="[Application.PrimaryBackgroundImageAlpha]"/>
       
       <!--Rule>
         <Conditions>
@@ -246,7 +247,7 @@
           <me:ContextMenuHost Name="ContextMenu" CommandContextPopOverlay="[CommandContextPopOverlay]" Visible="[ContextMenuVisible]" MenuData="[Page!shell:GalleryPage.ContextMenu]"/>
           <me:SlideDeck_Movie_Details Name="SlideMenu" Visible="[SlideMenuVisible]" SlideDeck="[SlideDeck]" CommandPopOverlay="[CommandPopOverlay]" CommandClearOverlays="[CommandClearOverlays]"/>
           <me:Browse Name="Content" Page="[Page]" Application="[Application]" Model="[Page.Model]" PageState="[Page.PageState]" FocusArea="[FocusArea]"/>
-          <comm:AnimatedBackground Name="Background" FanArt="[Application.PrimaryBackgroundImage]"/>
+          <comm:AnimatedBackground Name="Background" FanArt="[Application.PrimaryBackgroundImage]" FanArtAlpha="[Application.PrimaryBackgroundImageAlpha]"/>
         </Children>
       </Panel>
     </Content>

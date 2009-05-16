@@ -174,16 +174,29 @@ namespace Library.Code.V3
             //titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetAllTitles());
             titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(this.m_filters));
             ((VirtualList)this.m_listContent).Count = titles.Count;
-            if (this.m_listContent.Count > 25)
+
+            if (Properties.Settings.Default.GallerySelectedView == 0)
             {
-                this.ContentItemTemplate = "twoRowGalleryItemPoster";
+                this.ContentItemTemplate = "ListViewItem";
                 this.DetailTemplate = BrowsePivot.StandardDetailTemplate;
             }
             else
             {
                 this.ContentItemTemplate = "oneRowGalleryItemPoster";
                 this.DetailTemplate = BrowsePivot.ExtendedDetailTemplate;
+
+                if (Properties.Settings.Default.GalleryEnableTwoRow && this.m_listContent.Count > Properties.Settings.Default.GalleryTwoRowMin)
+                {
+                    this.ContentItemTemplate = "twoRowGalleryItemPoster";
+                    this.DetailTemplate = BrowsePivot.StandardDetailTemplate;
+                }
+                if (Properties.Settings.Default.GalleryEnableThreeRow && this.m_listContent.Count > Properties.Settings.Default.GalleryThreeRowMin)
+                {
+                    this.ContentItemTemplate = "threeRowGalleryItemPoster";
+                    this.DetailTemplate = BrowsePivot.StandardDetailTemplate;
+                }
             }
+            
             this.IsBusy = false;
         }
 

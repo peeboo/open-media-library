@@ -53,6 +53,7 @@ namespace Library
 
         private void SetPrimaryBackgroundImage()
         {
+            this.primaryBackgroundImageAlpha = Properties.Settings.Default.MainPageBackDropAlpha;
             if (Properties.Settings.Default.EnableMainPageBackDrop)
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.MainPageBackDropFile))
@@ -103,6 +104,20 @@ namespace Library
         void mainBackgroundTimer_Tick(object sender, EventArgs e)
         {
             SetPrimaryBackgroundImage();
+        }
+
+        private float primaryBackgroundImageAlpha = 1;
+        public float PrimaryBackgroundImageAlpha
+        {
+            get { return primaryBackgroundImageAlpha; }
+            set
+            {
+                if (this.primaryBackgroundImageAlpha != value)
+                {
+                    this.primaryBackgroundImageAlpha = value;
+                    FirePropertyChanged("PrimaryBackgroundImageAlpha");
+                }
+            }
         }
 
         public Image PrimaryBackgroundImage

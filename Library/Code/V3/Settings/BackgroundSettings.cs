@@ -70,9 +70,16 @@ namespace Library.Code.V3
 
         void transparancyOptions_ChosenChanged(object sender, EventArgs e)
         {
+            //decimal d = Convert.ToDecimal(((string)this.transparancyOptions.Chosen).Replace("%", "")) / 100;
+            //this.SelectedTransparancy = Decimal.ToSingle(d);
+            //this.SelectedTransparancy = .5;
+            this.SetTransparancy();
+        }
+
+        private void SetTransparancy()
+        {
             decimal d = Convert.ToDecimal(((string)this.transparancyOptions.Chosen).Replace("%", "")) / 100;
             this.SelectedTransparancy = Decimal.ToSingle(d);
-            //this.SelectedTransparancy = .5;
         }
 
         private void SetupTransparancyOptions()
@@ -86,7 +93,7 @@ namespace Library.Code.V3
 
             this.transparancyOptions.Options = delays;
             this.transparancyOptions.Chosen = string.Format("{0}%", (Properties.Settings.Default.MainPageBackDropAlpha * 100).ToString());
-            //this.selectedTranscodingDelay = string.Format("{0} seconds", OMLSettings.TranscodeBufferDelay.ToString());
+            this.SetTransparancy();
         }
 
         private void SetupRotationOptions()
@@ -136,6 +143,13 @@ namespace Library.Code.V3
         /// <returns></returns>
         public bool IsDirty()
         {
+            if (this.SelectedTransparancy != (Properties.Settings.Default.MainPageBackDropAlpha))
+                return true;
+            if (this.enableCustomBackground.Value != Properties.Settings.Default.EnableMainPageBackDrop)
+                return true;
+            if (Convert.ToInt32(rotationOptions.Chosen.ToString().Replace(" seconds", "")) != Properties.Settings.Default.MainPageBackDropRotationInSeconds)
+                return true;
+
             return false;
         }
 
@@ -145,6 +159,8 @@ namespace Library.Code.V3
         public void Save()
         {
             Properties.Settings.Default.EnableMainPageBackDrop = this.EnableCustomBackground.Value;
+            Properties.Settings.Default.MainPageBackDropAlpha = this.SelectedTransparancy;
+            Properties.Settings.Default.MainPageBackDropRotationInSeconds = Convert.ToInt32(rotationOptions.Chosen.ToString().Replace(" seconds", ""));
             Properties.Settings.Default.Save();
         }
 

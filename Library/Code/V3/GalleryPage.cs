@@ -170,6 +170,7 @@ namespace Library.Code.V3
 
         void Pivots_ChosenChanged(object sender, EventArgs e)
         {
+            //FirePropertyChanged("ContextMenu");
             Library.Code.V3.BrowsePivot p = (Library.Code.V3.BrowsePivot)this.Model.Pivots.Chosen;
             
             //set our last pivot
@@ -208,26 +209,30 @@ namespace Library.Code.V3
 
         private string TitleFromFilter()
         {
-            string title = string.Empty;
+            string title = Filter.Home;
             if (filters != null && filters.Count != 0)
             {
                 // create the title given the list of filters
-                StringBuilder sb = new StringBuilder(filters.Count * 10);
-                sb.Append(Filter.Home);
+                //StringBuilder sb = new StringBuilder(filters.Count * 10);
+                //sb.Append(Filter.Home);
                 foreach (OMLEngine.TitleFilter filter in this.filters)
                 {
-                    sb.Append(" > ");
+                    //sb.Append("|");
+                    title = ">" + title;
                     if (!string.IsNullOrEmpty(filter.FilterText))
-                        sb.Append(filter.FilterText);
+                    {
+                        title = filter.FilterText + title;
+                        //sb.Append(filter.FilterText);
+                    }
                     else
-                        sb.Append(filter.FilterType.ToString());
+                    {
+                        title = filter.FilterType.ToString() + title;
+                        //sb.Append(filter.FilterType.ToString());
+                    }
                 }
-                title = sb.ToString();
+                //title = sb.ToString();
             }
-            else
-            {
-                title = Filter.Home;
-            }
+            
             return title;
         }
         private void CreateTitleView()
