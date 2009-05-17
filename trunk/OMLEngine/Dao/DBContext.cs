@@ -19,8 +19,16 @@ namespace OMLEngine.Dao
                     lock (lockObject)
                     {
                         if (db == null)
-                        {
+                        {                            
                             db = new OMLDataDataContext();
+
+                            db.DeferredLoadingEnabled = true;
+
+                            System.Data.Linq.DataLoadOptions loadOptions = new System.Data.Linq.DataLoadOptions();                            
+                            //loadOptions.LoadWith<Title>(t => t.Disks);
+                            loadOptions.LoadWith<Title>(i => i.Images);
+                            db.LoadOptions = loadOptions;
+
                             db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
                         }
                     }
