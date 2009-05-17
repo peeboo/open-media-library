@@ -33,10 +33,13 @@ namespace OMLDatabaseEditor
         private AppearanceObject Percent60 = null;
         private AppearanceObject Percent70 = null;
         private AppearanceObject Percent80 = null;
-        private List<Title> _movieList;
+        //private List<Title> _movieList;
+        private Dictionary<int,Title> _movieList;
         private Dictionary<int, TreeNode> _mediaTree;
         private Dictionary<int, int> _parentchildRelationship; // titleid, parentid
         public List<String> DXSkins;
+
+        int SelectedTreeRoot;
 
         public MainEditor()
         {
@@ -86,6 +89,7 @@ namespace OMLDatabaseEditor
             
             SplashScreen2.SetStatus(64, "Loading Movies.");
             LoadMovies();
+            PopulateMediaTree(_movieList);
 
             SplashScreen2.SetStatus(80, "Loading MRU Lists.");
             this.titleEditor.SetMRULists();
@@ -174,7 +178,7 @@ namespace OMLDatabaseEditor
 
             // Set up filter lists
             ToolStripMenuItem item;
-            foreach (string genre in from g in TitleCollectionManager.GetAllGenres(null) select g.Name)
+            foreach (string genre in from g in TitleCollectionManager.GetAllGenres(new List<TitleFilter>()) select g.Name)
             {
                 item = new ToolStripMenuItem(genre);
                 item.CheckOnClick = true;
@@ -246,8 +250,9 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.WaitCursor;
             if (allMoviesToolStripMenuItem1.Checked)
             {
-                _movieList = TitleCollectionManager.GetAllTitles().ToList<Title>();
-                PopulateMovieList(_movieList);
+                //_movieList = TitleCollectionManager.GetAllTitles().ToList<Title>();
+                _movieList = TitleCollectionManager.GetAllTitles().ToDictionary(k => k.Id);
+                //PopulateMovieList(_movieList);
             }
             else
             {
@@ -292,7 +297,7 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.Default;
         }
 
-        private void PopulateMediaTree(List<Title> titles)
+        private void PopulateMediaTree(Dictionary<int, Title> titles)
         {
             if (_mediaTree == null)
             {
@@ -313,18 +318,14 @@ namespace OMLDatabaseEditor
             }
 
             treeMedia.Nodes.Clear();
-            int roottitleid = 0;
 
-            // TreeNode root = new TreeNode("All Media");
-            // treeMedia.Nodes.Add(root);
-
-            foreach (Title title in titles)
+            foreach (KeyValuePair<int, Title> title in titles)
             {
-                TreeNode tn = new TreeNode(title.Name);
-                tn.Name = title.Id.ToString();
-                _mediaTree[title.Id] = tn;
-                _parentchildRelationship[title.Id] = title.ParentTitleId;
-                if (title.Name == "All Media") { treeMedia.Nodes.Add(tn); roottitleid = title.Id; }
+                TreeNode tn = new TreeNode(title.Value.Name);
+                tn.Name = title.Value.Id.ToString();
+                _mediaTree[title.Value.Id] = tn;
+                _parentchildRelationship[title.Value.Id] = title.Value.ParentTitleId;
+                if (title.Value.Name == "All Media") { treeMedia.Nodes.Add(tn); SelectedTreeRoot = title.Value.Id; }
             }
 
 
@@ -340,35 +341,39 @@ namespace OMLDatabaseEditor
                 }
             }
 
-            PopulateMovieListV2(roottitleid, titles);
-            //root.Nodes.Add()
+            PopulateMovieListV2(SelectedTreeRoot, titles);
         }
 
-        private void PopulateMovieListV2(int roottitleid, List<Title> titles)
+        private void PopulateMovieListV2(int roottitleid, Dictionary<int, Title> titles)
         {
             lbTitles.Items.Clear();
 
             Dictionary<int, Title> _mediaTree = new Dictionary<int,Title>();
             Dictionary<int, List<int>> _parentchildRelationship = new Dictionary<int,List<int>>(); // titleid, parentid
-            foreach (Title title in titles)
+            foreach (KeyValuePair<int, Title> title in titles)
             {
                 // Create dictionary of all titles
-                _mediaTree[title.Id] = title;
+                _mediaTree[title.Value.Id] = title.Value;
 
                 // Create relation ship dictionary
-                if (!_parentchildRelationship.ContainsKey(title.ParentTitleId))
+                if (!_parentchildRelationship.ContainsKey(title.Value.ParentTitleId))
                 {
-                    _parentchildRelationship[title.ParentTitleId] = new List<int>();
+                    _parentchildRelationship[title.Value.ParentTitleId] = new List<int>();
                 }
-                _parentchildRelationship[title.ParentTitleId].Add(title.Id);
+                _parentchildRelationship[title.Value.ParentTitleId].Add(title.Value.Id);
             }
 
-            PopulateMovieListV2Sub(roottitleid, _mediaTree, _parentchildRelationship); 
-            
+            PopulateMovieListV2Sub(roottitleid, _mediaTree, _parentchildRelationship);
+
+            if (titleEditor.EditedTitle != null)
+            {
+                lbTitles.SelectedItem = TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
+            }
         }
+
         private void PopulateMovieListV2Sub(int roottitleid, Dictionary<int, Title> _mediaTree, Dictionary<int, List<int>> _parentchildRelationship)
         {
-            lbTitles.Items.Add(_mediaTree[roottitleid]);
+            lbTitles.Items.Add(_movieList[roottitleid]);
 
             if (_parentchildRelationship.ContainsKey(roottitleid))
             {
@@ -384,12 +389,14 @@ namespace OMLDatabaseEditor
 
         private void treeMedia_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            PopulateMovieListV2(Convert.ToInt32(e.Node.Name),_movieList);
+            SelectedTreeRoot = Convert.ToInt32(e.Node.Name);
+            PopulateMovieListV2(SelectedTreeRoot, _movieList);
         }
 
-        private void PopulateMovieList(List<Title> titles)
+ //       private void PopulateMovieList(List<Title> titles)
+        /*private void PopulateMovieList(Dictionary<int, Title> titles)
         {
-            PopulateMediaTree(titles);
+        
 
 
             //lbTitles.DataSource = titles;
@@ -398,7 +405,7 @@ namespace OMLDatabaseEditor
             //_titleCollection.SortBy("SortName", true);
 
             // throwing this into a new list shouldn't be needed but it seems like this control wants it
-            lbMovies.DataSource = titles;
+            //lbMovies.DataSource = titles;
             if (titleEditor.EditedTitle != null)
             {
                 List<Title> matches = (from title in titles
@@ -422,7 +429,7 @@ namespace OMLDatabaseEditor
                 titleEditor.ClearEditor();
             }
         }
-
+*/
         private void LoadImporters()
         {
             Cursor = Cursors.WaitCursor;
@@ -451,14 +458,13 @@ namespace OMLDatabaseEditor
                 result = XtraMessageBox.Show("You have unsaved changes to " + titleEditor.EditedTitle.Name + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
                 if (result == DialogResult.Yes)
                 {
-                    lbMovies.SelectedValue = titleEditor.EditedTitle.Id;
+                    //_movieList[titleEditor.EditedTitle.Id] = titleEditor.EditedTitle;
                     SaveChanges();
                 }
                 if (result == DialogResult.No)
                 {
-                    lbTitles.SelectedValue = titleEditor.EditedTitle.Id; 
-
-                    TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
+                    // Force reload of title
+                    titleEditor.EditedTitle.ReloadTitle();
                 }
             }
             else
@@ -747,7 +753,7 @@ namespace OMLDatabaseEditor
             if ((titleEditor.EditedTitle != null) && (titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges))
             {
                 Title editedTitle = titleEditor.EditedTitle;
-                Title collectionTitle = TitleCollectionManager.GetTitle(editedTitle.Id);
+             //   Title collectionTitle = TitleCollectionManager.GetTitle(editedTitle.Id);
 
                 //if (editedTitle.MetadataSourceID == String.Empty)
                 if (string.IsNullOrEmpty(editedTitle.MetadataSourceName))
@@ -780,7 +786,7 @@ namespace OMLDatabaseEditor
                 }
                 
                 titleEditor.SaveChanges();
-                LoadMovies();
+                //LoadMovies();
             }            
         }
 
@@ -885,6 +891,7 @@ namespace OMLDatabaseEditor
                         TitleCollectionManager.DeleteTitle(titleToRemove);                        
                         titleEditor.ClearEditor();
                         LoadMovies();
+                        PopulateMovieListV2(SelectedTreeRoot, _movieList);
                     }
                     this.Text = APP_TITLE;
                 }
@@ -1263,7 +1270,7 @@ namespace OMLDatabaseEditor
             }
             else
             {
-                allMoviesToolStripMenuItem1.Checked = false;
+/*                allMoviesToolStripMenuItem1.Checked = false;
                 if (filterItem.OwnerItem == filterByGenreToolStripMenuItem)
                     _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Genre, filterItem.Text).ToList<Title>();
                 else if (filterItem.OwnerItem == filterByCompletenessToolStripMenuItem)
@@ -1272,8 +1279,8 @@ namespace OMLDatabaseEditor
                     _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.ParentalRating, filterItem.Text).ToList<Title>();
                 else if (filterItem.OwnerItem == filterByTagToolStripMenuItem)
                     _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Tag, filterItem.Text).ToList<Title>();
-
-                PopulateMovieList(_movieList);
+*/
+                PopulateMovieListV2(0, _movieList);
             }
             Cursor = Cursors.Default;
         }

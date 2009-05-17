@@ -94,11 +94,8 @@ namespace OMLDatabaseEditor.Controls
         public void SaveChanges()
         {
             titleSource.CurrencyManager.Refresh();
-            // Title is allready added in order to create title ID, so no need to AddTitle.
-            //if (IsNew())
-            //    TitleCollectionManager.AddTitle(_dvdTitle);
-            //else
-                //MainEditor._titleCollection.Replace(_dvdTitle);
+
+            _dvdTitle.ModifiedDate = DateTime.Now;
 
             TitleCollectionManager.SaveTitleUpdates();
             ClearEditor();
