@@ -1070,7 +1070,7 @@
 
   <UI Name="threeRowGalleryItemPoster" BaseUI="me:twoRowGalleryItemPoster">
     <Properties>
-      <Size       Name="ThumbSize"        Size="87, 123"/>
+      <Size       Name="ThumbSize"        Size="90, 127"/>
       <Image      Name="NoThumbnailImage" Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage2RowPoster"/>
       <cor:Int32  Name="NumberOfRows"     Int32="3"/>
       <cor:Single Name="RippleDelay"      Single="0.015"/>

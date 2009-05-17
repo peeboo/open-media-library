@@ -1270,6 +1270,14 @@
 
           <!--Clip Name="ContentPanel" Margins="[ContentPanelMargins]" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="0.9"
   CenterPointPercent="0.5,0.5,0.5" Scale="0.95,0.95,0.95"-->
+          <Text Name="EmptyContentMessage" Color="color://comm:OffWhite" WordWrap="true" MaximumSize="683,305" Margins="0, 45, 0, 0" Visible="false">
+            <Font>
+              <Font FontName="global://comm:RegularFontFace" FontSize="24"/>
+            </Font>
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
+            </LayoutInput>
+          </Text>
           <Clip Name="ContentPanel" Margins="[ContentPanelMargins]" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="1"><!--scale needs to be removed-->
             <Layout>
               <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="true"/>
@@ -1357,13 +1365,13 @@
                                         </Children>
                                     </Gradient-->
 
-                  <Text Name="EmptyContentMessage" Color="color://comm:OffWhite" WordWrap="true" MaximumSize="683,305" Margins="0, 45, 0, 0" Visible="false">
+                  <!--Text Name="EmptyContentMessage" Color="color://comm:OffWhite" WordWrap="true" MaximumSize="683,305" Margins="0, 45, 0, 0" Visible="false">
                     <Font>
                       <Font FontName="global://comm:RegularFontFace" FontSize="24"/>
                     </Font>
-                  </Text>
+                  </Text-->
 
-                  <me:FocusPlaceholder Name="Placeholder" MinimumSize="1,1"/>
+                  <me:FocusPlaceholder Visible="false" Name="Placeholder" MinimumSize="1,1"/>
 
                 </Children>
               </Panel>

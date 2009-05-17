@@ -152,7 +152,7 @@
     <Compile Include="Code\V3\Controls\SlideMarkupFinder.cs" />
     <Compile Include="Code\V3\Controls\ThumbnailCommand.cs" />
     <Compile Include="Code\V3\Controls\WrappedIndexTransformer.cs" />
-    <Compile Include="Code\V3\YearPivot.cs" />
+    <Compile Include="Code\V3\DateAddedPivot.cs" />
     <Compile Include="Code\V3\SettingsManager.cs" />
     <Compile Include="Code\V3\DetailsPage.cs" />
     <Compile Include="Code\V3\DVDChangerItem.cs" />
@@ -169,6 +169,7 @@
     <Compile Include="Code\V3\Settings\OptimizationSettings.cs" />
     <Compile Include="Code\V3\Settings\FilterSettings.cs" />
     <Compile Include="Code\V3\TitlesPivot.cs" />
+    <Compile Include="Code\V3\YearPivot.cs" />
     <Compile Include="Code\Views\AlphaView.cs" />
     <Compile Include="Code\Views\LabeledList.cs" />
     <Compile Include="Code\Views\MovieViews.cs" />
