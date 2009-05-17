@@ -272,7 +272,20 @@ namespace Library.Code.V3
                     testGroup2.Description = "UNKNOWN";
                 else
                     testGroup2.Description = item.Name;
-                testGroup2.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_mystery");
+                testGroup2.DefaultImage = null;
+                testGroup2.Invoked += delegate(object sender, EventArgs args)
+                {
+                    OMLProperties properties = new OMLProperties();
+                    properties.Add("Application", OMLApplication.Current);
+                    properties.Add("I18n", I18n.Instance);
+                    Command CommandContextPopOverlay = new Command();
+                    properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
+
+                    Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(newFilter, testGroup2.Description);
+
+                    properties.Add("Page", gallery);
+                    OMLApplication.Current.Session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
+                };
                 testGroup2.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
                 filteredGalleryList.Add(testGroup2);
             }
