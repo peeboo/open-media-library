@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace OMLEngine.Dao
@@ -469,17 +470,37 @@ namespace OMLEngine.Dao
             return from title in titles
                    where title.WatchedCount == 0 || title.WatchedCount == null
                    select title;
+        }        
+
+        private static Expression<Func<Genre, bool>> GetGenrePredicate(List<TitleFilter> filters)
+        {
+            var predicate = PredicateBuilder.True<Genre>();
+
+            foreach (TitleFilter filter in filters)
+            {
+                if (filter.FilterType != TitleFilterType.Genre)
+                    continue;
+
+                string text = filter.FilterText;
+
+                predicate = predicate.And(a => a.MetaData.Name != text);                            
+            }           
+
+            return predicate;
         }
 
-        // <summary>
+        /// <summary>
         /// Returns all the people in the given titles
         /// </summary>
         /// <param name="titles"></param>
         /// <returns></returns>
         public static IEnumerable<FilteredCollection> GetAllGenres(List<TitleFilter> filters)
         {
+            var filteredGenres = DBContext.Instance.Genres.Where(GetGenrePredicate(filters));
+                                    
             var filteredTitles = from t in GetFilteredTitlesWrapper(filters)
-                                                from g in t.Genres
+                                 from g in filteredGenres
+                                 where g.TitleId == t.Id
                                                 join b in DBContext.Instance.GenreMetaDatas on g.GenreMetaDataId equals b.Id
                                                 join c in DBContext.Instance.ImageMappings on t.Id equals c.TitleId                                                 
                                                     where c.ImageType == (byte)ImageType.FrontCoverImage
@@ -742,6 +763,28 @@ namespace OMLEngine.Dao
 
             DBContext.Instance.Titles.DeleteOnSubmit(title);
             DBContext.Instance.SubmitChanges();
+        }
+    }
+
+    internal static class PredicateBuilder
+    {
+        public static Expression<Func<T, bool>> True<T>() { return f => true; }
+        public static Expression<Func<T, bool>> False<T>() { return f => false; }
+
+        public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> expr1,
+                                                            Expression<Func<T, bool>> expr2)
+        {
+            var invokedExpr = Expression.Invoke(expr2, expr1.Parameters.Cast<Expression>());
+            return Expression.Lambda<Func<T, bool>>
+                  (Expression.OrElse(expr1.Body, invokedExpr), expr1.Parameters);
+        }
+
+        public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> expr1,
+                                                             Expression<Func<T, bool>> expr2)
+        {
+            var invokedExpr = Expression.Invoke(expr2, expr1.Parameters.Cast<Expression>());
+            return Expression.Lambda<Func<T, bool>>
+                  (Expression.AndAlso(expr1.Body, invokedExpr), expr1.Parameters);
         }
     }
 }
