@@ -44,7 +44,7 @@
       <KeyHandler Handle="true" HandlerStage="Direct" Name="LeftHandler" Key="Left" />
       <KeyHandler Handle="true" HandlerStage="Direct" Name="DownHandler" Key="Enter" />
       <ScrollingHandler Name="ScrollingHandler" ScrollingData="[ScrollData]"
-                        HandlerStage="Bubbled"/>
+                        HandlerStage="Bubbled" HandleHomeEndKeys="false" HandlePageKeys="false"/>
       
       <!-- end new-->
       <Environment Name="Environment"/>

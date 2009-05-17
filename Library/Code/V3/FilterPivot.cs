@@ -112,6 +112,12 @@ namespace Library.Code.V3
             //titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetAllTitles());
             Filter f = new Filter(null, this.m_filterType, this.m_filters);
             titles = f.GetGalleryItems();
+
+            if (this.m_filterType == OMLEngine.TitleFilterType.Genre || this.m_filterType == OMLEngine.TitleFilterType.Tag)
+            {
+                
+            }
+            
             //titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(this.m_filters));
             ((VirtualList)this.m_listContent).Count = titles.Count;
             //if (this.m_listContent.Count > 25)

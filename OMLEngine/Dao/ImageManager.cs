@@ -34,7 +34,10 @@ namespace OMLEngine
 
         public static string NoCoverPath
         {
-            get { return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg"; }
+            get { 
+                return null;//don't want a nocover-v3 displays the title over the tile if it has no image
+                // OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg"; 
+            }
         }        
         
         public static int? AddImageToDB(string imagePath)

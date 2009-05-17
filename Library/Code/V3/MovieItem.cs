@@ -87,7 +87,8 @@ namespace Library.Code.V3
             this.Description = title.Name;
 
             //TODO: not sure how to read this yet...
-            this.SimpleVideoFormat = _titleObj.VideoFormat.ToString();
+            //temporarially disabled due to bug in eagerloading
+            //this.SimpleVideoFormat = _titleObj.VideoFormat.ToString();
 
 
             this.Invoked += delegate(object sender, EventArgs args)
