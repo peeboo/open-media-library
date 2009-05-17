@@ -27,7 +27,7 @@
       <IntRangedValue Name="ItemIndexOverride"/>
       <!-- used by galleries that override the count/index UI -->
       <BooleanChoice  Name="IsOneRow"/>
-      <EditableText   Name="FocusArea" Value="none"/>
+      <EditableText   Name="FocusArea" Value="Gallery"/>
       <!-- tracks the focus on a gross scale -->
       <EditableText   Name="NavigationDirection" Value="none"/>
       <!-- Used to trigger directional animations -->

@@ -111,7 +111,7 @@ namespace Library
         public IList<GalleryItem> GetGalleryItems()
         {            
             List<GalleryItem> items = new List<GalleryItem>();
-            items.Add(new GalleryItem(_gallery, AllItems, AllItems, this));
+            //items.Add(new GalleryItem(_gallery, AllItems, AllItems, this));
 
             IEnumerable<FilteredCollection> filteredItems = null;
 

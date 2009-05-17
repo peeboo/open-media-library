@@ -49,12 +49,12 @@ namespace Library.Code.V3
         {
             
             //description
-            this.Description = galleryName;
+            //this.Description = galleryName;
             this.Filters = filter;
             this.Model = new Library.Code.V3.BrowseModel(this);
             this.Model.Pivots = new Choice(this, "desc", new ArrayListDataSet(this));
             this.Description = this.TitleFromFilter();
-            this.CreateContextMenu();
+            //this.CreateContextMenu();
             this.CreateCommands();
             this.CreateViews();
             this.CreateFilters();
@@ -65,16 +65,16 @@ namespace Library.Code.V3
         /// </summary>
         private void CreateContextMenu()
         {
-            this.contextMenu=new Library.Code.V3.ContextMenuData();
-            Library.Code.V3.ThumbnailCommand viewSettingsCmd = new Library.Code.V3.ThumbnailCommand(this);
-            viewSettingsCmd.Invoked += new EventHandler(this.settingsCmd_Invoked);
-            viewSettingsCmd.Description = "Settings";
-            this.contextMenu.SharedItems.Add(viewSettingsCmd);
+            //this.contextMenu=new Library.Code.V3.ContextMenuData();
+            //Library.Code.V3.ThumbnailCommand viewSettingsCmd = new Library.Code.V3.ThumbnailCommand(this);
+            //viewSettingsCmd.Invoked += new EventHandler(this.settingsCmd_Invoked);
+            //viewSettingsCmd.Description = "Settings";
+            //this.contextMenu.SharedItems.Add(viewSettingsCmd);
 
-            Library.Code.V3.ThumbnailCommand viewSearchCmd = new Library.Code.V3.ThumbnailCommand(this);
-            viewSettingsCmd.Invoked += new EventHandler(this.searchCmd_Invoked);
-            viewSearchCmd.Description = "Search";
-            this.contextMenu.SharedItems.Add(viewSearchCmd);
+            //Library.Code.V3.ThumbnailCommand viewSearchCmd = new Library.Code.V3.ThumbnailCommand(this);
+            //viewSettingsCmd.Invoked += new EventHandler(this.searchCmd_Invoked);
+            //viewSearchCmd.Description = "Search";
+            //this.contextMenu.SharedItems.Add(viewSearchCmd);
         }
 
         private bool IsFilterDoubled(OMLEngine.TitleFilterType type)
@@ -170,6 +170,7 @@ namespace Library.Code.V3
 
         void Pivots_ChosenChanged(object sender, EventArgs e)
         {
+            //Console.WriteLine("PIV::" +this.Model.Pivots.ChosenIndex.ToString());
             //FirePropertyChanged("ContextMenu");
             Library.Code.V3.BrowsePivot p = (Library.Code.V3.BrowsePivot)this.Model.Pivots.Chosen;
             
@@ -184,7 +185,7 @@ namespace Library.Code.V3
                         }, 
                         delegate 
                         {
-                            FirePropertyChanged("ContextMenu");
+                            //FirePropertyChanged("ContextMenu");
                         }, null);
         }
 
@@ -218,7 +219,7 @@ namespace Library.Code.V3
                 foreach (OMLEngine.TitleFilter filter in this.filters)
                 {
                     //sb.Append("|");
-                    title = ">" + title;
+                    title = " | " + title;
                     if (!string.IsNullOrEmpty(filter.FilterText))
                     {
                         title = filter.FilterText + title;
@@ -397,7 +398,7 @@ namespace Library.Code.V3
             gallery.Model.Commands = new ArrayListDataSet(gallery);
 
             //create the context menu
-            Library.Code.V3.ContextMenuData ctx = new Library.Code.V3.ContextMenuData();
+            //Library.Code.V3.ContextMenuData ctx = new Library.Code.V3.ContextMenuData();
 
             //create the settings cmd
             Library.Code.V3.ThumbnailCommand settingsCmd = new Library.Code.V3.ThumbnailCommand(gallery);
@@ -418,48 +419,48 @@ namespace Library.Code.V3
             //searchCmd.Invoked += new EventHandler(searchCmd_Invoked);
             gallery.Model.Commands.Add(searchCmd);
 
-            //some ctx items
-            Library.Code.V3.ThumbnailCommand viewListCmd = new Library.Code.V3.ThumbnailCommand(gallery);
-            viewListCmd.Description = "View List";
-            //viewListCmd.Invoked += new EventHandler(viewCmd_Invoked);
+            ////some ctx items
+            //Library.Code.V3.ThumbnailCommand viewListCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            //viewListCmd.Description = "View List";
+            ////viewListCmd.Invoked += new EventHandler(viewCmd_Invoked);
 
-            Library.Code.V3.ThumbnailCommand viewSmallCmd = new Library.Code.V3.ThumbnailCommand(gallery);
-            //viewSmallCmd.Invoked += new EventHandler(viewCmd_Invoked);
-            viewSmallCmd.Description = "View Small";
+            //Library.Code.V3.ThumbnailCommand viewSmallCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            ////viewSmallCmd.Invoked += new EventHandler(viewCmd_Invoked);
+            //viewSmallCmd.Description = "View Small";
 
-            Library.Code.V3.ThumbnailCommand viewLargeCmd = new Library.Code.V3.ThumbnailCommand(gallery);
-            //viewLargeCmd.Invoked += new EventHandler(viewCmd_Invoked);
+            //Library.Code.V3.ThumbnailCommand viewLargeCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            ////viewLargeCmd.Invoked += new EventHandler(viewCmd_Invoked);
 
-            viewLargeCmd.Description = "View Large";
+            //viewLargeCmd.Description = "View Large";
 
-            Library.Code.V3.ThumbnailCommand viewSettingsCmd = new Library.Code.V3.ThumbnailCommand(gallery);
-            //viewSettingsCmd.Invoked += new EventHandler(this.SettingsHandler);
-            viewSettingsCmd.Description = "Settings";
+            //Library.Code.V3.ThumbnailCommand viewSettingsCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            ////viewSettingsCmd.Invoked += new EventHandler(this.SettingsHandler);
+            //viewSettingsCmd.Description = "Settings";
 
 
-            //ctx.SharedItems.Add(viewLargeCmd);
-            ctx.SharedItems.Add(viewSmallCmd);
-            ctx.SharedItems.Add(viewListCmd);
-            ctx.SharedItems.Add(viewSettingsCmd);
+            ////ctx.SharedItems.Add(viewLargeCmd);
+            //ctx.SharedItems.Add(viewSmallCmd);
+            //ctx.SharedItems.Add(viewListCmd);
+            //ctx.SharedItems.Add(viewSettingsCmd);
 
-            Library.Code.V3.ThumbnailCommand viewMovieDetailsCmd = new Library.Code.V3.ThumbnailCommand(gallery);
-            viewMovieDetailsCmd.Description = "Movie Details";
+            //Library.Code.V3.ThumbnailCommand viewMovieDetailsCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            //viewMovieDetailsCmd.Description = "Movie Details";
 
-            Library.Code.V3.ThumbnailCommand viewPlayCmd = new Library.Code.V3.ThumbnailCommand(gallery);
-            viewPlayCmd.Description = "Play";
+            //Library.Code.V3.ThumbnailCommand viewPlayCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            //viewPlayCmd.Description = "Play";
 
-            Library.Code.V3.ThumbnailCommand viewDeleteCmd = new Library.Code.V3.ThumbnailCommand(gallery);
-            viewDeleteCmd.Description = "Delete";
+            //Library.Code.V3.ThumbnailCommand viewDeleteCmd = new Library.Code.V3.ThumbnailCommand(gallery);
+            //viewDeleteCmd.Description = "Delete";
 
-            ctx.UniqueItems.Add(viewMovieDetailsCmd);
-            ctx.UniqueItems.Add(viewPlayCmd);
-            ctx.UniqueItems.Add(viewDeleteCmd);
+            //ctx.UniqueItems.Add(viewMovieDetailsCmd);
+            //ctx.UniqueItems.Add(viewPlayCmd);
+            //ctx.UniqueItems.Add(viewDeleteCmd);
 
             Command CommandContextPopOverlay = new Command();
             properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
 
             //properties.Add("MenuData", ctx);
-            gallery.ContextMenu = ctx;
+            //gallery.ContextMenu = ctx;
             //the pivots
             gallery.Model.Pivots = new Choice(gallery, "desc", new ArrayListDataSet(gallery));
 
@@ -835,24 +836,24 @@ namespace Library.Code.V3
         /// <summary>
         /// default context menu data for the gallery
         /// </summary>
-        private ContextMenuData contextMenu;
-        public ContextMenuData ContextMenu
-        {
-            get
-            {
-                //return this.contextMenu;
-                //if our pivot has a ctx menu-lets use that
-                if (this.model.Pivots.Chosen!=null && ((BrowsePivot)this.model.Pivots.Chosen).ContextMenu != null)
-                    return ((BrowsePivot)this.model.Pivots.Chosen).ContextMenu;
-                else
-                    return this.contextMenu;
+        //private ContextMenuData contextMenu;
+        //public ContextMenuData ContextMenu
+        //{
+        //    get
+        //    {
+        //        //return this.contextMenu;
+        //        //if our pivot has a ctx menu-lets use that
+        //        if (this.model.Pivots.Chosen!=null && ((BrowsePivot)this.model.Pivots.Chosen).ContextMenu != null)
+        //            return ((BrowsePivot)this.model.Pivots.Chosen).ContextMenu;
+        //        else
+        //            return this.contextMenu;
 
-            }
-            set
-            {
-                this.contextMenu = value;
-            }
-        }
+        //    }
+        //    set
+        //    {
+        //        this.contextMenu = value;
+        //    }
+        //}
 
         /// <summary>
         /// the PageState for the gallery

@@ -224,8 +224,19 @@
         </Actions>
       </Rule>
       <!--Binding Target="[ContextMenu.Model]" Source="[Page!shell:GalleryPage.SelectedItemCommand]"/-->
-      <Binding Target="[ContextMenu.MenuData]" Source="[Page!shell:GalleryPage.ContextMenu]"/>
-      <Binding Target="[ItemContextMenu.MenuData]" Source="[Page!shell:GalleryPage.ContextMenu]"/>
+      <!--Binding Target="[ContextMenu.MenuData]" Source="[Page!shell:GalleryPage.ContextMenu]"/>
+      <Binding Target="[ItemContextMenu.MenuData]" Source="[Page!shell:GalleryPage.ContextMenu]"/-->
+      <Changed Source="[Page!shell:GalleryPage.Model.Pivots.ChosenIndex]">
+        <Actions>
+          <Set Target="[ContextMenu.MenuData]" Value="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.ContextMenu]"/>
+          <Set Target="[ItemContextMenu.MenuData]" Value="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.ContextMenu]"/>
+          <DebugTrace Message="Chosen Changed {0}">
+            <Params>
+              <ObjectPath ObjectPath="[Page!shell:GalleryPage.Model.Pivots.ChosenIndex]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Changed>
     </Rules>
     <Content>
       <Panel>
@@ -243,8 +254,8 @@
           </Animation>
         </Animations>
         <Children>
-          <me:ItemContextMenuHost Name="ItemContextMenu" CommandContextPopOverlay="[CommandContextPopOverlay]" Visible="[ContextMenuVisible]" MenuData="[Page!shell:GalleryPage.ContextMenu]" Model="[Page!shell:GalleryPage.SelectedItemCommand]"/>
-          <me:ContextMenuHost Name="ContextMenu" CommandContextPopOverlay="[CommandContextPopOverlay]" Visible="[ContextMenuVisible]" MenuData="[Page!shell:GalleryPage.ContextMenu]"/>
+          <me:ItemContextMenuHost Name="ItemContextMenu" CommandContextPopOverlay="[CommandContextPopOverlay]" Visible="[ContextMenuVisible]" MenuData="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.ContextMenu]" Model="[Page!shell:GalleryPage.SelectedItemCommand]"/>
+          <me:ContextMenuHost Name="ContextMenu" CommandContextPopOverlay="[CommandContextPopOverlay]" Visible="[ContextMenuVisible]" MenuData="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.ContextMenu]"/>
           <me:SlideDeck_Movie_Details Name="SlideMenu" Visible="[SlideMenuVisible]" SlideDeck="[SlideDeck]" CommandPopOverlay="[CommandPopOverlay]" CommandClearOverlays="[CommandClearOverlays]"/>
           <me:Browse Name="Content" Page="[Page]" Application="[Application]" Model="[Page.Model]" PageState="[Page.PageState]" FocusArea="[FocusArea]"/>
           <comm:AnimatedBackground Name="Background" FanArt="[Application.PrimaryBackgroundImage]" FanArtAlpha="[Application.PrimaryBackgroundImageAlpha]"/>

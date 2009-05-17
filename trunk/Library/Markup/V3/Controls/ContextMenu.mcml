@@ -198,6 +198,9 @@
       <ShortcutHandler Name="Back" Shortcut="Back" HandlerStage="Routed" Handle="true" Command="[CommandContextPopOverlay]" />
       <ShortcutHandler Name="Clear" Shortcut="Clear" HandlerStage="Routed" Handle="true" Command="[CommandContextPopOverlay]" />
     </Locals>
+    <Rules>
+      <Binding Source="[MenuData]" Target="[ContextMenu.MenuData]"/>
+    </Rules>
     <!--Rules>
       <Rule>
         <Conditions>
@@ -231,7 +234,7 @@
                       <Animation Animation="animation://me:ContextualItem.Hide"/>
                     </Animations>
                   </Host>
-                  <me:ContextMenu MenuData="[MenuData]" />
+                  <me:ContextMenu Name="ContextMenu" MenuData="[MenuData]" />
                 </Children>
               </Panel>
             </Children>
@@ -435,6 +438,7 @@
           <Set Target="[MenuDetailsHost.Model]" Value="[Model]"/>
         </Actions>
       </Rule>
+      <Binding Source="[MenuData]" Target="[ContextMenuItem.MenuData]"/>
     </Rules>
     <!--Rules>
       <Rule>
