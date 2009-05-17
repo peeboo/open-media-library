@@ -257,31 +257,27 @@ namespace Library.Code.V3
             IList<Library.GalleryItem> filteredTitles = f.GetGalleryItems();
             foreach (Library.GalleryItem item in filteredTitles)
             {
-                //this is a temp hack
-                if (item.Name != " All ")
+                //am I being silly here copying this?
+                List<OMLEngine.TitleFilter> newFilter = new List<OMLEngine.TitleFilter>();
+                foreach (OMLEngine.TitleFilter filt in this.filters)
                 {
-                    //am I being silly here copying this?
-                    List<OMLEngine.TitleFilter> newFilter = new List<OMLEngine.TitleFilter>();
-                    foreach (OMLEngine.TitleFilter filt in this.filters)
-                    {
-                        newFilter.Add(filt);
-                    }
-                    newFilter.Add(new OMLEngine.TitleFilter(OMLEngine.TitleFilterType.Year, item.Name));
-
-                    Library.Code.V3.YearBrowseGroup testGroup2 = new Library.Code.V3.YearBrowseGroup(newFilter);
-                    testGroup2.Owner = this;
-                    //tmp hack for unknown dates
-                    if (item.Name == "1900")
-                        testGroup2.Description = "UNKNOWN";
-                    else
-                        testGroup2.Description = item.Name;
-                    testGroup2.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_mystery");
-                    testGroup2.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
-                    filteredGalleryList.Add(testGroup2);
+                    newFilter.Add(filt);
                 }
+                newFilter.Add(new OMLEngine.TitleFilter(OMLEngine.TitleFilterType.Year, item.Name));
+
+                Library.Code.V3.YearBrowseGroup testGroup2 = new Library.Code.V3.YearBrowseGroup(newFilter);
+                testGroup2.Owner = this;
+                //tmp hack for unknown dates
+                if (item.Name == "1900")
+                    testGroup2.Description = "UNKNOWN";
+                else
+                    testGroup2.Description = item.Name;
+                testGroup2.DefaultImage = new Image("resx://Library/Library.Resources/Genre_Sample_mystery");
+                testGroup2.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
+                filteredGalleryList.Add(testGroup2);
             }
 
-            Library.Code.V3.BrowsePivot yearGroup = new Library.Code.V3.BrowsePivot(this, "year", "No titles were found.", filteredGalleryList);
+            Library.Code.V3.YearPivot yearGroup = new Library.Code.V3.YearPivot(this, "year", "No titles were found.", filteredGalleryList);
             yearGroup.ContentLabel = this.Description;
             yearGroup.SupportsJIL = false;
             yearGroup.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
@@ -294,7 +290,7 @@ namespace Library.Code.V3
 
         private void CreateDateAddedFilter()
         {
-            Library.Code.V3.YearPivot yearGroup = new YearPivot(this, "date added", "No titles were found.", this.filters);
+            Library.Code.V3.DateAddedPivot yearGroup = new DateAddedPivot(this, "date added", "No titles were found.", this.filters);
             yearGroup.ContentLabel = this.Description;
             this.Model.Pivots.Options.Add(yearGroup);
         }

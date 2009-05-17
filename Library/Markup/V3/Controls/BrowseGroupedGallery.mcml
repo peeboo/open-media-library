@@ -19,6 +19,7 @@
       <Inset Name="GroupLabelColorMargins" Inset="-18, 0, 0, 0"/>
       <cor:Int32 Name="LabelRotation" Int32="0"/>
       <Size Name="GroupedListViewItemSize"/>
+      <shell:RepeaterHelper Name="RepeaterHelper"></shell:RepeaterHelper>
     </Properties>
     <Content Name="Item">
       <!--me:ListViewItem Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[ContentItemTemplate]" Index="[RepeatedItemIndex]" TileSize="[GroupedListViewItemSize]" ItemProperties="[ItemProperties]"/-->
@@ -49,6 +50,7 @@
 
       <cor:Int32          Name="ListViewLabelRotation"         Int32="0"/>
       <cor:Int32          Name="PosterLabelRotation"           Int32="90"/>
+      <shell:RepeaterHelper Name="RepeaterHelper"></shell:RepeaterHelper>
     </Properties>
 
     <Locals>
@@ -278,6 +280,18 @@
         <Set Target="[MarginPanel.Margins]" Value="0, 0, 0, 0"/>
       </Actions>
     </Condition>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Pivot!shell:BrowsePivot.SubContentItemTemplate]" ConditionOp="NotEquals" Value="null"/>
+          <Modified Source="[Pivot!shell:BrowsePivot.SubContentItemTemplate]" />
+        </Conditions>
+        <Actions>
+          <!--Set Target="[GalleryLayout]" Value="[Model.ContentItemTemplate]"/-->
+          <Set Target="[Repeater.ContentName]" Value="[Pivot!shell:BrowsePivot.SubContentItemTemplate]"/>
+          <Invoke Target="[RepeaterHelper.ForceRefresh]" Repeater="[Repeater]"/>
+          <!--Invoke Target="[Scroller.ForceContentChange]"/-->
+        </Actions>
+      </Rule>
     </Rules>
     <Content>
 

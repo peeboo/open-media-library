@@ -82,6 +82,40 @@ namespace Library.Code.V3
             }
         }
 
+        private void SetupContextMenu()
+        {
+            #region ctx menu
+            //create the context menu
+            Library.Code.V3.ContextMenuData ctx = new Library.Code.V3.ContextMenuData();
+
+            Library.Code.V3.ThumbnailCommand viewSettingsCmd = new Library.Code.V3.ThumbnailCommand(this);
+            viewSettingsCmd.Invoked += new EventHandler(viewSettingsCmd_Invoked);
+            viewSettingsCmd.Description = "Settings";
+
+            Library.Code.V3.ThumbnailCommand viewSearchCmd = new Library.Code.V3.ThumbnailCommand(this);
+            viewSearchCmd.Invoked += new EventHandler(this.viewSearchCmd_Invoked);
+            viewSearchCmd.Description = "Search";
+            ctx.SharedItems.Add(viewSettingsCmd);
+            ctx.SharedItems.Add(viewSearchCmd);
+
+            this.ContextMenu = ctx;
+            #endregion ctx menu
+        }
+
+        private void viewSearchCmd_Invoked(object sender, EventArgs e)
+        {
+            OMLApplication.Current.CatchMoreInfo();
+            if (this.Owner is GalleryPage)
+                ((GalleryPage)this.Owner).searchCmd_Invoked(sender, e);
+        }
+
+        private void viewSettingsCmd_Invoked(object sender, EventArgs e)
+        {
+            OMLApplication.Current.CatchMoreInfo();
+            if (this.Owner is GalleryPage)
+                ((GalleryPage)this.Owner).settingsCmd_Invoked(sender, e);
+        }
+
         private ContextMenuData m_contextMenu;
         public ContextMenuData ContextMenu
         {
