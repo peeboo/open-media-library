@@ -78,6 +78,26 @@ namespace OMLEngine
             get { return _title; }
         }
 
+        public void ReloadTitle()
+        {
+            Dao.DBContext.Instance.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, _title);
+           // _title.Disks.Clear();
+           // _disks = null;
+           // Dao.DBContext.Instance.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, _title);
+
+            DaoTitle.UpdatedActors = null;
+            DaoTitle.UpdatedBackCoverPath = null;
+            DaoTitle.UpdatedDirectors = null;
+            DaoTitle.UpdatedFanArtPaths = null;
+            DaoTitle.UpdatedFrontCoverPath = null;
+            DaoTitle.UpdatedGenres = null;
+            DaoTitle.UpdatedNonActingRoles = null;
+            DaoTitle.UpdatedProducers = null;
+            DaoTitle.UpdatedTags = null;
+            DaoTitle.UpdatedWriters = null;
+
+        }
+
         public string VideoResolution
         {
             get { return _title.VideoResolution; }
@@ -348,6 +368,12 @@ namespace OMLEngine
                     throw new FormatException("MetaDataSourceName must be 200 characters or less.");
                 _title.MetaDataSource = value;
             }
+        }
+
+        public DateTime? ModifiedDate
+        {
+            get { return _title.ModifiedDate; }
+            set { _title.ModifiedDate = value; }
         }
 
         /// <summary>
