@@ -201,7 +201,7 @@
             // numProductionYear
             // 
             this.numProductionYear.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "ProductionYear", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numProductionYear.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "ProductionYear", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.numProductionYear.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "ProductionYear", true));
             this.numProductionYear.Location = new System.Drawing.Point(120, 136);
             this.numProductionYear.Name = "numProductionYear";
             this.numProductionYear.Size = new System.Drawing.Size(100, 20);
@@ -309,8 +309,8 @@
             // 
             // numUserRating
             // 
-            this.numUserRating.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "UserStarRating", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numUserRating.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.titleSource, "UserStarRating", true));
+            this.numUserRating.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "UserStarRating", true, System.Windows.Forms.DataSourceUpdateMode.Never));
+            this.numUserRating.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.titleSource, "UserStarRating", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.numUserRating.EditValue = new decimal(new int[] {
             0,
             0,
@@ -335,8 +335,8 @@
             // 
             this.txtSynposis.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSynposis.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "Synopsis", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtSynposis.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "Synopsis", true));
+            this.txtSynposis.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "Synopsis", true, System.Windows.Forms.DataSourceUpdateMode.Never));
+            this.txtSynposis.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "Synopsis", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.txtSynposis.Location = new System.Drawing.Point(120, 162);
             this.txtSynposis.Name = "txtSynposis";
             this.txtSynposis.Size = new System.Drawing.Size(390, 64);
@@ -362,8 +362,8 @@
             // 
             // dtReleaseDate
             // 
-            this.dtReleaseDate.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "ReleaseDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.dtReleaseDate.DataBindings.Add(new System.Windows.Forms.Binding("DateTime", this.titleSource, "ReleaseDate", true));
+            this.dtReleaseDate.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "ReleaseDate", true, System.Windows.Forms.DataSourceUpdateMode.Never));
+            this.dtReleaseDate.DataBindings.Add(new System.Windows.Forms.Binding("DateTime", this.titleSource, "ReleaseDate", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.dtReleaseDate.EditValue = null;
             this.dtReleaseDate.Location = new System.Drawing.Point(120, 109);
             this.dtReleaseDate.Name = "dtReleaseDate";
@@ -464,6 +464,7 @@
             this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtName.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "Name", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtName.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "Name", true));
             this.txtName.Location = new System.Drawing.Point(120, 3);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(390, 20);
@@ -799,7 +800,7 @@
             // 
             this.txtCountryOfOrigin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCountryOfOrigin.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "CountryOfOrigin", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtCountryOfOrigin.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "CountryOfOrigin", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.txtCountryOfOrigin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "CountryOfOrigin", true));
             this.txtCountryOfOrigin.Location = new System.Drawing.Point(120, 29);
             this.txtCountryOfOrigin.Name = "txtCountryOfOrigin";
@@ -820,7 +821,7 @@
             // 
             this.txtAspectRatio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAspectRatio.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "AspectRatio", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtAspectRatio.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "AspectRatio", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.txtAspectRatio.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "AspectRatio", true));
             this.txtAspectRatio.Location = new System.Drawing.Point(120, 3);
             this.txtAspectRatio.Name = "txtAspectRatio";
