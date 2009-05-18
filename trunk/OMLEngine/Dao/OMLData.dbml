@@ -49,6 +49,7 @@
       <Column Name="ProductionYear" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ParentTitleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ModifiedDate" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
+      <Column Name="TitleType" Type="System.Int32" DbType="int" CanBeNull="true" />
       <Association Name="Title_Genre" Member="Genres" ThisKey="Id" OtherKey="TitleId" Type="Genre" />
       <Association Name="Title_Person" Member="People" Storage="_Peoples" ThisKey="Id" OtherKey="TitleId" Type="Person" />
       <Association Name="Title_Tag" Member="Tags" ThisKey="Id" OtherKey="TitleId" Type="Tag" />

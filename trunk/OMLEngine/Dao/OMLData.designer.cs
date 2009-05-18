@@ -211,7 +211,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
+		[Column(Storage="_Photo", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Photo
 		{
 			get
@@ -514,6 +514,8 @@ namespace OMLEngine.Dao
 		
 		private System.Nullable<System.DateTime> _ModifiedDate;
 		
+		private System.Nullable<int> _TitleType;
+		
 		private EntitySet<Genre> _Genres;
 		
 		private EntitySet<Person> _Peoples;
@@ -588,6 +590,8 @@ namespace OMLEngine.Dao
     partial void OnParentTitleIdChanged();
     partial void OnModifiedDateChanging(System.Nullable<System.DateTime> value);
     partial void OnModifiedDateChanged();
+    partial void OnTitleTypeChanging(System.Nullable<int> value);
+    partial void OnTitleTypeChanged();
     #endregion
 		
 		public Title()
@@ -1200,6 +1204,26 @@ namespace OMLEngine.Dao
 			}
 		}
 		
+		[Column(Storage="_TitleType", DbType="int")]
+		public System.Nullable<int> TitleType
+		{
+			get
+			{
+				return this._TitleType;
+			}
+			set
+			{
+				if ((this._TitleType != value))
+				{
+					this.OnTitleTypeChanging(value);
+					this.SendPropertyChanging();
+					this._TitleType = value;
+					this.SendPropertyChanged("TitleType");
+					this.OnTitleTypeChanged();
+				}
+			}
+		}
+		
 		[Association(Name="Title_Genre", Storage="_Genres", ThisKey="Id", OtherKey="TitleId")]
 		public EntitySet<Genre> Genres
 		{
@@ -1647,7 +1671,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
+		[Column(Storage="_Photo", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Photo
 		{
 			get

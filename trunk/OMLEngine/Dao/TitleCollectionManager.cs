@@ -6,6 +6,16 @@ using Dao = OMLEngine.Dao;
 
 namespace OMLEngine
 {
+    public enum TitleTypes : int
+    {
+        Movie, // (uses media logic)
+        Episode, // (uses media logic)
+        Collection, // (uses folder logic)
+        TVShow, // (uses folder logic)
+        Season // (uses folder logic)
+    }
+
+
     public static class TitleCollectionManager
     {
         /// <summary>
@@ -147,7 +157,9 @@ namespace OMLEngine
         public static bool SaveTitleUpdates()
         {
             System.Data.Linq.ChangeSet changeset = Dao.DBContext.Instance.GetChangeSet();
-
+            
+            // Find actual SQL run to process the update - debugging purposes
+            string s = Dao.DBContext.Instance.GetType().GetMethod("GetChangeText", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Invoke(Dao.DBContext.Instance, null) as string;
             // updates all the pending image changes
             foreach (object title in changeset.Updates)
             {
@@ -167,6 +179,7 @@ namespace OMLEngine
             return true;
         }
 
+                
         /// <summary>
         /// deletes all the images
         /// </summary>
@@ -257,6 +270,16 @@ namespace OMLEngine
             TitleCollectionManager.DeleteAllGenreMetaData();            
 
             ImageManager.CleanupCachedImages();
+        }
+
+        /// <summary>
+        /// Gets all folder / containers with data needed for browsing
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<Title> GetAllFolders()
+        {
+            // get all the titles
+            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetAllFolders());
         }
 
         /// <summary>
