@@ -33,12 +33,12 @@ namespace OMLEngine
         public readonly static IEnumerable<NumericRange> RUNTIME_RANGE = new List<NumericRange>()
         {
             new NumericRange() {Start = 0, End = 30}
-            , new NumericRange() {Start = 30, End = 60}
-            , new NumericRange() {Start = 60, End = 90}
-            , new NumericRange() {Start = 90, End = 120}
-            , new NumericRange() {Start = 120, End = 150}
-            , new NumericRange() {Start = 150, End = 180}
-            , new NumericRange() {Start = 180, End = int.MaxValue}
+            , new NumericRange() {Start = 0, End = 60}
+            , new NumericRange() {Start = 0, End = 90}
+            , new NumericRange() {Start = 0, End = 120}
+            , new NumericRange() {Start = 0, End = 150}
+            , new NumericRange() {Start = 0, End = 180}
+            , new NumericRange() {Start = 181, End = int.MaxValue}
         };
         
         public readonly static int[] ADDED_FILTER_DATE = new int[] { 0, 1, 7, 14, 31, 92, 184, 365, int.MaxValue };
