@@ -347,6 +347,12 @@ namespace OMLEngine
             set { _title.ParentTitleId = value; }
         }
 
+        public TitleTypes TitleType
+        {
+            get { return (TitleTypes)_title.TitleType; }
+            set { _title.TitleType = (int)value; }
+        }
+
         /// <summary>
         /// The id that this title is a group member of
         /// </summary>

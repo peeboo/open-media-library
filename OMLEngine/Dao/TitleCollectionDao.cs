@@ -80,6 +80,21 @@ namespace OMLEngine.Dao
             return paths.Except(allPaths, StringComparer.OrdinalIgnoreCase);
         }
 
+
+        /// <summary>
+        /// Returns all the folders / containers
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<Title> GetAllFolders()
+        {
+            var titles = from t in DBContext.Instance.Titles
+                         where (t.TitleType == (int)TitleTypes.Collection) || (t.TitleType == (int)TitleTypes.Season) || (t.TitleType == (int)TitleTypes.TVShow)
+                         orderby t.SortName
+                         select t;
+
+            return titles;
+        }
+
         /// <summary>
         /// Returns all the titles but doesn't return the actors/directors/writers
         /// </summary>
