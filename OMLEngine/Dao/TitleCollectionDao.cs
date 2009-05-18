@@ -653,32 +653,18 @@ namespace OMLEngine.Dao
                    group r by r.End into g
                    orderby g.Key ascending
                    select new FilteredCollection() { Name = TitleConfig.DaysToFilterString(g.Key), Count = g.Count() };
-        }
-        
-        private static int GetMaxRuntime(List<TitleFilter> filters)
+        }       
+            
+        public static IEnumerable<FilteredCollection> GetAllRuntimes(List<TitleFilter> filters)
         {
             int maxRuntime = int.MaxValue;
 
-            if (filters != null)
+            if (filters != null && filters.Count != 0)
             {
-                foreach (TitleFilter filter in filters)
-                {
-                    if (filter.FilterType == TitleFilterType.Runtime)
-                    {
-                        int runtime = TitleConfig.RuntimeFilterStringToInt(filter.FilterText) - 30;                        
-
-                        if (runtime < maxRuntime)
-                            maxRuntime = runtime;
-                    }
-                }
+                // get the max runtime value to query titles for which is 
+                // going to be our most restrictive filter
+                maxRuntime = filters.Where(a => a.FilterType == TitleFilterType.Runtime).Min(a => TitleConfig.RuntimeFilterStringToInt(a.FilterText) - 30);
             }
-
-            return maxRuntime;
-        }
-            
-        public static IEnumerable<FilteredCollection> GetAllRuntimes(List<TitleFilter> filters)
-        {            
-            int maxRuntime = GetMaxRuntime(filters);
 
             IEnumerable<short> runtimes = from t in GetFilteredTitlesWrapper(filters)
                             where t.Runtime.HasValue && t.Runtime <= maxRuntime
