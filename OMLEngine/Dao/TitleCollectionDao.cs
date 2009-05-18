@@ -304,34 +304,16 @@ namespace OMLEngine.Dao
         {
             int maxTime = TitleConfig.RuntimeFilterStringToInt(runtime);            
 
-            if (maxTime == 0)
+            if (maxTime != -1)
             {
                 return from t in titles
                        where t.Runtime <= maxTime
                        select t;
             }               
-            else if ( maxTime == -1 )
+            else 
             {
                 return from t in titles
                        where t.Runtime > TitleConfig.MAX_RUNTIME
-                       select t;
-            }
-            else
-            {
-                int minTime = 0;
-
-                // the min time is the previous index
-                for (int x = 0; x < TitleConfig.RUNTIME_FILTER_LENGTHS.Length; x++)
-                {
-                    if (TitleConfig.RUNTIME_FILTER_LENGTHS[x] == maxTime)
-                    {
-                        minTime = TitleConfig.RUNTIME_FILTER_LENGTHS[x - 1];
-                        break;
-                    }
-                }
-                
-                return from t in titles
-                       where t.Runtime <= maxTime && t.Runtime > minTime
                        select t;
             }            
         }
@@ -476,15 +458,18 @@ namespace OMLEngine.Dao
         {
             var predicate = PredicateBuilder.True<Genre>();
 
-            foreach (TitleFilter filter in filters)
+            if (filters != null && filters.Count != 0)
             {
-                if (filter.FilterType != TitleFilterType.Genre)
-                    continue;
+                foreach (TitleFilter filter in filters)
+                {
+                    if (filter.FilterType != TitleFilterType.Genre)
+                        continue;
 
-                string text = filter.FilterText;
+                    string text = filter.FilterText;
 
-                predicate = predicate.And(a => a.MetaData.Name != text);                            
-            }           
+                    predicate = predicate.And(a => a.MetaData.Name != text);
+                }
+            }
 
             return predicate;
         }
@@ -669,16 +654,46 @@ namespace OMLEngine.Dao
                    orderby g.Key ascending
                    select new FilteredCollection() { Name = TitleConfig.DaysToFilterString(g.Key), Count = g.Count() };
         }
-
-        public static IEnumerable<FilteredCollection> GetAllRuntimes(List<TitleFilter> filters)
+        
+        private static int GetMaxRuntime(List<TitleFilter> filters)
         {
+            int maxRuntime = int.MaxValue;
+
+            if (filters != null)
+            {
+                foreach (TitleFilter filter in filters)
+                {
+                    if (filter.FilterType == TitleFilterType.Runtime)
+                    {
+                        int runtime = TitleConfig.RuntimeFilterStringToInt(filter.FilterText) - 30;                        
+
+                        if (runtime < maxRuntime)
+                            maxRuntime = runtime;
+                    }
+                }
+            }
+
+            return maxRuntime;
+        }
+            
+        public static IEnumerable<FilteredCollection> GetAllRuntimes(List<TitleFilter> filters)
+        {            
+            int maxRuntime = GetMaxRuntime(filters);
+
             IEnumerable<short> runtimes = from t in GetFilteredTitlesWrapper(filters)
-                                        where t.Runtime.HasValue
-                                        select t.Runtime.Value;
+                            where t.Runtime.HasValue && t.Runtime <= maxRuntime
+                            select t.Runtime.Value;
+
+            short exists = runtimes.FirstOrDefault();
+            int longestRuntime = (exists == 0) ? 0 : runtimes.Max();
+            
+            IEnumerable<TitleConfig.NumericRange> runtimeRange = ( longestRuntime < TitleConfig.MAX_RUNTIME)
+                                                                    ? TitleConfig.RUNTIME_RANGE.AsQueryable().Where(r => longestRuntime + 30 > r.End)
+                                                                    : TitleConfig.RUNTIME_RANGE;
 
             return from d in runtimes
-                   from r in TitleConfig.RUNTIME_RANGE
-                   where d >= r.Start && d < r.End
+                   from r in runtimeRange
+                   where d >= r.Start && d <= r.End
                    group r by r.End into g
                    orderby g.Key ascending
                    select new FilteredCollection() { Name = TitleConfig.RuntimeToFilterString(g.Key), Count = g.Count() };
