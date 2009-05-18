@@ -417,6 +417,7 @@ namespace OMLEngine
                 if (File.Exists(value))
                 {
                     _title.UpdatedFrontCoverPath = value;
+                    DaoTitle.ModifiedDate = DateTime.Now;
                 }
             }
         }
@@ -525,6 +526,7 @@ namespace OMLEngine
                     throw new FormatException("BackCoverPath must be 255 characters or less.");
 
                 _title.UpdatedBackCoverPath = value;
+                DaoTitle.ModifiedDate = DateTime.Now;
             }
         }
 
@@ -831,6 +833,7 @@ namespace OMLEngine
             if (!DaoTitle.UpdatedActors.Exists(p => p.PersonName.Equals(actor, StringComparison.OrdinalIgnoreCase)))
             {
                 DaoTitle.UpdatedActors.Add(new Role(actor, role));
+                DaoTitle.ModifiedDate = DateTime.Now;
             }
         }
 
@@ -843,12 +846,14 @@ namespace OMLEngine
             if (role != null)
             {
                 DaoTitle.UpdatedActors.Remove(role);
+                DaoTitle.ModifiedDate = DateTime.Now;
             }
         }
 
         public void RemoveAllActingRoles()
         {
             DaoTitle.UpdatedActors = new List<Role>();
+            DaoTitle.ModifiedDate = DateTime.Now;
         }
 
         public void AddNonActingRole(string name, string role)
@@ -858,6 +863,7 @@ namespace OMLEngine
             if (!DaoTitle.UpdatedNonActingRoles.Exists(p => p.PersonName.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
                 DaoTitle.UpdatedActors.Add(new Role(name, role));
+                DaoTitle.ModifiedDate = DateTime.Now;
             }
         }
 
@@ -870,12 +876,14 @@ namespace OMLEngine
             if (role != null)
             {
                 DaoTitle.UpdatedNonActingRoles.Remove(role);
+                DaoTitle.ModifiedDate = DateTime.Now;
             }
         }
 
         public void RemoveAllNonActingRoles()
         {
             DaoTitle.UpdatedNonActingRoles = new List<Role>();
+            DaoTitle.ModifiedDate = DateTime.Now;
         }
 
         /// <summary>
@@ -889,6 +897,7 @@ namespace OMLEngine
             if (!(DaoTitle.UpdatedDirectors.Exists(p => p.full_name.Equals(director.full_name, StringComparison.OrdinalIgnoreCase))))
             {
                 DaoTitle.UpdatedDirectors.Add(director);
+                DaoTitle.ModifiedDate = DateTime.Now;
             }
         }
 
@@ -901,12 +910,14 @@ namespace OMLEngine
             if (person != null)
             {
                 DaoTitle.UpdatedDirectors.Remove(person);
+                DaoTitle.ModifiedDate = DateTime.Now;
             }
         }
 
         public void RemoveAllDirectors()
         {
             DaoTitle.UpdatedDirectors = new List<Person>();
+            DaoTitle.ModifiedDate = DateTime.Now;
         }
 
         /// <summary>
@@ -920,6 +931,7 @@ namespace OMLEngine
             if (!(DaoTitle.UpdatedWriters.Exists(p => p.full_name.Equals(writer.full_name, StringComparison.OrdinalIgnoreCase))))
             {
                 DaoTitle.UpdatedWriters.Add(writer);
+                DaoTitle.ModifiedDate = DateTime.Now;
             }
         }
 
@@ -932,12 +944,14 @@ namespace OMLEngine
             if (person != null)
             {
                 DaoTitle.UpdatedWriters.Remove(person);
+                DaoTitle.ModifiedDate = DateTime.Now;
             }
         }
 
         public void RemoveAllWriters()
         {
             DaoTitle.UpdatedWriters = new List<Person>();
+            DaoTitle.ModifiedDate = DateTime.Now;
         }
 
         /// <summary>
@@ -951,6 +965,7 @@ namespace OMLEngine
             if (!(DaoTitle.UpdatedProducers.Exists(p => p.full_name.Equals(producer.full_name, StringComparison.OrdinalIgnoreCase))))
             {
                 DaoTitle.UpdatedProducers.Add(producer);
+                DaoTitle.ModifiedDate = DateTime.Now;
             }
         }
 
@@ -963,12 +978,14 @@ namespace OMLEngine
             if (person != null)
             {
                 DaoTitle.UpdatedProducers.Remove(person);
+                DaoTitle.ModifiedDate = DateTime.Now;
             }
         }
 
         public void RemoveAllProducers()
         {
             DaoTitle.UpdatedProducers = new List<Person>();
+            DaoTitle.ModifiedDate = DateTime.Now;
         }
         #endregion
 
@@ -985,7 +1002,10 @@ namespace OMLEngine
                 return;
 
             if (File.Exists(path))
+            {
                 DaoTitle.UpdatedFanArtPaths.Add(path);
+                DaoTitle.ModifiedDate = DateTime.Now;
+            }
         }
 
         /// <summary>
@@ -1001,6 +1021,7 @@ namespace OMLEngine
                 return;
 
             DaoTitle.UpdatedFanArtPaths.Remove(path);
+            DaoTitle.ModifiedDate = DateTime.Now;
         }
 
         /// <summary>
@@ -1092,6 +1113,7 @@ namespace OMLEngine
 
             // add the genre to the local collection
             DaoTitle.UpdatedGenres.Add(genre);
+            DaoTitle.ModifiedDate = DateTime.Now;
         }
 
         /// <summary>
@@ -1107,6 +1129,7 @@ namespace OMLEngine
                 return;
 
             DaoTitle.UpdatedGenres.Remove(genre);
+            DaoTitle.ModifiedDate = DateTime.Now;
         }
 
         /// <summary>
@@ -1115,6 +1138,7 @@ namespace OMLEngine
         public void RemoveAllGenres()
         {
             DaoTitle.UpdatedGenres = new List<string>();
+            DaoTitle.ModifiedDate = DateTime.Now;
         }
 
         /// <summary>
@@ -1181,6 +1205,7 @@ namespace OMLEngine
                 return;
 
             DaoTitle.UpdatedTags.Add(tag);
+            DaoTitle.ModifiedDate = DateTime.Now;
         }
 
         /// <summary>
@@ -1196,6 +1221,7 @@ namespace OMLEngine
                 return;
 
             DaoTitle.UpdatedTags.Remove(tag);
+            DaoTitle.ModifiedDate = DateTime.Now;
         }
 
         public override bool Equals(object obj)
