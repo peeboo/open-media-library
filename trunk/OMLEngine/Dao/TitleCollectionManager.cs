@@ -283,13 +283,23 @@ namespace OMLEngine
         }
 
         /// <summary>
-        /// Gets all titles with data needed for browsing
+        /// Gets all titles with data needed for browsing (this only give root titles ie parenttitleid = id)
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<Title> GetAllTitles()
         {
             // get all the titles
-            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetAllTitles());            
+            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetAllTitles());
+        }
+
+        /// <summary>
+        /// Gets the entire titles table
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<Title> GetEntireTitleSet()
+        {
+            // get all the titles
+            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetEntireTitleSet());
         }
 
         public static IEnumerable<Title> GetTitlesByPercentComplete(decimal completeness)

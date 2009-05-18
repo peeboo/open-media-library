@@ -109,6 +109,16 @@ namespace OMLEngine.Dao
             return titles;
         }
 
+        public static IEnumerable<Title> GetEntireTitleSet()
+        {
+            var titles = from t in DBContext.Instance.Titles
+                         orderby t.SortName
+                         select t;
+
+            return titles;
+        }
+
+
         /// <summary>
         /// Returns all the unwatched titles
         /// </summary>
