@@ -39,7 +39,7 @@ namespace OMLDatabaseEditor
         private Dictionary<int, int> _parentchildRelationship; // titleid, parentid
         public List<String> DXSkins;
 
-        int SelectedTreeRoot;
+        int? SelectedTreeRoot;
 
         public MainEditor()
         {
@@ -89,7 +89,7 @@ namespace OMLDatabaseEditor
             
             SplashScreen2.SetStatus(64, "Loading Movies.");
             LoadMovies();
-            PopulateMediaTree(_movieList);
+            PopulateMediaTree();
 
             SplashScreen2.SetStatus(80, "Loading MRU Lists.");
             this.titleEditor.SetMRULists();
@@ -246,12 +246,12 @@ namespace OMLDatabaseEditor
 
         private void LoadMovies()
         {
-            if ((mainNav.ActiveGroup != groupMediaTree) && (mainNav.ActiveGroup != groupMovies)) return;
+            if (mainNav.ActiveGroup != groupMediaTree) return;
             Cursor = Cursors.WaitCursor;
             if (allMoviesToolStripMenuItem1.Checked)
             {
                 //_movieList = TitleCollectionManager.GetAllTitles().ToList<Title>();
-                _movieList = TitleCollectionManager.GetAllTitles().ToDictionary(k => k.Id);
+                _movieList = TitleCollectionManager.GetEntireTitleSet().ToDictionary(k => k.Id);
                 //PopulateMovieList(_movieList);
             }
             else
@@ -297,8 +297,13 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.Default;
         }
 
-        private void PopulateMediaTree(Dictionary<int, Title> titles)
+        /// <summary>
+        /// This populates the media tree view
+        /// </summary>
+        private void PopulateMediaTree()
         {
+            Dictionary<int, Title> mediatreefolders = TitleCollectionManager.GetAllFolders().ToDictionary(k => k.Id);
+
             if (_mediaTree == null)
             {
                 _mediaTree = new Dictionary<int, TreeNode>();
@@ -318,14 +323,18 @@ namespace OMLDatabaseEditor
             }
 
             treeMedia.Nodes.Clear();
+            TreeNode rootnode = new TreeNode("All Media");
+            treeMedia.Nodes.Add(rootnode); 
+            SelectedTreeRoot = null;
 
-            foreach (KeyValuePair<int, Title> title in titles)
+
+            foreach (KeyValuePair<int, Title> title in mediatreefolders)
             {
                 TreeNode tn = new TreeNode(title.Value.Name);
                 tn.Name = title.Value.Id.ToString();
                 _mediaTree[title.Value.Id] = tn;
                 _parentchildRelationship[title.Value.Id] = title.Value.ParentTitleId;
-                if (title.Value.Name == "All Media") { treeMedia.Nodes.Add(tn); SelectedTreeRoot = title.Value.Id; }
+                if (title.Value.Id == title.Value.ParentTitleId) { rootnode.Nodes.Add(tn); }
             }
 
 
@@ -341,29 +350,43 @@ namespace OMLDatabaseEditor
                 }
             }
 
-            PopulateMovieListV2(SelectedTreeRoot, titles);
+            PopulateMovieListV2(SelectedTreeRoot);
         }
 
-        private void PopulateMovieListV2(int roottitleid, Dictionary<int, Title> titles)
+        private void PopulateMovieListV2(int? roottitleid)
         {
             lbTitles.Items.Clear();
 
-            Dictionary<int, Title> _mediaTree = new Dictionary<int,Title>();
             Dictionary<int, List<int>> _parentchildRelationship = new Dictionary<int,List<int>>(); // titleid, parentid
-            foreach (KeyValuePair<int, Title> title in titles)
+            foreach (KeyValuePair<int, Title> title in _movieList)
             {
-                // Create dictionary of all titles
-                _mediaTree[title.Value.Id] = title.Value;
-
-                // Create relation ship dictionary
-                if (!_parentchildRelationship.ContainsKey(title.Value.ParentTitleId))
+                // Create relationship dictionary
+                if (title.Value.Id != title.Value.ParentTitleId)
                 {
-                    _parentchildRelationship[title.Value.ParentTitleId] = new List<int>();
+                    if (!_parentchildRelationship.ContainsKey(title.Value.ParentTitleId))
+                    {
+                        _parentchildRelationship[title.Value.ParentTitleId] = new List<int>();
+                    }
+                    _parentchildRelationship[title.Value.ParentTitleId].Add(title.Value.Id);
                 }
-                _parentchildRelationship[title.Value.ParentTitleId].Add(title.Value.Id);
             }
 
-            PopulateMovieListV2Sub(roottitleid, _mediaTree, _parentchildRelationship);
+            if (roottitleid != null)
+            {
+                PopulateMovieListV2Sub(roottitleid, _parentchildRelationship);
+            }
+            else
+            {
+                foreach (KeyValuePair<int, Title> title in _movieList)
+                {
+                    // Create relationship dictionary
+                    if (title.Value.Id == title.Value.ParentTitleId)
+                    {
+                        PopulateMovieListV2Sub(title.Value.Id, _parentchildRelationship);
+                    }
+                }
+            }
+
 
             if (titleEditor.EditedTitle != null)
             {
@@ -371,26 +394,32 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private void PopulateMovieListV2Sub(int roottitleid, Dictionary<int, Title> _mediaTree, Dictionary<int, List<int>> _parentchildRelationship)
+        private void PopulateMovieListV2Sub(int? roottitleid, Dictionary<int, List<int>> _parentchildRelationship)
         {
-            lbTitles.Items.Add(_movieList[roottitleid]);
+            lbTitles.Items.Add(_movieList[(int)roottitleid]);
 
-            if (_parentchildRelationship.ContainsKey(roottitleid))
+            if (_parentchildRelationship.ContainsKey((int)roottitleid))
             {
-                foreach (int id in _parentchildRelationship[roottitleid])
+                foreach (int id in _parentchildRelationship[(int)roottitleid])
                 {
-                    //lbTitles.Items.Add(_mediaTree[id]);
-                    PopulateMovieListV2Sub(id, _mediaTree, _parentchildRelationship);
+                    PopulateMovieListV2Sub(id, _parentchildRelationship);
                 }
             }
-
         }
 
 
         private void treeMedia_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            SelectedTreeRoot = Convert.ToInt32(e.Node.Name);
-            PopulateMovieListV2(SelectedTreeRoot, _movieList);
+            lbTitles.Items.Clear();
+            if (!string.IsNullOrEmpty(e.Node.Name))
+            {
+                SelectedTreeRoot = Convert.ToInt32(e.Node.Name);
+                PopulateMovieListV2(SelectedTreeRoot);
+            }
+            else
+            {
+                PopulateMovieListV2(null);
+            }
         }
 
  //       private void PopulateMovieList(List<Title> titles)
@@ -465,6 +494,7 @@ namespace OMLDatabaseEditor
                 {
                     // Force reload of title
                     titleEditor.EditedTitle.ReloadTitle();
+                    lbTitles.Refresh();
                 }
             }
             else
@@ -891,7 +921,7 @@ namespace OMLDatabaseEditor
                         TitleCollectionManager.DeleteTitle(titleToRemove);                        
                         titleEditor.ClearEditor();
                         LoadMovies();
-                        PopulateMovieListV2(SelectedTreeRoot, _movieList);
+                        PopulateMovieListV2(SelectedTreeRoot);
                     }
                     this.Text = APP_TITLE;
                 }
@@ -961,7 +991,7 @@ namespace OMLDatabaseEditor
         {
             _loading = true;
             ToggleSaveState(false);
-            if (e.Group == groupMovies)
+            if (e.Group == groupMediaTree)
                 LoadMovies();
             else if (e.Group == groupMetadata)
                 LoadMetadata();
@@ -1010,7 +1040,7 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private void lbMovies_SelectedIndexChanged(object sender, EventArgs e)
+        /*private void lbMovies_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_loading) return;
             Cursor = Cursors.WaitCursor;
@@ -1030,7 +1060,7 @@ namespace OMLDatabaseEditor
                 ToggleSaveState(false);
             }
             Cursor = Cursors.Default;
-        }
+        }*/
 
         private void lbMetadata_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1098,9 +1128,9 @@ namespace OMLDatabaseEditor
 
             //BaseListBoxControl.SelectedItemCollection collection = lbMovies.SelectedItems;
             pgbProgress.Visible = true;
-            pgbProgress.Maximum = lbMovies.SelectedItems.Count;
+            pgbProgress.Maximum = lbTitles.SelectedItems.Count;
             pgbProgress.Value = 0;
-            foreach (Title title in lbMovies.SelectedItems)
+            foreach (Title title in lbTitles.SelectedItems)
             {
                 pgbProgress.Value++;
                 statusText.Text = "Getting metadata for " + title.Name;
@@ -1280,7 +1310,7 @@ namespace OMLDatabaseEditor
                 else if (filterItem.OwnerItem == filterByTagToolStripMenuItem)
                     _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Tag, filterItem.Text).ToList<Title>();
 */
-                PopulateMovieListV2(0, _movieList);
+                PopulateMovieListV2(0);
             }
             Cursor = Cursors.Default;
         }
@@ -1309,7 +1339,7 @@ namespace OMLDatabaseEditor
 
         private void deleteSelectedMoviesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (Title title in lbMovies.SelectedItems)
+            foreach (Title title in lbTitles.SelectedItems)
             {
                 if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.Id == title.Id)
                     titleEditor.ClearEditor();
@@ -1324,7 +1354,7 @@ namespace OMLDatabaseEditor
         {
             string mediafile = "";
             // Search for a movie file in selected title/titles
-            foreach (Title title in lbMovies.SelectedItems)
+            foreach (Title title in lbTitles.SelectedItems)
             {
                 foreach (Disk disk in title.Disks)
                 {
@@ -1390,29 +1420,38 @@ namespace OMLDatabaseEditor
 
             Title currentTitle = ((Title)lbTitles.Items[e.Index]);
 
+            // Find the printing bounds
             int x = e.Bounds.X;
             int y = e.Bounds.Y;
             int w = e.Bounds.Width;
             int h = e.Bounds.Height;
-
-            //e.Graphics.DrawLine(new Pen(Color.LightGray),new Point(0,y + h - 1), new Point(e.Bounds.Width, y + h - 1));
-                
+            
+            // Setup string formatting
             StringFormat stf = new StringFormat();
             stf.Trimming = StringTrimming.EllipsisCharacter;
             stf.FormatFlags = StringFormatFlags.NoWrap;
+            
             e.DrawBackground();
-            e.Graphics.DrawString(currentTitle.Name, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x,y + 2 ,w - 65,h), stf);
-            e.Graphics.DrawString(currentTitle.ReleaseDate.ToShortDateString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(w - 60, y + 2, w, h), stf);
-            e.Graphics.DrawString(currentTitle.Runtime.ToString() + " minutes, " + currentTitle.Studio, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Gray), new RectangleF(8,y + 16, w - 40,h), stf);
-//e.Graphics.DrawString(
 
-            Color c1 = Color.Coral;
-            Color c2 = Color.Crimson;
 
-            
-            
-            //if (currentTitle.PercentComplete != null)
+            if ((currentTitle.TitleType == TitleTypes.Collection) ||
+                (currentTitle.TitleType == TitleTypes.Season) ||
+                (currentTitle.TitleType == TitleTypes.TVShow))
             {
+                // Folder specific paint goes here
+                e.Graphics.FillRectangle(new SolidBrush(Color.LightGray), x, y, w, h);
+                e.Graphics.DrawString(currentTitle.Name, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold), new SolidBrush(Color.Black), new RectangleF(x, y + 2, w - 65, h), stf);
+            }
+            else
+            {
+                // Media specific paint goes here
+                e.Graphics.DrawString(currentTitle.Name, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 2, w - 65, h), stf);
+                e.Graphics.DrawString(currentTitle.ReleaseDate.ToShortDateString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(w - 60, y + 2, w, h), stf);
+                e.Graphics.DrawString(currentTitle.Runtime.ToString() + " minutes, " + currentTitle.Studio, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Gray), new RectangleF(8, y + 16, w - 40, h), stf);
+
+                // Draw percentage complete box
+                Color c1 = Color.Coral;
+                Color c2 = Color.Crimson;
                 if (currentTitle.PercentComplete <= .3M)
                 {
                 }
@@ -1441,15 +1480,17 @@ namespace OMLDatabaseEditor
                     c1 = Color.SkyBlue;
                     c2 = Color.White;
                 }
+                
+                LinearGradientBrush bb = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), c1, c2, 2);
+
+                e.Graphics.FillEllipse(bb, new Rectangle(x + w - 30, y + 16, 14, 14));
+                e.Graphics.DrawEllipse(new Pen(Color.Black), new Rectangle(x + w - 30, y + 16, 14, 14));
             }
 
-            LinearGradientBrush bb = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), c1, c2, 2);
+            // Common painting goes here
+            e.Graphics.DrawLine(new Pen(Color.Gray), 0, y + h - 1, w, y + h - 1);
 
-            e.Graphics.FillEllipse(bb,new Rectangle(x + w - 30, y + 16, 14,14));
-            e.Graphics.DrawEllipse(new Pen(Color.Black), new Rectangle(x + w - 30, y + 16, 14, 14));
 
-            e.Graphics.DrawLine(new Pen(Color.LightGray), 0, y + h - 1, w, y + h - 1); 
-            
             e.DrawFocusRectangle();
         }
 
@@ -1469,9 +1510,17 @@ namespace OMLDatabaseEditor
                 
                 if (selectedTitle == null) return;
 
-                titleEditor.LoadDVD(selectedTitle);
-                this.Text = APP_TITLE + " - " + selectedTitle.Name;
-                ToggleSaveState(false);
+                if ((selectedTitle.TitleType == TitleTypes.Episode) ||
+                    (selectedTitle.TitleType == TitleTypes.Movie))
+                {
+                    titleEditor.LoadDVD(selectedTitle);
+                    this.Text = APP_TITLE + " - " + selectedTitle.Name;
+                    ToggleSaveState(false);
+                }
+                else
+                {
+                    titleEditor.ClearEditor();
+                }
             }
             Cursor = Cursors.Default;
         }
