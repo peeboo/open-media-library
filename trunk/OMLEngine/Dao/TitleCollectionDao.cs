@@ -498,7 +498,29 @@ namespace OMLEngine.Dao
                        (from title in filteredTitles
                         where title.GenreName == g.Key
                         select title.Path).First() };
-        }       
+        }
+
+        private static Expression<Func<Person, bool>> GetPersonPredicate(List<TitleFilter> filters)
+        {
+            var predicate = PredicateBuilder.True<Person>();
+
+            if (filters != null && filters.Count != 0)
+            {
+                foreach (TitleFilter filter in filters)
+                {
+                    if (filter.FilterType != TitleFilterType.Person && 
+                        filter.FilterType != TitleFilterType.Director &&
+                        filter.FilterType != TitleFilterType.Actor)
+                        continue;
+
+                    string text = filter.FilterText;
+
+                    predicate = predicate.And(a => a.MetaData.FullName != text);
+                }
+            }
+
+            return predicate;
+        }
         
         /// <summary>
         /// Returns all the people in the given titles
@@ -508,9 +530,12 @@ namespace OMLEngine.Dao
         /// <returns></returns>
         public static IEnumerable<FilteredCollection> GetAllPersons(List<TitleFilter> filters, PeopleRole role)
         {
+            var filteredPeople = DBContext.Instance.Persons.Where(GetPersonPredicate(filters));
+
             return from t in GetFilteredTitlesWrapper(filters)
-                   from p in t.People
-                   where p.Role == (byte)role
+                   from p in filteredPeople
+                   where p.TitleId == t.Id
+                   where p.Role == (byte)role                   
                    join b in DBContext.Instance.BioDatas on p.BioId equals b.Id
                    group b by b.FullName into g
                    orderby g.Key ascending
