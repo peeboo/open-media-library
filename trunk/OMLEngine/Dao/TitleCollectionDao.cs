@@ -627,6 +627,26 @@ namespace OMLEngine.Dao
                    select new FilteredCollection() { Name = GetVideoStringFromByte(g.Key), Count = g.Count() };
         }
 
+         private static Expression<Func<Tag, bool>> GetTagPredicate(List<TitleFilter> filters)
+        {
+            var predicate = PredicateBuilder.True<Tag>();
+
+            if (filters != null && filters.Count != 0)
+            {
+                foreach (TitleFilter filter in filters)
+                {
+                    if (filter.FilterType != TitleFilterType.Tag)
+                        continue;
+
+                    string text = filter.FilterText;
+
+                    predicate = predicate.And(a => a.Name != text);
+                }
+            }
+
+            return predicate;
+        }       
+
         /// <summary>
         /// Returns all the tags for the given filter and their counts
         /// </summary>
@@ -634,8 +654,11 @@ namespace OMLEngine.Dao
         /// <returns></returns>
         public static IEnumerable<FilteredCollection> GetAllTags(List<TitleFilter> filters)
         {
+            var filteredTags = DBContext.Instance.Tags.Where(GetTagPredicate(filters));
+
             return from t in GetFilteredTitlesWrapper(filters)
-                   from ta in t.Tags
+                   from ta in filteredTags
+                   where t.Id == ta.TitleId
                    group ta by ta.Name into g
                    orderby g.Key ascending
                    select new FilteredCollection() { Name = g.Key, Count = g.Count() };
@@ -659,7 +682,7 @@ namespace OMLEngine.Dao
         {
             int maxRuntime = int.MaxValue;
 
-            if (filters != null && filters.Count != 0)
+            if (filters != null && filters.Count != 0 && filters.Exists(f => f.FilterType == TitleFilterType.Runtime))
             {
                 // get the max runtime value to query titles for which is 
                 // going to be our most restrictive filter
@@ -669,9 +692,8 @@ namespace OMLEngine.Dao
             IEnumerable<short> runtimes = from t in GetFilteredTitlesWrapper(filters)
                             where t.Runtime.HasValue && t.Runtime <= maxRuntime
                             select t.Runtime.Value;
-
-            short exists = runtimes.FirstOrDefault();
-            int longestRuntime = (exists == 0) ? 0 : runtimes.Max();
+            
+            int longestRuntime = runtimes.DefaultIfEmpty().Max();
             
             IEnumerable<TitleConfig.NumericRange> runtimeRange = ( longestRuntime < TitleConfig.MAX_RUNTIME)
                                                                     ? TitleConfig.RUNTIME_RANGE.AsQueryable().Where(r => longestRuntime + 30 > r.End)
