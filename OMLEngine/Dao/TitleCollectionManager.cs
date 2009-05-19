@@ -381,6 +381,16 @@ namespace OMLEngine
         }
 
         /// <summary>
+        /// Returns the date when titles were added grouped into the logical groups with access to the titles
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredTitleCollection> GetAllDateAddedGrouped(List<TitleFilter> filters)
+        {
+            return Dao.TitleCollectionDao.GetAllDateAddedGrouped(filters);
+        }
+
+        /// <summary>
         /// Returns all the valid runtimes for the collection and their counts
         /// 
         /// todo : solomon : runtimes doesn't use the fancy LINQ way because of the grouping
@@ -419,6 +429,11 @@ namespace OMLEngine
         public static IEnumerable<FilteredCollection> GetAllYears(List<TitleFilter> filters)
         {
             return Dao.TitleCollectionDao.GetAllYears(filters);                
+        }
+
+        public static IEnumerable<FilteredTitleCollection> GetAllYearsGrouped(List<TitleFilter> filters)
+        {
+            return Dao.TitleCollectionDao.GetAllYearsGrouped(filters);
         }
 
         /// <summary>

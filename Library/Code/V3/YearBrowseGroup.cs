@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using Microsoft.MediaCenter.UI;
+using OMLEngine;
 
 namespace Library.Code.V3
 {
@@ -11,20 +12,18 @@ namespace Library.Code.V3
     {
         // Fields
         private IList m_listContent;
-        private List<OMLEngine.Title> titles;
-        private List<OMLEngine.TitleFilter> m_filters;
-
-        public YearBrowseGroup(List<OMLEngine.TitleFilter> filter)
+        private List<Title> titles;        
+        
+        public YearBrowseGroup(List<Title> titles)
             :base()
         {
-            this.m_filters = filter;
+            this.titles = titles;
             this.m_listContent = new VirtualList(new ItemCountHandler(this.InitializeListCount));
             ((VirtualList)this.m_listContent).RequestItemHandler = new RequestItemHandler(this.GetItem);
         }
 
         private void InitializeListCount(VirtualList vlist)
-        {
-            titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(this.m_filters));
+        {            
             //temp hack for perf issue: see http://discuss.mediacentersandbox.com/forums/thread/9205.aspx
             if (titles.Count > 20)
                 ((VirtualList)this.m_listContent).Count = 20;
