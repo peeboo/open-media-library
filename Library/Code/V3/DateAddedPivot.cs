@@ -183,11 +183,8 @@ namespace Library.Code.V3
 
             //titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(this.m_filters));
             //((VirtualList)this.m_listContent).Count = titles.Count;
-
-
-
-            OMLEngine.TitleFilterType filterType = Filter.FilterStringToTitleType("Date Added");
-            Filter f = new Filter(null, filterType, null);//new MovieGallery()
+            
+            Filter f = new Filter(null, OMLEngine.TitleFilterType.DateAdded, m_filters);//new MovieGallery()
             this.m_listContent = new VirtualList(this, null);
             IList<Library.GalleryItem> filteredTitles = f.GetGalleryItems();
             foreach (Library.GalleryItem item in filteredTitles)
