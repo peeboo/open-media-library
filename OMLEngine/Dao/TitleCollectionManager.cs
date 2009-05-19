@@ -6,13 +6,29 @@ using Dao = OMLEngine.Dao;
 
 namespace OMLEngine
 {
-    public enum TitleTypes : int
+    /*public enum TitleTypes : int
     {
         Movie, // (uses media logic)
         Episode, // (uses media logic)
         Collection, // (uses folder logic)
         TVShow, // (uses folder logic)
         Season // (uses folder logic)
+    }*/
+    public enum TitleTypes : int
+    {
+        Root = 0x0001,
+
+        // Folders / containers
+        Collection = 0x0002,
+        TVShow = 0x0004,
+        Season = 0x0008,
+        AllFolders = 0x00FE,
+
+        // Media
+        Unknown = 0x0100,
+        Movie = 0x0200, 
+        Episode = 0x0400,
+        AllMedia = 0xFF00
     }
 
 
@@ -25,6 +41,9 @@ namespace OMLEngine
         /// <returns></returns>
         public static bool AddTitle(Title title)
         {
+            // Set default titletype if none specified
+            if ((title.TitleType == null) || (title.TitleType == 0)) { title.TitleType = TitleTypes.Root | TitleTypes.Unknown; }
+            
             // setup all the collections objects
             // todo : solomon : this should go away once it's understood how people 
             // will be added
@@ -272,15 +291,6 @@ namespace OMLEngine
             ImageManager.CleanupCachedImages();
         }
 
-        /// <summary>
-        /// Gets all folder / containers with data needed for browsing
-        /// </summary>
-        /// <returns></returns>
-        public static IEnumerable<Title> GetAllFolders()
-        {
-            // get all the titles
-            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetAllFolders());
-        }
 
         /// <summary>
         /// Gets all titles with data needed for browsing (this only give root titles ie parenttitleid = id)
@@ -291,16 +301,12 @@ namespace OMLEngine
             // get all the titles
             return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetAllTitles());
         }
-
-        /// <summary>
-        /// Gets the entire titles table
-        /// </summary>
-        /// <returns></returns>
-        public static IEnumerable<Title> GetEntireTitleSet()
+        public static IEnumerable<Title> GetAllTitles(TitleTypes type)
         {
             // get all the titles
-            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetEntireTitleSet());
+            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetAllTitles(type));
         }
+
 
         public static IEnumerable<Title> GetTitlesByPercentComplete(decimal completeness)
         {
