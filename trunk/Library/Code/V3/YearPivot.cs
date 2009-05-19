@@ -10,6 +10,43 @@ namespace Library.Code.V3
 {
     public class YearPivot : BrowsePivot
     {
+        private List<OMLEngine.TitleFilter> m_filters;
+        private IList m_listContent;
+
+        public override IList Content
+        {
+            get
+            {                
+                return this.m_listContent;
+            }
+            set
+            {
+                if (this.m_listContent != value)
+                {
+                    this.m_listContent = value;
+                    base.FirePropertyChanged("Content");
+                }
+            }
+        }
+
+        public YearPivot(IModelItemOwner owner, string stDescription, string stNoContentText, List<OMLEngine.TitleFilter> filters)
+            : base(owner, stDescription, stNoContentText, null)
+        {
+            this.SupportsItemContext = true;
+            this.SetupContextMenu();
+            this.SupportsJIL = false;
+            this.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
+            this.ContentItemTemplate = "GalleryGroup";
+            this.SubContentItemTemplate = "twoRowPoster";//needs to pull from the total count to decide...
+            this.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+
+            this.SupportedContentItemTemplates.Add("View Large", "oneRowGalleryItemPoster");
+            this.SupportedContentItemTemplates.Add("View Small", "twoRowGalleryItemPoster");
+            this.SupportedContentItemTemplates.Add("View List", "ListViewItemGrouped");
+
+            this.m_filters = filters;
+            this.m_listContent = new VirtualList(new ItemCountHandler(this.InitializeListCount));            
+        }
 
         public YearPivot(IModelItemOwner owner, string stDescription, string stNoContentText, IList listContent)
             : base(owner, stDescription, stNoContentText, listContent)
@@ -156,6 +193,55 @@ namespace Library.Code.V3
             OMLApplication.Current.CatchMoreInfo();
             if (this.Owner is GalleryPage)
                 ((GalleryPage)this.Owner).SelectedItemCommand.Invoke();
+        }
+
+        private void InitializeListCount(VirtualList vlist)
+        {
+            this.IsBusy = true;            
+
+            Filter f = new Filter(null, OMLEngine.TitleFilterType.Year, m_filters);
+            VirtualList filteredGalleryList = new VirtualList(this, null);
+            IList<Library.GalleryItem> filteredTitles = f.GetGalleryItems();
+            
+            foreach (Library.GalleryItem item in filteredTitles)
+            {
+                //am I being silly here copying this?
+                List<OMLEngine.TitleFilter> newFilter = new List<OMLEngine.TitleFilter>();
+                foreach (OMLEngine.TitleFilter filt in this.m_filters)
+                {
+                    newFilter.Add(filt);
+                }
+                newFilter.Add(new OMLEngine.TitleFilter(OMLEngine.TitleFilterType.Year, item.Name));
+
+                Library.Code.V3.YearBrowseGroup testGroup2 = new Library.Code.V3.YearBrowseGroup(newFilter);
+                testGroup2.Owner = this;
+                //tmp hack for unknown dates
+                if (item.Name == "1900")
+                    testGroup2.Description = "UNKNOWN";
+                else
+                    testGroup2.Description = item.Name;
+
+                testGroup2.DefaultImage = null;
+                testGroup2.Invoked += delegate(object sender, EventArgs args)
+                {
+                    OMLProperties properties = new OMLProperties();
+                    properties.Add("Application", OMLApplication.Current);
+                    properties.Add("I18n", I18n.Instance);
+                    Command CommandContextPopOverlay = new Command();
+                    properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
+
+                    Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(newFilter, testGroup2.Description);
+
+                    properties.Add("Page", gallery);
+                    OMLApplication.Current.Session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
+                };
+
+                testGroup2.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
+                m_listContent.Add(testGroup2);
+            }
+
+
+            this.IsBusy = false;
         }
     }
 }

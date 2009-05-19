@@ -251,7 +251,7 @@ namespace Library.Code.V3
 
         private void CreateYearFilter()
         {
-            OMLEngine.TitleFilterType filterType = Filter.FilterStringToTitleType("Year");
+            /*OMLEngine.TitleFilterType filterType = Filter.FilterStringToTitleType("Year");
             Filter f = new Filter(null, filterType, null);
             VirtualList filteredGalleryList = new VirtualList(this, null);
             IList<Library.GalleryItem> filteredTitles = f.GetGalleryItems();
@@ -288,16 +288,16 @@ namespace Library.Code.V3
                 };
                 testGroup2.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
                 filteredGalleryList.Add(testGroup2);
-            }
+            }*/
 
-            Library.Code.V3.YearPivot yearGroup = new Library.Code.V3.YearPivot(this, "year", "No titles were found.", filteredGalleryList);
+            Library.Code.V3.YearPivot yearGroup = new Library.Code.V3.YearPivot(this, "year", "No titles were found.", this.filters);
             yearGroup.ContentLabel = this.Description;
-            yearGroup.SupportsJIL = false;
+            /*yearGroup.SupportsJIL = false;
             yearGroup.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
             yearGroup.ContentItemTemplate = "GalleryGroup";
             yearGroup.SubContentItemTemplate = "twoRowPoster";//needs to pull from the total count to decide...
             yearGroup.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
-            yearGroup.ContentLabel = this.Description;
+            yearGroup.ContentLabel = this.Description;*/
             this.Model.Pivots.Options.Add(yearGroup);
         }
 
