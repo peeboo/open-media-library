@@ -825,9 +825,13 @@ namespace OMLDatabaseEditor
 
                 // This gets called by titleEditor.SaveChanges(); anyway
                     TitleCollectionManager.SaveTitleUpdates();
+                    editedTitle.ReloadTitle();
+                    editedTitle.ParentTitleId = editedTitle.Id;
                 }
-                
+
                 titleEditor.SaveChanges();
+                LoadMovies();
+                PopulateMediaTree();
                 //LoadMovies();
             }            
         }
