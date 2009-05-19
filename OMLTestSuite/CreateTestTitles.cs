@@ -19,19 +19,25 @@ namespace OMLTestSuite
         //int filmno;
         public void CreateTitles()
         {
+            Console.WriteLine("Creating titles");
             totalfilms = 100;
             totaltvprograms = 100;
             seriesperprogram = 5;
             episodesperseries = 8;
 
+            // Test to create a title withou type specified
+            Title ttt1 = new Title();
+            ttt1.Name = "Test without titletype";
+            TitleCollectionManager.AddTitle(ttt1);
+
             Title ttmovies = new Title();
             ttmovies.Name = "Movies";
-            ttmovies.TitleType = TitleTypes.Collection;
+            ttmovies.TitleType = TitleTypes.Collection | TitleTypes.Root;
             TitleCollectionManager.AddTitle(ttmovies);
 
             Title tttv = new Title();
             tttv.Name = "TV";
-            tttv.TitleType = TitleTypes.Collection;
+            tttv.TitleType = TitleTypes.TVShow | TitleTypes.Root;
             TitleCollectionManager.AddTitle(tttv);
 
             for (int i = 0; i < totalfilms; i++)
@@ -43,7 +49,9 @@ namespace OMLTestSuite
             {
                 CreateTVProgram(tttv.Id, i);
             }
+            Console.WriteLine("Job Done. Press enter");
             Console.ReadKey();
+
         }
 
         public void CreateFilm(int parent, int no)
