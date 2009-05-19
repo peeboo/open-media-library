@@ -251,7 +251,7 @@ namespace OMLDatabaseEditor
             if (allMoviesToolStripMenuItem1.Checked)
             {
                 //_movieList = TitleCollectionManager.GetAllTitles().ToList<Title>();
-                _movieList = TitleCollectionManager.GetEntireTitleSet().ToDictionary(k => k.Id);
+                _movieList = TitleCollectionManager.GetAllTitles(TitleTypes.AllMedia | TitleTypes.AllFolders).ToDictionary(k => k.Id);
                 //PopulateMovieList(_movieList);
             }
             else
@@ -302,7 +302,7 @@ namespace OMLDatabaseEditor
         /// </summary>
         private void PopulateMediaTree()
         {
-            Dictionary<int, Title> mediatreefolders = TitleCollectionManager.GetAllFolders().ToDictionary(k => k.Id);
+            Dictionary<int, Title> mediatreefolders = TitleCollectionManager.GetAllTitles(TitleTypes.AllFolders).ToDictionary(k => k.Id);
 
             if (_mediaTree == null)
             {
@@ -334,7 +334,8 @@ namespace OMLDatabaseEditor
                 tn.Name = title.Value.Id.ToString();
                 _mediaTree[title.Value.Id] = tn;
                 _parentchildRelationship[title.Value.Id] = title.Value.ParentTitleId;
-                if (title.Value.Id == title.Value.ParentTitleId) { rootnode.Nodes.Add(tn); }
+                //if (title.Value.Id == title.Value.ParentTitleId) { rootnode.Nodes.Add(tn); }
+                if ((title.Value.TitleType & TitleTypes.Root) != 0) { rootnode.Nodes.Add(tn); }
             }
 
 
@@ -373,16 +374,27 @@ namespace OMLDatabaseEditor
 
             if (roottitleid != null)
             {
+                // We are looking at a sub folder
                 PopulateMovieListV2Sub(roottitleid, _parentchildRelationship);
             }
             else
             {
+                // We are looking at all items including root items
                 foreach (KeyValuePair<int, Title> title in _movieList)
                 {
                     // Create relationship dictionary
-                    if (title.Value.Id == title.Value.ParentTitleId)
+                    if ((title.Value.TitleType & TitleTypes.Root) != 0)
                     {
-                        PopulateMovieListV2Sub(title.Value.Id, _parentchildRelationship);
+                        if ((title.Value.TitleType & TitleTypes.AllFolders) != 0)
+                        {
+                            // This is a folder. Query child items
+                            PopulateMovieListV2Sub(title.Value.Id, _parentchildRelationship);
+                        }
+                        else
+                        {
+                            // This is a media title at the root level. Show it
+                            lbTitles.Items.Insert(0,title.Value);
+                        }
                     }
                 }
             }
@@ -1434,9 +1446,7 @@ namespace OMLDatabaseEditor
             e.DrawBackground();
 
 
-            if ((currentTitle.TitleType == TitleTypes.Collection) ||
-                (currentTitle.TitleType == TitleTypes.Season) ||
-                (currentTitle.TitleType == TitleTypes.TVShow))
+            if ((currentTitle.TitleType & TitleTypes.AllFolders) != 0)
             {
                 // Folder specific paint goes here
                 e.Graphics.FillRectangle(new SolidBrush(Color.LightGray), x, y, w, h);
@@ -1510,8 +1520,7 @@ namespace OMLDatabaseEditor
                 
                 if (selectedTitle == null) return;
 
-                if ((selectedTitle.TitleType == TitleTypes.Episode) ||
-                    (selectedTitle.TitleType == TitleTypes.Movie))
+                if ((selectedTitle.TitleType & TitleTypes.AllMedia) != 0)
                 {
                     titleEditor.LoadDVD(selectedTitle);
                     this.Text = APP_TITLE + " - " + selectedTitle.Name;
