@@ -102,7 +102,7 @@ namespace OMLEngine.Dao
         public static IEnumerable<Title> GetAllTitles()
         {
             var titles = from t in DBContext.Instance.Titles
-                         where t.ParentTitleId.CompareTo(t.Id) == 0
+                         where t.ParentTitleId == 0
                          orderby t.SortName
                          select t;
 
@@ -661,7 +661,20 @@ namespace OMLEngine.Dao
                    group t by t.ReleaseDate.Value.Year into g
                    orderby g.Key descending
                    select new FilteredCollection() { Name = g.Key.ToString(), Count = g.Count() };
-        }        
+        }
+
+        public static IEnumerable<FilteredTitleCollection> GetAllYearsGrouped(List<TitleFilter> filters)
+        {
+            IQueryable<Title> filteredTitles = GetFilteredTitlesWrapper(filters);
+
+            return from t in filteredTitles
+                   where t.ReleaseDate != null
+                   group t by t.ReleaseDate.Value.Year into g
+                   orderby g.Key descending
+                   select new FilteredTitleCollection() { 
+                                Name = g.Key.ToString(), 
+                                Titles = TitleCollectionManager.ConvertDaoTitlesToTitles(from t in filteredTitles where t.ReleaseDate != null && t.ReleaseDate.Value.Year == g.Key orderby t.SortName select t) };
+        }
 
         /// <summary>
         /// Returns all the valid video formats and their counts
@@ -726,7 +739,25 @@ namespace OMLEngine.Dao
                    group r by r.End into g
                    orderby g.Key ascending
                    select new FilteredCollection() { Name = TitleConfig.DaysToFilterString(g.Key), Count = g.Count() };
-        }       
+        }
+
+        public static IEnumerable<FilteredTitleCollection> GetAllDateAddedGrouped(List<TitleFilter> filters)
+        {
+            IEnumerable<int> days = from t in GetFilteredTitlesWrapper(filters)
+                                    where t.DateAdded.HasValue
+                                    select (int)(DateTime.Now - t.DateAdded.Value).TotalDays;
+
+            return from d in days
+                   from r in TitleConfig.DATE_ADDED_RANGE
+                   where d >= r.Start && d < r.End
+                   group r by r.End into g
+                   orderby g.Key ascending
+                   select new FilteredTitleCollection() 
+                   { 
+                       Name = TitleConfig.DaysToFilterString(g.Key),
+                       Titles = TitleCollectionManager.ConvertDaoTitlesToTitles(ApplyDateAddedFilter(GetFilteredTitlesWrapper(filters),  TitleConfig.DaysToFilterString(g.Key)))
+                   };
+        }
             
         public static IEnumerable<FilteredCollection> GetAllRuntimes(List<TitleFilter> filters)
         {

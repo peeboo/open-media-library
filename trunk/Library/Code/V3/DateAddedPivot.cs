@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using Microsoft.MediaCenter.UI;
+using OMLEngine;
 
 namespace Library.Code.V3
 {
@@ -181,48 +182,32 @@ namespace Library.Code.V3
         {
             this.IsBusy = true;
 
-            //titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(this.m_filters));
-            //((VirtualList)this.m_listContent).Count = titles.Count;
-            
-            Filter f = new Filter(null, OMLEngine.TitleFilterType.DateAdded, m_filters);//new MovieGallery()
-            this.m_listContent = new VirtualList(this, null);
-            IList<Library.GalleryItem> filteredTitles = f.GetGalleryItems();
-            foreach (Library.GalleryItem item in filteredTitles)
+            foreach (FilteredTitleCollection dateAdded in TitleCollectionManager.GetAllDateAddedGrouped(m_filters))
             {
-                //this is a temp hack
-                if (item.Name != " All " && item.ForcedCount>1)//umm why is the forced count always wrong?
+                Library.Code.V3.YearBrowseGroup testGroup2 = new Library.Code.V3.YearBrowseGroup(new List<Title>(dateAdded.Titles));
+
+                testGroup2.Owner = this;
+                testGroup2.Description = dateAdded.Name;
+                testGroup2.DefaultImage = null;// new Image("resx://Library/Library.Resources/Genre_Sample_mystery");
+                testGroup2.Invoked += delegate(object sender, EventArgs args)
                 {
-                    //List<OMLEngine.TitleFilter> filter = new List<OMLEngine.TitleFilter>();
-                    //am I being silly here copying this?
-                    List<OMLEngine.TitleFilter> newFilter = new List<OMLEngine.TitleFilter>();
-                    foreach (OMLEngine.TitleFilter filt in this.m_filters)
-                    {
-                        newFilter.Add(filt);
-                    }
-                    newFilter.Add(new OMLEngine.TitleFilter(OMLEngine.TitleFilterType.DateAdded, item.Name));
+                    OMLProperties properties = new OMLProperties();
+                    properties.Add("Application", OMLApplication.Current);
+                    properties.Add("I18n", I18n.Instance);
+                    Command CommandContextPopOverlay = new Command();
+                    properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
 
-                    Library.Code.V3.YearBrowseGroup testGroup2 = new Library.Code.V3.YearBrowseGroup(newFilter);
-                    testGroup2.Owner = this;
-                    testGroup2.Description = item.Name;
-                    testGroup2.DefaultImage = null;// new Image("resx://Library/Library.Resources/Genre_Sample_mystery");
-                    testGroup2.Invoked += delegate(object sender, EventArgs args)
-                    {
-                        OMLProperties properties = new OMLProperties();
-                        properties.Add("Application", OMLApplication.Current);
-                        properties.Add("I18n", I18n.Instance);
-                        Command CommandContextPopOverlay = new Command();
-                        properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
+                    List<TitleFilter> newFilter = new List<TitleFilter>(m_filters);
+                    newFilter.Add(new TitleFilter(TitleFilterType.DateAdded, dateAdded.Name));
 
-                        Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(newFilter, testGroup2.Description);
+                    Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(newFilter, testGroup2.Description);
 
-                        properties.Add("Page", gallery);
-                        OMLApplication.Current.Session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
-                    };
-                    testGroup2.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
-                    this.m_listContent.Add(testGroup2);
-                }
+                    properties.Add("Page", gallery);
+                    OMLApplication.Current.Session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
+                };
+                testGroup2.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
+                this.m_listContent.Add(testGroup2);                
             }
-
 
             this.IsBusy = false;
         }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections;
 using Microsoft.MediaCenter.UI;
 using System.Collections.Specialized;
+using OMLEngine;
 
 namespace Library.Code.V3
 {
@@ -199,27 +200,15 @@ namespace Library.Code.V3
         {
             this.IsBusy = true;            
 
-            Filter f = new Filter(null, OMLEngine.TitleFilterType.Year, m_filters);
-            VirtualList filteredGalleryList = new VirtualList(this, null);
-            IList<Library.GalleryItem> filteredTitles = f.GetGalleryItems();
-            
-            foreach (Library.GalleryItem item in filteredTitles)
-            {
-                //am I being silly here copying this?
-                List<OMLEngine.TitleFilter> newFilter = new List<OMLEngine.TitleFilter>();
-                foreach (OMLEngine.TitleFilter filt in this.m_filters)
-                {
-                    newFilter.Add(filt);
-                }
-                newFilter.Add(new OMLEngine.TitleFilter(OMLEngine.TitleFilterType.Year, item.Name));
-
-                Library.Code.V3.YearBrowseGroup testGroup2 = new Library.Code.V3.YearBrowseGroup(newFilter);
+            foreach (FilteredTitleCollection year in TitleCollectionManager.GetAllYearsGrouped(m_filters))
+            {                
+                Library.Code.V3.YearBrowseGroup testGroup2 = new Library.Code.V3.YearBrowseGroup(new List<Title>(year.Titles));
                 testGroup2.Owner = this;
                 //tmp hack for unknown dates
-                if (item.Name == "1900")
+                if (year.Name == "1900")
                     testGroup2.Description = "UNKNOWN";
                 else
-                    testGroup2.Description = item.Name;
+                    testGroup2.Description = year.Name;
 
                 testGroup2.DefaultImage = null;
                 testGroup2.Invoked += delegate(object sender, EventArgs args)
@@ -230,6 +219,9 @@ namespace Library.Code.V3
                     Command CommandContextPopOverlay = new Command();
                     properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
 
+                    List<TitleFilter> newFilter = new List<TitleFilter>(m_filters);
+                    newFilter.Add(new TitleFilter(TitleFilterType.Year, year.Name));
+
                     Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(newFilter, testGroup2.Description);
 
                     properties.Add("Page", gallery);
@@ -238,10 +230,7 @@ namespace Library.Code.V3
 
                 testGroup2.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
                 m_listContent.Add(testGroup2);
-            }
-
-
-            this.IsBusy = false;
+            }                        
         }
     }
 }
