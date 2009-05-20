@@ -480,7 +480,12 @@ namespace OMLEngine
         public static IEnumerable<FilteredCollection> GetAllGenres(List<TitleFilter> filters)
         {
             return Dao.TitleCollectionDao.GetAllGenres(filters);
-        }                
+        }
+
+        public static IEnumerable<FilteredCollectionWithImages> GetAllGenresWithImages(List<TitleFilter> filters)
+        {
+            return Dao.TitleCollectionDao.GetAllGenresWithImages(filters);
+        }
 
         /// <summary>
         /// Gets all the people and their count of movies
@@ -631,6 +636,11 @@ namespace OMLEngine
                 Dao.DBContext.Instance.Dispose();
             }            
         }
+    }
+
+    public class FilteredCollectionWithImages : FilteredCollection
+    {
+        public IEnumerable<int> ImageIds { get; internal set; }
     }
 
     public class FilteredCollection : IComparable

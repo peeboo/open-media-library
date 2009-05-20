@@ -510,6 +510,37 @@ namespace OMLEngine.Dao
                         select title.Path).First() };
         }
 
+        /// <summary>
+        /// Returns all the people in the given titles
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <returns></returns>
+        public static IEnumerable<FilteredCollectionWithImages> GetAllGenresWithImages(List<TitleFilter> filters)
+        {
+            var filteredGenres = DBContext.Instance.Genres.Where(GetGenrePredicate(filters));
+
+            var filteredTitles = from t in GetFilteredTitlesWrapper(filters)
+                                 from g in filteredGenres
+                                 where g.TitleId == t.Id
+                                 join b in DBContext.Instance.GenreMetaDatas on g.GenreMetaDataId equals b.Id
+                                 join c in DBContext.Instance.ImageMappings on t.Id equals c.TitleId
+                                 where c.ImageType == (byte)ImageType.FrontCoverImage
+                                 select new { GenreName = b.Name, Path = c.ImageId };
+
+            return from t in filteredTitles
+                   group t by t.GenreName into g
+                   orderby g.Key ascending
+                   select new FilteredCollectionWithImages()
+                   {
+                       Name = g.Key,
+                       Count = g.Count(),
+                       ImageIds =
+                           (from title in filteredTitles
+                            where title.GenreName == g.Key
+                            select title.Path)
+                   };
+        }
+
         private static Expression<Func<Person, bool>> GetPersonPredicate(List<TitleFilter> filters)
         {
             var predicate = PredicateBuilder.True<Person>();
