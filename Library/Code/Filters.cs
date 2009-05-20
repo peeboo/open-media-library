@@ -302,6 +302,9 @@ namespace Library
 
                 case TitleFilterType.Year:
                     return OMLSettings.ShowFilterYear;
+
+                case TitleFilterType.Unwatched:
+                    return OMLSettings.ShowFilterUnwatched;
             }
 
             return false;
