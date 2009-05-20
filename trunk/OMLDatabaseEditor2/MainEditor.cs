@@ -41,11 +41,13 @@ namespace OMLDatabaseEditor
 
         int? SelectedTreeRoot;
 
+        LinearGradientBrush _brushTreeViewSelected; 
+
         public MainEditor()
         {
             OMLEngine.Utilities.RawSetup();
 
-            //SplashScreen2.ShowSplashScreen();
+            SplashScreen2.ShowSplashScreen();
 
             InitializeComponent();
 
@@ -436,18 +438,23 @@ namespace OMLDatabaseEditor
 
             if (roottitleid != null)
             {
-                // We are looking at a sub folder
+                // We are looking at a parent item
                 PopulateMovieListV2Sub(roottitleid, 0);
             }
             else
             {
                 // We are looking at all items including root items
+                Title amt = new Title();
+                amt.Name = "All Media";
+                amt.TitleType = TitleTypes.Collection;
+                lbTitles.Items.Add(amt);
+
                 // Get All Root Titles
                 var titles = (from t in _movieList
                                       where (t.Value.TitleType & TitleTypes.AllMedia) != 0 &&
                                       (t.Value.TitleType & TitleTypes.Root) != 0
                                       select t.Value).ToList();
-
+                
                 lbTitles.Items.AddRange(SortTitles(titles).ToArray());
 
                 // Get All Root Folders
@@ -495,7 +502,11 @@ namespace OMLDatabaseEditor
 
                     foreach (Title title in SortTitles(titles))
                     {
-                        PopulateMovieListV2Sub(title.Id, 1);
+                        // If statement to stop stack overflow when parenttitid = id
+                        if (title.Id != roottitleid)
+                        {
+                            PopulateMovieListV2Sub(title.Id, 1);
+                        }
                     }
                 }
             }
@@ -914,17 +925,27 @@ namespace OMLDatabaseEditor
 
                 // This gets called by titleEditor.SaveChanges(); anyway
                     TitleCollectionManager.SaveTitleUpdates();
-                    if (editedTitle.Id == 0)
+                    
+                    // Code below moved into folder and title creation
+                    /*if (editedTitle.ParentTitleId == 0)
                     {
                         editedTitle.ReloadTitle();
                         editedTitle.ParentTitleId = editedTitle.Id;
-                    }
+                    }*/
                 }
 
                 titleEditor.SaveChanges();
                 lbTitles.Refresh();
-                //LoadMovies();
-                //PopulateMediaTree();
+                
+                if ((editedTitle.TitleType & TitleTypes.AllFolders) != 0)
+                {
+                    // If the current edited title is a folder, refresh the MediaTree
+                    PopulateMediaTree();
+                    if (_mediaTree.ContainsKey((int)SelectedTreeRoot))
+                    {
+                        treeMedia.SelectedNode = _mediaTree[(int)SelectedTreeRoot];
+                    }
+                }
                 //LoadMovies();
             }            
         }
@@ -1314,7 +1335,7 @@ namespace OMLDatabaseEditor
              */
         }
 
-        private void lbMovies_DrawItem(object sender, ListBoxDrawItemEventArgs e)
+       /* private void lbMovies_DrawItem(object sender, ListBoxDrawItemEventArgs e)
         {
             if (e.Item == null)
                 return;
@@ -1391,7 +1412,7 @@ namespace OMLDatabaseEditor
                 }
                 e.Appearance.Combine(Percent80);
             }
-        }
+        }*/
 
         private void filterTitles_Click(object sender, EventArgs e)
         {
@@ -1527,6 +1548,7 @@ namespace OMLDatabaseEditor
             }
         }
 
+        #region TitleList functions
         private void lbTitles_DrawItem(object sender, DrawItemEventArgs e)
         {
             if (e.Index < 0) return;
@@ -1627,8 +1649,64 @@ namespace OMLDatabaseEditor
             }
             Cursor = Cursors.Default;
         }
+        #endregion
 
-        #region Media Tree event handling functions
+        #region Media Tree handling functions
+        private void treeMedia_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        {
+            // Create the brushes
+            if (_brushTreeViewSelected == null)
+            {
+                _brushTreeViewSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.LimeGreen, Color.PaleGreen);
+            }
+
+
+            int x = e.Node.Bounds.X;
+            int y = e.Node.Bounds.Y;
+            int w = e.Node.Bounds.Width;
+            int h = e.Node.Bounds.Height;
+            int wt = (int)e.Graphics.MeasureString(e.Node.Text, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular)).Width + 2;
+
+            // Setup string formatting
+            StringFormat stf = new StringFormat();
+            stf.Trimming = StringTrimming.EllipsisCharacter;
+            stf.FormatFlags = StringFormatFlags.NoWrap;
+
+            e.Graphics.FillRectangle(new SolidBrush(Color.White), x, y, w, h);
+
+            if (e.Node.IsSelected)
+            {
+                e.Graphics.FillRectangle(_brushTreeViewSelected, x, y, wt, h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y, x - 2 + wt, y);
+                e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y - 1 + h, x - 2 + wt, y - 1 + h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x, y + 1, x, y - 2 + h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x -1 + wt, y + 1, x -1 + wt, y - 2 + h);
+
+            }
+
+            e.Graphics.DrawString(e.Node.Text, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 2, e.Bounds.Width, h), stf);
+
+            if (e.Node.Nodes.Count != 0)
+            {
+                if (e.Node.IsExpanded == true)
+                {
+                    Point p1 = new Point(x - 5, y + 5);
+                    Point p2 = new Point(x - 13, y + 13);
+                    Point p3 = new Point(x - 5, y + 13);
+                    e.Graphics.FillPolygon(new SolidBrush(Color.Black), new Point[] { p1, p2, p3 }, FillMode.Winding);
+               }
+                else
+                {
+                    Point p1 = new Point(x - 11, y + 5);
+                    Point p2 = new Point(x - 5, y + 9);
+                    Point p3 = new Point(x - 11, y + 13);
+                    e.Graphics.DrawLine(new Pen(Color.Black), p1, p2);
+                    e.Graphics.DrawLine(new Pen(Color.Black), p2, p3);
+                    e.Graphics.DrawLine(new Pen(Color.Black), p3, p1);
+                }
+            }
+        }
+
         private void treeMedia_AfterSelect(object sender, TreeViewEventArgs e)
         {
             lbTitles.Items.Clear();
@@ -1656,6 +1734,8 @@ namespace OMLDatabaseEditor
         {
             Title folder = new Title();
 
+            //int selectedfolderid = 0;
+
             if (treeMedia.SelectedNode.Name == "All Media")
             {
                 // Root Node
@@ -1666,12 +1746,27 @@ namespace OMLDatabaseEditor
                 int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
                 folder.ParentTitleId = parentid;
                 folder.TitleType = TitleTypes.Collection;
+                //selectedfolderid = Convert.ToInt32(treeMedia.SelectedNode.Name);
             }
            
             folder.Name = "New Folder";
             TitleCollectionManager.AddTitle(folder);
 
+            // Generate the parentid if required
+            if (folder.ParentTitleId == 0)
+            {
+                folder.ParentTitleId = folder.Id;
+                TitleCollectionManager.SaveTitleUpdates();
+            }
+
+            _movieList.Add(folder.Id, folder);
+
             PopulateMediaTree();
+
+            if (_mediaTree.ContainsKey(folder.Id))
+            {
+                treeMedia.SelectedNode = _mediaTree[folder.Id];
+            }
         }
 
         private void miDeleteFolder_Click(object sender, EventArgs e)
@@ -1692,8 +1787,8 @@ namespace OMLDatabaseEditor
                 CreateTitle(parentid);
             }
             //LoadMovies();
-            _movieList.Add(titleEditor.EditedTitle.Id, titleEditor.EditedTitle);
-            PopulateMovieListV2(SelectedTreeRoot);
+            //_movieList.Add(titleEditor.EditedTitle.Id, titleEditor.EditedTitle);
+            //PopulateMovieListV2(SelectedTreeRoot);
         }
 
         private void treeMedia_MouseDown(object sender, MouseEventArgs e)
@@ -1728,36 +1823,21 @@ namespace OMLDatabaseEditor
             // Add the title now to get the title ID
             TitleCollectionManager.AddTitle(newMovie);
 
+            // Generate the parentid if required
+            if (newMovie.ParentTitleId == 0)
+            {
+                newMovie.ParentTitleId = newMovie.Id;
+                TitleCollectionManager.SaveTitleUpdates();
+            }
+
+            // Add new title to title list and populate the screen control
+            _movieList.Add(newMovie.Id, newMovie);
+            PopulateMovieListV2(SelectedTreeRoot);
+
             titleEditor.LoadDVD(newMovie);
             ToggleSaveState(true);
         }
 
-        private void treeMedia_DrawNode(object sender, DrawTreeNodeEventArgs e)
-        {
-   //         e.Node.v
-            int x = e.Node.Bounds.X;
-            int y = e.Node.Bounds.Y;
-            int w = e.Node.Bounds.Width;
-            int h = e.Node.Bounds.Height;
 
-            // Setup string formatting
-            StringFormat stf = new StringFormat();
-            stf.Trimming = StringTrimming.EllipsisCharacter;
-            stf.FormatFlags = StringFormatFlags.NoWrap;
-     
-
-            e.Graphics.DrawString(e.Node.Text, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 2, w, h), stf);
-
-            if (e.Node.IsExpanded == true)
-            {
-                e.Graphics.FillEllipse(new SolidBrush(Color.White), new Rectangle(x - 15, y, 14, 14));
-            }
-            else
-            {
-                e.Graphics.FillEllipse(new SolidBrush(Color.Black), new Rectangle(x - 15, y, 14, 14));
-            }
-            e.Graphics.DrawEllipse(new Pen(Color.Black), new Rectangle(x - 15, y, 14, 14));
-
-        }
     }
 }
