@@ -230,7 +230,9 @@ namespace Library.Code.V3
 
                 testGroup2.ContentLabelTemplate = Library.Code.V3.BrowseGroup.StandardContentLabelTemplate;
                 m_listContent.Add(testGroup2);
-            }                        
+            }
+
+            this.IsBusy = false;
         }
     }
 }
