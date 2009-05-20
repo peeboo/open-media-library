@@ -493,6 +493,18 @@ namespace OMLEngine.Settings
             get { return SettingsManager.GetSettingByName("TitledFanArtPath", InstanceName) ?? ""; }
             set { SettingsManager.SaveSettingByName("TitledFanArtPath", value, InstanceName); }
         }
+
+        public static bool ShowSubFolderTitles
+        {
+            get { return SettingsManager.GetSettingByNameBool("ShowSubFolderTitles", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("ShowSubFolderTitles", value.ToString(), InstanceName); }
+        }
+
+        public static string DBETitleSortOrder
+        {
+            get { return SettingsManager.GetSettingByName("DBETitleSortOrder", InstanceName) ?? ""; }
+            set { SettingsManager.SaveSettingByName("DBETitleSortOrder", value, InstanceName); }
+        }
         #endregion
 
         public static string MPAARatings
