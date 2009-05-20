@@ -45,7 +45,7 @@ namespace OMLDatabaseEditor
         {
             OMLEngine.Utilities.RawSetup();
 
-            SplashScreen2.ShowSplashScreen();
+            //SplashScreen2.ShowSplashScreen();
 
             InitializeComponent();
 
@@ -90,6 +90,8 @@ namespace OMLDatabaseEditor
             SplashScreen2.SetStatus(64, "Loading Movies.");
             LoadMovies();
             PopulateMediaTree();
+            PopulateMovieListV2(SelectedTreeRoot);
+
 
             SplashScreen2.SetStatus(80, "Loading MRU Lists.");
             this.titleEditor.SetMRULists();
@@ -324,10 +326,10 @@ namespace OMLDatabaseEditor
 
             treeMedia.Nodes.Clear();
             TreeNode rootnode = new TreeNode("All Media");
+            rootnode.Name = "All Media";
             treeMedia.Nodes.Add(rootnode); 
-            SelectedTreeRoot = null;
-
-
+            //SelectedTreeRoot = null;
+            
             foreach (KeyValuePair<int, Title> title in mediatreefolders)
             {
                 TreeNode tn = new TreeNode(title.Value.Name);
@@ -350,11 +352,9 @@ namespace OMLDatabaseEditor
                     }
                 }
             }
-
-            PopulateMovieListV2(SelectedTreeRoot);
         }
 
-        private void PopulateMovieListV2(int? roottitleid)
+/*        private void PopulateMovieListV2(int? roottitleid)
         {
             lbTitles.Items.Clear();
 
@@ -375,20 +375,19 @@ namespace OMLDatabaseEditor
             if (roottitleid != null)
             {
                 // We are looking at a sub folder
-                PopulateMovieListV2Sub(roottitleid, _parentchildRelationship);
+                PopulateMovieListV2Sub(roottitleid, _parentchildRelationship, 0);
             }
             else
             {
                 // We are looking at all items including root items
                 foreach (KeyValuePair<int, Title> title in _movieList)
                 {
-                    // Create relationship dictionary
                     if ((title.Value.TitleType & TitleTypes.Root) != 0)
                     {
                         if ((title.Value.TitleType & TitleTypes.AllFolders) != 0)
                         {
                             // This is a folder. Query child items
-                            PopulateMovieListV2Sub(title.Value.Id, _parentchildRelationship);
+                            PopulateMovieListV2Sub(title.Value.Id, _parentchildRelationship, 1);
                         }
                         else
                         {
@@ -406,33 +405,123 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private void PopulateMovieListV2Sub(int? roottitleid, Dictionary<int, List<int>> _parentchildRelationship)
+        private void PopulateMovieListV2Sub(int? roottitleid, Dictionary<int, List<int>> _parentchildRelationship, int Level)
         {
-            lbTitles.Items.Add(_movieList[(int)roottitleid]);
-
-            if (_parentchildRelationship.ContainsKey((int)roottitleid))
+            if (_movieList.ContainsKey((int)roottitleid))
             {
-                foreach (int id in _parentchildRelationship[(int)roottitleid])
+                if ((OMLEngine.Settings.OMLSettings.ShowSubFolderTitles) ||
+                    ((_movieList[(int)roottitleid].TitleType & TitleTypes.AllMedia) != 0))
                 {
-                    PopulateMovieListV2Sub(id, _parentchildRelationship);
+                    lbTitles.Items.Add(_movieList[(int)roottitleid]);
+                }
+
+                if ((OMLEngine.Settings.OMLSettings.ShowSubFolderTitles) || (Level < 1))
+                {
+
+                    if (_parentchildRelationship.ContainsKey((int)roottitleid))
+                    {
+                        foreach (int id in _parentchildRelationship[(int)roottitleid])
+                        {
+                            PopulateMovieListV2Sub(id, _parentchildRelationship, Level + 1);
+                        }
+                    }
+                }
+            }
+        }*/
+
+
+        private void PopulateMovieListV2(int? roottitleid)
+        {
+            lbTitles.Items.Clear();
+
+            if (roottitleid != null)
+            {
+                // We are looking at a sub folder
+                PopulateMovieListV2Sub(roottitleid, 0);
+            }
+            else
+            {
+                // We are looking at all items including root items
+                // Get All Root Titles
+                var titles = (from t in _movieList
+                                      where (t.Value.TitleType & TitleTypes.AllMedia) != 0 &&
+                                      (t.Value.TitleType & TitleTypes.Root) != 0
+                                      select t.Value).ToList();
+
+                lbTitles.Items.AddRange(SortTitles(titles).ToArray());
+
+                // Get All Root Folders
+                titles = (from t in _movieList
+                          where (t.Value.TitleType & TitleTypes.AllFolders) != 0 &&
+                          (t.Value.TitleType & TitleTypes.Root) != 0
+                          select t.Value).ToList();
+
+                foreach (Title title in SortTitles(titles))
+                {
+                    // This is a folder. Query child items
+                    PopulateMovieListV2Sub(title.Id, 1);
+                }
+            }
+
+
+            if (titleEditor.EditedTitle != null)
+            {
+                lbTitles.SelectedItem = TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
+            }
+        }
+
+        private void PopulateMovieListV2Sub(int? roottitleid, int Level)
+        {
+            if ((OMLEngine.Settings.OMLSettings.ShowSubFolderTitles) || (Level < 1))
+            {
+                if (_movieList.ContainsKey((int)roottitleid))
+                {
+
+                    lbTitles.Items.Add(_movieList[(int)roottitleid]);
+
+                    // Get All Root Titles
+                    var titles = (from t in _movieList
+                                          where (t.Value.TitleType & TitleTypes.AllMedia) != 0 &&
+                                          t.Value.ParentTitleId == roottitleid
+                                          select t.Value).ToList();
+
+                    lbTitles.Items.AddRange(SortTitles(titles).ToArray());
+
+                    // Get All Root Folders
+                    titles =  (from t in _movieList
+                              where (t.Value.TitleType & TitleTypes.AllFolders) != 0 &&
+                              t.Value.ParentTitleId == roottitleid
+                              select t.Value).ToList();
+
+                    foreach (Title title in SortTitles(titles))
+                    {
+                        PopulateMovieListV2Sub(title.Id, 1);
+                    }
                 }
             }
         }
 
-
-        private void treeMedia_AfterSelect(object sender, TreeViewEventArgs e)
+        private IEnumerable<Title> SortTitles(IEnumerable<Title> titles)
         {
-            lbTitles.Items.Clear();
-            if (!string.IsNullOrEmpty(e.Node.Name))
+            switch (OMLEngine.Settings.OMLSettings.DBETitleSortOrder)
             {
-                SelectedTreeRoot = Convert.ToInt32(e.Node.Name);
-                PopulateMovieListV2(SelectedTreeRoot);
-            }
-            else
-            {
-                PopulateMovieListV2(null);
+                case "Name":
+                    return titles.OrderBy(st => st.SortName);
+                case "Runtime":
+                    return titles.OrderBy(st => st.Runtime);
+                case "DateAdded":
+                    return titles.OrderBy(st => st.DateAdded);
+                case "ModifiedDate":
+                    return titles.OrderBy(st => st.ModifiedDate);
+                case "ProductionYear":
+                    return titles.OrderBy(st => st.ProductionYear);
+                case "ReleaseDate":
+                    return titles.OrderBy(st => st.ReleaseDate);
+                default:
+                    return titles.OrderBy(st => st.SortName);
             }
         }
+
 
  //       private void PopulateMovieList(List<Title> titles)
         /*private void PopulateMovieList(Dictionary<int, Title> titles)
@@ -825,13 +914,17 @@ namespace OMLDatabaseEditor
 
                 // This gets called by titleEditor.SaveChanges(); anyway
                     TitleCollectionManager.SaveTitleUpdates();
-                    editedTitle.ReloadTitle();
-                    editedTitle.ParentTitleId = editedTitle.Id;
+                    if (editedTitle.Id == 0)
+                    {
+                        editedTitle.ReloadTitle();
+                        editedTitle.ParentTitleId = editedTitle.Id;
+                    }
                 }
 
                 titleEditor.SaveChanges();
-                LoadMovies();
-                PopulateMediaTree();
+                lbTitles.Refresh();
+                //LoadMovies();
+                //PopulateMediaTree();
                 //LoadMovies();
             }            
         }
@@ -879,6 +972,7 @@ namespace OMLDatabaseEditor
                         this.titleEditor.SetMRULists();
                         fromPreferredSourcesToolStripMenuItem.Visible = !String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin);
                     }
+                    PopulateMovieListV2(SelectedTreeRoot);
                 }
             }
             else if (sender == aboutToolStripMenuItem)
@@ -969,15 +1063,18 @@ namespace OMLDatabaseEditor
 
         private void fromScratchToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            CreateTitle(null);
+            /*
             Title newMovie = new Title();
-            newMovie.Name = "New Movie";
+            newMovie.Name = "New title";
+            newMovie.TitleType = TitleTypes.Root | TitleTypes.Unknown;
             newMovie.DateAdded = DateTime.Now;
 
             // Add the title now to get the title ID
             TitleCollectionManager.AddTitle(newMovie);
 
             titleEditor.LoadDVD(newMovie);
-            ToggleSaveState(true);
+            ToggleSaveState(true);*/
         }
 
         private void fromMetaDataToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1524,18 +1621,143 @@ namespace OMLDatabaseEditor
                 
                 if (selectedTitle == null) return;
 
-                if ((selectedTitle.TitleType & TitleTypes.AllMedia) != 0)
+                titleEditor.LoadDVD(selectedTitle);
+                this.Text = APP_TITLE + " - " + selectedTitle.Name;
+                ToggleSaveState(false);
+            }
+            Cursor = Cursors.Default;
+        }
+
+        #region Media Tree event handling functions
+        private void treeMedia_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            lbTitles.Items.Clear();
+            if (!string.IsNullOrEmpty(e.Node.Name))
+            {
+                if (treeMedia.SelectedNode.Name == "All Media")
                 {
-                    titleEditor.LoadDVD(selectedTitle);
-                    this.Text = APP_TITLE + " - " + selectedTitle.Name;
-                    ToggleSaveState(false);
+                    // Root Level selected
+                    SelectedTreeRoot = null;
+                    PopulateMovieListV2(SelectedTreeRoot);
                 }
                 else
                 {
-                    titleEditor.ClearEditor();
+                    SelectedTreeRoot = Convert.ToInt32(e.Node.Name);
+                    PopulateMovieListV2(SelectedTreeRoot);
                 }
             }
-            Cursor = Cursors.Default;
+            else
+            {
+                PopulateMovieListV2(null);
+            }
+        }
+
+        private void miCreateFolder_Click(object sender, EventArgs e)
+        {
+            Title folder = new Title();
+
+            if (treeMedia.SelectedNode.Name == "All Media")
+            {
+                // Root Node
+                folder.TitleType =  TitleTypes.Root | TitleTypes.Collection;
+            }
+            else
+            {
+                int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
+                folder.ParentTitleId = parentid;
+                folder.TitleType = TitleTypes.Collection;
+            }
+           
+            folder.Name = "New Folder";
+            TitleCollectionManager.AddTitle(folder);
+
+            PopulateMediaTree();
+        }
+
+        private void miDeleteFolder_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void miCreateTitle_Click(object sender, EventArgs e)
+        {
+            if (treeMedia.SelectedNode.Name == "All Media")
+            {
+                // Root Title
+                CreateTitle(null);
+            }
+            else
+            {
+                int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
+                CreateTitle(parentid);
+            }
+            //LoadMovies();
+            _movieList.Add(titleEditor.EditedTitle.Id, titleEditor.EditedTitle);
+            PopulateMovieListV2(SelectedTreeRoot);
+        }
+
+        private void treeMedia_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                Point p = new Point(e.X, e.Y);
+                TreeNode nodeUnderMouse = treeMedia.GetNodeAt(p);
+                if (nodeUnderMouse != null)
+                {
+                    treeMedia.SelectedNode = nodeUnderMouse;
+                }
+            }
+        }
+        #endregion
+
+        private void CreateTitle(int? parentid)
+        {
+            Title newMovie = new Title();
+            newMovie.Name = "New title";
+            if (parentid == null)
+            {
+                newMovie.TitleType = TitleTypes.Root | TitleTypes.Unknown;
+            }
+            else
+            {
+                newMovie.TitleType = TitleTypes.Unknown;
+                newMovie.ParentTitleId = (int)parentid;
+            }
+            newMovie.DateAdded = DateTime.Now;
+
+            // Add the title now to get the title ID
+            TitleCollectionManager.AddTitle(newMovie);
+
+            titleEditor.LoadDVD(newMovie);
+            ToggleSaveState(true);
+        }
+
+        private void treeMedia_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        {
+   //         e.Node.v
+            int x = e.Node.Bounds.X;
+            int y = e.Node.Bounds.Y;
+            int w = e.Node.Bounds.Width;
+            int h = e.Node.Bounds.Height;
+
+            // Setup string formatting
+            StringFormat stf = new StringFormat();
+            stf.Trimming = StringTrimming.EllipsisCharacter;
+            stf.FormatFlags = StringFormatFlags.NoWrap;
+     
+
+            e.Graphics.DrawString(e.Node.Text, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 2, w, h), stf);
+
+            if (e.Node.IsExpanded == true)
+            {
+                e.Graphics.FillEllipse(new SolidBrush(Color.White), new Rectangle(x - 15, y, 14, 14));
+            }
+            else
+            {
+                e.Graphics.FillEllipse(new SolidBrush(Color.Black), new Rectangle(x - 15, y, 14, 14));
+            }
+            e.Graphics.DrawEllipse(new Pen(Color.Black), new Rectangle(x - 15, y, 14, 14));
+
         }
     }
 }

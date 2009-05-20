@@ -32,6 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TitleEditor));
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.tpVisual = new DevExpress.XtraTab.XtraTabPage();
+            this.cbTitleType = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
             this.numProductionYear = new DevExpress.XtraEditors.TextEdit();
             this.titleSource = new System.Windows.Forms.BindingSource(this.components);
             this.labelControl21 = new DevExpress.XtraEditors.LabelControl();
@@ -112,6 +114,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tpVisual.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cbTitleType.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numProductionYear.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.titleSource)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -174,6 +177,8 @@
             // 
             this.tpVisual.AutoScroll = true;
             this.tpVisual.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.tpVisual.Controls.Add(this.cbTitleType);
+            this.tpVisual.Controls.Add(this.labelControl6);
             this.tpVisual.Controls.Add(this.numProductionYear);
             this.tpVisual.Controls.Add(this.labelControl21);
             this.tpVisual.Controls.Add(this.tableLayoutPanel1);
@@ -197,6 +202,24 @@
             this.tpVisual.Name = "tpVisual";
             this.tpVisual.Size = new System.Drawing.Size(513, 492);
             this.tpVisual.Text = "Visual";
+            // 
+            // cbTitleType
+            // 
+            this.cbTitleType.Location = new System.Drawing.Point(120, 258);
+            this.cbTitleType.Name = "cbTitleType";
+            this.cbTitleType.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cbTitleType.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
+            this.cbTitleType.Size = new System.Drawing.Size(100, 20);
+            this.cbTitleType.TabIndex = 25;
+            // 
+            // labelControl6
+            // 
+            this.labelControl6.Location = new System.Drawing.Point(35, 261);
+            this.labelControl6.Name = "labelControl6";
+            this.labelControl6.Size = new System.Drawing.Size(24, 13);
+            this.labelControl6.TabIndex = 24;
+            this.labelControl6.Text = "Type";
             // 
             // numProductionYear
             // 
@@ -231,11 +254,11 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.pbFrontCover, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.pbBackCover, 1, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 288);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 320);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(507, 201);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(507, 169);
             this.tableLayoutPanel1.TabIndex = 20;
             // 
             // pbFrontCover
@@ -248,7 +271,7 @@
             this.pbFrontCover.InitialImage = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.InitialImage")));
             this.pbFrontCover.Location = new System.Drawing.Point(3, 3);
             this.pbFrontCover.Name = "pbFrontCover";
-            this.pbFrontCover.Size = new System.Drawing.Size(247, 195);
+            this.pbFrontCover.Size = new System.Drawing.Size(247, 163);
             this.pbFrontCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbFrontCover.TabIndex = 0;
             this.pbFrontCover.TabStop = false;
@@ -265,7 +288,7 @@
             this.pbBackCover.InitialImage = ((System.Drawing.Image)(resources.GetObject("pbBackCover.InitialImage")));
             this.pbBackCover.Location = new System.Drawing.Point(256, 3);
             this.pbBackCover.Name = "pbBackCover";
-            this.pbBackCover.Size = new System.Drawing.Size(248, 195);
+            this.pbBackCover.Size = new System.Drawing.Size(248, 163);
             this.pbBackCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbBackCover.TabIndex = 18;
             this.pbBackCover.TabStop = false;
@@ -274,7 +297,7 @@
             // 
             // btnTags
             // 
-            this.btnTags.Location = new System.Drawing.Point(282, 259);
+            this.btnTags.Location = new System.Drawing.Point(282, 286);
             this.btnTags.Name = "btnTags";
             this.btnTags.Size = new System.Drawing.Size(75, 23);
             this.btnTags.TabIndex = 10;
@@ -283,7 +306,7 @@
             // 
             // btnDisks
             // 
-            this.btnDisks.Location = new System.Drawing.Point(120, 259);
+            this.btnDisks.Location = new System.Drawing.Point(120, 286);
             this.btnDisks.Name = "btnDisks";
             this.btnDisks.Size = new System.Drawing.Size(75, 23);
             this.btnDisks.TabIndex = 8;
@@ -292,7 +315,7 @@
             // 
             // btnGenres
             // 
-            this.btnGenres.Location = new System.Drawing.Point(201, 259);
+            this.btnGenres.Location = new System.Drawing.Point(201, 286);
             this.btnGenres.Name = "btnGenres";
             this.btnGenres.Size = new System.Drawing.Size(75, 23);
             this.btnGenres.TabIndex = 9;
@@ -901,19 +924,19 @@
             this.addToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.contextPeople.Name = "contextMenuStrip1";
-            this.contextPeople.Size = new System.Drawing.Size(108, 48);
+            this.contextPeople.Size = new System.Drawing.Size(117, 48);
             // 
             // addToolStripMenuItem
             // 
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.addToolStripMenuItem.Text = "Add";
             this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
@@ -948,26 +971,26 @@
             this.deleteImageToolStripMenuItem,
             this.updateFromMetadataToolStripMenuItem1});
             this.contextImage.Name = "contextImage";
-            this.contextImage.Size = new System.Drawing.Size(195, 70);
+            this.contextImage.Size = new System.Drawing.Size(203, 70);
             // 
             // selectImageToolStripMenuItem
             // 
             this.selectImageToolStripMenuItem.Name = "selectImageToolStripMenuItem";
-            this.selectImageToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.selectImageToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.selectImageToolStripMenuItem.Text = "Select Image";
             this.selectImageToolStripMenuItem.Click += new System.EventHandler(this.selectImageToolStripMenuItem_Click);
             // 
             // deleteImageToolStripMenuItem
             // 
             this.deleteImageToolStripMenuItem.Name = "deleteImageToolStripMenuItem";
-            this.deleteImageToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.deleteImageToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.deleteImageToolStripMenuItem.Text = "Delete Image";
             this.deleteImageToolStripMenuItem.Click += new System.EventHandler(this.deleteImageToolStripMenuItem_Click);
             // 
             // updateFromMetadataToolStripMenuItem1
             // 
             this.updateFromMetadataToolStripMenuItem1.Name = "updateFromMetadataToolStripMenuItem1";
-            this.updateFromMetadataToolStripMenuItem1.Size = new System.Drawing.Size(194, 22);
+            this.updateFromMetadataToolStripMenuItem1.Size = new System.Drawing.Size(202, 22);
             this.updateFromMetadataToolStripMenuItem1.Text = "Update from metadata";
             this.updateFromMetadataToolStripMenuItem1.Click += new System.EventHandler(this.updateFromMetadataToolStripMenuItem1_Click);
             // 
@@ -1013,19 +1036,19 @@
             this.setSingleBackdropToolStripMenuItem,
             this.clearSingleBackdropToolStripMenuItem});
             this.contextBackdrop.Name = "contextBackdrop";
-            this.contextBackdrop.Size = new System.Drawing.Size(203, 48);
+            this.contextBackdrop.Size = new System.Drawing.Size(202, 48);
             // 
             // setSingleBackdropToolStripMenuItem
             // 
             this.setSingleBackdropToolStripMenuItem.Name = "setSingleBackdropToolStripMenuItem";
-            this.setSingleBackdropToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.setSingleBackdropToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.setSingleBackdropToolStripMenuItem.Text = "Set as single backdrop";
             this.setSingleBackdropToolStripMenuItem.Click += new System.EventHandler(this.setSingleBackdropToolStripMenuItem_Click);
             // 
             // clearSingleBackdropToolStripMenuItem
             // 
             this.clearSingleBackdropToolStripMenuItem.Name = "clearSingleBackdropToolStripMenuItem";
-            this.clearSingleBackdropToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.clearSingleBackdropToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.clearSingleBackdropToolStripMenuItem.Text = "Clear as single backdrop";
             this.clearSingleBackdropToolStripMenuItem.Click += new System.EventHandler(this.clearSingleBackdropToolStripMenuItem_Click);
             // 
@@ -1040,6 +1063,7 @@
             this.xtraTabControl1.ResumeLayout(false);
             this.tpVisual.ResumeLayout(false);
             this.tpVisual.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cbTitleType.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numProductionYear.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.titleSource)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -1168,5 +1192,7 @@
         private System.Windows.Forms.ContextMenuStrip contextBackdrop;
         private System.Windows.Forms.ToolStripMenuItem setSingleBackdropToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearSingleBackdropToolStripMenuItem;
+        private DevExpress.XtraEditors.LabelControl labelControl6;
+        private DevExpress.XtraEditors.ComboBoxEdit cbTitleType;
     }
 }

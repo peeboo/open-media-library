@@ -82,6 +82,10 @@ namespace OMLDatabaseEditor
             this.groupMediaTree = new DevExpress.XtraNavBar.NavBarGroup();
             this.navBarGroupControlContainer4 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.treeMedia = new System.Windows.Forms.TreeView();
+            this.cmsMediaTree = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.miCreateFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.miDeleteFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.miCreateTitle = new System.Windows.Forms.ToolStripMenuItem();
             this.navBarGroupControlContainer2 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.lbMetadata = new DevExpress.XtraEditors.ListBoxControl();
             this.navBarGroupControlContainer3 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
@@ -103,6 +107,10 @@ namespace OMLDatabaseEditor
             this.navBarGroupControlContainer7 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.buttonEdit1 = new DevExpress.XtraEditors.ButtonEdit();
             this.lbTitles = new System.Windows.Forms.ListBox();
+            this.cmsMoviesList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.miMetadataMulti = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromPreferredSourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.titleEditor = new OMLDatabaseEditor.Controls.TitleEditor();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.newMovieSplitButton = new System.Windows.Forms.ToolStripSplitButton();
@@ -111,10 +119,6 @@ namespace OMLDatabaseEditor
             this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.cmsMoviesList = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.miMetadataMulti = new System.Windows.Forms.ToolStripMenuItem();
-            this.fromPreferredSourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -126,6 +130,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.mainNav)).BeginInit();
             this.mainNav.SuspendLayout();
             this.navBarGroupControlContainer4.SuspendLayout();
+            this.cmsMediaTree.SuspendLayout();
             this.navBarGroupControlContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbMetadata)).BeginInit();
             this.navBarGroupControlContainer3.SuspendLayout();
@@ -138,8 +143,8 @@ namespace OMLDatabaseEditor
             this.navBarControl1.SuspendLayout();
             this.navBarGroupControlContainer7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.buttonEdit1.Properties)).BeginInit();
-            this.toolStrip.SuspendLayout();
             this.cmsMoviesList.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -592,12 +597,47 @@ namespace OMLDatabaseEditor
             // 
             // treeMedia
             // 
+            this.treeMedia.ContextMenuStrip = this.cmsMediaTree;
             this.treeMedia.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeMedia.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
+            this.treeMedia.ItemHeight = 18;
             this.treeMedia.Location = new System.Drawing.Point(0, 0);
             this.treeMedia.Name = "treeMedia";
             this.treeMedia.Size = new System.Drawing.Size(175, 352);
             this.treeMedia.TabIndex = 0;
+            this.treeMedia.DrawNode += new System.Windows.Forms.DrawTreeNodeEventHandler(this.treeMedia_DrawNode);
             this.treeMedia.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeMedia_AfterSelect);
+            this.treeMedia.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeMedia_MouseDown);
+            // 
+            // cmsMediaTree
+            // 
+            this.cmsMediaTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miCreateFolder,
+            this.miDeleteFolder,
+            this.miCreateTitle});
+            this.cmsMediaTree.Name = "cmsMediaTree";
+            this.cmsMediaTree.Size = new System.Drawing.Size(152, 70);
+            // 
+            // miCreateFolder
+            // 
+            this.miCreateFolder.Name = "miCreateFolder";
+            this.miCreateFolder.Size = new System.Drawing.Size(151, 22);
+            this.miCreateFolder.Text = "Create Folder";
+            this.miCreateFolder.Click += new System.EventHandler(this.miCreateFolder_Click);
+            // 
+            // miDeleteFolder
+            // 
+            this.miDeleteFolder.Name = "miDeleteFolder";
+            this.miDeleteFolder.Size = new System.Drawing.Size(151, 22);
+            this.miDeleteFolder.Text = "Delete Folder";
+            this.miDeleteFolder.Click += new System.EventHandler(this.miDeleteFolder_Click);
+            // 
+            // miCreateTitle
+            // 
+            this.miCreateTitle.Name = "miCreateTitle";
+            this.miCreateTitle.Size = new System.Drawing.Size(151, 22);
+            this.miCreateTitle.Text = "Create Title";
+            this.miCreateTitle.Click += new System.EventHandler(this.miCreateTitle_Click);
             // 
             // navBarGroupControlContainer2
             // 
@@ -797,6 +837,7 @@ namespace OMLDatabaseEditor
             this.lbTitles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbTitles.ContextMenuStrip = this.cmsMoviesList;
             this.lbTitles.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.lbTitles.FormattingEnabled = true;
             this.lbTitles.ItemHeight = 36;
@@ -808,6 +849,36 @@ namespace OMLDatabaseEditor
             this.lbTitles.TabIndex = 1;
             this.lbTitles.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbTitles_DrawItem);
             this.lbTitles.SelectedIndexChanged += new System.EventHandler(this.lbTitles_SelectedIndexChanged);
+            // 
+            // cmsMoviesList
+            // 
+            this.cmsMoviesList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miMetadataMulti,
+            this.deleteToolStripMenuItem1});
+            this.cmsMoviesList.Name = "cmsMoviesList";
+            this.cmsMoviesList.Size = new System.Drawing.Size(170, 48);
+            // 
+            // miMetadataMulti
+            // 
+            this.miMetadataMulti.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fromPreferredSourcesToolStripMenuItem});
+            this.miMetadataMulti.Name = "miMetadataMulti";
+            this.miMetadataMulti.Size = new System.Drawing.Size(169, 22);
+            this.miMetadataMulti.Text = "Update metadata";
+            // 
+            // fromPreferredSourcesToolStripMenuItem
+            // 
+            this.fromPreferredSourcesToolStripMenuItem.Name = "fromPreferredSourcesToolStripMenuItem";
+            this.fromPreferredSourcesToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.fromPreferredSourcesToolStripMenuItem.Text = "From Preferred Sources";
+            this.fromPreferredSourcesToolStripMenuItem.Click += new System.EventHandler(this.fromPreferredSourcesToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem1
+            // 
+            this.deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
+            this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(169, 22);
+            this.deleteToolStripMenuItem1.Text = "Delete";
+            this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteSelectedMoviesToolStripMenuItem_Click);
             // 
             // titleEditor
             // 
@@ -884,36 +955,6 @@ namespace OMLDatabaseEditor
             this.helpToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.helpToolStripButton.Text = "He&lp";
             // 
-            // cmsMoviesList
-            // 
-            this.cmsMoviesList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.miMetadataMulti,
-            this.deleteToolStripMenuItem1});
-            this.cmsMoviesList.Name = "cmsMoviesList";
-            this.cmsMoviesList.Size = new System.Drawing.Size(170, 48);
-            // 
-            // miMetadataMulti
-            // 
-            this.miMetadataMulti.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fromPreferredSourcesToolStripMenuItem});
-            this.miMetadataMulti.Name = "miMetadataMulti";
-            this.miMetadataMulti.Size = new System.Drawing.Size(169, 22);
-            this.miMetadataMulti.Text = "Update metadata";
-            // 
-            // fromPreferredSourcesToolStripMenuItem
-            // 
-            this.fromPreferredSourcesToolStripMenuItem.Name = "fromPreferredSourcesToolStripMenuItem";
-            this.fromPreferredSourcesToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.fromPreferredSourcesToolStripMenuItem.Text = "From Preferred Sources";
-            this.fromPreferredSourcesToolStripMenuItem.Click += new System.EventHandler(this.fromPreferredSourcesToolStripMenuItem_Click);
-            // 
-            // deleteToolStripMenuItem1
-            // 
-            this.deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
-            this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(169, 22);
-            this.deleteToolStripMenuItem1.Text = "Delete";
-            this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteSelectedMoviesToolStripMenuItem_Click);
-            // 
             // defaultLookAndFeel1
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
@@ -946,6 +987,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.mainNav)).EndInit();
             this.mainNav.ResumeLayout(false);
             this.navBarGroupControlContainer4.ResumeLayout(false);
+            this.cmsMediaTree.ResumeLayout(false);
             this.navBarGroupControlContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbMetadata)).EndInit();
             this.navBarGroupControlContainer3.ResumeLayout(false);
@@ -958,9 +1000,9 @@ namespace OMLDatabaseEditor
             this.navBarControl1.ResumeLayout(false);
             this.navBarGroupControlContainer7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.buttonEdit1.Properties)).EndInit();
+            this.cmsMoviesList.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.cmsMoviesList.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1054,6 +1096,10 @@ namespace OMLDatabaseEditor
         private OMLDatabaseEditor.Controls.GenreEditor genreEditor1;
         private DevExpress.XtraEditors.ListBoxControl lbPeople;
         private DevExpress.XtraEditors.ButtonEdit buttonEdit1;
+        private System.Windows.Forms.ContextMenuStrip cmsMediaTree;
+        private System.Windows.Forms.ToolStripMenuItem miCreateFolder;
+        private System.Windows.Forms.ToolStripMenuItem miCreateTitle;
+        private System.Windows.Forms.ToolStripMenuItem miDeleteFolder;
     }
 }
 
