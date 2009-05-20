@@ -65,7 +65,47 @@ namespace OMLDatabaseEditor.Controls
             _isLoading = true;
             titleSource.DataSource = _dvdTitle;
             Status = TitleStatus.Normal;
-                        
+
+            cbTitleType.Properties.Items.Clear();
+
+            // Disable certain functions if title is a folder
+            if ((_dvdTitle.TitleType & TitleTypes.AllFolders) != 0)
+            {
+                btnDisks.Enabled = false;
+
+                // Setup titletype combo
+                foreach (int titletype in Enum.GetValues(typeof(TitleTypes)))
+                {
+                    if (((titletype & (int)TitleTypes.AllFolders) != 0) &&
+                        ((titletype & (int)TitleTypes.AllFolders) != (int)TitleTypes.AllFolders))
+                    {
+                        cbTitleType.Properties.Items.Add(Enum.GetName(typeof(TitleTypes), titletype));
+                        if (((int)_dvdTitle.TitleType & titletype) != 0)
+                        {
+                            cbTitleType.SelectedItem = Enum.GetName(typeof(TitleTypes), titletype);
+                        }
+                    }
+                }
+            }
+
+            if ((_dvdTitle.TitleType & TitleTypes.AllMedia) != 0)
+            {
+                btnDisks.Enabled = true;
+
+                // Setup titletype combo
+                foreach (int titletype in Enum.GetValues(typeof(TitleTypes)))
+                {
+                    if (((titletype & (int)TitleTypes.AllMedia) != 0) &&
+                        ((titletype & (int)TitleTypes.AllMedia) != (int)TitleTypes.AllMedia))
+                    {
+                        cbTitleType.Properties.Items.Add(Enum.GetName(typeof(TitleTypes), titletype));
+                        if (((int)_dvdTitle.TitleType & titletype) != 0)
+                        {
+                            cbTitleType.SelectedItem = Enum.GetName(typeof(TitleTypes), titletype);
+                        }
+                    }
+                }
+            }
             // todo : solomon : i'm not sure what this code is for but it's crashing right now if you delete a cover image
             //imageWatcherFront.Path = Path.GetDirectoryName(_dvdTitle.FrontCoverPath);
             //imageWatcherFront.Filter = "F*.jpg";            
