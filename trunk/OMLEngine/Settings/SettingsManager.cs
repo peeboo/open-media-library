@@ -8,6 +8,7 @@ namespace OMLEngine.Settings
 {
     public static class SettingsManager
     {
+        private static Dictionary<string, string> settingsCache = new Dictionary<string, string>();
 
         public static IEnumerable<OMLEngine.Dao.MataDataMapping> MetaDataMap_GetMappings()
         {
@@ -98,6 +99,11 @@ namespace OMLEngine.Settings
 
         public static string GetSettingByName(string name, string instanceName)
         {
+            string cachedValue;
+            
+            if (settingsCache.TryGetValue(name + "|" + instanceName, out cachedValue))
+                return cachedValue;
+
             Setting setting = OMLDataSettingsDBContext.Instance.Settings.SingleOrDefault(s => s.SettingName == name 
                                 && s.InstanceName == instanceName);
 
@@ -105,14 +111,18 @@ namespace OMLEngine.Settings
             if (setting == null)
             {
                 setting = OMLDataSettingsDBContext.Instance.Settings.SingleOrDefault(s => s.SettingName == name 
-                                    && s.InstanceName == "main");
-            }            
+                                    && s.InstanceName == "main");                
+            }
 
-            return (setting == null) 
-                        ? null 
-                        : string.IsNullOrEmpty(setting.SettingValue) 
-                            ? null 
+            cachedValue = (setting == null)
+                        ? null
+                        : string.IsNullOrEmpty(setting.SettingValue)
+                            ? null
                             : setting.SettingValue;
+
+            settingsCache[name + "|" + instanceName] = cachedValue;
+
+            return cachedValue;
         }
 
         public static int? GetSettingByNameInt(string name, string instanceName)
@@ -195,6 +205,8 @@ namespace OMLEngine.Settings
             setting.SettingValue = value;
 
             OMLDataSettingsDBContext.Instance.SubmitChanges();
+
+            settingsCache.Clear();
         }
 
         public static void Save()

@@ -143,21 +143,20 @@ namespace OMLEngine.Settings
         {
             get
             {
-                return SettingsManager.GetSettingByNameListString("MainFiltersToShow", InstanceName) ?? new List<string>(){
-                                                                                                                "Genres",
-                                                                                                                "Directors",
-                                                                                                                "Actors",
-                                                                                                                "Runtime",
-                                                                                                                "Country",
-                                                                                                                "Parental Rating",
-                                                                                                                "Tags",
-                                                                                                                "User Rating",
-                                                                                                                "Year",
-                                                                                                                "Date Added",
-                                                                                                                "Format",
-                                                                                                                "Trailers" };
-            }
-            set { SettingsManager.SaveSettingByName("MainFiltersToShow", value, InstanceName); }
+                return  new List<string>(){     "Unwatched",
+                                                "Genres",
+                                                "Directors",
+                                                "Actors",
+                                                "Runtime",
+                                                "Country",
+                                                "Parental Rating",
+                                                "Tags",
+                                                "User Rating",
+                                                "Year",
+                                                "Date Added",
+                                                "Format",
+                                                "Trailers"};
+            }            
         }
 
         /// <summary>
