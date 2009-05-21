@@ -1150,9 +1150,9 @@
               <FlowLayout Orientation="Horizontal" Spacing="2,0" AllowWrap="false"/>
             </Layout>
             <Children>
-              <Graphic Content="file://C:\ProgramData\OpenMediaLibrary\F210731730.jpg" MinimumSize="0,0" MaximumSize="73,100" HorizontalAlignment="Near" VerticalAlignment="Far"/>
-              <Graphic Content="file://C:\ProgramData\OpenMediaLibrary\F210731730.jpg" MinimumSize="0,0" MaximumSize="85,100" HorizontalAlignment="Center" VerticalAlignment="Far"/>
-              <Graphic Content="file://C:\ProgramData\OpenMediaLibrary\F210731730.jpg" MinimumSize="0,0" MaximumSize="73,100" HorizontalAlignment="Near" VerticalAlignment="Far"/>
+              <Graphic MinimumSize="0,0" MaximumSize="73,100" HorizontalAlignment="Near" VerticalAlignment="Far"/>
+              <Graphic MinimumSize="0,0" MaximumSize="85,100" HorizontalAlignment="Center" VerticalAlignment="Far"/>
+              <Graphic MinimumSize="0,0" MaximumSize="73,100" HorizontalAlignment="Near" VerticalAlignment="Far"/>
             </Children>
           </Panel>
           <Panel MaximumSize="0,75">
@@ -1160,9 +1160,9 @@
               <FlowLayout Orientation="Horizontal" Spacing="2,2" AllowWrap="false"/>
             </Layout>
             <Children>
-              <Graphic Content="file://C:\ProgramData\OpenMediaLibrary\F588129005.jpg" MinimumSize="0,0" MaximumSize="73,74" HorizontalAlignment="Near" VerticalAlignment="Near"/>
-              <Graphic Content="file://C:\ProgramData\OpenMediaLibrary\F588129005.jpg" MinimumSize="0,0" MaximumSize="85,74" HorizontalAlignment="Center" VerticalAlignment="Near"/>
-              <Graphic Content="file://C:\ProgramData\OpenMediaLibrary\F210731730.jpg" MinimumSize="0,0" MaximumSize="73,74" HorizontalAlignment="Near" VerticalAlignment="Near"/>
+              <Graphic MinimumSize="0,0" MaximumSize="73,74" HorizontalAlignment="Near" VerticalAlignment="Near"/>
+              <Graphic MinimumSize="0,0" MaximumSize="85,74" HorizontalAlignment="Center" VerticalAlignment="Near"/>
+              <Graphic MinimumSize="0,0" MaximumSize="73,74" HorizontalAlignment="Near" VerticalAlignment="Near"/>
             </Children>
           </Panel>
         </Children>
