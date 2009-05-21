@@ -18,6 +18,7 @@ using DevExpress.Utils;
 using OMLEngine;
 using OMLSDK;
 using OMLDatabaseEditor.Controls;
+using OMLEngine.Dao;
 
 namespace OMLDatabaseEditor
 {
@@ -1125,18 +1126,20 @@ namespace OMLDatabaseEditor
         {
             _loading = true;
             ToggleSaveState(false);
-            if (e.Group == groupMediaTree)
-                LoadMovies();
-            else if (e.Group == groupMetadata)
+
+
+            if (e.Group == groupMetadata) 
                 LoadMetadata();
-            else
+
+            if (e.Group == groupImport)
                 LoadImporters();
-            _loading = false;
+
 
             if (e.Group == groupMediaTree)
             {
+                LoadMovies();
+
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Dock = DockStyle.Fill;
-                
                 splitContainerNavigator.Panel2.Controls["genreEditor1"].Visible = false;
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
                 splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = false;
@@ -1144,34 +1147,26 @@ namespace OMLDatabaseEditor
             
             if (e.Group == groupPeople)
             {
+                lbPeople.Items.Clear();
+                lbPeople.Items.AddRange(TitleCollectionManager.GetAllBioDatas().ToArray());
                 splitContainerNavigator.Panel2.Controls["personEditor1"].Dock = DockStyle.Fill;
-
                 splitContainerNavigator.Panel2.Controls["genreEditor1"].Visible = false;
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
                 splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = true;
-
-                lbPeople.Items.Clear();
-                foreach (string name in from t in TitleCollectionManager.GetAllPeople(null, PeopleRole.Actor) select t.Name)
-                    lbPeople.Items.Add(name);
-                foreach (string name in from t in TitleCollectionManager.GetAllPeople(null, PeopleRole.Director) select t.Name)
-                    lbPeople.Items.Add(name);
-                foreach (string name in from t in TitleCollectionManager.GetAllPeople(null, PeopleRole.NonActing) select t.Name)
-                    lbPeople.Items.Add(name);
-                foreach (string name in from t in TitleCollectionManager.GetAllPeople(null, PeopleRole.Producers) select t.Name)
-                    lbPeople.Items.Add(name);
-                foreach (string name in from t in TitleCollectionManager.GetAllPeople(null, PeopleRole.Writer) select t.Name)
-                    lbPeople.Items.Add(name);
-                
             }
 
             if (e.Group == groupGenres)
             {
-                splitContainerNavigator.Panel2.Controls["genreEditor1"].Dock = DockStyle.Fill;
+                lbGenreMetadata.Items.Clear();
+                lbGenreMetadata.Items.AddRange(TitleCollectionManager.GetAllGenreMetaDatas().ToArray());
 
+                splitContainerNavigator.Panel2.Controls["genreEditor1"].Dock = DockStyle.Fill;
                 splitContainerNavigator.Panel2.Controls["genreEditor1"].Visible = true;
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
                 splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = false;
             }
+
+            _loading = false;
         }
 
         /*private void lbMovies_SelectedIndexChanged(object sender, EventArgs e)
