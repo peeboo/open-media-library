@@ -100,7 +100,7 @@ namespace OMLDatabaseEditor
             this.groupTags = new DevExpress.XtraNavBar.NavBarGroup();
             this.groupMetadata = new DevExpress.XtraNavBar.NavBarGroup();
             this.groupImport = new DevExpress.XtraNavBar.NavBarGroup();
-            this.genreEditor1 = new OMLDatabaseEditor.Controls.GenreEditor();
+            this.genreMetaDataEditor = new OMLDatabaseEditor.Controls.GenreMetaDataEditor();
             this.personEditor1 = new OMLDatabaseEditor.Controls.PersonEditor();
             this.splitContainerTitles = new DevExpress.XtraEditors.SplitContainerControl();
             this.navBarControl1 = new DevExpress.XtraNavBar.NavBarControl();
@@ -541,7 +541,7 @@ namespace OMLDatabaseEditor
             this.splitContainerNavigator.Name = "splitContainerNavigator";
             this.splitContainerNavigator.Panel1.Controls.Add(this.mainNav);
             this.splitContainerNavigator.Panel1.Text = "Panel1";
-            this.splitContainerNavigator.Panel2.Controls.Add(this.genreEditor1);
+            this.splitContainerNavigator.Panel2.Controls.Add(this.genreMetaDataEditor);
             this.splitContainerNavigator.Panel2.Controls.Add(this.personEditor1);
             this.splitContainerNavigator.Panel2.Controls.Add(this.splitContainerTitles);
             this.splitContainerNavigator.Panel2.Text = "Panel2";
@@ -607,6 +607,7 @@ namespace OMLDatabaseEditor
             this.lbGenreMetadata.Name = "lbGenreMetadata";
             this.lbGenreMetadata.Size = new System.Drawing.Size(175, 352);
             this.lbGenreMetadata.TabIndex = 1;
+            this.lbGenreMetadata.SelectedIndexChanged += new System.EventHandler(this.lbGenreMetadata_SelectedIndexChanged);
             // 
             // navBarGroupControlContainer2
             // 
@@ -765,12 +766,12 @@ namespace OMLDatabaseEditor
             this.groupImport.LargeImage = global::OMLDatabaseEditor.Properties.Resources.emblem_symbolic_link;
             this.groupImport.Name = "groupImport";
             // 
-            // genreEditor1
+            // genreMetaDataEditor
             // 
-            this.genreEditor1.Location = new System.Drawing.Point(298, 209);
-            this.genreEditor1.Name = "genreEditor1";
-            this.genreEditor1.Size = new System.Drawing.Size(183, 150);
-            this.genreEditor1.TabIndex = 5;
+            this.genreMetaDataEditor.Location = new System.Drawing.Point(298, 209);
+            this.genreMetaDataEditor.Name = "genreMetaDataEditor";
+            this.genreMetaDataEditor.Size = new System.Drawing.Size(183, 150);
+            this.genreMetaDataEditor.TabIndex = 5;
             // 
             // personEditor1
             // 
@@ -1110,7 +1111,7 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraNavBar.NavBarGroup groupGenres;
         private System.Windows.Forms.ListBox lbTitles;
         private OMLDatabaseEditor.Controls.PersonEditor personEditor1;
-        private OMLDatabaseEditor.Controls.GenreEditor genreEditor1;
+        private OMLDatabaseEditor.Controls.GenreMetaDataEditor genreMetaDataEditor;
         private DevExpress.XtraEditors.ListBoxControl lbPeople;
         private DevExpress.XtraEditors.ButtonEdit buttonEdit1;
         private System.Windows.Forms.ContextMenuStrip cmsMediaTree;

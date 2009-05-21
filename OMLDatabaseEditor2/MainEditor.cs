@@ -58,7 +58,7 @@ namespace OMLDatabaseEditor
 
             splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
             splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = false;
-            splitContainerNavigator.Panel2.Controls["genreEditor1"].Visible = false;
+            splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
 
         }
 
@@ -1140,7 +1140,7 @@ namespace OMLDatabaseEditor
                 LoadMovies();
 
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Dock = DockStyle.Fill;
-                splitContainerNavigator.Panel2.Controls["genreEditor1"].Visible = false;
+                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
                 splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = false;
             }
@@ -1150,7 +1150,7 @@ namespace OMLDatabaseEditor
                 lbPeople.Items.Clear();
                 lbPeople.Items.AddRange(TitleCollectionManager.GetAllBioDatas().ToArray());
                 splitContainerNavigator.Panel2.Controls["personEditor1"].Dock = DockStyle.Fill;
-                splitContainerNavigator.Panel2.Controls["genreEditor1"].Visible = false;
+                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
                 splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = true;
             }
@@ -1160,8 +1160,8 @@ namespace OMLDatabaseEditor
                 lbGenreMetadata.Items.Clear();
                 lbGenreMetadata.Items.AddRange(TitleCollectionManager.GetAllGenreMetaDatas().ToArray());
 
-                splitContainerNavigator.Panel2.Controls["genreEditor1"].Dock = DockStyle.Fill;
-                splitContainerNavigator.Panel2.Controls["genreEditor1"].Visible = true;
+                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Dock = DockStyle.Fill;
+                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = true;
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
                 splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = false;
             }
@@ -1833,6 +1833,12 @@ namespace OMLDatabaseEditor
             ToggleSaveState(true);
         }
 
-
+        private void lbGenreMetadata_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lbGenreMetadata.SelectedItem != null)
+            {
+                genreMetaDataEditor.LoadGenre((GenreMetaData)lbGenreMetadata.SelectedItem);
+            }
+        }
     }
 }
