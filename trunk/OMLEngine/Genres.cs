@@ -1,8 +1,46 @@
 ﻿using System;
-
+using Dao = OMLEngine.Dao;
 namespace OMLEngine
 {
-    public class Genres
+    public class Genre
+    {
+        private Dao.GenreMetaData _genreMetaData;
+
+        public Genre()
+        {
+            _genreMetaData = new OMLEngine.Dao.GenreMetaData();
+        }
+
+        internal Genre(OMLEngine.Dao.GenreMetaData genreMetaData)
+        {
+            _genreMetaData = genreMetaData;
+        }
+
+        public long Id
+        {
+            get { return _genreMetaData.Id; }
+            set { _genreMetaData.Id = value; }
+        }
+
+        public string Name
+        {
+            get { return _genreMetaData.Name ?? string.Empty; }
+            set { _genreMetaData.Name = value; }
+        }
+
+        public override string ToString()
+        {
+            return _genreMetaData.Name;
+        }
+
+        /*public byte[] Photo
+        {
+            get { return _genreMetaData.Photo; }
+            set { _genreMetaData.Photo = value; }
+        }*/
+
+    }
+    /*public class Genres
     {
         public static string Action = @"Action";
         public static string Adventure = @"Adventure";
@@ -32,5 +70,5 @@ namespace OMLEngine
         public static string Thriller = @"Thriller";
         public static string War = @"War";
         public static string Western = @"Western";
-    }
+    }*/
 }

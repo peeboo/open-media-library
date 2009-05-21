@@ -8,15 +8,36 @@ namespace OMLEngine.Dao
 {
     internal static class TitleCollectionDao
     {
+        #region GenreMetaDatas
         public static GenreMetaData GetGenreMetaDataByName(string name)
         {
             return DBContext.Instance.GenreMetaDatas.SingleOrDefault(t => t.Name.ToLower() == name.ToLower());
         }
 
+        public static IEnumerable<Dao.GenreMetaData> GetAllGenreMetaDatas()
+        {
+            var GenreMeta = from gm in Dao.DBContext.Instance.GenreMetaDatas
+                            select gm;
+
+            return GenreMeta;
+        }
+        #endregion
+
+
+        #region BioDatas
         public static BioData GetPersonBioDataByName(string name)
         {
             return DBContext.Instance.BioDatas.SingleOrDefault(t => t.FullName.ToLower() == name.ToLower());
         }
+
+        public static IEnumerable<Dao.BioData> GetAllBioDatas()
+        {
+            var BioData = from db in Dao.DBContext.Instance.BioDatas
+                            select db;
+
+            return BioData;
+        }
+        #endregion
 
         public static Tag GetTagByTagName(string name)
         {
