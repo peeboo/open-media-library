@@ -264,6 +264,16 @@ namespace OMLEngine
             Dao.DBContext.Instance.SubmitChanges();
         }
 
+        public static IEnumerable<Genre> GetAllGenreMetaDatas()
+        {
+            foreach (Dao.GenreMetaData gm in Dao.TitleCollectionDao.GetAllGenreMetaDatas())
+            {
+                yield return new Genre(gm);
+
+            }
+        }
+
+
         /// <summary>
         /// Deletes the people meta data
         /// </summary>
@@ -277,6 +287,14 @@ namespace OMLEngine
             Dao.DBContext.Instance.SubmitChanges();
         }
 
+        public static IEnumerable<BioData> GetAllBioDatas()
+        {
+            foreach (Dao.BioData bd in Dao.TitleCollectionDao.GetAllBioDatas())
+            {
+                yield return new BioData(bd);
+
+            }
+        }
         /// <summary>
         /// Deletes all the user information from the database
         /// </summary>
