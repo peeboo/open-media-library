@@ -1,6 +1,6 @@
 ﻿namespace OMLDatabaseEditor.Controls
 {
-    partial class GenreEditor
+    partial class GenreMetaDataEditor
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,13 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
-            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.textEdit1 = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
+            this.genremetadatasource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.genremetadatasource)).BeginInit();
             this.SuspendLayout();
             // 
             // panelControl1
@@ -48,13 +51,14 @@
             this.panelControl1.Size = new System.Drawing.Size(255, 236);
             this.panelControl1.TabIndex = 0;
             // 
-            // labelControl1
+            // textEdit1
             // 
-            this.labelControl1.Location = new System.Drawing.Point(31, 36);
-            this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(29, 13);
-            this.labelControl1.TabIndex = 0;
-            this.labelControl1.Text = "Genre";
+            this.textEdit1.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.genremetadatasource, "Name", true));
+            this.textEdit1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.genremetadatasource, "Name", true));
+            this.textEdit1.Location = new System.Drawing.Point(66, 33);
+            this.textEdit1.Name = "textEdit1";
+            this.textEdit1.Size = new System.Drawing.Size(100, 20);
+            this.textEdit1.TabIndex = 2;
             // 
             // labelControl2
             // 
@@ -64,24 +68,30 @@
             this.labelControl2.TabIndex = 1;
             this.labelControl2.Text = "Image";
             // 
-            // textEdit1
+            // labelControl1
             // 
-            this.textEdit1.Location = new System.Drawing.Point(66, 33);
-            this.textEdit1.Name = "textEdit1";
-            this.textEdit1.Size = new System.Drawing.Size(100, 20);
-            this.textEdit1.TabIndex = 2;
+            this.labelControl1.Location = new System.Drawing.Point(31, 36);
+            this.labelControl1.Name = "labelControl1";
+            this.labelControl1.Size = new System.Drawing.Size(29, 13);
+            this.labelControl1.TabIndex = 0;
+            this.labelControl1.Text = "Genre";
             // 
-            // GenreEditor
+            // genremetadatasource
+            // 
+            this.genremetadatasource.DataSource = typeof(OMLEngine.GenreMetaData);
+            // 
+            // GenreMetaDataEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panelControl1);
-            this.Name = "GenreEditor";
+            this.Name = "GenreMetaDataEditor";
             this.Size = new System.Drawing.Size(255, 236);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
             this.panelControl1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.genremetadatasource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -92,5 +102,6 @@
         private DevExpress.XtraEditors.TextEdit textEdit1;
         private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraEditors.LabelControl labelControl1;
+        private System.Windows.Forms.BindingSource genremetadatasource;
     }
 }
