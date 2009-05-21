@@ -2,16 +2,16 @@
 using Dao = OMLEngine.Dao;
 namespace OMLEngine
 {
-    public class Genre
+    public class GenreMetaData
     {
         private Dao.GenreMetaData _genreMetaData;
 
-        public Genre()
+        public GenreMetaData()
         {
             _genreMetaData = new OMLEngine.Dao.GenreMetaData();
         }
 
-        internal Genre(OMLEngine.Dao.GenreMetaData genreMetaData)
+        internal GenreMetaData(OMLEngine.Dao.GenreMetaData genreMetaData)
         {
             _genreMetaData = genreMetaData;
         }

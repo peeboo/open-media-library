@@ -264,11 +264,11 @@ namespace OMLEngine
             Dao.DBContext.Instance.SubmitChanges();
         }
 
-        public static IEnumerable<Genre> GetAllGenreMetaDatas()
+        public static IEnumerable<GenreMetaData> GetAllGenreMetaDatas()
         {
             foreach (Dao.GenreMetaData gm in Dao.TitleCollectionDao.GetAllGenreMetaDatas())
             {
-                yield return new Genre(gm);
+                yield return new GenreMetaData(gm);
 
             }
         }

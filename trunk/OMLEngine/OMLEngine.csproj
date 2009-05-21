@@ -112,7 +112,7 @@
     <Compile Include="I18nResourceManager.cs" />
     <Compile Include="Disk.cs" />
     <Compile Include="FileSystemWalker.cs" />
-    <Compile Include="Genres.cs" />
+    <Compile Include="GenreMetaData.cs" />
     <Compile Include="MediaScanner\IFOUtilities.cs" />
     <Compile Include="ITranscodingService.cs" />
     <Compile Include="MediaInfo.cs" />
