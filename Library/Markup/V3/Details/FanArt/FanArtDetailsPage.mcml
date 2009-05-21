@@ -6,6 +6,7 @@
 	  xmlns:core="resx://Library/Library.Resources/V3_Globals"
     xmlns:pip="resx://Library/Library.Resources/V3_GalleryPage"
       xmlns:scr="resx://Library/Library.Resources/V3_Controls_ScrollControl"
+      xmlns:chk="resx://Library/Library.Resources/V3_Controls_CheckBox"
 	  xmlns:me="Me">
 
   <!-- A details page -->
@@ -402,14 +403,19 @@
       </Condition>
     </Rules>
     <Content>
-      <Repeater Name="Buttons" Source="[Page.Commands]" Navigation="RememberFocus,FlowVertical" Layout="VerticalFlow" Margins="0,0,0,0">
-        <LayoutInput>
-          <AnchorLayoutInput Top="Parent,0" Horizontal="Near"/>
-        </LayoutInput>
-        <Content>
-          <ctl:Button Model="[RepeatedItem!Command]" SubFocusArea="[SubFocusArea]" NoFocusColor="[ButtonNoFocusColor]"/>
-        </Content>
-      </Repeater>
+      <Panel Layout="VerticalFlow">
+        <Children>
+          <Repeater Name="Buttons" Source="[Page.Commands]" Navigation="RememberFocus,FlowVertical" Layout="VerticalFlow" Margins="0,0,0,0">
+            <LayoutInput>
+              <AnchorLayoutInput Top="Parent,0" Horizontal="Near"/>
+            </LayoutInput>
+            <Content>
+              <ctl:Button Model="[RepeatedItem!Command]" SubFocusArea="[SubFocusArea]" NoFocusColor="[ButtonNoFocusColor]"/>
+            </Content>
+          </Repeater>
+          <chk:CheckBox Model="[Page.Watched]"/>
+        </Children>
+      </Panel>
     </Content>
   </UI>
   

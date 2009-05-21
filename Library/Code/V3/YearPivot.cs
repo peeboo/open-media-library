@@ -81,7 +81,7 @@ namespace Library.Code.V3
                     this.SupportsItemContext = true;
                     break;
                 case "ListViewItem":
-                    this.ContentItemTemplate = "ListViewItem";
+                    this.ContentItemTemplate = "ListViewItemGrouped";
                     this.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
                     ctx0.Description = "View Large";
                     ctx1.Description = "View Small";

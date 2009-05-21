@@ -65,7 +65,24 @@ namespace Library.Code.V3
             //Application.Current.GoToDetailsCast(this);
             //throw new Exception("The method or operation is not implemented.");
         }
-        
+
+        private BooleanChoice watched;
+        public BooleanChoice Watched
+        {
+            get
+            {
+                return this.watched;
+            }
+            set
+            {
+                if (watched != value)
+                {
+                    watched = value;
+                    FirePropertyChanged("Watched");
+                }
+            }
+        }
+
         /// <summary>
         /// The primary title of the object.
         /// </summary>

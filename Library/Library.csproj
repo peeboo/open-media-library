@@ -115,6 +115,7 @@
     <Compile Include="Code\UISettings.cs" />
     <Compile Include="Code\Filters.cs" />
     <Compile Include="Code\V3\Controls\LegacyHorizontalFlowLayoutHelper.cs" />
+    <Content Include="Code\V3\CollectionItem.cs.txt" />
     <Compile Include="Code\V3\FilterPivot.cs" />
     <Compile Include="Code\V3\Settings\BackgroundSettings.cs" />
     <Compile Include="Code\V3\Settings\GallerySettings.cs" />
