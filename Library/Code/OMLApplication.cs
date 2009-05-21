@@ -345,22 +345,41 @@ namespace Library
             #region v3POC
 
             SetPrimaryBackgroundImage();
-            OMLProperties properties = new OMLProperties();
-            properties.Add("Application", this);
-            //properties.Add("UISettings", new UISettings());
-            //properties.Add("Settings", new Settings());
-            properties.Add("I18n", I18n.Instance);
-            //v3 main gallery
-            Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(new List<OMLEngine.TitleFilter>(), "OML");
-            //description
-            gallery.Description = "OML";
-            Command CommandContextPopOverlay = new Command();
-            properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
-            properties.Add("Page", gallery);
-            _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
-            //this.mediaChangers = new Library.Code.V3.MediaChangeManager();
+
+            switch (context)
+            {
+                case "Settings":
+                    {
+                        Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                        Library.Code.V3.SettingsManager page = new Library.Code.V3.SettingsManager();
+                        properties["Page"] = page;
+                        properties["Application"] = OMLApplication.Current;
+
+                        OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_Settings_SettingsManager", properties);
+                        return;
+                    }
+                default:
+                    {
+                        OMLProperties properties = new OMLProperties();
+                        properties.Add("Application", this);
+                        //properties.Add("UISettings", new UISettings());
+                        //properties.Add("Settings", new Settings());
+                        properties.Add("I18n", I18n.Instance);
+                        //v3 main gallery
+                        Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(new List<OMLEngine.TitleFilter>(), "OML");
+                        //description
+                        gallery.Description = "OML";
+                        Command CommandContextPopOverlay = new Command();
+                        properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
+                        properties.Add("Page", gallery);
+                        _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
+                        //this.mediaChangers = new Library.Code.V3.MediaChangeManager();
+                        return;
+                    }
+            }
             #endregion v3POC
-            return;
+            //return;
 #endif
 
             // DISABLE THIS UNTIL ITS READY -- DJShultz 01/13/2009
