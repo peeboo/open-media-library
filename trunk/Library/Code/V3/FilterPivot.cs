@@ -144,11 +144,10 @@ namespace Library.Code.V3
                 string s = null;
                 if (item != null)
                 {
-                    if (item.SortName.ToLower() == " all ")
-                        s = "#";
-                    else if (item.SortName.StartsWith("the ", StringComparison.OrdinalIgnoreCase))
+                    //a and the add a lot of noise
+                    if (item.SortName.StartsWith("the ", StringComparison.OrdinalIgnoreCase))
                         s = item.SortName.Substring(4);
-                    else if (item.SortName.StartsWith(" a", StringComparison.OrdinalIgnoreCase))
+                    else if (item.SortName.StartsWith("a ", StringComparison.OrdinalIgnoreCase))
                         s = item.SortName.Substring(2);
                 }
                 if (s == null)

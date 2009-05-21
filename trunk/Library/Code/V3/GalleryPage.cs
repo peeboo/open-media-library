@@ -100,6 +100,7 @@ namespace Library.Code.V3
             //user rating
             //parental rating
             //format
+            //country
 
             foreach (string filterName in filtersToShow)
             {
@@ -148,6 +149,14 @@ namespace Library.Code.V3
                             }
                             break;
                         case OMLEngine.TitleFilterType.UserRating:
+                            if (!this.IsFilterDoubled(filterType))
+                            {
+                                filteredPivot = new Library.Code.V3.FilterPivot(this, Filter.FilterTypeToString(filterType).ToLower(), "No titles were found.", this.Filters, filterType);
+                                filteredPivot.ContentLabel = this.Description;
+                                this.Model.Pivots.Options.Add(filteredPivot);
+                            }
+                            break;
+                        case OMLEngine.TitleFilterType.Country:
                             if (!this.IsFilterDoubled(filterType))
                             {
                                 filteredPivot = new Library.Code.V3.FilterPivot(this, Filter.FilterTypeToString(filterType).ToLower(), "No titles were found.", this.Filters, filterType);
