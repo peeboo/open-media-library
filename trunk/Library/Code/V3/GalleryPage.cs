@@ -183,6 +183,19 @@ namespace Library.Code.V3
                     }
                 }
             }
+            //add favorites if we are root
+            if (this.filters == null || this.filters.Count == 0)
+            {
+                //add the Favorites pivot
+                this.CreateFavoritesFilter();
+            }
+        }
+
+        private void CreateFavoritesFilter()
+        {
+            Library.Code.V3.FavoritesPivot favoritesPivot = new Library.Code.V3.FavoritesPivot(this, "favorites", "No titles were found.");
+            favoritesPivot.ContentLabel = this.Description;
+            this.Model.Pivots.Options.Add(favoritesPivot);
         }
 
         void Pivots_ChosenChanged(object sender, EventArgs e)
@@ -337,6 +350,7 @@ namespace Library.Code.V3
         {
             if (this.SelectedItemCommand is Library.Code.V3.MovieItem)
             {
+                ((Library.Code.V3.MovieItem)this.SelectedItemCommand).PlayAllDisks();
             }
         }
 

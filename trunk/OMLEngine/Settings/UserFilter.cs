@@ -9,6 +9,9 @@ namespace OMLEngine.Settings
     {
         List<TitleFilter> filters = null;
 
+        public List<TitleFilter> Filters
+        { get { return this.filters; } }
+
         private string customName;
 
         public string Name
