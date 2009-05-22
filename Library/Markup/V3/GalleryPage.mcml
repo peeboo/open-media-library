@@ -40,7 +40,7 @@
     </Properties>
     <Locals>
       <ShortcutHandler Name="BackHandler" Shortcut="Back" Handle="false" HandlerStage="Bubbled"/>
-      <ShortcutHandler Name="PlayButton" Command="[Page.QuickPlay]" Shortcut="Play" Handle="true" HandlerStage="Direct" />
+      <ShortcutHandler Name="PlayButton" Command="[Page.QuickPlay]" Shortcut="Play" Handle="true" HandlerStage="Bubbled" />
       <cor:Boolean Name="ContextMenuVisible" Boolean="false"/>
       <cor:Boolean Name="ItemContextMenuVisible" Boolean="false"/>
       <cor:Boolean Name="SlideMenuVisible" Boolean="false"/>

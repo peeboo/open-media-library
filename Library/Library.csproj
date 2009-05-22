@@ -116,8 +116,11 @@
     <Compile Include="Code\Filters.cs" />
     <Compile Include="Code\V3\Controls\LegacyHorizontalFlowLayoutHelper.cs" />
     <Content Include="Code\V3\CollectionItem.cs.txt" />
+    <Compile Include="Code\V3\FilterItem.cs" />
+    <Compile Include="Code\V3\FavoritesPivot.cs" />
     <Compile Include="Code\V3\FilterPivot.cs" />
     <Compile Include="Code\V3\Settings\BackgroundSettings.cs" />
+    <Compile Include="Code\V3\Settings\FavoritesSettings.cs" />
     <Compile Include="Code\V3\Settings\GallerySettings.cs" />
     <Compile Include="Code\V3\Settings\GeneralSettings.cs" />
     <Compile Include="Code\V3\YearBrowseGroup.cs" />
@@ -522,6 +525,7 @@
     <Content Include="Markup\V3\Loader.mcml" />
     <Content Include="Markup\V3\Settings\BackgroundSettings.mcml" />
     <Content Include="Markup\V3\Settings\AdditionalSettings.mcml" />
+    <Content Include="Markup\V3\Settings\FavoritesSettings.mcml" />
     <Content Include="Markup\V3\Settings\GallerySettings.mcml" />
     <Content Include="Markup\V3\Settings\GeneralSettings.mcml" />
     <Content Include="Markup\V3\Settings\ExtenderSettingsImpersonation.mcml" />

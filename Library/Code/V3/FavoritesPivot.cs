@@ -4,20 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using Microsoft.MediaCenter.UI;
+using OMLEngine.Settings;
 
 namespace Library.Code.V3
 {
-    public class FilterPivot : BrowsePivot
+    public class FavoritesPivot : BrowsePivot
     {
-        public FilterPivot(IModelItemOwner owner, string stDescription, string stNoContentText)
-            : base(owner, stDescription, stNoContentText, null)
-        {
-            this.m_listContent = new VirtualList(new ItemCountHandler(this.InitializeListCount));
-            ((VirtualList)this.m_listContent).RequestItemHandler = new RequestItemHandler(this.GetItem);
-        }
-
-        private List<OMLEngine.TitleFilter> m_filters;
-        public FilterPivot(IModelItemOwner owner, string stDescription, string stNoContentText, List<OMLEngine.TitleFilter> filters, OMLEngine.TitleFilterType filterType)
+        private IList<UserFilter> m_filters;
+        public FavoritesPivot(IModelItemOwner owner, string stDescription, string stNoContentText)
             : base(owner, stDescription, stNoContentText, null)
         {
             //this.ContentLabel = "OML";
@@ -26,14 +20,10 @@ namespace Library.Code.V3
             this.ContentItemTemplate = "ListViewItem";
             this.DetailTemplate = Library.Code.V3.BrowsePivot.ExtendedDetailTemplate;
 
-            this.SupportedContentItemTemplates.Add("View Large", "oneRowGalleryItemPoster");
-            this.SupportedContentItemTemplates.Add("View Small", "twoRowGalleryItemPoster");
-            this.SupportedContentItemTemplates.Add("View List", "ListViewItemGrouped");
-
             this.SetupContextMenu();
+
             
-            this.m_filters = filters;
-            this.m_filterType = filterType;
+            //this.m_filterType = filterType;
             this.m_listContent = new VirtualList(new ItemCountHandler(this.InitializeListCount));
             ((VirtualList)this.m_listContent).RequestItemHandler = new RequestItemHandler(this.GetItem);
         }
@@ -108,35 +98,15 @@ namespace Library.Code.V3
         private void InitializeListCount(VirtualList vlist)
         {
             this.IsBusy = true;
-
-            //titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetAllTitles());
-            Filter f = new Filter(null, this.m_filterType, this.m_filters);
-            titles = f.GetGalleryItems();
-
-            if (this.m_filterType == OMLEngine.TitleFilterType.Genre || this.m_filterType == OMLEngine.TitleFilterType.Tag)
-            {
-                
-            }
-            
-            //titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(this.m_filters));
-            ((VirtualList)this.m_listContent).Count = titles.Count;
-            //if (this.m_listContent.Count > 25)
-            //{
-            //    this.ContentItemTemplate = "twoRowGalleryItemPoster";
-            //    this.DetailTemplate = BrowsePivot.StandardDetailTemplate;
-            //}
-            //else
-            //{
-            //    this.ContentItemTemplate = "oneRowGalleryItemPoster";
-            //    this.DetailTemplate = BrowsePivot.ExtendedDetailTemplate;
-            //}
+            this.m_filters = OMLSettings.UserFilters;
+            ((VirtualList)this.m_listContent).Count = this.m_filters.Count;
             this.IsBusy = false;
         }
 
         public override int DoSearch(string searchString)
         {
             int jump = 0;
-            foreach (Library.GalleryItem item in titles)
+            foreach (UserFilter item in m_filters)
             {
                 //TODO: this string stripping is a hack for OML 
                 //this needs to be spiffed up
@@ -145,24 +115,24 @@ namespace Library.Code.V3
                 if (item != null)
                 {
                     //a and the add a lot of noise
-                    if (item.SortName.StartsWith("the ", StringComparison.OrdinalIgnoreCase))
-                        s = item.SortName.Substring(4);
-                    else if (item.SortName.StartsWith("a ", StringComparison.OrdinalIgnoreCase))
-                        s = item.SortName.Substring(2);
+                    if (item.Name.StartsWith("the ", StringComparison.OrdinalIgnoreCase))
+                        s = item.Name.Substring(4);
+                    else if (item.Name.StartsWith("a ", StringComparison.OrdinalIgnoreCase))
+                        s = item.Name.Substring(2);
                 }
                 if (s == null)
-                    s = item.SortName;
+                    s = item.Name;
 
                 int cmpVal = s.CompareTo(searchString);
                 if (cmpVal == 0)
                 { // the values are the same
-                    jump = titles.IndexOf(item);
+                    jump = m_filters.IndexOf(item);
                     break;
                     //direct match
                 }
                 else if (cmpVal > 0)
                 {
-                    jump = titles.IndexOf(item);
+                    jump = m_filters.IndexOf(item);
                     break;
                 }
             }
@@ -176,9 +146,9 @@ namespace Library.Code.V3
             {
                 commandForItem = this.m_listContent[idx];
             }
-            else if (((this.titles != null) && (idx >= 0)) && (idx < this.titles.Count))
+            else if (((this.m_filters != null) && (idx >= 0)) && (idx < this.m_filters.Count))
             {
-                Library.GalleryItem item = this.titles[idx] as Library.GalleryItem;
+                UserFilter item = this.m_filters[idx] as UserFilter;
                 if (item != null)
                 {
                     commandForItem = this.GetCommandForItem(item);
@@ -187,28 +157,18 @@ namespace Library.Code.V3
             callbackItem(vlist, idx, commandForItem);
         }
 
-        private object GetCommandForItem(Library.GalleryItem item)
+        private object GetCommandForItem(UserFilter item)
         {
-            return new Library.Code.V3.FilterItem(item, this, this.m_filters);
+            return new Library.Code.V3.FilterItem(item, this, item.Filters);
         }
 
-        private OMLEngine.TitleFilterType m_filterType;
+        //private OMLEngine.TitleFilterType m_filterType;
 
         private IList m_listContent;
         public override IList Content
         {
             get
             {
-                //if(this.contentLoaded==false)
-                //{
-                //    if (retrievingData == false)
-                //    {
-                //        retrievingData = true;
-                //        Microsoft.MediaCenter.UI.Application.DeferredInvokeOnWorkerThread(this.StartDataRetrieval, this.EndDataRetrieval, null);
-                //    }
-                //    //return new VirtualList(this.Owner, null);
-                    
-                //}
                 return this.m_listContent;
             }
             set
@@ -221,6 +181,6 @@ namespace Library.Code.V3
             }
         }
 
-        IList<Library.GalleryItem> titles;
+        //IList<Library.GalleryItem> titles;
     }
 }
