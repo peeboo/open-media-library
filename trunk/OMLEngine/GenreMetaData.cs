@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Dao = OMLEngine.Dao;
+using System.Text;
+
 namespace OMLEngine
 {
     public class GenreMetaData
@@ -14,6 +17,11 @@ namespace OMLEngine
         internal GenreMetaData(OMLEngine.Dao.GenreMetaData genreMetaData)
         {
             _genreMetaData = genreMetaData;
+        }
+
+        internal Dao.GenreMetaData DaoGenreMetaData
+        {
+            get { return _genreMetaData; }
         }
 
         public long Id

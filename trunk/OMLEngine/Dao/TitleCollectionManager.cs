@@ -251,6 +251,7 @@ namespace OMLEngine
             Dao.DBContext.Instance.SubmitChanges();
         }
 
+        #region GenreMetaData functions
         /// <summary>
         /// Deletes the genre meta data
         /// </summary>
@@ -273,7 +274,25 @@ namespace OMLEngine
             }
         }
 
+        public static void AddGenreMetaData(GenreMetaData gm)
+        {
+            Dao.DBContext.Instance.GenreMetaDatas.InsertOnSubmit(gm.DaoGenreMetaData);
+            Dao.DBContext.Instance.SubmitChanges();
+        }
 
+        public static void RemoveGenreMetaData(GenreMetaData gm)
+        {
+            Dao.DBContext.Instance.GenreMetaDatas.DeleteOnSubmit(gm.DaoGenreMetaData);
+            Dao.DBContext.Instance.SubmitChanges();
+        }
+
+        public static void SaveGenreMetaDataChanges()
+        { 
+            Dao.DBContext.Instance.SubmitChanges();
+        }
+        #endregion
+
+        #region BioData functions
         /// <summary>
         /// Deletes the people meta data
         /// </summary>
@@ -295,6 +314,25 @@ namespace OMLEngine
 
             }
         }
+
+        public static void AddBioData(BioData bd)
+        {
+            Dao.DBContext.Instance.BioDatas.InsertOnSubmit(bd.DaoBioData);
+            Dao.DBContext.Instance.SubmitChanges();
+        }
+
+        public static void RemoveBioData(BioData bd)
+        {
+            Dao.DBContext.Instance.BioDatas.DeleteOnSubmit(bd.DaoBioData);
+            Dao.DBContext.Instance.SubmitChanges();
+        }
+
+        public static void SaveBioMetaDataChanges()
+        {
+            Dao.DBContext.Instance.SubmitChanges();
+        }
+        #endregion
+
         /// <summary>
         /// Deletes all the user information from the database
         /// </summary>

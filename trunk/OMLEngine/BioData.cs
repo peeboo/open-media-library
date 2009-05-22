@@ -12,11 +12,19 @@ namespace OMLEngine
         public BioData()
         {
             _bioData = new OMLEngine.Dao.BioData();
+
+            // Set a default date to stop exception (must change type from smalldate in db)
+            _bioData.DateOfBirth = new DateTime(1900, 1, 1);
         }
 
         internal BioData(OMLEngine.Dao.BioData bioData)
         {
             _bioData = bioData;
+        }
+
+        internal Dao.BioData DaoBioData
+        {
+            get { return _bioData; }
         }
 
         public long Id
