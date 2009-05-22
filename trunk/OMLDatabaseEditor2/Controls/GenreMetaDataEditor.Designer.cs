@@ -30,19 +30,19 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
-            this.textEdit1 = new DevExpress.XtraEditors.TextEdit();
+            this.teGenre = new DevExpress.XtraEditors.TextEdit();
+            this.genremetadatasource = new System.Windows.Forms.BindingSource(this.components);
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
-            this.genremetadatasource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teGenre.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.genremetadatasource)).BeginInit();
             this.SuspendLayout();
             // 
             // panelControl1
             // 
-            this.panelControl1.Controls.Add(this.textEdit1);
+            this.panelControl1.Controls.Add(this.teGenre);
             this.panelControl1.Controls.Add(this.labelControl2);
             this.panelControl1.Controls.Add(this.labelControl1);
             this.panelControl1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -51,14 +51,18 @@
             this.panelControl1.Size = new System.Drawing.Size(255, 236);
             this.panelControl1.TabIndex = 0;
             // 
-            // textEdit1
+            // teGenre
             // 
-            this.textEdit1.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.genremetadatasource, "Name", true));
-            this.textEdit1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.genremetadatasource, "Name", true));
-            this.textEdit1.Location = new System.Drawing.Point(66, 33);
-            this.textEdit1.Name = "textEdit1";
-            this.textEdit1.Size = new System.Drawing.Size(100, 20);
-            this.textEdit1.TabIndex = 2;
+            this.teGenre.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.genremetadatasource, "Name", true));
+            this.teGenre.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.genremetadatasource, "Name", true));
+            this.teGenre.Location = new System.Drawing.Point(66, 33);
+            this.teGenre.Name = "teGenre";
+            this.teGenre.Size = new System.Drawing.Size(100, 20);
+            this.teGenre.TabIndex = 2;
+            // 
+            // genremetadatasource
+            // 
+            this.genremetadatasource.DataSource = typeof(OMLEngine.GenreMetaData);
             // 
             // labelControl2
             // 
@@ -76,10 +80,6 @@
             this.labelControl1.TabIndex = 0;
             this.labelControl1.Text = "Genre";
             // 
-            // genremetadatasource
-            // 
-            this.genremetadatasource.DataSource = typeof(OMLEngine.GenreMetaData);
-            // 
             // GenreMetaDataEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -90,7 +90,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
             this.panelControl1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teGenre.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.genremetadatasource)).EndInit();
             this.ResumeLayout(false);
 
@@ -99,7 +99,7 @@
         #endregion
 
         private DevExpress.XtraEditors.PanelControl panelControl1;
-        private DevExpress.XtraEditors.TextEdit textEdit1;
+        private DevExpress.XtraEditors.TextEdit teGenre;
         private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraEditors.LabelControl labelControl1;
         private System.Windows.Forms.BindingSource genremetadatasource;

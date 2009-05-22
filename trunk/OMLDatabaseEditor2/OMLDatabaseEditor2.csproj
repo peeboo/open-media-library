@@ -154,11 +154,11 @@
     <Compile Include="Controls\NonFatalErrors.Designer.cs">
       <DependentUpon>NonFatalErrors.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PersonEditor.cs">
+    <Compile Include="Controls\BioDataEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\PersonEditor.Designer.cs">
-      <DependentUpon>PersonEditor.cs</DependentUpon>
+    <Compile Include="Controls\BioDataEditor.Designer.cs">
+      <DependentUpon>BioDataEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\PersonEditorFrm.cs">
       <SubType>Form</SubType>
@@ -396,6 +396,7 @@
     <Content Include="Resources\applications-multimedia.png" />
     <Content Include="Resources\emblem-symbolic-link.png" />
     <Content Include="Resources\movieheader.jpg" />
+    <None Include="Properties\DataSources\OMLEngine.BioData.datasource" />
     <None Include="Properties\DataSources\OMLEngine.Genre.datasource" />
     <None Include="Properties\DataSources\OMLEngine.GenreMetaData.datasource" />
     <None Include="Resources\splashimage.bmp" />
@@ -413,8 +414,8 @@
     <EmbeddedResource Include="Controls\GenreMetaDataEditor.resx">
       <DependentUpon>GenreMetaDataEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\PersonEditor.resx">
-      <DependentUpon>PersonEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\BioDataEditor.resx">
+      <DependentUpon>BioDataEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DownloadingBackDropsForm.resx">
       <DependentUpon>DownloadingBackDropsForm.cs</DependentUpon>
