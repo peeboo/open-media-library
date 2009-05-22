@@ -1259,6 +1259,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] V3_AdditionalSettings {
+            get {
+                object obj = ResourceManager.GetObject("V3_AdditionalSettings", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] V3_BackgroundSettings {
             get {
                 object obj = ResourceManager.GetObject("V3_BackgroundSettings", resourceCulture);
