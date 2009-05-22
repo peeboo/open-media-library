@@ -57,7 +57,7 @@ namespace OMLDatabaseEditor
             splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Dock = DockStyle.Fill;
 
             splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
-            splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = false;
+            splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = false;
             splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
 
         }
@@ -1142,20 +1142,20 @@ namespace OMLDatabaseEditor
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Dock = DockStyle.Fill;
                 splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
-                splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = false;
+                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = false;
             }
             
-            if (e.Group == groupPeople)
+            if (e.Group == groupBioData)
             {
-                lbPeople.Items.Clear();
-                lbPeople.Items.AddRange(TitleCollectionManager.GetAllBioDatas().ToArray());
-                splitContainerNavigator.Panel2.Controls["personEditor1"].Dock = DockStyle.Fill;
+                lbBioData.Items.Clear();
+                lbBioData.Items.AddRange(TitleCollectionManager.GetAllBioDatas().ToArray());
+                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Dock = DockStyle.Fill;
                 splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
-                splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = true;
+                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = true;
             }
 
-            if (e.Group == groupGenres)
+            if (e.Group == groupGenresMetadata)
             {
                 lbGenreMetadata.Items.Clear();
                 lbGenreMetadata.Items.AddRange(TitleCollectionManager.GetAllGenreMetaDatas().ToArray());
@@ -1163,7 +1163,7 @@ namespace OMLDatabaseEditor
                 splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Dock = DockStyle.Fill;
                 splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = true;
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
-                splitContainerNavigator.Panel2.Controls["personEditor1"].Visible = false;
+                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = false;
             }
 
             _loading = false;
@@ -1839,6 +1839,49 @@ namespace OMLDatabaseEditor
             {
                 genreMetaDataEditor.LoadGenre((GenreMetaData)lbGenreMetadata.SelectedItem);
             }
+        }
+
+        private void lbBioData_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lbBioData.SelectedItem != null)
+            {
+                bioDataEditor.LoadBioData((BioData)lbBioData.SelectedItem);
+            }
+        }
+
+        private void lbBioData_DrawItem(object sender, ListBoxDrawItemEventArgs e)
+        {
+            // Create the brushes
+            if (_brushTreeViewSelected == null)
+            {
+                _brushTreeViewSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.LimeGreen, Color.PaleGreen);
+            }
+
+
+            int x = e.Bounds.X;
+            int y = e.Bounds.Y;
+            int w = e.Bounds.Width;
+            int h = e.Bounds.Height;
+            int wt = (int)e.Graphics.MeasureString(e.Item.ToString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular)).Width + 2;
+
+            // Setup string formatting
+            StringFormat stf = new StringFormat();
+            stf.Trimming = StringTrimming.EllipsisCharacter;
+            stf.FormatFlags = StringFormatFlags.NoWrap;
+
+            e.Graphics.FillRectangle(new SolidBrush(Color.White), x, y, w, h);
+
+            if (lbBioData.SelectedItem == e.Item)
+            {
+                e.Graphics.FillRectangle(_brushTreeViewSelected, x, y, wt, h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y, x - 2 + wt, y);
+                e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y - 1 + h, x - 2 + wt, y - 1 + h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x, y + 1, x, y - 2 + h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x -1 + wt, y + 1, x -1 + wt, y - 2 + h);
+
+            }
+
+            e.Graphics.DrawString(e.Item.ToString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 2, e.Bounds.Width, h), stf);
         }
     }
 }
