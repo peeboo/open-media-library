@@ -1518,6 +1518,13 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_Controls_BrowseGalleryItem_New {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_BrowseGalleryItem_New", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap V3_Controls_BrowseGalleryItem_NoImage1Row4x3 {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_BrowseGalleryItem_NoImage1Row4x3", resourceCulture);

@@ -51,6 +51,24 @@ namespace Library.Code.V3
             };
         }
 
+        private bool isUnwatched = false;
+        public bool IsUnwatched
+        {
+            get
+            {
+                return isUnwatched;
+            }
+            set
+            {
+                if (this.isUnwatched != value)
+                {
+                    this.isUnwatched = value;
+                    FirePropertyChanged("IsUnwatched");
+                }
+            }
+        }
+
+
         private OMLEngine.Title _titleObj;
         public OMLEngine.Title TitleObject { get { return _titleObj; } }
 
@@ -61,6 +79,9 @@ namespace Library.Code.V3
             //this.InternalMovieItem = new Library.MovieItem(title, null);
 
             this.ItemType = 0;
+            this.OverlayContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem#UnwatchedOverlay";
+            if (this._titleObj.WatchedCount == 0)
+                this.isUnwatched = true;
 
             DateTime releaseDate = Convert.ToDateTime(_titleObj.ReleaseDate.ToString("MMMM dd, yyyy"));// new DateTime(2000, 1, 1);
             //invalid dates

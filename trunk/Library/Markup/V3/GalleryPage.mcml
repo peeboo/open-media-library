@@ -40,7 +40,7 @@
     </Properties>
     <Locals>
       <ShortcutHandler Name="BackHandler" Shortcut="Back" Handle="false" HandlerStage="Bubbled"/>
-
+      <ShortcutHandler Name="PlayButton" Command="[Page.QuickPlay]" Shortcut="Play" Handle="true" HandlerStage="Direct" />
       <cor:Boolean Name="ContextMenuVisible" Boolean="false"/>
       <cor:Boolean Name="ItemContextMenuVisible" Boolean="false"/>
       <cor:Boolean Name="SlideMenuVisible" Boolean="false"/>
@@ -1371,7 +1371,7 @@
                     </Font>
                   </Text-->
 
-                  <me:FocusPlaceholder Visible="false" Name="Placeholder" MinimumSize="1,1"/>
+                  <me:FocusPlaceholder Visible="true" Name="Placeholder" MinimumSize="1,1"/>
 
                 </Children>
               </Panel>

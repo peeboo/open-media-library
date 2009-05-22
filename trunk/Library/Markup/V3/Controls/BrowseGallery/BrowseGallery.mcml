@@ -1019,7 +1019,7 @@
     </Content>
 
     <Content Name="oneRowGalleryItemPoster">
-      <me:oneRowGalleryItemPoster Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+      <me:oneRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
       </me:oneRowGalleryItemPoster>
     </Content>
@@ -1037,7 +1037,7 @@
     </Content>
     
     <Content Name="twoRowGalleryItemPoster">
-      <me:twoRowGalleryItemPoster Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+      <me:twoRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
       </me:twoRowGalleryItemPoster>
     </Content>

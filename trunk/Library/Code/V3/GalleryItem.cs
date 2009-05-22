@@ -21,6 +21,23 @@ namespace Library.Code.V3
         {
         }
 
+        private string overlayContentTemplate=null;
+        public string OverlayContentTemplate
+        {
+            get
+            {
+                return overlayContentTemplate;
+            }
+            set
+            {
+                if (this.overlayContentTemplate != value)
+                {
+                    this.overlayContentTemplate = value;
+                    FirePropertyChanged("OverlayContentTemplate");
+                }
+            }
+        }
+
         //public Library.MovieItem InternalMovieItem;
 
         //hd/dvd/blu-ray icon
