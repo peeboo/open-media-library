@@ -924,19 +924,19 @@
             this.addToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.contextPeople.Name = "contextMenuStrip1";
-            this.contextPeople.Size = new System.Drawing.Size(117, 48);
+            this.contextPeople.Size = new System.Drawing.Size(108, 48);
             // 
             // addToolStripMenuItem
             // 
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.addToolStripMenuItem.Text = "Add";
             this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
@@ -971,26 +971,26 @@
             this.deleteImageToolStripMenuItem,
             this.updateFromMetadataToolStripMenuItem1});
             this.contextImage.Name = "contextImage";
-            this.contextImage.Size = new System.Drawing.Size(203, 70);
+            this.contextImage.Size = new System.Drawing.Size(195, 70);
             // 
             // selectImageToolStripMenuItem
             // 
             this.selectImageToolStripMenuItem.Name = "selectImageToolStripMenuItem";
-            this.selectImageToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.selectImageToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.selectImageToolStripMenuItem.Text = "Select Image";
             this.selectImageToolStripMenuItem.Click += new System.EventHandler(this.selectImageToolStripMenuItem_Click);
             // 
             // deleteImageToolStripMenuItem
             // 
             this.deleteImageToolStripMenuItem.Name = "deleteImageToolStripMenuItem";
-            this.deleteImageToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.deleteImageToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.deleteImageToolStripMenuItem.Text = "Delete Image";
             this.deleteImageToolStripMenuItem.Click += new System.EventHandler(this.deleteImageToolStripMenuItem_Click);
             // 
             // updateFromMetadataToolStripMenuItem1
             // 
             this.updateFromMetadataToolStripMenuItem1.Name = "updateFromMetadataToolStripMenuItem1";
-            this.updateFromMetadataToolStripMenuItem1.Size = new System.Drawing.Size(202, 22);
+            this.updateFromMetadataToolStripMenuItem1.Size = new System.Drawing.Size(194, 22);
             this.updateFromMetadataToolStripMenuItem1.Text = "Update from metadata";
             this.updateFromMetadataToolStripMenuItem1.Click += new System.EventHandler(this.updateFromMetadataToolStripMenuItem1_Click);
             // 
@@ -1036,19 +1036,19 @@
             this.setSingleBackdropToolStripMenuItem,
             this.clearSingleBackdropToolStripMenuItem});
             this.contextBackdrop.Name = "contextBackdrop";
-            this.contextBackdrop.Size = new System.Drawing.Size(202, 48);
+            this.contextBackdrop.Size = new System.Drawing.Size(203, 48);
             // 
             // setSingleBackdropToolStripMenuItem
             // 
             this.setSingleBackdropToolStripMenuItem.Name = "setSingleBackdropToolStripMenuItem";
-            this.setSingleBackdropToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.setSingleBackdropToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.setSingleBackdropToolStripMenuItem.Text = "Set as single backdrop";
             this.setSingleBackdropToolStripMenuItem.Click += new System.EventHandler(this.setSingleBackdropToolStripMenuItem_Click);
             // 
             // clearSingleBackdropToolStripMenuItem
             // 
             this.clearSingleBackdropToolStripMenuItem.Name = "clearSingleBackdropToolStripMenuItem";
-            this.clearSingleBackdropToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.clearSingleBackdropToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.clearSingleBackdropToolStripMenuItem.Text = "Clear as single backdrop";
             this.clearSingleBackdropToolStripMenuItem.Click += new System.EventHandler(this.clearSingleBackdropToolStripMenuItem_Click);
             // 

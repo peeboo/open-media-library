@@ -79,23 +79,26 @@ namespace OMLDatabaseEditor
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.splitContainerNavigator = new DevExpress.XtraEditors.SplitContainerControl();
             this.mainNav = new DevExpress.XtraNavBar.NavBarControl();
-            this.groupBioData = new DevExpress.XtraNavBar.NavBarGroup();
-            this.navBarGroupControlContainer5 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
-            this.lbBioData = new DevExpress.XtraEditors.ListBoxControl();
-            this.navBarGroupControlContainer2 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
-            this.lbMetadata = new DevExpress.XtraEditors.ListBoxControl();
-            this.navBarGroupControlContainer3 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
-            this.lbImport = new DevExpress.XtraEditors.ListBoxControl();
+            this.groupMediaTree = new DevExpress.XtraNavBar.NavBarGroup();
             this.navBarGroupControlContainer4 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.treeMedia = new System.Windows.Forms.TreeView();
             this.cmsMediaTree = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miCreateFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.miDeleteFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.miCreateTitle = new System.Windows.Forms.ToolStripMenuItem();
+            this.navBarGroupControlContainer2 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
+            this.lbMetadata = new DevExpress.XtraEditors.ListBoxControl();
+            this.navBarGroupControlContainer3 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
+            this.lbImport = new DevExpress.XtraEditors.ListBoxControl();
+            this.navBarGroupControlContainer5 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
+            this.lbBioData = new DevExpress.XtraEditors.ListBoxControl();
+            this.cmsSimpleAddRemove = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.miAdd = new System.Windows.Forms.ToolStripMenuItem();
+            this.miRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.navBarGroupControlContainer6 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.lbGenreMetadata = new DevExpress.XtraEditors.ListBoxControl();
             this.navBarGroupControlContainer8 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
-            this.groupMediaTree = new DevExpress.XtraNavBar.NavBarGroup();
+            this.groupBioData = new DevExpress.XtraNavBar.NavBarGroup();
             this.groupGenresMetadata = new DevExpress.XtraNavBar.NavBarGroup();
             this.groupTags = new DevExpress.XtraNavBar.NavBarGroup();
             this.groupMetadata = new DevExpress.XtraNavBar.NavBarGroup();
@@ -130,14 +133,15 @@ namespace OMLDatabaseEditor
             this.splitContainerNavigator.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainNav)).BeginInit();
             this.mainNav.SuspendLayout();
-            this.navBarGroupControlContainer5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lbBioData)).BeginInit();
+            this.navBarGroupControlContainer4.SuspendLayout();
+            this.cmsMediaTree.SuspendLayout();
             this.navBarGroupControlContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbMetadata)).BeginInit();
             this.navBarGroupControlContainer3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbImport)).BeginInit();
-            this.navBarGroupControlContainer4.SuspendLayout();
-            this.cmsMediaTree.SuspendLayout();
+            this.navBarGroupControlContainer5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lbBioData)).BeginInit();
+            this.cmsSimpleAddRemove.SuspendLayout();
             this.navBarGroupControlContainer6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbGenreMetadata)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTitles)).BeginInit();
@@ -581,69 +585,15 @@ namespace OMLDatabaseEditor
             this.mainNav.ActiveGroupChanged += new DevExpress.XtraNavBar.NavBarGroupEventHandler(this.mainNav_ActiveGroupChanged);
             this.mainNav.NavPaneStateChanged += new System.EventHandler(this.mainNav_NavPaneStateChanged);
             // 
-            // groupBioData
+            // groupMediaTree
             // 
-            this.groupBioData.Caption = "People";
-            this.groupBioData.ControlContainer = this.navBarGroupControlContainer5;
-            this.groupBioData.GroupClientHeight = 80;
-            this.groupBioData.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
-            this.groupBioData.LargeImage = global::OMLDatabaseEditor.Properties.Resources.text_html;
-            this.groupBioData.Name = "groupBioData";
-            // 
-            // navBarGroupControlContainer5
-            // 
-            this.navBarGroupControlContainer5.Controls.Add(this.lbBioData);
-            this.navBarGroupControlContainer5.Name = "navBarGroupControlContainer5";
-            this.navBarGroupControlContainer5.Size = new System.Drawing.Size(175, 352);
-            this.navBarGroupControlContainer5.TabIndex = 4;
-            // 
-            // lbBioData
-            // 
-            this.lbBioData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbBioData.Location = new System.Drawing.Point(0, 0);
-            this.lbBioData.Name = "lbBioData";
-            this.lbBioData.Size = new System.Drawing.Size(175, 352);
-            this.lbBioData.TabIndex = 0;
-            this.lbBioData.DrawItem += new DevExpress.XtraEditors.ListBoxDrawItemEventHandler(this.lbBioData_DrawItem);
-            this.lbBioData.SelectedIndexChanged += new System.EventHandler(this.lbBioData_SelectedIndexChanged);
-            // 
-            // navBarGroupControlContainer2
-            // 
-            this.navBarGroupControlContainer2.Controls.Add(this.lbMetadata);
-            this.navBarGroupControlContainer2.Name = "navBarGroupControlContainer2";
-            this.navBarGroupControlContainer2.Size = new System.Drawing.Size(138, 210);
-            this.navBarGroupControlContainer2.TabIndex = 1;
-            // 
-            // lbMetadata
-            // 
-            this.lbMetadata.DisplayMember = "PluginName";
-            this.lbMetadata.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbMetadata.HotTrackItems = true;
-            this.lbMetadata.HotTrackSelectMode = DevExpress.XtraEditors.HotTrackSelectMode.SelectItemOnClick;
-            this.lbMetadata.Location = new System.Drawing.Point(0, 0);
-            this.lbMetadata.Name = "lbMetadata";
-            this.lbMetadata.Size = new System.Drawing.Size(138, 210);
-            this.lbMetadata.TabIndex = 0;
-            this.lbMetadata.SelectedIndexChanged += new System.EventHandler(this.lbMetadata_SelectedIndexChanged);
-            // 
-            // navBarGroupControlContainer3
-            // 
-            this.navBarGroupControlContainer3.Controls.Add(this.lbImport);
-            this.navBarGroupControlContainer3.Name = "navBarGroupControlContainer3";
-            this.navBarGroupControlContainer3.Size = new System.Drawing.Size(175, 352);
-            this.navBarGroupControlContainer3.TabIndex = 2;
-            // 
-            // lbImport
-            // 
-            this.lbImport.DisplayMember = "Menu";
-            this.lbImport.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbImport.HotTrackItems = true;
-            this.lbImport.HotTrackSelectMode = DevExpress.XtraEditors.HotTrackSelectMode.SelectItemOnClick;
-            this.lbImport.Location = new System.Drawing.Point(0, 0);
-            this.lbImport.Name = "lbImport";
-            this.lbImport.Size = new System.Drawing.Size(175, 352);
-            this.lbImport.TabIndex = 0;
-            this.lbImport.SelectedIndexChanged += new System.EventHandler(this.lbImport_SelectedIndexChanged);
+            this.groupMediaTree.Caption = "Media";
+            this.groupMediaTree.ControlContainer = this.navBarGroupControlContainer4;
+            this.groupMediaTree.Expanded = true;
+            this.groupMediaTree.GroupClientHeight = 80;
+            this.groupMediaTree.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
+            this.groupMediaTree.LargeImage = global::OMLDatabaseEditor.Properties.Resources.applications_multimedia;
+            this.groupMediaTree.Name = "groupMediaTree";
             // 
             // navBarGroupControlContainer4
             // 
@@ -696,6 +646,85 @@ namespace OMLDatabaseEditor
             this.miCreateTitle.Text = "Create Title";
             this.miCreateTitle.Click += new System.EventHandler(this.miCreateTitle_Click);
             // 
+            // navBarGroupControlContainer2
+            // 
+            this.navBarGroupControlContainer2.Controls.Add(this.lbMetadata);
+            this.navBarGroupControlContainer2.Name = "navBarGroupControlContainer2";
+            this.navBarGroupControlContainer2.Size = new System.Drawing.Size(138, 210);
+            this.navBarGroupControlContainer2.TabIndex = 1;
+            // 
+            // lbMetadata
+            // 
+            this.lbMetadata.DisplayMember = "PluginName";
+            this.lbMetadata.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbMetadata.HotTrackItems = true;
+            this.lbMetadata.HotTrackSelectMode = DevExpress.XtraEditors.HotTrackSelectMode.SelectItemOnClick;
+            this.lbMetadata.Location = new System.Drawing.Point(0, 0);
+            this.lbMetadata.Name = "lbMetadata";
+            this.lbMetadata.Size = new System.Drawing.Size(138, 210);
+            this.lbMetadata.TabIndex = 0;
+            this.lbMetadata.SelectedIndexChanged += new System.EventHandler(this.lbMetadata_SelectedIndexChanged);
+            // 
+            // navBarGroupControlContainer3
+            // 
+            this.navBarGroupControlContainer3.Controls.Add(this.lbImport);
+            this.navBarGroupControlContainer3.Name = "navBarGroupControlContainer3";
+            this.navBarGroupControlContainer3.Size = new System.Drawing.Size(175, 352);
+            this.navBarGroupControlContainer3.TabIndex = 2;
+            // 
+            // lbImport
+            // 
+            this.lbImport.DisplayMember = "Menu";
+            this.lbImport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbImport.HotTrackItems = true;
+            this.lbImport.HotTrackSelectMode = DevExpress.XtraEditors.HotTrackSelectMode.SelectItemOnClick;
+            this.lbImport.Location = new System.Drawing.Point(0, 0);
+            this.lbImport.Name = "lbImport";
+            this.lbImport.Size = new System.Drawing.Size(175, 352);
+            this.lbImport.TabIndex = 0;
+            this.lbImport.SelectedIndexChanged += new System.EventHandler(this.lbImport_SelectedIndexChanged);
+            // 
+            // navBarGroupControlContainer5
+            // 
+            this.navBarGroupControlContainer5.Controls.Add(this.lbBioData);
+            this.navBarGroupControlContainer5.Name = "navBarGroupControlContainer5";
+            this.navBarGroupControlContainer5.Size = new System.Drawing.Size(175, 352);
+            this.navBarGroupControlContainer5.TabIndex = 4;
+            // 
+            // lbBioData
+            // 
+            this.lbBioData.ContextMenuStrip = this.cmsSimpleAddRemove;
+            this.lbBioData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbBioData.ItemHeight = 18;
+            this.lbBioData.Location = new System.Drawing.Point(0, 0);
+            this.lbBioData.Name = "lbBioData";
+            this.lbBioData.Size = new System.Drawing.Size(175, 352);
+            this.lbBioData.TabIndex = 0;
+            this.lbBioData.DrawItem += new DevExpress.XtraEditors.ListBoxDrawItemEventHandler(this.lbBioData_DrawItem);
+            this.lbBioData.SelectedIndexChanged += new System.EventHandler(this.lbBioData_SelectedIndexChanged);
+            // 
+            // cmsSimpleAddRemove
+            // 
+            this.cmsSimpleAddRemove.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miAdd,
+            this.miRemove});
+            this.cmsSimpleAddRemove.Name = "cmsSimpleAddRemove";
+            this.cmsSimpleAddRemove.Size = new System.Drawing.Size(118, 48);
+            // 
+            // miAdd
+            // 
+            this.miAdd.Name = "miAdd";
+            this.miAdd.Size = new System.Drawing.Size(117, 22);
+            this.miAdd.Text = "Add";
+            this.miAdd.Click += new System.EventHandler(this.miAdd_Click);
+            // 
+            // miRemove
+            // 
+            this.miRemove.Name = "miRemove";
+            this.miRemove.Size = new System.Drawing.Size(117, 22);
+            this.miRemove.Text = "Remove";
+            this.miRemove.Click += new System.EventHandler(this.miRemove_Click);
+            // 
             // navBarGroupControlContainer6
             // 
             this.navBarGroupControlContainer6.Controls.Add(this.lbGenreMetadata);
@@ -705,14 +734,16 @@ namespace OMLDatabaseEditor
             // 
             // lbGenreMetadata
             // 
+            this.lbGenreMetadata.ContextMenuStrip = this.cmsSimpleAddRemove;
             this.lbGenreMetadata.DisplayMember = "Menu";
             this.lbGenreMetadata.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbGenreMetadata.HotTrackItems = true;
             this.lbGenreMetadata.HotTrackSelectMode = DevExpress.XtraEditors.HotTrackSelectMode.SelectItemOnClick;
+            this.lbGenreMetadata.ItemHeight = 18;
             this.lbGenreMetadata.Location = new System.Drawing.Point(0, 0);
             this.lbGenreMetadata.Name = "lbGenreMetadata";
             this.lbGenreMetadata.Size = new System.Drawing.Size(175, 352);
             this.lbGenreMetadata.TabIndex = 1;
+            this.lbGenreMetadata.DrawItem += new DevExpress.XtraEditors.ListBoxDrawItemEventHandler(this.lbGenreMetadata_DrawItem);
             this.lbGenreMetadata.SelectedIndexChanged += new System.EventHandler(this.lbGenreMetadata_SelectedIndexChanged);
             // 
             // navBarGroupControlContainer8
@@ -721,15 +752,14 @@ namespace OMLDatabaseEditor
             this.navBarGroupControlContainer8.Size = new System.Drawing.Size(175, 304);
             this.navBarGroupControlContainer8.TabIndex = 6;
             // 
-            // groupMediaTree
+            // groupBioData
             // 
-            this.groupMediaTree.Caption = "Media";
-            this.groupMediaTree.ControlContainer = this.navBarGroupControlContainer4;
-            this.groupMediaTree.Expanded = true;
-            this.groupMediaTree.GroupClientHeight = 80;
-            this.groupMediaTree.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
-            this.groupMediaTree.LargeImage = global::OMLDatabaseEditor.Properties.Resources.applications_multimedia;
-            this.groupMediaTree.Name = "groupMediaTree";
+            this.groupBioData.Caption = "People";
+            this.groupBioData.ControlContainer = this.navBarGroupControlContainer5;
+            this.groupBioData.GroupClientHeight = 80;
+            this.groupBioData.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
+            this.groupBioData.LargeImage = global::OMLDatabaseEditor.Properties.Resources.text_html;
+            this.groupBioData.Name = "groupBioData";
             // 
             // groupGenresMetadata
             // 
@@ -773,14 +803,18 @@ namespace OMLDatabaseEditor
             this.genreMetaDataEditor.Location = new System.Drawing.Point(298, 209);
             this.genreMetaDataEditor.Name = "genreMetaDataEditor";
             this.genreMetaDataEditor.Size = new System.Drawing.Size(183, 150);
+            this.genreMetaDataEditor.Status = OMLDatabaseEditor.Controls.GenreMetaDataEditor.GenreMetaDataStatus.Normal;
             this.genreMetaDataEditor.TabIndex = 5;
+            this.genreMetaDataEditor.GenreMetaDataChanged += new OMLDatabaseEditor.Controls.GenreMetaDataEditor.GenreMetaDataChangeEventHandler(this.genreMetaDataEditor_GenreMetaDataChanged);
             // 
             // bioDataEditor
             // 
             this.bioDataEditor.Location = new System.Drawing.Point(13, 209);
             this.bioDataEditor.Name = "bioDataEditor";
             this.bioDataEditor.Size = new System.Drawing.Size(234, 213);
+            this.bioDataEditor.Status = OMLDatabaseEditor.Controls.BioDataEditor.BioDataStatus.Normal;
             this.bioDataEditor.TabIndex = 4;
+            this.bioDataEditor.BioDataChanged += new OMLDatabaseEditor.Controls.BioDataEditor.BioDataChangeEventHandler(this.bioDataEditor_BioDataChanged);
             // 
             // splitContainerTitles
             // 
@@ -1004,14 +1038,15 @@ namespace OMLDatabaseEditor
             this.splitContainerNavigator.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mainNav)).EndInit();
             this.mainNav.ResumeLayout(false);
-            this.navBarGroupControlContainer5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.lbBioData)).EndInit();
+            this.navBarGroupControlContainer4.ResumeLayout(false);
+            this.cmsMediaTree.ResumeLayout(false);
             this.navBarGroupControlContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbMetadata)).EndInit();
             this.navBarGroupControlContainer3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbImport)).EndInit();
-            this.navBarGroupControlContainer4.ResumeLayout(false);
-            this.cmsMediaTree.ResumeLayout(false);
+            this.navBarGroupControlContainer5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.lbBioData)).EndInit();
+            this.cmsSimpleAddRemove.ResumeLayout(false);
             this.navBarGroupControlContainer6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbGenreMetadata)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTitles)).EndInit();
@@ -1121,6 +1156,9 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem miCreateTitle;
         private System.Windows.Forms.ToolStripMenuItem miDeleteFolder;
         private DevExpress.XtraEditors.ListBoxControl lbGenreMetadata;
+        private System.Windows.Forms.ContextMenuStrip cmsSimpleAddRemove;
+        private System.Windows.Forms.ToolStripMenuItem miAdd;
+        private System.Windows.Forms.ToolStripMenuItem miRemove;
     }
 }
 
