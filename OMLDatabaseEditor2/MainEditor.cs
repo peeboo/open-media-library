@@ -302,238 +302,6 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.Default;
         }
 
-        /// <summary>
-        /// This populates the media tree view
-        /// </summary>
-        private void PopulateMediaTree()
-        {
-            Dictionary<int, Title> mediatreefolders = TitleCollectionManager.GetAllTitles(TitleTypes.AllFolders).ToDictionary(k => k.Id);
-
-            if (_mediaTree == null)
-            {
-                _mediaTree = new Dictionary<int, TreeNode>();
-            }
-            else
-            {
-                _mediaTree.Clear();
-            }
-
-            if (_parentchildRelationship == null)
-            {
-                _parentchildRelationship = new Dictionary<int, int>();
-            }
-            else
-            {
-                _parentchildRelationship.Clear();
-            }
-
-            treeMedia.Nodes.Clear();
-            TreeNode rootnode = new TreeNode("All Media");
-            rootnode.Name = "All Media";
-            treeMedia.Nodes.Add(rootnode); 
-            //SelectedTreeRoot = null;
-            
-            foreach (KeyValuePair<int, Title> title in mediatreefolders)
-            {
-                TreeNode tn = new TreeNode(title.Value.Name);
-                tn.Name = title.Value.Id.ToString();
-                _mediaTree[title.Value.Id] = tn;
-                _parentchildRelationship[title.Value.Id] = title.Value.ParentTitleId;
-                //if (title.Value.Id == title.Value.ParentTitleId) { rootnode.Nodes.Add(tn); }
-                if ((title.Value.TitleType & TitleTypes.Root) != 0) { rootnode.Nodes.Add(tn); }
-            }
-
-
-            foreach (KeyValuePair<int, TreeNode> kvp in _mediaTree)
-            {
-                if (kvp.Key != _parentchildRelationship[kvp.Key])
-                {
-                    // This title has a parent.
-                    if (_mediaTree.ContainsKey(_parentchildRelationship[kvp.Key]))
-                    {
-                        _mediaTree[_parentchildRelationship[kvp.Key]].Nodes.Add(_mediaTree[kvp.Key]);
-                    }
-                }
-            }
-        }
-
-/*        private void PopulateMovieListV2(int? roottitleid)
-        {
-            lbTitles.Items.Clear();
-
-            Dictionary<int, List<int>> _parentchildRelationship = new Dictionary<int,List<int>>(); // titleid, parentid
-            foreach (KeyValuePair<int, Title> title in _movieList)
-            {
-                // Create relationship dictionary
-                if (title.Value.Id != title.Value.ParentTitleId)
-                {
-                    if (!_parentchildRelationship.ContainsKey(title.Value.ParentTitleId))
-                    {
-                        _parentchildRelationship[title.Value.ParentTitleId] = new List<int>();
-                    }
-                    _parentchildRelationship[title.Value.ParentTitleId].Add(title.Value.Id);
-                }
-            }
-
-            if (roottitleid != null)
-            {
-                // We are looking at a sub folder
-                PopulateMovieListV2Sub(roottitleid, _parentchildRelationship, 0);
-            }
-            else
-            {
-                // We are looking at all items including root items
-                foreach (KeyValuePair<int, Title> title in _movieList)
-                {
-                    if ((title.Value.TitleType & TitleTypes.Root) != 0)
-                    {
-                        if ((title.Value.TitleType & TitleTypes.AllFolders) != 0)
-                        {
-                            // This is a folder. Query child items
-                            PopulateMovieListV2Sub(title.Value.Id, _parentchildRelationship, 1);
-                        }
-                        else
-                        {
-                            // This is a media title at the root level. Show it
-                            lbTitles.Items.Insert(0,title.Value);
-                        }
-                    }
-                }
-            }
-
-
-            if (titleEditor.EditedTitle != null)
-            {
-                lbTitles.SelectedItem = TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
-            }
-        }
-
-        private void PopulateMovieListV2Sub(int? roottitleid, Dictionary<int, List<int>> _parentchildRelationship, int Level)
-        {
-            if (_movieList.ContainsKey((int)roottitleid))
-            {
-                if ((OMLEngine.Settings.OMLSettings.ShowSubFolderTitles) ||
-                    ((_movieList[(int)roottitleid].TitleType & TitleTypes.AllMedia) != 0))
-                {
-                    lbTitles.Items.Add(_movieList[(int)roottitleid]);
-                }
-
-                if ((OMLEngine.Settings.OMLSettings.ShowSubFolderTitles) || (Level < 1))
-                {
-
-                    if (_parentchildRelationship.ContainsKey((int)roottitleid))
-                    {
-                        foreach (int id in _parentchildRelationship[(int)roottitleid])
-                        {
-                            PopulateMovieListV2Sub(id, _parentchildRelationship, Level + 1);
-                        }
-                    }
-                }
-            }
-        }*/
-
-
-        private void PopulateMovieListV2(int? roottitleid)
-        {
-            lbTitles.Items.Clear();
-
-            if (roottitleid != null)
-            {
-                // We are looking at a parent item
-                PopulateMovieListV2Sub(roottitleid, 0);
-            }
-            else
-            {
-                // We are looking at all items including root items
-                Title amt = new Title();
-                amt.Name = "All Media";
-                amt.TitleType = TitleTypes.Collection;
-                lbTitles.Items.Add(amt);
-
-                // Get All Root Titles
-                var titles = (from t in _movieList
-                                      where (t.Value.TitleType & TitleTypes.AllMedia) != 0 &&
-                                      (t.Value.TitleType & TitleTypes.Root) != 0
-                                      select t.Value).ToList();
-                
-                lbTitles.Items.AddRange(SortTitles(titles).ToArray());
-
-                // Get All Root Folders
-                titles = (from t in _movieList
-                          where (t.Value.TitleType & TitleTypes.AllFolders) != 0 &&
-                          (t.Value.TitleType & TitleTypes.Root) != 0
-                          select t.Value).ToList();
-
-                foreach (Title title in SortTitles(titles))
-                {
-                    // This is a folder. Query child items
-                    PopulateMovieListV2Sub(title.Id, 1);
-                }
-            }
-
-
-            if (titleEditor.EditedTitle != null)
-            {
-                lbTitles.SelectedItem = TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
-            }
-        }
-
-        private void PopulateMovieListV2Sub(int? roottitleid, int Level)
-        {
-            if ((OMLEngine.Settings.OMLSettings.ShowSubFolderTitles) || (Level < 1))
-            {
-                if (_movieList.ContainsKey((int)roottitleid))
-                {
-
-                    lbTitles.Items.Add(_movieList[(int)roottitleid]);
-
-                    // Get All Root Titles
-                    var titles = (from t in _movieList
-                                          where (t.Value.TitleType & TitleTypes.AllMedia) != 0 &&
-                                          t.Value.ParentTitleId == roottitleid
-                                          select t.Value).ToList();
-
-                    lbTitles.Items.AddRange(SortTitles(titles).ToArray());
-
-                    // Get All Root Folders
-                    titles =  (from t in _movieList
-                              where (t.Value.TitleType & TitleTypes.AllFolders) != 0 &&
-                              t.Value.ParentTitleId == roottitleid
-                              select t.Value).ToList();
-
-                    foreach (Title title in SortTitles(titles))
-                    {
-                        // If statement to stop stack overflow when parenttitid = id
-                        if (title.Id != roottitleid)
-                        {
-                            PopulateMovieListV2Sub(title.Id, 1);
-                        }
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<Title> SortTitles(IEnumerable<Title> titles)
-        {
-            switch (OMLEngine.Settings.OMLSettings.DBETitleSortOrder)
-            {
-                case "Name":
-                    return titles.OrderBy(st => st.SortName);
-                case "Runtime":
-                    return titles.OrderBy(st => st.Runtime);
-                case "DateAdded":
-                    return titles.OrderBy(st => st.DateAdded);
-                case "ModifiedDate":
-                    return titles.OrderBy(st => st.ModifiedDate);
-                case "ProductionYear":
-                    return titles.OrderBy(st => st.ProductionYear);
-                case "ReleaseDate":
-                    return titles.OrderBy(st => st.ReleaseDate);
-                default:
-                    return titles.OrderBy(st => st.SortName);
-            }
-        }
-
 
  //       private void PopulateMovieList(List<Title> titles)
         /*private void PopulateMovieList(Dictionary<int, Title> titles)
@@ -976,7 +744,23 @@ namespace OMLDatabaseEditor
         {
             if (sender == saveToolStripButton || sender == saveToolStripMenuItem)
             {
-                SaveChanges();
+                if (mainNav.ActiveGroup == groupMediaTree)
+                {
+                    SaveChanges();
+                }
+                if (mainNav.ActiveGroup == groupGenresMetadata)
+                {
+                    TitleCollectionManager.SaveGenreMetaDataChanges();
+                    genreMetaDataEditor.Status = GenreMetaDataEditor.GenreMetaDataStatus.Normal;
+                    this.Text = APP_TITLE + " - " + genreMetaDataEditor.EditedGenreMetaData.Name;
+
+                }
+                if (mainNav.ActiveGroup == groupBioData)
+                {
+                    TitleCollectionManager.SaveBioMetaDataChanges();
+                    bioDataEditor.Status = BioDataEditor.BioDataStatus.Normal;
+                    this.Text = APP_TITLE + " - " + bioDataEditor.EditedBioData.FullName;
+                }
             } 
             else if (sender == exitToolStripMenuItem)
             {
@@ -1122,74 +906,7 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private void mainNav_ActiveGroupChanged(object sender, DevExpress.XtraNavBar.NavBarGroupEventArgs e)
-        {
-            _loading = true;
-            ToggleSaveState(false);
 
-
-            if (e.Group == groupMetadata) 
-                LoadMetadata();
-
-            if (e.Group == groupImport)
-                LoadImporters();
-
-
-            if (e.Group == groupMediaTree)
-            {
-                LoadMovies();
-
-                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Dock = DockStyle.Fill;
-                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
-                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
-                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = false;
-            }
-            
-            if (e.Group == groupBioData)
-            {
-                lbBioData.Items.Clear();
-                lbBioData.Items.AddRange(TitleCollectionManager.GetAllBioDatas().ToArray());
-                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Dock = DockStyle.Fill;
-                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
-                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
-                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = true;
-            }
-
-            if (e.Group == groupGenresMetadata)
-            {
-                lbGenreMetadata.Items.Clear();
-                lbGenreMetadata.Items.AddRange(TitleCollectionManager.GetAllGenreMetaDatas().ToArray());
-
-                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Dock = DockStyle.Fill;
-                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = true;
-                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
-                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = false;
-            }
-
-            _loading = false;
-        }
-
-        /*private void lbMovies_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (_loading) return;
-            Cursor = Cursors.WaitCursor;
-            if (SaveCurrentMovie() == DialogResult.Cancel)
-            {
-                _loading = true; //bypasses second save movie dialog
-                lbMovies.SelectedItem = TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
-                _loading = false;
-            }
-            else
-            {
-                Title selectedTitle = lbMovies.SelectedItem as Title;
-                if (selectedTitle == null) return;
-
-                titleEditor.LoadDVD(selectedTitle);
-                this.Text = APP_TITLE + " - " + selectedTitle.Name;
-                ToggleSaveState(false);
-            }
-            Cursor = Cursors.Default;
-        }*/
 
         private void lbMetadata_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1330,85 +1047,6 @@ namespace OMLDatabaseEditor
              */
         }
 
-       /* private void lbMovies_DrawItem(object sender, ListBoxDrawItemEventArgs e)
-        {
-            if (e.Item == null)
-                return;
-
-            Title currentTitle = TitleCollectionManager.GetTitle((int)e.Item);
-            if (currentTitle.PercentComplete <= .3M)
-            {
-                if (Percent30 == null)
-                {
-                    Percent30 = (AppearanceObject)e.Appearance.Clone();
-                    Percent30.BackColor = Color.Coral;
-                    Percent30.BackColor2 = Color.Crimson;
-                    Percent30.GradientMode = LinearGradientMode.Vertical;
-                }
-                e.Appearance.Combine(Percent30);
-            }
-            else if (currentTitle.PercentComplete <= .4M)
-            {
-                if (Percent40 == null)
-                {
-                    Percent40 = (AppearanceObject)e.Appearance.Clone();
-                    Percent40.ForeColor = Color.White;
-                    Percent40.BackColor = Color.CornflowerBlue;
-                    Percent40.BackColor2 = Color.CadetBlue;
-                    Percent40.GradientMode = LinearGradientMode.Vertical;
-                }
-                e.Appearance.Combine(Percent40);
-            }
-            else if (currentTitle.PercentComplete <= .5M)
-            {
-                if (Percent50 == null)
-                {
-                    Percent50 = (AppearanceObject)e.Appearance.Clone();
-                    Percent50.ForeColor = Color.Black;
-                    Percent50.BackColor = Color.MediumSpringGreen;
-                    Percent50.BackColor2 = Color.LightSeaGreen;
-                    Percent50.GradientMode = LinearGradientMode.Vertical;
-                }
-                e.Appearance.Combine(Percent50);
-            }
-            else if (currentTitle.PercentComplete <= .6M)
-            {
-                if (Percent60 == null)
-                {
-                    Percent60 = (AppearanceObject)e.Appearance.Clone();
-                    Percent60.ForeColor = Color.Black;
-                    Percent60.BackColor = Color.Yellow;
-                    Percent60.BackColor2 = Color.Gold;
-                    Percent60.GradientMode = LinearGradientMode.Vertical;
-                }
-                e.Appearance.Combine(Percent60);
-            }
-            else if (currentTitle.PercentComplete <= .7M)
-            {
-                if (Percent70 == null)
-                {
-                    Percent70 = (AppearanceObject)e.Appearance.Clone();
-                    Percent70.ForeColor = Color.Black;
-                    Percent70.BackColor = Color.Silver;
-                    Percent70.BackColor2 = Color.SkyBlue;
-                    Percent70.GradientMode = LinearGradientMode.Vertical;
-                }
-                e.Appearance.Combine(Percent70);
-            }
-            else if (currentTitle.PercentComplete <= .8M)
-            {
-                if (Percent80 == null)
-                {
-                    Percent80 = (AppearanceObject)e.Appearance.Clone();
-                    Percent80.ForeColor = Color.Black;
-                    Percent80.BackColor = Color.SkyBlue;
-                    Percent80.BackColor2 = Color.White;
-                    Percent80.GradientMode = LinearGradientMode.Vertical;
-                }
-                e.Appearance.Combine(Percent80);
-            }
-        }*/
-
         private void filterTitles_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -1515,9 +1153,10 @@ namespace OMLDatabaseEditor
         private void manageMetadataMappingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MetadataMappings mdm = new MetadataMappings(this.titleEditor);
-            mdm.ShowDialog();            
+            mdm.ShowDialog();
         }
 
+        #region NavBar functions
         private void mainNav_NavPaneStateChanged(object sender, EventArgs e)
         {
             if (mainNav.OptionsNavPane.NavPaneState == DevExpress.XtraNavBar.NavPaneState.Collapsed)
@@ -1531,6 +1170,53 @@ namespace OMLDatabaseEditor
 
         }
 
+        private void mainNav_ActiveGroupChanged(object sender, DevExpress.XtraNavBar.NavBarGroupEventArgs e)
+        {
+            _loading = true;
+            ToggleSaveState(false);
+
+
+            if (e.Group == groupMetadata)
+                LoadMetadata();
+
+            if (e.Group == groupImport)
+                LoadImporters();
+
+
+            if (e.Group == groupMediaTree)
+            {
+                LoadMovies();
+
+                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Dock = DockStyle.Fill;
+                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
+                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
+                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = false;
+            }
+
+            if (e.Group == groupBioData)
+            {
+                lbBioData.Items.Clear();
+                lbBioData.Items.AddRange(TitleCollectionManager.GetAllBioDatas().ToArray());
+                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Dock = DockStyle.Fill;
+                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
+                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
+                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = true;
+            }
+
+            if (e.Group == groupGenresMetadata)
+            {
+                lbGenreMetadata.Items.Clear();
+                lbGenreMetadata.Items.AddRange(TitleCollectionManager.GetAllGenreMetaDatas().ToArray());
+
+                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Dock = DockStyle.Fill;
+                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = true;
+                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
+                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = false;
+            }
+
+            _loading = false;
+        }
+
         private void navBarControl1_NavPaneStateChanged(object sender, EventArgs e)
         {
             if (navBarControl1.OptionsNavPane.NavPaneState == DevExpress.XtraNavBar.NavPaneState.Collapsed)
@@ -1542,8 +1228,300 @@ namespace OMLDatabaseEditor
                 splitContainerTitles.SplitterPosition = navBarControl1.OptionsNavPane.ExpandedWidth + 4;
             }
         }
+        #endregion
+
+
+        #region Media Tree handling functions
+        /// <summary>
+        /// This populates the media tree view
+        /// </summary>
+        private void PopulateMediaTree()
+        {
+            Dictionary<int, Title> mediatreefolders = TitleCollectionManager.GetAllTitles(TitleTypes.AllFolders).ToDictionary(k => k.Id);
+
+            if (_mediaTree == null)
+            {
+                _mediaTree = new Dictionary<int, TreeNode>();
+            }
+            else
+            {
+                _mediaTree.Clear();
+            }
+
+            if (_parentchildRelationship == null)
+            {
+                _parentchildRelationship = new Dictionary<int, int>();
+            }
+            else
+            {
+                _parentchildRelationship.Clear();
+            }
+
+            treeMedia.Nodes.Clear();
+            TreeNode rootnode = new TreeNode("All Media");
+            rootnode.Name = "All Media";
+            treeMedia.Nodes.Add(rootnode);
+            //SelectedTreeRoot = null;
+
+            foreach (KeyValuePair<int, Title> title in mediatreefolders)
+            {
+                TreeNode tn = new TreeNode(title.Value.Name);
+                tn.Name = title.Value.Id.ToString();
+                _mediaTree[title.Value.Id] = tn;
+                _parentchildRelationship[title.Value.Id] = title.Value.ParentTitleId;
+                //if (title.Value.Id == title.Value.ParentTitleId) { rootnode.Nodes.Add(tn); }
+                if ((title.Value.TitleType & TitleTypes.Root) != 0) { rootnode.Nodes.Add(tn); }
+            }
+
+
+            foreach (KeyValuePair<int, TreeNode> kvp in _mediaTree)
+            {
+                if (kvp.Key != _parentchildRelationship[kvp.Key])
+                {
+                    // This title has a parent.
+                    if (_mediaTree.ContainsKey(_parentchildRelationship[kvp.Key]))
+                    {
+                        _mediaTree[_parentchildRelationship[kvp.Key]].Nodes.Add(_mediaTree[kvp.Key]);
+                    }
+                }
+            }
+        }
+
+        private void treeMedia_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        {
+            // Create the brushes
+            if (_brushTreeViewSelected == null)
+            {
+                _brushTreeViewSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.LimeGreen, Color.PaleGreen);
+            }
+
+
+            int x = e.Node.Bounds.X;
+            int y = e.Node.Bounds.Y;
+            int w = e.Node.Bounds.Width;
+            int h = e.Node.Bounds.Height;
+            int wt = (int)e.Graphics.MeasureString(e.Node.Text, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular)).Width + 2;
+
+            // Setup string formatting
+            StringFormat stf = new StringFormat();
+            stf.Trimming = StringTrimming.EllipsisCharacter;
+            stf.FormatFlags = StringFormatFlags.NoWrap;
+
+            e.Graphics.FillRectangle(new SolidBrush(Color.White), x, y, w, h);
+
+            if (e.Node.IsSelected)
+            {
+                e.Graphics.FillRectangle(_brushTreeViewSelected, x, y, wt, h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y, x - 2 + wt, y);
+                e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y - 1 + h, x - 2 + wt, y - 1 + h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x, y + 1, x, y - 2 + h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x - 1 + wt, y + 1, x - 1 + wt, y - 2 + h);
+
+            }
+
+            e.Graphics.DrawString(e.Node.Text, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 2, e.Bounds.Width, h), stf);
+
+            if (e.Node.Nodes.Count != 0)
+            {
+                if (e.Node.IsExpanded == true)
+                {
+                    Point p1 = new Point(x - 5, y + 5);
+                    Point p2 = new Point(x - 13, y + 13);
+                    Point p3 = new Point(x - 5, y + 13);
+                    e.Graphics.FillPolygon(new SolidBrush(Color.Black), new Point[] { p1, p2, p3 }, FillMode.Winding);
+                }
+                else
+                {
+                    Point p1 = new Point(x - 11, y + 5);
+                    Point p2 = new Point(x - 5, y + 9);
+                    Point p3 = new Point(x - 11, y + 13);
+                    e.Graphics.DrawLine(new Pen(Color.Black), p1, p2);
+                    e.Graphics.DrawLine(new Pen(Color.Black), p2, p3);
+                    e.Graphics.DrawLine(new Pen(Color.Black), p3, p1);
+                }
+            }
+        }
+
+        private void treeMedia_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            lbTitles.Items.Clear();
+            if (!string.IsNullOrEmpty(e.Node.Name))
+            {
+                if (treeMedia.SelectedNode.Name == "All Media")
+                {
+                    // Root Level selected
+                    SelectedTreeRoot = null;
+                    PopulateMovieListV2(SelectedTreeRoot);
+                }
+                else
+                {
+                    SelectedTreeRoot = Convert.ToInt32(e.Node.Name);
+                    PopulateMovieListV2(SelectedTreeRoot);
+                }
+            }
+            else
+            {
+                PopulateMovieListV2(null);
+            }
+        }
+
+        private void miCreateFolder_Click(object sender, EventArgs e)
+        {
+            Title folder = new Title();
+
+            //int selectedfolderid = 0;
+
+            if (treeMedia.SelectedNode.Name == "All Media")
+            {
+                // Root Node
+                folder.TitleType = TitleTypes.Root | TitleTypes.Collection;
+            }
+            else
+            {
+                int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
+                folder.ParentTitleId = parentid;
+                folder.TitleType = TitleTypes.Collection;
+                //selectedfolderid = Convert.ToInt32(treeMedia.SelectedNode.Name);
+            }
+
+            folder.Name = "New Folder";
+            TitleCollectionManager.AddTitle(folder);
+
+            // Generate the parentid if required
+            if (folder.ParentTitleId == 0)
+            {
+                folder.ParentTitleId = folder.Id;
+                TitleCollectionManager.SaveTitleUpdates();
+            }
+
+            _movieList.Add(folder.Id, folder);
+
+            PopulateMediaTree();
+
+            if (_mediaTree.ContainsKey(folder.Id))
+            {
+                treeMedia.SelectedNode = _mediaTree[folder.Id];
+            }
+        }
+
+        private void miDeleteFolder_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void miCreateTitle_Click(object sender, EventArgs e)
+        {
+            if (treeMedia.SelectedNode.Name == "All Media")
+            {
+                // Root Title
+                CreateTitle(null);
+            }
+            else
+            {
+                int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
+                CreateTitle(parentid);
+            }
+            //LoadMovies();
+            //_movieList.Add(titleEditor.EditedTitle.Id, titleEditor.EditedTitle);
+            //PopulateMovieListV2(SelectedTreeRoot);
+        }
+
+        private void treeMedia_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                Point p = new Point(e.X, e.Y);
+                TreeNode nodeUnderMouse = treeMedia.GetNodeAt(p);
+                if (nodeUnderMouse != null)
+                {
+                    treeMedia.SelectedNode = nodeUnderMouse;
+                }
+            }
+        }
+        #endregion
+
 
         #region TitleList functions
+        private void PopulateMovieListV2(int? roottitleid)
+        {
+            lbTitles.Items.Clear();
+
+            if (roottitleid != null)
+            {
+                // We are looking at a parent item
+                PopulateMovieListV2Sub(roottitleid, 0);
+            }
+            else
+            {
+                // We are looking at all items including root items
+                Title amt = new Title();
+                amt.Name = "All Media";
+                amt.TitleType = TitleTypes.Collection;
+                lbTitles.Items.Add(amt);
+
+                // Get All Root Titles
+                var titles = (from t in _movieList
+                              where (t.Value.TitleType & TitleTypes.AllMedia) != 0 &&
+                              (t.Value.TitleType & TitleTypes.Root) != 0
+                              select t.Value).ToList();
+
+                lbTitles.Items.AddRange(SortTitles(titles).ToArray());
+
+                // Get All Root Folders
+                titles = (from t in _movieList
+                          where (t.Value.TitleType & TitleTypes.AllFolders) != 0 &&
+                          (t.Value.TitleType & TitleTypes.Root) != 0
+                          select t.Value).ToList();
+
+                foreach (Title title in SortTitles(titles))
+                {
+                    // This is a folder. Query child items
+                    PopulateMovieListV2Sub(title.Id, 1);
+                }
+            }
+
+
+            if (titleEditor.EditedTitle != null)
+            {
+                lbTitles.SelectedItem = TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
+            }
+        }
+
+        private void PopulateMovieListV2Sub(int? roottitleid, int Level)
+        {
+            if ((OMLEngine.Settings.OMLSettings.ShowSubFolderTitles) || (Level < 1))
+            {
+                if (_movieList.ContainsKey((int)roottitleid))
+                {
+
+                    lbTitles.Items.Add(_movieList[(int)roottitleid]);
+
+                    // Get All Root Titles
+                    var titles = (from t in _movieList
+                                  where (t.Value.TitleType & TitleTypes.AllMedia) != 0 &&
+                                  t.Value.ParentTitleId == roottitleid
+                                  select t.Value).ToList();
+
+                    lbTitles.Items.AddRange(SortTitles(titles).ToArray());
+
+                    // Get All Root Folders
+                    titles = (from t in _movieList
+                              where (t.Value.TitleType & TitleTypes.AllFolders) != 0 &&
+                              t.Value.ParentTitleId == roottitleid
+                              select t.Value).ToList();
+
+                    foreach (Title title in SortTitles(titles))
+                    {
+                        // If statement to stop stack overflow when parenttitid = id
+                        if (title.Id != roottitleid)
+                        {
+                            PopulateMovieListV2Sub(title.Id, 1);
+                        }
+                    }
+                }
+            }
+        }
+
         private void lbTitles_DrawItem(object sender, DrawItemEventArgs e)
         {
             if (e.Index < 0) return;
@@ -1646,9 +1624,12 @@ namespace OMLDatabaseEditor
         }
         #endregion
 
-        #region Media Tree handling functions
-        private void treeMedia_DrawNode(object sender, DrawTreeNodeEventArgs e)
+
+        #region GenreMetaData Editing functions
+        private void lbGenreMetadata_DrawItem(object sender, ListBoxDrawItemEventArgs e)
         {
+            e.Handled = true;
+
             // Create the brushes
             if (_brushTreeViewSelected == null)
             {
@@ -1656,11 +1637,11 @@ namespace OMLDatabaseEditor
             }
 
 
-            int x = e.Node.Bounds.X;
-            int y = e.Node.Bounds.Y;
-            int w = e.Node.Bounds.Width;
-            int h = e.Node.Bounds.Height;
-            int wt = (int)e.Graphics.MeasureString(e.Node.Text, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular)).Width + 2;
+            int x = e.Bounds.X + 4;
+            int y = e.Bounds.Y;
+            int w = e.Bounds.Width;
+            int h = e.Bounds.Height;
+            int wt = (int)e.Graphics.MeasureString(e.Item.ToString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular)).Width + 2;
 
             // Setup string formatting
             StringFormat stf = new StringFormat();
@@ -1669,7 +1650,118 @@ namespace OMLDatabaseEditor
 
             e.Graphics.FillRectangle(new SolidBrush(Color.White), x, y, w, h);
 
-            if (e.Node.IsSelected)
+            if (lbGenreMetadata.SelectedItem == e.Item)
+            {
+                e.Graphics.FillRectangle(_brushTreeViewSelected, x, y, wt, h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y, x - 2 + wt, y);
+                e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y - 1 + h, x - 2 + wt, y - 1 + h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x, y + 1, x, y - 2 + h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x - 1 + wt, y + 1, x - 1 + wt, y - 2 + h);
+
+            }
+
+            e.Graphics.DrawString(e.Item.ToString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 2, e.Bounds.Width, h), stf);
+        }
+         
+        private void lbGenreMetadata_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SaveCurrentGenreMetaData();
+            if (lbGenreMetadata.SelectedItem != null)
+            {
+                genreMetaDataEditor.LoadGenre((GenreMetaData)lbGenreMetadata.SelectedItem);
+                this.Text = APP_TITLE + " - " + genreMetaDataEditor.EditedGenreMetaData.Name;
+            }
+        }
+
+        private void AddGenreMetaData()
+        {
+            SaveCurrentGenreMetaData();
+
+            GenreMetaData gmd = new GenreMetaData();
+            gmd.Name = "New Genre";
+            
+            lbGenreMetadata.Items.Add(gmd);
+            lbGenreMetadata.SelectedItem = gmd;
+
+            TitleCollectionManager.AddGenreMetaData(gmd);
+
+            genreMetaDataEditor.LoadGenre((GenreMetaData)gmd);
+        }
+
+        private void RemoveGenreMetaData()
+        {
+            if (lbGenreMetadata.SelectedItem != null)
+            {
+                TitleCollectionManager.RemoveGenreMetaData((GenreMetaData)lbGenreMetadata.SelectedItem);
+                lbGenreMetadata.Items.Remove(lbGenreMetadata.SelectedItem);
+            }
+        }
+
+        private DialogResult SaveCurrentGenreMetaData()
+        {
+            DialogResult result;
+            if (genreMetaDataEditor.EditedGenreMetaData != null && genreMetaDataEditor.Status == GenreMetaDataEditor.GenreMetaDataStatus.UnsavedChanges)
+            {
+                result = XtraMessageBox.Show("You have unsaved changes to " + genreMetaDataEditor.EditedGenreMetaData.Name + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
+                if (result == DialogResult.Yes)
+                {
+                    TitleCollectionManager.SaveGenreMetaDataChanges();           
+
+                    //_movieList[titleEditor.EditedTitle.Id] = titleEditor.EditedTitle;
+                    //SaveChanges();
+                }
+                if (result == DialogResult.No)
+                {
+                    // Force reload of title
+                    //titleEditor.EditedTitle.ReloadTitle();
+                    //lbTitles.Refresh();
+                }
+            }
+            else
+            {
+                result = DialogResult.Yes;
+            }
+            return result;
+        }
+
+        private void genreMetaDataEditor_GenreMetaDataChanged(object sender, EventArgs e)
+        {
+            if (genreMetaDataEditor.EditedGenreMetaData != null)
+                this.Text = APP_TITLE + " - " + genreMetaDataEditor.EditedGenreMetaData.Name + "*";
+            else
+                this.Text = APP_TITLE;
+
+            ToggleSaveState(true);
+        }
+        #endregion
+
+
+        #region BioData Editing functions
+        private void lbBioData_DrawItem(object sender, ListBoxDrawItemEventArgs e)
+        {
+            e.Handled = true;
+
+            // Create the brushes
+            if (_brushTreeViewSelected == null)
+            {
+                _brushTreeViewSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.LimeGreen, Color.PaleGreen);
+            }
+
+
+            int x = e.Bounds.X + 4;
+            int y = e.Bounds.Y;
+            int w = e.Bounds.Width;
+            int h = e.Bounds.Height;
+            int wt = (int)e.Graphics.MeasureString(e.Item.ToString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular)).Width + 2;
+
+            // Setup string formatting
+            StringFormat stf = new StringFormat();
+            stf.Trimming = StringTrimming.EllipsisCharacter;
+            stf.FormatFlags = StringFormatFlags.NoWrap;
+
+            e.Graphics.FillRectangle(new SolidBrush(Color.White), x, y, w, h);
+
+            if (lbBioData.SelectedItem == e.Item)
             {
                 e.Graphics.FillRectangle(_brushTreeViewSelected, x, y, wt, h);
                 e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y, x - 2 + wt, y);
@@ -1679,126 +1771,106 @@ namespace OMLDatabaseEditor
 
             }
 
-            e.Graphics.DrawString(e.Node.Text, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 2, e.Bounds.Width, h), stf);
+            e.Graphics.DrawString(e.Item.ToString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 2, e.Bounds.Width, h), stf);
+        }
 
-            if (e.Node.Nodes.Count != 0)
+        private void lbBioData_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SaveCurrentBioData();
+            if (lbBioData.SelectedItem != null)
             {
-                if (e.Node.IsExpanded == true)
-                {
-                    Point p1 = new Point(x - 5, y + 5);
-                    Point p2 = new Point(x - 13, y + 13);
-                    Point p3 = new Point(x - 5, y + 13);
-                    e.Graphics.FillPolygon(new SolidBrush(Color.Black), new Point[] { p1, p2, p3 }, FillMode.Winding);
-               }
-                else
-                {
-                    Point p1 = new Point(x - 11, y + 5);
-                    Point p2 = new Point(x - 5, y + 9);
-                    Point p3 = new Point(x - 11, y + 13);
-                    e.Graphics.DrawLine(new Pen(Color.Black), p1, p2);
-                    e.Graphics.DrawLine(new Pen(Color.Black), p2, p3);
-                    e.Graphics.DrawLine(new Pen(Color.Black), p3, p1);
-                }
+                bioDataEditor.LoadBioData((BioData)lbBioData.SelectedItem);
+                this.Text = APP_TITLE + " - " + bioDataEditor.EditedBioData.FullName;
             }
         }
 
-        private void treeMedia_AfterSelect(object sender, TreeViewEventArgs e)
+        private void AddBioData()
         {
-            lbTitles.Items.Clear();
-            if (!string.IsNullOrEmpty(e.Node.Name))
+            SaveCurrentBioData();
+
+            BioData bd = new BioData();
+            bd.FullName = "New Person";
+
+            lbBioData.Items.Add(bd);
+            lbBioData.SelectedItem = bd;
+
+            TitleCollectionManager.AddBioData(bd);
+
+            bioDataEditor.LoadBioData((BioData)bd);
+        }
+
+        private void RemoveBioData()
+        {
+            if (lbBioData.SelectedItem != null)
             {
-                if (treeMedia.SelectedNode.Name == "All Media")
+                TitleCollectionManager.RemoveBioData((BioData)lbBioData.SelectedItem);
+                lbBioData.Items.Remove(lbBioData.SelectedItem);
+            }
+        }
+
+        private DialogResult SaveCurrentBioData()
+        {
+            DialogResult result;
+            if (bioDataEditor.EditedBioData != null && bioDataEditor.Status == BioDataEditor.BioDataStatus.UnsavedChanges)
+            {
+                result = XtraMessageBox.Show("You have unsaved changes to " + bioDataEditor.EditedBioData.FullName + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
+                if (result == DialogResult.Yes)
                 {
-                    // Root Level selected
-                    SelectedTreeRoot = null;
-                    PopulateMovieListV2(SelectedTreeRoot);
+                    TitleCollectionManager.SaveBioMetaDataChanges();
+
+                    //_movieList[titleEditor.EditedTitle.Id] = titleEditor.EditedTitle;
+                    //SaveChanges();
                 }
-                else
+                if (result == DialogResult.No)
                 {
-                    SelectedTreeRoot = Convert.ToInt32(e.Node.Name);
-                    PopulateMovieListV2(SelectedTreeRoot);
+                    // Force reload of title
+                    //titleEditor.EditedTitle.ReloadTitle();
+                    //lbTitles.Refresh();
                 }
             }
             else
             {
-                PopulateMovieListV2(null);
+                result = DialogResult.Yes;
             }
+            return result;
         }
 
-        private void miCreateFolder_Click(object sender, EventArgs e)
+        private void bioDataEditor_BioDataChanged(object sender, EventArgs e)
         {
-            Title folder = new Title();
-
-            //int selectedfolderid = 0;
-
-            if (treeMedia.SelectedNode.Name == "All Media")
-            {
-                // Root Node
-                folder.TitleType =  TitleTypes.Root | TitleTypes.Collection;
-            }
+            if (bioDataEditor.EditedBioData != null)
+                this.Text = APP_TITLE + " - " +bioDataEditor.EditedBioData.FullName + "*";
             else
-            {
-                int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
-                folder.ParentTitleId = parentid;
-                folder.TitleType = TitleTypes.Collection;
-                //selectedfolderid = Convert.ToInt32(treeMedia.SelectedNode.Name);
-            }
-           
-            folder.Name = "New Folder";
-            TitleCollectionManager.AddTitle(folder);
+                this.Text = APP_TITLE;
 
-            // Generate the parentid if required
-            if (folder.ParentTitleId == 0)
-            {
-                folder.ParentTitleId = folder.Id;
-                TitleCollectionManager.SaveTitleUpdates();
-            }
-
-            _movieList.Add(folder.Id, folder);
-
-            PopulateMediaTree();
-
-            if (_mediaTree.ContainsKey(folder.Id))
-            {
-                treeMedia.SelectedNode = _mediaTree[folder.Id];
-            }
-        }
-
-        private void miDeleteFolder_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void miCreateTitle_Click(object sender, EventArgs e)
-        {
-            if (treeMedia.SelectedNode.Name == "All Media")
-            {
-                // Root Title
-                CreateTitle(null);
-            }
-            else
-            {
-                int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
-                CreateTitle(parentid);
-            }
-            //LoadMovies();
-            //_movieList.Add(titleEditor.EditedTitle.Id, titleEditor.EditedTitle);
-            //PopulateMovieListV2(SelectedTreeRoot);
-        }
-
-        private void treeMedia_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                Point p = new Point(e.X, e.Y);
-                TreeNode nodeUnderMouse = treeMedia.GetNodeAt(p);
-                if (nodeUnderMouse != null)
-                {
-                    treeMedia.SelectedNode = nodeUnderMouse;
-                }
-            }
+            ToggleSaveState(true);
         }
         #endregion
+
+        private void miAdd_Click(object sender, EventArgs e)
+        {
+            if (mainNav.ActiveGroup == groupBioData)
+            {
+                AddBioData();
+            }
+
+            if (mainNav.ActiveGroup == groupGenresMetadata)
+            {
+                AddGenreMetaData();
+            }
+        }
+
+        private void miRemove_Click(object sender, EventArgs e)
+        {
+            if (mainNav.ActiveGroup == groupBioData)
+            {
+                RemoveBioData();
+            }
+
+            if (mainNav.ActiveGroup == groupGenresMetadata)
+            {
+                RemoveGenreMetaData();
+            }
+        }
 
         private void CreateTitle(int? parentid)
         {
@@ -1833,55 +1905,25 @@ namespace OMLDatabaseEditor
             ToggleSaveState(true);
         }
 
-        private void lbGenreMetadata_SelectedIndexChanged(object sender, EventArgs e)
+        private IEnumerable<Title> SortTitles(IEnumerable<Title> titles)
         {
-            if (lbGenreMetadata.SelectedItem != null)
+            switch (OMLEngine.Settings.OMLSettings.DBETitleSortOrder)
             {
-                genreMetaDataEditor.LoadGenre((GenreMetaData)lbGenreMetadata.SelectedItem);
+                case "Name":
+                    return titles.OrderBy(st => st.SortName);
+                case "Runtime":
+                    return titles.OrderBy(st => st.Runtime);
+                case "DateAdded":
+                    return titles.OrderBy(st => st.DateAdded);
+                case "ModifiedDate":
+                    return titles.OrderBy(st => st.ModifiedDate);
+                case "ProductionYear":
+                    return titles.OrderBy(st => st.ProductionYear);
+                case "ReleaseDate":
+                    return titles.OrderBy(st => st.ReleaseDate);
+                default:
+                    return titles.OrderBy(st => st.SortName);
             }
-        }
-
-        private void lbBioData_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (lbBioData.SelectedItem != null)
-            {
-                bioDataEditor.LoadBioData((BioData)lbBioData.SelectedItem);
-            }
-        }
-
-        private void lbBioData_DrawItem(object sender, ListBoxDrawItemEventArgs e)
-        {
-            // Create the brushes
-            if (_brushTreeViewSelected == null)
-            {
-                _brushTreeViewSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.LimeGreen, Color.PaleGreen);
-            }
-
-
-            int x = e.Bounds.X;
-            int y = e.Bounds.Y;
-            int w = e.Bounds.Width;
-            int h = e.Bounds.Height;
-            int wt = (int)e.Graphics.MeasureString(e.Item.ToString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular)).Width + 2;
-
-            // Setup string formatting
-            StringFormat stf = new StringFormat();
-            stf.Trimming = StringTrimming.EllipsisCharacter;
-            stf.FormatFlags = StringFormatFlags.NoWrap;
-
-            e.Graphics.FillRectangle(new SolidBrush(Color.White), x, y, w, h);
-
-            if (lbBioData.SelectedItem == e.Item)
-            {
-                e.Graphics.FillRectangle(_brushTreeViewSelected, x, y, wt, h);
-                e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y, x - 2 + wt, y);
-                e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y - 1 + h, x - 2 + wt, y - 1 + h);
-                e.Graphics.DrawLine(new Pen(Color.Black), x, y + 1, x, y - 2 + h);
-                e.Graphics.DrawLine(new Pen(Color.Black), x -1 + wt, y + 1, x -1 + wt, y - 2 + h);
-
-            }
-
-            e.Graphics.DrawString(e.Item.ToString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 2, e.Bounds.Width, h), stf);
         }
     }
 }

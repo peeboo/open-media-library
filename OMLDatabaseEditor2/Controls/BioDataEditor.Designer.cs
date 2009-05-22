@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.Details = new DevExpress.XtraTab.XtraTabPage();
+            this.deDateOfBirth = new DevExpress.XtraEditors.DateEdit();
+            this.biodatasource = new System.Windows.Forms.BindingSource(this.components);
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
@@ -38,18 +40,16 @@
             this.teName = new DevExpress.XtraEditors.TextEdit();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
-            this.biodatasource = new System.Windows.Forms.BindingSource(this.components);
-            this.deDateOfBirth = new DevExpress.XtraEditors.DateEdit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.Details.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties.VistaTimeProperties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.biodatasource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.teNationality.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.teName.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.biodatasource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties.VistaTimeProperties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // xtraTabControl1
@@ -75,6 +75,25 @@
             this.Details.Name = "Details";
             this.Details.Size = new System.Drawing.Size(479, 283);
             this.Details.Text = "Details";
+            // 
+            // deDateOfBirth
+            // 
+            this.deDateOfBirth.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.biodatasource, "DateOfBirth", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.deDateOfBirth.DataBindings.Add(new System.Windows.Forms.Binding("DateTime", this.biodatasource, "DateOfBirth", true));
+            this.deDateOfBirth.EditValue = null;
+            this.deDateOfBirth.Location = new System.Drawing.Point(98, 55);
+            this.deDateOfBirth.Name = "deDateOfBirth";
+            this.deDateOfBirth.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.deDateOfBirth.Properties.VistaTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.deDateOfBirth.Size = new System.Drawing.Size(100, 20);
+            this.deDateOfBirth.TabIndex = 7;
+            this.deDateOfBirth.DateTimeChanged += new System.EventHandler(this.teBio_TextChanged);
+            // 
+            // biodatasource
+            // 
+            this.biodatasource.DataSource = typeof(OMLEngine.BioData);
             // 
             // labelControl4
             // 
@@ -106,15 +125,17 @@
             this.teNationality.Name = "teNationality";
             this.teNationality.Size = new System.Drawing.Size(100, 20);
             this.teNationality.TabIndex = 1;
+            this.teNationality.TextChanged += new System.EventHandler(this.teBio_TextChanged);
             // 
             // teName
             // 
-            this.teName.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.biodatasource, "FullName", true));
+            this.teName.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.biodatasource, "FullName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.teName.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.biodatasource, "FullName", true));
             this.teName.Location = new System.Drawing.Point(98, 27);
             this.teName.Name = "teName";
             this.teName.Size = new System.Drawing.Size(100, 20);
             this.teName.TabIndex = 0;
+            this.teName.TextChanged += new System.EventHandler(this.teBio_TextChanged);
             // 
             // xtraTabPage2
             // 
@@ -131,22 +152,6 @@
             this.panelControl1.Size = new System.Drawing.Size(492, 317);
             this.panelControl1.TabIndex = 1;
             // 
-            // biodatasource
-            // 
-            this.biodatasource.DataSource = typeof(OMLEngine.BioData);
-            // 
-            // deDateOfBirth
-            // 
-            this.deDateOfBirth.EditValue = null;
-            this.deDateOfBirth.Location = new System.Drawing.Point(98, 55);
-            this.deDateOfBirth.Name = "deDateOfBirth";
-            this.deDateOfBirth.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.deDateOfBirth.Properties.VistaTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.deDateOfBirth.Size = new System.Drawing.Size(100, 20);
-            this.deDateOfBirth.TabIndex = 7;
-            // 
             // BioDataEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -158,13 +163,13 @@
             this.xtraTabControl1.ResumeLayout(false);
             this.Details.ResumeLayout(false);
             this.Details.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties.VistaTimeProperties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.biodatasource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.teNationality.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.teName.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.biodatasource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties.VistaTimeProperties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }

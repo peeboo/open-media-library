@@ -53,12 +53,13 @@
             // 
             // teGenre
             // 
-            this.teGenre.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.genremetadatasource, "Name", true));
+            this.teGenre.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.genremetadatasource, "Name", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.teGenre.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.genremetadatasource, "Name", true));
             this.teGenre.Location = new System.Drawing.Point(66, 33);
             this.teGenre.Name = "teGenre";
             this.teGenre.Size = new System.Drawing.Size(100, 20);
             this.teGenre.TabIndex = 2;
+            this.teGenre.TextChanged += new System.EventHandler(this.teGenre_TextChanged);
             // 
             // genremetadatasource
             // 
