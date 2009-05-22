@@ -11,6 +11,20 @@ namespace Library.Code.V3
 {
     public class GallerySettings : ModelItem
     {
+        private BooleanChoice showUnwatchedIcon;
+        public BooleanChoice ShowUnwatchedIcon
+        {
+            get
+            {
+                return this.showUnwatchedIcon;
+            }
+            set
+            {
+                this.showUnwatchedIcon = value;
+                FirePropertyChanged("ShowUnwatchedIcon");
+            }
+        }
+
         private BooleanChoice enableAlphaJump;
         public BooleanChoice EnableAlphaJump
         {
@@ -105,6 +119,10 @@ namespace Library.Code.V3
             if (this.selectedViewOptions.ChosenIndex == 1)
                 this.enablePosterOptions.Value = true;
             this.selectedViewOptions.ChosenChanged += new EventHandler(selectedViewOptions_ChosenChanged);
+
+            this.showUnwatchedIcon = new BooleanChoice(this);
+            this.showUnwatchedIcon.Description = "Show unwatched icon";
+            this.showUnwatchedIcon.Value = OMLEngine.Settings.OMLSettings.ShowUnwatchedIcon;
         }
 
         private BooleanChoice enablePosterOptions;
@@ -209,6 +227,8 @@ namespace Library.Code.V3
                 return true;
             if (Convert.ToInt32(this.threeRowOptions.Chosen.ToString().Replace(" items", "")) != Properties.Settings.Default.GalleryThreeRowMin)
                 return true;
+            if (this.showUnwatchedIcon.Value != OMLEngine.Settings.OMLSettings.ShowUnwatchedIcon)
+                return true;
 
             return false;
         }
@@ -224,6 +244,7 @@ namespace Library.Code.V3
             Properties.Settings.Default.GallerySelectedView = this.selectedViewOptions.ChosenIndex;
             Properties.Settings.Default.GalleryTwoRowMin = Convert.ToInt32(this.twoRowOptions.Chosen.ToString().Replace(" items", ""));
             Properties.Settings.Default.GalleryThreeRowMin = Convert.ToInt32(this.threeRowOptions.Chosen.ToString().Replace(" items", ""));
+            OMLEngine.Settings.OMLSettings.ShowUnwatchedIcon = this.showUnwatchedIcon.Value;
 
             Properties.Settings.Default.Save();
         }

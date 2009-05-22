@@ -40,8 +40,20 @@ namespace Library.Code.V3
 
             //alpha
             Command alphaCmd = new Command();
-            alphaCmd.Description = "Alpha Jump";
+            alphaCmd.Description = "Additional Settings";
+            alphaCmd.Invoked += new EventHandler(alphaCmd_Invoked);
             this.Commands.Add(alphaCmd);
+        }
+
+        void alphaCmd_Invoked(object sender, EventArgs e)
+        {
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+
+            Library.Code.V3.GallerySettings page = new Library.Code.V3.GallerySettings();
+            properties["Page"] = page;
+            properties["Application"] = OMLApplication.Current;
+
+            OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_AdditionalSettings", properties);
         }
 
         void galleryCmd_Invoked(object sender, EventArgs e)

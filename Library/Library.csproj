@@ -521,6 +521,7 @@
     <Content Include="Markup\V3\Details\FanArt\Images\V3.FanArtDetails.BackSplash.png" />
     <Content Include="Markup\V3\Loader.mcml" />
     <Content Include="Markup\V3\Settings\BackgroundSettings.mcml" />
+    <Content Include="Markup\V3\Settings\AdditionalSettings.mcml" />
     <Content Include="Markup\V3\Settings\GallerySettings.mcml" />
     <Content Include="Markup\V3\Settings\GeneralSettings.mcml" />
     <Content Include="Markup\V3\Settings\ExtenderSettingsImpersonation.mcml" />

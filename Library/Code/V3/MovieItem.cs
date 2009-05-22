@@ -79,7 +79,8 @@ namespace Library.Code.V3
             //this.InternalMovieItem = new Library.MovieItem(title, null);
 
             this.ItemType = 0;
-            this.OverlayContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem#UnwatchedOverlay";
+            if(OMLEngine.Settings.OMLSettings.ShowUnwatchedIcon)
+                this.OverlayContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem#UnwatchedOverlay";
             if (this._titleObj.WatchedCount == 0)
                 this.isUnwatched = true;
 

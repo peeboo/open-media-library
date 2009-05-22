@@ -11,6 +11,12 @@ namespace OMLEngine.Settings
         private const string InstanceName = "main";
 
         #region ViewOptions
+
+        public static bool ShowUnwatchedIcon
+        {
+            get { return SettingsManager.GetSettingByNameBool("ShowUnwatchedIcon", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("ShowUnwatchedIcon", value.ToString(), InstanceName); }
+        }
         
         /*public static MovieView MovieView
         {
