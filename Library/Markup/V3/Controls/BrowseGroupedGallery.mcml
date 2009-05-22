@@ -335,7 +335,7 @@
       <!--me:oneRowGalleryItemPoster Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[Pivot.ContentItemTemplate]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
       </me:oneRowGalleryItemPoster-->
-      <me:oneRowGalleryItemPoster Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]"
+      <me:oneRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
       </me:oneRowGalleryItemPoster>
       <!--Text Content="[RepeatedItem!ICommand.Description]"/-->
@@ -350,7 +350,7 @@
       <!--me:oneRowGalleryItemPoster Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[Pivot.ContentItemTemplate]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
       </me:oneRowGalleryItemPoster-->
-      <me:twoRowGalleryItemPoster Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]"
+      <me:twoRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
       </me:twoRowGalleryItemPoster>
       <!--Text Content="[RepeatedItem!ICommand.Description]"/-->

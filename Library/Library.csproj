@@ -316,6 +316,7 @@
     <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.GalleryItemShadow.png" />
     <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.InsertCD.png" />
     <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.InsertCDFocus.png" />
+    <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.New.png" />
     <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage1Row4x3.png" />
     <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage1RowPoster.png" />
     <Content Include="Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage1RowSquare.png" />

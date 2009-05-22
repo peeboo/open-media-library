@@ -296,11 +296,20 @@ namespace Library.Code.V3
             get { return this.filters; }
             set { this.filters = value; }
         }
+
+        private Command quickPlay;
+        public Command QuickPlay
+        {
+            get { return this.quickPlay; }
+        }
         /// <summary>
         /// Loads the default commands
         /// </summary>
         private void CreateCommands()
         {
+            //create the quickplay
+            this.quickPlay = new Command(this);
+            this.quickPlay.Invoked += new EventHandler(quickPlay_Invoked);
             this.Model.Commands = new ArrayListDataSet(this);
 
             //create the settings cmd
@@ -322,6 +331,13 @@ namespace Library.Code.V3
             searchCmd.FocusImage = new Image("resx://Library/Library.Resources/V3_Controls_Common_Browse_Cmd_Search_Focus");
             searchCmd.Invoked += new EventHandler(searchCmd_Invoked);
             this.Model.Commands.Add(searchCmd);
+        }
+
+        void quickPlay_Invoked(object sender, EventArgs e)
+        {
+            if (this.SelectedItemCommand is Library.Code.V3.MovieItem)
+            {
+            }
         }
 
         /// <summary>
