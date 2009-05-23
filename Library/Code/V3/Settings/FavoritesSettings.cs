@@ -152,9 +152,12 @@ namespace Library.Code.V3
                 {
                     if (favoritesSender is FavoritesCommand)
                     {
-                        //do a delete!
-                        //this.IsBusy = true;
-                        //Microsoft.MediaCenter.UI.Application.DeferredInvokeOnWorkerThread(beginEject, endEject, (object)discSender);
+                        string strDelete = string.Format("Are you sure you want to delete {0}?", ((FavoritesCommand)favoritesSender).Name);
+                        DialogResult res = OMLApplication.Current.MediaCenterEnvironment.Dialog(strDelete, "DELETE FAVORITE", DialogButtons.Yes | DialogButtons.No, -1, true);
+                        if (res == DialogResult.Yes)
+                        {
+                            //delete
+                        }
                     }
                 };
                 this.favoritesArray.Add(cmd);

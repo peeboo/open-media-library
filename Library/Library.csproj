@@ -348,6 +348,11 @@
     <Content Include="Markup\V3\Controls\Common\Copy of Colors.mcml" />
     <Content Include="Markup\V3\Controls\Common\FontNames.mcml" />
     <Content Include="Markup\V3\Controls\Common\Fonts.mcml" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Remove.Disabled.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Remove.Dormant.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Remove.Focus.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Remove.FocusOverlay.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Remove.NoFocus.png" />
     <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Bottom.png" />
     <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Bottom.Pressed.png" />
     <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.AutoScroll.Chevron.Bottom.Reset.png" />
