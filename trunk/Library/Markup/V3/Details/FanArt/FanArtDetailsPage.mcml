@@ -295,7 +295,7 @@
                       </Repeater>
                     </Children>
                   </Panel-->
-                  <me:ButtonsHolder Page="[Page]" Name="ButtonsHolder" MinimumSize="240,500" Margins="0,80,0,0" Layout="VerticalFlow">
+                  <me:ButtonsHolder Page="[Page]" Name="ButtonsHolder" MinimumSize="240,500" Margins="0,80,30,0" Layout="VerticalFlow">
                     <LayoutInput>
                       <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
                     </LayoutInput>
@@ -403,7 +403,7 @@
       </Condition>
     </Rules>
     <Content>
-      <Panel Layout="VerticalFlow">
+      <Panel Layout="VerticalFlow" Margins="0,210,0,0">
         <Children>
           <Repeater Name="Buttons" Source="[Page.Commands]" Navigation="RememberFocus,FlowVertical" Layout="VerticalFlow" Margins="0,0,0,0">
             <LayoutInput>
