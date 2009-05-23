@@ -230,13 +230,15 @@ namespace Library.Code.V3
                 page.Watched = new BooleanChoice(this, "Watched");
 
                 //is this the right way?
+                // yes :)
                 if (_titleObj.WatchedCount > 0)
                     page.Watched.Value = true;
                 else
                     page.Watched.Value = false;
+
                 page.Watched.ChosenChanged += new EventHandler(Watched_ChosenChanged);
 
-                //this.SetFanArtImage(page.Details, this.InternalMovieItem);
+                this.SetFanArtImage(page.Details, _titleObj);
 
                 Dictionary<string, object> properties = new Dictionary<string, object>();
                 properties["Page"] = page;
@@ -308,51 +310,24 @@ namespace Library.Code.V3
             }
         }
 
-        //private void SetFanArtImage(ExtendedDetails details, Library.MovieItem internalMovie)
-        //{
-            //// only setup the background images once
-            //if (details.FanArtImages != null)
-            //    return;
+        private void SetFanArtImage(ExtendedDetails details, Title title)
+        {
+            if (details.FanArtImages != null)
+                return;
 
-            //details.FanArtImages = new List<Image>(1);
+            if (title.FanArtPaths == null || title.FanArtPaths.Count == 0)
+                return;
 
-            //if (!string.IsNullOrEmpty(internalMovie.TitleObject.BackDropImage))
-            //{
-            //    if (File.Exists(Path.GetFullPath(internalMovie.TitleObject.BackDropImage)))
-            //    {
-            //        details.FanArtImages.Add(new Image(
-            //            string.Format("file://{0}", Path.GetFullPath(internalMovie.TitleObject.BackDropImage))));
+            details.FanArtImages = new List<Image>();
 
-            //        // set the background image
-            //        details.FanArt = details.FanArtImages[0];
-                    
-            //        return;
-            //    }                
-            //}
+            foreach (string path in title.FanArtPaths)
+            {
+                details.FanArtImages.Add(new Image("file://" + path));
+            }
 
-            //// a specific file was NOT found, time to go hunting
-
-
-            //// if the /FanArt folder doesn't exist - that means no background images
-            //string fanArtSrcDir = internalMovie.TitleObject.BackDropFolder;
-            //if (string.IsNullOrEmpty(fanArtSrcDir)) //|| !Directory.Exists(fanArtSrcDir))
-            //        return;
-
-            //foreach (string file in
-            //    Directory.GetFiles(fanArtSrcDir, "*.jpg", SearchOption.TopDirectoryOnly))
-            //{
-            //    OMLApplication.DebugLine("[MovieDetailsPage] loading fanart image {0}", file);
-
-            //    details.FanArtImages.Add(new Image(string.Format("file://{0}", file)));
-            //}
-
-            //// oops - no images found in the fanart folder
-            //if (details.FanArtImages.Count == 0)
-            //    return;
-
-            //// set the background image
-            //details.FanArt = details.FanArtImages[0];            
-        //}
+            // set the first image
+            details.FanArt = details.FanArtImages[0];
+        }            
 
         void actorCommand_Invoked(object sender, EventArgs e)
         {
