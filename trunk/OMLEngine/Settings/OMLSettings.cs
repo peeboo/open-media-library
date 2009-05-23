@@ -506,10 +506,15 @@ namespace OMLEngine.Settings
             set { SettingsManager.SaveSettingByName("ShowSubFolderTitles", value.ToString(), InstanceName); }
         }
 
-        public static string DBETitleSortOrder
+        public static string DBETitleSortField
         {
-            get { return SettingsManager.GetSettingByName("DBETitleSortOrder", InstanceName) ?? ""; }
-            set { SettingsManager.SaveSettingByName("DBETitleSortOrder", value, InstanceName); }
+            get { return SettingsManager.GetSettingByName("DBETitleSortField", InstanceName) ?? ""; }
+            set { SettingsManager.SaveSettingByName("DBETitleSortField", value, InstanceName); }
+        }
+        public static bool DBETitleSortAsc
+        {
+            get { return SettingsManager.GetSettingByNameBool("DBETitleSortAsc", InstanceName) ?? true; }
+            set { SettingsManager.SaveSettingByName("DBETitleSortAsc", value.ToString(), InstanceName); }
         }
         #endregion
 
