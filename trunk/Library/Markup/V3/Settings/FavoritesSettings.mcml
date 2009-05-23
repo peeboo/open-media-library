@@ -210,7 +210,7 @@
     <Content>
       <Panel Layout="VerticalFlow">
         <Children>
-          <Repeater Name="Buttons" Source="[Page.ManagerCommands]" Navigation="RememberFocus,FlowVertical" Layout="VerticalFlow" Margins="0,0,0,0">
+          <Repeater Name="Buttons" Source="[Page.Commands]" Navigation="RememberFocus,FlowVertical" Layout="VerticalFlow" Margins="0,0,0,0">
             <LayoutInput>
               <AnchorLayoutInput Top="Parent,0" Horizontal="Near"/>
             </LayoutInput>
@@ -318,8 +318,9 @@
                           <AnchorLayoutInput Left="Parent,0, 0" Top="Parent,0, 25"/>
                         </LayoutInput>
                         <Children>
+                          <Text Content="Select a favorite to edit." WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255" Margins="0,0,0,10"/>
                           <Panel Layout="Anchor" Margins="0,0,0,0" FocusOrder="0">
-                            <Children>
+                            <Children>                              
                               <listview:ScrollingListFavorites Name="Favorites" Content="[Page.FavoritesArray]" GroupName="" Navigation="RememberFocus,Column">
                                 <LayoutInput>
                                   <AnchorLayoutInput Bottom="Parent,1, -45"  Top="Parent,0, -45"  Left="Parent,0, 0"/>
@@ -327,8 +328,7 @@
                                 <ScrollingData>
                                   <ScrollingData/>
                                 </ScrollingData>
-                              </listview:ScrollingListFavorites>
-                            
+                              </listview:ScrollingListFavorites>                            
                           </Children>
                           </Panel>
                         </Children>

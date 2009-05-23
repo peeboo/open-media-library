@@ -2663,6 +2663,41 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_Controls_Remove_Disabled {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Remove_Disabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Remove_Dormant {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Remove_Dormant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Remove_Focus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Remove_Focus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Remove_FocusOverlay {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Remove_FocusOverlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Controls_Remove_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_Controls_Remove_NoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static byte[] V3_Controls_ScrollControl {
             get {
                 object obj = ResourceManager.GetObject("V3_Controls_ScrollControl", resourceCulture);
@@ -2764,6 +2799,13 @@ namespace Library {
         internal static byte[] V3_FanArtDetailsPage {
             get {
                 object obj = ResourceManager.GetObject("V3_FanArtDetailsPage", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_FavoritesSettings {
+            get {
+                object obj = ResourceManager.GetObject("V3_FavoritesSettings", resourceCulture);
                 return ((byte[])(obj));
             }
         }

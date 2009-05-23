@@ -1363,4 +1363,22 @@
   <data name="V3_Controls_BrowseGalleryItem_New" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\v3\controls\browsegalleryitem\images\v3.controls.browsegalleryitem.new.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="V3_Controls_Remove_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.remove.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_Remove_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.remove.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_Remove_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.remove.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_Remove_FocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.remove.focusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_Controls_Remove_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\controls\common\images\v3.controls.remove.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="V3_FavoritesSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\settings\favoritessettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

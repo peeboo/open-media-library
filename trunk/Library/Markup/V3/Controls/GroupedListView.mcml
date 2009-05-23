@@ -445,7 +445,7 @@
             </Layout>
             <Children>
               <me:FavoritesButton TileSize="545,51" FocusedIndex="[FocusedIndex]" ItemIndex="[ItemIndex]" Model="[Model]"/>
-              <ctl:Button Model="[Model]" Margins="5,0,0,0" TileSize="51,51" ShowLabel="false" NoFocusImage="resx://Library/Library.Resources/V3_Controls_ChangerEject_Tile_NoFocus" FocusImage="resx://Library/Library.Resources/V3_Controls_ChangerEject_Tile_Focus" DisabledImage="resx://Library/Library.Resources/V3_Controls_ChangerEject_Tile_Disabled" FocusOverlayImage="resx://Library/Library.Resources/V3_Controls_ChangerEject_Tile_FocusOverlay"/>
+              <ctl:Button Model="[Model]" Margins="5,0,0,0" TileSize="51,51" ShowLabel="false" NoFocusImage="resx://Library/Library.Resources/V3_Controls_Remove_NoFocus" FocusImage="resx://Library/Library.Resources/V3_Controls_Remove_Focus" DisabledImage="resx://Library/Library.Resources/V3_Controls_Remove_Disabled" FocusOverlayImage="resx://Library/Library.Resources/V3_Controls_Remove_FocusOverlay"/>
 
             </Children>
           </Panel>

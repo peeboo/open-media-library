@@ -27,6 +27,12 @@ namespace Library.Code.V3
             generalCmd.Invoked += new EventHandler(generalCmd_Invoked);
             this.Commands.Add(generalCmd);
 
+            //favorites
+            Command favoritesCmd = new Command();
+            favoritesCmd.Description = "Favorites";
+            favoritesCmd.Invoked += new EventHandler(favoritesCmd_Invoked);
+            this.Commands.Add(favoritesCmd);
+
             //filters
             Command filtersCmd = new Command();
             filtersCmd.Description = "Filters";
@@ -148,6 +154,18 @@ namespace Library.Code.V3
             properties["Application"] = OMLApplication.Current;
 
             OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_GeneralSettings", properties);
+        }
+
+
+        void favoritesCmd_Invoked(object sender, EventArgs e)
+        {
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+
+            Library.Code.V3.FavoritesSettings page = new Library.Code.V3.FavoritesSettings();
+            properties["Page"] = page;
+            properties["Application"] = OMLApplication.Current;
+
+            OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_FavoritesSettings", properties);
         }
 
         void filtersCmd_Invoked(object sender, EventArgs e)
