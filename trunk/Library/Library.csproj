@@ -114,6 +114,7 @@
     <Compile Include="Code\TreeView.cs" />
     <Compile Include="Code\UISettings.cs" />
     <Compile Include="Code\Filters.cs" />
+    <Compile Include="Code\V3\AlphaPivot.cs" />
     <Compile Include="Code\V3\Controls\LegacyHorizontalFlowLayoutHelper.cs" />
     <Content Include="Code\V3\CollectionItem.cs.txt" />
     <Compile Include="Code\V3\FilterItem.cs" />
