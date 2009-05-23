@@ -692,36 +692,11 @@ namespace Library
             {
                 try
                 {
-                    string folder = string.Empty;
-                    if (!string.IsNullOrEmpty(_titleObj.FileLocation))
+                    if (_titleObj.FanArtPaths != null && _titleObj.FanArtPaths.Count != 0)
                     {
-                        folder = (Directory.Exists(_titleObj.FileLocation))
-                            ? _titleObj.FileLocation
-                            : Path.GetDirectoryName(_titleObj.FileLocation);
+                        return _titleObj.FanArtPaths[0];
                     }
-                    else
-                    {
-                        if (_titleObj.Disks.Count > 0 && !string.IsNullOrEmpty(_titleObj.Disks[0].Path))
-                        {
-                            folder = (Directory.Exists(_titleObj.Disks[0].Path))
-                                ? _titleObj.Disks[0].Path
-                                : Path.GetDirectoryName(_titleObj.Disks[0].Path);
-                        }
-                    }
-
-                    if (folder.Length > 0)
-                    {
-                        OMLApplication.DebugLine("[MovieItem] Checking for fanart file: {0}",
-                            Path.Combine(folder, "fanart.jpg"));
-
-                        if (File.Exists(Path.Combine(folder, "fanart.jpg")))
-                            return Path.Combine(folder, "fanart.jpg");
-
-                        if (File.Exists(Path.Combine(folder, "backdrop.jpg")))
-                            return Path.Combine(folder, "backdrop.jpg");
-                    }
-                    else
-                        OMLApplication.DebugLine("[MovieItem] No valid path found to look for fanart in");
+                    
                 }
                 catch (Exception e)
                 {
