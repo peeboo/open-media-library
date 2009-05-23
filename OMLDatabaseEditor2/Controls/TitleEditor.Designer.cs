@@ -386,7 +386,7 @@
             // 
             // dtReleaseDate
             // 
-            this.dtReleaseDate.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "ReleaseDate", true, System.Windows.Forms.DataSourceUpdateMode.Never));
+            this.dtReleaseDate.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "ReleaseDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.dtReleaseDate.DataBindings.Add(new System.Windows.Forms.Binding("DateTime", this.titleSource, "ReleaseDate", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.dtReleaseDate.EditValue = null;
             this.dtReleaseDate.Location = new System.Drawing.Point(120, 109);
