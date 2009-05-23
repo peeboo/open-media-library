@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
+using OMLEngine;
+using System.Linq;
 
 namespace OMLDatabaseEditor
 {
@@ -41,16 +43,9 @@ namespace OMLDatabaseEditor
 
         public void SetMRULists()
         {
-            if ((this.Text == "Genres") && (OMLEngine.Settings.OMLSettings.UseGenreList) && Properties.Settings.Default.gsValidGenres != null)
+            if (this.Text == "Genres") 
             {
-                string[] aGenres = new string[0];
-                if (Properties.Settings.Default.gsValidGenres != null)
-                {
-                    aGenres = new string[Properties.Settings.Default.gsValidGenres.Count];
-                    Properties.Settings.Default.gsValidGenres.CopyTo(aGenres, 0);
-                }
-
-                cbeItem.Properties.Items.AddRange(aGenres);
+                cbeItem.Properties.Items.AddRange(TitleCollectionManager.GetAllGenreMetaDatas().ToArray());
             }
             else if ((this.Text == "Tags"))
             {
@@ -66,19 +61,20 @@ namespace OMLDatabaseEditor
 
                 if (this.Text == "Genres")
                 {
-                    if (Properties.Settings.Default.gsValidGenres != null &&
-                        !Properties.Settings.Default.gsValidGenres.Contains(cbeItem.Text))
+
+                    var genre = from gmd in TitleCollectionManager.GetAllGenreMetaDatas()
+                                where gmd.Name == cbeItem.Text
+                                select gmd;
+
+                    if (genre.Count() == 0)
                     {
-                        DialogResult result = XtraMessageBox.Show("You are attempting to add a genre that is not in the allowed list. Would you like to add it to the list?\r\nClick \"Yes\" to add it to the list, \"No\" to add it to the movie but not the allowed list or \"Cancel\" to do nothing.", "Allowed Genre Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                        DialogResult result = XtraMessageBox.Show("You are attempting to add a genre that is not in the allowed list. Click Yes to addid to the list.", "Allowed Genre Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                         switch (result)
                         {
-                            case DialogResult.Yes:
-                                Properties.Settings.Default.gsValidGenres.Add(cbeItem.Text);
-                                break;
-                            case DialogResult.No:
-                                break;
-                            case DialogResult.Cancel:
+                            case DialogResult.OK:
                                 return;
+                             case DialogResult.Cancel:
+                                break;
                         }
                     }
                 }

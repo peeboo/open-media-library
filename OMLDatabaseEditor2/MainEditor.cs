@@ -609,15 +609,16 @@ namespace OMLDatabaseEditor
 
         private void CheckGenresAgainstSupported(Title title)
         {
-     /*       List<String> genreList = new List<String>();
+            List<String> genreList = new List<String>();
  //           if (Properties.Settings.Default.gsValidGenres != null
  //           && Properties.Settings.Default.gsValidGenres.Count > 0)
-            int genreCount = OMLEngine.Settings.SettingsManager.GetAllGenres.Count();
+            int genreCount = TitleCollectionManager.GetAllGenreMetaDatas().Count();
             if (genreCount > 0)
             {
                 //String[] arrGenre = new String[genreCount];
                 //Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
-                genreList.AddRange(OMLEngine.Settings.SettingsManager.GetAllGenres);
+                genreList.AddRange(from gm in TitleCollectionManager.GetAllGenreMetaDatas()
+                                       select gm.Name);
                 Dictionary<string, string> genreIssuesList = new Dictionary<string, string>();
                 Dictionary<string, string> genreChanges = new Dictionary<string, string>();
                 foreach (string genre in title.Genres)
@@ -656,7 +657,7 @@ namespace OMLDatabaseEditor
                     ResolveGenres resolveGenres = new ResolveGenres(genreIssuesList, title);
                     resolveGenres.ShowDialog();
                 }
-            }*/
+            }
         }
 
         private void SaveChanges()
