@@ -169,6 +169,8 @@
             // chkUpdateMissingDataOnly
             // 
             resources.ApplyResources(this.chkUpdateMissingDataOnly, "chkUpdateMissingDataOnly");
+            this.chkUpdateMissingDataOnly.Checked = true;
+            this.chkUpdateMissingDataOnly.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkUpdateMissingDataOnly.Name = "chkUpdateMissingDataOnly";
             this.chkUpdateMissingDataOnly.UseVisualStyleBackColor = true;
             // 

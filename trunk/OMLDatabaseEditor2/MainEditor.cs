@@ -42,8 +42,10 @@ namespace OMLDatabaseEditor
 
         int? SelectedTreeRoot;
 
-        LinearGradientBrush _brushTreeViewSelected; 
-
+        LinearGradientBrush _brushTreeViewSelected;
+        LinearGradientBrush _brushTitleListSelected;
+        LinearGradientBrush _brushTitleListFolder;
+        LinearGradientBrush _brushTitleListFolderSelected;
         public MainEditor()
         {
             OMLEngine.Utilities.RawSetup();
@@ -1003,10 +1005,10 @@ namespace OMLDatabaseEditor
 
         private void fromPreferredSourcesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*pgbProgress.Visible = true;
-            pgbProgress.Maximum = lbMovies.SelectedItems.Count;
+            pgbProgress.Visible = true;
+            pgbProgress.Maximum = lbTitles.SelectedItems.Count;
             pgbProgress.Value = 0;
-            foreach (Title title in lbMovies.SelectedItems)
+            foreach (Title title in lbTitles.SelectedItems)
             {
                 pgbProgress.Value++;
                 statusText.Text = "Getting metadata for " + title.Name;
@@ -1017,13 +1019,13 @@ namespace OMLDatabaseEditor
 
                 if (StartMetadataImport(null, false))
                 {
-                    _titleCollection.Replace(titleEditor.EditedTitle);
-                    _titleCollection.saveTitleCollection();
+                    //_titleCollection.Replace(titleEditor.EditedTitle);
+                    TitleCollectionManager.SaveTitleUpdates();
                 }
             }
             statusText.Text = "Finished updating metadata";
             pgbProgress.Visible = false;
-            Application.DoEvents();*/
+            Application.DoEvents();
         }
 
         private void exportCurrentMovieToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1105,20 +1107,7 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private void deleteSelectedMoviesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            foreach (Title title in lbTitles.SelectedItems)
-            {
-                if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.Id == title.Id)
-                    titleEditor.ClearEditor();
-                TitleCollectionManager.DeleteTitle(title);
-                //_titleCollection.Remove(title);
-            }
-            //_titleCollection.saveTitleCollection();
-            LoadMovies();
-        }
-
-        private void transcoderDiagnosticsToolStripMenuItem_Click(object sender, EventArgs e)
+         private void transcoderDiagnosticsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string mediafile = "";
             // Search for a movie file in selected title/titles
@@ -1197,7 +1186,7 @@ namespace OMLDatabaseEditor
             if (e.Group == groupBioData)
             {
                 lbBioData.Items.Clear();
-                lbBioData.Items.AddRange(TitleCollectionManager.GetAllBioDatas().ToArray());
+                lbBioData.Items.AddRange(TitleCollectionManager.GetAllBioDatas().OrderBy(b => b.FullName).ToArray());
                 splitContainerNavigator.Panel2.Controls["bioDataEditor"].Dock = DockStyle.Fill;
                 splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
@@ -1207,7 +1196,7 @@ namespace OMLDatabaseEditor
             if (e.Group == groupGenresMetadata)
             {
                 lbGenreMetadata.Items.Clear();
-                lbGenreMetadata.Items.AddRange(TitleCollectionManager.GetAllGenreMetaDatas().ToArray());
+                lbGenreMetadata.Items.AddRange(TitleCollectionManager.GetAllGenreMetaDatas().OrderBy(g => g.Name).ToArray());
 
                 splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Dock = DockStyle.Fill;
                 splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = true;
@@ -1525,6 +1514,14 @@ namespace OMLDatabaseEditor
 
         private void lbTitles_DrawItem(object sender, DrawItemEventArgs e)
         {
+            // Create the brushes
+            if (_brushTitleListSelected == null)
+            {
+                _brushTitleListSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.LimeGreen, Color.PaleGreen);
+                _brushTitleListFolder = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.Gainsboro, Color.Silver);
+                _brushTitleListFolderSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.Silver, Color.LightGreen);
+            }
+
             if (e.Index < 0) return;
 
             Title currentTitle = ((Title)lbTitles.Items[e.Index]);
@@ -1546,11 +1543,23 @@ namespace OMLDatabaseEditor
             if ((currentTitle.TitleType & TitleTypes.AllFolders) != 0)
             {
                 // Folder specific paint goes here
-                e.Graphics.FillRectangle(new SolidBrush(Color.LightGray), x, y, w, h);
+                if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                {
+                    e.Graphics.FillRectangle(_brushTitleListFolderSelected, x, y, w, h);
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(_brushTitleListFolder, x, y, w, h);
+                }
                 e.Graphics.DrawString(currentTitle.Name, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold), new SolidBrush(Color.Black), new RectangleF(x, y + 2, w - 65, h), stf);
             }
             else
             {
+                if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                {
+                    e.Graphics.FillRectangle(_brushTitleListSelected, x, y, w, h);
+                }
+
                 // Media specific paint goes here
                 e.Graphics.DrawString(currentTitle.Name, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 2, w - 65, h), stf);
                 e.Graphics.DrawString(currentTitle.ReleaseDate.ToShortDateString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(w - 60, y + 2, w, h), stf);
@@ -1596,9 +1605,6 @@ namespace OMLDatabaseEditor
 
             // Common painting goes here
             e.Graphics.DrawLine(new Pen(Color.Gray), 0, y + h - 1, w, y + h - 1);
-
-
-            e.DrawFocusRectangle();
         }
 
         private void lbTitles_SelectedIndexChanged(object sender, EventArgs e)
@@ -1622,6 +1628,21 @@ namespace OMLDatabaseEditor
                 ToggleSaveState(false);
             }
             Cursor = Cursors.Default;
+        }
+
+        private void deleteSelectedMoviesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Title title in lbTitles.SelectedItems)
+            {
+                if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.Id == title.Id)
+                    titleEditor.ClearEditor();
+
+                _movieList.Remove(title.Id);
+
+                TitleCollectionManager.DeleteTitle(title);
+            }
+            //_titleCollection.saveTitleCollection();
+            PopulateMovieListV2(SelectedTreeRoot);
         }
         #endregion
 
@@ -1906,25 +1927,114 @@ namespace OMLDatabaseEditor
             ToggleSaveState(true);
         }
 
+
+        #region Title Sorting
         private IEnumerable<Title> SortTitles(IEnumerable<Title> titles)
         {
-            switch (OMLEngine.Settings.OMLSettings.DBETitleSortOrder)
+            if (OMLEngine.Settings.OMLSettings.DBETitleSortAsc)
             {
-                case "Name":
-                    return titles.OrderBy(st => st.SortName);
-                case "Runtime":
-                    return titles.OrderBy(st => st.Runtime);
-                case "DateAdded":
-                    return titles.OrderBy(st => st.DateAdded);
-                case "ModifiedDate":
-                    return titles.OrderBy(st => st.ModifiedDate);
-                case "ProductionYear":
-                    return titles.OrderBy(st => st.ProductionYear);
-                case "ReleaseDate":
-                    return titles.OrderBy(st => st.ReleaseDate);
-                default:
-                    return titles.OrderBy(st => st.SortName);
+                switch (OMLEngine.Settings.OMLSettings.DBETitleSortField)
+                {
+                    case "Name":
+                        return titles.OrderBy(st => st.SortName);
+                    case "Runtime":
+                        return titles.OrderBy(st => st.Runtime);
+                    case "DateAdded":
+                        return titles.OrderBy(st => st.DateAdded);
+                    case "ModifiedDate":
+                        return titles.OrderBy(st => st.ModifiedDate);
+                    case "ProductionYear":
+                        return titles.OrderBy(st => st.ProductionYear);
+                    case "ReleaseDate":
+                        return titles.OrderBy(st => st.ReleaseDate);
+                    default:
+                        return titles.OrderBy(st => st.SortName);
+                }
+            }
+            else
+            {
+                switch (OMLEngine.Settings.OMLSettings.DBETitleSortField)
+                {
+                    case "Name":
+                        return titles.OrderByDescending(st => st.SortName);
+                    case "Runtime":
+                        return titles.OrderByDescending(st => st.Runtime);
+                    case "DateAdded":
+                        return titles.OrderByDescending(st => st.DateAdded);
+                    case "ModifiedDate":
+                        return titles.OrderByDescending(st => st.ModifiedDate);
+                    case "ProductionYear":
+                        return titles.OrderByDescending(st => st.ProductionYear);
+                    case "ReleaseDate":
+                        return titles.OrderByDescending(st => st.ReleaseDate);
+                    default:
+                        return titles.OrderByDescending(st => st.SortName);
+                }
             }
         }
+
+        private void SortControl_Paint(object sender, PaintEventArgs e)
+        {
+            int x = Convert.ToInt32(e.Graphics.ClipBounds.Left);
+            int y = Convert.ToInt32(e.Graphics.ClipBounds.Top);
+
+            e.Graphics.DrawString("Sort : " + OMLEngine.Settings.OMLSettings.DBETitleSortField.ToString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), x + 2, y + 2);
+            //e.Graphics.DrawLine(new Pen(Color.Black), new Point(x + 50, y + 2), new Point(x + 50, y + 8));
+
+            Point p1;
+            Point p2;
+            Point p3;
+
+            if (OMLEngine.Settings.OMLSettings.DBETitleSortAsc)
+            {
+                int wt = (int)e.Graphics.MeasureString("Ascending", new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular)).Width + 2;
+                e.Graphics.DrawString("Ascending", new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), e.Graphics.ClipBounds.Right - wt - 18, y + 2);
+
+                p1 = new Point(((int)e.Graphics.ClipBounds.Right) - 10, 13);
+                p2 = new Point(((int)e.Graphics.ClipBounds.Right) - 14, 8);
+                p3 = new Point(((int)e.Graphics.ClipBounds.Right) - 18, 13);
+            }
+            else
+            {
+                int wt = (int)e.Graphics.MeasureString("Descending", new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular)).Width + 2;
+                e.Graphics.DrawString("Descending", new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), e.Graphics.ClipBounds.Right - wt - 18, y + 2);
+
+                p1 = new Point(((int)e.Graphics.ClipBounds.Right) - 10, 8);
+                p2 = new Point(((int)e.Graphics.ClipBounds.Right) - 14, 13);
+                p3 = new Point(((int)e.Graphics.ClipBounds.Right) - 18, 8); 
+            }
+         
+            e.Graphics.FillPolygon(new SolidBrush(Color.Black), new Point[] { p1, p2, p3 }, FillMode.Winding);
+        }
+
+        private void SortControl_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.X > SortControl.Size.Width - 80)
+            {
+                OMLEngine.Settings.OMLSettings.DBETitleSortAsc = !OMLEngine.Settings.OMLSettings.DBETitleSortAsc;
+                PopulateMovieListV2(SelectedTreeRoot);
+                SortControl.Refresh();
+            }
+            else
+            {
+                ContextMenuStrip cms = new ContextMenuStrip();
+                //cms.ite
+                cms.ItemClicked += new ToolStripItemClickedEventHandler(SortOrderChanged);
+                cms.Items.Add("Name");
+                cms.Items.Add("Runtime");
+                cms.Items.Add("DateAdded");
+                cms.Items.Add("ModifiedDate");
+                cms.Items.Add("ProductionYear");
+                cms.Items.Add("ReleaseDate");
+                cms.Show(SortControl, e.Location);
+            }
+        }
+        public void SortOrderChanged(object sender, ToolStripItemClickedEventArgs e)
+        {
+            OMLEngine.Settings.OMLSettings.DBETitleSortField = e.ClickedItem.Text;
+            PopulateMovieListV2(SelectedTreeRoot);
+            SortControl.Refresh();
+        }
+        #endregion
     }
 }
