@@ -27,10 +27,8 @@ namespace OMLDatabaseEditor
 
         public Boolean OptionsDirty = false;
         private Boolean MPAAdirty = false;
-        private Boolean GenreDirty = false;
         private Boolean TagsDirty = false;
         private List<String> MPAAList;
-        private List<String> GenreList;
         private List<String> TagList;
 
         private void Options_Load(object sender, EventArgs e)
@@ -66,17 +64,8 @@ namespace OMLDatabaseEditor
             lbcTags.DataSource = TagList;
 
             this.ceUseGenreList.Checked = OMLSettings.UseGenreList;
-            GenreList = new List<String>();
-            if (Properties.Settings.Default.gsValidGenres != null
-            && Properties.Settings.Default.gsValidGenres.Count > 0)
-            {
-                genreCount = Properties.Settings.Default.gsValidGenres.Count;
-                String[] arrGenre = new String[genreCount];
-                Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
-                GenreList.AddRange(arrGenre);
-            }
-            else
-            {
+            
+            /*
                 if (XtraMessageBox.Show("No allowable genres have been defined. Would you like to load them from your current movie collection?", "No Genres", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     Properties.Settings.Default.gsValidGenres = new StringCollection();
@@ -90,10 +79,8 @@ namespace OMLDatabaseEditor
 
                     Properties.Settings.Default.gsValidGenres.AddRange(genreNames);
                 }
-            }
+            }*/
             // I disabled this line because gsValidGenres is not just empty, its undef
-            GenreList.Sort();
-            lbGenres.DataSource = GenreList;
 
             this.ceFoldersAsTitles.Checked = OMLSettings.TreatFoldersAsTitles;
             this.cePrependParentFolder.Checked = OMLSettings.AddParentFoldersToTitleName;
@@ -156,19 +143,6 @@ namespace OMLDatabaseEditor
                 {
                     bDirty = true;
                     OMLSettings.UseGenreList = this.ceUseGenreList.Checked;
-                }
-                if (GenreDirty)
-                {
-                    bDirty = true;
-                    if (Properties.Settings.Default.gsValidGenres == null)
-                    {
-                        Properties.Settings.Default.gsValidGenres = new StringCollection();
-                    }
-                    else
-                    {
-                        Properties.Settings.Default.gsValidGenres.Clear();
-                    }
-                    Properties.Settings.Default.gsValidGenres.AddRange(GenreList.ToArray());
                 }
                 if (TagsDirty)
                 {
@@ -259,16 +233,6 @@ namespace OMLDatabaseEditor
                 lbcTags.Refresh();
                 beTags.Text = String.Empty;
             }
-            else if (sender == btnGenre)
-            {
-                if (String.IsNullOrEmpty((String)btnGenre.Text)) return;
-                if (GenreList.Contains(btnGenre.Text)) return;
-
-                GenreList.Add(btnGenre.Text);
-                GenreDirty = true;
-                lbGenres.Refresh();
-                btnGenre.Text = String.Empty;
-            }
         }
 
         private void lbcMPAA_KeyDown(object sender, KeyEventArgs e)
@@ -285,7 +249,7 @@ namespace OMLDatabaseEditor
             ((ListBoxControl)sender).Refresh();
         }
 
-        private void lbGenres_KeyDown(object sender, KeyEventArgs e)
+/*        private void lbGenres_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete && lbGenres.SelectedItems.Count > 0)
             {
@@ -316,29 +280,8 @@ namespace OMLDatabaseEditor
                 }
                 lbGenres.Refresh();
             }
-        }
+        }*/
 
-        private void lbGenres_MouseClick(object sender, MouseEventArgs e)
-        {
-            // TODO : Create SQL Version
-            /*
-            lbGenres.SelectedIndex = lbGenres.IndexFromPoint(e.Location);
-            if (e.Button == MouseButtons.Right)
-            {
-                string genre = lbGenres.SelectedItem as string;
-                TitleCollection collection = MainEditor._titleCollection;
-                IEnumerable<KeyValuePair<string, string>> matches = collection.GenreMap.Where(kvp => kvp.Value == genre);
-                cmGenreMappings.Items.Clear();
-                foreach (KeyValuePair<string, string> match in matches)
-                {
-                    ToolStripMenuItem item = new ToolStripMenuItem(match.Key);
-                    item.Tag = match.Value;
-                    item.Click += new EventHandler(item_Click);
-                    cmGenreMappings.Items.Add(item);
-                }
-                cmGenreMappings.Show(lbGenres, e.Location);
-            }*/
-        }
 
         void item_Click(object sender, EventArgs e)
         {

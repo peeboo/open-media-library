@@ -61,29 +61,6 @@ namespace OMLDatabaseEditor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool gbUseGenreList {
-            get {
-                return ((bool)(this["gbUseGenreList"]));
-            }
-            set {
-                this["gbUseGenreList"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection gsValidGenres {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["gsValidGenres"]));
-            }
-            set {
-                this["gsValidGenres"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string gsTags {
             get {

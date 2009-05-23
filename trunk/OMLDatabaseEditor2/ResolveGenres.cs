@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
+using System.Linq;
+using OMLEngine;
 
 using OMLEngine;
 
@@ -22,12 +24,11 @@ namespace OMLDatabaseEditor
             InitializeComponent();
 
             _title = title;
-            if (Properties.Settings.Default.gsValidGenres != null
-            && Properties.Settings.Default.gsValidGenres.Count > 0)
+            if (TitleCollectionManager.GetAllGenreMetaDatas().Count() > 0)
             {
-                int genreCount = Properties.Settings.Default.gsValidGenres.Count;
-                String[] arrGenre = new String[genreCount];
-                Properties.Settings.Default.gsValidGenres.CopyTo(arrGenre, 0);
+                String[] arrGenre = (from gmd in TitleCollectionManager.GetAllGenreMetaDatas()
+                                     select gmd.Name).ToArray();
+ 
                 _genreList.AddRange(arrGenre);
             }
 
