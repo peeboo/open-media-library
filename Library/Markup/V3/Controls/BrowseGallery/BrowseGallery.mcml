@@ -1043,7 +1043,7 @@
     </Content>
 
     <Content Name="threeRowGalleryItemPoster">
-      <me:threeRowGalleryItemPoster Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+      <me:threeRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
       </me:threeRowGalleryItemPoster>
     </Content>
