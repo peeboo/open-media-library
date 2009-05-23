@@ -312,7 +312,7 @@
 
                 </Children>
               </Panel>
-              <Repeater Name="Repeater" Source="[Model.Content]" ContentName="[Pivot!shell:BrowsePivot.SubContentItemTemplate]" Navigation="RememberFocus, FlowVertical">
+              <Repeater Name="Repeater" Source="[Model.Content]" ContentName="[Pivot!shell:BrowsePivot.SubContentItemTemplate]" Navigation="FlowVertical">
                 <Layout>
                   <GridLayout Orientation="Vertical" AllowWrap="true" Spacing="2, 2"/>
                 </Layout>
