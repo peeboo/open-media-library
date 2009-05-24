@@ -606,6 +606,7 @@ namespace OMLDatabaseEditor
             // 
             // treeMedia
             // 
+            this.treeMedia.AllowDrop = true;
             this.treeMedia.ContextMenuStrip = this.cmsMediaTree;
             this.treeMedia.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeMedia.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
@@ -614,9 +615,13 @@ namespace OMLDatabaseEditor
             this.treeMedia.Name = "treeMedia";
             this.treeMedia.Size = new System.Drawing.Size(175, 352);
             this.treeMedia.TabIndex = 0;
+            this.treeMedia.DragLeave += new System.EventHandler(this.treeMedia_DragLeave);
             this.treeMedia.DrawNode += new System.Windows.Forms.DrawTreeNodeEventHandler(this.treeMedia_DrawNode);
+            this.treeMedia.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeMedia_DragDrop);
             this.treeMedia.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeMedia_AfterSelect);
             this.treeMedia.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeMedia_MouseDown);
+            this.treeMedia.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeMedia_DragEnter);
+            this.treeMedia.DragOver += new System.Windows.Forms.DragEventHandler(this.treeMedia_DragOver);
             // 
             // cmsMediaTree
             // 
@@ -915,6 +920,7 @@ namespace OMLDatabaseEditor
             this.lbTitles.TabIndex = 1;
             this.lbTitles.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbTitles_DrawItem);
             this.lbTitles.SelectedIndexChanged += new System.EventHandler(this.lbTitles_SelectedIndexChanged);
+            this.lbTitles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lbTitles_MouseDown);
             // 
             // cmsMoviesList
             // 
