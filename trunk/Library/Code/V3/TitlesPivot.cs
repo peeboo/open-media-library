@@ -220,11 +220,23 @@ namespace Library.Code.V3
 
         private object GetCommandForItem(OMLEngine.Title item)
         {
-            switch (item.TitleType)
+            if ((item.TitleType & OMLEngine.TitleTypes.AllMedia) != 0)
+            {
+                return new Library.Code.V3.MovieItem(item, this);
+            }
+
+            if ((item.TitleType & OMLEngine.TitleTypes.AllFolders) != 0)
+            {
+                return new Library.Code.V3.CollectionItem(item, this);
+            }
+
+            return new Library.Code.V3.CollectionItem(item, this);
+
+
+            /*switch (item.TitleType)
             {
                 case OMLEngine.TitleTypes.Movie:
                     {
-                        return new Library.Code.V3.MovieItem(item, this);
                     }
                 case OMLEngine.TitleTypes.Collection:
                     {
@@ -235,7 +247,7 @@ namespace Library.Code.V3
                         return new Library.Code.V3.MovieItem(item, this);
                     }
 
-            }
+            }*/
             
         }
 
