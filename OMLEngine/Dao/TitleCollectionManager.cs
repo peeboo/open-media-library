@@ -362,7 +362,11 @@ namespace OMLEngine
             // get all the titles
             return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetAllTitles(type));
         }
-
+        public static IEnumerable<Title> GetAllTitles(TitleTypes type, int parentId)
+        {
+            // get all the titles
+            return ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetAllTitles(type, parentId));
+        }
 
         public static IEnumerable<Title> GetTitlesByPercentComplete(decimal completeness)
         {
@@ -395,6 +399,18 @@ namespace OMLEngine
             return (filters == null || filters.Count == 0 ) 
                     ? GetAllTitles()
                     : ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetFilteredTitles(filters));
+        }
+
+        /// <summary>
+        /// Returns the titles for the given filter
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        public static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters, TitleTypes type, int parentId)
+        {
+            return (filters == null || filters.Count == 0)
+                    ? GetAllTitles(type, parentId)
+                    : ConvertDaoTitlesToTitles(Dao.TitleCollectionDao.GetFilteredTitles(filters, type, parentId));
         }
 
         public static IEnumerable<FilteredCollection> GetAllStudios(List<TitleFilter> filters)

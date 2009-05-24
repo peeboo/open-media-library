@@ -56,7 +56,7 @@ namespace Library.Code.V3
                 newFilter[i]=this.m_filters[i];
             }
             
-            UserFilter filter = new UserFilter(this.Description.Replace("|", ""), newFilter);
+            UserFilter filter = new UserFilter(this.Description, newFilter);
             newFilters[oldFilters.Count] = filter;
             OMLSettings.UserFilters = newFilters;
 

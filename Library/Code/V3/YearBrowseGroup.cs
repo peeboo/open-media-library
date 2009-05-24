@@ -25,8 +25,8 @@ namespace Library.Code.V3
         private void InitializeListCount(VirtualList vlist)
         {            
             //temp hack for perf issue: see http://discuss.mediacentersandbox.com/forums/thread/9205.aspx
-            if (titles.Count > 20)
-                ((VirtualList)this.m_listContent).Count = 20;
+            if (titles.Count > 5)
+                ((VirtualList)this.m_listContent).Count = 5;
             else
                 ((VirtualList)this.m_listContent).Count = titles.Count;
         }
