@@ -1279,6 +1279,12 @@ namespace OMLDatabaseEditor
 
         private void treeMedia_DrawNode(object sender, DrawTreeNodeEventArgs e)
         {
+            if (e.Node.Bounds.X == 0)
+            {
+                // Stop occasional paint corruption
+                return;
+            }
+
             // Create the brushes
             if (_brushTreeViewSelected == null)
             {
@@ -1387,7 +1393,6 @@ namespace OMLDatabaseEditor
             _movieList.Add(folder.Id, folder);
 
             PopulateMediaTree();
-
             if (_mediaTree.ContainsKey(folder.Id))
             {
                 treeMedia.SelectedNode = _mediaTree[folder.Id];
@@ -1434,6 +1439,8 @@ namespace OMLDatabaseEditor
         #region TitleList functions
         private void PopulateMovieListV2(int? roottitleid)
         {
+            this.Cursor = Cursors.WaitCursor;
+
             lbTitles.Items.Clear();
 
             if (roottitleid != null)
@@ -1475,6 +1482,8 @@ namespace OMLDatabaseEditor
             {
                 lbTitles.SelectedItem = TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
             }
+
+            this.Cursor = Cursors.Default;
         }
 
         private void PopulateMovieListV2Sub(int? roottitleid, int Level)
@@ -1531,12 +1540,12 @@ namespace OMLDatabaseEditor
             int y = e.Bounds.Y;
             int w = e.Bounds.Width;
             int h = e.Bounds.Height;
-            
+
             // Setup string formatting
             StringFormat stf = new StringFormat();
             stf.Trimming = StringTrimming.EllipsisCharacter;
             stf.FormatFlags = StringFormatFlags.NoWrap;
-            
+
             e.DrawBackground();
 
 
@@ -1596,7 +1605,7 @@ namespace OMLDatabaseEditor
                     c1 = Color.SkyBlue;
                     c2 = Color.White;
                 }
-                
+
                 LinearGradientBrush bb = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), c1, c2, 2);
 
                 e.Graphics.FillEllipse(bb, new Rectangle(x + w - 30, y + 16, 14, 14));
@@ -1605,6 +1614,35 @@ namespace OMLDatabaseEditor
 
             // Common painting goes here
             e.Graphics.DrawLine(new Pen(Color.Gray), 0, y + h - 1, w, y + h - 1);
+        }
+
+
+        private void lbTitles_MouseDown(object sender, MouseEventArgs e)
+        {
+            int indexOfItem = lbTitles.IndexFromPoint(e.X, e.Y);
+            if ((indexOfItem >= 0) && (indexOfItem < lbTitles.Items.Count))
+            {
+
+                //if (e.Button == MouseButtons.Right)
+                //{
+                   /* Point p = new Point(e.X, e.Y);
+
+                    if ((Control.ModifierKeys & (Keys.Alt | Keys.Control | Keys.Shift)) == 0)
+                    {
+                        lbTitles.SelectedItems.Clear();
+                    }
+                    lbTitles.SelectedIndex = indexOfItem;*/
+                //}
+
+                if (e.Button == MouseButtons.Left)
+                {
+                    int [] sitems = (from Title si in lbTitles.SelectedItems
+                                    select ((Title)si).Id).ToArray();
+                    lbTitles.DoDragDrop(sitems, DragDropEffects.Move);
+                    lbTitles_SelectedIndexChanged();
+
+                }
+            }
         }
 
         private void lbTitles_SelectedIndexChanged(object sender, EventArgs e)
@@ -1626,6 +1664,30 @@ namespace OMLDatabaseEditor
                 titleEditor.LoadDVD(selectedTitle);
                 this.Text = APP_TITLE + " - " + selectedTitle.Name;
                 ToggleSaveState(false);
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void lbTitles_SelectedIndexChanged()
+        {
+            if (_loading) return;
+            Cursor = Cursors.WaitCursor;
+            if (SaveCurrentMovie() == DialogResult.Cancel)
+            {
+                _loading = true; //bypasses second save movie dialog
+                lbTitles.SelectedItem = TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
+                _loading = false;
+            }
+            else
+            {
+                Title selectedTitle = lbTitles.SelectedItem as Title;
+
+                if (selectedTitle != null)
+                {
+                    titleEditor.LoadDVD(selectedTitle);
+                    this.Text = APP_TITLE + " - " + selectedTitle.Name;
+                    ToggleSaveState(false);
+                }
             }
             Cursor = Cursors.Default;
         }
@@ -1927,6 +1989,102 @@ namespace OMLDatabaseEditor
             ToggleSaveState(true);
         }
 
+        #region Title Drag and Drop support
+        private ToolTip tt;
+        TreeNode currenttreenode;
+        
+        private void treeMedia_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(int[])))
+            {
+                e.Effect = DragDropEffects.Move;
+            }
+        }
+
+        private void treeMedia_DragDrop(object sender, DragEventArgs e)
+        {
+            this.Cursor = Cursors.WaitCursor;
+            
+            bool foldermoved = false;
+
+            if (tt != null)
+            {
+                tt.Hide(this);
+                tt.Dispose();
+                tt = null;
+            }
+
+            TreeNode selectednode = treeMedia.GetNodeAt(treeMedia.PointToClient(new Point(e.X, e.Y)));
+
+            if (e.Data.GetDataPresent(typeof(int[])))
+            {
+                int[] items = (int[])e.Data.GetData(typeof(int[]));
+                foreach (int item in items)
+                {
+                    if ((_movieList[item].TitleType & TitleTypes.AllFolders) != 0)
+                    {
+                        foldermoved = true;
+                    }
+
+                    if (selectednode.Name == "All Media")
+                    {
+                        // Item is being moved to root
+                        _movieList[item].ParentTitleId = item;
+                        _movieList[item].TitleType = _movieList[item].TitleType | TitleTypes.Root;
+                    }
+                    else
+                    {
+                        // Item is being moved to a folder
+                        int parentid = Convert.ToInt32(selectednode.Name);
+                        _movieList[item].ParentTitleId = parentid;
+                        _movieList[item].TitleType = _movieList[item].TitleType & (TitleTypes.AllMedia | TitleTypes.AllFolders);
+                    }
+                }
+                TitleCollectionManager.SaveTitleUpdates();
+            }
+
+            if (foldermoved)
+            {
+                PopulateMediaTree();
+                if (_mediaTree.ContainsKey((int)SelectedTreeRoot))
+                {
+                    treeMedia.SelectedNode = _mediaTree[(int)SelectedTreeRoot];
+                }
+            }
+
+            PopulateMovieListV2(SelectedTreeRoot);
+
+            this.Cursor = Cursors.Default;
+        }
+
+        private void treeMedia_DragOver(object sender, DragEventArgs e)
+        {
+            if (tt == null)
+            {
+                tt = new ToolTip();
+            }
+
+            Point mouseLocation = treeMedia.PointToClient(new Point(e.X, e.Y));
+            TreeNode node = treeMedia.GetNodeAt(mouseLocation);
+
+            if (currenttreenode != node)
+            {
+                tt.Show("Move to " + node.Text, this, new Point(e.X, e.Y + 30));
+                currenttreenode = node;
+            }
+        }
+
+        private void treeMedia_DragLeave(object sender, EventArgs e)
+        {
+            if (tt != null)
+            {
+                tt.Hide(this);
+                tt.Dispose();
+                tt = null;
+            }
+        }
+        #endregion
+
 
         #region Title Sorting
         private IEnumerable<Title> SortTitles(IEnumerable<Title> titles)
@@ -1936,6 +2094,8 @@ namespace OMLDatabaseEditor
                 switch (OMLEngine.Settings.OMLSettings.DBETitleSortField)
                 {
                     case "Name":
+                        return titles.OrderBy(st => st.Name);
+                    case "SortName":
                         return titles.OrderBy(st => st.SortName);
                     case "Runtime":
                         return titles.OrderBy(st => st.Runtime);
@@ -1956,6 +2116,8 @@ namespace OMLDatabaseEditor
                 switch (OMLEngine.Settings.OMLSettings.DBETitleSortField)
                 {
                     case "Name":
+                        return titles.OrderByDescending(st => st.Name);
+                    case "SortName":
                         return titles.OrderByDescending(st => st.SortName);
                     case "Runtime":
                         return titles.OrderByDescending(st => st.Runtime);
@@ -2021,6 +2183,7 @@ namespace OMLDatabaseEditor
                 //cms.ite
                 cms.ItemClicked += new ToolStripItemClickedEventHandler(SortOrderChanged);
                 cms.Items.Add("Name");
+                cms.Items.Add("SortName");
                 cms.Items.Add("Runtime");
                 cms.Items.Add("DateAdded");
                 cms.Items.Add("ModifiedDate");
