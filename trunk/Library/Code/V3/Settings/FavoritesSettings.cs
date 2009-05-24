@@ -157,11 +157,17 @@ namespace Library.Code.V3
                         if (res == DialogResult.Yes)
                         {
                             //delete
+
                         }
                     }
                 };
                 this.favoritesArray.Add(cmd);
             }
+        }
+
+        public static bool DeleteFavorite()
+        {
+            return true;
         }
     }
 

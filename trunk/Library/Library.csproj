@@ -116,7 +116,8 @@
     <Compile Include="Code\Filters.cs" />
     <Compile Include="Code\V3\AlphaPivot.cs" />
     <Compile Include="Code\V3\Controls\LegacyHorizontalFlowLayoutHelper.cs" />
-    <Content Include="Code\V3\CollectionItem.cs.txt" />
+    <Compile Include="Code\V3\CollectionItem.cs" />
+    <Compile Include="Code\V3\CollectionPage.cs" />
     <Compile Include="Code\V3\FilterItem.cs" />
     <Compile Include="Code\V3\FavoritesPivot.cs" />
     <Compile Include="Code\V3\FilterPivot.cs" />

@@ -170,9 +170,8 @@ namespace Library.Code.V3
         private void InitializeListCount(VirtualList vlist)
         {
             this.IsBusy = true;
-
             //titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetAllTitles());
-            titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(this.m_filters));
+            titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(this.m_filters,OMLEngine.TitleTypes.AllFolders|OMLEngine.TitleTypes.AllMedia, 0));
             ((VirtualList)this.m_listContent).Count = titles.Count;
 
             if (Properties.Settings.Default.GallerySelectedView == 0)
@@ -221,7 +220,23 @@ namespace Library.Code.V3
 
         private object GetCommandForItem(OMLEngine.Title item)
         {
-            return new Library.Code.V3.MovieItem(item, this);
+            switch (item.TitleType)
+            {
+                case OMLEngine.TitleTypes.Movie:
+                    {
+                        return new Library.Code.V3.MovieItem(item, this);
+                    }
+                case OMLEngine.TitleTypes.Collection:
+                    {
+                        return new Library.Code.V3.CollectionItem(item, this);
+                    }
+                default:
+                    {
+                        return new Library.Code.V3.MovieItem(item, this);
+                    }
+
+            }
+            
         }
 
 
