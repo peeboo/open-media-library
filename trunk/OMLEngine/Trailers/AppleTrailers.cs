@@ -10,6 +10,12 @@ using System.Collections;
 
 namespace OMLEngine.Trailers
 {
+    public enum AppleTrailerRes
+    {
+        LowRes,
+        HiRes
+    }
+
     public class AppleTrailers
     {
         private const string LoFiUrl = @"http://www.apple.com/trailers/home/xml/current.xml";
@@ -39,14 +45,22 @@ namespace OMLEngine.Trailers
             }
         }
 
-        public AppleTrailers()
+        /// <summary>
+        /// Constructor for creating AppleTrailers object.  The constructor will do the outbound query and load up a collection
+        /// of titles you can query/sort against.
+        /// </summary>
+        /// <param name="res">The resolution of the trailers</param>
+        public AppleTrailers(AppleTrailerRes res)
         {
+            string url = (res == AppleTrailerRes.HiRes)
+                            ? HiFiUrl
+                            : LoFiUrl;
             try
             {
                 // load the xml
                 using (WebClient client = new WebClient())
                 {
-                    using (Stream stream = client.OpenRead(HiFiUrl))
+                    using (Stream stream = client.OpenRead(url))
                     {
                         XmlTextReader reader = new XmlTextReader(stream);
 
