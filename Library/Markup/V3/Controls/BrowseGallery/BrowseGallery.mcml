@@ -391,7 +391,7 @@
     </Locals>
 
     <Rules>
-      <Binding Source="[Model.IsBusy]" Target="[WaitCursor.Visible]" />
+      <!--Binding Source="[Model.IsBusy]" Target="[WaitCursor.Visible]" /-->
       <!--Binding Source="[ScrollerGrid]" Target="[RepeaterHelper.Scroller]"/-->
       <!--Binding Source="[ScrollerGrid]" Target="[RepeaterHelper.Scroller]"/-->
       <Rule>

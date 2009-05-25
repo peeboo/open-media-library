@@ -25,7 +25,7 @@ namespace Library.Code.V3
         {
             return 0;
         }
-        public void beginLoadContent(object pivot)
+        public virtual void beginLoadContent(object pivot)
         {
             //testing a slow load...
             //System.Threading.Thread.Sleep(5000);
@@ -40,7 +40,7 @@ namespace Library.Code.V3
                 });
         }
 
-        public void endLoadContent(object pivot)
+        public virtual void endLoadContent(object pivot)
         {
             if (!IsDisposed)
             {
@@ -82,7 +82,7 @@ namespace Library.Code.V3
             }
         }
 
-        private void SetupContextMenu()
+        public void SetupContextMenu()
         {
             #region ctx menu
             //create the context menu
@@ -306,6 +306,23 @@ namespace Library.Code.V3
                 {
                     this.m_stNoContentText = value;
                     base.FirePropertyChanged("EmptyContentText");
+                }
+            }
+        }
+
+        private string m_loadingContentMessage;
+        public string LoadingContentMessage
+        {
+            get
+            {
+                return this.m_loadingContentMessage;
+            }
+            set
+            {
+                if (this.m_loadingContentMessage != value)
+                {
+                    this.m_loadingContentMessage = value;
+                    base.FirePropertyChanged("LoadingContentMessage");
                 }
             }
         }
