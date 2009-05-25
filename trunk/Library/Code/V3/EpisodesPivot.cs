@@ -7,9 +7,9 @@ using Microsoft.MediaCenter.UI;
 
 namespace Library.Code.V3
 {
-    public class TitlesPivot : BrowsePivot
+    public class EpisodesPivot : BrowsePivot
     {
-        public TitlesPivot(IModelItemOwner owner, string stDescription, string stNoContentText)
+        public EpisodesPivot(IModelItemOwner owner, string stDescription, string stNoContentText)
             : base(owner, stDescription, stNoContentText, null)
         {
             this.m_listContent = new VirtualList(new ItemCountHandler(this.InitializeListCount));
@@ -19,17 +19,13 @@ namespace Library.Code.V3
         private int parentId = 0;
 
         private List<OMLEngine.TitleFilter> m_filters;
-        public TitlesPivot(IModelItemOwner owner, string stDescription, string stNoContentText, List<OMLEngine.TitleFilter> filters, int parentId)
+        public EpisodesPivot(IModelItemOwner owner, string stDescription, string stNoContentText, List<OMLEngine.TitleFilter> filters, int parentId)
             : base(owner, stDescription, stNoContentText, null)
         {
             this.parentId = parentId;
             this.SupportsItemContext = true;
             this.SupportsJIL = true;
             this.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
-            this.SupportedContentItemTemplates.Add("View Large", "oneRowGalleryItemPoster");
-            this.SupportedContentItemTemplates.Add("View Small", "twoRowGalleryItemPoster");
-            this.SupportedContentItemTemplates.Add("View List", "ListViewItem");
-
             this.SetupContextMenu();
             this.m_filters = filters;
             this.m_listContent = new VirtualList(new ItemCountHandler(this.InitializeListCount));
@@ -174,31 +170,31 @@ namespace Library.Code.V3
         {
             this.IsBusy = true;
             //titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetAllTitles());
-            titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(this.m_filters,OMLEngine.TitleTypes.AllFolders|OMLEngine.TitleTypes.AllMedia, this.parentId));
+            titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(this.m_filters, OMLEngine.TitleTypes.AllFolders | OMLEngine.TitleTypes.AllMedia, this.parentId));
             ((VirtualList)this.m_listContent).Count = titles.Count;
 
-            if (Properties.Settings.Default.GallerySelectedView == 0)
-            {
-                this.ContentItemTemplate = "ListViewItem";
-                this.DetailTemplate = BrowsePivot.StandardDetailTemplate;
-            }
-            else
-            {
-                this.ContentItemTemplate = "oneRowGalleryItemPoster";
-                this.DetailTemplate = BrowsePivot.ExtendedDetailTemplate;
+            //if (Properties.Settings.Default.GallerySelectedView == 0)
+            //{
+            //    this.ContentItemTemplate = "ListViewItem";
+            //    this.DetailTemplate = BrowsePivot.StandardDetailTemplate;
+            //}
+            //else
+            //{
+            this.ContentItemTemplate = "oneRowGalleryItem4x3";
+            this.DetailTemplate = BrowsePivot.ExtendedDetailTemplate;
 
-                if (Properties.Settings.Default.GalleryEnableTwoRow && this.m_listContent.Count > Properties.Settings.Default.GalleryTwoRowMin)
-                {
-                    this.ContentItemTemplate = "twoRowGalleryItemPoster";
-                    this.DetailTemplate = BrowsePivot.StandardDetailTemplate;
-                }
-                if (Properties.Settings.Default.GalleryEnableThreeRow && this.m_listContent.Count > Properties.Settings.Default.GalleryThreeRowMin)
-                {
-                    this.ContentItemTemplate = "threeRowGalleryItemPoster";
-                    this.DetailTemplate = BrowsePivot.StandardDetailTemplate;
-                }
-            }
-            
+            //    if (Properties.Settings.Default.GalleryEnableTwoRow && this.m_listContent.Count > Properties.Settings.Default.GalleryTwoRowMin)
+            //    {
+            //        this.ContentItemTemplate = "twoRowGalleryItemPoster";
+            //        this.DetailTemplate = BrowsePivot.StandardDetailTemplate;
+            //    }
+            //    if (Properties.Settings.Default.GalleryEnableThreeRow && this.m_listContent.Count > Properties.Settings.Default.GalleryThreeRowMin)
+            //    {
+            //        this.ContentItemTemplate = "threeRowGalleryItemPoster";
+            //        this.DetailTemplate = BrowsePivot.StandardDetailTemplate;
+            //    }
+            //}
+
             this.IsBusy = false;
         }
 
@@ -240,7 +236,7 @@ namespace Library.Code.V3
 
             if ((item.TitleType & OMLEngine.TitleTypes.Season) != 0)
             {
-                return new Library.Code.V3.SeasonItem(item, this);
+                return new Library.Code.V3.CollectionItem(item, this);
             }
 
             return new Library.Code.V3.MovieItem(item, this);

@@ -8,7 +8,7 @@ using Microsoft.MediaCenter.UI;
 
 namespace Library.Code.V3
 {
-    public class CollectionItem : GalleryItem
+    public class SeasonItem : GalleryItem
     {
 
         private void CacheImageDone(object nothing)
@@ -24,7 +24,7 @@ namespace Library.Code.V3
             }
         }
 
-        public CollectionItem(Library.GalleryItem title, IModelItem owner, List<TitleFilter> filter)
+        public SeasonItem(Library.GalleryItem title, IModelItem owner, List<TitleFilter> filter)
             : base(owner)
         {
             this.Description = title.Caption;
@@ -72,7 +72,7 @@ namespace Library.Code.V3
         private OMLEngine.Title _titleObj;
         public OMLEngine.Title TitleObject { get { return _titleObj; } }
 
-        public CollectionItem(Title title, IModelItem owner)
+        public SeasonItem(Title title, IModelItem owner)
             : base(owner)
         {
             this._titleObj = title;
@@ -116,7 +116,7 @@ namespace Library.Code.V3
             this.Invoked += delegate(object sender, EventArgs args)
             {
                 //stub details for CollectionItem  
-                CollectionPage page = new CollectionPage(this);
+                SeasonPage page = new SeasonPage(this);
                 OMLProperties properties = new OMLProperties();
                 properties.Add("Application", OMLApplication.Current);
                 //properties.Add("UISettings", new UISettings());

@@ -1,0 +1,1631 @@
+<Mcml
+    xmlns="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor ="assembly://MsCorLib/System"    
+    xmlns:comm="resx://Library/Library.Resources/V3_Globals"    
+    xmlns:statictext="resx://Library/Library.Resources/V3_Controls_StaticText"
+    xmlns:focus="resx://Library/Library.Resources/V3_Controls_FocusAnimation"
+    xmlns:shell ="assembly://Library/Library.Code.V3"
+    xmlns:omlShell ="assembly://Library/Library"
+    xmlns:me  ="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseCommand"/>
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseDetails"/>
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowsePivots"/>
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseGallery"/>
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem"/>
+  <Aggregate Source="resx://Library/Library.Resources/V3_SlideDeck_Movie_Details"/>
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_ContextMenu"/>
+
+
+  <Image Name="Browse.TitleShadow" Source="resx://Library/Library.Resources/V3_Controls_Common_Browse_TitleShadow" NineGrid="100, 0, 100, 62" Flippable="true"/>
+  <Image Name="Browse.TitleShadowListView" Source="resx://Library/Library.Resources/V3_Controls_Common_Browse_TitleShadowListView" NineGrid="100, 0, 100, 62" Flippable="true"/>
+  <Image Name="Browse.Selector" Source="resx://Library/Library.Resources/V3_Controls_Common_Browse_Selector" NineGrid="9, 9, 9, 9"/>
+
+  <UI Name="GalleryPage">
+    <Properties>
+      <shell:MovieDetailsSlideDeck Name="SlideDeck" MovieDetailsSlideDeck="$Required" />
+      <!--shell:ContextMenuData Name="MenuData" ContextMenuData="$Required" /-->
+      <shell:GalleryPage Name="Page" GalleryPage="$Required"/>
+      <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <!--wireup for slidedeck-->
+      <Command Command="$Required" Name="CommandPopOverlay"/>
+      <Command Command="$Required" Name="CommandClearOverlays"/>
+      <Command Command="$Required" Name="CommandPushOverlay"/>
+      <!--end wireup for slidedeck-->
+      <!-- wireup for context-->
+      <Command Command="$Required" Name="CommandContextPopOverlay"/>
+      <!--end wireup for context-->
+      <!-- environment helper-->
+      <!--shell:EnvironmentHelper Name="EnvironmentHelper"></shell:EnvironmentHelper-->
+    </Properties>
+    <Locals>
+      <ShortcutHandler Name="BackHandler" Shortcut="Back" Handle="false" HandlerStage="Bubbled"/>
+      <ShortcutHandler Name="PlayButton" Command="[Page.QuickPlay]" Shortcut="Play" Handle="true" HandlerStage="Bubbled" />
+      <cor:Boolean Name="ContextMenuVisible" Boolean="false"/>
+      <cor:Boolean Name="ItemContextMenuVisible" Boolean="false"/>
+      <cor:Boolean Name="SlideMenuVisible" Boolean="false"/>
+      <EditableText   Name="FocusArea" Value="none"/>
+      <!--Environment Name="Environment"/-->
+    </Locals>
+    <Rules>
+      <!--Changed Source="[Environment]" InitialEvaluate="true">
+        <Actions>
+          <Invoke Target="[EnvironmentHelper.GetEnvironment]" Environment="[Environment]" />
+        </Actions>
+      </Changed-->
+      <!-- wireup for the Details menu -->
+      <Binding Target="[ContextMenu.Visible]" Source="[ContextMenuVisible]"/>
+      <Binding Target="[ItemContextMenu.Visible]" Source="[ItemContextMenuVisible]"/>
+      <Binding Target="[SlideMenu.Visible]" Source="[SlideMenuVisible]"/>
+      <Binding Target="[Content.FocusArea]" Source="[FocusArea]"/>
+
+      <!--Changed Source="[Application.PrimaryBackgroundImage]">
+        <Actions>
+          <DebugTrace Message="Application.PrimaryBackgroundImage: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[Application.PrimaryBackgroundImage]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Changed-->
+
+      <!--Changed Source="[FocusArea.Value]">
+        <Actions>
+          <DebugTrace Message="FocusArea.Value: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[FocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Changed-->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Modified Source="[Application.MoreInfo]"/>
+          <Equality Source="[ContextMenuVisible]" Value="false" />
+          <Equality Source="[ItemContextMenuVisible]" Value="false" />
+          <Equality Source="[SlideMenuVisible]" Value="false" />
+          <Equality Source="[FocusArea.Value]" Value="Gallery"/>
+          <Equality Source="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.SupportsItemContext]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ItemContextMenuVisible]" Value="true"/>
+          <Set Target="[FocusArea.Value]" Value="Context"/>
+          <Invoke Target="[ItemContextMenu.NavigateInto]" />
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Modified Source="[Application.MoreInfo]"/>
+          <Equality Source="[ContextMenuVisible]" Value="false" />
+          <Equality Source="[ItemContextMenuVisible]" Value="false" />
+          <Equality Source="[SlideMenuVisible]" Value="false" />
+          <Equality Source="[FocusArea.Value]" ConditionOp="Equals" Value="Gallery"/>
+          <Equality Source="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.SupportsItemContext]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ContextMenuVisible]" Value="true"/>
+          <Set Target="[FocusArea.Value]" Value="Context"/>
+          <Invoke Target="[ContextMenu.NavigateInto]" />
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Modified Source="[Application.MoreInfo]"/>
+          <Equality Source="[ContextMenuVisible]" Value="false" />
+          <Equality Source="[ItemContextMenuVisible]" Value="false" />
+          <Equality Source="[SlideMenuVisible]" Value="false" />
+          <Equality Source="[FocusArea.Value]" ConditionOp="NotEquals" Value="Gallery"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ContextMenuVisible]" Value="true"/>
+          <Set Target="[FocusArea.Value]" Value="Context"/>
+          <Invoke Target="[ContextMenu.NavigateInto]" />
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Modified Source="[Application.MoreInfo]"/>
+          <Equality Source="[ContextMenuVisible]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[ContextMenuVisible]" Value="false"/>
+          <Set Target="[ItemContextMenuVisible]" Value="false"/>
+        </Actions>
+      </Rule>
+        <Rule ConditionLogicalOp="And">
+          <Conditions>
+            <Modified Source="[Application.MoreInfo]"/>
+            <Equality Source="[ItemContextMenuVisible]" Value="true" />
+          </Conditions>
+          <Actions>
+            <Set Target="[ContextMenuVisible]" Value="false"/>
+            <Set Target="[ItemContextMenuVisible]" Value="false"/>
+          </Actions>
+        </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[CommandContextPopOverlay.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ContextMenuVisible]" Value="false"/>
+          <Set Target="[ItemContextMenuVisible]" Value="false"/>
+        </Actions>
+      </Rule>
+        <!-- wireup for details slide-->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Modified Source="[CommandPopOverlay.Invoked]"/>
+          <Modified Source="[CommandClearOverlays.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SlideMenuVisible]" Value="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[CommandPushOverlay.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SlideMenuVisible]" Value="true"/>
+          <Set Target="[FocusArea.Value]" Value="Context"/>
+          <Invoke Target="[SlideMenu.NavigateInto]" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[Page]"/>
+          <Modified Source="[BackHandler.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Page.PageState.TransitionState]" Value="NavigatingAwayBackward"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[Page]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Page.PageState.TransitionState]" Value="[Page.PageStateEx.TransitionState]"/>
+        </Actions>
+      </Rule>
+      <!-- Only show the fanart if we were given a image -->
+      <Condition Source="[Application.PrimaryBackgroundImage]" ConditionOp="NotEquals" SourceValue="null">
+        <Actions>
+          <Set Target="[Background.Source]" Value="comm:FanArtBackgroundGallery"/>
+        </Actions>
+      </Condition>
+
+      <Binding Target="[Background.FanArt]" Source="[Application.PrimaryBackgroundImage]"/>
+      <Binding Target="[Background.FanArtAlpha]" Source="[Application.PrimaryBackgroundImageAlpha]"/>
+      
+      <!--Rule>
+        <Conditions>
+          <IsValid Source="[Page]"/>
+          <Equality ConditionOp="ChangedTo" Source="[Page.PageState.ETPageState.Value]" Value="NavigatingToBackward"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ContextMenuVisible]" Value="false"/>
+        </Actions>
+      </Rule-->
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <IsValid Source="[Page]"/>
+          <IsValid Source="[Page!shell:GalleryPage.SelectedItemCommand]"/>
+          <IsType Source="[Page!shell:GalleryPage.SelectedItemCommand]" Type="shell:GalleryItem"/>
+          <Modified Source="[Page!shell:GalleryPage.SelectedItemCommand]"/>
+        </Conditions>
+        <Actions>
+          <!--DebugTrace Message="ItemContextMenu.Model: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[Page!shell:GalleryPage.SelectedItemCommand.Description]"/>
+            </Params>
+          </DebugTrace-->
+          <Set Target="[ItemContextMenu.Model]" Value="[Page!shell:GalleryPage.SelectedItemCommand]"/>
+        </Actions>
+      </Rule>
+      <!--Binding Target="[ContextMenu.Model]" Source="[Page!shell:GalleryPage.SelectedItemCommand]"/-->
+      <!--Binding Target="[ContextMenu.MenuData]" Source="[Page!shell:GalleryPage.ContextMenu]"/>
+      <Binding Target="[ItemContextMenu.MenuData]" Source="[Page!shell:GalleryPage.ContextMenu]"/-->
+      <Changed Source="[Page!shell:GalleryPage.Model.Pivots.ChosenIndex]">
+        <Actions>
+          <Set Target="[ContextMenu.MenuData]" Value="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.ContextMenu]"/>
+          <Set Target="[ItemContextMenu.MenuData]" Value="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.ContextMenu]"/>
+          <DebugTrace Message="Chosen Changed {0}">
+            <Params>
+              <ObjectPath ObjectPath="[Page!shell:GalleryPage.Model.Pivots.ChosenIndex]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Changed>
+    </Rules>
+    <Content>
+      <Panel>
+        <Animations>
+          <Animation Loop="0">
+            <Keyframes>
+
+              <!-- Start at fully opaque. -->
+              <AlphaKeyframe Time="0.0" Value="0.0"/>
+
+              <!-- And then back to opaque -->
+              <AlphaKeyframe Time="0.7" Value="1.0"/>
+
+            </Keyframes>
+          </Animation>
+        </Animations>
+        <Children>
+          <me:ItemContextMenuHost Name="ItemContextMenu" CommandContextPopOverlay="[CommandContextPopOverlay]" Visible="[ContextMenuVisible]" MenuData="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.ContextMenu]" Model="[Page!shell:GalleryPage.SelectedItemCommand]"/>
+          <me:ContextMenuHost Name="ContextMenu" CommandContextPopOverlay="[CommandContextPopOverlay]" Visible="[ContextMenuVisible]" MenuData="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.ContextMenu]"/>
+          <me:SlideDeck_Movie_Details Name="SlideMenu" Visible="[SlideMenuVisible]" SlideDeck="[SlideDeck]" CommandPopOverlay="[CommandPopOverlay]" CommandClearOverlays="[CommandClearOverlays]"/>
+          <me:Browse Name="Content" Page="[Page]" Application="[Application]" Model="[Page.Model]" PageState="[Page.PageState]" FocusArea="[FocusArea]"/>
+          <comm:AnimatedBackground Name="Background" FanArt="[Application.PrimaryBackgroundImage]" FanArtAlpha="[Application.PrimaryBackgroundImageAlpha]"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="Browse">
+    <Properties>
+      <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <shell:BrowseModel Name="Model" BrowseModel="$Required"/>
+      <shell:PageState Name="PageState" PageState="$Required"/>
+      <shell:GalleryPage Name="Page" GalleryPage="$Required"/>
+
+      <Inset Name="RootPadding"      Inset="224, 0, 0, 0"/>
+      <Size  Name="GallerySize"      Size="0, 385"/>
+      <Size  Name="BrowsePanelSize"  Size="0, 720"/>
+
+      <cor:Boolean Name="InListMaker" Boolean="false"/>
+      <EditableText Name="CurrentState"/>
+      <EditableText   Name="FocusArea" Value="none"/>
+    </Properties>
+
+    <Locals>
+      <Environment    Name="Environment"/>
+      <IntRangedValue Name="MetaDataTopShift" Value="0"/>
+      <IntRangedValue Name="GalleryContentShift"/>
+      <IntRangedValue Name="MetaDataLeftShift"/>
+      <IntRangedValue Name="TotalCount"/>
+      <IntRangedValue Name="TotalCountOverride"/>
+      <!-- used by galleries that override the count/index UI -->
+      <IntRangedValue Name="ItemIndexOverride"/>
+      <!-- used by galleries that override the count/index UI -->
+      <BooleanChoice  Name="IsOneRow"/>
+      <!--EditableText   Name="FocusArea" Value="none"/-->
+      <!-- tracks the focus on a gross scale -->
+      <EditableText   Name="NavigationDirection" Value="none"/>
+      <!-- Used to trigger directional animations -->
+      <EditableText   Name="TransitionState" Value="NavigatingToForward"/>
+      <!-- tracks the current transition to activate the right animations -->
+      <EditableText   Name="ItemMode" Value="none"/>
+
+      <Timer Name="TransitionTimer" Interval="0" Enabled="false" AutoRepeat="false"/>
+    </Locals>
+
+    <Rules>
+      <!--don't forget to set idleactive based on keyfocus...-->
+      <!-- call only once!!!!-->
+      <Rule>
+        <Conditions>
+          <IsValid Source="[Page]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[PageState.TransitionState]" Value="[Page.PageState.TransitionState]"/>
+        </Actions>
+      </Rule>
+
+      <Binding Target="[NavigationArea.NavigationDirection]" Source="[NavigationDirection]"/>
+      <!--Changed Source="[NavigationDirection.Value]">
+        <Actions>
+          <DebugTrace Message="NavigationDirection.Value: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[NavigationDirection.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Changed-->
+      
+      <!--Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="PIP"/>
+        </Actions>
+      </Condition-->
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" ConditionOp="NotEquals" Value="Context"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="PIP"/>
+        </Actions>
+      </Condition>
+      <Binding Target="[TransitionState.Value]" Source="[PageState.ETPageState.Value]">
+        <Conditions>
+          <IsValid Source="[Page]"/>
+        </Conditions>
+      </Binding>
+
+
+      <!-- Set the transition state value that gets passed down into the layout tree so everything can react properly.
+                 In the arrival cases a timer is also started to reset the state value after the animations have a chance
+                 to finish so the focus doesn't show up until everything is in place. -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[PageState.TransitionState]" Value="NavigatingToForward"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="none"/>
+          <Set Target="[ItemMode.Value]" Value="none"/>
+          <Set Target="[Everything.Visible]" Value="true" InvokePolicy="AsynchronousNormal"/>
+          <Set Target="[TransitionState.Value]" Value="NavigatingToForward"/>
+          <Set Target="[TransitionTimer.Interval]" Value="1"/>
+          <Invoke Target="[TransitionTimer.Start]" InvokePolicy="AsynchronousLowPri"/>
+        </Actions>
+      </Rule>
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[PageState.TransitionState]" Value="NavigatingToBackward"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="none"/>
+          <Set Target="[ItemMode.Value]" Value="none"/>
+          <Set Target="[Everything.Visible]" Value="true" InvokePolicy="AsynchronousLowPri"/>
+          <Set Target="[TransitionState.Value]" Value="NavigatingToBackward"/>
+          <Set Target="[TransitionTimer.Interval]" Value="0"/>
+          <Invoke Target="[TransitionTimer.Start]" InvokePolicy="AsynchronousLowPri"/>
+        </Actions>
+      </Rule-->
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[PageState.TransitionState]" Value="NavigatingToBackward"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Page.StartApplicationIdle]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Page.ApplicationIdle]" InitialEvaluate="true"/>
+          <Equality Source="[Page.ApplicationIdle]" ConditionOp="ChangedTo" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="none"/>
+          <Set Target="[ItemMode.Value]" Value="none"/>
+          <Set Target="[Everything.Visible]" Value="true" InvokePolicy="AsynchronousLowPri"/>
+          <Set Target="[TransitionState.Value]" Value="NavigatingToBackward"/>
+          <Set Target="[TransitionTimer.Interval]" Value="60"/>
+          <Invoke Target="[TransitionTimer.Start]" InvokePolicy="AsynchronousLowPri"/>
+        </Actions>
+      </Rule>
+
+      <!-- Navigating away - this sets the transition state value and then does a delayed hide of the top level
+                 panel on the page so the rules in all the items have a chance to respond to the new state before the 
+                 Hide event is triggered. -->
+      <Condition Source="[PageState.TransitionState]" SourceValue="NavigatingAwayForward">
+        <Actions>
+          <Set Target="[TransitionState.Value]" Value="NavigatingAwayForward" />
+          <Set Target="[Everything.Visible]" Value="false" InvokePolicy="AsynchronousNormal"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[PageState.TransitionState]" SourceValue="NavigatingAwayBackward">
+        <Actions>
+          <Set Target="[TransitionState.Value]" Value="NavigatingAwayBackward"/>
+          <Set Target="[Everything.Visible]" Value="false" InvokePolicy="AsynchronousNormal"/>
+        </Actions>
+      </Condition>
+
+      <!-- the arrival animation has completed - reset the state so other animations and events can occur -->
+      <Changed Source="[TransitionTimer.Tick]">
+        <Actions>
+          <Set Target="[TransitionState.Value]" Value="Idle"/>
+          <Set Target="[Page.PageState.TransitionState]" Value="Idle"/>
+        </Actions>
+      </Changed>
+    </Rules>
+
+    <Content>
+      <Panel Name="Everything">
+        <Layout>
+          <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
+        </Layout>
+        <Children>
+
+          <Panel Layout="Fill" Navigation="Column" MaximumSize="[BrowsePanelSize]" MinimumSize="[BrowsePanelSize]">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 0" Top="Parent, 0" Right="Parent, 1" Bottom="Parent, 1"
+                                 Horizontal="Fill" Vertical="Center"/>
+            </LayoutInput>
+            <Children>
+
+              <!-- Placeholder for the Now Playing Inset -->
+              <Panel>
+                <Layout>
+                  <AnchorLayout SizeToVerticalChildren="false"/>
+                </Layout>
+                <Children>
+
+                  <me:PIPArea Name="PIPArea" MaximumSize="861, 150" MinimumSize="861, 150" FocusArea="[FocusArea]"
+                              NavigationDirection="[NavigationDirection]" TransitionState="[TransitionState]">
+                    <LayoutInput>
+                      <AnchorLayoutInput Horizontal="Near" Vertical="Far" />
+                    </LayoutInput>
+                  </me:PIPArea>
+
+                </Children>
+              </Panel>
+
+              <Panel Padding="[RootPadding]" Layout="Dock">
+                <Children>
+
+                  <!--
+                                    Navigation Space
+                                    - Commands    
+                                    - Pivots
+                                    -->
+                  <me:NavigationArea Name="NavigationArea" FocusOrder="1" Navigation="TabGroup" Model="[Model]"
+                                     FocusArea="[FocusArea]" NavigationDirection="[NavigationDirection]"
+                                     InListMaker="[InListMaker]" TransitionState="[TransitionState]">
+                    <LayoutInput>
+                      <DockLayoutInput Position="Top"/>
+                    </LayoutInput>
+                  </me:NavigationArea>
+
+                  <!--
+                                    Content Space
+                                    - Content Gallery
+                                    - Details
+                                    -->
+                  <me:ContentArea Name="ContentArea" Application="[Application]" FocusOrder="0" Navigation="TabGroup, RememberFocus, ContainHorizontal"
+                                  Model="[Model]" Page="[Page]" FocusArea="[FocusArea]" MetaDataTopShift="[MetaDataTopShift]"
+                                  NavigationDirection="[NavigationDirection]" GallerySize="[GallerySize]" InListMaker="[InListMaker]"
+                                  GalleryContentShift="[GalleryContentShift]" MetaDataLeftShift="[MetaDataLeftShift]" TotalCount="[TotalCount]"
+                                  TotalCountOverride="[TotalCountOverride]" ItemIndexOverride="[ItemIndexOverride]" IsOneRow="[IsOneRow]"
+                                  TransitionState="[TransitionState]" ItemMode="[ItemMode]">
+                    <LayoutInput>
+                      <DockLayoutInput Position="Client"/>
+                    </LayoutInput>
+                  </me:ContentArea>
+
+                </Children>
+              </Panel>
+
+            </Children>
+          </Panel>
+
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+
+  <UI Name="PIPArea">
+    <Properties>
+      <EditableText Name="FocusArea"           EditableText="$Required"/>
+      <EditableText Name="NavigationDirection" EditableText="$Required"/>
+      <EditableText Name="TransitionState"     EditableText="$Required"/>
+      <EditableText Name="FocusEnabler" Value="false"/>
+      <shell:PipHelper Name="PIPHelper"></shell:PipHelper>
+    </Properties>
+    <Rules>
+      
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[TransitionState.Value]" Value="Idle"/>
+          <Equality Source="[FocusEnabler.Value]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[PIPHelper.EnablePIP]" PIP="[PIP]"/>
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp="And">
+        <Conditions>
+          <Equality Source="[TransitionState.Value]" Value="Idle"/>
+          <Equality Source="[FocusEnabler.Value]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[PIPHelper.DisablePIP]" PIP="[PIP]"/>
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" Value="Pivot"/>
+          <Equality Source="[FocusArea.Value]" Value="Command"/>
+          <Equality Source="[FocusArea.Value]" Value="Context"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusEnabler.Value]" Value="false"/>
+        </Actions>
+      </Rule>
+
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" Value="Gallery"/>
+          <Equality Source="[FocusArea.Value]" Value="PIP"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusEnabler.Value]" Value="true"/>
+        </Actions>
+      </Rule>
+    </Rules>
+
+    <Content>
+      <NowPlaying Name="PIP" ShowFullMetadata="OnFocus"/>
+    </Content>
+  </UI>
+
+
+  <UI Name="NavigationArea">
+    <Properties>
+      <shell:BrowseModel Name="Model"               BrowseModel="$Required"/>
+      <EditableText    Name="FocusArea"           EditableText="$Required"/>
+      <EditableText    Name="NavigationDirection" EditableText="$Required"/>
+      <EditableText    Name="TransitionState"     EditableText="$Required"/>
+
+      <Size Name="NavSize" Size="0, 180"/>
+
+      <cor:Boolean Name="InListMaker" Boolean="false"/>
+    </Properties>
+
+    <!--Locals-->
+    <!-- This is the popup menu that will display sort options on a pivot. -->
+    <!--shell:MenuData Name="SortMenu" Description="Sort Menu" AggressivelyTakeFocus="true" CloseOnLostFocus="true" Active="false"/>
+        </Locals-->
+
+    <Rules>
+      <!-- If the PIP has the focus dim the entire navigation area -->
+      <!--Condition Source="[FocusArea.Value]" SourceValue="PIP">
+        <Actions>
+          <Set Target="[NavAreaPanel.Margins]" Value="23, 55, -23, -15"/>
+          <Set Target="[NavAreaPanel.Scale]" Value="0.95, 0.95, 1.0"/>
+          <Set Target="[NavAreaPanel.Alpha]" Value="0.6"/>
+        </Actions>
+      </Condition-->
+
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" Value="PIP"/>
+          <Equality Source="[FocusArea.Value]" Value="Context"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NavAreaPanel.Margins]" Value="23, 55, -23, -15"/>
+          <Set Target="[NavAreaPanel.Scale]" Value="0.95, 0.95, 1.0"/>
+          <Set Target="[NavAreaPanel.Alpha]" Value="0.6"/>
+        </Actions>
+      </Rule>
+
+      <Binding Target="[Pivots.NavigationDirection]" Source="[NavigationDirection]"/>
+      <!-- The command list instance is changed on navigating back to the page as they may have changed, so force resetting the commands. -->
+      <Changed Source="[Model.Commands]">
+        <Actions>
+          <Invoke Target="[CommandList.ForceRefresh]"/>
+          <Set Target="[CommandList.DataSource]" Value="[Model.Commands]"/>
+        </Actions>
+      </Changed>
+
+      <!-- If the pivot list instance changes, scrap the pivot menu and start over. -->
+      <Changed Source="[Model.Pivots]">
+        <Actions>
+          <Invoke Target="[Pivots.ForceRefresh]"/>
+          <Set Target="[Pivots.Pivots]" Value="[Model.Pivots]"/>
+        </Actions>
+      </Changed>
+
+      <!-- Attach the correct transition animation to the commands -->
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingToForward">
+        <Actions>
+          <Invoke Target="[CommandsPanel.AttachAnimation]" animation="animation://me:Browse.Command.NavigateToForward" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingToBackward">
+        <Actions>
+          <Invoke Target="[CommandsPanel.AttachAnimation]" animation="animation://me:Browse.Command.NavigateToBackward" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingAwayForward">
+        <Actions>
+          <Invoke Target="[CommandsPanel.AttachAnimation]" animation="animation://me:Browse.Command.NavigateAwayForward" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingAwayBackward">
+        <Actions>
+          <Invoke Target="[CommandsPanel.AttachAnimation]" animation="animation://me:Browse.Command.NavigateAwayBackward" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+    </Rules>
+
+    <Content>
+
+      <Panel MaximumSize="[NavSize]" MinimumSize="[NavSize]" Navigation="ContainHorizontal">
+        <Children>
+          <!-- changed padding from 40 to 37-this is probably a hack-->
+          <Panel Name="NavAreaPanel" Margins="0, 40, 0, 0" Scale="1.0, 1.0, 1.0" Alpha="1.0">
+            <Layout>
+              <FlowLayout Orientation="Vertical"/>
+            </Layout>
+            <Animations>
+              <Animation Animation="animation://me:Browse.NavigationArea.Move"/>
+              <Animation Animation="animation://me:Browse.NavigationArea.Scale"/>
+            </Animations>
+            <Children>
+
+              <!-- Command Menu -->
+              <Panel Name="CommandsPanel" MinimumSize="0, 70" MaximumSize="0, 70" Margins="-37, 0, 0, 0">
+                <Children>
+
+                  <me:CommandList Name="CommandList" DataSource="[Model.Commands]" FocusArea="[FocusArea]"
+                                  InListMaker="[InListMaker]" TransitionState="[TransitionState]"/>
+
+                </Children>
+              </Panel>
+
+              <!-- Pivot Menu -->
+              <me:PivotList Name="Pivots" Alpha="1.0" Pivots="[Model.Pivots]"
+                            FocusArea="[FocusArea]" NavigationDirection="[NavigationDirection]" TransitionState="[TransitionState]" Padding="0,10,0,0">
+                <!-- @ padding was added-->
+                <ScrollData>
+                  <ScrollingData LockedPosition="0.0" LockedAlignment="0.0" ScrollStep="100"/>
+                  <!-- @scrolldata was empty-->
+                </ScrollData>
+                <Animations>
+                  <Animation Animation="animation://me:Browse.Pivots.Panel.Show"/>
+                  <Animation Animation="animation://me:Browse.Pivots.Panel.Alpha"/>
+                </Animations>
+              </me:PivotList>
+
+              <!-- TODO:  Remove or not remove?  Sort Menu popup -->
+              <!--me:SortList Name="SortList" Visible="false" Model="[SortMenu]" FocusOrder="1">
+                                <LayoutInput>
+                                    <ReferenceLayoutInput To="Pivots, 0, 1" Offset="0, 0" SizeDelta="0, 600"
+                                                          ContributeToWidth="false" ContributeToHeight="false"/>
+                                </LayoutInput>
+                            </me:SortList-->
+
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+
+    </Content>
+  </UI>
+
+
+  <UI Name="ContentArea">
+    <Properties>
+      <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <shell:BrowseModel Name="Model" BrowseModel="$Required"/>
+      <shell:GalleryPage Name="Page" GalleryPage="$Required"/>
+      <IntRangedValue Name="MetaDataTopShift"    IntRangedValue="$Required"/>
+      <IntRangedValue Name="GalleryContentShift" IntRangedValue="$Required"/>
+      <IntRangedValue Name="MetaDataLeftShift"   IntRangedValue="$Required"/>
+      <IntRangedValue Name="TotalCount"          IntRangedValue="$Required"/>
+      <BooleanChoice  Name="IsOneRow"            BooleanChoice="$Required"/>
+      <EditableText   Name="FocusArea"           EditableText="$Required"/>
+      <EditableText   Name="NavigationDirection" EditableText="$Required"/>
+      <EditableText   Name="TransitionState"     EditableText="$Required"/>
+      <EditableText   Name="ItemMode"            EditableText="$Required"/>
+      <IntRangedValue Name="TotalCountOverride"/>
+      <!-- used by galleries that override the count/index UI -->
+      <IntRangedValue Name="ItemIndexOverride"/>
+      <!-- used by galleries that override the count/index UI -->
+      <Size Name="GallerySize"/>
+      <!-- $Required -->
+      <cor:Boolean Name="InListMaker"/>
+    </Properties>
+
+    <Locals>
+      <Environment Name="Environment"/>
+
+      <IntRangedValue Name="SelectedGroup"/>
+      <IntRangedValue Name="SelectedIndex"/>
+      <shell:WrappedIndexTransformer Name="IndexTransformer"/>
+
+      <cor:Boolean    Name="NeedContentRefresh" Boolean="false"/>
+      <cor:Boolean    Name="NeedDetailsRefresh" Boolean="false"/>
+      <BooleanChoice  Name="IsListView" Value="false"/>
+
+      <EditableText Name="PreviousFocusArea" Value="previous"/>
+
+      <RangedValue Name="KeyDelay" Value="1.0"/>
+      <Timer Name="DetailsTimer" Interval="1533" AutoRepeat="false" Enabled="false"/>
+
+      <Inset Name="ContentPanelMargins"/>
+
+      <AnchorLayoutInput Name="DetailsMetadataLayoutInput" Horizontal="Near">
+        <!-- MaximumOffset = (2 x item size) + (2 x spacing) = (244 + 4) = 248 -->
+        <Left>
+          <AnchorEdge Id="Focus" Percent="0" MinimumOffset="-30" MaximumOffset="248"/>
+        </Left>
+        <Top>
+          <AnchorEdge Id="ContentArea" Percent="1" Offset="[MetaDataTopShift.Value]"/>
+        </Top>
+        <Right>
+          <AnchorEdge Id="Parent" Percent="1" Offset="-175"/>
+        </Right>
+      </AnchorLayoutInput>
+      <!-- for the counter and such-->
+      <AnchorLayoutInput Name="CounterContainerLayoutInput" Horizontal="Far" Vertical="Near">
+        <Top>
+          <AnchorEdge Id="Parent" Percent="1" Offset="-77"/>
+        </Top>
+        <Right>
+          <AnchorEdge Id="Parent" Percent="1" Offset="-110"/>
+        </Right>
+      </AnchorLayoutInput>
+
+      <Command Name="NavigateIntoContent"/>
+      <Command Name="ItemSelected"/>
+
+      <cor:Single Name="BrowseGalleryTitleFadeSize" Single="global://comm:BrowseGalleryTitleFadeSize"/>
+      <cor:Single Name="BrowseGalleryTitleFarOffset" Single="global://comm:BrowseGalleryTitleFarOffset"/>
+    </Locals>
+
+    <Rules>
+      <!-- set a timer to delay the showing of the metadata (details) container for the transition -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingToForward"/>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingToBackward"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="None"/>
+          <Set Target="[DetailsContainer.Visible]" Value="false"/>
+          <Invoke Target="[DetailsTimer.Start]" InvokePolicy="AsynchronousLowPri"/>
+        </Actions>
+      </Rule>
+      <Changed Source="[DetailsTimer.Tick]">
+        <Actions>
+          <Set Target="[DetailsContainer.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+
+      <!-- Attach the appropriate show animation depending on which way the navigation is going -->
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingToForward">
+        <Actions>
+          <Invoke Target="[TitleContainer.AttachAnimation]" animation="animation://me:Browse.Gallery.Title.NavigateToForward" InvokePolicy="Synchronous"/>
+          <Invoke Target="[CounterContainer.AttachAnimation]" animation="animation://me:Browse.Counter.NavigateToForward" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingToBackward">
+        <Actions>
+          <Invoke Target="[TitleContainer.AttachAnimation]" animation="animation://me:Browse.Gallery.Title.NavigateToBackward" InvokePolicy="Synchronous"/>
+          <Invoke Target="[CounterContainer.AttachAnimation]" animation="animation://me:Browse.Counter.NavigateToBackward" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+
+      <!-- Attach all the exit animations based on which direction we're going -->
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingAwayForward">
+        <Actions>
+          <Invoke Target="[TitleContainer.AttachAnimation]" animation="animation://me:Browse.Gallery.Title.NavigateAwayForward" InvokePolicy="Synchronous"/>
+          <Invoke Target="[Details.AttachAnimation]" animation="animation://me:Browse.Details.NavigateAwayForward" InvokePolicy="Synchronous"/>
+          <Invoke Target="[CounterContainer.AttachAnimation]" animation="animation://me:Browse.Counter.NavigateAway" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingAwayBackward">
+        <Actions>
+          <Invoke Target="[Selector.AttachAnimation]" animation="animation://me:Browse.Gallery.Selector.NavigateAwayBackward" InvokePolicy="Synchronous"/>
+          <Invoke Target="[TitleContainer.AttachAnimation]" animation="animation://me:Browse.Gallery.Title.NavigateAwayBackward" InvokePolicy="Synchronous"/>
+          <Invoke Target="[Details.AttachAnimation]" animation="animation://me:Browse.Details.NavigateAwayBackward" InvokePolicy="Synchronous"/>
+          <Invoke Target="[CounterContainer.AttachAnimation]" animation="animation://me:Browse.Counter.NavigateAway" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+
+      <Condition Source="[IsListView.Value]" SourceValue="true">
+        <Actions>
+          <Set Target="[TitleShadow.Content]" Value="image://me:Browse.TitleShadowListView"/>
+        </Actions>
+      </Condition>
+      <Default Target="[TitleShadow.Content]" Value="image://me:Browse.TitleShadow"/>
+      
+      <!-- Select the appropriate animations based on the method of control -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Application.IsMouseActive]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Selector.AttachAnimation]" animation="animation://me:Browse.Gallery.Selector.Hide.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Selector.AttachAnimation]" animation="animation://me:Browse.Gallery.Selector.Move.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingToForward"/>
+          <Equality Source="[Application.IsMouseActive]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Selector.AttachAnimation]" animation="animation://me:Browse.Gallery.Selector.Hide.Key.Up" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Selector.AttachAnimation]" animation="animation://me:Browse.Gallery.Selector.Move.Key" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+
+      <!-- A QuickLink is animating - have the selector animate with it -->
+      <Condition Source="[ItemMode.Value]" SourceValue="Press">
+        <Actions>
+          <PlayAnimation Target="[Selector]" Animation="animation://me:Browse.Gallery.Selector.Press"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[ItemMode.Value]" SourceValue="Release">
+        <Actions>
+          <PlayAnimation Target="[Selector]" Animation="animation://me:Browse.Gallery.Selector.Release"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[ItemMode.Value]" SourceValue="Select">
+        <Actions>
+          <PlayAnimation Target="[Selector]" Animation="animation://me:Browse.Gallery.Selector.Release"/>
+          <Invoke Target="[Selector.DetachAnimation]" type="Hide" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+      <Rule>
+        <Conditions>
+          <Equality Source="[ItemMode.Value]" Value="Select"/>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingAwayForward"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Selector.AttachAnimation]" animation="animation://me:Browse.Gallery.Selector.NavigateAwayForward" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule>
+
+      <!--  If gallery has focus and the selector is turned on, the selection frame is visible -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" Value="Gallery"/>
+          <Equality Source="[Content.ShowGallerySelector]"  Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Selector.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+
+      <!-- Resetting the left AnchorEdge of the metadata  -->
+      <Changed Source="[MetaDataLeftShift.Value]">
+        <Actions>
+          <Set Target="[DetailsMetadataLayoutInput.Left.Offset]" Value="[MetaDataLeftShift.Value]" />
+        </Actions>
+      </Changed>
+
+      <!-- Resetting the top AnchorEdge of the metadata  -->
+      <Changed Source="[MetaDataTopShift.Value]">
+        <Actions>
+          <Set Target="[DetailsMetadataLayoutInput.Top.Offset]" Value="[MetaDataTopShift.Value]" ExclusiveApply="false"/>
+          <!--DebugTrace Message="MetaDataTopShift.Value: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[MetaDataTopShift.Value]"/>
+            </Params>
+          </DebugTrace-->
+        </Actions>
+      </Changed>
+
+      <!-- Fade out the title and set the content container fade when going to the PIP -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" Value="PIP"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[TitleShadow]" Animation="animation://me:Browse.Title.Hide"/>
+          <Invoke Target="[Selector.AttachAnimation]" animation="animation://me:Browse.Gallery.Selector.Hide.Key.Down" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Set Target="[CounterPanel.Visible]" Value="false"/>
+        </Actions>
+      </Rule>
+
+      <!-- Fade out the title, set the selector hide, and set the content container fade -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" Value="Command"/>
+          <Equality Source="[FocusArea.Value]" Value="Pivot"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[TitleShadow]" Animation="animation://me:Browse.Title.Hide"/>
+          <PlayAnimation Target="[CounterContainer]" Animation="animation://me:Browse.Title.Hide"/>
+          <Invoke Target="[Selector.AttachAnimation]" animation="animation://me:Browse.Gallery.Selector.Hide.Key.Up" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+
+      <!-- Gallery Title Visible -->
+      <Condition Source="[FocusArea.Value]" SourceValue="Gallery">
+        <Actions>
+          <Set Target="[TitleShadow.Visible]" Value="true"/>
+          <PlayAnimation Target="[TitleShadow]" Animation="animation://me:Browse.Title.Show"/>
+          <PlayAnimation Target="[CounterContainer]" Animation="animation://me:Browse.Title.Show"/>
+        </Actions>
+      </Condition>
+
+      <!-- Main title label -->
+      <Binding Target="[Title.Content]" Source="[Model.Pivots.Chosen!shell:IBrowsePivot.ContentLabel]"/>
+      <!-- Play the directional gallery switch animations on the contents -->
+      <Condition Source="[NavigationDirection.Value]" SourceValue="right">
+        <Actions>
+          <Invoke Target="[Content.AttachAnimation]" animation="animation://me:Browse.Gallery.Hide.Right" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Content.AttachAnimation]" animation="animation://me:Browse.Gallery.Show.Right" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[NavigationDirection.Value]" SourceValue="left">
+        <Actions>
+          <Invoke Target="[Content.AttachAnimation]" animation="animation://me:Browse.Gallery.Hide.Left" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Content.AttachAnimation]" animation="animation://me:Browse.Gallery.Show.Left" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Condition>
+
+      <!-- Make sure there is no Show animation when we're not doing pivot navigation -->
+      <Rule>
+        <Actions>
+          <Invoke Target="[Content.DetachAnimation]" type="Show"/>
+        </Actions>
+      </Rule>
+
+      <!-- Play the focus related animations for the non-nav areas -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" Value="ListMaker"/>
+          <Equality Source="[TransitionState.Value]" Value="Idle"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[ContentArea]" Animation="animation://me:Browse.Gallery.Show.Focus"/>
+          <Set Target="[ContentPanel.FadeSize]" Value="0"/>
+          <Set Target="[ContentPanel.Alpha]" Value="1"/>
+          <Set Target="[NeedDetailsRefresh]" Value="true"/>
+          <Set Target="[Details.Visible]" Value="true"/>
+          <Set Target="[PreviousFocusArea.Value]" Value="Gallery"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" ConditionOp="NotEquals" Value="Gallery"/>
+          <Equality Source="[FocusArea.Value]" ConditionOp="NotEquals" Value="ListMaker"/>
+          <Equality Source="[PreviousFocusArea.Value]" Value="Gallery"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[ContentArea]" Animation="animation://me:Browse.Gallery.Hide.Focus"/>
+          <Set Target="[ContentPanel.FadeSize]" Value="300"/>
+          <Set Target="[ContentPanel.Alpha]" Value=".9"/>
+          <Invoke Target="[Details.AttachAnimation]" animation="animation://me:Browse.Details.Hide" InvokePolicy="Synchronous"/>
+          <Set Target="[Details.Visible]" Value="false"/>
+          <Set Target="[PreviousFocusArea.Value]" Value="[FocusArea.Value]"/>
+        </Actions>
+      </Rule>
+
+      <!-- @ pipfix -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" ConditionOp="Equals" Value="PIP"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[ContentArea]" Animation="animation://me:Browse.Gallery.Hide.Focus"/>
+          <Set Target="[ContentPanel.ShowFar]" Value="true"/>
+          <Set Target="[ContentPanel.ShowNear]" Value="false"/>
+          <Set Target="[ContentPanel.FadeSize]" Value="300"/>
+          <Set Target="[ContentPanel.Alpha]" Value=".9"/>
+          <Invoke Target="[Details.AttachAnimation]" animation="animation://me:Browse.Details.Hide" InvokePolicy="Synchronous"/>
+          <Set Target="[Details.Visible]" Value="false"/>
+          <Set Target="[PreviousFocusArea.Value]" Value="[FocusArea.Value]"/>
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" Value="Gallery"/>
+          <Equality Source="[TransitionState.Value]" Value="Idle"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[ContentArea]" Animation="animation://me:Browse.Gallery.Show.Focus"/>
+          <Set Target="[ContentPanel.FadeSize]" Value="0"/>
+          <Set Target="[ContentPanel.Alpha]" Value="1"/>
+          <Set Target="[NeedDetailsRefresh]" Value="true"/>
+          <Set Target="[Details.Visible]" Value="true"/>
+          <Set Target="[PreviousFocusArea.Value]" Value="[FocusArea.Value]"/>
+        </Actions>
+      </Rule>
+
+      <!-- The detail template has changed.  We need to update the detail area and metadata -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Model.Pivots.Chosen!shell:IBrowsePivot.DetailTemplate]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NeedDetailsRefresh]" Value="true"/>
+        </Actions>
+      </Rule>
+
+      <!-- The pivot has changed.  We need to update the content area and metadata. -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Model.Pivots.Chosen]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NeedContentRefresh]" Value="true"/>
+          <Set Target="[NeedDetailsRefresh]" Value="true"/>
+          <Set Target="[SelectedGroup.Value]" Value="0"/>
+          <Set Target="[SelectedIndex.Value]" Value="0"/>
+          <Invoke Target="[Content.ForceRefresh]"/>
+          <Invoke Target="[Details.ForceRefresh]"/>
+          <!--DebugTrace Message="NEEDSDETAILSREFRESH2: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[Model.Pivots.Chosen!shell:IBrowsePivot.DetailTemplate]"/>
+            </Params>
+          </DebugTrace-->
+        </Actions>
+      </Rule>
+
+      <!-- Something has changed with the content that would cause us to do a total refresh. -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Modified Source="[Model.Pivots.Chosen!shell:IBrowsePivot.ContentTemplate]"/>
+          <Modified Source="[Model.Pivots.Chosen!shell:IBrowsePivot.Content]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NeedContentRefresh]" Value="true"/>
+        </Actions>
+      </Rule>
+
+      <!-- Cause the details area to refresh. -->
+      <Condition Source="[NeedDetailsRefresh]" SourceValue="true">
+        <Actions>
+          <Set Target="[Details.SelectionPolicy]" Value="[Model.Pivots.Chosen!shell:IBrowsePivot.ContentSelectionPolicy]"/>
+          <Set Target="[Details.DetailTemplate]" Value="[Model.Pivots.Chosen!shell:IBrowsePivot.DetailTemplate]"/>
+          <Invoke Target="[Details.ForceRefresh]"/>
+          <!--DebugTrace Message="NEEDSDETAILSREFRESH: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[Model.Pivots.Chosen!shell:IBrowsePivot.DetailTemplate]"/>
+            </Params>
+          </DebugTrace-->
+        </Actions>
+      </Condition>
+
+      <!-- Cause the content area to refresh. -->
+      <Condition Source="[NeedContentRefresh]" SourceValue="true">
+        <Actions>
+          <Invoke Target="[Content.ForceRefresh]"/>
+          <Set Target="[Content.Model]" Value="[Model.Pivots.Chosen!shell:IBrowsePivot]"/>
+          <Set Target="[Content.Source]" Value="[Model.Pivots.Chosen!shell:IBrowsePivot.ContentTemplate]"/>
+        </Actions>
+      </Condition>
+
+      <Changed Source="[NavigateIntoContent.Invoked]">
+        <Actions>
+          <Invoke Target="[Content.NavigateInto]"/>
+        </Actions>
+      </Changed>
+
+      <!--
+                If we just did a content refresh, *and focus was on the gallery* do a NavigateInto on the
+                gallery so that we keep the same item focused.
+
+                Note that this rule needs to occur AFTER the refresh rule above.
+            -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[NeedContentRefresh]" Value="true"/>
+          <Equality Source="[FocusArea.Value]" Value="Gallery"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[NavigateIntoContent.Invoke]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Hide the focus placeholder if the initial count is non-zero -->
+      <Rule>
+        <Conditions>
+          <IsValid Source="[Model.Pivots.Chosen!shell:IBrowsePivot.Content.Count]"/>
+          <Equality Source="[Model.Pivots.Chosen!shell:IBrowsePivot.Content.Count]"  ConditionOp="GreaterThan" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Placeholder.Visible]" Value="false"/>
+        </Actions>
+      </Rule>
+
+      <!-- Hide our focus placeholder as soon as the list count changes -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Placeholder.Visible]" Value="true"/>
+          <Modified Source="[Model.Pivots.Chosen!shell:IBrowsePivot.Content.Count]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Placeholder.Visible]" Value="false"/>
+        </Actions>
+      </Rule>
+
+      <!-- Display the empty content message if the count is zero. -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Model.Pivots.Chosen!shell:IBrowsePivot.Content.Count]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[EmptyContentMessage.Visible]" Value="[Model.Pivots.Chosen!shell:IBrowsePivot.Content]">
+            <Transformer>
+              <BooleanTransformer Inverse="true"/>
+            </Transformer>
+          </Set>
+        </Actions>
+      </Rule>
+
+      <!-- When the current selection index has changed, update our SelectedIndex.Value -->
+      <Rule>
+        <Conditions>
+          <IsValid Source="[Model.Pivots.Chosen!shell:IBrowsePivot.ContentSelectionPolicy.SelectionIndex]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SelectedIndex.Value]" Value="[Model.Pivots.Chosen!shell:IBrowsePivot.ContentSelectionPolicy.SelectionIndex]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Getting the total item count from the pivot -->
+      <!-- Putting the total count in MyCounter.TotalCount -->
+      <!-- Putting the total count in IndexTransformer -->
+      <Rule>
+        <Conditions>
+          <IsValid Source="[TotalCountOverride.Value]"/>
+          <Equality Source="[TotalCountOverride.Value]" ConditionOp="GreaterThan" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[MyCounter.TotalCount]" Value="[TotalCountOverride.Value]"/>
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <IsValid Source="[TotalCount.Value]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[MyCounter.TotalCount]" Value="[TotalCount.Value]"/>
+          <Set Target="[IndexTransformer.Count]" Value="[TotalCount.Value]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Binding the Item index to the counter number -->
+      <Binding Target="[MyCounter.ItemIndex]" Source="[ItemIndexOverride.Value]">
+        <Conditions>
+          <IsValid Source="[ItemIndexOverride.Value]" />
+          <Equality Source="[ItemIndexOverride.Value]" ConditionOp="GreaterThan" Value="0"/>
+        </Conditions>
+      </Binding>
+
+      <Binding Target="[MyCounter.ItemIndex]" Source="[SelectedIndex.Value]" Transformer="[IndexTransformer]"/>
+
+      <Binding Target="[EmptyContentMessage.Content]" Source="[Model.Pivots.Chosen!shell:IBrowsePivot.EmptyContentText]"/>
+
+      <!-- Remove any Top Margins for 1-row galleries in ListMaker -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[InListMaker]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ContentPanelMargins.Top]" Value="0" />
+          <Set Target="[CounterContainerLayoutInput.Top.Offset]" Value="-150"/>
+        </Actions>
+      </Rule>
+
+      <!-- Setting the Top int of the Inset and then reapplying the Inset to the Margins -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[GalleryContentShift.Value]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[ContentPanelMargins.Top]" Value="[GalleryContentShift.Value]"/>
+          <Set Target="[ContentPanel.Margins]" Value="[ContentPanelMargins]"/>
+        </Actions>
+      </Rule>
+
+      <!-- If 1-row or In ListMaker, allow the gallery to collapse and the metadata to pull up  -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[IsOneRow.Value]" Value="true"/>
+          <Equality Source="[InListMaker]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Content.MinimumSize]" Value="0, 0"/>
+        </Actions>
+      </Rule>
+      <Binding Source="[Model.Pivots.Chosen!shell:IBrowsePivot]" Target="[Content.Model]"/>
+      <Changed Source="[Model.Pivots.ChosenIndex]" InitialEvaluate="true">
+        <Actions>
+          <Set Target="[Content.Model]" Value="[Model.Pivots.Chosen!shell:IBrowsePivot]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[Model.Pivots.Chosen!shell:IBrowsePivot.ContentItemTemplate]">
+                <Actions>
+                  <Invoke Target="[Content.ForceContentChange]"/>
+                </Actions>
+            </Changed>
+    </Rules>
+
+    <Content>
+      <!--changed padding from 10 to -13 this is probably a hack-->
+      <Panel Navigation="ContainHorizontal" Padding="0,0,0,0">
+        <!--@padding was added-->
+        <Layout>
+          <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
+        </Layout>
+        <Children>
+
+          <!-- Title -->
+          <Clip Name="TitleContainer" Orientation="Vertical" ShowNear="false" ShowFar="true" FadeSize="[BrowseGalleryTitleFadeSize]"
+                FarOffset="[BrowseGalleryTitleFarOffset]">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 0, 170" Right="Parent, 1, -53" Top="Parent, 0, -172" Horizontal="Far"
+                                 ContributesToWidth="false" ContributesToHeight="false"/>
+            </LayoutInput>
+            <Children>
+
+              <Graphic Name="TitleShadow" Margins="-20, 0, -45, 0" Padding="20, 0, 45, 0" SizingPolicy="SizeToChildren">
+                <Animations>
+                  <Animation Animation="animation://me:Browse.Gallery.Title.Show"/>
+                  <Animation Animation="animation://me:Browse.Gallery.Title.Hide"/>
+                </Animations>
+                <Children>
+
+                  <statictext:StaticText Name="Title" AccessibilityName="Title"
+                                       Color="color://comm:MediumBlue" Margins="0, 0, 0, 0" Padding="0, 0, 0, 30">
+                    <Font>
+                      <Font Name="BrowseMainTitle" FontName="global://comm:LightFontFace" FontSize="48" />
+                    </Font>
+                  </statictext:StaticText>
+
+                </Children>
+              </Graphic>
+
+            </Children>
+          </Clip>
+
+          <!-- TODO: Integrate the browse title gradient with the panel.ccarea title gradient below, per cglein-->
+
+          <!--Clip Name="ContentPanel" Margins="[ContentPanelMargins]" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="0.9"
+  CenterPointPercent="0.5,0.5,0.5" Scale="0.95,0.95,0.95"-->
+          <Text Name="EmptyContentMessage" Color="color://comm:OffWhite" WordWrap="true" MaximumSize="683,305" Margins="0, 45, 0, 0" Visible="false">
+            <Font>
+              <Font FontName="global://comm:RegularFontFace" FontSize="24"/>
+            </Font>
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
+            </LayoutInput>
+          </Text>
+          <Clip Name="ContentPanel" Margins="[ContentPanelMargins]" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="1"><!--scale needs to be removed-->
+            <Layout>
+              <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="true"/>
+            </Layout>
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Near" Vertical="Near" />
+            </LayoutInput>
+            <Children>
+
+              <!-- NOTE: Scale has to be hard-coded (value got from GalleryItem.FocusScale) -->
+              <Graphic Name="Selector" Content="image://me:Browse.Selector" Visible="false" SizingPolicy="SizeToConstraint"
+                       Scale="1.26, 1.26, 1.26" CenterPointPercent="0.5,0.5,0.5">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Focus, 0, -4" Right="Focus, 1, 4" Top="Focus, 0, -4" Bottom="Focus, 1, 4"
+                                     ContributesToWidth="false" ContributesToHeight="false"/>
+                </LayoutInput>
+                <Animations>
+                  <Animation Animation="animation://me:Browse.Gallery.Selector.Show"/>
+                  <!-- new crap-->
+                  <Animation Animation="animation://me:Browse.Gallery.Selector.Hide.Key.Up"/>
+                  <Animation Animation="animation://me:Browse.Gallery.Selector.Move.Key"/>
+                </Animations>
+                <Children>
+
+                  <focus:SelectorFocusLoop>
+                    <LayoutInput>
+                      <AnchorLayoutInput Left="Parent, 0" Right="Parent, 1" Top="Parent, 0" Bottom="Parent, 1"
+                                         ContributesToWidth="false" ContributesToHeight="false"/>
+                    </LayoutInput>
+                  </focus:SelectorFocusLoop>
+
+                </Children>
+              </Graphic>
+
+              <Panel Name="ContentArea">
+                <LayoutInput>
+                  <AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
+                </LayoutInput>
+                <Children>
+
+                  <!-- This gradient handles the whole-gallery fade and the gradient fade at the top of the gallery
+                                         NOTE: For perf reasons it's extremely important that this gradient be
+                                         *off* by default (via the color mask), and only turned on when needed
+                                         (i.e. when the top navigation area has focus). -->
+                  <!--Gradient Name="ContentContainer" Orientation="Vertical" Offset="0" ColorMask="0,0,0,0"
+                                              OffsetAnimation="animation://me:Browse.Page.GradientOffset"
+                                              ColorMaskAnimation="animation://me:Browse.Page.GradientColorMask">
+                                        <Ramp>
+                                            <RampValue Value="0" Position="-350" Relative="GadgetMin"/>
+                                            <RampValue Value="1" Position="0" Relative="GadgetMin"/>
+                                            <RampValue Value="1" Position="0" Relative="GadgetMax"/>
+                                        </Ramp>
+                                        <Children-->
+
+                  <!-- This gradient handles the graduated fade at the bottom of the gallery.
+                                                 NOTE: For perf reasons it's extremely important that this gradient be
+                                                 *off* by default (via the color mask), and only turned on when needed
+                                                 (i.e. when the pip has focus). -->
+                  <!--Gradient Name="BottomFade" Orientation="Vertical" Offset="0" ColorMask="0,0,0,0"
+                                                      OffsetAnimation="animation://me:Browse.Page.GradientOffset"
+                                                      ColorMaskAnimation="animation://me:Browse.Page.GradientColorMask">
+                                                <Ramp>
+                                                    <RampValue Value="1" Position="0" Relative="GadgetMin"/>
+                                                    <RampValue Value="1" Position="0" Relative="GadgetMax"/>
+                                                    <RampValue Value="0" Position="350" Relative="GadgetMax"/>
+                                                </Ramp>
+                                                <Children-->
+
+                  <!-- Content -->
+                  <me:Gallery Name="Content" Page="[Page]" Application="[Application]" Model="[Model.Pivots.Chosen!shell:IBrowsePivot]" TransitionState="[TransitionState]"
+                              FocusArea="[FocusArea]" Margins="0, 0, 0, 0" MinimumSize="[GallerySize]" MaximumSize="[GallerySize]" MetadataDelay="[KeyDelay]"
+                              MetaDataTopShift="[MetaDataTopShift]" ItemMode="[ItemMode]" IsListView="[IsListView]" IsOneRow="[IsOneRow]"
+                              InListMaker="[InListMaker]" GalleryContentShift="[GalleryContentShift]" MetaDataLeftShift="[MetaDataLeftShift]"
+                              SelectedIndex="[SelectedIndex]" SelectedGroup="[SelectedGroup]" TotalCount="[TotalCount]"
+                              ItemIndexOverride="[ItemIndexOverride]" TotalCountOverride="[TotalCountOverride]" NavigateIntoContent="[NavigateIntoContent]">
+                    <Animations>
+                      <Animation Animation="animation://me:Browse.Gallery.Show.Right"/>
+                      <Animation Animation="animation://me:Browse.Gallery.Hide.Right"/>
+                    </Animations>
+                  </me:Gallery>
+
+                  <!--/Children>
+                                            </Gradient>
+                                        
+                                        </Children>
+                                    </Gradient-->
+
+                  <!--Text Name="EmptyContentMessage" Color="color://comm:OffWhite" WordWrap="true" MaximumSize="683,305" Margins="0, 45, 0, 0" Visible="false">
+                    <Font>
+                      <Font FontName="global://comm:RegularFontFace" FontSize="24"/>
+                    </Font>
+                  </Text-->
+
+                  <me:FocusPlaceholder Visible="true" Name="Placeholder" MinimumSize="1,1"/>
+
+                </Children>
+              </Panel>
+
+              <Panel Name="DetailsContainer" Visible="true" LayoutInput="[DetailsMetadataLayoutInput]">
+                <Animations>
+                  <Animation Animation="animation://me:Browse.Details.Move"/>
+                </Animations>
+
+                <Children>
+
+                  <!-- Details -->
+                  <me:DetailsHost Name="Details" Model="[Model]" Page="[Page]" SelectionPolicy="null" DetailTemplate="null" Delay="[KeyDelay]" TransitionState="[TransitionState]"/>
+
+                </Children>
+              </Panel>
+
+            </Children>
+          </Clip>
+          <!--/Panel-->
+
+          <!--Counter information (x | y)-->
+          <Panel Name="CounterContainer" Layout="HorizontalFlow" LayoutInput="[CounterContainerLayoutInput]">
+            <Children>
+
+              <Panel Name="CounterPanel" Visible="true">
+                <Animations>
+                  <Animation Animation="animation://me:Browse.Counter.Show"/>
+                  <Animation Animation="animation://me:Browse.Counter.Hide"/>
+                </Animations>
+                <Children>
+
+                  <me:CounterHost Name="MyCounter" ItemIndex="0" TotalCount="0"/>
+
+                </Children>
+              </Panel>
+
+            </Children>
+          </Panel>
+
+        </Children>
+      </Panel>
+
+    </Content>
+
+  </UI>
+
+
+  <!-- UI for Counter information (x | y) -->
+  <!-- The counter should not be flipped  -->
+  <UI Name="CounterHost" Flippable="false">
+    <Properties>
+      <cor:Int32 Name="ItemIndex" />
+      <cor:Int32 Name="TotalCount" />
+    </Properties>
+
+    <Rules>
+      <!-- hide the item counter if the count is zero. -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[TotalCount]" ConditionOp="GreaterThan" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[CounterContainer.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+
+      <!-- set the total count -->
+      <Binding Target="[ItemTotalCount.Content]" Source="[TotalCount]">
+        <Transformer>
+          <FormatTransformer/>
+        </Transformer>
+      </Binding>
+
+      <!-- set the current item. Add 1 since the index is zero based -->
+      <Binding Target="[ItemNumber.Content]" Source="[ItemIndex]">
+        <Transformer>
+          <MathTransformer Add="1" Type="string"/>
+        </Transformer>
+      </Binding>
+
+      <!-- Accessibility -->
+      <Default Target="[Accessible.Name]" Value="Indicator"/>
+      <Default Target="[Accessible.Role]" Value="Indicator"/>
+
+    </Rules>
+
+    <Content>
+      <Panel Name="CounterContainer" Visible="false">
+        <Layout>
+          <FlowLayout Orientation="Horizontal"/>
+        </Layout>
+        <Children>
+
+          <statictext:StaticText Name="ItemNumber" AccessibilityName="ItemNumber" Color="color://comm:OffWhite">
+            <Font>
+              <Font FontName="global://comm:MainFontFace" FontSize="18"/>
+            </Font>
+          </statictext:StaticText>
+          <statictext:StaticText Color="color://comm:LightBlue" Content=" | " Margins="-6, -5, -6, 0">
+            <Font>
+              <Font FontName="global://comm:RegularFontFace" FontSize="21"/>
+            </Font>
+          </statictext:StaticText>
+          <statictext:StaticText Name="ItemTotalCount" AccessibilityName="ItemTotalCount" Color="color://comm:LightBlue">
+            <Font>
+              <Font FontName="global://comm:RegularFontFace" FontSize="18"/>
+            </Font>
+          </statictext:StaticText>
+
+
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+
+  <UI Name="DetailsHost">
+    <Properties>
+      <shell:BrowseModel  Name="Model"           BrowseModel="$Required"/>
+      <shell:ISelectionPolicy Name="SelectionPolicy" ISelectionPolicy="$Required"/>
+      <shell:GalleryPage Name="Page" GalleryPage="$Required"/>
+      <cor:String       Name="DetailTemplate"  String="null"/>
+      <RangedValue      Name="Delay"           RangedValue="$Required"/>
+      <EditableText     Name="TransitionState" EditableText="$Required"/>
+    </Properties>
+
+    <Rules>
+      <Rule>
+        <Conditions>
+          <!--IsValid Source="[DetailTemplate]"/-->
+          <Modified Source="[Model.Pivots.Chosen!shell:IBrowsePivot.DetailTemplate]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Details.Source]" Value="[Model.Pivots.Chosen!shell:IBrowsePivot.DetailTemplate]"/>
+          <!--DebugTrace Message="Details.Source: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[Model.Pivots.Chosen!shell:IBrowsePivot.DetailTemplate]"/>
+            </Params>
+          </DebugTrace-->
+        </Actions>
+      </Rule>
+      <!--Binding Source="[DetailTemplate]" Target="[Details.Source]"/-->
+      <!--Rule>
+        <Conditions>
+          <IsValid Source="[DetailTemplate]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Details.Source]" Value="[DetailTemplate]"/>
+        </Actions>
+      </Rule-->
+      
+      <!-- Send down the currently selected item. -->
+      <Rule>
+        <Conditions>
+          <IsValid Source="[SelectionPolicy]"/>
+          <Modified Source="[SelectionPolicy.CurrentSelection]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Details.Selection]" Value="[SelectionPolicy.CurrentSelection]"/>
+        </Actions>
+      </Rule>
+    </Rules>
+
+    <Content>
+
+      <me:Details Name="Details" GalleryPage="[Page]" Model="[Model]" GallerySelection="null" GalleryItem="null" Selection="null" MinimumSize="0, 100" KeyDelay="[Delay]" MouseDelay="null" TransitionState="[TransitionState]"/>
+
+    </Content>
+  </UI>
+
+
+  <!--
+        We want the default focus to be on the gallery, even when the items are slow to arrive.
+        However, if there's no content, ehshell will try to aggresively send it somewhere, anywhere
+        focusable.  This is just an invisible placeholder that can take focus until the real
+        content arrives (or we know there won't be any)       
+    -->
+  <UI Name="FocusPlaceholder">
+    <Rules>
+      <!--
+              If the user sends focus somewhere else, then don't let them come back to us
+            -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" ConditionOp="ChangedTo" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="false"/>
+        </Actions>
+
+      </Rule>
+
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+
+    </Rules>
+
+    <Content>
+      <Panel Name="Placeholder"/>
+    </Content>
+  </UI>
+
+
+  <!-- This is used on the old framework pages to get an effect that matches what is inline above. -->
+  <UI Name="FadedTitle">
+    <Properties>
+      <cor:String Name="Content" String="null"/>
+    </Properties>
+
+    <Locals>
+      <cor:Single Name="TitleFadeSize" Single="global://comm:TitleFadeSize"/>
+      <cor:Single Name="TitleFarOffset" Single="global://comm:TitleFarOffset"/>
+      <Environment Name="Environment" />
+    </Locals>
+
+    <Rules>
+      <Binding Target="[Title.Content]" Source="[Content]"/>
+      <Condition Source="[Environment.ColorScheme]" SourceValue="Default" Target="[GradientDisplay.ShowFar]" Value="true"/>
+    </Rules>
+
+    <Content>
+
+      <!-- Title -->
+      <Clip Orientation="Vertical" ShowNear="false" ShowFar="false" FadeSize="[TitleFadeSize]" FarOffset="[TitleFarOffset]" Name="GradientDisplay">
+        <Children>
+
+          <Graphic Name="TitleShadow" Margins="-20, 0, -45, 0" Padding="20, 0, 45, 0" SizingPolicy="SizeToChildren">
+            <Animations>
+              <Animation Animation="animation://me:Browse.Gallery.Title.Show"/>
+              <Animation Animation="animation://me:Browse.Gallery.Title.Hide"/>
+            </Animations>
+            <Children>
+
+              <statictext:StaticText Name="Title" AccessibilityName="Title"
+                    Color="color://comm:LightBlue" Margins="0, 0, 0, 0" Padding="0, 0, 0, 40" WordWrap="true" MaximumLines="2">
+                <Font>
+                  <Font Name="BrowseMainTitle" FontName="global://comm:LightFontFace" FontSize="29" />
+                </Font>
+              </statictext:StaticText>
+
+            </Children>
+          </Graphic>
+
+        </Children>
+      </Clip>
+
+    </Content>
+  </UI>
+
+  <!-- This is used on the old framework now playing pages to get an effect that matches what is inline above. -->
+  <UI Name="NowPlayingFadedTitle" BaseUI="me:FadedTitle">
+    <Locals>
+      <cor:Single Name="TitleFadeSize" Single="global://comm:NowPlayingTitleFadeSize"/>
+      <cor:Single Name="TitleFarOffset" Single="global://comm:NowPlayingTitleFarOffset"/>
+    </Locals>
+  </UI>
+</Mcml>

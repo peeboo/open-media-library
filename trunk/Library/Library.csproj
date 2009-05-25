@@ -118,6 +118,9 @@
     <Compile Include="Code\V3\Controls\LegacyHorizontalFlowLayoutHelper.cs" />
     <Compile Include="Code\V3\CollectionItem.cs" />
     <Compile Include="Code\V3\CollectionPage.cs" />
+    <Compile Include="Code\V3\EpisodesPivot.cs" />
+    <Compile Include="Code\V3\SeasonPage.cs" />
+    <Compile Include="Code\V3\SeasonItem.cs" />
     <Compile Include="Code\V3\FilterItem.cs" />
     <Compile Include="Code\V3\FavoritesPivot.cs" />
     <Compile Include="Code\V3\FilterPivot.cs" />
@@ -524,6 +527,7 @@
     <Content Include="Markup\V3\Controls\StaticText.mcml" />
     <Content Include="Markup\V3\Controls\TurboScroll.mcml" />
     <Content Include="Markup\V3\Controls\WaitCursor.mcml" />
+    <Content Include="Markup\V3\CollectionPage.mcml" />
     <Content Include="Markup\V3\Details\DetailsPage.mcml" />
     <Content Include="Markup\V3\Details\DetailsPageCastCrew.mcml" />
     <Content Include="Markup\V3\Details\FanArt\FanArtDetailsPage.mcml" />
