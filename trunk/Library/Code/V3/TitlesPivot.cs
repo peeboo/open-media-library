@@ -16,10 +16,10 @@ namespace Library.Code.V3
             ((VirtualList)this.m_listContent).RequestItemHandler = new RequestItemHandler(this.GetItem);
         }
 
-        private int parentId = 0;
+        private int? parentId;
 
         private List<OMLEngine.TitleFilter> m_filters;
-        public TitlesPivot(IModelItemOwner owner, string stDescription, string stNoContentText, List<OMLEngine.TitleFilter> filters, int parentId)
+        public TitlesPivot(IModelItemOwner owner, string stDescription, string stNoContentText, List<OMLEngine.TitleFilter> filters, int? parentId)
             : base(owner, stDescription, stNoContentText, null)
         {
             this.parentId = parentId;
