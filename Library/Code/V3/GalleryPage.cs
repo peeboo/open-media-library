@@ -61,6 +61,22 @@ namespace Library.Code.V3
             this.CreateFilters();
         }
 
+        public GalleryPage(List<OMLEngine.TitleFilter> filter, string galleryName, int parentId)
+            : this()
+        {
+
+            //description
+            //this.Description = galleryName;
+            this.Filters = filter;
+            this.Model = new Library.Code.V3.BrowseModel(this);
+            this.Model.Pivots = new Choice(this, "desc", new ArrayListDataSet(this));
+            this.Description = this.TitleFromFilter();
+            //this.CreateContextMenu();
+            this.CreateCommands();
+            this.CreateViews();
+            //this.CreateFilters();
+        }
+
         /// <summary>
         /// generic context menu for gallery
         /// </summary>
@@ -270,7 +286,7 @@ namespace Library.Code.V3
         }
         private void CreateTitleView()
         {
-            Library.Code.V3.TitlesPivot titlePivot = new Library.Code.V3.TitlesPivot(this, "title", "No titles were found.", this.filters);
+            Library.Code.V3.TitlesPivot titlePivot = new Library.Code.V3.TitlesPivot(this, "title", "No titles were found.", this.filters, 0);
             titlePivot.ContentLabel = this.Description;
             titlePivot.SupportsJIL = true;
             titlePivot.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
@@ -293,7 +309,7 @@ namespace Library.Code.V3
             List<TitleFilter> filters = new List<TitleFilter>(this.filters);
             filters.Add(new TitleFilter(TitleFilterType.Unwatched, false.ToString()));
 
-            Library.Code.V3.TitlesPivot pivot = new TitlesPivot(this, "unwatched", "No titles were found.", filters);
+            Library.Code.V3.TitlesPivot pivot = new TitlesPivot(this, "unwatched", "No titles were found.", filters, 0);
             pivot.ContentLabel = this.Description;
             this.Model.Pivots.Options.Add(pivot);
         }
@@ -320,7 +336,7 @@ namespace Library.Code.V3
         /// <summary>
         /// Loads the default commands
         /// </summary>
-        private void CreateCommands()
+        public void CreateCommands()
         {
             //create the quickplay
             this.quickPlay = new Command(this);

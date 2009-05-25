@@ -14,13 +14,13 @@ namespace Library.Code.V3
     /// </summary>
     /// 
     [Microsoft.MediaCenter.UI.MarkupVisible]
-    public class CollectionPage : GalleryPage
+    public class SeasonPage : GalleryPage
     {
-        private CollectionItem collectionItem;
-        public CollectionPage(CollectionItem item)
+        private SeasonItem seasonItem;
+        public SeasonPage(SeasonItem item)
             : base()
         {
-            this.collectionItem = item;
+            this.seasonItem = item;
             //description
             this.Description = item.Description;
             //this.Filters = filter;
@@ -32,11 +32,11 @@ namespace Library.Code.V3
 
         private void CreateTitleView()
         {
-            Library.Code.V3.TitlesPivot titlePivot = new Library.Code.V3.TitlesPivot(this, "title", "No titles were found.", base.Filters, this.collectionItem.TitleObject.Id);
+            Library.Code.V3.EpisodesPivot titlePivot = new Library.Code.V3.EpisodesPivot(this, "title", "No titles were found.", base.Filters, this.seasonItem.TitleObject.Id);
             titlePivot.ContentLabel = this.Description;
             titlePivot.SupportsJIL = true;
             titlePivot.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
-            titlePivot.ContentItemTemplate = "oneRowGalleryItemPoster";
+            titlePivot.ContentItemTemplate = "oneRowGalleryItem4x3";
             titlePivot.DetailTemplate = Library.Code.V3.BrowsePivot.ExtendedDetailTemplate;
             this.Model.Pivots.Options.Add(titlePivot);
             //setting this as the default chosen pivot
