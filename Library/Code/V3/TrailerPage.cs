@@ -364,7 +364,7 @@ namespace Library.Code.V3
             titlePivot.ContentLabel = this.Description;
             titlePivot.SetupContextMenu();
             titlePivot.LoadingContentMessage = "Loading trailers...";
-            titlePivot.SupportsJIL = true;
+            titlePivot.SupportsJIL = false;
             titlePivot.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
             titlePivot.ContentItemTemplate = "oneRowGalleryItemPoster";
             titlePivot.DetailTemplate = Library.Code.V3.BrowsePivot.ExtendedDetailTemplate;

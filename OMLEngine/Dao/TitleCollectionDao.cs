@@ -129,11 +129,11 @@ namespace OMLEngine.Dao
             return titles;
         }
 
-        public static IEnumerable<Title> GetAllTitles(TitleTypes type, int parentId)
+        public static IEnumerable<Title> GetAllTitles(TitleTypes type, int? parentId)
         {
             var titles = from t in DBContext.Instance.Titles
                          where (t.TitleType & (int)type) != 0
-                         && t.ParentTitleId==parentId
+                         && object.Equals(t.ParentTitleId, parentId)
                          orderby t.SortName
                          select t;
 
@@ -147,7 +147,7 @@ namespace OMLEngine.Dao
         public static IEnumerable<Title> GetUnwatchedTitles()
         {
             var titles = from t in DBContext.Instance.Titles
-                         where t.WatchedCount == 0 || t.WatchedCount == null && (t.ParentTitleId.CompareTo(t.Id) == 0)
+                         where t.WatchedCount == 0 || t.WatchedCount == null && (t.ParentTitleId.Value.CompareTo(t.Id) == 0)
                          orderby t.SortName
                          select t;
 
@@ -169,11 +169,11 @@ namespace OMLEngine.Dao
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
-        public static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters, TitleTypes type, int parentId)
+        public static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters, TitleTypes type, int? parentId)
         {
             var titles = from t in DBContext.Instance.Titles
                          where (t.TitleType & (int)type) != 0
-                         && t.ParentTitleId==parentId
+                         && object.Equals(t.ParentTitleId, parentId)
                          orderby t.SortName
                          select t;
 

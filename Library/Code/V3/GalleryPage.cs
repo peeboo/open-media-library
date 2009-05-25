@@ -284,9 +284,11 @@ namespace Library.Code.V3
             
             return title;
         }
+        private int? parentId;
+
         private void CreateTitleView()
         {
-            Library.Code.V3.TitlesPivot titlePivot = new Library.Code.V3.TitlesPivot(this, "title", "No titles were found.", this.filters, 0);
+            Library.Code.V3.TitlesPivot titlePivot = new Library.Code.V3.TitlesPivot(this, "title", "No titles were found.", this.filters, this.parentId);
             titlePivot.ContentLabel = this.Description;
             titlePivot.SupportsJIL = true;
             titlePivot.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
@@ -309,7 +311,7 @@ namespace Library.Code.V3
             List<TitleFilter> filters = new List<TitleFilter>(this.filters);
             filters.Add(new TitleFilter(TitleFilterType.Unwatched, false.ToString()));
 
-            Library.Code.V3.TitlesPivot pivot = new TitlesPivot(this, "unwatched", "No titles were found.", filters, 0);
+            Library.Code.V3.TitlesPivot pivot = new TitlesPivot(this, "unwatched", "No titles were found.", filters, this.parentId);
             pivot.ContentLabel = this.Description;
             this.Model.Pivots.Options.Add(pivot);
         }

@@ -211,7 +211,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
+		[Column(Storage="_Photo", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Photo
 		{
 			get
@@ -510,7 +510,7 @@ namespace OMLEngine.Dao
 		
 		private System.Nullable<int> _ProductionYear;
 		
-		private int _ParentTitleId;
+		private System.Nullable<int> _ParentTitleId;
 		
 		private System.Nullable<System.DateTime> _ModifiedDate;
 		
@@ -586,7 +586,7 @@ namespace OMLEngine.Dao
     partial void OnMetaDataSourceItemIdChanged();
     partial void OnProductionYearChanging(System.Nullable<int> value);
     partial void OnProductionYearChanged();
-    partial void OnParentTitleIdChanging(int value);
+    partial void OnParentTitleIdChanging(System.Nullable<int> value);
     partial void OnParentTitleIdChanged();
     partial void OnModifiedDateChanging(System.Nullable<System.DateTime> value);
     partial void OnModifiedDateChanged();
@@ -1164,8 +1164,8 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_ParentTitleId", DbType="Int NOT NULL")]
-		public int ParentTitleId
+		[Column(Storage="_ParentTitleId", DbType="Int")]
+		public System.Nullable<int> ParentTitleId
 		{
 			get
 			{
@@ -1671,7 +1671,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
+		[Column(Storage="_Photo", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Photo
 		{
 			get
