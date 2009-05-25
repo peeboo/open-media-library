@@ -83,9 +83,12 @@ namespace OMLDatabaseEditor
             this.navBarGroupControlContainer4 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.treeMedia = new System.Windows.Forms.TreeView();
             this.cmsMediaTree = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.miCreateFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.miCreateMovieCollection = new System.Windows.Forms.ToolStripMenuItem();
+            this.miCreateFolderTVShow = new System.Windows.Forms.ToolStripMenuItem();
+            this.miCreateFolderTVSeason = new System.Windows.Forms.ToolStripMenuItem();
+            this.miCreateMovie = new System.Windows.Forms.ToolStripMenuItem();
+            this.miCreateTVEpisode = new System.Windows.Forms.ToolStripMenuItem();
             this.miDeleteFolder = new System.Windows.Forms.ToolStripMenuItem();
-            this.miCreateTitle = new System.Windows.Forms.ToolStripMenuItem();
             this.navBarGroupControlContainer2 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.lbMetadata = new DevExpress.XtraEditors.ListBoxControl();
             this.navBarGroupControlContainer3 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
@@ -626,32 +629,57 @@ namespace OMLDatabaseEditor
             // cmsMediaTree
             // 
             this.cmsMediaTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.miCreateFolder,
-            this.miDeleteFolder,
-            this.miCreateTitle});
+            this.miCreateMovieCollection,
+            this.miCreateFolderTVShow,
+            this.miCreateFolderTVSeason,
+            this.miCreateMovie,
+            this.miCreateTVEpisode,
+            this.miDeleteFolder});
             this.cmsMediaTree.Name = "cmsMediaTree";
-            this.cmsMediaTree.Size = new System.Drawing.Size(145, 70);
+            this.cmsMediaTree.Size = new System.Drawing.Size(251, 136);
+            this.cmsMediaTree.Opening += new System.ComponentModel.CancelEventHandler(this.cmsMediaTree_Opening);
             // 
-            // miCreateFolder
+            // miCreateMovieCollection
             // 
-            this.miCreateFolder.Name = "miCreateFolder";
-            this.miCreateFolder.Size = new System.Drawing.Size(144, 22);
-            this.miCreateFolder.Text = "Create Folder";
-            this.miCreateFolder.Click += new System.EventHandler(this.miCreateFolder_Click);
+            this.miCreateMovieCollection.Name = "miCreateMovieCollection";
+            this.miCreateMovieCollection.Size = new System.Drawing.Size(250, 22);
+            this.miCreateMovieCollection.Text = "Create Folder (Movies)";
+            this.miCreateMovieCollection.Click += new System.EventHandler(this.miCreateFolder_Click);
+            // 
+            // miCreateFolderTVShow
+            // 
+            this.miCreateFolderTVShow.Name = "miCreateFolderTVShow";
+            this.miCreateFolderTVShow.Size = new System.Drawing.Size(250, 22);
+            this.miCreateFolderTVShow.Text = "Create Folder (TV Show)";
+            this.miCreateFolderTVShow.Click += new System.EventHandler(this.miCreateFolderTVShow_Click);
+            // 
+            // miCreateFolderTVSeason
+            // 
+            this.miCreateFolderTVSeason.Name = "miCreateFolderTVSeason";
+            this.miCreateFolderTVSeason.Size = new System.Drawing.Size(250, 22);
+            this.miCreateFolderTVSeason.Text = "Create Folder (TV Season / Series)";
+            this.miCreateFolderTVSeason.Click += new System.EventHandler(this.miCreateFolderTVSeason_Click);
+            // 
+            // miCreateMovie
+            // 
+            this.miCreateMovie.Name = "miCreateMovie";
+            this.miCreateMovie.Size = new System.Drawing.Size(250, 22);
+            this.miCreateMovie.Text = "Create Movie";
+            this.miCreateMovie.Click += new System.EventHandler(this.miCreateTitle_Click);
+            // 
+            // miCreateTVEpisode
+            // 
+            this.miCreateTVEpisode.Name = "miCreateTVEpisode";
+            this.miCreateTVEpisode.Size = new System.Drawing.Size(250, 22);
+            this.miCreateTVEpisode.Text = "Create TV Episode / Show";
+            this.miCreateTVEpisode.Click += new System.EventHandler(this.miCreateTVEpisode_Click);
             // 
             // miDeleteFolder
             // 
             this.miDeleteFolder.Name = "miDeleteFolder";
-            this.miDeleteFolder.Size = new System.Drawing.Size(144, 22);
+            this.miDeleteFolder.Size = new System.Drawing.Size(250, 22);
             this.miDeleteFolder.Text = "Delete Folder";
             this.miDeleteFolder.Click += new System.EventHandler(this.miDeleteFolder_Click);
-            // 
-            // miCreateTitle
-            // 
-            this.miCreateTitle.Name = "miCreateTitle";
-            this.miCreateTitle.Size = new System.Drawing.Size(144, 22);
-            this.miCreateTitle.Text = "Create Title";
-            this.miCreateTitle.Click += new System.EventHandler(this.miCreateTitle_Click);
             // 
             // navBarGroupControlContainer2
             // 
@@ -1173,14 +1201,17 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraEditors.ListBoxControl lbBioData;
         private DevExpress.XtraEditors.ButtonEdit buttonEdit1;
         private System.Windows.Forms.ContextMenuStrip cmsMediaTree;
-        private System.Windows.Forms.ToolStripMenuItem miCreateFolder;
-        private System.Windows.Forms.ToolStripMenuItem miCreateTitle;
+        private System.Windows.Forms.ToolStripMenuItem miCreateMovieCollection;
+        private System.Windows.Forms.ToolStripMenuItem miCreateMovie;
         private System.Windows.Forms.ToolStripMenuItem miDeleteFolder;
         private DevExpress.XtraEditors.ListBoxControl lbGenreMetadata;
         private System.Windows.Forms.ContextMenuStrip cmsSimpleAddRemove;
         private System.Windows.Forms.ToolStripMenuItem miAdd;
         private System.Windows.Forms.ToolStripMenuItem miRemove;
         private DevExpress.XtraEditors.PanelControl SortControl;
+        private System.Windows.Forms.ToolStripMenuItem miCreateFolderTVShow;
+        private System.Windows.Forms.ToolStripMenuItem miCreateFolderTVSeason;
+        private System.Windows.Forms.ToolStripMenuItem miCreateTVEpisode;
     }
 }
 

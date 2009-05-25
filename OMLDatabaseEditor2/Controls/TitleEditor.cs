@@ -137,6 +137,9 @@ namespace OMLDatabaseEditor.Controls
 
             _dvdTitle.ModifiedDate = DateTime.Now;
 
+            _dvdTitle.TitleType = (_dvdTitle.TitleType & TitleTypes.Root) |
+                (TitleTypes)Enum.Parse(typeof(TitleTypes), cbTitleType.Text);
+
             TitleCollectionManager.SaveTitleUpdates();
             ClearEditor();
         }
