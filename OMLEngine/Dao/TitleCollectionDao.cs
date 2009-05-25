@@ -79,13 +79,17 @@ namespace OMLEngine.Dao
 
         public static int AddImage(byte[] imageStream)
         {
-            DBImage dbImage = new OMLEngine.Dao.DBImage();
-            dbImage.Image = imageStream;
+            using (OMLDataDataContext db = new OMLDataDataContext())
+            {
+                db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
+                DBImage dbImage = new OMLEngine.Dao.DBImage();
+                dbImage.Image = imageStream;
 
-            DBContext.Instance.DBImages.InsertOnSubmit(dbImage);
-            DBContext.Instance.SubmitChanges();
-
-            return dbImage.Id;
+                DBContext.Instance.DBImages.InsertOnSubmit(dbImage);
+                DBContext.Instance.SubmitChanges();
+                
+                return dbImage.Id;
+            }
         }
 
         /// <summary>
