@@ -213,6 +213,7 @@
             this.cbTitleType.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             this.cbTitleType.Size = new System.Drawing.Size(100, 20);
             this.cbTitleType.TabIndex = 25;
+            this.cbTitleType.SelectedValueChanged += new System.EventHandler(this.TitleChanges);
             // 
             // labelControl6
             // 
@@ -333,8 +334,8 @@
             // 
             // numUserRating
             // 
-            this.numUserRating.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "UserStarRating", true, System.Windows.Forms.DataSourceUpdateMode.Never));
-            this.numUserRating.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.titleSource, "UserStarRating", true, System.Windows.Forms.DataSourceUpdateMode.Never));
+            this.numUserRating.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "UserStarRating", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.numUserRating.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.titleSource, "UserStarRating", true));
             this.numUserRating.EditValue = new decimal(new int[] {
             0,
             0,
@@ -359,8 +360,8 @@
             // 
             this.txtSynposis.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSynposis.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "Synopsis", true, System.Windows.Forms.DataSourceUpdateMode.Never));
-            this.txtSynposis.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "Synopsis", true, System.Windows.Forms.DataSourceUpdateMode.Never));
+            this.txtSynposis.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "Synopsis", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtSynposis.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.titleSource, "Synopsis", true));
             this.txtSynposis.Location = new System.Drawing.Point(120, 162);
             this.txtSynposis.Name = "txtSynposis";
             this.txtSynposis.Size = new System.Drawing.Size(390, 64);
@@ -387,7 +388,7 @@
             // dtReleaseDate
             // 
             this.dtReleaseDate.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "ReleaseDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.dtReleaseDate.DataBindings.Add(new System.Windows.Forms.Binding("DateTime", this.titleSource, "ReleaseDate", true, System.Windows.Forms.DataSourceUpdateMode.Never));
+            this.dtReleaseDate.DataBindings.Add(new System.Windows.Forms.Binding("DateTime", this.titleSource, "ReleaseDate", true));
             this.dtReleaseDate.EditValue = null;
             this.dtReleaseDate.Location = new System.Drawing.Point(120, 109);
             this.dtReleaseDate.Name = "dtReleaseDate";
