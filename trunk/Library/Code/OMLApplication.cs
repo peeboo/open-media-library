@@ -359,6 +359,22 @@ namespace Library
                         OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_Settings_SettingsManager", properties);
                         return;
                     }
+                case "Trailers":
+                    {
+                        OMLProperties properties = new OMLProperties();
+                        properties.Add("Application", this);
+                        //properties.Add("UISettings", new UISettings());
+                        //properties.Add("Settings", new Settings());
+                        properties.Add("I18n", I18n.Instance);
+                        //v3 main gallery
+                        Library.Code.V3.TrailerPage gallery = new Library.Code.V3.TrailerPage("trailers");
+                        Command CommandContextPopOverlay = new Command();
+                        properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
+                        properties.Add("Page", gallery);
+                        _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
+                        //this.mediaChangers = new Library.Code.V3.MediaChangeManager();
+                        return;
+                    }
                 default:
                     {
                         OMLProperties properties = new OMLProperties();

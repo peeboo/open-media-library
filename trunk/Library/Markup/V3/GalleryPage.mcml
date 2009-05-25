@@ -6,6 +6,7 @@
     xmlns:focus="resx://Library/Library.Resources/V3_Controls_FocusAnimation"
     xmlns:shell ="assembly://Library/Library.Code.V3"
     xmlns:omlShell ="assembly://Library/Library"
+    xmlns:wait="resx://Library/Library.Resources/V3_Controls_WaitCursor"
     xmlns:me  ="Me">
 
   <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseCommand"/>
@@ -421,6 +422,7 @@
           <Set Target="[Page.PageState.TransitionState]" Value="Idle"/>
         </Actions>
       </Changed>
+      <Binding Source="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.IsBusy]" Target="[WaitCursor.Visible]" />
     </Rules>
 
     <Content>
@@ -429,7 +431,7 @@
           <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
         </Layout>
         <Children>
-
+          <wait:WaitCursorHost Name="WaitCursor" Visible="true"/>
           <Panel Layout="Fill" Navigation="Column" MaximumSize="[BrowsePanelSize]" MinimumSize="[BrowsePanelSize]">
             <LayoutInput>
               <AnchorLayoutInput Left="Parent, 0" Top="Parent, 0" Right="Parent, 1" Bottom="Parent, 1"
@@ -1179,6 +1181,9 @@
         </Conditions>
       </Binding>
 
+      <Binding Source="[Page.Model.Pivots.Chosen!shell:IBrowsePivot.IsBusy]" Target="[LoadingContentMessage.Visible]" />
+      <Binding Target="[LoadingContentMessage.Content]" Source="[Model.Pivots.Chosen!shell:IBrowsePivot.LoadingContentMessage]"/>
+
       <Binding Target="[MyCounter.ItemIndex]" Source="[SelectedIndex.Value]" Transformer="[IndexTransformer]"/>
 
       <Binding Target="[EmptyContentMessage.Content]" Source="[Model.Pivots.Chosen!shell:IBrowsePivot.EmptyContentText]"/>
@@ -1270,6 +1275,14 @@
 
           <!--Clip Name="ContentPanel" Margins="[ContentPanelMargins]" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="0.9"
   CenterPointPercent="0.5,0.5,0.5" Scale="0.95,0.95,0.95"-->
+          <Text Name="LoadingContentMessage" Color="color://comm:OffWhite" WordWrap="true" MaximumSize="683,305" Margins="0, 45, 0, 0" Visible="false">
+            <Font>
+              <Font FontName="global://comm:RegularFontFace" FontSize="24"/>
+            </Font>
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
+            </LayoutInput>
+          </Text>
           <Text Name="EmptyContentMessage" Color="color://comm:OffWhite" WordWrap="true" MaximumSize="683,305" Margins="0, 45, 0, 0" Visible="false">
             <Font>
               <Font FontName="global://comm:RegularFontFace" FontSize="24"/>

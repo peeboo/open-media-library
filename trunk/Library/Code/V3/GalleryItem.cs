@@ -89,7 +89,7 @@ namespace Library.Code.V3
         }
 
         //holds the standard metadata (rating, duration | PG-13, 102 minutes)
-        public string Metadata
+        public virtual string Metadata
         {
             get
             {

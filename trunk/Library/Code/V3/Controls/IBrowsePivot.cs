@@ -20,6 +20,7 @@ namespace Library.Code.V3
         string Description { get; }
         string DetailTemplate { get; }
         string EmptyContentText { get; }
+        string LoadingContentMessage { get; }
         Choice SortOptions { get; }
         ContextMenuData ContextMenu { get; }
     }

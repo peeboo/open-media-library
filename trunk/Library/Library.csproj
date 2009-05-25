@@ -118,6 +118,9 @@
     <Compile Include="Code\V3\Controls\LegacyHorizontalFlowLayoutHelper.cs" />
     <Compile Include="Code\V3\CollectionItem.cs" />
     <Compile Include="Code\V3\CollectionPage.cs" />
+    <Compile Include="Code\V3\TrailerPivot.cs" />
+    <Compile Include="Code\V3\TrailerItem.cs" />
+    <Compile Include="Code\V3\TrailerPage.cs" />
     <Compile Include="Code\V3\EpisodesPivot.cs" />
     <Compile Include="Code\V3\SeasonPage.cs" />
     <Compile Include="Code\V3\SeasonItem.cs" />
