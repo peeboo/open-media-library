@@ -44,10 +44,10 @@ namespace OMLEngine.Dao
             return DBContext.Instance.Tags.SingleOrDefault(t => t.Name.ToLower() == name.ToLower());
         }
 
-        public static void AddTitle(Title title)
-        {
-            DBContext.Instance.Titles.InsertOnSubmit(title);
-            DBContext.Instance.SubmitChanges();
+        public static void AddTitle(OMLDataDataContext context, Title title)
+        {            
+            context.Titles.InsertOnSubmit(title);
+            context.SubmitChanges();            
         }        
 
         public static Title GetTitleById(int id)
@@ -79,14 +79,13 @@ namespace OMLEngine.Dao
 
         public static int AddImage(byte[] imageStream)
         {
-            using (OMLDataDataContext db = new OMLDataDataContext())
-            {
-                db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
+            using (LocalDataContext db = new LocalDataContext())
+            {                
                 DBImage dbImage = new OMLEngine.Dao.DBImage();
                 dbImage.Image = imageStream;
 
-                DBContext.Instance.DBImages.InsertOnSubmit(dbImage);
-                DBContext.Instance.SubmitChanges();
+                db.Context.DBImages.InsertOnSubmit(dbImage);
+                db.Context.SubmitChanges();
                 
                 return dbImage.Id;
             }

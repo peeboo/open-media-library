@@ -76,7 +76,7 @@ namespace OMLEngine
                         finally
                         {
                             if (scaledImage != null)
-                                scaledImage.Dispose();
+                                scaledImage.Dispose();                            
                         }
                     }
                 }
@@ -94,11 +94,9 @@ namespace OMLEngine
         {
             Image image = null;
 
-            using (Dao.OMLDataDataContext dbContext = new Dao.OMLDataDataContext())
-            {
-                dbContext.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
-                
-                Dao.DBImage dbImage = dbContext.DBImages.SingleOrDefault(i => i.Id == id);
+            using (Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext())
+            {                                
+                Dao.DBImage dbImage = db.Context.DBImages.SingleOrDefault(i => i.Id == id);
 
                 if (dbImage != null)
                 {
@@ -491,11 +489,9 @@ namespace OMLEngine
 
         public static int? GetImageIdForTitleThreadSafe(int titleId, ImageType imageType)
         {
-            using (Dao.OMLDataDataContext context = new OMLEngine.Dao.OMLDataDataContext())
-            {
-                context.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
-
-                int imageId = (from a in context.ImageMappings
+            using (Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext())
+            {                
+                int imageId = (from a in db.Context.ImageMappings
                                   where a.TitleId == titleId
                                   where a.ImageType == (byte)imageType
                                   select a.ImageId).FirstOrDefault();

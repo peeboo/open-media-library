@@ -41,6 +41,35 @@ namespace OMLEngine.Dao
         public static OMLDataDataContext InstanceOrNull { get { return db; } }        
     }
 
+    internal class LocalDataContext : IDisposable
+    {
+        private OMLDataDataContext db = null;
+
+        public OMLDataDataContext Context { get { return db; } }
+
+        public LocalDataContext()
+        {
+            db = new OMLDataDataContext();
+            db.DeferredLoadingEnabled = true;
+
+            System.Data.Linq.DataLoadOptions loadOptions = new System.Data.Linq.DataLoadOptions();
+            //loadOptions.LoadWith<Title>(t => t.Disks);
+            loadOptions.LoadWith<Title>(i => i.Images);
+            db.LoadOptions = loadOptions;
+
+            db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
+        }
+
+        public void Dispose()
+        {
+            if (db != null)
+            {
+                db.Dispose();
+                db = null;
+            }
+        }                
+    }
+
     internal static class WatcherDataContext
     {
         private static WatcherDataDataContext db = null;
