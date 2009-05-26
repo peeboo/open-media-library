@@ -403,6 +403,20 @@ namespace MyMoviesPlugin
             }
             #endregion
 
+            #region watched status (Submitted by yodine from our forums)
+            if (navigator.MoveToChild("Watched", ""))
+            {
+                navigator.MoveToParent(); // move back, we just wanted to know this field existed.
+                Utilities.DebugLine("[MyMoviesImporter] Found Watched status. Trying to decode");
+                string watched = GetChildNodesValue(navigator, "Watched");
+                if (!string.IsNullOrEmpty(watched))
+                {
+                    if (Boolean.Parse(watched))
+                        newTitle.WatchedCount++;
+                }
+            }
+            #endregion
+
             #region subtitles
             if (navigator.MoveToChild("Subtitles", ""))
             {
