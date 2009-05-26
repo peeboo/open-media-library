@@ -1454,12 +1454,13 @@ namespace OMLDatabaseEditor
             folder.Name = Name;
             TitleCollectionManager.AddTitle(folder);
 
+            // No need for this now - null denotes a root title.
             // Generate the parentid if required
-            if (folder.ParentTitleId == 0)
-            {
-                folder.ParentTitleId = folder.Id;
-                TitleCollectionManager.SaveTitleUpdates();
-            }
+            //if (folder.ParentTitleId == 0)
+            //{
+            //    folder.ParentTitleId = folder.Id;
+            //    TitleCollectionManager.SaveTitleUpdates();
+            //}
 
             _movieList.Add(folder.Id, folder);
 
@@ -2056,12 +2057,13 @@ namespace OMLDatabaseEditor
             // Add the title now to get the title ID
             TitleCollectionManager.AddTitle(newMovie);
 
+            // No need for this now - null denotes a root title
             // Generate the parentid if required
-            if (newMovie.ParentTitleId == 0)
-            {
-                newMovie.ParentTitleId = newMovie.Id;
-                TitleCollectionManager.SaveTitleUpdates();
-            }
+            //if (newMovie.ParentTitleId == 0)
+            //{
+            //    newMovie.ParentTitleId = newMovie.Id;
+            //    TitleCollectionManager.SaveTitleUpdates();
+            //}
 
             // Add new title to title list and populate the screen control
             _movieList.Add(newMovie.Id, newMovie);
