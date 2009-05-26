@@ -41,23 +41,27 @@ namespace OMLEngine
         /// <returns></returns>
         public static bool AddTitle(Title title)
         {
-            // Set default titletype if none specified
-            if ((title.TitleType == null) || (title.TitleType == 0)) { title.TitleType = TitleTypes.Root | TitleTypes.Unknown; }
-            
-            // setup all the collections objects
-            // todo : solomon : this should go away once it's understood how people 
-            // will be added
-            Dao.TitleDao.SetupCollectionsToBeAdded(title);
+            using (OMLEngine.Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext())
+            {                
+                // Set default titletype if none specified
+                if ((title.TitleType == null) || (title.TitleType == 0)) { title.TitleType = TitleTypes.Root | TitleTypes.Unknown; }
 
-            // setup all the images
-            UpdatesImagesForTitle(title.DaoTitle);
+                // setup all the collections objects
+                // todo : solomon : this should go away once it's understood how people 
+                // will be added
+                Dao.TitleDao.SetupCollectionsToBeAdded(db.Context, title);
 
-            // reset the % complete
-            title.DaoTitle.ResetPercentComplete();
+                // setup all the images
+                UpdatesImagesForTitle(title.DaoTitle);
 
-            // todo : solomon : do your duplicate logic here
-            Dao.TitleCollectionDao.AddTitle(title.DaoTitle);
-            return true;
+                // reset the % complete
+                title.DaoTitle.ResetPercentComplete();
+
+                // todo : solomon : do your duplicate logic here
+                Dao.TitleCollectionDao.AddTitle(db.Context, title.DaoTitle);
+
+                return true;
+            }                        
         }
 
         private static void UpdatesImagesForTitle(Dao.Title title)
@@ -204,17 +208,11 @@ namespace OMLEngine
         /// </summary>
         public static void DeleteAllImages()
         {
-            var mappings = from m in Dao.DBContext.Instance.ImageMappings
-                           select m;
+            // delete all the Image mappings
+            Dao.DBContext.Instance.ExecuteCommand("delete from ImageMappings");
 
-            Dao.DBContext.Instance.ImageMappings.DeleteAllOnSubmit(mappings);
-
-            var images = from d in Dao.DBContext.Instance.DBImages
-                               select d;
-
-            Dao.DBContext.Instance.DBImages.DeleteAllOnSubmit(images);            
-
-            Dao.DBContext.Instance.SubmitChanges();
+            // delete all the images
+            Dao.DBContext.Instance.ExecuteCommand("delete from DBImages");
         }
 
         /// <summary>
@@ -222,33 +220,26 @@ namespace OMLEngine
         /// </summary>
         public static void DeleteAllTitles()
         {
-            // this needs to be optimized - i believe this approach will use a select first
-            var deletePeople = from d in Dao.DBContext.Instance.Persons
-                               select d;
+            // delete all the people
+            Dao.DBContext.Instance.ExecuteCommand("delete from People");
 
-            Dao.DBContext.Instance.Persons.DeleteAllOnSubmit(deletePeople);
+            // delete all the disks
+            Dao.DBContext.Instance.ExecuteCommand("delete from Disks");
 
-            var deleteDisks = from d in Dao.DBContext.Instance.Disks
-                               select d;
+            // delete all the genres
+            Dao.DBContext.Instance.ExecuteCommand("delete from Genres");
 
-            Dao.DBContext.Instance.Disks.DeleteAllOnSubmit(deleteDisks);
+            // delete all the tags
+            Dao.DBContext.Instance.ExecuteCommand("delete from Tags");            
 
-            var deleteGenres = from d in Dao.DBContext.Instance.Genres
-                              select d;
+            // delete all the Genre Mappings
+            Dao.DBContext.Instance.ExecuteCommand("delete from GenreMappings");            
 
-            Dao.DBContext.Instance.Genres.DeleteAllOnSubmit(deleteGenres);
+            // delete all the meta data mappings
+            Dao.DBContext.Instance.ExecuteCommand("delete from MataDataMappings");
 
-            var deleteTags = from d in Dao.DBContext.Instance.Tags
-                               select d;
-
-            Dao.DBContext.Instance.Tags.DeleteAllOnSubmit(deleteTags);
-
-            var deleteTitles = from d in Dao.DBContext.Instance.Titles
-                             select d;
-
-            Dao.DBContext.Instance.Titles.DeleteAllOnSubmit(deleteTitles);            
-
-            Dao.DBContext.Instance.SubmitChanges();
+            // delete all the tiles
+            Dao.DBContext.Instance.ExecuteCommand("delete from Titles");            
         }
 
         #region GenreMetaData functions
@@ -257,12 +248,8 @@ namespace OMLEngine
         /// </summary>
         public static void DeleteAllGenreMetaData()
         {
-            var deleteGenreMeta = from d in Dao.DBContext.Instance.GenreMetaDatas
-                                  select d;
-
-            Dao.DBContext.Instance.GenreMetaDatas.DeleteAllOnSubmit(deleteGenreMeta);
-
-            Dao.DBContext.Instance.SubmitChanges();
+            // delete all the meta data mappings
+            Dao.DBContext.Instance.ExecuteCommand("delete from GenreMetaData");
         }
 
         public static IEnumerable<GenreMetaData> GetAllGenreMetaDatas()
@@ -298,12 +285,8 @@ namespace OMLEngine
         /// </summary>
         public static void DeleteAllPeopleData()
         {
-            var deleteBio = from d in Dao.DBContext.Instance.BioDatas
-                             select d;
-
-            Dao.DBContext.Instance.BioDatas.DeleteAllOnSubmit(deleteBio);
-
-            Dao.DBContext.Instance.SubmitChanges();
+            // delete all the people
+            Dao.DBContext.Instance.ExecuteCommand("delete from BioData");            
         }
 
         public static IEnumerable<BioData> GetAllBioDatas()

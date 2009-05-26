@@ -9,7 +9,7 @@ namespace OMLEngine.Dao
     {
         private const char dbCollectionDelimiter = '\t';        
 
-        public static void SetupCollectionsToBeAdded(OMLEngine.Title title)
+        public static void SetupCollectionsToBeAdded(OMLDataDataContext context, OMLEngine.Title title)
         {
             Title daoTitle = title.DaoTitle;
 
@@ -28,7 +28,7 @@ namespace OMLEngine.Dao
                     continue;
 
                 // try to see if the genre exists
-                GenreMetaData metaData = TitleCollectionDao.GetGenreMetaDataByName(genre);
+                GenreMetaData metaData = context.GenreMetaDatas.SingleOrDefault(t => t.Name.ToLower() == genre.ToLower());
 
                 if (metaData == null)
                 {
@@ -56,7 +56,7 @@ namespace OMLEngine.Dao
                     continue;
 
                 // try to see if the tag exists in the db already
-                tag = TitleCollectionDao.GetTagByTagName(name);
+                tag = context.Tags.SingleOrDefault(t => t.Name.ToLower() == name.ToLower());
 
                 if (tag == null)
                 {
@@ -70,7 +70,7 @@ namespace OMLEngine.Dao
             }
 
             // grab from the db who we know about already
-            Dictionary<string, BioData> existingPeople = GetAllExistingPeople(title);
+            Dictionary<string, BioData> existingPeople = GetAllExistingPeople(context, title);
 
             int actorIndex = 0;
 
@@ -371,7 +371,7 @@ namespace OMLEngine.Dao
         /// </summary>
         /// <param name="title"></param>
         /// <returns></returns>
-        private static Dictionary<string, BioData> GetAllExistingPeople(OMLEngine.Title title)
+        private static Dictionary<string, BioData> GetAllExistingPeople(OMLDataDataContext context, OMLEngine.Title title)
         {
             List<string> names = new List<string>(title.ActingRoles.Count + title.Writers.Count + title.Directors.Count + title.Producers.Count);
 
@@ -388,7 +388,7 @@ namespace OMLEngine.Dao
                 names.Add(person.full_name);
 
             // now that we have all the people - query to see who exists
-            var actors = from actor in DBContext.Instance.BioDatas
+            var actors = from actor in context.BioDatas
                          where names.Contains(actor.FullName)
                          select actor;
 
