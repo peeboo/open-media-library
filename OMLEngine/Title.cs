@@ -423,6 +423,7 @@ namespace OMLEngine
                 if (File.Exists(value))
                 {
                     _title.UpdatedFrontCoverPath = value;
+                    _frontCoverPath = null;
                     DaoTitle.ModifiedDate = DateTime.Now;
                 }
             }
@@ -521,8 +522,11 @@ namespace OMLEngine
                 if (_title.UpdatedBackCoverPath != null)
                     return _title.UpdatedBackCoverPath;
 
-                Dao.ImageMapping backCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.BackCoverImage);
-                _backCoverPath = ImageManager.GetImagePathById((backCover == null) ? (int?)null : backCover.ImageId, ImageSize.Original);
+                if (_backCoverPath == null)
+                {
+                    Dao.ImageMapping backCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.BackCoverImage);
+                    _backCoverPath = ImageManager.GetImagePathById((backCover == null) ? (int?)null : backCover.ImageId, ImageSize.Original);
+                }
 
                 return _backCoverPath;
             }
@@ -532,6 +536,7 @@ namespace OMLEngine
                     throw new FormatException("BackCoverPath must be 255 characters or less.");
 
                 _title.UpdatedBackCoverPath = value;
+                _backCoverPath = null;
                 DaoTitle.ModifiedDate = DateTime.Now;
             }
         }
@@ -1229,6 +1234,13 @@ namespace OMLEngine
             DaoTitle.UpdatedTags.Remove(tag);
             DaoTitle.ModifiedDate = DateTime.Now;
         }
+
+        public void RemoveAllTags()
+        {
+            DaoTitle.UpdatedTags = new List<string>();
+            DaoTitle.ModifiedDate = DateTime.Now;
+        }
+
 
         public override bool Equals(object obj)
         {
@@ -2129,7 +2141,7 @@ namespace OMLEngine
                 if (!String.IsNullOrEmpty(src) && String.IsNullOrEmpty(dest))
                     return src;
                 else
-                    return dest;
+                    return dest ?? "";
             }
         }
 
@@ -2210,8 +2222,7 @@ namespace OMLEngine
             {
                 if (overWrite || Genres.Count == 0)
                 {
-                    DaoTitle.UpdatedGenres.Clear();
-
+                    RemoveAllGenres();
                     foreach (string p in t.Genres)
                     {
                         AddGenre(p);
@@ -2225,7 +2236,7 @@ namespace OMLEngine
 
                 if (overWrite || DaoTitle.UpdatedTags.Count == 0)
                 {
-                    DaoTitle.UpdatedTags.Clear();
+                    RemoveAllTags();
                     foreach (string p in t.DaoTitle.UpdatedTags)
                     {
                         DaoTitle.UpdatedTags.Add(p);
