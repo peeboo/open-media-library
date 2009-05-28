@@ -119,10 +119,19 @@ namespace OMLDatabaseEditor.Controls
             titleSource.ResetCurrentItem();
         }
 
-        public void ClearEditor()
+        /// <summary>
+        /// Resets the title editor. This will set the status of the edited title
+        /// to 'Normal' (no unsaved changes) and if required clears all the
+        /// screen fields
+        /// </summary>
+        /// <param name="Clear">If set the contents of the titleeditor is blanked.</param>
+        public void ClearEditor(bool Clear)
         {
-            _dvdTitle = null;
-            titleSource.DataSource = typeof(Title);
+            if (Clear)
+            {
+                _dvdTitle = null;
+                titleSource.DataSource = typeof(Title);
+            }
             Status = TitleStatus.Normal;
         }
 
@@ -141,7 +150,7 @@ namespace OMLDatabaseEditor.Controls
                 (TitleTypes)Enum.Parse(typeof(TitleTypes), cbTitleType.Text);
 
             TitleCollectionManager.SaveTitleUpdates();
-            ClearEditor();
+            ClearEditor(false);
         }
 
         private void _titleChanged(EventArgs e)
