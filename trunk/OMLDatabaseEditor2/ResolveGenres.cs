@@ -90,7 +90,6 @@ namespace OMLDatabaseEditor
                     // ignore genre
                     if (_title.Genres.Contains(map.SourceGenre))
                         _title.RemoveGenre(map.SourceGenre);
-
                     
                     OMLEngine.Dao.GenreMapping mapping = new OMLEngine.Dao.GenreMapping();
                     mapping.GenreName = map.SourceGenre;

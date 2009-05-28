@@ -628,7 +628,7 @@ namespace OMLDatabaseEditor
                     string newGenre = genre.Trim();
                     if (!genreList.Contains(newGenre))
                     {
-                        if (!string.IsNullOrEmpty(OMLEngine.Settings.SettingsManager.GenreMap_GetMapping(newGenre)))
+                        if (OMLEngine.Settings.SettingsManager.GenreMap_GetMapping(newGenre) != null)
                         {
                             // Mapping already exists for genre
                             genreChanges[genre] = OMLEngine.Settings.SettingsManager.GenreMap_GetMapping(newGenre);
@@ -649,10 +649,12 @@ namespace OMLDatabaseEditor
                 }
                 foreach (string genre in genreChanges.Keys)
                 {
-                    title.Genres.Remove(genre);
+                    //title.Genres.Remove(genre);
+                    title.RemoveGenre(genre);
                     // Mapping contains empty string when user wants a specific genre ignored.
                     if (!String.IsNullOrEmpty(genreChanges[genre]) && !title.Genres.Contains(genreChanges[genre]))
-                        title.Genres.Add(genreChanges[genre]);
+                        title.AddGenre(genreChanges[genre]);
+                        //title.Genres.Add(genreChanges[genre]);
                 }
                 if (genreIssuesList.Keys.Count > 0)
                 {
@@ -753,6 +755,8 @@ namespace OMLDatabaseEditor
                 if (mainNav.ActiveGroup == groupMediaTree)
                 {
                     SaveChanges();
+                    ToggleSaveState(false);
+                    this.Text = APP_TITLE + " - " + titleEditor.EditedTitle.Name;
                 }
                 if (mainNav.ActiveGroup == groupGenresMetadata)
                 {
@@ -841,7 +845,7 @@ namespace OMLDatabaseEditor
                     if (result == DialogResult.Yes)
                     {
                         TitleCollectionManager.DeleteTitle(titleToRemove);                        
-                        titleEditor.ClearEditor();
+                        titleEditor.ClearEditor(true);
                         LoadMovies();
                         PopulateMovieListV2(SelectedTreeRoot);
                     }
@@ -1780,7 +1784,7 @@ namespace OMLDatabaseEditor
             foreach (Title title in lbTitles.SelectedItems)
             {
                 if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.Id == title.Id)
-                    titleEditor.ClearEditor();
+                    titleEditor.ClearEditor(true);
 
                 _movieList.Remove(title.Id);
 
