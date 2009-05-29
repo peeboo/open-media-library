@@ -105,7 +105,7 @@
           </Component>
           <Component Id="OMLDatabaseEditor.exe" Guid="4226fe89-8797-44ed-b463-6fda1be5c918" Win64="yes" DiskId="1">
             <File Name="OMLDatabaseEditor.exe"
-                  Source="..\..\OMLDatabaseEditor\bin\$(var.BuildType)\OMLDatabaseEditor.exe" Checksum="no" />
+                  Source="..\..\OMLDatabaseEditor2\bin\$(var.BuildType)\OMLDatabaseEditor.exe" Checksum="no" />
           </Component>
           <Component Id="OMLImporter.exe" Guid="5405ac5c-69ba-49c0-8854-bb766ffe44bb" Win64="yes" DiskId="1">
             <File Name="OMLImporter.exe"
