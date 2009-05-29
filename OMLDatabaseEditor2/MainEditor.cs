@@ -28,16 +28,16 @@ namespace OMLDatabaseEditor
         internal static List<IOMLMetadataPlugin> _metadataPlugins = new List<IOMLMetadataPlugin>();
         private const string APP_TITLE = "OML Movie Manager";
         private bool _loading = false;
-        private AppearanceObject Percent30 = null;
-        private AppearanceObject Percent40 = null;
-        private AppearanceObject Percent50 = null;
-        private AppearanceObject Percent60 = null;
-        private AppearanceObject Percent70 = null;
-        private AppearanceObject Percent80 = null;
+        //private AppearanceObject Percent30 = null;
+        //private AppearanceObject Percent40 = null;
+        //private AppearanceObject Percent50 = null;
+        //private AppearanceObject Percent60 = null;
+        //private AppearanceObject Percent70 = null;
+        //private AppearanceObject Percent80 = null;
         //private List<Title> _movieList;
         private Dictionary<int,Title> _movieList;
         private Dictionary<int, TreeNode> _mediaTree;
-        private Dictionary<int, int> _parentchildRelationship; // titleid, parentid
+
         public List<String> DXSkins;
 
         int? SelectedTreeRoot;
@@ -304,44 +304,6 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.Default;
         }
 
-
- //       private void PopulateMovieList(List<Title> titles)
-        /*private void PopulateMovieList(Dictionary<int, Title> titles)
-        {
-        
-
-
-            //lbTitles.DataSource = titles;
-
-            lbMovies.Items.Clear();
-            //_titleCollection.SortBy("SortName", true);
-
-            // throwing this into a new list shouldn't be needed but it seems like this control wants it
-            //lbMovies.DataSource = titles;
-            if (titleEditor.EditedTitle != null)
-            {
-                List<Title> matches = (from title in titles
-                                       where title.Id == titleEditor.EditedTitle.Id
-                                       select title).ToList<Title>();
-                if (matches.Count == 0)
-                {
-                    lbMovies.SelectedIndex = -1;
-                    lbMovies.SelectedItem = null;
-                    titleEditor.ClearEditor();
-                }
-                else
-                {
-                    lbMovies.SelectedItem = matches[0];
-                }
-            }
-            else
-            {
-                lbMovies.SelectedIndex = -1;
-                lbMovies.SelectedItem = null;
-                titleEditor.ClearEditor();
-            }
-        }
-*/
         private void LoadImporters()
         {
             Cursor = Cursors.WaitCursor;
@@ -387,82 +349,8 @@ namespace OMLDatabaseEditor
             return result;
         }
 
-        /*public void LoadTitlesIntoDatabase(OMLPlugin plugin)
-        {
-            try
-            {
-                Utilities.DebugLine("[OMLImporter] Titles loaded, beginning Import process");
-                IList<Title> titles = plugin.GetTitles();
-                Utilities.DebugLine("[OMLImporter] " + titles.Count + " titles found in input file");
 
-                int numberOfTitlesAdded = 0;
-                int numberOfTitlesSkipped = 0;
-                pgbProgress.Value = 0;
-                bool YesToAll = true;// false;
-
-                pgbProgress.Maximum = titles.Count;
-
-                foreach (Title t in titles)
-                {
-                    pgbProgress.Value++;
-                    if (TitleCollectionManager.ContainsDisks(t.Disks))
-                    {
-                        numberOfTitlesSkipped++;
-                        continue;
-                    }
-
-                    if (!YesToAll)
-                    {
-                        //TODO: Need to show a UI that let's the User decide whether to import all titles or be selective about it
-
-                        /*Console.WriteLine("Would you like to add this title? (y/n/a)");
-                        string response = Console.ReadLine();
-                        switch (response.ToUpper())
-                        {
-                            case "Y":
-                                mainTitleCollection.Add(t);
-                                numberOfTitlesAdded++;
-                                break;
-                            case "N":
-                                numberOfTitlesSkipped++;
-                                break;
-                            case "A":
-                                YesToAll = true;
-                                mainTitleCollection.Add(t);
-                                numberOfTitlesAdded++;
-                                break;
-                            default:
-                                break;
-                        }*/
-           //         }
-        /*            else
-                    {                        
-                        TitleCollectionManager.AddTitle(t);
-                        numberOfTitlesAdded++;
-                    }
-                }
-
-                // this is for saving the resized image
-                TitleCollectionManager.SaveTitleUpdates();
-
-                XtraMessageBox.Show("Added " + numberOfTitlesAdded + " titles\nSkipped " + numberOfTitlesSkipped + " titles\n", "Import Results");
-
-                plugin.GetTitles().Clear();
-            }
-            catch (Exception e)
-            {
-                XtraMessageBox.Show("Exception in LoadTitlesIntoDatabase: {0}", e.Message);
-                Utilities.DebugLine("[OMLImporter] Exception in LoadTitlesIntoDatabase: " + e.Message);
-            }
-        }*/
-
-        private void ShowNonFatalErrors(string[] errors)
-        {
-            Controls.NonFatalErrors nfe = new Controls.NonFatalErrors();
-            nfe.LoadErrors(errors);
-            nfe.Show();
-        }
-
+        #region MetaData Import
         private bool StartMetadataImport(IOMLMetadataPlugin plugin, bool coverArtOnly)
         {
             return StartMetadataImport(plugin, coverArtOnly, titleEditor.EditedTitle.Name, null);
@@ -663,6 +551,8 @@ namespace OMLDatabaseEditor
                 }
             }
         }
+        #endregion
+
 
         private void SaveChanges()
         {
@@ -1231,6 +1121,7 @@ namespace OMLDatabaseEditor
         private void PopulateMediaTree()
         {
             Dictionary<int, Title> mediatreefolders = TitleCollectionManager.GetAllTitles(TitleTypes.AllFolders).ToDictionary(k => k.Id);
+            Dictionary<int, int> _parentchildRelationship  = new Dictionary<int, int>();  // titleid, parentid
 
             if (_mediaTree == null)
             {
@@ -1239,15 +1130,6 @@ namespace OMLDatabaseEditor
             else
             {
                 _mediaTree.Clear();
-            }
-
-            if (_parentchildRelationship == null)
-            {
-                _parentchildRelationship = new Dictionary<int, int>();
-            }
-            else
-            {
-                _parentchildRelationship.Clear();
             }
 
             treeMedia.Nodes.Clear();
@@ -1419,7 +1301,7 @@ namespace OMLDatabaseEditor
  
         private void miCreateFolder_Click(object sender, EventArgs e)
         {
-            CreateFolder("New Folder", TitleTypes.Collection);
+            CreateFolder("New Movies", TitleTypes.Collection);
         }
         
         private void miCreateFolderTVShow_Click(object sender, EventArgs e)
@@ -2075,10 +1957,11 @@ namespace OMLDatabaseEditor
 
         #region Title Drag and Drop support
         private ToolTip tt;
-        TreeNode currenttreenode;
+        TreeNode currentmovetonode;
         
         private void treeMedia_DragEnter(object sender, DragEventArgs e)
         {
+            currentmovetonode = null;
             if (e.Data.GetDataPresent(typeof(int[])))
             {
                 e.Effect = DragDropEffects.Move;
@@ -2113,7 +1996,7 @@ namespace OMLDatabaseEditor
                     if (selectednode.Name == "All Media")
                     {
                         // Item is being moved to root
-                        _movieList[item].ParentTitleId = item;
+                        _movieList[item].ParentTitleId = null;
                         _movieList[item].TitleType = _movieList[item].TitleType | TitleTypes.Root;
                     }
                     else
@@ -2149,14 +2032,89 @@ namespace OMLDatabaseEditor
             }
 
             Point mouseLocation = treeMedia.PointToClient(new Point(e.X, e.Y));
-            TreeNode node = treeMedia.GetNodeAt(mouseLocation);
+            TreeNode movetonode = treeMedia.GetNodeAt(mouseLocation);
 
-            if (currenttreenode != node)
+
+            if (currentmovetonode != movetonode)
             {
-                tt.Show("Move to " + node.Text, this, new Point(e.X, e.Y + 30));
-                currenttreenode = node;
+                bool validmove = true;
+
+                if (movetonode == null)
+                {
+                    validmove = false;
+                }
+                else
+                {
+                    try
+                    {
+                        if (e.Data.GetDataPresent(typeof(int[])))
+                        {
+                            int[] items = (int[])e.Data.GetData(typeof(int[]));
+                            foreach (int item in items)
+                            {
+                                if ((_movieList[item].TitleType & TitleTypes.AllFolders) != 0)
+                                {
+                                    // Item is a folder - dangerous. Make sure this will not result circular recursion
+
+                                    if (movetonode.Name == "All Media")
+                                    {
+                                        if (_movieList[item].ParentTitleId == null)
+                                        {
+                                            validmove = false;
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // Is it being moved into itself
+                                        if (item == Convert.ToInt32(movetonode.Name))
+                                        {
+                                            validmove = false;
+                                            break;
+                                        }
+
+                                        // Is it being moved to it's parent - it's allready there
+                                        if (_movieList[item].ParentTitleId == Convert.ToInt32(movetonode.Name))
+                                        {
+                                            validmove = false;
+                                            break;
+                                        }
+
+                                        // Check for circular parents
+                                        int? parentid = _movieList[Convert.ToInt32(movetonode.Name)].ParentTitleId;
+                                        while ((validmove) && (parentid != null))
+                                        {
+                                            if ((parentid == item) || (parentid == _movieList[(int)parentid].ParentTitleId)) // Last bit stops run aways if parenttitleid==titleid (shouldn't happen)
+                                            {
+                                                validmove = false;
+                                                break;
+                                            }
+                                            parentid = _movieList[(int)parentid].ParentTitleId;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+
+                if (validmove)
+                {
+                    e.Effect = DragDropEffects.Move;
+                    tt.Show("Move to " + movetonode.Text, this, new Point(e.X, e.Y + 30));
+                }
+                else
+                {
+                    e.Effect = DragDropEffects.None;
+                    tt.Show("Unable to move here!", this, new Point(e.X, e.Y + 30));
+                }
+                currentmovetonode = movetonode;
             }
-        }
+         }
+
 
         private void treeMedia_DragLeave(object sender, EventArgs e)
         {
