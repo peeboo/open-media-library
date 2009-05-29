@@ -387,7 +387,7 @@ namespace OMLDatabaseEditor
             return result;
         }
 
-        public void LoadTitlesIntoDatabase(OMLPlugin plugin)
+        /*public void LoadTitlesIntoDatabase(OMLPlugin plugin)
         {
             try
             {
@@ -434,8 +434,8 @@ namespace OMLDatabaseEditor
                             default:
                                 break;
                         }*/
-                    }
-                    else
+           //         }
+        /*            else
                     {                        
                         TitleCollectionManager.AddTitle(t);
                         numberOfTitlesAdded++;
@@ -454,7 +454,7 @@ namespace OMLDatabaseEditor
                 XtraMessageBox.Show("Exception in LoadTitlesIntoDatabase: {0}", e.Message);
                 Utilities.DebugLine("[OMLImporter] Exception in LoadTitlesIntoDatabase: " + e.Message);
             }
-        }
+        }*/
 
         private void ShowNonFatalErrors(string[] errors)
         {
@@ -940,20 +940,13 @@ namespace OMLDatabaseEditor
             if (importer != null)
             {                
                 lblCurrentStatus.Text = "Importing movies";
-                pgbProgress.Visible = true;
-                string[] work = importer.GetWork();
-                if (work != null)
-                {
-                    importer.DoWork(work);
-                    LoadTitlesIntoDatabase(importer);
-                }
-                pgbProgress.Visible = false;
+                Importer imp = new Importer(importer);
+                imp.ShowDialog();
+                
                 lblCurrentStatus.Text = "";
 
                 this.Refresh();
-                string[] nonFatalErrors = importer.GetErrors;
-                if (nonFatalErrors.Length > 0)
-                    ShowNonFatalErrors(nonFatalErrors);
+ 
                 lbImport.SelectedItem = null;
                 lbImport.SelectedIndex = -1;
             }
@@ -1188,6 +1181,9 @@ namespace OMLDatabaseEditor
                 splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
                 splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = false;
+
+                PopulateMediaTree();
+                PopulateMovieListV2(SelectedTreeRoot);
             }
 
             if (e.Group == groupBioData)
