@@ -103,11 +103,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostInstallerWizard", "Post
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLDatabaseEditor2", "OMLDatabaseEditor2\OMLDatabaseEditor2.csproj", "{2488F54D-DA71-4C8D-B992-179B314C3FE7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVDBMetadata", "TVDBMetadata\TVDBMetadata.csproj", "{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}"
+EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -467,8 +465,24 @@ Global
 		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Release|x64.ActiveCfg = Release|Any CPU
 		{2488F54D-DA71-4C8D-B992-179B314C3FE7}.Release|x86.ActiveCfg = Release|Any CPU
+		{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}.Release|x64.ActiveCfg = Release|Any CPU
+		{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
