@@ -9,6 +9,7 @@ namespace OMLEngine.Settings
 {
     public class XMLSettingsManager
     {
+        public bool ConfigFileExists { get; set; }
         public string SQLServerName { get; set; }
         public string SQLInstanceName { get; set; }
         public string DatabaseName { get; set; }
@@ -33,6 +34,7 @@ namespace OMLEngine.Settings
                 SAPassword = ExtractField(dr, "SAPassword");
                 OMLUserAcct = ExtractField(dr, "OMLUserAcct");
                 OMLUserPassword = ExtractField(dr, "OMLUserPassword");
+                ConfigFileExists = true;
 
                 Utilities.DebugLine("[SettingsManager] : Loaded settings xml");
             }
@@ -45,7 +47,7 @@ namespace OMLEngine.Settings
                 SAPassword = null;
                 OMLUserAcct = null;
                 OMLUserPassword = null;
-
+                ConfigFileExists = false;
             }
         }
 

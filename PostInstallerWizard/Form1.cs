@@ -13,6 +13,23 @@ using OMLEngine;
 
 namespace PostInstallerWizard
 {
+    // Database management logic
+    //
+    // Is there an existing 'settings.xml', if so oml has allready been setup
+    // In this case we simply need to verify we can connect to the db and check
+    // the schema version (upgrade if required)
+    //
+    //
+    //
+    //
+    //
+    enum WizardActions
+    {
+        CheckAndUpgradeSchema,
+        InstallSQLServer,
+        SetupForRemoteServer
+
+    }
     public partial class Form1 : Form
     {
         List<Control> WizPages = new List<Control>();
@@ -24,7 +41,9 @@ namespace PostInstallerWizard
 
         Control CurrentPage;
 
-        bool ServerInstall;
+        WizardActions WizardAction;
+
+        bool ServerInstall;             // Does the install include the server components
         bool ServerAllreadyInstalled;
         bool InstallNewInstance;
         bool AdvancedMode;
@@ -37,12 +56,15 @@ namespace PostInstallerWizard
         {
             ServerInstall = false;
 
+            // Check if this a server installation. This needs to be changed to a better method.
+            // Maybe a registry setting in wix to indicate server install
             if ((File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLEXPR_x86_ENU.exe")) ||
                 (File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLEXPR_x64_ENU.exe")))
             {
                 ServerInstall = true;
             }
 
+            // Check the command line for the 'client' override
             if (Environment.GetCommandLineArgs().Length > 1)
             {
                 if (string.Compare(Environment.GetCommandLineArgs()[1], "client", true) == 0)
@@ -51,7 +73,16 @@ namespace PostInstallerWizard
                 }
             }
 
-            ServerAllreadyInstalled = CheckSQLExists();
+            // Does the OML instance allready exists
+            if (ServerInstall)
+            {
+                ServerAllreadyInstalled = CheckSQLExists();
+            }
+            else
+            {
+                ServerAllreadyInstalled = false;
+            }
+
 
             // Set some bools
             InstallNewInstance = true;
@@ -88,26 +119,41 @@ namespace PostInstallerWizard
 
             if (CurrentPage == null)
             {
-                if (ServerInstall)
+                if (OMLEngine.DatabaseManagement.DatabaseInformation.ConfigFileExists)
                 {
-                    // Server installation
-                    if (ServerAllreadyInstalled)
-                    {  
-                        (WizStart as Wiz_Start).cbAdvanced.Visible = false;
-                        (WizStart as Wiz_Start).lMessage1.Text = "This wizard will upgrade the database to the latest version!";
-                        (WizStart as Wiz_Start).lMessage2.Text = "Press Next to begin upgrading the database.";
-                    }
-                    else
-                    {
-                        (WizStart as Wiz_Start).lMessage1.Text = "This wizard will install and prepare SQL Server for OML!";
-                        (WizStart as Wiz_Start).lMessage2.Text = "Press Next to begin installing SQL Server.";
-                    }
+                    // Good news, this must be an upgrade. Just need to check  
+                    // we can connect and check the schema version
+                    (WizStart as Wiz_Start).lMessage1.Text = "This wizard has detected an existing installation of OML!";
+                    (WizStart as Wiz_Start).lMessage2.Text = "Press Next to begin checking the database.";
+                    WizardAction = WizardActions.CheckAndUpgradeSchema;
                 }
                 else
                 {
-                    // Client installation
-                    (WizStart as Wiz_Start).lMessage1.Text = "This wizard will assist in setting up OML for a remote server!";
-                    (WizStart as Wiz_Start).lMessage2.Text = "Press Next to select a server.";
+                    // This must be a new install. Is it a server install
+                    if (ServerInstall)
+                    {
+                        // Server installation
+                        if (!ServerAllreadyInstalled)
+                        {
+                            (WizStart as Wiz_Start).cbAdvanced.Visible = false;
+                            (WizStart as Wiz_Start).lMessage1.Text = "This wizard has detected a previous installation of OML!";
+                            (WizStart as Wiz_Start).lMessage2.Text = "Press Next to begin checking the database.";
+                            WizardAction = WizardActions.CheckAndUpgradeSchema;
+                        }
+                        else
+                        {
+                            (WizStart as Wiz_Start).lMessage1.Text = "This wizard will install and prepare SQL Server for OML!";
+                            (WizStart as Wiz_Start).lMessage2.Text = "Press Next to begin installing SQL Server.";
+                            WizardAction = WizardActions.InstallSQLServer;
+                        }
+                    }
+                    else
+                    {
+                        // Client installation
+                        (WizStart as Wiz_Start).lMessage1.Text = "This wizard will assist in setting up OML for a remote server!";
+                        (WizStart as Wiz_Start).lMessage2.Text = "Press Next to select a server.";
+                        WizardAction = WizardActions.SetupForRemoteServer;
+                    }
                 }
                 SetWizardPage(WizStart);
                 return;
@@ -118,15 +164,15 @@ namespace PostInstallerWizard
             {
                 AdvancedMode = (WizStart as Wiz_Start).cbAdvanced.Checked;
 
-                if (ServerInstall && ServerAllreadyInstalled)
+                if (WizardAction == WizardActions.CheckAndUpgradeSchema)
                 {
-                    // Upgrade Schema
+                    // Check & Upgrade Schema
                     UpgradeSchema();
                     buttonNext.Text = "Finish";
                     buttonBack.Enabled = false;
                     SetWizardPage(WizEnd);
                 }
-                if (ServerInstall && !ServerAllreadyInstalled)
+                if (WizardAction == WizardActions.InstallSQLServer)
                 {
                     // Install SQL 
                     if (AdvancedMode == true)
@@ -154,7 +200,7 @@ namespace PostInstallerWizard
                         SetWizardPage(WizEnd);
                     }
                 }
-                if (!ServerInstall)
+                if (WizardAction == WizardActions.SetupForRemoteServer)
                 {
                     ShowSelectExistingServerPage(AdvancedMode);
                 }
@@ -189,6 +235,9 @@ namespace PostInstallerWizard
                     sapassword = (WizSelectExistingServer as Wiz_SelectExistingServer).teSAPwd.Text;
                     instancename = (WizSelectExistingServer as Wiz_SelectExistingServer).teInstance.Text;
                 }
+
+                // Check & Upgrade Schema
+                UpgradeSchema();
                 buttonNext.Text = "Finish";
                 buttonBack.Enabled = false;
                 SetWizardPage(WizEnd);
@@ -235,9 +284,9 @@ namespace PostInstallerWizard
             (WizSelectExistingServer as Wiz_SelectExistingServer).cbServers.Items.Clear();
             (WizSelectExistingServer as Wiz_SelectExistingServer).cbServers.Items.Add("localhost");
 
-            foreach (string server in OMLEngine.FileSystem.NetworkScanner.GetAllAvailableNetworkDevices())
+            //foreach (string server in OMLEngine.FileSystem.NetworkScanner.GetAllAvailableNetworkDevices())
             {
-                (WizSelectExistingServer as Wiz_SelectExistingServer).cbServers.Items.Add(server.Trim('\\'));
+            //    (WizSelectExistingServer as Wiz_SelectExistingServer).cbServers.Items.Add(server.Trim('\\'));
             }
             pw.Hide();
             pw.Dispose();
@@ -370,7 +419,7 @@ namespace PostInstallerWizard
 
         private void UpgradeSchema()
         {
-            MessageBox.Show("Upgrade schema goes here");
+            MessageBox.Show("Check and Upgrade schema goes here");
         }
 
         private void ConfigureSQL()

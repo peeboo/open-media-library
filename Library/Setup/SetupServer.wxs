@@ -45,22 +45,11 @@
           <File Name="SQLEXPR_x86_ENU.exe"
                             Source="..\..\PostInstallerWizard\SQLInstallers\SQLEXPR_x86_ENU.exe" Checksum="no" />
         </Component>
-        <Component Id="TitleDatabase.sql" Guid="D559AFE1-A066-4bf6-86EE-9DF8124E564E" DiskId="1">
-          <File Name="Title Database.sql"
-                            Source="..\..\SQL Scripts\Title Database.sql" Checksum="no" />
-        </Component>
-        <Component Id="SQLConfigNoTools_x32.ini" Guid="95458A50-59EE-4408-958E-1E0904C95442" DiskId="1">
-          <File Name="SQLConfigNoTools_x32.ini"
-                            Source="..\..\SQL Scripts\SQLConfigNoTools_x32.ini" Checksum="no" />
-        </Component>
-
       </Directory>
     </DirectoryRef>
 
     <ComponentGroup Id="ServerGroup">
       <ComponentRef Id ="SQLEXPR_x86_ENU.exe"/>
-      <ComponentRef Id ="TitleDatabase.sql"/>
-      <ComponentRef Id ="SQLConfigNoTools_x32.ini"/>
     </ComponentGroup>
 
     <Feature Id="APPLICATIONROOTFEATURE" Title="Open Media Library" Level="1" AllowAdvertise="no" Absent="disallow">

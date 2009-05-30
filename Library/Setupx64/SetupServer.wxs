@@ -47,22 +47,11 @@
           <File Name="SQLEXPR_x64_ENU.exe"
                             Source="..\..\PostInstallerWizard\SQLInstallers\SQLEXPR_x64_ENU.exe" Checksum="no" />
         </Component>
-        <Component Id="TitleDatabase.sql" Guid="51867C0A-0FB6-4f4a-AEF6-1C6FEBB47143" Win64="yes" DiskId="1">
-          <File Name="Title Database.sql"
-                            Source="..\..\SQL Scripts\Title Database.sql" Checksum="no" />
-        </Component>
-        <Component Id="SQLConfigNoTools_x64.ini" Guid="F35FE429-19F9-4d7f-ABDD-CD2F0F01F170" Win64="yes" DiskId="1">
-          <File Name="SQLConfigNoTools_x64.ini"
-                            Source="..\..\SQL Scripts\SQLConfigNoTools_x64.ini" Checksum="no" />
-        </Component>
-
       </Directory>
     </DirectoryRef>
 
     <ComponentGroup Id="ServerGroup">
       <ComponentRef Id ="SQLEXPR_x64_ENU.exe"/>
-      <ComponentRef Id ="TitleDatabase.sql"/>
-      <ComponentRef Id ="SQLConfigNoTools_x64.ini"/>
     </ComponentGroup>
 
     <Feature Id="APPLICATIONROOTFEATURE" Title="Open Media Library" Level="1" AllowAdvertise="no" Absent="disallow">
