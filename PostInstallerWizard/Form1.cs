@@ -133,7 +133,7 @@ namespace PostInstallerWizard
                     if (ServerInstall)
                     {
                         // Server installation
-                        if (!ServerAllreadyInstalled)
+                        if (ServerAllreadyInstalled)
                         {
                             (WizStart as Wiz_Start).cbAdvanced.Visible = false;
                             (WizStart as Wiz_Start).lMessage1.Text = "This wizard has detected a previous installation of OML!";
