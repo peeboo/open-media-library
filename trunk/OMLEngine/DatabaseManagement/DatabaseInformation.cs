@@ -15,10 +15,14 @@ namespace OMLEngine.DatabaseManagement
             LoginFailure,
             OMLDBNotFound,
             OMLDBFoundInvalid,
-            OMLDBFoundNoVersion,
+            OMLDBVersionNotFound,
+            OMLDBVersionUpgradeRequired,
+            OMLDBVersionCodeOlderThanSchema,
             OMLUserNotFound,
             UnknownState
         }
+
+        public static bool ConfigFileExists { get; set; }
 
         private static string _SQLServerName;
         private static string _SQLInstanceName;
@@ -36,6 +40,7 @@ namespace OMLEngine.DatabaseManagement
             _SAPassword = xmlsettings.SAPassword;
             _OMLUserAcct = xmlsettings.OMLUserAcct;
             _OMLUserPassword = xmlsettings.OMLUserPassword;
+            ConfigFileExists = xmlsettings.ConfigFileExists;
         }
 
         public static void SaveSettings()

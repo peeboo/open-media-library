@@ -119,7 +119,7 @@
           <Component Id="MediaInfo.dll" Guid="BCDD1285-37EA-4086-838A-82BE908F074F" DiskId="1">
             <File Name="MediaInfo.dll"
                               Source="..\..\OMLEngine\MediaInfoi386.dll" Checksum="no" />
-          </Component> 
+          </Component>
           <Component Id="PostInstallerWizard.exe" Guid="53F24DE9-DEBA-43c0-A6B2-95AC100DCD1E" DiskId="1">
             <File Name="PostInstallerWizard.exe"
                               Source="..\..\PostInstallerWizard\bin\$(var.BuildType)\PostInstallerWizard.exe" Checksum="no" />
@@ -170,6 +170,18 @@
             <!--<ServiceControl Id="OMLFWServiceControl" Name="OMLFWService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
           </Component>
+
+          <Directory Id="SQLDBSCRIPTS" Name="SQLInstaller">
+            <Component Id="TitleDatabase.sql" Guid="D559AFE1-A066-4bf6-86EE-9DF8124E564E" DiskId="1">
+              <File Name="Title Database.sql"
+                                Source="..\..\SQL Scripts\Title Database.sql" Checksum="no" />
+            </Component>
+            <Component Id="SQLConfigNoTools_x32.ini" Guid="95458A50-59EE-4408-958E-1E0904C95442" DiskId="1">
+              <File Name="SQLConfigNoTools_x32.ini"
+                                Source="..\..\SQL Scripts\SQLConfigNoTools_x32.ini" Checksum="no" />
+            </Component>
+          </Directory>
+
           <Directory Id ="HELPDIRECTORY" Name="Help">
             <Component Id="Open_Media_Library_User_Manual.pdf" Guid="699C7762-E52E-4761-81C3-52B01231A2D2" DiskId="1">
               <File Name="Open_Media_Library_User_Manual.pdf" KeyPath="no"
@@ -333,7 +345,7 @@
       <ComponentRef Id="OMLEngineService.exe"/>
       <ComponentRef Id="OMLFWService.exe"/>
       <!--><ComponentRef Id="DatabaseCreate"/>-->
-      
+
       <!-- Plugins -->
       <ComponentRef Id="DVDProfilerPlugin.dll" />
       <ComponentRef Id="DVRMSPlugin.dll" />
@@ -341,6 +353,7 @@
       <ComponentRef Id="MyMoviesPlugin.dll" />
       <ComponentRef Id="MyMoviesToOML.xsl" />
       <ComponentRef Id="OMLSDK.dll" />
+     
       <ComponentRef Id="VMCDVDLibraryPlugin.dll" />
       <ComponentRef Id="OMLXMLImporter.dll" />
       <ComponentRef Id="AmazonMetadata.dll" />
@@ -370,17 +383,19 @@
 
       <!-- Registry Keys -->
       <ComponentRef Id="registry"/>
-      <ComponentRef Id="registryFWS"/>     
+      <ComponentRef Id="registryFWS"/>
     </ComponentGroup>
 
     <ComponentGroup Id="UserGuide">
       <ComponentRef Id="UserManualShortcut" />
-      <ComponentRef Id="Open_Media_Library_User_Manual.pdf"/>     
+      <ComponentRef Id="Open_Media_Library_User_Manual.pdf"/>
     </ComponentGroup>
-    
+
     <ComponentGroup Id="CommonComponents">
       <ComponentRef Id="OMLEngine.dll" />
       <ComponentRef Id="PostInstallerWizard.exe"/>
+      <ComponentRef Id="TitleDatabase.sql"/>
+      <ComponentRef Id="SQLConfigNoTools_x32.ini"/>
     </ComponentGroup>
 
 
@@ -527,10 +542,10 @@
     <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTDIRECTORY"/>
 
 
-    
+
     <!--<Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXEXT" Value="Launch My Application Name" />
     <Property Id="WixShellExecTarget" Value="[#PostInstallerWizard.exe]" />-->
-  <!--  <CustomAction Id="LaunchApplication"
+    <!--  <CustomAction Id="LaunchApplication"
                   FileKey="PostInstallerWizard.exe"
                   ExeCommand=""/>-->
     <!--BinaryKey="WixCA"
@@ -542,7 +557,7 @@
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
 
     <PropertyRef Id="NETFRAMEWORK35"/>
-  
+
   </Fragment>
 </Wix>
 

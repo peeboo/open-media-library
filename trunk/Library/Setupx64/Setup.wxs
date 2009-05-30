@@ -170,6 +170,18 @@
             <!--<ServiceControl Id="OMLFWServiceControl" Name="OMLFWService"
                                         Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
           </Component>
+
+          <Directory Id="SQLDBSCRIPTS" Name="SQLInstaller">
+            <Component Id="TitleDatabase.sql" Guid="51867C0A-0FB6-4f4a-AEF6-1C6FEBB47143" Win64="yes" DiskId="1">
+              <File Name="Title Database.sql"
+                                Source="..\..\SQL Scripts\Title Database.sql" Checksum="no" />
+            </Component>
+            <Component Id="SQLConfigNoTools_x64.ini" Guid="F35FE429-19F9-4d7f-ABDD-CD2F0F01F170" Win64="yes" DiskId="1">
+              <File Name="SQLConfigNoTools_x64.ini"
+                                Source="..\..\SQL Scripts\SQLConfigNoTools_x64.ini" Checksum="no" />
+            </Component>
+          </Directory>
+          
           <Directory Id ="HELPDIRECTORY" Name="Help">
             <Component Id="Open_Media_Library_User_Manual.pdf" Guid="699C7762-E52E-4761-81C3-52B01231A2D2" Win64="yes" DiskId="1">
               <File Name="Open_Media_Library_User_Manual.pdf" KeyPath="no"
@@ -382,6 +394,8 @@
     <ComponentGroup Id="CommonComponents">
       <ComponentRef Id="OMLEngine.dll" />
       <ComponentRef Id="PostInstallerWizard.exe"/>
+      <ComponentRef Id ="TitleDatabase.sql"/>
+      <ComponentRef Id ="SQLConfigNoTools_x64.ini"/>
     </ComponentGroup>  
 
     

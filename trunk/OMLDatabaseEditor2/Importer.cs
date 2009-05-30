@@ -162,16 +162,16 @@ namespace OMLDatabaseEditor
                 backgroundWorker1.ReportProgress(0, "Saving titles");
                 LoadTitlesIntoDatabase(importer);
             }
-
-            string[] nonFatalErrors = importer.GetErrors;
-            if (nonFatalErrors.Length > 0)
-                ShowNonFatalErrors(nonFatalErrors);
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             sbCancel.Enabled = false;
             sbOK.Enabled = true;
+
+            string[] nonFatalErrors = importer.GetErrors;
+            if (nonFatalErrors.Length > 0)
+                ShowNonFatalErrors(nonFatalErrors);
         }
     }
 }

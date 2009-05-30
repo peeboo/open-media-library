@@ -51,29 +51,38 @@ namespace OMLEngine.DatabaseManagement
             // Test 2. Get the schema version number for later comparison
             // ----------------------------------------------------------
             // Schema versioning disabled for now
-            /*DatabaseInformation.SchemaVersion = 0;
-            string sql = "select version from version";
-            if (!ExecuteReader(sql, out reader))
+            int ReqMajor;
+            int ReqMinor;
+            int CurrentMajor;
+            int CurrentMinor;
+
+            DatabaseInformation.SQLState sqlstate = DatabaseInformation.SQLState.UnknownState;
+
+            GetRequiredSchemaVersion(out ReqMajor, out ReqMinor);
+
+            if (GetSchemaVersion(out CurrentMajor, out CurrentMinor))
             {
-                CloseDatabase();
-                return DatabaseInformation.SQLState.UnknownState;
+                if (ReqMajor > CurrentMajor) sqlstate = DatabaseInformation.SQLState.OMLDBVersionUpgradeRequired;
+                if (ReqMajor < CurrentMajor) sqlstate = DatabaseInformation.SQLState.OMLDBVersionCodeOlderThanSchema;
+
+                if (ReqMajor == CurrentMajor)
+                {
+                    if (ReqMinor > CurrentMinor) sqlstate = DatabaseInformation.SQLState.OMLDBVersionUpgradeRequired;
+                    if (ReqMinor < CurrentMinor) sqlstate = DatabaseInformation.SQLState.OMLDBVersionCodeOlderThanSchema;
+                    if (ReqMinor == CurrentMinor) sqlstate = DatabaseInformation.SQLState.OK;
+                }
+            }
+            else
+            {
+                // Cannot find schema version
+                sqlstate = DatabaseInformation.SQLState.OMLDBVersionNotFound;
             }
 
-            while (reader.Read())
-            {
-                DatabaseInformation.SchemaVersion = Convert.ToInt32(reader[0]);
-            }
-
-            reader.Close();*/
 
             sqlConn.Close();
             sqlConn.Dispose();
 
-
-            // Schema versioning disabled for now
-            //if (DatabaseInformation.SchemaVersion == 0) return DatabaseInformation.SQLState.OMLDBFoundNoVersion;
-  
-            return DatabaseInformation.SQLState.OK;
+            return sqlstate;
         }
 
 
@@ -295,6 +304,52 @@ namespace OMLEngine.DatabaseManagement
             }
 
             return retval;
+        }
+
+
+        public void GetRequiredSchemaVersion(out int Major, out int Minor)
+        {
+            Major = 1;
+            Minor = 0;
+        }
+
+
+        public bool GetSchemaVersion(SqlConnection sqlConn, out int Major, out int Minor)
+        {
+            Major = 0;
+            Minor = 0;
+            object version;
+            if (sqlConn != null)
+            {
+                if (ExecuteScalar(sqlConn, "select dbo.GetSchemaVersion() as VersionString", out version))
+                {
+                    string strversion = (string)version;
+                    string[] versions = strversion.Split('.');
+                    if (versions.Count() == 2)
+                    {
+                        Major = Convert.ToInt32(versions[0]);
+                        Minor = Convert.ToInt32(versions[1]);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        
+        
+        public bool GetSchemaVersion(out int Major, out int Minor)
+        {
+            Major = 0;
+            Minor = 0;
+            
+            // Create database connection to OML and open it
+            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.OMLDatabaseConnectionString);
+
+            if (sqlConn != null)
+            {
+                GetSchemaVersion(sqlConn, out Major, out Minor);
+            }
+            return true;
         }
 
 
