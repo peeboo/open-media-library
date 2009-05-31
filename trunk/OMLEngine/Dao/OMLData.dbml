@@ -75,6 +75,7 @@
       <Column Name="Photo" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="DateOfBirth" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="Biography " Member="Biography" Storage="_Synopsis" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.Tags" Member="Tags" AccessModifier="Internal">

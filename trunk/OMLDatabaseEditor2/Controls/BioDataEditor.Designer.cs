@@ -31,8 +31,10 @@
             this.components = new System.ComponentModel.Container();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.Details = new DevExpress.XtraTab.XtraTabPage();
-            this.deDateOfBirth = new DevExpress.XtraEditors.DateEdit();
+            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
+            this.txtSynposis = new DevExpress.XtraEditors.MemoEdit();
             this.biodatasource = new System.Windows.Forms.BindingSource(this.components);
+            this.deDateOfBirth = new DevExpress.XtraEditors.DateEdit();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
@@ -43,9 +45,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.Details.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSynposis.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.biodatasource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties.VistaTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.biodatasource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.teNationality.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.teName.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
@@ -66,6 +69,8 @@
             // 
             // Details
             // 
+            this.Details.Controls.Add(this.labelControl2);
+            this.Details.Controls.Add(this.txtSynposis);
             this.Details.Controls.Add(this.deDateOfBirth);
             this.Details.Controls.Add(this.labelControl4);
             this.Details.Controls.Add(this.labelControl3);
@@ -75,6 +80,29 @@
             this.Details.Name = "Details";
             this.Details.Size = new System.Drawing.Size(479, 283);
             this.Details.Text = "Details";
+            // 
+            // labelControl2
+            // 
+            this.labelControl2.Location = new System.Drawing.Point(44, 116);
+            this.labelControl2.Name = "labelControl2";
+            this.labelControl2.Size = new System.Drawing.Size(48, 13);
+            this.labelControl2.TabIndex = 10;
+            this.labelControl2.Text = "Biography";
+            // 
+            // txtSynposis
+            // 
+            this.txtSynposis.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSynposis.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.biodatasource, "Biography", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtSynposis.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.biodatasource, "Biography", true));
+            this.txtSynposis.Location = new System.Drawing.Point(98, 114);
+            this.txtSynposis.Name = "txtSynposis";
+            this.txtSynposis.Size = new System.Drawing.Size(378, 103);
+            this.txtSynposis.TabIndex = 9;
+            // 
+            // biodatasource
+            // 
+            this.biodatasource.DataSource = typeof(OMLEngine.BioData);
             // 
             // deDateOfBirth
             // 
@@ -90,10 +118,6 @@
             this.deDateOfBirth.Size = new System.Drawing.Size(100, 20);
             this.deDateOfBirth.TabIndex = 7;
             this.deDateOfBirth.DateTimeChanged += new System.EventHandler(this.teBio_TextChanged);
-            // 
-            // biodatasource
-            // 
-            this.biodatasource.DataSource = typeof(OMLEngine.BioData);
             // 
             // labelControl4
             // 
@@ -163,9 +187,10 @@
             this.xtraTabControl1.ResumeLayout(false);
             this.Details.ResumeLayout(false);
             this.Details.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSynposis.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.biodatasource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties.VistaTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.biodatasource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.teNationality.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.teName.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
@@ -187,5 +212,7 @@
         private DevExpress.XtraEditors.TextEdit teName;
         private System.Windows.Forms.BindingSource biodatasource;
         private DevExpress.XtraEditors.DateEdit deDateOfBirth;
+        private DevExpress.XtraEditors.LabelControl labelControl2;
+        private DevExpress.XtraEditors.MemoEdit txtSynposis;
     }
 }
