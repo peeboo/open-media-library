@@ -300,20 +300,63 @@ namespace OMLEngine
 
         public static void AddBioData(BioData bd)
         {
+            UpdatesImagesForBioData(bd.DaoBioData);
             Dao.DBContext.Instance.BioDatas.InsertOnSubmit(bd.DaoBioData);
             Dao.DBContext.Instance.SubmitChanges();
         }
 
         public static void RemoveBioData(BioData bd)
         {
+            // delete the image if it exists
+            if (bd.DaoBioData.PhotoID != null)
+            {
+                Dao.TitleCollectionDao.SetDeleteImage((int)bd.DaoBioData.PhotoID);
+            }
+
             Dao.DBContext.Instance.BioDatas.DeleteOnSubmit(bd.DaoBioData);
             Dao.DBContext.Instance.SubmitChanges();
         }
 
         public static void SaveBioMetaDataChanges()
         {
+            System.Data.Linq.ChangeSet changeset = Dao.DBContext.Instance.GetChangeSet();
+
+            // Find actual SQL run to process the update - debugging purposes
+            string s = Dao.DBContext.Instance.GetType().GetMethod("GetChangeText", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Invoke(Dao.DBContext.Instance, null) as string;
+            // updates all the pending image changes
+            foreach (object bio in changeset.Updates)
+            {
+                Dao.BioData daoBio = bio as Dao.BioData;
+
+                if (daoBio != null)
+                {
+                    UpdatesImagesForBioData(daoBio);
+                }
+            }
+
             Dao.DBContext.Instance.SubmitChanges();
         }
+
+        private static void UpdatesImagesForBioData(Dao.BioData bd)
+        {
+            // if there's a new front cover image path
+            if (bd.UpdatedImagePath != null)
+            {
+                // delete the old one if it exists
+                if (bd.PhotoID != null)
+                {
+                    Dao.TitleCollectionDao.SetDeleteImage((int)bd.PhotoID);
+                }
+
+                // add the new one
+                bd.PhotoID = ImageManager.AddImageToDB(bd.UpdatedImagePath);
+
+                // clear it out
+                bd.UpdatedImagePath = null;
+            }
+        }        
+
+
         #endregion
 
         /// <summary>

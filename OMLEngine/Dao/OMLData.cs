@@ -68,4 +68,9 @@ namespace OMLEngine.Dao
                 return base.ToString();
         }
     }
+
+    partial class BioData
+    {
+        public string UpdatedImagePath { get; set; }
+    }
 }

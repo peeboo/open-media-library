@@ -1864,7 +1864,6 @@ namespace OMLDatabaseEditor
 
             BioData bd = new BioData();
             bd.FullName = "New Person";
-
             lbBioData.Items.Add(bd);
             lbBioData.SelectedItem = bd;
 
