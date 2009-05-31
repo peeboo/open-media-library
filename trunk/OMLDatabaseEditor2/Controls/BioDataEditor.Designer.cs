@@ -31,22 +31,27 @@
             this.components = new System.ComponentModel.Container();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.Details = new DevExpress.XtraTab.XtraTabPage();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.cmsImage = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.miSelectImage = new System.Windows.Forms.ToolStripMenuItem();
+            this.biodatasource = new System.Windows.Forms.BindingSource(this.components);
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.txtSynposis = new DevExpress.XtraEditors.MemoEdit();
-            this.biodatasource = new System.Windows.Forms.BindingSource(this.components);
             this.deDateOfBirth = new DevExpress.XtraEditors.DateEdit();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.teNationality = new DevExpress.XtraEditors.TextEdit();
             this.teName = new DevExpress.XtraEditors.TextEdit();
-            this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
+            this.openCoverFile = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.Details.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtSynposis.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.cmsImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.biodatasource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSynposis.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties.VistaTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.teNationality.Properties)).BeginInit();
@@ -64,11 +69,11 @@
             this.xtraTabControl1.Size = new System.Drawing.Size(488, 313);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
-            this.Details,
-            this.xtraTabPage2});
+            this.Details});
             // 
             // Details
             // 
+            this.Details.Controls.Add(this.pictureBox1);
             this.Details.Controls.Add(this.labelControl2);
             this.Details.Controls.Add(this.txtSynposis);
             this.Details.Controls.Add(this.deDateOfBirth);
@@ -80,6 +85,41 @@
             this.Details.Name = "Details";
             this.Details.Size = new System.Drawing.Size(479, 283);
             this.Details.Text = "Details";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.ContextMenuStrip = this.cmsImage;
+            this.pictureBox1.DataBindings.Add(new System.Windows.Forms.Binding("ImageLocation", this.biodatasource, "ImagePath", true));
+            this.pictureBox1.ErrorImage = global::OMLDatabaseEditor.Properties.Resources.text_html;
+            this.pictureBox1.Image = global::OMLDatabaseEditor.Properties.Resources.text_html;
+            this.pictureBox1.InitialImage = global::OMLDatabaseEditor.Properties.Resources.text_html;
+            this.pictureBox1.Location = new System.Drawing.Point(15, 237);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(451, 44);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 11;
+            this.pictureBox1.TabStop = false;
+            // 
+            // cmsImage
+            // 
+            this.cmsImage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miSelectImage});
+            this.cmsImage.Name = "contextMenuStrip1";
+            this.cmsImage.Size = new System.Drawing.Size(142, 26);
+            // 
+            // miSelectImage
+            // 
+            this.miSelectImage.Name = "miSelectImage";
+            this.miSelectImage.Size = new System.Drawing.Size(141, 22);
+            this.miSelectImage.Text = "Select Image";
+            this.miSelectImage.Click += new System.EventHandler(this.miSelectImage_Click);
+            // 
+            // biodatasource
+            // 
+            this.biodatasource.DataSource = typeof(OMLEngine.BioData);
             // 
             // labelControl2
             // 
@@ -99,10 +139,7 @@
             this.txtSynposis.Name = "txtSynposis";
             this.txtSynposis.Size = new System.Drawing.Size(378, 103);
             this.txtSynposis.TabIndex = 9;
-            // 
-            // biodatasource
-            // 
-            this.biodatasource.DataSource = typeof(OMLEngine.BioData);
+            this.txtSynposis.TextChanged += new System.EventHandler(this.teBio_TextChanged);
             // 
             // deDateOfBirth
             // 
@@ -161,12 +198,6 @@
             this.teName.TabIndex = 0;
             this.teName.TextChanged += new System.EventHandler(this.teBio_TextChanged);
             // 
-            // xtraTabPage2
-            // 
-            this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(479, 283);
-            this.xtraTabPage2.Text = "Image";
-            // 
             // panelControl1
             // 
             this.panelControl1.Controls.Add(this.xtraTabControl1);
@@ -175,6 +206,12 @@
             this.panelControl1.Name = "panelControl1";
             this.panelControl1.Size = new System.Drawing.Size(492, 317);
             this.panelControl1.TabIndex = 1;
+            // 
+            // openCoverFile
+            // 
+            this.openCoverFile.DefaultExt = "jpg";
+            this.openCoverFile.Filter = "JPG Files|*.jpg|All Files|*.*";
+            this.openCoverFile.Title = "Select Cover Art";
             // 
             // BioDataEditor
             // 
@@ -187,8 +224,10 @@
             this.xtraTabControl1.ResumeLayout(false);
             this.Details.ResumeLayout(false);
             this.Details.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtSynposis.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.cmsImage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.biodatasource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSynposis.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties.VistaTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.deDateOfBirth.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.teNationality.Properties)).EndInit();
@@ -203,7 +242,6 @@
 
         private DevExpress.XtraTab.XtraTabControl xtraTabControl1;
         private DevExpress.XtraTab.XtraTabPage Details;
-        private DevExpress.XtraTab.XtraTabPage xtraTabPage2;
         private DevExpress.XtraEditors.PanelControl panelControl1;
         private DevExpress.XtraEditors.LabelControl labelControl4;
         private DevExpress.XtraEditors.LabelControl labelControl3;
@@ -214,5 +252,9 @@
         private DevExpress.XtraEditors.DateEdit deDateOfBirth;
         private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraEditors.MemoEdit txtSynposis;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ContextMenuStrip cmsImage;
+        private System.Windows.Forms.ToolStripMenuItem miSelectImage;
+        private System.Windows.Forms.OpenFileDialog openCoverFile;
     }
 }

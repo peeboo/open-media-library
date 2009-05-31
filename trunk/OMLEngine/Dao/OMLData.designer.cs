@@ -211,7 +211,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
+		[Column(Storage="_Photo", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Photo
 		{
 			get
@@ -1626,7 +1626,7 @@ namespace OMLEngine.Dao
 		
 		private string _FullName;
 		
-		private System.Data.Linq.Binary _Photo;
+		private System.Nullable<int> _Photo;
 		
 		private long _Id;
 		
@@ -1634,20 +1634,24 @@ namespace OMLEngine.Dao
 		
 		private string _Synopsis;
 		
+		private System.Nullable<System.DateTime> _ModifiedDate;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
     partial void OnFullNameChanging(string value);
     partial void OnFullNameChanged();
-    partial void OnPhotoChanging(System.Data.Linq.Binary value);
-    partial void OnPhotoChanged();
+    partial void OnPhotoIDChanging(System.Nullable<int> value);
+    partial void OnPhotoIDChanged();
     partial void OnIdChanging(long value);
     partial void OnIdChanged();
     partial void OnDateOfBirthChanging(System.Nullable<System.DateTime> value);
     partial void OnDateOfBirthChanged();
     partial void OnBiographyChanging(string value);
     partial void OnBiographyChanged();
+    partial void OnModifiedDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnModifiedDateChanged();
     #endregion
 		
 		public BioData()
@@ -1675,8 +1679,8 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
-		public System.Data.Linq.Binary Photo
+		[Column(Storage="_Photo", DbType="Int NOT NULL")]
+		public System.Nullable<int> PhotoID
 		{
 			get
 			{
@@ -1686,11 +1690,11 @@ namespace OMLEngine.Dao
 			{
 				if ((this._Photo != value))
 				{
-					this.OnPhotoChanging(value);
+					this.OnPhotoIDChanging(value);
 					this.SendPropertyChanging();
 					this._Photo = value;
-					this.SendPropertyChanged("Photo");
-					this.OnPhotoChanged();
+					this.SendPropertyChanged("PhotoID");
+					this.OnPhotoIDChanged();
 				}
 			}
 		}
@@ -1751,6 +1755,26 @@ namespace OMLEngine.Dao
 					this._Synopsis = value;
 					this.SendPropertyChanged("Biography");
 					this.OnBiographyChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_ModifiedDate", DbType="datetime")]
+		public System.Nullable<System.DateTime> ModifiedDate
+		{
+			get
+			{
+				return this._ModifiedDate;
+			}
+			set
+			{
+				if ((this._ModifiedDate != value))
+				{
+					this.OnModifiedDateChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedDate = value;
+					this.SendPropertyChanged("ModifiedDate");
+					this.OnModifiedDateChanged();
 				}
 			}
 		}

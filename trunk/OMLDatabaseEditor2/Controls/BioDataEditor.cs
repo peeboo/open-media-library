@@ -57,5 +57,18 @@ namespace OMLDatabaseEditor.Controls
                 BioDataChanged(this, e);
             }
         }
+
+        private void miSelectImage_Click(object sender, EventArgs e)
+        {
+            if (openCoverFile.ShowDialog() == DialogResult.OK)
+            {
+                _bioData.ImagePath = openCoverFile.FileName;
+
+                biodatasource.ResetCurrentItem();
+
+                Status = BioDataStatus.UnsavedChanges;
+                BioDataChanged(this, e);
+            }
+        }
     }
 }

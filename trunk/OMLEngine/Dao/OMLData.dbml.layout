@@ -40,10 +40,10 @@
         <elementListCompartment Id="3967bc35-f52b-4d3a-88b4-952ce78617f5" absoluteBounds="6.5150000000000006, 2.96, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="340dae8a-01d5-4c65-80fc-e2b84267d1ce" absoluteBounds="6.5, 0.5, 2, 1.7708968098958331">
+    <classShape Id="340dae8a-01d5-4c65-80fc-e2b84267d1ce" absoluteBounds="6.5, 0.5, 2, 1.9631982421875">
       <DataClassMoniker Name="/OMLDataDataContext/BioData" />
       <nestedChildShapes>
-        <elementListCompartment Id="0638a690-bd4b-4313-a136-5e3a70b88feb" absoluteBounds="6.515, 0.96, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="0638a690-bd4b-4313-a136-5e3a70b88feb" absoluteBounds="6.515, 0.96, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
     <classShape Id="e7ade832-c3da-47e3-8517-3ce7e88730ce" absoluteBounds="0.5, 4, 2, 1.3862939453124996">
@@ -59,7 +59,7 @@
         <classShapeMoniker Id="e7ade832-c3da-47e3-8517-3ce7e88730ce" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(7.5 : 2.27089680989583); (7.5 : 2.5)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(7.5 : 2.4631982421875); (7.5 : 2.5)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/OMLDataDataContext/BioData/BioData_Person" />
       <nodes>
         <classShapeMoniker Id="340dae8a-01d5-4c65-80fc-e2b84267d1ce" />
@@ -79,7 +79,7 @@
         <elementListCompartment Id="46edcb5c-e9f9-4db0-ae52-2da195f2aa5e" absoluteBounds="6.765, 5.71, 1.9700000000000002, 2.364705403645833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(5.25 : 6.26036702473958); (6.75 : 6.26036702473958)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(5.25 : 6.26036702473958); (6.41666666666667 : 6.26036702473958 : JumpStart); (6.58333333333333 : 6.26036702473958 : JumpEnd); (6.75 : 6.26036702473958)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/OMLDataDataContext/Title/Title_Disk" />
       <nodes>
         <classShapeMoniker Id="489dd18d-13bb-4ea6-b69e-cbd8e7af224e" />
