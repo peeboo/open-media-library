@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
 
 using DevExpress.XtraEditors;
 using DevExpress.Skins;
@@ -123,9 +124,33 @@ namespace OMLDatabaseEditor
 
             OMLEngine.DatabaseManagement.DatabaseInformation.SQLState state = dbm.CheckDatabase();
 
+            if (state == OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OMLDBVersionUpgradeRequired)
+            {
+                XtraMessageBox.Show("The OML database is an older version. Press OK to upgrade the database!", "Problem running DBEditor", MessageBoxButtons.OK);
+
+                // Find the script path. Also include hack to find scripts if running from VS rathr than c:\program files....
+                string ScriptsPath = Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller";
+                if (Directory.Exists( Path.GetDirectoryName(Application.ExecutablePath) + "\\..\\..\\..\\SQL Scripts"))
+                {
+                    ScriptsPath = Path.GetDirectoryName(Application.ExecutablePath) + "\\..\\..\\..\\SQL Scripts";
+                }
+
+                dbm.UpgradeSchemaVersion(ScriptsPath);
+         
+                // Retest the connection
+                state = dbm.CheckDatabase();
+            }
+
             switch (state)
             {
                 case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OK:
+                    return true;
+
+                case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OMLDBVersionCodeOlderThanSchema:
+                    XtraMessageBox.Show("The OML client is an older version than the database. Please upgrade the client components!", "Problem running DBEditor", MessageBoxButtons.OK);
+                    return false;
+
+                case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OMLDBVersionNotFound:
                     return true;
 
                 case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.LoginFailure:

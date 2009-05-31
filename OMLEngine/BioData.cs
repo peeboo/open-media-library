@@ -42,6 +42,11 @@ namespace OMLEngine
             get { return _bioData.FullName; }
             set { _bioData.FullName = value; }
         }
+        public string Biography
+        {
+            get { return _bioData.Biography; }
+            set { _bioData.Biography = value; }
+        }
 
         public override string ToString()
         {

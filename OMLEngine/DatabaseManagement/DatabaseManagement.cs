@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Threading;
+using System.Diagnostics;
+using System.IO;
 
 namespace OMLEngine.DatabaseManagement
 {
@@ -17,6 +19,14 @@ namespace OMLEngine.DatabaseManagement
         {
             DatabaseInformation.SQLState dbstatus = CheckOMLDatabase();
 
+            if ((dbstatus == DatabaseInformation.SQLState.OMLDBVersionCodeOlderThanSchema) ||
+                (dbstatus == DatabaseInformation.SQLState.OMLDBVersionUpgradeRequired) ||
+                (dbstatus == DatabaseInformation.SQLState.OMLDBVersionNotFound))
+            {
+                // Return to the ui / editor to deal with
+                return dbstatus;
+            }
+           
             if (dbstatus != DatabaseInformation.SQLState.OK)
             {
                 // There has been a problem logging in to the OML Database. Investigate
@@ -163,6 +173,7 @@ namespace OMLEngine.DatabaseManagement
         }
 
 
+        #region Database Maintenance
         public bool BackupDatabase(string path)
         {
             bool retval = false;
@@ -219,8 +230,10 @@ namespace OMLEngine.DatabaseManagement
             sqlConn.Dispose();
             return retval;
         }
+        #endregion
 
 
+        #region User and Database creation functions
         /// <summary>
         /// Creates the OML user. This should allready have been done as part
         /// of the installer.
@@ -307,10 +320,25 @@ namespace OMLEngine.DatabaseManagement
         }
 
 
+        public void ConfigureSQL(string ScriptsPath)
+        {
+            CreateOMLDatabase();
+
+            // Run sql configuration script
+            RunSQLScript(ScriptsPath + "\\SQLConfigurationScript.sql");
+
+            // Run schema creation script
+            RunSQLScript(ScriptsPath + "\\Title Database.sql");
+            CreateOMLUser();
+        }
+        #endregion
+
+
+        #region Schema Versioning
         public void GetRequiredSchemaVersion(out int Major, out int Minor)
         {
             Major = 1;
-            Minor = 0;
+            Minor = 1;
         }
 
 
@@ -353,27 +381,43 @@ namespace OMLEngine.DatabaseManagement
         }
 
 
-        public void RunSQLScript(string filname)
+        public bool UpgradeSchemaVersion(string ScriptsPath)
         { 
-            // Create database connection to OML and open it
-            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
+            int ReqMajor;
+            int ReqMinor;
+            int CurrentMajor;
+            int CurrentMinor;
 
-            if (sqlConn != null)
+            DatabaseInformation.SQLState sqlstate = DatabaseInformation.SQLState.UnknownState;
+
+            GetRequiredSchemaVersion(out ReqMajor, out ReqMinor);
+
+            if (!GetSchemaVersion(out CurrentMajor, out CurrentMinor))
             {
-                string sql = System.IO.File.ReadAllText(filname);
+                // No version in db - abort
+                return false;
+            }
 
-                string[] commands = sql.Split(
-                    new string[] { "GO\r\n", "GO ", "GO\t" }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (string c in commands)
+
+            for (int i = CurrentMajor; i <= ReqMajor; i++)
+            {
+                for (int j = CurrentMinor; j <= ReqMinor; j++)
                 {
-                    ExecuteNonQuery(sqlConn, c);
-
+                    if ((i != CurrentMajor) || (j != CurrentMinor))
+                    {
+                        RunSQLScript(ScriptsPath + "\\Title Database - Upgrade " + i.ToString() + "." + j.ToString() + ".sql");
+                    }
                 }
             }
-            sqlConn.Close();
+
+            // Backup the database
+
+            return true;
         }
+        #endregion
 
 
+        #region Open database code and sql Execution functions
         private SqlConnection OpenDatabase(string connectionstring)
         {
             SqlConnection sqlConn = new System.Data.SqlClient.SqlConnection(connectionstring);
@@ -441,6 +485,31 @@ namespace OMLEngine.DatabaseManagement
             }
             return true;
         }
+
+
+        public void RunSQLScript(string filename)
+        {
+            if (File.Exists(filename))
+            {
+                // Create database connection to OML and open it
+                SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
+
+                if (sqlConn != null)
+                {
+                    string sql = System.IO.File.ReadAllText(filename);
+
+                    string[] commands = sql.Split(
+                        new string[] { "GO\r\n", "GO ", "GO\t" }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string c in commands)
+                    {
+                        ExecuteNonQuery(sqlConn, c);
+
+                    }
+                }
+                sqlConn.Close();
+            }
+        }
+        #endregion
     }
 }
 

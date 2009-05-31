@@ -211,7 +211,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
+		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Photo
 		{
 			get
@@ -1632,6 +1632,8 @@ namespace OMLEngine.Dao
 		
 		private System.Nullable<System.DateTime> _DateOfBirth;
 		
+		private string _Synopsis;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -1644,6 +1646,8 @@ namespace OMLEngine.Dao
     partial void OnIdChanged();
     partial void OnDateOfBirthChanging(System.Nullable<System.DateTime> value);
     partial void OnDateOfBirthChanged();
+    partial void OnBiographyChanging(string value);
+    partial void OnBiographyChanged();
     #endregion
 		
 		public BioData()
@@ -1671,7 +1675,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_Photo", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
+		[Column(Storage="_Photo", DbType="Image", UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Photo
 		{
 			get
@@ -1727,6 +1731,26 @@ namespace OMLEngine.Dao
 					this._DateOfBirth = value;
 					this.SendPropertyChanged("DateOfBirth");
 					this.OnDateOfBirthChanged();
+				}
+			}
+		}
+		
+		[Column(Name="Biography ", Storage="_Synopsis", DbType="NVarChar(MAX)")]
+		public string Biography
+		{
+			get
+			{
+				return this._Synopsis;
+			}
+			set
+			{
+				if ((this._Synopsis != value))
+				{
+					this.OnBiographyChanging(value);
+					this.SendPropertyChanging();
+					this._Synopsis = value;
+					this.SendPropertyChanged("Biography");
+					this.OnBiographyChanged();
 				}
 			}
 		}

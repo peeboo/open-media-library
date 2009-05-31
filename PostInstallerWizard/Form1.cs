@@ -52,6 +52,8 @@ namespace PostInstallerWizard
         string sapassword;
         string instancename;
 
+        string ScriptsPath;
+
         public Form1()
         {
             ServerInstall = false;
@@ -95,6 +97,12 @@ namespace PostInstallerWizard
             instancename = "oml";
             servername = "localhost";
 
+            // Find the script path. Also include hack to find scripts if running from VS rathr than c:\program files....
+            ScriptsPath = Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller";
+            if (Directory.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\..\\..\\..\\SQL Scripts"))
+            {
+                ScriptsPath = Path.GetDirectoryName(Application.ExecutablePath) + "\\..\\..\\..\\SQL Scripts";
+            }
 
             InitializeComponent();
 
@@ -167,7 +175,7 @@ namespace PostInstallerWizard
                 if (WizardAction == WizardActions.CheckAndUpgradeSchema)
                 {
                     // Check & Upgrade Schema
-                    UpgradeSchema();
+                    CheckAndUpgradeSchema();
                     buttonNext.Text = "Finish";
                     buttonBack.Enabled = false;
                     SetWizardPage(WizEnd);
@@ -237,7 +245,7 @@ namespace PostInstallerWizard
                 }
 
                 // Check & Upgrade Schema
-                UpgradeSchema();
+                CheckAndUpgradeSchema();
                 buttonNext.Text = "Finish";
                 buttonBack.Enabled = false;
                 SetWizardPage(WizEnd);
@@ -417,17 +425,38 @@ namespace PostInstallerWizard
                 }
         }
 
-        private void UpgradeSchema()
+
+        private void CheckAndUpgradeSchema()
         {
-            MessageBox.Show("Check and Upgrade schema goes here");
+            OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
+
+            OMLEngine.DatabaseManagement.DatabaseInformation.SQLState state = dbm.CheckDatabase();
+
+            if (state == OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OMLDBNotFound)
+            {
+                MessageBox.Show("Detected SQL Server but cannot find the database. Click OK to create the database.", "Databse problem", MessageBoxButtons.OK);
+                // OML Instance but OML database does not exist
+                dbm.ConfigureSQL(ScriptsPath);
+                dbm.UpgradeSchemaVersion(ScriptsPath);
+
+                // Retest the connection
+                state = dbm.CheckDatabase();
+            }
+
+            if (state == OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OMLDBVersionUpgradeRequired)
+            {
+                MessageBox.Show("Detected the OML Database but it requires updating. Click OK to update the database.", "Databse problem", MessageBoxButtons.OK);
+                dbm.UpgradeSchemaVersion(ScriptsPath);
+   
+                // Retest the connection
+                state = dbm.CheckDatabase();
+            }
         }
 
         private void ConfigureSQL()
         {
             OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
-            dbm.CreateOMLDatabase();
-            dbm.RunSQLScript(Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\Title Database.sql");
-            dbm.CreateOMLUser();
+            dbm.ConfigureSQL(ScriptsPath);
         }
 
         private void WriteSettings()
