@@ -49,7 +49,7 @@ namespace OMLDatabaseEditor
             }
             else if ((this.Text == "Tags"))
             {
-                cbeItem.Properties.Items.AddRange(OMLEngine.Settings.OMLSettings.Tags.Split('|'));
+                cbeItem.Properties.Items.AddRange(TitleCollectionManager.GetAllTagsList().ToArray());
             }
         }
 
@@ -86,7 +86,7 @@ namespace OMLDatabaseEditor
             }
             else if ((this.Text == "Tags"))
             {
-                cbeItem.Properties.Items.AddRange(OMLEngine.Settings.OMLSettings.Tags.Split('|'));
+                //cbeItem.Properties.Items.AddRange(OMLEngine.Settings.OMLSettings.Tags.Split('|'));
             }
         }
 
