@@ -604,7 +604,7 @@ namespace OMLDatabaseEditor
             // 
             this.navBarGroupControlContainer4.Controls.Add(this.treeMedia);
             this.navBarGroupControlContainer4.Name = "navBarGroupControlContainer4";
-            this.navBarGroupControlContainer4.Size = new System.Drawing.Size(175, 352);
+            this.navBarGroupControlContainer4.Size = new System.Drawing.Size(175, 400);
             this.navBarGroupControlContainer4.TabIndex = 3;
             // 
             // treeMedia
@@ -616,7 +616,7 @@ namespace OMLDatabaseEditor
             this.treeMedia.ItemHeight = 18;
             this.treeMedia.Location = new System.Drawing.Point(0, 0);
             this.treeMedia.Name = "treeMedia";
-            this.treeMedia.Size = new System.Drawing.Size(175, 352);
+            this.treeMedia.Size = new System.Drawing.Size(175, 400);
             this.treeMedia.TabIndex = 0;
             this.treeMedia.DragLeave += new System.EventHandler(this.treeMedia_DragLeave);
             this.treeMedia.DrawNode += new System.Windows.Forms.DrawTreeNodeEventHandler(this.treeMedia_DrawNode);
@@ -813,6 +813,7 @@ namespace OMLDatabaseEditor
             this.groupTags.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
             this.groupTags.LargeImage = global::OMLDatabaseEditor.Properties.Resources.text_html;
             this.groupTags.Name = "groupTags";
+            this.groupTags.NavigationPaneVisible = false;
             // 
             // groupMetadata
             // 
