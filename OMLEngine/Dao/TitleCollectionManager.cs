@@ -355,9 +355,17 @@ namespace OMLEngine
                 bd.UpdatedImagePath = null;
             }
         }        
-
-
         #endregion
+
+        /// <summary>
+        /// Returns a distinct list of all tags allocated to titles
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<string> GetAllTagsList()
+        {
+            return Dao.TitleCollectionDao.GetAllTagsList();
+        }
+
 
         /// <summary>
         /// Deletes all the user information from the database

@@ -39,10 +39,21 @@ namespace OMLEngine.Dao
         }
         #endregion
 
+
+        #region Tags
         public static Tag GetTagByTagName(string name)
         {
             return DBContext.Instance.Tags.SingleOrDefault(t => t.Name.ToLower() == name.ToLower());
         }
+
+        public static IEnumerable<string> GetAllTagsList()
+        {
+            var Tags = (from tag in DBContext.Instance.Tags
+                       select tag.Name).Distinct();
+
+            return Tags;
+        }     
+        #endregion
 
         public static void AddTitle(OMLDataDataContext context, Title title)
         {            
