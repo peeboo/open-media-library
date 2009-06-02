@@ -1422,6 +1422,22 @@ namespace OMLDatabaseEditor
                     treeMedia.SelectedNode = nodeUnderMouse;
                 }
             }
+            if (e.Button == MouseButtons.Left)
+            {
+                Point p = new Point(e.X, e.Y);
+                TreeNode nodeUnderMouse = treeMedia.GetNodeAt(p);
+                if (nodeUnderMouse != null)
+                {
+                    treeMedia.SelectedNode = nodeUnderMouse;
+
+                    if (nodeUnderMouse.Name != "All Media")
+                    {
+                        int[] sitems = new int[1];
+                        sitems[0] = Convert.ToInt32(nodeUnderMouse.Name);
+                        lbTitles.DoDragDrop(sitems, DragDropEffects.Move);
+                    }
+                }
+            }
         }
         #endregion
 
@@ -1986,10 +2002,12 @@ namespace OMLDatabaseEditor
         private void treeMedia_DragEnter(object sender, DragEventArgs e)
         {
             currentmovetonode = null;
-            if (e.Data.GetDataPresent(typeof(int[])))
-            {
-                e.Effect = DragDropEffects.Move;
-            }
+
+            treeMedia_DragOver(sender, e);
+            //if (e.Data.GetDataPresent(typeof(int[])))
+            //{
+            //    e.Effect = DragDropEffects.Move;
+            //}
         }
 
         private void treeMedia_DragDrop(object sender, DragEventArgs e)
