@@ -73,4 +73,9 @@ namespace OMLEngine.Dao
     {
         public string UpdatedImagePath { get; set; }
     }
+
+    partial class GenreMetaData
+    {
+        public string UpdatedImagePath { get; set; }
+    }
 }

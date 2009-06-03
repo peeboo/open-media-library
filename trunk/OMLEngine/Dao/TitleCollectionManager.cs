@@ -263,20 +263,59 @@ namespace OMLEngine
 
         public static void AddGenreMetaData(GenreMetaData gm)
         {
+            UpdatesImagesForGenreMetaData(gm.DaoGenreMetaData);
             Dao.DBContext.Instance.GenreMetaDatas.InsertOnSubmit(gm.DaoGenreMetaData);
             Dao.DBContext.Instance.SubmitChanges();
         }
 
         public static void RemoveGenreMetaData(GenreMetaData gm)
-        {
+        {            
+            // delete the image if it exists
+            if (gm.DaoGenreMetaData.PhotoID != null)
+            {
+                Dao.TitleCollectionDao.SetDeleteImage((int)gm.DaoGenreMetaData.PhotoID);
+            }
             Dao.DBContext.Instance.GenreMetaDatas.DeleteOnSubmit(gm.DaoGenreMetaData);
             Dao.DBContext.Instance.SubmitChanges();
         }
 
         public static void SaveGenreMetaDataChanges()
-        { 
+        {
+            System.Data.Linq.ChangeSet changeset = Dao.DBContext.Instance.GetChangeSet();
+
+            // Find actual SQL run to process the update - debugging purposes
+            string s = Dao.DBContext.Instance.GetType().GetMethod("GetChangeText", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Invoke(Dao.DBContext.Instance, null) as string;
+            // updates all the pending image changes
+            foreach (object gmd in changeset.Updates)
+            {
+                Dao.GenreMetaData daoGMD = gmd as Dao.GenreMetaData;
+
+                if (daoGMD != null)
+                {
+                    UpdatesImagesForGenreMetaData(daoGMD);
+                }
+            }
             Dao.DBContext.Instance.SubmitChanges();
         }
+
+        private static void UpdatesImagesForGenreMetaData(Dao.GenreMetaData gm)
+        {
+            // if there's a new front cover image path
+            if (gm.UpdatedImagePath != null)
+            {
+                // delete the old one if it exists
+                if (gm.PhotoID != null)
+                {
+                    Dao.TitleCollectionDao.SetDeleteImage((int)gm.PhotoID);
+                }
+
+                // add the new one
+                gm.PhotoID = ImageManager.AddImageToDB(gm.UpdatedImagePath);
+
+                // clear it out
+                gm.UpdatedImagePath = null;
+            }
+        }   
         #endregion
 
         #region BioData functions

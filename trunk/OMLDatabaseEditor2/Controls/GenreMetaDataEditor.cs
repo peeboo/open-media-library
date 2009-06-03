@@ -62,5 +62,18 @@ namespace OMLDatabaseEditor.Controls
                 GenreMetaDataChanged(this, e);
             }
         }
+
+        private void miSelectImage_Click(object sender, EventArgs e)
+        {
+            if (openCoverFile.ShowDialog() == DialogResult.OK)
+            {
+                _genreMetaData.ImagePath = openCoverFile.FileName;
+
+                genremetadatasource.ResetCurrentItem();
+
+                Status = GenreMetaDataStatus.UnsavedChanges;
+                GenreMetaDataChanged(this, e);
+            }
+        }
     }
 }

@@ -4,8 +4,9 @@
   <Table Name="dbo.GenreMetaData" Member="GenreMetaDatas" AccessModifier="Internal">
     <Type Name="GenreMetaData" AccessModifier="Internal">
       <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="Photo" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
+      <Column Name="PhotoID" Storage="_Photo" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.Genres" Member="Genres" AccessModifier="Internal">
@@ -72,7 +73,7 @@
   <Table Name="dbo.BioData" Member="BioDatas" AccessModifier="Internal">
     <Type Name="BioData" AccessModifier="Internal">
       <Column Name="FullName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="PhotoID" Storage="_Photo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="true" />
+      <Column Name="PhotoID" Storage="_Photo" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="DateOfBirth" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
       <Column Name="Biography " Member="Biography" Storage="_Synopsis" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />

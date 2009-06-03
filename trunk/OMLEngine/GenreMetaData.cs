@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using Dao = OMLEngine.Dao;
 using System.Text;
+using System.IO;
+using System.Drawing;
 
 namespace OMLEngine
 {
     public class GenreMetaData
     {
         private Dao.GenreMetaData _genreMetaData;
+        
+        string _imagePath;
 
         public GenreMetaData()
         {
@@ -33,7 +37,45 @@ namespace OMLEngine
         public string Name
         {
             get { return _genreMetaData.Name ?? string.Empty; }
-            set { _genreMetaData.Name = value; }
+            set
+            {
+                _genreMetaData.Name = value;
+                ModifiedDate = DateTime.Now;
+            }
+        }
+        
+        public DateTime? ModifiedDate
+        {
+            get { return _genreMetaData.ModifiedDate; }
+            set { _genreMetaData.ModifiedDate = value; }
+        }
+        
+        public string ImagePath
+        {
+            get
+            {
+                if (_genreMetaData.UpdatedImagePath != null)
+                    return _genreMetaData.UpdatedImagePath;
+
+                if (_imagePath == null)
+                {
+                    string path = ImageManager.GetImagePathById(_genreMetaData.PhotoID, ImageSize.Original);
+
+                    if (File.Exists(path))
+                        _imagePath = path;
+                }
+
+                return _imagePath;
+            }
+            set
+            {
+                if (value.Length > 255)
+                    throw new FormatException("ImagePath must be 255 characters or less.");
+
+                _genreMetaData.UpdatedImagePath = value;
+                _imagePath = null;
+                _genreMetaData.ModifiedDate = DateTime.Now;
+            }
         }
 
         public override string ToString()
