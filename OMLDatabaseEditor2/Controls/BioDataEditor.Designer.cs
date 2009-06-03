@@ -33,7 +33,6 @@
             this.Details = new DevExpress.XtraTab.XtraTabPage();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.cmsImage = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.miSelectImage = new System.Windows.Forms.ToolStripMenuItem();
             this.biodatasource = new System.Windows.Forms.BindingSource(this.components);
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.txtSynposis = new DevExpress.XtraEditors.MemoEdit();
@@ -45,6 +44,7 @@
             this.teName = new DevExpress.XtraEditors.TextEdit();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
             this.openCoverFile = new System.Windows.Forms.OpenFileDialog();
+            this.miSelectImage = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.Details.SuspendLayout();
@@ -108,14 +108,7 @@
             this.cmsImage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miSelectImage});
             this.cmsImage.Name = "contextMenuStrip1";
-            this.cmsImage.Size = new System.Drawing.Size(142, 26);
-            // 
-            // miSelectImage
-            // 
-            this.miSelectImage.Name = "miSelectImage";
-            this.miSelectImage.Size = new System.Drawing.Size(141, 22);
-            this.miSelectImage.Text = "Select Image";
-            this.miSelectImage.Click += new System.EventHandler(this.miSelectImage_Click);
+            this.cmsImage.Size = new System.Drawing.Size(153, 48);
             // 
             // biodatasource
             // 
@@ -213,6 +206,13 @@
             this.openCoverFile.Filter = "JPG Files|*.jpg|All Files|*.*";
             this.openCoverFile.Title = "Select Cover Art";
             // 
+            // miSelectImage
+            // 
+            this.miSelectImage.Name = "miSelectImage";
+            this.miSelectImage.Size = new System.Drawing.Size(152, 22);
+            this.miSelectImage.Text = "Select Image";
+            this.miSelectImage.Click += new System.EventHandler(this.miSelectImage_Click);
+            // 
             // BioDataEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -254,7 +254,7 @@
         private DevExpress.XtraEditors.MemoEdit txtSynposis;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ContextMenuStrip cmsImage;
-        private System.Windows.Forms.ToolStripMenuItem miSelectImage;
         private System.Windows.Forms.OpenFileDialog openCoverFile;
+        private System.Windows.Forms.ToolStripMenuItem miSelectImage;
     }
 }

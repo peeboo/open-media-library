@@ -96,7 +96,7 @@ namespace OMLEngine
             set
             {
                 if (value.Length > 255)
-                    throw new FormatException("BackCoverPath must be 255 characters or less.");
+                    throw new FormatException("ImagePath must be 255 characters or less.");
 
                 _bioData.UpdatedImagePath = value;
                 _imagePath = null;
