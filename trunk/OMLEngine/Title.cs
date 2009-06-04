@@ -819,6 +819,7 @@ namespace OMLEngine
         {
             _title = new OMLEngine.Dao.Title();
 
+            DaoTitle.ModifiedDate = DateTime.Now;
             // todo : solomon : this went wonky here 
             /*
             info.AddValue("backdrop_boxart_path", _backDropImage);

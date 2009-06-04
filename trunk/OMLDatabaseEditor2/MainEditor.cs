@@ -1339,45 +1339,6 @@ namespace OMLDatabaseEditor
             CreateFolder("New TV Season", TitleTypes.Season);
         }
   
-        private void CreateFolder(string Name, TitleTypes titletype)
-        {
-            Title folder = new Title();
-
-            //int selectedfolderid = 0;
-
-            if (treeMedia.SelectedNode.Name == "All Media")
-            {
-                // Root Node
-                folder.TitleType = TitleTypes.Root | titletype;
-            }
-            else
-            {
-                int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
-                folder.ParentTitleId = parentid;
-                folder.TitleType = titletype;
-                //selectedfolderid = Convert.ToInt32(treeMedia.SelectedNode.Name);
-            }
-
-            folder.Name = Name;
-            TitleCollectionManager.AddTitle(folder);
-
-            // No need for this now - null denotes a root title.
-            // Generate the parentid if required
-            //if (folder.ParentTitleId == 0)
-            //{
-            //    folder.ParentTitleId = folder.Id;
-            //    TitleCollectionManager.SaveTitleUpdates();
-            //}
-
-            _movieList.Add(folder.Id, folder);
-
-            PopulateMediaTree();
-            if (_mediaTree.ContainsKey(folder.Id))
-            {
-                treeMedia.SelectedNode = _mediaTree[folder.Id];
-            }
-        }
-
         private void miCreateTVEpisode_Click(object sender, EventArgs e)
         {
             if (treeMedia.SelectedNode.Name == "All Media")
@@ -1961,39 +1922,64 @@ namespace OMLDatabaseEditor
             }
         }
 
+
+        #region Title & Folder Creation
         private void CreateTitle(int? parentid, string Name, TitleTypes titletype)
         {
-            Title newMovie = new Title();
-            newMovie.Name = Name;
+            Title newTitle = new Title();
+            newTitle.Name = Name;
+            
             if (parentid == null)
             {
-                newMovie.TitleType = TitleTypes.Root | titletype;
+                newTitle.TitleType = TitleTypes.Root | titletype;
             }
             else
             {
-                newMovie.TitleType = titletype;
-                newMovie.ParentTitleId = (int)parentid;
+                newTitle.TitleType = titletype;
+                newTitle.ParentTitleId = (int)parentid;
             }
-            newMovie.DateAdded = DateTime.Now;
+            newTitle.DateAdded = DateTime.Now;
 
             // Add the title now to get the title ID
-            TitleCollectionManager.AddTitle(newMovie);
+            TitleCollectionManager.AddTitle(newTitle);
 
-            // No need for this now - null denotes a root title
-            // Generate the parentid if required
-            //if (newMovie.ParentTitleId == 0)
-            //{
-            //    newMovie.ParentTitleId = newMovie.Id;
-            //    TitleCollectionManager.SaveTitleUpdates();
-            //}
+            // Get the new title from the DB and add it to the title list 
+            Title addedTitle = TitleCollectionManager.GetTitle(newTitle.Id);
+            _movieList.Add(newTitle.Id, addedTitle);
 
-            // Add new title to title list and populate the screen control
-            _movieList.Add(newMovie.Id, newMovie);
-            PopulateMovieListV2(SelectedTreeRoot);
-
-            titleEditor.LoadDVD(newMovie);
-            ToggleSaveState(true);
+            if ((titletype & TitleTypes.AllMedia) != 0)
+            {
+                // Added a media
+                PopulateMovieListV2(SelectedTreeRoot);
+                titleEditor.LoadDVD(addedTitle);
+                //ToggleSaveState(true);
+            }
+            else
+            { 
+                // Added a folder
+                PopulateMediaTree();
+                if (_mediaTree.ContainsKey(addedTitle.Id))
+                {
+                    treeMedia.SelectedNode = _mediaTree[addedTitle.Id];
+                }
+            }
         }
+
+        private void CreateFolder(string Name, TitleTypes titletype)
+        {
+            if (treeMedia.SelectedNode.Name == "All Media")
+            {
+                // Root Node
+                CreateTitle(null, Name, titletype);
+            }
+            else
+            {
+                int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
+                CreateTitle(parentid, Name, titletype);
+            }
+        }
+        #endregion
+
 
         #region Title Drag and Drop support
         private ToolTip tt;
