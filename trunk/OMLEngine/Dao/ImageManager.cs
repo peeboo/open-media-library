@@ -38,9 +38,14 @@ namespace OMLEngine
                 return null;//don't want a nocover-v3 displays the title over the tile if it has no image
                 // OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg"; 
             }
-        }        
-        
+        }
+
         public static int? AddImageToDB(string imagePath)
+        {
+            return AddImageToDB(imagePath, MAX_IMAGE_HEIGHT);
+        }
+        
+        public static int? AddImageToDB(string imagePath, int maxHeight)
         {
             if (!File.Exists(imagePath))
                 return null;
