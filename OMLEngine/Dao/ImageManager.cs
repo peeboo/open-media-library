@@ -64,9 +64,9 @@ namespace OMLEngine
                         try
                         {                            
                             // if the image is too big - scale it down
-                            if (image.Height > MAX_IMAGE_HEIGHT)
+                            if (image.Height > maxHeight)
                             {
-                                scaledImage = ScaleImageByHeight(image, MAX_IMAGE_HEIGHT);
+                                scaledImage = ScaleImageByHeight(image, maxHeight);
                             }
                             
                             byte[] imageArray = (scaledImage != null )  ? ImageManager.ImageToByteArray(scaledImage)
