@@ -748,7 +748,7 @@ namespace OMLEngine.Dao
 			}
 		}
 		
-		[Column(Storage="_ParentalRating", DbType="NVarChar(20)")]
+		[Column(Storage="_ParentalRating", DbType="NVarChar(80)")]
 		public string ParentalRating
 		{
 			get
