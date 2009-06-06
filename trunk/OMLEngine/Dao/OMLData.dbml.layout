@@ -14,7 +14,7 @@
         <elementListCompartment Id="bc114933-a893-44d7-bffd-3332e9932fd8" absoluteBounds="0.51499999999999968, 2.71, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(1.5 : 2.07859537760417); (1.5 : 2.25)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(1.5 : 2.07859537760417); (1.5 : 2.25)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/OMLDataDataContext/GenreMetaData/GenreMetaData_Genre" />
       <nodes>
         <classShapeMoniker Id="2712b53d-5dac-46c7-a8f4-0025326cfa60" />

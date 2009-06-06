@@ -576,8 +576,8 @@ namespace OMLEngine
             get { return _title.ParentalRating ?? string.Empty; }
             set
             {
-                if (value.Length > 20)
-                    throw new FormatException("ParentalRating must be 20 characters or less.");
+                if (value.Length > 80)
+                    throw new FormatException("ParentalRating must be 80 characters or less.");
                 _title.ParentalRating = value;
             }
         }

@@ -26,7 +26,7 @@
       <Column Name="WatchedCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="MetaDataSource" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
       <Column Name="Runtime" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="ParentalRating" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="ParentalRating" Type="System.String" DbType="NVarChar(80)" CanBeNull="true" />
       <Column Name="Synopsis" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="Studio" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="CountryOfOrigin" Storage="_CountryOfOrgin" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
