@@ -66,6 +66,8 @@ namespace OMLEngine
 
         private static void UpdatesImagesForTitle(Dao.Title title)
         {
+            const int MAX_FANART_HEIGHT = 1080;
+
             // if there's a new front cover image path
             if (title.UpdatedFrontCoverPath != null)
             {                                
@@ -157,7 +159,7 @@ namespace OMLEngine
                 // add the new ones
                 foreach (string add in added)
                 {
-                    int? id = ImageManager.AddImageToDB(add);
+                    int? id = ImageManager.AddImageToDB(add, MAX_FANART_HEIGHT);
 
                     if (id != null)
                     {
@@ -220,6 +222,8 @@ namespace OMLEngine
         /// </summary>
         public static void DeleteAllTitles()
         {
+            DeleteAllImages();
+
             // delete all the people
             Dao.DBContext.Instance.ExecuteCommand("delete from People");
 
