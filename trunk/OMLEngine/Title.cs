@@ -1079,7 +1079,7 @@ namespace OMLEngine
                 _subtitles = null;
                 throw new FormatException("Too many audio tracks have been added.");
             }
-            _title.Subtitles = subtitle;
+            _title.Subtitles = subtitles;
 
             _subtitles = null;
         }
