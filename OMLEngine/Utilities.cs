@@ -320,7 +320,7 @@ namespace OMLEngine
                         Trace.Listeners.Add(new TextWriterTraceListener(Log, "debug.txt"));
                         Trace.AutoFlush = true;
                         Trace.WriteLine(new string('=', 80));
-                        Trace.TraceInformation(DateTime.Now.ToString() + " OML Version: 0.21b ({0}, PID:{1})", File.GetLastWriteTime(typeof(Utilities).Assembly.Location), Process.GetCurrentProcess().Id);
+                        Trace.TraceInformation(DateTime.Now.ToString() + " OML Version: 0.3b ({0}, PID:{1})", File.GetLastWriteTime(typeof(Utilities).Assembly.Location), Process.GetCurrentProcess().Id);
                     }
                     catch
                     { }
