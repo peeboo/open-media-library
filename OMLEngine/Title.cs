@@ -33,6 +33,7 @@ namespace OMLEngine
         private string _frontCoverMenuPath = null;
         private string _frontCoverPath = null;
         private string _backCoverPath = null;
+        private Title _parentTitle = null;
 
         private List<Disk> _disks = null;
         private List<string> _audioTracks = null;
@@ -351,6 +352,28 @@ namespace OMLEngine
             get { return _title.ParentTitleId; }
             set { _title.ParentTitleId = value; }
         }
+
+        public Title ParentTitle
+        {
+            get
+            {
+                if (_parentTitle != null)
+                    return _parentTitle;
+
+                if (ParentTitleId != null)
+                {
+                    _parentTitle = TitleCollectionManager.GetTitle((int)ParentTitleId);
+                    return _parentTitle;
+                }
+                return null;
+            }
+            set
+            {
+                _parentTitle = value;
+                ParentTitleId = value.Id;
+            }
+        }
+
 
         public TitleTypes TitleType
         {
