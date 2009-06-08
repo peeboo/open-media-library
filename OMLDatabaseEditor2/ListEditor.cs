@@ -68,13 +68,13 @@ namespace OMLDatabaseEditor
 
                     if (genre.Count() == 0)
                     {
-                        DialogResult result = XtraMessageBox.Show("You are attempting to add a genre that is not in the allowed list. Click Yes to addid to the list.", "Allowed Genre Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        DialogResult result = XtraMessageBox.Show("You are attempting to add a genre that is not defined. Click Yes to add it to the list.", "Allowed Genre Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                         switch (result)
                         {
                             case DialogResult.Yes:
-                                return;
-                            default:
                                 break;
+                            default:
+                                return;
                         }
                     }
                 }
