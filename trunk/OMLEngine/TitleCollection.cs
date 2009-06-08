@@ -84,8 +84,14 @@ namespace OMLEngine
 
         public void RenameDATCollection()
         {
+            string BackupFileName = _database_filename + ".bak";
+
+            // If a backup files allready exists, delete it.
+            if (File.Exists(BackupFileName))
+                File.Delete(BackupFileName);
+
             if (File.Exists(_database_filename))
-                File.Move(_database_filename, _database_filename + ".bak");
+                File.Move(_database_filename, BackupFileName);
         }               
     }    
 }

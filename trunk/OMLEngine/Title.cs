@@ -156,7 +156,12 @@ namespace OMLEngine
             }
             set
             {
-                if (string.IsNullOrEmpty(value) || value.Length > 255)
+                if (string.IsNullOrEmpty(value)) 
+                {
+                    _title.SortName = _title.Name;
+                    return;
+                }
+                if (value.Length > 255)
                     throw new FormatException("SortName must be 255 characters or less.");
                 _title.SortName = value;
             }
@@ -2436,13 +2441,13 @@ namespace OMLEngine
             Studio = GetSerializedString(info, "distributor");
             CountryOfOrigin = GetSerializedString(info, "country_of_origin");
             OfficialWebsiteURL = GetSerializedString(info, "official_website_url");
-            DateAdded = GetSerializedDateTime(info, "date_added");
+            DateAdded = CheckDateRange(GetSerializedDateTime(info, "date_added"));
             ImporterSource = GetSerializedString(info, "importer_source");
             Runtime = GetSerializedInt(info, "runtime");
             ParentalRating = GetSerializedString(info, "mpaa_rating");
 
 
-            ReleaseDate = GetSerializedDateTime(info, "release_date");
+            ReleaseDate = CheckDateRange(GetSerializedDateTime(info, "release_date"));
 
             DaoTitle.UpdatedProducers = new List<Person>();
             List<string> producers = GetSerializedList<List<string>>(info, "producers");
@@ -2497,6 +2502,15 @@ namespace OMLEngine
             VideoResolution = GetSerializedString(info, "video_resolution");
             ExtraFeatures = GetSerializedList<List<string>>(info, "extra_features");
             WatchedCount = GetSerializedInt(info, "watched_count");
+        }
+
+        public DateTime CheckDateRange(DateTime dt)
+        {
+            if ((dt >= DateTime.Parse("1 Jan 1900")) && (dt<= DateTime.Parse("6 June 2079")))
+            {
+                return dt;
+            }
+            return DateTime.Parse("1 Jan 1990");
         }
 
         void CleanDuplicateDisks()

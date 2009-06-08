@@ -282,9 +282,7 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.WaitCursor;
             if (allMoviesToolStripMenuItem1.Checked)
             {
-                //_movieList = TitleCollectionManager.GetAllTitles().ToList<Title>();
                 _movieList = TitleCollectionManager.GetAllTitles(TitleTypes.AllMedia | TitleTypes.AllFolders).ToDictionary(k => k.Id);
-                //PopulateMovieList(_movieList);
             }
             else
             {
@@ -1019,6 +1017,9 @@ namespace OMLDatabaseEditor
 
                 coll.RenameDATCollection();
                 LoadMovies();
+                PopulateMediaTree();
+                PopulateMovieListV2(SelectedTreeRoot);
+
             }
         }
 
@@ -1358,12 +1359,12 @@ namespace OMLDatabaseEditor
             if (treeMedia.SelectedNode.Name == "All Media")
             {
                 // Root Title
-                CreateTitle(null, "Movie", TitleTypes.Movie);
+                CreateTitle(null, "New Movie", TitleTypes.Movie);
             }
             else
             {
                 int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
-                CreateTitle(parentid, "Movie", TitleTypes.Movie);
+                CreateTitle(parentid, "New Movie", TitleTypes.Movie);
             }
         }
 
