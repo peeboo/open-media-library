@@ -80,19 +80,22 @@ namespace OMLEngine
                         Dao.DBContext.Instance.ImageMappings.DeleteOnSubmit(title.Images[i]);
                         title.Images.RemoveAt(i);
                     }
-                } 
+                }
 
-                // add the new one
-                int? id = ImageManager.AddImageToDB(title.UpdatedFrontCoverPath);
-
-                // if we got an id back let's associate it
-                if (id != null)
+                if (!string.IsNullOrEmpty(title.UpdatedFrontCoverPath))
                 {
-                    Dao.ImageMapping image = new OMLEngine.Dao.ImageMapping();
-                    image.ImageId = id.Value;
-                    image.ImageType = (byte)ImageType.FrontCoverImage;                    
+                    // add the new one
+                    int? id = ImageManager.AddImageToDB(title.UpdatedFrontCoverPath);
 
-                    title.Images.Add(image);
+                    // if we got an id back let's associate it
+                    if (id != null)
+                    {
+                        Dao.ImageMapping image = new OMLEngine.Dao.ImageMapping();
+                        image.ImageId = id.Value;
+                        image.ImageType = (byte)ImageType.FrontCoverImage;
+
+                        title.Images.Add(image);
+                    }
                 }
 
                 // clear it out
@@ -111,20 +114,23 @@ namespace OMLEngine
                         Dao.DBContext.Instance.ImageMappings.DeleteOnSubmit(title.Images[i]);
                         title.Images.RemoveAt(i);
                     }
-                }                
+                }
 
-                // add the new one
-                int? id = ImageManager.AddImageToDB(title.UpdatedBackCoverPath);
-
-                // if we got an id back let's associate it
-                if (id != null)
+                if (!string.IsNullOrEmpty(title.UpdatedBackCoverPath))
                 {
-                    Dao.ImageMapping image = new OMLEngine.Dao.ImageMapping();
-                    image.ImageId = id.Value;
-                    image.ImageType = (byte)ImageType.BackCoverImage;                    
+                    // add the new one
+                    int? id = ImageManager.AddImageToDB(title.UpdatedBackCoverPath);
 
-                    title.Images.Add(image);
-                }                
+                    // if we got an id back let's associate it
+                    if (id != null)
+                    {
+                        Dao.ImageMapping image = new OMLEngine.Dao.ImageMapping();
+                        image.ImageId = id.Value;
+                        image.ImageType = (byte)ImageType.BackCoverImage;
+
+                        title.Images.Add(image);
+                    }
+                }
 
                 // clear it out
                 title.UpdatedBackCoverPath = null;

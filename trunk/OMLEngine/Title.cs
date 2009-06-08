@@ -425,7 +425,7 @@ namespace OMLEngine
                 if (value.Length > 255)
                     throw new FormatException("FrontCoverPath must be 255 characters or less.");
 
-                if (File.Exists(value))
+                if ((value == "") || (File.Exists(value)))
                 {
                     _title.UpdatedFrontCoverPath = value;
                     _frontCoverPath = null;
@@ -540,9 +540,12 @@ namespace OMLEngine
                 if (value.Length > 255)
                     throw new FormatException("BackCoverPath must be 255 characters or less.");
 
-                _title.UpdatedBackCoverPath = value;
-                _backCoverPath = null;
-                DaoTitle.ModifiedDate = DateTime.Now;
+                if ((value == "") || (File.Exists(value)))
+                {
+                    _title.UpdatedBackCoverPath = value;
+                    _backCoverPath = null;
+                    DaoTitle.ModifiedDate = DateTime.Now;
+                }
             }
         }
 

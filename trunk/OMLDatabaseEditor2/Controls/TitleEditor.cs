@@ -601,17 +601,13 @@ namespace OMLDatabaseEditor.Controls
             if (openCoverFile.ShowDialog() == DialogResult.OK)
             {
                 PictureBox pb = contextImage.Tag as PictureBox;
-                if (pb.Name.Contains("Front"))
+                if (pb.Name.Contains("FrontCover"))
                 {
                     _dvdTitle.FrontCoverPath = openCoverFile.FileName;
                 }
-                else if (pb.Name.Contains("Backdrop"))
+                else if (pb.Name.Contains("BackCover"))
                 {
-                    //_dvdTitle.BackDropImage = openCoverFile.FileName;
-                }
-                else
-                {
-                    _dvdTitle.FrontCoverPath = openCoverFile.FileName;
+                    _dvdTitle.BackCoverPath = openCoverFile.FileName;
                 }
 
                 titleSource.ResetCurrentItem();
