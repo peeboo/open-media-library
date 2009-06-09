@@ -22,7 +22,8 @@ namespace OMLEngine
         Actor,
         UserRating,        
         PercentComplete,
-        DateAdded
+        DateAdded,
+        Name
     }
 
     public class TitleFilter
