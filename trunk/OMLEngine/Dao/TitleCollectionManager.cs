@@ -28,7 +28,9 @@ namespace OMLEngine
         Unknown = 0x0100,
         Movie = 0x0200, 
         Episode = 0x0400,
-        AllMedia = 0xFF00
+        AllMedia = 0xFF00,
+
+        Everything = 0xFFFF
     }
 
 
