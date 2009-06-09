@@ -1298,11 +1298,13 @@ namespace OMLDatabaseEditor
                     // Root Level selected
                     SelectedTreeRoot = null;
                     PopulateMovieListV2(SelectedTreeRoot);
+                    titleEditor.ClearEditor(true);
                 }
                 else
                 {
                     SelectedTreeRoot = Convert.ToInt32(e.Node.Name);
                     PopulateMovieListV2(SelectedTreeRoot);
+                    titleEditor.LoadDVD(_movieList[(int)SelectedTreeRoot]);
                 }
             }
             else
@@ -1322,9 +1324,11 @@ namespace OMLDatabaseEditor
                 //miCreateTVEpisode.Visible = false;
                 miDeleteFolder.Visible = false;
             }
-   /*         else
+            else
             {
-                int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
+                miDeleteFolder.Visible = true;
+            }
+              /*  int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
                 if ((_movieList[parentid].TitleType & TitleTypes.Collection) != 0)
                 {
                     // Allow Collection and TV Show
@@ -1402,8 +1406,29 @@ namespace OMLDatabaseEditor
         }
 
         private void miDeleteFolder_Click(object sender, EventArgs e)
-        {
+        {   
+            if (treeMedia.SelectedNode.Name != "All Media")
+            {
+                int titleid = Convert.ToInt32(treeMedia.SelectedNode.Name);
+                SelectedTreeRoot = _movieList[titleid].ParentTitleId;
 
+                if (TitleCollectionManager.GetAllTitles(TitleTypes.Everything, titleid).Count() == 0)
+                {
+                    // No child items, delete
+                    TitleCollectionManager.DeleteTitle(_movieList[Convert.ToInt32(treeMedia.SelectedNode.Name)]);
+                    LoadMovies();
+                    PopulateMediaTree();
+                    PopulateMovieListV2(SelectedTreeRoot);
+                    if (SelectedTreeRoot != null)
+                    {
+                        treeMedia.SelectedNode = _mediaTree[(int)SelectedTreeRoot];
+                    }
+                }
+                else
+                {
+                    XtraMessageBox.Show("Cannot delete this folder. Please move or delete any child items.", "Delete error!");
+                }
+            }
         }
 
         private void treeMedia_MouseDown(object sender, MouseEventArgs e)
@@ -1651,26 +1676,7 @@ namespace OMLDatabaseEditor
 
         private void lbTitles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_loading) return;
-            Cursor = Cursors.WaitCursor;
-            if (SaveCurrentMovie() == DialogResult.Cancel)
-            {
-                _loading = true; //bypasses second save movie dialog
-                lbTitles.SelectedItem = TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
-                _loading = false;
-            }
-            else
-            {
-                Title selectedTitle = lbTitles.SelectedItem as Title;
-                
-                if (selectedTitle == null) return;
-
-                titleEditor.LoadDVD(selectedTitle);
-            
-                this.Text = APP_TITLE + " - " + selectedTitle.Name;
-                ToggleSaveState(false);
-            }
-            Cursor = Cursors.Default;
+            lbTitles_SelectedIndexChanged();
         }
 
         private void lbTitles_SelectedIndexChanged()
@@ -1689,8 +1695,16 @@ namespace OMLDatabaseEditor
 
                 if (selectedTitle != null)
                 {
-                    titleEditor.LoadDVD(selectedTitle);
-                    this.Text = APP_TITLE + " - " + selectedTitle.Name;
+                    if (selectedTitle.Name != "All Media")
+                    {
+                        titleEditor.LoadDVD(selectedTitle);
+                        this.Text = APP_TITLE + " - " + selectedTitle.Name;
+                    }
+                    else
+                    {
+                        titleEditor.ClearEditor(true);
+                        this.Text = APP_TITLE;
+                    }
                     ToggleSaveState(false);
                 }
             }
