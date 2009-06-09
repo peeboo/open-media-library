@@ -348,7 +348,8 @@ namespace OMLDatabaseEditor
             this.allMoviesToolStripMenuItem1,
             this.filterByGenreToolStripMenuItem,
             this.filterByCompletenessToolStripMenuItem,
-            this.filterByParentalRatingToolStripMenuItem});
+            this.filterByParentalRatingToolStripMenuItem,
+            this.filterByTagToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "View";
