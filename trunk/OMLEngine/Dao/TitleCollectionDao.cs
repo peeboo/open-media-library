@@ -174,8 +174,41 @@ namespace OMLEngine.Dao
             return (IQueryable<Title>) GetFilteredTitles(filters);
         }
 
+
         /// <summary>
         /// Gets all the titles given the list of filters
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        public static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters)
+        {
+            var titles = DBContext.Instance.Titles;
+
+            if (filters == null || filters.Count == 0) return titles;
+
+            return GetFilteredTitles(filters, titles);
+        }
+
+        /// <summary>
+        /// Gets all the titles given the list of filters and a title type
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters, TitleTypes type)
+        {
+            var titles = from t in DBContext.Instance.Titles
+                         where (t.TitleType & (int)type) != 0
+                         orderby t.SortName
+                         select t;
+
+            if (filters == null || filters.Count == 0) return titles;
+
+            return GetFilteredTitles(filters, titles);
+        }
+
+        /// <summary>
+        /// Gets all the titles given the list of filters, title type and parent title id
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
@@ -187,11 +220,14 @@ namespace OMLEngine.Dao
                          orderby t.SortName
                          select t;
 
-            //var titles = DBContext.Instance.Titles;
+            if (filters == null || filters.Count == 0) return titles;
 
-            if (filters == null || filters.Count == 0)
-                return titles;
+            return GetFilteredTitles(filters, titles);
+        }
 
+
+        private static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters, IQueryable<Title> titles)
+        {
             IQueryable<Title> results = null;
 
             foreach (TitleFilter filter in filters)
@@ -264,89 +300,6 @@ namespace OMLEngine.Dao
                    select t;
         }
 
-        /// <summary>
-        /// Gets all the titles given the list of filters
-        /// </summary>
-        /// <param name="filters"></param>
-        /// <returns></returns>
-        public static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters)
-        {
-            var titles = DBContext.Instance.Titles;
-
-            if (filters == null || filters.Count == 0)
-                return titles;
-
-            IQueryable<Title> results = null;
-
-            foreach (TitleFilter filter in filters)
-            {
-                IQueryable<Title> lastQuery = results ?? titles;
-
-                switch (filter.FilterType)
-                {
-                    case TitleFilterType.Genre:
-                        results = ApplyGenreFilter(lastQuery, filter.FilterText);
-                        break;
-
-                    case TitleFilterType.Person:
-                        results = ApplyPersonFilter(lastQuery, filter.FilterText);
-                        break;
-
-                    case TitleFilterType.VideoFormat:
-                        results = ApplyFormatFilter(lastQuery, (VideoFormat)Enum.Parse(typeof(VideoFormat), filter.FilterText));
-                        break;
-
-                    case TitleFilterType.Unwatched:                       
-                        results = ApplyWatchedFilter(lastQuery, filter.FilterText);
-                        break;
-
-                    case TitleFilterType.Tag:
-                        results = ApplyTagFilter(lastQuery, filter.FilterText);
-                        break;
-
-                    case TitleFilterType.Alpha:
-                        results = ApplyAlphaFilter(lastQuery, filter.FilterText);
-                        break;
-
-                    case TitleFilterType.ParentalRating:
-                        results = ApplyParentalRatingFilter(lastQuery, filter.FilterText);
-                        break;
-
-                    case TitleFilterType.Runtime:
-                        results = ApplyRuntimeFilter(lastQuery, filter.FilterText);
-                        break;
-
-                    case TitleFilterType.Year:
-                        results = ApplyYearFilter(lastQuery, filter.FilterText);
-                        break;
-
-                    case TitleFilterType.Country:
-                        results = ApplyCountryFilter(lastQuery, filter.FilterText);
-                        break;           
-         
-                    case TitleFilterType.Actor:
-                        results = ApplyPersonFilter(lastQuery, filter.FilterText, PeopleRole.Actor);
-                        break;
-
-                    case TitleFilterType.Director:
-                        results = ApplyPersonFilter(lastQuery, filter.FilterText, PeopleRole.Director);
-                        break;
-
-                    case TitleFilterType.UserRating:
-                        results = ApplyUserRatingFilter(lastQuery, filter.FilterText);
-                        break;
-
-                    case TitleFilterType.DateAdded:
-                        results = ApplyDateAddedFilter(lastQuery, filter.FilterText);
-                        break;
-                }
-            }
-
-            // sort the results
-            return from t in results
-                   orderby t.SortName
-                   select t;
-        }
 
         /// <summary>
         /// Applies the rating filter

@@ -1107,7 +1107,7 @@ namespace OMLDatabaseEditor
             }
             else
             {
-                allMoviesToolStripMenuItem1.Checked = false;
+                /*allMoviesToolStripMenuItem1.Checked = false;
                 if (filterItem.OwnerItem == filterByGenreToolStripMenuItem)
                     _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Genre, filterItem.Text).ToList<Title>();
                 else if (filterItem.OwnerItem == filterByCompletenessToolStripMenuItem)
@@ -1116,7 +1116,7 @@ namespace OMLDatabaseEditor
                     _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.ParentalRating, filterItem.Text).ToList<Title>();
                 else if (filterItem.OwnerItem == filterByTagToolStripMenuItem)
                     _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Tag, filterItem.Text).ToList<Title>();
-
+                */
                 PopulateMovieList(_movieList);
             }
             Cursor = Cursors.Default;

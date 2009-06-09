@@ -47,6 +47,8 @@ namespace OMLDatabaseEditor
         LinearGradientBrush _brushTitleListSelected;
         LinearGradientBrush _brushTitleListFolder;
         LinearGradientBrush _brushTitleListFolderSelected;
+
+        #region Initialisation
         public MainEditor()
         {
             OMLEngine.Utilities.RawSetup();
@@ -94,11 +96,13 @@ namespace OMLDatabaseEditor
             _loading = true;
             
             SplashScreen2.SetStatus(64, "Loading Movies.");
+
+            _movieList = new Dictionary<int,Title>();
+
             LoadMovies();
             PopulateMediaTree();
             PopulateMovieListV2(SelectedTreeRoot);
-
-
+            
             SplashScreen2.SetStatus(80, "Loading MRU Lists.");
             this.titleEditor.SetMRULists();
 
@@ -173,7 +177,6 @@ namespace OMLDatabaseEditor
             }
         }
 
-
         private void GetDXSkins()
         {
             DXSkins = new List<string>();
@@ -226,7 +229,7 @@ namespace OMLDatabaseEditor
                 filterByParentalRatingToolStripMenuItem.DropDownItems.Add(item);
             }
 
-            foreach (string tag in from t in TitleCollectionManager.GetAllTags(null) select t.Name)
+            foreach (string tag in TitleCollectionManager.GetAllTagsList())
             {
                 item = new ToolStripMenuItem(tag);
                 item.CheckOnClick = true;
@@ -276,13 +279,83 @@ namespace OMLDatabaseEditor
             }
         }
 
+        private void LoadImporters()
+        {
+            Cursor = Cursors.WaitCursor;
+            lbImport.Items.Clear();
+            LoadImportPlugins(PluginTypes.ImportPlugin, _importPlugins);
+            lbImport.DataSource = _importPlugins;
+            lbImport.SelectedItem = null;
+            Cursor = Cursors.Default;
+        }
+
+        private void LoadMetadata()
+        {
+            Cursor = Cursors.WaitCursor;
+            lbMetadata.Items.Clear();
+            LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
+            lbMetadata.DataSource = _metadataPlugins;
+            lbMetadata.SelectedItem = null;
+            Cursor = Cursors.Default;
+        }
+        #endregion
+
+
+        #region Title Loading
+        private void filterTitles_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            ToolStripMenuItem filterItem = ((ToolStripMenuItem)sender);
+            // Uncheck all other filters
+            foreach (ToolStripMenuItem item in filterByCompletenessToolStripMenuItem.DropDownItems)
+                if (item != filterItem) item.Checked = false;
+            foreach (ToolStripMenuItem item in filterByGenreToolStripMenuItem.DropDownItems)
+                if (item != filterItem) item.Checked = false;
+            foreach (ToolStripMenuItem item in filterByParentalRatingToolStripMenuItem.DropDownItems)
+                if (item != filterItem) item.Checked = false;
+            foreach (ToolStripMenuItem item in filterByTagToolStripMenuItem.DropDownItems)
+                if (item != filterItem) item.Checked = false;
+
+            if (sender == allMoviesToolStripMenuItem1)
+            {
+                LoadMovies();
+                PopulateMovieListV2(SelectedTreeRoot);
+            }
+            else
+            {
+                allMoviesToolStripMenuItem1.Checked = false;
+
+                if (filterItem.OwnerItem == filterByCompletenessToolStripMenuItem)
+                {
+                    // Percentage filter
+                    _movieList = (TitleCollectionManager.GetAllTitles(TitleTypes.AllFolders).Concat(TitleCollectionManager.GetTitlesByPercentComplete(TitleTypes.AllMedia, decimal.Parse("." + filterItem.Text.TrimEnd('%')))).ToDictionary(k => k.Id));
+                }
+                else
+                {
+                    List<TitleFilter> tf = new List<TitleFilter>();
+                    if (filterItem.OwnerItem == filterByGenreToolStripMenuItem) tf.Add(new TitleFilter(TitleFilterType.Genre, filterItem.Text));
+
+                    if (filterItem.OwnerItem == filterByParentalRatingToolStripMenuItem) tf.Add(new TitleFilter(TitleFilterType.ParentalRating, filterItem.Text));
+
+                    if (filterItem.OwnerItem == filterByTagToolStripMenuItem) tf.Add(new TitleFilter(TitleFilterType.Tag, filterItem.Text));
+
+                    _movieList = (TitleCollectionManager.GetAllTitles(TitleTypes.AllFolders).
+                        Concat(TitleCollectionManager.GetFilteredTitles(tf, TitleTypes.AllMedia)).ToDictionary(k => k.Id));
+                }
+
+                PopulateMovieListV2(SelectedTreeRoot);
+            }
+            Cursor = Cursors.Default;
+        }
+
         private void LoadMovies()
         {
             if (mainNav.ActiveGroup != groupMediaTree) return;
             Cursor = Cursors.WaitCursor;
+
             if (allMoviesToolStripMenuItem1.Checked)
             {
-                _movieList = TitleCollectionManager.GetAllTitles(TitleTypes.AllMedia | TitleTypes.AllFolders).ToDictionary(k => k.Id);
+                _movieList = TitleCollectionManager.GetAllTitles(TitleTypes.AllFolders | TitleTypes.AllMedia).ToDictionary(k => k.Id);
             }
             else
             {
@@ -326,26 +399,8 @@ namespace OMLDatabaseEditor
             }
             Cursor = Cursors.Default;
         }
+        #endregion 
 
-        private void LoadImporters()
-        {
-            Cursor = Cursors.WaitCursor;
-            lbImport.Items.Clear();
-            LoadImportPlugins(PluginTypes.ImportPlugin, _importPlugins);
-            lbImport.DataSource = _importPlugins;
-            lbImport.SelectedItem = null;
-            Cursor = Cursors.Default;
-        }
-
-        private void LoadMetadata()
-        {
-            Cursor = Cursors.WaitCursor;
-            lbMetadata.Items.Clear();
-            LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
-            lbMetadata.DataSource = _metadataPlugins;
-            lbMetadata.SelectedItem = null;
-            Cursor = Cursors.Default;
-        }
 
         private DialogResult SaveCurrentMovie()
         {
@@ -759,6 +814,7 @@ namespace OMLDatabaseEditor
                     {
                         TitleCollectionManager.DeleteTitle(titleToRemove);                        
                         titleEditor.ClearEditor(true);
+
                         LoadMovies();
                         PopulateMovieListV2(SelectedTreeRoot);
                     }
@@ -787,6 +843,8 @@ namespace OMLDatabaseEditor
             {
                 TitleCollectionManager.DeleteAllTitles();
                 LoadMovies();
+                PopulateMediaTree();
+                PopulateMovieListV2(SelectedTreeRoot);
             }
         }
 
@@ -828,8 +886,6 @@ namespace OMLDatabaseEditor
                 ToggleSaveState(true);
             }
         }
-
-
 
         private void lbMetadata_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -963,41 +1019,6 @@ namespace OMLDatabaseEditor
              */
         }
 
-        private void filterTitles_Click(object sender, EventArgs e)
-        {
-            Cursor = Cursors.WaitCursor;
-            ToolStripMenuItem filterItem = ((ToolStripMenuItem)sender);
-            // Uncheck all other filters
-            foreach (ToolStripMenuItem item in filterByCompletenessToolStripMenuItem.DropDownItems)
-                if (item != filterItem) item.Checked = false;
-            foreach (ToolStripMenuItem item in filterByGenreToolStripMenuItem.DropDownItems)
-                if (item != filterItem) item.Checked = false;
-            foreach (ToolStripMenuItem item in filterByParentalRatingToolStripMenuItem.DropDownItems)
-                if (item != filterItem) item.Checked = false;
-            foreach (ToolStripMenuItem item in filterByTagToolStripMenuItem.DropDownItems)
-                if (item != filterItem) item.Checked = false;
-
-            if (sender == allMoviesToolStripMenuItem1)
-            {
-                LoadMovies();
-            }
-            else
-            {
-/*                allMoviesToolStripMenuItem1.Checked = false;
-                if (filterItem.OwnerItem == filterByGenreToolStripMenuItem)
-                    _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Genre, filterItem.Text).ToList<Title>();
-                else if (filterItem.OwnerItem == filterByCompletenessToolStripMenuItem)
-                    _movieList = TitleCollectionManager.GetTitlesByPercentComplete(decimal.Parse("." + filterItem.Text.TrimEnd('%'))).ToList<Title>();
-                else if (filterItem.OwnerItem == filterByParentalRatingToolStripMenuItem)
-                    _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.ParentalRating, filterItem.Text).ToList<Title>();
-                else if (filterItem.OwnerItem == filterByTagToolStripMenuItem)
-                    _movieList = TitleCollectionManager.GetFilteredTitles(TitleFilterType.Tag, filterItem.Text).ToList<Title>();
-*/
-                PopulateMovieListV2(0);
-            }
-            Cursor = Cursors.Default;
-        }
-
         private void MainEditor_Load(object sender, EventArgs e)
         {
             // If the old DAT file still exists ask the user if they want to import those titles.
@@ -1016,14 +1037,14 @@ namespace OMLDatabaseEditor
                 }
 
                 coll.RenameDATCollection();
+
                 LoadMovies();
                 PopulateMediaTree();
                 PopulateMovieListV2(SelectedTreeRoot);
-
             }
         }
 
-         private void transcoderDiagnosticsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void transcoderDiagnosticsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string mediafile = "";
             // Search for a movie file in selected title/titles
@@ -1091,15 +1112,16 @@ namespace OMLDatabaseEditor
 
             if (e.Group == groupMediaTree)
             {
+                //LoadFolderSet();
+                PopulateMediaTree();
+
                 LoadMovies();
+                PopulateMovieListV2(SelectedTreeRoot);
 
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Dock = DockStyle.Fill;
                 splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
                 splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
                 splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = false;
-
-                PopulateMediaTree();
-                PopulateMovieListV2(SelectedTreeRoot);
             }
 
             if (e.Group == groupBioData)
