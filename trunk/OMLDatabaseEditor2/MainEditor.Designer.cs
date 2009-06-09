@@ -60,6 +60,7 @@ namespace OMLDatabaseEditor
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.filterByParentalRatingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.filterByTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,7 +76,6 @@ namespace OMLDatabaseEditor
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.filterByTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.splitContainerNavigator = new DevExpress.XtraEditors.SplitContainerControl();
             this.mainNav = new DevExpress.XtraNavBar.NavBarControl();
@@ -113,7 +113,7 @@ namespace OMLDatabaseEditor
             this.groupTitles = new DevExpress.XtraNavBar.NavBarGroup();
             this.navBarGroupControlContainer7 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.SortControl = new DevExpress.XtraEditors.PanelControl();
-            this.buttonEdit1 = new DevExpress.XtraEditors.ButtonEdit();
+            this.beSearch = new DevExpress.XtraEditors.ButtonEdit();
             this.lbTitles = new System.Windows.Forms.ListBox();
             this.cmsMoviesList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miMetadataMulti = new System.Windows.Forms.ToolStripMenuItem();
@@ -154,7 +154,7 @@ namespace OMLDatabaseEditor
             this.navBarControl1.SuspendLayout();
             this.navBarGroupControlContainer7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SortControl)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.buttonEdit1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.beSearch.Properties)).BeginInit();
             this.cmsMoviesList.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -410,6 +410,12 @@ namespace OMLDatabaseEditor
             this.filterByParentalRatingToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.filterByParentalRatingToolStripMenuItem.Text = "Filter By Parental Rating";
             // 
+            // filterByTagToolStripMenuItem
+            // 
+            this.filterByTagToolStripMenuItem.Name = "filterByTagToolStripMenuItem";
+            this.filterByTagToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.filterByTagToolStripMenuItem.Text = "Filter By Tag";
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -517,12 +523,6 @@ namespace OMLDatabaseEditor
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
-            // 
-            // filterByTagToolStripMenuItem
-            // 
-            this.filterByTagToolStripMenuItem.Name = "filterByTagToolStripMenuItem";
-            this.filterByTagToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.filterByTagToolStripMenuItem.Text = "Filter By Tag";
             // 
             // toolStripContainer1
             // 
@@ -905,7 +905,7 @@ namespace OMLDatabaseEditor
             // navBarGroupControlContainer7
             // 
             this.navBarGroupControlContainer7.Controls.Add(this.SortControl);
-            this.navBarGroupControlContainer7.Controls.Add(this.buttonEdit1);
+            this.navBarGroupControlContainer7.Controls.Add(this.beSearch);
             this.navBarGroupControlContainer7.Controls.Add(this.lbTitles);
             this.navBarGroupControlContainer7.Name = "navBarGroupControlContainer7";
             this.navBarGroupControlContainer7.Size = new System.Drawing.Size(193, 172);
@@ -922,16 +922,17 @@ namespace OMLDatabaseEditor
             this.SortControl.Paint += new System.Windows.Forms.PaintEventHandler(this.SortControl_Paint);
             this.SortControl.MouseClick += new System.Windows.Forms.MouseEventHandler(this.SortControl_MouseClick);
             // 
-            // buttonEdit1
+            // beSearch
             // 
-            this.buttonEdit1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.beSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonEdit1.Location = new System.Drawing.Point(3, 3);
-            this.buttonEdit1.Name = "buttonEdit1";
-            this.buttonEdit1.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            this.beSearch.Location = new System.Drawing.Point(3, 3);
+            this.beSearch.Name = "beSearch";
+            this.beSearch.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, global::OMLDatabaseEditor.Properties.Resources.searchicon, null)});
-            this.buttonEdit1.Size = new System.Drawing.Size(187, 23);
-            this.buttonEdit1.TabIndex = 3;
+            this.beSearch.Size = new System.Drawing.Size(187, 23);
+            this.beSearch.TabIndex = 3;
+            this.beSearch.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.beSearch_ButtonClick);
             // 
             // lbTitles
             // 
@@ -1105,7 +1106,7 @@ namespace OMLDatabaseEditor
             this.navBarControl1.ResumeLayout(false);
             this.navBarGroupControlContainer7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SortControl)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.buttonEdit1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.beSearch.Properties)).EndInit();
             this.cmsMoviesList.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
@@ -1201,7 +1202,7 @@ namespace OMLDatabaseEditor
         private OMLDatabaseEditor.Controls.BioDataEditor bioDataEditor;
         private OMLDatabaseEditor.Controls.GenreMetaDataEditor genreMetaDataEditor;
         private DevExpress.XtraEditors.ListBoxControl lbBioData;
-        private DevExpress.XtraEditors.ButtonEdit buttonEdit1;
+        private DevExpress.XtraEditors.ButtonEdit beSearch;
         private System.Windows.Forms.ContextMenuStrip cmsMediaTree;
         private System.Windows.Forms.ToolStripMenuItem miCreateMovieCollection;
         private System.Windows.Forms.ToolStripMenuItem miCreateMovie;

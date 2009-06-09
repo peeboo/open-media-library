@@ -301,7 +301,7 @@ namespace OMLDatabaseEditor
         #endregion
 
 
-        #region Title Loading
+        #region Title Loading & search
         private void filterTitles_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -346,6 +346,17 @@ namespace OMLDatabaseEditor
                 PopulateMovieListV2(SelectedTreeRoot);
             }
             Cursor = Cursors.Default;
+        }
+
+        private void beSearch_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
+        {
+            List<TitleFilter> tf = new List<TitleFilter>();
+            tf.Add(new TitleFilter(TitleFilterType.Name, beSearch.Text));
+
+            _movieList = (TitleCollectionManager.GetAllTitles(TitleTypes.AllFolders).
+                Concat(TitleCollectionManager.GetFilteredTitles(tf, TitleTypes.AllMedia)).ToDictionary(k => k.Id));
+
+            PopulateMovieListV2(SelectedTreeRoot);
         }
 
         private void LoadMovies()
@@ -1410,15 +1421,19 @@ namespace OMLDatabaseEditor
             {
                 Point p = new Point(e.X, e.Y);
                 TreeNode nodeUnderMouse = treeMedia.GetNodeAt(p);
+               
                 if (nodeUnderMouse != null)
                 {
-                    treeMedia.SelectedNode = nodeUnderMouse;
-
-                    if (nodeUnderMouse.Name != "All Media")
+                    if (e.X > nodeUnderMouse.Bounds.Left)
                     {
-                        int[] sitems = new int[1];
-                        sitems[0] = Convert.ToInt32(nodeUnderMouse.Name);
-                        lbTitles.DoDragDrop(sitems, DragDropEffects.Move);
+                        treeMedia.SelectedNode = nodeUnderMouse;
+
+                        if (nodeUnderMouse.Name != "All Media")
+                        {
+                            int[] sitems = new int[1];
+                            sitems[0] = Convert.ToInt32(nodeUnderMouse.Name);
+                            lbTitles.DoDragDrop(sitems, DragDropEffects.Move);
+                        }
                     }
                 }
             }
