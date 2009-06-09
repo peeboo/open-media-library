@@ -291,6 +291,10 @@ namespace OMLEngine.Dao
                     case TitleFilterType.DateAdded:
                         results = ApplyDateAddedFilter(lastQuery, filter.FilterText);
                         break;
+
+                    case TitleFilterType.Name:
+                        results = ApplyNameFilter(lastQuery, filter.FilterText);
+                        break;
                 }
             }
 
@@ -427,6 +431,19 @@ namespace OMLEngine.Dao
         {
             return from t in titles
                    where t.ParentalRating == rating
+                   select t;
+        }
+
+        /// <summary>
+        /// Returns all the titles that have a specific name
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="rating"></param>
+        /// <returns></returns>
+        private static IQueryable<Title> ApplyNameFilter(IQueryable<Title> titles, string name)
+        {
+            return from t in titles
+                   where t.Name.Contains(name)
                    select t;
         }
 
