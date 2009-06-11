@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.IO;
+using System.Management;
 
 namespace OMLEngine.FileSystem
 {
@@ -136,5 +138,37 @@ namespace OMLEngine.FileSystem
             public string lpComment = null;
             public string lpProvider = null;
         };
+
+        /// <summary>
+        /// Will return if the drive letter is a network drive and output the UNC path
+        /// </summary>
+        /// <param name="driveLetter"></param>
+        /// <param name="UNCPath"></param>
+        /// <returns></returns>
+        public static bool IsNetworkDrive(char driveLetter, out string UNCPath)
+        {
+            bool isUNCPath = false;
+
+            // make sure the drive exists
+            if (!Directory.Exists(driveLetter.ToString() + ":\\"))
+            {
+                UNCPath = driveLetter.ToString() + ":\\";
+                return isUNCPath;
+            }                        
+
+            ManagementObject management = new ManagementObject();
+
+            management.Path = new ManagementPath("Win32_LogicalDisk='" + driveLetter + ":'");                       
+
+            if (Convert.ToInt32(management["DriveType"]) == 4)
+            {
+                isUNCPath = true;
+                UNCPath = Convert.ToString(management["ProviderName"]);
+            }
+            else
+                UNCPath = driveLetter.ToString() + ":\\";
+
+            return isUNCPath;
+        }
     }
 }
