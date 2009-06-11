@@ -170,5 +170,52 @@ namespace OMLEngine.FileSystem
 
             return isUNCPath;
         }
+
+        public enum DriveTypes
+        {
+            Unknown = 0,
+            NoRootDirectory = 1,
+            RemovableDisk = 2,
+            LocalDisk = 3,
+            NetworkDrive = 4,
+            CompactDisc = 5,
+            RAMDisk = 6,
+        }
+
+        static public DriveTypes GetDriveType(char driveLetter)
+        {
+            /*bool isUNCPath = false;
+
+            // make sure the drive exists
+            if (!Directory.Exists(driveLetter.ToString() + ":\\"))
+            {
+                UNCPath = driveLetter.ToString() + ":\\";
+                return isUNCPath;
+            }*/
+
+            ManagementObject management = new ManagementObject();
+
+            management.Path = new ManagementPath("Win32_LogicalDisk='" + driveLetter + ":'");
+
+            return (DriveTypes)Convert.ToInt32(management["DriveType"]);
+
+        }
+
+        static public DriveTypes GetDriveType(string path)
+        {
+            if (!string.IsNullOrEmpty(path)
+                && !path.StartsWith("\\\\")
+                && path.Length > 2
+                && path[1] == ':')
+            {
+                // It is a local drive
+                return GetDriveType(path[0]);
+            }
+            else
+            {
+                // It is a UNC path
+                return DriveTypes.NetworkDrive;
+            }
+        }
     }
 }
