@@ -125,10 +125,10 @@
                               Source="..\..\PostInstallerWizard\bin\$(var.BuildType)\PostInstallerWizard.exe" Checksum="no" />
           </Component>
           
-          <Component Id="TranscoderTester.exe" Guid="2F7D11B3-70BD-4f2d-9EC1-730D28042BBF" DiskId="1" Win64="yes">
+          <!--Component Id="TranscoderTester.exe" Guid="2F7D11B3-70BD-4f2d-9EC1-730D28042BBF" DiskId="1" Win64="yes">
             <File Name="TranscoderTester.exe"
                 Source="..\..\TranscoderTester\bin\$(var.BuildType)\TranscoderTester.exe" Checksum="no" />
-          </Component>
+          </Component-->
           
           <Component Id="Maximizer.exe" Guid="e94299e1-62cd-4068-8861-052c8c7bec6c" Win64="yes" DiskId="1">
             <File Name="Maximizer.exe"
@@ -390,7 +390,7 @@
       <ComponentRef Id="OMLImporter.exe" />
       <ComponentRef Id="MEncoder.exe"/>
       <ComponentRef Id="MediaInfo.dll"/>
-      <ComponentRef Id="TranscoderTester.exe"/>
+      <!--ComponentRef Id="TranscoderTester.exe"/-->
       <ComponentRef Id="Maximizer.exe"/>
 
       <!-- Start Menu Shortcuts -->
