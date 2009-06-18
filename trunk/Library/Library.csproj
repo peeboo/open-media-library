@@ -118,6 +118,8 @@
     <Compile Include="Code\V3\Controls\LegacyHorizontalFlowLayoutHelper.cs" />
     <Compile Include="Code\V3\CollectionItem.cs" />
     <Compile Include="Code\V3\CollectionPage.cs" />
+    <Compile Include="Code\V3\Settings\StartMenuItemSettings.cs" />
+    <Compile Include="Code\V3\Settings\StartMenuSettings.cs" />
     <Compile Include="Code\V3\TrailerPivot.cs" />
     <Compile Include="Code\V3\TrailerItem.cs" />
     <Compile Include="Code\V3\TrailerPage.cs" />
@@ -356,6 +358,16 @@
     <Content Include="Markup\V3\Controls\Common\Copy of Colors.mcml" />
     <Content Include="Markup\V3\Controls\Common\FontNames.mcml" />
     <Content Include="Markup\V3\Controls\Common\Fonts.mcml" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Arrow.Down.Disabled.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Arrow.Down.Dormant.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Arrow.Down.Focus.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Arrow.Down.FocusOverlay.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Arrow.Down.NoFocus.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Arrow.Up.Disabled.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Arrow.Up.Dormant.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Arrow.Up.Focus.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Arrow.Up.FocusOverlay.png" />
+    <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Arrow.Up.NoFocus.png" />
     <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Remove.Disabled.png" />
     <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Remove.Dormant.png" />
     <Content Include="Markup\V3\Controls\Common\Images\V3.Controls.Remove.Focus.png" />
@@ -539,6 +551,9 @@
     <Content Include="Markup\V3\Loader.mcml" />
     <Content Include="Markup\V3\Settings\BackgroundSettings.mcml" />
     <Content Include="Markup\V3\Settings\AdditionalSettings.mcml" />
+    <Content Include="Markup\V3\Settings\StartMenuItemSettings.mcml" />
+    <Content Include="Markup\V3\Settings\StartMenuSettings.mcml" />
+    <Content Include="Markup\V3\Settings\ImageMountingSettingsAdvanced.mcml" />
     <Content Include="Markup\V3\Settings\FavoritesSettings.mcml" />
     <Content Include="Markup\V3\Settings\GallerySettings.mcml" />
     <Content Include="Markup\V3\Settings\GeneralSettings.mcml" />

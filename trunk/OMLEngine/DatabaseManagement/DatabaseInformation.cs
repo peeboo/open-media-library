@@ -155,7 +155,7 @@ namespace OMLEngine.DatabaseManagement
             {
                 if (!string.IsNullOrEmpty(SQLServerName))
                 {
-                    return "Server=" + ServerInstance + ";UID=sa;PWD=" + SAPassword + ";Database=master;Connect Timeout=5;";
+                    return "Server=" + ServerInstance + ";UID=sa;PWD=" + SAPassword + ";Database=master;Connect Timeout=50;";
                 }
                 else
                 {
@@ -170,7 +170,7 @@ namespace OMLEngine.DatabaseManagement
             {
                 if (!string.IsNullOrEmpty(SQLServerName))
                 {
-                    return "Server=" + ServerInstance + ";UID=" + OMLUserAcct + ";PWD=" + OMLUserPassword + ";Database=" + DatabaseName + ";Connect Timeout=5;";
+                    return "Server=" + ServerInstance + ";UID=" + OMLUserAcct + ";PWD=" + OMLUserPassword + ";Database=" + DatabaseName + ";Connect Timeout=50;";
                 }
                 else
                 {

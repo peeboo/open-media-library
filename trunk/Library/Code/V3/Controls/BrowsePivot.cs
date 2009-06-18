@@ -82,7 +82,7 @@ namespace Library.Code.V3
             }
         }
 
-        public void SetupContextMenu()
+        public virtual void SetupContextMenu()
         {
             #region ctx menu
             //create the context menu

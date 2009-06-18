@@ -200,11 +200,11 @@ namespace Library.Code.V3
                 }
             }
             //add favorites if we are root
-            if (this.filters == null || this.filters.Count == 0)
-            {
+            //if (this.filters == null || this.filters.Count == 0)
+            //{
                 //add the Favorites pivot
                 this.CreateFavoritesFilter();
-            }
+            //}
         }
 
         private void CreateFavoritesFilter()
@@ -212,7 +212,7 @@ namespace Library.Code.V3
             Library.Code.V3.FavoritesPivot favoritesPivot = new Library.Code.V3.FavoritesPivot(this, "favorites", "No titles were found.");
             favoritesPivot.ContentLabel = this.Description;
             this.Model.Pivots.Options.Add(favoritesPivot);
-            if (favoritesPivot.Description == Properties.Settings.Default.GalleryPivotChosen)
+            if ((this.filters == null || this.filters.Count == 0) && favoritesPivot.Description == Properties.Settings.Default.GalleryPivotChosen)
                 this.Model.Pivots.Chosen = favoritesPivot;
         }
 

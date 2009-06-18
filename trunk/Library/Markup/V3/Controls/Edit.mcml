@@ -39,9 +39,9 @@ xmlns:comm="res://Microsoft.MediaCenter.Shell!Globals.mcml"-->
       <Size Name="TextMinSize" Size="0, 30"/>
       <Inset Name="ContentMargins" Inset="15, 7, 15, 7"/>
       <Inset Name="LabelMargins" Inset="15, 5, 10, 5"/>
-      <Image Name="NoFocusImage" Image="resx://Library/Library.Resources/V3_Controls_Common_Find_EditBox_NoFocus"/>
-      <Image Name="FocusImage" Image="resx://Library/Library.Resources/V3_Controls_Common_Find_EditBox"/>
-      <Image Name="DisabledImage" Image="resx://Library/Library.Resources/V3_Controls_Common_Find_EditBox_NoFocus"/>
+      <Image Name="NoFocusImage" Source="resx://Library/Library.Resources/V3_Controls_Common_Find_EditBox_NoFocus" NineGrid="4,4,4,4"/>
+      <Image Name="FocusImage" Source="resx://Library/Library.Resources/V3_Controls_Common_Find_EditBox" NineGrid="4,4,4,4"/>
+      <Image Name="DisabledImage" Source="resx://Library/Library.Resources/V3_Controls_Common_Find_EditBox_NoFocus" NineGrid="4,4,4,4"/>
       <Color Name="NoFocusColor" Color="color://comm:LightBlue"/>
       <Color Name="FocusColor" Color="color://comm:OffWhite"/>
       <Color Name="DisabledColor" Color="color://comm:LightBlue40Percent"/>

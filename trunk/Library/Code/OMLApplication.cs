@@ -359,38 +359,77 @@ namespace Library
                         OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_Settings_SettingsManager", properties);
                         return;
                     }
+                case "Search":
+                    {
+                        Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                        Library.Code.V3.MoviesSearchPage page = new Library.Code.V3.MoviesSearchPage();
+                        properties["Page"] = page;
+                        properties["Application"] = OMLApplication.Current;
+
+                        OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_MoviesSearchPage", properties);
+                        return;
+                    }
                 case "Trailers":
                     {
                         OMLProperties properties = new OMLProperties();
                         properties.Add("Application", this);
-                        //properties.Add("UISettings", new UISettings());
-                        //properties.Add("Settings", new Settings());
                         properties.Add("I18n", I18n.Instance);
-                        //v3 main gallery
                         Library.Code.V3.TrailerPage gallery = new Library.Code.V3.TrailerPage("trailers");
                         Command CommandContextPopOverlay = new Command();
                         properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
                         properties.Add("Page", gallery);
                         _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
-                        //this.mediaChangers = new Library.Code.V3.MediaChangeManager();
+                        return;
+                    }
+                case "Custom1":
+                    {
+                        UserFilter filt = new UserFilter(OMLEngine.Properties.Settings.Default.StartMenuCustom1);
+                        this.GoHome(filt.Filters, filt.Name);
+                        return;
+                    }
+                case "Custom2":
+                    {
+                        UserFilter filt = new UserFilter(OMLEngine.Properties.Settings.Default.StartMenuCustom1);
+                        this.GoHome(filt.Filters, filt.Name);
+                        return;
+                    }
+                case "Custom3":
+                    {
+                        UserFilter filt = new UserFilter(OMLEngine.Properties.Settings.Default.StartMenuCustom1);
+                        this.GoHome(filt.Filters, filt.Name);
+                        return;
+                    }
+                case "Custom4":
+                    {
+                        UserFilter filt = new UserFilter(OMLEngine.Properties.Settings.Default.StartMenuCustom1);
+                        this.GoHome(filt.Filters, filt.Name);
+                        return;
+                    }
+                case "Custom5":
+                    {
+                        UserFilter filt = new UserFilter(OMLEngine.Properties.Settings.Default.StartMenuCustom1);
+                        this.GoHome(filt.Filters, filt.Name);
                         return;
                     }
                 default:
                     {
-                        OMLProperties properties = new OMLProperties();
-                        properties.Add("Application", this);
-                        //properties.Add("UISettings", new UISettings());
-                        //properties.Add("Settings", new Settings());
-                        properties.Add("I18n", I18n.Instance);
-                        //v3 main gallery
-                        Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(new List<OMLEngine.TitleFilter>(), "OML");
-                        //description
-                        gallery.Description = "OML";
-                        Command CommandContextPopOverlay = new Command();
-                        properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
-                        properties.Add("Page", gallery);
-                        _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
-                        //this.mediaChangers = new Library.Code.V3.MediaChangeManager();
+                        ////everything else for now
+                        //OMLProperties properties = new OMLProperties();
+                        //properties.Add("Application", this);
+                        ////properties.Add("UISettings", new UISettings());
+                        ////properties.Add("Settings", new Settings());
+                        //properties.Add("I18n", I18n.Instance);
+                        ////v3 main gallery
+                        //Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(new List<OMLEngine.TitleFilter>(), "OML");
+                        ////description
+                        //gallery.Description = "OML";
+                        //Command CommandContextPopOverlay = new Command();
+                        //properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
+                        //properties.Add("Page", gallery);
+                        //_session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
+                        ////this.mediaChangers = new Library.Code.V3.MediaChangeManager();
+                        this.GoHome(new List<OMLEngine.TitleFilter>(), "OML");
                         return;
                     }
             }
@@ -465,6 +504,23 @@ namespace Library
                     GoToMenu(new MovieGallery());
                     return;
             }
+        }
+
+        private void GoHome(List<OMLEngine.TitleFilter> filters, string name)
+        {
+            OMLProperties properties = new OMLProperties();
+            properties.Add("Application", this);
+            //properties.Add("UISettings", new UISettings());
+            //properties.Add("Settings", new Settings());
+            properties.Add("I18n", I18n.Instance);
+            //v3 main gallery
+            Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(filters, name);
+            //description
+            gallery.Description = name;
+            Command CommandContextPopOverlay = new Command();
+            properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
+            properties.Add("Page", gallery);
+            _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
         }
 
         public void GoToBackPage()

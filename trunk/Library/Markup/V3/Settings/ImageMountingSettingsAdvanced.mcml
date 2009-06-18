@@ -14,9 +14,9 @@
 	  xmlns:me="Me">
 
   <!-- A details page -->
-  <UI Name="ImageMountingSettings">
+  <UI Name="ImageMountingSettingsAdvanced">
     <Properties>
-      <shl:ImageMountingSettings Name="Page" ImageMountingSettings="$Required"/>
+      <shl:ImageMountingSettingsAdvanced Name="Page" ImageMountingSettingsAdvanced="$Required"/>
       <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
     </Properties>
     <Locals>
@@ -168,7 +168,7 @@
 
   <UI Name="ButtonsHolder">
     <Properties>
-      <shl:ImageMountingSettings Name="Page" ImageMountingSettings="$Required"/>
+      <shl:ImageMountingSettingsAdvanced Name="Page" ImageMountingSettingsAdvanced="$Required"/>
     </Properties>
     <Locals>
       <Color Name="ButtonNoFocusColor" Color="color://core:OffWhite"/>
@@ -212,7 +212,7 @@
   <!-- The primary display area of a details page -->
   <UI Name="DetailsPane">
     <Properties>
-      <shl:ImageMountingSettings Name="Page" ImageMountingSettings="$Required"/>
+      <shl:ImageMountingSettingsAdvanced Name="Page" ImageMountingSettingsAdvanced="$Required"/>
     </Properties>
     <Rules>
       <Binding Target="[ChkEnableImageMounting.Model]" Source="[Page.EnableImageMounting]"/>
@@ -288,7 +288,7 @@
                       <FormLayoutInput Left="ButtonsHolder,1" Top="ButtonsHolder, 0" Vertical="Fill" Horizontal="Fill"/>
                     </LayoutInput>
                     <Children>
-                      <Text Content="IMAGE MOUNTING" MaximumLines="1" WordWrap="false"  Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23">
+                      <Text Content="ADVANCED IMAGE MOUNTING" MaximumLines="1" WordWrap="false"  Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23">
                         <LayoutInput>
                           <AnchorLayoutInput Left="Parent,0" Top="Parent,0, -55"/>
                         </LayoutInput>
@@ -298,10 +298,10 @@
                           <AnchorLayoutInput Left="Parent,0, 60" Top="Parent,0, 70"/>
                         </LayoutInput>
                         <Children>
-                          <Text Content="[Page.DescriptiveText]" WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
-                          <chk:CheckBox Name="ChkEnableImageMounting" Margins="10,0,0,0" Model="[Page.EnableImageMounting]" Visible="[Page.MountingToolChoiceEnabled.Value]"/>
-                          <Graphic Content="resx://Library/Library.Resources/V3_Controls_Radio_DividerLine" Margins="-150,15,0,10" MinimumSize="620,3" Visible="[Page.MountingToolChoiceEnabled.Value]"/>
-                          <me:SubOptions Name="SubOptions" Page="[Page]" Visible="[Page.MountingToolChoiceEnabled.Value]"/>
+                          <!--Text Content="[Page.DescriptiveText]" WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/-->
+                          <chk:CheckBox Name="ChkEnableImageMounting" Margins="10,0,0,0" Model="[Page.EnableImageMounting]"/>
+                          <Graphic Content="resx://Library/Library.Resources/V3_Controls_Radio_DividerLine" Margins="-150,15,0,10" MinimumSize="620,3"/>
+                          <me:SubOptions Name="SubOptions" Page="[Page]"/>
                           <!--Graphic Content="resx://Library/Library.Resources/V3_Controls_Radio_DividerLine" Margins="-150,15,0,10" MinimumSize="620,3"/>
                           <ctl:Button Model="[Page.OptimizeNow]" TileSize="590,51" Margins="10,0,0,0" NoFocusImage="[ButtonNoFocusImage]"/-->
                         </Children>
@@ -318,7 +318,7 @@
   </UI>
   <UI Name="SubOptions">
     <Properties>
-      <shl:ImageMountingSettings Name="Page" ImageMountingSettings="$Required"/>
+      <shl:ImageMountingSettingsAdvanced Name="Page" ImageMountingSettingsAdvanced="$Required"/>
       <BooleanChoice  Name="Enabled" Value="false"/>
       <Image Name="ButtonNoFocusImage" Source="resx://Library/Library.Resources/V3_Controls_Common_Button_FirstRun_NoFocus" NineGrid="5,5,5,5"/>
     </Properties>
@@ -350,19 +350,7 @@
       <Panel Name="Root" Layout="VerticalFlow" Alpha=".4">
         <Children>
           <Text Content="Mounting Tool:" WordWrap="false" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
-          <Panel Layout="HorizontalFlow" Margins="15,0,0,0" Visible="[Page.EnableDaemonTools]">
-            <Children>
-              <Graphic Content="resx://Library/Library.Resources/V3_Controls_Common_GlobalSettings_RadioButton_Dormant" MaximumSize="50,50" SizingPolicy="SizeToConstraint"/>
-              <Text Color="color://core:LightBlue40Percent" Font="font://core:ButtonText" Margins="15, 5, 10, 5" Content="DAEMON Tools Lite (Not Installed)"/>
-            </Children>
-          </Panel>
           <radio:RadioGroup Model="[Page.MountingToolChoice]" Margins="15,0,0,0"/>
-          <Panel Layout="HorizontalFlow" Margins="15,0,0,0" Visible="[Page.EnableVirtualCloneDrive]">
-            <Children>
-              <Graphic Content="resx://Library/Library.Resources/V3_Controls_Common_GlobalSettings_RadioButton_Dormant" MaximumSize="50,50" SizingPolicy="SizeToConstraint"/>
-              <Text Color="color://core:LightBlue40Percent" Font="font://core:ButtonText" Margins="15, 5, 10, 5" Content="Virtual CloneDrive (Not Installed)"/>
-            </Children>
-          </Panel>
           <!--Panel Name="SpinnerPanel" Layout="HorizontalFlow" Margins="15,0,0,0" Navigation="RememberFocus">
             <Children>
               <spin:Spinner NoFocusImage="null" FocusImage="null" DisabledImage="null" Margins="10,-2,0,0" LabelMinSize="100,50" LabelMaxSize="100,50" Model="[Page.DriveOptions]"/>
@@ -370,6 +358,9 @@
             </Children>
           </Panel-->
           <!--edit:Edit ContentMinSize="250,32" ContentMaxSize="250,32" Model="[Page.MountingToolPath]"/-->
+          <Graphic Content="resx://Library/Library.Resources/V3_Controls_Radio_DividerLine" Margins="-150,15,0,10" MinimumSize="620,3"/>
+          <Text Content="Mounting Tool Path:" WordWrap="false" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
+          <edit:Edit Margins="15,0,0,0" ContentMinSize="450,32" ContentMaxSize="450,32" Model="[Page.MountingToolPath]"/>
           <Graphic Content="resx://Library/Library.Resources/V3_Controls_Radio_DividerLine" Margins="-150,15,0,10" MinimumSize="620,3"/>
           <Text Content="Virtual Drive:" WordWrap="false" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
           <Panel Layout="VerticalFlow" Margins="2,0,-705,0">

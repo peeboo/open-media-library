@@ -46,7 +46,7 @@ namespace OMLEngine.Settings
             }
         }
 
-        internal UserFilter(string serializedFilter)
+        public UserFilter(string serializedFilter)
         {
             filters = new List<TitleFilter>();
 
