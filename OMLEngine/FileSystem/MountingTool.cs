@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.IO;
+using System.Management;
+using Microsoft.Win32;
 
 /* This entire library is either completely taken
  * from or heavily influenced by code from the MediaPortal
@@ -57,11 +59,11 @@ namespace OMLEngine.FileSystem
             string strParams;
             switch (_Tool)
             {
-                case Tool.VirtualCloneDrive :
+                case Tool.VirtualCloneDrive:
                     strParams = string.Format("/l={0} \"{1}\"", _DriveNo, IsoFile);
                     break;
 
-                default :
+                default:
                     strParams = string.Format("-mount {0}, \"{1}\"", _DriveNo, IsoFile);
                     break;
 
@@ -102,11 +104,11 @@ namespace OMLEngine.FileSystem
             string strParams;
             switch (_Tool)
             {
-                case Tool.VirtualCloneDrive :
+                case Tool.VirtualCloneDrive:
                     strParams = "/u";
                     break;
 
-                default :
+                default:
                     strParams = string.Format("-unmount {0}", _DriveNo);
                     break;
             }
@@ -203,7 +205,7 @@ namespace OMLEngine.FileSystem
 
         // Functions for finding the mounting tool
         private const string DefaultDaemonToolsPath = @"Program Files\DAEMON Tools Lite\daemon.exe";
-        private const string DefaultVirtualCloneDrivePath = @"Program Files\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";        
+        private const string DefaultVirtualCloneDrivePath = @"Program Files\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";
 
         public string ScanForMountTool(Tool _tool, string _driveToScan)
         {
@@ -290,6 +292,104 @@ namespace OMLEngine.FileSystem
                 }
             }
             return string.Empty;
+        }
+
+        public static List<string> GetAvailableDriveLetters()
+        {
+            List<string> availableDriveList = new List<string>();
+            for (char c = 'C'; c <= 'Z'; c++)//A and B should be reserved for floppies, like anyone has them anymore
+                availableDriveList.Add(string.Format(@"{0}:\", new string(c, 1)));
+
+            string name = string.Empty;
+            SelectQuery query = new SelectQuery("select name from win32_logicaldisk where drivetype=3");
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+
+            //dump drive letters that have a physical drive assigned to them
+            foreach (ManagementObject mo in searcher.Get())
+            {
+                name = String.Format(@"{0}\", mo["name"].ToString());
+                if (availableDriveList.IndexOf(name) > -1)
+                    availableDriveList.RemoveAt(availableDriveList.IndexOf(name));
+            }
+
+            return availableDriveList;
+        }
+
+        public static string GetFirstFreeDriveLetter()
+        {
+            List<string> unavailableDriveList = new List<string>();
+
+            foreach (DriveInfo mo in System.IO.DriveInfo.GetDrives())
+            {
+                unavailableDriveList.Add(mo.Name);   
+            }
+
+            for (char c = 'C'; c <= 'Z'; c++)//A and B should be reserved for floppies, like anyone has them anymore
+            {
+                string selectedDrive = string.Format(@"{0}:\", new string(c, 1));
+                if (unavailableDriveList.IndexOf(selectedDrive) == -1)
+                    return selectedDrive;
+            }
+            return string.Empty;
+        }
+
+        private const string DaemonToolsRegistryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\DAEMON Tools Lite";
+        private const string VirtualCloneDriveRegistryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\VirtualCloneDrive";
+        private const string DaemonToolsExe = "daemon.exe";
+        private const string VirtualCloneDriveExe = "VCDMount.exe";
+        private const string DaemonToolsFolderPath = @"Program Files\DAEMON Tools Lite";
+        private const string VirtualCloneDriveFolderPath = @"Program Files\Elaborate Bytes\VirtualCloneDrive";
+
+        public static string GetMountingToolPath(Tool _tool)
+        {
+            string retStr = string.Empty;
+            RegistryKey mountKey = Registry.LocalMachine;
+            string exeName = string.Empty;
+            string regPath = string.Empty;
+            string defaultPath = string.Empty;
+            switch (_tool)
+            {
+                case MountingTool.Tool.DaemonTools:
+                    exeName = DaemonToolsExe;
+                    regPath = DaemonToolsRegistryPath;
+                    defaultPath = DaemonToolsFolderPath;
+                    break;
+
+                case MountingTool.Tool.VirtualCloneDrive:
+                    exeName = VirtualCloneDriveExe;
+                    regPath = VirtualCloneDriveRegistryPath;
+                    defaultPath = VirtualCloneDriveFolderPath;
+                    break;
+
+                default:
+                    return string.Empty;
+            }
+
+            string exePath = string.Empty;
+            mountKey = mountKey.OpenSubKey(regPath);
+            if (mountKey != null)
+                exePath = mountKey.GetValue("InstallLocation", string.Empty).ToString();
+            else
+            {
+                SelectQuery query = new SelectQuery("select name from win32_logicaldisk where drivetype=3");
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+                foreach (ManagementObject mo in searcher.Get())
+                {
+                    string name = String.Format(@"{0}\",mo["name"].ToString());
+                    if (Directory.Exists(Path.Combine(name, defaultPath)))
+                    {
+                        exePath = Path.Combine(name, defaultPath);
+                        break;
+                    }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(exePath) && (File.Exists(Path.Combine(exePath, exeName))))
+            {
+                retStr = Path.Combine(exePath, exeName);
+                Utilities.DebugLine("[Settings] Found Image Mounter: {0}", retStr);
+            }
+            return retStr;
         }
     }
 }

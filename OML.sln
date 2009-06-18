@@ -105,7 +105,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLDatabaseEditor2", "OMLDa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVDBMetadata", "TVDBMetadata\TVDBMetadata.csproj", "{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL Scripts", "SQL Scripts", "{828BF4C6-25FA-4889-AA01-70D9C344F247}"
+	ProjectSection(SolutionItems) = preProject
+		SQL Scripts\SQLConfigNoTools_x32.ini = SQL Scripts\SQLConfigNoTools_x32.ini
+		SQL Scripts\SQLConfigNoTools_x64.ini = SQL Scripts\SQLConfigNoTools_x64.ini
+		SQL Scripts\SQLConfigurationScript.sql = SQL Scripts\SQLConfigurationScript.sql
+		SQL Scripts\SQLConfigWithTools_x32.ini = SQL Scripts\SQLConfigWithTools_x32.ini
+		SQL Scripts\SQLConfigWithTools_x64.ini = SQL Scripts\SQLConfigWithTools_x64.ini
+		SQL Scripts\Title Database - Upgrade 1.1.sql = SQL Scripts\Title Database - Upgrade 1.1.sql
+		SQL Scripts\Title Database.sql = SQL Scripts\Title Database.sql
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -480,9 +495,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

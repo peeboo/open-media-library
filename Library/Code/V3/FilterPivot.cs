@@ -77,7 +77,7 @@ namespace Library.Code.V3
                 ((GalleryPage)this.Owner).settingsCmd_Invoked(sender, e);
         }
 
-        private void SetupContextMenu()
+        public override void SetupContextMenu()
         {
             #region ctx menu
             //create the context menu

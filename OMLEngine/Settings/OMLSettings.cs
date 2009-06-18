@@ -319,6 +319,12 @@ namespace OMLEngine.Settings
             set { SettingsManager.SaveSettingByName("VirtualDiscDriveNumber", value.ToString(), InstanceName); }
         }
 
+        public static bool MountingToolUseAdvanced
+        {
+            get { return SettingsManager.GetSettingByNameBool("MountingToolUseAdvanced", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("MountingToolUseAdvanced", value.ToString(), InstanceName); }
+        }
+
         #endregion
 
         #region Trailers

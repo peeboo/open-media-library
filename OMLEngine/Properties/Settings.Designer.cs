@@ -92,5 +92,65 @@ namespace OMLEngine.Properties {
                 return ((string)(this["OMLConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StartMenuCustom1 {
+            get {
+                return ((string)(this["StartMenuCustom1"]));
+            }
+            set {
+                this["StartMenuCustom1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StartMenuCustom2 {
+            get {
+                return ((string)(this["StartMenuCustom2"]));
+            }
+            set {
+                this["StartMenuCustom2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StartMenuCustom3 {
+            get {
+                return ((string)(this["StartMenuCustom3"]));
+            }
+            set {
+                this["StartMenuCustom3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StartMenuCustom4 {
+            get {
+                return ((string)(this["StartMenuCustom4"]));
+            }
+            set {
+                this["StartMenuCustom4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StartMenuCustom5 {
+            get {
+                return ((string)(this["StartMenuCustom5"]));
+            }
+            set {
+                this["StartMenuCustom5"] = value;
+            }
+        }
     }
 }

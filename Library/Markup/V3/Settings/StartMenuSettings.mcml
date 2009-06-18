@@ -1,24 +1,22 @@
 <Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
 	  xmlns:shl="assembly://Library/Library.Code.V3"
-      xmlns:omlShell ="assembly://Library/Library"
+    xmlns:omlShell ="assembly://Library/Library"
 	  xmlns:sys="assembly://mscorlib/System"
-	  xmlns:ctl="resx://Library/Library.Resources/V3_Controls"
 	  xmlns:core="resx://Library/Library.Resources/V3_Globals"
     xmlns:pip="resx://Library/Library.Resources/V3_GalleryPage"
-      xmlns:scr="resx://Library/Library.Resources/V3_Controls_ScrollControl"
-      xmlns:chk="resx://Library/Library.Resources/V3_Controls_CheckBox"
-      xmlns:edit="resx://Library/Library.Resources/V3_Controls_Edit"
-      xmlns:spin="resx://Library/Library.Resources/V3_Controls_Spinner"
-      xmlns:radio="resx://Library/Library.Resources/V3_Controls_RadioGroup"
-      xmlns:rb ="resx://Library/Library.Resources/V3_Controls_RadioButton" 
+    xmlns:listview="resx://Library/Library.Resources/V3_Controls_GroupedListView"
+    xmlns:ctl="resx://Library/Library.Resources/V3_Controls"
+    xmlns:radio="resx://Library/Library.Resources/V3_Controls_RadioGroup"
+    xmlns:wait="resx://Library/Library.Resources/V3_Controls_WaitCursor"
 	  xmlns:me="Me">
 
   <!-- A details page -->
-  <UI Name="ImageMountingSettings">
+  <UI Name="StartMenu">
     <Properties>
-      <shl:ImageMountingSettings Name="Page" ImageMountingSettings="$Required"/>
+      <shl:StartMenuSettings Name="Page" StartMenuSettings="$Required"/>
       <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
     </Properties>
+
     <Locals>
       <sys:Boolean Name="Initialized" Boolean="false"/>
       <Environment    Name="Environment"/>
@@ -38,10 +36,14 @@
       <EditableText   Name="TransitionState" Value="Idle"/>
       <!-- tracks the current transition to activate the right animations -->
       <EditableText   Name="ItemMode" Value="none"/>
-      <!-- dirty handler-->
-      <ShortcutHandler Name="BackHandler" Shortcut="Back" Handle="true" HandlerStage="Bubbled"/>
+
+      <Timer Name="TransitionTimer" Interval="0" Enabled="false" AutoRepeat="false"/>
     </Locals>
+
     <Rules>
+
+      <Binding Source="[Page.IsBusy]" Target="[WaitCursor.Visible]" />
+
       <Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
         <Actions>
           <Set Target="[FocusArea.Value]" Value="PIP"/>
@@ -52,6 +54,7 @@
           <Set Target="[FocusArea.Value]" Value="Gallery"/>
         </Actions>
       </Condition>
+
       <Rule>
         <Conditions>
           <Equality Source="[FocusArea.Value]" ConditionOp="Equals" Value="PIP"/>
@@ -84,20 +87,11 @@
 
       <Binding Target="[Background.FanArt]" Source="[Application.PrimaryBackgroundImage]"/>
       <Binding Target="[Background.FanArtAlpha]" Source="[Application.PrimaryBackgroundImageAlpha]"/>
-      <!-- dirty handler-->
-      <Rule>
-        <Conditions>
-          <Modified Source="[BackHandler.Invoked]"/>
-        </Conditions>
-        <Actions>
-          <Invoke Target="[Page.ConfirmSave]"/>
-        </Actions>
-      </Rule>
-      <!--end dirty handler-->
     </Rules>
     <Content>
       <Panel>
         <Children>
+          <wait:WaitCursorHost Name="WaitCursor" Visible="false"/>
           <Panel Name="PIPFocusBackground" MaximumSize="1366, 0" Visible="false">
             <Children>
 
@@ -159,7 +153,22 @@
 
             </Children>
           </Panel>
-          <core:AnimatedBackground Name="Background" FanArt="[Application.PrimaryBackgroundImage]"/>
+          <core:AnimatedBackground Name="Background" FanArt="[Application.PrimaryBackgroundImage]">
+            <Animations>
+              <Animation Type="Show">
+                <Keyframes>
+                  <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="Linear"  RelativeTo="Absolute"/>
+                  <AlphaKeyframe Time="2.01" Value="1.0" RelativeTo="Absolute"/>
+                </Keyframes>
+              </Animation>
+              <Animation Type="Hide">
+                <Keyframes>
+                  <AlphaKeyframe Time="0.00" RelativeTo="Current" Interpolation="SCurve"/>
+                  <AlphaKeyframe Time="1.01" Value="0.0" RelativeTo="Absolute"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+          </core:AnimatedBackground>
 
         </Children>
       </Panel>
@@ -168,7 +177,7 @@
 
   <UI Name="ButtonsHolder">
     <Properties>
-      <shl:ImageMountingSettings Name="Page" ImageMountingSettings="$Required"/>
+      <shl:StartMenuSettings Name="Page" StartMenuSettings="$Required"/>
     </Properties>
     <Locals>
       <Color Name="ButtonNoFocusColor" Color="color://core:OffWhite"/>
@@ -199,24 +208,28 @@
       </Condition>
     </Rules>
     <Content>
-      <Repeater Name="Buttons" Source="[Page.Commands]" Navigation="RememberFocus,FlowVertical" Layout="VerticalFlow" Margins="0,0,0,0">
-        <LayoutInput>
-          <AnchorLayoutInput Top="Parent,0" Horizontal="Near"/>
-        </LayoutInput>
-        <Content>
-          <ctl:Button Model="[RepeatedItem!Command]" SubFocusArea="[SubFocusArea]" NoFocusColor="[ButtonNoFocusColor]"/>
-        </Content>
-      </Repeater>
+      <Panel Layout="VerticalFlow">
+        <Children>
+          <Repeater Name="Buttons" Source="[Page.Commands]" Navigation="RememberFocus,FlowVertical" Layout="VerticalFlow" Margins="0,0,0,0">
+            <LayoutInput>
+              <AnchorLayoutInput Top="Parent,0" Horizontal="Near"/>
+            </LayoutInput>
+            <Content>
+              <ctl:Button Model="[RepeatedItem!Command]" SubFocusArea="[SubFocusArea]" NoFocusColor="[ButtonNoFocusColor]"/>
+            </Content>
+          </Repeater>
+        </Children>
+      </Panel>
     </Content>
   </UI>
+  
   <!-- The primary display area of a details page -->
   <UI Name="DetailsPane">
     <Properties>
-      <shl:ImageMountingSettings Name="Page" ImageMountingSettings="$Required"/>
+      <shl:StartMenuSettings Name="Page" StartMenuSettings="$Required"/>
     </Properties>
     <Rules>
-      <Binding Target="[ChkEnableImageMounting.Model]" Source="[Page.EnableImageMounting]"/>
-      <Binding Target="[SubOptions.Enabled]" Source="[ChkEnableImageMounting.Model]"/>
+      <Binding Source="[Page.StartMenuArray]" Target="[StartMenu.Content]" />
     </Rules>
     <Content>
       <Panel>
@@ -225,7 +238,7 @@
           <Animation Type="Show">
             <Keyframes>
               <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="SCurve" RelativeTo="Absolute"/>
-              <AlphaKeyframe Time="0.5" Value="1.0" RelativeTo="Absolute"/>
+              <AlphaKeyframe Time="1.01" Value="1.0" RelativeTo="Absolute"/>
             </Keyframes>
           </Animation>
 
@@ -233,7 +246,7 @@
           <Animation Type="Hide">
             <Keyframes>
               <AlphaKeyframe Time="0.00" RelativeTo="Current" Interpolation="SCurve"/>
-              <AlphaKeyframe Time="0.2" Value="0.0" RelativeTo="Absolute"/>
+              <AlphaKeyframe Time="1.01" Value="0.0" RelativeTo="Absolute"/>
             </Keyframes>
           </Animation>
         </Animations>
@@ -242,14 +255,14 @@
             <Children>
               <Clip FadeSize="25" MaximumSize="500,70" NearOffset="-40" Orientation="Vertical">
                 <Children>
-                  <!--Text Content="movie details" Color="203,255,255,255" Font="Segoe Media Center Light,28" Alpha=".75" CenterPointPercent="1,0,1"/-->
+                  <!--Text Content="movie detailsx" Color="203,255,255,255" Font="Segoe Media Center Light,28" Alpha=".75" CenterPointPercent="1,0,1"/-->
                   <Text Content="settings" Color="102, 151, 217, 255" Font="Segoe Media Center Light,28" Alpha=".92" CenterPointPercent="1,0,1"/>
                 </Children>
               </Clip>
             </Children>
           </Panel>
           <!-- main layout panel -->
-          <Panel Margins="205,85,205,0">
+          <Panel Margins="205,120,205,0">
             <Layout>
               <FlowLayout Orientation="Horizontal"/>
             </Layout>
@@ -257,11 +270,11 @@
               <!-- Grow create -->
               <Animation Type="Show" CenterPointPercent="0.5, 0.5, 1.0">
                 <Keyframes>
-                  <ScaleKeyframe Time="0.0" Value="0.0, 0.0, 0.0" Interpolation="Log" RelativeTo="Absolute"/>
-                  <ScaleKeyframe Time="0.5" Value="1.0, 1.0, 1.0" RelativeTo="Absolute"/>
+                  <ScaleKeyframe Time="0.0" Value="0.0, 0.0, 0.0" Interpolation="Log"/>
+                  <ScaleKeyframe Time=".70" Value="1.0, 1.0, 1.0" RelativeTo="Absolute"/>
 
-                  <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="Log" RelativeTo="Absolute"/>
-                  <AlphaKeyframe Time="0.5" Value="1.0" RelativeTo="Absolute"/>
+                  <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="Log"/>
+                  <AlphaKeyframe Time=".70" Value="1.0" RelativeTo="Absolute"/>
                 </Keyframes>
               </Animation>
               <!-- Shrink Destroy -->
@@ -278,7 +291,7 @@
             <Children>
               <Panel Layout="Form" Padding="0,0,0,0">
                 <Children>
-                  <me:ButtonsHolder Page="[Page]" Name="ButtonsHolder" MinimumSize="240,500" Margins="0,80,0,0" Layout="VerticalFlow">
+                  <me:ButtonsHolder Page="[Page]" Name="ButtonsHolder" MinimumSize="240,500" Margins="0,48,0,0" Layout="VerticalFlow">
                     <LayoutInput>
                       <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
                     </LayoutInput>
@@ -288,22 +301,29 @@
                       <FormLayoutInput Left="ButtonsHolder,1" Top="ButtonsHolder, 0" Vertical="Fill" Horizontal="Fill"/>
                     </LayoutInput>
                     <Children>
-                      <Text Content="IMAGE MOUNTING" MaximumLines="1" WordWrap="false"  Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23">
+                      <Text Content="START MENU" MaximumLines="1" WordWrap="false"  Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23">
                         <LayoutInput>
-                          <AnchorLayoutInput Left="Parent,0" Top="Parent,0, -55"/>
+                          <AnchorLayoutInput Left="Parent,0" Top="Parent,0, -95"/>
                         </LayoutInput>
                       </Text>
                       <Panel Layout="VerticalFlow">
                         <LayoutInput>
-                          <AnchorLayoutInput Left="Parent,0, 60" Top="Parent,0, 70"/>
+                          <AnchorLayoutInput Left="Parent,0, 0" Top="Parent,0, 25"/>
                         </LayoutInput>
                         <Children>
-                          <Text Content="[Page.DescriptiveText]" WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
-                          <chk:CheckBox Name="ChkEnableImageMounting" Margins="10,0,0,0" Model="[Page.EnableImageMounting]" Visible="[Page.MountingToolChoiceEnabled.Value]"/>
-                          <Graphic Content="resx://Library/Library.Resources/V3_Controls_Radio_DividerLine" Margins="-150,15,0,10" MinimumSize="620,3" Visible="[Page.MountingToolChoiceEnabled.Value]"/>
-                          <me:SubOptions Name="SubOptions" Page="[Page]" Visible="[Page.MountingToolChoiceEnabled.Value]"/>
-                          <!--Graphic Content="resx://Library/Library.Resources/V3_Controls_Radio_DividerLine" Margins="-150,15,0,10" MinimumSize="620,3"/>
-                          <ctl:Button Model="[Page.OptimizeNow]" TileSize="590,51" Margins="10,0,0,0" NoFocusImage="[ButtonNoFocusImage]"/-->
+                          <Text Content="Within OML you can have up to five custom items on the Open Media Library menu strip." WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255" Margins="0,0,0,10"/>
+                          <Panel Layout="Anchor" Margins="0,0,0,0" FocusOrder="0">
+                            <Children>
+                              <listview:ScrollingListStartMenu Name="StartMenu" Content="[Page.StartMenuArray]" GroupName="" Navigation="RememberFocus,Column">
+                                <LayoutInput>
+                                  <AnchorLayoutInput Bottom="Parent,1, -85"  Top="Parent,0, -45"  Left="Parent,0, 0"/>
+                                </LayoutInput>
+                                <ScrollingData>
+                                  <ScrollingData/>
+                                </ScrollingData>
+                              </listview:ScrollingListStartMenu>                            
+                          </Children>
+                          </Panel>
                         </Children>
                       </Panel>
                     </Children>
@@ -315,73 +335,9 @@
         </Children>
       </Panel>
     </Content>
+
   </UI>
-  <UI Name="SubOptions">
-    <Properties>
-      <shl:ImageMountingSettings Name="Page" ImageMountingSettings="$Required"/>
-      <BooleanChoice  Name="Enabled" Value="false"/>
-      <Image Name="ButtonNoFocusImage" Source="resx://Library/Library.Resources/V3_Controls_Common_Button_FirstRun_NoFocus" NineGrid="5,5,5,5"/>
-    </Properties>
-    <Rules>
-      <!--Default Target="[Input.Enabled]" Value="false" /-->
-      <!--Binding Target="[Input.Enabled]" Source="[Enabled.Value]"/-->
-      <Changed Source="[Enabled.Value]" InitialEvaluate="true">
-        <Conditions>
-          <Equality Source="[Enabled.Value]" Value="true"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[Input.Enabled]" Value="true" />
-          <Set Target="[Input.KeyInteractive]" Value="true" />
-          <Set Target="[Root.Alpha]" Value="1" />
-        </Actions>
-      </Changed>
-      <Changed Source="[Enabled.Value]" InitialEvaluate="true">
-        <Conditions>
-          <Equality Source="[Enabled.Value]" Value="false"/>
-        </Conditions>
-        <Actions>
-          <Set Target="[Input.Enabled]" Value="false" />
-          <Set Target="[Input.KeyInteractive]" Value="false" />
-          <Set Target="[Root.Alpha]" Value=".4" />
-        </Actions>
-      </Changed>
-    </Rules>
-    <Content>
-      <Panel Name="Root" Layout="VerticalFlow" Alpha=".4">
-        <Children>
-          <Text Content="Mounting Tool:" WordWrap="false" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
-          <Panel Layout="HorizontalFlow" Margins="15,0,0,0" Visible="[Page.EnableDaemonTools]">
-            <Children>
-              <Graphic Content="resx://Library/Library.Resources/V3_Controls_Common_GlobalSettings_RadioButton_Dormant" MaximumSize="50,50" SizingPolicy="SizeToConstraint"/>
-              <Text Color="color://core:LightBlue40Percent" Font="font://core:ButtonText" Margins="15, 5, 10, 5" Content="DAEMON Tools Lite (Not Installed)"/>
-            </Children>
-          </Panel>
-          <radio:RadioGroup Model="[Page.MountingToolChoice]" Margins="15,0,0,0"/>
-          <Panel Layout="HorizontalFlow" Margins="15,0,0,0" Visible="[Page.EnableVirtualCloneDrive]">
-            <Children>
-              <Graphic Content="resx://Library/Library.Resources/V3_Controls_Common_GlobalSettings_RadioButton_Dormant" MaximumSize="50,50" SizingPolicy="SizeToConstraint"/>
-              <Text Color="color://core:LightBlue40Percent" Font="font://core:ButtonText" Margins="15, 5, 10, 5" Content="Virtual CloneDrive (Not Installed)"/>
-            </Children>
-          </Panel>
-          <!--Panel Name="SpinnerPanel" Layout="HorizontalFlow" Margins="15,0,0,0" Navigation="RememberFocus">
-            <Children>
-              <spin:Spinner NoFocusImage="null" FocusImage="null" DisabledImage="null" Margins="10,-2,0,0" LabelMinSize="100,50" LabelMaxSize="100,50" Model="[Page.DriveOptions]"/>
-              <ctl:Button Model="[Page.ScanNow]" TileSize="590,51" Margins="10,0,0,0" NoFocusImage="[ButtonNoFocusImage]"/>
-            </Children>
-          </Panel-->
-          <!--edit:Edit ContentMinSize="250,32" ContentMaxSize="250,32" Model="[Page.MountingToolPath]"/-->
-          <Graphic Content="resx://Library/Library.Resources/V3_Controls_Radio_DividerLine" Margins="-150,15,0,10" MinimumSize="620,3"/>
-          <Text Content="Virtual Drive:" WordWrap="false" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
-          <Panel Layout="VerticalFlow" Margins="2,0,-705,0">
-            <!-- -705 margin is a hack for spinner-->
-            <Children>
-              <spin:Spinner ShowLabel="false" NoFocusImage="null" FocusImage="null" DisabledImage="null" LabelMinSize="450,51" Model="[Page.VirtualDriveOptions]"/>
-            </Children>
-          </Panel>
-        </Children>
-      </Panel>
-    </Content>
-  </UI>
+  
   <Animation Name="Browse.Gallery.Show.Focus" Type="Idle" CenterPointPercent="0.5, 0.5, 0.0">
     <Keyframes>
       <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>

@@ -43,6 +43,23 @@ namespace Library.Code.V3
             alphaCmd.Description = "Additional Settings";
             alphaCmd.Invoked += new EventHandler(alphaCmd_Invoked);
             this.Commands.Add(alphaCmd);
+
+            //start menu
+            Command startMenuCmd = new Command();
+            startMenuCmd.Description = "Start Menu";
+            startMenuCmd.Invoked += new EventHandler(startMenuCmd_Invoked);
+            this.Commands.Add(startMenuCmd);
+        }
+
+        void startMenuCmd_Invoked(object sender, EventArgs e)
+        {
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+
+            Library.Code.V3.StartMenuSettings page = new Library.Code.V3.StartMenuSettings();
+            properties["Page"] = page;
+            properties["Application"] = OMLApplication.Current;
+
+            OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_StartMenuSettings", properties);
         }
 
         void alphaCmd_Invoked(object sender, EventArgs e)
