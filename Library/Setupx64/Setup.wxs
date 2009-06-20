@@ -319,6 +319,8 @@
           <RegistryValue Id="reg6" Type="integer" Name="TimeStamp" Value="214505906" Action="write"/>
         </RegistryKey-->
         <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey" Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\Services\Movies\{543d0438-b10d-43d8-a20d-f0c96db4e6bd}" />
+        <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey1" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" />
+        <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey2" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\OML\Media Library" />
       </Component>
       <Component Id="registryFWS" Guid="1A746A98-A8D4-4e5e-B41F-5E6D6B8B5DFD" DiskId="1" Win64="yes">
         <RegistryKey Id="registryFWS0" Root="HKCU" Key="Software\OpenMediaLibrary" Action="createAndRemoveOnUninstall">
