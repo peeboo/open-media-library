@@ -296,7 +296,7 @@
           <RegistryValue Id="reg3" Type="string" Name="OnStartMenu" Value="True" Action="write"/>
           <RegistryValue Id="reg4" Type="integer" Name="TimeStamp" Value="214505905" Action="write"/>
         </RegistryKey>
-        <RegistryKey Id="registry1" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\OML\Media Library" Action="create"/>
+        <RegistryKey Id="registry1" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\OML\Open Media Library" Action="create"/>
         <RegistryKey Id="registry2" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Entry Points\{1044a023-44cc-401c-a5df-4f58601f1f57}" Action="create">
           <RegistryValue Id="reg5" Type="expandable" Name="AddIn" Value="Library.MyAddIn, Library,Culture=Neutral,Version=3.0.0.0,PublicKeyToken=74d3b407d6cf16f1" Action="write"/>
           <RegistryValue Id="reg6" Type="string" Name="AppId" Value="{3f0850a7-0fd7-4cbf-b8dc-c7f7ea31534e}" Action="write"/>
