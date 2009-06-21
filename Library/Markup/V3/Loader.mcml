@@ -2,6 +2,9 @@
       xmlns:wait="resx://Library/Library.Resources/V3_Controls_WaitCursor"
 	  xmlns:cor="assembly://MSCorLib/System">
 	<UI Name="Loader">
+    <Rules>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+    </Rules>
 		<Content>
       <wait:WaitCursorHost Name="WaitCursor" Visible="true"/>
 		</Content>
