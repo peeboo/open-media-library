@@ -295,6 +295,10 @@ namespace OMLEngine.Dao
                     case TitleFilterType.Name:
                         results = ApplyNameFilter(lastQuery, filter.FilterText);
                         break;
+
+                    case TitleFilterType.Parent:
+                        results = ApplyParentFilter(lastQuery, filter.FilterText);
+                        break;
                 }
             }
 
@@ -304,6 +308,23 @@ namespace OMLEngine.Dao
                    select t;
         }
 
+        /// <summary>
+        /// Applies the parent filter, this will return all titles that have the given parent id
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        private static IQueryable<Title> ApplyParentFilter(IQueryable<Title> titles, string parent)
+        {
+            int parentId;
+
+            if (!int.TryParse(parent, out parentId))
+                return from t in titles select t;
+
+            return from t in titles
+                   where t.ParentTitleId == parentId
+                   select t;
+        }
 
         /// <summary>
         /// Applies the rating filter

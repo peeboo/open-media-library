@@ -23,7 +23,8 @@ namespace OMLEngine
         UserRating,        
         PercentComplete,
         DateAdded,
-        Name
+        Name,
+        Parent
     }
 
     public class TitleFilter
