@@ -37,7 +37,7 @@ xmlns:comm="res://Microsoft.MediaCenter.Shell!Globals.mcml"-->
       <Size Name="ContentMinSize" Size="150, 32"/>
       <Size Name="ContentMaxSize" Size="150, 32"/>
       <Size Name="TextMinSize" Size="0, 30"/>
-      <Inset Name="ContentMargins" Inset="15, 7, 15, 7"/>
+      <Inset Name="ContentMargins" Inset="5, 7, 5, 7"/>
       <Inset Name="LabelMargins" Inset="15, 5, 10, 5"/>
       <Image Name="NoFocusImage" Source="resx://Library/Library.Resources/V3_Controls_Common_Find_EditBox_NoFocus" NineGrid="4,4,4,4"/>
       <Image Name="FocusImage" Source="resx://Library/Library.Resources/V3_Controls_Common_Find_EditBox" NineGrid="4,4,4,4"/>
@@ -48,7 +48,7 @@ xmlns:comm="res://Microsoft.MediaCenter.Shell!Globals.mcml"-->
       <cor:String Name="AccessibilityName" String="null"/>
       <cor:String Name="AccessibilityDesc" String="null"/>
       <cor:Int32 Name="MaxLength" Int32="32000" />
-      <cor:Boolean Name="UseTripleTap" Boolean="false" />
+      <cor:Boolean Name="UseTripleTap" Boolean="true" />
     </Properties>
     <Locals>
       <TypingHandler Name="Typer"/>
@@ -85,6 +85,7 @@ xmlns:comm="res://Microsoft.MediaCenter.Shell!Globals.mcml"-->
       </Changed-->
       <Binding Source="[Model.Overtype]" Target="[Overtype.Visible]"/>
       <Binding Source="[Typer.DisplayValue]" Target="[Value.Content]"/>
+      <Binding Source="[Typer.DisplayValue]" Target="[Overtype.Content]"/>
       <Binding Source="[Model.Description]" Target="[Label.Content]"/>
       <Binding Target="[Typer.EditableText]" Source="[Model]"/>
       <Binding Target="[Typer.PasswordMasked]" Source="[PasswordMasked]"/>
@@ -115,11 +116,12 @@ xmlns:comm="res://Microsoft.MediaCenter.Shell!Globals.mcml"-->
                         </LayoutInput-->
                       </Text>
                       <!--ColorFill Name="Overtype" Layout="LegacyFill" Content="255, 126, 185, 227"/-->
-                      <ColorFill Name="Overtype" Layout="Fill" Content="255, 126, 185, 227"/>
+                      <!--ColorFill Name="Overtype" Layout="LegacyFill" Content="255, 126, 185, 227"/-->
+                      <Text Name="Overtype" BackColor="255, 126, 185, 227" Color="Transparent" HorizontalAlignment="Far" Font="[Font]"/>
                     </Children>
                   </Panel>
                   <!--Graphic Name="Caret" Visible="false" Image="res://ehres!Edit.Mirror.Caret.png" MaximumSize="[CaretSize]"-->
-                  <Graphic Name="Caret" Visible="false" Content="resx://Library/Library.Resources/V3_Controls_Common_Edit_Mirror_Caret" MaximumSize="[CaretSize]">
+                  <Graphic Name="Caret" Visible="false" Content="resx://Library/Library.Resources/V3_Controls_Common_Edit_Caret" MaximumSize="[CaretSize]">
                     <!--Animation>
                       animation://comm:CaretBlink.Show
                     </Animation>
