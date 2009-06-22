@@ -133,6 +133,11 @@ namespace PostInstallerWizard
                     // we can connect and check the schema version
                     (WizStart as Wiz_Start).lMessage1.Text = "This wizard has detected an existing installation of OML!";
                     (WizStart as Wiz_Start).lMessage2.Text = "Press Next to begin checking the database.";
+
+                    sapassword = OMLEngine.DatabaseManagement.DatabaseInformation.SAPassword;
+                    instancename = OMLEngine.DatabaseManagement.DatabaseInformation.SQLInstanceName;
+                    servername = OMLEngine.DatabaseManagement.DatabaseInformation.SQLServerName;
+
                     WizardAction = WizardActions.CheckAndUpgradeSchema;
                 }
                 else
@@ -310,6 +315,27 @@ namespace PostInstallerWizard
         /// <param name="newpage"></param>
         private void SetWizardPage(Control newpage)
         {
+            // Manage forward / next buttons
+            if (newpage == WizStart)
+            {
+                buttonBack.Enabled = false;
+            }
+            else
+            {
+                buttonBack.Enabled = true;
+            }
+
+            if (newpage == WizEnd)
+            {
+                buttonNext.Text = "Finish";
+                buttonBack.Enabled = false;
+            }
+            else
+            {
+                buttonNext.Text = "Next";
+                buttonBack.Enabled = true;
+            }
+
             CurrentPage = newpage;
 
             if (WizPages.Count > 0)
@@ -450,6 +476,12 @@ namespace PostInstallerWizard
    
                 // Retest the connection
                 state = dbm.CheckDatabase();
+            }
+
+            if (state == OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OK)
+            {
+                MessageBox.Show("The database appears all fine.", "Database status", MessageBoxButtons.OK);
+                return;
             }
         }
 
