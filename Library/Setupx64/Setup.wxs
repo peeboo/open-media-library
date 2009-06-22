@@ -176,6 +176,10 @@
               <File Name="Title Database.sql"
                                 Source="..\..\SQL Scripts\Title Database.sql" Checksum="no" />
             </Component>
+            <Component Id="TitleDatabaseUpgrade1.1.sql" Guid="81162A55-6145-419a-93A0-8AA5855542FC" Win64="yes" DiskId="1">
+              <File Name="Title Database - Upgrade 1.1.sql"
+                                Source="..\..\SQL Scripts\Title Database - Upgrade 1.1.sql" Checksum="no" />
+            </Component>
             <Component Id="SQLConfigNoTools_x64.ini" Guid="F35FE429-19F9-4d7f-ABDD-CD2F0F01F170" Win64="yes" DiskId="1">
               <File Name="SQLConfigNoTools_x64.ini"
                                 Source="..\..\SQL Scripts\SQLConfigNoTools_x64.ini" Checksum="no" />
@@ -413,6 +417,7 @@
       <ComponentRef Id="OMLEngine.dll" />
       <ComponentRef Id="PostInstallerWizard.exe"/>
       <ComponentRef Id ="TitleDatabase.sql"/>
+      <ComponentRef Id="TitleDatabaseUpgrade1.1.sql"/>
       <ComponentRef Id ="SQLConfigNoTools_x64.ini"/>
     </ComponentGroup>  
 

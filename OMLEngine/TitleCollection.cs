@@ -91,7 +91,15 @@ namespace OMLEngine
                 File.Delete(BackupFileName);
 
             if (File.Exists(_database_filename))
-                File.Move(_database_filename, BackupFileName);
+            {
+                try
+                {
+                    File.Move(_database_filename, BackupFileName);
+                }
+                catch
+                {
+                }
+            }
         }               
     }    
 }
