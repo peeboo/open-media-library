@@ -47,7 +47,13 @@ namespace OMLDatabaseEditor
         LinearGradientBrush _brushTitleListSelected;
         LinearGradientBrush _brushTitleListFolder;
         LinearGradientBrush _brushTitleListFolderSelected;
-
+        LinearGradientBrush _brushTitleList0;
+        LinearGradientBrush _brushTitleList30;
+        LinearGradientBrush _brushTitleList40;
+        LinearGradientBrush _brushTitleList50;
+        LinearGradientBrush _brushTitleList60;
+        LinearGradientBrush _brushTitleList70;
+        LinearGradientBrush _brushTitleList80;
         #region Initialisation
         public MainEditor()
         {
@@ -64,7 +70,6 @@ namespace OMLDatabaseEditor
             splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
             splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = false;
             splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
-
         }
 
 
@@ -102,7 +107,7 @@ namespace OMLDatabaseEditor
             LoadMovies();
             PopulateMediaTree();
             PopulateMovieListV2(SelectedTreeRoot);
-            
+
             SplashScreen2.SetStatus(80, "Loading MRU Lists.");
             this.titleEditor.SetMRULists();
 
@@ -431,7 +436,10 @@ namespace OMLDatabaseEditor
                 {
                     // Force reload of title
                     titleEditor.EditedTitle.ReloadTitle();
-                    lbTitles.Refresh();
+                    titleEditor.LoadDVD(_movieList[titleEditor.EditedTitle.Id]);
+                    this.Text = APP_TITLE + " - " + titleEditor.EditedTitle.Name;
+                    lvTitles.Refresh();
+                    ToggleSaveState(false);
                 }
             }
             else
@@ -691,7 +699,7 @@ namespace OMLDatabaseEditor
                 }
 
                 titleEditor.SaveChanges();
-                lbTitles.Refresh();
+                lvTitles.Refresh();
 
                 if ((editedTitle.TitleType & TitleTypes.AllFolders) != 0)
                 {
@@ -960,10 +968,15 @@ namespace OMLDatabaseEditor
 
             //BaseListBoxControl.SelectedItemCollection collection = lbMovies.SelectedItems;
             pgbProgress.Visible = true;
-            pgbProgress.Maximum = lbTitles.SelectedItems.Count;
+            pgbProgress.Maximum = lvTitles.SelectedItems.Count;
             pgbProgress.Value = 0;
-            foreach (Title title in lbTitles.SelectedItems)
+
+            ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
+
+            foreach (ListViewItem item in sic)
             {
+                Title title = _movieList[Convert.ToInt32(item.Text)];
+
                 pgbProgress.Value++;
                 statusText.Text = "Getting metadata for " + title.Name;
                 Application.DoEvents();
@@ -989,10 +1002,15 @@ namespace OMLDatabaseEditor
         private void fromPreferredSourcesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pgbProgress.Visible = true;
-            pgbProgress.Maximum = lbTitles.SelectedItems.Count;
+            pgbProgress.Maximum = lvTitles.SelectedItems.Count;
             pgbProgress.Value = 0;
-            foreach (Title title in lbTitles.SelectedItems)
+
+            ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
+
+            foreach (ListViewItem item in sic)
             {
+                Title title = _movieList[Convert.ToInt32(item.Text)];
+
                 pgbProgress.Value++;
                 statusText.Text = "Getting metadata for " + title.Name;
                 Application.DoEvents();
@@ -1062,8 +1080,13 @@ namespace OMLDatabaseEditor
         {
             string mediafile = "";
             // Search for a movie file in selected title/titles
-            foreach (Title title in lbTitles.SelectedItems)
+                        
+            ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
+
+            foreach (ListViewItem item in sic)
             {
+                Title title = _movieList[Convert.ToInt32(item.Text)];
+
                 foreach (Disk disk in title.Disks)
                 {
                     if (disk.Path != "")
@@ -1293,7 +1316,7 @@ namespace OMLDatabaseEditor
 
         private void treeMedia_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            lbTitles.Items.Clear();
+            lvTitles.Items.Clear();
             if (!string.IsNullOrEmpty(e.Node.Name))
             {
                 if (treeMedia.SelectedNode.Name == "All Media")
@@ -1461,7 +1484,8 @@ namespace OMLDatabaseEditor
                         {
                             int[] sitems = new int[1];
                             sitems[0] = Convert.ToInt32(nodeUnderMouse.Name);
-                            lbTitles.DoDragDrop(sitems, DragDropEffects.Move);
+                            treeMedia.DoDragDrop(sitems, DragDropEffects.Move);
+                            //lbTitles.DoDragDrop(sitems, DragDropEffects.Move);
                         }
                     }
                 }
@@ -1475,8 +1499,7 @@ namespace OMLDatabaseEditor
         {
             this.Cursor = Cursors.WaitCursor;
 
-            lbTitles.Items.Clear();
-
+            lvTitles.Items.Clear();
             if (roottitleid != null)
             {
                 // We are looking at a parent item
@@ -1484,19 +1507,18 @@ namespace OMLDatabaseEditor
             }
             else
             {
-                // We are looking at all items including root items
-                Title amt = new Title();
-                amt.Name = "All Media";
-                amt.TitleType = TitleTypes.Collection;
-                lbTitles.Items.Add(amt);
-
+                lvTitles.Items.Add("All Media", "All Media", null);
+             
                 // Get All Root Titles
                 var titles = (from t in _movieList
                               where (t.Value.TitleType & TitleTypes.AllMedia) != 0 &&
                               (t.Value.TitleType & TitleTypes.Root) != 0
                               select t.Value).ToList();
 
-                lbTitles.Items.AddRange(SortTitles(titles).ToArray());
+                foreach (Title t in titles)
+                {
+                    lvTitles.Items.Add(t.Id.ToString(), t.Id.ToString(), null);
+                }
 
                 // Get All Root Folders
                 titles = (from t in _movieList
@@ -1512,10 +1534,19 @@ namespace OMLDatabaseEditor
             }
 
 
+            // Disabled
+            /*
             if (titleEditor.EditedTitle != null)
             {
-                lbTitles.SelectedItem = TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
-            }
+                lvTitles.SelectedItems.Clear();
+                if (lvTitles.Items.ContainsKey(titleEditor.EditedTitle.Id.ToString()))
+                {
+                    lvTitles.Items[titleEditor.EditedTitle.Id.ToString()].Selected = true;
+                }
+            }*/
+
+            // Set the width of the list view column to ensure painting has the correct width
+            lvTitles.Columns[0].Width = lvTitles.ClientRectangle.Width;
 
             this.Cursor = Cursors.Default;
         }
@@ -1526,8 +1557,7 @@ namespace OMLDatabaseEditor
             {
                 if (_movieList.ContainsKey((int)roottitleid))
                 {
-
-                    lbTitles.Items.Add(_movieList[(int)roottitleid]);
+                    lvTitles.Items.Add(roottitleid.ToString(), roottitleid.ToString(), null);
 
                     // Get All Root Titles
                     var titles = (from t in _movieList
@@ -1535,7 +1565,11 @@ namespace OMLDatabaseEditor
                                   t.Value.ParentTitleId == roottitleid
                                   select t.Value).ToList();
 
-                    lbTitles.Items.AddRange(SortTitles(titles).ToArray());
+                    
+                    foreach (Title t in titles)
+                    {
+                        lvTitles.Items.Add(t.Id.ToString(), t.Id.ToString(), null);
+                    }
 
                     // Get All Root Folders
                     titles = (from t in _movieList
@@ -1555,26 +1589,48 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private void lbTitles_DrawItem(object sender, DrawItemEventArgs e)
+        private void lvTitles_DrawItem(object sender, DrawListViewItemEventArgs e)
         {
+            //if (e.Index < 0) return;
+
+            // Find the printing bounds
+            int x = e.Bounds.X;
+            int y = e.Bounds.Y;
+            //int w = e.Bounds.Width;
+            //int w = lvTitles.Size.Width - 20;
+            int w = lvTitles.ClientRectangle.Width;
+            int h = e.Bounds.Height;
+
             // Create the brushes
             if (_brushTitleListSelected == null)
             {
                 _brushTitleListSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.LimeGreen, Color.PaleGreen);
                 _brushTitleListFolder = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.Gainsboro, Color.Silver);
                 _brushTitleListFolderSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.Silver, Color.LightGreen);
+                
+                _brushTitleList0 = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), Color.Coral, Color.Crimson, 2);
+                _brushTitleList30 = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), Color.CornflowerBlue, Color.CadetBlue, 2);
+                _brushTitleList40 = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), Color.MediumSpringGreen, Color.LightSeaGreen, 2);
+                _brushTitleList50 = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), Color.Yellow, Color.Gold, 2);
+                _brushTitleList60 = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), Color.Silver, Color.SkyBlue, 2);
+                _brushTitleList70 = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), Color.SkyBlue, Color.White, 2);
             }
 
-            if (e.Index < 0) return;
 
-            Title currentTitle = ((Title)lbTitles.Items[e.Index]);
+            Title currentTitle = null;
 
-            // Find the printing bounds
-            int x = e.Bounds.X;
-            int y = e.Bounds.Y;
-            int w = e.Bounds.Width;
-            int h = e.Bounds.Height;
+            if (e.Item.Text == "All Media")
+            {
+                currentTitle = new Title();
+                currentTitle.Name = e.Item.Text;
+                currentTitle.TitleType = TitleTypes.Collection;
+            }
+            else
+            {
+                currentTitle = _movieList[Convert.ToInt32(e.Item.Text)];
+            }
 
+           
             // Setup string formatting
             StringFormat stf = new StringFormat();
             stf.Trimming = StringTrimming.EllipsisCharacter;
@@ -1586,7 +1642,7 @@ namespace OMLDatabaseEditor
             if ((currentTitle.TitleType & TitleTypes.AllFolders) != 0)
             {
                 // Folder specific paint goes here
-                if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                if (lvTitles.SelectedItems.ContainsKey(currentTitle.Id.ToString()))
                 {
                     e.Graphics.FillRectangle(_brushTitleListFolderSelected, x, y, w, h);
                 }
@@ -1598,7 +1654,7 @@ namespace OMLDatabaseEditor
             }
             else
             {
-                if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                if (lvTitles.SelectedItems.ContainsKey(currentTitle.Id.ToString()))
                 {
                     e.Graphics.FillRectangle(_brushTitleListSelected, x, y, w, h);
                 }
@@ -1609,38 +1665,32 @@ namespace OMLDatabaseEditor
                 e.Graphics.DrawString(currentTitle.Runtime.ToString() + " minutes, " + currentTitle.Studio, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Gray), new RectangleF(8, y + 16, w - 40, h), stf);
 
                 // Draw percentage complete box
-                Color c1 = Color.Coral;
-                Color c2 = Color.Crimson;
+                LinearGradientBrush bb = _brushTitleList0;
+
                 if (currentTitle.PercentComplete <= .3M)
                 {
+                    bb = _brushTitleList30;
                 }
                 else if (currentTitle.PercentComplete <= .4M)
-                {
-                    c1 = Color.CornflowerBlue;
-                    c2 = Color.CadetBlue;
+                {     
+                    bb = _brushTitleList40;
                 }
                 else if (currentTitle.PercentComplete <= .5M)
                 {
-                    c1 = Color.MediumSpringGreen;
-                    c2 = Color.LightSeaGreen;
+                    bb = _brushTitleList50;
                 }
                 else if (currentTitle.PercentComplete <= .6M)
                 {
-                    c1 = Color.Yellow;
-                    c2 = Color.Gold;
+                    bb = _brushTitleList60;
                 }
                 else if (currentTitle.PercentComplete <= .7M)
                 {
-                    c1 = Color.Silver;
-                    c2 = Color.SkyBlue;
+                    bb = _brushTitleList70;
                 }
                 else if (currentTitle.PercentComplete <= .8M)
-                {
-                    c1 = Color.SkyBlue;
-                    c2 = Color.White;
+                {                 
+                    bb = _brushTitleList80;
                 }
-
-                LinearGradientBrush bb = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), c1, c2, 2);
 
                 e.Graphics.FillEllipse(bb, new Rectangle(x + w - 30, y + 16, 14, 14));
                 e.Graphics.DrawEllipse(new Pen(Color.Black), new Rectangle(x + w - 30, y + 16, 14, 14));
@@ -1649,53 +1699,77 @@ namespace OMLDatabaseEditor
             // Common painting goes here
             e.Graphics.DrawLine(new Pen(Color.Gray), 0, y + h - 1, w, y + h - 1);
         }
-
-        private void lbTitles_MouseDown(object sender, MouseEventArgs e)
+      
+        private void lvTitles_MouseMove(object sender, MouseEventArgs e)
         {
-            int indexOfItem = lbTitles.IndexFromPoint(e.X, e.Y);
-            if ((indexOfItem >= 0) && (indexOfItem < lbTitles.Items.Count))
+            if (e.Button == MouseButtons.Left)
             {
-
-                //if (e.Button == MouseButtons.Right)
-                //{
-                   /* Point p = new Point(e.X, e.Y);
-
-                    if ((Control.ModifierKeys & (Keys.Alt | Keys.Control | Keys.Shift)) == 0)
-                    {
-                        lbTitles.SelectedItems.Clear();
-                    }
-                    lbTitles.SelectedIndex = indexOfItem;*/
-                //}
-
-                if (e.Button == MouseButtons.Left)
-                {
-                    int [] sitems = (from Title si in lbTitles.SelectedItems
-                                    select ((Title)si).Id).ToArray();
-                    lbTitles.DoDragDrop(sitems, DragDropEffects.Move);
-                    lbTitles_SelectedIndexChanged();
-
-                }
+                ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
+                
+                int[] sitems = (from ListViewItem si in sic
+                                select Convert.ToInt32(si.Text)).ToArray();
+                lvTitles.DoDragDrop(sitems, DragDropEffects.Move);
             }
         }
 
-        private void lbTitles_SelectedIndexChanged(object sender, EventArgs e)
+        private void lvTitles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lbTitles_SelectedIndexChanged();
+            lvTitles_SelectedIndexChanged();
+            //lvTitles.Refresh();
         }
 
-        private void lbTitles_SelectedIndexChanged()
+        bool cancellingsave = false;
+        private void lvTitles_SelectedIndexChanged()
         {
             if (_loading) return;
+
+            // This gets called on both clearing a selection and selecting a new title.
+            // Don't check the clearing
+            if (lvTitles.SelectedItems.Count == 0) return;
+
             Cursor = Cursors.WaitCursor;
-            if (SaveCurrentMovie() == DialogResult.Cancel)
-            {
-                _loading = true; //bypasses second save movie dialog
-                lbTitles.SelectedItem = TitleCollectionManager.GetTitle(titleEditor.EditedTitle.Id);
-                _loading = false;
+
+            // Is there a save cancel pending
+            if (cancellingsave)
+            { 
+                // Reset current editing title       
+                this.lvTitles.SelectedIndexChanged -= new System.EventHandler(this.lvTitles_SelectedIndexChanged);
+
+                lvTitles.SelectedItems.Clear();
+                if (lvTitles.Items.ContainsKey(titleEditor.EditedTitle.Id.ToString()))
+                {
+                    lvTitles.Items[titleEditor.EditedTitle.Id.ToString()].Selected = true;
+                }
+                cancellingsave = false;
+                this.lvTitles.SelectedIndexChanged += new System.EventHandler(this.lvTitles_SelectedIndexChanged);
+                Cursor = Cursors.Default;
+                return; 
             }
-            else
+
+
+            if (titleEditor.EditedTitle != null && titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges)
             {
-                Title selectedTitle = lbTitles.SelectedItem as Title;
+                // Unsaved changes.
+                if (SaveCurrentMovie() == DialogResult.Cancel)
+                {
+                    cancellingsave = true;
+                    _loading = true; //bypasses second save movie dialog
+
+                    lvTitles.SelectedItems.Clear();
+                    if (lvTitles.Items.ContainsKey(titleEditor.EditedTitle.Id.ToString()))
+                    {
+                        lvTitles.Items[titleEditor.EditedTitle.Id.ToString()].Selected = true;
+                    }
+                    _loading = false;
+                    Cursor = Cursors.Default;
+                    return;
+                }
+            }
+            
+        
+            if (lvTitles.SelectedItems.Count == 1)
+            {
+                Title selectedTitle = _movieList[Convert.ToInt32(lvTitles.SelectedItems[0].Text)];
 
                 if (selectedTitle != null)
                 {
@@ -1712,22 +1786,43 @@ namespace OMLDatabaseEditor
                     ToggleSaveState(false);
                 }
             }
+            else
+            {
+                titleEditor.ClearEditor(true);
+                this.Text = APP_TITLE;
+            }
+
             Cursor = Cursors.Default;
         }
 
         private void deleteSelectedMoviesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (Title title in lbTitles.SelectedItems)
+            ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
+
+            foreach (ListViewItem item in sic)
             {
-                if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.Id == title.Id)
+                int id = Convert.ToInt32(item.Text);
+
+                if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.Id == id)
                     titleEditor.ClearEditor(true);
 
-                _movieList.Remove(title.Id);
+                TitleCollectionManager.DeleteTitle(_movieList[id]);
 
-                TitleCollectionManager.DeleteTitle(title);
+                _movieList.Remove(id);
             }
             //_titleCollection.saveTitleCollection();
             PopulateMovieListV2(SelectedTreeRoot);
+        }
+        
+        int oldsize;
+        private void lvTitles_Resize(object sender, EventArgs e)
+        {
+            if (oldsize != lvTitles.Size.Width)
+            {
+                lvTitles.Columns[0].Width = lvTitles.ClientRectangle.Width;
+                oldsize = lvTitles.Size.Width;
+
+            }
         }
         #endregion
 
@@ -2325,5 +2420,7 @@ namespace OMLDatabaseEditor
             SortControl.Refresh();
         }
         #endregion
+
+
     }
 }
