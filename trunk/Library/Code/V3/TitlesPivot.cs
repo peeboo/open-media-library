@@ -33,7 +33,7 @@ namespace Library.Code.V3
             this.SetupContextMenu();
             this.m_filters = filters;
             this.m_listContent = new VirtualList(new ItemCountHandler(this.InitializeListCount));
-            ((VirtualList)this.m_listContent).RequestItemHandler = new RequestItemHandler(this.GetItem);
+            ((VirtualList)this.m_listContent).RequestItemHandler = new RequestItemHandler(this.GetItem);           
         }
 
         public override void UpdateContext(string newTemplate)
@@ -173,8 +173,24 @@ namespace Library.Code.V3
         private void InitializeListCount(VirtualList vlist)
         {
             this.IsBusy = true;
-            //titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetAllTitles());
-            titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(this.m_filters,OMLEngine.TitleTypes.AllFolders|OMLEngine.TitleTypes.AllMedia, this.parentId));
+
+            List<OMLEngine.TitleFilter> filters = new List<OMLEngine.TitleFilter>(m_filters); ;
+
+            if (this.parentId.HasValue)
+                filters.Add(new OMLEngine.TitleFilter(OMLEngine.TitleFilterType.Parent, this.parentId.ToString()));
+
+            // hack hack hack
+            // todo : solomon : get a better way of doing this
+            // if there are no filters - enforce that all items must be root items
+            if (filters.Count == 0)
+            {
+                filters.Add(new OMLEngine.TitleTypeFilter(OMLEngine.TitleTypes.Root));
+            }            
+            
+            filters.Add(new OMLEngine.TitleTypeFilter(OMLEngine.TitleTypes.AllFolders | OMLEngine.TitleTypes.AllMedia));
+            
+            titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(filters));
+
             ((VirtualList)this.m_listContent).Count = titles.Count;
 
             if (Properties.Settings.Default.GallerySelectedView == 0)

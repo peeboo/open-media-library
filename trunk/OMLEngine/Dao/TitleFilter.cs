@@ -24,7 +24,8 @@ namespace OMLEngine
         PercentComplete,
         DateAdded,
         Name,
-        Parent
+        Parent,
+        TitleType
     }
 
     public class TitleFilter
@@ -57,6 +58,22 @@ namespace OMLEngine
                 return filterType.GetHashCode() ^ filterText.GetHashCode();
             else
                 return filterType.GetHashCode();
+        }
+    }
+
+    public class TitleTypeFilter : TitleFilter
+    {
+        public TitleTypeFilter(TitleTypes titleTypes)
+            : base(TitleFilterType.TitleType, ((int)titleTypes).ToString())
+        {
+        }
+    }
+
+    public class ParentFilter : TitleFilter
+    {
+        public ParentFilter(int parentId)
+            : base(TitleFilterType.Parent, parentId.ToString())
+        {
         }
     }
 }

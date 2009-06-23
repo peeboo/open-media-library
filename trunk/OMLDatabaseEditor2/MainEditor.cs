@@ -339,8 +339,10 @@ namespace OMLDatabaseEditor
 
                     if (filterItem.OwnerItem == filterByTagToolStripMenuItem) tf.Add(new TitleFilter(TitleFilterType.Tag, filterItem.Text));
 
+                    tf.Add(new TitleTypeFilter(TitleTypes.AllMedia));
+
                     _movieList = (TitleCollectionManager.GetAllTitles(TitleTypes.AllFolders).
-                        Concat(TitleCollectionManager.GetFilteredTitles(tf, TitleTypes.AllMedia)).ToDictionary(k => k.Id));
+                        Concat(TitleCollectionManager.GetFilteredTitles(tf)).ToDictionary(k => k.Id));
                 }
 
                 PopulateMovieListV2(SelectedTreeRoot);
@@ -352,9 +354,10 @@ namespace OMLDatabaseEditor
         {
             List<TitleFilter> tf = new List<TitleFilter>();
             tf.Add(new TitleFilter(TitleFilterType.Name, beSearch.Text));
+            tf.Add(new TitleTypeFilter(TitleTypes.AllMedia));
 
             _movieList = (TitleCollectionManager.GetAllTitles(TitleTypes.AllFolders).
-                Concat(TitleCollectionManager.GetFilteredTitles(tf, TitleTypes.AllMedia)).ToDictionary(k => k.Id));
+                Concat(TitleCollectionManager.GetFilteredTitles(tf)).ToDictionary(k => k.Id));
 
             PopulateMovieListV2(SelectedTreeRoot);
         }
@@ -1296,7 +1299,7 @@ namespace OMLDatabaseEditor
                 if (treeMedia.SelectedNode.Name == "All Media")
                 {
                     // Root Level selected
-                    SelectedTreeRoot = null;
+                    SelectedTreeRoot = null;    
                     PopulateMovieListV2(SelectedTreeRoot);
                     titleEditor.ClearEditor(true);
                 }
@@ -1315,7 +1318,8 @@ namespace OMLDatabaseEditor
 
         private void cmsMediaTree_Opening(object sender, CancelEventArgs e)
         {
-            if (treeMedia.SelectedNode.Name == "All Media")
+            if (treeMedia.SelectedNode == null ||
+                treeMedia.SelectedNode.Name == "All Media")
             {
                 //miCreateMovieCollection.Visible = true;
                 //miCreateFolderTVShow.Visible = true;
@@ -1412,7 +1416,7 @@ namespace OMLDatabaseEditor
                 int titleid = Convert.ToInt32(treeMedia.SelectedNode.Name);
                 SelectedTreeRoot = _movieList[titleid].ParentTitleId;
 
-                if (TitleCollectionManager.GetAllTitles(TitleTypes.Everything, titleid).Count() == 0)
+                if (TitleCollectionManager.GetFilteredTitles(TitleFilterType.Parent, titleid.ToString()).Count() == 0)
                 {
                     // No child items, delete
                     TitleCollectionManager.DeleteTitle(_movieList[Convert.ToInt32(treeMedia.SelectedNode.Name)]);

@@ -169,8 +169,13 @@ namespace Library.Code.V3
         private void InitializeListCount(VirtualList vlist)
         {
             this.IsBusy = true;
+
+            List<OMLEngine.TitleFilter> filters = new List<OMLEngine.TitleFilter>(m_filters);
+            filters.Add(new OMLEngine.TitleFilter(OMLEngine.TitleFilterType.Parent, this.parentId.ToString()));
+            filters.Add(new OMLEngine.TitleTypeFilter(OMLEngine.TitleTypes.AllFolders | OMLEngine.TitleTypes.AllMedia));
+
             //titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetAllTitles());
-            titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(this.m_filters, OMLEngine.TitleTypes.AllFolders | OMLEngine.TitleTypes.AllMedia, this.parentId));
+            titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(filters));
             ((VirtualList)this.m_listContent).Count = titles.Count;
 
             //if (Properties.Settings.Default.GallerySelectedView == 0)
