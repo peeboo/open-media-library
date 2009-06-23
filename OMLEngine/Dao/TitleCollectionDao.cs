@@ -186,7 +186,15 @@ namespace OMLEngine.Dao
 
             if (filters == null || filters.Count == 0) return titles;
 
-            return GetFilteredTitles(filters, titles);
+            IEnumerable<Title> filteredTitles = GetFilteredTitles(filters, titles);
+
+            // LINQ to SQL has a bug where it won't send the distinct directive even
+            // though i specify it, the fix is to do it on the client at the cost of 
+            // client side CPU and bringing extra titles over the wire :(
+            // so far this is only needed for exclusion filters
+            return (filters.FirstOrDefault(t => t.ExclusionFilter) != null)
+                ? filteredTitles.Distinct()
+                : filteredTitles;
         }
 
         private static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters, IQueryable<Title> titles)
@@ -200,11 +208,11 @@ namespace OMLEngine.Dao
                 switch (filter.FilterType)
                 {
                     case TitleFilterType.Genre:
-                        results = ApplyGenreFilter(lastQuery, filter.FilterText);
+                        results = ApplyGenreFilter(lastQuery, filter.FilterText, filter.ExclusionFilter);
                         break;
 
                     case TitleFilterType.Person:
-                        results = ApplyPersonFilter(lastQuery, filter.FilterText);
+                        results = ApplyPersonFilter(lastQuery, filter.FilterText, filter.ExclusionFilter);
                         break;
 
                     case TitleFilterType.VideoFormat:
@@ -216,7 +224,7 @@ namespace OMLEngine.Dao
                         break;
 
                     case TitleFilterType.Tag:
-                        results = ApplyTagFilter(lastQuery, filter.FilterText);
+                        results = ApplyTagFilter(lastQuery, filter.FilterText, filter.ExclusionFilter);
                         break;
 
                     case TitleFilterType.Alpha:
@@ -224,7 +232,7 @@ namespace OMLEngine.Dao
                         break;
 
                     case TitleFilterType.ParentalRating:
-                        results = ApplyParentalRatingFilter(lastQuery, filter.FilterText);
+                        results = ApplyParentalRatingFilter(lastQuery, filter.FilterText, filter.ExclusionFilter);
                         break;
 
                     case TitleFilterType.Runtime:
@@ -232,23 +240,23 @@ namespace OMLEngine.Dao
                         break;
 
                     case TitleFilterType.Year:
-                        results = ApplyYearFilter(lastQuery, filter.FilterText);
+                        results = ApplyYearFilter(lastQuery, filter.FilterText, filter.ExclusionFilter);
                         break;
 
                     case TitleFilterType.Country:
-                        results = ApplyCountryFilter(lastQuery, filter.FilterText);
+                        results = ApplyCountryFilter(lastQuery, filter.FilterText, filter.ExclusionFilter);
                         break;
 
                     case TitleFilterType.Actor:
-                        results = ApplyPersonFilter(lastQuery, filter.FilterText, PeopleRole.Actor);
+                        results = ApplyPersonFilter(lastQuery, filter.FilterText, PeopleRole.Actor, filter.ExclusionFilter);
                         break;
 
                     case TitleFilterType.Director:
-                        results = ApplyPersonFilter(lastQuery, filter.FilterText, PeopleRole.Director);
+                        results = ApplyPersonFilter(lastQuery, filter.FilterText, PeopleRole.Director, filter.ExclusionFilter);
                         break;
 
                     case TitleFilterType.UserRating:
-                        results = ApplyUserRatingFilter(lastQuery, filter.FilterText);
+                        results = ApplyUserRatingFilter(lastQuery, filter.FilterText, filter.ExclusionFilter);
                         break;
 
                     case TitleFilterType.DateAdded:
@@ -256,23 +264,22 @@ namespace OMLEngine.Dao
                         break;
 
                     case TitleFilterType.Name:
-                        results = ApplyNameFilter(lastQuery, filter.FilterText);
+                        results = ApplyNameFilter(lastQuery, filter.FilterText, filter.ExclusionFilter);
                         break;
 
                     case TitleFilterType.Parent:
-                        results = ApplyParentFilter(lastQuery, filter.FilterText);
+                        results = ApplyParentFilter(lastQuery, filter.FilterText, filter.ExclusionFilter);
                         break;
 
                     case TitleFilterType.TitleType:
-                        results = ApplyTitleTypeFilter(lastQuery, filter.FilterText);
+                        results = ApplyTitleTypeFilter(lastQuery, filter.FilterText, filter.ExclusionFilter);
                         break;
                 }
             }
 
             // sort the results
-            return from t in results
-                   orderby t.SortName
-                   select t;
+            return (from t in results                    
+                    select t).Distinct().OrderBy(t => t.SortName);
         }
 
         /// <summary>
@@ -281,16 +288,25 @@ namespace OMLEngine.Dao
         /// <param name="titles"></param>
         /// <param name="titleType"></param>
         /// <returns></returns>
-        private static IQueryable<Title> ApplyTitleTypeFilter(IQueryable<Title> titles, string titleType)
+        private static IQueryable<Title> ApplyTitleTypeFilter(IQueryable<Title> titles, string titleType, bool notEquals)
         {
             int titleTypeInt;
 
             if (!int.TryParse(titleType, out titleTypeInt))
                 return from t in titles select t;
 
-            return from t in titles
-                   where (t.TitleType & titleTypeInt) != 0
-                   select t;
+            if (notEquals)
+            {
+                return from t in titles
+                       where (t.TitleType & titleTypeInt) == 0
+                       select t;
+            }
+            else
+            {
+                return from t in titles
+                       where (t.TitleType & titleTypeInt) != 0
+                       select t;
+            }
         }
 
         /// <summary>
@@ -299,16 +315,25 @@ namespace OMLEngine.Dao
         /// <param name="titles"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        private static IQueryable<Title> ApplyParentFilter(IQueryable<Title> titles, string parent)
+        private static IQueryable<Title> ApplyParentFilter(IQueryable<Title> titles, string parent, bool notEquals)
         {
             int parentId;
 
             if (!int.TryParse(parent, out parentId))
                 return from t in titles select t;
 
-            return from t in titles
-                   where t.ParentTitleId == parentId
-                   select t;
+            if (notEquals)
+            {
+                return from t in titles
+                       where t.ParentTitleId != parentId
+                       select t;
+            }
+            else
+            {
+                return from t in titles
+                       where t.ParentTitleId == parentId
+                       select t;
+            }
         }
 
         /// <summary>
@@ -317,7 +342,7 @@ namespace OMLEngine.Dao
         /// <param name="titles"></param>
         /// <param name="rating"></param>
         /// <returns></returns>
-        private static IQueryable<Title> ApplyUserRatingFilter(IQueryable<Title> titles, string rating)
+        private static IQueryable<Title> ApplyUserRatingFilter(IQueryable<Title> titles, string rating, bool notEquals)
         {
             double userRating;
 
@@ -326,9 +351,18 @@ namespace OMLEngine.Dao
                 userRating *= 10;
             }
 
-            return from t in titles
-                   where t.UserRating == (byte)userRating
-                   select t;
+            if (notEquals)
+            {
+                return from t in titles
+                       where t.UserRating != (byte)userRating
+                       select t;
+            }
+            else
+            {
+                return from t in titles
+                       where t.UserRating == (byte)userRating
+                       select t;
+            }
         }
 
         /// <summary>
@@ -337,11 +371,20 @@ namespace OMLEngine.Dao
         /// <param name="titles"></param>
         /// <param name="country"></param>
         /// <returns></returns>
-        private static IQueryable<Title> ApplyCountryFilter(IQueryable<Title> titles, string country)
+        private static IQueryable<Title> ApplyCountryFilter(IQueryable<Title> titles, string country, bool notEquals)
         {
-            return from t in titles
-                   where t.CountryOfOrigin.ToLower() == country.ToLower()
-                   select t;
+            if (notEquals)
+            {
+                return from t in titles
+                       where t.CountryOfOrigin.ToLower() != country.ToLower()
+                       select t;
+            }
+            else
+            {
+                return from t in titles
+                       where t.CountryOfOrigin.ToLower() == country.ToLower()
+                       select t;
+            }
         }
 
         /// <summary>
@@ -350,15 +393,24 @@ namespace OMLEngine.Dao
         /// <param name="titles"></param>
         /// <param name="year"></param>
         /// <returns></returns>
-        private static IQueryable<Title> ApplyYearFilter(IQueryable<Title> titles, string year)
+        private static IQueryable<Title> ApplyYearFilter(IQueryable<Title> titles, string year, bool notEquals)
         {
             int filterYear;
 
             int.TryParse(year, out filterYear);
 
-            return from t in titles
-                   where t.ReleaseDate.HasValue && t.ReleaseDate.Value.Year == filterYear
-                   select t;
+            if (notEquals)
+            {
+                return from t in titles
+                       where !t.ReleaseDate.HasValue || ( t.ReleaseDate.HasValue && t.ReleaseDate.Value.Year != filterYear)
+                       select t;
+            }
+            else
+            {
+                return from t in titles
+                       where t.ReleaseDate.HasValue && t.ReleaseDate.Value.Year == filterYear
+                       select t;
+            }
         }
 
         /// <summary>
@@ -433,11 +485,20 @@ namespace OMLEngine.Dao
         /// <param name="titles"></param>
         /// <param name="rating"></param>
         /// <returns></returns>
-        private static IQueryable<Title> ApplyParentalRatingFilter(IQueryable<Title> titles, string rating)
+        private static IQueryable<Title> ApplyParentalRatingFilter(IQueryable<Title> titles, string rating, bool notEquals)
         {
-            return from t in titles
-                   where t.ParentalRating == rating
-                   select t;
+            if (notEquals)
+            {
+                return from t in titles
+                       where t.ParentalRating != rating
+                       select t;
+            }
+            else
+            {
+                return from t in titles
+                       where t.ParentalRating == rating
+                       select t;
+            }
         }
 
         /// <summary>
@@ -446,11 +507,20 @@ namespace OMLEngine.Dao
         /// <param name="titles"></param>
         /// <param name="rating"></param>
         /// <returns></returns>
-        private static IQueryable<Title> ApplyNameFilter(IQueryable<Title> titles, string name)
+        private static IQueryable<Title> ApplyNameFilter(IQueryable<Title> titles, string name, bool notEquals)
         {
-            return from t in titles
-                   where t.Name.Contains(name)
-                   select t;
+            if (notEquals)
+            {
+                return from t in titles
+                       where !t.Name.Contains(name)
+                       select t;
+            }
+            else
+            {
+                return from t in titles
+                       where t.Name.Contains(name)
+                       select t;
+            }
         }
 
         /// <summary>
@@ -472,12 +542,22 @@ namespace OMLEngine.Dao
         /// <param name="titles"></param>
         /// <param name="tagName"></param>
         /// <returns></returns>
-        private static IQueryable<Title> ApplyTagFilter(IQueryable<Title> titles, string tagName)
+        private static IQueryable<Title> ApplyTagFilter(IQueryable<Title> titles, string tagName, bool notEquals)
         {
-            return (from t in titles
-                    from p in t.Tags
-                    where p.Name.ToLower() == tagName.ToLower()
-                    select t).Distinct();
+            if (notEquals)
+            {
+                return (from t in titles
+                        from p in t.Tags
+                        where p.Name.ToLower() != tagName.ToLower()
+                        select t).Distinct();
+            }
+            else
+            {
+                return (from t in titles
+                        from p in t.Tags
+                        where p.Name.ToLower() == tagName.ToLower()
+                        select t).Distinct();
+            }
         }
 
         /// <summary>
@@ -514,12 +594,22 @@ namespace OMLEngine.Dao
         /// <param name="name"></param>
         /// <param name="role"></param>
         /// <returns></returns>
-        private static IQueryable<Title> ApplyPersonFilter(IQueryable<Title> titles, string name, PeopleRole role)
+        private static IQueryable<Title> ApplyPersonFilter(IQueryable<Title> titles, string name, PeopleRole role, bool notEquals)
         {
-            return (from t in titles
-                    from p in t.People
-                    where p.MetaData.FullName == name && p.Role == (byte)role
-                    select t).Distinct();
+            if (notEquals)
+            {
+                return (from t in titles
+                        from p in t.People
+                        where p.MetaData.FullName != name && p.Role != (byte)role
+                        select t).Distinct();
+            }
+            else
+            {
+                return (from t in titles
+                        from p in t.People
+                        where p.MetaData.FullName == name && p.Role == (byte)role
+                        select t).Distinct();
+            }
         }
 
         /// <summary>
@@ -528,12 +618,22 @@ namespace OMLEngine.Dao
         /// <param name="titles"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        private static IQueryable<Title> ApplyPersonFilter(IQueryable<Title> titles, string name)
+        private static IQueryable<Title> ApplyPersonFilter(IQueryable<Title> titles, string name, bool notEquals)
         {
-            return (from t in titles
-                    from p in t.People
-                    where p.MetaData.FullName == name
-                    select t).Distinct();
+            if (notEquals)
+            {
+                return (from t in titles
+                        from p in t.People
+                        where p.MetaData.FullName != name
+                        select t).Distinct();
+            }
+            else
+            {
+                return (from t in titles
+                        from p in t.People
+                        where p.MetaData.FullName == name
+                        select t).Distinct();
+            }
         }
 
         /// <summary>
@@ -542,12 +642,22 @@ namespace OMLEngine.Dao
         /// <param name="titles"></param>
         /// <param name="genreName"></param>
         /// <returns></returns>
-        private static IQueryable<Title> ApplyGenreFilter(IQueryable<Title> titles, string genreName)
+        private static IQueryable<Title> ApplyGenreFilter(IQueryable<Title> titles, string genreName, bool notEquals)
         {
-            return (from title in titles
-                    from g in title.Genres
-                    where g.MetaData.Name == genreName
-                    select title).Distinct();
+            if (notEquals)
+            {
+                return (from title in titles
+                        from g in title.Genres
+                        where g.MetaData.Name != genreName
+                        select title).Distinct();
+            }
+            else
+            {
+                return (from title in titles
+                        from g in title.Genres
+                        where g.MetaData.Name == genreName
+                        select title).Distinct();
+            }
         }
 
         /// <summary>
