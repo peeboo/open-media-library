@@ -189,43 +189,6 @@ namespace OMLEngine.Dao
             return GetFilteredTitles(filters, titles);
         }
 
-        /// <summary>
-        /// Gets all the titles given the list of filters and a title type
-        /// </summary>
-        /// <param name="filters"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters, TitleTypes type)
-        {
-            var titles = from t in DBContext.Instance.Titles
-                         where (t.TitleType & (int)type) != 0
-                         orderby t.SortName
-                         select t;
-
-            if (filters == null || filters.Count == 0) return titles;
-
-            return GetFilteredTitles(filters, titles);
-        }
-
-        /// <summary>
-        /// Gets all the titles given the list of filters, title type and parent title id
-        /// </summary>
-        /// <param name="filters"></param>
-        /// <returns></returns>
-        public static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters, TitleTypes type, int? parentId)
-        {
-            var titles = from t in DBContext.Instance.Titles
-                         where (t.TitleType & (int)type) != 0
-                         && object.Equals(t.ParentTitleId, parentId)
-                         orderby t.SortName
-                         select t;
-
-            if (filters == null || filters.Count == 0) return titles;
-
-            return GetFilteredTitles(filters, titles);
-        }
-
-
         private static IEnumerable<Title> GetFilteredTitles(List<TitleFilter> filters, IQueryable<Title> titles)
         {
             IQueryable<Title> results = null;
@@ -299,12 +262,34 @@ namespace OMLEngine.Dao
                     case TitleFilterType.Parent:
                         results = ApplyParentFilter(lastQuery, filter.FilterText);
                         break;
+
+                    case TitleFilterType.TitleType:
+                        results = ApplyTitleTypeFilter(lastQuery, filter.FilterText);
+                        break;
                 }
             }
 
             // sort the results
             return from t in results
                    orderby t.SortName
+                   select t;
+        }
+
+        /// <summary>
+        /// Applies the title type filter
+        /// </summary>
+        /// <param name="titles"></param>
+        /// <param name="titleType"></param>
+        /// <returns></returns>
+        private static IQueryable<Title> ApplyTitleTypeFilter(IQueryable<Title> titles, string titleType)
+        {
+            int titleTypeInt;
+
+            if (!int.TryParse(titleType, out titleTypeInt))
+                return from t in titles select t;
+
+            return from t in titles
+                   where (t.TitleType & titleTypeInt) != 0
                    select t;
         }
 
