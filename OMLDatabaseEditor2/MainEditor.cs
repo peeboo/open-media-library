@@ -2421,6 +2421,36 @@ namespace OMLDatabaseEditor
         }
         #endregion
 
+        private void addTagMenuItem1_Click(object sender, EventArgs e)
+        {
+            List<string> tags = new List<string>();
+            ListEditor editor = new ListEditor("Tags", tags);
+            editor.ShowDialog();
+            foreach (string tag in tags)
+            {
+                foreach (Title title in lvTitles.SelectedItems)
+                {
+                    if (!title.Tags.Contains(tag))
+                        title.AddTag(tag);
+                }
+            }
+            TitleCollectionManager.SaveTitleUpdates();
+        }
 
+        private void addGenreMenuItem1_Click(object sender, EventArgs e)
+        {
+            List<string> genres = new List<string>();
+            ListEditor editor = new ListEditor("Genres", genres);
+            editor.ShowDialog();
+            foreach (string genre in genres)
+            {
+                foreach (Title title in lvTitles.SelectedItems)
+                {
+                    if (!title.Genres.Contains(genre))
+                        title.AddGenre(genre);
+                }
+            }
+            TitleCollectionManager.SaveTitleUpdates();
+        }
     }
 }
