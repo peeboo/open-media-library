@@ -118,6 +118,8 @@ namespace OMLDatabaseEditor
             this.miMetadataMulti = new System.Windows.Forms.ToolStripMenuItem();
             this.fromPreferredSourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.addTagMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.addGenreMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.ListViewImages = new System.Windows.Forms.ImageList(this.components);
             this.SortControl = new DevExpress.XtraEditors.PanelControl();
             this.beSearch = new DevExpress.XtraEditors.ButtonEdit();
@@ -945,9 +947,11 @@ namespace OMLDatabaseEditor
             // 
             this.cmsMoviesList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miMetadataMulti,
-            this.deleteToolStripMenuItem1});
+            this.deleteToolStripMenuItem1,
+            this.addTagMenuItem1,
+            this.addGenreMenuItem1});
             this.cmsMoviesList.Name = "cmsMoviesList";
-            this.cmsMoviesList.Size = new System.Drawing.Size(166, 48);
+            this.cmsMoviesList.Size = new System.Drawing.Size(166, 114);
             // 
             // miMetadataMulti
             // 
@@ -970,6 +974,21 @@ namespace OMLDatabaseEditor
             this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
             this.deleteToolStripMenuItem1.Text = "Delete";
             this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteSelectedMoviesToolStripMenuItem_Click);
+            // 
+            // addTagMenuItem1
+            // 
+            this.addTagMenuItem1.Name = "addTagMenuItem1";
+            this.addTagMenuItem1.Size = new System.Drawing.Size(165, 22);
+            this.addTagMenuItem1.Text = "Add Tag";
+            this.addTagMenuItem1.Click += new System.EventHandler(this.addTagMenuItem1_Click);
+            // 
+            // addGenreMenuItem1
+            // 
+            this.addGenreMenuItem1.Enabled = false;
+            this.addGenreMenuItem1.Name = "addGenreMenuItem1";
+            this.addGenreMenuItem1.Size = new System.Drawing.Size(165, 22);
+            this.addGenreMenuItem1.Text = "Add Genre";
+            this.addGenreMenuItem1.Click += new System.EventHandler(this.addGenreMenuItem1_Click);
             // 
             // ListViewImages
             // 
@@ -1231,6 +1250,8 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem miCreateFolderTVShow;
         private System.Windows.Forms.ToolStripMenuItem miCreateFolderTVSeason;
         private System.Windows.Forms.ToolStripMenuItem miCreateTVEpisode;
+        private System.Windows.Forms.ToolStripMenuItem addTagMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem addGenreMenuItem1;
         private System.Windows.Forms.ColumnHeader columnTitleID;
         private System.Windows.Forms.ImageList ListViewImages;
         private System.Windows.Forms.ListView lvTitles;
