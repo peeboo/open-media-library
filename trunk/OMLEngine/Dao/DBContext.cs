@@ -98,6 +98,28 @@ namespace OMLEngine.Dao
         public static WatcherDataDataContext InstanceOrNull { get { return db; } }        
     }
 
+    internal class LocalWatcherDataContext : IDisposable
+    {
+        private WatcherDataDataContext db = null;
+
+        public WatcherDataDataContext Context { get { return db; } }
+
+        public LocalWatcherDataContext()
+        {
+            db = new WatcherDataDataContext();
+            db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
+        }
+
+        public void Dispose()
+        {
+            if (db != null)
+            {
+                db.Dispose();
+                db = null;
+            }
+        }
+    }
+
     internal static class OMLDataSettingsDBContext
     {
         private static OMLDataSettingsDataContext db = null;

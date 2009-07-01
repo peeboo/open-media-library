@@ -11,7 +11,7 @@
     <Type Name="ScannerSetting">
       <Column Name="Enabled" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="MetaData" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="LastModified" AutoSync="Always" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LastModified" AutoSync="Always" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
 </Database>
