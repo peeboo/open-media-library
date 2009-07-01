@@ -30,6 +30,7 @@ namespace OMLEngine.Settings
             if (settings == null)
             {
                 settings = new ScannerSetting();
+                settings.LastModified = DateTime.Now;
                 WatcherDataContext.Instance.ScannerSettings.InsertOnSubmit(settings);
                 WatcherDataContext.Instance.SubmitChanges();
             }
@@ -52,9 +53,12 @@ namespace OMLEngine.Settings
         /// <returns></returns>
         public static bool ModifiedSince(DateTime lastModified)
         {
-            return (from s in WatcherDataContext.Instance.ScannerSettings
-                    where s.LastModified > lastModified
-                    select s).Count() > 0;
+            using (LocalWatcherDataContext dbContext = new LocalWatcherDataContext())
+            {
+                return (from s in dbContext.Context.ScannerSettings
+                        where s.LastModified > lastModified
+                        select s).Count() > 0;
+            }
         }
 
         private static DateTime UpdateModifiedTime()

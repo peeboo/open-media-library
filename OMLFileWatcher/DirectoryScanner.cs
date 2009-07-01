@@ -15,13 +15,22 @@ namespace OMLFileWatcher
     public class DirectoryScanner
     {
         private const string DEFAULT_DISK_NAME = "Main Title";
-        private const int CHANGE_TIMER_TIMEOUT = 15000;
+        private const int CHANGE_TIMER_TIMEOUT = 8000;
 
         private System.Timers.Timer timer;
+        private System.Timers.Timer badWatcherTimer;
+
         private List<FileSystemWatcher> watchers = null;
+        private List<FileSystemWatcher> badWatchers = new List<FileSystemWatcher>();
+
         private IList<string> watchFolders;
         private object lockObject = new object();
+
         private static object staticLockObject = new object();
+        private static object syncObject = new object();
+
+        private List<string> waitCreatedList = new List<string>();
+        private List<string> waitDeletedList = new List<string>();
 
         IOMLMetadataPlugin metaDataPlugin = null;        
 
@@ -30,7 +39,12 @@ namespace OMLFileWatcher
             timer = new System.Timers.Timer();
             timer.AutoReset = false;
             timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
-        }       
+
+            badWatcherTimer = new System.Timers.Timer();
+            badWatcherTimer.AutoReset = false;
+            badWatcherTimer.Interval = CHANGE_TIMER_TIMEOUT;
+            badWatcherTimer.Elapsed += new System.Timers.ElapsedEventHandler(badWatcherTimer_Elapsed);
+        }            
 
         /// <summary>
         /// Get's a meta data filled title for the given name
@@ -198,68 +212,137 @@ namespace OMLFileWatcher
         /// <returns>Returns false if it's in the middle of a scan and can't update the watch folders</returns>
         public bool WatchFolders(IEnumerable<string> folders)
         {
-            try
+            if (!Monitor.TryEnter(lockObject))
             {
                 // if we can't enter the lock that means a scan is already in progress
-                if (!Monitor.TryEnter(lockObject))
+                DebugLine("Unable to watch new folders since a scan is in progress.  Try again later.");
+                return false;
+            }
+            else
+            {
+                try
                 {
-                    DebugLine("Unable to watch new folders since a scan is in progress.  Try again later.");
-                    return false;
-                }
-
-                // stop any existing scans and watchers
-                Stop();
-
-                // clean up any existing watchers
-                if (watchers != null)
-                {
-                    foreach (FileSystemWatcher watcher in watchers)
-                    {
-                        watcher.Dispose();
-                    }
-                }
-
-                watchFolders = new List<string>(folders);
-
-                // if there are no watch folders bail out
-                if (watchFolders.Count == 0)
-                {
-                    DebugLine("No folders found to watch");
-                    watchFolders = null;
+                    // stop any existing scans and watchers
                     Stop();
-                    return true;
+
+                    // clean up any existing watchers
+                    if (watchers != null)
+                    {
+                        foreach (FileSystemWatcher watcher in watchers)
+                        {
+                            watcher.Dispose();
+                        }
+                    }
+
+                    watchFolders = new List<string>(folders);
+
+                    // if there are no watch folders bail out
+                    if (watchFolders.Count == 0)
+                    {
+                        DebugLine("No folders found to watch");
+                        watchFolders = null;
+                        Stop();
+                        return true;
+                    }
+
+                    watchers = new List<FileSystemWatcher>(watchFolders.Count);
+
+                    foreach (string folder in watchFolders)
+                    {
+                        if (Directory.Exists(folder))
+                        {                            
+                            watchers.Add(CreateWatcher(folder));
+                        }
+                    }
+                }
+                catch (Exception err)
+                {
+                    DebugLineError(err, "Error setting up watch folders");
+                }
+                finally
+                {
+                    Monitor.Exit(lockObject);
                 }
 
-                watchers = new List<FileSystemWatcher>(watchFolders.Count);
+                // immediately do an async scan of the new watch folders
+                ScanASync();
 
-                foreach (string folder in folders)
-                {
-                    if (Directory.Exists(folder))
-                    {
-                        FileSystemWatcher watcher = new FileSystemWatcher(folder);
-                        watcher.IncludeSubdirectories = true;
-                        watcher.EnableRaisingEvents = true;
-                        //watcher.NotifyFilter = NotifyFilters.DirectoryName | NotifyFilters.FileName;                    
-                        watcher.Changed += new FileSystemEventHandler(watcher_Changed);
-                        watcher.Error += new ErrorEventHandler(watcher_Error);
-
-                        watchers.Add(watcher);
-                    }
-                }                
+                return true;
             }
-            catch (Exception err)
+        }
+
+        /// <summary>
+        /// Creates a file system watcher
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <returns></returns>
+        private FileSystemWatcher CreateWatcher(string folder)
+        {
+            FileSystemWatcher watcher = new FileSystemWatcher(folder);
+            watcher.IncludeSubdirectories = true;
+            watcher.EnableRaisingEvents = true;
+
+            // only listen for file events for now
+            watcher.NotifyFilter = NotifyFilters.FileName;
+            watcher.Created += new FileSystemEventHandler(watcher_Created);
+            watcher.Deleted += new FileSystemEventHandler(watcher_Deleted);
+            watcher.Renamed += new RenamedEventHandler(watcher_Renamed);
+            watcher.Error += new ErrorEventHandler(watcher_Error);
+
+            return watcher;
+        }
+
+        void watcher_Renamed(object sender, RenamedEventArgs e)
+        {            
+            if (e.OldFullPath.Equals(e.FullPath, StringComparison.OrdinalIgnoreCase))
+                return;
+
+            // reset the timer
+            timer.Stop();            
+
+            lock (syncObject)
+            {                
+                waitDeletedList.Add(e.OldFullPath);
+                waitCreatedList.Add(e.FullPath);
+            }
+
+            StartTimer();  
+        }
+
+        void watcher_Deleted(object sender, FileSystemEventArgs e)
+        {
+            // reset the timer
+            timer.Stop();  
+
+            lock (syncObject)
             {
-                DebugLineError(err, "Error setting up watch folders");
+                if (waitCreatedList.Contains(e.FullPath, StringComparer.OrdinalIgnoreCase))
+                    waitCreatedList.Remove(e.FullPath);
+
+                waitDeletedList.Add(e.FullPath);
             }
-            finally
+
+            StartTimer();  
+        }
+
+        void watcher_Created(object sender, FileSystemEventArgs e)
+        {
+            // ignore directory creation
+            if (Directory.Exists(e.FullPath))
+                return;
+
+            // reset the timer
+            timer.Stop();  
+
+            lock (syncObject)
             {
-                Monitor.Exit(lockObject);
+                if (waitDeletedList.Contains(e.FullPath, StringComparer.OrdinalIgnoreCase))
+                    waitDeletedList.Remove(e.FullPath);
+
+                waitCreatedList.Add(e.FullPath);
             }
 
-            // immediately do an async scan of the new watch folders
-            ScanASync();
-
-            return true;
+            StartTimer();  
         }
 
         /// <summary>
@@ -289,18 +372,77 @@ namespace OMLFileWatcher
         private void watcher_Error(object sender, ErrorEventArgs e)
         {
             try
-            {                
-                DebugLineError(e.GetException(), "Error in Filesystem watcher - mostly likely a disconnected network");                
+            {    
+                FileSystemWatcher watcher = sender as FileSystemWatcher;
+              
+                if ( watcher == null )
+                    return;
 
-                // if we can't find the drive anymore setup a new watcher
-                if (e.GetException().Message == "The specified network name is no longer available")
-                    sender = new FileSystemWatcher(((FileSystemWatcher)sender).Path);
+                // if the watcher path no longer exists for whatever reason, add this watcher to the bad queue
+                // to re-attempt to see if it exists every 5 seconds.  This can happen if a network drive disconnects
+                // or someone removes an attached drive.  re-creating the watcher is required when the device comes
+                // back online
+                if (!Directory.Exists(watcher.Path))
+                {
+                    lock (badWatchers)
+                    {
+                        // add it to the bad watcher list
+                        if (watchers.Contains(watcher))
+                        {
+                            badWatchers.Add(watcher);
+                            watchers.Remove(watcher);
+
+                            badWatcherTimer.Start();
+                        }
+                    }
+                }                
             }
             catch (Exception err)
             {
                 DebugLineError(err, "Error re-setting up watcher");
             }
         }
+
+        /// <summary>
+        /// Handle seeing if the bad watchers are fixed up yet
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void badWatcherTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {            
+            badWatcherTimer.Stop();
+
+            bool badWatchersStillExist = false;
+
+            lock (badWatchers)
+            {
+                for(int i = badWatchers.Count - 1 ; i >= 0 ; i --)
+                {
+                    // if the directory exists again re-create the watcher
+                    if (Directory.Exists(badWatchers[i].Path))
+                    {
+                        try
+                        {
+                            watchers.Add(CreateWatcher(badWatchers[i].Path));
+                            badWatchers.RemoveAt(i);
+                        }
+                        catch (Exception err)
+                        {
+                            badWatchersStillExist = true;
+                            DebugLineError(err, "Error re-creating the watcher");
+                        }
+                    }
+                    else
+                    {
+                        badWatchersStillExist = true;
+                    }
+                }                
+            }
+
+            // if there are still bad watchers forward the timer
+            if (badWatchersStillExist)
+                badWatcherTimer.Start();
+        }   
 
         /// <summary>
         /// Starts watching folders that are being watched
@@ -345,11 +487,71 @@ namespace OMLFileWatcher
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void watcher_Changed(object sender, FileSystemEventArgs e)
+        /*private void watcher_Changed(object sender, FileSystemEventArgs e)
         {                        
             // reset the timer
             timer.Stop();
             StartTimer();  
+        }*/
+
+        /// <summary>
+        /// Returns if the file is done copying which means it can be opened in exclusive read mode without error
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private bool IsFileDoneCopying(string path)
+        {
+            if (!File.Exists(path))            
+                return false;            
+
+            try
+            {
+                using (File.Open(path, FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    return true;
+                }
+            }
+            catch (IOException)
+            {
+                return false;
+            }            
+        }
+
+        /// <summary>
+        /// Attempts to cleanup the pending action queues.  Will only remove files if they are
+        /// properly created, removed, or renamed.
+        /// </summary>
+        /// <returns></returns>
+        private void TryCleanupFileLists()
+        {            
+            // make sure all the file operations are completed
+            lock (syncObject)
+            {
+                for (int i = waitCreatedList.Count - 1; i >= 0; i--)
+                {
+                    if (!IsFileDoneCopying(waitCreatedList[i]))
+                    {                        
+                        continue;
+                    }
+
+                    // that file is successfully created, remove it
+                    waitCreatedList.RemoveAt(i);
+                }
+
+                for (int i = waitDeletedList.Count - 1; i >= 0; i--)
+                {
+                    if (File.Exists(waitDeletedList[i]) ||
+                        Directory.Exists(waitDeletedList[i]))
+                    {                        
+                        continue;
+                    }
+                    else
+                    {
+                        // that file is successfully deleted, remove it
+                        waitDeletedList.RemoveAt(i);
+                    }
+                }
+            }            
         }
 
         /// <summary>
@@ -360,6 +562,20 @@ namespace OMLFileWatcher
         private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {            
             timer.Stop();
+
+            // if there are any files pending actions make sure they're cleaned up.
+            // we want to wait 8 seconds after a clean queue before we start our scan.  this way if
+            // multiple files are copying we should wait till everything is done before starting our
+            // scan process
+            if (waitCreatedList.Count != 0 ||
+                waitDeletedList.Count != 0)
+            {
+                // attempt to cleanup the list of pending file actions
+                TryCleanupFileLists();
+
+                StartTimer();
+                return;
+            }
 
             if (Monitor.TryEnter(lockObject))
             {
@@ -372,11 +588,11 @@ namespace OMLFileWatcher
                     Monitor.Exit(lockObject);
                 }
             }
-            else 
+            else
             {
-                // else forward the timer to try again in 15 seconds
-                StartTimer();
-            }
+                // else forward the timer to try again in 8 seconds
+                StartTimer();    
+            }            
         }
 
         /// <summary>
