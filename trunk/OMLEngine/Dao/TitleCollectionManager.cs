@@ -21,13 +21,15 @@ namespace OMLEngine
         // Folders / containers
         Collection = 0x0002,
         TVShow = 0x0004,
-        Season = 0x0008,
+        Season = 0x0008,        
         AllFolders = 0x00FE,
 
         // Media
-        Unknown = 0x0100,
+        Video = 0x0100,
         Movie = 0x0200, 
         Episode = 0x0400,
+        MusicVideo = 0x0800,
+        Unknown = 0x1000,
         AllMedia = 0xFF00,
 
         Everything = 0xFFFF
@@ -46,7 +48,7 @@ namespace OMLEngine
             using (OMLEngine.Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext())
             {                
                 // Set default titletype if none specified
-                if ((title.TitleType == null) || (title.TitleType == 0)) { title.TitleType = TitleTypes.Root | TitleTypes.Unknown; }
+                if ((title.TitleType == null) || (title.TitleType == 0)) { title.TitleType = TitleTypes.Root | TitleTypes.Video; }
 
                 // setup all the collections objects
                 // todo : solomon : this should go away once it's understood how people 

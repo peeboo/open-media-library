@@ -68,57 +68,7 @@ namespace OMLEngine.Dao
                 db = null;
             }
         }                
-    }
-
-    internal static class WatcherDataContext
-    {
-        private static WatcherDataDataContext db = null;
-        private static object lockObject = new object();
-
-        public static WatcherDataDataContext Instance
-        {
-            get
-            {
-                if (db == null)
-                {
-                    lock (lockObject)
-                    {
-                        if (db == null)
-                        {
-                            db = new WatcherDataDataContext();
-                            db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
-                        }
-                    }
-                }
-
-                return db;
-            }
-        }
-
-        public static WatcherDataDataContext InstanceOrNull { get { return db; } }        
-    }
-
-    internal class LocalWatcherDataContext : IDisposable
-    {
-        private WatcherDataDataContext db = null;
-
-        public WatcherDataDataContext Context { get { return db; } }
-
-        public LocalWatcherDataContext()
-        {
-            db = new WatcherDataDataContext();
-            db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
-        }
-
-        public void Dispose()
-        {
-            if (db != null)
-            {
-                db.Dispose();
-                db = null;
-            }
-        }
-    }
+    }    
 
     internal static class OMLDataSettingsDBContext
     {
