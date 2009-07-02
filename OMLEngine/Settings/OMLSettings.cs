@@ -423,6 +423,32 @@ namespace OMLEngine.Settings
 
         #endregion
 
+        #region Scanner
+        public static bool ScannerEnabled
+        {
+            get { return SettingsManager.GetSettingByNameBool("ScannerEnabled", InstanceName) ?? true; }
+            set { SettingsManager.SaveSettingByName("ScannerEnabled", value.ToString(), InstanceName); }
+        }
+
+        public static DateTime ScannerSettingsLastUpdated
+        {
+            get { return SettingsManager.GetSettingByNameDateTime("ScannerSettingsLastUpdated", InstanceName) ?? DateTime.Now.AddYears(-30); }
+            set { SettingsManager.SaveSettingByName("ScannerSettingsLastUpdated", value.ToString(), InstanceName); }
+        }       
+
+        public static IList<string> ScannerMetaDataPlugins
+        {
+            get { return SettingsManager.GetSettingByNameListString("ScannerMetaDataPlugins", InstanceName) ?? new List<string>(0); }
+            set { SettingsManager.SaveSettingByName("ScannerMetaDataPlugins", value, InstanceName); }
+        }
+
+        public static IList<string> ScannerWatchedFolders
+        {
+            get { return SettingsManager.GetSettingByNameListString("ScannerWatchedFolders", InstanceName) ?? new List<string>(0); }
+            set { SettingsManager.SaveSettingByName("ScannerWatchedFolders", value, InstanceName); }
+        }
+        #endregion
+
         public static string ImpersonationUsername
         {
             get { return SettingsManager.GetSettingByName("ImpersonationUsername", InstanceName) ?? string.Empty; }

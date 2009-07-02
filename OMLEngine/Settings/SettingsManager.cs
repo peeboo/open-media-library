@@ -8,6 +8,8 @@ namespace OMLEngine.Settings
 {
     public static class SettingsManager
     {
+        public static bool DisableResultCaching { get; set; }
+
         private static Dictionary<string, string> settingsCache = new Dictionary<string, string>();
 
         public static IEnumerable<OMLEngine.Dao.MataDataMapping> MetaDataMap_GetMappings()
@@ -100,9 +102,12 @@ namespace OMLEngine.Settings
         public static string GetSettingByName(string name, string instanceName)
         {
             string cachedValue;
-            
-            if (settingsCache.TryGetValue(name + "|" + instanceName, out cachedValue))
-                return cachedValue;
+
+            if (!DisableResultCaching)
+            {
+                if (settingsCache.TryGetValue(name + "|" + instanceName, out cachedValue))
+                    return cachedValue;
+            }
 
             Setting setting = OMLDataSettingsDBContext.Instance.Settings.SingleOrDefault(s => s.SettingName == name 
                                 && s.InstanceName == instanceName);
@@ -147,6 +152,18 @@ namespace OMLEngine.Settings
             float selection;
 
             return float.TryParse(value, out selection) ? selection : -1;
+        }
+
+        public static DateTime? GetSettingByNameDateTime(string name, string instanceName)
+        {
+            string value = SettingsManager.GetSettingByName(name, instanceName);
+
+            if (string.IsNullOrEmpty(value))
+                return null;
+
+            DateTime selection;
+
+            return DateTime.TryParse(value, out selection) ? selection : DateTime.MinValue;
         }
 
         public static bool? GetSettingByNameBool(string name, string instanceName)

@@ -90,11 +90,6 @@
     <Compile Include="Dao\TitleCollectionDao.cs" />
     <Compile Include="Dao\TitleCollectionManager.cs" />
     <Compile Include="Dao\TitleFilter.cs" />
-    <Compile Include="Dao\WatcherData.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>WatcherData.dbml</DependentUpon>
-    </Compile>
     <Compile Include="DatabaseManagement\DatabaseInformation.cs" />
     <Compile Include="DatabaseManagement\DatabaseManagement.cs" />
     <Compile Include="FileSystem\MountingTool.cs" />
@@ -133,8 +128,6 @@
     <Compile Include="Settings\MetaDataSettings.cs" />
     <Compile Include="Settings\OMLSettings.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
-    <Compile Include="Settings\WatcherSettings.cs" />
-    <Compile Include="Settings\WatcherSettingsManager.cs" />
     <Compile Include="Settings\XMLSettingsManager.cs" />
     <Compile Include="SortedArrayList.cs" />
     <Compile Include="SubtitleStream.cs" />
@@ -164,11 +157,6 @@
     <None Include="Dao\OMLData.dbml.layout">
       <DependentUpon>OMLData.dbml</DependentUpon>
     </None>
-    <None Include="Dao\WatcherData.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>WatcherData.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
@@ -178,9 +166,6 @@
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>OMLDataSettings.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Dao\WatcherData.dbml.layout">
-      <DependentUpon>WatcherData.dbml</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -52,17 +52,76 @@ namespace OMLTestSuite
         [Test]
         public void TEST_GETTING_ALL_TITLES()
         {
+            List<TitleFilter> filters = new List<TitleFilter>();
+
+            filters.Add(new TitleFilter(TitleFilterType.Genre, "Drama", true));
+            filters.Add(new TitleFilter(TitleFilterType.Genre, "Comedy", true));
+
+            List<Title> titles = new List<Title>(TitleCollectionManager.GetFilteredTitles(filters));
+
+            foreach (Title title in titles)
+            {
+                Console.WriteLine(title.Name);
+            }            
+
+            return;
+
+
+            OMLEngine.Trailers.AppleTrailers trailer = new OMLEngine.Trailers.AppleTrailers(OMLEngine.Trailers.AppleTrailerRes.HiRes);
+
+            foreach (OMLEngine.Trailers.AppleTrailer trail in trailer.AllTrailers)
+            {
+                Console.WriteLine(trail.Title);
+            }
+
+            return;
+
             Console.WriteLine("Starting to get all titles");
             DateTime start = DateTime.Now;
+
+            IEnumerable<FilteredCollectionWithImages> items = TitleCollectionManager.GetAllGenresWithImages(null);
+
+
+            //IEnumerable<FilteredTitleCollection> items = TitleCollectionManager.GetAllYearsGrouped(new List<TitleFilter>() { new TitleFilter(TitleFilterType.Genre, "Horror") });
+
+            /*            
 
             IEnumerable<Title> titles = TitleCollectionManager.GetAllTitles();
 
             foreach (Title title in titles)
-                Console.WriteLine(title.Name);
+            {
+                Console.WriteLine(title.Name + title.Disks.Count + title.FrontCoverMenuPath);
+            }*/
+
+            /*foreach (FilteredTitleCollection col in items)
+            {
+                Console.WriteLine(col.Name);
+
+                foreach (Title title in col.Titles)
+                {
+                    Console.WriteLine(title.Name);
+                }
+            }*/
+
+            foreach (FilteredCollectionWithImages col in items)
+            {
+                Console.WriteLine(col.Name + " " + col.Count);
+
+                int x = 0;
+
+                foreach (int id in col.ImageIds)
+                {
+                    if (x++ == 6)
+                        break;
+
+                    Console.Write(id);
+                }
+            }
 
             Console.WriteLine(string.Format("Done - Took: {0} milliseconds for {1} titles",
                                         (DateTime.Now - start).TotalMilliseconds.ToString(),
-                                        titles.Count()));
+                                        items
+                                        .Count()));
         }
 
         [Test]
@@ -360,10 +419,10 @@ namespace OMLTestSuite
 
             list.Add(@"C:\Users\Public\Recorded TV");
 
-            OMLEngine.Settings.WatcherSettingsManager.SetWatchFolders(list);
+            OMLSettings.ScannerWatchedFolders = list;
         }
 
-        public void UPDATE_SETTINGS()
+        /*public void UPDATE_SETTINGS()
         {
             WatcherSettings settings = WatcherSettingsManager.GetSettings();
 
@@ -383,7 +442,7 @@ namespace OMLTestSuite
             keys.Add(new KeyValuePair<string,string>("Collection Path", "c:\\Collection.xml"));           
 
             settings.SetMetaDataPlugins(new MetaDataSettings[] { new MetaDataSettings("DVDProfiler", keys) });
-        }
+        }*/
 
         public void TEST_CLEANUP_IMAGES()
         {

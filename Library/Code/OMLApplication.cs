@@ -698,8 +698,7 @@ namespace Library
             finally
             {
                 // close the db connections
-                TitleCollectionManager.CloseDBConnection();
-                WatcherSettingsManager.CloseDBConnection();
+                TitleCollectionManager.CloseDBConnection();                
             }            
         }
 

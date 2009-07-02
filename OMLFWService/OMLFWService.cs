@@ -17,10 +17,12 @@ namespace OMLFWService
         private const int SETTINGS_UPDATE_TIMEOUT = 30000;
         DirectoryScanner watcher;
         Timer timer;
-        DateTime settingsLastUpdated = DateTime.MinValue;
+        DateTime settingsLastUpdated = DateTime.Now.AddYears(-30);
 
         public OMLFWService()
         {
+            SettingsManager.DisableResultCaching = true;
+
             InitializeComponent();
 
             watcher = new DirectoryScanner();
@@ -37,19 +39,19 @@ namespace OMLFWService
 
         void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (WatcherSettingsManager.ModifiedSince(settingsLastUpdated))
+            if (OMLSettings.ScannerSettingsLastUpdated > settingsLastUpdated)
             {
                 ReloadSettings();
             }
-        }
+        }      
 
         private void ReloadSettings()
         {
-            WatcherSettings settings = WatcherSettingsManager.GetSettings();
+            DateTime updatedTime = OMLSettings.ScannerSettingsLastUpdated;
 
-            if (!settings.Enabled)
+            if (!OMLSettings.ScannerEnabled)
             {
-                settingsLastUpdated = settings.LastUpdated;
+                settingsLastUpdated = updatedTime;
                 watcher.Stop();
                 return;
             }                        
@@ -59,9 +61,9 @@ namespace OMLFWService
                 // attempt to watch some folders
                 // this will return false if the folders can't be watched at this time - 
                 // just use the 30 second timeout to try again then
-                if (watcher.WatchFolders(WatcherSettingsManager.GetWatchedFolders()))
+                if (watcher.WatchFolders(OMLSettings.ScannerWatchedFolders))
                 {
-                    settingsLastUpdated = settings.LastUpdated;
+                    settingsLastUpdated = updatedTime;
                 }                
             }
             catch (Exception err)
@@ -100,8 +102,6 @@ namespace OMLFWService
             watcher.Stop();
             timer.Enabled = false;
             WriteToLog(EventLogEntryType.Information, "OMLFWService Stopped");
-
-            WatcherSettingsManager.CloseDBConnection();
         }
 
         private void WriteToLog(EventLogEntryType type, string msg)

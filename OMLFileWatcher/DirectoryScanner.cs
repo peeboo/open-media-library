@@ -32,7 +32,11 @@ namespace OMLFileWatcher
         private List<string> waitCreatedList = new List<string>();
         private List<string> waitDeletedList = new List<string>();
 
-        IOMLMetadataPlugin metaDataPlugin = null;        
+        IOMLMetadataPlugin metaDataPlugin = null;
+
+        public delegate void TitleAdded(object sender, Title title);
+        public event TitleAdded Added;
+
 
         public DirectoryScanner()
         {                       
@@ -50,7 +54,7 @@ namespace OMLFileWatcher
         /// Get's a meta data filled title for the given name
         /// </summary>
         /// <param name="title"></param>
-        public Title GetTitleMetaData(string name)
+        /*public Title GetTitleMetaData(string name)
         {            
             Title returnTitle = null;
 
@@ -82,24 +86,24 @@ namespace OMLFileWatcher
                 DebugLine("Meta Data found for " + name);
 
             return returnTitle ?? new Title() { Name = name };            
-        }
+        }*/
 
         /// <summary>
         /// Initializes the meta data source of choice
         /// </summary>
-        private void SetupMetaDataPlugin()
+        /*private void SetupMetaDataPlugin()
         {
             try
             {
-                WatcherSettings settings = WatcherSettingsManager.GetSettings();
+                IList<string> plugins = OMLSettings.ScannerMetaDataPlugins;
 
                 // if no meta plugins are set just bail out
-                if (settings.MetaDataPlugins == null && settings.MetaDataPlugins.Count == 0)
+                if (plugins == null && plugins.Count == 0)
                     return;
 
                 // todo : solomon : eventually we should support an order of meta data plugins to allow
                 // for more than one - sadly that day isn't here yet
-                MetaDataSettings metaDataSettings = settings.MetaDataPlugins[0];
+                MetaDataSettings metaDataSettings = GetTitleMetaData(plugins[0]);
 
                 List<PluginServices.AvailablePlugin> plugins = PluginServices.FindPlugins(FileSystemWalker.PluginsDirectory, PluginTypes.MetadataPlugin);
 
@@ -141,7 +145,7 @@ namespace OMLFileWatcher
             {
                 DebugLineError(err, "Error could not load meta data plugin");
             }
-        }
+        }*/
 
         /// <summary>
         /// Scans the directory for any new media and adds the titles to the db
@@ -172,7 +176,11 @@ namespace OMLFileWatcher
 
                     foreach (string path in uniqueMedia)
                     {
-                        Title title = GetTitleMetaData(FileHelper.GetNameFromPath(path));
+                        // todo : solomon : i'm ignoring the meta data stuff for now
+
+                        // add the new title as unkown so the UI can filter on it
+                        Title title = new Title() { Name = FileHelper.GetNameFromPath(path), TitleType = TitleTypes.Root | TitleTypes.Unknown }; 
+                        //GetTitleMetaData(FileHelper.GetNameFromPath(path));
 
                         title.AddDisk(new Disk(DEFAULT_DISK_NAME, path, FileScanner.GetVideoFormatFromPath(path)));
 
@@ -181,6 +189,10 @@ namespace OMLFileWatcher
 
                         updated = true;
                         adddedCount++;
+
+                        // fire the event
+                        if (Added != null)
+                            Added(this, title);                                
                     }
 
                     // save all the image updates
