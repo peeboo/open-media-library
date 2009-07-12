@@ -185,7 +185,7 @@ namespace OMLEngine.DatabaseManagement
             {
                 // Launch backup job
                 string sql = "BACKUP DATABASE [" + DatabaseInformation.DatabaseName + "] TO DISK = '" + path + "' WITH INIT";
-                if (ExecuteNonQuery(sqlConn, sql))
+                if (ExecuteNonQuery(sqlConn, sql, 1200))
                 {
                     retval = true;
                 }
@@ -436,10 +436,17 @@ namespace OMLEngine.DatabaseManagement
             return sqlConn;
         }
 
-
         private bool ExecuteNonQuery(SqlConnection sqlConn, string query)
         {
+            return ExecuteNonQuery(sqlConn, query, 50);
+        }
+
+        private bool ExecuteNonQuery(SqlConnection sqlConn, string query, int timeout)
+        {
             SqlCommand sqlComm = new SqlCommand(query, sqlConn);
+
+            sqlComm.CommandTimeout = timeout;
+
             try
             {
                 sqlComm.ExecuteNonQuery();
