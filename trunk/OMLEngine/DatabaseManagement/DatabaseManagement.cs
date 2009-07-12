@@ -198,13 +198,14 @@ namespace OMLEngine.DatabaseManagement
         public bool OptimiseDatabase()
         {
             bool retval = true;
+            List<string> Tables = new List<string>();
 
             // Create database connection to OML and open it
             SqlConnection sqlConn = OpenDatabase(DatabaseInformation.OMLDatabaseConnectionString);
             if (sqlConn != null)
             {
                 // Get a list of tables in database
-                string sql = "select name from sysobjects where category = 0";
+                string sql = "select name from sysobjects where category = 0 and xtype = 'U'";
                 SqlDataReader reader;
 
                 if (!ExecuteReader(sqlConn, sql, out reader))
@@ -214,17 +215,21 @@ namespace OMLEngine.DatabaseManagement
 
                 while (reader.Read())
                 {
+                    Tables.Add(reader[0].ToString());
+                }
+                reader.Close();
+
+                foreach (string Table in Tables)
+                {
                     // Launch reindex job
-                    sql = "DBCC DBREINDEX (" + reader[0] + ", '', 70)";
+                    sql = "DBCC DBREINDEX (" + Table + ", '', 70)";
                     if (!ExecuteNonQuery(sqlConn, sql))
                     {
-                        reader.Close();
                         sqlConn.Close();
                         sqlConn.Dispose();
                         return false;
                     }
                 }
-                reader.Close();
             }
             sqlConn.Close();
             sqlConn.Dispose();
