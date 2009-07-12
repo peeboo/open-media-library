@@ -1607,13 +1607,14 @@ namespace OMLDatabaseEditor
                 _brushTitleListSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.LimeGreen, Color.PaleGreen);
                 _brushTitleListFolder = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.Gainsboro, Color.Silver);
                 _brushTitleListFolderSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.Silver, Color.LightGreen);
-                
-                _brushTitleList0 = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), Color.Coral, Color.Crimson, 2);
-                _brushTitleList30 = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), Color.CornflowerBlue, Color.CadetBlue, 2);
-                _brushTitleList40 = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), Color.MediumSpringGreen, Color.LightSeaGreen, 2);
-                _brushTitleList50 = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), Color.Yellow, Color.Gold, 2);
-                _brushTitleList60 = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), Color.Silver, Color.SkyBlue, 2);
-                _brushTitleList70 = new LinearGradientBrush(new Rectangle(x + w - 30, y + 16, 14, 14), Color.SkyBlue, Color.White, 2);
+
+                _brushTitleList0 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.Coral, Color.Crimson, LinearGradientMode.Horizontal);
+                _brushTitleList30 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.CornflowerBlue, Color.CadetBlue, LinearGradientMode.Horizontal);
+                _brushTitleList40 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.MediumSpringGreen, Color.LightSeaGreen, LinearGradientMode.Horizontal);
+                _brushTitleList50 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.Yellow, Color.Gold, LinearGradientMode.Horizontal);
+                _brushTitleList60 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.Silver, Color.SkyBlue, LinearGradientMode.Horizontal);
+                _brushTitleList70 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.SkyBlue, Color.White, LinearGradientMode.Horizontal);
+                _brushTitleList80 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.SkyBlue, Color.White, LinearGradientMode.Horizontal);
             }
 
 
@@ -2451,6 +2452,12 @@ namespace OMLDatabaseEditor
                 }
             }
             TitleCollectionManager.SaveTitleUpdates();
+        }
+
+        private void databaseToolsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DatabaseTools dt = new DatabaseTools();
+            dt.ShowDialog();
         }
     }
 }

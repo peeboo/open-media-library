@@ -132,6 +132,7 @@ namespace OMLDatabaseEditor
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
+            this.databaseToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -425,6 +426,7 @@ namespace OMLDatabaseEditor
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.customizeToolStripMenuItem,
             this.optionsToolStripMenuItem,
+            this.databaseToolsToolStripMenuItem,
             this.toolStripSeparator1,
             this.metaDataSettingsToolStripMenuItem,
             this.manageMetadataMappingsToolStripMenuItem,
@@ -951,7 +953,7 @@ namespace OMLDatabaseEditor
             this.addTagMenuItem1,
             this.addGenreMenuItem1});
             this.cmsMoviesList.Name = "cmsMoviesList";
-            this.cmsMoviesList.Size = new System.Drawing.Size(166, 114);
+            this.cmsMoviesList.Size = new System.Drawing.Size(166, 92);
             // 
             // miMetadataMulti
             // 
@@ -1097,6 +1099,13 @@ namespace OMLDatabaseEditor
             // defaultLookAndFeel1
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
+            // 
+            // databaseToolsToolStripMenuItem
+            // 
+            this.databaseToolsToolStripMenuItem.Name = "databaseToolsToolStripMenuItem";
+            this.databaseToolsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.databaseToolsToolStripMenuItem.Text = "Database Tools";
+            this.databaseToolsToolStripMenuItem.Click += new System.EventHandler(this.databaseToolsToolStripMenuItem_Click);
             // 
             // MainEditor
             // 
@@ -1255,6 +1264,7 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ColumnHeader columnTitleID;
         private System.Windows.Forms.ImageList ListViewImages;
         private System.Windows.Forms.ListView lvTitles;
+        private System.Windows.Forms.ToolStripMenuItem databaseToolsToolStripMenuItem;
     }
 }
 

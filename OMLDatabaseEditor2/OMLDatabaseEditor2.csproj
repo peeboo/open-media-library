@@ -172,6 +172,12 @@
     <Compile Include="Controls\TitleEditor.Designer.cs">
       <DependentUpon>TitleEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="DatabaseTools.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DatabaseTools.Designer.cs">
+      <DependentUpon>DatabaseTools.cs</DependentUpon>
+    </Compile>
     <Compile Include="DownloadingBackDropsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -422,6 +428,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\BioDataEditor.resx">
       <DependentUpon>BioDataEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DatabaseTools.resx">
+      <DependentUpon>DatabaseTools.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DownloadingBackDropsForm.resx">
       <DependentUpon>DownloadingBackDropsForm.cs</DependentUpon>
