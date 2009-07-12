@@ -45,6 +45,21 @@ namespace OMLEngine
             get { return Path.Combine(PublicRootDirectory, @"FanArt"); }
         }
 
+        public static string DBBackupDirectory
+        {
+            get { return Path.Combine(PublicRootDirectory, @"Backups"); }
+        }
+
+        public static bool DBBackupDirectoryExists
+        {
+            get { return Directory.Exists(DBBackupDirectory); }
+        }
+
+        public static void createDBBackupDirectory()
+        {
+            Directory.CreateDirectory(DBBackupDirectory);
+        }
+
         /// <summary>
         /// Location for cover art and other images to be stored
         /// </summary>

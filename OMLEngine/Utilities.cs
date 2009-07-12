@@ -219,9 +219,12 @@ namespace OMLEngine
 
             if (!FileSystemWalker.MainBackDropDirExists)
                 FileSystemWalker.createMainBackDropDirectory();
-            
+
             if (!FileSystemWalker.FanArtDirectoryExists)
                 FileSystemWalker.createFanArtDirectory();
+
+            if (!FileSystemWalker.DBBackupDirectoryExists)
+                FileSystemWalker.createDBBackupDirectory();
 
             if (!FileSystemWalker.ExtenderCacheDirectoryExists)
                 FileSystemWalker.CreateExtenderCacheDirectory();
