@@ -66,7 +66,16 @@ namespace OMLDatabaseEditor
             if (XtraMessageBox.Show("This may take some time, do you want to continue?", "Optimize Database", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
-                dbm.OptimiseDatabase();
+                if (dbm.OptimiseDatabase())
+                {
+                    Cursor = Cursors.Default;
+                    XtraMessageBox.Show("The routine has been successful", "Database Optimization");
+                }
+                else
+                {
+                    Cursor = Cursors.Default;
+                    XtraMessageBox.Show("The process has failed with error : " + OMLEngine.DatabaseManagement.DatabaseInformation.LastSQLError, "Database Optimization");
+                }
             }
         }
     }
