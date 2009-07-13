@@ -38,11 +38,11 @@ namespace OMLDatabaseEditor
             // 
             // sbBackupDB
             // 
-            this.sbBackupDB.Location = new System.Drawing.Point(62, 31);
+            this.sbBackupDB.Location = new System.Drawing.Point(51, 31);
             this.sbBackupDB.Name = "sbBackupDB";
-            this.sbBackupDB.Size = new System.Drawing.Size(75, 23);
+            this.sbBackupDB.Size = new System.Drawing.Size(113, 23);
             this.sbBackupDB.TabIndex = 0;
-            this.sbBackupDB.Text = "Backup";
+            this.sbBackupDB.Text = "Backup to a file";
             this.sbBackupDB.Click += new System.EventHandler(this.sbBackupDB_Click);
             // 
             // labelControl1
@@ -55,20 +55,20 @@ namespace OMLDatabaseEditor
             // 
             // sbOptimizeDB
             // 
-            this.sbOptimizeDB.Location = new System.Drawing.Point(62, 122);
+            this.sbOptimizeDB.Location = new System.Drawing.Point(51, 122);
             this.sbOptimizeDB.Name = "sbOptimizeDB";
-            this.sbOptimizeDB.Size = new System.Drawing.Size(75, 23);
+            this.sbOptimizeDB.Size = new System.Drawing.Size(113, 23);
             this.sbOptimizeDB.TabIndex = 3;
             this.sbOptimizeDB.Text = "Optimize";
             this.sbOptimizeDB.Click += new System.EventHandler(this.sbOptimizeDB_Click);
             // 
             // sbRestoreDB
             // 
-            this.sbRestoreDB.Location = new System.Drawing.Point(62, 60);
+            this.sbRestoreDB.Location = new System.Drawing.Point(51, 60);
             this.sbRestoreDB.Name = "sbRestoreDB";
-            this.sbRestoreDB.Size = new System.Drawing.Size(75, 23);
+            this.sbRestoreDB.Size = new System.Drawing.Size(113, 23);
             this.sbRestoreDB.TabIndex = 4;
-            this.sbRestoreDB.Text = "Restore";
+            this.sbRestoreDB.Text = "Restore from a file";
             this.sbRestoreDB.Click += new System.EventHandler(this.sbRestoreDB_Click);
             // 
             // labelControl2
@@ -82,9 +82,9 @@ namespace OMLDatabaseEditor
             // sbClose
             // 
             this.sbClose.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.sbClose.Location = new System.Drawing.Point(62, 171);
+            this.sbClose.Location = new System.Drawing.Point(51, 171);
             this.sbClose.Name = "sbClose";
-            this.sbClose.Size = new System.Drawing.Size(75, 23);
+            this.sbClose.Size = new System.Drawing.Size(113, 23);
             this.sbClose.TabIndex = 6;
             this.sbClose.Text = "Close";
             // 
@@ -92,7 +92,7 @@ namespace OMLDatabaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(191, 206);
+            this.ClientSize = new System.Drawing.Size(205, 206);
             this.Controls.Add(this.sbClose);
             this.Controls.Add(this.labelControl2);
             this.Controls.Add(this.sbRestoreDB);

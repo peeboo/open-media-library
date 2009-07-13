@@ -194,6 +194,40 @@ namespace OMLEngine.DatabaseManagement
             return retval;
         }
 
+        public bool RestoreDatabase(string path)
+        {
+            bool retval = false;
+
+            // Create database connection to OML and open it
+            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
+
+            if (sqlConn != null)
+            {
+                // Kill all users connected to OML
+                string sql = "DECLARE @SQL varchar(max) " +
+                    "SET @SQL = '' " +
+                    "SELECT @SQL = @SQL + 'Kill ' + Convert(varchar, SPId) + ';' " +
+                    "FROM MASTER..SysProcesses " +
+                    "WHERE DBId = DB_ID('" + DatabaseInformation.DatabaseName + "') " +
+                    "EXEC(@SQL)";
+
+                if (!ExecuteNonQuery(sqlConn, sql, 1200))
+                {
+                    retval = false;
+                }
+                else
+                {
+                    // Launch backup job
+                    sql = "RESTORE DATABASE [" + DatabaseInformation.DatabaseName + "] FROM DISK = '" + path + "'";
+                    if (ExecuteNonQuery(sqlConn, sql, 1200))
+                    {
+                        retval = true;
+                    }
+                }
+            }
+            sqlConn.Close();
+            return retval;
+        }
 
         public bool OptimiseDatabase()
         {
