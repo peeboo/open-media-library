@@ -57,7 +57,16 @@ namespace OMLDatabaseEditor
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
-                //dbm.RestoreDatabase(ofd.FileName);
+                if (dbm.RestoreDatabase(ofd.FileName))
+                {
+                    Cursor = Cursors.Default; 
+                    XtraMessageBox.Show("The restore has been successful. Please close and reopen any open OML applications", "Database Restore");
+                }
+                else
+                {
+                    Cursor = Cursors.Default;
+                    XtraMessageBox.Show("The restore has failed with error : " + OMLEngine.DatabaseManagement.DatabaseInformation.LastSQLError, "Database Restore");
+                }
             }
         }
 
