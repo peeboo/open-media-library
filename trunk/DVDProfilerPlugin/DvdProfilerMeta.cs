@@ -30,7 +30,7 @@ namespace DVDProfilerPlugin
         {
         }
 
-        public string PluginName { get { return "DVDProfiler"; } }
+        public string PluginName { get { return "DVDProfiler (DVDProfilerPlugin)"; } }
 
         // these 2 methods must be called in sequence
         public bool Initialize(Dictionary<string, string> parameters)
