@@ -29,33 +29,32 @@ namespace OMLDatabaseEditor
         private void InitializeComponent()
         {
             this.sbBackupDB = new DevExpress.XtraEditors.SimpleButton();
-            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.sbOptimizeDB = new DevExpress.XtraEditors.SimpleButton();
             this.sbRestoreDB = new DevExpress.XtraEditors.SimpleButton();
-            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.sbClose = new DevExpress.XtraEditors.SimpleButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lcReqDatabaseVersion = new DevExpress.XtraEditors.LabelControl();
+            this.lcDatabaseVersion = new DevExpress.XtraEditors.LabelControl();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lcDatabaseSize = new DevExpress.XtraEditors.LabelControl();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // sbBackupDB
             // 
-            this.sbBackupDB.Location = new System.Drawing.Point(51, 31);
+            this.sbBackupDB.Location = new System.Drawing.Point(59, 27);
             this.sbBackupDB.Name = "sbBackupDB";
             this.sbBackupDB.Size = new System.Drawing.Size(113, 23);
             this.sbBackupDB.TabIndex = 0;
             this.sbBackupDB.Text = "Backup to a file";
             this.sbBackupDB.Click += new System.EventHandler(this.sbBackupDB_Click);
             // 
-            // labelControl1
-            // 
-            this.labelControl1.Location = new System.Drawing.Point(12, 12);
-            this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(85, 13);
-            this.labelControl1.TabIndex = 1;
-            this.labelControl1.Text = "Backup && Restore";
-            // 
             // sbOptimizeDB
             // 
-            this.sbOptimizeDB.Location = new System.Drawing.Point(51, 122);
+            this.sbOptimizeDB.Location = new System.Drawing.Point(59, 30);
             this.sbOptimizeDB.Name = "sbOptimizeDB";
             this.sbOptimizeDB.Size = new System.Drawing.Size(113, 23);
             this.sbOptimizeDB.TabIndex = 3;
@@ -64,58 +63,112 @@ namespace OMLDatabaseEditor
             // 
             // sbRestoreDB
             // 
-            this.sbRestoreDB.Location = new System.Drawing.Point(51, 60);
+            this.sbRestoreDB.Location = new System.Drawing.Point(59, 60);
             this.sbRestoreDB.Name = "sbRestoreDB";
             this.sbRestoreDB.Size = new System.Drawing.Size(113, 23);
             this.sbRestoreDB.TabIndex = 4;
             this.sbRestoreDB.Text = "Restore from a file";
             this.sbRestoreDB.Click += new System.EventHandler(this.sbRestoreDB_Click);
             // 
-            // labelControl2
-            // 
-            this.labelControl2.Location = new System.Drawing.Point(12, 103);
-            this.labelControl2.Name = "labelControl2";
-            this.labelControl2.Size = new System.Drawing.Size(61, 13);
-            this.labelControl2.TabIndex = 5;
-            this.labelControl2.Text = "Maintenance";
-            // 
             // sbClose
             // 
             this.sbClose.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.sbClose.Location = new System.Drawing.Point(51, 171);
+            this.sbClose.Location = new System.Drawing.Point(71, 299);
             this.sbClose.Name = "sbClose";
             this.sbClose.Size = new System.Drawing.Size(113, 23);
             this.sbClose.TabIndex = 6;
             this.sbClose.Text = "Close";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lcDatabaseSize);
+            this.groupBox1.Controls.Add(this.lcReqDatabaseVersion);
+            this.groupBox1.Controls.Add(this.lcDatabaseVersion);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(234, 82);
+            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Info";
+            // 
+            // lcReqDatabaseVersion
+            // 
+            this.lcReqDatabaseVersion.Location = new System.Drawing.Point(11, 39);
+            this.lcReqDatabaseVersion.Name = "lcReqDatabaseVersion";
+            this.lcReqDatabaseVersion.Size = new System.Drawing.Size(137, 13);
+            this.lcReqDatabaseVersion.TabIndex = 11;
+            this.lcReqDatabaseVersion.Text = "Required Database version :";
+            // 
+            // lcDatabaseVersion
+            // 
+            this.lcDatabaseVersion.Location = new System.Drawing.Point(11, 20);
+            this.lcDatabaseVersion.Name = "lcDatabaseVersion";
+            this.lcDatabaseVersion.Size = new System.Drawing.Size(91, 13);
+            this.lcDatabaseVersion.TabIndex = 10;
+            this.lcDatabaseVersion.Text = "Database version :";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.sbBackupDB);
+            this.groupBox2.Controls.Add(this.sbRestoreDB);
+            this.groupBox2.Location = new System.Drawing.Point(12, 100);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(234, 100);
+            this.groupBox2.TabIndex = 8;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Backup && Restore";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.sbOptimizeDB);
+            this.groupBox3.Location = new System.Drawing.Point(12, 206);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(234, 73);
+            this.groupBox3.TabIndex = 9;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Maintenance";
+            // 
+            // lcDatabaseSize
+            // 
+            this.lcDatabaseSize.Location = new System.Drawing.Point(11, 58);
+            this.lcDatabaseSize.Name = "lcDatabaseSize";
+            this.lcDatabaseSize.Size = new System.Drawing.Size(77, 13);
+            this.lcDatabaseSize.TabIndex = 12;
+            this.lcDatabaseSize.Text = "Database size : ";
+            // 
             // DatabaseTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(205, 206);
+            this.ClientSize = new System.Drawing.Size(258, 334);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.sbClose);
-            this.Controls.Add(this.labelControl2);
-            this.Controls.Add(this.sbRestoreDB);
-            this.Controls.Add(this.sbOptimizeDB);
-            this.Controls.Add(this.labelControl1);
-            this.Controls.Add(this.sbBackupDB);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DatabaseTools";
             this.Text = "DatabaseTools";
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private DevExpress.XtraEditors.SimpleButton sbBackupDB;
-        private DevExpress.XtraEditors.LabelControl labelControl1;
         private DevExpress.XtraEditors.SimpleButton sbOptimizeDB;
         private DevExpress.XtraEditors.SimpleButton sbRestoreDB;
-        private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraEditors.SimpleButton sbClose;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private DevExpress.XtraEditors.LabelControl lcDatabaseVersion;
+        private DevExpress.XtraEditors.LabelControl lcReqDatabaseVersion;
+        private DevExpress.XtraEditors.LabelControl lcDatabaseSize;
     }
 }

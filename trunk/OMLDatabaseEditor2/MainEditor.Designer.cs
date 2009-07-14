@@ -64,6 +64,7 @@ namespace OMLDatabaseEditor
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.databaseToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.metaDataSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageMetadataMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -132,7 +133,6 @@ namespace OMLDatabaseEditor
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
-            this.databaseToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -449,6 +449,13 @@ namespace OMLDatabaseEditor
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.ToolStripOptionClick);
+            // 
+            // databaseToolsToolStripMenuItem
+            // 
+            this.databaseToolsToolStripMenuItem.Name = "databaseToolsToolStripMenuItem";
+            this.databaseToolsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.databaseToolsToolStripMenuItem.Text = "Database Tools";
+            this.databaseToolsToolStripMenuItem.Click += new System.EventHandler(this.databaseToolsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -931,7 +938,7 @@ namespace OMLDatabaseEditor
             this.lvTitles.Location = new System.Drawing.Point(0, 57);
             this.lvTitles.Name = "lvTitles";
             this.lvTitles.OwnerDraw = true;
-            this.lvTitles.Size = new System.Drawing.Size(194, 275);
+            this.lvTitles.Size = new System.Drawing.Size(194, 314);
             this.lvTitles.SmallImageList = this.ListViewImages;
             this.lvTitles.TabIndex = 9;
             this.lvTitles.UseCompatibleStateImageBehavior = false;
@@ -995,7 +1002,7 @@ namespace OMLDatabaseEditor
             // ListViewImages
             // 
             this.ListViewImages.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.ListViewImages.ImageSize = new System.Drawing.Size(1, 32);
+            this.ListViewImages.ImageSize = new System.Drawing.Size(1, 38);
             this.ListViewImages.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // SortControl
@@ -1099,13 +1106,6 @@ namespace OMLDatabaseEditor
             // defaultLookAndFeel1
             // 
             this.defaultLookAndFeel1.LookAndFeel.SkinName = "Blue";
-            // 
-            // databaseToolsToolStripMenuItem
-            // 
-            this.databaseToolsToolStripMenuItem.Name = "databaseToolsToolStripMenuItem";
-            this.databaseToolsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
-            this.databaseToolsToolStripMenuItem.Text = "Database Tools";
-            this.databaseToolsToolStripMenuItem.Click += new System.EventHandler(this.databaseToolsToolStripMenuItem_Click);
             // 
             // MainEditor
             // 

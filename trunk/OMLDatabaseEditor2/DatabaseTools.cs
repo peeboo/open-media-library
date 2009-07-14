@@ -15,6 +15,22 @@ namespace OMLDatabaseEditor
         public DatabaseTools()
         {
             InitializeComponent();
+
+            // Get database versioning
+            OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
+            int dbMajor;
+            int dbMinor;
+            dbm.GetSchemaVersion(out dbMajor, out dbMinor);
+            lcDatabaseVersion.Text = "Database version : " + dbMajor.ToString() + "." + dbMinor.ToString();
+            int dbReqMajor;
+            int dbRejMinor;
+            dbm.GetRequiredSchemaVersion(out dbReqMajor, out dbRejMinor);
+            lcReqDatabaseVersion.Text = "Required Database version :" + dbReqMajor.ToString() + "." + dbRejMinor.ToString();
+
+            int DataSize;
+            int LogSize;
+            dbm.GetDatabaseSize(out DataSize, out LogSize);
+            lcDatabaseSize.Text = "Database size : Data " + DataSize.ToString() + " MB, Logs " + LogSize.ToString() + " MB";
         }
 
         private void sbBackupDB_Click(object sender, EventArgs e)

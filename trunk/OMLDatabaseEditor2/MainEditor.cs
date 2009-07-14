@@ -10,6 +10,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 using DevExpress.XtraEditors;
 using DevExpress.Skins;
@@ -47,13 +48,18 @@ namespace OMLDatabaseEditor
         LinearGradientBrush _brushTitleListSelected;
         LinearGradientBrush _brushTitleListFolder;
         LinearGradientBrush _brushTitleListFolderSelected;
-        LinearGradientBrush _brushTitleList0;
-        LinearGradientBrush _brushTitleList30;
-        LinearGradientBrush _brushTitleList40;
-        LinearGradientBrush _brushTitleList50;
-        LinearGradientBrush _brushTitleList60;
-        LinearGradientBrush _brushTitleList70;
-        LinearGradientBrush _brushTitleList80;
+
+        Image ImgMetaPercentage1;
+        Image ImgMetaPercentage2;
+        Image ImgMetaPercentage3;
+        Image ImgMetaPercentage4;
+        Image ImgMetaPercentage5;
+        Image ImgStars0;
+        Image ImgStars1;
+        Image ImgStars2;
+        Image ImgStars3;
+        Image ImgStars4;
+        Image ImgStars5;
         #region Initialisation
         public MainEditor()
         {
@@ -110,6 +116,34 @@ namespace OMLDatabaseEditor
 
             SplashScreen2.SetStatus(80, "Loading MRU Lists.");
             this.titleEditor.SetMRULists();
+
+            // Load resource images
+            Stream imgStream = null;
+            Assembly a = Assembly.GetExecutingAssembly();
+
+            imgStream = a.GetManifestResourceStream("OMLDatabaseEditor.Resources.MetaDataIndicator1.png");
+            ImgMetaPercentage1 = Image.FromStream(imgStream);
+            imgStream = a.GetManifestResourceStream("OMLDatabaseEditor.Resources.MetaDataIndicator2.png");
+            ImgMetaPercentage2 = Image.FromStream(imgStream);
+            imgStream = a.GetManifestResourceStream("OMLDatabaseEditor.Resources.MetaDataIndicator3.png");
+            ImgMetaPercentage3 = Image.FromStream(imgStream);
+            imgStream = a.GetManifestResourceStream("OMLDatabaseEditor.Resources.MetaDataIndicator4.png");
+            ImgMetaPercentage4 = Image.FromStream(imgStream);
+            imgStream = a.GetManifestResourceStream("OMLDatabaseEditor.Resources.MetaDataIndicator5.png");
+            ImgMetaPercentage5 = Image.FromStream(imgStream);
+            imgStream = a.GetManifestResourceStream("OMLDatabaseEditor.Resources.Stars0.png");
+            ImgStars0 = Image.FromStream(imgStream);
+            imgStream = a.GetManifestResourceStream("OMLDatabaseEditor.Resources.Stars1.png");
+            ImgStars1 = Image.FromStream(imgStream);
+            imgStream = a.GetManifestResourceStream("OMLDatabaseEditor.Resources.Stars2.png");
+            ImgStars2 = Image.FromStream(imgStream);
+            imgStream = a.GetManifestResourceStream("OMLDatabaseEditor.Resources.Stars3.png");
+            ImgStars3 = Image.FromStream(imgStream);
+            imgStream = a.GetManifestResourceStream("OMLDatabaseEditor.Resources.Stars4.png");
+            ImgStars4 = Image.FromStream(imgStream);
+            imgStream = a.GetManifestResourceStream("OMLDatabaseEditor.Resources.Stars5.png");
+            ImgStars5 = Image.FromStream(imgStream);
+
 
             SplashScreen2.SetStatus(100,"Completed.");
 
@@ -1510,10 +1544,10 @@ namespace OMLDatabaseEditor
                 lvTitles.Items.Add("All Media", "All Media", null);
              
                 // Get All Root Titles
-                var titles = (from t in _movieList
+                var titles = SortTitles((from t in _movieList
                               where (t.Value.TitleType & TitleTypes.AllMedia) != 0 &&
                               (t.Value.TitleType & TitleTypes.Root) != 0
-                              select t.Value).ToList();
+                              select t.Value).ToList());
 
                 foreach (Title t in titles)
                 {
@@ -1560,10 +1594,10 @@ namespace OMLDatabaseEditor
                     lvTitles.Items.Add(roottitleid.ToString(), roottitleid.ToString(), null);
 
                     // Get All Root Titles
-                    var titles = (from t in _movieList
+                    var titles = SortTitles((from t in _movieList
                                   where (t.Value.TitleType & TitleTypes.AllMedia) != 0 &&
                                   t.Value.ParentTitleId == roottitleid
-                                  select t.Value).ToList();
+                                  select t.Value).ToList());
 
                     
                     foreach (Title t in titles)
@@ -1607,14 +1641,6 @@ namespace OMLDatabaseEditor
                 _brushTitleListSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.LimeGreen, Color.PaleGreen);
                 _brushTitleListFolder = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.Gainsboro, Color.Silver);
                 _brushTitleListFolderSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.Silver, Color.LightGreen);
-
-                _brushTitleList0 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.Coral, Color.Crimson, LinearGradientMode.Horizontal);
-                _brushTitleList30 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.CornflowerBlue, Color.CadetBlue, LinearGradientMode.Horizontal);
-                _brushTitleList40 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.MediumSpringGreen, Color.LightSeaGreen, LinearGradientMode.Horizontal);
-                _brushTitleList50 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.Yellow, Color.Gold, LinearGradientMode.Horizontal);
-                _brushTitleList60 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.Silver, Color.SkyBlue, LinearGradientMode.Horizontal);
-                _brushTitleList70 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.SkyBlue, Color.White, LinearGradientMode.Horizontal);
-                _brushTitleList80 = new LinearGradientBrush(new Rectangle(x + w - 30, 16, 32, 32), Color.SkyBlue, Color.White, LinearGradientMode.Horizontal);
             }
 
 
@@ -1663,42 +1689,58 @@ namespace OMLDatabaseEditor
                 // Media specific paint goes here
                 e.Graphics.DrawString(currentTitle.Name, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 2, w - 65, h), stf);
                 e.Graphics.DrawString(currentTitle.ReleaseDate.ToShortDateString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(w - 60, y + 2, w, h), stf);
-                e.Graphics.DrawString(currentTitle.Runtime.ToString() + " minutes, " + currentTitle.Studio, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Gray), new RectangleF(8, y + 16, w - 40, h), stf);
-
+                //e.Graphics.DrawString(currentTitle.Runtime.ToString() + " minutes, " + currentTitle.Studio, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Gray), new RectangleF(8, y + 16, w - 40, h), stf);
+                e.Graphics.DrawString(currentTitle.Runtime.ToString() + " minutes", new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Gray), new RectangleF(x + 22, y + 19, w - 102, h), stf);
+                
                 // Draw percentage complete box
-                LinearGradientBrush bb = _brushTitleList0;
+                Image MetaPercentage = ImgMetaPercentage1;
 
-                if (currentTitle.PercentComplete <= .3M)
+                if (currentTitle.PercentComplete <= .2M)
                 {
-                    bb = _brushTitleList30;
+                    MetaPercentage = ImgMetaPercentage1;
                 }
                 else if (currentTitle.PercentComplete <= .4M)
-                {     
-                    bb = _brushTitleList40;
-                }
-                else if (currentTitle.PercentComplete <= .5M)
                 {
-                    bb = _brushTitleList50;
+                    MetaPercentage = ImgMetaPercentage2;
                 }
                 else if (currentTitle.PercentComplete <= .6M)
                 {
-                    bb = _brushTitleList60;
-                }
-                else if (currentTitle.PercentComplete <= .7M)
-                {
-                    bb = _brushTitleList70;
+                    MetaPercentage = ImgMetaPercentage3;
                 }
                 else if (currentTitle.PercentComplete <= .8M)
-                {                 
-                    bb = _brushTitleList80;
+                {
+                    MetaPercentage = ImgMetaPercentage4;
+                }
+                else 
+                {
+                    MetaPercentage = ImgMetaPercentage5;
                 }
 
-                e.Graphics.FillEllipse(bb, new Rectangle(x + w - 30, y + 16, 14, 14));
-                e.Graphics.DrawEllipse(new Pen(Color.Black), new Rectangle(x + w - 30, y + 16, 14, 14));
+                e.Graphics.DrawImageUnscaled(MetaPercentage,x + 4,y + 18);
+                //e.Graphics.FillEllipse(bb, new Rectangle(x + w - 30, y + 16, 14, 14));
+                //e.Graphics.DrawEllipse(new Pen(Color.Black), new Rectangle(x + w - 30, y + 16, 14, 14));
             }
 
             // Common painting goes here
             e.Graphics.DrawLine(new Pen(Color.Gray), 0, y + h - 1, w, y + h - 1);
+            
+            // Draw rating stars
+            Image Stars = null;
+            switch (currentTitle.UserStarRating)
+            {
+                case 0: Stars = ImgStars0; break;
+                case 1: 
+                case 2: Stars = ImgStars1; break;
+                case 3:
+                case 4: Stars = ImgStars2; break;
+                case 5:
+                case 6: Stars = ImgStars3; break;
+                case 7:
+                case 8:
+                case 9: Stars = ImgStars4; break;
+                default: Stars = ImgStars5; break;
+            }
+            e.Graphics.DrawImageUnscaled(Stars, x + w - 82, y + 18);
         }
       
         private void lvTitles_MouseMove(object sender, MouseEventArgs e)
@@ -1770,11 +1812,12 @@ namespace OMLDatabaseEditor
         
             if (lvTitles.SelectedItems.Count == 1)
             {
-                Title selectedTitle = _movieList[Convert.ToInt32(lvTitles.SelectedItems[0].Text)];
-
-                if (selectedTitle != null)
+                if (lvTitles.SelectedItems[0].Text != "All Media")
                 {
-                    if (selectedTitle.Name != "All Media")
+
+                    Title selectedTitle = _movieList[Convert.ToInt32(lvTitles.SelectedItems[0].Text)];
+
+                    if (selectedTitle != null)
                     {
                         titleEditor.LoadDVD(selectedTitle);
                         this.Text = APP_TITLE + " - " + selectedTitle.Name;
@@ -1784,6 +1827,12 @@ namespace OMLDatabaseEditor
                         titleEditor.ClearEditor(true);
                         this.Text = APP_TITLE;
                     }
+                    ToggleSaveState(false);
+                }
+                else
+                {
+                    titleEditor.ClearEditor(true);
+                    this.Text = APP_TITLE;
                     ToggleSaveState(false);
                 }
             }
@@ -2317,18 +2366,20 @@ namespace OMLDatabaseEditor
                 {
                     case "Name":
                         return titles.OrderBy(st => st.Name);
-                    case "SortName":
+                    case "Sort Name":
                         return titles.OrderBy(st => st.SortName);
-                    case "Runtime":
+                    case "Run Time":
                         return titles.OrderBy(st => st.Runtime);
-                    case "DateAdded":
+                    case "Date Added":
                         return titles.OrderBy(st => st.DateAdded);
-                    case "ModifiedDate":
+                    case "Modified Date":
                         return titles.OrderBy(st => st.ModifiedDate);
-                    case "ProductionYear":
+                    case "Production Year":
                         return titles.OrderBy(st => st.ProductionYear);
-                    case "ReleaseDate":
+                    case "Release Date":
                         return titles.OrderBy(st => st.ReleaseDate);
+                    case "User Rating":
+                        return titles.OrderBy(st => st.UserStarRating);
                     default:
                         return titles.OrderBy(st => st.SortName);
                 }
@@ -2339,18 +2390,20 @@ namespace OMLDatabaseEditor
                 {
                     case "Name":
                         return titles.OrderByDescending(st => st.Name);
-                    case "SortName":
+                    case "Sort Name":
                         return titles.OrderByDescending(st => st.SortName);
-                    case "Runtime":
+                    case "Run Time":
                         return titles.OrderByDescending(st => st.Runtime);
-                    case "DateAdded":
+                    case "Date Added":
                         return titles.OrderByDescending(st => st.DateAdded);
-                    case "ModifiedDate":
+                    case "Modified Date":
                         return titles.OrderByDescending(st => st.ModifiedDate);
-                    case "ProductionYear":
+                    case "Production Year":
                         return titles.OrderByDescending(st => st.ProductionYear);
-                    case "ReleaseDate":
+                    case "Release Date":
                         return titles.OrderByDescending(st => st.ReleaseDate);
+                    case "User Rating":
+                        return titles.OrderByDescending(st => st.UserStarRating);
                     default:
                         return titles.OrderByDescending(st => st.SortName);
                 }
@@ -2405,12 +2458,13 @@ namespace OMLDatabaseEditor
                 //cms.ite
                 cms.ItemClicked += new ToolStripItemClickedEventHandler(SortOrderChanged);
                 cms.Items.Add("Name");
-                cms.Items.Add("SortName");
-                cms.Items.Add("Runtime");
-                cms.Items.Add("DateAdded");
-                cms.Items.Add("ModifiedDate");
-                cms.Items.Add("ProductionYear");
-                cms.Items.Add("ReleaseDate");
+                cms.Items.Add("Sort Name");
+                cms.Items.Add("Run Time");
+                cms.Items.Add("Date Added");
+                cms.Items.Add("Modified Date");
+                cms.Items.Add("Production Year");
+                cms.Items.Add("Release Date");
+                cms.Items.Add("User Rating");
                 cms.Show(SortControl, e.Location);
             }
         }

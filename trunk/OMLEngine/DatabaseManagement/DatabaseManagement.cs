@@ -172,6 +172,34 @@ namespace OMLEngine.DatabaseManagement
             return DatabaseInformation.SQLState.OK;
         }
 
+        public bool GetDatabaseSize(out int Data, out int Logs)
+        {
+            Data = 0;
+            Logs = 0;
+
+            // Create database connection to OML and open it
+            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
+            
+            SqlDataReader reader;
+            
+            if (!ExecuteReader(sqlConn, "select name, size / 128 from oml.dbo.sysfiles", out reader))
+            {
+                return false;
+            }
+
+            while (reader.Read())
+            {
+                if (reader[0].ToString().Contains("log"))
+                {
+                    Logs = Convert.ToInt32(reader[1]);
+                }
+                else
+                {
+                    Data = Convert.ToInt32(reader[1]);
+                }
+            }
+            return true;
+        }
 
         #region Database Maintenance
         public bool BackupDatabase(string path)
