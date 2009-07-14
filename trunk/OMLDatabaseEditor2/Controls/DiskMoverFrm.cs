@@ -11,9 +11,12 @@ namespace OMLDatabaseEditor.Controls
 {
     public partial class DiskMoverFrm : DevExpress.XtraEditors.XtraForm
     {
-        public DiskMoverFrm()
+        List<string> folders;
+
+        public DiskMoverFrm(List<string> pfolders)
         {
             InitializeComponent();
+            folders = pfolders;
         }
 
         public string fromFolder
@@ -42,9 +45,7 @@ namespace OMLDatabaseEditor.Controls
 
         private void DiskMoverFrm_Load(object sender, EventArgs e)
         {
-            // TODO SQL Version
-//            lbcFolders.Items.AddRange(MainEditor._titleCollection.GetFolders.ToArray());
-            //lbcFolders.Items.AddRange( MainEditor._titleCollection.GetFolders.ToArray());
+            lbcFolders.Items.AddRange(folders.ToArray());
             beDestination.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             beDestination.MaskBox.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
         }

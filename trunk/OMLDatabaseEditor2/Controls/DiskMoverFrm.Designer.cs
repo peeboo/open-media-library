@@ -91,6 +91,7 @@ namespace OMLDatabaseEditor.Controls
             this.ceWithImages.Properties.Caption = "w/Images";
             this.ceWithImages.Size = new System.Drawing.Size(75, 18);
             this.ceWithImages.TabIndex = 4;
+            this.ceWithImages.Visible = false;
             // 
             // DiskMoverFrm
             // 

@@ -822,39 +822,60 @@ namespace OMLDatabaseEditor
             }
             else if (sender == moveDisksToolStripMenuItem)
             {
-                /*DiskMoverFrm dsm = new DiskMoverFrm();
+                // Build list of folders in current title list view
+                List<int> titleid = new List<int>();
+
+                foreach (ListViewItem Item in lvTitles.Items)
+                {
+                    if (Item.Text != "All Media")
+                    {
+                        titleid.Add(Convert.ToInt32(Item.Text));
+                    }
+                }
+ 
+                List<string> folders = (from title in _movieList 
+                                        where titleid.Contains(title.Key)
+                                        from disk in title.Value.Disks
+                                        orderby System.IO.Path.GetDirectoryName(disk.Path) ascending
+                                        select System.IO.Path.GetDirectoryName(disk.Path)).Distinct().ToList<string>();
+
+
+                DiskMoverFrm dsm = new DiskMoverFrm(folders);
+
                 if (dsm.ShowDialog(this) == DialogResult.OK)
                 {
                     string fromFolder = dsm.fromFolder;
                     string toFolder = dsm.toFolder;
-                    List<Title> titles = _titleCollection.FindByFolder(fromFolder);
-                    foreach (Title title in titles)
+
+                    List<Disk> disks = (from title in _movieList
+                                        from disk in title.Value.Disks
+                                        where System.IO.Path.GetDirectoryName(disk.Path).StartsWith(fromFolder)
+                                        select disk).ToList();
+
+                    foreach (Disk disk in disks)
                     {
-                        foreach (Disk disk in title.Disks)
-                        {
-                            if (disk.Path.StartsWith(fromFolder))
-                            {
-                                disk.Path = disk.Path.Replace(fromFolder, toFolder);
-                            }
-                        }
-                        if (dsm.withImages)
-                        {
-                            if (title.FrontCoverPath.StartsWith(fromFolder))
-                            {
-                                title.FrontCoverPath = title.FrontCoverPath.Replace(fromFolder, toFolder);
-                            }
-                            if (title.FrontCoverMenuPath.StartsWith(fromFolder))
-                            {
-                                title.FrontCoverMenuPath = title.FrontCoverMenuPath.Replace(fromFolder, toFolder);
-                            }
-                            if (title.BackCoverPath.StartsWith(fromFolder))
-                            {
-                                title.BackCoverPath = title.BackCoverPath.Replace(fromFolder, toFolder);
-                            }
-                        }
+                        disk.Path = System.IO.Path.Combine(
+                            System.IO.Path.GetDirectoryName(disk.Path).Replace(fromFolder, toFolder),
+                            System.IO.Path.GetFileName(disk.Path));
                     }
+                    /*if (dsm.withImages)
+                    {
+                        if (title.FrontCoverPath.StartsWith(fromFolder))
+                        {
+                            title.FrontCoverPath = title.FrontCoverPath.Replace(fromFolder, toFolder);
+                        }
+                        if (title.FrontCoverMenuPath.StartsWith(fromFolder))
+                        {
+                            title.FrontCoverMenuPath = title.FrontCoverMenuPath.Replace(fromFolder, toFolder);
+                        }
+                        if (title.BackCoverPath.StartsWith(fromFolder))
+                        {
+                            title.BackCoverPath = title.BackCoverPath.Replace(fromFolder, toFolder);
+                        }
+                    }*/
+
                     TitleCollectionManager.SaveTitleUpdates();
-                }*/
+                }
             }
         }
 
