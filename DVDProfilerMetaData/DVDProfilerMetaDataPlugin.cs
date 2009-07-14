@@ -41,7 +41,7 @@ namespace DVDProfilerMetaData
 
         public string PluginName
         {
-            get { return "DVDProfiler"; }
+            get { return "DVDProfiler (DVDProfilerMetaData)"; }
         }
 
 
