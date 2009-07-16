@@ -39,6 +39,8 @@ namespace OMLDatabaseEditor
         //private List<Title> _movieList;
         private Dictionary<int,Title> _movieList;
         private Dictionary<int, TreeNode> _mediaTree;
+        private Dictionary<int, int> _movieCount;
+        int _movieRootCount;
 
         public List<String> DXSkins;
 
@@ -391,6 +393,19 @@ namespace OMLDatabaseEditor
 
         private void beSearch_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
         {
+            SearchTitles();
+        }
+
+        private void beSearch_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                SearchTitles();
+            }
+        }
+
+        private void SearchTitles()
+        {
             List<TitleFilter> tf = new List<TitleFilter>();
             tf.Add(new TitleFilter(TitleFilterType.Name, beSearch.Text));
             tf.Add(new TitleTypeFilter(TitleTypes.AllMedia));
@@ -451,6 +466,43 @@ namespace OMLDatabaseEditor
                 }
             }
             Cursor = Cursors.Default;
+        }
+
+        private void CountMovies()
+        {
+            if (_movieCount == null)
+            {
+                _movieCount = new Dictionary<int, int>();
+            }
+            else
+            {
+                _movieCount.Clear();
+            }
+
+            _movieRootCount = 0;
+
+            foreach (Title title in _movieList.Values)
+            {
+                if ((title.TitleType & TitleTypes.AllMedia) != 0)
+                {
+                    if ((title.TitleType & TitleTypes.Root) != 0)
+                    {
+                        // Root Item
+                        _movieRootCount++;
+                    }
+                    else
+                    {
+                        if (_movieCount.ContainsKey((int)title.ParentTitleId))
+                        {
+                            _movieCount[(int)title.ParentTitleId] = _movieCount[(int)title.ParentTitleId] + 1;
+                        }
+                        else
+                        {
+                            _movieCount[(int)title.ParentTitleId] = 1;
+                        }
+                    }
+                }
+            }
         }
         #endregion 
 
@@ -1552,6 +1604,8 @@ namespace OMLDatabaseEditor
         #region TitleList functions
         private void PopulateMovieListV2(int? roottitleid)
         {
+            CountMovies();
+
             this.Cursor = Cursors.WaitCursor;
 
             lvTitles.Items.Clear();
@@ -1666,7 +1720,7 @@ namespace OMLDatabaseEditor
 
 
             Title currentTitle = null;
-
+            int? currentTitleID = null;
             if (e.Item.Text == "All Media")
             {
                 currentTitle = new Title();
@@ -1675,7 +1729,8 @@ namespace OMLDatabaseEditor
             }
             else
             {
-                currentTitle = _movieList[Convert.ToInt32(e.Item.Text)];
+                currentTitleID = Convert.ToInt32(e.Item.Text);
+                currentTitle = _movieList[(int)currentTitleID];
             }
 
            
@@ -1698,6 +1753,23 @@ namespace OMLDatabaseEditor
                 {
                     e.Graphics.FillRectangle(_brushTitleListFolder, x, y, w, h);
                 }
+                e.Graphics.DrawString(currentTitle.Name, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold), new SolidBrush(Color.Black), new RectangleF(x, y + 2, w - 65, h), stf);
+                
+                int titleCount = 0;
+                if (currentTitleID == null)
+                {
+                    titleCount = _movieRootCount;
+                }
+                else
+                {
+                    if (_movieCount.ContainsKey((int)currentTitleID))
+                    {
+                        titleCount = _movieCount[(int)currentTitleID];
+                    }
+                }
+
+                e.Graphics.DrawString("Total titles " + titleCount.ToString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 18, w - 65, h), stf);
+            
                 e.Graphics.DrawString(currentTitle.Name, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold), new SolidBrush(Color.Black), new RectangleF(x, y + 2, w - 65, h), stf);
             }
             else

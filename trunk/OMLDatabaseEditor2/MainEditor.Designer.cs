@@ -1027,6 +1027,7 @@ namespace OMLDatabaseEditor
             this.beSearch.Size = new System.Drawing.Size(187, 23);
             this.beSearch.TabIndex = 3;
             this.beSearch.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.beSearch_ButtonClick);
+            this.beSearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.beSearch_KeyPress);
             // 
             // titleEditor
             // 

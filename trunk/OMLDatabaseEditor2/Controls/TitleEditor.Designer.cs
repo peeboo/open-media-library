@@ -375,7 +375,7 @@
             this.lblSynopsis.Name = "lblSynopsis";
             this.lblSynopsis.Size = new System.Drawing.Size(42, 13);
             this.lblSynopsis.TabIndex = 11;
-            this.lblSynopsis.Text = "Synposis";
+            this.lblSynopsis.Text = "Synopsis";
             // 
             // labelControl5
             // 
