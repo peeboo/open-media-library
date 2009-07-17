@@ -24,7 +24,7 @@ namespace OMLEngine
     public class Title : IComparable, ISerializable
     {
         #region locals
-        //private static string XmlNameSpace = "http://www.openmedialibrary.org/";
+        private static string XmlNameSpace = "http://www.openmedialibrary.org/";
         //private bool _needsTranscode = false;        
 
         private Disk _selectedDisk = null;
@@ -1304,8 +1304,11 @@ namespace OMLEngine
 
         static public Title CreateFromXML(string fileName)
         {
-            return new Title();
-            /*Title t = new Title();
+            //return new Title();
+            
+            Title t = new Title();
+
+            t.DateAdded = DateTime.Now;
 
             try
             {
@@ -1353,11 +1356,11 @@ namespace OMLEngine
                         }
 
                         
-                        if (navigator.MoveToChild("FrontCoverMenuPath", XmlNameSpace))
+                        /*if (navigator.MoveToChild("FrontCoverMenuPath", XmlNameSpace))
                         {
                             if (!String.IsNullOrEmpty(navigator.Value)) t.FrontCoverMenuPath = navigator.Value;
                             navigator.MoveToParent();
-                        }
+                        }*/
 
                         if (navigator.MoveToChild("BackCoverPath", XmlNameSpace))
                         {
@@ -1403,7 +1406,7 @@ namespace OMLEngine
                                         }
                                         navigator.MoveToParent();
 
-                                        t.Disks.Add(new Disk(diskName, path, format));
+                                        t.AddDisk(new Disk(diskName, path, format));
 
                                         if (!navigator.MoveToNext()) break;
                                     }
@@ -1499,9 +1502,13 @@ namespace OMLEngine
                                 DateTime releaseDate;
                                 if (DateTime.TryParse(navigator.Value, out releaseDate))
                                 {
-                                    t.ReleaseDate = releaseDate;
+                                    if (releaseDate >= DateTime.Parse("1 Jan 1900"))
+                                    {
+                                        t.ReleaseDate = releaseDate;
+                                    }
                                 }
                             }
+
                             navigator.MoveToParent();
                         }
 
@@ -1594,7 +1601,8 @@ namespace OMLEngine
                                 {
                                     if (navigator.Name == "Photo")
                                     {
-                                        t.Photos.Add(navigator.Value);
+                                        t.FanArtPaths.Add(navigator.Value);
+                                        //t.Photos.Add(navigator.Value);
                                         if (!navigator.MoveToNext()) break;
                                     }
                                     else
@@ -1675,7 +1683,9 @@ namespace OMLEngine
                                 {
                                     if (navigator.Name == "Producer")
                                     {
-                                        t.AddProducer(navigator.Value);
+                                        Person producer = new Person();
+                                        producer.full_name = navigator.Value;
+                                        t.AddProducer(producer);
                                         if (!navigator.MoveToNext()) break;
                                     }
                                     else break;
@@ -1868,7 +1878,7 @@ namespace OMLEngine
 
                         }
 
-                        if (navigator.MoveToChild("CustomFields", XmlNameSpace))
+                        /*if (navigator.MoveToChild("CustomFields", XmlNameSpace))
                         {
                             if (navigator.MoveToFirstChild())
                             {
@@ -1908,13 +1918,11 @@ namespace OMLEngine
                                 navigator.MoveToParent();
                             }
                             navigator.MoveToParent();
-
-                        }
-
+                        }*/
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return null;
             }
@@ -1932,16 +1940,41 @@ namespace OMLEngine
             }
 
             // tries to guess the right file names if file not found. Try several alternatives
-            t.FrontCoverPath = FixupImagePath(t.FrontCoverPath.ToUpper(), fileName.ToUpper(), ".JPG");
+            /*t.FrontCoverPath = FixupImagePath(t.FrontCoverPath.ToUpper(), fileName.ToUpper(), ".JPG");
             t.BackCoverPath = FixupImagePath(t.BackCoverPath.ToUpper(), fileName.ToUpper(), ".BACK.JPG");
 
             if (copyImages)
             {
                 t.CopyFrontCoverFromFile(t.FrontCoverPath, false);
                 t.CopyBackCoverFromFile(t.BackCoverPath, false);
-            }
+            }*/
 
-            return t;*/
+            return t;
+        }
+
+
+        // for paths that don't exist, try to guess
+        // replace the folder for the path with the folder where oml.xml file was found
+        private static string FixupDiskPath(string path, string omlXmlFile)
+        {
+            path = path.Trim();
+            if (File.Exists(path) || Directory.Exists(path))
+                return path;
+
+            string omlxmlFileFolder = Path.GetDirectoryName(omlXmlFile);
+            string omlxmlFileStripped = omlXmlFile.Replace(".OML.XML", "");
+
+            if (path.Length > 0)
+            {
+                string pathFilename = Path.GetFileName(path);
+
+                string fixedPath = omlxmlFileFolder + "\\" + pathFilename;
+                if (File.Exists(fixedPath) || Directory.Exists(fixedPath))
+                {
+                    return fixedPath;
+                }
+            }
+            return path;
         }
 
         //<?xml version="1.0" encoding="utf-8"?>
@@ -1949,8 +1982,7 @@ namespace OMLEngine
 
         public bool SerializeToXMLFile(string fileName)
         {
-            return true;
-            /*fileName = fileName.ToUpper();
+            fileName = fileName.ToUpper();
             try
             {
                 if (File.Exists(fileName))
@@ -1968,10 +2000,10 @@ namespace OMLEngine
                 writer.WriteStartElement("OMLTitle", XmlNameSpace);
 
                 writer.WriteElementString("Name", Name);
-                writer.WriteElementString("SortName", _sortName);
-                writer.WriteElementString("OriginalName", _originalName);
+                writer.WriteElementString("SortName", this.SortName);
+                writer.WriteElementString("OriginalName", this.OriginalName);
 
-                string newFrontCoverPath = fileName.Replace(".OML.XML", ".JPG");
+                /*string newFrontCoverPath = fileName.Replace(".OML.XML", ".JPG");
                 string newBackCoverPath = fileName.Replace(".OML.XML", ".BACK.JPG");
 
                 if (newFrontCoverPath.EndsWith(@"\VIDEO_TS.JPG"))
@@ -1999,7 +2031,7 @@ namespace OMLEngine
                 // this will be created when imported
                 //writer.WriteElementString("FrontCoverMenuPath", FrontCoverMenuPath);
                 writer.WriteElementString("FrontCoverMenuPath", "");
-
+                */
 
                 // should be relative path so it can be loaded on any computer
                 writer.WriteStartElement("Disks");
@@ -2016,18 +2048,18 @@ namespace OMLEngine
                 writer.WriteEndElement();
 
                 ////writer.WriteElementString("VideoFormat", _videoFormat.ToString());
-                writer.WriteElementString("TranscodeToExtender", _needsTranscode.ToString());
+                //writer.WriteElementString("TranscodeToExtender", _needsTranscode.ToString());
 
-                writer.WriteElementString("Synopsis", _synopsis);
-                writer.WriteElementString("Studio", _studio);
-                writer.WriteElementString("Country", _countryOfOrigin);
-                writer.WriteElementString("OfficialWebSiteURL", _officialWebsiteURL);
+                writer.WriteElementString("Synopsis", this.Synopsis);
+                writer.WriteElementString("Studio", this.Studio);
+                writer.WriteElementString("Country", this.CountryOfOrigin);
+                writer.WriteElementString("OfficialWebSiteURL", this.OfficialWebsiteURL);
 
-                writer.WriteElementString("Runtime", _runtime.ToString());
-                writer.WriteElementString("ParentalRating", _parentalRating);
-                writer.WriteElementString("ParentalRatingReason", _parentalRatingReason);
-                writer.WriteElementString("ReleaseDate", _releaseDate.ToString());
-                writer.WriteElementString("ProductionYear", _productionYear.ToString());
+                writer.WriteElementString("Runtime", this.Runtime.ToString());
+                writer.WriteElementString("ParentalRating", this.ParentalRating);
+                writer.WriteElementString("ParentalRatingReason", this.ParentalRatingReason);
+                writer.WriteElementString("ReleaseDate", this.ReleaseDate.ToString());
+                writer.WriteElementString("ProductionYear", this.ProductionYear.ToString());
 
 
 
@@ -2060,27 +2092,27 @@ namespace OMLEngine
                 writer.WriteEndElement();
 
 
-                writer.WriteElementString("UserRating", _userStarRating.ToString());
-                writer.WriteElementString("AspectRatio", _aspectRatio.ToString());
-                writer.WriteElementString("VideoStandard", _videoStandard);
+                writer.WriteElementString("UserRating", this.UserStarRating.ToString());
+                writer.WriteElementString("AspectRatio", this.AspectRatio);
+                writer.WriteElementString("VideoStandard", this.VideoStandard);
 
 
                 writer.WriteStartElement("ActingRoles");
-                foreach (KeyValuePair<string, string> actingRole in ActingRoles)
+                foreach (Role actingRole in ActingRoles)
                 {
                     writer.WriteStartElement("Actor");
-                    writer.WriteAttributeString("Name", actingRole.Key);
-                    writer.WriteAttributeString("Role", actingRole.Value);
+                    writer.WriteAttributeString("Name", actingRole.PersonName);
+                    writer.WriteAttributeString("Role", actingRole.RoleName);
                     writer.WriteEndElement();
                 }
                 writer.WriteEndElement();
 
                 writer.WriteStartElement("NonActingRoles");
-                foreach (KeyValuePair<string, string> actingRole in NonActingRoles)
+                foreach (Role nonactingRole in NonActingRoles)
                 {
                     writer.WriteStartElement("Person");
-                    writer.WriteAttributeString("Name", actingRole.Key);
-                    writer.WriteAttributeString("Role", actingRole.Value);
+                    writer.WriteAttributeString("Name", nonactingRole.PersonName);
+                    writer.WriteAttributeString("Role", nonactingRole.RoleName);
                     writer.WriteEndElement();
                 }
                 writer.WriteEndElement();
@@ -2108,22 +2140,22 @@ namespace OMLEngine
                 writer.WriteEndElement();
 
 
-                writer.WriteStartElement("CustomFields");
+                /*writer.WriteStartElement("CustomFields");
                 foreach (KeyValuePair<string, string> field in AdditionalFields)
                 {
                     writer.WriteStartElement("CustomField");
                     writer.WriteAttributeString("Name", field.Key);
                     writer.WriteAttributeString("Value", field.Key);
                 }
-                writer.WriteEndElement();
+                writer.WriteEndElement();*/
 
 
-                writer.WriteStartElement("Photos");
+                /*writer.WriteStartElement("Photos");
                 foreach (string photo in Photos)
                 {
                     writer.WriteElementString("Photo", photo);
                 }
-                writer.WriteEndElement();
+                writer.WriteEndElement();*/
 
                 writer.WriteStartElement("Trailers");
                 foreach (string trailer in Trailers)
@@ -2140,9 +2172,9 @@ namespace OMLEngine
                 writer.WriteEndElement();
 
 
-                writer.WriteElementString("VideoDetails", _videoDetails);
+                writer.WriteElementString("VideoDetails", this.VideoDetails);
 
-                writer.WriteElementString("VideoResolution", _videoResolution);
+                writer.WriteElementString("VideoResolution", this.VideoResolution);
 
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
@@ -2153,7 +2185,7 @@ namespace OMLEngine
             catch
             {
                 return false;
-            }*/
+            }
         }
 
         private string CopyStringValue(string src, string dest, bool overWrite)
@@ -2194,9 +2226,9 @@ namespace OMLEngine
             SortName = CopyStringValue(t.SortName, SortName, overWrite);
             ParentalRatingReason = CopyStringValue(t.ParentalRatingReason, ParentalRatingReason, overWrite);
             VideoDetails = CopyStringValue(t.VideoDetails, VideoDetails, overWrite);
+            ReleaseDate = CheckDateRange(t.ReleaseDate);
 
             if (t.Runtime > 0) Runtime = t.Runtime;
-            if ((t.ReleaseDate != null) && (t.ReleaseDate.Year > 1900) && (t.ReleaseDate.Year < 2080)) ReleaseDate = t.ReleaseDate;
             if (t.UserStarRating > 0) UserStarRating = t.UserStarRating;
             if (t.ProductionYear > 0) ProductionYear = t.ProductionYear;
 
@@ -2536,7 +2568,7 @@ namespace OMLEngine
             {
                 return dt;
             }
-            return DateTime.Parse("1 Jan 1990");
+            return DateTime.Parse("1 Jan 1900");
         }
 
         void CleanDuplicateDisks()
