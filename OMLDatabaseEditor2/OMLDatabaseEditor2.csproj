@@ -424,6 +424,8 @@
     <EmbeddedResource Include="Resources\Stars2.png" />
     <EmbeddedResource Include="Resources\Stars3.png" />
     <EmbeddedResource Include="Resources\Stars5.png" />
+    <None Include="Resources\peoplesmall.png" />
+    <None Include="Resources\people.png" />
     <Content Include="Resources\text-html.png" />
     <Content Include="Resources\video-x-generic.png" />
     <EmbeddedResource Include="Controls\DiskInfoFrm.resx">

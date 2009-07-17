@@ -108,8 +108,12 @@ namespace OMLDatabaseEditor.Controls
             }
             // todo : solomon : i'm not sure what this code is for but it's crashing right now if you delete a cover image
             //imageWatcherFront.Path = Path.GetDirectoryName(_dvdTitle.FrontCoverPath);
-            //imageWatcherFront.Filter = "F*.jpg";            
-
+            //imageWatcherFront.Filter = "F*.jpg";         
+            
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TitleEditor));
+            this.pbFrontCover.Image = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.Image")));
+            this.pbBackCover.Image = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.Image")));
+            
             LoadBackdrops();
             _isLoading = false;
         }
@@ -131,7 +135,12 @@ namespace OMLDatabaseEditor.Controls
             {
                 _dvdTitle = null;
                 titleSource.DataSource = typeof(Title);
-            }
+            } 
+            
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TitleEditor));
+            this.pbFrontCover.Image = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.Image")));
+            this.pbBackCover.Image = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.Image")));
+
             Status = TitleStatus.Normal;
         }
 
@@ -620,10 +629,14 @@ namespace OMLDatabaseEditor.Controls
             if (pb.Name.Contains("Front"))
             {                
                 _dvdTitle.FrontCoverPath = string.Empty;
+                System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TitleEditor));
+                this.pbFrontCover.Image = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.Image")));
             }
             else
             {                
                 _dvdTitle.BackCoverPath = string.Empty;
+                System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TitleEditor));
+                this.pbBackCover.Image = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.Image")));
             }
             titleSource.ResetCurrentItem();
         }

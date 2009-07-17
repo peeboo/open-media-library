@@ -1148,14 +1148,14 @@ namespace OMLDatabaseEditor
 
         private void exportAllMoviesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // exporting is going to have to wait
-            /*
-            Cursor = Cursors.WaitCursor; 
-            foreach (Title t in _titleCollection) 
-                if (t.Disks.Count > 0) 
-                    t.SerializeToXMLFile(t.Disks[0].Path + ".oml.xml"); 
+            
+            Cursor = Cursors.WaitCursor;
+            foreach (Title t in TitleCollectionManager.GetAllTitles(TitleTypes.AllMedia).ToList())
+            {
+                if (t.Disks.Count > 0)
+                    t.SerializeToXMLFile(t.Disks[0].Path + ".oml.xml");
+            }
             Cursor = Cursors.Default; 
-             */
         }
 
         private void MainEditor_Load(object sender, EventArgs e)
