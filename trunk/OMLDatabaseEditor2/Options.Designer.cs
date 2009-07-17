@@ -148,7 +148,7 @@ namespace OMLDatabaseEditor
             // 
             // ceShowSubFolderTitles
             // 
-            this.ceShowSubFolderTitles.Location = new System.Drawing.Point(7, 236);
+            this.ceShowSubFolderTitles.Location = new System.Drawing.Point(6, 184);
             this.ceShowSubFolderTitles.Name = "ceShowSubFolderTitles";
             this.ceShowSubFolderTitles.Properties.Caption = "Show Sub Folder titles in Movie panel";
             this.ceShowSubFolderTitles.Size = new System.Drawing.Size(259, 18);
@@ -156,7 +156,7 @@ namespace OMLDatabaseEditor
             // 
             // ceScanDiskRollInfoToTitle
             // 
-            this.ceScanDiskRollInfoToTitle.Location = new System.Drawing.Point(7, 212);
+            this.ceScanDiskRollInfoToTitle.Location = new System.Drawing.Point(7, 160);
             this.ceScanDiskRollInfoToTitle.Name = "ceScanDiskRollInfoToTitle";
             this.ceScanDiskRollInfoToTitle.Properties.Caption = "Roll scan disk info into title";
             this.ceScanDiskRollInfoToTitle.Size = new System.Drawing.Size(259, 18);
@@ -164,7 +164,7 @@ namespace OMLDatabaseEditor
             // 
             // ceAutoScanDiskOnAdd
             // 
-            this.ceAutoScanDiskOnAdd.Location = new System.Drawing.Point(7, 187);
+            this.ceAutoScanDiskOnAdd.Location = new System.Drawing.Point(7, 136);
             this.ceAutoScanDiskOnAdd.Name = "ceAutoScanDiskOnAdd";
             this.ceAutoScanDiskOnAdd.Properties.Caption = "Auto scan disk when adding new disks";
             this.ceAutoScanDiskOnAdd.Size = new System.Drawing.Size(259, 18);
@@ -172,30 +172,33 @@ namespace OMLDatabaseEditor
             // 
             // labelControl3
             // 
-            this.labelControl3.Location = new System.Drawing.Point(9, 155);
+            this.labelControl3.Location = new System.Drawing.Point(18, 227);
             this.labelControl3.Name = "labelControl3";
             this.labelControl3.Size = new System.Drawing.Size(91, 13);
             this.labelControl3.TabIndex = 8;
             this.labelControl3.Text = "Titled FanArt Path:";
+            this.labelControl3.Visible = false;
             // 
             // beTitledFanArtPath
             // 
             this.beTitledFanArtPath.Enabled = false;
-            this.beTitledFanArtPath.Location = new System.Drawing.Point(106, 152);
+            this.beTitledFanArtPath.Location = new System.Drawing.Point(115, 217);
             this.beTitledFanArtPath.Name = "beTitledFanArtPath";
             this.beTitledFanArtPath.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton()});
             this.beTitledFanArtPath.Size = new System.Drawing.Size(204, 20);
             this.beTitledFanArtPath.TabIndex = 7;
+            this.beTitledFanArtPath.Visible = false;
             this.beTitledFanArtPath.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.beTitledFanArtPath_ButtonClick);
             // 
             // ceTitledFanArtFolder
             // 
-            this.ceTitledFanArtFolder.Location = new System.Drawing.Point(7, 127);
+            this.ceTitledFanArtFolder.Location = new System.Drawing.Point(7, 250);
             this.ceTitledFanArtFolder.Name = "ceTitledFanArtFolder";
             this.ceTitledFanArtFolder.Properties.Caption = "Titled FanArt Folders";
             this.ceTitledFanArtFolder.Size = new System.Drawing.Size(259, 18);
             this.ceTitledFanArtFolder.TabIndex = 6;
+            this.ceTitledFanArtFolder.Visible = false;
             this.ceTitledFanArtFolder.CheckStateChanged += new System.EventHandler(this.ceTitledFanArtFolder_CheckStateChanged);
             // 
             // cmbDefaultMetadataPlugin

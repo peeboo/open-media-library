@@ -33,6 +33,7 @@
             this.Details = new DevExpress.XtraTab.XtraTabPage();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.cmsImage = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.miSelectImage = new System.Windows.Forms.ToolStripMenuItem();
             this.biodatasource = new System.Windows.Forms.BindingSource(this.components);
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.txtSynposis = new DevExpress.XtraEditors.MemoEdit();
@@ -44,7 +45,6 @@
             this.teName = new DevExpress.XtraEditors.TextEdit();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
             this.openCoverFile = new System.Windows.Forms.OpenFileDialog();
-            this.miSelectImage = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.Details.SuspendLayout();
@@ -93,9 +93,9 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.ContextMenuStrip = this.cmsImage;
             this.pictureBox1.DataBindings.Add(new System.Windows.Forms.Binding("ImageLocation", this.biodatasource, "ImagePath", true));
-            this.pictureBox1.ErrorImage = global::OMLDatabaseEditor.Properties.Resources.text_html;
-            this.pictureBox1.Image = global::OMLDatabaseEditor.Properties.Resources.text_html;
-            this.pictureBox1.InitialImage = global::OMLDatabaseEditor.Properties.Resources.text_html;
+            this.pictureBox1.ErrorImage = global::OMLDatabaseEditor.Properties.Resources.people;
+            this.pictureBox1.Image = global::OMLDatabaseEditor.Properties.Resources.people;
+            this.pictureBox1.InitialImage = global::OMLDatabaseEditor.Properties.Resources.people;
             this.pictureBox1.Location = new System.Drawing.Point(15, 237);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(451, 44);
@@ -108,7 +108,14 @@
             this.cmsImage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miSelectImage});
             this.cmsImage.Name = "contextMenuStrip1";
-            this.cmsImage.Size = new System.Drawing.Size(153, 48);
+            this.cmsImage.Size = new System.Drawing.Size(142, 26);
+            // 
+            // miSelectImage
+            // 
+            this.miSelectImage.Name = "miSelectImage";
+            this.miSelectImage.Size = new System.Drawing.Size(141, 22);
+            this.miSelectImage.Text = "Select Image";
+            this.miSelectImage.Click += new System.EventHandler(this.miSelectImage_Click);
             // 
             // biodatasource
             // 
@@ -205,13 +212,6 @@
             this.openCoverFile.DefaultExt = "jpg";
             this.openCoverFile.Filter = "JPG Files|*.jpg|All Files|*.*";
             this.openCoverFile.Title = "Select Cover Art";
-            // 
-            // miSelectImage
-            // 
-            this.miSelectImage.Name = "miSelectImage";
-            this.miSelectImage.Size = new System.Drawing.Size(152, 22);
-            this.miSelectImage.Text = "Select Image";
-            this.miSelectImage.Click += new System.EventHandler(this.miSelectImage_Click);
             // 
             // BioDataEditor
             // 

@@ -270,6 +270,7 @@ namespace OMLDatabaseEditor
             this.exportCurrentMovieToolStripMenuItem.Name = "exportCurrentMovieToolStripMenuItem";
             this.exportCurrentMovieToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.exportCurrentMovieToolStripMenuItem.Text = "Export Current Movie";
+            this.exportCurrentMovieToolStripMenuItem.Visible = false;
             this.exportCurrentMovieToolStripMenuItem.Click += new System.EventHandler(this.exportCurrentMovieToolStripMenuItem_Click);
             // 
             // exportAllMoviesToolStripMenuItem
@@ -277,6 +278,7 @@ namespace OMLDatabaseEditor
             this.exportAllMoviesToolStripMenuItem.Name = "exportAllMoviesToolStripMenuItem";
             this.exportAllMoviesToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.exportAllMoviesToolStripMenuItem.Text = "Export All Movies";
+            this.exportAllMoviesToolStripMenuItem.Visible = false;
             this.exportAllMoviesToolStripMenuItem.Click += new System.EventHandler(this.exportAllMoviesToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
@@ -807,7 +809,7 @@ namespace OMLDatabaseEditor
             this.groupBioData.ControlContainer = this.navBarGroupControlContainer5;
             this.groupBioData.GroupClientHeight = 80;
             this.groupBioData.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
-            this.groupBioData.LargeImage = global::OMLDatabaseEditor.Properties.Resources.text_html;
+            this.groupBioData.LargeImage = global::OMLDatabaseEditor.Properties.Resources.peoplesmall;
             this.groupBioData.Name = "groupBioData";
             // 
             // groupGenresMetadata

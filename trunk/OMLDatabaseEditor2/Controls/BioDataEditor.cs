@@ -46,6 +46,8 @@ namespace OMLDatabaseEditor.Controls
             biodatasource.DataSource = _bioData;
             _status = BioDataStatus.Normal;
 
+            this.pictureBox1.Image = global::OMLDatabaseEditor.Properties.Resources.people;
+
             _isLoading = false;
         }
 
