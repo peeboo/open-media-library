@@ -234,7 +234,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grdTitles.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="btnSelectMovie.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom</value>
@@ -261,7 +261,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnSelectMovie.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="btnCancel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom</value>
@@ -288,7 +288,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnCancel.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="chkUpdateMissingDataOnly.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom</value>
@@ -318,7 +318,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;chkUpdateMissingDataOnly.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="reSearchAdjustTitleLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -348,7 +348,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;reSearchAdjustTitleLabel.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="reSearchSubmitButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -375,7 +375,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;reSearchSubmitButton.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="reSearchTitle.AccessibleName" xml:space="preserve">
     <value />
@@ -399,7 +399,31 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;reSearchTitle.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
+  </data>
+  <data name="lcProviderMessage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 552</value>
+  </data>
+  <data name="lcProviderMessage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>63, 13</value>
+  </data>
+  <data name="lcProviderMessage.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="lcProviderMessage.Text" xml:space="preserve">
+    <value>labelControl1</value>
+  </data>
+  <data name="&gt;&gt;lcProviderMessage.Name" xml:space="preserve">
+    <value>lcProviderMessage</value>
+  </data>
+  <data name="&gt;&gt;lcProviderMessage.Type" xml:space="preserve">
+    <value>DevExpress.XtraEditors.LabelControl, DevExpress.XtraEditors.v8.2, Version=8.2.6.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1</value>
+  </data>
+  <data name="&gt;&gt;lcProviderMessage.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lcProviderMessage.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

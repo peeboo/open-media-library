@@ -3,20 +3,26 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-
+using System.Diagnostics;
 using OMLEngine;
+using OMLSDK;
 
 namespace OMLDatabaseEditor
 {
     public partial class frmSearchResult : Form
     {
+        IOMLMetadataPlugin _plugin;
+
         Title[] _titles = null;
         int _selectedTitle = -1;
         bool _overwriteMetadata;
         MainEditor _openerForm;
         public string _lastMetaPluginName;
 
-        public string LastMetaPluginName
+        bool TVSearch;
+        int TVSearchStage;
+
+        /*public string LastMetaPluginName
         {
             get { return _lastMetaPluginName; }
             set { _lastMetaPluginName = value; }
@@ -26,7 +32,7 @@ namespace OMLDatabaseEditor
         {
             get { return reSearchTitle.Text; }
             set { reSearchTitle.Text = value; }
-        }
+        }*/
 
         public bool OverwriteMetadata
         {
@@ -39,11 +45,27 @@ namespace OMLDatabaseEditor
             get { return _selectedTitle; }
         }
 
-        public frmSearchResult(MainEditor opener)
+        public frmSearchResult(IOMLMetadataPlugin plugin, string searchstr, MainEditor opener)
         {
+            _plugin = plugin;
             _openerForm = opener;
+
             InitializeComponent();
+
+            if (string.IsNullOrEmpty(_plugin.ProviderLink))
+            {
+                lcProviderMessage.Text = plugin.ProviderMessage;
+            }
+            else
+            {
+                lcProviderMessage.Text = plugin.ProviderMessage + " - Click to view website";
+            }
+
+            reSearchTitle.Text = searchstr;
+
+            Search();
         }
+
         public frmSearchResult()
         {
             InitializeComponent();
@@ -53,6 +75,38 @@ namespace OMLDatabaseEditor
         {
 
         }
+
+        private void Search()
+        {
+            Cursor = Cursors.WaitCursor;
+
+            try
+            {
+                if ((_plugin.GetPluginCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)
+                {
+                    _plugin.SearchForMovie(reSearchTitle.Text);
+                    TVSearch = false;
+                }
+                else
+                {
+                    if ((_plugin.GetPluginCapabilities & MetadataPluginCapabilities.SupportsTVSearch) != 0)
+                    {
+                        _plugin.SearchForTVSeries(reSearchTitle.Text);
+                        TVSearch = true;
+                        TVSearchStage = 0;
+                    }
+                }
+
+                _titles = _plugin.GetAvailableTitles();
+                ShowResults();
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[OMLDatabaseEditor] Metadata search caused an Exception {0}", ex);
+            }
+ 
+            Cursor = Cursors.Default;
+         }
 
         private string MakeStringFromList(IList<string> list)
         {
@@ -110,15 +164,15 @@ namespace OMLDatabaseEditor
             return ret;
         }
 
-        public DialogResult ShowResults(Title[] titles)
+        public void ShowResults()//Title[] titles)
         {
-            _titles = null;
+            //_titles = null;
             grdTitles.Rows.Clear();
-            _titles = titles;
-            if (titles != null)
+            //_titles = titles;
+            if (_titles != null)
             {
                 int i = 0;
-                foreach (Title t in titles)
+                foreach (Title t in _titles)
                 {
                     if (t != null)
                     {
@@ -137,23 +191,52 @@ namespace OMLDatabaseEditor
                     }
                 }
             }
-            return ShowDialog();
+            //return ShowDialog();
         }
 
         private void btnSelectMovie_Click(object sender, EventArgs e)
         {
-            if (grdTitles.SelectedRows != null && grdTitles.SelectedRows.Count > 0)
-            {
-                if (chkUpdateMissingDataOnly.Checked)
-                    _overwriteMetadata = false;
-                else
-                    _overwriteMetadata = true;
+            if (chkUpdateMissingDataOnly.Checked)
+                _overwriteMetadata = false;
+            else
+                _overwriteMetadata = true;
 
-                _selectedTitle = grdTitles.SelectedRows[0].Index;
+            if (TVSearch == false)
+            {
+                if (grdTitles.SelectedRows != null && grdTitles.SelectedRows.Count > 0)
+                {
+
+
+                    _selectedTitle = grdTitles.SelectedRows[0].Index;
+                    DialogResult = DialogResult.OK;
+                }
+                else
+                {
+                    _selectedTitle = -1;
+                }
             }
             else
             {
-                _selectedTitle = -1;
+                Cursor = Cursors.WaitCursor;
+
+                if (grdTitles.SelectedRows != null && grdTitles.SelectedRows.Count > 0)
+                {
+                    switch (TVSearchStage)
+                    {
+                        case 0:
+                            _plugin.SearchForTVEpisodes(grdTitles.SelectedRows[0].Index);
+                            _titles = _plugin.GetAvailableTitles();
+                            TVSearchStage = 1;
+                            ShowResults();
+                            break;
+                        case 1:
+                            _selectedTitle = grdTitles.SelectedRows[0].Index;
+                            DialogResult = DialogResult.OK;
+                            break;
+                    }
+                }
+                Cursor = Cursors.Default;
+
             }
         }
 
@@ -178,7 +261,8 @@ namespace OMLDatabaseEditor
 
         private void submitNewTitleSearch()
         {
-            try
+            Search();
+            /*try
             {
                 if (_openerForm != null)
                 {
@@ -188,6 +272,18 @@ namespace OMLDatabaseEditor
             catch
             {
                 Cursor = Cursors.Default;
+            }*/
+        }
+
+        private void lcProviderMessage_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(_plugin.ProviderLink))
+            {
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                string link = _plugin.ProviderLink;
+
+                p.StartInfo.FileName = link;
+                p.Start();
             }
         }
     }

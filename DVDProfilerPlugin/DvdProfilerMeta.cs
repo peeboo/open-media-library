@@ -21,16 +21,18 @@ namespace DVDProfilerPlugin
         XPathDocument document;
         private Title foundTitle = null;
 
-        public bool SupportsBackDrops()
-        {
-            return false;
-        }
-
         public void DownloadBackDropsForTitle(Title t, int index)
         {
         }
 
         public string PluginName { get { return "DVDProfiler (DVDProfilerPlugin)"; } }
+        public string ProviderMessage { get { return ""; } }
+        public string ProviderLink { get { return ""; } }
+     
+        public MetadataPluginCapabilities GetPluginCapabilities
+        {
+            get { return MetadataPluginCapabilities.SupportsMovieSearch; }
+        }
 
         // these 2 methods must be called in sequence
         public bool Initialize(Dictionary<string, string> parameters)
@@ -237,6 +239,13 @@ namespace DVDProfilerPlugin
             }
 
             return true;
+        }
+
+        public void SearchForTVSeries(string SeriesName)
+        {
+        }
+        public void SearchForTVEpisodes(int id)
+        {
         }
     }
 }

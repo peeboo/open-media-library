@@ -34,11 +34,13 @@ namespace NetFlixMetadata
 
         private List<NetFlixDbResult> results = null;
 
-        public string PluginName
+        public string PluginName { get { return "NetFlix"; } }
+        public string ProviderMessage { get { return "Data provided by NetFlix"; } }
+        public string ProviderLink { get { return "http://www.netflix.com"; } }
+        public MetadataPluginCapabilities GetPluginCapabilities
         {
-            get { return "NetFlix"; }
+            get { return MetadataPluginCapabilities.SupportsMovieSearch; }
         }
-
 
         public bool Initialize(Dictionary<string, string> parameters)
         {
@@ -423,13 +425,8 @@ namespace NetFlixMetadata
                     File.Delete(tempFileName);
                 }
             }
-        }
-
-        public bool SupportsBackDrops()
-        {
-            return false;
-        }
-
+        } 
+        
         public void DownloadBackDropsForTitle(Title t, int index)
         {
         }
@@ -437,6 +434,14 @@ namespace NetFlixMetadata
         private static string getNonHTML(string inputString)
         {
             return Regex.Replace(inputString, HTML_TAG_PATTERN, string.Empty);
+        }
+
+
+        public void SearchForTVSeries(string SeriesName)
+        {
+        }
+        public void SearchForTVEpisodes(int id)
+        {
         }
     }
 }

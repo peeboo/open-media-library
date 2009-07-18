@@ -27,7 +27,14 @@ using OMLEngine;
 // Step 13: compile and make sure you copy the plugin to the OML plugins directory.
 
 namespace OMLSDK
-{
+{    
+    public enum MetadataPluginCapabilities : int
+    {
+        SupportsBackDrops = 0x0001,
+        SupportsMovieSearch = 0x0002,
+        SupportsTVSearch = 0x0004,
+    };
+
     public interface IOMLMetadataPlugin
     {
         string PluginName { get; }
@@ -40,6 +47,13 @@ namespace OMLSDK
         bool Initialize( Dictionary<string,string> parameters );
         bool SearchForMovie( string movieName );
 
+        MetadataPluginCapabilities GetPluginCapabilities { get; }
+        string ProviderMessage { get; }
+        string ProviderLink { get; }
+
+        // TV Metadata support
+        void SearchForTVSeries(string SeriesName);
+        void SearchForTVEpisodes(int id);
         // these methods are to be called after the 2 methods above
 
         // get the best match
@@ -54,7 +68,7 @@ namespace OMLSDK
         List<OMLMetadataOption> GetOptions();
         bool SetOptionValue(string option, string value);
 
-        bool SupportsBackDrops();
+        //bool SupportsBackDrops();
 
         void DownloadBackDropsForTitle(Title t, int index);
     }
