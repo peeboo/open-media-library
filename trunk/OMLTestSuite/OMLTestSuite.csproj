@@ -75,6 +75,7 @@
     <Compile Include="TitleCollectionTest.cs" />
     <Compile Include="TitleTest.cs" />
     <Compile Include="TranscodeTest.cs" />
+    <Compile Include="TVDBMetaDataTest.cs" />
     <Compile Include="VirtualDirectoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +122,10 @@
     <ProjectReference Include="..\TheMovieDbMetadata\TheMovieDbMetadata.csproj">
       <Project>{BD6F6DBB-B6D8-4EC3-939A-62BC58CC19B1}</Project>
       <Name>TheMovieDbMetadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TVDBMetadata\TVDBMetadata.csproj">
+      <Project>{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}</Project>
+      <Name>TVDBMetadata</Name>
     </ProjectReference>
     <ProjectReference Include="..\VMCDVDLibraryPlugin\VMCDVDLibraryPlugin.csproj">
       <Project>{CEEBFC5A-9CAB-40D1-A453-8C30A13F0CD4}</Project>

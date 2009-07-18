@@ -14,14 +14,18 @@ namespace OMLTestSuite
     {
         static void Main(string[] args)
         {
-            CreateTestTitles ctt = new CreateTestTitles();
+            TVDBMetaDataTest tvdb = new TVDBMetaDataTest();
+            tvdb.Test();
+
+
+            /*CreateTestTitles ctt = new CreateTestTitles();
             ctt.CreateTitles();
             Console.ReadKey();
             return;
 
             TitleCollectionManagerTest tcm = new TitleCollectionManagerTest();
             
-            Console.WriteLine("Testing: Title Collection Manager SQL");
+            Console.WriteLine("Testing: Title Collection Manager SQL");*/
             //tcm.TEST_DELETE_ALL_DATA();
             //tcm.TEST_IMPORT_INTO_DATABASE();
             //tcm.TEST_GETTING_ALL_TITLES();
