@@ -53,6 +53,7 @@
             this.reSearchAdjustTitleLabel = new System.Windows.Forms.Label();
             this.reSearchSubmitButton = new System.Windows.Forms.Button();
             this.reSearchTitle = new System.Windows.Forms.TextBox();
+            this.lcProviderMessage = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.grdTitles)).BeginInit();
             this.SuspendLayout();
             // 
@@ -154,7 +155,6 @@
             // btnSelectMovie
             // 
             resources.ApplyResources(this.btnSelectMovie, "btnSelectMovie");
-            this.btnSelectMovie.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnSelectMovie.Name = "btnSelectMovie";
             this.btnSelectMovie.UseVisualStyleBackColor = true;
             this.btnSelectMovie.Click += new System.EventHandler(this.btnSelectMovie_Click);
@@ -192,10 +192,19 @@
             this.reSearchTitle.Name = "reSearchTitle";
             this.reSearchTitle.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.reSearchTitleKeypress);
             // 
+            // lcProviderMessage
+            // 
+            this.lcProviderMessage.Appearance.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lcProviderMessage.Appearance.Options.UseForeColor = true;
+            resources.ApplyResources(this.lcProviderMessage, "lcProviderMessage");
+            this.lcProviderMessage.Name = "lcProviderMessage";
+            this.lcProviderMessage.Click += new System.EventHandler(this.lcProviderMessage_Click);
+            // 
             // frmSearchResult
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lcProviderMessage);
             this.Controls.Add(this.reSearchAdjustTitleLabel);
             this.Controls.Add(this.reSearchSubmitButton);
             this.Controls.Add(this.reSearchTitle);
@@ -230,5 +239,6 @@
         private System.Windows.Forms.Label reSearchAdjustTitleLabel;
         private System.Windows.Forms.Button reSearchSubmitButton;
         private System.Windows.Forms.TextBox reSearchTitle;
+        private DevExpress.XtraEditors.LabelControl lcProviderMessage;
     }
 }

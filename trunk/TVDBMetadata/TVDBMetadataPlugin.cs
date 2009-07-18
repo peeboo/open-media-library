@@ -13,8 +13,6 @@ namespace TVDBMetadata
 {
     public class TheTVDBDbResult
     {
-
-
         public Title Title { get; set; }
         public int SeriesNo { get; set; }
         public int EpisodeNo { get; set; }
@@ -31,10 +29,10 @@ namespace TVDBMetadata
 
     public class TVDBMetadataPlugin : IOMLMetadataPlugin
     {
-        IList<string> BackDrops = null;
         private const string API_KEY = "FC18699D6C4514F7";
         private const string API_URL_SEARCH = "";
         private const string API_URL_INFO = "";
+        public List<string> BackDrops = null;
 
         List<string> xmlmirrors;
         List<string> bannermirrors;
@@ -44,7 +42,14 @@ namespace TVDBMetadata
         
         
         public string PluginName { get { return "thetvdb.com"; } }
+        public string ProviderMessage { get { return "Data provided by thetvdb.com"; } }
+        public string ProviderLink { get { return "http://www.thetvdb.com"; } }
 
+        public MetadataPluginCapabilities GetPluginCapabilities
+        {
+            get { return MetadataPluginCapabilities.SupportsTVSearch | 
+                MetadataPluginCapabilities.SupportsBackDrops; }
+        }
 
         // these 2 methods must be called in sequence
         public bool Initialize(Dictionary<string, string> parameters)
@@ -59,9 +64,7 @@ namespace TVDBMetadata
 
         public bool SearchForMovie(string movieName)
         {
-            SearchForMovies(movieName);
-
-            return (results != null && results.Count != 0);
+            return false;
         }
 
         // these methods are to be called after the 2 methods above
@@ -73,8 +76,7 @@ namespace TVDBMetadata
             {
                 if (results.Count != 0)
                 {
-                    // load up the big image
-                    return GetMovieDetails(results[0].Id);
+                    return GetTitle(0);
                 }
             }
             return null;
@@ -93,7 +95,7 @@ namespace TVDBMetadata
 
         public Title GetTitle(int index)
         {
-            return GetMovieDetails(results[index].Id);
+            return results[index].Title;
         }
 
         public List<OMLMetadataOption> GetOptions()
@@ -111,7 +113,7 @@ namespace TVDBMetadata
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        private TheTVDBDbResult GetTitleFromMovieNode(XmlTextReader reader)
+        /*private TheTVDBDbResult GetTitleFromMovieNode(XmlTextReader reader)
         {
             this.BackDrops = null;
             bool notMovie = false;
@@ -145,7 +147,8 @@ namespace TVDBMetadata
 
         private Title GetMovieDetails(int movieId)
         {
-            UriBuilder uri = new UriBuilder(API_URL_INFO);
+            return results[movieId].Title;
+            /*UriBuilder uri = new UriBuilder(API_URL_INFO);
             uri.Query = "api_key=" + API_KEY + "&id=" + movieId.ToString();
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri.Uri);
@@ -180,54 +183,54 @@ namespace TVDBMetadata
             {
                 DownloadImage(title.Title, title.ImageUrl);
             }
+            */
+            //return (title != null) ? title.Title : null;
+        /*   }
+    
+           /// <summary>
+           /// Fills the local results with movies
+           /// </summary>
+           /// <param name="searchQuery"></param>
+           private void SearchForMovies(string searchQuery)
+           {
+               UriBuilder uri = new UriBuilder(API_URL_SEARCH);
+               uri.Query = "api_key=" + API_KEY + "&title=" + searchQuery;
 
-            return (title != null) ? title.Title : null;
-        }
+               results = new List<TheTVDBDbResult>();
 
-        /// <summary>
-        /// Fills the local results with movies
-        /// </summary>
-        /// <param name="searchQuery"></param>
-        private void SearchForMovies(string searchQuery)
-        {
-            UriBuilder uri = new UriBuilder(API_URL_SEARCH);
-            uri.Query = "api_key=" + API_KEY + "&title=" + searchQuery;
+               HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri.Uri);
 
-            results = new List<TheTVDBDbResult>();
+               // execute the request
+               using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+               {
+                   // we will read data via the response stream
+                   using (Stream resStream = response.GetResponseStream())
+                   {
+                       XmlTextReader reader = new XmlTextReader(resStream);
+                       reader.WhitespaceHandling = WhitespaceHandling.None;
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri.Uri);
+                       while (reader.Read())
+                       {
+                           if (reader.NodeType == XmlNodeType.Element)
+                           {
+                               if (reader.Name == "movie")
+                               {
+                                   TheTVDBDbResult title = GetTitleFromMovieNode(reader);
 
-            // execute the request
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            {
-                // we will read data via the response stream
-                using (Stream resStream = response.GetResponseStream())
-                {
-                    XmlTextReader reader = new XmlTextReader(resStream);
-                    reader.WhitespaceHandling = WhitespaceHandling.None;
+                                   if (title != null)
+                                       results.Add(title);
+                               }
+                           }
+                       }
+                   }
+               }
 
-                    while (reader.Read())
-                    {
-                        if (reader.NodeType == XmlNodeType.Element)
-                        {
-                            if (reader.Name == "movie")
-                            {
-                                TheTVDBDbResult title = GetTitleFromMovieNode(reader);
-
-                                if (title != null)
-                                    results.Add(title);
-                            }
-                        }
-                    }
-                }
-            }
-
-            // load up all the titles with images
-            foreach (TheTVDBDbResult title in results)
-            {
-                DownloadImage(title.Title, title.ImageUrlThumb);
-            }
-        }
+               // load up all the titles with images
+               foreach (TheTVDBDbResult title in results)
+               {
+                   DownloadImage(title.Title, title.ImageUrlThumb);
+               }
+           }*/
 
         /// <summary>
         /// Returns the text field value of a node or empty string if it doesn't have one
@@ -295,39 +298,33 @@ namespace TVDBMetadata
             }
         }
 
-        public bool SupportsBackDrops()
-        {
-            return false;
-        }
-
         public void DownloadBackDropsForTitle(Title t, int index)
         {
-            /*if (results.Count >= index)
+            if (BackDrops == null) return;
+            WebClient web = new WebClient();
+
+            foreach (string backDropUrl in BackDrops)
             {
-                if (this.BackDrops == null)
-                    return;
-
-                WebClient web = new WebClient();
-
-                foreach (string backDropUrl in this.BackDrops)
+                try
                 {
-                    try
+                    if (!string.IsNullOrEmpty(backDropUrl))
                     {
-                        if (!string.IsNullOrEmpty(backDropUrl))
-                        {
-                            string filename = Path.Combine(FileSystemWalker.ImageDownloadDirectory, Guid.NewGuid().ToString());
-                            web.DownloadFile(backDropUrl, filename);
-
-                            t.AddFanArtImage(filename);
-                        }
-                    }
-                    catch
-                    {
+                        string filename = Path.Combine(FileSystemWalker.ImageDownloadDirectory, Guid.NewGuid().ToString());
+                        web.DownloadFile("http://images.thetvdb.com/banners/" + backDropUrl, filename);
+                        t.AddFanArtImage(filename);
                     }
                 }
-            }*/
+                catch
+                {
+                }
+
+            }
         }
 
+        /// <summary>
+        /// Returns a list tv shows with matching name
+        /// </summary>
+        /// <param name="SeriesName"></param>
         public void SearchForTVSeries(string SeriesName)
         {
             UriBuilder uri = new UriBuilder("http://www.thetvdb.com/api/GetSeries.php");
@@ -413,14 +410,29 @@ namespace TVDBMetadata
                         }
                     }
                 }
+            } 
+            
+            // load up all the titles with images
+            foreach (TheTVDBDbResult title in results)
+            {
+                DownloadImage(title.Title, "http://images.thetvdb.com/banners/" + title.ImageUrl);
             }
         }
 
+        /// <summary>
+        /// Returns a list of all episodes
+        /// </summary>
+        /// <param name="id"></param>
         public void SearchForTVEpisodes(int id)
         {
-            UriBuilder uri = new UriBuilder("http://thetvdb.com/data/series/" + results[id].Id + "/all/");
+            UriBuilder uri = new UriBuilder("http://thetvdb.com/api/" + API_KEY + "/series/" + results[id].Id + "/all/");
 
-           
+            string actors = "";
+            string genres = "";
+            string network = "";
+            int runtime = 0;
+            string rating = "";
+
             results = new List<TheTVDBDbResult>();
 
 
@@ -442,14 +454,52 @@ namespace TVDBMetadata
                     {
                         if (reader.NodeType == XmlNodeType.Element)
                         {
+                            if (reader.Name.ToLower() == "series")
+                            {
+                                while (reader.Read())
+                                {
+                                    if (reader.NodeType == XmlNodeType.Element)
+                                    {
+                                        switch (reader.Name.ToLower())
+                                        {
+                                            case "actors":
+                                                actors = GetElementValue(reader).ToString();
+                                                break;
+                                            case "genre":
+                                                genres = GetElementValue(reader);
+                                                break;
+                                            case "network":
+                                                network = GetElementValue(reader);
+                                                break;
+                                            case "runtime":
+                                                runtime = int.Parse(GetElementValue(reader));
+                                                break;
+                                            case "fanart":
+                                                if (BackDrops == null) BackDrops = new List<string>();
+                                                BackDrops.Add(GetElementValue(reader));
+                                                break;
+                                            case "poster":
+                                                if (BackDrops == null) BackDrops = new List<string>();
+                                                BackDrops.Add(GetElementValue(reader));
+                                                break;   
+                                            case "contentrating":
+                                                rating = GetElementValue(reader);
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+                                    else if (reader.NodeType == XmlNodeType.EndElement && reader.Name.ToLower() == "episode")
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+
                             if (reader.Name.ToLower() == "episode")
                             {
                                 TheTVDBDbResult result = new TheTVDBDbResult();
 
-                                //TheTVDBDbResult title = GetTitleFromMovieNode(reader);
-
-                                //if (title != null)
-                                //    results.Add(title);
                                 while (reader.Read())
                                 {
                                     if (reader.NodeType == XmlNodeType.Element)
@@ -484,8 +534,19 @@ namespace TVDBMetadata
                                             case "seriesid":
                                             //    typemask = int.Parse(GetElementValue(reader));
                                                 break;
-                                                
+                                            case "filename":
+                                                result.ImageUrl = GetElementValue(reader);
+                                                break;
+                                            case "gueststars":
+                                                foreach (string actor in GetElementValue(reader).Split('|'))
+                                                {
+                                                    result.Title.AddActingRole(actor, "");
+                                                }
+                                                break;
 
+                                            case "runtime":
+                                                result.Title.Runtime = int.Parse(GetElementValue(reader));
+                                                break;
                                             default:
                                                 break;
                                         }
@@ -495,6 +556,20 @@ namespace TVDBMetadata
                                     {
                                         if (result.SeriesNo != 0)
                                         {
+                                            foreach (string actor in actors.Split('|'))
+                                            {
+                                                result.Title.AddActingRole(actor, "");
+                                            }
+                                            foreach (string genre in genres.Split('|'))
+                                            {
+                                                result.Title.AddGenre(genre);
+                                            }
+                                            result.Title.Studio = network;
+                                            result.Title.Runtime = runtime;
+                                            if (string.IsNullOrEmpty(result.Title.ParentalRating))
+                                            {
+                                                result.Title.ParentalRating = rating;
+                                            }
                                             results.Add(result);
                                         }
                                         break;
@@ -504,6 +579,12 @@ namespace TVDBMetadata
                         }
                     }
                 }
+            } 
+            
+            // load up all the titles with images
+            foreach (TheTVDBDbResult title in results)
+            {
+                DownloadImage(title.Title, "http://images.thetvdb.com/banners/" + title.ImageUrl);
             }
         }
 

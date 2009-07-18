@@ -82,7 +82,7 @@ namespace OMLEngine.Settings
                       where t.GenreName == genreName
                       select t.GenreMapTo;
 
-            if (mdm.Count() == 0) { return ""; }
+            if (mdm.Count() == 0) { return null; }
 
             return mdm.ToArray()[0];
         }

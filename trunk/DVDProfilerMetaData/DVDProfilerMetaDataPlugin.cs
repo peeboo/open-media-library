@@ -39,12 +39,14 @@ namespace DVDProfilerMetaData
         String _imgPath = null;
         DVDProfilerSearchResult _searchResult = null;
 
-        public string PluginName
+        public string PluginName { get { return "DVDProfiler (DVDProfilerMetaData)"; } }
+        public string ProviderMessage { get { return ""; } }
+        public string ProviderLink { get { return ""; } }
+
+        public MetadataPluginCapabilities GetPluginCapabilities
         {
-            get { return "DVDProfiler (DVDProfilerMetaData)"; }
-        }
-
-
+            get { return MetadataPluginCapabilities.SupportsMovieSearch; }
+        } 
         public string DVDProfilerImageDir
         {
             get
@@ -239,16 +241,17 @@ namespace DVDProfilerMetaData
             }
         }
 
-        public bool SupportsBackDrops()
-        {
-            return false;
-        }
-
         public void DownloadBackDropsForTitle(Title t, int index)
         {
             throw new NotImplementedException();
         }
 
+        public void SearchForTVSeries(string SeriesName)
+        {
+        }
+        public void SearchForTVEpisodes(int id)
+        {
+        }
         #endregion
     }
 

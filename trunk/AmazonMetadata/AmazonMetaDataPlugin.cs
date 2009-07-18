@@ -42,11 +42,14 @@ namespace AmazonMetadata
         //
         // must implement this, will show up in the menus
         //
-        public string PluginName
-        {
-            get { return "Amazon"; }
-        }
+        public string PluginName { get { return "Amazon"; } }
+        public string ProviderMessage { get { return "Data provided by Amazon"; } }
+        public string ProviderLink { get { return "http://www.amazon.com/"; } }
 
+        public MetadataPluginCapabilities GetPluginCapabilities
+        {
+            get { return MetadataPluginCapabilities.SupportsMovieSearch; }
+        }
 
         // Must call this before any other plugin method
         // parameters is optional -use it if you want to get parameters passed in
@@ -185,12 +188,14 @@ namespace AmazonMetadata
             return PluginName;
         }
 
-        public bool SupportsBackDrops()
+        public void DownloadBackDropsForTitle(Title t, int index)
         {
-            return false;
         }
 
-        public void DownloadBackDropsForTitle(Title t, int index)
+        public void SearchForTVSeries(string SeriesName)
+        {
+        }
+        public void SearchForTVEpisodes(int id)
         {
         }
     }

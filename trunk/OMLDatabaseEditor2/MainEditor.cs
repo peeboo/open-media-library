@@ -539,38 +539,34 @@ namespace OMLDatabaseEditor
         #region MetaData Import
         private bool StartMetadataImport(IOMLMetadataPlugin plugin, bool coverArtOnly)
         {
-            return StartMetadataImport(plugin, coverArtOnly, titleEditor.EditedTitle.Name, null);
+            return StartMetadataImport(plugin, coverArtOnly, titleEditor.EditedTitle.Name); //, null);
         }
 
         internal bool StartMetadataImport(string pluginName, bool coverArtOnly, string titleNameSearch, Form targetForm)
         {
             foreach (IOMLMetadataPlugin plugin in _metadataPlugins)
             {
-                if (plugin.PluginName == pluginName) return StartMetadataImport(plugin, coverArtOnly, titleNameSearch, targetForm);
+                if (plugin.PluginName == pluginName) return StartMetadataImport(plugin, coverArtOnly, titleNameSearch); //, targetForm);
             }
             return false;
         }
 
-        internal bool StartMetadataImport(IOMLMetadataPlugin plugin, bool coverArtOnly, string titleNameSearch, Form targetForm)
+        internal bool StartMetadataImport(IOMLMetadataPlugin plugin, bool coverArtOnly, string titleNameSearch) //, Form targetForm)
         {
             try
             {
                 if (titleNameSearch != null)
                 {
-                    Cursor = Cursors.WaitCursor;
                     if (plugin != null)
                     {
-                        // Update movie based on specified plugin
-                        plugin.SearchForMovie(titleNameSearch);
-                        frmSearchResult searchResultForm;
-                        if (targetForm == null) searchResultForm = new frmSearchResult(this);
-                        else searchResultForm = targetForm as frmSearchResult;
-                        searchResultForm.ReSearchText = titleNameSearch;
-                        searchResultForm.LastMetaPluginName = (string)plugin.PluginName;
-                        Cursor = Cursors.Default;
-                        DialogResult result = searchResultForm.ShowResults(plugin.GetAvailableTitles());
+                        frmSearchResult searchResultForm = null;
+                             
+                        searchResultForm = new frmSearchResult(plugin, titleNameSearch, this);
+
+                        DialogResult result = searchResultForm.ShowDialog(); // ShowResults(plugin.GetAvailableTitles());
                         if (result == DialogResult.OK)
                         {
+                            Cursor = Cursors.WaitCursor;
                             Title t = plugin.GetTitle(searchResultForm.SelectedTitleIndex);
                             if (t != null)
                             {
@@ -587,7 +583,9 @@ namespace OMLDatabaseEditor
                                 }
                             }
                             CheckGenresAgainstSupported(titleEditor.EditedTitle);
-                            titleEditor.RefreshEditor();
+                            titleEditor.RefreshEditor(); 
+                            Cursor = Cursors.Default;
+
                             return true;
                         }
                         else
@@ -609,30 +607,33 @@ namespace OMLDatabaseEditor
                             {
                                 if (map.Key == OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin) continue;
                                 metadata = _metadataPlugins.First(p => p.PluginName == map.Key);
-                                metadata.SearchForMovie(titleNameSearch);
-                                title = metadata.GetBestMatch();
-                                if (title != null)
+                                if ((metadata.GetPluginCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)
                                 {
-                                    Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using plugin " + map.Key);
-                                    foreach (string property in map.Value)
+                                    metadata.SearchForMovie(titleNameSearch);
+                                    title = metadata.GetBestMatch();
+                                    if (title != null)
                                     {
-                                        switch (property)
+                                        Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using plugin " + map.Key);
+                                        foreach (string property in map.Value)
                                         {
-                                            case "FanArt":
-                                                loadedfanart = true;
-                                                LoadFanartFromPlugin(metadata, title);
-                                                break;
-                                            case "Genres":
-                                                titleEditor.EditedTitle.Genres.Clear();
-                                                //titleEditor.EditedTitle.Genres.AddRange(title.Genres.ToArray<string>());
-                                                foreach (string genre in title.Genres.ToArray<string>())
-                                                    titleEditor.EditedTitle.AddGenre(genre);
-                                                break;
-                                            default:
-                                                Utilities.DebugLine("[OMLDatabaseEditor] Using value for " + property + " from plugin " + map.Key);
-                                                System.Reflection.PropertyInfo prop = tTitle.GetProperty(property);
-                                                prop.SetValue(titleEditor.EditedTitle, prop.GetValue(title, null), null);
-                                                break;
+                                            switch (property)
+                                            {
+                                                case "FanArt":
+                                                    loadedfanart = true;
+                                                    LoadFanartFromPlugin(metadata, title);
+                                                    break;
+                                                case "Genres":
+                                                    titleEditor.EditedTitle.Genres.Clear();
+                                                    //titleEditor.EditedTitle.Genres.AddRange(title.Genres.ToArray<string>());
+                                                    foreach (string genre in title.Genres.ToArray<string>())
+                                                        titleEditor.EditedTitle.AddGenre(genre);
+                                                    break;
+                                                default:
+                                                    Utilities.DebugLine("[OMLDatabaseEditor] Using value for " + property + " from plugin " + map.Key);
+                                                    System.Reflection.PropertyInfo prop = tTitle.GetProperty(property);
+                                                    prop.SetValue(titleEditor.EditedTitle, prop.GetValue(title, null), null);
+                                                    break;
+                                            }
                                         }
                                     }
                                 }
@@ -645,14 +646,18 @@ namespace OMLDatabaseEditor
                         }
                         // Use default plugin for remaining fields
                         metadata = _metadataPlugins.First(p => p.PluginName == OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin);
-                        metadata.SearchForMovie(titleNameSearch);
-                        title = metadata.GetBestMatch();
-                        if (title != null)
+
+                        if ((metadata.GetPluginCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)
                         {
-                            if (!loadedfanart) { LoadFanartFromPlugin(metadata, title); }
- 
-                            Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using default plugin " + metadata.PluginName);
-                            titleEditor.EditedTitle.CopyMetadata(title, false);
+                            metadata.SearchForMovie(titleNameSearch);
+                            title = metadata.GetBestMatch();
+                            if (title != null)
+                            {
+                                if (!loadedfanart) { LoadFanartFromPlugin(metadata, title); }
+
+                                Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using default plugin " + metadata.PluginName);
+                                titleEditor.EditedTitle.CopyMetadata(title, false);
+                            }
                         }
 
                         Cursor = Cursors.Default;
@@ -661,7 +666,9 @@ namespace OMLDatabaseEditor
                         return true;
                     }
                 }
+                Cursor = Cursors.Default;
                 return false;
+
             }
             catch (Exception ex)
             {
@@ -673,7 +680,7 @@ namespace OMLDatabaseEditor
 
         private void LoadFanartFromPlugin(IOMLMetadataPlugin metadata, Title title)
         {
-            if (metadata.SupportsBackDrops())
+            if ((metadata.GetPluginCapabilities & MetadataPluginCapabilities.SupportsBackDrops) != 0)
             {                
                 DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
                 dbdForm.Show();
@@ -2573,11 +2580,16 @@ namespace OMLDatabaseEditor
         {
             List<string> tags = new List<string>();
             ListEditor editor = new ListEditor("Tags", tags);
-            editor.ShowDialog();
+            editor.ShowDialog(); 
+            
+            ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
+
             foreach (string tag in tags)
             {
-                foreach (Title title in lvTitles.SelectedItems)
+                foreach (ListViewItem item in sic)
                 {
+                    Title title = _movieList[Convert.ToInt32(item.Text)];
+
                     if (!title.Tags.Contains(tag))
                         title.AddTag(tag);
                 }
