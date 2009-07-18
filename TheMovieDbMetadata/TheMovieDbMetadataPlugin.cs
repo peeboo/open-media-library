@@ -33,7 +33,17 @@ namespace TheMovieDbMetadata
         private List<TheMovieDbResult> results = null;
 
         public string PluginName { get { return "themoviedb.org"; } }
-
+        public string ProviderMessage { get { return "Data provided by themoviedb.org"; } }
+        public string ProviderLink { get { return "http://www.themoviedb.org/"; } }
+        
+        public MetadataPluginCapabilities GetPluginCapabilities
+        {
+            get
+            {
+                return MetadataPluginCapabilities.SupportsMovieSearch |
+                    MetadataPluginCapabilities.SupportsBackDrops;
+            }
+        }
 
         // these 2 methods must be called in sequence
         public bool Initialize(Dictionary<string, string> parameters)
@@ -415,11 +425,6 @@ namespace TheMovieDbMetadata
             }
         }
 
-        public bool SupportsBackDrops()
-        {
-            return true;
-        }
-
         public void DownloadBackDropsForTitle(Title t, int index)
         {            
             if (results.Count >= index)
@@ -446,6 +451,13 @@ namespace TheMovieDbMetadata
                     }
                 }
             }
+        }
+
+        public void SearchForTVSeries(string SeriesName)
+        {
+        }
+        public void SearchForTVEpisodes(int id)
+        {
         }
     }
 }
