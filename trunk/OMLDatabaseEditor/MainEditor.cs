@@ -565,7 +565,7 @@ namespace OMLDatabaseEditor
 
         private void LoadFanartFromPlugin(IOMLMetadataPlugin metadata, Title title)
         {
-            if (metadata.SupportsBackDrops())
+            if ((metadata.GetPluginCapabilities & MetadataPluginCapabilities.SupportsBackDrops) != 0)
             {                
                 DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
                 dbdForm.Show();
