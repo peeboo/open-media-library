@@ -8,11 +8,16 @@ using System.Net;
 using System.Xml;
 using System.Globalization;
 
+
 namespace TVDBMetadata
 {
     public class TheTVDBDbResult
     {
+
+
         public Title Title { get; set; }
+        public int SeriesNo { get; set; }
+        public int EpisodeNo { get; set; }
         public int Id { get; set; }
         public string ImageUrl { get; set; }
         public string ImageUrlThumb { get; set; }
@@ -26,11 +31,14 @@ namespace TVDBMetadata
 
     public class TVDBMetadataPlugin : IOMLMetadataPlugin
     {
-
         IList<string> BackDrops = null;
-        private const string API_KEY = "";
+        private const string API_KEY = "FC18699D6C4514F7";
         private const string API_URL_SEARCH = "";
         private const string API_URL_INFO = "";
+
+        List<string> xmlmirrors;
+        List<string> bannermirrors;
+        List<string> zipmirrors;
 
         private List<TheTVDBDbResult> results = null;
         
@@ -41,6 +49,11 @@ namespace TVDBMetadata
         // these 2 methods must be called in sequence
         public bool Initialize(Dictionary<string, string> parameters)
         {
+            xmlmirrors = new List<string>();
+            bannermirrors = new List<string>();
+            zipmirrors = new List<string>();
+            GetMirrors();
+
             return true;
         }
 
@@ -313,6 +326,254 @@ namespace TVDBMetadata
                     }
                 }
             }*/
+        }
+
+        public void SearchForTVSeries(string SeriesName)
+        {
+            UriBuilder uri = new UriBuilder("http://www.thetvdb.com/api/GetSeries.php");
+            uri.Query = "seriesname=" + SeriesName;
+
+            results = new List<TheTVDBDbResult>();
+
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri.Uri);
+
+            // execute the request
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                string mirrorpath = "";
+                int typemask = 0;
+
+                // we will read data via the response stream
+                using (Stream resStream = response.GetResponseStream())
+                {
+                    XmlTextReader reader = new XmlTextReader(resStream);
+                    reader.WhitespaceHandling = WhitespaceHandling.None;
+
+                    while (reader.Read())
+                    {
+                        if (reader.NodeType == XmlNodeType.Element)
+                        {
+                            if (reader.Name.ToLower() == "series")
+                            {
+                                TheTVDBDbResult result = new TheTVDBDbResult();
+
+                                //TheTVDBDbResult title = GetTitleFromMovieNode(reader);
+
+                                //if (title != null)
+                                //    results.Add(title);
+                                while (reader.Read())
+                                {
+                                    if (reader.NodeType == XmlNodeType.Element)
+                                    {
+                                        switch (reader.Name.ToLower())
+                                        {
+                                            case "seriesid":
+                                                result.Id = int.Parse(GetElementValue(reader));
+                                                break;
+                                            //case "language":
+                                            //    result. = GetElementValue(reader);
+                                            //    break;
+                                            case "seriesname":
+                                                result.Title.Name = GetElementValue(reader);
+                                                break;
+                                            case "banner":
+                                                result.ImageUrl = GetElementValue(reader);
+                                                break;
+                                            case "overview":
+                                                result.Title.Synopsis = GetElementValue(reader);
+                                                break;
+                                            case "firstAired":
+                                                result.Title.ReleaseDate = DateTime.Parse(GetElementValue(reader));
+                                                break;
+                                            //case "IMDB_ID":
+                                            //    typemask = int.Parse(GetElementValue(reader));
+                                            //    break;
+                                            //case "zap2it_id":
+                                            //    typemask = int.Parse(GetElementValue(reader));
+                                            //    break;
+                                            //case "id":
+                                            //    typemask = int.Parse(GetElementValue(reader));
+                                            //    break;
+                                            //case "IMDB_ID":
+                                            //    typemask = int.Parse(GetElementValue(reader));
+                                            //    break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+
+                                    else if (reader.NodeType == XmlNodeType.EndElement && reader.Name.ToLower() == "series")
+                                    {
+                                        results.Add(result);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void SearchForTVEpisodes(int id)
+        {
+            UriBuilder uri = new UriBuilder("http://thetvdb.com/data/series/" + results[id].Id + "/all/");
+
+           
+            results = new List<TheTVDBDbResult>();
+
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri.Uri);
+
+            // execute the request
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                string mirrorpath = "";
+                int typemask = 0;
+
+                // we will read data via the response stream
+                using (Stream resStream = response.GetResponseStream())
+                {
+                    XmlTextReader reader = new XmlTextReader(resStream);
+                    reader.WhitespaceHandling = WhitespaceHandling.None;
+
+                    while (reader.Read())
+                    {
+                        if (reader.NodeType == XmlNodeType.Element)
+                        {
+                            if (reader.Name.ToLower() == "episode")
+                            {
+                                TheTVDBDbResult result = new TheTVDBDbResult();
+
+                                //TheTVDBDbResult title = GetTitleFromMovieNode(reader);
+
+                                //if (title != null)
+                                //    results.Add(title);
+                                while (reader.Read())
+                                {
+                                    if (reader.NodeType == XmlNodeType.Element)
+                                    {
+                                        switch (reader.Name.ToLower())
+                                        {
+                                            case "id":
+                                                result.Id = int.Parse(GetElementValue(reader));
+                                                break;
+                                            case "episodename":
+                                                result.Title.Name = GetElementValue(reader);
+                                                break;
+                                            case "director":
+                                                Person director = new Person(GetElementValue(reader).ToString());
+                                                result.Title.AddDirector(director);
+                                                break;
+                                            case "episodenumber":
+                                                result.Title.Synopsis = GetElementValue(reader);
+                                                break;
+                                            case "firstaired":
+                                            //    result.Title.ReleaseDate = DateTime.Parse(GetElementValue(reader));
+                                                break;
+                                            case "overview":
+                                                result.Title.Synopsis = GetElementValue(reader);
+                                                break;
+                                            case "seasonnumber":
+                                                result.SeriesNo = int.Parse(GetElementValue(reader));
+                                                break;
+                                            case "seasonid":
+                                            //    typemask = int.Parse(GetElementValue(reader));
+                                                break;
+                                            case "seriesid":
+                                            //    typemask = int.Parse(GetElementValue(reader));
+                                                break;
+                                                
+
+                                            default:
+                                                break;
+                                        }
+                                    }
+
+                                    else if (reader.NodeType == XmlNodeType.EndElement && reader.Name.ToLower() == "episode")
+                                    {
+                                        if (result.SeriesNo != 0)
+                                        {
+                                            results.Add(result);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void GetMirrors()
+        {
+            UriBuilder uri = new UriBuilder("http://www.thetvdb.com/api/" + API_KEY + "/mirrors.xml");
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri.Uri);
+
+            // execute the request
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                string mirrorpath = "";
+                int typemask = 0;
+
+                // we will read data via the response stream
+                using (Stream resStream = response.GetResponseStream())
+                {
+                    XmlTextReader reader = new XmlTextReader(resStream);
+                    reader.WhitespaceHandling = WhitespaceHandling.None;
+
+                    while (reader.Read())
+                    {
+                        if (reader.NodeType == XmlNodeType.Element)
+                        {
+                            if (reader.Name.ToLower() == "mirror")
+                            {
+                                //TheTVDBDbResult title = GetTitleFromMovieNode(reader);
+
+                                //if (title != null)
+                                //    results.Add(title);
+                                while (reader.Read())
+                                {
+                                    if (reader.NodeType == XmlNodeType.Element)
+                                    {
+                                        switch (reader.Name.ToLower())
+                                        {
+                                            case "mirrorpath" :
+                                                mirrorpath = GetElementValue(reader);
+                                                break;
+                                            case "typemask" :
+                                                typemask = int.Parse(GetElementValue(reader));
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+
+                                    else if (reader.NodeType == XmlNodeType.EndElement && reader.Name.ToLower() == "mirror")
+                                    {
+                                        if ((typemask & 1) != 0)
+                                        {
+                                            xmlmirrors.Add(mirrorpath);
+                                        }
+                                        if ((typemask & 2) != 0)
+                                        {
+                                            bannermirrors.Add(mirrorpath);
+                                        }
+                                        if ((typemask & 4) != 0)
+                                        {
+                                            zipmirrors.Add(mirrorpath);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
