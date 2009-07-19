@@ -112,6 +112,10 @@
             this.imageWatcherFront = new System.IO.FileSystemWatcher();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.pnlMain = new DevExpress.XtraEditors.PanelControl();
+            this.seSeason = new DevExpress.XtraEditors.SpinEdit();
+            this.seEpisode = new DevExpress.XtraEditors.SpinEdit();
+            this.labelControl22 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl23 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tpVisual.SuspendLayout();
@@ -157,6 +161,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlMain)).BeginInit();
             this.pnlMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.seSeason.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seEpisode.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // xtraTabControl1
@@ -178,6 +184,10 @@
             // 
             this.tpVisual.AutoScroll = true;
             this.tpVisual.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.tpVisual.Controls.Add(this.labelControl23);
+            this.tpVisual.Controls.Add(this.labelControl22);
+            this.tpVisual.Controls.Add(this.seEpisode);
+            this.tpVisual.Controls.Add(this.seSeason);
             this.tpVisual.Controls.Add(this.cbTitleType);
             this.tpVisual.Controls.Add(this.labelControl6);
             this.tpVisual.Controls.Add(this.numProductionYear);
@@ -1064,6 +1074,68 @@
             this.pnlMain.Size = new System.Drawing.Size(526, 526);
             this.pnlMain.TabIndex = 3;
             // 
+            // seSeason
+            // 
+            this.seSeason.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "SeasonNumber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.seSeason.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.titleSource, "SeasonNumber", true));
+            this.seSeason.EditValue = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.seSeason.Location = new System.Drawing.Point(282, 258);
+            this.seSeason.Name = "seSeason";
+            this.seSeason.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.seSeason.Properties.IsFloatValue = false;
+            this.seSeason.Properties.Mask.EditMask = "N00";
+            this.seSeason.Properties.MaxValue = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.seSeason.Size = new System.Drawing.Size(55, 20);
+            this.seSeason.TabIndex = 26;
+            // 
+            // seEpisode
+            // 
+            this.seEpisode.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "EpisodeNumber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.seEpisode.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.titleSource, "EpisodeNumber", true));
+            this.seEpisode.EditValue = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.seEpisode.Location = new System.Drawing.Point(386, 258);
+            this.seEpisode.Name = "seEpisode";
+            this.seEpisode.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.seEpisode.Properties.IsFloatValue = false;
+            this.seEpisode.Properties.Mask.EditMask = "N00";
+            this.seEpisode.Properties.MaxValue = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.seEpisode.Size = new System.Drawing.Size(53, 20);
+            this.seEpisode.TabIndex = 27;
+            // 
+            // labelControl22
+            // 
+            this.labelControl22.Location = new System.Drawing.Point(241, 261);
+            this.labelControl22.Name = "labelControl22";
+            this.labelControl22.Size = new System.Drawing.Size(35, 13);
+            this.labelControl22.TabIndex = 28;
+            this.labelControl22.Text = "Season";
+            // 
+            // labelControl23
+            // 
+            this.labelControl23.Location = new System.Drawing.Point(343, 261);
+            this.labelControl23.Name = "labelControl23";
+            this.labelControl23.Size = new System.Drawing.Size(37, 13);
+            this.labelControl23.TabIndex = 29;
+            this.labelControl23.Text = "Episode";
+            // 
             // TitleEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1119,6 +1191,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlMain)).EndInit();
             this.pnlMain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.seSeason.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seEpisode.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1207,5 +1281,9 @@
         private DevExpress.XtraEditors.LabelControl labelControl6;
         private DevExpress.XtraEditors.ComboBoxEdit cbTitleType;
         private System.Windows.Forms.ToolStripMenuItem miAddNewBackdrop;
+        private DevExpress.XtraEditors.LabelControl labelControl23;
+        private DevExpress.XtraEditors.LabelControl labelControl22;
+        private DevExpress.XtraEditors.SpinEdit seEpisode;
+        private DevExpress.XtraEditors.SpinEdit seSeason;
     }
 }

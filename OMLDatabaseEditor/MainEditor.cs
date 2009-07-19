@@ -24,7 +24,9 @@ namespace OMLDatabaseEditor
     public partial class MainEditor : XtraForm
     {
         internal static List<OMLPlugin> _importPlugins = new List<OMLPlugin>();
-        internal static List<IOMLMetadataPlugin> _metadataPlugins = new List<IOMLMetadataPlugin>();
+
+        internal static List<MetaDataPluginDescriptor> _metadataPlugins = new List<MetaDataPluginDescriptor>();
+
         private const string APP_TITLE = "OML Movie Manager";
         private bool _loading = false;
         private AppearanceObject Percent30 = null;
@@ -210,7 +212,7 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private static void LoadMetadataPlugins(string pluginType, List<IOMLMetadataPlugin> pluginList)
+        private static void LoadMetadataPlugins(string pluginType, List<MetaDataPluginDescriptor> pluginList)
         {
             pluginList.Clear();
 
@@ -224,8 +226,14 @@ namespace OMLDatabaseEditor
                 foreach (PluginServices.AvailablePlugin oPlugin in plugins)
                 {
                     objPlugin = (IOMLMetadataPlugin)PluginServices.CreateInstance(oPlugin);
-                    pluginList.Add(objPlugin);
+                    
                     objPlugin.Initialize(new Dictionary<string, string>());
+
+                    foreach (MetaDataPluginDescriptor provider in objPlugin.GetProviders)
+                    {
+                        provider.PluginDLL = objPlugin;
+                        pluginList.Add(provider);
+                    }
                 }
                 plugins = null;
             }

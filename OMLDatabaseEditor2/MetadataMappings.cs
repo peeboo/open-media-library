@@ -114,9 +114,9 @@ namespace OMLDatabaseEditor
             cbeMetaProvider.Name = "cbeMapping" + no;
             cbeMetaProvider.Text = value;
             cbeMetaProvider.Properties.Items.Add("");
-            foreach (IOMLMetadataPlugin plugin in MainEditor._metadataPlugins)
+            foreach (MetaDataPluginDescriptor plugin in MainEditor._metadataPlugins)
             {
-                cbeMetaProvider.Properties.Items.Add(plugin.PluginName);
+                cbeMetaProvider.Properties.Items.Add(plugin.DataProviderName);
             }
 
             cbeMetaProvider.Dock = DockStyle.Fill;

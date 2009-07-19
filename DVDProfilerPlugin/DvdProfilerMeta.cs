@@ -26,16 +26,27 @@ namespace DVDProfilerPlugin
         }
 
         public string PluginName { get { return "DVDProfiler (DVDProfilerPlugin)"; } }
-        public string ProviderMessage { get { return ""; } }
-        public string ProviderLink { get { return ""; } }
-     
-        public MetadataPluginCapabilities GetPluginCapabilities
+
+        public List<MetaDataPluginDescriptor> GetProviders
         {
-            get { return MetadataPluginCapabilities.SupportsMovieSearch; }
+            get
+            {
+                List<MetaDataPluginDescriptor> descriptors = new List<MetaDataPluginDescriptor>();
+
+                MetaDataPluginDescriptor descriptor = new MetaDataPluginDescriptor();
+                descriptor.DataProviderName = PluginName;
+                descriptor.DataProviderMessage = "";
+                descriptor.DataProviderLink = "";
+                descriptor.DataProviderCapabilities = MetadataPluginCapabilities.SupportsMovieSearch;
+                descriptor.PluginDLL = null;
+                descriptors.Add(descriptor);
+                return descriptors;
+            }
         }
 
+
         // these 2 methods must be called in sequence
-        public bool Initialize(Dictionary<string, string> parameters)
+        public bool Initialize(string provider, Dictionary<string, string> parameters)
         {
             dvdsByName = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             dvdsById = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -129,7 +140,7 @@ namespace DVDProfilerPlugin
             return sb.ToString();
         }
 
-        public bool SearchForMovie(string movieName)
+        public bool SearchForMovie(string movieName, int maxResults)
         {
             movieName = CleanString(movieName);
 
@@ -241,11 +252,13 @@ namespace DVDProfilerPlugin
             return true;
         }
 
-        public void SearchForTVSeries(string SeriesName)
+        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo)
         {
+            return false;
         }
-        public void SearchForTVEpisodes(int id)
+        public bool SearchForTVDrillDown(int id)
         {
+            return false;
         }
     }
 }

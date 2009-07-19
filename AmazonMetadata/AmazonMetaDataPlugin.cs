@@ -39,22 +39,30 @@ namespace AmazonMetadata
         AmazonLocale _locale = AmazonLocale.Default;
         AmazonSearchResult _searchResult = null;
 
-        //
-        // must implement this, will show up in the menus
-        //
         public string PluginName { get { return "Amazon"; } }
-        public string ProviderMessage { get { return "Data provided by Amazon"; } }
-        public string ProviderLink { get { return "http://www.amazon.com/"; } }
 
-        public MetadataPluginCapabilities GetPluginCapabilities
+        public List<MetaDataPluginDescriptor> GetProviders
         {
-            get { return MetadataPluginCapabilities.SupportsMovieSearch; }
+            get
+            {
+                List<MetaDataPluginDescriptor> descriptors = new List<MetaDataPluginDescriptor>();
+
+                MetaDataPluginDescriptor descriptor = new MetaDataPluginDescriptor();
+                descriptor.DataProviderName = PluginName;
+                descriptor.DataProviderMessage = "Data provided by Amazon";
+                descriptor.DataProviderLink = "http://www.amazon.com";
+                descriptor.DataProviderCapabilities = MetadataPluginCapabilities.SupportsMovieSearch;
+                descriptor.PluginDLL = null;
+                descriptors.Add(descriptor);
+                return descriptors;
+            }
         }
+
 
         // Must call this before any other plugin method
         // parameters is optional -use it if you want to get parameters passed in
         // here we can accept the Locale parameter but we'll use the default if not
-        public bool Initialize(Dictionary<string, string> parameters)
+        public bool Initialize(string provider, Dictionary<string, string> parameters)
         {
             try
             {
@@ -82,11 +90,11 @@ namespace AmazonMetadata
         // this is the main method used to actually search for movies
         // returns true if it succeeded
         // Note: save the results in your private variables, we'll ask later for the found items
-        public bool SearchForMovie(string movieName)
+        public bool SearchForMovie(string movieName, int maxResults)
         {
             try
             {
-                if (_amazon == null) Initialize(null);
+                if (_amazon == null) Initialize(PluginName, null);
                 if (_amazon == null) return false;
 
                 _searchResult = _amazon.SearchDVDs(movieName, 1, _locale);
@@ -192,11 +200,13 @@ namespace AmazonMetadata
         {
         }
 
-        public void SearchForTVSeries(string SeriesName)
+        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo)
         {
+            return false;
         }
-        public void SearchForTVEpisodes(int id)
+        public bool SearchForTVDrillDown(int id)
         {
+            return false;
         }
     }
 }

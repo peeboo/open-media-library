@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 
 using OMLEngine;
 
@@ -35,25 +36,35 @@ namespace OMLSDK
         SupportsTVSearch = 0x0004,
     };
 
+    public class MetaDataPluginDescriptor
+    {
+        public string DataProviderName;
+        public string DataProviderMessage;
+        public string DataProviderLink;
+        public MetadataPluginCapabilities DataProviderCapabilities;
+        public IOMLMetadataPlugin PluginDLL;
+    }
+
     public interface IOMLMetadataPlugin
     {
-        string PluginName { get; }
+        List<MetaDataPluginDescriptor> GetProviders { get; }
 
+        // Obsolete methods & Properties
+        // string PluginName { get; }
         // string MainFanArtDir { get; set; }
-
         // bool UseMainFanArtDir { set; }
+        //MetadataPluginCapabilities GetPluginCapabilities { get; }
+        //string ProviderMessage { get; }
+        //string ProviderLink { get; }
 
         // these 2 methods must be called in sequence
-        bool Initialize( Dictionary<string,string> parameters );
-        bool SearchForMovie( string movieName );
+        bool Initialize(string provider, Dictionary<string,string> parameters );
+        bool SearchForMovie( string movieName, int maxResults );
 
-        MetadataPluginCapabilities GetPluginCapabilities { get; }
-        string ProviderMessage { get; }
-        string ProviderLink { get; }
 
         // TV Metadata support
-        void SearchForTVSeries(string SeriesName);
-        void SearchForTVEpisodes(int id);
+        bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo);
+        bool SearchForTVDrillDown(int id);
         // these methods are to be called after the 2 methods above
 
         // get the best match

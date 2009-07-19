@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Text;
 using OMLEngine;
 using OMLSDK;
 
@@ -11,7 +12,7 @@ namespace OMLDatabaseEditor
 {
     public partial class frmSearchResult : Form
     {
-        IOMLMetadataPlugin _plugin;
+        MetaDataPluginDescriptor _plugin;
 
         Title[] _titles = null;
         int _selectedTitle = -1;
@@ -45,20 +46,20 @@ namespace OMLDatabaseEditor
             get { return _selectedTitle; }
         }
 
-        public frmSearchResult(IOMLMetadataPlugin plugin, string searchstr, MainEditor opener)
+        public frmSearchResult(MetaDataPluginDescriptor plugin, string searchstr, MainEditor opener)
         {
             _plugin = plugin;
             _openerForm = opener;
 
             InitializeComponent();
 
-            if (string.IsNullOrEmpty(_plugin.ProviderLink))
+            if (string.IsNullOrEmpty(_plugin.DataProviderLink))
             {
-                lcProviderMessage.Text = plugin.ProviderMessage;
+                lcProviderMessage.Text = plugin.DataProviderMessage;
             }
             else
             {
-                lcProviderMessage.Text = plugin.ProviderMessage + " - Click to view website";
+                lcProviderMessage.Text = plugin.DataProviderMessage + " - Click to view website";
             }
 
             reSearchTitle.Text = searchstr;
@@ -82,22 +83,22 @@ namespace OMLDatabaseEditor
 
             try
             {
-                if ((_plugin.GetPluginCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)
+                if ((_plugin.DataProviderCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)
                 {
-                    _plugin.SearchForMovie(reSearchTitle.Text);
+                    _plugin.PluginDLL.SearchForMovie(reSearchTitle.Text, 999);
                     TVSearch = false;
                 }
                 else
                 {
-                    if ((_plugin.GetPluginCapabilities & MetadataPluginCapabilities.SupportsTVSearch) != 0)
+                    if ((_plugin.DataProviderCapabilities & MetadataPluginCapabilities.SupportsTVSearch) != 0)
                     {
-                        _plugin.SearchForTVSeries(reSearchTitle.Text);
+                        _plugin.PluginDLL.SearchForTVSeries(reSearchTitle.Text, "", null, null);
                         TVSearch = true;
                         TVSearchStage = 0;
                     }
                 }
 
-                _titles = _plugin.GetAvailableTitles();
+                _titles = _plugin.PluginDLL.GetAvailableTitles();
                 ShowResults();
             }
             catch (Exception ex)
@@ -186,7 +187,21 @@ namespace OMLDatabaseEditor
                         if (t.ReleaseDate.Year > 1900)
                             releaseDate = t.ReleaseDate.Year.ToString();
 
-                        grdTitles.Rows.Add(i.ToString(), coverArt, t.Name, t.Synopsis, releaseDate, MakeStringFromList(t.Genres), MakeStringFromPersonList(t.Directors), MakeStringFromRoleList(t.ActingRoles));
+                        string Name = null;
+                        if (TVSearch)
+                        {
+                            StringBuilder bd = new StringBuilder();
+                            if (t.SeasonNumber > 0) bd.Append("Season " + t.SeasonNumber.ToString() + " : ");
+                            if (t.EpisodeNumber > 0) bd.Append("Episode " + t.EpisodeNumber.ToString() + " : ");
+                            bd.Append(t.Name);
+                            Name = bd.ToString();
+                        }
+                        else
+                        {
+                            Name = t.Name;
+                        }
+
+                        grdTitles.Rows.Add(i.ToString(), coverArt, Name, t.Synopsis, releaseDate, MakeStringFromList(t.Genres), MakeStringFromPersonList(t.Directors), MakeStringFromRoleList(t.ActingRoles));
                         i++;
                     }
                 }
@@ -224,8 +239,8 @@ namespace OMLDatabaseEditor
                     switch (TVSearchStage)
                     {
                         case 0:
-                            _plugin.SearchForTVEpisodes(grdTitles.SelectedRows[0].Index);
-                            _titles = _plugin.GetAvailableTitles();
+                            _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index);
+                            _titles = _plugin.PluginDLL.GetAvailableTitles();
                             TVSearchStage = 1;
                             ShowResults();
                             break;
@@ -277,10 +292,10 @@ namespace OMLDatabaseEditor
 
         private void lcProviderMessage_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(_plugin.ProviderLink))
+            if (!string.IsNullOrEmpty(_plugin.DataProviderLink))
             {
                 System.Diagnostics.Process p = new System.Diagnostics.Process();
-                string link = _plugin.ProviderLink;
+                string link = _plugin.DataProviderLink;
 
                 p.StartInfo.FileName = link;
                 p.Start();

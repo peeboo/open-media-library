@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Linq;
 
 using DevExpress.XtraEditors;
 
@@ -15,15 +16,28 @@ namespace OMLDatabaseEditor
 {
     public partial class MetaDataPluginSelect : XtraForm
     {
-        public MetaDataPluginSelect(List<IOMLMetadataPlugin> metadataPlugins)
+        List<MetaDataPluginDescriptor> _metadataPlugins;
+        public MetaDataPluginSelect(List<MetaDataPluginDescriptor> metadataPlugins)
         {
             InitializeComponent();
-            cmbPlugins.Properties.Items.AddRange(metadataPlugins);
+            _metadataPlugins = metadataPlugins;
+
+            foreach (MetaDataPluginDescriptor provider in metadataPlugins)
+            {
+                cmbPlugins.Properties.Items.Add(provider.DataProviderName);
+            }
         }
 
-        public IOMLMetadataPlugin SelectedPlugin()
+        public MetaDataPluginDescriptor SelectedPlugin()
         {
-            return cmbPlugins.SelectedItem as IOMLMetadataPlugin;
+            var qry = from t in _metadataPlugins
+                      where t.DataProviderName == (cmbPlugins.SelectedItem as string)
+                      select t;
+
+            return qry.First();
+
+
+            //return cmbPlugins.SelectedItem as MetaDataPluginDescriptor;
         }
     }
 }

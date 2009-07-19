@@ -34,15 +34,24 @@ namespace NetFlixMetadata
 
         private List<NetFlixDbResult> results = null;
 
-        public string PluginName { get { return "NetFlix"; } }
-        public string ProviderMessage { get { return "Data provided by NetFlix"; } }
-        public string ProviderLink { get { return "http://www.netflix.com"; } }
-        public MetadataPluginCapabilities GetPluginCapabilities
+        public List<MetaDataPluginDescriptor> GetProviders
         {
-            get { return MetadataPluginCapabilities.SupportsMovieSearch; }
+            get
+            {
+                List<MetaDataPluginDescriptor> descriptors = new List<MetaDataPluginDescriptor>();
+
+                MetaDataPluginDescriptor descriptor = new MetaDataPluginDescriptor();
+                descriptor.DataProviderName = "NetFlix";
+                descriptor.DataProviderMessage = "Data provided by NetFlix";
+                descriptor.DataProviderLink = "http://www.netflix.com";
+                descriptor.DataProviderCapabilities = MetadataPluginCapabilities.SupportsMovieSearch;
+                descriptor.PluginDLL = null;
+                descriptors.Add(descriptor);
+                return descriptors;
+            }
         }
 
-        public bool Initialize(Dictionary<string, string> parameters)
+        public bool Initialize(string provider, Dictionary<string, string> parameters)
         {
             return true;
         }
@@ -61,7 +70,7 @@ namespace NetFlixMetadata
             return finalUrl;
         }
 
-        public bool SearchForMovie(string movieName)
+        public bool SearchForMovie(string movieName, int maxResults)
         {
             SearchForMovies(movieName);
             
@@ -437,11 +446,13 @@ namespace NetFlixMetadata
         }
 
 
-        public void SearchForTVSeries(string SeriesName)
+        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo)
         {
+            return false;
         }
-        public void SearchForTVEpisodes(int id)
+        public bool SearchForTVDrillDown(int id)
         {
+            return false;
         }
     }
 }

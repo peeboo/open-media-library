@@ -50,15 +50,25 @@ namespace OMLDatabaseEditor
                 Dictionary<string, object> dataCollection = new Dictionary<string, object>();
                 foreach (PluginServices.AvailablePlugin oPlugin in plugins)
                 {
+                    // Create instance to get plugin list
                     objPlugin = (IOMLMetadataPlugin)PluginServices.CreateInstance(oPlugin);
-                    objPlugin.Initialize(new Dictionary<string, string>());
                     try
                     {
-                        objPlugin.SearchForMovie(_title.Name);
-                        Title title = objPlugin.GetBestMatch();
-                        if (title != null)
+                        foreach (MetaDataPluginDescriptor provider in objPlugin.GetProviders)
                         {
-                            AddResult(objPlugin, _propertyInfo.GetValue(title, null), pluginForProperty);
+                            // Create instance of the plugin for this particular provider. This would create a unique instance per provider.
+                            provider.PluginDLL = (IOMLMetadataPlugin)PluginServices.CreateInstance(oPlugin);
+
+                            // Initialise the plugin and select which provider it serves
+                            provider.PluginDLL.Initialize(provider.DataProviderName, new Dictionary<string, string>());
+
+                            provider.PluginDLL.SearchForMovie(_title.Name, 999);
+                            
+                            Title title = provider.PluginDLL.GetBestMatch();
+                            if (title != null)
+                            {
+                                AddResult(provider, _propertyInfo.GetValue(title, null), pluginForProperty);
+                            }
                         }
                     }
                     catch (Exception e)
@@ -72,16 +82,16 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.Default;
         }
 
-        private void AddResult(IOMLMetadataPlugin plugin, object value, string defaultPlugin)
+        private void AddResult(MetaDataPluginDescriptor plugin, object value, string defaultPlugin)
         {
             LabelControl lblPlugin = new LabelControl();
-            lblPlugin.Text = plugin.PluginName;
-            if (defaultPlugin == plugin.PluginName)
+            lblPlugin.Text = plugin.DataProviderName;
+            if (defaultPlugin == plugin.DataProviderName)
                 lblPlugin.Font = new Font(lblPlugin.Font, FontStyle.Bold);
             // Add context menu of other search results
             ContextMenu menu = new ContextMenu();
             menu.Tag = plugin;
-            Title[] matches = plugin.GetAvailableTitles();
+            Title[] matches = plugin.PluginDLL.GetAvailableTitles();
             for (int i = 0; i < matches.Length; i++)
             {
                 MenuItem item = new MenuItem(matches[i].Name, new EventHandler(otherTitle_Click));
@@ -89,7 +99,7 @@ namespace OMLDatabaseEditor
                 menu.MenuItems.Add(item);
             }
             lblPlugin.ContextMenu = menu;
-            Control ctrl = CreateValueControl(plugin.PluginName, value);
+            Control ctrl = CreateValueControl(plugin.DataProviderName, value);
             if (ctrl != null)
             {
                 tblData.Controls.Add(lblPlugin);
@@ -158,16 +168,16 @@ namespace OMLDatabaseEditor
         {
             MenuItem item = sender as MenuItem;
             ContextMenu menu = item.Parent as ContextMenu;
-            IOMLMetadataPlugin plugin = ((IOMLMetadataPlugin)menu.Tag);
-            Title selectedTitle = plugin.GetTitle((int)item.Tag);
+            MetaDataPluginDescriptor plugin = ((MetaDataPluginDescriptor)menu.Tag);
+            Title selectedTitle = plugin.PluginDLL.GetTitle((int)item.Tag);
             for (int i = 0; i < tblData.Controls.Count; i++)
             {
                 Control ctrl = tblData.Controls[i];
-                if (ctrl is LabelControl && ctrl.Text == plugin.PluginName)
+                if (ctrl is LabelControl && ctrl.Text == plugin.DataProviderName)
                 {
                     int row = i / 2;
                     tblData.Controls.RemoveAt(i + 1);
-                    tblData.Controls.Add(CreateValueControl(plugin.PluginName, _propertyInfo.GetValue(selectedTitle, null)), 1, row);
+                    tblData.Controls.Add(CreateValueControl(plugin.DataProviderName, _propertyInfo.GetValue(selectedTitle, null)), 1, row);
                     return;
                 }
             }
