@@ -12,11 +12,11 @@ namespace OMLTestSuite
         {
 
             TVDBMetadataPlugin tvd = new TVDBMetadataPlugin();
-            tvd.Initialize(null);
-            tvd.SearchForTVSeries("Red");
+            tvd.Initialize("", null);
+            tvd.SearchForTVSeries("Red", "", null, null);
             OMLEngine.Title[] titles = tvd.GetAvailableTitles();
             Console.WriteLine("Title count " + titles.Count());
-            tvd.SearchForTVEpisodes(3);
+            tvd.SearchForTVDrillDown(3);
             titles = tvd.GetAvailableTitles();
             Console.WriteLine("Title count " + titles.Count());
 

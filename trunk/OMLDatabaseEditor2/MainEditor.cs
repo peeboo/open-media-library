@@ -27,7 +27,9 @@ namespace OMLDatabaseEditor
     public partial class MainEditor : XtraForm
     {
         internal static List<OMLPlugin> _importPlugins = new List<OMLPlugin>();
-        internal static List<IOMLMetadataPlugin> _metadataPlugins = new List<IOMLMetadataPlugin>();
+        
+        internal static List<MetaDataPluginDescriptor> _metadataPlugins = new List<MetaDataPluginDescriptor>();
+
         private const string APP_TITLE = "OML Movie Manager";
         private bool _loading = false;
         //private AppearanceObject Percent30 = null;
@@ -231,19 +233,19 @@ namespace OMLDatabaseEditor
         private void SetupNewMovieAndContextMenu()
         {
             LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
-            foreach (IOMLMetadataPlugin plugin in _metadataPlugins)
+            foreach (MetaDataPluginDescriptor plugin in _metadataPlugins)
             {
-                ToolStripMenuItem newItem = new ToolStripMenuItem("From " + plugin.PluginName);
+                ToolStripMenuItem newItem = new ToolStripMenuItem("From " + plugin.DataProviderName);
                 newItem.Tag = plugin;
                 newItem.Click += new EventHandler(this.fromMetaDataToolStripMenuItem_Click);
                 newToolStripMenuItem.DropDownItems.Add(newItem);
 
-                newItem = new ToolStripMenuItem("From " + plugin.PluginName);
+                newItem = new ToolStripMenuItem("From " + plugin.DataProviderName);
                 newItem.Tag = plugin;
                 newItem.Click += new EventHandler(this.fromMetaDataToolStripMenuItem_Click);
                 newMovieSplitButton.DropDownItems.Add(newItem);
 
-                ToolStripMenuItem metadataItem = new ToolStripMenuItem("From " + plugin.PluginName);
+                ToolStripMenuItem metadataItem = new ToolStripMenuItem("From " + plugin.DataProviderName);
                 metadataItem.Tag = plugin;
                 metadataItem.Click += new EventHandler(this.miMetadataMulti_Click);
                 miMetadataMulti.DropDownItems.Add(metadataItem);
@@ -299,7 +301,12 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private static void LoadMetadataPlugins(string pluginType, List<IOMLMetadataPlugin> pluginList)
+        /// <summary>
+        /// Load metadata plugins
+        /// </summary>
+        /// <param name="pluginType"></param>
+        /// <param name="pluginList"></param>
+        private static void LoadMetadataPlugins(string pluginType, List<MetaDataPluginDescriptor> pluginList)
         {
             pluginList.Clear();
 
@@ -312,9 +319,21 @@ namespace OMLDatabaseEditor
             {
                 foreach (PluginServices.AvailablePlugin oPlugin in plugins)
                 {
+                    // Create an instance to enumerate providers in the plugin
                     objPlugin = (IOMLMetadataPlugin)PluginServices.CreateInstance(oPlugin);
-                    pluginList.Add(objPlugin);
-                    objPlugin.Initialize(new Dictionary<string, string>());
+
+                    foreach (MetaDataPluginDescriptor provider in objPlugin.GetProviders)
+                    {
+                        // Create instance of the plugin for this particular provider. This would create a unique instance per provider.
+                        provider.PluginDLL = (IOMLMetadataPlugin)PluginServices.CreateInstance(oPlugin);
+                        
+                        // Initialise the plugin and select which provider it serves
+                        provider.PluginDLL.Initialize(provider.DataProviderName, new Dictionary<string, string>());
+
+                        pluginList.Add(provider);
+                    }
+
+
                 }
                 plugins = null;
             }
@@ -537,21 +556,21 @@ namespace OMLDatabaseEditor
 
 
         #region MetaData Import
-        private bool StartMetadataImport(IOMLMetadataPlugin plugin, bool coverArtOnly)
+        private bool StartMetadataImport(MetaDataPluginDescriptor plugin, bool coverArtOnly)
         {
             return StartMetadataImport(plugin, coverArtOnly, titleEditor.EditedTitle.Name); //, null);
         }
 
         internal bool StartMetadataImport(string pluginName, bool coverArtOnly, string titleNameSearch, Form targetForm)
         {
-            foreach (IOMLMetadataPlugin plugin in _metadataPlugins)
+            foreach (MetaDataPluginDescriptor plugin in _metadataPlugins)
             {
-                if (plugin.PluginName == pluginName) return StartMetadataImport(plugin, coverArtOnly, titleNameSearch); //, targetForm);
+                if (plugin.DataProviderName == pluginName) return StartMetadataImport(plugin, coverArtOnly, titleNameSearch); //, targetForm);
             }
             return false;
         }
 
-        internal bool StartMetadataImport(IOMLMetadataPlugin plugin, bool coverArtOnly, string titleNameSearch) //, Form targetForm)
+        internal bool StartMetadataImport(MetaDataPluginDescriptor plugin, bool coverArtOnly, string titleNameSearch) //, Form targetForm)
         {
             try
             {
@@ -567,7 +586,9 @@ namespace OMLDatabaseEditor
                         if (result == DialogResult.OK)
                         {
                             Cursor = Cursors.WaitCursor;
-                            Title t = plugin.GetTitle(searchResultForm.SelectedTitleIndex);
+                            Title t = plugin.PluginDLL.GetTitle(searchResultForm.SelectedTitleIndex);
+                            t.MetadataSourceName = plugin.DataProviderName;
+
                             if (t != null)
                             {
                                 LoadFanartFromPlugin(plugin, t);
@@ -597,7 +618,7 @@ namespace OMLDatabaseEditor
                         Dictionary<string, List<string>> mappings = OMLEngine.Settings.SettingsManager.MetaDataMap_PropertiesByPlugin();
                         // Loop through configured mappings
                         Type tTitle = typeof(Title);
-                        IOMLMetadataPlugin metadata;
+                        MetaDataPluginDescriptor metadata;
                         Title title;
                         bool loadedfanart = false;
 
@@ -606,11 +627,11 @@ namespace OMLDatabaseEditor
                             try
                             {
                                 if (map.Key == OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin) continue;
-                                metadata = _metadataPlugins.First(p => p.PluginName == map.Key);
-                                if ((metadata.GetPluginCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)
+                                metadata = _metadataPlugins.First(p => p.DataProviderName == map.Key);
+                                if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)
                                 {
-                                    metadata.SearchForMovie(titleNameSearch);
-                                    title = metadata.GetBestMatch();
+                                    metadata.PluginDLL.SearchForMovie(titleNameSearch,1);
+                                    title = metadata.PluginDLL.GetBestMatch();
                                     if (title != null)
                                     {
                                         Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using plugin " + map.Key);
@@ -645,17 +666,19 @@ namespace OMLDatabaseEditor
                             }
                         }
                         // Use default plugin for remaining fields
-                        metadata = _metadataPlugins.First(p => p.PluginName == OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin);
+                        metadata = _metadataPlugins.First(p => p.DataProviderName == OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin);
 
-                        if ((metadata.GetPluginCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)
+                        if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)
                         {
-                            metadata.SearchForMovie(titleNameSearch);
-                            title = metadata.GetBestMatch();
+                            metadata.PluginDLL.SearchForMovie(titleNameSearch,1);
+                            title = metadata.PluginDLL.GetBestMatch();
+                            title.MetadataSourceName = metadata.DataProviderName;
+
                             if (title != null)
                             {
                                 if (!loadedfanart) { LoadFanartFromPlugin(metadata, title); }
 
-                                Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using default plugin " + metadata.PluginName);
+                                Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using default plugin " + metadata.DataProviderName);
                                 titleEditor.EditedTitle.CopyMetadata(title, false);
                             }
                         }
@@ -678,13 +701,13 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private void LoadFanartFromPlugin(IOMLMetadataPlugin metadata, Title title)
+        private void LoadFanartFromPlugin(MetaDataPluginDescriptor metadata, Title title)
         {
-            if ((metadata.GetPluginCapabilities & MetadataPluginCapabilities.SupportsBackDrops) != 0)
+            if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsBackDrops) != 0)
             {                
                 DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
                 dbdForm.Show();
-                metadata.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
+                metadata.PluginDLL.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
                 dbdForm.Hide();
                 dbdForm.Dispose();                
             }
@@ -763,7 +786,7 @@ namespace OMLDatabaseEditor
                         LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
                         MetaDataPluginSelect selectPlugin = new MetaDataPluginSelect(_metadataPlugins);
                         selectPlugin.ShowDialog();
-                        IOMLMetadataPlugin plugin = selectPlugin.SelectedPlugin();
+                        MetaDataPluginDescriptor plugin = selectPlugin.SelectedPlugin();
                         StartMetadataImport(plugin, false);
                     }
                     else
@@ -1003,12 +1026,13 @@ namespace OMLDatabaseEditor
         private void fromMetaDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem selectedItem = sender as ToolStripMenuItem;
-            IOMLMetadataPlugin plugin = selectedItem.Tag as IOMLMetadataPlugin;
+            MetaDataPluginDescriptor plugin = selectedItem.Tag as MetaDataPluginDescriptor;
             // Ask for name of movie
             NewMovieName movieName = new NewMovieName();
             if (movieName.ShowDialog() == DialogResult.OK)
             {
-                string name = movieName.MovieName();
+                CreateTitle(null, movieName.MovieName(), TitleTypes.Unknown);
+                /*TitleTypes*string name = movieName.MovieName();
                 Title newTitle = new Title();
                 newTitle.DateAdded = DateTime.Now;
                 newTitle.Name = name;
@@ -1016,7 +1040,7 @@ namespace OMLDatabaseEditor
                 // Add the title now to get the title ID
                 TitleCollectionManager.AddTitle(newTitle);
 
-                titleEditor.LoadDVD(newTitle);
+                titleEditor.LoadDVD(newTitle);*/
                 StartMetadataImport(plugin, false);
                 this.Text = APP_TITLE + " - " + titleEditor.EditedTitle.Name + "*";
                 ToggleSaveState(true);
@@ -1027,7 +1051,7 @@ namespace OMLDatabaseEditor
         {
             if (_loading) return;
             Cursor = Cursors.WaitCursor;
-            IOMLMetadataPlugin metadata = lbMetadata.SelectedItem as IOMLMetadataPlugin;
+            MetaDataPluginDescriptor metadata = lbMetadata.SelectedItem as MetaDataPluginDescriptor;
             if (metadata != null)
             {
                 StartMetadataImport(metadata, false);
@@ -1078,7 +1102,7 @@ namespace OMLDatabaseEditor
             Cursor = Cursors.WaitCursor;
             SaveCurrentMovie();
             ToolStripMenuItem selectedItem = sender as ToolStripMenuItem;
-            IOMLMetadataPlugin plugin = selectedItem.Tag as IOMLMetadataPlugin;
+            MetaDataPluginDescriptor plugin = selectedItem.Tag as MetaDataPluginDescriptor;
 
             //BaseListBoxControl.SelectedItemCollection collection = lbMovies.SelectedItems;
             pgbProgress.Visible = true;
@@ -1106,7 +1130,8 @@ namespace OMLDatabaseEditor
                     // todo : solomon : need to see how this update is happening since it'll update
                     // existing ones it pulls out out of the db but not new ones
                     TitleCollectionManager.SaveTitleUpdates();
-                }
+                } 
+                titleEditor.LoadDVD(title);
             }
             statusText.Text = "Finished updating metadata";
             pgbProgress.Visible = false;
@@ -1137,6 +1162,7 @@ namespace OMLDatabaseEditor
                     //_titleCollection.Replace(titleEditor.EditedTitle);
                     TitleCollectionManager.SaveTitleUpdates();
                 }
+                titleEditor.LoadDVD(title);
             }
             statusText.Text = "Finished updating metadata";
             pgbProgress.Visible = false;

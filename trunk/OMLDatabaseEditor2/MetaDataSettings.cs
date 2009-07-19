@@ -8,7 +8,7 @@ namespace OMLDatabaseEditor
 {
     public partial class MetaDataSettings : Form
     {
-        private IOMLMetadataPlugin _selectdPlugin = null;
+        private MetaDataPluginDescriptor _selectdPlugin = null;
 
         public MetaDataSettings()
         {
@@ -20,12 +20,12 @@ namespace OMLDatabaseEditor
 
         }
 
-        public DialogResult Show(List<IOMLMetadataPlugin> plugins)
+        public DialogResult Show(List<MetaDataPluginDescriptor> plugins)
         {
             _selectdPlugin = null;
             if (plugins != null)
             {
-                foreach (IOMLMetadataPlugin plugin in plugins)
+                foreach (MetaDataPluginDescriptor plugin in plugins)
                 {
 
                     lbMetadataPlugins.Items.Add(plugin);
@@ -40,9 +40,9 @@ namespace OMLDatabaseEditor
             if (lbMetadataPlugins.SelectedItem != null)
             {
                 grdOptions.Rows.Clear();
-                IOMLMetadataPlugin plugin = lbMetadataPlugins.SelectedItem as IOMLMetadataPlugin;
+                MetaDataPluginDescriptor plugin = lbMetadataPlugins.SelectedItem as MetaDataPluginDescriptor;
                 _selectdPlugin = plugin;
-                List<OMLMetadataOption> options = plugin.GetOptions();
+                List<OMLMetadataOption> options = plugin.PluginDLL.GetOptions();
                 if (options != null)
                 {
                     foreach (OMLMetadataOption option in options)
@@ -93,7 +93,7 @@ namespace OMLDatabaseEditor
             {
                 foreach (DataGridViewRow row in grdOptions.Rows)
                 {
-                    _selectdPlugin.SetOptionValue((string)row.Cells[colOptionName.Index].Value, (string)row.Cells[colOptionValue.Index].Value);
+                    _selectdPlugin.PluginDLL.SetOptionValue((string)row.Cells[colOptionName.Index].Value, (string)row.Cells[colOptionValue.Index].Value);
                 }
             }
         }

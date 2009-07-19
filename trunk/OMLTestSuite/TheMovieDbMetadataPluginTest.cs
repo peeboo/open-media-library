@@ -15,8 +15,8 @@ namespace OMLTestSuite
         public void TEST_BASE_CASE()
         {
             TheMovieDbMetadata.TheMovieDbMetadata plugin = new TheMovieDbMetadata.TheMovieDbMetadata();
-            plugin.Initialize(null);
-            plugin.SearchForMovie("The Dark Knight");
+            plugin.Initialize("", null);
+            plugin.SearchForMovie("The Dark Knight", 999);
             Title t = plugin.GetBestMatch();
             plugin.GetTitle(0);
         }

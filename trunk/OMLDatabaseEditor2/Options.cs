@@ -86,9 +86,9 @@ namespace OMLDatabaseEditor
             this.cePrependParentFolder.Checked = OMLSettings.AddParentFoldersToTitleName;
             cePrependParentFolder.Enabled = this.ceFoldersAsTitles.Checked;
 
-            foreach (IOMLMetadataPlugin plugin in MainEditor._metadataPlugins)
+            foreach (MetaDataPluginDescriptor plugin in MainEditor._metadataPlugins)
             {
-                cmbDefaultMetadataPlugin.Properties.Items.Add(plugin.PluginName);
+                cmbDefaultMetadataPlugin.Properties.Items.Add(plugin.DataProviderName);
             }
             cmbDefaultMetadataPlugin.SelectedItem = OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin;
 

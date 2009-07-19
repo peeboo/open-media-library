@@ -138,6 +138,9 @@ namespace OMLEngine
             }
         }
 
+        public int? SeasonNumber { get; set; }
+        public int? EpisodeNumber { get; set; }
+
         public string ParentalRatingReason
         {
             get { return _title.ParentalRatingReason; }
@@ -148,6 +151,7 @@ namespace OMLEngine
                 _title.ParentalRatingReason = value;
             }
         }
+
 
         public string SortName
         {
@@ -2212,7 +2216,9 @@ namespace OMLEngine
         public void CopyMetadata(Title t, bool overWrite)
         {
             Name = CopyStringValue(t.Name, Name, overWrite);
+            
             MetadataSourceID = CopyStringValue(t.MetadataSourceID, MetadataSourceID, overWrite);
+            MetadataSourceName = CopyStringValue(t.MetadataSourceName, MetadataSourceName, overWrite);
 
             ParentalRating = CopyStringValue(t.ParentalRating, ParentalRating, overWrite);
             Synopsis = CopyStringValue(t.Synopsis, Synopsis, overWrite);
@@ -2228,6 +2234,8 @@ namespace OMLEngine
             VideoDetails = CopyStringValue(t.VideoDetails, VideoDetails, overWrite);
             ReleaseDate = CheckDateRange(t.ReleaseDate);
 
+            if (t.SeasonNumber > 0) SeasonNumber = t.SeasonNumber;
+            if (t.EpisodeNumber > 0) EpisodeNumber = t.EpisodeNumber;
             if (t.Runtime > 0) Runtime = t.Runtime;
             if (t.UserStarRating > 0) UserStarRating = t.UserStarRating;
             if (t.ProductionYear > 0) ProductionYear = t.ProductionYear;
