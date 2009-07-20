@@ -17,11 +17,11 @@ namespace OMLDatabaseEditor
         Title[] _titles = null;
         int _selectedTitle = -1;
         bool _overwriteMetadata;
-        MainEditor _openerForm;
+        //MainEditor _openerForm;
         public string _lastMetaPluginName;
 
         bool TVSearch;
-        int TVSearchStage;
+        bool SearchDrillDownReq;
 
         /*public string LastMetaPluginName
         {
@@ -46,10 +46,10 @@ namespace OMLDatabaseEditor
             get { return _selectedTitle; }
         }
 
-        public frmSearchResult(MetaDataPluginDescriptor plugin, string searchstr, MainEditor opener)
+        public frmSearchResult(MetaDataPluginDescriptor plugin, string searchstr, string EpisodeName, int ? SeasonNo, int ? EpisodeNo) //MainEditor opener)
         {
             _plugin = plugin;
-            _openerForm = opener;
+            //_openerForm = opener;
 
             InitializeComponent();
 
@@ -63,7 +63,9 @@ namespace OMLDatabaseEditor
             }
 
             reSearchTitle.Text = searchstr;
-
+            teEpisodeName.Text = EpisodeName;
+            if (SeasonNo != null) seSeasonNo.Value = Convert.ToInt32(SeasonNo);
+            if (EpisodeNo != null) seEpisodeNo.Value = Convert.ToInt32(EpisodeNo);
             Search();
         }
 
@@ -87,14 +89,14 @@ namespace OMLDatabaseEditor
                 {
                     _plugin.PluginDLL.SearchForMovie(reSearchTitle.Text, 999);
                     TVSearch = false;
+                    SearchDrillDownReq = false;
                 }
                 else
                 {
                     if ((_plugin.DataProviderCapabilities & MetadataPluginCapabilities.SupportsTVSearch) != 0)
                     {
-                        _plugin.PluginDLL.SearchForTVSeries(reSearchTitle.Text, "", null, null);
+                        SearchDrillDownReq = _plugin.PluginDLL.SearchForTVSeries(reSearchTitle.Text, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value));
                         TVSearch = true;
-                        TVSearchStage = 0;
                     }
                 }
 
@@ -236,22 +238,33 @@ namespace OMLDatabaseEditor
 
                 if (grdTitles.SelectedRows != null && grdTitles.SelectedRows.Count > 0)
                 {
-                    switch (TVSearchStage)
+                    if (SearchDrillDownReq)
                     {
-                        case 0:
-                            _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index);
-                            _titles = _plugin.PluginDLL.GetAvailableTitles();
-                            TVSearchStage = 1;
-                            ShowResults();
-                            break;
-                        case 1:
-                            _selectedTitle = grdTitles.SelectedRows[0].Index;
-                            DialogResult = DialogResult.OK;
-                            break;
+                        Cursor = Cursors.WaitCursor;
+                        SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value));
+                        _titles = _plugin.PluginDLL.GetAvailableTitles();
+                        ShowResults();
+                        Cursor = Cursors.Default;
                     }
-                }
-                Cursor = Cursors.Default;
+                    else
+                    {
+                        _selectedTitle = grdTitles.SelectedRows[0].Index;
+                        DialogResult = DialogResult.OK;
+                    }
 
+                }
+            }
+        }
+
+        private void reSearchSubmitEpisodeButton_Click(object sender, EventArgs e)
+        {
+            if (TVSearch)
+            {
+                Cursor = Cursors.WaitCursor;
+                SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value));
+                _titles = _plugin.PluginDLL.GetAvailableTitles();
+                ShowResults();
+                Cursor = Cursors.Default;
             }
         }
 

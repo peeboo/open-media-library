@@ -462,7 +462,7 @@ namespace TheMovieDbMetadata
         {
             return false;
         }
-        public bool SearchForTVDrillDown(int id)
+        public bool SearchForTVDrillDown(int id, string EpisodeName, int? SeriesNo, int? EpisodeNo)
         {
             return false;
         }

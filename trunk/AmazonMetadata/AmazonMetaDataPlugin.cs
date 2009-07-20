@@ -204,7 +204,7 @@ namespace AmazonMetadata
         {
             return false;
         }
-        public bool SearchForTVDrillDown(int id)
+        public bool SearchForTVDrillDown(int id, string EpisodeName, int? SeasonNo, int? EpisodeNo)
         {
             return false;
         }

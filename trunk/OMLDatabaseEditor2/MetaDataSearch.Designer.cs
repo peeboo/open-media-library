@@ -54,7 +54,14 @@
             this.reSearchSubmitButton = new System.Windows.Forms.Button();
             this.reSearchTitle = new System.Windows.Forms.TextBox();
             this.lcProviderMessage = new DevExpress.XtraEditors.LabelControl();
+            this.teEpisodeName = new System.Windows.Forms.TextBox();
+            this.seSeasonNo = new DevExpress.XtraEditors.SpinEdit();
+            this.seEpisodeNo = new DevExpress.XtraEditors.SpinEdit();
+            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
+            this.reSearchSubmitEpisodeButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.grdTitles)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seSeasonNo.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seEpisodeNo.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // grdTitles
@@ -200,10 +207,50 @@
             this.lcProviderMessage.Name = "lcProviderMessage";
             this.lcProviderMessage.Click += new System.EventHandler(this.lcProviderMessage_Click);
             // 
+            // teEpisodeName
+            // 
+            resources.ApplyResources(this.teEpisodeName, "teEpisodeName");
+            this.teEpisodeName.Name = "teEpisodeName";
+            // 
+            // seSeasonNo
+            // 
+            resources.ApplyResources(this.seSeasonNo, "seSeasonNo");
+            this.seSeasonNo.Name = "seSeasonNo";
+            this.seSeasonNo.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.seSeasonNo.Properties.IsFloatValue = false;
+            this.seSeasonNo.Properties.Mask.EditMask = resources.GetString("seSeasonNo.Properties.Mask.EditMask");
+            // 
+            // seEpisodeNo
+            // 
+            resources.ApplyResources(this.seEpisodeNo, "seEpisodeNo");
+            this.seEpisodeNo.Name = "seEpisodeNo";
+            this.seEpisodeNo.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.seEpisodeNo.Properties.IsFloatValue = false;
+            this.seEpisodeNo.Properties.Mask.EditMask = resources.GetString("seEpisodeNo.Properties.Mask.EditMask");
+            // 
+            // labelControl1
+            // 
+            resources.ApplyResources(this.labelControl1, "labelControl1");
+            this.labelControl1.Name = "labelControl1";
+            // 
+            // reSearchSubmitEpisodeButton
+            // 
+            resources.ApplyResources(this.reSearchSubmitEpisodeButton, "reSearchSubmitEpisodeButton");
+            this.reSearchSubmitEpisodeButton.Name = "reSearchSubmitEpisodeButton";
+            this.reSearchSubmitEpisodeButton.UseVisualStyleBackColor = true;
+            this.reSearchSubmitEpisodeButton.Click += new System.EventHandler(this.reSearchSubmitEpisodeButton_Click);
+            // 
             // frmSearchResult
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.reSearchSubmitEpisodeButton);
+            this.Controls.Add(this.labelControl1);
+            this.Controls.Add(this.seEpisodeNo);
+            this.Controls.Add(this.seSeasonNo);
+            this.Controls.Add(this.teEpisodeName);
             this.Controls.Add(this.lcProviderMessage);
             this.Controls.Add(this.reSearchAdjustTitleLabel);
             this.Controls.Add(this.reSearchSubmitButton);
@@ -215,6 +262,8 @@
             this.Name = "frmSearchResult";
             this.Load += new System.EventHandler(this.frmSearchResult_Load);
             ((System.ComponentModel.ISupportInitialize)(this.grdTitles)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seSeasonNo.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seEpisodeNo.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -240,5 +289,10 @@
         private System.Windows.Forms.Button reSearchSubmitButton;
         private System.Windows.Forms.TextBox reSearchTitle;
         private DevExpress.XtraEditors.LabelControl lcProviderMessage;
+        private System.Windows.Forms.TextBox teEpisodeName;
+        private DevExpress.XtraEditors.SpinEdit seSeasonNo;
+        private DevExpress.XtraEditors.SpinEdit seEpisodeNo;
+        private DevExpress.XtraEditors.LabelControl labelControl1;
+        private System.Windows.Forms.Button reSearchSubmitEpisodeButton;
     }
 }
