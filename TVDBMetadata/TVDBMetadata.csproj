@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StringMatching.cs" />
     <Compile Include="TVDBMetadataPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -66,4 +67,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetPath) "C:\Program Files\OpenMediaLibrary\Plugins"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
