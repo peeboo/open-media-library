@@ -7,6 +7,7 @@ using System.IO;
 using System.Net;
 using System.Xml;
 using System.Globalization;
+using System.Linq;
 
 
 namespace TVDBMetadata
@@ -14,8 +15,9 @@ namespace TVDBMetadata
     public class TheTVDBDbResult
     {
         public Title Title { get; set; }
-        public int SeriesNo { get; set; }
+        public int SeasonNo { get; set; }
         public int EpisodeNo { get; set; }
+        public int NameMatchConfidence { get; set; }
         public int Id { get; set; }
         public string ImageUrl { get; set; }
         public string ImageUrlThumb { get; set; }
@@ -205,6 +207,14 @@ namespace TVDBMetadata
             }
         }
 
+
+        /*#region Variables to record TV search progress
+        string SeriesName;
+        int SeriesID;
+        string EpisodeName;
+        int? SeriesNo;
+        int? EpisodeNo;
+        #endregion*/
         /// <summary>
         /// 
         /// </summary>
@@ -213,8 +223,55 @@ namespace TVDBMetadata
         /// <param name="SeriesNo"></param>
         /// <param name="EpisodeNo"></param>
         /// <returns>Boolean to indicate a drill down is required</returns>
-        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo)
+        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeasonNo, int? EpisodeNo)
         {
+            // Store the search criteria for later
+            /*SeriesName = pSeriesName;
+            EpisodeName = pEpisodeName; 
+            SeriesNo = pSeriesNo;
+            EpisodeNo = pEpisodeNo;*/
+
+            // First try to find the TV Show on tvdb
+            SearchForTVShow(SeriesName);
+
+            if (results.Count <= 0) return false;
+            
+            if (results.Count > 1)
+            {
+                // Found more than one possible show. Present the list to the user
+                // but first load up all the titles with images
+                foreach (TheTVDBDbResult title in results)
+                {
+                    DownloadImage(title.Title, "http://images.thetvdb.com/banners/" + title.ImageUrl);
+                }
+                return true;
+            }
+            else
+            {
+                // We have a single match on the series. Try to load the episodes
+                SeriesID = results[0].Id;
+                SearchForEpisode(EpisodeName, SeasonNo, EpisodeNo);
+                return false;
+            }
+        }
+
+        public bool SearchForTVDrillDown(int id, string EpisodeName, int? SeasonNo, int? EpisodeNo)
+        {
+            // If no series ID cached, get from the id passed to function.
+            if (SeriesID == 0) SeriesID = results[id].Id;
+            SearchForEpisode(EpisodeName, SeasonNo, EpisodeNo);
+            return false;
+        }
+
+        /// <summary>
+        /// Queries tvdb to get a list of tc shows matching 'SeriesName'
+        /// </summary>
+        /// <param name="SeriesName"></param>
+        private void SearchForTVShow(string SeriesName)
+        {
+            // Reset current series ID
+            SeriesID = 0;
+
             UriBuilder uri = new UriBuilder("http://www.thetvdb.com/api/GetSeries.php");
             uri.Query = "seriesname=" + SeriesName;
 
@@ -299,22 +356,16 @@ namespace TVDBMetadata
                     }
                 }
             } 
-            
-            // load up all the titles with images
-            foreach (TheTVDBDbResult title in results)
-            {
-                DownloadImage(title.Title, "http://images.thetvdb.com/banners/" + title.ImageUrl);
-            }
-            return true;
         }
 
         /// <summary>
         /// Returns a list of all episodes
         /// </summary>
         /// <param name="id"></param>
-        public bool SearchForTVDrillDown(int id)
+        int SeriesID;
+        private void SearchForEpisode(string EpisodeName, int? SeasonNo, int? EpisodeNo)
         {
-            UriBuilder uri = new UriBuilder("http://thetvdb.com/api/" + API_KEY + "/series/" + results[id].Id + "/all/");
+            UriBuilder uri = new UriBuilder("http://thetvdb.com/api/" + API_KEY + "/series/" + SeriesID.ToString() + "/all/");
 
             string actors = "";
             string genres = "";
@@ -361,7 +412,8 @@ namespace TVDBMetadata
                                                 network = GetElementValue(reader);
                                                 break;
                                             case "runtime":
-                                                runtime = int.Parse(GetElementValue(reader));
+                                                int.TryParse(GetElementValue(reader), out runtime); 
+                                                //runtime = int.Parse(GetElementValue(reader));
                                                 break;
                                             case "fanart":
                                                 if (BackDrops == null) BackDrops = new List<string>();
@@ -422,8 +474,8 @@ namespace TVDBMetadata
                                                 result.Title.Synopsis = GetElementValue(reader);
                                                 break;
                                             case "seasonnumber":
-                                                result.SeriesNo = int.Parse(GetElementValue(reader));
-                                                result.Title.SeasonNumber = result.SeriesNo;
+                                                result.SeasonNo = int.Parse(GetElementValue(reader));
+                                                result.Title.SeasonNumber = result.SeasonNo;
                                                 break;
                                             case "seasonid":
                                             //    typemask = int.Parse(GetElementValue(reader));
@@ -454,29 +506,41 @@ namespace TVDBMetadata
 
                                     else if (reader.NodeType == XmlNodeType.EndElement && reader.Name.ToLower() == "episode")
                                     {
-                                        if (result.SeriesNo != 0)
+                                        if (result.SeasonNo != 0)
                                         {
-                                            foreach (string actor in actors.Split('|'))
+                                            bool AddTitle = true;
+
+                                            // If an episode or season number is specified, only add if matched
+                                            if ((SeasonNo > 0) && (SeasonNo != result.SeasonNo)) AddTitle = false;
+                                            if ((EpisodeNo > 0) && (EpisodeNo != result.EpisodeNo)) AddTitle = false;
+
+                                            // If an episode name is specified, calculate the match confidence
+                                            if (!string.IsNullOrEmpty(EpisodeName))  result.NameMatchConfidence = StringMatching.Compute(EpisodeName, result.Title.Name);
+
+                                            if (AddTitle)
                                             {
-                                                if (!string.IsNullOrEmpty(actor))
+                                                foreach (string actor in actors.Split('|'))
                                                 {
-                                                    result.Title.AddActingRole(actor, "");
+                                                    if (!string.IsNullOrEmpty(actor))
+                                                    {
+                                                        result.Title.AddActingRole(actor, "");
+                                                    }
                                                 }
-                                            }
-                                            foreach (string genre in genres.Split('|'))
-                                            {
-                                                if (!string.IsNullOrEmpty(genre))
+                                                foreach (string genre in genres.Split('|'))
                                                 {
-                                                    result.Title.AddGenre(genre);
+                                                    if (!string.IsNullOrEmpty(genre))
+                                                    {
+                                                        result.Title.AddGenre(genre);
+                                                    }
                                                 }
+                                                result.Title.Studio = network;
+                                                result.Title.Runtime = runtime;
+                                                if (string.IsNullOrEmpty(result.Title.ParentalRating))
+                                                {
+                                                    result.Title.ParentalRating = rating;
+                                                }
+                                                results.Add(result);
                                             }
-                                            result.Title.Studio = network;
-                                            result.Title.Runtime = runtime;
-                                            if (string.IsNullOrEmpty(result.Title.ParentalRating))
-                                            {
-                                                result.Title.ParentalRating = rating;
-                                            }
-                                            results.Add(result);
                                         }
                                         break;
                                     }
@@ -485,14 +549,21 @@ namespace TVDBMetadata
                         }
                     }
                 }
+            }
+
+            if (!string.IsNullOrEmpty(EpisodeName))
+            {
+                // Sort by name confidence and limit result set
+                results = (from r in results
+                           orderby r.NameMatchConfidence
+                           select r).Take(5).ToList();
             } 
-            
+
             // load up all the titles with images
             foreach (TheTVDBDbResult title in results)
             {
                 DownloadImage(title.Title, "http://images.thetvdb.com/banners/" + title.ImageUrl);
             }
-            return false;
         }
 
         private void GetMirrors()

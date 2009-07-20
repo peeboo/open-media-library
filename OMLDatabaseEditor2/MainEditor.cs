@@ -558,19 +558,56 @@ namespace OMLDatabaseEditor
         #region MetaData Import
         private bool StartMetadataImport(MetaDataPluginDescriptor plugin, bool coverArtOnly)
         {
-            return StartMetadataImport(plugin, coverArtOnly, titleEditor.EditedTitle.Name); //, null);
+            int? SeasonNo = null;
+            int? EpisodeNo = null;
+
+            if ((titleEditor.EditedTitle.TitleType & TitleTypes.Episode) != 0)
+            {
+                // TV Search
+                if (titleEditor.EditedTitle.SeasonNumber != null) SeasonNo = titleEditor.EditedTitle.SeasonNumber.Value;
+                if (titleEditor.EditedTitle.EpisodeNumber != null) EpisodeNo = titleEditor.EditedTitle.EpisodeNumber.Value;
+                string Showname = null;
+
+                Title t = titleEditor.EditedTitle;
+                // Try to find show name be looking up the folder structure.
+                while ((t.TitleType & TitleTypes.Root) == 0)
+                {
+                    // Get parent
+                    t = t.ParentTitle;
+                    if ((t.TitleType & TitleTypes.TVShow) != 0)
+                    {
+                        Showname = t.Name;
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(Showname))
+                {
+                    // Cannot find a show name in the folder structure
+                    return StartMetadataImport(plugin, coverArtOnly, titleEditor.EditedTitle.Name, "", SeasonNo, EpisodeNo);
+                }
+                else
+                {
+                    return StartMetadataImport(plugin, coverArtOnly, Showname, titleEditor.EditedTitle.Name, SeasonNo, EpisodeNo);
+                }
+            }
+            else
+            {
+                // Movie Search
+                return StartMetadataImport(plugin, coverArtOnly, titleEditor.EditedTitle.Name, "", SeasonNo, EpisodeNo);
+            }
         }
 
-        internal bool StartMetadataImport(string pluginName, bool coverArtOnly, string titleNameSearch, Form targetForm)
+        internal bool StartMetadataImport(string pluginName, bool coverArtOnly, string titleNameSearch, string EpisodeName, int SeasonNo, int EpisodeNo)
         {
             foreach (MetaDataPluginDescriptor plugin in _metadataPlugins)
             {
-                if (plugin.DataProviderName == pluginName) return StartMetadataImport(plugin, coverArtOnly, titleNameSearch); //, targetForm);
+                if (plugin.DataProviderName == pluginName) return StartMetadataImport(plugin, coverArtOnly, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo); 
             }
             return false;
         }
 
-        internal bool StartMetadataImport(MetaDataPluginDescriptor plugin, bool coverArtOnly, string titleNameSearch) //, Form targetForm)
+        internal bool StartMetadataImport(MetaDataPluginDescriptor plugin, bool coverArtOnly, string titleNameSearch, string EpisodeName, int ? SeasonNo, int ? EpisodeNo)
         {
             try
             {
@@ -580,7 +617,7 @@ namespace OMLDatabaseEditor
                     {
                         frmSearchResult searchResultForm = null;
                              
-                        searchResultForm = new frmSearchResult(plugin, titleNameSearch, this);
+                        searchResultForm = new frmSearchResult(plugin, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo);
 
                         DialogResult result = searchResultForm.ShowDialog(); // ShowResults(plugin.GetAvailableTitles());
                         if (result == DialogResult.OK)
@@ -1136,6 +1173,7 @@ namespace OMLDatabaseEditor
             statusText.Text = "Finished updating metadata";
             pgbProgress.Visible = false;
             Application.DoEvents();
+            Cursor = Cursors.Default;
         }
 
         private void fromPreferredSourcesToolStripMenuItem_Click(object sender, EventArgs e)
