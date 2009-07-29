@@ -115,12 +115,6 @@ namespace OMLDatabaseEditor
             this.navBarGroupControlContainer7 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
             this.lvTitles = new System.Windows.Forms.ListView();
             this.columnTitleID = new System.Windows.Forms.ColumnHeader();
-            this.cmsMoviesList = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.miMetadataMulti = new System.Windows.Forms.ToolStripMenuItem();
-            this.fromPreferredSourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.addTagMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.addGenreMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.ListViewImages = new System.Windows.Forms.ImageList(this.components);
             this.SortControl = new DevExpress.XtraEditors.PanelControl();
             this.beSearch = new DevExpress.XtraEditors.ButtonEdit();
@@ -158,7 +152,6 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.navBarControl1)).BeginInit();
             this.navBarControl1.SuspendLayout();
             this.navBarGroupControlContainer7.SuspendLayout();
-            this.cmsMoviesList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SortControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.beSearch.Properties)).BeginInit();
             this.toolStrip.SuspendLayout();
@@ -933,7 +926,6 @@ namespace OMLDatabaseEditor
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lvTitles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnTitleID});
-            this.lvTitles.ContextMenuStrip = this.cmsMoviesList;
             this.lvTitles.FullRowSelect = true;
             this.lvTitles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.lvTitles.HideSelection = false;
@@ -946,6 +938,7 @@ namespace OMLDatabaseEditor
             this.lvTitles.UseCompatibleStateImageBehavior = false;
             this.lvTitles.View = System.Windows.Forms.View.Details;
             this.lvTitles.Resize += new System.EventHandler(this.lvTitles_Resize);
+            this.lvTitles.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvTitles_MouseClick);
             this.lvTitles.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.lvTitles_DrawItem);
             this.lvTitles.SelectedIndexChanged += new System.EventHandler(this.lvTitles_SelectedIndexChanged);
             this.lvTitles.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lvTitles_MouseMove);
@@ -953,53 +946,6 @@ namespace OMLDatabaseEditor
             // columnTitleID
             // 
             this.columnTitleID.Width = 190;
-            // 
-            // cmsMoviesList
-            // 
-            this.cmsMoviesList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.miMetadataMulti,
-            this.deleteToolStripMenuItem1,
-            this.addTagMenuItem1,
-            this.addGenreMenuItem1});
-            this.cmsMoviesList.Name = "cmsMoviesList";
-            this.cmsMoviesList.Size = new System.Drawing.Size(166, 92);
-            // 
-            // miMetadataMulti
-            // 
-            this.miMetadataMulti.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fromPreferredSourcesToolStripMenuItem});
-            this.miMetadataMulti.Name = "miMetadataMulti";
-            this.miMetadataMulti.Size = new System.Drawing.Size(165, 22);
-            this.miMetadataMulti.Text = "Update metadata";
-            // 
-            // fromPreferredSourcesToolStripMenuItem
-            // 
-            this.fromPreferredSourcesToolStripMenuItem.Name = "fromPreferredSourcesToolStripMenuItem";
-            this.fromPreferredSourcesToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.fromPreferredSourcesToolStripMenuItem.Text = "From Preferred Sources";
-            this.fromPreferredSourcesToolStripMenuItem.Click += new System.EventHandler(this.fromPreferredSourcesToolStripMenuItem_Click);
-            // 
-            // deleteToolStripMenuItem1
-            // 
-            this.deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
-            this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
-            this.deleteToolStripMenuItem1.Text = "Delete";
-            this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteSelectedMoviesToolStripMenuItem_Click);
-            // 
-            // addTagMenuItem1
-            // 
-            this.addTagMenuItem1.Name = "addTagMenuItem1";
-            this.addTagMenuItem1.Size = new System.Drawing.Size(165, 22);
-            this.addTagMenuItem1.Text = "Add Tag";
-            this.addTagMenuItem1.Click += new System.EventHandler(this.addTagMenuItem1_Click);
-            // 
-            // addGenreMenuItem1
-            // 
-            this.addGenreMenuItem1.Enabled = false;
-            this.addGenreMenuItem1.Name = "addGenreMenuItem1";
-            this.addGenreMenuItem1.Size = new System.Drawing.Size(165, 22);
-            this.addGenreMenuItem1.Text = "Add Genre";
-            this.addGenreMenuItem1.Click += new System.EventHandler(this.addGenreMenuItem1_Click);
             // 
             // ListViewImages
             // 
@@ -1153,7 +1099,6 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.navBarControl1)).EndInit();
             this.navBarControl1.ResumeLayout(false);
             this.navBarGroupControlContainer7.ResumeLayout(false);
-            this.cmsMoviesList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SortControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.beSearch.Properties)).EndInit();
             this.toolStrip.ResumeLayout(false);
@@ -1205,8 +1150,6 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem regenerateThumbnailToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem currentMovieToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allMoviesToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip cmsMoviesList;
-        private System.Windows.Forms.ToolStripMenuItem miMetadataMulti;
         private System.Windows.Forms.ToolStripMenuItem exportCurrentMovieToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportAllMoviesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSplitButton newMovieSplitButton;
@@ -1225,8 +1168,6 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem moveDisksToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteSelectedMoviesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem fromPreferredSourcesToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel statusText;
         private System.Windows.Forms.ToolStripMenuItem fromPreferredSourcesToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem fromPreferredSourcesToolStripMenuItem2;
@@ -1262,8 +1203,6 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem miCreateFolderTVShow;
         private System.Windows.Forms.ToolStripMenuItem miCreateFolderTVSeason;
         private System.Windows.Forms.ToolStripMenuItem miCreateTVEpisode;
-        private System.Windows.Forms.ToolStripMenuItem addTagMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem addGenreMenuItem1;
         private System.Windows.Forms.ColumnHeader columnTitleID;
         private System.Windows.Forms.ImageList ListViewImages;
         private System.Windows.Forms.ListView lvTitles;

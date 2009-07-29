@@ -132,7 +132,7 @@
     <value>0, 0</value>
   </data>
   <data name="lbMetadataPlugins.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 381</value>
+    <value>163, 381</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="lbMetadataPlugins.TabIndex" type="System.Int32, mscorlib">
@@ -163,7 +163,7 @@
     <value>0</value>
   </data>
   <data name="button1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>234, 391</value>
+    <value>207, 391</value>
   </data>
   <data name="button1.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -187,7 +187,7 @@
     <value>0</value>
   </data>
   <data name="btnOk.Location" type="System.Drawing.Point, System.Drawing">
-    <value>153, 391</value>
+    <value>126, 391</value>
   </data>
   <data name="btnOk.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -229,19 +229,13 @@
     <value>Value</value>
   </data>
   <data name="colOptionValue.Width" type="System.Int32, mscorlib">
-    <value>120</value>
-  </data>
-  <metadata name="colDescription.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="colDescription.HeaderText" xml:space="preserve">
-    <value>Description</value>
+    <value>400</value>
   </data>
   <data name="grdOptions.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
   <data name="grdOptions.Size" type="System.Drawing.Size, System.Drawing">
-    <value>618, 379</value>
+    <value>563, 379</value>
   </data>
   <data name="grdOptions.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -271,10 +265,10 @@
     <value>1</value>
   </data>
   <data name="splitContainer1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>788, 426</value>
+    <value>748, 426</value>
   </data>
   <data name="splitContainer1.SplitterDistance" type="System.Int32, mscorlib">
-    <value>163</value>
+    <value>166</value>
   </data>
   <data name="splitContainer1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -298,7 +292,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>788, 426</value>
+    <value>748, 426</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Metadata Settings</value>
@@ -313,13 +307,7 @@
     <value>colOptionValue</value>
   </data>
   <data name="&gt;&gt;colOptionValue.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewButtonColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;colDescription.Name" xml:space="preserve">
-    <value>colDescription</value>
-  </data>
-  <data name="&gt;&gt;colDescription.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.DataGridViewComboBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MetaDataSettings</value>

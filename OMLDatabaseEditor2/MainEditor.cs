@@ -32,13 +32,7 @@ namespace OMLDatabaseEditor
 
         private const string APP_TITLE = "OML Movie Manager";
         private bool _loading = false;
-        //private AppearanceObject Percent30 = null;
-        //private AppearanceObject Percent40 = null;
-        //private AppearanceObject Percent50 = null;
-        //private AppearanceObject Percent60 = null;
-        //private AppearanceObject Percent70 = null;
-        //private AppearanceObject Percent80 = null;
-        //private List<Title> _movieList;
+
         private Dictionary<int,Title> _movieList;
         private Dictionary<int, TreeNode> _mediaTree;
         private Dictionary<int, int> _movieCount;
@@ -64,6 +58,7 @@ namespace OMLDatabaseEditor
         Image ImgStars3;
         Image ImgStars4;
         Image ImgStars5;
+        
         #region Initialisation
         public MainEditor()
         {
@@ -245,14 +240,14 @@ namespace OMLDatabaseEditor
                 newItem.Click += new EventHandler(this.fromMetaDataToolStripMenuItem_Click);
                 newMovieSplitButton.DropDownItems.Add(newItem);
 
-                ToolStripMenuItem metadataItem = new ToolStripMenuItem("From " + plugin.DataProviderName);
+                /*ToolStripMenuItem metadataItem = new ToolStripMenuItem("From " + plugin.DataProviderName);
                 metadataItem.Tag = plugin;
                 metadataItem.Click += new EventHandler(this.miMetadataMulti_Click);
-                miMetadataMulti.DropDownItems.Add(metadataItem);
+                miMetadataMulti.DropDownItems.Add(metadataItem);*/
             }
 
             if (String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))
-                fromPreferredSourcesToolStripMenuItem.Visible = false;
+                fromPreferredSourcesToolStripMenuItem1.Visible = false;
 
             // Set up filter lists
             ToolStripMenuItem item;
@@ -330,6 +325,19 @@ namespace OMLDatabaseEditor
                         // Initialise the plugin and select which provider it serves
                         provider.PluginDLL.Initialize(provider.DataProviderName, new Dictionary<string, string>());
 
+                        // Configure the plugin with any settings stored in the db
+                        if (provider.PluginDLL.GetOptions() != null)
+                        {
+                            foreach (OMLMetadataOption option in provider.PluginDLL.GetOptions())
+                            {
+                                string setting = OMLEngine.Settings.SettingsManager.GetSettingByName(option.Name, "PLG-" + provider.DataProviderName);
+                                if (!string.IsNullOrEmpty(setting))
+                                {
+                                    provider.PluginDLL.SetOptionValue(option.Name, setting);
+                                }
+                            }
+                        }
+
                         pluginList.Add(provider);
                     }
 
@@ -358,10 +366,35 @@ namespace OMLDatabaseEditor
             lbMetadata.SelectedItem = null;
             Cursor = Cursors.Default;
         }
+
+        private void MainEditor_Load(object sender, EventArgs e)
+        {
+            // If the old DAT file still exists ask the user if they want to import those titles.
+            LegacyTitleCollection coll = new LegacyTitleCollection();
+            if (coll.OMLDatExists)
+            {
+                if (XtraMessageBox.Show("Would you like to convert your existing movie collection?", "Convert collection", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    coll.LoadTitleCollectionFromOML();
+
+
+                    foreach (Title title in coll.Source)
+                    {
+                        TitleCollectionManager.AddTitle(title);
+                    }
+                }
+
+                coll.RenameDATCollection();
+
+                LoadMovies();
+                PopulateMediaTree();
+                PopulateMovieListV2(SelectedTreeRoot);
+            }
+        }
         #endregion
 
 
-        #region Title Loading & search
+        #region Title filter, Load & Save
         private void filterTitles_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -523,8 +556,6 @@ namespace OMLDatabaseEditor
                 }
             }
         }
-        #endregion 
-
 
         private DialogResult SaveCurrentMovie()
         {
@@ -553,6 +584,76 @@ namespace OMLDatabaseEditor
             }
             return result;
         }
+  
+        private void SaveChanges()
+        {
+            if ((titleEditor.EditedTitle != null) && (titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges))
+            {
+                Title editedTitle = titleEditor.EditedTitle;
+                //   Title collectionTitle = TitleCollectionManager.GetTitle(editedTitle.Id);
+
+                //if (editedTitle.MetadataSourceID == String.Empty)
+                if (string.IsNullOrEmpty(editedTitle.MetadataSourceName))
+                {
+                    DialogResult result = XtraMessageBox.Show("Would you like to retrieve metadata on this movie?", "Get data", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.Yes)
+                    {
+                        LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
+                        MetaDataPluginSelect selectPlugin = new MetaDataPluginSelect(_metadataPlugins);
+                        selectPlugin.ShowDialog();
+                        MetaDataPluginDescriptor plugin = selectPlugin.SelectedPlugin();
+                        StartMetadataImport(plugin, false);
+                    }
+                    else
+                    {
+                        editedTitle.MetadataSourceName = "Manual Title";
+                    }
+                    //_titleCollection.Add(editedTitle);
+                    //TitleCollectionManager.AddTitle(editedTitle);
+                }
+                else
+                {
+                    // Title exists so we need to copy edited data to collection title
+                    //_titleCollection.Replace(editedTitle);
+                    // todo : solomon : i think a save should just work here unless this is working
+                    // off a copy
+
+                    // This gets called by titleEditor.SaveChanges(); anyway
+                    TitleCollectionManager.SaveTitleUpdates();
+
+                    // Code below moved into folder and title creation
+                    /*if (editedTitle.ParentTitleId == 0)
+                    {
+                        editedTitle.ReloadTitle();
+                        editedTitle.ParentTitleId = editedTitle.Id;
+                    }*/
+                }
+
+                titleEditor.SaveChanges();
+                lvTitles.Refresh();
+
+                if ((editedTitle.TitleType & TitleTypes.AllFolders) != 0)
+                {
+                    // If the current edited title is a folder, refresh the MediaTree
+                    PopulateMediaTree();
+                    if (SelectedTreeRoot != null)
+                    {
+                        if (_mediaTree.ContainsKey((int)SelectedTreeRoot))
+                        {
+                            treeMedia.SelectedNode = _mediaTree[(int)SelectedTreeRoot];
+                        }
+                    }
+                }
+                //LoadMovies();
+            }
+        }
+
+        private void ToggleSaveState(bool enabled)
+        {
+            saveToolStripButton.Enabled = enabled;
+            saveToolStripMenuItem.Enabled = enabled;
+        }
+        #endregion
 
 
         #region MetaData Import
@@ -616,8 +717,15 @@ namespace OMLDatabaseEditor
                     if (plugin != null)
                     {
                         frmSearchResult searchResultForm = null;
-                             
-                        searchResultForm = new frmSearchResult(plugin, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo);
+
+                        if ((plugin.DataProviderCapabilities & MetadataPluginCapabilities.SupportsTVSearch) != 0)
+                        {
+                            searchResultForm = new frmSearchResult(plugin, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, true);
+                        }
+                        else
+                        {
+                            searchResultForm = new frmSearchResult(plugin, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, false);
+                        }
 
                         DialogResult result = searchResultForm.ShowDialog(); // ShowResults(plugin.GetAvailableTitles());
                         if (result == DialogResult.OK)
@@ -807,75 +915,6 @@ namespace OMLDatabaseEditor
         #endregion
 
 
-        private void SaveChanges()
-        {
-            if ((titleEditor.EditedTitle != null) && (titleEditor.Status == OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.UnsavedChanges))
-            {
-                Title editedTitle = titleEditor.EditedTitle;
-             //   Title collectionTitle = TitleCollectionManager.GetTitle(editedTitle.Id);
-
-                //if (editedTitle.MetadataSourceID == String.Empty)
-                if (string.IsNullOrEmpty(editedTitle.MetadataSourceName))
-                {
-                    DialogResult result = XtraMessageBox.Show("Would you like to retrieve metadata on this movie?", "Get data", MessageBoxButtons.YesNo);
-                    if (result == DialogResult.Yes)
-                    {
-                        LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
-                        MetaDataPluginSelect selectPlugin = new MetaDataPluginSelect(_metadataPlugins);
-                        selectPlugin.ShowDialog();
-                        MetaDataPluginDescriptor plugin = selectPlugin.SelectedPlugin();
-                        StartMetadataImport(plugin, false);
-                    }
-                    else
-                    {
-                        editedTitle.MetadataSourceName = "Manual Title";
-                    }
-                    //_titleCollection.Add(editedTitle);
-                    //TitleCollectionManager.AddTitle(editedTitle);
-                }
-                else
-                {
-                    // Title exists so we need to copy edited data to collection title
-                    //_titleCollection.Replace(editedTitle);
-                    // todo : solomon : i think a save should just work here unless this is working
-                    // off a copy
-
-                // This gets called by titleEditor.SaveChanges(); anyway
-                    TitleCollectionManager.SaveTitleUpdates();
-                    
-                    // Code below moved into folder and title creation
-                    /*if (editedTitle.ParentTitleId == 0)
-                    {
-                        editedTitle.ReloadTitle();
-                        editedTitle.ParentTitleId = editedTitle.Id;
-                    }*/
-                }
-
-                titleEditor.SaveChanges();
-                lvTitles.Refresh();
-
-                if ((editedTitle.TitleType & TitleTypes.AllFolders) != 0)
-                {
-                    // If the current edited title is a folder, refresh the MediaTree
-                    PopulateMediaTree();
-                    if (SelectedTreeRoot != null)
-                    {
-                        if (_mediaTree.ContainsKey((int)SelectedTreeRoot))
-                        {
-                            treeMedia.SelectedNode = _mediaTree[(int)SelectedTreeRoot];
-                        }
-                    }
-                }
-                //LoadMovies();
-            }            
-        }
-
-        private void ToggleSaveState(bool enabled)
-        {
-            saveToolStripButton.Enabled = enabled;
-            saveToolStripMenuItem.Enabled = enabled;
-        }
-
         private void titleEditor_TitleChanged(object sender, EventArgs e)
         {
             if (titleEditor.EditedTitle != null)
@@ -891,6 +930,8 @@ namespace OMLDatabaseEditor
             ToggleSaveState(true);
         }
 
+
+        #region UI Event Handlers
         private void ToolStripOptionClick(object sender, EventArgs e)
         {
             if (sender == saveToolStripButton || sender == saveToolStripMenuItem)
@@ -929,7 +970,7 @@ namespace OMLDatabaseEditor
                     if (options.OptionsDirty)
                     {
                         this.titleEditor.SetMRULists();
-                        fromPreferredSourcesToolStripMenuItem.Visible = !String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin);
+                        fromPreferredSourcesToolStripMenuItem1.Visible = !String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin);
                     }
                     PopulateMovieListV2(SelectedTreeRoot);
                 }
@@ -1084,41 +1125,6 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private void lbMetadata_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (_loading) return;
-            Cursor = Cursors.WaitCursor;
-            MetaDataPluginDescriptor metadata = lbMetadata.SelectedItem as MetaDataPluginDescriptor;
-            if (metadata != null)
-            {
-                StartMetadataImport(metadata, false);
-                lbMetadata.SelectedItem = null;
-                lbMetadata.SelectedIndex = -1;
-            }
-            Cursor = Cursors.Default;
-        }
-
-        private void lbImport_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (_loading) return;
-            Cursor = Cursors.WaitCursor;
-            OMLPlugin importer = lbImport.SelectedItem as OMLPlugin;
-            if (importer != null)
-            {                
-                lblCurrentStatus.Text = "Importing movies";
-                Importer imp = new Importer(importer);
-                imp.ShowDialog();
-                
-                lblCurrentStatus.Text = "";
-
-                this.Refresh();
- 
-                lbImport.SelectedItem = null;
-                lbImport.SelectedIndex = -1;
-            }
-            Cursor = Cursors.Default;
-        }
-
         private void currentMovieToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //if (titleEditor.EditedTitle != null)
@@ -1226,39 +1232,14 @@ namespace OMLDatabaseEditor
                 if (t.Disks.Count > 0)
                     t.SerializeToXMLFile(t.Disks[0].Path + ".oml.xml");
             }
-            Cursor = Cursors.Default; 
-        }
-
-        private void MainEditor_Load(object sender, EventArgs e)
-        {
-            // If the old DAT file still exists ask the user if they want to import those titles.
-            LegacyTitleCollection coll = new LegacyTitleCollection();
-            if (coll.OMLDatExists)
-            {
-                if (XtraMessageBox.Show("Would you like to convert your existing movie collection?", "Convert collection", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    coll.LoadTitleCollectionFromOML();
-
-
-                    foreach (Title title in coll.Source)
-                    {
-                        TitleCollectionManager.AddTitle(title);
-                    }
-                }
-
-                coll.RenameDATCollection();
-
-                LoadMovies();
-                PopulateMediaTree();
-                PopulateMovieListV2(SelectedTreeRoot);
-            }
+            Cursor = Cursors.Default;
         }
 
         private void transcoderDiagnosticsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string mediafile = "";
             // Search for a movie file in selected title/titles
-                        
+
             ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
 
             foreach (ListViewItem item in sic)
@@ -1298,6 +1279,50 @@ namespace OMLDatabaseEditor
             mdm.ShowDialog();
         }
 
+        private void databaseToolsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DatabaseTools dt = new DatabaseTools();
+            dt.ShowDialog();
+        }
+        #endregion
+
+
+        private void lbMetadata_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_loading) return;
+            Cursor = Cursors.WaitCursor;
+            MetaDataPluginDescriptor metadata = lbMetadata.SelectedItem as MetaDataPluginDescriptor;
+            if (metadata != null)
+            {
+                StartMetadataImport(metadata, false);
+                lbMetadata.SelectedItem = null;
+                lbMetadata.SelectedIndex = -1;
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void lbImport_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_loading) return;
+            Cursor = Cursors.WaitCursor;
+            OMLPlugin importer = lbImport.SelectedItem as OMLPlugin;
+            if (importer != null)
+            {
+                lblCurrentStatus.Text = "Importing movies";
+                Importer imp = new Importer(importer);
+                imp.ShowDialog();
+
+                lblCurrentStatus.Text = "";
+
+                this.Refresh();
+
+                lbImport.SelectedItem = null;
+                lbImport.SelectedIndex = -1;
+            }
+            Cursor = Cursors.Default;
+        }
+        
+        
         #region NavBar functions
         private void mainNav_NavPaneStateChanged(object sender, EventArgs e)
         {
@@ -1906,16 +1931,87 @@ namespace OMLDatabaseEditor
             }
             e.Graphics.DrawImageUnscaled(Stars, x + w - 82, y + 18);
         }
-      
+
+        private void lvTitles_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                // Setup context menu for title
+
+                // Find titles type selected so we present the right plugins
+                bool EpisodeSelected = false;
+                bool MovieSelected = false;
+                bool MusicVideoSelected = false;
+                bool UnknownSelected = false;
+                ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
+
+                foreach (ListViewItem item in sic)
+                {
+                    if (item.Text == "All Media") return;
+
+                    Title title = _movieList[Convert.ToInt32(item.Text)];
+                    if ((title.TitleType & TitleTypes.Episode) != 0) EpisodeSelected = true;
+                    if ((title.TitleType & TitleTypes.Movie) != 0) MovieSelected = true;
+                    if ((title.TitleType & TitleTypes.Video) != 0) MovieSelected = true;
+                    if ((title.TitleType & TitleTypes.MusicVideo) != 0) MusicVideoSelected = true;
+                    if ((title.TitleType & TitleTypes.Unknown) != 0) UnknownSelected = true;
+                }
+
+                // Build custom context menu strip
+                ContextMenuStrip cms = new ContextMenuStrip();
+
+                ToolStripMenuItem metadata = new ToolStripMenuItem("Update metadata");
+                cms.Items.Add(metadata);
+
+                // Preferred sources
+                if (!String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))
+                {
+                    ToolStripMenuItem metadataItem = new ToolStripMenuItem("From Preferred Sources");
+                    metadataItem.Click += new System.EventHandler(this.fromPreferredSourcesToolStripMenuItem_Click);
+                    metadata.DropDownItems.Add(metadataItem);
+                }
+
+                foreach (MetaDataPluginDescriptor plugin in _metadataPlugins)
+                {
+                    bool showplugin = false;
+
+                    if (EpisodeSelected &&
+                        ((plugin.DataProviderCapabilities & MetadataPluginCapabilities.SupportsTVSearch) != 0)) showplugin = true;
+
+                    if (MovieSelected &&
+                        ((plugin.DataProviderCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)) showplugin = true;
+
+                    if (UnknownSelected || showplugin)
+                    {
+                        ToolStripMenuItem metadataItem = new ToolStripMenuItem("From " + plugin.DataProviderName);
+                        metadataItem.Tag = plugin;
+                        metadataItem.Click += new EventHandler(this.miMetadataMulti_Click);
+                        metadata.DropDownItems.Add(metadataItem);
+                    }
+                }
+
+                cms.Items.Add("Delete", null, new System.EventHandler(this.deleteSelectedMoviesToolStripMenuItem_Click));
+                cms.Items.Add("Add Tag", null, new System.EventHandler(this.addTagMenuItem1_Click));
+                cms.Items.Add("Add Genre", null, new System.EventHandler(this.addGenreMenuItem1_Click));
+
+                cms.Show(lvTitles.PointToScreen(e.Location));
+            }
+        }
+        
         private void lvTitles_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
                 ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
                 
+                
                 int[] sitems = (from ListViewItem si in sic
+                                where si.Text != "All Media"
                                 select Convert.ToInt32(si.Text)).ToArray();
-                lvTitles.DoDragDrop(sitems, DragDropEffects.Move);
+                if (sitems.Count() != 0)
+                {
+                    lvTitles.DoDragDrop(sitems, DragDropEffects.Move);
+                }
             }
         }
 
@@ -2261,32 +2357,6 @@ namespace OMLDatabaseEditor
         }
         #endregion
 
-        private void miAdd_Click(object sender, EventArgs e)
-        {
-            if (mainNav.ActiveGroup == groupBioData)
-            {
-                AddBioData();
-            }
-
-            if (mainNav.ActiveGroup == groupGenresMetadata)
-            {
-                AddGenreMetaData();
-            }
-        }
-
-        private void miRemove_Click(object sender, EventArgs e)
-        {
-            if (mainNav.ActiveGroup == groupBioData)
-            {
-                RemoveBioData();
-            }
-
-            if (mainNav.ActiveGroup == groupGenresMetadata)
-            {
-                RemoveGenreMetaData();
-            }
-        }
-
 
         #region Title & Folder Creation
         private void CreateTitle(int? parentid, string Name, TitleTypes titletype)
@@ -2427,7 +2497,6 @@ namespace OMLDatabaseEditor
             Point mouseLocation = treeMedia.PointToClient(new Point(e.X, e.Y));
             TreeNode movetonode = treeMedia.GetNodeAt(mouseLocation);
 
-
             if (currentmovetonode != movetonode)
             {
                 bool validmove = true;
@@ -2497,12 +2566,12 @@ namespace OMLDatabaseEditor
                 if (validmove)
                 {
                     e.Effect = DragDropEffects.Move;
-                    tt.Show("Move to " + movetonode.Text, this, new Point(e.X, e.Y + 30));
+                    tt.Show("Move to " + movetonode.Text, this, this.PointToClient(new Point(e.X, e.Y + 30)));
                 }
                 else
                 {
                     e.Effect = DragDropEffects.None;
-                    tt.Show("Unable to move here!", this, new Point(e.X, e.Y + 30));
+                    tt.Show("Unable to move here!", this, this.PointToClient(new Point(e.X, e.Y + 30)));
                 }
                 currentmovetonode = movetonode;
             }
@@ -2666,10 +2735,15 @@ namespace OMLDatabaseEditor
             List<string> genres = new List<string>();
             ListEditor editor = new ListEditor("Genres", genres);
             editor.ShowDialog();
+
+            ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
+
             foreach (string genre in genres)
             {
-                foreach (Title title in lvTitles.SelectedItems)
+                foreach (ListViewItem item in sic)
                 {
+                    Title title = _movieList[Convert.ToInt32(item.Text)];
+
                     if (!title.Genres.Contains(genre))
                         title.AddGenre(genre);
                 }
@@ -2677,10 +2751,30 @@ namespace OMLDatabaseEditor
             TitleCollectionManager.SaveTitleUpdates();
         }
 
-        private void databaseToolsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void miAdd_Click(object sender, EventArgs e)
         {
-            DatabaseTools dt = new DatabaseTools();
-            dt.ShowDialog();
+            if (mainNav.ActiveGroup == groupBioData)
+            {
+                AddBioData();
+            }
+
+            if (mainNav.ActiveGroup == groupGenresMetadata)
+            {
+                AddGenreMetaData();
+            }
+        }
+
+        private void miRemove_Click(object sender, EventArgs e)
+        {
+            if (mainNav.ActiveGroup == groupBioData)
+            {
+                RemoveBioData();
+            }
+
+            if (mainNav.ActiveGroup == groupGenresMetadata)
+            {
+                RemoveGenreMetaData();
+            }
         }
     }
 }

@@ -46,7 +46,7 @@ namespace OMLDatabaseEditor
             get { return _selectedTitle; }
         }
 
-        public frmSearchResult(MetaDataPluginDescriptor plugin, string searchstr, string EpisodeName, int ? SeasonNo, int ? EpisodeNo) //MainEditor opener)
+        public frmSearchResult(MetaDataPluginDescriptor plugin, string searchstr, string EpisodeName, int ? SeasonNo, int ? EpisodeNo, bool ShowTVFields) //MainEditor opener)
         {
             _plugin = plugin;
             //_openerForm = opener;
@@ -62,6 +62,16 @@ namespace OMLDatabaseEditor
                 lcProviderMessage.Text = plugin.DataProviderMessage + " - Click to view website";
             }
 
+            // Hive the tv fields of not reqiured
+            if (!ShowTVFields)
+            {
+                teEpisodeName.Visible = false;
+                seEpisodeNo.Visible = false;
+                seSeasonNo.Visible = false;
+                reSearchSubmitEpisodeButton.Visible = false;
+                lcEpisodeLabel.Visible = false;
+
+            }
             reSearchTitle.Text = searchstr;
             teEpisodeName.Text = EpisodeName;
             if (SeasonNo != null) seSeasonNo.Value = Convert.ToInt32(SeasonNo);

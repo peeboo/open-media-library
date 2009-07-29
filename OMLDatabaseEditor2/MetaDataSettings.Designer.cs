@@ -37,8 +37,7 @@
             this.btnOk = new System.Windows.Forms.Button();
             this.grdOptions = new System.Windows.Forms.DataGridView();
             this.colOptionName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colOptionValue = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.colDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colOptionValue = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -90,12 +89,11 @@
             this.grdOptions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grdOptions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colOptionName,
-            this.colOptionValue,
-            this.colDescription});
+            this.colOptionValue});
             this.grdOptions.MultiSelect = false;
             this.grdOptions.Name = "grdOptions";
             this.grdOptions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grdOptions.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdOptions_CellContentClick);
+            this.grdOptions.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.grdOptions_CellValidating);
             // 
             // colOptionName
             // 
@@ -108,19 +106,12 @@
             this.colOptionValue.Name = "colOptionValue";
             this.colOptionValue.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
-            // colDescription
-            // 
-            this.colDescription.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            resources.ApplyResources(this.colDescription, "colDescription");
-            this.colDescription.Name = "colDescription";
-            // 
             // MetaDataSettings
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer1);
             this.Name = "MetaDataSettings";
-            this.Load += new System.EventHandler(this.MetaDataSettings_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
@@ -136,10 +127,9 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListBox lbMetadataPlugins;
         private System.Windows.Forms.DataGridView grdOptions;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colOptionName;
-        private System.Windows.Forms.DataGridViewButtonColumn colOptionValue;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDescription;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnOk;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colOptionName;
+        private System.Windows.Forms.DataGridViewComboBoxColumn colOptionValue;
     }
 }

@@ -37,6 +37,7 @@ namespace PostInstallerWizard
         Control WizStart;
         Control WizSelectServer;
         Control WizEnd;
+        Control WizEndSQLInstallFail;
         Control WizSelectExistingServer;
 
         Control CurrentPage;
@@ -97,7 +98,7 @@ namespace PostInstallerWizard
             instancename = "oml";
             servername = "localhost";
 
-            // Find the script path. Also include hack to find scripts if running from VS rathr than c:\program files....
+            // Find the script path. Also include hack to find scripts if running from VS rather than c:\program files....
             ScriptsPath = Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller";
             if (Directory.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\..\\..\\..\\SQL Scripts"))
             {
@@ -111,6 +112,7 @@ namespace PostInstallerWizard
             WizSelectServer = new Wiz_SelectServer();
             WizSelectExistingServer = new Wiz_SelectExistingServer();
             WizEnd = new Wiz_End();
+            WizEndSQLInstallFail = new Wiz_End_SQLInstall_Fail();
             
             // Set first page as active
             NextPage();
@@ -205,12 +207,16 @@ namespace PostInstallerWizard
                     }
                     else
                     {
-                        WriteSettings();
-                        RunSQLSetup();
-                        ConfigureSQL();
-                        buttonNext.Text = "Finish";
-                        buttonBack.Enabled = false;
-                        SetWizardPage(WizEnd);
+                        if (RunSQLSetup())
+                        {
+                            WriteSettings();
+                            ConfigureSQL();
+                            SetWizardPage(WizEnd);
+                        }
+                        else
+                        {
+                            SetWizardPage(WizEndSQLInstallFail);
+                        }
                     }
                 }
                 if (WizardAction == WizardActions.SetupForRemoteServer)
@@ -251,8 +257,6 @@ namespace PostInstallerWizard
 
                 // Check & Upgrade Schema
                 CheckAndUpgradeSchema();
-                buttonNext.Text = "Finish";
-                buttonBack.Enabled = false;
                 SetWizardPage(WizEnd);
                 return;
             }
@@ -261,6 +265,11 @@ namespace PostInstallerWizard
             if (CurrentPage == WizEnd)
             {
                 WriteSettings();
+                this.Close();
+            }
+
+            if (CurrentPage == WizEndSQLInstallFail)
+            {
                 this.Close();
             }
         }
@@ -325,7 +334,7 @@ namespace PostInstallerWizard
                 buttonBack.Enabled = true;
             }
 
-            if (newpage == WizEnd)
+            if ((newpage == WizEnd) || (newpage == WizEndSQLInstallFail))
             {
                 buttonNext.Text = "Finish";
                 buttonBack.Enabled = false;
@@ -422,7 +431,10 @@ namespace PostInstallerWizard
                 return false;
             }
         }
-
+        
+        
+        private static StringBuilder prOutput = null;
+        private static StringBuilder prError = null;
         private bool RunSQLSetup()
         {
             Process pr = new Process();
@@ -431,25 +443,79 @@ namespace PostInstallerWizard
             {
                 pr.StartInfo.FileName = Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLEXPR_x86_ENU.exe";
                 pr.StartInfo.Arguments = "/CONFIGURATIONFILE=\"" + Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLConfigNoTools_x32.ini\"";
-                pr.Start();
-                pr.WaitForExit();
-                return true;
             }
             else
+            {
+
                 if (File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLEXPR_x64_ENU.exe"))
                 {
                     pr.StartInfo.FileName = Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLEXPR_x64_ENU.exe";
                     pr.StartInfo.Arguments = "/CONFIGURATIONFILE=\"" + Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLConfigNoTools_x64.ini\"";
-                    pr.Start();
-                    pr.WaitForExit();
-                    return true;
                 }
                 else
                 {
                     MessageBox.Show("Cannot find the SQL installers!", "Error");
                     return false;
                 }
+            }
+
+            // Attempt to capture stdout & stderr, doesn't seem to work but leaving code in
+            // just incase it works but is buggy
+
+            // Set UseShellExecute to false for redirection.
+            pr.StartInfo.UseShellExecute = false;
+
+            // Setup stdout capture
+            pr.StartInfo.RedirectStandardOutput = true;
+            pr.OutputDataReceived += new DataReceivedEventHandler(NetOutputDataHandler);
+            prOutput = new StringBuilder();
+
+            // Setup stderr capture
+            pr.StartInfo.RedirectStandardError = true;
+            pr.ErrorDataReceived += new DataReceivedEventHandler(NetErrorDataHandler);
+            prError = new StringBuilder();
+
+            pr.Start();
+
+            // Start the asynchronous read of the standard output & stderr stream.
+            pr.BeginOutputReadLine();
+            pr.BeginErrorReadLine();
+
+            pr.WaitForExit();
+
+            int ExitCode = pr.ExitCode;
+
+            if (ExitCode == 0)
+                return true;
+            else
+            {
+                MessageBox.Show("SQL installer reported error code " + ExitCode.ToString(), "Error");
+                return false;
+            }
+
         }
+
+        private static void NetOutputDataHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            // Collect the net view command output.
+            if (!String.IsNullOrEmpty(outLine.Data))
+            {
+                // Add the text to the collected output.
+                prOutput.Append(Environment.NewLine + "  " + outLine.Data);
+            }
+        }
+
+        private static void NetErrorDataHandler(object sendingProcess, DataReceivedEventArgs errLine)
+        {
+            // Write the error text to the file if there is something
+            // to write and an error file has been specified.
+
+            if (!String.IsNullOrEmpty(errLine.Data))
+            {
+                prError.Append(Environment.NewLine + "  " + errLine.Data);
+            }
+        }
+
 
 
         private void CheckAndUpgradeSchema()

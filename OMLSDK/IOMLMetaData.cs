@@ -38,11 +38,11 @@ namespace OMLSDK
 
     public class MetaDataPluginDescriptor
     {
-        public string DataProviderName;
-        public string DataProviderMessage;
-        public string DataProviderLink;
-        public MetadataPluginCapabilities DataProviderCapabilities;
-        public IOMLMetadataPlugin PluginDLL;
+        public string DataProviderName { get; set; }
+        public string DataProviderMessage { get; set; }
+        public string DataProviderLink { get; set; }
+        public MetadataPluginCapabilities DataProviderCapabilities { get; set; }
+        public IOMLMetadataPlugin PluginDLL { get; set; }
     }
 
     public interface IOMLMetadataPlugin
