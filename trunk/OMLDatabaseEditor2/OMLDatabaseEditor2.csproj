@@ -239,12 +239,6 @@
     <Compile Include="MetaDataSettings.Designer.cs">
       <DependentUpon>MetaDataSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="OptionList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OptionList.Designer.cs">
-      <DependentUpon>OptionList.cs</DependentUpon>
-    </Compile>
     <Compile Include="Options.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -303,10 +297,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MetaDataSettings.resx">
       <DependentUpon>MetaDataSettings.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OptionList.resx">
-      <DependentUpon>OptionList.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Options.resx">

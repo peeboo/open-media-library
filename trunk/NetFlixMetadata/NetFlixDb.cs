@@ -28,8 +28,11 @@ namespace NetFlixMetadata
 
     public class NetFlixDb : IOMLMetadataPlugin
     {
-        private const string API_KEY = @"8mfjpswhjxg7y4md35zs5ang";
-        private const string SHARED_SECRET = @"Q9J4DrqSZv";
+        private const string DEFAULT_API_KEY = @"8mfjpswhjxg7y4md35zs5ang";
+        private const string DEFAULT_SHARED_SECRET = @"Q9J4DrqSZv";
+        private string API_KEY;
+        private string SHARED_SECRET;
+
         private const string HTML_TAG_PATTERN = @"<(.|\n)*?>";
 
         private List<NetFlixDbResult> results = null;
@@ -53,6 +56,15 @@ namespace NetFlixMetadata
 
         public bool Initialize(string provider, Dictionary<string, string> parameters)
         {
+            // Set default api info
+            API_KEY = DEFAULT_API_KEY;
+            SHARED_SECRET = DEFAULT_SHARED_SECRET;
+
+            foreach (KeyValuePair<string, string> parameter in parameters)
+            {
+                SetOptionValue(parameter.Key, parameter.Value);
+            }
+
             return true;
         }
 
@@ -100,11 +112,40 @@ namespace NetFlixMetadata
 
         public List<OMLMetadataOption> GetOptions()
         {
-            return null;
+            List<OMLMetadataOption> options = new List<OMLMetadataOption>();
+            OMLMetadataOption apikey = new OMLMetadataOption("API Key", API_KEY, null, false);
+            OMLMetadataOption sharedsecret = new OMLMetadataOption("Shared Secret", SHARED_SECRET, null, false);
+            options.Add(apikey);
+            options.Add(sharedsecret);
+
+            return options;
         }
 
         public bool SetOptionValue(string option, string value)
         {
+            if (string.Compare(option, "API Key", true) == 0)
+            {     
+                if (string.IsNullOrEmpty(value))
+                {
+                    API_KEY = DEFAULT_API_KEY;
+                }
+                else
+                {
+                API_KEY = value;
+                }
+            }
+
+            if (string.Compare(option, "Shared Secret", true) == 0)
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    SHARED_SECRET = DEFAULT_SHARED_SECRET;
+                }
+                else
+                {
+                    SHARED_SECRET = value;
+                }
+            }
             return true;
         }
 

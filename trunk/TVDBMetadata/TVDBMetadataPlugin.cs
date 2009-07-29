@@ -31,9 +31,9 @@ namespace TVDBMetadata
 
     public class TVDBMetadataPlugin : IOMLMetadataPlugin
     {
-        private const string API_KEY = "FC18699D6C4514F7";
-        private const string API_URL_SEARCH = "";
-        private const string API_URL_INFO = "";
+        private const string DEFAULT_API_KEY = "FC18699D6C4514F7";
+        private string API_KEY;
+
         public List<string> BackDrops = null;
 
         List<string> xmlmirrors;
@@ -62,7 +62,15 @@ namespace TVDBMetadata
 
         // these 2 methods must be called in sequence
         public bool Initialize(string provider, Dictionary<string, string> parameters)
-        {
+        {            
+            // Set api info
+            API_KEY = DEFAULT_API_KEY;
+
+            foreach (KeyValuePair<string, string> parameter in parameters)
+            {
+                SetOptionValue(parameter.Key, parameter.Value);
+            }
+
             xmlmirrors = new List<string>();
             bannermirrors = new List<string>();
             zipmirrors = new List<string>();
@@ -109,11 +117,26 @@ namespace TVDBMetadata
 
         public List<OMLMetadataOption> GetOptions()
         {
-            return null;
+            List<OMLMetadataOption> options = new List<OMLMetadataOption>();
+            OMLMetadataOption apikey = new OMLMetadataOption("API Key", API_KEY, null, false);
+            options.Add(apikey);
+
+            return options;
         }
 
         public bool SetOptionValue(string option, string value)
         {
+            if (string.Compare(option, "API Key", true) == 0)
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    API_KEY = DEFAULT_API_KEY;
+                }
+                else
+                {
+                    API_KEY = value;
+                }
+            }
             return true;
         }
 

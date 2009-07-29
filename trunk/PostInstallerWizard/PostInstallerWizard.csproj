@@ -65,6 +65,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Wiz_End_SQLInstall_Fail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wiz_End_SQLInstall_Fail.Designer.cs">
+      <DependentUpon>Wiz_End_SQLInstall_Fail.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,6 +85,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Wiz_End_SQLInstall_Fail.resx">
+      <DependentUpon>Wiz_End_SQLInstall_Fail.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
