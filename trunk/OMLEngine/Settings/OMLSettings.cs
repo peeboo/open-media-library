@@ -520,6 +520,13 @@ namespace OMLEngine.Settings
             set { SettingsManager.SaveSettingByName("DefaultMetadataPlugin", value, InstanceName); }
         }
 
+        public static int MetadataLookupResultsQty
+        {
+            get { return SettingsManager.GetSettingByNameInt("MetadataLookupResultsQty", InstanceName) ?? 10; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupResultsQty", value.ToString(), InstanceName); }
+
+        }
+
         public static bool TitledFanArtFolder
         {
             get { return SettingsManager.GetSettingByNameBool("TitledFanArtFolder", InstanceName) ?? false; }
@@ -543,6 +550,7 @@ namespace OMLEngine.Settings
             get { return SettingsManager.GetSettingByName("DBETitleSortField", InstanceName) ?? ""; }
             set { SettingsManager.SaveSettingByName("DBETitleSortField", value, InstanceName); }
         }
+
         public static bool DBETitleSortAsc
         {
             get { return SettingsManager.GetSettingByNameBool("DBETitleSortAsc", InstanceName) ?? true; }

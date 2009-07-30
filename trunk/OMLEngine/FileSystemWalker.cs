@@ -60,6 +60,21 @@ namespace OMLEngine
             Directory.CreateDirectory(DBBackupDirectory);
         }
 
+        public static string ThirdPartyData
+        {
+            get { return Path.Combine(PublicRootDirectory, @"ThirdPartyData"); }
+        }
+
+        public static bool ThirdPartyDataExists
+        {
+            get { return Directory.Exists(ThirdPartyData); }
+        }
+
+        public static void createThirdPartyDatay()
+        {
+            Directory.CreateDirectory(ThirdPartyData);
+        }
+
         /// <summary>
         /// Location for cover art and other images to be stored
         /// </summary>

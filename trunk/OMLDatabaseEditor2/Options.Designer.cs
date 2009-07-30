@@ -65,6 +65,8 @@ namespace OMLDatabaseEditor
             this.sbCancel = new DevExpress.XtraEditors.SimpleButton();
             this.sbOK = new DevExpress.XtraEditors.SimpleButton();
             this.cmGenreMappings = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.seMetadataLookupResultsQty = new DevExpress.XtraEditors.SpinEdit();
+            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
@@ -92,6 +94,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolVDrive.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolScan.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgMountingTool.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seMetadataLookupResultsQty.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -130,6 +133,8 @@ namespace OMLDatabaseEditor
             // 
             // tpOptions
             // 
+            this.tpOptions.Controls.Add(this.labelControl1);
+            this.tpOptions.Controls.Add(this.seMetadataLookupResultsQty);
             this.tpOptions.Controls.Add(this.ceShowSubFolderTitles);
             this.tpOptions.Controls.Add(this.ceScanDiskRollInfoToTitle);
             this.tpOptions.Controls.Add(this.ceAutoScanDiskOnAdd);
@@ -148,7 +153,7 @@ namespace OMLDatabaseEditor
             // 
             // ceShowSubFolderTitles
             // 
-            this.ceShowSubFolderTitles.Location = new System.Drawing.Point(6, 184);
+            this.ceShowSubFolderTitles.Location = new System.Drawing.Point(6, 203);
             this.ceShowSubFolderTitles.Name = "ceShowSubFolderTitles";
             this.ceShowSubFolderTitles.Properties.Caption = "Show Sub Folder titles in Movie panel";
             this.ceShowSubFolderTitles.Size = new System.Drawing.Size(259, 18);
@@ -156,7 +161,7 @@ namespace OMLDatabaseEditor
             // 
             // ceScanDiskRollInfoToTitle
             // 
-            this.ceScanDiskRollInfoToTitle.Location = new System.Drawing.Point(7, 160);
+            this.ceScanDiskRollInfoToTitle.Location = new System.Drawing.Point(7, 179);
             this.ceScanDiskRollInfoToTitle.Name = "ceScanDiskRollInfoToTitle";
             this.ceScanDiskRollInfoToTitle.Properties.Caption = "Roll scan disk info into title";
             this.ceScanDiskRollInfoToTitle.Size = new System.Drawing.Size(259, 18);
@@ -164,7 +169,7 @@ namespace OMLDatabaseEditor
             // 
             // ceAutoScanDiskOnAdd
             // 
-            this.ceAutoScanDiskOnAdd.Location = new System.Drawing.Point(7, 136);
+            this.ceAutoScanDiskOnAdd.Location = new System.Drawing.Point(7, 155);
             this.ceAutoScanDiskOnAdd.Name = "ceAutoScanDiskOnAdd";
             this.ceAutoScanDiskOnAdd.Properties.Caption = "Auto scan disk when adding new disks";
             this.ceAutoScanDiskOnAdd.Size = new System.Drawing.Size(259, 18);
@@ -172,7 +177,7 @@ namespace OMLDatabaseEditor
             // 
             // labelControl3
             // 
-            this.labelControl3.Location = new System.Drawing.Point(18, 227);
+            this.labelControl3.Location = new System.Drawing.Point(18, 240);
             this.labelControl3.Name = "labelControl3";
             this.labelControl3.Size = new System.Drawing.Size(91, 13);
             this.labelControl3.TabIndex = 8;
@@ -182,7 +187,7 @@ namespace OMLDatabaseEditor
             // beTitledFanArtPath
             // 
             this.beTitledFanArtPath.Enabled = false;
-            this.beTitledFanArtPath.Location = new System.Drawing.Point(115, 217);
+            this.beTitledFanArtPath.Location = new System.Drawing.Point(115, 241);
             this.beTitledFanArtPath.Name = "beTitledFanArtPath";
             this.beTitledFanArtPath.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton()});
@@ -203,14 +208,14 @@ namespace OMLDatabaseEditor
             // 
             // cmbDefaultMetadataPlugin
             // 
-            this.cmbDefaultMetadataPlugin.Location = new System.Drawing.Point(135, 101);
+            this.cmbDefaultMetadataPlugin.Location = new System.Drawing.Point(161, 101);
             this.cmbDefaultMetadataPlugin.Name = "cmbDefaultMetadataPlugin";
             this.cmbDefaultMetadataPlugin.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
             this.cmbDefaultMetadataPlugin.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.cmbDefaultMetadataPlugin.Properties.NullText = "Not Specified";
             this.cmbDefaultMetadataPlugin.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            this.cmbDefaultMetadataPlugin.Size = new System.Drawing.Size(175, 20);
+            this.cmbDefaultMetadataPlugin.Size = new System.Drawing.Size(158, 20);
             this.cmbDefaultMetadataPlugin.TabIndex = 5;
             // 
             // labelControl2
@@ -502,6 +507,34 @@ namespace OMLDatabaseEditor
             this.cmGenreMappings.Name = "cmGenreMappings";
             this.cmGenreMappings.Size = new System.Drawing.Size(61, 4);
             // 
+            // seMetadataLookupResultsQty
+            // 
+            this.seMetadataLookupResultsQty.AllowDrop = true;
+            this.seMetadataLookupResultsQty.EditValue = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.seMetadataLookupResultsQty.Location = new System.Drawing.Point(161, 128);
+            this.seMetadataLookupResultsQty.Name = "seMetadataLookupResultsQty";
+            this.seMetadataLookupResultsQty.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.seMetadataLookupResultsQty.Properties.MaxValue = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.seMetadataLookupResultsQty.Size = new System.Drawing.Size(158, 20);
+            this.seMetadataLookupResultsQty.TabIndex = 12;
+            // 
+            // labelControl1
+            // 
+            this.labelControl1.Location = new System.Drawing.Point(9, 131);
+            this.labelControl1.Name = "labelControl1";
+            this.labelControl1.Size = new System.Drawing.Size(142, 13);
+            this.labelControl1.TabIndex = 13;
+            this.labelControl1.Text = "Metadata Lookup Results Qty";
+            // 
             // Options
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -542,6 +575,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolVDrive.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolScan.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgMountingTool.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seMetadataLookupResultsQty.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -584,5 +618,7 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraEditors.ComboBoxEdit cmbMntToolScan;
         private DevExpress.XtraEditors.SimpleButton simpleButtonScanMntTool;
         private DevExpress.XtraEditors.RadioGroup rgMountingTool;
+        private DevExpress.XtraEditors.LabelControl labelControl1;
+        private DevExpress.XtraEditors.SpinEdit seMetadataLookupResultsQty;
     }
 }

@@ -252,11 +252,11 @@ namespace DVDProfilerPlugin
             return true;
         }
 
-        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo)
+        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults)
         {
             return false;
         }
-        public bool SearchForTVDrillDown(int id, string EpisodeName, int? SeriesNo, int? EpisodeNo)
+        public bool SearchForTVDrillDown(int id, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults)
         {
             return false;
         }

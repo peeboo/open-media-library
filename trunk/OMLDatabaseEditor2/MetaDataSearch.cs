@@ -97,7 +97,7 @@ namespace OMLDatabaseEditor
             {
                 if ((_plugin.DataProviderCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)
                 {
-                    _plugin.PluginDLL.SearchForMovie(reSearchTitle.Text, 999);
+                    _plugin.PluginDLL.SearchForMovie(reSearchTitle.Text, OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
                     TVSearch = false;
                     SearchDrillDownReq = false;
                 }
@@ -105,7 +105,7 @@ namespace OMLDatabaseEditor
                 {
                     if ((_plugin.DataProviderCapabilities & MetadataPluginCapabilities.SupportsTVSearch) != 0)
                     {
-                        SearchDrillDownReq = _plugin.PluginDLL.SearchForTVSeries(reSearchTitle.Text, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value));
+                        SearchDrillDownReq = _plugin.PluginDLL.SearchForTVSeries(reSearchTitle.Text, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
                         TVSearch = true;
                     }
                 }
@@ -251,7 +251,7 @@ namespace OMLDatabaseEditor
                     if (SearchDrillDownReq)
                     {
                         Cursor = Cursors.WaitCursor;
-                        SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value));
+                        SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
                         _titles = _plugin.PluginDLL.GetAvailableTitles();
                         ShowResults();
                         Cursor = Cursors.Default;
@@ -271,7 +271,7 @@ namespace OMLDatabaseEditor
             if (TVSearch)
             {
                 Cursor = Cursors.WaitCursor;
-                SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value));
+                SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
                 _titles = _plugin.PluginDLL.GetAvailableTitles();
                 ShowResults();
                 Cursor = Cursors.Default;
