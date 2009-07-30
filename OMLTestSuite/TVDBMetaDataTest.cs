@@ -20,7 +20,7 @@ namespace OMLTestSuite
             int ? episodeno = 0;
 
             // Search for show
-            if (!tvd.SearchForTVSeries(show, episode, seasonno, episodeno))
+            if (!tvd.SearchForTVSeries(show, episode, seasonno, episodeno, OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty))
             {
                 Console.WriteLine("We found the show. Episode list below.");
                  
@@ -44,7 +44,7 @@ namespace OMLTestSuite
                 Console.WriteLine("");
 
                 // Search for episode
-                tvd.SearchForTVDrillDown(0, episode, seasonno, episodeno);
+                tvd.SearchForTVDrillDown(0, episode, seasonno, episodeno, OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
                 
                 titles = tvd.GetAvailableTitles();
                 Console.WriteLine("Title count " + titles.Count());

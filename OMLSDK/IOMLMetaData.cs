@@ -63,8 +63,8 @@ namespace OMLSDK
 
 
         // TV Metadata support
-        bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo);
-        bool SearchForTVDrillDown(int id, string EpisodeName, int? SeriesNo, int? EpisodeNo);
+        bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults);
+        bool SearchForTVDrillDown(int id, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults);
 
         // these methods are to be called after the 2 methods above
 

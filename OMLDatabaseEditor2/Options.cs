@@ -92,6 +92,8 @@ namespace OMLDatabaseEditor
             }
             cmbDefaultMetadataPlugin.SelectedItem = OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin;
 
+            seMetadataLookupResultsQty.Value = OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty;
+
             ceTitledFanArtFolder.Checked = OMLSettings.TitledFanArtFolder;
             beTitledFanArtPath.EditValue = OMLSettings.TitledFanArtPath;
             if (string.IsNullOrEmpty(beTitledFanArtPath.EditValue.ToString())) beTitledFanArtPath.EditValue = OMLEngine.FileSystemWalker.FanArtDirectory;
@@ -167,6 +169,8 @@ namespace OMLDatabaseEditor
 
                 bDirty = true;
                 OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin = (string)cmbDefaultMetadataPlugin.SelectedItem;
+
+                OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty = (int)seMetadataLookupResultsQty.Value;
 
                 if (bDirty)
                 {

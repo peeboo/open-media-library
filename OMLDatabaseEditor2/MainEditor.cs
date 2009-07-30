@@ -97,7 +97,7 @@ namespace OMLDatabaseEditor
 
             defaultLookAndFeel1.LookAndFeel.SkinName = OMLEngine.Settings.OMLSettings.DBEditorSkin;
 
-            SplashScreen2.SetStatus(32, "Setting up Menus.");
+            SplashScreen2.SetStatus(32, "Loading plugins.");
             SetupNewMovieAndContextMenu();
 
             SplashScreen2.SetStatus(48, "Loading Skins.");
@@ -319,6 +319,8 @@ namespace OMLDatabaseEditor
 
                     foreach (MetaDataPluginDescriptor provider in objPlugin.GetProviders)
                     {
+                        SplashScreen2.SetStatus(32, "Loading plugin - " + provider.DataProviderName);
+
                         // Create instance of the plugin for this particular provider. This would create a unique instance per provider.
                         provider.PluginDLL = (IOMLMetadataPlugin)PluginServices.CreateInstance(oPlugin);
                         

@@ -246,7 +246,7 @@ namespace TVDBMetadata
         /// <param name="SeriesNo"></param>
         /// <param name="EpisodeNo"></param>
         /// <returns>Boolean to indicate a drill down is required</returns>
-        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeasonNo, int? EpisodeNo)
+        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeasonNo, int? EpisodeNo, int maxResults)
         {
             // Store the search criteria for later
             /*SeriesName = pSeriesName;
@@ -273,16 +273,16 @@ namespace TVDBMetadata
             {
                 // We have a single match on the series. Try to load the episodes
                 SeriesID = results[0].Id;
-                SearchForEpisode(EpisodeName, SeasonNo, EpisodeNo);
+                SearchForEpisode(EpisodeName, SeasonNo, EpisodeNo, maxResults);
                 return false;
             }
         }
 
-        public bool SearchForTVDrillDown(int id, string EpisodeName, int? SeasonNo, int? EpisodeNo)
+        public bool SearchForTVDrillDown(int id, string EpisodeName, int? SeasonNo, int? EpisodeNo, int maxResults)
         {
             // If no series ID cached, get from the id passed to function.
             if (SeriesID == 0) SeriesID = results[id].Id;
-            SearchForEpisode(EpisodeName, SeasonNo, EpisodeNo);
+            SearchForEpisode(EpisodeName, SeasonNo, EpisodeNo, maxResults);
             return false;
         }
 
@@ -386,7 +386,7 @@ namespace TVDBMetadata
         /// </summary>
         /// <param name="id"></param>
         int SeriesID;
-        private void SearchForEpisode(string EpisodeName, int? SeasonNo, int? EpisodeNo)
+        private void SearchForEpisode(string EpisodeName, int? SeasonNo, int? EpisodeNo, int maxResults)
         {
             UriBuilder uri = new UriBuilder("http://thetvdb.com/api/" + API_KEY + "/series/" + SeriesID.ToString() + "/all/");
 
@@ -574,13 +574,13 @@ namespace TVDBMetadata
                 }
             }
 
-            if (!string.IsNullOrEmpty(EpisodeName))
-            {
+            //if (!string.IsNullOrEmpty(EpisodeName))
+            //{
                 // Sort by name confidence and limit result set
                 results = (from r in results
                            orderby r.NameMatchConfidence
-                           select r).Take(5).ToList();
-            } 
+                           select r).Take(maxResults).ToList();
+            //} 
 
             // load up all the titles with images
             foreach (TheTVDBDbResult title in results)

@@ -62,7 +62,7 @@ namespace OMLDatabaseEditor
                             // Initialise the plugin and select which provider it serves
                             provider.PluginDLL.Initialize(provider.DataProviderName, new Dictionary<string, string>());
 
-                            provider.PluginDLL.SearchForMovie(_title.Name, 999);
+                            provider.PluginDLL.SearchForMovie(_title.Name, OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
                             
                             Title title = provider.PluginDLL.GetBestMatch();
                             if (title != null)
