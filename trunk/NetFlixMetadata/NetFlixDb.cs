@@ -84,7 +84,7 @@ namespace NetFlixMetadata
 
         public bool SearchForMovie(string movieName, int maxResults)
         {
-            SearchForMovies(movieName);
+            SearchForMovies(movieName, maxResults);
             
             return (results != null && results.Count != 0);
         }
@@ -364,7 +364,7 @@ namespace NetFlixMetadata
             return null;
         }
 
-        private void SearchForMovies(string query)
+        private void SearchForMovies(string query, int maxResults)
         {
             results = new List<NetFlixDbResult>();
 
@@ -389,6 +389,7 @@ namespace NetFlixMetadata
                             {
                                 NetFlixDbResult title = GetTitleFromMovieNode(reader);
                                 if (title != null)results.Add(title);
+                                if (results.Count >= maxResults) break;
                             }
                         }
                     }
@@ -398,7 +399,11 @@ namespace NetFlixMetadata
             // load up all the titles with images
             foreach (NetFlixDbResult title in results)
             {
-                DownloadImage(title.Title, title.ImageUrlThumb);
+                if (title.ImageUrlThumb != null)
+                {
+                    title.Title.FrontCoverPath = title.ImageUrlThumb;
+                }
+                //DownloadImage(title.Title, title.ImageUrlThumb);
             }
         }
 

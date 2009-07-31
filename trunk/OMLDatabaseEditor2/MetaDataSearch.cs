@@ -5,6 +5,8 @@ using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Text;
+using System.Net;
+using System.ComponentModel;
 using OMLEngine;
 using OMLSDK;
 
@@ -19,6 +21,8 @@ namespace OMLDatabaseEditor
         bool _overwriteMetadata;
         //MainEditor _openerForm;
         public string _lastMetaPluginName;
+
+        List<KeyValuePair<int, string>> ImageLoadQueue = new List<KeyValuePair<int,string>>();
 
         bool TVSearch;
         bool SearchDrillDownReq;
@@ -191,9 +195,20 @@ namespace OMLDatabaseEditor
                     {
                         Image coverArt = null;
 
-                        if (t.FrontCoverPath != null && File.Exists(t.FrontCoverPath))
+                        if (t.FrontCoverPath != null)
                         {
-                            coverArt = Utilities.ReadImageFromFile(t.FrontCoverPath);
+                            if (string.Compare(t.FrontCoverPath.Substring(0, 4), "http", true) == 0)
+                            {
+                                // Images are not downloaded. Add to lazy load queue
+                                ImageLoadQueue.Add(new KeyValuePair<int,string>(i, t.FrontCoverPath));
+                            }
+                            else
+                            {
+                                if (File.Exists(t.FrontCoverPath))
+                                {
+                                    coverArt = Utilities.ReadImageFromFile(t.FrontCoverPath);
+                                }
+                            }
                         }
                         string releaseDate = "";
                         if (t.ReleaseDate.Year > 1900)
@@ -218,6 +233,7 @@ namespace OMLDatabaseEditor
                     }
                 }
             }
+            LoadImages();
             //return ShowDialog();
         }
 
@@ -323,6 +339,50 @@ namespace OMLDatabaseEditor
                 p.StartInfo.FileName = link;
                 p.Start();
             }
+        }
+
+        private void LoadImages()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                if (ImageLoadQueue.Count > 0)
+                {
+                    LoadImage();
+                }
+            }
+        }
+
+        private void LoadImage()
+        {
+            if (ImageLoadQueue.Count > 0)
+            {
+                KeyValuePair<int, string> src = ImageLoadQueue[0];
+
+                ImageLoadQueue.RemoveAt(0);
+
+                WebClient web = new WebClient();
+
+                web.DownloadFileCompleted += new AsyncCompletedEventHandler(FileDownloadedEvent);
+
+                KeyValuePair<int, string> dest = new KeyValuePair<int, string>(src.Key, Path.GetTempFileName());
+
+                web.DownloadFileAsync(new Uri(src.Value), dest.Value, dest);
+            }
+        }
+
+        private void FileDownloadedEvent(object sender, AsyncCompletedEventArgs c)
+        {
+            KeyValuePair<int, string> img = (KeyValuePair<int, string>)c.UserState;
+
+            if (File.Exists(img.Value))
+            {
+                Image coverArt = Utilities.ReadImageFromFile(img.Value);
+
+                ((DataGridViewImageCell)grdTitles[colCoverArt.Index,img.Key]).Value = coverArt;
+
+                _titles[img.Key].FrontCoverPath = img.Value;
+            }
+            LoadImage();
         }
     }
 }

@@ -58,7 +58,7 @@ namespace TheMovieDbMetadata
 
         public bool SearchForMovie(string movieName, int maxResults)
         {
-            SearchForMovies(movieName);
+            SearchForMovies(movieName, maxResults);
 
             return (results != null && results.Count != 0);
         }
@@ -323,7 +323,7 @@ namespace TheMovieDbMetadata
         /// Fills the local results with movies
         /// </summary>
         /// <param name="searchQuery"></param>
-        private void SearchForMovies(string searchQuery)
+        private void SearchForMovies(string searchQuery, int maxResults)
         {
             UriBuilder uri = new UriBuilder(API_URL_SEARCH);
             uri.Query = "api_key=" + API_KEY + "&title=" + searchQuery;
@@ -351,6 +351,8 @@ namespace TheMovieDbMetadata
 
                                 if (title != null)
                                     results.Add(title);
+
+                                if (results.Count >= maxResults) break;
                             }
                         }
                     }
@@ -360,7 +362,14 @@ namespace TheMovieDbMetadata
             // load up all the titles with images
             foreach (TheMovieDbResult title in results)
             {
-                DownloadImage(title.Title, title.ImageUrlThumb);
+                if (title != null)
+                {
+                    if (title.ImageUrlThumb != null)
+                    {
+                        title.Title.FrontCoverPath = title.ImageUrlThumb;
+                    }
+                }
+                //DownloadImage(title.Title, title.ImageUrlThumb);
             }
         }
 

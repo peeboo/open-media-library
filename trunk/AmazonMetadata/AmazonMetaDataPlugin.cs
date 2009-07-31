@@ -4,6 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
+using System.Net;
 using OMLEngine;        // need this for OML Title class
 using OMLSDK;           // need this for the IOMLMetadataPlugin
 
@@ -97,7 +99,7 @@ namespace AmazonMetadata
                 if (_amazon == null) Initialize(PluginName, null);
                 if (_amazon == null) return false;
 
-                _searchResult = _amazon.SearchDVDs(movieName, 1, _locale);
+                _searchResult = _amazon.SearchDVDs(movieName, 1, _locale, maxResults);
                 if (_searchResult != null && _searchResult.DVDList != null)
                 {
                     return true;
@@ -117,15 +119,7 @@ namespace AmazonMetadata
         // get the best match after doing a SearchFOrMovies
         public Title GetBestMatch()
         {
-            if (_searchResult != null & _searchResult.DVDList != null)
-            {
-                // for now get the first one but it may not be the best match
-                return _searchResult.DVDList[0];
-            }
-            else
-            {
-                return null;
-            }
+            return GetTitle(0);
         }
 
         // or choose among all the titles after doing a SearchFOrMovies
@@ -144,6 +138,12 @@ namespace AmazonMetadata
             {
                 if (index >= 0 && index < _searchResult.DVDList.Length)
                 {
+                    // Check if image has been downloaded
+                    if (string.Compare(_searchResult.DVDList[index].FrontCoverPath.Substring(0, 4), "http", true) == 0)
+                    {
+                        DownloadImage(_searchResult.DVDList[index], _searchResult.DVDList[index].FrontCoverPath);
+                    }
+
                     return _searchResult.DVDList[index];
                 }
                 else
@@ -155,6 +155,24 @@ namespace AmazonMetadata
             else
             {
                 return null;
+            }
+        }
+
+        private void DownloadImage(Title title, string imageUrl)
+        {
+            if (!string.IsNullOrEmpty(imageUrl))
+            {
+                string tempFileName = Path.GetTempFileName();
+                WebClient web = new WebClient();
+                try
+                {
+                    web.DownloadFile(imageUrl, tempFileName);
+                    title.FrontCoverPath = tempFileName;
+                }
+                catch
+                {
+                    File.Delete(tempFileName);
+                }
             }
         }
 
