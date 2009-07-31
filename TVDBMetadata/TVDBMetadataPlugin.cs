@@ -112,6 +112,12 @@ namespace TVDBMetadata
 
         public Title GetTitle(int index)
         {
+            // Check if image has been downloaded
+            if (string.Compare(results[index].Title.FrontCoverPath.Substring(0, 4), "http", true) == 0)
+            {
+                DownloadImage(results[index].Title, results[index].Title.FrontCoverPath);
+            }
+
             return results[index].Title;
         }
 
@@ -265,7 +271,8 @@ namespace TVDBMetadata
                 // but first load up all the titles with images
                 foreach (TheTVDBDbResult title in results)
                 {
-                    DownloadImage(title.Title, "http://images.thetvdb.com/banners/" + title.ImageUrl);
+                    title.Title.FrontCoverPath = "http://images.thetvdb.com/banners/" + title.ImageUrl;
+                    //DownloadImage(title.Title, "http://images.thetvdb.com/banners/" + title.ImageUrl);
                 }
                 return true;
             }
@@ -585,7 +592,8 @@ namespace TVDBMetadata
             // load up all the titles with images
             foreach (TheTVDBDbResult title in results)
             {
-                DownloadImage(title.Title, "http://images.thetvdb.com/banners/" + title.ImageUrl);
+                title.Title.FrontCoverPath = "http://images.thetvdb.com/banners/" + title.ImageUrl;
+                //DownloadImage(title.Title, "http://images.thetvdb.com/banners/" + title.ImageUrl);
             }
         }
 

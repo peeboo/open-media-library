@@ -112,7 +112,7 @@ namespace AmazonMetadata
             /// <param name="searchString">dvd keyword to search for, e.g. name, actor, or UPC</param>
             /// <param name="pageNumber">page number to show, starts at 1</param>
             /// <remarks>Several search criterial values can be altered in the Settings designer</remarks>
-            public AmazonSearchResult SearchDVDs(string searchString,  int pageNumber, AmazonLocale locale)
+            public AmazonSearchResult SearchDVDs(string searchString,  int pageNumber, AmazonLocale locale, int maxResults)
             {
                 string searchType = "Title";
                 try
@@ -161,14 +161,15 @@ namespace AmazonMetadata
                         amazonItems = amazonResponse.Items[0].Item;
                     }
 
+                    int itemsToProcess = Math.Min(amazonItems.Length, maxResults);
 
                     if (amazonItems != null)
                     {
                         // convert Amazon Items to generic collection of DVDs
-                        Title[] searchResults = new Title[amazonItems.Length];
+                        Title[] searchResults = new Title[itemsToProcess];
 
 
-                        for (int i = 0; i < amazonItems.Length; i++)
+                        for (int i = 0; i < itemsToProcess; i++)
                         {
                             searchResults[i] = AmazonToOML.TitleFromAmazonItem(amazonItems[i]);
                         }
@@ -248,7 +249,12 @@ namespace AmazonMetadata
                         }
                     }
 
-                    DownloadImage(t, amazonItem);
+                    if (amazonItem.LargeImage.URL != null)
+                    {
+                        t.FrontCoverPath = amazonItem.LargeImage.URL;// title.ImageUrl;
+                    }
+
+                    //DownloadImage(t, amazonItem);
 
                     return t;
                 }
@@ -258,7 +264,7 @@ namespace AmazonMetadata
                 }
             }
 
-            static private void DownloadImage( Title t, Item amazonItem )
+            /*static private void DownloadImage( Title t, Item amazonItem )
             {
                 if (amazonItem.LargeImage != null)
                 {
@@ -277,7 +283,7 @@ namespace AmazonMetadata
                         }
                     }
                 }
-            }
+            }*/
 
             static private DateTime AmazonYearToDateTime(string amazonDate)
             {

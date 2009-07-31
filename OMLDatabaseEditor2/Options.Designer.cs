@@ -32,6 +32,8 @@ namespace OMLDatabaseEditor
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.tpOptions = new DevExpress.XtraTab.XtraTabPage();
+            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
+            this.seMetadataLookupResultsQty = new DevExpress.XtraEditors.SpinEdit();
             this.ceShowSubFolderTitles = new DevExpress.XtraEditors.CheckEdit();
             this.ceScanDiskRollInfoToTitle = new DevExpress.XtraEditors.CheckEdit();
             this.ceAutoScanDiskOnAdd = new DevExpress.XtraEditors.CheckEdit();
@@ -65,12 +67,11 @@ namespace OMLDatabaseEditor
             this.sbCancel = new DevExpress.XtraEditors.SimpleButton();
             this.sbOK = new DevExpress.XtraEditors.SimpleButton();
             this.cmGenreMappings = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.seMetadataLookupResultsQty = new DevExpress.XtraEditors.SpinEdit();
-            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tpOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.seMetadataLookupResultsQty.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceShowSubFolderTitles.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceScanDiskRollInfoToTitle.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceAutoScanDiskOnAdd.Properties)).BeginInit();
@@ -94,7 +95,6 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolVDrive.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolScan.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgMountingTool.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.seMetadataLookupResultsQty.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -150,6 +150,36 @@ namespace OMLDatabaseEditor
             this.tpOptions.Name = "tpOptions";
             this.tpOptions.Size = new System.Drawing.Size(346, 271);
             this.tpOptions.Text = "Options";
+            // 
+            // labelControl1
+            // 
+            this.labelControl1.Location = new System.Drawing.Point(9, 131);
+            this.labelControl1.Name = "labelControl1";
+            this.labelControl1.Size = new System.Drawing.Size(142, 13);
+            this.labelControl1.TabIndex = 13;
+            this.labelControl1.Text = "Metadata Lookup Results Qty";
+            // 
+            // seMetadataLookupResultsQty
+            // 
+            this.seMetadataLookupResultsQty.AllowDrop = true;
+            this.seMetadataLookupResultsQty.EditValue = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.seMetadataLookupResultsQty.Location = new System.Drawing.Point(161, 128);
+            this.seMetadataLookupResultsQty.Name = "seMetadataLookupResultsQty";
+            this.seMetadataLookupResultsQty.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.seMetadataLookupResultsQty.Properties.IsFloatValue = false;
+            this.seMetadataLookupResultsQty.Properties.Mask.EditMask = "N00";
+            this.seMetadataLookupResultsQty.Properties.MaxValue = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.seMetadataLookupResultsQty.Size = new System.Drawing.Size(158, 20);
+            this.seMetadataLookupResultsQty.TabIndex = 12;
             // 
             // ceShowSubFolderTitles
             // 
@@ -507,34 +537,6 @@ namespace OMLDatabaseEditor
             this.cmGenreMappings.Name = "cmGenreMappings";
             this.cmGenreMappings.Size = new System.Drawing.Size(61, 4);
             // 
-            // seMetadataLookupResultsQty
-            // 
-            this.seMetadataLookupResultsQty.AllowDrop = true;
-            this.seMetadataLookupResultsQty.EditValue = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.seMetadataLookupResultsQty.Location = new System.Drawing.Point(161, 128);
-            this.seMetadataLookupResultsQty.Name = "seMetadataLookupResultsQty";
-            this.seMetadataLookupResultsQty.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.seMetadataLookupResultsQty.Properties.MaxValue = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.seMetadataLookupResultsQty.Size = new System.Drawing.Size(158, 20);
-            this.seMetadataLookupResultsQty.TabIndex = 12;
-            // 
-            // labelControl1
-            // 
-            this.labelControl1.Location = new System.Drawing.Point(9, 131);
-            this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(142, 13);
-            this.labelControl1.TabIndex = 13;
-            this.labelControl1.Text = "Metadata Lookup Results Qty";
-            // 
             // Options
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -551,6 +553,7 @@ namespace OMLDatabaseEditor
             this.xtraTabControl1.ResumeLayout(false);
             this.tpOptions.ResumeLayout(false);
             this.tpOptions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.seMetadataLookupResultsQty.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceShowSubFolderTitles.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceScanDiskRollInfoToTitle.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceAutoScanDiskOnAdd.Properties)).EndInit();
@@ -575,7 +578,6 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolVDrive.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolScan.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgMountingTool.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.seMetadataLookupResultsQty.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
