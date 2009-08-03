@@ -540,6 +540,10 @@ namespace OMLEngine.Dao
 		
 		private int _TitleType;
 		
+		private System.Nullable<short> _SeasonNumber;
+		
+		private System.Nullable<short> _EpisodeNumber;
+		
 		private EntitySet<Genre> _Genres;
 		
 		private EntitySet<Person> _Peoples;
@@ -616,6 +620,10 @@ namespace OMLEngine.Dao
     partial void OnModifiedDateChanged();
     partial void OnTitleTypeChanging(int value);
     partial void OnTitleTypeChanged();
+    partial void OnSeasonNumberChanging(System.Nullable<short> value);
+    partial void OnSeasonNumberChanged();
+    partial void OnEpisodeNumberChanging(System.Nullable<short> value);
+    partial void OnEpisodeNumberChanged();
     #endregion
 		
 		public Title()
@@ -1244,6 +1252,46 @@ namespace OMLEngine.Dao
 					this._TitleType = value;
 					this.SendPropertyChanged("TitleType");
 					this.OnTitleTypeChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_SeasonNumber", DbType="SmallInt")]
+		public System.Nullable<short> SeasonNumber
+		{
+			get
+			{
+				return this._SeasonNumber;
+			}
+			set
+			{
+				if ((this._SeasonNumber != value))
+				{
+					this.OnSeasonNumberChanging(value);
+					this.SendPropertyChanging();
+					this._SeasonNumber = value;
+					this.SendPropertyChanged("SeasonNumber");
+					this.OnSeasonNumberChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_EpisodeNumber", DbType="SmallInt")]
+		public System.Nullable<short> EpisodeNumber
+		{
+			get
+			{
+				return this._EpisodeNumber;
+			}
+			set
+			{
+				if ((this._EpisodeNumber != value))
+				{
+					this.OnEpisodeNumberChanging(value);
+					this.SendPropertyChanging();
+					this._EpisodeNumber = value;
+					this.SendPropertyChanged("EpisodeNumber");
+					this.OnEpisodeNumberChanged();
 				}
 			}
 		}
@@ -2444,6 +2492,8 @@ namespace OMLEngine.Dao
 		
 		private byte _ImageType;
 		
+		private string _OriginalName;
+		
 		private EntityRef<Title> _Title;
 		
 		private EntityRef<DBImage> _DBImage;
@@ -2458,6 +2508,8 @@ namespace OMLEngine.Dao
     partial void OnImageIdChanged();
     partial void OnImageTypeChanging(byte value);
     partial void OnImageTypeChanged();
+    partial void OnOriginalNameChanging(string value);
+    partial void OnOriginalNameChanged();
     #endregion
 		
 		public ImageMapping()
@@ -2531,6 +2583,26 @@ namespace OMLEngine.Dao
 					this._ImageType = value;
 					this.SendPropertyChanged("ImageType");
 					this.OnImageTypeChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_OriginalName", DbType="NVarChar(80)")]
+		public string OriginalName
+		{
+			get
+			{
+				return this._OriginalName;
+			}
+			set
+			{
+				if ((this._OriginalName != value))
+				{
+					this.OnOriginalNameChanging(value);
+					this.SendPropertyChanging();
+					this._OriginalName = value;
+					this.SendPropertyChanged("OriginalName");
+					this.OnOriginalNameChanged();
 				}
 			}
 		}

@@ -504,5 +504,32 @@ namespace OMLEngine
                 return imageId;
             }
         }
+
+        /// <summary>
+        /// Checks if the image [fileName] has allready been stored for the 
+        /// [titleid]
+        /// </summary>
+        /// <param name="titleId"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static bool CheckImageOriginalNameTitleThreadSafe(int titleId, string fileName)
+        {
+            using (Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext())
+            {
+                int count = (from a in db.Context.ImageMappings
+                             where a.OriginalName == Path.GetFileName(fileName)
+                             where a.TitleId == titleId
+                             select a).Count();
+
+                if (count == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
     }
 }

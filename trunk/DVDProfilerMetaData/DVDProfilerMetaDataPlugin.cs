@@ -253,9 +253,10 @@ namespace DVDProfilerMetaData
             }
         }
 
-        public void DownloadBackDropsForTitle(Title t, int index)
+        public List<string> GetBackDropUrlsForTitle()
         {
-            throw new NotImplementedException();
+            return null;
+            //throw new NotImplementedException();
         }
 
         public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults)

@@ -56,6 +56,7 @@ namespace OMLSDK
         //MetadataPluginCapabilities GetPluginCapabilities { get; }
         //string ProviderMessage { get; }
         //string ProviderLink { get; }
+        //void DownloadBackDropsForTitle(Title t, int index);
 
         // these 2 methods must be called in sequence
         bool Initialize(string provider, Dictionary<string,string> parameters );
@@ -82,7 +83,7 @@ namespace OMLSDK
 
         //bool SupportsBackDrops();
 
-        void DownloadBackDropsForTitle(Title t, int index);
+        List<string> GetBackDropUrlsForTitle();
     }
 
     /*

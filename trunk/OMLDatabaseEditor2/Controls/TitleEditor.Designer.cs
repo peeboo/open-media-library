@@ -32,10 +32,15 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TitleEditor));
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.tpVisual = new DevExpress.XtraTab.XtraTabPage();
+            this.picUserRating = new System.Windows.Forms.PictureBox();
+            this.labelControl23 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl22 = new DevExpress.XtraEditors.LabelControl();
+            this.seEpisode = new DevExpress.XtraEditors.SpinEdit();
+            this.titleSource = new System.Windows.Forms.BindingSource(this.components);
+            this.seSeason = new DevExpress.XtraEditors.SpinEdit();
             this.cbTitleType = new DevExpress.XtraEditors.ComboBoxEdit();
             this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
             this.numProductionYear = new DevExpress.XtraEditors.TextEdit();
-            this.titleSource = new System.Windows.Forms.BindingSource(this.components);
             this.labelControl21 = new DevExpress.XtraEditors.LabelControl();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pbFrontCover = new System.Windows.Forms.PictureBox();
@@ -44,7 +49,6 @@
             this.btnDisks = new DevExpress.XtraEditors.SimpleButton();
             this.btnGenres = new DevExpress.XtraEditors.SimpleButton();
             this.labelControl7 = new DevExpress.XtraEditors.LabelControl();
-            this.numUserRating = new DevExpress.XtraEditors.SpinEdit();
             this.txtSynposis = new DevExpress.XtraEditors.MemoEdit();
             this.lblSynopsis = new DevExpress.XtraEditors.LabelControl();
             this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
@@ -112,20 +116,18 @@
             this.imageWatcherFront = new System.IO.FileSystemWatcher();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.pnlMain = new DevExpress.XtraEditors.PanelControl();
-            this.seSeason = new DevExpress.XtraEditors.SpinEdit();
-            this.seEpisode = new DevExpress.XtraEditors.SpinEdit();
-            this.labelControl22 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl23 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tpVisual.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picUserRating)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seEpisode.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.titleSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seSeason.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbTitleType.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numProductionYear.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.titleSource)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numUserRating.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtSynposis.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtReleaseDate.Properties.VistaTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtReleaseDate.Properties)).BeginInit();
@@ -161,8 +163,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlMain)).BeginInit();
             this.pnlMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.seSeason.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.seEpisode.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // xtraTabControl1
@@ -184,6 +184,7 @@
             // 
             this.tpVisual.AutoScroll = true;
             this.tpVisual.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.tpVisual.Controls.Add(this.picUserRating);
             this.tpVisual.Controls.Add(this.labelControl23);
             this.tpVisual.Controls.Add(this.labelControl22);
             this.tpVisual.Controls.Add(this.seEpisode);
@@ -197,7 +198,6 @@
             this.tpVisual.Controls.Add(this.btnDisks);
             this.tpVisual.Controls.Add(this.btnGenres);
             this.tpVisual.Controls.Add(this.labelControl7);
-            this.tpVisual.Controls.Add(this.numUserRating);
             this.tpVisual.Controls.Add(this.txtSynposis);
             this.tpVisual.Controls.Add(this.lblSynopsis);
             this.tpVisual.Controls.Add(this.labelControl5);
@@ -213,6 +213,85 @@
             this.tpVisual.Name = "tpVisual";
             this.tpVisual.Size = new System.Drawing.Size(513, 492);
             this.tpVisual.Text = "Visual";
+            // 
+            // picUserRating
+            // 
+            this.picUserRating.Image = global::OMLDatabaseEditor.Properties.Resources.Stars0;
+            this.picUserRating.Location = new System.Drawing.Point(120, 234);
+            this.picUserRating.Name = "picUserRating";
+            this.picUserRating.Size = new System.Drawing.Size(100, 20);
+            this.picUserRating.TabIndex = 30;
+            this.picUserRating.TabStop = false;
+            this.picUserRating.MouseLeave += new System.EventHandler(this.picUserRating_MouseLeave);
+            this.picUserRating.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picUserRating_MouseMove);
+            this.picUserRating.Click += new System.EventHandler(this.picUserRating_Click);
+            // 
+            // labelControl23
+            // 
+            this.labelControl23.Location = new System.Drawing.Point(343, 261);
+            this.labelControl23.Name = "labelControl23";
+            this.labelControl23.Size = new System.Drawing.Size(37, 13);
+            this.labelControl23.TabIndex = 29;
+            this.labelControl23.Text = "Episode";
+            // 
+            // labelControl22
+            // 
+            this.labelControl22.Location = new System.Drawing.Point(241, 261);
+            this.labelControl22.Name = "labelControl22";
+            this.labelControl22.Size = new System.Drawing.Size(35, 13);
+            this.labelControl22.TabIndex = 28;
+            this.labelControl22.Text = "Season";
+            // 
+            // seEpisode
+            // 
+            this.seEpisode.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "EpisodeNumber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.seEpisode.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.titleSource, "EpisodeNumber", true));
+            this.seEpisode.EditValue = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.seEpisode.Location = new System.Drawing.Point(386, 258);
+            this.seEpisode.Name = "seEpisode";
+            this.seEpisode.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.seEpisode.Properties.IsFloatValue = false;
+            this.seEpisode.Properties.Mask.EditMask = "N00";
+            this.seEpisode.Properties.MaxValue = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.seEpisode.Size = new System.Drawing.Size(53, 20);
+            this.seEpisode.TabIndex = 27;
+            // 
+            // titleSource
+            // 
+            this.titleSource.DataSource = typeof(OMLEngine.Title);
+            this.titleSource.CurrentChanged += new System.EventHandler(this.titleSource_CurrentChanged);
+            // 
+            // seSeason
+            // 
+            this.seSeason.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "SeasonNumber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.seSeason.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.titleSource, "SeasonNumber", true));
+            this.seSeason.EditValue = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.seSeason.Location = new System.Drawing.Point(282, 258);
+            this.seSeason.Name = "seSeason";
+            this.seSeason.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.seSeason.Properties.IsFloatValue = false;
+            this.seSeason.Properties.Mask.EditMask = "N00";
+            this.seSeason.Properties.MaxValue = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.seSeason.Size = new System.Drawing.Size(55, 20);
+            this.seSeason.TabIndex = 26;
             // 
             // cbTitleType
             // 
@@ -242,11 +321,6 @@
             this.numProductionYear.Size = new System.Drawing.Size(100, 20);
             this.numProductionYear.TabIndex = 5;
             this.numProductionYear.KeyDown += new System.Windows.Forms.KeyEventHandler(this.field_KeyDown);
-            // 
-            // titleSource
-            // 
-            this.titleSource.DataSource = typeof(OMLEngine.Title);
-            this.titleSource.CurrentChanged += new System.EventHandler(this.titleSource_CurrentChanged);
             // 
             // labelControl21
             // 
@@ -341,30 +415,6 @@
             this.labelControl7.Size = new System.Drawing.Size(56, 13);
             this.labelControl7.TabIndex = 14;
             this.labelControl7.Text = "User Rating";
-            // 
-            // numUserRating
-            // 
-            this.numUserRating.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "UserStarRating", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numUserRating.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.titleSource, "UserStarRating", true));
-            this.numUserRating.EditValue = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.numUserRating.Location = new System.Drawing.Point(120, 232);
-            this.numUserRating.Name = "numUserRating";
-            this.numUserRating.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.numUserRating.Properties.IsFloatValue = false;
-            this.numUserRating.Properties.Mask.EditMask = "N00";
-            this.numUserRating.Properties.MaxValue = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numUserRating.Size = new System.Drawing.Size(100, 20);
-            this.numUserRating.TabIndex = 7;
-            this.numUserRating.ValueChanged += new System.EventHandler(this.TitleChanges);
             // 
             // txtSynposis
             // 
@@ -1074,68 +1124,6 @@
             this.pnlMain.Size = new System.Drawing.Size(526, 526);
             this.pnlMain.TabIndex = 3;
             // 
-            // seSeason
-            // 
-            this.seSeason.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "SeasonNumber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.seSeason.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.titleSource, "SeasonNumber", true));
-            this.seSeason.EditValue = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.seSeason.Location = new System.Drawing.Point(282, 258);
-            this.seSeason.Name = "seSeason";
-            this.seSeason.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.seSeason.Properties.IsFloatValue = false;
-            this.seSeason.Properties.Mask.EditMask = "N00";
-            this.seSeason.Properties.MaxValue = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.seSeason.Size = new System.Drawing.Size(55, 20);
-            this.seSeason.TabIndex = 26;
-            // 
-            // seEpisode
-            // 
-            this.seEpisode.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.titleSource, "EpisodeNumber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.seEpisode.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.titleSource, "EpisodeNumber", true));
-            this.seEpisode.EditValue = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.seEpisode.Location = new System.Drawing.Point(386, 258);
-            this.seEpisode.Name = "seEpisode";
-            this.seEpisode.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.seEpisode.Properties.IsFloatValue = false;
-            this.seEpisode.Properties.Mask.EditMask = "N00";
-            this.seEpisode.Properties.MaxValue = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.seEpisode.Size = new System.Drawing.Size(53, 20);
-            this.seEpisode.TabIndex = 27;
-            // 
-            // labelControl22
-            // 
-            this.labelControl22.Location = new System.Drawing.Point(241, 261);
-            this.labelControl22.Name = "labelControl22";
-            this.labelControl22.Size = new System.Drawing.Size(35, 13);
-            this.labelControl22.TabIndex = 28;
-            this.labelControl22.Text = "Season";
-            // 
-            // labelControl23
-            // 
-            this.labelControl23.Location = new System.Drawing.Point(343, 261);
-            this.labelControl23.Name = "labelControl23";
-            this.labelControl23.Size = new System.Drawing.Size(37, 13);
-            this.labelControl23.TabIndex = 29;
-            this.labelControl23.Text = "Episode";
-            // 
             // TitleEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1147,13 +1135,15 @@
             this.xtraTabControl1.ResumeLayout(false);
             this.tpVisual.ResumeLayout(false);
             this.tpVisual.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picUserRating)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seEpisode.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.titleSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seSeason.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbTitleType.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numProductionYear.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.titleSource)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbFrontCover)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackCover)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numUserRating.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtSynposis.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtReleaseDate.Properties.VistaTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtReleaseDate.Properties)).EndInit();
@@ -1191,8 +1181,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.imageWatcherFront)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlMain)).EndInit();
             this.pnlMain.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.seSeason.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.seEpisode.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1218,7 +1206,6 @@
         private DevExpress.XtraEditors.MemoEdit txtSynposis;
         private DevExpress.XtraEditors.LabelControl lblSynopsis;
         private DevExpress.XtraEditors.LabelControl labelControl7;
-        private DevExpress.XtraEditors.SpinEdit numUserRating;
         private DevExpress.XtraEditors.SimpleButton btnGenres;
         private DevExpress.XtraEditors.SimpleButton btnTags;
         private DevExpress.XtraEditors.SimpleButton btnDisks;
@@ -1285,5 +1272,6 @@
         private DevExpress.XtraEditors.LabelControl labelControl22;
         private DevExpress.XtraEditors.SpinEdit seEpisode;
         private DevExpress.XtraEditors.SpinEdit seSeason;
+        private System.Windows.Forms.PictureBox picUserRating;
     }
 }

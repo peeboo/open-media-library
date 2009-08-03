@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using Dao = OMLEngine.Dao;
 
 namespace OMLEngine
@@ -169,15 +170,19 @@ namespace OMLEngine
                 // add the new ones
                 foreach (string add in added)
                 {
-                    int? id = ImageManager.AddImageToDB(add, MAX_FANART_HEIGHT);
-
-                    if (id != null)
+                    if (!ImageManager.CheckImageOriginalNameTitleThreadSafe(title.Id, add))
                     {
-                        Dao.ImageMapping mapping = new Dao.ImageMapping();
-                        mapping.ImageId = id.Value;
-                        mapping.ImageType = (byte)ImageType.FanartImage;
+                        int? id = ImageManager.AddImageToDB(add, MAX_FANART_HEIGHT);
 
-                        title.Images.Add(mapping);
+                        if (id != null)
+                        {
+                            Dao.ImageMapping mapping = new Dao.ImageMapping();
+                            mapping.ImageId = id.Value;
+                            mapping.ImageType = (byte)ImageType.FanartImage;
+                            mapping.OriginalName = Path.GetFileName(add);
+
+                            title.Images.Add(mapping);
+                        }
                     }
                 }
 

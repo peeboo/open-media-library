@@ -405,7 +405,7 @@ namespace OMLEngine.DatabaseManagement
         public void GetRequiredSchemaVersion(out int Major, out int Minor)
         {
             Major = 1;
-            Minor = 1;
+            Minor = 2;
         }
 
 

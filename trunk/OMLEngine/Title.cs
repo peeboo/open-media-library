@@ -138,8 +138,27 @@ namespace OMLEngine
             }
         }
 
-        public int? SeasonNumber { get; set; }
-        public int? EpisodeNumber { get; set; }
+        public short? SeasonNumber {
+            get
+            {
+                return _title.SeasonNumber;
+            }
+            set
+            {
+                _title.SeasonNumber = value;
+            }
+        }
+        public short? EpisodeNumber
+        {
+            get
+            {
+                return _title.EpisodeNumber;
+            }
+            set
+            {
+                _title.EpisodeNumber = value;
+            }
+        }
 
         public string ParentalRatingReason
         {
@@ -2621,7 +2640,14 @@ namespace OMLEngine
 
         public override string ToString()
         {
-            return PersonName + " as " + RoleName;
+            if (string.IsNullOrEmpty(RoleName))
+            {
+                return PersonName;
+            }
+            else
+            {
+                return PersonName + " as " + RoleName;
+            }
         }
 
         public string Display

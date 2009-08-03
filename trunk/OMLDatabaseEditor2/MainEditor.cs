@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-
 using DevExpress.XtraEditors;
 using DevExpress.Skins;
 using DevExpress.Skins.Info;
@@ -851,12 +850,30 @@ namespace OMLDatabaseEditor
         private void LoadFanartFromPlugin(MetaDataPluginDescriptor metadata, Title title)
         {
             if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsBackDrops) != 0)
-            {                
-                DownloadingBackDropsForm dbdForm = new DownloadingBackDropsForm();
-                dbdForm.Show();
-                metadata.PluginDLL.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
-                dbdForm.Hide();
-                dbdForm.Dispose();                
+            {
+                List<string> images = new List<string>();
+
+                foreach (string image in metadata.PluginDLL.GetBackDropUrlsForTitle())
+                {
+                    if (!ImageManager.CheckImageOriginalNameTitleThreadSafe(titleEditor.EditedTitle.Id, image))
+                    {
+                        images.Add(image);
+                    }
+                }
+
+                if (images.Count > 0)
+                {
+                    DownloadingBackDropsForm dbdForm =
+                        new DownloadingBackDropsForm(titleEditor.EditedTitle, images);
+
+                    dbdForm.ShowDialog();
+                }
+                //metadata.PluginDLL.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
+                //List<string> images = metadata.PluginDLL.GetBackDropUrlsForTitle();
+
+
+                //dbdForm.Hide();
+                //dbdForm.Dispose();                
             }
         }
 

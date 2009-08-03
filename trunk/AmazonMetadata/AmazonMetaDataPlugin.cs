@@ -214,8 +214,9 @@ namespace AmazonMetadata
             return PluginName;
         }
 
-        public void DownloadBackDropsForTitle(Title t, int index)
+        public List<string> GetBackDropUrlsForTitle()
         {
+            return null;
         }
 
         public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults)

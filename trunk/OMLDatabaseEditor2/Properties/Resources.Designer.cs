@@ -144,6 +144,48 @@ namespace OMLDatabaseEditor.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Stars0 {
+            get {
+                object obj = ResourceManager.GetObject("Stars0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Stars1 {
+            get {
+                object obj = ResourceManager.GetObject("Stars1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Stars2 {
+            get {
+                object obj = ResourceManager.GetObject("Stars2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Stars3 {
+            get {
+                object obj = ResourceManager.GetObject("Stars3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Stars4 {
+            get {
+                object obj = ResourceManager.GetObject("Stars4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Stars5 {
+            get {
+                object obj = ResourceManager.GetObject("Stars5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap text_html {
             get {
                 object obj = ResourceManager.GetObject("text-html", resourceCulture);

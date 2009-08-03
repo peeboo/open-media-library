@@ -88,6 +88,7 @@ namespace OMLDatabaseEditor
             InitializeComponent();
         }
 
+
         private void frmSearchResult_Load(object sender, EventArgs e)
         {
 
@@ -233,7 +234,15 @@ namespace OMLDatabaseEditor
                     }
                 }
             }
-            LoadImages();
+            //LoadImages();
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (ImageLoadQueue.Count > 0)
+                {
+                    LoadImage();
+                }
+            }
             //return ShowDialog();
         }
 
@@ -341,16 +350,16 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private void LoadImages()
+        /*private void LoadImages()
         {
-            for (int i = 0; i < 5; i++)
+            /*for (int i = 0; i < 5; i++)
             {
                 if (ImageLoadQueue.Count > 0)
                 {
-                    LoadImage();
+                    //LoadImage();
                 }
             }
-        }
+        }*/
 
         private void LoadImage()
         {
@@ -380,7 +389,7 @@ namespace OMLDatabaseEditor
 
                 ((DataGridViewImageCell)grdTitles[colCoverArt.Index,img.Key]).Value = coverArt;
 
-                _titles[img.Key].FrontCoverPath = img.Value;
+                //_titles[img.Key].FrontCoverPath = img.Value;
             }
             LoadImage();
         }
