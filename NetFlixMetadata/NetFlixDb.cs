@@ -480,10 +480,11 @@ namespace NetFlixMetadata
                     File.Delete(tempFileName);
                 }
             }
-        } 
-        
-        public void DownloadBackDropsForTitle(Title t, int index)
+        }
+
+        public List<string> GetBackDropUrlsForTitle()
         {
+            return null;
         }
 
         private static string getNonHTML(string inputString)

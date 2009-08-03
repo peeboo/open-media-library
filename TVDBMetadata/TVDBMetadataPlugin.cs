@@ -213,10 +213,11 @@ namespace TVDBMetadata
             }
         }
 
-        public void DownloadBackDropsForTitle(Title t, int index)
+        public List<string> GetBackDropUrlsForTitle()
         {
-            if (BackDrops == null) return;
-            WebClient web = new WebClient();
+            return BackDrops;
+
+            /*WebClient web = new WebClient();
 
             foreach (string backDropUrl in BackDrops)
             {
@@ -233,7 +234,7 @@ namespace TVDBMetadata
                 {
                 }
 
-            }
+            }*/
         }
 
 
@@ -447,11 +448,11 @@ namespace TVDBMetadata
                                                 break;
                                             case "fanart":
                                                 if (BackDrops == null) BackDrops = new List<string>();
-                                                BackDrops.Add(GetElementValue(reader));
+                                                BackDrops.Add("http://images.thetvdb.com/banners/" + GetElementValue(reader));
                                                 break;
                                             case "poster":
                                                 if (BackDrops == null) BackDrops = new List<string>();
-                                                BackDrops.Add(GetElementValue(reader));
+                                                BackDrops.Add("http://images.thetvdb.com/banners/" + GetElementValue(reader));
                                                 break;   
                                             case "contentrating":
                                                 rating = GetElementValue(reader);
@@ -495,7 +496,7 @@ namespace TVDBMetadata
                                                 break;
                                             case "episodenumber":
                                                 result.EpisodeNo = int.Parse(GetElementValue(reader));
-                                                result.Title.EpisodeNumber = result.EpisodeNo;
+                                                result.Title.EpisodeNumber = (short)result.EpisodeNo;
                                                 break;
                                             case "firstaired":
                                             //    result.Title.ReleaseDate = DateTime.Parse(GetElementValue(reader));
@@ -505,7 +506,7 @@ namespace TVDBMetadata
                                                 break;
                                             case "seasonnumber":
                                                 result.SeasonNo = int.Parse(GetElementValue(reader));
-                                                result.Title.SeasonNumber = result.SeasonNo;
+                                                result.Title.SeasonNumber = (short)result.SeasonNo;
                                                 break;
                                             case "seasonid":
                                             //    typemask = int.Parse(GetElementValue(reader));

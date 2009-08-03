@@ -25,7 +25,7 @@ namespace TheMovieDbMetadata
 
     public class TheMovieDbMetadata : IOMLMetadataPlugin
     {
-        IList<string> BackDrops = null;
+        List<string> BackDrops = null;
         private const string API_KEY = "1376bf98794bda0c2495bd500a37f689";
         private const string API_URL_SEARCH = "http://api.themoviedb.org/2.0/Movie.search";
         private const string API_URL_INFO = "http://api.themoviedb.org/2.0/Movie.getInfo";
@@ -439,8 +439,10 @@ namespace TheMovieDbMetadata
             }
         }
 
-        public void DownloadBackDropsForTitle(Title t, int index)
-        {            
+        public List<string> GetBackDropUrlsForTitle()
+        {
+            return BackDrops;
+            /*
             if (results.Count >= index)
             {
                 if (this.BackDrops == null)
@@ -464,7 +466,7 @@ namespace TheMovieDbMetadata
                     {
                     }
                 }
-            }
+            }*/
         }
 
         public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults)

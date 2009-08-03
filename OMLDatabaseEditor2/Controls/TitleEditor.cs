@@ -109,7 +109,9 @@ namespace OMLDatabaseEditor.Controls
             // todo : solomon : i'm not sure what this code is for but it's crashing right now if you delete a cover image
             //imageWatcherFront.Path = Path.GetDirectoryName(_dvdTitle.FrontCoverPath);
             //imageWatcherFront.Filter = "F*.jpg";         
-            
+
+            DrawUserRating((int)_dvdTitle.UserStarRating);
+
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TitleEditor));
             this.pbFrontCover.Image = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.Image")));
             this.pbBackCover.Image = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.Image")));
@@ -747,6 +749,48 @@ namespace OMLDatabaseEditor.Controls
                 }
             }
         }
+
+        #region UserRatingStars
+        int UserStarRating;
+        private void picUserRating_MouseMove(object sender, MouseEventArgs e)
+        {
+            int newrating = (int)(e.X / 7.5);
+            DrawUserRating(newrating);
+        }
+
+        private void DrawUserRating(int value)
+        {
+            if (value != UserStarRating)
+            {
+                UserStarRating = value;
+                switch (value)
+                {
+                    case 0: picUserRating.Image = global::OMLDatabaseEditor.Properties.Resources.Stars0; break;
+                    case 1:
+                    case 2: picUserRating.Image = global::OMLDatabaseEditor.Properties.Resources.Stars1; break;
+                    case 3:
+                    case 4: picUserRating.Image = global::OMLDatabaseEditor.Properties.Resources.Stars2; break;
+                    case 5:
+                    case 6: picUserRating.Image = global::OMLDatabaseEditor.Properties.Resources.Stars3; break;
+                    case 7:
+                    case 8:
+                    case 9: picUserRating.Image = global::OMLDatabaseEditor.Properties.Resources.Stars4; break;
+                    default: picUserRating.Image = global::OMLDatabaseEditor.Properties.Resources.Stars5; break;
+                }
+            }
+        }
+
+        private void picUserRating_Click(object sender, EventArgs e)
+        {
+            _dvdTitle.UserStarRating = UserStarRating;
+        }
+
+        private void picUserRating_MouseLeave(object sender, EventArgs e)
+        {
+            DrawUserRating((int)_dvdTitle.UserStarRating);
+            TitleChanges(null, EventArgs.Empty);
+        }
+        #endregion
     }
 
     public class TitleNameChangedEventArgs : EventArgs
