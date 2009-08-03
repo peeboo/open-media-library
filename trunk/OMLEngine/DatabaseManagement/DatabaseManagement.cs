@@ -579,8 +579,12 @@ namespace OMLEngine.DatabaseManagement
                         ExecuteNonQuery(sqlConn, c);
 
                     }
+                    sqlConn.Close();
                 }
-                sqlConn.Close();
+                else
+                {
+                    DatabaseInformation.LastSQLError = "A logon error has occured. Please verify your login information in your settings.xml file.";
+                }
             }
         }
         #endregion
