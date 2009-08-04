@@ -556,6 +556,12 @@ namespace OMLEngine.Settings
             get { return SettingsManager.GetSettingByNameBool("DBETitleSortAsc", InstanceName) ?? true; }
             set { SettingsManager.SaveSettingByName("DBETitleSortAsc", value.ToString(), InstanceName); }
         }
+
+        public static bool DBEAlwaysShowTitleList
+        {
+            get { return SettingsManager.GetSettingByNameBool("DBEAlwaysShowTitleList", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("DBEAlwaysShowTitleList", value.ToString(), InstanceName); }
+        }
         #endregion
 
         public static string MPAARatings
