@@ -69,11 +69,15 @@ namespace OMLDatabaseEditor
 
             InitData();
             
-            splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Dock = DockStyle.Fill;
+            // Setup views
+            splitContainerDetails.Panel2.Controls["titleEditor"].Visible = true;
+            splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = false;
+            splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = false;
+            splitContainerDetails.Panel2.Controls["titleEditor"].Dock = DockStyle.Fill;
+            splitContainerDetails.Panel2.Controls["bioDataEditor"].Dock = DockStyle.Fill;
+            splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Dock = DockStyle.Fill;
+            alwaysShowTitleListToolStripMenuItem.Checked = OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList;
 
-            splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
-            splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = false;
-            splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
         }
 
 
@@ -395,7 +399,7 @@ namespace OMLDatabaseEditor
         #endregion
 
 
-        #region Title filter, Load & Save
+        #region Title change management, filter, Load & Save
         private void filterTitles_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -653,6 +657,21 @@ namespace OMLDatabaseEditor
         {
             saveToolStripButton.Enabled = enabled;
             saveToolStripMenuItem.Enabled = enabled;
+        }
+
+        private void titleEditor_TitleChanged(object sender, EventArgs e)
+        {
+            if (titleEditor.EditedTitle != null)
+                this.Text = APP_TITLE + " - " + titleEditor.EditedTitle.Name + "*";
+            else
+                this.Text = APP_TITLE;
+            ToggleSaveState(true);
+        }
+
+        private void titleEditor_TitleNameChanged(object sender, OMLDatabaseEditor.Controls.TitleNameChangedEventArgs e)
+        {
+            this.Text = APP_TITLE + " - " + e.NewName + "*";
+            ToggleSaveState(true);
         }
         #endregion
 
@@ -932,22 +951,6 @@ namespace OMLDatabaseEditor
             }
         }
         #endregion
-
-
-        private void titleEditor_TitleChanged(object sender, EventArgs e)
-        {
-            if (titleEditor.EditedTitle != null)
-                this.Text = APP_TITLE + " - " + titleEditor.EditedTitle.Name + "*";
-            else
-                this.Text = APP_TITLE;
-            ToggleSaveState(true);
-        }
-
-        private void titleEditor_TitleNameChanged(object sender, OMLDatabaseEditor.Controls.TitleNameChangedEventArgs e)
-        {
-            this.Text = APP_TITLE + " - " + e.NewName + "*";
-            ToggleSaveState(true);
-        }
 
 
         #region UI Event Handlers
@@ -1371,26 +1374,35 @@ namespace OMLDatabaseEditor
 
             if (e.Group == groupMediaTree)
             {
-                //LoadFolderSet();
                 PopulateMediaTree();
 
                 LoadMovies();
                 PopulateMovieListV2(SelectedTreeRoot);
 
-                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Dock = DockStyle.Fill;
-                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
-                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = true;
-                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["titleEditor"].Visible = true;
+
+                splitContainerDetails.PanelVisibility = SplitPanelVisibility.Both;
             }
 
             if (e.Group == groupBioData)
             {
                 lbBioData.Items.Clear();
                 lbBioData.Items.AddRange(TitleCollectionManager.GetAllBioDatas().OrderBy(b => b.FullName).ToArray());
-                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Dock = DockStyle.Fill;
-                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = false;
-                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
-                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = true;
+
+                splitContainerDetails.Panel2.Controls["titleEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = true;
+
+                if (OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList == true)
+                {
+                    splitContainerDetails.PanelVisibility = SplitPanelVisibility.Both;
+                }
+                else
+                {
+                    splitContainerDetails.PanelVisibility = SplitPanelVisibility.Panel2;
+                }
             }
 
             if (e.Group == groupGenresMetadata)
@@ -1398,24 +1410,57 @@ namespace OMLDatabaseEditor
                 lbGenreMetadata.Items.Clear();
                 lbGenreMetadata.Items.AddRange(TitleCollectionManager.GetAllGenreMetaDatas().OrderBy(g => g.Name).ToArray());
 
-                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Dock = DockStyle.Fill;
-                splitContainerNavigator.Panel2.Controls["genreMetaDataEditor"].Visible = true;
-                splitContainerNavigator.Panel2.Controls["splitContainerTitles"].Visible = false;
-                splitContainerNavigator.Panel2.Controls["bioDataEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["titleEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = true;
+
+                if (OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList == true)
+                {
+                    splitContainerDetails.PanelVisibility = SplitPanelVisibility.Both;
+                }
+                else
+                {
+                    splitContainerDetails.PanelVisibility = SplitPanelVisibility.Panel2;
+                }
             }
 
             _loading = false;
+        }
+
+        private void alwaysShowTitleListToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            if (alwaysShowTitleListToolStripMenuItem.Checked)
+            {
+                OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList = true;
+                splitContainerDetails.PanelVisibility = SplitPanelVisibility.Both;
+            }
+            else
+            {
+                OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList = false;
+
+                if ((mainNav.ActiveGroup == groupMetadata) ||
+                    (mainNav.ActiveGroup == groupImport) ||
+                    (mainNav.ActiveGroup == groupBioData) ||
+                    (mainNav.ActiveGroup == groupGenresMetadata))
+                {
+                    splitContainerDetails.PanelVisibility = SplitPanelVisibility.Panel2;
+                }
+                else 
+                {
+                    splitContainerDetails.PanelVisibility = SplitPanelVisibility.Both;
+                }
+            }
         }
 
         private void navBarControl1_NavPaneStateChanged(object sender, EventArgs e)
         {
             if (navBarControl1.OptionsNavPane.NavPaneState == DevExpress.XtraNavBar.NavPaneState.Collapsed)
             {
-                splitContainerTitles.SplitterPosition = 38;
+                splitContainerDetails.SplitterPosition = 38;
             }
             else
             {
-                splitContainerTitles.SplitterPosition = navBarControl1.OptionsNavPane.ExpandedWidth + 4;
+                splitContainerDetails.SplitterPosition = navBarControl1.OptionsNavPane.ExpandedWidth + 4;
             }
         }
         #endregion
@@ -1691,11 +1736,15 @@ namespace OMLDatabaseEditor
                     treeMedia.SelectedNode = nodeUnderMouse;
                 }
             }
+        }
+
+        private void treeMedia_MouseMove(object sender, MouseEventArgs e)
+        {
             if (e.Button == MouseButtons.Left)
             {
                 Point p = new Point(e.X, e.Y);
                 TreeNode nodeUnderMouse = treeMedia.GetNodeAt(p);
-               
+
                 if (nodeUnderMouse != null)
                 {
                     if (e.X > nodeUnderMouse.Bounds.Left)
@@ -1704,13 +1753,194 @@ namespace OMLDatabaseEditor
 
                         if (nodeUnderMouse.Name != "All Media")
                         {
-                            int[] sitems = new int[1];
-                            sitems[0] = Convert.ToInt32(nodeUnderMouse.Name);
-                            treeMedia.DoDragDrop(sitems, DragDropEffects.Move);
+                            OMLDragAndDropClass OMLDragAndDrop = new OMLDragAndDropClass();
+                            OMLDragAndDrop.OMLDragAndDropType = OMLDragAndDropTypes.Title;
+                            OMLDragAndDrop.iItems = new int[1];
+                            OMLDragAndDrop.iItems[0] = Convert.ToInt32(nodeUnderMouse.Name);
+
+                            treeMedia.DoDragDrop(OMLDragAndDrop, DragDropEffects.Move);
                             //lbTitles.DoDragDrop(sitems, DragDropEffects.Move);
                         }
                     }
                 }
+            }
+        }
+
+        private void treeMedia_DragEnter(object sender, DragEventArgs e)
+        {
+            currentmovetonode = null;
+            treeMedia_DragOver(sender, e);
+        }
+
+        private void treeMedia_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+            {
+                this.Cursor = Cursors.WaitCursor;
+
+                bool foldermoved = false;
+
+                if (tt != null)
+                {
+                    tt.Hide(this);
+                    tt.Dispose();
+                    tt = null;
+                }
+
+                TreeNode selectednode = treeMedia.GetNodeAt(treeMedia.PointToClient(new Point(e.X, e.Y)));
+
+                OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
+
+                if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
+                {
+                    int[] items = OMLDragAndDrop.iItems;
+                    foreach (int item in items)
+                    {
+                        if ((_movieList[item].TitleType & TitleTypes.AllFolders) != 0)
+                        {
+                            foldermoved = true;
+                        }
+
+                        if (selectednode.Name == "All Media")
+                        {
+                            // Item is being moved to root
+                            _movieList[item].ParentTitleId = null;
+                            _movieList[item].TitleType = _movieList[item].TitleType | TitleTypes.Root;
+                        }
+                        else
+                        {
+                            // Item is being moved to a folder
+                            int parentid = Convert.ToInt32(selectednode.Name);
+                            _movieList[item].ParentTitleId = parentid;
+                            _movieList[item].TitleType = _movieList[item].TitleType & (TitleTypes.AllMedia | TitleTypes.AllFolders);
+                        }
+                    }
+                    TitleCollectionManager.SaveTitleUpdates();
+
+
+
+                    if (foldermoved)
+                    {
+                        PopulateMediaTree();
+                        if (_mediaTree.ContainsKey((int)SelectedTreeRoot))
+                        {
+                            treeMedia.SelectedNode = _mediaTree[(int)SelectedTreeRoot];
+                        }
+                    }
+
+                    PopulateMovieListV2(SelectedTreeRoot);
+                }
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void treeMedia_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+            {
+                if (tt == null)
+                {
+                    tt = new ToolTip();
+                }
+
+                Point mouseLocation = treeMedia.PointToClient(new Point(e.X, e.Y));
+                TreeNode movetonode = treeMedia.GetNodeAt(mouseLocation);
+
+                if (currentmovetonode != movetonode)
+                {
+                    bool validmove = true;
+
+                    if (movetonode == null)
+                    {
+                        validmove = false;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
+
+                            if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
+                            {
+
+                                int[] items = OMLDragAndDrop.iItems;
+                                foreach (int item in items)
+                                {
+                                    if ((_movieList[item].TitleType & TitleTypes.AllFolders) != 0)
+                                    {
+                                        // Item is a folder - dangerous. Make sure this will not result circular recursion
+
+                                        if (movetonode.Name == "All Media")
+                                        {
+                                            if (_movieList[item].ParentTitleId == null)
+                                            {
+                                                validmove = false;
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // Is it being moved into itself
+                                            if (item == Convert.ToInt32(movetonode.Name))
+                                            {
+                                                validmove = false;
+                                                break;
+                                            }
+
+                                            // Is it being moved to it's parent - it's allready there
+                                            if (_movieList[item].ParentTitleId == Convert.ToInt32(movetonode.Name))
+                                            {
+                                                validmove = false;
+                                                break;
+                                            }
+
+                                            // Check for circular parents
+                                            int? parentid = _movieList[Convert.ToInt32(movetonode.Name)].ParentTitleId;
+                                            while ((validmove) && (parentid != null))
+                                            {
+                                                if ((parentid == item) || (parentid == _movieList[(int)parentid].ParentTitleId)) // Last bit stops run aways if parenttitleid==titleid (shouldn't happen)
+                                                {
+                                                    validmove = false;
+                                                    break;
+                                                }
+                                                parentid = _movieList[(int)parentid].ParentTitleId;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+
+                    if (LastMousePoint != new Point(e.X, e.Y))
+                    {
+                        LastMousePoint = new Point(e.X, e.Y);
+                        if (validmove)
+                        {
+                            e.Effect = DragDropEffects.Move;
+                            tt.Show("Move to " + movetonode.Text, this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                        }
+                        else
+                        {
+                            e.Effect = DragDropEffects.None;
+                            tt.Show("Unable to move here!", this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                        }
+                        currentmovetonode = movetonode;
+                    }
+                }
+            }
+        }
+
+        private void treeMedia_DragLeave(object sender, EventArgs e)
+        {
+            if (tt != null)
+            {
+                tt.Hide(this);
+                tt.Dispose();
+                tt = null;
             }
         }
         #endregion
@@ -2016,24 +2246,7 @@ namespace OMLDatabaseEditor
                 cms.Show(lvTitles.PointToScreen(e.Location));
             }
         }
-        
-        private void lvTitles_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
-                
-                
-                int[] sitems = (from ListViewItem si in sic
-                                where si.Text != "All Media"
-                                select Convert.ToInt32(si.Text)).ToArray();
-                if (sitems.Count() != 0)
-                {
-                    lvTitles.DoDragDrop(sitems, DragDropEffects.Move);
-                }
-            }
-        }
-
+      
         private void lvTitles_SelectedIndexChanged(object sender, EventArgs e)
         {
             lvTitles_SelectedIndexChanged();
@@ -2153,6 +2366,142 @@ namespace OMLDatabaseEditor
 
             }
         }
+
+        private void lvTitles_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
+
+                int[] sitems = (from ListViewItem si in sic
+                                where si.Text != "All Media"
+                                select Convert.ToInt32(si.Text)).ToArray();
+                if (sitems.Count() != 0)
+                {
+                    OMLDragAndDropClass OMLDragAndDrop = new OMLDragAndDropClass();
+                    OMLDragAndDrop.OMLDragAndDropType = OMLDragAndDropTypes.Title;
+                    OMLDragAndDrop.iItems = sitems;
+
+                    lvTitles.DoDragDrop(OMLDragAndDrop, DragDropEffects.Move);
+                }
+            }
+        }
+ 
+        private void lvTitles_DragEnter(object sender, DragEventArgs e)
+        {
+            currentmovetonode = null;
+            lvTitles_DragOver(sender, e);
+        }
+
+        private void lvTitles_DragOver(object sender, DragEventArgs e)
+        {
+            bool validmove = false;
+
+            string[] items = null;
+            string title = null;
+            if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+            {
+                OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
+
+                if ((OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Genre) ||
+                    (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Person))
+                {
+                    Point pt = lvTitles.PointToClient(new Point(e.X, e.Y));
+                                    
+                    ListViewItem lvitem = lvTitles.GetItemAt(pt.X, pt.Y);
+
+                    if (lvitem != null)
+                    {
+                        title = _movieList[int.Parse(lvitem.Text)].Name;
+                        validmove = true;
+                    }
+
+                    items = OMLDragAndDrop.sItems;
+                }
+            }
+
+            if (LastMousePoint != new Point(e.X, e.Y))
+            {
+                LastMousePoint = new Point(e.X, e.Y);
+
+                if (tt == null)
+                {
+                    tt = new ToolTip();
+                }
+
+                if (validmove)
+                {
+                    e.Effect = DragDropEffects.Move;
+                    tt.Show("Add " + string.Join(", ", items) + " to " + title, this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                }
+                else
+                {
+                    e.Effect = DragDropEffects.None;
+                    tt.Show("Invalid Drag", this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                }
+            }
+        }
+
+        private void lvTitles_DragLeave(object sender, EventArgs e)
+        {
+            if (tt != null)
+            {
+                tt.Hide(this);
+                tt.Dispose();
+                tt = null;
+            }
+        }
+
+        private void lvTitles_DragDrop(object sender, DragEventArgs e)
+        {
+            if (tt != null)
+            {
+                tt.Hide(this);
+                tt.Dispose();
+                tt = null;
+            }
+
+            if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+            {
+                this.Cursor = Cursors.WaitCursor;
+                
+                OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
+
+                Point pt = lvTitles.PointToClient(new Point(e.X, e.Y));
+
+                ListViewItem lvitem = lvTitles.GetItemAt(pt.X, pt.Y);
+
+                if (lvitem != null)
+                {
+                    Title title = _movieList[int.Parse(lvitem.Text)];
+                    if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Genre)
+                    {
+                        foreach (string Genre in OMLDragAndDrop.sItems)
+                        {
+                            if (!title.Genres.Contains(Genre))
+                            {
+                                title.AddGenre(Genre);
+                            }
+                        }
+                    }
+
+                    if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Person)
+                    {
+                        foreach (string Person in OMLDragAndDrop.sItems)
+                        {
+                            if ((from t in title.ActingRoles
+                                 where t.PersonName == Person
+                                 select t.PersonName).Count() == 0)
+                            {
+                                title.AddActingRole(Person, "");
+                            }
+                        }
+                    }
+                }
+                TitleCollectionManager.SaveTitleUpdates();
+                this.Cursor = Cursors.Default;
+            }
+        }
         #endregion
 
 
@@ -2181,7 +2530,17 @@ namespace OMLDatabaseEditor
 
             e.Graphics.FillRectangle(new SolidBrush(Color.White), x, y, w, h);
 
-            if (lbGenreMetadata.SelectedItem == e.Item)
+            bool highlight = false;
+            foreach (int selectedindex in lbGenreMetadata.SelectedIndices)
+            {
+                if (lbGenreMetadata.Items[selectedindex] == e.Item)
+                {
+                    highlight = true;
+                }
+            }
+
+            if (highlight)
+            //if (lbGenreMetadata.SelectedItem == e.Item)
             {
                 e.Graphics.FillRectangle(_brushTreeViewSelected, x, y, wt, h);
                 e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y, x - 2 + wt, y);
@@ -2264,6 +2623,143 @@ namespace OMLDatabaseEditor
 
             ToggleSaveState(true);
         }
+
+        private void lbGenreMetadata_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (lbGenreMetadata.SelectedIndices.Count > 0)
+                {
+                    OMLDragAndDropClass OMLDragAndDrop = new OMLDragAndDropClass();
+
+                    OMLDragAndDrop.OMLDragAndDropType = OMLDragAndDropTypes.Genre;
+
+
+                    OMLDragAndDrop.sItems = new string[lbGenreMetadata.SelectedIndices.Count];
+
+
+                    for (int i = 0; i < lbGenreMetadata.SelectedIndices.Count; i++)
+                    {
+                        OMLDragAndDrop.sItems[i] = ((GenreMetaData)(lbGenreMetadata.Items[lbGenreMetadata.SelectedIndices[i]])).Name;
+                    }
+
+                    lbGenreMetadata.DoDragDrop(OMLDragAndDrop, DragDropEffects.Move);
+                }
+            }
+        }
+
+        private void lbGenreMetadata_DragEnter(object sender, DragEventArgs e)
+        {
+            currentmovetonode = null;
+            lbGenreMetadata_DragOver(sender, e);
+        }
+
+        private void lbGenreMetadata_DragOver(object sender, DragEventArgs e)
+        {
+            bool validmove = false;
+
+            GenreMetaData Genre = null;
+            string[] titles = null;
+
+            if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+            {
+                OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
+
+                if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
+                {
+
+                    Point mouseLocation = lbGenreMetadata.PointToClient(new Point(e.X, e.Y));
+                    int itemIndex = lbGenreMetadata.IndexFromPoint(mouseLocation);
+                    if (itemIndex >= 0)
+                    {
+                        Genre = (GenreMetaData)lbGenreMetadata.Items[itemIndex];
+
+                        if (OMLDragAndDrop.iItems.Count() > 0)
+                        {
+                            titles = new string[OMLDragAndDrop.iItems.Count()];
+                            for (int i = 0; i < OMLDragAndDrop.iItems.Count(); i++)
+                            {
+                                titles[i] = _movieList[OMLDragAndDrop.iItems[i]].Name;
+                            }
+                            validmove = true;
+                        }
+                    }
+                }
+            }
+
+            if (LastMousePoint != new Point(e.X, e.Y))
+            {
+                LastMousePoint = new Point(e.X, e.Y);
+
+                if (tt == null)
+                {
+                    tt = new ToolTip();
+                }
+
+                if (validmove)
+                {
+                    e.Effect = DragDropEffects.Move;
+                    tt.Show("Add " + Genre.Name + " to " + string.Join(", ", titles), this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                }
+                else
+                {
+                    e.Effect = DragDropEffects.None;
+                    tt.Show("Invalid Drag", this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                }
+            }
+        }
+        
+        private void lbGenreMetadata_DragLeave(object sender, EventArgs e)
+        {
+            if (tt != null)
+            {
+                tt.Hide(this);
+                tt.Dispose();
+                tt = null;
+            }
+        }
+
+        private void lbGenreMetadata_DragDrop(object sender, DragEventArgs e)
+        {
+            if (tt != null)
+            {
+                tt.Hide(this);
+                tt.Dispose();
+                tt = null;
+            }
+
+            GenreMetaData Genre = null;
+
+            if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+            {
+                this.Cursor = Cursors.WaitCursor;
+ 
+                OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
+
+                if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
+                {   
+                    // Find Genre
+                    Point mouseLocation = lbGenreMetadata.PointToClient(new Point(e.X, e.Y));
+                    int itemIndex = lbGenreMetadata.IndexFromPoint(mouseLocation);
+                    if (itemIndex >= 0)
+                    {
+                        Genre = (GenreMetaData)lbGenreMetadata.Items[itemIndex];
+
+                        // Perform changes
+                        foreach (int titleid in OMLDragAndDrop.iItems)
+                        {
+                            if (!_movieList[titleid].Genres.Contains(Genre.Name))
+                            {
+                                _movieList[titleid].AddGenre(Genre.Name);
+                            }
+                        }
+                    } 
+                    TitleCollectionManager.SaveTitleUpdates();
+                } 
+                
+                this.Cursor = Cursors.Default;
+            }
+        }
         #endregion
 
 
@@ -2291,8 +2787,18 @@ namespace OMLDatabaseEditor
             stf.FormatFlags = StringFormatFlags.NoWrap;
 
             e.Graphics.FillRectangle(new SolidBrush(Color.White), x, y, w, h);
+            
+            bool highlight = false;
+            foreach (int selectedindex in lbBioData.SelectedIndices)
+            {
+                if (lbBioData.Items[selectedindex] == e.Item)
+                {
+                    highlight = true;
+                }
+            }
 
-            if (lbBioData.SelectedItem == e.Item)
+            if (highlight == true)
+            //if (lbBioData.SelectedItem == e.Item)
             {
                 e.Graphics.FillRectangle(_brushTreeViewSelected, x, y, wt, h);
                 e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y, x - 2 + wt, y);
@@ -2374,9 +2880,167 @@ namespace OMLDatabaseEditor
 
             ToggleSaveState(true);
         }
+
+        private void lbBioData_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (lbBioData.SelectedIndices.Count > 0)
+                {
+                    OMLDragAndDropClass OMLDragAndDrop = new OMLDragAndDropClass();
+
+                    OMLDragAndDrop.OMLDragAndDropType = OMLDragAndDropTypes.Person;
+
+
+                    OMLDragAndDrop.sItems = new string[lbBioData.SelectedIndices.Count];
+
+
+                    for (int i = 0; i < lbBioData.SelectedIndices.Count; i++)
+                    {
+                        OMLDragAndDrop.sItems[i] = ((BioData)(lbBioData.Items[lbBioData.SelectedIndices[i]])).FullName;
+                    }
+
+                    lbBioData.DoDragDrop(OMLDragAndDrop, DragDropEffects.Move);
+                }
+            }
+        }
+
+        private void lbBioData_DragEnter(object sender, DragEventArgs e)
+        {
+            currentmovetonode = null;
+            lbBioData_DragOver(sender, e);
+        }
+
+        private void lbBioData_DragOver(object sender, DragEventArgs e)
+        {
+            bool validmove = false;
+
+            BioData Person = null;
+            string[] titles = null;
+
+            if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+            {
+                OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
+
+                if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
+                {
+
+                    Point mouseLocation = lbBioData.PointToClient(new Point(e.X, e.Y));
+                    int itemIndex = lbBioData.IndexFromPoint(mouseLocation);
+                    if (itemIndex >= 0)
+                    {
+                        Person = (BioData)lbBioData.Items[itemIndex];
+
+                        if (OMLDragAndDrop.iItems.Count() > 0)
+                        {
+                            titles = new string[OMLDragAndDrop.iItems.Count()];
+                            for (int i = 0; i < OMLDragAndDrop.iItems.Count(); i++)
+                            {
+                                titles[i] = _movieList[OMLDragAndDrop.iItems[i]].Name;
+                            }
+                            validmove = true;
+                        }
+                    }
+                }
+            }
+
+            if (LastMousePoint != new Point(e.X, e.Y))
+            {
+                LastMousePoint = new Point(e.X, e.Y);
+
+                if (tt == null)
+                {
+                    tt = new ToolTip();
+                }
+
+                if (validmove)
+                {
+                    e.Effect = DragDropEffects.Move;
+                    tt.Show("Add " + Person.FullName + " to " + string.Join(", ", titles), this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                }
+                else
+                {
+                    e.Effect = DragDropEffects.None;
+                    tt.Show("Invalid Drag", this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                }
+            }
+        }
+ 
+        private void lbBioData_DragLeave(object sender, EventArgs e)
+        {
+            if (tt != null)
+            {
+                tt.Hide(this);
+                tt.Dispose();
+                tt = null;
+            }
+        }
+
+        private void lbBioData_DragDrop(object sender, DragEventArgs e)
+        {
+            if (tt != null)
+            {
+                tt.Hide(this);
+                tt.Dispose();
+                tt = null;
+            }
+           
+            BioData Person = null;
+
+            if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+            {
+                this.Cursor = Cursors.WaitCursor;
+
+                OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
+
+                if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
+                { 
+                    // Find Person
+                    Point mouseLocation = lbBioData.PointToClient(new Point(e.X, e.Y));
+                    int itemIndex = lbBioData.IndexFromPoint(mouseLocation);
+                    if (itemIndex >= 0)
+                    {
+                        Person = (BioData)lbBioData.Items[itemIndex];
+
+                        // Perform changes
+                        foreach (int titleid in OMLDragAndDrop.iItems)
+                        {
+                            if ((from t in _movieList[titleid].ActingRoles
+                                 where t.PersonName == Person.FullName
+                                 select t.PersonName).Count() == 0)
+                            {
+                                _movieList[titleid].AddActingRole(Person.FullName, "");
+                            }
+                        }
+                    }
+                    TitleCollectionManager.SaveTitleUpdates();
+                }
+                this.Cursor = Cursors.Default;
+            }
+        }
         #endregion
 
 
+        #region Title Drag and Drop support
+        private ToolTip tt;
+        TreeNode currentmovetonode;
+        Point LastMousePoint;
+
+        enum OMLDragAndDropTypes
+        {
+            Title,
+            Genre,
+            Person
+        }
+        class OMLDragAndDropClass
+        {
+            public OMLDragAndDropTypes OMLDragAndDropType;
+            public int[] iItems;
+            public string[] sItems;
+        }
+        #endregion
+        
+        
         #region Title & Folder Creation
         private void CreateTitle(int? parentid, string Name, TitleTypes titletype)
         {
@@ -2430,180 +3094,6 @@ namespace OMLDatabaseEditor
             {
                 int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
                 CreateTitle(parentid, Name, titletype);
-            }
-        }
-        #endregion
-
-
-        #region Title Drag and Drop support
-        private ToolTip tt;
-        TreeNode currentmovetonode;
-        
-        private void treeMedia_DragEnter(object sender, DragEventArgs e)
-        {
-            currentmovetonode = null;
-
-            treeMedia_DragOver(sender, e);
-            //if (e.Data.GetDataPresent(typeof(int[])))
-            //{
-            //    e.Effect = DragDropEffects.Move;
-            //}
-        }
-
-        private void treeMedia_DragDrop(object sender, DragEventArgs e)
-        {
-            this.Cursor = Cursors.WaitCursor;
-            
-            bool foldermoved = false;
-
-            if (tt != null)
-            {
-                tt.Hide(this);
-                tt.Dispose();
-                tt = null;
-            }
-
-            TreeNode selectednode = treeMedia.GetNodeAt(treeMedia.PointToClient(new Point(e.X, e.Y)));
-
-            if (e.Data.GetDataPresent(typeof(int[])))
-            {
-                int[] items = (int[])e.Data.GetData(typeof(int[]));
-                foreach (int item in items)
-                {
-                    if ((_movieList[item].TitleType & TitleTypes.AllFolders) != 0)
-                    {
-                        foldermoved = true;
-                    }
-
-                    if (selectednode.Name == "All Media")
-                    {
-                        // Item is being moved to root
-                        _movieList[item].ParentTitleId = null;
-                        _movieList[item].TitleType = _movieList[item].TitleType | TitleTypes.Root;
-                    }
-                    else
-                    {
-                        // Item is being moved to a folder
-                        int parentid = Convert.ToInt32(selectednode.Name);
-                        _movieList[item].ParentTitleId = parentid;
-                        _movieList[item].TitleType = _movieList[item].TitleType & (TitleTypes.AllMedia | TitleTypes.AllFolders);
-                    }
-                }
-                TitleCollectionManager.SaveTitleUpdates();
-            }
-
-            if (foldermoved)
-            {
-                PopulateMediaTree();
-                if (_mediaTree.ContainsKey((int)SelectedTreeRoot))
-                {
-                    treeMedia.SelectedNode = _mediaTree[(int)SelectedTreeRoot];
-                }
-            }
-
-            PopulateMovieListV2(SelectedTreeRoot);
-
-            this.Cursor = Cursors.Default;
-        }
-
-        private void treeMedia_DragOver(object sender, DragEventArgs e)
-        {
-            if (tt == null)
-            {
-                tt = new ToolTip();
-            }
-
-            Point mouseLocation = treeMedia.PointToClient(new Point(e.X, e.Y));
-            TreeNode movetonode = treeMedia.GetNodeAt(mouseLocation);
-
-            if (currentmovetonode != movetonode)
-            {
-                bool validmove = true;
-
-                if (movetonode == null)
-                {
-                    validmove = false;
-                }
-                else
-                {
-                    try
-                    {
-                        if (e.Data.GetDataPresent(typeof(int[])))
-                        {
-                            int[] items = (int[])e.Data.GetData(typeof(int[]));
-                            foreach (int item in items)
-                            {
-                                if ((_movieList[item].TitleType & TitleTypes.AllFolders) != 0)
-                                {
-                                    // Item is a folder - dangerous. Make sure this will not result circular recursion
-
-                                    if (movetonode.Name == "All Media")
-                                    {
-                                        if (_movieList[item].ParentTitleId == null)
-                                        {
-                                            validmove = false;
-                                            break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // Is it being moved into itself
-                                        if (item == Convert.ToInt32(movetonode.Name))
-                                        {
-                                            validmove = false;
-                                            break;
-                                        }
-
-                                        // Is it being moved to it's parent - it's allready there
-                                        if (_movieList[item].ParentTitleId == Convert.ToInt32(movetonode.Name))
-                                        {
-                                            validmove = false;
-                                            break;
-                                        }
-
-                                        // Check for circular parents
-                                        int? parentid = _movieList[Convert.ToInt32(movetonode.Name)].ParentTitleId;
-                                        while ((validmove) && (parentid != null))
-                                        {
-                                            if ((parentid == item) || (parentid == _movieList[(int)parentid].ParentTitleId)) // Last bit stops run aways if parenttitleid==titleid (shouldn't happen)
-                                            {
-                                                validmove = false;
-                                                break;
-                                            }
-                                            parentid = _movieList[(int)parentid].ParentTitleId;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                }
-
-                if (validmove)
-                {
-                    e.Effect = DragDropEffects.Move;
-                    tt.Show("Move to " + movetonode.Text, this, this.PointToClient(new Point(e.X, e.Y + 30)));
-                }
-                else
-                {
-                    e.Effect = DragDropEffects.None;
-                    tt.Show("Unable to move here!", this, this.PointToClient(new Point(e.X, e.Y + 30)));
-                }
-                currentmovetonode = movetonode;
-            }
-         }
-
-
-        private void treeMedia_DragLeave(object sender, EventArgs e)
-        {
-            if (tt != null)
-            {
-                tt.Hide(this);
-                tt.Dispose();
-                tt = null;
             }
         }
         #endregion
@@ -2727,6 +3217,7 @@ namespace OMLDatabaseEditor
             SortControl.Refresh();
         }
         #endregion
+
 
         private void addTagMenuItem1_Click(object sender, EventArgs e)
         {

@@ -787,8 +787,11 @@ namespace OMLDatabaseEditor.Controls
 
         private void picUserRating_MouseLeave(object sender, EventArgs e)
         {
-            DrawUserRating((int)_dvdTitle.UserStarRating);
-            TitleChanges(null, EventArgs.Empty);
+            if (_dvdTitle != null)
+            {
+                DrawUserRating((int)_dvdTitle.UserStarRating);
+                TitleChanges(null, EventArgs.Empty);
+            }
         }
         #endregion
     }

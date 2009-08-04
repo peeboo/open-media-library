@@ -61,6 +61,8 @@ namespace OMLDatabaseEditor
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.filterByParentalRatingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filterByTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.alwaysShowTitleListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,9 +109,7 @@ namespace OMLDatabaseEditor
             this.groupTags = new DevExpress.XtraNavBar.NavBarGroup();
             this.groupMetadata = new DevExpress.XtraNavBar.NavBarGroup();
             this.groupImport = new DevExpress.XtraNavBar.NavBarGroup();
-            this.genreMetaDataEditor = new OMLDatabaseEditor.Controls.GenreMetaDataEditor();
-            this.bioDataEditor = new OMLDatabaseEditor.Controls.BioDataEditor();
-            this.splitContainerTitles = new DevExpress.XtraEditors.SplitContainerControl();
+            this.splitContainerDetails = new DevExpress.XtraEditors.SplitContainerControl();
             this.navBarControl1 = new DevExpress.XtraNavBar.NavBarControl();
             this.groupTitles = new DevExpress.XtraNavBar.NavBarGroup();
             this.navBarGroupControlContainer7 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
@@ -118,7 +118,9 @@ namespace OMLDatabaseEditor
             this.ListViewImages = new System.Windows.Forms.ImageList(this.components);
             this.SortControl = new DevExpress.XtraEditors.PanelControl();
             this.beSearch = new DevExpress.XtraEditors.ButtonEdit();
+            this.genreMetaDataEditor = new OMLDatabaseEditor.Controls.GenreMetaDataEditor();
             this.titleEditor = new OMLDatabaseEditor.Controls.TitleEditor();
+            this.bioDataEditor = new OMLDatabaseEditor.Controls.BioDataEditor();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.newMovieSplitButton = new System.Windows.Forms.ToolStripSplitButton();
             this.fromScratchToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -147,8 +149,8 @@ namespace OMLDatabaseEditor
             this.cmsSimpleAddRemove.SuspendLayout();
             this.navBarGroupControlContainer6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbGenreMetadata)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerTitles)).BeginInit();
-            this.splitContainerTitles.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerDetails)).BeginInit();
+            this.splitContainerDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.navBarControl1)).BeginInit();
             this.navBarControl1.SuspendLayout();
             this.navBarGroupControlContainer7.SuspendLayout();
@@ -349,7 +351,9 @@ namespace OMLDatabaseEditor
             this.filterByGenreToolStripMenuItem,
             this.filterByCompletenessToolStripMenuItem,
             this.filterByParentalRatingToolStripMenuItem,
-            this.filterByTagToolStripMenuItem});
+            this.filterByTagToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.alwaysShowTitleListToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "View";
@@ -415,6 +419,19 @@ namespace OMLDatabaseEditor
             this.filterByTagToolStripMenuItem.Name = "filterByTagToolStripMenuItem";
             this.filterByTagToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.filterByTagToolStripMenuItem.Text = "Filter By Tag";
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(196, 6);
+            // 
+            // alwaysShowTitleListToolStripMenuItem
+            // 
+            this.alwaysShowTitleListToolStripMenuItem.CheckOnClick = true;
+            this.alwaysShowTitleListToolStripMenuItem.Name = "alwaysShowTitleListToolStripMenuItem";
+            this.alwaysShowTitleListToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.alwaysShowTitleListToolStripMenuItem.Text = "Always Show Title List";
+            this.alwaysShowTitleListToolStripMenuItem.CheckedChanged += new System.EventHandler(this.alwaysShowTitleListToolStripMenuItem_CheckedChanged);
             // 
             // toolsToolStripMenuItem
             // 
@@ -559,9 +576,7 @@ namespace OMLDatabaseEditor
             this.splitContainerNavigator.Name = "splitContainerNavigator";
             this.splitContainerNavigator.Panel1.Controls.Add(this.mainNav);
             this.splitContainerNavigator.Panel1.Text = "Panel1";
-            this.splitContainerNavigator.Panel2.Controls.Add(this.genreMetaDataEditor);
-            this.splitContainerNavigator.Panel2.Controls.Add(this.bioDataEditor);
-            this.splitContainerNavigator.Panel2.Controls.Add(this.splitContainerTitles);
+            this.splitContainerNavigator.Panel2.Controls.Add(this.splitContainerDetails);
             this.splitContainerNavigator.Panel2.Text = "Panel2";
             this.splitContainerNavigator.Size = new System.Drawing.Size(793, 661);
             this.splitContainerNavigator.SplitterPosition = 181;
@@ -631,6 +646,7 @@ namespace OMLDatabaseEditor
             this.treeMedia.DrawNode += new System.Windows.Forms.DrawTreeNodeEventHandler(this.treeMedia_DrawNode);
             this.treeMedia.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeMedia_DragDrop);
             this.treeMedia.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeMedia_AfterSelect);
+            this.treeMedia.MouseMove += new System.Windows.Forms.MouseEventHandler(this.treeMedia_MouseMove);
             this.treeMedia.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeMedia_MouseDown);
             this.treeMedia.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeMedia_DragEnter);
             this.treeMedia.DragOver += new System.Windows.Forms.DragEventHandler(this.treeMedia_DragOver);
@@ -732,19 +748,27 @@ namespace OMLDatabaseEditor
             // 
             this.navBarGroupControlContainer5.Controls.Add(this.lbBioData);
             this.navBarGroupControlContainer5.Name = "navBarGroupControlContainer5";
-            this.navBarGroupControlContainer5.Size = new System.Drawing.Size(175, 352);
+            this.navBarGroupControlContainer5.Size = new System.Drawing.Size(175, 400);
             this.navBarGroupControlContainer5.TabIndex = 4;
             // 
             // lbBioData
             // 
+            this.lbBioData.AllowDrop = true;
             this.lbBioData.ContextMenuStrip = this.cmsSimpleAddRemove;
             this.lbBioData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbBioData.HotTrackSelectMode = DevExpress.XtraEditors.HotTrackSelectMode.SelectItemOnClick;
             this.lbBioData.ItemHeight = 18;
             this.lbBioData.Location = new System.Drawing.Point(0, 0);
             this.lbBioData.Name = "lbBioData";
-            this.lbBioData.Size = new System.Drawing.Size(175, 352);
+            this.lbBioData.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lbBioData.Size = new System.Drawing.Size(175, 400);
             this.lbBioData.TabIndex = 0;
+            this.lbBioData.DragOver += new System.Windows.Forms.DragEventHandler(this.lbBioData_DragOver);
+            this.lbBioData.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lbBioData_MouseMove);
+            this.lbBioData.DragDrop += new System.Windows.Forms.DragEventHandler(this.lbBioData_DragDrop);
             this.lbBioData.DrawItem += new DevExpress.XtraEditors.ListBoxDrawItemEventHandler(this.lbBioData_DrawItem);
+            this.lbBioData.DragLeave += new System.EventHandler(this.lbBioData_DragLeave);
+            this.lbBioData.DragEnter += new System.Windows.Forms.DragEventHandler(this.lbBioData_DragEnter);
             this.lbBioData.SelectedIndexChanged += new System.EventHandler(this.lbBioData_SelectedIndexChanged);
             // 
             // cmsSimpleAddRemove
@@ -773,11 +797,12 @@ namespace OMLDatabaseEditor
             // 
             this.navBarGroupControlContainer6.Controls.Add(this.lbGenreMetadata);
             this.navBarGroupControlContainer6.Name = "navBarGroupControlContainer6";
-            this.navBarGroupControlContainer6.Size = new System.Drawing.Size(175, 352);
+            this.navBarGroupControlContainer6.Size = new System.Drawing.Size(175, 400);
             this.navBarGroupControlContainer6.TabIndex = 5;
             // 
             // lbGenreMetadata
             // 
+            this.lbGenreMetadata.AllowDrop = true;
             this.lbGenreMetadata.ContextMenuStrip = this.cmsSimpleAddRemove;
             this.lbGenreMetadata.DisplayMember = "Menu";
             this.lbGenreMetadata.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -785,9 +810,15 @@ namespace OMLDatabaseEditor
             this.lbGenreMetadata.ItemHeight = 18;
             this.lbGenreMetadata.Location = new System.Drawing.Point(0, 0);
             this.lbGenreMetadata.Name = "lbGenreMetadata";
-            this.lbGenreMetadata.Size = new System.Drawing.Size(175, 352);
+            this.lbGenreMetadata.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lbGenreMetadata.Size = new System.Drawing.Size(175, 400);
             this.lbGenreMetadata.TabIndex = 1;
+            this.lbGenreMetadata.DragOver += new System.Windows.Forms.DragEventHandler(this.lbGenreMetadata_DragOver);
+            this.lbGenreMetadata.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lbGenreMetadata_MouseMove);
+            this.lbGenreMetadata.DragDrop += new System.Windows.Forms.DragEventHandler(this.lbGenreMetadata_DragDrop);
             this.lbGenreMetadata.DrawItem += new DevExpress.XtraEditors.ListBoxDrawItemEventHandler(this.lbGenreMetadata_DrawItem);
+            this.lbGenreMetadata.DragLeave += new System.EventHandler(this.lbGenreMetadata_DragLeave);
+            this.lbGenreMetadata.DragEnter += new System.Windows.Forms.DragEventHandler(this.lbGenreMetadata_DragEnter);
             this.lbGenreMetadata.SelectedIndexChanged += new System.EventHandler(this.lbGenreMetadata_SelectedIndexChanged);
             // 
             // navBarGroupControlContainer8
@@ -843,38 +874,23 @@ namespace OMLDatabaseEditor
             this.groupImport.LargeImage = global::OMLDatabaseEditor.Properties.Resources.emblem_symbolic_link;
             this.groupImport.Name = "groupImport";
             // 
-            // genreMetaDataEditor
+            // splitContainerDetails
             // 
-            this.genreMetaDataEditor.Location = new System.Drawing.Point(363, 451);
-            this.genreMetaDataEditor.Name = "genreMetaDataEditor";
-            this.genreMetaDataEditor.Size = new System.Drawing.Size(183, 150);
-            this.genreMetaDataEditor.Status = OMLDatabaseEditor.Controls.GenreMetaDataEditor.GenreMetaDataStatus.Normal;
-            this.genreMetaDataEditor.TabIndex = 5;
-            this.genreMetaDataEditor.GenreMetaDataChanged += new OMLDatabaseEditor.Controls.GenreMetaDataEditor.GenreMetaDataChangeEventHandler(this.genreMetaDataEditor_GenreMetaDataChanged);
-            // 
-            // bioDataEditor
-            // 
-            this.bioDataEditor.Location = new System.Drawing.Point(40, 426);
-            this.bioDataEditor.Name = "bioDataEditor";
-            this.bioDataEditor.Size = new System.Drawing.Size(234, 213);
-            this.bioDataEditor.Status = OMLDatabaseEditor.Controls.BioDataEditor.BioDataStatus.Normal;
-            this.bioDataEditor.TabIndex = 4;
-            this.bioDataEditor.BioDataChanged += new OMLDatabaseEditor.Controls.BioDataEditor.BioDataChangeEventHandler(this.bioDataEditor_BioDataChanged);
-            // 
-            // splitContainerTitles
-            // 
-            this.splitContainerTitles.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerTitles.Name = "splitContainerTitles";
-            this.splitContainerTitles.Panel1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
-            this.splitContainerTitles.Panel1.Controls.Add(this.navBarControl1);
-            this.splitContainerTitles.Panel1.Text = "Panel1";
-            this.splitContainerTitles.Panel2.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
-            this.splitContainerTitles.Panel2.Controls.Add(this.titleEditor);
-            this.splitContainerTitles.Panel2.Text = "Panel2";
-            this.splitContainerTitles.Size = new System.Drawing.Size(392, 402);
-            this.splitContainerTitles.SplitterPosition = 195;
-            this.splitContainerTitles.TabIndex = 3;
-            this.splitContainerTitles.Text = "splitContainerControl2";
+            this.splitContainerDetails.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerDetails.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerDetails.Name = "splitContainerDetails";
+            this.splitContainerDetails.Panel1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            this.splitContainerDetails.Panel1.Controls.Add(this.navBarControl1);
+            this.splitContainerDetails.Panel1.Text = "Panel1";
+            this.splitContainerDetails.Panel2.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            this.splitContainerDetails.Panel2.Controls.Add(this.genreMetaDataEditor);
+            this.splitContainerDetails.Panel2.Controls.Add(this.titleEditor);
+            this.splitContainerDetails.Panel2.Controls.Add(this.bioDataEditor);
+            this.splitContainerDetails.Panel2.Text = "Panel2";
+            this.splitContainerDetails.Size = new System.Drawing.Size(602, 657);
+            this.splitContainerDetails.SplitterPosition = 195;
+            this.splitContainerDetails.TabIndex = 3;
+            this.splitContainerDetails.Text = "splitContainerControl2";
             // 
             // navBarControl1
             // 
@@ -894,11 +910,10 @@ namespace OMLDatabaseEditor
             this.navBarControl1.OptionsNavPane.ShowExpandButton = false;
             this.navBarControl1.OptionsNavPane.ShowOverflowPanel = false;
             this.navBarControl1.OptionsNavPane.ShowSplitter = false;
-            this.navBarControl1.Size = new System.Drawing.Size(195, 399);
+            this.navBarControl1.Size = new System.Drawing.Size(195, 654);
             this.navBarControl1.TabIndex = 0;
             this.navBarControl1.Text = "navBarControl1";
             this.navBarControl1.View = new DevExpress.XtraNavBar.ViewInfo.SkinNavigationPaneViewInfoRegistrator();
-            this.navBarControl1.NavPaneStateChanged += new System.EventHandler(this.navBarControl1_NavPaneStateChanged);
             // 
             // groupTitles
             // 
@@ -916,11 +931,12 @@ namespace OMLDatabaseEditor
             this.navBarGroupControlContainer7.Controls.Add(this.SortControl);
             this.navBarGroupControlContainer7.Controls.Add(this.beSearch);
             this.navBarGroupControlContainer7.Name = "navBarGroupControlContainer7";
-            this.navBarGroupControlContainer7.Size = new System.Drawing.Size(193, 371);
+            this.navBarGroupControlContainer7.Size = new System.Drawing.Size(193, 626);
             this.navBarGroupControlContainer7.TabIndex = 0;
             // 
             // lvTitles
             // 
+            this.lvTitles.AllowDrop = true;
             this.lvTitles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -932,7 +948,7 @@ namespace OMLDatabaseEditor
             this.lvTitles.Location = new System.Drawing.Point(0, 57);
             this.lvTitles.Name = "lvTitles";
             this.lvTitles.OwnerDraw = true;
-            this.lvTitles.Size = new System.Drawing.Size(194, 314);
+            this.lvTitles.Size = new System.Drawing.Size(194, 569);
             this.lvTitles.SmallImageList = this.ListViewImages;
             this.lvTitles.TabIndex = 9;
             this.lvTitles.UseCompatibleStateImageBehavior = false;
@@ -941,7 +957,11 @@ namespace OMLDatabaseEditor
             this.lvTitles.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvTitles_MouseClick);
             this.lvTitles.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.lvTitles_DrawItem);
             this.lvTitles.SelectedIndexChanged += new System.EventHandler(this.lvTitles_SelectedIndexChanged);
+            this.lvTitles.DragDrop += new System.Windows.Forms.DragEventHandler(this.lvTitles_DragDrop);
             this.lvTitles.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lvTitles_MouseMove);
+            this.lvTitles.DragEnter += new System.Windows.Forms.DragEventHandler(this.lvTitles_DragEnter);
+            this.lvTitles.DragLeave += new System.EventHandler(this.lvTitles_DragLeave);
+            this.lvTitles.DragOver += new System.Windows.Forms.DragEventHandler(this.lvTitles_DragOver);
             // 
             // columnTitleID
             // 
@@ -977,16 +997,34 @@ namespace OMLDatabaseEditor
             this.beSearch.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.beSearch_ButtonClick);
             this.beSearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.beSearch_KeyPress);
             // 
+            // genreMetaDataEditor
+            // 
+            this.genreMetaDataEditor.Location = new System.Drawing.Point(32, 326);
+            this.genreMetaDataEditor.Name = "genreMetaDataEditor";
+            this.genreMetaDataEditor.Size = new System.Drawing.Size(141, 131);
+            this.genreMetaDataEditor.Status = OMLDatabaseEditor.Controls.GenreMetaDataEditor.GenreMetaDataStatus.Normal;
+            this.genreMetaDataEditor.TabIndex = 5;
+            this.genreMetaDataEditor.GenreMetaDataChanged += new OMLDatabaseEditor.Controls.GenreMetaDataEditor.GenreMetaDataChangeEventHandler(this.genreMetaDataEditor_GenreMetaDataChanged);
+            // 
             // titleEditor
             // 
-            this.titleEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.titleEditor.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.titleEditor.Location = new System.Drawing.Point(0, 0);
             this.titleEditor.Name = "titleEditor";
-            this.titleEditor.Size = new System.Drawing.Size(191, 402);
+            this.titleEditor.Size = new System.Drawing.Size(191, 152);
             this.titleEditor.Status = OMLDatabaseEditor.Controls.TitleEditor.TitleStatus.Normal;
             this.titleEditor.TabIndex = 3;
             this.titleEditor.TitleChanged += new OMLDatabaseEditor.Controls.TitleEditor.TitleChangeEventHandler(this.titleEditor_TitleChanged);
             this.titleEditor.TitleNameChanged += new OMLDatabaseEditor.Controls.TitleEditor.TitleNameChangeEventHandler(this.titleEditor_TitleNameChanged);
+            // 
+            // bioDataEditor
+            // 
+            this.bioDataEditor.Location = new System.Drawing.Point(22, 177);
+            this.bioDataEditor.Name = "bioDataEditor";
+            this.bioDataEditor.Size = new System.Drawing.Size(141, 127);
+            this.bioDataEditor.Status = OMLDatabaseEditor.Controls.BioDataEditor.BioDataStatus.Normal;
+            this.bioDataEditor.TabIndex = 4;
+            this.bioDataEditor.BioDataChanged += new OMLDatabaseEditor.Controls.BioDataEditor.BioDataChangeEventHandler(this.bioDataEditor_BioDataChanged);
             // 
             // toolStrip
             // 
@@ -1094,8 +1132,8 @@ namespace OMLDatabaseEditor
             this.cmsSimpleAddRemove.ResumeLayout(false);
             this.navBarGroupControlContainer6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbGenreMetadata)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerTitles)).EndInit();
-            this.splitContainerTitles.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerDetails)).EndInit();
+            this.splitContainerDetails.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.navBarControl1)).EndInit();
             this.navBarControl1.ResumeLayout(false);
             this.navBarGroupControlContainer7.ResumeLayout(false);
@@ -1176,7 +1214,7 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraNavBar.NavBarGroup groupMediaTree;
         private DevExpress.XtraNavBar.NavBarGroupControlContainer navBarGroupControlContainer4;
         private System.Windows.Forms.TreeView treeMedia;
-        private DevExpress.XtraEditors.SplitContainerControl splitContainerTitles;
+        private DevExpress.XtraEditors.SplitContainerControl splitContainerDetails;
         private OMLDatabaseEditor.Controls.TitleEditor titleEditor;
         private DevExpress.XtraNavBar.NavBarControl navBarControl1;
         private DevExpress.XtraNavBar.NavBarGroup groupTitles;
@@ -1207,6 +1245,8 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ImageList ListViewImages;
         private System.Windows.Forms.ListView lvTitles;
         private System.Windows.Forms.ToolStripMenuItem databaseToolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem alwaysShowTitleListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     }
 }
 

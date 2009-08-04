@@ -19,7 +19,10 @@ namespace OMLDatabaseEditor
         public ListEditor(string name, IList<string> list)
         {
             InitializeComponent();
-            _list = list;
+            _list = (from t in list
+                     orderby t
+                     select t).ToList();
+
             this.Text = name;
             lbItems.DataSource = _list;
             if ((name == "Genres") || (name == "Tags"))
