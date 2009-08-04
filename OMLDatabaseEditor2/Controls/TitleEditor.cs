@@ -335,6 +335,8 @@ namespace OMLDatabaseEditor.Controls
             {
                 List<string> items = new List<string>();
                 items.AddRange(_dvdTitle.Genres);
+
+                items.Sort();
                 EditList("Genres", items);
                 _dvdTitle.RemoveAllGenres();
 
@@ -353,6 +355,9 @@ namespace OMLDatabaseEditor.Controls
                 List<string> items = new List<string>();
                 originalitems.AddRange(_dvdTitle.Tags);
                 items.AddRange(_dvdTitle.Tags);
+
+                originalitems.Sort();
+                items.Sort();
                 EditList("Tags", items);
 
                 foreach (string item in originalitems.Except(items))
@@ -782,7 +787,11 @@ namespace OMLDatabaseEditor.Controls
 
         private void picUserRating_Click(object sender, EventArgs e)
         {
-            _dvdTitle.UserStarRating = UserStarRating;
+            if (_dvdTitle != null)
+            {
+                _dvdTitle.UserStarRating = UserStarRating;
+                TitleChanges(null, EventArgs.Empty);
+            }
         }
 
         private void picUserRating_MouseLeave(object sender, EventArgs e)
@@ -790,7 +799,6 @@ namespace OMLDatabaseEditor.Controls
             if (_dvdTitle != null)
             {
                 DrawUserRating((int)_dvdTitle.UserStarRating);
-                TitleChanges(null, EventArgs.Empty);
             }
         }
         #endregion

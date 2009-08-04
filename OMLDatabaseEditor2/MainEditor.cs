@@ -73,9 +73,11 @@ namespace OMLDatabaseEditor
             splitContainerDetails.Panel2.Controls["titleEditor"].Visible = true;
             splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = false;
             splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = false;
+            splitContainerDetails.Panel2.Controls["titlesListView"].Visible = false;
             splitContainerDetails.Panel2.Controls["titleEditor"].Dock = DockStyle.Fill;
             splitContainerDetails.Panel2.Controls["bioDataEditor"].Dock = DockStyle.Fill;
             splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Dock = DockStyle.Fill;
+            splitContainerDetails.Panel2.Controls["titlesListView"].Dock = DockStyle.Fill;
             alwaysShowTitleListToolStripMenuItem.Checked = OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList;
 
         }
@@ -1381,6 +1383,7 @@ namespace OMLDatabaseEditor
 
                 splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = false;
                 splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["titlesListView"].Visible = false; 
                 splitContainerDetails.Panel2.Controls["titleEditor"].Visible = true;
 
                 splitContainerDetails.PanelVisibility = SplitPanelVisibility.Both;
@@ -1393,6 +1396,7 @@ namespace OMLDatabaseEditor
 
                 splitContainerDetails.Panel2.Controls["titleEditor"].Visible = false;
                 splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["titlesListView"].Visible = false; 
                 splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = true;
 
                 if (OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList == true)
@@ -1412,6 +1416,7 @@ namespace OMLDatabaseEditor
 
                 splitContainerDetails.Panel2.Controls["titleEditor"].Visible = false;
                 splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["titlesListView"].Visible = false;
                 splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = true;
 
                 if (OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList == true)
@@ -1424,6 +1429,25 @@ namespace OMLDatabaseEditor
                 }
             }
 
+            if (e.Group == groupTags)
+            {
+                lbTags.Items.Clear();
+                lbTags.Items.AddRange(TitleCollectionManager.GetAllTagsList().OrderBy(g => g).ToArray());
+
+                splitContainerDetails.Panel2.Controls["titleEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["titlesListView"].Visible = true;
+
+                if (OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList == true)
+                {
+                    splitContainerDetails.PanelVisibility = SplitPanelVisibility.Both;
+                }
+                else
+                {
+                    splitContainerDetails.PanelVisibility = SplitPanelVisibility.Panel2;
+                }
+            }
             _loading = false;
         }
 
@@ -1441,6 +1465,7 @@ namespace OMLDatabaseEditor
                 if ((mainNav.ActiveGroup == groupMetadata) ||
                     (mainNav.ActiveGroup == groupImport) ||
                     (mainNav.ActiveGroup == groupBioData) ||
+                    (mainNav.ActiveGroup == groupTags) ||
                     (mainNav.ActiveGroup == groupGenresMetadata))
                 {
                     splitContainerDetails.PanelVisibility = SplitPanelVisibility.Panel2;
@@ -1921,12 +1946,12 @@ namespace OMLDatabaseEditor
                         if (validmove)
                         {
                             e.Effect = DragDropEffects.Move;
-                            tt.Show("Move to " + movetonode.Text, this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                            tt.Show("Move to " + movetonode.Text, this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
                         }
                         else
                         {
                             e.Effect = DragDropEffects.None;
-                            tt.Show("Unable to move here!", this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                            tt.Show("Unable to move here!", this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
                         }
                         currentmovetonode = movetonode;
                     }
@@ -2404,7 +2429,8 @@ namespace OMLDatabaseEditor
                 OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
 
                 if ((OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Genre) ||
-                    (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Person))
+                    (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Person) ||
+                    (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Tag))
                 {
                     Point pt = lvTitles.PointToClient(new Point(e.X, e.Y));
                                     
@@ -2432,12 +2458,12 @@ namespace OMLDatabaseEditor
                 if (validmove)
                 {
                     e.Effect = DragDropEffects.Move;
-                    tt.Show("Add " + string.Join(", ", items) + " to " + title, this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                    tt.Show("Add " + string.Join(", ", items) + " to " + title, this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
                 }
                 else
                 {
                     e.Effect = DragDropEffects.None;
-                    tt.Show("Invalid Drag", this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                    tt.Show("Invalid Drag", this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
                 }
             }
         }
@@ -2494,6 +2520,17 @@ namespace OMLDatabaseEditor
                                  select t.PersonName).Count() == 0)
                             {
                                 title.AddActingRole(Person, "");
+                            }
+                        }
+                    } 
+                    
+                    if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Tag)
+                    {
+                        foreach (string Tag in OMLDragAndDrop.sItems)
+                        {
+                            if (!title.Tags.Contains(Tag))
+                            {
+                                title.AddTag(Tag);
                             }
                         }
                     }
@@ -2699,12 +2736,12 @@ namespace OMLDatabaseEditor
                 if (validmove)
                 {
                     e.Effect = DragDropEffects.Move;
-                    tt.Show("Add " + Genre.Name + " to " + string.Join(", ", titles), this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                    tt.Show("Add " + Genre.Name + " to " + string.Join(", ", titles), this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
                 }
                 else
                 {
                     e.Effect = DragDropEffects.None;
-                    tt.Show("Invalid Drag", this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                    tt.Show("Invalid Drag", this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
                 }
             }
         }
@@ -2956,12 +2993,12 @@ namespace OMLDatabaseEditor
                 if (validmove)
                 {
                     e.Effect = DragDropEffects.Move;
-                    tt.Show("Add " + Person.FullName + " to " + string.Join(", ", titles), this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                    tt.Show("Add " + Person.FullName + " to " + string.Join(", ", titles), this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
                 }
                 else
                 {
                     e.Effect = DragDropEffects.None;
-                    tt.Show("Invalid Drag", this, this.PointToClient(new Point(e.X, e.Y + 30)));
+                    tt.Show("Invalid Drag", this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
                 }
             }
         }
@@ -3021,6 +3058,200 @@ namespace OMLDatabaseEditor
         #endregion
 
 
+        #region Tag Functions
+        private void lbTags_DrawItem(object sender, ListBoxDrawItemEventArgs e)
+        {
+            e.Handled = true;
+
+            // Create the brushes
+            if (_brushTreeViewSelected == null)
+            {
+                _brushTreeViewSelected = new LinearGradientBrush(new Point(0, 0), new Point(0, e.Bounds.Height), Color.LimeGreen, Color.PaleGreen);
+            }
+
+
+            int x = e.Bounds.X + 4;
+            int y = e.Bounds.Y;
+            int w = e.Bounds.Width;
+            int h = e.Bounds.Height;
+            int wt = (int)e.Graphics.MeasureString(e.Item.ToString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular)).Width + 2;
+
+            // Setup string formatting
+            StringFormat stf = new StringFormat();
+            stf.Trimming = StringTrimming.EllipsisCharacter;
+            stf.FormatFlags = StringFormatFlags.NoWrap;
+
+            e.Graphics.FillRectangle(new SolidBrush(Color.White), x, y, w, h);
+            
+            bool highlight = false;
+            foreach (int selectedindex in lbTags.SelectedIndices)
+            {
+                if (lbTags.Items[selectedindex] == e.Item)
+                {
+                    highlight = true;
+                }
+            }
+
+            if (highlight == true)
+            //if (lbBioData.SelectedItem == e.Item)
+            {
+                e.Graphics.FillRectangle(_brushTreeViewSelected, x, y, wt, h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y, x - 2 + wt, y);
+                e.Graphics.DrawLine(new Pen(Color.Black), x + 1, y - 1 + h, x - 2 + wt, y - 1 + h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x, y + 1, x, y - 2 + h);
+                e.Graphics.DrawLine(new Pen(Color.Black), x -1 + wt, y + 1, x -1 + wt, y - 2 + h);
+
+            }
+
+            e.Graphics.DrawString(e.Item.ToString(), new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular), new SolidBrush(Color.Black), new RectangleF(x, y + 2, e.Bounds.Width, h), stf);
+        }
+        
+        private void lbTags_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            List<TitleFilter> tf = new List<TitleFilter>();
+            TitleFilter tag = new TitleFilter(TitleFilterType.Tag, (string)lbTags.SelectedItem);
+            tf.Add(tag);
+            titlesListView.SetFilter(tf);
+        }
+        private void lbTags_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (lbTags.SelectedIndices.Count > 0)
+                {
+                    OMLDragAndDropClass OMLDragAndDrop = new OMLDragAndDropClass();
+
+                    OMLDragAndDrop.OMLDragAndDropType = OMLDragAndDropTypes.Tag;
+
+
+                    OMLDragAndDrop.sItems = new string[lbTags.SelectedIndices.Count];
+
+
+                    for (int i = 0; i < lbTags.SelectedIndices.Count; i++)
+                    {
+                        OMLDragAndDrop.sItems[i] = (string)lbTags.Items[lbTags.SelectedIndices[i]];
+                    }
+
+                    lbTags.DoDragDrop(OMLDragAndDrop, DragDropEffects.Move);
+                }
+            }
+        }
+        
+        private void lbTags_DragEnter(object sender, DragEventArgs e)
+        {
+            currentmovetonode = null;
+            lbTags_DragOver(sender, e);
+        }
+
+        private void lbTags_DragOver(object sender, DragEventArgs e)
+        {
+            bool validmove = false;
+
+            string Tag = null;
+            string[] titles = null;
+
+            if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+            {
+                OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
+
+                if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
+                {
+
+                    Point mouseLocation = lbTags.PointToClient(new Point(e.X, e.Y));
+                    int itemIndex = lbTags.IndexFromPoint(mouseLocation);
+                    if (itemIndex >= 0)
+                    {
+                        Tag = (string)lbTags.Items[itemIndex];
+
+                        if (OMLDragAndDrop.iItems.Count() > 0)
+                        {
+                            titles = new string[OMLDragAndDrop.iItems.Count()];
+                            for (int i = 0; i < OMLDragAndDrop.iItems.Count(); i++)
+                            {
+                                titles[i] = _movieList[OMLDragAndDrop.iItems[i]].Name;
+                            }
+                            validmove = true;
+                        }
+                    }
+                }
+            }
+
+            if (LastMousePoint != new Point(e.X, e.Y))
+            {
+                LastMousePoint = new Point(e.X, e.Y);
+
+                if (tt == null)
+                {
+                    tt = new ToolTip();
+                }
+
+                if (validmove)
+                {
+                    e.Effect = DragDropEffects.Move;
+                    tt.Show("Add " + Tag + " to " + string.Join(", ", titles), this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
+                }
+                else
+                {
+                    e.Effect = DragDropEffects.None;
+                    tt.Show("Invalid Drag", this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
+                }
+            }
+        }
+        
+        private void lbTags_DragLeave(object sender, EventArgs e)
+        {
+            if (tt != null)
+            {
+                tt.Hide(this);
+                tt.Dispose();
+                tt = null;
+            }
+        }
+
+        private void lbTags_DragDrop(object sender, DragEventArgs e)
+        {
+            if (tt != null)
+            {
+                tt.Hide(this);
+                tt.Dispose();
+                tt = null;
+            }
+
+            string Tag = null;
+
+            if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+            {
+                this.Cursor = Cursors.WaitCursor;
+
+                OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
+
+                if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
+                {
+                    // Find Genre
+                    Point mouseLocation = lbTags.PointToClient(new Point(e.X, e.Y));
+                    int itemIndex = lbTags.IndexFromPoint(mouseLocation);
+                    if (itemIndex >= 0)
+                    {
+                        Tag = (string)lbTags.Items[itemIndex];
+
+                        // Perform changes
+                        foreach (int titleid in OMLDragAndDrop.iItems)
+                        {
+                            if (!_movieList[titleid].Tags.Contains(Tag))
+                            {
+                                _movieList[titleid].AddTag(Tag);
+                            }
+                        }
+                    }
+                    TitleCollectionManager.SaveTitleUpdates();
+                }
+
+                this.Cursor = Cursors.Default;
+            }
+        }
+        #endregion
+
+
         #region Title Drag and Drop support
         private ToolTip tt;
         TreeNode currentmovetonode;
@@ -3030,7 +3261,8 @@ namespace OMLDatabaseEditor
         {
             Title,
             Genre,
-            Person
+            Person,
+            Tag
         }
         class OMLDragAndDropClass
         {
