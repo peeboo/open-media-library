@@ -172,6 +172,12 @@
     <Compile Include="Controls\TitleEditor.Designer.cs">
       <DependentUpon>TitleEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TitlesListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TitlesListView.Designer.cs">
+      <DependentUpon>TitlesListView.cs</DependentUpon>
+    </Compile>
     <Compile Include="DatabaseTools.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -397,6 +403,9 @@
     <Content Include="Resources\Application.png" />
     <Content Include="Resources\applications-multimedia.png" />
     <Content Include="Resources\emblem-symbolic-link.png" />
+    <EmbeddedResource Include="Controls\TitlesListView.resx">
+      <DependentUpon>TitlesListView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\MetaDataIndicator1.png" />
     <EmbeddedResource Include="Resources\MetaDataIndicator2.png" />
     <EmbeddedResource Include="Resources\MetaDataIndicator3.png" />
