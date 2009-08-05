@@ -21,13 +21,17 @@ namespace Library.Code.V3
             : base()
         {
             this.collectionItem = item;
+            base.Filters.Add(new TitleFilter(TitleFilterType.Parent, collectionItem.TitleObject.Id.ToString()));
+            base.ParentId = collectionItem.TitleObject.Id;
             //description
             this.Description = item.Description;
             //this.Filters = filter;
             this.Model = new Library.Code.V3.BrowseModel(this);
             this.Model.Pivots = new Choice(this, "desc", new ArrayListDataSet(this));
             base.CreateCommands();
-            this.CreateTitleView();
+            //this.CreateTitleView();
+            base.CreateViews();
+            base.CreateFilters();
         }
 
         private void CreateTitleView()

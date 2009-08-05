@@ -174,6 +174,10 @@ namespace Library.Code.V3
         {
             this.IsBusy = true;
 
+            //    Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.loadBackground), null, new TimeSpan(1));
+        //}
+            //private void loadBackground(object options)
+        //{
             List<OMLEngine.TitleFilter> filters = new List<OMLEngine.TitleFilter>(m_filters); ;
 
             if (this.parentId.HasValue)

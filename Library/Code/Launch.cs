@@ -34,11 +34,14 @@ namespace Library
 
         public void Uninitialize()
         {
-            if (OMLApplication.Current.IsExtender && this.imp != null)
-                this.imp.Leave();
+            if (OMLApplication.Current != null)
+            {
+                if (OMLApplication.Current.IsExtender && this.imp != null)
+                    this.imp.Leave();
 
-            OMLApplication.Current.Uninitialize();
-            OMLApplication.DebugLine("[Launch] Uninitialize");
+                OMLApplication.Current.Uninitialize();
+                OMLApplication.DebugLine("[Launch] Uninitialize");
+            }
         }
 
         private void GoToLoader()
@@ -75,9 +78,47 @@ namespace Library
 
         public void Launch(AddInHost host)
         {
-            s_session = new Library.Code.V3.HistoryOrientedPageSessionEx();
-            GoToLoader();
-            Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.BeginStart), (object)host, new TimeSpan(1));
+            if (_id == "FirstRun")
+            {
+                CheckFirstRun(host);
+            }
+            else
+            {
+                s_session = new Library.Code.V3.HistoryOrientedPageSessionEx();
+                GoToLoader();
+                Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.BeginStart), (object)host, new TimeSpan(1));
+            }
+        }
+
+        private void CheckFirstRun(AddInHost host)
+        {
+            if (Properties.Settings.Default.CompletedFirstRun == false)
+            {
+                List<string> buttons = new List<string>();
+                buttons.Add("Configure OML");
+                buttons.Add("No Thanks");
+                Microsoft.MediaCenter.MediaCenterEnvironment env = host.MediaCenterEnvironment;
+                string dialogText = "Would you like to configure Open Media Library now? To run this wizard later you can access OML from the program library.";
+                Microsoft.MediaCenter.DialogResult res = env.Dialog(dialogText, "OPEN MEDIA LIBRARY", buttons, -1, true, null, delegate(Microsoft.MediaCenter.DialogResult dialogResult) { });
+                if ((int)res == 100)
+                {
+                    //tmp until firstrun page
+                    Properties.Settings.Default.CompletedFirstRun = true;
+                    Properties.Settings.Default.Save();
+
+                    //run setup
+                    s_session = new Library.Code.V3.HistoryOrientedPageSessionEx();
+                    GoToLoader();
+                    Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.BeginStart), (object)host, new TimeSpan(1));
+                }
+                else
+                {
+                    Properties.Settings.Default.CompletedFirstRun = true;
+                    Properties.Settings.Default.Save();
+                    //env.Dialog("You can access OML from the program library.", "OPEN MEDIA LIBRARY", Microsoft.MediaCenter.DialogButtons.Ok, -1, true);
+                }
+                
+            }
         }
 
         private void DeleteOldRegistryKey(AddInHost host)

@@ -22,7 +22,8 @@ namespace Library.Code.V3
     public class TrailerPage : GalleryPage
     {
         private static string LoFiUrl = @"http://www.apple.com/trailers/home/xml/current.xml";
-        private static string HiFiUrl = @"http://www.apple.com/trailers/home/xml/current_720p.xml";
+        private static string HiFiUrl = @"http://www.apple.com/trailers/home/xml/current.xml";
+        //private static string HiFiUrl = @"http://www.apple.com/trailers/home/xml/current_720p.xml";
 
         public TrailerPage(string description)
             : base()

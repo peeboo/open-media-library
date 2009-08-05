@@ -106,7 +106,7 @@ namespace Library.Code.V3
             }
             return false;
         }
-        private void CreateFilters()
+        public void CreateFilters()
         {
             IList<string> filtersToShow = OMLEngine.Settings.OMLSettings.MainFiltersToShow;
 
@@ -251,7 +251,7 @@ namespace Library.Code.V3
             return sortedList;
         }
 
-        private void CreateViews()
+        public void CreateViews()
         {
             this.CreateTitleView();
         }
@@ -279,12 +279,19 @@ namespace Library.Code.V3
                         //sb.Append(filter.FilterType.ToString());
                     }
                 }
+                title = title.Replace(" | OML Home", "");//tmp
                 //title = sb.ToString();
             }
             
             return title;
         }
         private int? parentId;
+
+        public int? ParentId
+        {
+            get { return this.parentId; }
+            set { this.parentId = value; }
+        }
 
         private void CreateTitleView()
         {

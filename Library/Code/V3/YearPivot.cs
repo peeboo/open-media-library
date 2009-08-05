@@ -198,8 +198,12 @@ namespace Library.Code.V3
 
         private void InitializeListCount(VirtualList vlist)
         {
-            this.IsBusy = true;            
+            this.IsBusy = true;
 
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.loadBackground), null, new TimeSpan(1));
+        }
+        private void loadBackground(object options)
+        {
             foreach (FilteredTitleCollection year in TitleCollectionManager.GetAllYearsGrouped(m_filters))
             {                
                 Library.Code.V3.YearBrowseGroup testGroup2 = new Library.Code.V3.YearBrowseGroup(new List<Title>(year.Titles));

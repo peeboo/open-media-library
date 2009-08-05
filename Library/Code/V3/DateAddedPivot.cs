@@ -182,6 +182,10 @@ namespace Library.Code.V3
         {
             this.IsBusy = true;
 
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.loadBackground), null, new TimeSpan(1));
+        }
+        private void loadBackground(object options)
+        {
             foreach (FilteredTitleCollection dateAdded in TitleCollectionManager.GetAllDateAddedGrouped(m_filters))
             {
                 Library.Code.V3.YearBrowseGroup testGroup2 = new Library.Code.V3.YearBrowseGroup(new List<Title>(dateAdded.Titles));

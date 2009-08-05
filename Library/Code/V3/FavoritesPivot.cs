@@ -98,6 +98,11 @@ namespace Library.Code.V3
         private void InitializeListCount(VirtualList vlist)
         {
             this.IsBusy = true;
+
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.loadBackground), null, new TimeSpan(1));
+        }
+        private void loadBackground(object options)
+        {
             this.m_filters = OMLSettings.UserFilters;
             ((VirtualList)this.m_listContent).Count = this.m_filters.Count;
             this.IsBusy = false;

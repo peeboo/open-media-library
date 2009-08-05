@@ -22,7 +22,8 @@ namespace OMLEngine
         FrontCoverImage = 0,
         BackCoverImage = 1,
         FanartImage = 2,
-        BackdropImage = 3
+        BackdropImage = 3,
+        ThumbnailImage = 4
     }
 
     public static class ImageManager

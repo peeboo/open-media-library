@@ -2859,6 +2859,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] V3_ExternalPlayerSettings {
+            get {
+                object obj = ResourceManager.GetObject("V3_ExternalPlayerSettings", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap V3_FanArtDetails_BackSplash {
             get {
                 object obj = ResourceManager.GetObject("V3_FanArtDetails_BackSplash", resourceCulture);
@@ -2869,6 +2876,13 @@ namespace Library {
         internal static byte[] V3_FanArtDetailsPage {
             get {
                 object obj = ResourceManager.GetObject("V3_FanArtDetailsPage", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_FavoritesItemSettings {
+            get {
+                object obj = ResourceManager.GetObject("V3_FavoritesItemSettings", resourceCulture);
                 return ((byte[])(obj));
             }
         }
