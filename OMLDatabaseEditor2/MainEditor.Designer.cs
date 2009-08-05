@@ -589,7 +589,7 @@ namespace OMLDatabaseEditor
             // 
             // mainNav
             // 
-            this.mainNav.ActiveGroup = this.groupTags;
+            this.mainNav.ActiveGroup = this.groupMediaTree;
             this.mainNav.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -622,6 +622,7 @@ namespace OMLDatabaseEditor
             // 
             this.groupMediaTree.Caption = "Media";
             this.groupMediaTree.ControlContainer = this.navBarGroupControlContainer4;
+            this.groupMediaTree.Expanded = true;
             this.groupMediaTree.GroupClientHeight = 80;
             this.groupMediaTree.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
             this.groupMediaTree.LargeImage = global::OMLDatabaseEditor.Properties.Resources.applications_multimedia;
@@ -872,7 +873,6 @@ namespace OMLDatabaseEditor
             // 
             this.groupTags.Caption = "Tags";
             this.groupTags.ControlContainer = this.navBarGroupControlContainer8;
-            this.groupTags.Expanded = true;
             this.groupTags.GroupClientHeight = 80;
             this.groupTags.GroupStyle = DevExpress.XtraNavBar.NavBarGroupStyle.ControlContainer;
             this.groupTags.LargeImage = global::OMLDatabaseEditor.Properties.Resources.text_html;
@@ -1135,7 +1135,6 @@ namespace OMLDatabaseEditor
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainEditor";
             this.Text = "OML Movie Manager";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainEditor_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainEditor_FormClosing);
             this.statusStrip.ResumeLayout(false);

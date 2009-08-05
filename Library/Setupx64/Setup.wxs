@@ -44,7 +44,7 @@
                   KeyPath="yes" Source="..\..\OMLEngine\bin\$(var.BuildType)\OMLEngine.dll"
                   Checksum="yes" Vital="yes" Assembly=".net"/>
           </Component>
-          <Component Id="dssnap.dll" Guid="5fd9888f-4eb4-4da1-bc2a-f82d3c5e4e53" DiskId="1">
+          <Component Id="dssnap.dll" Guid="5fd9888f-4eb4-4da1-bc2a-f82d3c5e4e53" Win64="yes" DiskId="1">
             <File Name="dssnap.dll"
                   KeyPath="yes" Source="..\..\OMLEngine\bin\$(var.BuildType)\dssnap.dll"
                   Checksum="yes" Vital="yes" Assembly=".net"/>
@@ -74,39 +74,39 @@
 
           <!--<Component Id="ComponentFactory.Krypton.Toolkit.DLL" Guid="ACDECE2C-B066-415e-AD42-0B63D341300F" Win64="yes" DiskId="1">
                         <File Name="ComponentFactory.Krypton.Toolkit.DLL"
-                              Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\ComponentFactory.Krypton.Toolkit.DLL" Checksum="no" />
+                              Source="..\..\..\OMLDatabaseEditor2\bin\$(var.BuildType)\ComponentFactory.Krypton.Toolkit.DLL" Checksum="no" />
                     </Component>-->
           <Component Id="DevExpress.Data.v8.2.dll" Guid="5268f9d7-2529-4af0-b5fb-6b94079a7f74" Win64="yes" DiskId="1">
             <File Name="DevExpress.Data.v8.2.dll"
-                  Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Data.v8.2.dll" Checksum="no" />
+                  Source="..\..\..\OMLDatabaseEditor2\bin\$(var.BuildType)\DevExpress.Data.v8.2.dll" Checksum="no" />
           </Component>
           <Component Id="DevExpress.Utils.v8.2.dll" Guid="419c9895-3e28-442c-af94-d77f9e4487b4" Win64="yes" DiskId="1">
             <File Name="DevExpress.Utils.v8.2.dll"
-                  Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Utils.v8.2.dll" Checksum="no" />
+                  Source="..\..\..\OMLDatabaseEditor2\bin\$(var.BuildType)\DevExpress.Utils.v8.2.dll" Checksum="no" />
           </Component>
           <Component Id="DevExpress.XtraEditors.v8.2.dll" Guid="cd530611-c23a-4a31-aa6e-ac8926845707" Win64="yes" DiskId="1">
             <File Name="DevExpress.XtraEditors.v8.2.dll"
-                  Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraEditors.v8.2.dll" Checksum="no" />
+                  Source="..\..\..\OMLDatabaseEditor2\bin\$(var.BuildType)\DevExpress.XtraEditors.v8.2.dll" Checksum="no" />
           </Component>
           <Component Id="DevExpress.XtraNavBar.v8.2.dll" Guid="cd530611-c23a-4a31-aa6f-ac8926845707" Win64="yes" DiskId="1">
             <File Name="DevExpress.XtraNavBar.v8.2.dll"
-                  Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraNavBar.v8.2.dll" Checksum="no" />
+                  Source="..\..\..\OMLDatabaseEditor2\bin\$(var.BuildType)\DevExpress.XtraNavBar.v8.2.dll" Checksum="no" />
           </Component>
           <Component Id="DevExpress.Data.v8.2.xml" Guid="25af85cb-dc9d-46df-b022-f8a3df4f71fb" Win64="yes" DiskId="1">
             <File Name="DevExpress.Data.v8.2.xml"
-                  Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Data.v8.2.xml" Checksum="no" />
+                  Source="..\..\..\OMLDatabaseEditor2\bin\$(var.BuildType)\DevExpress.Data.v8.2.xml" Checksum="no" />
           </Component>
           <Component Id="DevExpress.Utils.v8.2.xml" Guid="ac15ad59-c236-4a0b-9cb9-a009684582b7" Win64="yes" DiskId="1">
             <File Name="DevExpress.Utils.v8.2.xml"
-                  Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.Utils.v8.2.xml" Checksum="no" />
+                  Source="..\..\..\OMLDatabaseEditor2\bin\$(var.BuildType)\DevExpress.Utils.v8.2.xml" Checksum="no" />
           </Component>
           <Component Id="DevExpress.XtraEditors.v8.2.xml" Guid="365ba1f3-7823-4ff7-ac1c-cb040d2b852e" Win64="yes" DiskId="1">
             <File Name="DevExpress.XtraEditors.v8.2.xml"
-                  Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraEditors.v8.2.xml" Checksum="no" />
+                  Source="..\..\..\OMLDatabaseEditor2\bin\$(var.BuildType)\DevExpress.XtraEditors.v8.2.xml" Checksum="no" />
           </Component>
           <Component Id="DevExpress.XtraNavBar.v8.2.xml" Guid="365ba1f3-7823-4ff8-ac1c-cb040d2b852e" Win64="yes" DiskId="1">
             <File Name="DevExpress.XtraNavBar.v8.2.xml"
-                  Source="..\..\..\OMLDatabaseEditor\bin\$(var.BuildType)\DevExpress.XtraNavBar.v8.2.xml" Checksum="no" />
+                  Source="..\..\..\OMLDatabaseEditor2\bin\$(var.BuildType)\DevExpress.XtraNavBar.v8.2.xml" Checksum="no" />
           </Component>
           <Component Id="OMLDatabaseEditor.exe" Guid="4226fe89-8797-44ed-b463-6fda1be5c918" Win64="yes" DiskId="1">
             <File Name="OMLDatabaseEditor.exe"
@@ -185,6 +185,10 @@
               <File Name="Title Database - Upgrade 1.1.sql"
                                 Source="..\..\SQL Scripts\Title Database - Upgrade 1.1.sql" Checksum="no" />
             </Component>
+            <Component Id="TitleDatabaseUpgrade1.2.sql" Guid="0E88D597-EA38-4940-B5AA-08B4753EB5D7" Win64="yes" DiskId="1">
+              <File Name="Title Database - Upgrade 1.2.sql"
+                                Source="..\..\SQL Scripts\Title Database - Upgrade 1.2.sql" Checksum="no" />
+            </Component>
             <Component Id="SQLConfigNoTools_x64.ini" Guid="F35FE429-19F9-4d7f-ABDD-CD2F0F01F170" Win64="yes" DiskId="1">
               <File Name="SQLConfigNoTools_x64.ini"
                                 Source="..\..\SQL Scripts\SQLConfigNoTools_x64.ini" Checksum="no" />
@@ -251,6 +255,11 @@
             <Component Id="DVDProfilerMetaData.dll" Guid="830DF3C8-507C-49f2-8153-CBE2949945A5" Win64="yes" DiskId="1">
               <File Name="DVDProfilerMetaData.dll"
                     KeyPath="yes" Source="..\..\DVDProfilerMetaData\bin\$(var.BuildType)\DVDProfilerMetaData.dll"
+                    Checksum="yes" Vital="yes"/>
+            </Component>
+            <Component Id="TVDBMetadata.dll" Guid="3A38B541-1AB0-4906-B8F5-E05F3537BC46" Win64="yes" DiskId="1">
+              <File Name="TVDBMetadata.dll"
+                    KeyPath="yes" Source="..\..\TVDBMetadata\bin\$(var.BuildType)\TVDBMetadata.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
             <Component Id="OMLSDK.dll" Guid="26097a63-fc55-41d2-a8d5-432809de99fc" Win64="yes" DiskId="1">
@@ -388,6 +397,7 @@
       <ComponentRef Id="TheMovieDbMetadata.dll" />
       <ComponentRef Id="NetFlixMetadata.dll"/>
       <ComponentRef Id="DVDProfilerMetaData.dll"/>
+      <ComponentRef Id="TVDBMetadata.dll"/>
 
       <!-- Windows programs -->
       <ComponentRef Id="DevExpress.Data.v8.2.dll"/>
@@ -425,6 +435,7 @@
       <ComponentRef Id ="TitleDatabase.sql"/>
       <ComponentRef Id="TitleDatabaseUpgrade1.1.sql"/>
       <ComponentRef Id ="SQLConfigNoTools_x64.ini"/>
+      <ComponentRef Id="TitleDatabaseUpgrade1.2.sql"/>
     </ComponentGroup>  
 
     
