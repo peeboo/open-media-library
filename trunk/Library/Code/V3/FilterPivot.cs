@@ -42,13 +42,13 @@ namespace Library.Code.V3
         void addFavoritesCmd_Invoked(object sender, EventArgs e)
         {
             //this.m_filters
-            IList<UserFilter> oldFilters = OMLSettings.UserFilters;
-            UserFilter[] newFilters = new UserFilter[oldFilters.Count + 1];
-            //deal with the existing userfilters
-            for (int i = 0; i < oldFilters.Count; i++)
-            {
-                newFilters[i] = oldFilters[i];
-            }
+            //IList<UserFilter> oldFilters = OMLSettings.UserFilters;
+            //UserFilter[] newFilters = new UserFilter[oldFilters.Count + 1];
+            ////deal with the existing userfilters
+            //for (int i = 0; i < oldFilters.Count; i++)
+            //{
+            //    newFilters[i] = oldFilters[i];
+            //}
 
             OMLEngine.TitleFilter[] newFilter = new OMLEngine.TitleFilter[this.m_filters.Count];
             for (int i = 0; i < this.m_filters.Count; i++)
@@ -56,11 +56,19 @@ namespace Library.Code.V3
                 newFilter[i]=this.m_filters[i];
             }
             
-            UserFilter filter = new UserFilter(this.Description, newFilter);
-            newFilters[oldFilters.Count] = filter;
-            OMLSettings.UserFilters = newFilters;
+            UserFilter filter = new UserFilter(this.ContentLabel.Replace("|","").Replace(" OML Home",""), newFilter);
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+
+            Library.Code.V3.FavoritesItemSettings page = new Library.Code.V3.FavoritesItemSettings(filter, true);
+            properties["Page"] = page;
+            properties["Application"] = OMLApplication.Current;
 
             OMLApplication.Current.CatchMoreInfo();
+            OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_FavoritesItemSettings", properties);
+            //newFilters[oldFilters.Count] = filter;
+            //OMLSettings.UserFilters = newFilters;
+
+            
         }
 
         void viewSearchCmd_Invoked(object sender, EventArgs e)
@@ -106,6 +114,10 @@ namespace Library.Code.V3
         {
             this.IsBusy = true;
 
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.loadBackground), null, new TimeSpan(1));
+        }
+        private void loadBackground(object options)
+        {
             //titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetAllTitles());
             Filter f = new Filter(null, this.m_filterType, this.m_filters);
             titles = f.GetGalleryItems();

@@ -84,7 +84,7 @@ namespace Library
                             Path.Combine(FileSystemWalker.MainBackDropDirectory,
                             files[iCurrentBackgroundImage].FullName)));
                     iCurrentBackgroundImage++;
-                    if (mainBackgroundTimer == null)
+                    if (mainBackgroundTimer == null && iTotalBackgroundImages>1)
                     {
                         mainBackgroundTimer = new Microsoft.MediaCenter.UI.Timer();
                         mainBackgroundTimer.AutoRepeat = true;
@@ -410,6 +410,17 @@ namespace Library
                     {
                         UserFilter filt = new UserFilter(OMLEngine.Properties.Settings.Default.StartMenuCustom1);
                         this.GoHome(filt.Filters, filt.Name);
+                        return;
+                    }
+                case "FirstRun":
+                    {
+                        Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                        Library.Code.V3.SettingsManager page = new Library.Code.V3.SettingsManager();
+                        properties["Page"] = page;
+                        properties["Application"] = OMLApplication.Current;
+
+                        OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_Settings_SettingsManager", properties);
                         return;
                     }
                 default:

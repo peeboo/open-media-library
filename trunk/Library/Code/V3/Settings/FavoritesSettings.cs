@@ -37,15 +37,15 @@ namespace Library.Code.V3
         {
             this.commands = new ArrayListDataSet(this);
 
-            //save command
-            Command saveCmd = new Command();
-            saveCmd.Description = "Save";
-            saveCmd.Invoked += new EventHandler(saveCmd_Invoked);
-            this.commands.Add(saveCmd);
+            ////save command
+            //Command saveCmd = new Command();
+            //saveCmd.Description = "Save";
+            //saveCmd.Invoked += new EventHandler(saveCmd_Invoked);
+            //this.commands.Add(saveCmd);
 
             //cancel command
             Command cancelCmd = new Command();
-            cancelCmd.Description = "Cancel";
+            cancelCmd.Description = "Done";
             cancelCmd.Invoked += new EventHandler(cancelCmd_Invoked);
             this.commands.Add(cancelCmd);
 
@@ -190,12 +190,17 @@ namespace Library.Code.V3
         {
             this.filter = Filter;
             this.edit = new Command(this);
-            this.edit.Invoked += new EventHandler(edit_Invoked);
-        }
+            this.edit.Invoked += delegate(object Sender, EventArgs Args)
+            {
+                //navigate to edit page
+                Dictionary<string, object> properties = new Dictionary<string, object>();
 
-        void edit_Invoked(object sender, EventArgs e)
-        {
-            //navigate to edit page
+                Library.Code.V3.FavoritesItemSettings page = new Library.Code.V3.FavoritesItemSettings(this.filter, false);
+                properties["Page"] = page;
+                properties["Application"] = OMLApplication.Current;
+
+                OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_FavoritesItemSettings", properties);
+            };
         }
 
         private UserFilter filter;

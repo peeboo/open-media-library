@@ -680,6 +680,14 @@ namespace OMLEngine
             Dao.TitleCollectionDao.DeleteTitle(title.DaoTitle);
         }
 
+        internal static void AddThumbnailImage(Title title, Dao.ImageMapping image)
+        {
+            Dao.Title daoTitle = Dao.TitleCollectionDao.GetTitleById(title.Id);
+            //daoTitle.WatchedCount = (daoTitle.WatchedCount == null) ? 1 : daoTitle.WatchedCount.Value + 1;
+            daoTitle.Images.Add(image);
+            Dao.DBContext.Instance.SubmitChanges();
+        }
+
         /// <summary>
         /// Increments the watch count on the title object
         /// </summary>

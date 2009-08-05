@@ -44,6 +44,11 @@
                   KeyPath="yes" Source="..\..\OMLEngine\bin\$(var.BuildType)\OMLEngine.dll"
                   Checksum="yes" Vital="yes" Assembly=".net"/>
           </Component>
+          <Component Id="dssnap.dll" Guid="5fd9888f-4eb4-4da1-bc2a-f82d3c5e4e53" DiskId="1">
+            <File Name="dssnap.dll"
+                  KeyPath="yes" Source="..\..\OMLEngine\bin\$(var.BuildType)\dssnap.dll"
+                  Checksum="yes" Vital="yes" Assembly=".net"/>
+          </Component>
           <Component Id="OMLFileWatcher.dll" Guid="7EA6B674-1AD6-417a-A184-7F89AA8B1578" DiskId="1">
             <File Name="OMLFileWatcher.dll"
                   KeyPath="yes" Source="..\..\OMLFileWatcher\bin\$(var.BuildType)\OMLFileWatcher.dll"
@@ -355,6 +360,7 @@
 
     <ComponentGroup Id="ClientGroup">
       <ComponentRef Id="Library.dll" />
+      <ComponentRef Id="dssnap.dll" />
       <ComponentRef Id="OMLFileWatcher.dll"/>
       <ComponentRef Id="OMLTranscoder.dll"/>
       <ComponentRef Id="Registration.xml" />

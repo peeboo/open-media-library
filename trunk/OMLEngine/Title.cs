@@ -489,15 +489,23 @@ namespace OMLEngine
         private object pathUpdateLocker = new object();
         private DelegateFrontCoverPath callback;        
 
-        private static void ProcessorCallback(Title title)
+        private static void FrontCoverProcessorCallback(Title title)
         {
             if (title._frontCoverMenuPath == null)
             {
                 lock (title.pathUpdateLocker)
                 {
-                    if (title._frontCoverMenuPath == null)
+                    //need to find a better way to do this
+                    if (title._thumbnailMenuPath == null && title.TitleType == TitleTypes.Episode)
                     {
-                        title.GetFrontCoverMenuPathSlow();
+                        title.GetThumbnailMenuPathSlow();
+                    }
+                    else
+                    {
+                        if (title._frontCoverMenuPath == null)
+                        {
+                            title.GetFrontCoverMenuPathSlow();
+                        }
                     }
                 }
             }
@@ -514,13 +522,30 @@ namespace OMLEngine
                 {
                     if (imageProcessor == null)
                     {
-                        imageProcessor = new BackgroundProcessor<Title>(4, Title.ProcessorCallback, "ImageProcessor");
+                        imageProcessor = new BackgroundProcessor<Title>(4, Title.FrontCoverProcessorCallback, "ImageProcessor");
                     }
                 }
             }
 
             imageProcessor.Enqueue(this);
             this.callback += callback;            
+        }
+
+        public void BeginGetThumbnailMenuPath(DelegateFrontCoverPath callback)
+        {
+            if (imageProcessor == null)
+            {
+                lock (threadLocker)
+                {
+                    if (imageProcessor == null)
+                    {
+                        imageProcessor = new BackgroundProcessor<Title>(4, Title.FrontCoverProcessorCallback, "ImageProcessor");
+                    }
+                }
+            }
+
+            imageProcessor.Enqueue(this);
+            this.callback += callback;
         }        
 
         #endregion
@@ -540,7 +565,87 @@ namespace OMLEngine
             }
 
             return _frontCoverMenuPath;
-        }               
+        }
+
+        /// <summary>
+        /// Will returns the thumbnail and roundtrip to the database if need be.
+        /// Thread Safe.
+        /// </summary>
+        /// <returns></returns>
+        public string GetThumbnailMenuPathSlow()
+        {
+            if (_thumbnailMenuPath == null)
+            {
+                int? thumbnailId = ImageManager.GetImageIdForTitleThreadSafe(this.Id, ImageType.ThumbnailImage);
+                _thumbnailMenuPath = ImageManager.GetImagePathById(thumbnailId, ImageSize.Small);
+
+                if(string.IsNullOrEmpty(_thumbnailMenuPath) && this.Disks!=null && this.Disks.Count>0)
+                {
+                    //render the image and stick it in the db
+                    string diskPath=this.Disks[0].Path;
+                    if (this.Disks[0].Format == VideoFormat.DVD)
+                    {
+                        //get the first VOB
+                        DirectoryInfo di = new DirectoryInfo(this.Disks[0].Path);
+                        if (di.Exists)
+                        {
+                            FileInfo[] files = di.GetFiles("*.vob");
+                            if (files.Length > 0)
+                                diskPath = files[0].FullName;
+                        }
+                    }
+                    //string imageNamePath=ImageManager.ConstructImagePathById(
+                    //create a temp filename
+                    string imageNamePath = Path.Combine(FileSystemWalker.ImageDirectory, System.Guid.NewGuid().ToString() + ".png");
+                    
+                    babgvant.DSSnap.DSThumbnail.GrabWithSG(diskPath, 10999999999999999, imageNamePath, System.Drawing.Imaging.ImageFormat.Png);
+                    if (imageNamePath != null)
+                    {
+                         //add the new one
+                        int? id = ImageManager.AddImageToDB(imageNamePath);
+                        //delete the temp image
+                        FileInfo tmpFile = new FileInfo(imageNamePath);
+                        tmpFile.Delete();
+
+                        // if we got an id back let's associate it
+                        if (id != null)
+                        {
+                            Dao.ImageMapping image = new OMLEngine.Dao.ImageMapping();
+                            image.ImageId = id.Value;
+                            image.ImageType = (byte)ImageType.ThumbnailImage;
+                            TitleCollectionManager.AddThumbnailImage(this, image);
+                            //tmp need to change filename
+                            //_thumbnailMenuPath = imageNamePath;
+                            _thumbnailMenuPath = ImageManager.GetImagePathById(id, ImageSize.Small);
+                        }
+                    }
+
+                }
+            }
+
+            return _thumbnailMenuPath;
+        }
+        /// <summary>
+        /// The small version of the Thumbnail image
+        /// 
+        /// </summary>
+        private string _thumbnailMenuPath = null;
+        public string ThumbnailMenuPath
+        {
+            get
+            {
+                if (_thumbnailMenuPath == null)
+                {
+                    Dao.ImageMapping thumbnail = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.ThumbnailImage);
+                    string path = ImageManager.ConstructImagePathById((thumbnail == null) ? (int?)null : thumbnail.ImageId, ImageSize.Small);
+
+                    if (File.Exists(path))
+                        _thumbnailMenuPath = path;
+                }
+
+                return _thumbnailMenuPath;
+            }
+        }
 
         /// <summary>
         /// The small version of the front cover image.  Will be NULL if the image hasn't been retrieved from the database yet.

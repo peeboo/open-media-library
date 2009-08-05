@@ -118,6 +118,8 @@
     <Compile Include="Code\V3\Controls\LegacyHorizontalFlowLayoutHelper.cs" />
     <Compile Include="Code\V3\CollectionItem.cs" />
     <Compile Include="Code\V3\CollectionPage.cs" />
+    <Compile Include="Code\V3\EpisodeItem.cs" />
+    <Compile Include="Code\V3\Settings\FavoritesItemSettings.cs" />
     <Compile Include="Code\V3\Settings\StartMenuItemSettings.cs" />
     <Compile Include="Code\V3\Settings\StartMenuSettings.cs" />
     <Compile Include="Code\V3\TrailerPivot.cs" />
@@ -551,6 +553,8 @@
     <Content Include="Markup\V3\Loader.mcml" />
     <Content Include="Markup\V3\Settings\BackgroundSettings.mcml" />
     <Content Include="Markup\V3\Settings\AdditionalSettings.mcml" />
+    <Content Include="Markup\V3\Settings\ExternalPlayerSettings.mcml" />
+    <Content Include="Markup\V3\Settings\FavoritesItemSettings.mcml" />
     <Content Include="Markup\V3\Settings\StartMenuItemSettings.mcml" />
     <Content Include="Markup\V3\Settings\StartMenuSettings.mcml" />
     <Content Include="Markup\V3\Settings\ImageMountingSettingsAdvanced.mcml" />

@@ -106,6 +106,10 @@ namespace Library.Code.V3
         {
             this.IsBusy = true;
 
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.loadBackground), null, new TimeSpan(1));
+        }
+        private void loadBackground(object options)
+        {
             //titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetAllTitles());
             Filter f = new Filter(null, this.m_filterType, this.m_filters);
             titles = f.GetGalleryItems();

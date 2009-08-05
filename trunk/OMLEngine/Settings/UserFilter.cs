@@ -55,7 +55,7 @@ namespace OMLEngine.Settings
             if (parts == null || parts.Length < 3)
                 return;
 
-            string customName = parts[0];
+            this.customName = parts[0];
 
             for (int x = 1; x < parts.Length; x++)
             {                

@@ -585,5 +585,17 @@ namespace Library.Properties {
                 this["GalleryEnableAlphaJump"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CompletedFirstRun {
+            get {
+                return ((bool)(this["CompletedFirstRun"]));
+            }
+            set {
+                this["CompletedFirstRun"] = value;
+            }
+        }
     }
 }
