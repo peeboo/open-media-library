@@ -1111,7 +1111,7 @@ namespace OMLDatabaseEditor
 
         private void fromScratchToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CreateTitle(null, "New Title", TitleTypes.Unknown);
+            CreateTitle(null, "New Title", TitleTypes.Unknown, null);
             /*
             Title newMovie = new Title();
             newMovie.Name = "New title";
@@ -1133,7 +1133,7 @@ namespace OMLDatabaseEditor
             NewMovieName movieName = new NewMovieName();
             if (movieName.ShowDialog() == DialogResult.OK)
             {
-                CreateTitle(null, movieName.MovieName(), TitleTypes.Unknown);
+                CreateTitle(null, movieName.MovieName(), TitleTypes.Unknown, null);
                 /*TitleTypes*string name = movieName.MovieName();
                 Title newTitle = new Title();
                 newTitle.DateAdded = DateTime.Now;
@@ -1701,12 +1701,12 @@ namespace OMLDatabaseEditor
             if (treeMedia.SelectedNode.Name == "All Media")
             {
                 // Root Title
-                CreateTitle(null, "New TV Episode", TitleTypes.Episode);
+                CreateTitle(null, "New TV Episode", TitleTypes.Episode, null);
             }
             else
             {
                 int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
-                CreateTitle(parentid, "New TV Episode", TitleTypes.Episode);
+                CreateTitle(parentid, "New TV Episode", TitleTypes.Episode, null);
             }
         }
   
@@ -1715,12 +1715,12 @@ namespace OMLDatabaseEditor
             if (treeMedia.SelectedNode.Name == "All Media")
             {
                 // Root Title
-                CreateTitle(null, "New Movie", TitleTypes.Movie);
+                CreateTitle(null, "New Movie", TitleTypes.Movie, null);
             }
             else
             {
                 int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
-                CreateTitle(parentid, "New Movie", TitleTypes.Movie);
+                CreateTitle(parentid, "New Movie", TitleTypes.Movie, null);
             }
         }
 
@@ -1799,61 +1799,86 @@ namespace OMLDatabaseEditor
 
         private void treeMedia_DragDrop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+            if (tt != null)
+            {
+                tt.Hide(this);
+                tt.Dispose();
+                tt = null;
+            }
+
+            Point mouseLocation = treeMedia.PointToClient(new Point(e.X, e.Y));
+            TreeNode selectednode = treeMedia.GetNodeAt(mouseLocation);
+
+            if (selectednode != null)
             {
                 this.Cursor = Cursors.WaitCursor;
 
-                bool foldermoved = false;
+                // Find the titleid of the destination title
+                int? parentid;
 
-                if (tt != null)
+                if (selectednode.Name == "All Media")
                 {
-                    tt.Hide(this);
-                    tt.Dispose();
-                    tt = null;
+                    parentid = null;
+                }
+                else
+                {
+                    parentid = Convert.ToInt32(selectednode.Name);
                 }
 
-                TreeNode selectednode = treeMedia.GetNodeAt(treeMedia.PointToClient(new Point(e.X, e.Y)));
-
-                OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
-
-                if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
+                // Received a file drag and drop
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
-                    int[] items = OMLDragAndDrop.iItems;
-                    foreach (int item in items)
+                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                    if (files.Length > 0)
                     {
-                        if ((_movieList[item].TitleType & TitleTypes.AllFolders) != 0)
-                        {
-                            foldermoved = true;
-                        }
-
-                        if (selectednode.Name == "All Media")
-                        {
-                            // Item is being moved to root
-                            _movieList[item].ParentTitleId = null;
-                            _movieList[item].TitleType = _movieList[item].TitleType | TitleTypes.Root;
-                        }
-                        else
-                        {
-                            // Item is being moved to a folder
-                            int parentid = Convert.ToInt32(selectednode.Name);
-                            _movieList[item].ParentTitleId = parentid;
-                            _movieList[item].TitleType = _movieList[item].TitleType & (TitleTypes.AllMedia | TitleTypes.AllFolders);
-                        }
+                        CreateTitlesFromPathArray(parentid, files);
                     }
-                    TitleCollectionManager.SaveTitleUpdates();
+                }
 
+                // Received an internal drag and drop
+                if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+                {
+                    bool foldermoved = false;
 
+                    OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
 
-                    if (foldermoved)
+                    if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
                     {
-                        PopulateMediaTree();
-                        if (_mediaTree.ContainsKey((int)SelectedTreeRoot))
+                        int[] items = OMLDragAndDrop.iItems;
+                        foreach (int item in items)
                         {
-                            treeMedia.SelectedNode = _mediaTree[(int)SelectedTreeRoot];
-                        }
-                    }
+                            if ((_movieList[item].TitleType & TitleTypes.AllFolders) != 0)
+                            {
+                                foldermoved = true;
+                            }
 
-                    PopulateMovieListV2(SelectedTreeRoot);
+                            if (parentid == null)
+                            {
+                                // Item is being moved to root
+                                _movieList[item].ParentTitleId = null;
+                                _movieList[item].TitleType = _movieList[item].TitleType | TitleTypes.Root;
+                            }
+                            else
+                            {
+                                // Item is being moved to a folder
+                                _movieList[item].ParentTitleId = parentid;
+                                _movieList[item].TitleType = _movieList[item].TitleType & (TitleTypes.AllMedia | TitleTypes.AllFolders);
+                            }
+                        }
+                        TitleCollectionManager.SaveTitleUpdates();
+
+                        if (foldermoved)
+                        {
+                            PopulateMediaTree();
+                            if (_mediaTree.ContainsKey((int)SelectedTreeRoot))
+                            {
+                                treeMedia.SelectedNode = _mediaTree[(int)SelectedTreeRoot];
+                            }
+                        }
+
+                        PopulateMovieListV2(SelectedTreeRoot);
+                    }
                 }
                 this.Cursor = Cursors.Default;
             }
@@ -1861,7 +1886,7 @@ namespace OMLDatabaseEditor
 
         private void treeMedia_DragOver(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+            try
             {
                 if (tt == null)
                 {
@@ -1871,91 +1896,113 @@ namespace OMLDatabaseEditor
                 Point mouseLocation = treeMedia.PointToClient(new Point(e.X, e.Y));
                 TreeNode movetonode = treeMedia.GetNodeAt(mouseLocation);
 
-                if (currentmovetonode != movetonode)
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
-                    bool validmove = true;
-
-                    if (movetonode == null)
+                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                    if ((files.Length > 0) && (movetonode != null))
                     {
-                        validmove = false;
+                        e.Effect = DragDropEffects.Copy;
+                        tt.Show("Add " + string.Join(", ", files) + " to " + movetonode.Text, this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
                     }
                     else
                     {
-                        try
+                        e.Effect = DragDropEffects.None;
+                        tt.Show("Unable to move here!", this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
+                    }
+                }
+
+                if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+                {
+                    if (currentmovetonode != movetonode)
+                    {
+                        bool validmove = true;
+
+                        if (movetonode == null)
                         {
-                            OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
-
-                            if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
+                            validmove = false;
+                        }
+                        else
+                        {
+                            try
                             {
+                                OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
 
-                                int[] items = OMLDragAndDrop.iItems;
-                                foreach (int item in items)
+                                if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
                                 {
-                                    if ((_movieList[item].TitleType & TitleTypes.AllFolders) != 0)
+
+                                    int[] items = OMLDragAndDrop.iItems;
+                                    foreach (int item in items)
                                     {
-                                        // Item is a folder - dangerous. Make sure this will not result circular recursion
-
-                                        if (movetonode.Name == "All Media")
+                                        if ((_movieList[item].TitleType & TitleTypes.AllFolders) != 0)
                                         {
-                                            if (_movieList[item].ParentTitleId == null)
-                                            {
-                                                validmove = false;
-                                                break;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            // Is it being moved into itself
-                                            if (item == Convert.ToInt32(movetonode.Name))
-                                            {
-                                                validmove = false;
-                                                break;
-                                            }
+                                            // Item is a folder - dangerous. Make sure this will not result circular recursion
 
-                                            // Is it being moved to it's parent - it's allready there
-                                            if (_movieList[item].ParentTitleId == Convert.ToInt32(movetonode.Name))
+                                            if (movetonode.Name == "All Media")
                                             {
-                                                validmove = false;
-                                                break;
-                                            }
-
-                                            // Check for circular parents
-                                            int? parentid = _movieList[Convert.ToInt32(movetonode.Name)].ParentTitleId;
-                                            while ((validmove) && (parentid != null))
-                                            {
-                                                if ((parentid == item) || (parentid == _movieList[(int)parentid].ParentTitleId)) // Last bit stops run aways if parenttitleid==titleid (shouldn't happen)
+                                                if (_movieList[item].ParentTitleId == null)
                                                 {
                                                     validmove = false;
                                                     break;
                                                 }
-                                                parentid = _movieList[(int)parentid].ParentTitleId;
+                                            }
+                                            else
+                                            {
+                                                // Is it being moved into itself
+                                                if (item == Convert.ToInt32(movetonode.Name))
+                                                {
+                                                    validmove = false;
+                                                    break;
+                                                }
+
+                                                // Is it being moved to it's parent - it's allready there
+                                                if (_movieList[item].ParentTitleId == Convert.ToInt32(movetonode.Name))
+                                                {
+                                                    validmove = false;
+                                                    break;
+                                                }
+
+                                                // Check for circular parents
+                                                int? parentid = _movieList[Convert.ToInt32(movetonode.Name)].ParentTitleId;
+                                                while ((validmove) && (parentid != null))
+                                                {
+                                                    if ((parentid == item) || (parentid == _movieList[(int)parentid].ParentTitleId)) // Last bit stops run aways if parenttitleid==titleid (shouldn't happen)
+                                                    {
+                                                        validmove = false;
+                                                        break;
+                                                    }
+                                                    parentid = _movieList[(int)parentid].ParentTitleId;
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+                            catch (Exception ex)
+                            {
+                            }
                         }
-                        catch (Exception ex)
-                        {
-                        }
-                    }
 
-                    if (LastMousePoint != new Point(e.X, e.Y))
-                    {
-                        LastMousePoint = new Point(e.X, e.Y);
-                        if (validmove)
+                        if (LastMousePoint != new Point(e.X, e.Y))
                         {
-                            e.Effect = DragDropEffects.Move;
-                            tt.Show("Move to " + movetonode.Text, this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
+                            LastMousePoint = new Point(e.X, e.Y);
+                            if (validmove)
+                            {
+                                e.Effect = DragDropEffects.Move;
+                                tt.Show("Move to " + movetonode.Text, this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
+                            }
+                            else
+                            {
+                                e.Effect = DragDropEffects.None;
+                                tt.Show("Unable to move here!", this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
+                            }
+                            currentmovetonode = movetonode;
                         }
-                        else
-                        {
-                            e.Effect = DragDropEffects.None;
-                            tt.Show("Unable to move here!", this, this.PointToClient(new Point(e.X + 20, e.Y + 30)));
-                        }
-                        currentmovetonode = movetonode;
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                OMLEngine.Utilities.DebugLine("Drag and drop exception", ex.Message);
             }
         }
 
@@ -3274,11 +3321,11 @@ namespace OMLDatabaseEditor
         
         
         #region Title & Folder Creation
-        private void CreateTitle(int? parentid, string Name, TitleTypes titletype)
+        private void CreateTitle(int? parentid, string Name, TitleTypes titletype, Disk[] disks)
         {
             Title newTitle = new Title();
             newTitle.Name = Name;
-            
+
             if (parentid == null)
             {
                 newTitle.TitleType = TitleTypes.Root | titletype;
@@ -3287,8 +3334,31 @@ namespace OMLDatabaseEditor
             {
                 newTitle.TitleType = titletype;
                 newTitle.ParentTitleId = (int)parentid;
+
+                if ((titletype & TitleTypes.Unknown) != 0)
+                {
+                    // Title type is unknown. Attempt to find title type by looking at parent
+                    if (((_movieList[(int)parentid].TitleType & TitleTypes.TVShow) != 0) ||
+                    (((_movieList[(int)parentid].TitleType & TitleTypes.Season) != 0)))
+                    {
+                        newTitle.TitleType = TitleTypes.Episode;
+                    }
+
+                    if ((_movieList[(int)parentid].TitleType & TitleTypes.Collection) != 0)
+                    {
+                        newTitle.TitleType = TitleTypes.Movie;
+                    }
+                }
             }
             newTitle.DateAdded = DateTime.Now;
+
+            if (disks != null)
+            {
+                foreach (Disk disk in disks)
+                {
+                    newTitle.AddDisk(disk);
+                }
+            }
 
             // Add the title now to get the title ID
             TitleCollectionManager.AddTitle(newTitle);
@@ -3320,12 +3390,59 @@ namespace OMLDatabaseEditor
             if (treeMedia.SelectedNode.Name == "All Media")
             {
                 // Root Node
-                CreateTitle(null, Name, titletype);
+                CreateTitle(null, Name, titletype, null);
             }
             else
             {
                 int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
-                CreateTitle(parentid, Name, titletype);
+
+                if ((titletype & TitleTypes.Unknown) != 0)
+                {
+                    // Title type is unknown. Attempt to find title type by looking at parent
+                    if (((_movieList[(int)parentid].TitleType & TitleTypes.TVShow) != 0) ||
+                    (((_movieList[(int)parentid].TitleType & TitleTypes.Season) != 0)))
+                    {
+                        titletype = TitleTypes.Season;
+                    }
+
+                    if ((_movieList[(int)parentid].TitleType & TitleTypes.Collection) != 0)
+                    {
+                        titletype = TitleTypes.Collection;
+                    }
+                }
+                CreateTitle(parentid, Name, titletype, null);
+            }
+        }
+
+        private void CreateTitlesFromPathArray(int? parentid, string[] path)
+        {
+            foreach (string file in path)
+            {
+                if (Directory.Exists(file))
+                {
+                    // Folder passed in. This is where St Sana kicks in
+                }
+
+                if (File.Exists(file))
+                {
+                    string extension = Path.GetExtension(file).ToUpper().Substring(1);
+                    extension = extension.Replace("-", "");
+
+                    if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
+                    {
+                        Disk disk = new Disk();
+                        disk.Path = file;
+                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension.ToUpperInvariant());
+                        disk.Name = string.Format("Disk {0}", 0);
+
+                        //List<
+                        CreateTitle(parentid,
+                            Path.GetFileNameWithoutExtension(file),
+                            TitleTypes.Unknown,
+                            new Disk[1] { disk });
+
+                    }
+                }
             }
         }
         #endregion
