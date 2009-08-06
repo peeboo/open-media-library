@@ -220,7 +220,7 @@ namespace Library.Code.V3
                 if (page.Details.FanArt!=null)
                     Library.OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_FanArtDetailsPage", properties);
                 else
-                    Library.OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_DetailsPage", properties);
+                    Library.OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_EpisodeDetailsPage", properties);
             };
         }
 

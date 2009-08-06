@@ -545,6 +545,7 @@
     <Content Include="Markup\V3\Controls\TurboScroll.mcml" />
     <Content Include="Markup\V3\Controls\WaitCursor.mcml" />
     <Content Include="Markup\V3\CollectionPage.mcml" />
+    <Content Include="Markup\V3\Details\EpisodeDetailsPage.mcml" />
     <Content Include="Markup\V3\Details\DetailsPage.mcml" />
     <Content Include="Markup\V3\Details\DetailsPageCastCrew.mcml" />
     <Content Include="Markup\V3\Details\FanArt\FanArtDetailsPage.mcml" />
