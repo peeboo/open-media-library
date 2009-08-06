@@ -1426,4 +1426,7 @@
   <data name="V3_ExternalPlayerSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\v3\settings\externalplayersettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="V3_EpisodeDetailsPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\v3\details\episodedetailspage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

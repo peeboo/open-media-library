@@ -325,7 +325,7 @@
                     </Children>
                   </Panel-->
                   <!--Panel Name="Picture" MaximumSize ="400,578" MinimumSize ="185,265" Margins="45,0,0,0"-->
-                  <Panel Name="Picture" MaximumSize ="230,330" MinimumSize ="185,265" Margins="45,0,0,0">
+                  <Panel Name="Picture" MaximumSize ="230,169" MinimumSize ="185,136" Margins="45,0,0,0">
                     <LayoutInput>
                       <FormLayoutInput Left="ButtonsHolder,1" Top="Parent,0"/>
                     </LayoutInput>

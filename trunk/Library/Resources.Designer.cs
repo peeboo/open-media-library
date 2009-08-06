@@ -2838,6 +2838,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] V3_EpisodeDetailsPage {
+            get {
+                object obj = ResourceManager.GetObject("V3_EpisodeDetailsPage", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] V3_ExtenderSettings {
             get {
                 object obj = ResourceManager.GetObject("V3_ExtenderSettings", resourceCulture);
