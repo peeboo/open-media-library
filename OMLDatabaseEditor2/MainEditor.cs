@@ -15,6 +15,7 @@ using DevExpress.XtraEditors;
 using DevExpress.Skins;
 using DevExpress.Skins.Info;
 using DevExpress.Utils;
+using StSana;
 
 using OMLEngine;
 using OMLSDK;
@@ -1111,7 +1112,7 @@ namespace OMLDatabaseEditor
 
         private void fromScratchToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CreateTitle(null, "New Title", TitleTypes.Unknown, null);
+            CreateTitle(null, "New Title", TitleTypes.Unknown, null, true);
             /*
             Title newMovie = new Title();
             newMovie.Name = "New title";
@@ -1133,7 +1134,7 @@ namespace OMLDatabaseEditor
             NewMovieName movieName = new NewMovieName();
             if (movieName.ShowDialog() == DialogResult.OK)
             {
-                CreateTitle(null, movieName.MovieName(), TitleTypes.Unknown, null);
+                CreateTitle(null, movieName.MovieName(), TitleTypes.Unknown, null, true);
                 /*TitleTypes*string name = movieName.MovieName();
                 Title newTitle = new Title();
                 newTitle.DateAdded = DateTime.Now;
@@ -1683,17 +1684,17 @@ namespace OMLDatabaseEditor
  
         private void miCreateFolder_Click(object sender, EventArgs e)
         {
-            CreateFolder("New Movies", TitleTypes.Collection);
+            CreateFolder("New Movies", TitleTypes.Collection, true);
         }
         
         private void miCreateFolderTVShow_Click(object sender, EventArgs e)
         {
-            CreateFolder("New TV Show", TitleTypes.TVShow);
+            CreateFolder("New TV Show", TitleTypes.TVShow, true);
         }
 
         private void miCreateFolderTVSeason_Click(object sender, EventArgs e)
         {
-            CreateFolder("New TV Season", TitleTypes.Season);
+            CreateFolder("New TV Season", TitleTypes.Season, true);
         }
   
         private void miCreateTVEpisode_Click(object sender, EventArgs e)
@@ -1701,12 +1702,12 @@ namespace OMLDatabaseEditor
             if (treeMedia.SelectedNode.Name == "All Media")
             {
                 // Root Title
-                CreateTitle(null, "New TV Episode", TitleTypes.Episode, null);
+                CreateTitle(null, "New TV Episode", TitleTypes.Episode, null, true);
             }
             else
             {
                 int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
-                CreateTitle(parentid, "New TV Episode", TitleTypes.Episode, null);
+                CreateTitle(parentid, "New TV Episode", TitleTypes.Episode, null, true);
             }
         }
   
@@ -1715,12 +1716,12 @@ namespace OMLDatabaseEditor
             if (treeMedia.SelectedNode.Name == "All Media")
             {
                 // Root Title
-                CreateTitle(null, "New Movie", TitleTypes.Movie, null);
+                CreateTitle(null, "New Movie", TitleTypes.Movie, null, true);
             }
             else
             {
                 int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
-                CreateTitle(parentid, "New Movie", TitleTypes.Movie, null);
+                CreateTitle(parentid, "New Movie", TitleTypes.Movie, null, true);
             }
         }
 
@@ -3321,7 +3322,7 @@ namespace OMLDatabaseEditor
         
         
         #region Title & Folder Creation
-        private void CreateTitle(int? parentid, string Name, TitleTypes titletype, Disk[] disks)
+        private int CreateTitle(int? parentid, string Name, TitleTypes titletype, Disk[] disks, bool RefreshUI)
         {
             Title newTitle = new Title();
             newTitle.Name = Name;
@@ -3367,30 +3368,62 @@ namespace OMLDatabaseEditor
             Title addedTitle = TitleCollectionManager.GetTitle(newTitle.Id);
             _movieList.Add(newTitle.Id, addedTitle);
 
-            if ((titletype & TitleTypes.AllMedia) != 0)
+            if (RefreshUI)
             {
-                // Added a media
-                PopulateMovieListV2(SelectedTreeRoot);
-                titleEditor.LoadDVD(addedTitle);
-                //ToggleSaveState(true);
+                if ((titletype & TitleTypes.AllMedia) != 0)
+                {
+                    // Added a media
+                    PopulateMovieListV2(SelectedTreeRoot);
+                    titleEditor.LoadDVD(addedTitle);
+                    //ToggleSaveState(true);
+                }
+                else
+                {
+                    // Added a folder
+                    PopulateMediaTree();
+                    if (_mediaTree.ContainsKey(addedTitle.Id))
+                    {
+                        treeMedia.SelectedNode = _mediaTree[addedTitle.Id];
+                    }
+                }
+            }
+
+            return newTitle.Id;
+        }
+        
+        private int CreateFolder(int? parentid, string Name, TitleTypes titletype, bool RefreshUI)
+        {
+            if (parentid == null)
+            {
+                // Root Node
+                return CreateTitle(null, Name, titletype, null, RefreshUI);
             }
             else
-            { 
-                // Added a folder
-                PopulateMediaTree();
-                if (_mediaTree.ContainsKey(addedTitle.Id))
+            {
+                if ((titletype & TitleTypes.Unknown) != 0)
                 {
-                    treeMedia.SelectedNode = _mediaTree[addedTitle.Id];
+                    // Title type is unknown. Attempt to find title type by looking at parent
+                    if (((_movieList[(int)parentid].TitleType & TitleTypes.TVShow) != 0) ||
+                    (((_movieList[(int)parentid].TitleType & TitleTypes.Season) != 0)))
+                    {
+                        titletype = TitleTypes.Season;
+                    }
+
+                    if ((_movieList[(int)parentid].TitleType & TitleTypes.Collection) != 0)
+                    {
+                        titletype = TitleTypes.Collection;
+                    }
                 }
+                return CreateTitle(parentid, Name, titletype, null, RefreshUI);
             }
         }
 
-        private void CreateFolder(string Name, TitleTypes titletype)
+        private int CreateFolder(string Name, TitleTypes titletype, bool RefreshUI)
         {
             if (treeMedia.SelectedNode.Name == "All Media")
             {
                 // Root Node
-                CreateTitle(null, Name, titletype, null);
+                return CreateFolder(null, Name, titletype, RefreshUI);
             }
             else
             {
@@ -3410,22 +3443,71 @@ namespace OMLDatabaseEditor
                         titletype = TitleTypes.Collection;
                     }
                 }
-                CreateTitle(parentid, Name, titletype, null);
+                return CreateFolder(parentid, Name, titletype, RefreshUI);
             }
         }
 
         private void CreateTitlesFromPathArray(int? parentid, string[] path)
         {
+            // TODO - When adding titles see if that disks allready exists before creating
+            // TODO - Need to check for images in folder
+            // TODO - Wrap this up in another thread
             foreach (string file in path)
             {
                 if (Directory.Exists(file))
                 {
                     // Folder passed in. This is where St Sana kicks in
+                    Servant stsana = new Servant();
+                    stsana.BasePaths.Add(file);
+                    stsana.Scan();
+                    
+                    int a_parent = CreateFolder(parentid, Path.GetFileName(file), TitleTypes.Collection, false);
+                  
+                    if (stsana.Entities != null)
+                    {
+                        foreach (Entity e in stsana.Entities)
+                        {
+                            int e_parent = CreateFolder(a_parent, e.Name, TitleTypes.Collection, false);
+                            foreach (Series s in e.Series)
+                            {
+                                int s_parent = CreateFolder(e_parent, s.Name, TitleTypes.Collection, false);
+                                foreach (Video v in s.Videos)
+                                {
+                                    //int v_parent = CreateFolder(s_parent, Path.GetFileNameWithoutExtension(v.Name), TitleTypes.Collection, false);
+
+                                    List<Disk> disks = new List<Disk>();
+
+                                    foreach (string f in v.Files)
+                                    {
+                                        string extension = Path.GetExtension(f).ToUpper().Replace(".", "");
+                                        extension = extension.Replace("-", "");
+
+                                        if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
+                                        {
+                                            Disk disk = new Disk();
+                                            disk.Path = f;
+                                            disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension.ToUpperInvariant());
+                                            disk.Name = string.Format("Disk {0}", 0);
+
+                                            disks.Add(disk);
+                                        }
+
+                                        CreateTitle(s_parent,
+                                            Path.GetFileNameWithoutExtension(v.Name),
+                                            TitleTypes.Unknown,
+                                            disks.ToArray(),
+                                            false);
+
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 if (File.Exists(file))
                 {
-                    string extension = Path.GetExtension(file).ToUpper().Substring(1);
+                    string extension = Path.GetExtension(file).ToUpper().Replace(".", "");
                     extension = extension.Replace("-", "");
 
                     if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
@@ -3439,11 +3521,15 @@ namespace OMLDatabaseEditor
                         CreateTitle(parentid,
                             Path.GetFileNameWithoutExtension(file),
                             TitleTypes.Unknown,
-                            new Disk[1] { disk });
+                            new Disk[1] { disk },
+                            false);
 
                     }
                 }
-            }
+            } 
+            
+            PopulateMovieListV2(SelectedTreeRoot);
+            PopulateMediaTree();
         }
         #endregion
 
@@ -3463,6 +3549,8 @@ namespace OMLDatabaseEditor
                         return titles.OrderBy(st => st.Runtime);
                     case "Date Added":
                         return titles.OrderBy(st => st.DateAdded);
+                    case "Metadata":
+                        return titles.OrderBy(st => st.PercentComplete);
                     case "Modified Date":
                         return titles.OrderBy(st => st.ModifiedDate);
                     case "Production Year":
@@ -3471,7 +3559,7 @@ namespace OMLDatabaseEditor
                         return titles.OrderBy(st => st.ReleaseDate);
                     case "User Rating":
                         return titles.OrderBy(st => st.UserStarRating);
-                    default:
+                     default:
                         return titles.OrderBy(st => st.SortName);
                 }
             }
@@ -3487,6 +3575,8 @@ namespace OMLDatabaseEditor
                         return titles.OrderByDescending(st => st.Runtime);
                     case "Date Added":
                         return titles.OrderByDescending(st => st.DateAdded);
+                    case "Metadata":
+                        return titles.OrderByDescending(st => st.PercentComplete);
                     case "Modified Date":
                         return titles.OrderByDescending(st => st.ModifiedDate);
                     case "Production Year":
@@ -3546,12 +3636,12 @@ namespace OMLDatabaseEditor
             else
             {
                 ContextMenuStrip cms = new ContextMenuStrip();
-                //cms.ite
                 cms.ItemClicked += new ToolStripItemClickedEventHandler(SortOrderChanged);
                 cms.Items.Add("Name");
                 cms.Items.Add("Sort Name");
                 cms.Items.Add("Run Time");
                 cms.Items.Add("Date Added");
+                cms.Items.Add("Metadata");
                 cms.Items.Add("Modified Date");
                 cms.Items.Add("Production Year");
                 cms.Items.Add("Release Date");
@@ -3559,6 +3649,7 @@ namespace OMLDatabaseEditor
                 cms.Show(SortControl, e.Location);
             }
         }
+
         public void SortOrderChanged(object sender, ToolStripItemClickedEventArgs e)
         {
             OMLEngine.Settings.OMLSettings.DBETitleSortField = e.ClickedItem.Text;

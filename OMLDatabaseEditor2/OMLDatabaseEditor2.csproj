@@ -82,6 +82,10 @@
     <Reference Include="PresentationFramework">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="StSana, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\StSana.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Aliases>global,system</Aliases>
     </Reference>

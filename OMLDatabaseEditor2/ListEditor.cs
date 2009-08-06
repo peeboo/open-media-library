@@ -19,9 +19,8 @@ namespace OMLDatabaseEditor
         public ListEditor(string name, IList<string> list)
         {
             InitializeComponent();
-            _list = (from t in list
-                     orderby t
-                     select t).ToList();
+
+            _list = list;
 
             this.Text = name;
             lbItems.DataSource = _list;

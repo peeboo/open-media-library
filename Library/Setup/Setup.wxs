@@ -107,6 +107,10 @@
           <Component Id="DevExpress.XtraNavBar.v8.2.xml" Guid="365BA1F3-7823-4ff8-AC1C-CB040D2B852E" DiskId="1">
             <File Name="DevExpress.XtraNavBar.v8.2.xml"
                   Source="..\..\OMLDatabaseEditor2\DevExpress.XtraNavBar.v8.2.xml" Checksum="no" />
+          </Component> 
+          <Component Id="StSana.dll" Guid="9752ADE8-61E5-4fe4-BF26-F046B9F43026" DiskId="1">
+            <File Name="StSana.dll"
+                  Source="..\..\OMLDatabaseEditor2\StSana.dll" Checksum="no" />
           </Component>
           <Component Id="OMLDatabaseEditor.exe" Guid="4226fe89-8797-44ed-b463-6fda1be5c918" DiskId="1">
             <File Name="OMLDatabaseEditor.exe"
@@ -402,6 +406,7 @@
       <ComponentRef Id="DevExpress.Utils.v8.2.xml"/>
       <ComponentRef Id="DevExpress.XtraEditors.v8.2.xml"/>
       <ComponentRef Id="DevExpress.XtraNavBar.v8.2.xml"/>
+      <ComponentRef Id="StSana.dll"/>
       <ComponentRef Id="OMLDatabaseEditor.exe" />
       <ComponentRef Id="OMLImporter.exe" />
       <ComponentRef Id="MEncoder.exe"/>
