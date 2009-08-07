@@ -119,6 +119,11 @@ namespace Library
             {
                 case TitleFilterType.Genre:
                     filteredItems = TitleCollectionManager.GetAllGenres(existingFilters);
+                    //IEnumerable<FilteredCollectionWithImages> fc = TitleCollectionManager.GetAllGenresWithImages(existingFilters);
+                    //foreach (FilteredCollectionWithImages gen in fc)
+                    //{
+                        
+                    //}
                     break;
 
                 case TitleFilterType.ParentalRating:
