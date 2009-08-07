@@ -30,7 +30,8 @@ namespace OMLEngine
             get { return _disk.Path; } 
             set 
             {
-                // if it's pointing to a physical drive do the network test
+                value = NetworkScanner.FixPath(value);
+                /*// if it's pointing to a physical drive do the network test
                 if (!string.IsNullOrEmpty(value)
                     && !value.StartsWith("\\\\") 
                     && value.Length > 2
@@ -43,7 +44,7 @@ namespace OMLEngine
                     {
                         value = uncPath + "\\" + value.Remove(0, 2);
                     }
-                }
+                }*/
 
                 if (!string.IsNullOrEmpty(value) && value.Length > 255)
                     throw new FormatException("Disk path must be 255 characters or less.");

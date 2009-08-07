@@ -1309,8 +1309,6 @@ namespace OMLDatabaseEditor
             DatabaseTools dt = new DatabaseTools();
             dt.ShowDialog();
         }
-        #endregion
-
 
         private void lbMetadata_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1346,8 +1344,9 @@ namespace OMLDatabaseEditor
             }
             Cursor = Cursors.Default;
         }
-        
-        
+        #endregion
+
+
         #region NavBar functions
         private void mainNav_NavPaneStateChanged(object sender, EventArgs e)
         {
@@ -3449,7 +3448,6 @@ namespace OMLDatabaseEditor
 
         private void CreateTitlesFromPathArray(int? parentid, string[] path)
         {
-            // TODO - When adding titles see if that disks allready exists before creating
             // TODO - Need to check for images in folder
             // TODO - Wrap this up in another thread
             foreach (string file in path)
@@ -3461,16 +3459,26 @@ namespace OMLDatabaseEditor
                     stsana.BasePaths.Add(file);
                     stsana.Scan();
                     
-                    int a_parent = CreateFolder(parentid, Path.GetFileName(file), TitleTypes.Collection, false);
+                    int a_parent = CreateFolderNonDuplicate(parentid, Path.GetFileName(file), TitleTypes.Collection, false);
                   
                     if (stsana.Entities != null)
                     {
                         foreach (Entity e in stsana.Entities)
                         {
-                            int e_parent = CreateFolder(a_parent, e.Name, TitleTypes.Collection, false);
+                            int e_parent = a_parent;
+                            if (e.Name != file)
+                            {
+                                e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
+                            }
+
                             foreach (Series s in e.Series)
                             {
-                                int s_parent = CreateFolder(e_parent, s.Name, TitleTypes.Collection, false);
+                                int s_parent = e_parent;
+                                if (s.Name != e.Name)
+                                {
+                                    s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, false);
+                                }
+                                    
                                 foreach (Video v in s.Videos)
                                 {
                                     //int v_parent = CreateFolder(s_parent, Path.GetFileNameWithoutExtension(v.Name), TitleTypes.Collection, false);
@@ -3482,21 +3490,26 @@ namespace OMLDatabaseEditor
                                         string extension = Path.GetExtension(f).ToUpper().Replace(".", "");
                                         extension = extension.Replace("-", "");
 
-                                        if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
+                                        if (!TitleCollectionManager.ContainsDisks(OMLEngine.FileSystem.NetworkScanner.FixPath(f)))
                                         {
-                                            Disk disk = new Disk();
-                                            disk.Path = f;
-                                            disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension.ToUpperInvariant());
-                                            disk.Name = string.Format("Disk {0}", 0);
+                                            if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
+                                            {
+                                                Disk disk = new Disk();
+                                                disk.Path = f;
+                                                disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension.ToUpperInvariant());
+                                                disk.Name = string.Format("Disk {0}", 0);
 
-                                            disks.Add(disk);
+                                                disks.Add(disk);
+                                            }
                                         }
-
-                                        CreateTitle(s_parent,
-                                            Path.GetFileNameWithoutExtension(v.Name),
-                                            TitleTypes.Unknown,
-                                            disks.ToArray(),
-                                            false);
+                                        if (disks.Count != 0)
+                                        {
+                                            CreateTitle(s_parent,
+                                                Path.GetFileNameWithoutExtension(v.Name),
+                                                TitleTypes.Unknown,
+                                                disks.ToArray(),
+                                                false);
+                                        }
 
                                     }
                                 }
@@ -3530,6 +3543,36 @@ namespace OMLDatabaseEditor
             
             PopulateMovieListV2(SelectedTreeRoot);
             PopulateMediaTree();
+        }
+
+        /// <summary>
+        /// Creates a folder but first checks to see if one of the same name allready exists
+        /// If so then this id is returned
+        /// </summary>
+        /// <param name="parentid"></param>
+        /// <param name="Name"></param>
+        /// <param name="titletype"></param>
+        /// <param name="RefreshUI"></param>
+        private int CreateFolderNonDuplicate(int? parentid, string Name, TitleTypes titletype, bool RefreshUI)
+        {
+            int titleid;
+
+            // Build filter
+            TitleFilter tf1 = new TitleFilter(TitleFilterType.Parent, parentid.ToString());
+            TitleFilter tf2 = new TitleFilter(TitleFilterType.Name, Name);
+            List<TitleFilter> tf = new List<TitleFilter>();
+            tf.Add(tf1);
+            tf.Add(tf2);
+            List<Title> existingTitle = TitleCollectionManager.GetFilteredTitles(tf).ToList();
+            if (existingTitle.Count > 0)
+            {
+                titleid = existingTitle[0].Id;
+            }
+            else
+            {
+                titleid = CreateFolder(parentid, Name, titletype, RefreshUI);
+            }
+            return titleid;
         }
         #endregion
 

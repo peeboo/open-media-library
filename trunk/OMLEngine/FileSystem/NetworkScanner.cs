@@ -217,5 +217,26 @@ namespace OMLEngine.FileSystem
                 return DriveTypes.NetworkDrive;
             }
         }
+
+        /// <summary>
+        /// This will validate the path supplied and convert it to a unc path if 
+        /// path is a network mapped drive
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        static public string FixPath(string path)
+        {
+            if (GetDriveType(path) == DriveTypes.NetworkDrive)
+            {
+                // Check if this is a mapped drive
+                string uncPath;
+                // if it's an attached network drive convert it to a UNC path
+                if (IsNetworkDrive(path[0], out uncPath))
+                {
+                    return uncPath + "\\" + path.Remove(0, 2).TrimStart('\\');
+                }
+            }
+            return path;
+        }
     }
 }
