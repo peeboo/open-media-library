@@ -714,14 +714,14 @@ namespace OMLEngine.Dao
         public static IEnumerable<FilteredCollection> GetAllGenres(List<TitleFilter> filters)
         {
             var filteredGenres = DBContext.Instance.Genres.Where(GetGenrePredicate(filters));
-                                    
+
             var filteredTitles = from t in GetFilteredTitlesWrapper(filters)
                                  from g in filteredGenres
                                  where g.TitleId == t.Id
-                                                join b in DBContext.Instance.GenreMetaDatas on g.GenreMetaDataId equals b.Id
-                                                join c in DBContext.Instance.ImageMappings on t.Id equals c.TitleId                                                 
-                                                    where c.ImageType == (byte)ImageType.FrontCoverImage
-                                                select new { GenreName = b.Name, Path = c.ImageId };
+                                 join b in DBContext.Instance.GenreMetaDatas on g.GenreMetaDataId equals b.Id
+                                 join c in DBContext.Instance.ImageMappings on t.Id equals c.TitleId
+                                 where c.ImageType == (byte)ImageType.FrontCoverImage
+                                 select new { GenreName = b.Name, Path = b.PhotoID };//c.ImageId };
 
             return from t in filteredTitles
                    group t by t.GenreName into g

@@ -134,8 +134,12 @@ namespace Library.Code.V3
                             {
                                 this.CreateUnwatchedFilter();
                             }
-                            break;                            
-
+                            break;
+                        case OMLEngine.TitleFilterType.Genre:
+                                GenrePivot genrePivot = new Library.Code.V3.GenrePivot(this, Filter.FilterTypeToString(filterType).ToLower(), "No titles were found.", this.Filters, filterType);
+                                genrePivot.ContentLabel = this.Description;
+                                this.Model.Pivots.Options.Add(genrePivot);
+                            break;
                         case OMLEngine.TitleFilterType.Year:
                             if (!this.IsFilterDoubled(filterType))
                             {
