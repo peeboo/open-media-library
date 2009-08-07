@@ -21,6 +21,7 @@ namespace Library.Code.V3
         public GenrePivot(IModelItemOwner owner, string stDescription, string stNoContentText, List<OMLEngine.TitleFilter> filters, OMLEngine.TitleFilterType filterType)
             : base(owner, stDescription, stNoContentText, null)
         {
+            this.SetupContextMenu();
             //this.ContentLabel = "OML";
             this.SupportsJIL = true;
             this.ContentTemplate = "resx://Library/Library.Resources/V3_Controls_BrowseGallery#Gallery";
@@ -31,7 +32,7 @@ namespace Library.Code.V3
             //this.SupportedContentItemTemplates.Add("View Small", "twoRowGalleryItemPoster");
             this.SupportedContentItemTemplates.Add("View List", "ListViewItem");
 
-            this.SetupContextMenu();
+            
             
             this.m_filters = filters;
             this.m_filterType = filterType;
@@ -85,11 +86,59 @@ namespace Library.Code.V3
                 ((GalleryPage)this.Owner).settingsCmd_Invoked(sender, e);
         }
 
+        public override void UpdateContext(string newTemplate)
+        {
+            //change the buttons based on which view was invoked
+            ICommand ctx0 = (ICommand)this.ContextMenu.SharedItems[0];
+
+            switch (newTemplate)
+            {
+
+                case "twoRowGalleryItemGenre":
+                    this.ContentItemTemplate = "twoRowGalleryItemGenre";
+                    //this.SubContentItemTemplate = "twoRowPoster";
+                    this.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+                    ctx0.Description = "View List";
+                    break;
+                case "ListViewItem":
+                    this.ContentItemTemplate = "ListViewItem";
+                    this.DetailTemplate = Library.Code.V3.BrowsePivot.StandardDetailTemplate;
+                    ctx0.Description = "View Large";
+                    break;
+            }
+        }
+
+        void viewCmd_Invoked(object sender, EventArgs e)
+        {
+            OMLApplication.Current.CatchMoreInfo();
+
+            ICommand invokedCmd = (ICommand)sender;
+            string template = "twoRowGalleryItemGenre";
+            switch (invokedCmd.Description)
+            {
+                case "View Large":
+                    template = "twoRowGalleryItemGenre";
+                    break;
+                case "View List":
+                    template = "ListViewItem";
+                    break;
+            }
+            this.UpdateContext(template);
+        }
+
         public override void SetupContextMenu()
         {
             #region ctx menu
             //create the context menu
             Library.Code.V3.ContextMenuData ctx = new Library.Code.V3.ContextMenuData();
+
+            Library.Code.V3.ThumbnailCommand viewFirstCmd = new Library.Code.V3.ThumbnailCommand(this);
+            //if (this.SubContentItemTemplate == "twoRowPoster")
+            viewFirstCmd.Description = "View List";//hard for now-we default to two row
+            //else
+            //    viewFirstCmd.Description = "View Small";
+            viewFirstCmd.Invoked += new EventHandler(viewCmd_Invoked);
+            ctx.SharedItems.Add(viewFirstCmd);
 
             Library.Code.V3.ThumbnailCommand viewSettingsCmd = new Library.Code.V3.ThumbnailCommand(this);
             viewSettingsCmd.Invoked += new EventHandler(viewSettingsCmd_Invoked);
