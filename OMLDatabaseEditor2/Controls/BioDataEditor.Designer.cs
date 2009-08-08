@@ -83,7 +83,7 @@
             this.Details.Controls.Add(this.teNationality);
             this.Details.Controls.Add(this.teName);
             this.Details.Name = "Details";
-            this.Details.Size = new System.Drawing.Size(479, 283);
+            this.Details.Size = new System.Drawing.Size(479, 282);
             this.Details.Text = "Details";
             // 
             // pictureBox1
@@ -163,6 +163,7 @@
             this.labelControl4.Size = new System.Drawing.Size(51, 13);
             this.labelControl4.TabIndex = 6;
             this.labelControl4.Text = "Nationality";
+            this.labelControl4.Visible = false;
             // 
             // labelControl3
             // 
@@ -186,6 +187,7 @@
             this.teNationality.Name = "teNationality";
             this.teNationality.Size = new System.Drawing.Size(100, 20);
             this.teNationality.TabIndex = 1;
+            this.teNationality.Visible = false;
             this.teNationality.TextChanged += new System.EventHandler(this.teBio_TextChanged);
             // 
             // teName

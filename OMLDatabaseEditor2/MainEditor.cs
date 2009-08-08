@@ -2651,15 +2651,26 @@ namespace OMLDatabaseEditor
         {
             SaveCurrentGenreMetaData();
 
-            GenreMetaData gmd = new GenreMetaData();
-            gmd.Name = "New Genre";
-            
-            lbGenreMetadata.Items.Add(gmd);
-            lbGenreMetadata.SelectedItem = gmd;
+            var e = from Object li in lbGenreMetadata.Items
+                    where li.ToString() == "New Genre"
+                    select li;
 
-            TitleCollectionManager.AddGenreMetaData(gmd);
+            if (e.Count() == 0)
+            {
+                GenreMetaData gmd = new GenreMetaData();
+                gmd.Name = "New Genre";
 
-            genreMetaDataEditor.LoadGenre((GenreMetaData)gmd);
+                lbGenreMetadata.Items.Add(gmd);
+                lbGenreMetadata.SelectedItem = gmd;
+
+                TitleCollectionManager.AddGenreMetaData(gmd);
+
+                genreMetaDataEditor.LoadGenre((GenreMetaData)gmd);
+            }
+            else
+            {
+                lbGenreMetadata.SelectedItem = e.First();
+            }
         }
 
         private void RemoveGenreMetaData()
@@ -2909,14 +2920,26 @@ namespace OMLDatabaseEditor
         {
             SaveCurrentBioData();
 
-            BioData bd = new BioData();
-            bd.FullName = "New Person";
-            lbBioData.Items.Add(bd);
-            lbBioData.SelectedItem = bd;
+            var e = from Object li in lbBioData.Items
+                    where li.ToString() == "New Person"
+                    select li;
 
-            TitleCollectionManager.AddBioData(bd);
+            if (e.Count() == 0)
+            {
+                BioData bd = new BioData();
+                bd.FullName = "New Person";
 
-            bioDataEditor.LoadBioData((BioData)bd);
+                lbBioData.Items.Add(bd);
+                lbBioData.SelectedItem = bd;
+
+                TitleCollectionManager.AddBioData(bd);
+
+                bioDataEditor.LoadBioData((BioData)bd);
+            }
+            else
+            {
+                lbBioData.SelectedItem = e.First();
+            }
         }
 
         private void RemoveBioData()
@@ -3160,6 +3183,7 @@ namespace OMLDatabaseEditor
             tf.Add(tag);
             titlesListView.SetFilter(tf);
         }
+        
         private void lbTags_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -3487,16 +3511,19 @@ namespace OMLDatabaseEditor
 
                                     foreach (string f in v.Files)
                                     {
-                                        string extension = Path.GetExtension(f).ToUpper().Replace(".", "");
-                                        extension = extension.Replace("-", "");
+                                        string pathWithNoFile = Path.GetDirectoryName(f);
+                                        string pathWithNoExtension = Path.GetDirectoryName(f) + "\\" + Path.GetFileNameWithoutExtension(f);
+                                        string fileExtension = Path.GetExtension(f).ToUpper().Replace(".", "");
+
+                                        fileExtension = fileExtension.Replace("-", "");
 
                                         if (!TitleCollectionManager.ContainsDisks(OMLEngine.FileSystem.NetworkScanner.FixPath(f)))
                                         {
-                                            if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
+                                            if (Enum.IsDefined(typeof(VideoFormat), fileExtension.ToUpperInvariant()))
                                             {
                                                 Disk disk = new Disk();
                                                 disk.Path = f;
-                                                disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension.ToUpperInvariant());
+                                                disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
                                                 disk.Name = string.Format("Disk {0}", 0);
 
                                                 disks.Add(disk);
@@ -3504,13 +3531,14 @@ namespace OMLDatabaseEditor
                                         }
                                         if (disks.Count != 0)
                                         {
-                                            CreateTitle(s_parent,
+                                            int newTitleID = CreateTitle(s_parent,
                                                 Path.GetFileNameWithoutExtension(v.Name),
                                                 TitleTypes.Unknown,
                                                 disks.ToArray(),
                                                 false);
-                                        }
 
+                                            CheckPathForImages(newTitleID, f);
+                                        }
                                     }
                                 }
                             }
@@ -3531,18 +3559,47 @@ namespace OMLDatabaseEditor
                         disk.Name = string.Format("Disk {0}", 0);
 
                         //List<
-                        CreateTitle(parentid,
+                        int newTitleID = CreateTitle(parentid,
                             Path.GetFileNameWithoutExtension(file),
                             TitleTypes.Unknown,
                             new Disk[1] { disk },
                             false);
 
+                        CheckPathForImages(newTitleID, file);
                     }
                 }
             } 
             
             PopulateMovieListV2(SelectedTreeRoot);
             PopulateMediaTree();
+        }
+
+        private void CheckPathForImages(int TitleID, string path)
+        {
+            string pathWithNoFile = Path.GetDirectoryName(path);
+            string pathWithNoExtension = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path);
+            //string fileExtension = Path.GetExtension(path).ToUpper().Replace(".", "");
+
+            string image = null;
+            if (File.Exists(pathWithNoExtension + ".jpg"))
+            {
+                image = pathWithNoExtension + ".jpg";
+            }
+            else if (File.Exists(path + ".jpg"))
+            {
+                image = path + ".jpg";
+            }
+            else if (File.Exists(Path.Combine(Path.GetDirectoryName(pathWithNoFile), "folder.jpg")))
+            {
+                image = Path.Combine(Path.GetDirectoryName(pathWithNoFile), "\\folder.jpg");
+            }
+
+            if (!string.IsNullOrEmpty(image))
+            {
+                Title newTitle = TitleCollectionManager.GetTitle(TitleID);
+                newTitle.FrontCoverPath = image;
+                TitleCollectionManager.SaveTitleUpdates();
+            }
         }
 
         /// <summary>
