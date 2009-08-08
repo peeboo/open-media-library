@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System;
+using OMLEngine;
 
 namespace OMLSDK
 {
@@ -26,8 +27,9 @@ namespace OMLSDK
                     objDLL = Assembly.LoadFrom(strDLLs[intIndex]);
                     ExamineAssembly(objDLL, strInterface, Plugins);
                 }
-                catch {
+                catch (Exception ex){
                     // Error loading DLL, we don't need to do anything special
+                    Utilities.DebugLine("[PluginService] Loading plugin {0} Caused an Exception {1}", strDLLs[intIndex], ex.Message);
                 }
             }
             // Return all plugins found
