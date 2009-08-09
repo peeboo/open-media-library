@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="BackgroundProcessor.cs" />
     <Compile Include="BioData.cs" />
+    <Compile Include="WVXManager.cs" />
     <Compile Include="Settings\StartMenuHelper.cs" />
     <Compile Include="Settings\StartMenuItem.cs" />
     <Compile Include="Settings\UserFilter.cs" />

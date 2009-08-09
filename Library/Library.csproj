@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="Code\AppleTrailers.cs" />
     <Compile Include="Code\BaseModelItem.cs" />
+    <Compile Include="Code\MoviePlayerWVX.cs" />
     <Compile Include="Code\GroupColor.cs" />
     <Compile Include="Code\ContextMenu.cs" />
     <Compile Include="Code\Impersonator.cs" />
