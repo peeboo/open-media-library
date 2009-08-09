@@ -11,4 +11,5 @@
   <Font Name="DialogContent"          FontName="global://me:MainFontFace"  FontSize="18" />
   <Font Name="VolumeText"             FontName="global://me:MainFontFace"  FontSize="36" />
   <Font Name="ThumbnailButtonText"    FontName="global://me:MainFontFace"  FontSize="16" />
+  <Font Name="FirstRunButtonText"     FontName="global://me:MainFontFace"  FontSize="16" />
 </Mcml>

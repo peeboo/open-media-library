@@ -28,6 +28,25 @@
       </Panel>
     </Content>
   </UI>
+  <UI Name="FirstRunRadioButton" BaseUI="me:RadioButton">
+    <Properties>
+      <Choice Name="Model" Choice="$Required"/>
+      <cor:Object Name="Option" Object="$Required"/>
+      <Font Name="Font" Font="font://comm:ButtonText"/>
+      <Size Name="TileSize" Width="34" Height="34"/>
+      <Inset Name="LabelMargins" Inset="5, 5, 10, 5"/>
+      <cor:Boolean Name="ShowLabel" Boolean="true"/>
+      <Image Name="NoFocusImage" Source="resx://Library/Library.Resources/V3_FirstRun_SmallRadioButton_NoFocus"/>
+      <Image Name="FocusImage" Source="resx://Library/Library.Resources/V3_FirstRun_SmallRadioButton_Focus"/>
+      <Image Name="DisabledImage" Source="resx://Library/Library.Resources/V3_FirstRun_SmallRadioButton_Disabled"/>
+      <Image Name="CheckedNoFocusImage" Source="resx://Library/Library.Resources/V3_FirstRun_SmallRadioButton_NoFocus_Selected"/>
+      <Image Name="CheckedFocusImage" Source="resx://Library/Library.Resources/V3_FirstRun_SmallRadioButton_Focus_Selected"/>
+      <Image Name="CheckedDisabledImage" Source="resx://Library/Library.Resources/V3_FirstRun_SmallRadioButton_Disabled_Selected"/>
+      <Color Name="NoFocusColor" Color="color://comm:LightBlue"/>
+      <Color Name="FocusColor" Color="color://comm:OffWhite"/>
+      <Color Name="DisabledColor" Color="color://comm:LightBlue40Percent"/>
+    </Properties>
+  </UI>
   
   <UI Name="RadioButton">
     <Properties>

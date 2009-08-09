@@ -2901,6 +2901,111 @@ namespace Library {
             }
         }
         
+        internal static System.Drawing.Bitmap V3_FirstRun_BG_Banner_Bottom {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRun_BG_Banner_Bottom", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_FirstRun_BG_Banner_Top {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRun_BG_Banner_Top", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_FirstRun_BG_Spotlight {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRun_BG_Spotlight", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_FirstRun_BigArrow {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRun_BigArrow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_FirstRun_BigCheckmark {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRun_BigCheckmark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_FirstRun_SmallRadioButton_Disabled {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRun_SmallRadioButton_Disabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_FirstRun_SmallRadioButton_Disabled_Selected {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRun_SmallRadioButton_Disabled_Selected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_FirstRun_SmallRadioButton_Focus {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRun_SmallRadioButton_Focus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_FirstRun_SmallRadioButton_Focus_Selected {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRun_SmallRadioButton_Focus_Selected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_FirstRun_SmallRadioButton_NoFocus {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRun_SmallRadioButton_NoFocus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_FirstRun_SmallRadioButton_NoFocus_Selected {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRun_SmallRadioButton_NoFocus_Selected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_FirstRun_SmallRadioButton_Pressed {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRun_SmallRadioButton_Pressed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_FirstRun_SmallRadioButton_Pressed_Selected {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRun_SmallRadioButton_Pressed_Selected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static byte[] V3_FirstRunBackground {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRunBackground", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_FirstRunButton {
+            get {
+                object obj = ResourceManager.GetObject("V3_FirstRunButton", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] V3_GalleryPage {
             get {
                 object obj = ResourceManager.GetObject("V3_GalleryPage", resourceCulture);

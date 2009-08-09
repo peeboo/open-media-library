@@ -63,6 +63,20 @@
       <mrb:MenuRadioButton Model="[Model]" Option="[RepeatedItem]" Font="[Font]" Margins="[ItemSpacing]"/>
     </Content>
   </UI>
+  <UI Name="FirstRunRadioGroup" BaseUI="me:RadioGroup">
+    <Properties>
+      <Inset Name="ItemSpacing" Inset="0, 0, 0, -12"/>
+      <Inset Name="ItemLabelMargins" Inset="4, 8, 0, 0"/>
+      <Font Name="Font" Font="font://comm:ButtonText"/>
+      <Size Name="TileSize" Size="34, 34"/>
+      <ILayout Name="FlowLayout" ILayout="global://me:DefaultLayout"/>
+    </Properties>
+    <Content Name="RadioButton">
+      <rb:FirstRunRadioButton Model="[Model]" 
+Option="[RepeatedItem]" Font="[Font]" TileSize="[TileSize]" 
+Margins="[ItemSpacing]" LabelMargins="[ItemLabelMargins]"/>
+    </Content>
+  </UI>
   <FlowLayout Name="DefaultLayout" Orientation="Vertical" AllowWrap="true"/>
   <!--LegacyVerticalFlowLayout Name="DefaultLayout" AllowWrap="true"/-->
 </Mcml>

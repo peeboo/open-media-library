@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Mcml xmlns ="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor ="assembly://MsCorLib/System"
+    xmlns:comm="resx://Library/Library.Resources/V3_Globals"
+    xmlns:me ="Me">
+  <UI Name="TestButton">
+    <Properties>
+      <Command Name="SampleButton1" Description="Cast + More"/>
+      <Command Name="SampleButton2" Description="Record"/>
+      <Command Name="SampleButton3" Description="Advanced Record"/>
+      <Command Name="SampleButton4" Description="Other Showings"/>
+    </Properties>
+    <Content>
+      <Panel Layout="Center">
+        <Children>
+          <Panel Layout="VerticalFlow">
+            <Children>
+              <me:Button Model="[SampleButton1]" TileSize="590,51" />
+              <me:Button Model="[SampleButton2]"/>
+              <me:Button Model="[SampleButton3]"/>
+              <me:Button Model="[SampleButton4]"/>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="Button" BaseUI="me:ButtonBase">
+    <Properties>
+      <BooleanChoice  Name="Enabled" Value="true"/>
+      <cor:Boolean Name="KeyInteractive" Boolean="true"/>
+      <ICommand Name="Model" ICommand="$Required"/>
+      <!--ISelectionPolicy Name="SelectionPolicy" ISelectionPolicy="null"/-->
+      <cor:String Name="AccessibilityName" String="null"/>
+      <cor:String Name="AccessibilityDesc" String="null"/>
+      <AccessibleRole Name="AccessibilityRole" AccessibleRole="PushButton"/>
+      <!-- new-->
+      <!--Color Name="NoFocusColor" Color="color://comm:OffWhite"/-->
+      <!-- end new -->
+    </Properties>
+    <Rules>
+      <Changed Source="[Enabled.Value]" InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[Enabled.Value]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.Enabled]" Value="true" />
+          <Set Target="[Input.KeyInteractive]" Value="true" />
+        </Actions>
+      </Changed>
+      <Changed Source="[Enabled.Value]" InitialEvaluate="true">
+        <Conditions>
+          <Equality Source="[Enabled.Value]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.Enabled]" Value="false" />
+          <Set Target="[Input.KeyInteractive]" Value="false" />
+        </Actions>
+      </Changed>
+      <Binding Target="[Accessible.IsUnavailable]" Source="[Model.Available]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Target="[Accessible.IsPressed]" Source="[Clicker.Clicking]"/>
+      <Binding Target="[Accessible.IsFocusable]" Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]" Source="[Input.KeyFocus]"/>
+      <Binding Target="[Accessible.Description]" Source="[AccessibilityDesc]"/>
+      <Default Target="[Accessible.DefaultActionCommand]" Value="[Model]"/>
+      <Default Target="[Accessible.DefaultAction]" Value="Button"/>
+      <Default Target="[Accessible.Role]" Value="[AccessibilityRole]"/>
+      <Default Target="[Clicker.Command]" Value="[Model!ICommand]"/>
+      <Binding Source="[Model.Available]" Target="[Input.Enabled]"/>
+      <Rule >
+        <Conditions>
+          <Equality Source="[AccessibilityName]" Value="null"/>
+          <!--Modified Source="[Model.Description]" InitialTransitionEvaluate="true"/-->
+          <Modified Source="[Model.Description]" InitialEvaluate="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Accessible.Name]" Value="[Model.Description]"/>
+        </Actions>
+      </Rule>
+      <Default Target="[Accessible.Name]" Value="[AccessibilityName]"/>
+      <!--Rule>
+        <Conditions>
+          <IsType Source="[Model]" Type="shell:IThumbnailCommand"/>
+          <IsValid Source="[Model!shell:IThumbnailCommand.Image.DefaultImage]"/>
+        </Conditions>
+        <Actions>
+          <Set Value="[Model!shell:IThumbnailCommand.Image.DefaultImage]" Target="[IconImage]"/>
+        </Actions>
+      </Rule-->
+      <!--Rule>
+        <Conditions>
+          <IsValid Source="[SelectionPolicy]"/>
+        </Conditions>
+        <Actions>
+          <Set Value="[SelectionPolicy]" Target="[Model!ISelectable.SelectionPolicy]"/>
+        </Actions>
+      </Rule-->
+      <Binding Source="[Model.Description]" Target="[Label.Content]"/>
+    </Rules>
+  </UI>
+  <UI Name="ButtonBase">
+    <Properties>
+      <EditableText Name="SubFocusArea" Value="none"/>
+      <Color Name="NoFocusColorActive" Color="color://comm:OffWhite"/>
+      <Color Name="NoFocusColorInactive" Color="color://comm:LightBlue"/>
+      <Image Name="ButtonFocus" Image="resx://Library/Library.Resources/V3_Controls_Background_Static" Flippable="true"/>
+      <Font Name="Font" Font="font://comm:FirstRunButtonText"/>
+      <Font Name="FocusFont" Font="null"/>
+      <Font Name="DisabledFont" Font="null"/>
+      <cor:Boolean Name="ShowLabel" Boolean="true"/>
+      <cor:Boolean Name="AllowPressedEffect" Boolean="true"/>
+      <cor:Boolean Name="AllowMarquee" Boolean="true"/>
+      <Size Name="TileSize" Size="166, 32"/>
+      <cor:Boolean Name="ShowLabelBackground" Boolean="false"/>
+      <Image Name="LabelBackground" Image="null"/>
+      <Image Name="LabelBackgroundFocus" Image="null"/>
+      <!--draw:BaseImage Name="NoFocusImage" BaseImage="metaimage://comm:Common.Button.Left.NoFocus"/>
+      <draw:BaseImage Name="FocusImage" BaseImage="metaimage://comm:Common.Button.Left.Focus"/>
+      <draw:BaseImage Name="DisabledImage" BaseImage="metaimage://comm:Common.Button.Left.Disabled"/-->
+      <Image  Name="NoFocusImage"        Image="resx://Library/Library.Resources/V3_Controls_Common_Button_FirstRun_NoFocus" NineGrid="5,5,5,5"/>
+      <Image  Name="FocusImage"          Source="resx://Library/Library.Resources/V3_Controls_Common_Button_Left_Focus" NineGrid="5,5,5,5"/>
+      <Image  Name="DisabledImage"       Image="null"/>
+
+      <Image Name="FocusOverlayImage" Image="resx://Library/Library.Resources/V3_Controls_Common_Button_Left_Focus_Overlay"/>
+      <Image Name="PressedImage" Image="resx://Library/Library.Resources/V3_Controls_Common_Button_Pressed_Highlight"/>
+      <Color Name="NoFocusColor" Color="color://comm:LightBlue"/>
+      <Color Name="FocusColor" Color="color://comm:OffWhite"/>
+      <Color Name="DisabledColor" Color="color://comm:LightBlue40Percent"/>
+      <Color Name="NoFocusFillColor" Color="color://comm:Transparent"/>
+      <Color Name="FocusFillColor" Color="color://comm:Transparent"/>
+      <Color Name="DisabledFillColor" Color="color://comm:Transparent"/>
+      <Inset Name="LabelMargins" Inset="global://comm:StandardButtonTextMargins"/>
+      <DockLayoutInput Name="LabelBorderInput" Position="Left" Alignment="Center"/>
+      <AnchorLayoutInput Name="LabelBackgroundLayoutInput" Left="PressedGradient,0,-8" Top="PressedGradient,0,-4" Right="PressedGradient,1,8" Bottom="PressedGradient,1,4" ContributesToWidth="false" ContributesToHeight="false"/>
+      <cor:Boolean Name="ShowIcon" Boolean="true"/>
+      <Image Name="IconImage" Image="null"/>
+      <Image Name="FocusIconImage" Image="null"/>
+      <Image Name="IconAcquiringImage" Image="null"/>
+      <Image Name="IconErrorImage" Image="null"/>
+      <Size Name="IconMinSize"/>
+      <Size Name="IconMaxSize"/>
+      <Inset Name="IconPadding"/>
+      <DockLayoutInput Name="IconBorderInput" Position="Left" Alignment="Center"/>
+      <cor:String Name="FocusLoopContentTemplate" String="null"/>
+      <cor:Boolean Name="IsNavigatingCommand" Boolean="true"/>
+      <!--shell:ImageSet Name="LabelBackgroundImageSet" ImageSet="global://comm:Button.Label.Background"/-->
+      <Sound Name="DefaultNavigationSound" Sound="resx://Library/Library.Resources/V3_Controls_Common_Select_a" />
+      <Sound Name="DefaultNonNavigationSound" Sound="resx://Library/Library.Resources/V3_Controls_Common_MiniSelect_a" />
+    </Properties>
+    <Locals>
+      <ClickHandler Name="Clicker"/>
+    </Locals>
+    <Rules>
+      <Binding Target="[Accessible.IsFocusable]" Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]" Source="[Input.KeyFocus]"/>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]"/>
+          <Equality Source="[IsNavigatingCommand]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="[DefaultNavigationSound]" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]"/>
+          <Equality Source="[IsNavigatingCommand]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="[DefaultNonNavigationSound]" />
+        </Actions>
+      </Rule>
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[AllowPressedEffect]" Value="true"/>
+          <Equality Source="[Clicker.Clicking]" ConditionOp="ChangedTo" Value="true"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[PressedGradient]" Animation="global://me:PressedLabelHighlight"/>
+        </Actions>
+      </Rule-->
+      <Condition Source="[Input.Enabled]" SourceValue="false" Target="[Label.Color]" Value="[DisabledColor]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true" Target="[Label.Color]" Value="[FocusColor]"/>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[FocusLoopContentTemplate]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[IconFocusLoopHost.Visible]" Value="true"/>
+          <Set Target="[IconFocusLoopHost.Source]" Value="[FocusLoopContentTemplate]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[FocusIconImage]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Icon.Content]" Value="[FocusIconImage]"/>
+        </Actions>
+      </Rule>
+      <Binding Source="[IconErrorImage]" Target="[Icon.ErrorImage]"/>
+      <Binding Source="[IconAcquiringImage]" Target="[Icon.AcquiringImage]"/>
+      <Binding Source="[IconImage]" Target="[Icon.Content]"/>
+      <Default Target="[Icon.Content]" Value="[IconImage]"/>
+      <!--Condition Source="[Input.KeyFocus]" SourceValue="true" Target="[LabelBackgroundGraphic.Content]" Value="[LabelBackgroundFocus]"/-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.Enabled]" Value="false"/>
+          <Equality Source="[DisabledFont]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Font]" Value="[DisabledFont]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[FocusFont]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Font]" Value="[FocusFont]"/>
+        </Actions>
+      </Rule>
+      <Condition Source="[Input.Enabled]" SourceValue="false" Target="[Background.Content]" Value="[DisabledImage]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true" Target="[Background.Content]" Value="[FocusImage]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="false" Target="[BackgroundUnderlay.Visible]" Value="true"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true" Target="[BackgroundUnderlay.Visible]" Value="false"/>
+      <Condition Source="[Input.Enabled]" SourceValue="false" Target="[Fill.Content]" Value="[DisabledFillColor]"/>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Fill.Content]" Value="[FocusFillColor]"/>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_Focus_a" />
+        </Actions>
+      </Rule>
+      <Binding Source="[Input.KeyFocus]" Target="[FocusOverlay.Visible]"/>
+      <Binding Source="[Clicker.Clicking]" Target="[Highlight.Visible]"/>
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[AllowMarquee]" Value="true"/>
+          <Modified Source="[Input.KeyFocus]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.AllowMarquee]" Value="[Input.KeyFocus]"/>
+        </Actions>
+      </Rule-->
+      <Binding Source="[TileSize]" Target="[Root.MaximumSize]"/>
+      <Binding Source="[TileSize]" Target="[Fill.MinimumSize]"/>
+      <Binding Source="[TileSize]" Target="[Background.MinimumSize]"/>
+      <!--Default Target="[LabelBackgroundFocus]" Value="[LabelBackgroundImageSet.Values.#Focus!Image]" />
+      <Default Target="[LabelBackground]" Value="[LabelBackgroundImageSet.Values.#Default!Image]" /-->
+      <Default Target="[LabelBackgroundFocus]" Value="[ButtonFocus]" />
+
+      <Changed Source="[SubFocusArea.Value]">
+        <Conditions>
+          <Equality Source="[SubFocusArea.Value]" Value="NoFocusColorInactive"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NoFocusColor]" Value="[NoFocusColorInactive]"/>
+          <Set Target="[Label.Color]" Value="[NoFocusColor]"/>
+          <DebugTrace Message="INTERNALSubFocusArea.Value: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[SubFocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Changed>
+      
+      <Changed Source="[SubFocusArea.Value]">
+        <Conditions>
+          <Equality Source="[SubFocusArea.Value]" Value="NoFocusColorActive"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NoFocusColor]" Value="[NoFocusColorActive]"/>
+          <Set Target="[Label.Color]" Value="[NoFocusColor]"/>
+          <DebugTrace Message="INTERNALSubFocusArea.Value: {0}">
+            <Params>
+              <ObjectPath ObjectPath="[SubFocusArea.Value]"/>
+            </Params>
+          </DebugTrace>
+        </Actions>
+      </Changed>
+    </Rules>
+    <Content>
+      <Panel Name="Root" MouseInteractive="true">
+        <!--Layout>
+          <StageLayout/>
+        </Layout-->
+        <Children>
+          <Panel Name="LabelScalePanel" Layout="Dock">
+            <Children>
+              <Graphic Name="Icon" LayoutInput="[IconBorderInput]" Margins="[IconPadding]" MaintainAspectRatio="true" MinimumSize="[IconMinSize]" MaximumSize="[IconMaxSize]" Visible="[ShowIcon]">
+                <Children>
+                  <me:BaseIconFocusLoopContent Name="IconFocusLoopHost" Visible="false" Source="null"/>
+                </Children>
+              </Graphic>
+              <Panel Name="LabelPanel" Layout="Anchor" LayoutInput="[LabelBorderInput]" Margins="[LabelMargins]" Visible="[ShowLabel]">
+                <Children>
+                  <!--Gradient Name="PressedGradient" Orientation="Horizontal" ColorMask="0, 0, 0, 0">
+                    <LayoutInput>
+                      <AnchorLayoutInput Vertical="center" Horizontal="near"/>
+                    </LayoutInput>
+                    <Ramp>
+                      <RampValue Value="1" Position="-20" Relative="GadgetMin"/>
+                      <RampValue Value="0" Position="20" Relative="GadgetMin"/>
+                      <RampValue Value="0" Position="-20" Relative="GadgetMax"/>
+                      <RampValue Value="1" Position="20" Relative="GadgetMax"/>
+                    </Ramp>
+                    <Children>
+                      <FancyText Name="Label" Color="[NoFocusColor]" Font="[Font]"/>
+                    </Children>
+                  </Gradient>
+                  <Graphic Name="LabelBackgroundGraphic" Image="[LabelBackground]" Visible="[ShowLabelBackground]" LayoutInput="[LabelBackgroundLayoutInput]" /-->
+                  <!--replacement panel-->
+                  <Graphic Name="PressedGradient" SizingPolicy="SizeToChildren" Layout="Center">
+                    <!--LayoutInput>
+                      <AnchorLayoutInput Vertical="Center" Horizontal="Center"/>
+                    </LayoutInput-->
+                    <Children>
+                      <Text Name="Label" Color="[NoFocusColor]" Font="[Font]" Margins="-2,1,0,0"/>
+                    </Children>
+                  </Graphic>
+                  <Graphic Name="LabelBackgroundGraphic" Content="[LabelBackground]" Visible="[ShowLabelBackground]" Layout="Fill" />
+                  <!-- end replacement panel-->
+                </Children>
+              </Panel>
+            </Children>
+          </Panel>
+          <Clip FadeSize="20" Layout="LegacyFill">
+            <Children>
+              <Graphic Name="Highlight" Content="[PressedImage]">
+                <!--Animations>
+                  <IAnimationProvider IAnimationProvider="global://comm:Button.PressedHighlight.Show"/>
+                  <IAnimationProvider IAnimationProvider="global://comm:Button.PressedHighlight.Hide"/>
+                </Animations-->
+                <Animations>
+                  <!-- Button highlight -->
+                  <TransformByAttributeAnimation Name="Button.PressedHighlight.Show" Filter="Position" Attribute="Width" Magnitude="1.0">
+                    <Source>
+                      <!-- DebugID="Button.PressedHighlight.Show.Source" -->
+                      <Animation Type="Show">
+                        <Keyframes>
+                          <PositionKeyframe Time="0.00" Value="-1.0,0,0" RelativeTo="Final"/>
+                          <PositionKeyframe Time="0.10" Value="0.00,0,0" RelativeTo="Final"/>
+                          <PositionKeyframe Time="0.18" Value="0.35,0,0" RelativeTo="Final"/>
+                          <PositionKeyframe Time="0.35" Value="0.55,0,0" RelativeTo="Final"/>
+                          <PositionKeyframe Time="0.60" Value="1.25,0,0" RelativeTo="Final"/>
+                          <PositionKeyframe Time="0.70" Value="1.25,0,0" RelativeTo="Final"/>
+
+                          <AlphaKeyframe Time="0.00" Value="0.00" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="0.05" Value="0.75" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="0.17" Value="0.75" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="0.40" Value="0.00" RelativeTo="Absolute"/>
+                        </Keyframes>
+                      </Animation>
+                    </Source>
+                  </TransformByAttributeAnimation>
+
+                  <!-- Button highlight - stop -->
+                  <TransformByAttributeAnimation Name="Button.PressedHighlight.Hide" Filter="Position" Attribute="Width" Magnitude="1.0">
+                    <Source>
+                      <!-- DebugID="Button.PressedHighlight.Hide.Source" -->
+                      <Animation Type="Hide">
+                        <Keyframes>
+                          <PositionKeyframe Time="0.00" Value="0.0,0,0" RelativeTo="Current"/>
+                          <PositionKeyframe Time="0.10" Value="1.0,0,0" RelativeTo="Final"/>
+
+                          <AlphaKeyframe Time="0.00" RelativeTo="Current"/>
+                          <AlphaKeyframe Time="0.10" Value="0.0" RelativeTo="Absolute"/>
+                        </Keyframes>
+                      </Animation>
+                    </Source>
+                  </TransformByAttributeAnimation>
+                </Animations>
+              </Graphic>
+            </Children>
+          </Clip>
+          <!--Graphic Name="FocusOverlay" Layout="LegacyFill" Image="[FocusOverlayImage]"-->
+          <Graphic Name="FocusOverlay" Layout="Fill" Content="[FocusOverlayImage]">
+            <Animations>
+              <Animation Animation="animation://comm:Button.FocusOverlay.Idle"/>
+            </Animations>
+          </Graphic>
+          <!--ColorFill Name="Fill" Layout="LegacyFill" Content="[NoFocusFillColor]"/>
+          <Graphic Name="Background" Layout="LegacyFill" Image="[NoFocusImage]"-->
+          <ColorFill Name="Fill" Layout="Fill" Content="[NoFocusFillColor]"/>
+          <Graphic Name="Background" Layout="Fill" Content="[NoFocusImage]">
+            <!--LayoutInput>
+              <StageLayoutInput Stage="Primary"/>
+            </LayoutInput-->
+          </Graphic>
+          <Graphic Name="BackgroundUnderlay" Layout="Fill" Content="[LabelBackground]" Visible="false"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="BaseIconFocusLoopContent"></UI>
+</Mcml>
