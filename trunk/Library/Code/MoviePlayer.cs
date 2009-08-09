@@ -83,6 +83,11 @@ namespace Library
                     OMLApplication.DebugLine("[MoviePlayerFactory] WPLMoviePlayer created: {0}", source);
                     return new MoviePlayerWPL(source);
                 }
+                else if (mediaFormat == VideoFormat.WVX) // if its a playlist, do that first
+                {
+                    OMLApplication.DebugLine("[MoviePlayerFactory] WVXMoviePlayer created: {0}", source);
+                    return new MoviePlayerWVX(source);
+                }
                 else if (IsExtenderDVD_NoTranscoding(source)) // play the dvd
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] ExtenderDVDPlayer created: {0}", source);

@@ -380,10 +380,10 @@ namespace Library.Code.V3
 
         public void PlayAllDisks()
         {
-            IncrementPlayCount();
+            //IncrementPlayCount();
 
             // create a disk out of the playlist of all items
-            this.TitleObject.SelectedDisk = new Disk(this.Description, CreatePlayListFromAllDisks(), VideoFormat.WPL);
+            this.TitleObject.SelectedDisk = new Disk(this.Description, CreatePlayListFromAllDisks(), VideoFormat.WVX);
 
             PlayMovie();
         }
@@ -393,19 +393,19 @@ namespace Library.Code.V3
             if (!Directory.Exists(FileSystemWalker.TempPlayListDirectory))
                 FileSystemWalker.createTempPlayListDirectory();
 
-            WindowsPlayListManager playlist = new WindowsPlayListManager();
+            WVXManager playlist = new WVXManager();
 
-            string playlistFile = Path.Combine(FileSystemWalker.TempPlayListDirectory, "AllDisks_" + this.TitleObject.Id + ".WPL");
+            string playlistFile = Path.Combine(FileSystemWalker.TempPlayListDirectory, "AllDisks_" + this.TitleObject.Id + ".WVX");
 
             foreach (Disk disk in this.TitleObject.Disks)
             {
                 if (string.IsNullOrEmpty(disk.Path))
                     continue;
 
-                playlist.AddItem(new PlayListItem(disk.Path));
+                playlist.AddItem(new PlayListItem(disk.Path, disk.Name));
             }
 
-            playlist.WriteWPLFile(playlistFile);
+            playlist.WriteWVXFile(playlistFile);
 
             return playlistFile;
         }
