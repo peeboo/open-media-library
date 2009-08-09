@@ -118,6 +118,7 @@
     <Compile Include="Code\V3\Controls\LegacyHorizontalFlowLayoutHelper.cs" />
     <Compile Include="Code\V3\CollectionItem.cs" />
     <Compile Include="Code\V3\CollectionPage.cs" />
+    <Compile Include="Code\V3\FirstRun\FirstRunBase.cs" />
     <Compile Include="Code\V3\GenreItem.cs" />
     <Compile Include="Code\V3\GenrePivot.cs" />
     <Compile Include="Code\V3\EpisodeItem.cs" />
@@ -528,6 +529,7 @@
     <Content Include="Markup\V3\Controls\Controls.mcml" />
     <None Include="Markup\V3\Controls\BrowsePivotItem.mcml.old" />
     <None Include="Markup\V3\Controls\BrowseGroupedGallery.mcml.old" />
+    <Content Include="Markup\V3\Controls\FirstRunButton.mcml" />
     <Content Include="Markup\V3\Controls\ListViewItem.mcml" />
     <Content Include="Markup\V3\Controls\ListBox.mcml" />
     <Content Include="Markup\V3\Controls\Edit.mcml" />
@@ -553,6 +555,20 @@
     <Content Include="Markup\V3\Details\FanArt\FanArtDetailsPage.mcml" />
     <Content Include="Markup\V3\Details\FanArt\FanArtDetailsPageCastCrew.mcml" />
     <Content Include="Markup\V3\Details\FanArt\Images\V3.FanArtDetails.BackSplash.png" />
+    <Content Include="Markup\V3\FirstRun\FirstRunBackground.mcml" />
+    <Content Include="Markup\V3\FirstRun\Images\V3.FirstRun.SmallRadioButton.Disabled.png" />
+    <Content Include="Markup\V3\FirstRun\Images\V3.FirstRun.SmallRadioButton.Disabled.Selected.png" />
+    <Content Include="Markup\V3\FirstRun\Images\V3.FirstRun.SmallRadioButton.Focus.png" />
+    <Content Include="Markup\V3\FirstRun\Images\V3.FirstRun.SmallRadioButton.Focus.Selected.png" />
+    <Content Include="Markup\V3\FirstRun\Images\V3.FirstRun.SmallRadioButton.NoFocus.png" />
+    <Content Include="Markup\V3\FirstRun\Images\V3.FirstRun.SmallRadioButton.NoFocus.Selected.png" />
+    <Content Include="Markup\V3\FirstRun\Images\V3.FirstRun.SmallRadioButton.Pressed.png" />
+    <Content Include="Markup\V3\FirstRun\Images\V3.FirstRun.SmallRadioButton.Pressed.Selected.png" />
+    <Content Include="Markup\V3\FirstRun\Images\V3.FirstRun.BG.Spotlight.png" />
+    <Content Include="Markup\V3\FirstRun\Images\V3.FirstRun.BG.Banner.Bottom.png" />
+    <Content Include="Markup\V3\FirstRun\Images\V3.FirstRun.BG.Banner.Top.png" />
+    <Content Include="Markup\V3\FirstRun\Images\V3.FirstRun.BigArrow.png" />
+    <Content Include="Markup\V3\FirstRun\Images\V3.FirstRun.BigCheckmark.png" />
     <Content Include="Markup\V3\Loader.mcml" />
     <Content Include="Markup\V3\Settings\BackgroundSettings.mcml" />
     <Content Include="Markup\V3\Settings\AdditionalSettings.mcml" />

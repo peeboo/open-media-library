@@ -416,11 +416,11 @@ namespace Library
                     {
                         Dictionary<string, object> properties = new Dictionary<string, object>();
 
-                        Library.Code.V3.SettingsManager page = new Library.Code.V3.SettingsManager();
-                        properties["Page"] = page;
-                        properties["Application"] = OMLApplication.Current;
+                        //Library.Code.V3.SettingsManager page = new Library.Code.V3.SettingsManager();
+                        //properties["Page"] = page;
+                        //properties["Application"] = OMLApplication.Current;
 
-                        OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_Settings_SettingsManager", properties);
+                        OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_FirstRunBackground", properties);
                         return;
                     }
                 default:

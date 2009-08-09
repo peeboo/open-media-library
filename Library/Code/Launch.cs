@@ -78,6 +78,7 @@ namespace Library
 
         public void Launch(AddInHost host)
         {
+            //_id = "FirstRun";
             if (_id == "FirstRun")
             {
                 CheckFirstRun(host);
