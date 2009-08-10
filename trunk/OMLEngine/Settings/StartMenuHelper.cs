@@ -253,6 +253,12 @@ namespace OMLEngine.Settings
                 case "Trailers":
                     return Context.Trailers;
 
+                case "Movies":
+                    return Context.Movies;
+
+                case "TV":
+                    return Context.TV;
+
                 case "Search":
                     return Context.Search;
 

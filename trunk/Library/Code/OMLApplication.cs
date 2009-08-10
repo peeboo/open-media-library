@@ -416,11 +416,20 @@ namespace Library
                     {
                         Dictionary<string, object> properties = new Dictionary<string, object>();
 
-                        //Library.Code.V3.SettingsManager page = new Library.Code.V3.SettingsManager();
-                        //properties["Page"] = page;
-                        //properties["Application"] = OMLApplication.Current;
+                        Library.Code.V3.FirstRun page = new Library.Code.V3.FirstRun();
+                        properties["Page"] = page;
 
                         OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_FirstRunBackground", properties);
+                        return;
+                    }
+                case "TV":
+                    {
+                        this.GoHome(new List<OMLEngine.TitleFilter>(), "TV");
+                        return;
+                    }
+                case "Movies":
+                    {
+                        this.GoHome(new List<OMLEngine.TitleFilter>(), "Movies");
                         return;
                     }
                 default:
