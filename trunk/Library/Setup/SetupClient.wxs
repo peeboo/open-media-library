@@ -2,8 +2,8 @@
 
 <!-- These variables define the Windows Installer product version, product code and upgrade code. They   -->
 <!-- will be used later on in this file.                                                                 -->
-<?define Property_ProductVersion = "3.0.0.0" ?>
-<?define Property_ProductCode = "282ffe47-5856-4f07-a5e1-617a24a9b4a5" ?>
+<?define Property_ProductVersion = "3.0.2.0" ?>
+<?define Property_ProductCode = "73490B5E-1D9C-4ed9-BBFD-BE2BB8317C9D" ?>
 <?define Property_UpgradeCode = "0921ec75-fddc-46f8-bdf4-a5d697351567" ?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
@@ -22,13 +22,13 @@
 		         InstallerVersion="200"
 		         Compressed="yes" />
 
-    <Binary Id="OMLDB" SourceFile="..\..\SQL Scripts\Title Database.sql" />
+    <!--<Binary Id="OMLDB" SourceFile="..\..\SQL Scripts\Title Database.sql" />-->
     <!-- This information enables Windows Installer major upgrade functionality so users can seamlessly  -->
     <!-- install a new version of the product and have the old version automatically uninstall behind    -->
     <!-- the scenes. See the following topic in the MSDN Library for additional information:             -->
     <!-- http://msdn.microsoft.com/library/default.asp?url=/library/en-us/msi/setup/major_upgrades.asp   -->
     <Upgrade Id="$(var.Property_UpgradeCode)">
-      <UpgradeVersion OnlyDetect="yes"
+      <UpgradeVersion OnlyDetect="no"
                       Property="OLDERVERSIONBEINGUPGRADED"
                       Minimum="1.0.0"
                       IncludeMinimum="yes"
@@ -42,7 +42,7 @@
     <Feature Id="APPLICATIONROOTFEATURE" Title="Open Media Library" Level="1" AllowAdvertise="no" Absent="disallow">
       <ComponentGroupRef Id="CommonComponents"/>
       <ComponentGroupRef Id="UserGuide"/>
-      <ComponentGroupRef Id="ClientGroup"/>
+      <FeatureGroupRef Id="CLIENTFEATURES"/>
     </Feature>
 
     <!-- This UIRef element specifies what WiXUI dialog set to use for the setup UI. This package uses   -->
@@ -51,7 +51,7 @@
     <!-- page and a completion page. Other dialog sets are available in the WiX toolset and are          -->
     <!-- described in more detail in the WiX documentation.                                              -->
     <UI>
-      <UIRef Id="WixUI_Minimal" />
+      <UIRef Id="WixUI_FeatureTree" />
       <Publish Dialog="ExitDialog"
                Control="Finish"
                Event="DoAction"

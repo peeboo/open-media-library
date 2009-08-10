@@ -311,7 +311,7 @@
       </Directory>
     </Directory>
     <DirectoryRef Id="TARGETDIR">
-      <Component Id="registry" Guid="FDDE2AF7-995E-4b84-B8B7-2E150E7C7101" DiskId="1" KeyPath="yes">
+      <Component Id="registryUI" Guid="FDDE2AF7-995E-4b84-B8B7-2E150E7C7101" DiskId="1" KeyPath="yes">
         <RegistryKey Id="registry0" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{3f0850a7-0fd7-4cbf-b8dc-c7f7ea31534e}" Action="create">
           <RegistryValue Id="reg1" Type="string" Name="Title" Value="Open Media Library" Action="write"/>
           <RegistryValue Id="reg2" Type="string" Name="Category" Value="OML\Open Media Library" Action="write"/>
@@ -370,34 +370,45 @@
     <!-- only one feature. Each feature contains a list of components that it will install. Features can -->
     <!-- can be displayed and allow user selection in setup UI if desired. -->
 
-    <ComponentGroup Id="ClientGroup">
+    <ComponentGroup Id="CommonComponents">
+      <ComponentRef Id="PostInstallerWizard.exe"/>
+
+      <ComponentRef Id="Application.png" />
+      
+      <!-- Required OML Libraries-->
+      <ComponentRef Id="OMLEngine.dll" />
+      <ComponentRef Id="OMLSDK.dll" />
+      <ComponentRef Id="StSana.dll"/>
+      <ComponentRef Id="MediaInfo.dll"/>
+      <ComponentRef Id="Maximizer.exe"/>
+      <ComponentRef Id="OMLEngineService.exe"/>
+      
+      <!-- File Watcher-->
+      <ComponentRef Id="OMLFWService.exe"/>
+      <ComponentRef Id="OMLFileWatcher.dll"/>
+      <ComponentRef Id="registryFWS"/>
+
+      <!-- Database scripts-->
+      <ComponentRef Id="TitleDatabase.sql"/>
+      <ComponentRef Id="TitleDatabaseUpgrade1.1.sql"/>
+      <ComponentRef Id="TitleDatabaseUpgrade1.2.sql"/>
+      <ComponentRef Id="SQLConfigNoTools_x32.ini"/>
+    </ComponentGroup>
+    
+    <ComponentGroup Id="ClientGroupUI">
+      <!-- Media Center plugin components-->
       <ComponentRef Id="Library.dll" />
       <ComponentRef Id="dssnap.dll" />
-      <ComponentRef Id="OMLFileWatcher.dll"/>
       <ComponentRef Id="OMLTranscoder.dll"/>
       <ComponentRef Id="Registration.xml" />
-      <ComponentRef Id="Application.png" />
-      <ComponentRef Id="OMLEngineService.exe"/>
-      <ComponentRef Id="OMLFWService.exe"/>
-      <!--><ComponentRef Id="DatabaseCreate"/>-->
+      <ComponentRef Id="MEncoder.exe"/>
 
-      <!-- Plugins -->
-      <ComponentRef Id="DVDProfilerPlugin.dll" />
-      <ComponentRef Id="DVRMSPlugin.dll" />
-      <ComponentRef Id="MovieCollectorz.dll" />
-      <ComponentRef Id="MyMoviesPlugin.dll" />
-      <ComponentRef Id="MyMoviesToOML.xsl" />
-      <ComponentRef Id="OMLSDK.dll" />
-     
-      <ComponentRef Id="VMCDVDLibraryPlugin.dll" />
-      <ComponentRef Id="OMLXMLImporter.dll" />
-      <ComponentRef Id="AmazonMetadata.dll" />
-      <ComponentRef Id="TheMovieDbMetadata.dll" />
-      <ComponentRef Id="NetFlixMetadata.dll"/>
-      <ComponentRef Id="DVDProfilerMetaData.dll"/>
-      <ComponentRef Id="TVDBMetadata.dll"/>
-      
-      <!-- Windows programs -->
+      <!-- UI Registry Keys -->
+      <ComponentRef Id="registryUI"/>
+    </ComponentGroup>
+ 
+    <ComponentGroup Id="ClientGroupEditor">
+      <!-- Editor components -->
       <ComponentRef Id="DevExpress.Data.v8.2.dll"/>
       <ComponentRef Id="DevExpress.Utils.v8.2.dll"/>
       <ComponentRef Id="DevExpress.XtraEditors.v8.2.dll"/>
@@ -406,21 +417,31 @@
       <ComponentRef Id="DevExpress.Utils.v8.2.xml"/>
       <ComponentRef Id="DevExpress.XtraEditors.v8.2.xml"/>
       <ComponentRef Id="DevExpress.XtraNavBar.v8.2.xml"/>
-      <ComponentRef Id="StSana.dll"/>
       <ComponentRef Id="OMLDatabaseEditor.exe" />
-      <ComponentRef Id="OMLImporter.exe" />
-      <ComponentRef Id="MEncoder.exe"/>
-      <ComponentRef Id="MediaInfo.dll"/>
       <ComponentRef Id="TranscoderTester.exe"/>
-      <ComponentRef Id="Maximizer.exe"/>
+
+      <!-- Importer Plugins -->
+      <ComponentRef Id="OMLImporter.exe" />
+      <ComponentRef Id="DVDProfilerPlugin.dll" />
+      <ComponentRef Id="DVRMSPlugin.dll" />
+      <ComponentRef Id="MovieCollectorz.dll" />
+      <ComponentRef Id="MyMoviesPlugin.dll" />
+      <ComponentRef Id="MyMoviesToOML.xsl" />
+      <ComponentRef Id="OMLXMLImporter.dll" />
+
+      <!-- Metadata Plugins -->
+      <ComponentRef Id="VMCDVDLibraryPlugin.dll" />
+      <ComponentRef Id="AmazonMetadata.dll" />
+      <ComponentRef Id="TheMovieDbMetadata.dll" />
+      <ComponentRef Id="NetFlixMetadata.dll"/>
+      <ComponentRef Id="DVDProfilerMetaData.dll"/>
+      <ComponentRef Id="TVDBMetadata.dll"/>
+      
 
       <!-- Start Menu Shortcuts -->
       <ComponentRef Id="DatabaseEditorShortcut" />
       <ComponentRef Id="ImporterShortcut" />
 
-      <!-- Registry Keys -->
-      <ComponentRef Id="registry"/>
-      <ComponentRef Id="registryFWS"/>
     </ComponentGroup>
 
     <ComponentGroup Id="UserGuide">
@@ -428,16 +449,16 @@
       <ComponentRef Id="Open_Media_Library_User_Manual.pdf"/>
     </ComponentGroup>
 
-    <ComponentGroup Id="CommonComponents">
-      <ComponentRef Id="OMLEngine.dll" />
-      <ComponentRef Id="PostInstallerWizard.exe"/>
-      <ComponentRef Id="TitleDatabase.sql"/>
-      <ComponentRef Id="TitleDatabaseUpgrade1.1.sql"/>
-      <ComponentRef Id="TitleDatabaseUpgrade1.2.sql"/>
-      <ComponentRef Id="SQLConfigNoTools_x32.ini"/>
-    </ComponentGroup>
 
-
+    <FeatureGroup Id ="CLIENTFEATURES">
+      <Feature Id="CLIENTFEATUREUI" Title="OML Media Center Plugin" Level="1" AllowAdvertise="no" Description="Install the Media Center Plugin">
+        <Condition Level="0"><![CDATA[NOT MCEINSTALLVERSION >= "5.0" OR NOT REGISTERMCEAPP]]></Condition>
+        <ComponentGroupRef Id="ClientGroupUI"/>
+      </Feature>
+      <Feature Id="CLIENTFEATUREEDITOR" Title="OML Database Editor" Level="1" AllowAdvertise="no" Description="Install the Database Editor">
+        <ComponentGroupRef Id="ClientGroupEditor"/>
+      </Feature>
+    </FeatureGroup>
 
 
 
@@ -486,7 +507,7 @@
       <!-- value 5.0 and the presence of the file %windir%\eHome\RegisterMceApp.exe. If all of these     -->
       <!-- conditions are met, the system is a Windows Vista Home Premium or Ultimate Edition operating  -->
       <!-- system and the product will be allowed to install.                                            -->
-      <Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 600 OR NOT MCEINSTALLVERSION >= "5.0" OR NOT REGISTERMCEAPP) AND NOT Installed]]></Custom>
+      <Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 500) AND NOT Installed]]></Custom>
 
       <Custom Action="CA_RegisterMceApp_Unregister_Install_Cmd" After="CostFinalize">
         <![CDATA[NOT REMOVE]]>
@@ -513,13 +534,13 @@
       <!-- because Windows Installer pushes each action onto a stack and then pops them off of the stack -->
       <!-- in case of any failure in order to accomplish the roll back.                                  -->
       <Custom Action="CA_RegisterMceApp_Rollback" After="InstallFiles">
-        <![CDATA[NOT REMOVE]]>
+        <![CDATA[NOT REMOVE AND (&CLIENTFEATUREUI=3 OR !CLIENTFEATUREUI=3)]]>
       </Custom>
       <Custom Action="CA_RegisterMceApp_Unregister_Install" After="CA_RegisterMceApp_Rollback">
-        <![CDATA[NOT REMOVE]]>
+        <![CDATA[NOT REMOVE AND (&CLIENTFEATUREUI=3 OR !CLIENTFEATUREUI=3)]]>
       </Custom>
       <Custom Action="CA_RegisterMceApp_Register" After="CA_RegisterMceApp_Unregister_Install">
-        <![CDATA[NOT REMOVE]]>
+        <![CDATA[NOT REMOVE AND (&CLIENTFEATUREUI=3)]]>
       </Custom>
       <Custom Action="ActivateNetTcpPortSharing" After="InstallInitialize">Not Installed</Custom>
       <!--<ScheduleReboot After="InstallFinalize"/>-->
@@ -533,7 +554,7 @@
       <Custom Action="CA_BlockOlderVersionInstall" After="FindRelatedProducts">
         <![CDATA[NEWERVERSIONDETECTED]]>
       </Custom>
-      <Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 600 OR NOT MCEINSTALLVERSION >= "5.0" OR NOT REGISTERMCEAPP) AND NOT Installed]]></Custom>
+      <Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 500) AND NOT Installed]]></Custom>
     </InstallUISequence>
 
     <!-- This sets the icon used for the Add/Remove Programs screen -->
