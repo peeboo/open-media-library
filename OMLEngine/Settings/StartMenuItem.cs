@@ -9,6 +9,8 @@ namespace OMLEngine.Settings
     {
         Home,
         Trailers,
+        Movies,
+        TV,
         Search,
         Settings,
         Custom1,
