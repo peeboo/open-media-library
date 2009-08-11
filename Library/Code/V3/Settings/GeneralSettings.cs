@@ -38,6 +38,12 @@ namespace Library.Code.V3
             backgroundCmd.Invoked+=new EventHandler(backgroundCmd_Invoked);
             this.Commands.Add(backgroundCmd);
 
+            //rerun setup
+            Command firstrunCmd = new Command();
+            firstrunCmd.Description = "OML Setup";
+            firstrunCmd.Invoked += new EventHandler(firstrunCmd_Invoked);
+            this.Commands.Add(firstrunCmd);
+
             //alpha
             Command alphaCmd = new Command();
             alphaCmd.Description = "Additional Settings";
@@ -49,6 +55,16 @@ namespace Library.Code.V3
             startMenuCmd.Description = "Start Menu";
             startMenuCmd.Invoked += new EventHandler(startMenuCmd_Invoked);
             this.Commands.Add(startMenuCmd);
+        }
+
+        void firstrunCmd_Invoked(object sender, EventArgs e)
+        {
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+
+            Library.Code.V3.FirstRun page = new Library.Code.V3.FirstRun();
+            properties["Page"] = page;
+
+            OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_FirstRunBackground", properties);
         }
 
         void startMenuCmd_Invoked(object sender, EventArgs e)
