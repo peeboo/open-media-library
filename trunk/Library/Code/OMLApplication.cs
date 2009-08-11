@@ -449,7 +449,17 @@ namespace Library
                         //properties.Add("Page", gallery);
                         //_session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
                         ////this.mediaChangers = new Library.Code.V3.MediaChangeManager();
-                        this.GoHome(new List<OMLEngine.TitleFilter>(), "OML");
+                        if (Properties.Settings.Default.CompletedFirstRun == false)
+                        {
+                            Dictionary<string, object> properties = new Dictionary<string, object>();
+
+                            Library.Code.V3.FirstRun page = new Library.Code.V3.FirstRun();
+                            properties["Page"] = page;
+
+                            OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_FirstRunBackground", properties);
+                        }
+                        else
+                            this.GoHome(new List<OMLEngine.TitleFilter>(), "OML");
                         return;
                     }
             }

@@ -407,6 +407,9 @@ namespace Library.Code.V3
         {
             if (this.currentPage != this.cancelPage)
             {
+                //we completed firstrun
+                Properties.Settings.Default.CompletedFirstRun = true;
+                Properties.Settings.Default.Save();
                 //save stuff
                 foreach (IFirstRunItem item in this.pages)
                 {

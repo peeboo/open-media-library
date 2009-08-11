@@ -40,7 +40,7 @@ namespace Library.Code.V3
 
             //rerun setup
             Command firstrunCmd = new Command();
-            firstrunCmd.Description = "OML Setup";
+            firstrunCmd.Description = "Open Media Library Setup";
             firstrunCmd.Invoked += new EventHandler(firstrunCmd_Invoked);
             this.Commands.Add(firstrunCmd);
 
