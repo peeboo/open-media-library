@@ -597,5 +597,17 @@ namespace Library.Properties {
                 this["CompletedFirstRun"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFirstRunPrompt {
+            get {
+                return ((bool)(this["ShowFirstRunPrompt"]));
+            }
+            set {
+                this["ShowFirstRunPrompt"] = value;
+            }
+        }
     }
 }

@@ -93,7 +93,7 @@ namespace Library
 
         private void CheckFirstRun(AddInHost host)
         {
-            if (Properties.Settings.Default.CompletedFirstRun == false)
+            if (Properties.Settings.Default.ShowFirstRunPrompt == true)
             {
                 List<string> buttons = new List<string>();
                 buttons.Add("Configure OML");
@@ -104,7 +104,7 @@ namespace Library
                 if ((int)res == 100)
                 {
                     //tmp until firstrun page
-                    Properties.Settings.Default.CompletedFirstRun = true;
+                    Properties.Settings.Default.ShowFirstRunPrompt = false;
                     Properties.Settings.Default.Save();
 
                     //run setup
@@ -114,7 +114,7 @@ namespace Library
                 }
                 else
                 {
-                    Properties.Settings.Default.CompletedFirstRun = true;
+                    Properties.Settings.Default.ShowFirstRunPrompt = false;
                     Properties.Settings.Default.Save();
                     //env.Dialog("You can access OML from the program library.", "OPEN MEDIA LIBRARY", Microsoft.MediaCenter.DialogButtons.Ok, -1, true);
                 }
