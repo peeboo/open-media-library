@@ -23,6 +23,7 @@ namespace Library.Code.V3
                 return "resx://Library/Library.Resources/V3_FirstRunBackground#RadioContentHost";
             }
         }
+        public bool FocusContent { get; set; }
 
         public void Commit()
         {
@@ -119,11 +120,13 @@ namespace Library.Code.V3
             this.selectedViewOptions.ChosenIndex = 0;
 
             this.selectedViewOptions.ChosenChanged += new EventHandler(selectedViewOptions_ChosenChanged);
+
+            this.FocusContent = true;
         }
 
         void selectedViewOptions_ChosenChanged(object sender, EventArgs e)
         {
-            
+            this.owner.FireNext();   
         }
     }
 
@@ -140,6 +143,7 @@ namespace Library.Code.V3
                 return "resx://Library/Library.Resources/V3_FirstRunBackground#DefaultContentHost";
             }
         }
+        public bool FocusContent { get; set; }
 
         public void Commit()
         {
@@ -170,6 +174,7 @@ namespace Library.Code.V3
                 return "resx://Library/Library.Resources/V3_FirstRunBackground#DefaultContentHost";
             }
         }
+        public bool FocusContent { get; set; }
 
         public void Commit()
         {
@@ -186,16 +191,58 @@ namespace Library.Code.V3
         }
     }
 
+    public class FirstRunStartPage : IFirstRunItem
+    {
+        #region IFirstRunItem Members
+
+        public string PageTitle { get; set; }
+        public string PageInstructions { get; set; }
+        public string SourceTemplate
+        {
+            get
+            {
+                return "resx://Library/Library.Resources/V3_FirstRunBackground#DefaultContentHost";
+            }
+        }
+        public bool FocusContent { get; set; }
+
+        public void Commit()
+        {
+        }
+
+        #endregion
+
+        private FirstRun owner;
+        public FirstRunStartPage(FirstRun firstRun)
+        {
+            this.PageInstructions = "This wizard will help you configure Open Media Library to access your media library.\n\nSelect Next to get started.";
+            this.PageTitle = "Welcome to Open Media Library";
+            this.owner = firstRun;
+        }
+    }
+
     public interface IFirstRunItem
     {
         string PageTitle { get; set; }
         string PageInstructions { get; set; }
         string SourceTemplate { get; }
+        bool FocusContent { get; set; }
         void Commit();
     }
 
     public class FirstRun : ModelItem
     {
+        public void FireNext()
+        {
+            FirePropertyChanged("FocusNext");
+        }
+        public void FireFinish()
+        {
+            FirePropertyChanged("FocusFinish");
+        }
+
+        public bool FocusNext { get; set; }
+        public bool FocusFinish { get; set; }
         public string FirstRunTitle { get; set; }
         private List<IFirstRunItem> pages;
         private IFirstRunItem currentPage;
@@ -306,8 +353,10 @@ namespace Library.Code.V3
         public bool FinishCommandVisible {
             get
             {
-                if (this.currentPage == this.pages[this.pages.Count - 1] || this.currentPage==this.cancelPage)
+                if (this.currentPage == this.pages[this.pages.Count - 1] || this.currentPage == this.cancelPage)
+                {
                     return true;
+                }
 
                 return false;
             }
@@ -329,6 +378,7 @@ namespace Library.Code.V3
         {
             this.cancelPage = new FirstRunCancelPage(this);
             this.pages = new List<Library.Code.V3.IFirstRunItem>();
+            pages.Add(new FirstRunStartPage(this));
             pages.Add(new FirstRunConfigureStartMenu(this));
             pages.Add(new FirstRunFinishPage(this));
             

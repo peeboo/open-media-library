@@ -116,10 +116,20 @@
     <Properties>
       <shl:IFirstRunItem Name="CurrentPage" IFirstRunItem="$Required"/>
     </Properties>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[CurrentPage.FocusContent]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[RadioGroup.NavigateInto]" />
+        </Actions>
+      </Rule>
+    </Rules>
     <Content>
       <Panel Layout="VerticalFlow" Margins="34,18,0,0">
         <Children>
-          <radio:FirstRunRadioGroup Model="[CurrentPage!shl:FirstRunConfigureStartMenu.SelectedViewOptions]"/>
+          <radio:FirstRunRadioGroup Name="RadioGroup" Model="[CurrentPage!shl:FirstRunConfigureStartMenu.SelectedViewOptions]"/>
         </Children>
       </Panel>
     </Content>
@@ -132,6 +142,24 @@
       <Command Name="SampleButton2" Description="Next"/>
       <Command Name="SampleButton3" Description="Cancel"/>
     </Properties>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Page.FocusNext]" InitialEvaluate="false"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[NextButton.NavigateInto]" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Page.FocusFinish]" InitialEvaluate="false"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[FinishButton.NavigateInto]" />
+        </Actions>
+      </Rule>
+    </Rules>
     <Content>
       <Panel>
         <Children>
@@ -140,9 +168,9 @@
               <Panel Layout="HorizontalFlow">
                 <Children>
                   <frButton:Button Model="[Page.BackCommand]" Visible="[Page.BackCommandVisible]" FocusOrder="2"/>
-                  <frButton:Button Model="[Page.NextCommand]" Enabled="[Page.NextCommandEnabled]" Visible="[Page.NextCommandVisible]" Margins="25,0,0,0" FocusOrder="0"/>
-                  <frButton:Button Model="[Page.FinishCommand]" Visible="[Page.FinishCommandVisible]" Margins="25,0,0,0" FocusOrder="0"/>
-                  <frButton:Button Model="[Page.CancelCommand]" Visible="[Page.CancelCommandVisible]" Margins="25,0,0,0" FocusOrder="0"/>
+                  <frButton:Button Name="NextButton" Model="[Page.NextCommand]" Enabled="[Page.NextCommandEnabled]" Visible="[Page.NextCommandVisible]" Margins="25,0,0,0" FocusOrder="0"/>
+                  <frButton:Button Name="FinishButton" Model="[Page.FinishCommand]" Visible="[Page.FinishCommandVisible]" Margins="25,0,0,0" FocusOrder="0"/>
+                  <frButton:Button Model="[Page.CancelCommand]" Visible="[Page.CancelCommandVisible]" Margins="25,0,0,0" FocusOrder="1"/>
                 </Children>
                 <LayoutInput>
                   <AnchorLayoutInput Right="Parent,1,-245" Bottom="Parent,1,-23"/>
