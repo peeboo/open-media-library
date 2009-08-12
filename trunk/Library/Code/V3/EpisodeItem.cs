@@ -383,7 +383,11 @@ namespace Library.Code.V3
             //IncrementPlayCount();
 
             // create a disk out of the playlist of all items
-            this.TitleObject.SelectedDisk = new Disk(this.Description, CreatePlayListFromAllDisks(), VideoFormat.WVX);
+            if (OMLApplication.Current.IsExtender)
+                this.TitleObject.SelectedDisk = new Disk(this.Description, CreatePlayListFromAllDisks(), VideoFormat.WPL);
+            else
+                this.TitleObject.SelectedDisk = new Disk(this.Description, CreatePlayListFromAllDisks(), VideoFormat.WVX);
+
 
             PlayMovie();
         }
