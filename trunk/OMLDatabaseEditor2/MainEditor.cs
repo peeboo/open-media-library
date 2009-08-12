@@ -3547,13 +3547,28 @@ namespace OMLDatabaseEditor
                             int e_parent = a_parent;
                             if (e.Name != file)
                             {
-                                e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
+                                switch (e.EntityType)
+                                {
+                                    case Serf.EntityType.COLLECTION:
+                                        e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
+                                        break;
+                                    case Serf.EntityType.MOVIE:
+                                        e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Movie, false);
+                                        break;
+                                    case Serf.EntityType.TV_SHOW:
+                                        e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.TVShow, false);
+                                        break;
+                                    default:
+                                        e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
+                                }
                             }
 
                             foreach (Series s in e.Series)
                             {
                                 int s_parent = e_parent;
-                                if (s.Name != e.Name)
+                                // if the s.name and e.name are the same, its a movie, to be sure though lets check s.number, it should be
+                                // -1 for non tv shows.
+                                if (s.Name.ToUpperInvariant().CompareTo(e.Name.ToUpperInvariant()) != 0 || s.Number > -1)
                                 {
                                     s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, false);
                                 }
