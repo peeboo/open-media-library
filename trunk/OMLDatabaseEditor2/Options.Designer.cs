@@ -34,7 +34,6 @@ namespace OMLDatabaseEditor
             this.tpOptions = new DevExpress.XtraTab.XtraTabPage();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.seMetadataLookupResultsQty = new DevExpress.XtraEditors.SpinEdit();
-            this.ceShowSubFolderTitles = new DevExpress.XtraEditors.CheckEdit();
             this.ceScanDiskRollInfoToTitle = new DevExpress.XtraEditors.CheckEdit();
             this.ceAutoScanDiskOnAdd = new DevExpress.XtraEditors.CheckEdit();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
@@ -72,7 +71,6 @@ namespace OMLDatabaseEditor
             this.xtraTabControl1.SuspendLayout();
             this.tpOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seMetadataLookupResultsQty.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ceShowSubFolderTitles.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceScanDiskRollInfoToTitle.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceAutoScanDiskOnAdd.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.beTitledFanArtPath.Properties)).BeginInit();
@@ -135,7 +133,6 @@ namespace OMLDatabaseEditor
             // 
             this.tpOptions.Controls.Add(this.labelControl1);
             this.tpOptions.Controls.Add(this.seMetadataLookupResultsQty);
-            this.tpOptions.Controls.Add(this.ceShowSubFolderTitles);
             this.tpOptions.Controls.Add(this.ceScanDiskRollInfoToTitle);
             this.tpOptions.Controls.Add(this.ceAutoScanDiskOnAdd);
             this.tpOptions.Controls.Add(this.labelControl3);
@@ -180,14 +177,6 @@ namespace OMLDatabaseEditor
             0});
             this.seMetadataLookupResultsQty.Size = new System.Drawing.Size(158, 20);
             this.seMetadataLookupResultsQty.TabIndex = 12;
-            // 
-            // ceShowSubFolderTitles
-            // 
-            this.ceShowSubFolderTitles.Location = new System.Drawing.Point(6, 203);
-            this.ceShowSubFolderTitles.Name = "ceShowSubFolderTitles";
-            this.ceShowSubFolderTitles.Properties.Caption = "Show Sub Folder titles in Movie panel";
-            this.ceShowSubFolderTitles.Size = new System.Drawing.Size(259, 18);
-            this.ceShowSubFolderTitles.TabIndex = 11;
             // 
             // ceScanDiskRollInfoToTitle
             // 
@@ -554,7 +543,6 @@ namespace OMLDatabaseEditor
             this.tpOptions.ResumeLayout(false);
             this.tpOptions.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seMetadataLookupResultsQty.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ceShowSubFolderTitles.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceScanDiskRollInfoToTitle.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceAutoScanDiskOnAdd.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.beTitledFanArtPath.Properties)).EndInit();
@@ -590,7 +578,6 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ContextMenuStrip cmGenreMappings;
         private DevExpress.XtraTab.XtraTabControl xtraTabControl1;
         private DevExpress.XtraTab.XtraTabPage tpOptions;
-        private DevExpress.XtraEditors.CheckEdit ceShowSubFolderTitles;
         private DevExpress.XtraEditors.CheckEdit ceScanDiskRollInfoToTitle;
         private DevExpress.XtraEditors.CheckEdit ceAutoScanDiskOnAdd;
         private DevExpress.XtraEditors.LabelControl labelControl3;

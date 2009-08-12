@@ -116,7 +116,6 @@ namespace OMLDatabaseEditor
             rgMountingTool.EditValue = OMLSettings.MountingToolSelection.ToString();
             cmbMntToolVDrive.Text = OMLSettings.VirtualDiscDrive;
             teMntToolPath.Text = OMLSettings.MountingToolPath;
-            ceShowSubFolderTitles.Checked = OMLSettings.ShowSubFolderTitles;
         }
 
         private void SimpleButtonClick(object sender, EventArgs e)
@@ -195,8 +194,6 @@ namespace OMLDatabaseEditor
                 OMLSettings.MountingToolSelection = tool;
                 OMLSettings.VirtualDiscDrive = cmbMntToolVDrive.Text;
                 OMLSettings.MountingToolPath = teMntToolPath.Text;
-                OMLSettings.ShowSubFolderTitles = ceShowSubFolderTitles.Checked;
-
 
             }
             else if (sender == this.sbCancel)
