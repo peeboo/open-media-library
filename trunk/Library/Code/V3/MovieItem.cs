@@ -340,7 +340,36 @@ namespace Library.Code.V3
 
         void playCmd_Invoked(object sender, EventArgs e)
         {
-            this.PlayAllDisks();
+            if (NeedsMounting(this.TitleObject.Disks[0].Format))
+            {
+                this.TitleObject.SelectedDisk = this.TitleObject.Disks[0];
+                this.PlayMovie();
+            }
+            else
+            {
+                this.PlayAllDisks();
+            }
+        }
+
+        //this is a temp hack - we need to handle this alot better!
+        static bool NeedsMounting(VideoFormat videoFormat)
+        {
+            switch (videoFormat)
+            {
+                case VideoFormat.BIN:
+                case VideoFormat.CUE:
+                case VideoFormat.IMG:
+                case VideoFormat.ISO:
+                case VideoFormat.MDF:
+                case VideoFormat.NRG:
+                case VideoFormat.VOB:
+                case VideoFormat.DVD:
+                case VideoFormat.DVRMS:
+                case VideoFormat.WTV:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         private static void AppendSeparatedValue(ref string text, string value, string seperator)

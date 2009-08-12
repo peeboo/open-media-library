@@ -151,14 +151,14 @@
           <Invoke Target="[NextButton.NavigateInto]" />
         </Actions>
       </Rule>
-      <Rule>
+      <!--Rule>
         <Conditions>
           <Modified Source="[Page.FocusFinish]" InitialEvaluate="false"/>
         </Conditions>
         <Actions>
           <Invoke Target="[FinishButton.NavigateInto]" />
         </Actions>
-      </Rule>
+      </Rule-->
     </Rules>
     <Content>
       <Panel>
