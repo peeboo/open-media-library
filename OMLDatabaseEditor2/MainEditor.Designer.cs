@@ -63,6 +63,7 @@ namespace OMLDatabaseEditor
             this.filterByTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.alwaysShowTitleListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showAllItemsInTitleListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -357,10 +358,11 @@ namespace OMLDatabaseEditor
             this.filterByParentalRatingToolStripMenuItem,
             this.filterByTagToolStripMenuItem,
             this.toolStripSeparator5,
-            this.alwaysShowTitleListToolStripMenuItem});
+            this.alwaysShowTitleListToolStripMenuItem,
+            this.showAllItemsInTitleListToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "View";
+            this.viewToolStripMenuItem.Text = "&View";
             // 
             // allMoviesToolStripMenuItem1
             // 
@@ -368,14 +370,14 @@ namespace OMLDatabaseEditor
             this.allMoviesToolStripMenuItem1.CheckOnClick = true;
             this.allMoviesToolStripMenuItem1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.allMoviesToolStripMenuItem1.Name = "allMoviesToolStripMenuItem1";
-            this.allMoviesToolStripMenuItem1.Size = new System.Drawing.Size(199, 22);
-            this.allMoviesToolStripMenuItem1.Text = "All Movies";
+            this.allMoviesToolStripMenuItem1.Size = new System.Drawing.Size(210, 22);
+            this.allMoviesToolStripMenuItem1.Text = "&All Movies";
             this.allMoviesToolStripMenuItem1.Click += new System.EventHandler(this.filterTitles_Click);
             // 
             // filterByGenreToolStripMenuItem
             // 
             this.filterByGenreToolStripMenuItem.Name = "filterByGenreToolStripMenuItem";
-            this.filterByGenreToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.filterByGenreToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.filterByGenreToolStripMenuItem.Text = "Filter By Genre";
             // 
             // filterByCompletenessToolStripMenuItem
@@ -385,7 +387,7 @@ namespace OMLDatabaseEditor
             this.toolStripMenuItem3,
             this.toolStripMenuItem4});
             this.filterByCompletenessToolStripMenuItem.Name = "filterByCompletenessToolStripMenuItem";
-            this.filterByCompletenessToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.filterByCompletenessToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.filterByCompletenessToolStripMenuItem.Text = "Filter By Completeness";
             // 
             // toolStripMenuItem2
@@ -415,27 +417,35 @@ namespace OMLDatabaseEditor
             // filterByParentalRatingToolStripMenuItem
             // 
             this.filterByParentalRatingToolStripMenuItem.Name = "filterByParentalRatingToolStripMenuItem";
-            this.filterByParentalRatingToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.filterByParentalRatingToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.filterByParentalRatingToolStripMenuItem.Text = "Filter By Parental Rating";
             // 
             // filterByTagToolStripMenuItem
             // 
             this.filterByTagToolStripMenuItem.Name = "filterByTagToolStripMenuItem";
-            this.filterByTagToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.filterByTagToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.filterByTagToolStripMenuItem.Text = "Filter By Tag";
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(196, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(207, 6);
             // 
             // alwaysShowTitleListToolStripMenuItem
             // 
             this.alwaysShowTitleListToolStripMenuItem.CheckOnClick = true;
             this.alwaysShowTitleListToolStripMenuItem.Name = "alwaysShowTitleListToolStripMenuItem";
-            this.alwaysShowTitleListToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.alwaysShowTitleListToolStripMenuItem.Text = "Always Show Title List";
+            this.alwaysShowTitleListToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.alwaysShowTitleListToolStripMenuItem.Text = "Always Show &Title List";
             this.alwaysShowTitleListToolStripMenuItem.CheckedChanged += new System.EventHandler(this.alwaysShowTitleListToolStripMenuItem_CheckedChanged);
+            // 
+            // showAllItemsInTitleListToolStripMenuItem
+            // 
+            this.showAllItemsInTitleListToolStripMenuItem.CheckOnClick = true;
+            this.showAllItemsInTitleListToolStripMenuItem.Name = "showAllItemsInTitleListToolStripMenuItem";
+            this.showAllItemsInTitleListToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.showAllItemsInTitleListToolStripMenuItem.Text = "&Show all items in Title List";
+            this.showAllItemsInTitleListToolStripMenuItem.CheckedChanged += new System.EventHandler(this.showAllItemsInTitleListToolStripMenuItem_CheckedChanged);
             // 
             // toolsToolStripMenuItem
             // 
@@ -1281,6 +1291,7 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private DevExpress.XtraEditors.ListBoxControl lbTags;
         private OMLDatabaseEditor.Controls.TitlesListView titlesListView;
+        private System.Windows.Forms.ToolStripMenuItem showAllItemsInTitleListToolStripMenuItem;
     }
 }
 

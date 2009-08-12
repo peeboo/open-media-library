@@ -80,7 +80,7 @@ namespace OMLDatabaseEditor
             splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Dock = DockStyle.Fill;
             splitContainerDetails.Panel2.Controls["titlesListView"].Dock = DockStyle.Fill;
             alwaysShowTitleListToolStripMenuItem.Checked = OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList;
-
+            showAllItemsInTitleListToolStripMenuItem.Checked = OMLEngine.Settings.OMLSettings.ShowSubFolderTitles;
         }
 
 
@@ -93,7 +93,7 @@ namespace OMLDatabaseEditor
             //OMLEngine.Utilities.DebugLine("[MainEditor] InitData() : new TitleCollection()");
             //OMLEngine.Utilities.DebugLine("[MainEditor] InitData() : loadTitleCollection()");            
 
-            SplashScreen2.SetStatus(16, "Checking database.");
+            SplashScreen2.SetStatus(14, "Checking database.");
             if (!ValidateDatabase())
             {
                 SplashScreen2.CloseForm();
@@ -103,15 +103,18 @@ namespace OMLDatabaseEditor
 
             defaultLookAndFeel1.LookAndFeel.SkinName = OMLEngine.Settings.OMLSettings.DBEditorSkin;
 
-            SplashScreen2.SetStatus(32, "Loading plugins.");
+            SplashScreen2.SetStatus(28, "Loading plugins.");
             SetupNewMovieAndContextMenu();
 
-            SplashScreen2.SetStatus(48, "Loading Skins.");
+            SplashScreen2.SetStatus(42, "Setting up filter lists");
+            SetupFilterListContextMenu();
+
+            SplashScreen2.SetStatus(56, "Loading Skins.");
             GetDXSkins();
 
             _loading = true;
             
-            SplashScreen2.SetStatus(64, "Loading Movies.");
+            SplashScreen2.SetStatus(70, "Loading Movies.");
 
             _movieList = new Dictionary<int,Title>();
 
@@ -119,7 +122,7 @@ namespace OMLDatabaseEditor
             PopulateMediaTree();
             PopulateMovieListV2(SelectedTreeRoot);
 
-            SplashScreen2.SetStatus(80, "Loading MRU Lists.");
+            SplashScreen2.SetStatus(85, "Loading MRU Lists.");
             this.titleEditor.SetMRULists();
 
             // Load resource images
@@ -254,10 +257,15 @@ namespace OMLDatabaseEditor
 
             if (String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))
                 fromPreferredSourcesToolStripMenuItem1.Visible = false;
+        }
 
+        private void SetupFilterListContextMenu()
+        {
             // Set up filter lists
             ToolStripMenuItem item;
-            foreach (string genre in from g in TitleCollectionManager.GetAllGenres(new List<TitleFilter>()) select g.Name)
+
+            filterByGenreToolStripMenuItem.DropDownItems.Clear();
+            foreach (string genre in from g in TitleCollectionManager.GetAllGenreMetaDatas() select g.Name)
             {
                 item = new ToolStripMenuItem(genre);
                 item.CheckOnClick = true;
@@ -265,6 +273,7 @@ namespace OMLDatabaseEditor
                 filterByGenreToolStripMenuItem.DropDownItems.Add(item);
             }
 
+            filterByParentalRatingToolStripMenuItem.DropDownItems.Clear();
             foreach (string rating in from t in TitleCollectionManager.GetAllParentalRatings(null) select t.Name)
             {
                 item = new ToolStripMenuItem(rating);
@@ -273,6 +282,7 @@ namespace OMLDatabaseEditor
                 filterByParentalRatingToolStripMenuItem.DropDownItems.Add(item);
             }
 
+            filterByTagToolStripMenuItem.DropDownItems.Clear();
             foreach (string tag in TitleCollectionManager.GetAllTagsList())
             {
                 item = new ToolStripMenuItem(tag);
@@ -1344,6 +1354,39 @@ namespace OMLDatabaseEditor
             }
             Cursor = Cursors.Default;
         }
+
+        private void alwaysShowTitleListToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            if (alwaysShowTitleListToolStripMenuItem.Checked)
+            {
+                OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList = true;
+                splitContainerDetails.PanelVisibility = SplitPanelVisibility.Both;
+            }
+            else
+            {
+                OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList = false;
+
+                if ((mainNav.ActiveGroup == groupMetadata) ||
+                    (mainNav.ActiveGroup == groupImport) ||
+                    (mainNav.ActiveGroup == groupBioData) ||
+                    (mainNav.ActiveGroup == groupTags) ||
+                    (mainNav.ActiveGroup == groupGenresMetadata))
+                {
+                    splitContainerDetails.PanelVisibility = SplitPanelVisibility.Panel2;
+                }
+                else
+                {
+                    splitContainerDetails.PanelVisibility = SplitPanelVisibility.Both;
+                }
+            }
+        }
+
+        private void showAllItemsInTitleListToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            OMLEngine.Settings.OMLSettings.ShowSubFolderTitles = showAllItemsInTitleListToolStripMenuItem.Checked;
+            PopulateMovieListV2(SelectedTreeRoot);
+        }
+
         #endregion
 
 
@@ -1449,32 +1492,6 @@ namespace OMLDatabaseEditor
                 }
             }
             _loading = false;
-        }
-
-        private void alwaysShowTitleListToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
-        {
-            if (alwaysShowTitleListToolStripMenuItem.Checked)
-            {
-                OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList = true;
-                splitContainerDetails.PanelVisibility = SplitPanelVisibility.Both;
-            }
-            else
-            {
-                OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList = false;
-
-                if ((mainNav.ActiveGroup == groupMetadata) ||
-                    (mainNav.ActiveGroup == groupImport) ||
-                    (mainNav.ActiveGroup == groupBioData) ||
-                    (mainNav.ActiveGroup == groupTags) ||
-                    (mainNav.ActiveGroup == groupGenresMetadata))
-                {
-                    splitContainerDetails.PanelVisibility = SplitPanelVisibility.Panel2;
-                }
-                else 
-                {
-                    splitContainerDetails.PanelVisibility = SplitPanelVisibility.Both;
-                }
-            }
         }
 
         private void navBarControl1_NavPaneStateChanged(object sender, EventArgs e)
@@ -2671,14 +2688,42 @@ namespace OMLDatabaseEditor
             {
                 lbGenreMetadata.SelectedItem = e.First();
             }
+
+            SetupFilterListContextMenu();
         }
 
         private void RemoveGenreMetaData()
         {
             if (lbGenreMetadata.SelectedItem != null)
             {
-                TitleCollectionManager.RemoveGenreMetaData((GenreMetaData)lbGenreMetadata.SelectedItem);
-                lbGenreMetadata.Items.Remove(lbGenreMetadata.SelectedItem);
+                List<TitleFilter> tfl = new List<TitleFilter>();
+                TitleFilter tf = new TitleFilter(TitleFilterType.Genre, ((GenreMetaData)lbGenreMetadata.SelectedItem).Name);
+                tfl.Add(tf);
+
+                if (TitleCollectionManager.GetFilteredTitles(tfl).Count() == 0)
+                {
+                    TitleCollectionManager.RemoveGenreMetaData((GenreMetaData)lbGenreMetadata.SelectedItem);
+                    lbGenreMetadata.Items.Remove(lbGenreMetadata.SelectedItem);
+                    SetupFilterListContextMenu();
+                }
+                else
+                {
+                    if (XtraMessageBox.Show("The genre " + lbGenreMetadata.SelectedItem + " is assigned to movies. Do you want to set filter for this genre?", "Cannot delete genres.", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        allMoviesToolStripMenuItem1.Checked = false;
+
+                        foreach (ToolStripMenuItem item in filterByGenreToolStripMenuItem.DropDownItems)
+                            if (item.Text != lbGenreMetadata.SelectedItem.ToString())
+                                item.Checked = false;
+                            else
+                                item.Checked = true;
+                        
+                        showAllItemsInTitleListToolStripMenuItem.Checked = true;
+
+                        LoadMovies();
+                        PopulateMovieListV2(SelectedTreeRoot);
+                    }
+                }
             }
         }
 
@@ -2690,7 +2735,8 @@ namespace OMLDatabaseEditor
                 result = XtraMessageBox.Show("You have unsaved changes to " + genreMetaDataEditor.EditedGenreMetaData.Name + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
                 if (result == DialogResult.Yes)
                 {
-                    TitleCollectionManager.SaveGenreMetaDataChanges();           
+                    TitleCollectionManager.SaveGenreMetaDataChanges();
+                    SetupFilterListContextMenu();
 
                     //_movieList[titleEditor.EditedTitle.Id] = titleEditor.EditedTitle;
                     //SaveChanges();
@@ -3347,6 +3393,11 @@ namespace OMLDatabaseEditor
         #region Title & Folder Creation
         private int CreateTitle(int? parentid, string Name, TitleTypes titletype, Disk[] disks, bool RefreshUI)
         {
+            return CreateTitle(parentid, Name, titletype, null, null, disks, RefreshUI);
+        }
+
+        private int CreateTitle(int? parentid, string Name, TitleTypes titletype, short? SeasonNumber, short? EpisodeNumber, Disk[] disks, bool RefreshUI)
+        {
             Title newTitle = new Title();
             newTitle.Name = Name;
 
@@ -3376,6 +3427,9 @@ namespace OMLDatabaseEditor
             }
             newTitle.DateAdded = DateTime.Now;
 
+            newTitle.SeasonNumber = SeasonNumber;
+            newTitle.EpisodeNumber = EpisodeNumber;
+
             if (disks != null)
             {
                 foreach (Disk disk in disks)
@@ -3383,6 +3437,7 @@ namespace OMLDatabaseEditor
                     newTitle.AddDisk(disk);
                 }
             }
+
 
             // Add the title now to get the title ID
             TitleCollectionManager.AddTitle(newTitle);
@@ -3502,31 +3557,36 @@ namespace OMLDatabaseEditor
                                 {
                                     s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, false);
                                 }
-                                    
+
                                 foreach (Video v in s.Videos)
                                 {
                                     //int v_parent = CreateFolder(s_parent, Path.GetFileNameWithoutExtension(v.Name), TitleTypes.Collection, false);
 
                                     List<Disk> disks = new List<Disk>();
 
-                                    foreach (string f in v.Files)
+                                    if ((e.EntityType == Serf.EntityType.COLLECTION) ||
+                                        (e.EntityType == Serf.EntityType.MOVIE))
                                     {
-                                        string pathWithNoFile = Path.GetDirectoryName(f);
-                                        string pathWithNoExtension = Path.GetDirectoryName(f) + "\\" + Path.GetFileNameWithoutExtension(f);
-                                        string fileExtension = Path.GetExtension(f).ToUpper().Replace(".", "");
-
-                                        fileExtension = fileExtension.Replace("-", "");
-
-                                        if (!TitleCollectionManager.ContainsDisks(OMLEngine.FileSystem.NetworkScanner.FixPath(f)))
+                                        // Collection or movie mode. Create one title per folder with multiple disks
+                                        foreach (string f in v.Files)
                                         {
-                                            if (Enum.IsDefined(typeof(VideoFormat), fileExtension.ToUpperInvariant()))
-                                            {
-                                                Disk disk = new Disk();
-                                                disk.Path = f;
-                                                disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
-                                                disk.Name = string.Format("Disk {0}", 0);
+                                            string pathWithNoFile = Path.GetDirectoryName(f);
+                                            string pathWithNoExtension = Path.GetDirectoryName(f) + "\\" + Path.GetFileNameWithoutExtension(f);
+                                            string fileExtension = Path.GetExtension(f).ToUpper().Replace(".", "");
 
-                                                disks.Add(disk);
+                                            fileExtension = fileExtension.Replace("-", "");
+
+                                            if (!TitleCollectionManager.ContainsDisks(OMLEngine.FileSystem.NetworkScanner.FixPath(f)))
+                                            {
+                                                if (Enum.IsDefined(typeof(VideoFormat), fileExtension.ToUpperInvariant()))
+                                                {
+                                                    Disk disk = new Disk();
+                                                    disk.Path = f;
+                                                    disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
+                                                    disk.Name = string.Format("Disk {0}", 0);
+
+                                                    disks.Add(disk);
+                                                }
                                             }
                                         }
                                         if (disks.Count != 0)
@@ -3537,7 +3597,47 @@ namespace OMLDatabaseEditor
                                                 disks.ToArray(),
                                                 false);
 
-                                            CheckPathForImages(newTitleID, f);
+                                            CheckPathForImages(newTitleID, disks[0].Path);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // TV mode. Create one title per file, each with single disks
+                                        foreach (string f in v.Files)
+                                        {
+                                            string pathWithNoFile = Path.GetDirectoryName(f);
+                                            string pathWithNoExtension = Path.GetDirectoryName(f) + "\\" + Path.GetFileNameWithoutExtension(f);
+                                            string fileExtension = Path.GetExtension(f).ToUpper().Replace(".", "");
+
+                                            fileExtension = fileExtension.Replace("-", "");
+
+                                            if (!TitleCollectionManager.ContainsDisks(OMLEngine.FileSystem.NetworkScanner.FixPath(f)))
+                                            {
+                                                if (Enum.IsDefined(typeof(VideoFormat), fileExtension.ToUpperInvariant()))
+                                                {
+                                                    Disk disk = new Disk();
+                                                    disk.Path = f;
+                                                    disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
+                                                    disk.Name = string.Format("Disk {0}", 0);
+
+                                                    disks.Add(disk);
+                                                }
+                                            }
+                                            if (disks.Count != 0)
+                                            {
+                                                short episodeno = 0;
+                                                if (v.EpisodeNumbers.Count > 0) episodeno = (short)v.EpisodeNumbers[0];
+                                                
+                                                int newTitleID = CreateTitle(s_parent,
+                                                    Path.GetFileNameWithoutExtension(f),
+                                                    TitleTypes.Episode,
+                                                    (short)s.Number,
+                                                    episodeno,
+                                                    disks.ToArray(),
+                                                    false);
+                                                
+                                                CheckPathForImages(newTitleID, disks[0].Path);
+                                            }
                                         }
                                     }
                                 }
