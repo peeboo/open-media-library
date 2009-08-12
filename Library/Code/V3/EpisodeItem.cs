@@ -335,6 +335,10 @@ namespace Library.Code.V3
                 case VideoFormat.ISO:
                 case VideoFormat.MDF:
                 case VideoFormat.NRG:
+                case VideoFormat.VOB:
+                case VideoFormat.DVD:
+                case VideoFormat.DVRMS:
+                case VideoFormat.WTV:
                     return true;
                 default:
                     return false;
