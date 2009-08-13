@@ -18,7 +18,7 @@ namespace OMLEngine.DatabaseManagement
 
             foreach (KeyValuePair<int, Title> t in _movieList)
             {
-                if (((t.Value.TitleType & TitleTypes.Root) == 0) && (t.Value.ParentTitleId != null))
+                if (t.Value.ParentTitleId != null)
                 {
                     if (!_movieList.ContainsKey((int)t.Value.ParentTitleId))
                     {
