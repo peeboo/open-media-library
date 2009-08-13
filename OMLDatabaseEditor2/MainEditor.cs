@@ -3527,6 +3527,9 @@ namespace OMLDatabaseEditor
 
         private void CreateTitlesFromPathArray(int? parentid, string[] path)
         {
+            StSanaEvents eventsForm = new StSanaEvents();
+            eventsForm.Activate();
+
             // TODO - Need to check for images in folder
             // TODO - Wrap this up in another thread
             foreach (string file in path)
@@ -3535,6 +3538,7 @@ namespace OMLDatabaseEditor
                 {
                     // Folder passed in. This is where St Sana kicks in
                     Servant stsana = new Servant();
+                    stsana.Log += new Servant.SSEventHandler(stsana_Log);
                     stsana.BasePaths.Add(file);
                     stsana.Scan();
                     
@@ -3558,8 +3562,6 @@ namespace OMLDatabaseEditor
                                     case Serf.EntityType.TV_SHOW:
                                         e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.TVShow, false);
                                         break;
-                                    default:
-                                        e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
                                 }
                             }
 
@@ -3687,6 +3689,11 @@ namespace OMLDatabaseEditor
             
             PopulateMovieListV2(SelectedTreeRoot);
             PopulateMediaTree();
+        }
+
+        void stsana_Log(string message)
+        {
+            StSanaEvents.UpdateStatus(message);
         }
 
         private void CheckPathForImages(int TitleID, string path)
