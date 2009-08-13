@@ -14,6 +14,7 @@ namespace OMLDatabaseEditor
         static public void UpdateStatus(string msg)
         {
             StSanaEvents.instance.StSanaEventLabel.Text = msg;
+            StSanaEvents.instance.Refresh();
         }
 
         static private StSanaEvents instance;
