@@ -226,6 +226,8 @@ namespace OMLEngine.FileSystem
         /// <returns></returns>
         static public string FixPath(string path)
         {
+            if (string.IsNullOrEmpty(path)) return "";
+
             if (GetDriveType(path) == DriveTypes.NetworkDrive)
             {
                 // Check if this is a mapped drive
