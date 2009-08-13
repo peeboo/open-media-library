@@ -3554,10 +3554,9 @@ namespace OMLDatabaseEditor
                                 switch (e.EntityType)
                                 {
                                     case Serf.EntityType.COLLECTION:
-                                        e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
-                                        break;
                                     case Serf.EntityType.MOVIE:
-                                        e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Movie, false);
+                                        e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
+                                        e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
                                         break;
                                     case Serf.EntityType.TV_SHOW:
                                         e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.TVShow, false);
@@ -3572,7 +3571,17 @@ namespace OMLDatabaseEditor
                                 // -1 for non tv shows.
                                 if (s.Name.ToUpperInvariant().CompareTo(e.Name.ToUpperInvariant()) != 0 || s.Number > -1)
                                 {
-                                    s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, false);
+                                    //s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, false);
+                                    switch (e.EntityType)
+                                    {
+                                        case Serf.EntityType.COLLECTION:
+                                        case Serf.EntityType.MOVIE:
+                                            s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, false);
+                                            break;
+                                        case Serf.EntityType.TV_SHOW:
+                                            s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Season, false);
+                                            break;
+                                    }
                                 }
 
                                 foreach (Video v in s.Videos)
