@@ -981,7 +981,7 @@
             // openCoverFile
             // 
             this.openCoverFile.DefaultExt = "jpg";
-            this.openCoverFile.Filter = "JPG Files|*.jpg|All Files|*.*";
+            this.openCoverFile.Filter = "JPG Files|*.jpg|PNG Files|*.png|All Files|*.*";
             this.openCoverFile.Title = "Select Cover Art";
             // 
             // imageWatcherFront

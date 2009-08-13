@@ -3722,13 +3722,25 @@ namespace OMLDatabaseEditor
             {
                 image = pathWithNoExtension + ".jpg";
             }
+            else if (File.Exists(pathWithNoExtension + ".png"))
+            {
+                image = pathWithNoExtension + ".png";
+            }
             else if (File.Exists(path + ".jpg"))
             {
                 image = path + ".jpg";
             }
+            else if (File.Exists(path + ".png"))
+            {
+                image = path = ".png";
+            }
             else if (File.Exists(Path.Combine(Path.GetDirectoryName(pathWithNoFile), "folder.jpg")))
             {
                 image = Path.Combine(Path.GetDirectoryName(pathWithNoFile), "\\folder.jpg");
+            }
+            else if (File.Exists(Path.Combine(Path.GetDirectoryName(pathWithNoFile), "folder.png")))
+            {
+                image = Path.Combine(Path.GetDirectoryName(pathWithNoFile), "\\folder.png");
             }
 
             if (!string.IsNullOrEmpty(image))
