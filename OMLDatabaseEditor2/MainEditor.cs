@@ -3685,8 +3685,11 @@ namespace OMLDatabaseEditor
                         CheckPathForImages(newTitleID, file);
                     }
                 }
-            } 
-            
+            }
+
+            eventsForm.Hide();
+            eventsForm.Dispose();
+            eventsForm = null;
             PopulateMovieListV2(SelectedTreeRoot);
             PopulateMediaTree();
         }
