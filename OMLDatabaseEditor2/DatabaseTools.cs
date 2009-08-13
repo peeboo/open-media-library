@@ -103,5 +103,32 @@ namespace OMLDatabaseEditor
                 }
             }
         }
+
+        private void sbDatabaseIntegrity_Click(object sender, EventArgs e)
+        {
+            OMLEngine.DatabaseManagement.DatabaseIntegrityChecks dbi = new OMLEngine.DatabaseManagement.DatabaseIntegrityChecks();
+
+            List<Title> OrphanedTitles = new List<Title>();
+
+            if (dbi.CheckOrphanedTitles(out OrphanedTitles))
+            {
+                // There are orphaned titles
+                // TODO - Must do something about them
+                StringBuilder sb = new StringBuilder();
+                foreach (Title t in OrphanedTitles)
+                {
+                    if (sb.Length < 255)
+                    {
+                        if (sb.Length > 0) sb.Append(", ");
+                        sb.Append(t.Name);
+                    }
+                }
+                XtraMessageBox.Show("We have found the following orphaned titles - " + sb.ToString(), "Orphaned Titles!");
+            }
+            else
+            {
+                XtraMessageBox.Show("No orphaned titles were found.", "Orphaned Titles!");
+            }
+        }
     }
 }

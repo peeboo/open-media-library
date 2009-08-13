@@ -3527,8 +3527,8 @@ namespace OMLDatabaseEditor
 
         private void CreateTitlesFromPathArray(int? parentid, string[] path)
         {
-            StSanaEvents eventsForm = new StSanaEvents();
-            eventsForm.Activate();
+            //StSanaEvents eventsForm = new StSanaEvents();
+            //eventsForm.Activate();
 
             // TODO - Need to check for images in folder
             // TODO - Wrap this up in another thread
@@ -3687,16 +3687,16 @@ namespace OMLDatabaseEditor
                 }
             }
 
-            eventsForm.Hide();
-            eventsForm.Dispose();
-            eventsForm = null;
+            //eventsForm.Hide();
+            //eventsForm.Dispose();
+            //eventsForm = null;
             PopulateMovieListV2(SelectedTreeRoot);
             PopulateMediaTree();
         }
 
         void stsana_Log(string message)
         {
-            StSanaEvents.UpdateStatus(message);
+            //StSanaEvents.UpdateStatus(message);
         }
 
         private void CheckPathForImages(int TitleID, string path)
