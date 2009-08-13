@@ -33,11 +33,12 @@ namespace OMLDatabaseEditor
             this.sbRestoreDB = new DevExpress.XtraEditors.SimpleButton();
             this.sbClose = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lcDatabaseSize = new DevExpress.XtraEditors.LabelControl();
             this.lcReqDatabaseVersion = new DevExpress.XtraEditors.LabelControl();
             this.lcDatabaseVersion = new DevExpress.XtraEditors.LabelControl();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.lcDatabaseSize = new DevExpress.XtraEditors.LabelControl();
+            this.sbDatabaseIntegrity = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -63,7 +64,7 @@ namespace OMLDatabaseEditor
             // 
             // sbRestoreDB
             // 
-            this.sbRestoreDB.Location = new System.Drawing.Point(59, 60);
+            this.sbRestoreDB.Location = new System.Drawing.Point(59, 56);
             this.sbRestoreDB.Name = "sbRestoreDB";
             this.sbRestoreDB.Size = new System.Drawing.Size(113, 23);
             this.sbRestoreDB.TabIndex = 4;
@@ -73,7 +74,7 @@ namespace OMLDatabaseEditor
             // sbClose
             // 
             this.sbClose.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.sbClose.Location = new System.Drawing.Point(71, 299);
+            this.sbClose.Location = new System.Drawing.Point(71, 335);
             this.sbClose.Name = "sbClose";
             this.sbClose.Size = new System.Drawing.Size(113, 23);
             this.sbClose.TabIndex = 6;
@@ -90,6 +91,14 @@ namespace OMLDatabaseEditor
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Info";
+            // 
+            // lcDatabaseSize
+            // 
+            this.lcDatabaseSize.Location = new System.Drawing.Point(11, 58);
+            this.lcDatabaseSize.Name = "lcDatabaseSize";
+            this.lcDatabaseSize.Size = new System.Drawing.Size(77, 13);
+            this.lcDatabaseSize.TabIndex = 12;
+            this.lcDatabaseSize.Text = "Database size : ";
             // 
             // lcReqDatabaseVersion
             // 
@@ -113,34 +122,36 @@ namespace OMLDatabaseEditor
             this.groupBox2.Controls.Add(this.sbRestoreDB);
             this.groupBox2.Location = new System.Drawing.Point(12, 100);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(234, 100);
+            this.groupBox2.Size = new System.Drawing.Size(234, 96);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Backup && Restore";
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.sbDatabaseIntegrity);
             this.groupBox3.Controls.Add(this.sbOptimizeDB);
-            this.groupBox3.Location = new System.Drawing.Point(12, 206);
+            this.groupBox3.Location = new System.Drawing.Point(12, 214);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(234, 73);
+            this.groupBox3.Size = new System.Drawing.Size(234, 100);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Maintenance";
             // 
-            // lcDatabaseSize
+            // sbDatabaseIntegrity
             // 
-            this.lcDatabaseSize.Location = new System.Drawing.Point(11, 58);
-            this.lcDatabaseSize.Name = "lcDatabaseSize";
-            this.lcDatabaseSize.Size = new System.Drawing.Size(77, 13);
-            this.lcDatabaseSize.TabIndex = 12;
-            this.lcDatabaseSize.Text = "Database size : ";
+            this.sbDatabaseIntegrity.Location = new System.Drawing.Point(59, 59);
+            this.sbDatabaseIntegrity.Name = "sbDatabaseIntegrity";
+            this.sbDatabaseIntegrity.Size = new System.Drawing.Size(113, 23);
+            this.sbDatabaseIntegrity.TabIndex = 4;
+            this.sbDatabaseIntegrity.Text = "Check DB Integrity";
+            this.sbDatabaseIntegrity.Click += new System.EventHandler(this.sbDatabaseIntegrity_Click);
             // 
             // DatabaseTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(258, 334);
+            this.ClientSize = new System.Drawing.Size(258, 376);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.sbClose);
             this.Controls.Add(this.groupBox2);
@@ -170,5 +181,6 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraEditors.LabelControl lcDatabaseVersion;
         private DevExpress.XtraEditors.LabelControl lcReqDatabaseVersion;
         private DevExpress.XtraEditors.LabelControl lcDatabaseSize;
+        private DevExpress.XtraEditors.SimpleButton sbDatabaseIntegrity;
     }
 }
