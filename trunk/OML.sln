@@ -5,11 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVDProfilerPlugin", "DVDPro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMoviesPlugin", "MyMoviesPlugin\MyMoviesPlugin.csproj", "{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLDatabaseEditor", "OMLDatabaseEditor\OMLDatabaseEditor.csproj", "{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C62E5AA2-D72F-4CDB-944B-2E8C98353973} = {C62E5AA2-D72F-4CDB-944B-2E8C98353973}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieCollectorzPlugin", "MovieCollectorz\MovieCollectorzPlugin.csproj", "{5228D6B1-AB63-4DE9-B7AB-8A60F56A3570}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLEngine", "OMLEngine\OMLEngine.csproj", "{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}"
@@ -161,14 +156,6 @@ Global
 		{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}.Release|x64.ActiveCfg = Release|Any CPU
 		{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}.Release|x86.ActiveCfg = Release|Any CPU
-		{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}.Release|x64.ActiveCfg = Release|Any CPU
-		{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}.Release|x86.ActiveCfg = Release|Any CPU
 		{5228D6B1-AB63-4DE9-B7AB-8A60F56A3570}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5228D6B1-AB63-4DE9-B7AB-8A60F56A3570}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5228D6B1-AB63-4DE9-B7AB-8A60F56A3570}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
