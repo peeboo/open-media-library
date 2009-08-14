@@ -52,6 +52,12 @@ namespace Library
             OMLApplication.DebugLine("[MoviePlayerFactory] Determing MoviePlayer to use for: {0}", source);
             if (File.Exists(source.MediaPath) || Directory.Exists(source.MediaPath))
             {
+                // we need to figure out if you are on an extender and using windows7, then don't try to transcode stuff
+                //if (OMLApplication.IsWindows7)
+                //{
+                //    OMLApplication.DebugLine("[MoviePlayerFactory] VideoPlayer created: {0}", source);
+                //    return new VideoPlayer(source);
+                //}
                 // This is for transcoding debugging
                 if (OMLSettings.DebugTranscoding)
                 {
