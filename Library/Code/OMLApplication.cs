@@ -214,7 +214,19 @@ namespace Library
                 isStartingTranscodingJob = value;
                 //FirePropertyChanged("IsStartingTranscodingJob");
             }
-        }       
+        }
+
+        static public bool IsWindows7
+        {
+            get
+            {
+                OperatingSystem os = Environment.OSVersion;
+                if (os.Version.Major >= 6 && os.Version.Minor >= 1)
+                    return true;
+
+                return false;
+            }
+        }
 
         public OMLApplication()
             : this(null, null)
