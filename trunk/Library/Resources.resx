@@ -430,15 +430,6 @@
   <data name="TranscodingMessage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Markup\Control\TranscodingMessage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Blu_RayMovieDisk" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\Blu-RayMovieDisk.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="EnhancedDVD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\EnhancedDVD.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="hddvdmovie" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\hddvdmovie.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Folder_Closed" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\Folder_Closed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -465,9 +456,6 @@
   </data>
   <data name="GalleryItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Markup\Control\GalleryItem.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="SampleBackground2_1024_768" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\nightmare_wp_05_1024.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="GalleryV2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Markup\LayoutV2\GalleryV2.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -525,30 +513,6 @@
   </data>
   <data name="IntroPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Markup\IntroPage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="boxart01" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\boxart01.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="boxart02" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\boxart02.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="boxart03" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\boxart03.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="boxart04" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\boxart04.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="boxart05" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\boxart05.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="boxart06" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\boxart06.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="boxart07" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\boxart07.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="boxart08" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\boxart08.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SampleBackDrop" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\appleseedexmachina1080x25.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
