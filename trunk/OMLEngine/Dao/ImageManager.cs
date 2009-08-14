@@ -204,8 +204,8 @@ namespace OMLEngine
                         resizeSize = 400;
                         break;
 
-                    case ImageSize.Small:                        
-                        resizeSize = 200;
+                    case ImageSize.Small:
+                        resizeSize = 319;
                         break;
 
                     case ImageSize.Original:
