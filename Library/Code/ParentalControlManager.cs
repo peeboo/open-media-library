@@ -7,8 +7,17 @@ namespace Library
 {
     public class ParentalControlManager : ModelItem
     {
+        Library.Code.V3.MovieItem currentItem;
         ParentalControls controls;
         IList<string> ratingsSystems;
+
+        public bool isLocked
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         public ParentalControlManager()
         {
@@ -17,14 +26,38 @@ namespace Library
             ratingsSystems = controls.GetAvailableRatingSystems();
         }
 
-        public void AskForPin()
+        public void PlayMovie(Library.Code.V3.MovieItem item)
         {
-            ParentalPromptCompletedCallback parentalCallback = UnlockParentalLimits;
-            controls.PromptForPin(parentalCallback);
+            this.currentItem = item;
+            if (this.isLocked)
+            {
+                ParentalPromptCompletedCallback cb = cbPlayMovie;
+                controls.PromptForPin(cb);
+            } else
+                item.PlayMovie();
         }
 
-        public void UnlockParentalLimits(bool correctPinEntered)
+        public void cbPlayMovie(bool correctPinEntered)
         {
+            if (correctPinEntered)
+                this.currentItem.PlayMovie();
+        }
+
+        public void PlayAllDisks(Library.Code.V3.MovieItem item)
+        {
+            this.currentItem = item;
+            if (this.isLocked)
+            {
+                ParentalPromptCompletedCallback cb = cbPlayAllDisks;
+                controls.PromptForPin(cb);
+            } else
+                item.PlayAllDisks();
+        }
+
+        public void cbPlayAllDisks(bool correctPinEntered)
+        {
+            if (correctPinEntered)
+                this.currentItem.PlayAllDisks();
         }
     }
 }
