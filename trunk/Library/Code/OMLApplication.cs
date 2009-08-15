@@ -24,6 +24,7 @@ namespace Library
     /// </summary>
     public class OMLApplication : BaseModelItem
     {
+        public ParentalControlManager parentalControlManager;
         private bool isBusy = false;
         private bool isStartingTranscodingJob = false;
         private string transcodeStatus = string.Empty;
@@ -39,6 +40,14 @@ namespace Library
         private Library.Code.V3.IsMouseActiveHooker mouseActiveHooker;
 
         //v3 temp
+
+        public bool ParentalControlsActive
+        {
+            get {
+                return parentalControlManager.isLocked;
+            }
+        }
+
         public void FixRepeatRate(object scroller, uint val)
         {
             PropertyInfo pi = scroller.GetType().GetProperty("View", BindingFlags.Public | BindingFlags.Instance);
@@ -265,7 +274,7 @@ namespace Library
             this.mouseActiveHooker.MouseActive += new Library.Code.V3.IsMouseActiveHooker.MouseActiveHandler(mouseActiveHooker_MouseActive);
             #endif
 
-
+            this.parentalControlManager = new ParentalControlManager();
             this._session = session;
             AddInHost.Current.MediaCenterEnvironment.PropertyChanged +=new PropertyChangedEventHandler(MediaCenterEnvironment_PropertyChanged);
 

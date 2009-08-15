@@ -343,10 +343,12 @@ namespace Library.Code.V3
             if (NeedsMounting(this.TitleObject.Disks[0].Format))
             {
                 this.TitleObject.SelectedDisk = this.TitleObject.Disks[0];
+                OMLApplication.Current.parentalControlManager.PlayMovie(this);
                 this.PlayMovie();
             }
             else
             {
+                OMLApplication.Current.parentalControlManager.PlayAllDisks(this);
                 this.PlayAllDisks();
             }
         }
