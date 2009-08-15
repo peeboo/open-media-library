@@ -105,6 +105,7 @@
     <Compile Include="Code\LayoutV2\OMLCommand.cs" />
     <Compile Include="Code\LayoutV2\OMLPage.cs" />
     <Compile Include="Code\OMLUpdater.cs" />
+    <Compile Include="Code\ParentalControlManager.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\ExternalPlayer.cs" />
     <Compile Include="Code\SettingsUIWrapper.cs" />
