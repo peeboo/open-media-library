@@ -26,7 +26,7 @@ namespace Library
         {            
             _filter = filter;
             FilterName = _filter.Name;
-            Invoked += filter.OnFilterSelected;
+            //Invoked += filter.OnFilterSelected;
         }
 
         public override string ToString()
@@ -346,37 +346,37 @@ namespace Library
             return movies;
         }
 
-        public void OnFilterSelected(object sender, EventArgs args)
-        {
-            OMLApplication.ExecuteSafe(delegate
-            {
-                Trace.TraceInformation("MovieGallery.OnFilterSelected");
-                FilterCommand cmd = (FilterCommand)sender;
-                if (cmd.Filter.Name == Filter.Settings)
-                {
-                    OMLApplication.Current.GoToSettingsPage(_gallery);
-                }
-                else if (cmd.Filter.Name == Filter.Trailers)
-                {
-                    OMLApplication.Current.GoToTrailersPage();
-                }
-                else if (cmd.Filter.Name == Filter.Unwatched)
-                {
-                    if ( existingFilters == null )
-                        existingFilters = new List<TitleFilter>(1);
+        //public void OnFilterSelected(object sender, EventArgs args)
+        //{
+        //    OMLApplication.ExecuteSafe(delegate
+        //    {
+        //        Trace.TraceInformation("MovieGallery.OnFilterSelected");
+        //        FilterCommand cmd = (FilterCommand)sender;
+        //        if (cmd.Filter.Name == Filter.Settings)
+        //        {
+        //            OMLApplication.Current.GoToSettingsPage(_gallery);
+        //        }
+        //        else if (cmd.Filter.Name == Filter.Trailers)
+        //        {
+        //            OMLApplication.Current.GoToTrailersPage();
+        //        }
+        //        else if (cmd.Filter.Name == Filter.Unwatched)
+        //        {
+        //            if ( existingFilters == null )
+        //                existingFilters = new List<TitleFilter>(1);
 
-                    TitleFilter newFilter = new TitleFilter(TitleFilterType.Unwatched, null);
+        //            TitleFilter newFilter = new TitleFilter(TitleFilterType.Unwatched, null);
 
-                    if (!existingFilters.Contains(newFilter))
-                        existingFilters.Add(newFilter);
+        //            if (!existingFilters.Contains(newFilter))
+        //                existingFilters.Add(newFilter);
 
-                    OMLApplication.Current.GoToMenu(new MovieGallery(existingFilters));
-                }
-                else
-                {
-                    OMLApplication.Current.GoToSelectionList(this);
-                }
-            });
-        }
+        //            OMLApplication.Current.GoToMenu(new MovieGallery(existingFilters));
+        //        }
+        //        else
+        //        {
+        //            OMLApplication.Current.GoToSelectionList(this);
+        //        }
+        //    });
+        //}
     }
 }

@@ -131,14 +131,14 @@ namespace OMLTestSuite
             mecbt.TEST_DVD_IFO_PARSING();
             mecbt.TEST_COMMAND_BUILDER_A_S();
             //mecbt.EXECUTE_COMMAND_BUILDER_A_S();
-#if !CUSTOM
-            mecbt.TEST_BASIC_COMMAND_BUILDER();
+//#if !CUSTOM
+//            mecbt.TEST_BASIC_COMMAND_BUILDER();
 
-            VirtualDirectoryTest vdt = new VirtualDirectoryTest();
-            Console.WriteLine("Testing: VirtualDirectory");
-            vdt.TEST_CREATE_VIRTUAL_FOLDER();
-            vdt.TEST_MULTIPLE_BASE_FOLDERS_WORK();
-#endif
+//            VirtualDirectoryTest vdt = new VirtualDirectoryTest();
+//            Console.WriteLine("Testing: VirtualDirectory");
+//            vdt.TEST_CREATE_VIRTUAL_FOLDER();
+//            vdt.TEST_MULTIPLE_BASE_FOLDERS_WORK();
+//#endif
         }
     }
 }

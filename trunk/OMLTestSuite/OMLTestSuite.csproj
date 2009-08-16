@@ -76,7 +76,6 @@
     <Compile Include="TitleTest.cs" />
     <Compile Include="TranscodeTest.cs" />
     <Compile Include="TVDBMetaDataTest.cs" />
-    <Compile Include="VirtualDirectoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DVDProfilerPlugin\DVDProfilerPlugin.csproj">
