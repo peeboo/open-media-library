@@ -44,7 +44,7 @@ namespace Library
         public bool ParentalControlsActive
         {
             get {
-                return parentalControlManager.isLocked;
+                return parentalControlManager.Enabled;
             }
         }
 
@@ -159,41 +159,6 @@ namespace Library
                 }
             }
         }
-
-        //public int DistanceToMoveCloserBasedOnAngleOrRotation
-        //{
-        //    get
-        //    {
-        //        int originalHeight = Properties.Settings.Default.CarouselItemWidth;
-        //        double newWidth = originalHeight * Math.Cos(Convert.ToDouble(currentAngleDegrees));
-        //        int distanceToMove = originalHeight - Convert.ToInt32(newWidth);
-
-        //        return distanceToMove;
-        //    }
-        //}
-
-        //public Inset MoveToInset
-        //{
-        //    get { return new Inset(0, 0, DistanceToMoveCloserBasedOnAngleOrRotation, 0); }
-        //}
-
-        //public int CurrentAngleDegrees
-        //{
-        //    get { return currentAngleDegrees; }
-        //    set { currentAngleDegrees = value; }
-        //}
-
-        //public int CurrentFocusedItemIndex
-        //{
-        //    get { return currentFocusedItemIndex; }
-        //    set { currentFocusedItemIndex = value; }
-        //}
-
-        //public int CurrentItemIndexPosition
-        //{
-        //    get { return currentItemIndexPosition; }
-        //    set { currentItemIndexPosition = value; }
-        //}
 
         public string TranscodeStatus
         {
@@ -477,78 +442,12 @@ namespace Library
             // DISABLE THIS UNTIL ITS READY -- DJShultz 01/13/2009
             //OMLUpdater updater = new OMLUpdater();
             //ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
-
-            //TheMovieDbBackDropDownloader downloader = new TheMovieDbBackDropDownloader();
-            //foreach (Title t in Titles)
-            //{
-            //    downloader.SearchForTitle(t);
-            //}
-            //SetPrimaryBackgroundImage();
-
-            //switch (context)
-            //{
-            //    case "Menu":
-            //        // Before running strait to the menu, check to see if we want to run the first-time setup
-            //        if (!Properties.Settings.Default.HasRunSetup)
-            //        {
-            //            OMLApplication.DebugLine("[OMLApplication] firstrun, going to setup");
-            //            GoToSetup(new MovieGallery());
-            //            Properties.Settings.Default.HasRunSetup = true;
-            //            Properties.Settings.Default.Save();
-            //            return;
-            //        }
-
-            //        // we want the movie library - check the startup page
-            //        if (OMLSettings.StartPage == Filter.Home)
-            //        {
-            //            OMLApplication.DebugLine("[OMLApplication] going to Menu Page");
-            //            GoToMenu(new MovieGallery());
-            //        }
-            //        else
-            //        {                                                
-            //            // see if they've selected a subfilter
-            //            // the unwatched is a special case until we add a user setting to determine the subfilter
-            //            if (!string.IsNullOrEmpty(OMLSettings.StartPageSubFilter)
-            //                || OMLSettings.StartPage == Filter.Unwatched)
-            //            {
-            //                // go to the subfilter
-            //                GoToMenu(
-            //                    new MovieGallery(
-            //                        new TitleFilter(Filter.FilterStringToTitleType(OMLSettings.StartPage),
-            //                            OMLSettings.StartPageSubFilter)));
-            //            }
-            //            else
-            //            {
-            //                // go to the selection list
-            //                GoToSelectionList(new Filter(new MovieGallery(), Filter.FilterStringToTitleType(OMLSettings.StartPage), null));               
-            //            }
-            //        }
-            //        return;
-            //    case "Settings":
-            //        OMLApplication.DebugLine("[OMLApplication] going to Settings Page");
-            //        GoToSettingsPage(new MovieGallery(TitleCollectionManager.GetAllTitles(), Filter.Settings));
-            //        return;
-            //    case "Trailers":
-            //        OMLApplication.DebugLine("[OMLApplication] going to Trailers Page");
-            //        GoToTrailersPage();
-            //        return;
-            //    case "About":
-            //        OMLApplication.DebugLine("[OMLApplication] going to About Page");
-            //        GoToAboutPage(new MovieGallery(TitleCollectionManager.GetAllTitles(), Filter.About));
-            //        return;
-            //    default:
-            //        OMLApplication.DebugLine("[OMLApplication] going to Default (Menu) Page");
-            //        GoToMenu(new MovieGallery());
-            //        return;
-            //}
         }
 
         private void GoHome(List<OMLEngine.TitleFilter> filters, string name)
         {
             OMLProperties properties = new OMLProperties();
             properties.Add("Application", this);
-            //properties.Add("UISettings", new UISettings());
-            //properties.Add("Settings", new Settings());
             properties.Add("I18n", I18n.Instance);
             //v3 main gallery
             Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(filters, name);
@@ -559,140 +458,6 @@ namespace Library
             properties.Add("Page", gallery);
             _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
         }
-
-        //public void GoToBackPage()
-        //{
-        //    DebugLine("[OMLApplication] GoToBackPage()");
-        //    if (_session != null)
-        //    {
-        //        _session.BackPage();
-        //    }
-        //}
-
-        //v3 temp
-        //public void SettingsHandler(object sender, EventArgs e)
-        //{
-        //    _session.GoToPage("resx://Library/Library.Resources/Settings_Main", CreateProperties(true, true, null));
-        //}
-
-        //public void GoToSettings_AppearancePage(SettingsUIWrapper classSettingsUIWrapper)
-        //{
-        //    DebugLine("[OMLApplication] GoToSettings_AppearancePage()");
-        //    if (_session != null)
-        //    {
-        //        Dictionary<string, object> properties = new Dictionary<string, object>();
-
-        //        Settings settings = new Settings();
-        //        classSettingsUIWrapper.Init(settings);
-        //        properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
-        //        properties["Settings"] = settings;
-        //        properties["Application"] = this;
-
-        //        _session.GoToPage("resx://Library/Library.Resources/Settings_Appearance", properties);
-        //    }
-        //}
-
-        //public void GoToSettings_Appearance_GeneralPage(SettingsUIWrapper classSettingsUIWrapper)
-        //{
-        //    DebugLine("[OMLApplication] GoToSettings_Appearance_GeneralPage()");
-        //    if (_session != null)
-        //    {
-        //        Dictionary<string, object> properties = new Dictionary<string, object>();
-
-        //        Settings settings = new Settings();
-        //        classSettingsUIWrapper.Init(settings);
-        //        properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
-        //        properties["Settings"] = settings;
-        //        properties["Application"] = this;
-
-        //        _session.GoToPage("resx://Library/Library.Resources/Settings_Appearance_General", properties);
-        //    }
-        //}
-
-        //public void GoToSettings_Appearance_DetailViewPage(SettingsUIWrapper classSettingsUIWrapper)
-        //{
-        //    DebugLine("[OMLApplication] GoToSettings_Appearance_GeneralPage()");
-        //    if (_session != null)
-        //    {
-        //        Dictionary<string, object> properties = new Dictionary<string, object>();
-
-        //        Settings settings = new Settings();
-        //        classSettingsUIWrapper.Init(settings);
-        //        properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
-        //        properties["Settings"] = settings;
-        //        properties["Application"] = this;
-
-        //        _session.GoToPage("resx://Library/Library.Resources/Settings_Appearance_DetailView", properties);
-        //    }
-        //}
-
-        //public void GoToSettings_Appearance_GalleryViewPage(SettingsUIWrapper classSettingsUIWrapper)
-        //{
-        //    DebugLine("[OMLApplication] GoToSettings_Appearance_GalleryViewPage()");
-        //    if (_session != null)
-        //    {
-        //        Dictionary<string, object> properties = new Dictionary<string, object>();
-
-        //        Settings settings = new Settings();
-        //        classSettingsUIWrapper.Init(settings);
-        //        properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
-        //        properties["Settings"] = settings;
-        //        properties["Application"] = this;
-
-        //        _session.GoToPage("resx://Library/Library.Resources/Settings_Appearance_GalleryView", properties);
-        //    }
-        //}
-
-        //public void GoToSettings_ExternalInterfacePage(SettingsUIWrapper classSettingsUIWrapper)
-        //{
-        //    DebugLine("[OMLApplication] GoToSettings_ExternalInterfacePage()");
-        //    if (_session != null)
-        //    {
-        //        Dictionary<string, object> properties = new Dictionary<string, object>();
-
-        //        Settings settings = new Settings();
-        //        classSettingsUIWrapper.Init(settings);
-        //        properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
-        //        properties["Settings"] = settings;
-        //        properties["Application"] = this;
-
-        //        _session.GoToPage("resx://Library/Library.Resources/Settings_ExternalInterface", properties);
-        //    }
-        //}
-
-        //public void GoToSettings_FiltersPage(SettingsUIWrapper classSettingsUIWrapper)
-        //{
-        //    DebugLine("[OMLApplication] GoToSettings_FiltersPage()");
-        //    if (_session != null)
-        //    {
-        //        Dictionary<string, object> properties = new Dictionary<string, object>();
-
-        //        Settings settings = new Settings();
-        //        classSettingsUIWrapper.Init(settings);
-        //        properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
-        //        properties["Settings"] = settings;
-        //        properties["Application"] = this;
-
-        //        _session.GoToPage("resx://Library/Library.Resources/Settings_Filters", properties);
-        //    }
-        //}
-
-        //public void GoToSettings_TrailersPage(SettingsUIWrapper classSettingsUIWrapper)
-        //{
-        //    DebugLine("[OMLApplication] GoToSettings_TrailersPage()");
-        //    if (_session != null)
-        //    {
-        //        Dictionary<string, object> properties = new Dictionary<string, object>();
-
-        //        Settings settings = new Settings();
-        //        classSettingsUIWrapper.Init(settings);
-        //        properties["ClassSettingsUIWrapper"] = classSettingsUIWrapper;
-        //        properties["Settings"] = settings;
-        //        properties["Application"] = this;
-
-        //        _session.GoToPage("resx://Library/Library.Resources/Settings_Trailers", properties);
-        //    }
-        //}
 
         public void GoToSettings_AboutPage()
         {
@@ -758,116 +523,6 @@ namespace Library
             }
         }
 
-        //public void GoToSetup(MovieGallery gallery)
-        //{
-        //    DebugLine("[OMLApplication] GoToSetup()");
-        //    if (_session != null)
-        //    {
-        //        _session.GoToPage("resx://Library/Library.Resources/FirstRunSetup", CreateProperties(true, false, gallery));
-        //    }
-        //}
-
-        //public void GoToSettingsPage(MovieGallery gallery)
-        //{
-        //    DebugLine("[OMLApplication] GoToSettingsPage()");
-        //    if (_session != null)
-        //    {
-        //        _session.GoToPage("resx://Library/Library.Resources/Settings", CreateProperties(true, true, gallery));
-        //    }
-        //}
-
-        //public void GoToTrailersPage()
-        //{
-        //    DebugLine("[OMLApplication] GoToTrailersPage()");
-        //    if (_session != null)
-        //    {
-        //        _session.GoToPage("resx://Library/Library.Resources/Trailers", CreateProperties(true, true, null));
-        //    }
-        //}
-
-        //public void GoToAboutPage(MovieGallery gallery)
-        //{
-        //    DebugLine("[OMLApplication] GotoAboutPage()");
-        //    if (_session != null)
-        //        _session.GoToPage("resx://Library/Library.Resources/About", CreateProperties(true, false, gallery));
-        //}        
-
-        //public void GoToMenu(MovieGallery gallery)
-        //{
-        //    DebugLine("[OMLApplication] GoToMenu(Gallery, #{0} Movies)", gallery.Movies.Count);
-        //    Dictionary<string, object> properties = CreateProperties(true, false, gallery);
-
-        //    if (OMLSettings.MovieView == GalleryView.CoverArtWithAlpha &&
-        //        gallery.Movies.Count < 30)
-        //    {
-        //        // alpha falls back to cover art view if there's not enough items
-        //        properties["GalleryView"] = GalleryView.CoverArt;
-        //    }
-        //    else
-        //    {
-        //        properties["GalleryView"] = OMLSettings.MovieView;
-        //    }
-
-        //    if (_session != null)
-        //    {
-        //        _session.GoToPage("resx://Library/Library.Resources/Menu", properties);
-        //    }
-        //    //IsBusy = true; why do this?
-        //}
-
-        //public void GoToSelectionList(Filter filter)
-        //{
-        //    // currently the selection list page uses the same gallery object as the previous page
-        //    // we shoud look into refactoring this so the selection logic is in a different object than
-        //    // the movie list so we can deal with selections across pages better
-        //    MovieGallery gallery = filter.Gallery;
-
-        //    // reset the index
-        //    gallery.FocusIndex.Value = 0;
-
-        //    //DebugLine("[OMLApplication] GoToSelectionList(#{0} items, list name: {1}, gallery: {2})", list.Count, listName, galleryView);
-        //    Dictionary<string, object> properties = CreateProperties(true, false, gallery);
-        //    properties["MovieBrowser"] = gallery;
-        //    properties["List"] = filter.GetGalleryItems();
-        //    properties["ListName"] = filter.Title;
-        //    properties["GalleryView"] = filter.GetViewForFilter();
-
-        //    if (_session != null)
-        //    {
-        //        _session.GoToPage("resx://Library/Library.Resources/SelectionList", properties);
-        //    }            
-        //}
-
-        //public void GoToDetails(MovieDetailsPage page)
-        //{
-        //    DebugLine("[OMLApplication] GoToDetails({0})", page);
-        //    if (page == null)
-        //        throw new System.Exception("The method or operation is not implemented.");
-
-        //    //
-        //    // Construct the arguments dictionary and then navigate to the
-        //    // details page template.
-        //    //
-        //    Dictionary<string, object> properties = CreateProperties(true, false, null);
-        //    properties["DetailsPage"] = page;
-
-        //    // If we have no page session, just spit out a trace statement.
-        //    if (_session != null)
-        //    {
-        //        switch (OMLSettings.DetailsView)
-        //        {
-        //            case "Background Boxes":
-        //                _session.GoToPage("resx://Library/Library.Resources/DetailsPage_Boxes", properties);
-        //                break;
-
-        //            case "Original":
-        //            default:
-        //                _session.GoToPage("resx://Library/Library.Resources/DetailsPage", properties);
-        //                break;
-        //        }                
-        //    }
-        //}
-
         public static void DebugLine(string msg, params object[] paramArray)
         {
             Utilities.DebugLine(msg, paramArray);
@@ -910,18 +565,6 @@ namespace Library
             get { return NowPlayingStatus.ToString() + ": " + NowPlayingMovieName; }
         }
 
-        /*public TitleCollection ReloadTitleCollection()
-        {
-            DebugLine("[OMLApplication] ReloadTitleCollection()");
-            _titles.loadTitleCollection();
-            return _titles;
-        }*/
-
-        /*public void SaveTitles()
-        {
-            //_titles.saveTitleCollection();
-        }*/
-
         public static void ExecuteSafe(Action action)
         {
             try
@@ -937,20 +580,6 @@ namespace Library
                     throw;
             }
         }
-
-        //private Dictionary<string, object> CreateProperties(bool uiSettings, bool settings, MovieGallery gallery)
-        //{
-        //    Dictionary<string, object> properties = new Dictionary<string, object>();
-        //    properties["Application"] = this;
-        //    properties["I18n"] = I18n.Instance;
-        //    if (uiSettings)
-        //        properties["UISettings"] = new UISettings();
-        //    if (settings)
-        //        properties["Settings"] = new Settings();
-        //    if (gallery != null)
-        //        properties["MovieBrowser"] = gallery;
-        //    return properties;
-        //}
 
         static public void MediaCenterEnvironment_PropertyChanged(IPropertyObject sender, string property)
         {
