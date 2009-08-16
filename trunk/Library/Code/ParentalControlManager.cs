@@ -86,16 +86,56 @@ namespace Library
             if (DateTime.UtcNow >= this.unlockedTime.AddHours(this.unlockPeriod)) this.ReLock();
         }
 
+        public bool ItemIsAllowed(Library.MovieItem item)
+        {
+            if (this.Enabled)
+            {
+                string itemRating = item.TitleObject.ParentalRating.ToUpperInvariant();
+                if (string.IsNullOrEmpty(itemRating))
+                {
+                    if (MCMovieRatings[itemRating] != null)
+                        if (MCMovieRatings[itemRating] <= this.MaxAllowed)
+                            return true;
+                }
+                else
+                {
+                    if (this.BlockUnrated)
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        public bool ItemIsAllowed(Library.Code.V3.MovieItem item)
+        {
+            if (this.Enabled)
+            {
+                string itemRating = item.TitleObject.ParentalRating.ToUpperInvariant();
+                if (string.IsNullOrEmpty(itemRating))
+                {
+                    if (MCMovieRatings[itemRating] != null)
+                        if (MCMovieRatings[itemRating] <= this.MaxAllowed)
+                            return true;
+                }
+                else
+                {
+                    if (this.BlockUnrated)
+                        return false;
+                }
+            }
+            return true;
+        }
+
         public void PlayMovie(Library.Code.V3.MovieItem item)
         {
             if (this.Enabled)
             {
-                string itemRating = item.TitleObject.ParentalRating;
+                string itemRating = item.TitleObject.ParentalRating.ToUpperInvariant();
                 if (!string.IsNullOrEmpty(itemRating))
                 {
-                    if (MCMovieRatings[itemRating.ToUpperInvariant()] != null)
+                    if (MCMovieRatings[itemRating] != null)
                     {
-                        if (MCMovieRatings[itemRating.ToUpperInvariant()] > this.MaxAllowed)
+                        if (MCMovieRatings[itemRating] > this.MaxAllowed)
                         {
                             controls.PromptForPin(delegate(bool goodPin)
                             {
@@ -124,12 +164,12 @@ namespace Library
         {
             if (this.Enabled)
             {
-                string itemRating = item.TitleObject.ParentalRating;
+                string itemRating = item.TitleObject.ParentalRating.ToUpperInvariant();
                 if (!string.IsNullOrEmpty(itemRating))
                 {
-                    if (MCMovieRatings[itemRating.ToUpperInvariant()] != null)
+                    if (MCMovieRatings[itemRating] != null)
                     {
-                        if (MCMovieRatings[itemRating.ToUpperInvariant()] > this.MaxAllowed)
+                        if (MCMovieRatings[itemRating] > this.MaxAllowed)
                         {
                             controls.PromptForPin(delegate(bool goodPin)
                             {
