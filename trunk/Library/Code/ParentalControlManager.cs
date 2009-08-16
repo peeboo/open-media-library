@@ -12,10 +12,13 @@ namespace Library
 {
     public class ParentalControlManager : ModelItem
     {
+        Dictionary<string, int> MCMovieRatings = new Dictionary<string, int>();
+        Dictionary<int, string> MCMovieRatingStrings = new Dictionary<int, string>();
         Timer _timer;
         DateTime unlockedTime { get; set; }
         int unlockPeriod { get; set; }
 
+        #region properties
         ParentalControls controls
         {
             get
@@ -23,7 +26,6 @@ namespace Library
                 return Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.ParentalControls;
             }
         }
-
         ParentalControlSetting parentalSettings
         {
             get
@@ -36,31 +38,43 @@ namespace Library
                 return null;
             }
         }
-
-        public bool isLocked
+        public bool Enabled
         {
             get
             {
-                //if (parentalSettings != null)
-                //    return parentalSettings.Enabled;
-
-                return false;
+                return parentalSettings.Enabled;
             }
         }
-
         public bool BlockUnrated
         {
             get
             {
-                if (parentalSettings != null)
-                    return parentalSettings.BlockUnrated;
-
-                return false;
+                return parentalSettings.BlockUnrated;
             }
         }
+        public int MaxAllowed
+        {
+            get
+            {
+                return parentalSettings.MaxAllowed;
+            }
+        }
+        #endregion properties
 
         public ParentalControlManager()
         {
+            MCMovieRatings.Add("G", 1);
+            MCMovieRatings.Add("PG", 2);
+            MCMovieRatings.Add("PG-13", 3);
+            MCMovieRatings.Add("R", 4);
+            MCMovieRatings.Add("NC-17", 5);
+            MCMovieRatings.Add("Unrated", 10);
+            MCMovieRatings.Add("X", 15);
+            MCMovieRatings.Add("XXX", 20);
+
+            foreach (string key in MCMovieRatings.Keys)
+                MCMovieRatingStrings.Add(MCMovieRatings[key], key);
+
             _timer = new Timer();
             _timer.Enabled = false;
             _timer.Interval = 60000;
@@ -74,15 +88,22 @@ namespace Library
 
         public void PlayMovie(Library.Code.V3.MovieItem item)
         {
-            if (this.isLocked)
+            if (this.Enabled)
             {
-                if (!string.IsNullOrEmpty(item.TitleObject.ParentalRating))
+                string itemRating = item.TitleObject.ParentalRating;
+                if (!string.IsNullOrEmpty(itemRating))
                 {
-                    controls.PromptForPin(delegate(bool goodPin)
+                    if (MCMovieRatings[itemRating.ToUpperInvariant()] != null)
                     {
-                        if (goodPin)
-                            item.PlayMovie();
-                    });
+                        if (MCMovieRatings[itemRating.ToUpperInvariant()] > this.MaxAllowed)
+                        {
+                            controls.PromptForPin(delegate(bool goodPin)
+                            {
+                                if (goodPin)
+                                    item.PlayMovie();
+                            });
+                        }
+                    }
                 }
                 else
                 {
@@ -101,15 +122,22 @@ namespace Library
 
         public void PlayAllDisks(Library.Code.V3.MovieItem item)
         {
-            if (this.isLocked)
+            if (this.Enabled)
             {
-                if (!string.IsNullOrEmpty(item.TitleObject.ParentalRating))
+                string itemRating = item.TitleObject.ParentalRating;
+                if (!string.IsNullOrEmpty(itemRating))
                 {
-                    controls.PromptForPin(delegate(bool goodPin)
+                    if (MCMovieRatings[itemRating.ToUpperInvariant()] != null)
                     {
-                        if (goodPin)
-                            item.PlayAllDisks();
-                    });
+                        if (MCMovieRatings[itemRating.ToUpperInvariant()] > this.MaxAllowed)
+                        {
+                            controls.PromptForPin(delegate(bool goodPin)
+                            {
+                                if (goodPin)
+                                    item.PlayAllDisks();
+                            });
+                        }
+                    }
                 }
                 else
                 {
@@ -122,7 +150,8 @@ namespace Library
                         });
                     }
                 }
-            } else
+            }
+            else
                 item.PlayAllDisks();
         }
 
