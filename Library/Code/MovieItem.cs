@@ -118,7 +118,7 @@ namespace Library
             _owner = owner;
             _category = browseCategory;
             MenuCoverArt = NoCoverImage; // default to NoCoverImage
-            Invoked += ItemSelected;
+            //Invoked += ItemSelected;
 
             _quickPlay = new Command();
             _quickPlay.Invoked += new EventHandler(QuickPlayClicked);
@@ -215,25 +215,25 @@ namespace Library
         /// </summary>
         /// <param name="sender">The sender is a MovieItem.</param>
         /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public virtual void ItemSelected(object sender, EventArgs args)
-        {
-            OMLApplication.ExecuteSafe(delegate
-            {
-                GalleryItem galleryItem = (GalleryItem)sender;
+        //public virtual void ItemSelected(object sender, EventArgs args)
+        //{
+        //    OMLApplication.ExecuteSafe(delegate
+        //    {
+        //        GalleryItem galleryItem = (GalleryItem)sender;
 
-                if (Gallery != null)
-                {
-                    if (galleryItem.Name == Filter.AllItems)
-                    {
-                        OMLApplication.Current.GoToMenu(Gallery);
-                    }
-                    else
-                    {
-                        OMLApplication.Current.GoToMenu(Category.CreateGallery(galleryItem.Name));
-                    }
-                }
-            });
-        }
+        //        if (Gallery != null)
+        //        {
+        //            if (galleryItem.Name == Filter.AllItems)
+        //            {
+        //                OMLApplication.Current.GoToMenu(Gallery);
+        //            }
+        //            else
+        //            {
+        //                OMLApplication.Current.GoToMenu(Category.CreateGallery(galleryItem.Name));
+        //            }
+        //        }
+        //    });
+        //}
 
         public virtual GalleryItem Clone(MovieGallery newOwner)
         {
@@ -386,30 +386,30 @@ namespace Library
         /// </summary>
         /// <param name="sender">The sender is a MovieItem.</param>
         /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void ItemSelected(object sender, EventArgs args)
-        {            
-            OMLApplication.ExecuteSafe(delegate
-            {
-                MovieItem galleryItem = (MovieItem)sender;
+        //public override void ItemSelected(object sender, EventArgs args)
+        //{            
+        //    OMLApplication.ExecuteSafe(delegate
+        //    {
+        //        MovieItem galleryItem = (MovieItem)sender;
 
-                // Navigate to a details page for this item.
-                MovieDetailsPage page = CreateDetailsPage(galleryItem);
-                Gallery.JumpInListText.Value = "";
-                Gallery.ClearJumpValue = true;
-                OMLApplication.Current.GoToDetails(page);
-            });
-        }
+        //        // Navigate to a details page for this item.
+        //        MovieDetailsPage page = CreateDetailsPage(galleryItem);
+        //        Gallery.JumpInListText.Value = "";
+        //        Gallery.ClearJumpValue = true;
+        //        OMLApplication.Current.GoToDetails(page);
+        //    });
+        //}
 
         /// <summary>
         /// Creates the details page for this movie
         /// </summary>
         /// <param name="item">The movie item.</param>
         /// <returns></returns>
-        public MovieDetailsPage CreateDetailsPage(MovieItem item)
-        {
-            OMLApplication.DebugLine("[MovieItem] Creating a detailspage for {0}", item);
-            return new MovieDetailsPage(item);
-        }
+        //public MovieDetailsPage CreateDetailsPage(MovieItem item)
+        //{
+        //    OMLApplication.DebugLine("[MovieItem] Creating a detailspage for {0}", item);
+        //    return new MovieDetailsPage(item);
+        //}
 
         private void IncrementPlayCount()
         {

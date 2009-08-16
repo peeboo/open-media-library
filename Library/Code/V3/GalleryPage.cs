@@ -434,8 +434,8 @@ namespace Library.Code.V3
             //this is temp to test controls
             OMLProperties properties = new OMLProperties();
             properties.Add("Application", OMLApplication.Current);
-            properties.Add("UISettings", new UISettings());
-            properties.Add("Settings", new Library.Settings());
+            //properties.Add("UISettings", new UISettings());
+            //properties.Add("Settings", new Library.Settings());
             properties.Add("I18n", I18n.Instance);
             //v3 main gallery
             Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage();

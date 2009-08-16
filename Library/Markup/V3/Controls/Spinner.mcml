@@ -42,9 +42,9 @@
       <Color Name="NoFocusColor" Color="color://comm:LightBlue"/>
       <Color Name="FocusColor" Color="color://comm:OffWhite"/>
       <Color Name="DisabledColor" Color="color://comm:LightBlue40Percent"/>
-      <Image Name="SpinnerBluebarLargeDormant"        Source="resx://Library/Library.Resources/SpinnerBluebarLargeDormant"/>
-      <Image Name="SpinnerBluebarLargeFocus"          Source="resx://Library/Library.Resources/SpinnerBluebarLargeFocus"/>
-      <Image Name="SpinnerBluebarLargeNoFocus"        Source="resx://Library/Library.Resources/SpinnerBluebarLargeNoFocus"/>
+      <Image Name="SpinnerBluebarLargeDormant"        Source="resx://Library/Library.Resources/V3_Controls_Common_Spinner_BlueBarLarge_Dormant"/>
+      <Image Name="SpinnerBluebarLargeFocus"          Source="resx://Library/Library.Resources/V3_Controls_Common_Spinner_BlueBarLarge_Focus"/>
+      <Image Name="SpinnerBluebarLargeNoFocus"        Source="resx://Library/Library.Resources/V3_Controls_Common_Spinner_BlueBarLarge_NoFocus"/>
     </Properties>
     <Locals>
       <InvokeCommand Name="PreviousValue" Target="[Model.PreviousValue]" Description="-"/>

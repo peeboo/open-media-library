@@ -333,7 +333,19 @@ namespace OMLEngine.FileSystem
             return string.Empty;
         }
 
-        private const string DaemonToolsRegistryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\DAEMON Tools Lite";
+        public static string GetVirtualCloneDriveDriveLetter()
+        {
+            ManagementObjectSearcher mgmtObjects = new ManagementObjectSearcher("Select * from Win32_CDROMDrive");
+
+            foreach (var item in mgmtObjects.Get())
+            {
+                if (item["Name"].ToString().ToUpper().IndexOf("CLONEDRIVE") > -1)
+                    return item["Drive"].ToString();
+            }
+            return string.Empty;
+        }
+
+        private const string DaemonToolsRegistryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
         private const string VirtualCloneDriveRegistryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\VirtualCloneDrive";
         private const string DaemonToolsExe = "daemon.exe";
         private const string VirtualCloneDriveExe = "VCDMount.exe";
@@ -344,6 +356,8 @@ namespace OMLEngine.FileSystem
         {
             string retStr = string.Empty;
             RegistryKey mountKey = Registry.LocalMachine;
+            if(_tool==Tool.DaemonTools)
+                mountKey = Registry.CurrentUser;
             string exeName = string.Empty;
             string regPath = string.Empty;
             string defaultPath = string.Empty;
@@ -367,8 +381,10 @@ namespace OMLEngine.FileSystem
 
             string exePath = string.Empty;
             mountKey = mountKey.OpenSubKey(regPath);
-            if (mountKey != null)
+            if (_tool== Tool.VirtualCloneDrive && mountKey != null)
                 exePath = mountKey.GetValue("InstallLocation", string.Empty).ToString();
+            else if (_tool == Tool.DaemonTools && mountKey != null)
+                exePath = mountKey.GetValue("DAEMON Tools Lite", string.Empty).ToString().Replace("\"", "").Replace(" -autorun","");
             else
             {
                 SelectQuery query = new SelectQuery("select name from win32_logicaldisk where drivetype=3");
