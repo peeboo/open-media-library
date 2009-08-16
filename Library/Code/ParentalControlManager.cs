@@ -12,11 +12,30 @@ namespace Library
 {
     public class ParentalControlManager : ModelItem
     {
-        ParentalControls controls;
-        ParentalControlSetting parentalSettings;
         Timer _timer;
         DateTime unlockedTime { get; set; }
         int unlockPeriod { get; set; }
+
+        ParentalControls controls
+        {
+            get
+            {
+                return Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.ParentalControls;
+            }
+        }
+
+        ParentalControlSetting parentalSettings
+        {
+            get
+            {
+                foreach (string ratingSystem in controls.GetAvailableRatingSystems())
+                {
+                    if (ratingSystem.ToUpperInvariant().Contains("movie".ToUpperInvariant()))
+                        return controls[ratingSystem];
+                }
+                return null;
+            }
+        }
 
         public bool isLocked
         {
@@ -42,15 +61,6 @@ namespace Library
 
         public ParentalControlManager()
         {
-            controls =
-                OMLApplication.Current.MediaCenterEnvironment.ParentalControls;
-
-            foreach (string ratingSystem in controls.GetAvailableRatingSystems())
-            {
-                if (ratingSystem.ToUpperInvariant().Contains("movie".ToUpperInvariant()))
-                    parentalSettings = controls[ratingSystem];
-            }
-
             _timer = new Timer();
             _timer.Enabled = false;
             _timer.Interval = 60000;
@@ -118,8 +128,6 @@ namespace Library
 
         public void UnLock()
         {
-            MediaCenterEnvironment env = Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment;
-            controls = env.ParentalControls;
             controls.PromptForPin(delegate(bool goodPin)
             {
                 if (goodPin)
