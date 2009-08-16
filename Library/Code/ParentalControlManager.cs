@@ -29,6 +29,17 @@ namespace Library
             }
         }
 
+        public bool BlockUnrated
+        {
+            get
+            {
+                if (parentalSettings != null)
+                    return parentalSettings.BlockUnrated;
+
+                return false;
+            }
+        }
+
         public ParentalControlManager()
         {
             controls =
@@ -55,11 +66,25 @@ namespace Library
         {
             if (this.isLocked)
             {
-                controls.PromptForPin(delegate(bool goodPin)
+                if (!string.IsNullOrEmpty(item.TitleObject.ParentalRating))
                 {
-                    if (goodPin)
-                        item.PlayMovie();
-                });
+                    controls.PromptForPin(delegate(bool goodPin)
+                    {
+                        if (goodPin)
+                            item.PlayMovie();
+                    });
+                }
+                else
+                {
+                    if (this.BlockUnrated)
+                    {
+                        controls.PromptForPin(delegate(bool goodPin)
+                        {
+                            if (goodPin)
+                                item.PlayMovie();
+                        });
+                    }
+                }
             } else
                 item.PlayMovie();
         }
@@ -68,11 +93,25 @@ namespace Library
         {
             if (this.isLocked)
             {
-                controls.PromptForPin(delegate(bool goodPin)
+                if (!string.IsNullOrEmpty(item.TitleObject.ParentalRating))
                 {
-                    if (goodPin)
-                        item.PlayAllDisks();
-                });
+                    controls.PromptForPin(delegate(bool goodPin)
+                    {
+                        if (goodPin)
+                            item.PlayAllDisks();
+                    });
+                }
+                else
+                {
+                    if (this.BlockUnrated)
+                    {
+                        controls.PromptForPin(delegate(bool goodPin)
+                        {
+                            if (goodPin)
+                                item.PlayAllDisks();
+                        });
+                    }
+                }
             } else
                 item.PlayAllDisks();
         }
