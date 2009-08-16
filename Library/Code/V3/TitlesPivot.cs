@@ -178,7 +178,7 @@ namespace Library.Code.V3
         //}
             //private void loadBackground(object options)
         //{
-            List<OMLEngine.TitleFilter> filters = new List<OMLEngine.TitleFilter>(m_filters); ;
+            List<OMLEngine.TitleFilter> filters = new List<OMLEngine.TitleFilter>(m_filters);
 
             if (this.parentId.HasValue)
                 filters.Add(new OMLEngine.TitleFilter(OMLEngine.TitleFilterType.Parent, this.parentId.ToString()));
@@ -362,7 +362,20 @@ namespace Library.Code.V3
                 this.m_listContent = new VirtualList(this.Owner, null);
             });
 
-            titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetAllTitles());
+            if (OMLApplication.Current.ParentalControlsActive)
+            {
+                List<OMLEngine.TitleFilter> filters = new List<OMLEngine.TitleFilter>();
+                int i = 1;
+                while (i <= OMLApplication.Current.parentalControlManager.MaxAllowed) {
+                    filters.Add(new OMLEngine.TitleFilter(OMLEngine.TitleFilterType.ParentalRating,
+                        OMLApplication.Current.parentalControlManager.MCMovieRatingStrings[i]));
+                }
+                titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(filters));
+            }
+            else
+            {
+                titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetAllTitles());
+            }
             ((VirtualList)this.m_listContent).Count = titles.Count;
             //Application.DeferredInvoke(delegate
             //{

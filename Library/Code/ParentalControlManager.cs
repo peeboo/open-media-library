@@ -12,8 +12,8 @@ namespace Library
 {
     public class ParentalControlManager : ModelItem
     {
-        Dictionary<string, int> MCMovieRatings = new Dictionary<string, int>();
-        Dictionary<int, string> MCMovieRatingStrings = new Dictionary<int, string>();
+        public Dictionary<string, int> MCMovieRatings = new Dictionary<string, int>();
+        public Dictionary<int, string> MCMovieRatingStrings = new Dictionary<int, string>();
         Timer _timer;
         DateTime unlockedTime { get; set; }
         int unlockPeriod { get; set; }
@@ -93,9 +93,8 @@ namespace Library
                 string itemRating = item.TitleObject.ParentalRating.ToUpperInvariant();
                 if (string.IsNullOrEmpty(itemRating))
                 {
-                    if (MCMovieRatings[itemRating] != null)
-                        if (MCMovieRatings[itemRating] <= this.MaxAllowed)
-                            return true;
+                    if (MCMovieRatings[itemRating] <= this.MaxAllowed)
+                        return true;
                 }
                 else
                 {
@@ -113,9 +112,27 @@ namespace Library
                 string itemRating = item.TitleObject.ParentalRating.ToUpperInvariant();
                 if (string.IsNullOrEmpty(itemRating))
                 {
-                    if (MCMovieRatings[itemRating] != null)
-                        if (MCMovieRatings[itemRating] <= this.MaxAllowed)
-                            return true;
+                    if (MCMovieRatings[itemRating] <= this.MaxAllowed)
+                        return true;
+                }
+                else
+                {
+                    if (this.BlockUnrated)
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        public bool ItemIsAllowed(OMLEngine.Title item)
+        {
+            if (this.Enabled)
+            {
+                string itemRating = item.ParentalRating.ToUpperInvariant();
+                if (string.IsNullOrEmpty(itemRating))
+                {
+                    if (MCMovieRatings[itemRating] <= this.MaxAllowed)
+                        return true;
                 }
                 else
                 {
