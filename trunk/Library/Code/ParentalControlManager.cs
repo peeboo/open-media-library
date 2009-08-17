@@ -63,12 +63,16 @@ namespace Library
 
         public ParentalControlManager()
         {
+            //needs to be broken down to a lookup table
             MCMovieRatings.Add("G", 1);
             MCMovieRatings.Add("PG", 2);
-            MCMovieRatings.Add("PG-13", 3);
+            //MCMovieRatings.Add("PG-13", 3);
+            MCMovieRatings.Add("PG13", 3);
             MCMovieRatings.Add("R", 4);
-            MCMovieRatings.Add("NC-17", 5);
-            MCMovieRatings.Add("Unrated", 10);
+            //MCMovieRatings.Add("NC-17", 5);
+            MCMovieRatings.Add("NC17", 5);
+            MCMovieRatings.Add("NOT RATED", 10); //this isn't a "real MPAA" rating-but many titles get it
+            //MCMovieRatings.Add("Unrated", 10); //unrated should not be found in here
             MCMovieRatings.Add("X", 15);
             MCMovieRatings.Add("XXX", 20);
 
@@ -147,20 +151,19 @@ namespace Library
         {
             if (this.Enabled)
             {
-                string itemRating = item.TitleObject.ParentalRating.ToUpperInvariant();
-                if (!string.IsNullOrEmpty(itemRating))
+                string itemRating = item.TitleObject.ParentalRating.ToUpperInvariant().Replace("-", "");
+                if (!string.IsNullOrEmpty(itemRating) && itemRating!="UNRATED")
                 {
-                    if (MCMovieRatings[itemRating] != null)
+                    if (MCMovieRatings.ContainsKey(itemRating) && MCMovieRatings[itemRating] > this.MaxAllowed)
                     {
-                        if (MCMovieRatings[itemRating] > this.MaxAllowed)
+                        controls.PromptForPin(delegate(bool goodPin)
                         {
-                            controls.PromptForPin(delegate(bool goodPin)
-                            {
-                                if (goodPin)
-                                    item.PlayMovie();
-                            });
-                        }
+                            if (goodPin)
+                                item.PlayMovie();
+                        });
                     }
+                    else
+                        item.PlayMovie();
                 }
                 else
                 {
@@ -172,8 +175,11 @@ namespace Library
                                 item.PlayMovie();
                         });
                     }
+                    else
+                        item.PlayMovie();
                 }
-            } else
+            }
+            else
                 item.PlayMovie();
         }
 
@@ -181,20 +187,19 @@ namespace Library
         {
             if (this.Enabled)
             {
-                string itemRating = item.TitleObject.ParentalRating.ToUpperInvariant();
-                if (!string.IsNullOrEmpty(itemRating))
+                string itemRating = item.TitleObject.ParentalRating.ToUpperInvariant().Replace("-", "");
+                if (!string.IsNullOrEmpty(itemRating) && itemRating != "UNRATED")
                 {
-                    if (MCMovieRatings[itemRating] != null)
+                    if (MCMovieRatings.ContainsKey(itemRating) && MCMovieRatings[itemRating] > this.MaxAllowed)
                     {
-                        if (MCMovieRatings[itemRating] > this.MaxAllowed)
+                        controls.PromptForPin(delegate(bool goodPin)
                         {
-                            controls.PromptForPin(delegate(bool goodPin)
-                            {
-                                if (goodPin)
-                                    item.PlayAllDisks();
-                            });
-                        }
+                            if (goodPin)
+                                item.PlayAllDisks();
+                        });
                     }
+                    else
+                        item.PlayAllDisks();
                 }
                 else
                 {
@@ -206,6 +211,8 @@ namespace Library
                                 item.PlayAllDisks();
                         });
                     }
+                    else
+                        item.PlayAllDisks();
                 }
             }
             else
