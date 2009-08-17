@@ -480,6 +480,69 @@ namespace Library
             base.FirePropertyChanged("MoreInfo");
         }
 
+        public bool _reallydeleteFile(string path, out string status)
+        {
+            status = string.Empty;
+            return false;
+        }
+
+        private bool _reallydeleteFolder(string path, out string status)
+        {
+            status = string.Empty;
+            return false;
+        }
+
+        public string deleteDisk(Disk d)
+        {
+            string status = string.Empty;
+            if (File.Exists(d.Path))
+                _reallydeleteFile(d.Path, out status);
+
+            if (Directory.Exists(d.Path))
+                _reallydeleteFolder(d.Path, out status);
+
+            return status;
+        }
+
+        public void DeleteTitle(Library.Code.V3.MovieItem item)
+        {
+            foreach (Disk d in item.TitleObject.Disks)
+            {
+                string status = deleteDisk(d);
+                if (!string.IsNullOrEmpty(status))
+                {
+                    //alert the error and stop trying to delete stuff
+                    return;
+                }
+            }
+        }
+
+        public void DeleteTitle(Library.MovieItem item)
+        {
+            foreach (Disk d in item.TitleObject.Disks)
+            {
+                string status = deleteDisk(d);
+                if (!string.IsNullOrEmpty(status))
+                {
+                    //alert the error and stop trying to delete stuff
+                    return;
+                }
+            }
+        }
+
+        public void DeleteTitle(OMLEngine.Title item)
+        {
+            foreach (Disk d in item.Disks)
+            {
+                string status = deleteDisk(d);
+                if (!string.IsNullOrEmpty(status))
+                {
+                    //alert the error and stop trying to delete stuff
+                    return;
+                }
+            }
+        }
+
         private bool _moreInfo = false;
         public bool MoreInfo
         {
