@@ -46,7 +46,7 @@ namespace Library
                 {
                     if (OMLApplication.Current.MediaCenterEnvironment.Capabilities.ContainsKey("Console"))
                     {
-                        DialogResult reply = OMLApplication.Current.MediaCenterEnvironment.Dialog("", "", DialogButtons.Yes | DialogButtons.No, 10, true);
+                        DialogResult reply = OMLApplication.Current.MediaCenterEnvironment.Dialog("A new version of OML is available, would you like to upgrade now?", "Update Available", DialogButtons.Yes | DialogButtons.No, 10, true);
 
                         if (reply == DialogResult.Yes)
                             DownloadUpdate();

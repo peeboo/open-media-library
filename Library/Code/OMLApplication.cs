@@ -440,8 +440,8 @@ namespace Library
 #endif
 
             // DISABLE THIS UNTIL ITS READY -- DJShultz 01/13/2009
-            //OMLUpdater updater = new OMLUpdater();
-            //ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
+            OMLUpdater updater = new OMLUpdater();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
         }
 
         private void GoHome(List<OMLEngine.TitleFilter> filters, string name)
