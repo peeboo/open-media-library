@@ -239,7 +239,7 @@ namespace Library
             this.mouseActiveHooker.MouseActive += new Library.Code.V3.IsMouseActiveHooker.MouseActiveHandler(mouseActiveHooker_MouseActive);
             #endif
 
-            //this.parentalControlManager = new ParentalControlManager();
+            this.parentalControlManager = new ParentalControlManager();
             this._session = session;
             AddInHost.Current.MediaCenterEnvironment.PropertyChanged +=new PropertyChangedEventHandler(MediaCenterEnvironment_PropertyChanged);
 
