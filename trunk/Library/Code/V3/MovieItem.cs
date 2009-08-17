@@ -344,12 +344,12 @@ namespace Library.Code.V3
             {
                 this.TitleObject.SelectedDisk = this.TitleObject.Disks[0];
                 OMLApplication.Current.parentalControlManager.PlayMovie(this);
-                this.PlayMovie();
+                //this.PlayMovie();
             }
             else
             {
                 OMLApplication.Current.parentalControlManager.PlayAllDisks(this);
-                this.PlayAllDisks();
+                //this.PlayAllDisks();
             }
         }
 
