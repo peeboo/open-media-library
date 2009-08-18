@@ -33,7 +33,34 @@ namespace Library.Code.V3
             this.SetupContextMenu();
             this.m_filters = filters;
             this.m_listContent = new VirtualList(new ItemCountHandler(this.InitializeListCount));
-            ((VirtualList)this.m_listContent).RequestItemHandler = new RequestItemHandler(this.GetItem);           
+            ((VirtualList)this.m_listContent).RequestItemHandler = new RequestItemHandler(this.GetItem);
+
+            OMLApplication.Current.TitleDeleted += new DeleteTitleEventHandler(Current_TitleDeleted);
+        }
+
+        void Current_TitleDeleted(object sender, TitleEventArgs e)
+        {
+            if (this.titles != null && this.titles.IndexOf(e.Title) > -1)
+            {
+                this.titles.Remove(e.Title);
+                foreach (Object o in this.m_listContent)
+                {
+                    if (o is MovieItem)
+                    {
+                        MovieItem item = o as MovieItem;
+                        if (item.TitleObject == e.Title)
+                        {
+                            this.m_listContent.Remove(item);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            //if (((VirtualList)this.m_listContent).IndexOf(.IsItemAvailable(idx))
+            //{
+            //    commandForItem = this.m_listContent[idx];
+            //}
         }
 
         public override void UpdateContext(string newTemplate)
@@ -362,20 +389,21 @@ namespace Library.Code.V3
                 this.m_listContent = new VirtualList(this.Owner, null);
             });
 
-            if (OMLApplication.Current.ParentalControlsActive)
-            {
-                List<OMLEngine.TitleFilter> filters = new List<OMLEngine.TitleFilter>();
-                int i = 1;
-                while (i <= OMLApplication.Current.parentalControlManager.MaxAllowed) {
-                    filters.Add(new OMLEngine.TitleFilter(OMLEngine.TitleFilterType.ParentalRating,
-                        OMLApplication.Current.parentalControlManager.MCMovieRatingStrings[i]));
-                }
-                titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(filters));
-            }
-            else
-            {
+            //tmp disabled
+            //if (OMLApplication.Current.ParentalControlsActive)
+            //{
+            //    List<OMLEngine.TitleFilter> filters = new List<OMLEngine.TitleFilter>();
+            //    int i = 1;
+            //    while (i <= OMLApplication.Current.parentalControlManager.MaxAllowed) {
+            //        filters.Add(new OMLEngine.TitleFilter(OMLEngine.TitleFilterType.ParentalRating,
+            //            OMLApplication.Current.parentalControlManager.MCMovieRatingStrings[i]));
+            //    }
+            //    titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(filters));
+            //}
+            //else
+            //{
                 titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetAllTitles());
-            }
+            //}
             ((VirtualList)this.m_listContent).Count = titles.Count;
             //Application.DeferredInvoke(delegate
             //{

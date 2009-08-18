@@ -296,6 +296,7 @@
                           <chk:CheckBox Name="ChkEnableAlphaJump" Margins="10,0,0,0" Model="[Page.EnableAlphaJump]"/>
                           <!--Graphic Content="resx://Library/Library.Resources/V3_Controls_Radio_DividerLine" Margins="-150,15,0,10" MinimumSize="620,3"/-->
                           <chk:CheckBox Name="ChkShowUnwatchedIcon" Margins="10,0,0,0" Model="[Page.ShowUnwatchedIcon]"/>
+                          <chk:CheckBox Name="ChkAllowDelete" Margins="10,0,0,0" Model="[Page.AllowDelete]"/>
                           <!--Graphic Content="resx://Library/Library.Resources/V3_Controls_Radio_DividerLine" Margins="-150,15,0,10" MinimumSize="620,3"/-->
                         </Children>
                       </Panel>
