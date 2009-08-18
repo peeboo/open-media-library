@@ -520,8 +520,14 @@ namespace Library
                 string status = deleteDisk(d);
                 if (!string.IsNullOrEmpty(status))
                 {
-                    //alert the error and stop trying to delete stuff
+                    this.MediaCenterEnvironment.Dialog(
+                        string.Format("Unable to delete this movie: {0}", status),
+                        "Failed", DialogButtons.Ok, 5, false);
                     return;
+                }
+                else
+                {
+                    TitleCollectionManager.DeleteTitle(item.TitleObject);
                 }
             }
         }
@@ -539,8 +545,14 @@ namespace Library
                 string status = deleteDisk(d);
                 if (!string.IsNullOrEmpty(status))
                 {
-                    //alert the error and stop trying to delete stuff
+                    this.MediaCenterEnvironment.Dialog(
+                        string.Format("Unable to delete this movie: {0}", status),
+                        "Failed", DialogButtons.Ok, 5, false);
                     return;
+                }
+                else
+                {
+                    TitleCollectionManager.DeleteTitle(item.TitleObject);
                 }
             }
         }
@@ -552,8 +564,14 @@ namespace Library
                 string status = deleteDisk(d);
                 if (!string.IsNullOrEmpty(status))
                 {
-                    //alert the error and stop trying to delete stuff
+                    this.MediaCenterEnvironment.Dialog(
+                        string.Format("Unable to delete this movie: {0}", status),
+                        "Failed", DialogButtons.Ok, 5, false);
                     return;
+                }
+                else
+                {
+                    TitleCollectionManager.DeleteTitle(item);
                 }
             }
             TitleEventArgs t = new TitleEventArgs(item);
