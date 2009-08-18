@@ -45,10 +45,10 @@ namespace Library
                 string path = FileScanner.GetPlayStringForPath(_mediaPath);
 
                 // the unc path requires that it start with // so remove \\ if it exists
-                if (path.StartsWith("\\\\"))
-                    path = path.Substring(2);
+                //if (path.StartsWith("\\\\"))
+                //    path = path.Substring(2);
 
-                path = path.Replace("\\", "/");
+                //path = path.Replace("\\", @"\");
 
                 path = string.Format("DVD://{0}", path);
                 OMLApplication.DebugLine("[MoviePlayerDVD] Actual play string being passed to PlayMovie: {0}", path);
