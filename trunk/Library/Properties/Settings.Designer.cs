@@ -609,5 +609,17 @@ namespace Library.Properties {
                 this["ShowFirstRunPrompt"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AllowDelete {
+            get {
+                return ((bool)(this["AllowDelete"]));
+            }
+            set {
+                this["AllowDelete"] = value;
+            }
+        }
     }
 }

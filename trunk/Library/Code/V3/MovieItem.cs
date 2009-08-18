@@ -5,6 +5,7 @@ using System.Text;
 using OMLEngine;
 using System.IO;
 using Microsoft.MediaCenter.UI;
+using Microsoft.MediaCenter;
 
 namespace Library.Code.V3
 {
@@ -227,6 +228,15 @@ namespace Library.Code.V3
                     page.Commands.Add(command);
                 }
 
+                if (Properties.Settings.Default.AllowDelete)
+                {
+                    //delete a title
+                    Command deleteCmd = new Command();
+                    deleteCmd.Description = "Delete";
+                    deleteCmd.Invoked += new EventHandler(deleteCmd_Invoked);
+                    page.Commands.Add(deleteCmd);
+                }
+
                 page.Watched = new BooleanChoice(this, "Watched");
 
                 //is this the right way?
@@ -249,6 +259,17 @@ namespace Library.Code.V3
                 else
                     Library.OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_DetailsPage", properties);
             };
+        }
+
+        void deleteCmd_Invoked(object sender, EventArgs e)
+        {
+            DialogResult res = OMLApplication.Current.MediaCenterEnvironment.Dialog("Are you sure you want to delete this title?", "DELETE TITLE", DialogButtons.Yes | DialogButtons.No, -1, true);
+            if (res == DialogResult.Yes)
+            {
+                //delete
+                OMLApplication.Current.DeleteTitle(this.TitleObject);
+                OMLApplication.Current.Session.BackPage();
+            }
         }
 
         void Watched_ChosenChanged(object sender, EventArgs e)

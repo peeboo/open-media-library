@@ -11,6 +11,20 @@ namespace Library.Code.V3
 {
     public class GallerySettings : ModelItem
     {
+        private BooleanChoice allowDelete;
+        public BooleanChoice AllowDelete
+        {
+            get
+            {
+                return this.allowDelete;
+            }
+            set
+            {
+                this.allowDelete = value;
+                FirePropertyChanged("AllowDelete");
+            }
+        }
+
         private BooleanChoice showUnwatchedIcon;
         public BooleanChoice ShowUnwatchedIcon
         {
@@ -123,6 +137,10 @@ namespace Library.Code.V3
             this.showUnwatchedIcon = new BooleanChoice(this);
             this.showUnwatchedIcon.Description = "Show unwatched icon";
             this.showUnwatchedIcon.Value = OMLEngine.Settings.OMLSettings.ShowUnwatchedIcon;
+
+            this.allowDelete = new BooleanChoice(this);
+            this.allowDelete.Description = "Allow deletion of movies";
+            this.allowDelete.Value = Properties.Settings.Default.AllowDelete;
         }
 
         private BooleanChoice enablePosterOptions;
@@ -229,6 +247,8 @@ namespace Library.Code.V3
                 return true;
             if (this.showUnwatchedIcon.Value != OMLEngine.Settings.OMLSettings.ShowUnwatchedIcon)
                 return true;
+            if (this.allowDelete.Value != Properties.Settings.Default.AllowDelete)
+                return true;
 
             return false;
         }
@@ -245,6 +265,7 @@ namespace Library.Code.V3
             Properties.Settings.Default.GalleryTwoRowMin = Convert.ToInt32(this.twoRowOptions.Chosen.ToString().Replace(" items", ""));
             Properties.Settings.Default.GalleryThreeRowMin = Convert.ToInt32(this.threeRowOptions.Chosen.ToString().Replace(" items", ""));
             OMLEngine.Settings.OMLSettings.ShowUnwatchedIcon = this.showUnwatchedIcon.Value;
+            Properties.Settings.Default.AllowDelete = this.allowDelete.Value;
 
             Properties.Settings.Default.Save();
         }

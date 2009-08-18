@@ -18,19 +18,28 @@ using OMLEngine.Settings;
 using System;
 
 namespace Library
-{    
+{
+    public class TitleEventArgs : EventArgs
+    {
+        public TitleEventArgs(OMLEngine.Title title)
+        {
+            this.Title = title;
+        }
+        public OMLEngine.Title Title;
+    }
+
+    public delegate void DeleteTitleEventHandler(object sender, TitleEventArgs e);
     /// <summary>
     /// Starting point for the OML
     /// </summary>
     public class OMLApplication : BaseModelItem
     {
+        public event DeleteTitleEventHandler TitleDeleted;
+
         public ParentalControlManager parentalControlManager;
         private bool isBusy = false;
         private bool isStartingTranscodingJob = false;
         private string transcodeStatus = string.Empty;
-        private int currentFocusedItemIndex = 0;
-        private int currentItemIndexPosition = 0;
-        private int currentAngleDegrees;
         private Image primaryBackgroundImage;
         private int iCurrentBackgroundImage = 0;
         private int iTotalBackgroundImages = 0;
@@ -517,6 +526,12 @@ namespace Library
             }
         }
 
+        protected virtual void OnTitleDeleted(TitleEventArgs e)
+        {
+            if (TitleDeleted != null)
+                TitleDeleted(this, e);
+        }
+
         public void DeleteTitle(Library.MovieItem item)
         {
             foreach (Disk d in item.TitleObject.Disks)
@@ -541,6 +556,8 @@ namespace Library
                     return;
                 }
             }
+            TitleEventArgs t = new TitleEventArgs(item);
+            this.OnTitleDeleted(t);
         }
 
         private bool _moreInfo = false;
