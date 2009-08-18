@@ -59,7 +59,7 @@ namespace Library.Code.V3
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();
 
-            Library.Code.V3.ExtenderSettings page = new Library.Code.V3.ExtenderSettings();
+            Library.Code.V3.ExtenderSettings page = this;
             properties["Page"] = page;
             properties["Application"] = OMLApplication.Current;
 
@@ -70,7 +70,7 @@ namespace Library.Code.V3
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();
 
-            Library.Code.V3.ExtenderSettings page = new Library.Code.V3.ExtenderSettings();
+            Library.Code.V3.ExtenderSettings page = this;
             properties["Page"] = page;
             properties["Application"] = OMLApplication.Current;
 
@@ -202,8 +202,23 @@ namespace Library.Code.V3
         /// <returns></returns>
         public bool IsDirty()
         {
-            //if ((string)this.trailerResolutions.Chosen != this.selectedTrailerResolution)
-            //    return true;
+            if (this.impersonationUserName.Value != OMLSettings.ImpersonationUsername)
+                return true;
+            if (this.impersonationPassword.Value != OMLSettings.ImpersonationPassword)
+                return true;
+
+            if (((string)transcodingDelays.Chosen).Replace(" seconds", "") != OMLSettings.TranscodeBufferDelay.ToString())
+                return true;
+
+            if ((bool)this.transcodeAVI.Chosen != OMLSettings.TranscodeAVIFiles)
+                return true;
+            if ((bool)this.transcodeMKV.Chosen != OMLSettings.TranscodeMKVFiles)
+                return true;
+            if ((bool)this.transcodeOGM.Chosen != OMLSettings.TranscodeOGMFiles)
+                return true;
+            if ((bool)this.preserveAudioFormat.Chosen != OMLSettings.PreserveAudioOnTranscode)
+                return true;
+
             return false;
         }
 
@@ -212,10 +227,13 @@ namespace Library.Code.V3
         /// </summary>
         public void Save()
         {
-            //if ((string)this.trailerResolutions.Chosen == "Hi")
-            //    OMLSettings.TrailersDefinition = "Hi";
-            //else
-            //    OMLSettings.TrailersDefinition = "Std";
+            OMLSettings.ImpersonationUsername = this.impersonationUserName.Value;
+            OMLSettings.ImpersonationPassword = this.impersonationPassword.Value;
+            OMLSettings.TranscodeBufferDelay = Convert.ToInt32(((string)transcodingDelays.Chosen).Replace(" seconds", ""));
+            OMLSettings.TranscodeAVIFiles = (bool)this.transcodeAVI.Chosen;
+            OMLSettings.TranscodeMKVFiles = (bool)this.transcodeMKV.Chosen;
+            OMLSettings.TranscodeOGMFiles = (bool)this.transcodeOGM.Chosen;
+            OMLSettings.PreserveAudioOnTranscode = (bool)this.preserveAudioFormat.Chosen;
         }
 
         /// <summary>
