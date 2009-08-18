@@ -22,8 +22,7 @@ namespace Library.Code.V3
     public class TrailerPage : GalleryPage
     {
         private static string LoFiUrl = @"http://www.apple.com/trailers/home/xml/current.xml";
-        private static string HiFiUrl = @"http://www.apple.com/trailers/home/xml/current.xml";
-        //private static string HiFiUrl = @"http://www.apple.com/trailers/home/xml/current_720p.xml";
+        private static string HiFiUrl = @"http://www.apple.com/trailers/home/xml/current_720p.xml";
 
         public TrailerPage(string description)
             : base()
@@ -55,16 +54,16 @@ namespace Library.Code.V3
 
         private void beginLoadTrailers(object o)
         {
-            string fidelity = OMLEngine.Settings.OMLSettings.AppleTrailerFidelity;
+            string fidelity = OMLEngine.Settings.OMLSettings.TrailersDefinition;
             if (string.IsNullOrEmpty(fidelity) == true)
-                fidelity = @"Low";
+                fidelity = @"Hi";
 
             switch (fidelity)
             {
                 case "Hi":
                     this.GetTrailersForUrl(TrailerPage.HiFiUrl);
                     break;
-                case "Low":
+                case "Std":
                     this.GetTrailersForUrl(TrailerPage.LoFiUrl);
                     break;
                 default:
@@ -402,7 +401,7 @@ namespace Library.Code.V3
         public IEnumerable<TrailerItem> SortTrailersByDate(IEnumerable<TrailerItem> titles)
         {
             List<TrailerItem> sortedList = new List<TrailerItem>(titles);
-            sortedList.Sort(delegate(TrailerItem x, TrailerItem y) { return x.ReleaseDate.CompareTo(y.ReleaseDate); });
+            sortedList.Sort(delegate(TrailerItem x, TrailerItem y) { return y.ReleaseDate.CompareTo(x.ReleaseDate); });
             return sortedList;
         }
         public IEnumerable<TrailerItem> SortTrailersByName(IEnumerable<TrailerItem> titles)
