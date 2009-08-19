@@ -114,6 +114,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranscoderTester", "Transco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PFMLib", "PFMLib\PFMLib.csproj", "{D5817C18-5E4B-4C80-BF5D-982CB8F702DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonMetaData2", "AmazonMetaData2\AmazonMetaData2.csproj", "{32B876CD-44F5-4F08-8685-55BCA121AD09}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -490,6 +492,18 @@ Global
 		{D5817C18-5E4B-4C80-BF5D-982CB8F702DA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D5817C18-5E4B-4C80-BF5D-982CB8F702DA}.Release|x64.ActiveCfg = Release|Any CPU
 		{D5817C18-5E4B-4C80-BF5D-982CB8F702DA}.Release|x86.ActiveCfg = Release|Any CPU
+		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Release|x64.ActiveCfg = Release|Any CPU
+		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
