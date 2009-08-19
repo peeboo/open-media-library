@@ -42,15 +42,24 @@ namespace Library
         {
             if (FileScanner.IsDVD(_mediaPath))
             {
+                bool isUNC = false;
                 string path = FileScanner.GetPlayStringForPath(_mediaPath);
 
                 // the unc path requires that it start with // so remove \\ if it exists
-                //if (path.StartsWith("\\\\"))
-                //    path = path.Substring(2);
+                //http://discuss.mediacentersandbox.com/forums/thread/9307.aspx
+                if (path.StartsWith("\\\\"))
+                {
+                    path = path.Substring(2);
+                    isUNC = true;
+                }
 
-                //path = path.Replace("\\", @"\");
+                path = path.Replace("\\", "/");
 
-                path = string.Format("DVD://{0}", path);
+                if(OMLApplication.IsWindows7 && isUNC)
+                    path = string.Format("//{0}", path);
+                else
+                    path = string.Format("DVD://{0}", path);
+
                 OMLApplication.DebugLine("[MoviePlayerDVD] Actual play string being passed to PlayMovie: {0}", path);
                 return PlayMovie(path);
             }
