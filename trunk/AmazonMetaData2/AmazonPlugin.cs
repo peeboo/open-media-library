@@ -145,23 +145,34 @@ namespace AmazonMetaData2
         }
         public bool SearchForMovie(string movieName, int maxResults)
         {
+            _locale = AmazonLocale.FromString(Properties.Settings.Default.AmazonLocale);
+
+            BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+            binding.MaxReceivedMessageSize = int.MaxValue;
+
+            client = new AWSECommerceServicePortTypeClient(
+                binding, new EndpointAddress(_locale.URL)
+            );
+
+            client.ChannelFactory.Endpoint.Behaviors.Add(new AmazonSigningEndpointBehavior());
+
             try
             {
                 ItemSearchRequest req = new ItemSearchRequest();
-                req.SearchIndex = "DVD";
+                req.SearchIndex = Properties.Settings.Default.AmazonSearchMode;
                 req.Title = movieName;
+                req.ItemPage = @"1";
                 req.ResponseGroup = new string[] { "Medium", "Subjects" };
 
                 ItemSearch iSearch = new ItemSearch();
                 iSearch.Request = new ItemSearchRequest[] { req };
                 iSearch.AWSAccessKeyId = Properties.Settings.Default.AWEAccessKeyId;
 
-                Console.WriteLine(iSearch.Validate);
                 ItemSearchResponse res = client.ItemSearch(iSearch);
                 if (res.Items[0].Item.Length > 0)
                 {
                     Item[] amazonItems = res.Items[0].Item;
-                    int itemsToProcess = Math.Min(amazonItems.Length, 20);
+                    int itemsToProcess = Math.Min(amazonItems.Length, maxResults);
 
                     if (amazonItems != null)
                     {
@@ -198,15 +209,6 @@ namespace AmazonMetaData2
 
         public bool Initialize(string provider, Dictionary<string, string> parameters)
         {
-            BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
-            binding.MaxReceivedMessageSize = int.MaxValue;
-
-            client = new AWSECommerceServicePortTypeClient(
-                binding, new EndpointAddress("https://webservices.amazon.com/onca/soap?Service=AWSECommerceService")
-            );
-
-            client.ChannelFactory.Endpoint.Behaviors.Add(new AmazonSigningEndpointBehavior());
-
             _locale = AmazonLocale.FromString(Properties.Settings.Default.AmazonLocale);
 
             if (parameters != null)
@@ -217,6 +219,7 @@ namespace AmazonMetaData2
                     _locale = AmazonLocale.FromString(localeParam);
                 }
             }
+
             return true;
         }
 

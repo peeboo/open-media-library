@@ -62,7 +62,7 @@ namespace AmazonMetaData2.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://soap.amazon.com/onca/soap?Service=AWSECommerceService")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://webservices.amazon.com/onca/soap?Service=AWSECommerceService")]
         public string AmazonUrlEN {
             get {
                 return ((string)(this["AmazonUrlEN"]));
@@ -75,7 +75,7 @@ namespace AmazonMetaData2.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://soap.amazon.co.uk/onca/soap?Service=AWSECommerceService")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://webservices.amazon.co.uk/onca/soap?Service=AWSECommerceService")]
         public string AmazonUrlUK {
             get {
                 return ((string)(this["AmazonUrlUK"]));
@@ -88,7 +88,7 @@ namespace AmazonMetaData2.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://soap.amazon.de/onca/soap?Service=AWSECommerceService")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://webservices.amazon.de/onca/soap?Service=AWSECommerceService")]
         public string AmazonUrlDE {
             get {
                 return ((string)(this["AmazonUrlDE"]));
@@ -101,7 +101,7 @@ namespace AmazonMetaData2.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://soap.amazon.co.jp/onca/soap?Service=AWSECommerceService")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://webservices.amazon.co.jp/onca/soap?Service=AWSECommerceService")]
         public string AmazonUrlJP {
             get {
                 return ((string)(this["AmazonUrlJP"]));
@@ -114,7 +114,7 @@ namespace AmazonMetaData2.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://soap.amazon.fr/onca/soap?Service=AWSECommerceService")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://webservices.amazon.fr/onca/soap?Service=AWSECommerceService")]
         public string AmazonUrlFR {
             get {
                 return ((string)(this["AmazonUrlFR"]));
@@ -127,7 +127,7 @@ namespace AmazonMetaData2.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://soap.amazon.ca/onca/soap?Service=AWSECommerceService")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://webservices.amazon.ca/onca/soap?Service=AWSECommerceService")]
         public string AmazonUrlCA {
             get {
                 return ((string)(this["AmazonUrlCA"]));
