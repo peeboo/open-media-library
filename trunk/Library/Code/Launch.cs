@@ -52,28 +52,47 @@ namespace Library
         private void BeginStart(object host)
         {
             OMLApplication.DebugLine("[Launch] Launch called");
-            DeleteOldRegistryKey((AddInHost)host);
-
-            if (app == null)
+            if (TestDBConnection((AddInHost)host))
             {
-                OMLApplication.DebugLine("[Launch] No Application found, creating...");
-                app = new OMLApplication(s_session, (AddInHost)host);
-            }
+                DeleteOldRegistryKey((AddInHost)host);
 
-            try
-            {
-                if (OMLApplication.Current.IsExtender)
+                if (app == null)
                 {
-                    this.imp = new Impersonator();
-                    this.imp.Enter();
+                    OMLApplication.DebugLine("[Launch] No Application found, creating...");
+                    app = new OMLApplication(s_session, (AddInHost)host);
+                }
+
+                try
+                {
+                    if (OMLApplication.Current.IsExtender)
+                    {
+                        this.imp = new Impersonator();
+                        this.imp.Enter();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    OMLApplication.DebugLine("Exception during this.imp.Enter(): {0}", ex);
+                }
+
+                app.Startup(_id);
+            }
+            else
+            {
+                //just going to do a retry for now-need to allow db change later...
+                List<string> buttons = new List<string>();
+                buttons.Add("Retry");
+                buttons.Add("Cancel");
+                Microsoft.MediaCenter.DialogResult res = ((AddInHost)host).MediaCenterEnvironment.Dialog("Unable to communicate with database. Would you like to retry or cancel?", "OPEN MEDIA LIBRARY", buttons, -1, true, null, delegate(Microsoft.MediaCenter.DialogResult dialogResult) { });
+                if ((int)res == 100)
+                {
+                    Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.BeginStart), (object)host, new TimeSpan(1));
+                }
+                else
+                {
+                    s_session.Close();
                 }
             }
-            catch (Exception ex)
-            {
-                OMLApplication.DebugLine("Exception during this.imp.Enter(): {0}", ex);
-            }
-
-            app.Startup(_id);
         }
 
         public void Launch(AddInHost host)
@@ -91,6 +110,39 @@ namespace Library
             }
         }
 
+        private bool TestDBConnection(AddInHost host)
+        {
+            try
+            {
+                //return OMLEngine.Settings.OMLSettings.IsConnected;
+                OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
+                OMLEngine.DatabaseManagement.DatabaseInformation.SQLState state = dbm.CheckDatabase();
+                switch (state)
+                {
+                    case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OK:
+                        return true;
+                    case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OMLDBVersionCodeOlderThanSchema:
+                        throw (new Exception("The OML client is an older version than the database. Please upgrade the client components!"));
+                    //is this right?
+                    case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OMLDBVersionNotFound:
+                        return true;
+                    case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.LoginFailure:
+                        return false;
+                    default:
+                        throw (new Exception(OMLEngine.DatabaseManagement.DatabaseInformation.LastSQLError));
+                }
+            }
+            catch (Exception ex)
+            {
+                host.MediaCenterEnvironment.Dialog(
+                ex.Message,
+                "CONNECTION FAILED", Microsoft.MediaCenter.DialogButtons.Ok, 5, false);
+                return false;
+                
+                //this._session.Close();
+            }
+            return true;
+        }
         private void CheckFirstRun(AddInHost host)
         {
             if (Properties.Settings.Default.ShowFirstRunPrompt == true)
