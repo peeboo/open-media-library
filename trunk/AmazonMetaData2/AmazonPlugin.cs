@@ -13,11 +13,10 @@ namespace AmazonMetaData2
     public class AmazonPlugin : IOMLMetadataPlugin
     {
         AmazonLocale _locale = AmazonLocale.Default;
-        Item[] searchResultItems;
         AmazonSearchResult _searchResult = null;
         AWSECommerceServicePortTypeClient client;
 
-        public string PluginName { get { return "AmazonV2"; } }
+        public string PluginName { get { return "Amazon"; } }
 
         public AmazonPlugin() { }
 
