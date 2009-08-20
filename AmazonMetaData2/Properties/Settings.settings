@@ -12,22 +12,22 @@
       <Value Profile="(Default)">DVD</Value>
     </Setting>
     <Setting Name="AmazonUrlEN" Type="(Web Service URL)" Scope="User">
-      <Value Profile="(Default)">http://soap.amazon.com/onca/soap?Service=AWSECommerceService</Value>
+      <Value Profile="(Default)">https://webservices.amazon.com/onca/soap?Service=AWSECommerceService</Value>
     </Setting>
     <Setting Name="AmazonUrlUK" Type="(Web Service URL)" Scope="User">
-      <Value Profile="(Default)">http://soap.amazon.co.uk/onca/soap?Service=AWSECommerceService</Value>
+      <Value Profile="(Default)">https://webservices.amazon.co.uk/onca/soap?Service=AWSECommerceService</Value>
     </Setting>
     <Setting Name="AmazonUrlDE" Type="(Web Service URL)" Scope="User">
-      <Value Profile="(Default)">http://soap.amazon.de/onca/soap?Service=AWSECommerceService</Value>
+      <Value Profile="(Default)">https://webservices.amazon.de/onca/soap?Service=AWSECommerceService</Value>
     </Setting>
     <Setting Name="AmazonUrlJP" Type="(Web Service URL)" Scope="User">
-      <Value Profile="(Default)">http://soap.amazon.co.jp/onca/soap?Service=AWSECommerceService</Value>
+      <Value Profile="(Default)">https://webservices.amazon.co.jp/onca/soap?Service=AWSECommerceService</Value>
     </Setting>
     <Setting Name="AmazonUrlFR" Type="(Web Service URL)" Scope="User">
-      <Value Profile="(Default)">http://soap.amazon.fr/onca/soap?Service=AWSECommerceService</Value>
+      <Value Profile="(Default)">https://webservices.amazon.fr/onca/soap?Service=AWSECommerceService</Value>
     </Setting>
     <Setting Name="AmazonUrlCA" Type="(Web Service URL)" Scope="User">
-      <Value Profile="(Default)">http://soap.amazon.ca/onca/soap?Service=AWSECommerceService</Value>
+      <Value Profile="(Default)">https://webservices.amazon.ca/onca/soap?Service=AWSECommerceService</Value>
     </Setting>
     <Setting Name="Genres" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
