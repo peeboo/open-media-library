@@ -114,7 +114,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranscoderTester", "Transco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PFMLib", "PFMLib\PFMLib.csproj", "{D5817C18-5E4B-4C80-BF5D-982CB8F702DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonMetaData2", "AmazonMetaData2\AmazonMetaData2.csproj", "{32B876CD-44F5-4F08-8685-55BCA121AD09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonMetaData", "AmazonMetaData2\AmazonMetaData.csproj", "{32B876CD-44F5-4F08-8685-55BCA121AD09}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
