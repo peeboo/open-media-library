@@ -241,9 +241,9 @@
                     KeyPath="yes" Source="..\..\OMLXMLImporter\bin\$(var.BuildType)\OMLXMLImporter.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
-            <Component Id="AmazonMetadata2.dll" Guid="CF998984-7F40-47FC-AA82-A85F8C8344DB" DiskId="1">
-              <File Name="AmazonMetadata2.dll"
-                    KeyPath="yes" Source="..\..\AmazonMetadata2\bin\$(var.BuildType)\AmazonMetadata2.dll"
+            <Component Id="AmazonMetadata.dll" Guid="CF998984-7F40-47FC-AA82-A85F8C8344DB" DiskId="1">
+              <File Name="AmazonMetadata.dll"
+                    KeyPath="yes" Source="..\..\AmazonMetadata2\bin\$(var.BuildType)\AmazonMetadata.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
             <Component Id="TheMovieDbMetadata.dll" Guid="46534B9A-16B6-4c74-AB87-03B89BE3B160" DiskId="1">
@@ -431,7 +431,7 @@
 
       <!-- Metadata Plugins -->
       <ComponentRef Id="VMCDVDLibraryPlugin.dll" />
-      <ComponentRef Id="AmazonMetadata2.dll" />
+      <ComponentRef Id="AmazonMetadata.dll" />
       <ComponentRef Id="TheMovieDbMetadata.dll" />
       <ComponentRef Id="NetFlixMetadata.dll"/>
       <ComponentRef Id="DVDProfilerMetaData.dll"/>
