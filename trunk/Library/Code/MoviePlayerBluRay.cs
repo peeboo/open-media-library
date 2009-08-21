@@ -33,6 +33,7 @@ namespace Library
                         Utilities.DebugLine("BluRayPlayer.PlayMovie: movie {0} Playing", _source);
                         OMLApplication.Current.NowPlayingMovieName = _source.Name;
                         OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
+                        AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged -= MoviePlayerFactory.Transport_PropertyChanged;
                         AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
                         AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                     }
