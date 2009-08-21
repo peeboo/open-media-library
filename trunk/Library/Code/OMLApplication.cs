@@ -320,6 +320,10 @@ namespace Library
         public void Startup(string context)
         {            
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
+            // DISABLE THIS UNTIL ITS READY -- DJShultz 01/13/2009
+
+            OMLUpdater updater = new OMLUpdater();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
 
 #if LAYOUT_V3
 
@@ -448,9 +452,6 @@ namespace Library
             //return;
 #endif
 
-            // DISABLE THIS UNTIL ITS READY -- DJShultz 01/13/2009
-            OMLUpdater updater = new OMLUpdater();
-            ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
         }
 
         private void GoHome(List<OMLEngine.TitleFilter> filters, string name)
