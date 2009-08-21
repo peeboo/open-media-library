@@ -72,9 +72,10 @@
       <HintPath>.\DevExpress.XtraNavBar.v8.2.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DirectShowLib-2005, Version=2.0.0.0, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f, processorArchitecture=MSIL">
+    <Reference Include="dssnap, Version=1.0.0.0, Culture=neutral, PublicKeyToken=be95517fa8951550, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DVDMediaInfo\DirectShowLib-2005.dll</HintPath>
+      <HintPath>..\OMLEngine\dssnap.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
