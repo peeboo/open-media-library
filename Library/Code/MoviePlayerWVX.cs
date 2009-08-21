@@ -31,6 +31,7 @@ namespace Library
                     Utilities.DebugLine("VideoPlayer.PlayMovie: movie {0} Playing", _mItem);
                     OMLApplication.Current.NowPlayingMovieName = _mItem.Name;
                     OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
+                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged -= MoviePlayerFactory.Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                 }

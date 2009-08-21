@@ -219,7 +219,9 @@ namespace Library
                         Utilities.DebugLine("ExtenderDVDPlayer.PlayMovie: set resume time to: {0}", _source.ResumeTime);
                         AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.Position = _source.ResumeTime.Value;
                     }
+                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged -= MoviePlayerFactory.Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
+                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged -= this.Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += this.Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                 }
