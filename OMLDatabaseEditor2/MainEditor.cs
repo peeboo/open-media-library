@@ -81,6 +81,9 @@ namespace OMLDatabaseEditor
             splitContainerDetails.Panel2.Controls["titlesListView"].Dock = DockStyle.Fill;
             alwaysShowTitleListToolStripMenuItem.Checked = OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList;
             showAllItemsInTitleListToolStripMenuItem.Checked = OMLEngine.Settings.OMLSettings.ShowSubFolderTitles;
+
+            this.DesktopBounds =new Rectangle(Properties.Settings.Default.Location,Properties.Settings.Default.Size);
+            this.WindowState = (FormWindowState)Enum.Parse(typeof(FormWindowState),Properties.Settings.Default.WindowState);
         }
 
 
@@ -1098,6 +1101,11 @@ namespace OMLDatabaseEditor
         private void MainEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = SaveCurrentMovie() == DialogResult.Cancel;
+
+            Properties.Settings.Default.Location = this.DesktopBounds.Location;
+            Properties.Settings.Default.Size = this.DesktopBounds.Size;
+            Properties.Settings.Default.WindowState = Enum.GetName(typeof(FormWindowState), this.WindowState);
+
             Properties.Settings.Default.Save();
         }
 
