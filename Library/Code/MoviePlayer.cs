@@ -31,7 +31,7 @@ namespace Library
     /// A factory class to create the movie player based on file type
     /// </summary>
     public class MoviePlayerFactory
-    {        
+    {
         /// <summary>
         /// Creates the movie player based on the the video formatin in the Title.
         /// </summary>
@@ -70,9 +70,9 @@ namespace Library
                 {
                     mediaFormat = MountImage(source.MediaPath, out mediaPath);
                 }
-                
+
                 // if we don't need mounting or the mounting failed setup the paths
-                if ( mediaFormat == VideoFormat.UNKNOWN)
+                if (mediaFormat == VideoFormat.UNKNOWN)
                 {
                     mediaFormat = source.Format;
                     mediaPath = source.MediaPath;
@@ -194,8 +194,12 @@ namespace Library
 
                     if (t.PlayState == PlayState.Finished || t.PlayState == PlayState.Stopped)
                     {
-                        OMLApplication.DebugLine("[MoviePlayer] Playstate is stopped, moving to previous page");
-                        OMLApplication.Current.Session.BackPage();
+                        if (AddInHost.Current.ApplicationContext.IsForegroundApplication && AddInHost.Current.MediaCenterEnvironment.MediaExperience.IsFullScreen)
+                        {
+                            AddInHost.Current.ApplicationContext.ReturnToApplication();
+                            OMLApplication.DebugLine("[MoviePlayer] Playstate is stopped, moving to previous page");
+                            //OMLApplication.Current.Session.BackPage();
+                        }
                     }
                 }
             });
@@ -205,7 +209,7 @@ namespace Library
         // keep all the Playing logic here
         static bool IsExtenderDVD_NoTranscoding(MediaSource source)
         {
-            if (OMLApplication.Current.IsExtender == false || source.Format != VideoFormat.DVD 
+            if (OMLApplication.Current.IsExtender == false || source.Format != VideoFormat.DVD
                 || FileScanner.IsDVD(source.MediaPath) == false || ExtenderDVDPlayer.CanPlay(source) == false)
                 return false;
 
