@@ -124,7 +124,18 @@ namespace TVDBMetadata
         public List<OMLMetadataOption> GetOptions()
         {
             List<OMLMetadataOption> options = new List<OMLMetadataOption>();
-            OMLMetadataOption apikey = new OMLMetadataOption("API Key", API_KEY, null, false);
+
+            OMLMetadataOption apikey = null;
+
+            if (API_KEY == DEFAULT_API_KEY)
+            {
+                apikey = new OMLMetadataOption("API Key", "[Enter your API key here to override the OML key]", null, false);
+            }
+            else
+            {
+                apikey = new OMLMetadataOption("API Key", API_KEY, null, false);
+            }
+
             options.Add(apikey);
 
             return options;
