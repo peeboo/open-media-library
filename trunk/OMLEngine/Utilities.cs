@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Data;
@@ -589,5 +590,117 @@ namespace OMLEngine
         //        return false;
         //    }
         //}
+
+        #region This code borrowed from a public forum posting on www.pinvoke.net
+        static public string GetUniversalPath(string path)
+        {
+            string universalPath = "";
+            try
+            {
+                GetNetShares gns = new GetNetShares();
+                foreach (GetNetShares.ShareInfo shareInfo in gns.EnumNetShares("127.0.0.1"))
+                {
+                    if (path.Equals(shareInfo.Path, StringComparison.OrdinalIgnoreCase))
+                        return String.Concat(@"\\", Environment.MachineName, @"\", shareInfo.ShareName);
+                }
+            }
+            catch
+            {
+                universalPath = path;
+            }
+ 
+            return universalPath;
+        }
+ 
+        class GetNetShares
+        {
+            #region External Calls
+            [DllImport("Netapi32.dll", SetLastError = true)]
+            static extern int NetApiBufferFree(IntPtr Buffer);
+            [DllImport("Netapi32.dll", CharSet = CharSet.Unicode)]
+            private static extern int NetShareEnum(
+                 StringBuilder ServerName,
+                 int level,
+                 ref IntPtr bufPtr,
+                 uint prefmaxlen,
+                 ref int entriesread,
+                 ref int totalentries,
+                 ref int resume_handle
+                 );
+            #endregion
+            #region External Structures
+            [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+            public struct ShareInfo
+            {
+                public string ShareName;
+                public uint ShareType;
+                public string Remark;
+                public uint Permissions;
+                public uint MaxUses;
+                public uint CurrentUses;
+                public string Path;
+                public string Password;
+ 
+                public ShareInfo(string netname, uint type, string remark, uint permissions, uint max_uses, uint current_uses, string path, string password)
+                {
+                    ShareName = netname;
+                    ShareType = type;
+                    Remark = remark;
+                    Permissions = permissions;
+                    MaxUses = max_uses;
+                    CurrentUses = current_uses;
+                    Path = path;
+                    Password = password;
+                }
+            }
+            #endregion
+ 
+            const uint MAX_PREFERRED_LENGTH = 0xFFFFFFFF;
+            const int SuccessCode = 0;
+            private enum NetErrorResults : uint
+            {
+                Success = 0,
+                BASE = 2100,
+                UnknownDevDir = (BASE + 16),
+                DuplicateShare = (BASE + 18),
+                BufTooSmall = (BASE + 23),
+            }
+            private enum SHARE_TYPE : uint
+            {
+                DiskTree = 0,
+                PrintQ = 1,
+                Device = 2,
+                IPC = 3,
+                Special = 0x80000000,
+            }
+            public List<ShareInfo> EnumNetShares(string Server)
+            {
+                List<ShareInfo> ShareInfos = new List<ShareInfo>();
+                int entriesread = 0;
+                int totalentries = 0;
+                int resume_handle = 0;
+                int nStructSize = Marshal.SizeOf(typeof(ShareInfo));
+                IntPtr bufPtr = IntPtr.Zero;
+                StringBuilder server = new StringBuilder(Server);
+                int ret = NetShareEnum(server, 2, ref bufPtr, MAX_PREFERRED_LENGTH, ref entriesread, ref totalentries, ref resume_handle);
+                if (ret == SuccessCode)
+                {
+                    IntPtr currentPtr = bufPtr;
+                    for (int i = 0; i < entriesread; i++)
+                    {
+                        ShareInfo shi1 = (ShareInfo)Marshal.PtrToStructure(currentPtr, typeof(ShareInfo));
+                        ShareInfos.Add(shi1);
+                        currentPtr = new IntPtr(currentPtr.ToInt32() + nStructSize);
+                    }
+                    NetApiBufferFree(bufPtr);
+                    return ShareInfos;
+                }
+                else
+                {
+                    return new List<ShareInfo>();
+                }
+            }
+        }
+        #endregion
     }
 }
