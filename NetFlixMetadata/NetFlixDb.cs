@@ -28,8 +28,8 @@ namespace NetFlixMetadata
 
     public class NetFlixDb : IOMLMetadataPlugin
     {
-        private const string DEFAULT_API_KEY = @"8mfjpswhjxg7y4md35zs5ang";
-        private const string DEFAULT_SHARED_SECRET = @"Q9J4DrqSZv";
+        private const string DEFAULT_API_KEY = @"r548xb5mryvw2d9ewpzwh6bg";
+        private const string DEFAULT_SHARED_SECRET = @"udYADAm3W2";
         private string API_KEY;
         private string SHARED_SECRET;
 
@@ -113,8 +113,28 @@ namespace NetFlixMetadata
         public List<OMLMetadataOption> GetOptions()
         {
             List<OMLMetadataOption> options = new List<OMLMetadataOption>();
-            OMLMetadataOption apikey = new OMLMetadataOption("API Key", API_KEY, null, false);
-            OMLMetadataOption sharedsecret = new OMLMetadataOption("Shared Secret", SHARED_SECRET, null, false);
+
+            OMLMetadataOption apikey = null;
+            OMLMetadataOption sharedsecret = null;
+
+            if (API_KEY == DEFAULT_API_KEY)
+            {
+                apikey = new OMLMetadataOption("API Key", "[Enter your API key here to override the OML key]", null, false);
+            }
+            else
+            {
+                apikey = new OMLMetadataOption("API Key", API_KEY, null, false);
+            }
+
+            if (SHARED_SECRET == DEFAULT_SHARED_SECRET)
+            {
+                sharedsecret = new OMLMetadataOption("Shared Secret", "[Enter your Secret here to override the OML secret]", null, false);
+            }
+            else
+            {
+                sharedsecret = new OMLMetadataOption("Shared Secret", SHARED_SECRET, null, false);
+            }
+
             options.Add(apikey);
             options.Add(sharedsecret);
 
@@ -131,7 +151,7 @@ namespace NetFlixMetadata
                 }
                 else
                 {
-                API_KEY = value;
+                    API_KEY = value;
                 }
             }
 
