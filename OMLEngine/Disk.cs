@@ -30,7 +30,8 @@ namespace OMLEngine
             get { return _disk.Path; } 
             set 
             {
-                value = NetworkScanner.FixPath(value);
+                value = Utilities.GetUniversalPath(value);
+                //value = NetworkScanner.FixPath(value);
                 /*// if it's pointing to a physical drive do the network test
                 if (!string.IsNullOrEmpty(value)
                     && !value.StartsWith("\\\\") 
