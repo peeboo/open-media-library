@@ -413,6 +413,7 @@
     <Content Include="Application.ico" />
     <Content Include="Resources\Application.png" />
     <Content Include="Resources\applications-multimedia.png" />
+    <EmbeddedResource Include="Resources\Credits.xml" />
     <Content Include="Resources\emblem-symbolic-link.png" />
     <EmbeddedResource Include="Controls\TitlesListView.resx">
       <DependentUpon>TitlesListView.cs</DependentUpon>
@@ -500,5 +501,6 @@
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
+    <PreBuildEvent>copy $(SolutionDir)\Credits.xml $(ProjectDir)\Resources\Credits.xml</PreBuildEvent>
   </PropertyGroup>
 </Project>

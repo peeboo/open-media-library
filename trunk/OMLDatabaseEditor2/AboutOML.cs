@@ -2,6 +2,9 @@
 using System.Reflection;
 using System.Windows.Forms;
 using System.IO;
+using System.Xml;
+using System.Xml.XPath;
+using System.Text;
 
 namespace OMLDatabaseEditor
 {
@@ -20,6 +23,9 @@ namespace OMLDatabaseEditor
             this.labelCopyright.Text = AssemblyCopyright;
             //this.labelCompanyName.Text = AssemblyCompany;
             //this.textBoxDescription.Text = AssemblyDescription;
+
+            textBoxDescription.Text = BuildCreditsString();
+
             try
             {
                 _assembly = Assembly.GetExecutingAssembly();
@@ -32,6 +38,49 @@ namespace OMLDatabaseEditor
             catch (Exception)
             { }
         }
+
+        private string BuildCreditsString()
+        {
+            StringBuilder CreditsText = new StringBuilder();
+            
+            Stream creditsStream = null;
+            Assembly a = Assembly.GetExecutingAssembly();
+
+            creditsStream = a.GetManifestResourceStream("OMLDatabaseEditor.Resources.Credits.xml");
+
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(creditsStream);
+            XPathNavigator nav = xDoc.CreateNavigator();
+            XPathNodeIterator it = nav.Select("Credits/Developers/Person");
+
+            CreditsText.AppendLine("DEVELOPMENT TEAM:");
+            while (it.MoveNext())
+            {
+                CreditsText.AppendLine(it.Current.Value);
+            }
+            CreditsText.AppendLine("");
+            it = nav.Select("Credits/Contributors/Person");
+
+            CreditsText.AppendLine("COMPANIES AND INDIVIDUALS:");
+            while (it.MoveNext())
+            {
+                CreditsText.AppendLine(it.Current.Value);
+            }
+            CreditsText.AppendLine("");
+            it = nav.Select("Credits/Special/Person");
+
+            CreditsText.AppendLine("SPECIAL THANKS:");
+            while (it.MoveNext())
+            {
+                CreditsText.AppendLine(it.Current.Value);
+            }
+
+            CreditsText.AppendLine("");
+            CreditsText.AppendLine("And many others that we have missed, sorry we missed you but thanks for your support.");
+            
+            return CreditsText.ToString();
+        }
+
 
         #region Assembly Attribute Accessors
 
