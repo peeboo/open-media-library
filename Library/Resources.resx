@@ -1009,6 +1009,9 @@
   <data name="V3_AboutSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\v3\settings\aboutsettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Credits" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Credits.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="V3_UpdaterSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>markup\v3\settings\updatersettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

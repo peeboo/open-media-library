@@ -7,75 +7,120 @@ using Microsoft.MediaCenter;
 using OMLEngine.Settings;
 using System.Collections;
 using System.Threading;
+using System.Xml;
+using System.Reflection;
+using System.IO;
+using System.Xml.XPath;
 
 namespace Library.Code.V3
 {
     public class AboutSettings : ModelItem
     {
+        public Boolean ShowAbout
+        {
+            get
+            {
+                if (this.radioCommands.ChosenIndex == 0)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+        public Boolean ShowCredits
+        {
+            get
+            {
+                if (this.radioCommands.ChosenIndex == 0)
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+        public string AboutText { get; set; }       
+        private string aboutTitle="SOFTWARE VERSION";
+
+        public string CreditsText { get; set; }
+        private string creditsTitle="CREDITS";
+
+        public string ActiveTitle
+        {
+            get
+            {
+                if (this.radioCommands.ChosenIndex == 0)
+                    return aboutTitle;
+                else
+                    return creditsTitle;
+            }
+        }
+
         public AboutSettings()
         {
-            this.commands = new ArrayListDataSet(this);
+            
 
-            //save command
-            Command saveCmd = new Command();
-            saveCmd.Description = "Save";
-            saveCmd.Invoked += new EventHandler(saveCmd_Invoked);
-            this.commands.Add(saveCmd);
+            System.Resources.ResourceManager RM = new System.Resources.ResourceManager("Library.Resources",System.Reflection.Assembly.GetExecutingAssembly());
+            string creditsString = (string)RM.GetObject("Credits");
+            byte[] byteArray = Encoding.ASCII.GetBytes(creditsString);
+            MemoryStream stream = new MemoryStream(byteArray);
+            //XmlTextReader reader = new XmlTextReader(stream);
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(stream);
+            XPathNavigator nav = xDoc.CreateNavigator();
+            XPathNodeIterator it = nav.Select("Credits/Developers/Person");
 
-            //cancel command
-            Command cancelCmd = new Command();
-            cancelCmd.Description = "Cancel";
-            cancelCmd.Invoked += new EventHandler(cancelCmd_Invoked);
-            this.commands.Add(cancelCmd);
-
-            this.languageOptions = new Choice(this);
-            this.SetupUILanguage();
-        }
-
-        private void SetupUILanguage()
-        {
-            string selected = null;
-            List<string> list = new List<string>();
-            string configuredLangId = OMLSettings.UILanguage;
-
-            foreach (var availableCulture in I18n.AvailableCultures)
+            this.CreditsText = "DEVELOPMENT TEAM:";
+            while (it.MoveNext())
             {
-                string name = availableCulture.TextInfo.ToTitleCase(availableCulture.NativeName);
-                if (string.CompareOrdinal(availableCulture.Name, configuredLangId) == 0)
-                {
-                    selected = name;
-                }
-                list.Add(name);
+                this.CreditsText += "\n" + it.Current.Value;
+            }
+            this.CreditsText += "\n\n";
+            it = nav.Select("Credits/Contributors/Person");
+
+            this.CreditsText += "COMPANIES AND INDIVIDUALS:";
+            while (it.MoveNext())
+            {
+                this.CreditsText += "\n" + it.Current.Value;
+            }
+            this.CreditsText += "\n\n";
+            it = nav.Select("Credits/Special/Person");
+
+            this.CreditsText += "SPECIAL THANKS:";
+            while (it.MoveNext())
+            {
+                this.CreditsText += "\n" + it.Current.Value;
             }
 
-            list.Sort((a, b) => string.Compare(a, b, true, Thread.CurrentThread.CurrentCulture));
+            string version=Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-            list.Insert(0, "Use system language");
-            if (string.IsNullOrEmpty(selected)) selected = list[0];
+            this.AboutText = "Open Media Library (replace with image)\n\nVersion: " + version + " (Revision: " + OMLApplication.Current.RevisionNumber+")";
+            this.AboutText += "\nCopyright © 2008, GNU General Public License v3";
 
-            languageOptions.Options = list;
-            languageOptions.Chosen = selected;
-            this.selectedLanguage = selected;
+            this.radioCommands = new Choice(this);
+            ArrayListDataSet radioSet = new ArrayListDataSet();
+
+            Command aboutCmd=new Command(this);
+            aboutCmd.Description="About";
+            radioSet.Add(aboutCmd);
+
+            Command creditsCmd = new Command(this);
+            creditsCmd.Description = "Credits";
+            radioSet.Add(creditsCmd);
+
+            //this.CreditsText = "this is a credit";
+
+            this.radioCommands.Options = radioSet;
+            this.radioCommands.ChosenChanged += new EventHandler(radioCommands_ChosenChanged);
+           
         }
 
-        private string selectedLanguage;
-        private Choice languageOptions;
-        public Choice LanguageOptions
+        void radioCommands_ChosenChanged(object sender, EventArgs e)
         {
-            get { return languageOptions; }
-            set { languageOptions = value; }
-        }
-
-        private static String CultureIdFromDisplayName(string displayName)
-        {
-            foreach (var availableCulture in I18n.AvailableCultures)
-            {
-                if (string.CompareOrdinal(availableCulture.TextInfo.ToTitleCase(availableCulture.NativeName), displayName) == 0)
-                {
-                    return availableCulture.Name;
-                }
-            }
-            return null;
+            FirePropertyChanged("ActiveTitle");
+            FirePropertyChanged("ShowAbout");
+            FirePropertyChanged("ShowCredits");
+            
+            //FirePropertyChanged("ActiveContent");
         }
 
         private Boolean isBusy = false;
@@ -95,8 +140,6 @@ namespace Library.Code.V3
         /// <returns></returns>
         public bool IsDirty()
         {
-            if ((string)this.languageOptions.Chosen != this.selectedLanguage)
-                return true;
             return false;
         }
 
@@ -105,7 +148,7 @@ namespace Library.Code.V3
         /// </summary>
         public void Save()
         {
-            OMLSettings.UILanguage = CultureIdFromDisplayName(this.languageOptions.Chosen as string);
+            
         }
 
         /// <summary>

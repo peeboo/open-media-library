@@ -536,6 +536,7 @@
     <None Include="Setup\License.rtf" />
     <None Include="Setup\omlsetupx86.proj" />
     <EmbeddedResource Include="Revision.txt" />
+    <None Include="Resources\Credits.xml" />
     <Content Include="Setupx64\SetupClient.wxs" />
     <Content Include="Setupx64\SetupServer.wxs" />
     <Content Include="Setup\SetupClient.wxs" />
