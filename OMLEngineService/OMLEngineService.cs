@@ -11,7 +11,7 @@ namespace OMLEngineService
 {
     public partial class OMLEngineService : ServiceBase
     {
-        private List<Title> titles;
+        private IList<Title> titles;
         private ServiceHost _transcodingServiceHost, _titleCollectionServiceHost;
 
         public OMLEngineService()
