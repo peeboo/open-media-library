@@ -8,12 +8,13 @@
     xmlns:ctl="resx://Library/Library.Resources/V3_Controls"
     xmlns:radio="resx://Library/Library.Resources/V3_Controls_RadioGroup"
     xmlns:wait="resx://Library/Library.Resources/V3_Controls_WaitCursor"
+      xmlns:scr="resx://Library/Library.Resources/V3_Controls_ScrollControl"
 	  xmlns:me="Me">
 
   <!-- A details page -->
   <UI Name="DetailsPageCastCrew">
     <Properties>
-      <shl:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
+      <shl:AboutSettings Name="Page" AboutSettings="$Required"/>
       <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
     </Properties>
 
@@ -177,7 +178,7 @@
 
   <UI Name="ButtonsHolder">
     <Properties>
-      <shl:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
+      <shl:AboutSettings Name="Page" AboutSettings="$Required"/>
     </Properties>
     <Locals>
       <Color Name="ButtonNoFocusColor" Color="color://core:OffWhite"/>
@@ -210,15 +211,7 @@
     <Content>
       <Panel Layout="VerticalFlow">
         <Children>
-          <radio:MenuRadioGroup Model="[Page.SortCommands]"/>
-          <Repeater Name="Buttons" Source="[Page.ManagerCommands]" Navigation="RememberFocus,FlowVertical" Layout="VerticalFlow" Margins="0,0,0,0">
-            <LayoutInput>
-              <AnchorLayoutInput Top="Parent,0" Horizontal="Near"/>
-            </LayoutInput>
-            <Content>
-              <ctl:Button Model="[RepeatedItem!Command]" SubFocusArea="[SubFocusArea]" NoFocusColor="[ButtonNoFocusColor]"/>
-            </Content>
-          </Repeater>
+          <radio:MenuRadioGroup Model="[Page.RadioCommands]"/>
         </Children>
       </Panel>
     </Content>
@@ -227,10 +220,10 @@
   <!-- The primary display area of a details page -->
   <UI Name="DetailsPane">
     <Properties>
-      <shl:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
+      <shl:AboutSettings Name="Page" AboutSettings="$Required"/>
     </Properties>
     <Rules>
-      <Binding Target="[Discs.Content]" Source="[Page.DiscArray]"/>
+      <!--Binding Target="[Discs.Content]" Source="[Page.DiscArray]"/>
       <Changed Source="[Page.DiscArray]" InitialEvaluate="true">
         <Actions>
           <Set Target="[Discs.Content]" Value="[Page.DiscArray]"/>
@@ -240,15 +233,18 @@
         <Actions>
           <Set Target="[DiscTitle.Content]" Value="[Page.SelectedDisc.Description]"/>
         </Actions>
-      </Changed>
-      <Changed Source="[Page.ShowErrorMessage]" InitialEvaluate="true">
+      </Changed-->
+      <!--Changed Source="[Page.ShowErrorMessage]" InitialEvaluate="true">
         <Conditions>
           <Equality Source="[Page.ShowErrorMessage]" Value="true"/>
         </Conditions>
         <Actions>
           <Set Target="[Discs.Source]" Value="me:EmptyContentMessage"/>
         </Actions>
-      </Changed>
+      </Changed-->
+      <Binding Target="[PageTitle.Content]" Source="[Page.ActiveTitle]"/>
+      <Binding Target="[CreditsTextPanel.Visible]" Source="[Page.ShowCredits]"/>
+      <Binding Target="[AboutTextPanel.Visible]" Source="[Page.ShowAbout]"/>
     </Rules>
     <Content>
       <Panel>
@@ -275,7 +271,7 @@
               <Clip FadeSize="25" MaximumSize="500,70" NearOffset="-40" Orientation="Vertical">
                 <Children>
                   <!--Text Content="movie detailsx" Color="203,255,255,255" Font="Segoe Media Center Light,28" Alpha=".75" CenterPointPercent="1,0,1"/-->
-                  <Text Content="manage discs" Color="102, 151, 217, 255" Font="Segoe Media Center Light,28" Alpha=".92" CenterPointPercent="1,0,1"/>
+                  <Text Content="settings" Color="102, 151, 217, 255" Font="Segoe Media Center Light,28" Alpha=".92" CenterPointPercent="1,0,1"/>
                 </Children>
               </Clip>
             </Children>
@@ -320,7 +316,7 @@
                       <FormLayoutInput Left="ButtonsHolder,1" Top="ButtonsHolder, 0" Vertical="Fill" Horizontal="Fill"/>
                     </LayoutInput>
                     <Children>
-                      <Text Name="DiscTitle" Content="MEDIA CHANGER OPTIONS" MaximumLines="1" WordWrap="false"  Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23">
+                      <Text Name="PageTitle" Content="[Page.ActiveTitle]" MaximumLines="1" WordWrap="false"  Color="255, 242, 242, 242" Font="Segoe Media Center Semibold, 23">
                         <LayoutInput>
                           <AnchorLayoutInput Left="Parent,0" Top="Parent,0, -95"/>
                         </LayoutInput>
@@ -332,14 +328,16 @@
                         <Children>
                           <Panel Layout="Anchor" Margins="0,0,0,0" FocusOrder="0">
                             <Children>
-                              <listview:ScrollingListDiscs Page="[Page]" Name="Discs" Content="[Page.DiscArray]" GroupName="" Navigation="RememberFocus,Column">
+                              <Text Name="AboutTextPanel" Content="[Page.AboutText]" WordWrap="true" Font="Segoe Media Center Semibold,18" Color="255, 242, 242, 242">
                                 <LayoutInput>
-                                  <AnchorLayoutInput Bottom="Parent,1, -45"  Top="Parent,0, -45"  Left="Parent,0, 0"/>
+                                  <AnchorLayoutInput Bottom="Parent,1, -32"  Left="Parent,0" Top="Parent,0, 12"/>
                                 </LayoutInput>
-                                <ScrollingData>
-                                  <ScrollingData/>
-                                </ScrollingData>
-                              </listview:ScrollingListDiscs>
+                              </Text>
+                              <scr:ScrollPanel Name="CreditsTextPanel" Visible="true" Font="Segoe Media Center Semibold, 18" ScrollContent="[Page.CreditsText]">
+                                <LayoutInput>
+                                  <AnchorLayoutInput Bottom="Parent,1, -32"  Left="Parent,0" Top="Parent,0, 12"/>
+                                </LayoutInput>
+                              </scr:ScrollPanel>
                             </Children>
                           </Panel>
                         </Children>
@@ -356,9 +354,9 @@
 
   </UI>
 
-  <UI Name="EmptyContentMessage">
+  <!--UI Name="EmptyContentMessage">
     <Properties>
-      <shl:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
+      <shl:AboutSettings Name="Page" AboutSettings="$Required"/>
     </Properties>
     <Content>
       <Panel Layout="VerticalFlow">
@@ -370,7 +368,7 @@
         </Children>
       </Panel>
     </Content>
-  </UI>
+  </UI-->
   
   <Animation Name="Browse.Gallery.Show.Focus" Type="Idle" CenterPointPercent="0.5, 0.5, 0.0">
     <Keyframes>

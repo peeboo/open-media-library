@@ -61,6 +61,23 @@ namespace Library.Code.V3
             automaticUpdateCmd.Description = "Automatic Updates";
             automaticUpdateCmd.Invoked += new EventHandler(automaticUpdateCmd_Invoked);
             this.Commands.Add(automaticUpdateCmd);
+
+            //about
+            Command aboutCmd = new Command();
+            aboutCmd.Description = "About Open Media Library";
+            aboutCmd.Invoked += new EventHandler(aboutCmd_Invoked);
+            this.Commands.Add(aboutCmd);
+        }
+
+        void aboutCmd_Invoked(object sender, EventArgs e)
+        {
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+
+            Library.Code.V3.AboutSettings page = new Library.Code.V3.AboutSettings();
+            properties["Page"] = page;
+            properties["Application"] = OMLApplication.Current;
+
+            OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_AboutSettings", properties);
         }
 
         void automaticUpdateCmd_Invoked(object sender, EventArgs e)
