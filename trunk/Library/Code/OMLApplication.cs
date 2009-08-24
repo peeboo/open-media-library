@@ -29,12 +29,14 @@ namespace Library
     }
 
     public delegate void DeleteTitleEventHandler(object sender, TitleEventArgs e);
+    public delegate void UnwatchedTitleEventHandler(object sender, TitleEventArgs e);
     /// <summary>
     /// Starting point for the OML
     /// </summary>
     public class OMLApplication : BaseModelItem
     {
         public event DeleteTitleEventHandler TitleDeleted;
+        public event UnwatchedTitleEventHandler TitleWatched;
 
         public ParentalControlManager parentalControlManager;
         private bool isBusy = false;
@@ -49,6 +51,16 @@ namespace Library
         private Library.Code.V3.IsMouseActiveHooker mouseActiveHooker;
 
         //v3 temp
+        private MoviePlayerFactory _factory;
+        public MoviePlayerFactory PlaybackFactory
+        {
+            get
+            {
+                if (this._factory == null)
+                    this._factory = new MoviePlayerFactory();
+                return this._factory;
+            }
+        }
 
         public bool ParentalControlsActive
         {
@@ -251,6 +263,9 @@ namespace Library
             this.parentalControlManager = new ParentalControlManager();
             this._session = session;
             AddInHost.Current.MediaCenterEnvironment.PropertyChanged +=new PropertyChangedEventHandler(MediaCenterEnvironment_PropertyChanged);
+            
+            //I know its a factory
+            //this._factory = new MoviePlayerFactory();
 
             try { // borrowed from vmcNetFlix project on google-code
                 bool isConsole = false;
@@ -322,8 +337,12 @@ namespace Library
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
             // DISABLE THIS UNTIL ITS READY -- DJShultz 01/13/2009
 
-            OMLUpdater updater = new OMLUpdater();
-            ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
+            //should we update?
+            if (OMLSettings.EnableAutomaticUpdates)
+            {
+                OMLUpdater updater = new OMLUpdater();
+                ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
+            }
 
 #if LAYOUT_V3
 
@@ -577,6 +596,18 @@ namespace Library
             }
             TitleEventArgs t = new TitleEventArgs(item);
             this.OnTitleDeleted(t);
+        }
+
+        public void WatchTitle(OMLEngine.Title item)
+        {
+            TitleEventArgs t = new TitleEventArgs(item);
+            this.OnTitleWatched(t);
+        }
+
+        protected virtual void OnTitleWatched(TitleEventArgs e)
+        {
+            if (this.TitleWatched != null)
+                this.TitleWatched(this, e);
         }
 
         private bool _moreInfo = false;

@@ -449,6 +449,23 @@ namespace OMLEngine.Settings
         }
         #endregion
 
+        public static bool EnableAutomaticUpdates
+        {
+            get { return SettingsManager.GetSettingByNameBool("EnableAutomaticUpdates", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("EnableAutomaticUpdates", value.ToString(), InstanceName); }
+        }
+
+        public static bool EnableAutomaticUpdatesDailyBuilds
+        {
+            get { return SettingsManager.GetSettingByNameBool("EnableAutomaticUpdatesDailyBuilds", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("EnableAutomaticUpdatesDailyBuilds", value.ToString(), InstanceName); }
+        } 
+
+        public static bool IsConnected
+        {
+            get { return SettingsManager.GetSettingByNameBool("IsConnected", InstanceName) ?? true; }
+        } 
+
         public static string ImpersonationUsername
         {
             get { return SettingsManager.GetSettingByName("ImpersonationUsername", InstanceName) ?? string.Empty; }

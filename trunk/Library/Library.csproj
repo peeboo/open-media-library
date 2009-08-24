@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\ActiveSettings.cs" />
     <Compile Include="Code\BaseModelItem.cs" />
     <Compile Include="Code\MovieGallery.cs">
       <SubType>Code</SubType>
@@ -111,6 +112,8 @@
     <Compile Include="Code\V3\GenreItem.cs" />
     <Compile Include="Code\V3\GenrePivot.cs" />
     <Compile Include="Code\V3\EpisodeItem.cs" />
+    <Compile Include="Code\V3\Settings\AboutSettings.cs" />
+    <Compile Include="Code\V3\Settings\UpdaterSettings.cs" />
     <Compile Include="Code\V3\Settings\FavoritesItemSettings.cs" />
     <Compile Include="Code\V3\Settings\StartMenuItemSettings.cs" />
     <Compile Include="Code\V3\Settings\StartMenuSettings.cs" />
@@ -471,6 +474,8 @@
     <Content Include="Markup\V3\Loader.mcml" />
     <Content Include="Markup\V3\Settings\BackgroundSettings.mcml" />
     <Content Include="Markup\V3\Settings\AdditionalSettings.mcml" />
+    <Content Include="Markup\V3\Settings\AboutSettings.mcml" />
+    <Content Include="Markup\V3\Settings\UpdaterSettings.mcml" />
     <Content Include="Markup\V3\Settings\ExternalPlayerSettings.mcml" />
     <Content Include="Markup\V3\Settings\FavoritesItemSettings.mcml" />
     <Content Include="Markup\V3\Settings\StartMenuItemSettings.mcml" />

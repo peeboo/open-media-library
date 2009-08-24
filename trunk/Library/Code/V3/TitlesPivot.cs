@@ -36,6 +36,31 @@ namespace Library.Code.V3
             ((VirtualList)this.m_listContent).RequestItemHandler = new RequestItemHandler(this.GetItem);
 
             OMLApplication.Current.TitleDeleted += new DeleteTitleEventHandler(Current_TitleDeleted);
+            if (this.m_filters.IndexOf(new OMLEngine.TitleFilter(OMLEngine.TitleFilterType.Unwatched, false.ToString())) > -1)
+            {
+                OMLApplication.Current.TitleWatched += new UnwatchedTitleEventHandler(Current_TitleWatched);
+            }
+
+        }
+
+        void Current_TitleWatched(object sender, TitleEventArgs e)
+        {
+            if (this.titles != null && this.titles.IndexOf(e.Title) > -1)
+            {
+                this.titles.Remove(e.Title);
+                foreach (Object o in this.m_listContent)
+                {
+                    if (o is MovieItem)
+                    {
+                        MovieItem item = o as MovieItem;
+                        if (item.TitleObject == e.Title)
+                        {
+                            this.m_listContent.Remove(item);
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         void Current_TitleDeleted(object sender, TitleEventArgs e)

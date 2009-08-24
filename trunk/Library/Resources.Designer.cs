@@ -165,6 +165,13 @@ namespace Library {
             }
         }
         
+        internal static byte[] V3_AboutSettings {
+            get {
+                object obj = ResourceManager.GetObject("V3_AboutSettings", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] V3_AdditionalSettings {
             get {
                 object obj = ResourceManager.GetObject("V3_AdditionalSettings", resourceCulture);
@@ -2125,6 +2132,13 @@ namespace Library {
         internal static byte[] V3_TrailersSettings {
             get {
                 object obj = ResourceManager.GetObject("V3_TrailersSettings", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_UpdaterSettings {
+            get {
+                object obj = ResourceManager.GetObject("V3_UpdaterSettings", resourceCulture);
                 return ((byte[])(obj));
             }
         }
