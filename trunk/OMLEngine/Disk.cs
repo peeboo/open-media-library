@@ -30,22 +30,9 @@ namespace OMLEngine
             get { return _disk.Path; } 
             set 
             {
-                value = Utilities.GetUniversalPath(value);
-                //value = NetworkScanner.FixPath(value);
-                /*// if it's pointing to a physical drive do the network test
-                if (!string.IsNullOrEmpty(value)
-                    && !value.StartsWith("\\\\") 
-                    && value.Length > 2
-                    && value[1] == ':')
-                {
-                    string uncPath;
-                    
-                    // if it's an attached network drive convert it to a UNC path
-                    if (NetworkScanner.IsNetworkDrive(value[0], out uncPath))
-                    {
-                        value = uncPath + "\\" + value.Remove(0, 2);
-                    }
-                }*/
+                value = NetworkScanner.FixPath(value);
+                                
+                //value = Utilities.GetUniversalPath(value);
 
                 if (!string.IsNullOrEmpty(value) && value.Length > 255)
                     throw new FormatException("Disk path must be 255 characters or less.");
