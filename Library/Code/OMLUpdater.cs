@@ -12,6 +12,7 @@ using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
 using System.Reflection;
+using OMLEngine.Settings;
 
 namespace Library
 {
@@ -37,7 +38,10 @@ namespace Library
                 xDoc.Load(new XmlTextReader(infoURL));
 
                 XmlNode node;
-                node = xDoc.SelectSingleNode("/Config/Release");
+                if (OMLSettings.EnableAutomaticUpdatesDailyBuilds)
+                    node = xDoc.SelectSingleNode("/Config/Beta");
+                else
+                    node = xDoc.SelectSingleNode("/Config/Release");
 
                 newVersion = new System.Version(node.Attributes["version"].Value);
                 remoteFile = node.Attributes["url"].Value;

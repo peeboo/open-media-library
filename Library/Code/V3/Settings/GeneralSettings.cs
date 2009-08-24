@@ -55,6 +55,23 @@ namespace Library.Code.V3
             startMenuCmd.Description = "Start Menu";
             startMenuCmd.Invoked += new EventHandler(startMenuCmd_Invoked);
             this.Commands.Add(startMenuCmd);
+
+            //automatic updates
+            Command automaticUpdateCmd = new Command();
+            automaticUpdateCmd.Description = "Automatic Updates";
+            automaticUpdateCmd.Invoked += new EventHandler(automaticUpdateCmd_Invoked);
+            this.Commands.Add(automaticUpdateCmd);
+        }
+
+        void automaticUpdateCmd_Invoked(object sender, EventArgs e)
+        {
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+
+            Library.Code.V3.UpdaterSettings page = new Library.Code.V3.UpdaterSettings();
+            properties["Page"] = page;
+            properties["Application"] = OMLApplication.Current;
+
+            OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_UpdaterSettings", properties);
         }
 
         void firstrunCmd_Invoked(object sender, EventArgs e)

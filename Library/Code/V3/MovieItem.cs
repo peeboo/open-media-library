@@ -408,6 +408,7 @@ namespace Library.Code.V3
             OMLApplication.ExecuteSafe(delegate
             {
                 TitleCollectionManager.IncrementWatchedCount(this.TitleObject);
+                OMLApplication.Current.WatchTitle(this.TitleObject);
             });
         }
 
