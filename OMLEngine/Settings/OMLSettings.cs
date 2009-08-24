@@ -347,7 +347,7 @@ namespace OMLEngine.Settings
 
         #endregion
 
-        #region Extender / Transcover
+        #region Extender / Transcoder
 
         public static bool PreserveAudioOnTranscode
         {
