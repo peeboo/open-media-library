@@ -489,7 +489,7 @@
 
     <CustomAction Id="ActivateNetTcpPortSharing"
                   Directory="TARGETDIR"
-                  ExeCommand="sc.exe config NetTcpPortSharing start= demand"
+                  ExeCommand="sc.exe config NetTcpPortSharing start= boot"
                   Execute="deferred"
                   Impersonate="no"
                   Return="ignore" />
@@ -500,7 +500,7 @@
       <Custom Action="CA_BlockOlderVersionInstall" After="FindRelatedProducts">
         <![CDATA[NEWERVERSIONDETECTED]]>
       </Custom>
-      <RemoveExistingProducts After="InstallFinalize" />
+      <RemoveExistingProducts After="InstallInitialize" />
       <LaunchConditions After="AppSearch"/>
 
       <!-- This custom action searches for Windows version 6.0, the Windows Media Center Ident registry  -->
@@ -600,17 +600,6 @@
     <!-- during setup. The Id must be set to WIXUI_INSTALLDIR and the value must match the directory Id  -->
     <!-- defined above that represents the root installation directory.                                  -->
     <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTDIRECTORY"/>
-
-
-
-    <!--<Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXEXT" Value="Launch My Application Name" />
-    <Property Id="WixShellExecTarget" Value="[#PostInstallerWizard.exe]" />-->
-    <!--  <CustomAction Id="LaunchApplication"
-                  FileKey="PostInstallerWizard.exe"
-                  ExeCommand=""/>-->
-    <!--BinaryKey="WixCA"
-                  DllEntry="WixShellExec"
-                  Impersonate="yes" -->
 
     <!-- In WiX v3.0, this variable is used to override the default license agreement text that is       -->
     <!-- included in the WixUIExtension with a custom file.                                              -->
