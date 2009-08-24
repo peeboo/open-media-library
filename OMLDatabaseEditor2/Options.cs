@@ -103,7 +103,7 @@ namespace OMLDatabaseEditor
 
             ceAutoScanDiskOnAdd.Checked = OMLSettings.AutoScanDiskOnAdding;
             ceScanDiskRollInfoToTitle.Checked = OMLSettings.ScanDiskRollInfoToTitle;
-
+            ceStSanaCreateTLFolder.Checked = OMLSettings.DBEStSanaCreateTLFolder;
 
             // Mounting Tools
             foreach (string toolName in Enum.GetNames(typeof(OMLEngine.FileSystem.MountingTool.Tool)))
@@ -188,6 +188,7 @@ namespace OMLDatabaseEditor
 
                 OMLSettings.AutoScanDiskOnAdding = ceAutoScanDiskOnAdd.Checked;
                 OMLSettings.ScanDiskRollInfoToTitle = ceScanDiskRollInfoToTitle.Checked;
+                OMLSettings.DBEStSanaCreateTLFolder = ceStSanaCreateTLFolder.Checked;
 
 
                 MountingTool.Tool tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), rgMountingTool.Text);

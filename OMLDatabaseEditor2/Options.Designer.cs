@@ -66,6 +66,7 @@ namespace OMLDatabaseEditor
             this.sbCancel = new DevExpress.XtraEditors.SimpleButton();
             this.sbOK = new DevExpress.XtraEditors.SimpleButton();
             this.cmGenreMappings = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ceStSanaCreateTLFolder = new DevExpress.XtraEditors.CheckEdit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
@@ -93,6 +94,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolVDrive.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolScan.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgMountingTool.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceStSanaCreateTLFolder.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -131,6 +133,7 @@ namespace OMLDatabaseEditor
             // 
             // tpOptions
             // 
+            this.tpOptions.Controls.Add(this.ceStSanaCreateTLFolder);
             this.tpOptions.Controls.Add(this.labelControl1);
             this.tpOptions.Controls.Add(this.seMetadataLookupResultsQty);
             this.tpOptions.Controls.Add(this.ceScanDiskRollInfoToTitle);
@@ -145,7 +148,7 @@ namespace OMLDatabaseEditor
             this.tpOptions.Controls.Add(this.ceUseMPAAList);
             this.tpOptions.Controls.Add(this.ceFoldersAsTitles);
             this.tpOptions.Name = "tpOptions";
-            this.tpOptions.Size = new System.Drawing.Size(346, 271);
+            this.tpOptions.Size = new System.Drawing.Size(346, 270);
             this.tpOptions.Text = "Options";
             // 
             // labelControl1
@@ -183,7 +186,7 @@ namespace OMLDatabaseEditor
             this.ceScanDiskRollInfoToTitle.Location = new System.Drawing.Point(7, 179);
             this.ceScanDiskRollInfoToTitle.Name = "ceScanDiskRollInfoToTitle";
             this.ceScanDiskRollInfoToTitle.Properties.Caption = "Roll scan disk info into title";
-            this.ceScanDiskRollInfoToTitle.Size = new System.Drawing.Size(259, 18);
+            this.ceScanDiskRollInfoToTitle.Size = new System.Drawing.Size(259, 19);
             this.ceScanDiskRollInfoToTitle.TabIndex = 10;
             // 
             // ceAutoScanDiskOnAdd
@@ -191,7 +194,7 @@ namespace OMLDatabaseEditor
             this.ceAutoScanDiskOnAdd.Location = new System.Drawing.Point(7, 155);
             this.ceAutoScanDiskOnAdd.Name = "ceAutoScanDiskOnAdd";
             this.ceAutoScanDiskOnAdd.Properties.Caption = "Auto scan disk when adding new disks";
-            this.ceAutoScanDiskOnAdd.Size = new System.Drawing.Size(259, 18);
+            this.ceAutoScanDiskOnAdd.Size = new System.Drawing.Size(259, 19);
             this.ceAutoScanDiskOnAdd.TabIndex = 9;
             // 
             // labelControl3
@@ -220,7 +223,7 @@ namespace OMLDatabaseEditor
             this.ceTitledFanArtFolder.Location = new System.Drawing.Point(7, 250);
             this.ceTitledFanArtFolder.Name = "ceTitledFanArtFolder";
             this.ceTitledFanArtFolder.Properties.Caption = "Titled FanArt Folders";
-            this.ceTitledFanArtFolder.Size = new System.Drawing.Size(259, 18);
+            this.ceTitledFanArtFolder.Size = new System.Drawing.Size(259, 19);
             this.ceTitledFanArtFolder.TabIndex = 6;
             this.ceTitledFanArtFolder.Visible = false;
             this.ceTitledFanArtFolder.CheckStateChanged += new System.EventHandler(this.ceTitledFanArtFolder_CheckStateChanged);
@@ -250,7 +253,7 @@ namespace OMLDatabaseEditor
             this.cePrependParentFolder.Location = new System.Drawing.Point(7, 76);
             this.cePrependParentFolder.Name = "cePrependParentFolder";
             this.cePrependParentFolder.Properties.Caption = "Prepend Parent Folder to Title on folder scan";
-            this.cePrependParentFolder.Size = new System.Drawing.Size(259, 18);
+            this.cePrependParentFolder.Size = new System.Drawing.Size(259, 19);
             this.cePrependParentFolder.TabIndex = 3;
             // 
             // ceUseGenreList
@@ -258,7 +261,7 @@ namespace OMLDatabaseEditor
             this.ceUseGenreList.Location = new System.Drawing.Point(7, 28);
             this.ceUseGenreList.Name = "ceUseGenreList";
             this.ceUseGenreList.Properties.Caption = "Use Genre Auto Complete List";
-            this.ceUseGenreList.Size = new System.Drawing.Size(259, 18);
+            this.ceUseGenreList.Size = new System.Drawing.Size(259, 19);
             this.ceUseGenreList.TabIndex = 1;
             // 
             // ceUseMPAAList
@@ -266,7 +269,7 @@ namespace OMLDatabaseEditor
             this.ceUseMPAAList.Location = new System.Drawing.Point(7, 4);
             this.ceUseMPAAList.Name = "ceUseMPAAList";
             this.ceUseMPAAList.Properties.Caption = "Use MPAA Auto Complete List";
-            this.ceUseMPAAList.Size = new System.Drawing.Size(259, 18);
+            this.ceUseMPAAList.Size = new System.Drawing.Size(259, 19);
             this.ceUseMPAAList.TabIndex = 0;
             // 
             // ceFoldersAsTitles
@@ -274,7 +277,7 @@ namespace OMLDatabaseEditor
             this.ceFoldersAsTitles.Location = new System.Drawing.Point(7, 52);
             this.ceFoldersAsTitles.Name = "ceFoldersAsTitles";
             this.ceFoldersAsTitles.Properties.Caption = "Folders are Titles";
-            this.ceFoldersAsTitles.Size = new System.Drawing.Size(259, 18);
+            this.ceFoldersAsTitles.Size = new System.Drawing.Size(259, 19);
             this.ceFoldersAsTitles.TabIndex = 2;
             this.ceFoldersAsTitles.CheckStateChanged += new System.EventHandler(this.ceFoldersAsTitles_CheckStateChanged);
             // 
@@ -282,7 +285,7 @@ namespace OMLDatabaseEditor
             // 
             this.tpSkins.Controls.Add(this.lbcSkins);
             this.tpSkins.Name = "tpSkins";
-            this.tpSkins.Size = new System.Drawing.Size(346, 271);
+            this.tpSkins.Size = new System.Drawing.Size(346, 270);
             this.tpSkins.Text = "Skins";
             // 
             // lbcSkins
@@ -290,7 +293,7 @@ namespace OMLDatabaseEditor
             this.lbcSkins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbcSkins.Location = new System.Drawing.Point(0, 0);
             this.lbcSkins.Name = "lbcSkins";
-            this.lbcSkins.Size = new System.Drawing.Size(346, 271);
+            this.lbcSkins.Size = new System.Drawing.Size(346, 270);
             this.lbcSkins.TabIndex = 0;
             this.lbcSkins.SelectedValueChanged += new System.EventHandler(this.lbcSkins_SelectedValueChanged);
             // 
@@ -299,7 +302,7 @@ namespace OMLDatabaseEditor
             this.tpMPAAList.Controls.Add(this.lbcMPAA);
             this.tpMPAAList.Controls.Add(this.beMPAA);
             this.tpMPAAList.Name = "tpMPAAList";
-            this.tpMPAAList.Size = new System.Drawing.Size(346, 271);
+            this.tpMPAAList.Size = new System.Drawing.Size(346, 270);
             this.tpMPAAList.Text = "MPAA";
             // 
             // lbcMPAA
@@ -334,7 +337,7 @@ namespace OMLDatabaseEditor
             this.tpTags.Controls.Add(this.beTags);
             this.tpTags.Name = "tpTags";
             this.tpTags.PageVisible = false;
-            this.tpTags.Size = new System.Drawing.Size(346, 271);
+            this.tpTags.Size = new System.Drawing.Size(346, 270);
             this.tpTags.Text = "Tags";
             // 
             // lbcTags
@@ -373,7 +376,7 @@ namespace OMLDatabaseEditor
             this.tpMountTools.Controls.Add(this.simpleButtonScanMntTool);
             this.tpMountTools.Controls.Add(this.rgMountingTool);
             this.tpMountTools.Name = "tpMountTools";
-            this.tpMountTools.Size = new System.Drawing.Size(346, 271);
+            this.tpMountTools.Size = new System.Drawing.Size(346, 270);
             this.tpMountTools.Text = "Mounting Tools";
             // 
             // labelControl7
@@ -526,6 +529,14 @@ namespace OMLDatabaseEditor
             this.cmGenreMappings.Name = "cmGenreMappings";
             this.cmGenreMappings.Size = new System.Drawing.Size(61, 4);
             // 
+            // ceStSanaCreateTLFolder
+            // 
+            this.ceStSanaCreateTLFolder.Location = new System.Drawing.Point(7, 204);
+            this.ceStSanaCreateTLFolder.Name = "ceStSanaCreateTLFolder";
+            this.ceStSanaCreateTLFolder.Properties.Caption = "Create top level folder when dragging folders into the editor";
+            this.ceStSanaCreateTLFolder.Size = new System.Drawing.Size(325, 19);
+            this.ceStSanaCreateTLFolder.TabIndex = 14;
+            // 
             // Options
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -566,6 +577,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolVDrive.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolScan.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgMountingTool.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceStSanaCreateTLFolder.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -609,5 +621,6 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraEditors.RadioGroup rgMountingTool;
         private DevExpress.XtraEditors.LabelControl labelControl1;
         private DevExpress.XtraEditors.SpinEdit seMetadataLookupResultsQty;
+        private DevExpress.XtraEditors.CheckEdit ceStSanaCreateTLFolder;
     }
 }
