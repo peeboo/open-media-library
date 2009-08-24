@@ -65,6 +65,7 @@
     <Compile Include="MoviePlayerDVDTest.cs" />
     <Compile Include="MyMoviesPluginTest.cs" />
     <Compile Include="NetFlixMetadataTest.cs" />
+    <Compile Include="NetworkPathFix.cs" />
     <Compile Include="OMLFileWatcherTest.cs" />
     <Compile Include="OMLXMLImporterTest.cs" />
     <Compile Include="Program.cs" />
