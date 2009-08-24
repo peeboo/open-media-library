@@ -14,8 +14,12 @@ namespace OMLTestSuite
     {
         static void Main(string[] args)
         {
-            TVDBMetaDataTest tvdb = new TVDBMetaDataTest();
-            tvdb.Test();
+            NetworkPathFix nfp = new NetworkPathFix();
+            nfp.Test();
+            
+    
+            //TVDBMetaDataTest tvdb = new TVDBMetaDataTest();
+            //tvdb.Test();
 
 
             /*CreateTestTitles ctt = new CreateTestTitles();
