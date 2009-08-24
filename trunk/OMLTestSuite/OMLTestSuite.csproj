@@ -60,6 +60,7 @@
     <Compile Include="DiskInfoTest.cs" />
     <Compile Include="DVDLibraryImporterTest.cs" />
     <Compile Include="DVDProfilerTest.cs" />
+    <Compile Include="FileDownloaderTest.cs" />
     <Compile Include="MEncoderCommandBuilderTest.cs" />
     <Compile Include="MovieCollectorzTest.cs" />
     <Compile Include="MoviePlayerDVDTest.cs" />
@@ -82,6 +83,10 @@
     <ProjectReference Include="..\DVDProfilerPlugin\DVDProfilerPlugin.csproj">
       <Project>{8D8056BC-5D9B-4FAD-AD05-CB11D059B511}</Project>
       <Name>DVDProfilerPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FileDownloader\FileDownloader.csproj">
+      <Project>{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}</Project>
+      <Name>FileDownloader</Name>
     </ProjectReference>
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{2D747049-9A5C-4FFB-919F-1FD47BC18B3D}</Project>

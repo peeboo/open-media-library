@@ -116,6 +116,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PFMLib", "PFMLib\PFMLib.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonMetaData", "AmazonMetaData2\AmazonMetaData.csproj", "{32B876CD-44F5-4F08-8685-55BCA121AD09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileDownloader", "FileDownloader\FileDownloader.csproj", "{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -492,6 +494,18 @@ Global
 		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Release|x64.ActiveCfg = Release|Any CPU
 		{32B876CD-44F5-4F08-8685-55BCA121AD09}.Release|x86.ActiveCfg = Release|Any CPU
+		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Release|x64.ActiveCfg = Release|Any CPU
+		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
