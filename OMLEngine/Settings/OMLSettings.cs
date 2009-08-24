@@ -579,6 +579,16 @@ namespace OMLEngine.Settings
             get { return SettingsManager.GetSettingByNameBool("DBEAlwaysShowTitleList", InstanceName) ?? false; }
             set { SettingsManager.SaveSettingByName("DBEAlwaysShowTitleList", value.ToString(), InstanceName); }
         }
+
+        /// <summary>
+        /// Create top level folder when dragging in a folder structure from Windows Explorer
+        /// into the editor
+        /// </summary>
+        public static bool DBEStSanaCreateTLFolder
+        {
+            get { return SettingsManager.GetSettingByNameBool("DBEStSanaCreateTLFolder", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("DBEStSanaCreateTLFolder", value.ToString(), InstanceName); }
+        }
         #endregion
 
         public static string MPAARatings
