@@ -81,6 +81,29 @@ namespace OMLDatabaseEditor.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Credits&gt;
+        ///  &lt;Developers&gt;
+        ///    &lt;Person&gt;KingManon - Project Manager&lt;/Person&gt;
+        ///    &lt;Person&gt;Translucent - Senior Developer&lt;/Person&gt;
+        ///    &lt;Person&gt;Thom &apos;Bermuda&apos; Lamb - Developer&lt;/Person&gt;
+        ///    &lt;Person&gt;TheSeeker - Developer&lt;/Person&gt;
+        ///    &lt;Person&gt;Solomon - Developer&lt;/Person&gt;
+        ///    &lt;Person&gt;mikem2te - Developer&lt;/Person&gt;
+        ///  &lt;/Developers&gt;
+        ///  &lt;Contributors&gt;
+        ///    &lt;Person&gt;Warren&lt;/Person&gt;
+        ///    &lt;Person&gt;docmattman&lt;/Person&gt;
+        ///    &lt;Person&gt;Taranu&lt;/Person&gt;
+        ///    &lt;Person&gt;eck brian &apos;dbldown768 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Credits {
+            get {
+                return ResourceManager.GetString("Credits", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap emblem_symbolic_link {
             get {
                 object obj = ResourceManager.GetObject("emblem-symbolic-link", resourceCulture);
