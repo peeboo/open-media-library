@@ -57,12 +57,10 @@
     <Feature Id="APPLICATIONROOTFEATURE" Title="Open Media Library" Level="1" AllowAdvertise="no" Absent="disallow">
       <ComponentGroupRef Id="CommonComponents"/>
       <ComponentGroupRef Id="UserGuide"/>
-      <Feature Id="CLIENTFEATURE" Title="OML Client" Level="1" AllowAdvertise="no" Description="Install the client components">
-        <ComponentGroupRef Id="ClientGroup"/>
-      </Feature>
       <Feature Id="SERVERFEATURE" Title="OML Server" Level="1" AllowAdvertise="no" Description="Install the server components.">
         <ComponentGroupRef Id ="ServerGroup"/>
       </Feature>
+      <FeatureGroupRef Id="CLIENTFEATURES"/>
     </Feature>
 
     <!-- This UIRef element specifies what WiXUI dialog set to use for the setup UI. This package uses   -->
