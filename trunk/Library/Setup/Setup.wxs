@@ -523,7 +523,7 @@
       <Custom Action="CA_RegisterMceApp_Register" After="CA_RegisterMceApp_Unregister_Install">
         <![CDATA[NOT REMOVE AND (&CLIENTFEATUREUI=3)]]>
       </Custom>
-      <Custom Action="ActivateNetTcpPortSharing" After="InstallInitialize">Not Installed</Custom>
+      <Custom Action="ActivateNetTcpPortSharing" Before="InstallFinalize">Not Installed</Custom>
       <!--<ScheduleReboot After="InstallFinalize"/>-->
     </InstallExecuteSequence>
 
