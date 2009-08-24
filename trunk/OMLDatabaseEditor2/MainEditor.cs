@@ -3550,14 +3550,23 @@ namespace OMLDatabaseEditor
                     stsana.Log += new Servant.SSEventHandler(stsana_Log);
                     stsana.BasePaths.Add(file);
                     stsana.Scan();
-                    
-                    int a_parent = CreateFolderNonDuplicate(parentid, Path.GetFileName(file), TitleTypes.Collection, false);
-                  
+
+                    int? a_parent;
+
+                    if (OMLEngine.Settings.OMLSettings.DBEStSanaCreateTLFolder)
+                    {
+                        a_parent = CreateFolderNonDuplicate(parentid, Path.GetFileName(file), TitleTypes.Collection, false);
+                    }
+                    else
+                    {
+                        a_parent = parentid;
+                    }
+
                     if (stsana.Entities != null)
                     {
                         foreach (Entity e in stsana.Entities)
                         {
-                            int e_parent = a_parent;
+                            int? e_parent = a_parent;
                             if (e.Name != file)
                             {
                                 switch (e.EntityType)
@@ -3575,7 +3584,7 @@ namespace OMLDatabaseEditor
 
                             foreach (Series s in e.Series)
                             {
-                                int s_parent = e_parent;
+                                int? s_parent = e_parent;
                                 // if the s.name and e.name are the same, its a movie, to be sure though lets check s.number, it should be
                                 // -1 for non tv shows.
                                 if (s.Name.ToUpperInvariant().CompareTo(e.Name.ToUpperInvariant()) != 0 || s.Number > -1)
