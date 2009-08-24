@@ -474,32 +474,25 @@
 
     <CustomAction Id="ActivateNetTcpPortSharing"
                   Directory="TARGETDIR"
-                  ExeCommand="sc.exe config NetTcpPortSharing start= demand"
+                  ExeCommand="sc.exe config NetTcpPortSharing start= boot"
                   Execute="deferred"
                   Impersonate="no"
                   Return="ignore" />
-    <!--
-    <CustomAction Id="ActivateNetTcpPortSharing"
-                  Directory="TARGETDIR"
-                  ExeCommand="sc.exe config NetTcpPortSharing start= demand"
-                  Execute="deferred"
-                  Return="ignore"
-                  Impersonate="no"/>
--->
+
     <!-- The InstallExecuteSequence table describes the order that actions will be executed during       -->
     <!-- installation, repair and uninstall of this product.                                             -->
     <InstallExecuteSequence>
       <Custom Action="CA_BlockOlderVersionInstall" After="FindRelatedProducts">
         <![CDATA[NEWERVERSIONDETECTED]]>
       </Custom>
-      <RemoveExistingProducts After="InstallFinalize" />
+      <RemoveExistingProducts After="InstallInitialize" />
       <LaunchConditions After="AppSearch"/>
 
       <!-- This custom action searches for Windows version 6.0, the Windows Media Center Ident registry  -->
       <!-- value 5.0 and the presence of the file %windir%\eHome\RegisterMceApp.exe. If all of these     -->
-      <!-- conditions are met/, the system is a Windows Vista Home Premium or Ultimate Edition operating  -->
+      <!-- conditions are met, the system is a Windows Vista Home Premium or Ultimate Edition operating  -->
       <!-- system and the product will be allowed to install.                                            -->
-      <Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 600 OR NOT REGISTERMCEAPP) AND NOT Installed]]></Custom>
+      <Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 500) AND NOT Installed]]></Custom>
 
       <Custom Action="CA_RegisterMceApp_Unregister_Install_Cmd" After="CostFinalize">
         <![CDATA[NOT REMOVE]]>
@@ -526,13 +519,13 @@
       <!-- because Windows Installer pushes each action onto a stack and then pops them off of the stack -->
       <!-- in case of any failure in order to accomplish the roll back.                                  -->
       <Custom Action="CA_RegisterMceApp_Rollback" After="InstallFiles">
-        <![CDATA[NOT REMOVE]]>
+        <![CDATA[NOT REMOVE AND (&CLIENTFEATUREUI=3 OR !CLIENTFEATUREUI=3)]]>
       </Custom>
       <Custom Action="CA_RegisterMceApp_Unregister_Install" After="CA_RegisterMceApp_Rollback">
-        <![CDATA[NOT REMOVE]]>
+        <![CDATA[NOT REMOVE AND (&CLIENTFEATUREUI=3 OR !CLIENTFEATUREUI=3)]]>
       </Custom>
       <Custom Action="CA_RegisterMceApp_Register" After="CA_RegisterMceApp_Unregister_Install">
-        <![CDATA[NOT REMOVE]]>
+        <![CDATA[NOT REMOVE AND (&CLIENTFEATUREUI=3)]]>
       </Custom>
       <Custom Action="ActivateNetTcpPortSharing" After="InstallInitialize">Not Installed</Custom>
       <!--<ScheduleReboot After="InstallFinalize"/>-->
@@ -546,7 +539,7 @@
       <Custom Action="CA_BlockOlderVersionInstall" After="FindRelatedProducts">
         <![CDATA[NEWERVERSIONDETECTED]]>
       </Custom>
-      <Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 600 OR NOT REGISTERMCEAPP) AND NOT Installed]]></Custom>
+      <Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 500) AND NOT Installed]]></Custom>
     </InstallUISequence>
 
     <!-- This sets the icon used for the Add/Remove Programs screen -->
@@ -561,6 +554,13 @@
     <!-- installed per-machine instead of per-user.                                                      -->
     <Property Id="ALLUSERS">
       <![CDATA[1]]>
+    </Property>
+
+    <!-- This property uses a registry locator to determine the version of Windows Media Center present  -->
+    <!-- on the system (if any). This registry-based version detection algorithm is documented in the    -->
+    <!-- Windows Media Center SDK for Windows Vista.                                                     -->
+    <Property Id="MCEINSTALLVERSION" Secure="yes">
+      <RegistrySearch Id="MceInstallRegKey" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center" Name="Ident" Type="raw"/>
     </Property>
 
     <!-- This property uses an AppSearch to attempt to locate the file %windir\eHome\ehShell.exe  on the -->
@@ -585,25 +585,6 @@
     <!-- during setup. The Id must be set to WIXUI_INSTALLDIR and the value must match the directory Id  -->
     <!-- defined above that represents the root installation directory.                                  -->
     <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTDIRECTORY"/>
-
-    <!-- This UIRef element specifies what WiXUI dialog set to use for the setup UI. This package uses   -->
-    <!-- the WixUI_InstallDir dialog set, which provides a welcome page, a license agreement page, a     -->
-    <!-- page to allow changing the installation path, an installation confirmation page, a progress     -->
-    <!-- page and a completion page. Other dialog sets are available in the WiX toolset and are          -->
-    <!-- described in more detail in the WiX documentation.                                              -->
-    <!-- <UI>
-      <UIRef Id="WixUI_Minimal" />
-      <Publish Dialog="ExitDialog"
-               Control="Finish"
-               Event="DoAction"
-               Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
-    </UI>
-    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXEXT" Value="Launch My Application Name" />
-    <Property Id="WixShellExecTarget" Value="[#OMLDatabaseEditor.exe]" />
-    <CustomAction Id="LaunchApplication"
-                  BinaryKey="WixCA"
-                  DllEntry="WixShellExec"
-                  Impersonate="yes" />-->
 
     <!-- In WiX v3.0, this variable is used to override the default license agreement text that is       -->
     <!-- included in the WixUIExtension with a custom file.                                              -->
