@@ -14,6 +14,9 @@ namespace OMLTestSuite
     {
         static void Main(string[] args)
         {
+            FileDownloaderTest fdt = new FileDownloaderTest();
+            fdt.TestDownload();
+
             NetworkPathFix nfp = new NetworkPathFix();
             nfp.Test();
             
