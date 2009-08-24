@@ -52,12 +52,6 @@ namespace Library
             OMLApplication.DebugLine("[MoviePlayerFactory] Determing MoviePlayer to use for: {0}", source);
             if (File.Exists(source.MediaPath) || Directory.Exists(source.MediaPath))
             {
-                // we need to figure out if you are on an extender and using windows7, then don't try to transcode stuff
-                //if (OMLApplication.IsWindows7)
-                //{
-                //    OMLApplication.DebugLine("[MoviePlayerFactory] VideoPlayer created: {0}", source);
-                //    return new VideoPlayer(source);
-                //}
                 // This is for transcoding debugging
                 if (OMLSettings.DebugTranscoding)
                 {
@@ -102,16 +96,31 @@ namespace Library
                 else if (OMLApplication.Current.IsExtender && mediaFormat == VideoFormat.BLURAY && FileScanner.IsBluRay(mediaPath))
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] ExtenderBlurayPlayer created: {0}", source);
+                    // we need to figure out if you are on an extender and using windows7, then don't try to transcode stuff
+                    if (OMLApplication.IsWindows7) {
+                        OMLApplication.DebugLine("[MoviePlayerFactory] VideoPlayer created: {0}", source);
+                        return new VideoPlayer(source);
+                    }
                     return new TranscodeBluRayPlayer(source);
                 }
                 else if (OMLApplication.Current.IsExtender && mediaFormat == VideoFormat.HDDVD && FileScanner.IsHDDVD(mediaPath))
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] ExtenderHDDVDPlayer created: {0}", source);
+                    // we need to figure out if you are on an extender and using windows7, then don't try to transcode stuff
+                    if (OMLApplication.IsWindows7) {
+                        OMLApplication.DebugLine("[MoviePlayerFactory] VideoPlayer created: {0}", source);
+                        return new VideoPlayer(source);
+                    }
                     return new TranscodeHDDVDPlayer(source);
                 }
                 else if (OMLApplication.Current.IsExtender && NeedsTranscode(mediaFormat)) // if it needs to be transcoded
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created ({1}): {0}", source, mediaFormat);
+                    // we need to figure out if you are on an extender and using windows7, then don't try to transcode stuff
+                    if (OMLApplication.IsWindows7) {
+                        OMLApplication.DebugLine("[MoviePlayerFactory] VideoPlayer created: {0}", source);
+                        return new VideoPlayer(source);
+                    }
                     return new TranscodePlayer(source);
                 }
                 else if (mediaFormat == VideoFormat.DVD && FileScanner.IsDVD(mediaPath)) // play the dvd

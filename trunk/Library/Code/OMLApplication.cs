@@ -215,11 +215,11 @@ namespace Library
         {
             get
             {
-                OperatingSystem os = Environment.OSVersion;
-                if (os.Version.Major >= 6 && os.Version.Minor >= 1)
-                    return true;
-
-                return false;
+                return Properties.Settings.Default.IsWindows7;
+            }
+            set{
+                Properties.Settings.Default.IsWindows7 = value;
+                Properties.Settings.Default.Save();
             }
         }
 
@@ -337,6 +337,15 @@ namespace Library
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
             // DISABLE THIS UNTIL ITS READY -- DJShultz 01/13/2009
 
+            if (!IsExtender) {
+                OperatingSystem os = Environment.OSVersion;
+                if (os.Version.Major >= 6 && os.Version.Minor >= 1)
+                    Properties.Settings.Default.IsWindows7 = true;
+                else
+                    Properties.Settings.Default.IsWindows7 = false;
+
+                Properties.Settings.Default.Save();
+            }
             //should we update?
             if (OMLSettings.EnableAutomaticUpdates)
             {
