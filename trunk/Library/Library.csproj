@@ -575,8 +575,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"$(DevEnvDir)..\..\..\Microsoft SDKs\Windows\v6.0\Bin\GacUtil.exe" /i "$(TargetPath)" /f</PostBuildEvent>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>copy "$(SolutionDir)Credits.xml" "$(ProjectDir)Resources"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
