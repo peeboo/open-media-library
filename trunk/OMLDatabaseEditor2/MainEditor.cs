@@ -3574,7 +3574,6 @@ namespace OMLDatabaseEditor
                                     case Serf.EntityType.COLLECTION:
                                     case Serf.EntityType.MOVIE:
                                         e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
-                                        e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
                                         break;
                                     case Serf.EntityType.TV_SHOW:
                                         e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.TVShow, false);
