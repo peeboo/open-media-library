@@ -59,6 +59,11 @@
                   KeyPath="yes" Source="..\..\OMLTranscoder\bin\$(var.BuildType)\OMLTranscoder.dll"
                   Checksum="yes" Vital="yes" Assembly=".net"/>
           </Component>
+          <Component Id="FileDownloader.dll" Guid="F52BAB24-FE4F-43D6-9259-D56E2EFEC5DC" Win64="yes" DiskId="1">
+            <File Name="FileDownloader.dll"
+                  KeyPath="yes" Source="..\..\FileDownloader\bin\$(var.BuildType)\FileDownloader.dll"
+                  Checksum="yes" Vital="yes" Assembly=".net"/>
+          </Component>
           <Component Id="Registration.xml" Guid="68b08279-69c0-42fb-b087-30a20ee12608" Win64="yes" DiskId="1">
             <File Name="Registration.xml"
                   Source="..\..\Library\Registration.xml" Checksum="no" />
@@ -383,6 +388,7 @@
       <ComponentRef Id="OMLTranscoder.dll"/>
       <ComponentRef Id="Registration.xml" />
       <ComponentRef Id="MEncoder.exe"/>
+      <ComponentRef Id="FileDownloader.dll"/>
 
       <!-- UI Registry Keys -->
       <ComponentRef Id="registryUI"/>
