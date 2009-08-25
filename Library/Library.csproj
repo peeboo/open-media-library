@@ -555,6 +555,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FileDownloader\FileDownloader.csproj">
+      <Project>{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}</Project>
+      <Name>FileDownloader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
       <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
       <Name>OMLEngine</Name>
