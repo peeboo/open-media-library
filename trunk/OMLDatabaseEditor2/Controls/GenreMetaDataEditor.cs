@@ -54,6 +54,13 @@ namespace OMLDatabaseEditor.Controls
             _isLoading = false;
         }
 
+        public void RefreshEditor()
+        {
+            _isLoading = true;
+            genremetadatasource.ResetCurrentItem();
+            _isLoading = false;
+        }
+
         private void teGenre_TextChanged(object sender, EventArgs e)
         {
             if (GenreMetaDataChanged != null && !_isLoading)

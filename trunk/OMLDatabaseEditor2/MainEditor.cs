@@ -38,10 +38,12 @@ namespace OMLDatabaseEditor
         private Dictionary<int, int> _movieCount;
         int _movieRootCount;
 
+        DevExpress.XtraNavBar.NavBarGroup CurrentNavigation;
+
         public List<String> DXSkins;
 
         int? SelectedTreeRoot;
-
+        
         LinearGradientBrush _brushTreeViewSelected;
         LinearGradientBrush _brushTitleListSelected;
         LinearGradientBrush _brushTitleListFolder;
@@ -84,6 +86,8 @@ namespace OMLDatabaseEditor
 
             this.DesktopBounds =new Rectangle(Properties.Settings.Default.Location,Properties.Settings.Default.Size);
             this.WindowState = (FormWindowState)Enum.Parse(typeof(FormWindowState),Properties.Settings.Default.WindowState);
+
+            CurrentNavigation = mainNav.ActiveGroup;
         }
 
 
@@ -1412,18 +1416,55 @@ namespace OMLDatabaseEditor
 
         }
 
+        bool cancellingnavchange = false;
         private void mainNav_ActiveGroupChanged(object sender, DevExpress.XtraNavBar.NavBarGroupEventArgs e)
         {
+            if (cancellingnavchange) return;
+            
+            // We are changing selected navigation, check if there are any unsaved changes before moving on
+            if (CurrentNavigation == groupMediaTree)
+            {
+                if (SaveCurrentMovie() == DialogResult.Cancel)
+                {
+                    cancellingnavchange = true;
+                    mainNav.ActiveGroup = groupMediaTree;
+                    cancellingnavchange = false;
+                    return;
+                }
+            }
+            if (CurrentNavigation == groupBioData)
+            {
+                if (SaveCurrentBioData() == DialogResult.Cancel)
+                {
+                    cancellingnavchange = true;
+                    mainNav.ActiveGroup = groupBioData;
+                    cancellingnavchange = false;
+                    return;
+                }
+            }
+            if (CurrentNavigation == groupGenresMetadata)
+            {
+                if (SaveCurrentGenreMetaData() == DialogResult.Cancel)
+                {
+                    cancellingnavchange = true;
+                    mainNav.ActiveGroup = groupGenresMetadata;
+                    cancellingnavchange = false;
+                    return;
+                }
+            }
+
+
+
             _loading = true;
             ToggleSaveState(false);
 
+            CurrentNavigation = e.Group;
 
             if (e.Group == groupMetadata)
                 LoadMetadata();
 
             if (e.Group == groupImport)
                 LoadImporters();
-
 
             if (e.Group == groupMediaTree)
             {
@@ -1434,7 +1475,7 @@ namespace OMLDatabaseEditor
 
                 splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = false;
                 splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = false;
-                splitContainerDetails.Panel2.Controls["titlesListView"].Visible = false; 
+                splitContainerDetails.Panel2.Controls["titlesListView"].Visible = false;
                 splitContainerDetails.Panel2.Controls["titleEditor"].Visible = true;
 
                 splitContainerDetails.PanelVisibility = SplitPanelVisibility.Both;
@@ -1442,13 +1483,19 @@ namespace OMLDatabaseEditor
 
             if (e.Group == groupBioData)
             {
-                lbBioData.Items.Clear();
-                lbBioData.Items.AddRange(TitleCollectionManager.GetAllBioDatas().OrderBy(b => b.FullName).ToArray());
-
+                if (lbBioData.Items.Count == 0)
+                {
+                    // Only load the once
+                    lbBioData.Items.AddRange(TitleCollectionManager.GetAllBioDatas().OrderBy(b => b.FullName).ToArray());
+                }
                 splitContainerDetails.Panel2.Controls["titleEditor"].Visible = false;
                 splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = false;
-                splitContainerDetails.Panel2.Controls["titlesListView"].Visible = false; 
+                splitContainerDetails.Panel2.Controls["titlesListView"].Visible = false;
                 splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = true;
+                
+                bioDataEditor.RefreshEditor();
+
+                SetWindowsTitleBioData();
 
                 if (OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList == true)
                 {
@@ -1462,14 +1509,19 @@ namespace OMLDatabaseEditor
 
             if (e.Group == groupGenresMetadata)
             {
-                lbGenreMetadata.Items.Clear();
-                lbGenreMetadata.Items.AddRange(TitleCollectionManager.GetAllGenreMetaDatas().OrderBy(g => g.Name).ToArray());
-
+                if (lbGenreMetadata.Items.Count == 0)
+                {
+                    // Only load the once
+                    lbGenreMetadata.Items.AddRange(TitleCollectionManager.GetAllGenreMetaDatas().OrderBy(g => g.Name).ToArray());
+                }
                 splitContainerDetails.Panel2.Controls["titleEditor"].Visible = false;
                 splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = false;
                 splitContainerDetails.Panel2.Controls["titlesListView"].Visible = false;
                 splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = true;
 
+                genreMetaDataEditor.RefreshEditor();
+
+                SetWindowsTitleGenreMetaData();
                 if (OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList == true)
                 {
                     splitContainerDetails.PanelVisibility = SplitPanelVisibility.Both;
@@ -2672,11 +2724,24 @@ namespace OMLDatabaseEditor
          
         private void lbGenreMetadata_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SaveCurrentGenreMetaData();
-            if (lbGenreMetadata.SelectedItem != null)
+            if (!cancellingsave)
             {
-                genreMetaDataEditor.LoadGenre((GenreMetaData)lbGenreMetadata.SelectedItem);
-                this.Text = APP_TITLE + " - " + genreMetaDataEditor.EditedGenreMetaData.Name;
+                // Check if there are any unsaved changes, prompt to save
+                DialogResult dr = SaveCurrentGenreMetaData();
+
+                if ((dr == DialogResult.Yes) || (dr == DialogResult.No))
+                {
+                    // Data is properly saved or aborted, select new genre to edit
+                    if (lbGenreMetadata.SelectedItem != null)
+                    {
+                        if (genreMetaDataEditor.EditedGenreMetaData != lbGenreMetadata.SelectedItem)
+                        {
+                            // If a different genre is selected, load it into the editor
+                            genreMetaDataEditor.LoadGenre((GenreMetaData)lbGenreMetadata.SelectedItem);
+                            SetWindowsTitleGenreMetaData();
+                        }
+                    }
+                }
             }
         }
 
@@ -2745,40 +2810,64 @@ namespace OMLDatabaseEditor
 
         private DialogResult SaveCurrentGenreMetaData()
         {
-            DialogResult result;
+            DialogResult result = DialogResult.Yes; ;
             if (genreMetaDataEditor.EditedGenreMetaData != null && genreMetaDataEditor.Status == GenreMetaDataEditor.GenreMetaDataStatus.UnsavedChanges)
             {
                 result = XtraMessageBox.Show("You have unsaved changes to " + genreMetaDataEditor.EditedGenreMetaData.Name + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
+                
                 if (result == DialogResult.Yes)
                 {
-                    TitleCollectionManager.SaveGenreMetaDataChanges();
+                    // Save the changes
+                    TitleCollectionManager.SaveGenreMetaDataChanges(); 
+                    genreMetaDataEditor.Status = GenreMetaDataEditor.GenreMetaDataStatus.Normal;
                     SetupFilterListContextMenu();
-
-                    //_movieList[titleEditor.EditedTitle.Id] = titleEditor.EditedTitle;
-                    //SaveChanges();
                 }
+
+                if (result == DialogResult.Cancel)
+                {
+                    // Cancel the changes (reselect the current item if selected item changed)
+                    if (lbGenreMetadata.SelectedItem != genreMetaDataEditor.EditedGenreMetaData)
+                    {
+                        cancellingsave = true;
+                        lbGenreMetadata.SelectedItem = genreMetaDataEditor.EditedGenreMetaData; 
+                        cancellingsave = false;
+                    }
+                }
+
                 if (result == DialogResult.No)
                 {
-                    // Force reload of title
-                    //titleEditor.EditedTitle.ReloadTitle();
-                    //lbTitles.Refresh();
+                    // Don't save the changes - force reload of matadata
+                    genreMetaDataEditor.EditedGenreMetaData.ReloadGenreMetaData();
+
+                    SetWindowsTitleGenreMetaData(); 
+                    genreMetaDataEditor.Status = GenreMetaDataEditor.GenreMetaDataStatus.Normal;
+                    lbGenreMetadata.Refresh();
+                    ToggleSaveState(false);
                 }
-            }
-            else
-            {
-                result = DialogResult.Yes;
+
             }
             return result;
         }
 
         private void genreMetaDataEditor_GenreMetaDataChanged(object sender, EventArgs e)
         {
-            if (genreMetaDataEditor.EditedGenreMetaData != null)
-                this.Text = APP_TITLE + " - " + genreMetaDataEditor.EditedGenreMetaData.Name + "*";
-            else
-                this.Text = APP_TITLE;
-
+            SetWindowsTitleGenreMetaData();
             ToggleSaveState(true);
+        }
+
+        private void SetWindowsTitleGenreMetaData()
+        {
+            if (genreMetaDataEditor.EditedGenreMetaData != null)
+            {
+                if (genreMetaDataEditor.Status == GenreMetaDataEditor.GenreMetaDataStatus.UnsavedChanges)
+                    this.Text = APP_TITLE + " - " + genreMetaDataEditor.EditedGenreMetaData.Name + "*";
+                else
+                    this.Text = APP_TITLE + " - " + genreMetaDataEditor.EditedGenreMetaData.Name;
+            }
+            else
+            {
+                this.Text = APP_TITLE;
+            }
         }
 
         private void lbGenreMetadata_MouseMove(object sender, MouseEventArgs e)
@@ -2970,11 +3059,24 @@ namespace OMLDatabaseEditor
 
         private void lbBioData_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SaveCurrentBioData();
-            if (lbBioData.SelectedItem != null)
+            if (!cancellingsave)
             {
-                bioDataEditor.LoadBioData((BioData)lbBioData.SelectedItem);
-                this.Text = APP_TITLE + " - " + bioDataEditor.EditedBioData.FullName;
+                // Check if there are any unsaved changes, prompt to save
+                DialogResult dr = SaveCurrentBioData();
+
+                if ((dr == DialogResult.Yes) || (dr == DialogResult.No))
+                {   
+                    // Data is properly saved or aborted, select new genre to edit
+                    if (lbBioData.SelectedItem != null)
+                    {
+                        if (bioDataEditor.EditedBioData != lbBioData.SelectedItem)
+                        {
+                            // If a different person is selected, load it into the editor
+                            bioDataEditor.LoadBioData((BioData)lbBioData.SelectedItem);
+                            SetWindowsTitleBioData();
+                        }
+                    }
+                }
             }
         }
 
@@ -3019,18 +3121,32 @@ namespace OMLDatabaseEditor
             if (bioDataEditor.EditedBioData != null && bioDataEditor.Status == BioDataEditor.BioDataStatus.UnsavedChanges)
             {
                 result = XtraMessageBox.Show("You have unsaved changes to " + bioDataEditor.EditedBioData.FullName + ". Would you like to save your changes?", "Save Changes?", MessageBoxButtons.YesNoCancel);
+                
                 if (result == DialogResult.Yes)
                 {
-                    TitleCollectionManager.SaveBioMetaDataChanges();
-
-                    //_movieList[titleEditor.EditedTitle.Id] = titleEditor.EditedTitle;
-                    //SaveChanges();
+                    TitleCollectionManager.SaveBioMetaDataChanges(); 
+                    bioDataEditor.Status = BioDataEditor.BioDataStatus.Normal;
                 }
+
+                if (result == DialogResult.Cancel)
+                {
+                    if (lbBioData.SelectedItem != bioDataEditor.EditedBioData)
+                    {
+                        cancellingsave = true;
+                        lbBioData.SelectedItem = bioDataEditor.EditedBioData;
+                        cancellingsave = false;
+                    }
+                }
+
                 if (result == DialogResult.No)
                 {
-                    // Force reload of title
-                    //titleEditor.EditedTitle.ReloadTitle();
-                    //lbTitles.Refresh();
+                    // Don't save the changes - force reload of the person
+                    bioDataEditor.EditedBioData.ReloadBioData();
+
+                    SetWindowsTitleBioData();
+                    bioDataEditor.Status = BioDataEditor.BioDataStatus.Normal;
+                    lbBioData.Refresh();
+                    ToggleSaveState(false);
                 }
             }
             else
@@ -3042,12 +3158,23 @@ namespace OMLDatabaseEditor
 
         private void bioDataEditor_BioDataChanged(object sender, EventArgs e)
         {
-            if (bioDataEditor.EditedBioData != null)
-                this.Text = APP_TITLE + " - " +bioDataEditor.EditedBioData.FullName + "*";
-            else
-                this.Text = APP_TITLE;
-
+            SetWindowsTitleBioData();
             ToggleSaveState(true);
+        }
+
+        private void SetWindowsTitleBioData()
+        {
+            if (bioDataEditor.EditedBioData != null)
+            {
+                if (bioDataEditor.Status == BioDataEditor.BioDataStatus.UnsavedChanges)
+                    this.Text = APP_TITLE + " - " + bioDataEditor.EditedBioData.FullName + "*";
+                else
+                    this.Text = APP_TITLE + " - " + bioDataEditor.EditedBioData.FullName;
+            }
+            else
+            {
+                this.Text = APP_TITLE;
+            }
         }
 
         private void lbBioData_MouseMove(object sender, MouseEventArgs e)

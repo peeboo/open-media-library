@@ -50,6 +50,13 @@ namespace OMLDatabaseEditor.Controls
 
             _isLoading = false;
         }
+        
+        public void RefreshEditor()
+        {
+            _isLoading = true;
+            biodatasource.ResetCurrentItem();
+            _isLoading = false;
+        }
 
         private void teBio_TextChanged(object sender, EventArgs e)
         {
