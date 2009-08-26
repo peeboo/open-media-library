@@ -43,11 +43,12 @@ namespace TVDBMetadata
         private List<TheTVDBDbResult> results = null;
 
 
-        public List<MetaDataPluginDescriptor> GetProviders {
+        public List<MetaDataPluginDescriptor> GetProviders
+        {
             get
             {
                 List<MetaDataPluginDescriptor> descriptors = new List<MetaDataPluginDescriptor>();
-               
+
                 MetaDataPluginDescriptor descriptor = new MetaDataPluginDescriptor();
                 descriptor.DataProviderName = "thetvdb.com";
                 descriptor.DataProviderMessage = "Data provided by thetvdb.com";
@@ -62,7 +63,7 @@ namespace TVDBMetadata
 
         // these 2 methods must be called in sequence
         public bool Initialize(string provider, Dictionary<string, string> parameters)
-        {            
+        {
             // Set api info
             API_KEY = DEFAULT_API_KEY;
 
@@ -74,7 +75,9 @@ namespace TVDBMetadata
             xmlmirrors = new List<string>();
             bannermirrors = new List<string>();
             zipmirrors = new List<string>();
-            GetMirrors();
+            
+            // Mike - don't initialise mirrors now, do it when first used
+            //GetMirrors();
 
             return true;
         }
@@ -227,25 +230,6 @@ namespace TVDBMetadata
         public List<string> GetBackDropUrlsForTitle()
         {
             return BackDrops;
-
-            /*WebClient web = new WebClient();
-
-            foreach (string backDropUrl in BackDrops)
-            {
-                try
-                {
-                    if (!string.IsNullOrEmpty(backDropUrl))
-                    {
-                        string filename = Path.Combine(FileSystemWalker.ImageDownloadDirectory, Guid.NewGuid().ToString());
-                        web.DownloadFile("http://images.thetvdb.com/banners/" + backDropUrl, filename);
-                        t.AddFanArtImage(filename);
-                    }
-                }
-                catch
-                {
-                }
-
-            }*/
         }
 
 
@@ -272,11 +256,20 @@ namespace TVDBMetadata
             SeriesNo = pSeriesNo;
             EpisodeNo = pEpisodeNo;*/
 
+            if (xmlmirrors.Count == 0)
+            {
+                // Looks like the tvdb api initialisation failed. Try again
+                if (!GetMirrors())
+                {
+                    return true;
+                }
+            }
+
             // First try to find the TV Show on tvdb
             SearchForTVShow(SeriesName);
 
             if (results.Count <= 0) return false;
-            
+
             if (results.Count > 1)
             {
                 // Found more than one possible show. Present the list to the user
@@ -397,7 +390,7 @@ namespace TVDBMetadata
                         }
                     }
                 }
-            } 
+            }
         }
 
         /// <summary>
@@ -454,7 +447,7 @@ namespace TVDBMetadata
                                                 network = GetElementValue(reader);
                                                 break;
                                             case "runtime":
-                                                int.TryParse(GetElementValue(reader), out runtime); 
+                                                int.TryParse(GetElementValue(reader), out runtime);
                                                 //runtime = int.Parse(GetElementValue(reader));
                                                 break;
                                             case "fanart":
@@ -464,7 +457,7 @@ namespace TVDBMetadata
                                             case "poster":
                                                 if (BackDrops == null) BackDrops = new List<string>();
                                                 BackDrops.Add("http://images.thetvdb.com/banners/" + GetElementValue(reader));
-                                                break;   
+                                                break;
                                             case "contentrating":
                                                 rating = GetElementValue(reader);
                                                 break;
@@ -510,7 +503,7 @@ namespace TVDBMetadata
                                                 result.Title.EpisodeNumber = (short)result.EpisodeNo;
                                                 break;
                                             case "firstaired":
-                                            //    result.Title.ReleaseDate = DateTime.Parse(GetElementValue(reader));
+                                                //    result.Title.ReleaseDate = DateTime.Parse(GetElementValue(reader));
                                                 break;
                                             case "overview":
                                                 result.Title.Synopsis = GetElementValue(reader);
@@ -520,10 +513,10 @@ namespace TVDBMetadata
                                                 result.Title.SeasonNumber = (short)result.SeasonNo;
                                                 break;
                                             case "seasonid":
-                                            //    typemask = int.Parse(GetElementValue(reader));
+                                                //    typemask = int.Parse(GetElementValue(reader));
                                                 break;
                                             case "seriesid":
-                                            //    typemask = int.Parse(GetElementValue(reader));
+                                                //    typemask = int.Parse(GetElementValue(reader));
                                                 break;
                                             case "filename":
                                                 result.ImageUrl = GetElementValue(reader);
@@ -557,7 +550,7 @@ namespace TVDBMetadata
                                             if ((EpisodeNo > 0) && (EpisodeNo != result.EpisodeNo)) AddTitle = false;
 
                                             // If an episode name is specified, calculate the match confidence
-                                            if (!string.IsNullOrEmpty(EpisodeName))  result.NameMatchConfidence = StringMatching.Compute(EpisodeName, result.Title.Name);
+                                            if (!string.IsNullOrEmpty(EpisodeName)) result.NameMatchConfidence = StringMatching.Compute(EpisodeName, result.Title.Name);
 
                                             if (AddTitle)
                                             {
@@ -595,10 +588,10 @@ namespace TVDBMetadata
 
             //if (!string.IsNullOrEmpty(EpisodeName))
             //{
-                // Sort by name confidence and limit result set
-                results = (from r in results
-                           orderby r.NameMatchConfidence
-                           select r).Take(maxResults).ToList();
+            // Sort by name confidence and limit result set
+            results = (from r in results
+                       orderby r.NameMatchConfidence
+                       select r).Take(maxResults).ToList();
             //} 
 
             // load up all the titles with images
@@ -609,72 +602,89 @@ namespace TVDBMetadata
             }
         }
 
-        private void GetMirrors()
+        private bool GetMirrors()
         {
-            UriBuilder uri = new UriBuilder("http://www.thetvdb.com/api/" + API_KEY + "/mirrors.xml");
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri.Uri);
-
-            // execute the request
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            try
             {
-                string mirrorpath = "";
-                int typemask = 0;
+                UriBuilder uri = new UriBuilder("http://www.thetvdb.com/api/" + API_KEY + "/mirrors.xml");
 
-                // we will read data via the response stream
-                using (Stream resStream = response.GetResponseStream())
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri.Uri);
+
+                // execute the request
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
-                    XmlTextReader reader = new XmlTextReader(resStream);
-                    reader.WhitespaceHandling = WhitespaceHandling.None;
+                    string mirrorpath = "";
+                    int typemask = 0;
 
-                    while (reader.Read())
+                    // we will read data via the response stream
+                    using (Stream resStream = response.GetResponseStream())
                     {
-                        if (reader.NodeType == XmlNodeType.Element)
+                        XmlTextReader reader = new XmlTextReader(resStream);
+                        reader.WhitespaceHandling = WhitespaceHandling.None;
+
+                        while (reader.Read())
                         {
-                            if (reader.Name.ToLower() == "mirror")
+                            if (reader.NodeType == XmlNodeType.Element)
                             {
-                                //TheTVDBDbResult title = GetTitleFromMovieNode(reader);
-
-                                //if (title != null)
-                                //    results.Add(title);
-                                while (reader.Read())
+                                if (reader.Name.ToLower() == "mirror")
                                 {
-                                    if (reader.NodeType == XmlNodeType.Element)
-                                    {
-                                        switch (reader.Name.ToLower())
-                                        {
-                                            case "mirrorpath" :
-                                                mirrorpath = GetElementValue(reader);
-                                                break;
-                                            case "typemask" :
-                                                typemask = int.Parse(GetElementValue(reader));
-                                                break;
-                                            default:
-                                                break;
-                                        }
-                                    }
+                                    //TheTVDBDbResult title = GetTitleFromMovieNode(reader);
 
-                                    else if (reader.NodeType == XmlNodeType.EndElement && reader.Name.ToLower() == "mirror")
+                                    //if (title != null)
+                                    //    results.Add(title);
+                                    while (reader.Read())
                                     {
-                                        if ((typemask & 1) != 0)
+                                        if (reader.NodeType == XmlNodeType.Element)
                                         {
-                                            xmlmirrors.Add(mirrorpath);
+                                            switch (reader.Name.ToLower())
+                                            {
+                                                case "mirrorpath":
+                                                    mirrorpath = GetElementValue(reader);
+                                                    break;
+                                                case "typemask":
+                                                    typemask = int.Parse(GetElementValue(reader));
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
                                         }
-                                        if ((typemask & 2) != 0)
+
+                                        else if (reader.NodeType == XmlNodeType.EndElement && reader.Name.ToLower() == "mirror")
                                         {
-                                            bannermirrors.Add(mirrorpath);
+                                            if ((typemask & 1) != 0)
+                                            {
+                                                xmlmirrors.Add(mirrorpath);
+                                            }
+                                            if ((typemask & 2) != 0)
+                                            {
+                                                bannermirrors.Add(mirrorpath);
+                                            }
+                                            if ((typemask & 4) != 0)
+                                            {
+                                                zipmirrors.Add(mirrorpath);
+                                            }
+                                            break;
                                         }
-                                        if ((typemask & 4) != 0)
-                                        {
-                                            zipmirrors.Add(mirrorpath);
-                                        }
-                                        break;
                                     }
                                 }
                             }
                         }
                     }
                 }
+            }
+
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            if (xmlmirrors.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }
