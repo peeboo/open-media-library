@@ -19,7 +19,13 @@ namespace OMLDatabaseEditor
         Title[] _titles = null;
         int _selectedTitle = -1;
         bool _overwriteMetadata;
-        //MainEditor _openerForm;
+
+        // Store last search criteria to avoid researching if nothing changes
+        string LastSearchTitle;
+        string LastEpisodeName;
+        int? LastSeasonNo;
+        int? LastEpisodeNo;
+
         public string _lastMetaPluginName;
 
         List<KeyValuePair<int, string>> ImageLoadQueue = new List<KeyValuePair<int,string>>();
@@ -27,17 +33,6 @@ namespace OMLDatabaseEditor
         bool TVSearch;
         bool SearchDrillDownReq;
 
-        /*public string LastMetaPluginName
-        {
-            get { return _lastMetaPluginName; }
-            set { _lastMetaPluginName = value; }
-        }
-
-        public string ReSearchText
-        {
-            get { return reSearchTitle.Text; }
-            set { reSearchTitle.Text = value; }
-        }*/
 
         public bool OverwriteMetadata
         {
@@ -53,7 +48,6 @@ namespace OMLDatabaseEditor
         public frmSearchResult(MetaDataPluginDescriptor plugin, string searchstr, string EpisodeName, int ? SeasonNo, int ? EpisodeNo, bool ShowTVFields) //MainEditor opener)
         {
             _plugin = plugin;
-            //_openerForm = opener;
 
             InitializeComponent();
 
@@ -66,20 +60,32 @@ namespace OMLDatabaseEditor
                 lcProviderMessage.Text = plugin.DataProviderMessage + " - Click to view website";
             }
 
-            // Hive the tv fields of not reqiured
+            // Hide the tv fields of not reqiured
             if (!ShowTVFields)
             {
                 teEpisodeName.Visible = false;
                 seEpisodeNo.Visible = false;
                 seSeasonNo.Visible = false;
-                reSearchSubmitEpisodeButton.Visible = false;
                 lcEpisodeLabel.Visible = false;
-
+                reSearchSubmitButton.Location = new Point(335, 3);
             }
+
             reSearchTitle.Text = searchstr;
+            LastSearchTitle = searchstr;
+
             teEpisodeName.Text = EpisodeName;
-            if (SeasonNo != null) seSeasonNo.Value = Convert.ToInt32(SeasonNo);
-            if (EpisodeNo != null) seEpisodeNo.Value = Convert.ToInt32(EpisodeNo);
+            LastEpisodeName = EpisodeName;
+            if (SeasonNo != null)
+            {
+                seSeasonNo.Value = Convert.ToInt32(SeasonNo);
+                LastSeasonNo = Convert.ToInt32(SeasonNo);
+            }
+            if (EpisodeNo != null)
+            {
+                seEpisodeNo.Value = Convert.ToInt32(EpisodeNo);
+                LastEpisodeNo = Convert.ToInt32(EpisodeNo);
+            }
+
             Search();
         }
 
@@ -257,8 +263,6 @@ namespace OMLDatabaseEditor
             {
                 if (grdTitles.SelectedRows != null && grdTitles.SelectedRows.Count > 0)
                 {
-
-
                     _selectedTitle = grdTitles.SelectedRows[0].Index;
                     DialogResult = DialogResult.OK;
                 }
@@ -291,18 +295,6 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private void reSearchSubmitEpisodeButton_Click(object sender, EventArgs e)
-        {
-            if (TVSearch)
-            {
-                Cursor = Cursors.WaitCursor;
-                SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
-                _titles = _plugin.PluginDLL.GetAvailableTitles();
-                ShowResults();
-                Cursor = Cursors.Default;
-            }
-        }
-
         private void grdTitles_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -310,14 +302,49 @@ namespace OMLDatabaseEditor
 
         private void reSearchSubmitButton_Click(object sender, EventArgs e)
         {
-            submitNewTitleSearch();
+            if (LastSearchTitle != reSearchTitle.Text)
+            {
+                // If the search criteria has changed perform new movie/show search search
+                LastSearchTitle = reSearchTitle.Text;
+                submitNewTitleSearch();
+            }
+            else
+            {
+                // Otherwise no need to perform new movie/show search
+                // If we are searching for a TV episode, do that
+                if (TVSearch)
+                {
+                    if ((LastEpisodeName != teEpisodeName.Text) ||
+                        (LastSeasonNo != seSeasonNo.Value) ||
+                        (LastEpisodeNo != seEpisodeNo.Value))
+                    {
+                        LastEpisodeName = teEpisodeName.Text;
+                        LastSeasonNo = (int)seSeasonNo.Value;
+                        LastEpisodeNo = (int)seEpisodeNo.Value;
+                        Cursor = Cursors.WaitCursor;
+                        SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
+                        _titles = _plugin.PluginDLL.GetAvailableTitles();
+                        ShowResults();
+                        Cursor = Cursors.Default;
+                    }
+                }
+            }
         }
 
         private void reSearchTitleKeypress(Object o, System.Windows.Forms.KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
             {
-                submitNewTitleSearch();
+                reSearchSubmitButton_Click(null, null);
+                e.Handled = true;
+            }
+        }
+
+        private void teEpisodeName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                reSearchSubmitButton_Click(null, null);
                 e.Handled = true;
             }
         }
@@ -325,17 +352,6 @@ namespace OMLDatabaseEditor
         private void submitNewTitleSearch()
         {
             Search();
-            /*try
-            {
-                if (_openerForm != null)
-                {
-                    bool reSearch = _openerForm.StartMetadataImport(_lastMetaPluginName, false, reSearchTitle.Text, this);
-                }
-            }
-            catch
-            {
-                Cursor = Cursors.Default;
-            }*/
         }
 
         private void lcProviderMessage_Click(object sender, EventArgs e)
