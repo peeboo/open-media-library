@@ -21,6 +21,11 @@ namespace OMLEngine
             _bioData.DateOfBirth = new DateTime(1900, 1, 1);
         }
 
+        public void ReloadBioData()
+        {
+            Dao.DBContext.Instance.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, _bioData);
+        }
+
         internal BioData(OMLEngine.Dao.BioData bioData)
         {
             _bioData = bioData;

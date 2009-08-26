@@ -18,6 +18,11 @@ namespace OMLEngine
             _genreMetaData = new OMLEngine.Dao.GenreMetaData();
         }
 
+        public void ReloadGenreMetaData()
+        {
+            Dao.DBContext.Instance.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, _genreMetaData);
+        }
+
         internal GenreMetaData(OMLEngine.Dao.GenreMetaData genreMetaData)
         {
             _genreMetaData = genreMetaData;
