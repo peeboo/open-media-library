@@ -29,7 +29,7 @@ namespace OMLEngineService
         protected override void OnStart(string[] args)
         {
 #if DEBUG
-            System.Diagnostics.Debugger.Launch();
+            //System.Diagnostics.Debugger.Launch();
 #endif
             WriteToLog(EventLogEntryType.Information, "OMLEngineService Start");
 

@@ -106,7 +106,8 @@ namespace Library.Code.V3
             this.owner = firstRun;
             this.owner.NextCommandEnabled.Value = true;
 
-            this.helper = new StartMenuHelper();
+            string addinId = OMLApplication.AssemblyName;
+            this.helper = new StartMenuHelper(addinId);
 
             this.selectedViewOptions = new Choice(this.owner);
             List<string> selectedViewList = new List<string>();

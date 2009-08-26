@@ -729,6 +729,15 @@ namespace Library
         {
             DebugLine("[OMLApplication] Property {0} changed on the AddInHost", property);
         }
+
+        public static string AssemblyName
+        {
+            get
+            {
+                //gotta format it this way
+                return string.Format("Library.MyAddIn, Library,Culture=Neutral,Version={0},PublicKeyToken=74d3b407d6cf16f1", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            }
+        }
         // private data
         private string _nowPlayingMovieName;
         private PlayState _nowPlayingStatus;

@@ -30,7 +30,8 @@ namespace Library.Code.V3
             this.commands.Add(cancelCmd);
 
             //this.SetupStartMenu();
-            this.helper = new StartMenuHelper();
+            string addinId = OMLApplication.AssemblyName;
+            this.helper = new StartMenuHelper(addinId);
             this.helper.Changed += new ChangedEventHandler(helper_Changed);
             this.LoadArray();
         }

@@ -21,12 +21,13 @@ namespace OMLEngine.Settings
         private static string EntryPointRegKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Entry Points";
         private static string OMLCategoryRegKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\OML\Open Media Library";
         private static string OMLApplicationId = "{3f0850a7-0fd7-4cbf-b8dc-c7f7ea31534e}";
-        private static string OMLAddIn = "Library.MyAddIn, Library,Culture=Neutral,Version=3.0.0.0,PublicKeyToken=74d3b407d6cf16f1";
+        private string OMLAddIn;// = "Library.MyAddIn, Library,Culture=Neutral,Version=3.0.0.0,PublicKeyToken=74d3b407d6cf16f1";
 
         public List<StartMenuItem> StartMenuItems { get; set; }
 
-        public StartMenuHelper()
+        public StartMenuHelper(string addinId)
         {
+            this.OMLAddIn = addinId;
             this.GetStartMenuItems();
         }
 
