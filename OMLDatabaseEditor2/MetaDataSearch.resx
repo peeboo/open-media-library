@@ -138,7 +138,7 @@
     <value>True</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="dataGridViewCellStyle8.NullValue" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="dataGridViewCellStyle1.NullValue" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         Qk32AgAAAAAAADYAAAAoAAAADgAAABAAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACEgoTGw8bGw8bGw8bGw8bGw8bGw8bG
@@ -234,7 +234,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grdTitles.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>11</value>
   </data>
   <data name="btnSelectMovie.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom</value>
@@ -261,7 +261,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnSelectMovie.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>10</value>
   </data>
   <data name="btnCancel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom</value>
@@ -288,7 +288,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnCancel.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>9</value>
   </data>
   <data name="chkUpdateMissingDataOnly.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom</value>
@@ -318,7 +318,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;chkUpdateMissingDataOnly.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>8</value>
   </data>
   <data name="reSearchAdjustTitleLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -348,13 +348,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;reSearchAdjustTitleLabel.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="reSearchSubmitButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="reSearchSubmitButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>322, 3</value>
+    <value>735, 3</value>
   </data>
   <data name="reSearchSubmitButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -375,7 +375,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;reSearchSubmitButton.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>6</value>
   </data>
   <data name="reSearchTitle.AccessibleName" xml:space="preserve">
     <value />
@@ -399,7 +399,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;reSearchTitle.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>7</value>
   </data>
   <data name="lcProviderMessage.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
@@ -430,13 +430,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lcProviderMessage.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="teEpisodeName.AccessibleName" xml:space="preserve">
     <value />
   </data>
   <data name="teEpisodeName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>611, 4</value>
+    <value>502, 4</value>
   </data>
   <data name="teEpisodeName.Size" type="System.Drawing.Size, System.Drawing">
     <value>85, 20</value>
@@ -454,13 +454,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;teEpisodeName.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="seSeasonNo.EditValue" type="System.Decimal, mscorlib">
     <value>0</value>
   </data>
   <data name="seSeasonNo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>702, 4</value>
+    <value>593, 4</value>
   </data>
   <data name="seSeasonNo.Properties.Mask.EditMask" xml:space="preserve">
     <value>N00</value>
@@ -481,13 +481,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;seSeasonNo.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="seEpisodeNo.EditValue" type="System.Decimal, mscorlib">
     <value>0</value>
   </data>
   <data name="seEpisodeNo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>748, 4</value>
+    <value>639, 4</value>
   </data>
   <data name="seEpisodeNo.Properties.Mask.EditMask" xml:space="preserve">
     <value>N00</value>
@@ -508,10 +508,10 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;seEpisodeNo.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="lcEpisodeLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>438, 8</value>
+    <value>329, 8</value>
   </data>
   <data name="lcEpisodeLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>162, 13</value>
@@ -532,33 +532,6 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lcEpisodeLabel.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="reSearchSubmitEpisodeButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="reSearchSubmitEpisodeButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>794, 2</value>
-  </data>
-  <data name="reSearchSubmitEpisodeButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="reSearchSubmitEpisodeButton.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
-  </data>
-  <data name="reSearchSubmitEpisodeButton.Text" xml:space="preserve">
-    <value>Search</value>
-  </data>
-  <data name="&gt;&gt;reSearchSubmitEpisodeButton.Name" xml:space="preserve">
-    <value>reSearchSubmitEpisodeButton</value>
-  </data>
-  <data name="&gt;&gt;reSearchSubmitEpisodeButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;reSearchSubmitEpisodeButton.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;reSearchSubmitEpisodeButton.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

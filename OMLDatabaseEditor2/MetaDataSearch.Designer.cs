@@ -31,13 +31,13 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearchResult));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grdTitles = new System.Windows.Forms.DataGridView();
             this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCoverArt = new System.Windows.Forms.DataGridViewImageColumn();
@@ -58,7 +58,6 @@
             this.seSeasonNo = new DevExpress.XtraEditors.SpinEdit();
             this.seEpisodeNo = new DevExpress.XtraEditors.SpinEdit();
             this.lcEpisodeLabel = new DevExpress.XtraEditors.LabelControl();
-            this.reSearchSubmitEpisodeButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.grdTitles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.seSeasonNo.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.seEpisodeNo.Properties)).BeginInit();
@@ -96,9 +95,9 @@
             // 
             // colCoverArt
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
-            dataGridViewCellStyle8.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle8.NullValue")));
-            this.colCoverArt.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle1.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle1.NullValue")));
+            this.colCoverArt.DefaultCellStyle = dataGridViewCellStyle1;
             resources.ApplyResources(this.colCoverArt, "colCoverArt");
             this.colCoverArt.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
             this.colCoverArt.Name = "colCoverArt";
@@ -107,54 +106,54 @@
             // 
             // colName
             // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.colName.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.colName.DefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(this.colName, "colName");
             this.colName.Name = "colName";
             this.colName.ReadOnly = true;
             // 
             // colSynopsis
             // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.colSynopsis.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.colSynopsis.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(this.colSynopsis, "colSynopsis");
             this.colSynopsis.Name = "colSynopsis";
             this.colSynopsis.ReadOnly = true;
             // 
             // colYear
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.colYear.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.colYear.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(this.colYear, "colYear");
             this.colYear.Name = "colYear";
             this.colYear.ReadOnly = true;
             // 
             // colGenres
             // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.colGenres.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.colGenres.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(this.colGenres, "colGenres");
             this.colGenres.Name = "colGenres";
             this.colGenres.ReadOnly = true;
             // 
             // colDirector
             // 
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.colDirector.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.colDirector.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(this.colDirector, "colDirector");
             this.colDirector.Name = "colDirector";
             this.colDirector.ReadOnly = true;
             // 
             // colActors
             // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.colActors.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.colActors.DefaultCellStyle = dataGridViewCellStyle7;
             resources.ApplyResources(this.colActors, "colActors");
             this.colActors.Name = "colActors";
             this.colActors.ReadOnly = true;
@@ -211,6 +210,7 @@
             // 
             resources.ApplyResources(this.teEpisodeName, "teEpisodeName");
             this.teEpisodeName.Name = "teEpisodeName";
+            this.teEpisodeName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.teEpisodeName_KeyPress);
             // 
             // seSeasonNo
             // 
@@ -220,6 +220,11 @@
             new DevExpress.XtraEditors.Controls.EditorButton()});
             this.seSeasonNo.Properties.IsFloatValue = false;
             this.seSeasonNo.Properties.Mask.EditMask = resources.GetString("seSeasonNo.Properties.Mask.EditMask");
+            this.seSeasonNo.Properties.MaxValue = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
             // 
             // seEpisodeNo
             // 
@@ -229,24 +234,21 @@
             new DevExpress.XtraEditors.Controls.EditorButton()});
             this.seEpisodeNo.Properties.IsFloatValue = false;
             this.seEpisodeNo.Properties.Mask.EditMask = resources.GetString("seEpisodeNo.Properties.Mask.EditMask");
+            this.seEpisodeNo.Properties.MaxValue = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
             // 
             // lcEpisodeLabel
             // 
             resources.ApplyResources(this.lcEpisodeLabel, "lcEpisodeLabel");
             this.lcEpisodeLabel.Name = "lcEpisodeLabel";
             // 
-            // reSearchSubmitEpisodeButton
-            // 
-            resources.ApplyResources(this.reSearchSubmitEpisodeButton, "reSearchSubmitEpisodeButton");
-            this.reSearchSubmitEpisodeButton.Name = "reSearchSubmitEpisodeButton";
-            this.reSearchSubmitEpisodeButton.UseVisualStyleBackColor = true;
-            this.reSearchSubmitEpisodeButton.Click += new System.EventHandler(this.reSearchSubmitEpisodeButton_Click);
-            // 
             // frmSearchResult
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.reSearchSubmitEpisodeButton);
             this.Controls.Add(this.lcEpisodeLabel);
             this.Controls.Add(this.seEpisodeNo);
             this.Controls.Add(this.seSeasonNo);
@@ -293,6 +295,5 @@
         private DevExpress.XtraEditors.SpinEdit seSeasonNo;
         private DevExpress.XtraEditors.SpinEdit seEpisodeNo;
         private DevExpress.XtraEditors.LabelControl lcEpisodeLabel;
-        private System.Windows.Forms.Button reSearchSubmitEpisodeButton;
     }
 }
