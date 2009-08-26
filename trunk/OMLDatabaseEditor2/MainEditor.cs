@@ -1824,88 +1824,95 @@ namespace OMLDatabaseEditor
 
         private void treeMedia_DragDrop(object sender, DragEventArgs e)
         {
-            if (tt != null)
+            try
             {
-                tt.Hide(this);
-                tt.Dispose();
-                tt = null;
+                if (tt != null)
+                {
+                    tt.Hide(this);
+                    tt.Dispose();
+                    tt = null;
+                }
+
+                Point mouseLocation = treeMedia.PointToClient(new Point(e.X, e.Y));
+                TreeNode selectednode = treeMedia.GetNodeAt(mouseLocation);
+
+                if (selectednode != null)
+                {
+                    this.Cursor = Cursors.WaitCursor;
+
+                    // Find the titleid of the destination title
+                    int? parentid;
+
+                    if (selectednode.Name == "All Media")
+                    {
+                        parentid = null;
+                    }
+                    else
+                    {
+                        parentid = Convert.ToInt32(selectednode.Name);
+                    }
+
+                    // Received a file drag and drop
+                    if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                    {
+                        string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                        if (files.Length > 0)
+                        {
+                            CreateTitlesFromPathArray(parentid, files);
+                        }
+                    }
+
+                    // Received an internal drag and drop
+                    if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
+                    {
+                        bool foldermoved = false;
+
+                        OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
+
+                        if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
+                        {
+                            int[] items = OMLDragAndDrop.iItems;
+                            foreach (int item in items)
+                            {
+                                if ((_movieList[item].TitleType & TitleTypes.AllFolders) != 0)
+                                {
+                                    foldermoved = true;
+                                }
+
+                                if (parentid == null)
+                                {
+                                    // Item is being moved to root
+                                    _movieList[item].ParentTitleId = null;
+                                    _movieList[item].TitleType = _movieList[item].TitleType | TitleTypes.Root;
+                                }
+                                else
+                                {
+                                    // Item is being moved to a folder
+                                    _movieList[item].ParentTitleId = parentid;
+                                    _movieList[item].TitleType = _movieList[item].TitleType & (TitleTypes.AllMedia | TitleTypes.AllFolders);
+                                }
+                            }
+                            TitleCollectionManager.SaveTitleUpdates();
+
+                            if (foldermoved)
+                            {
+                                PopulateMediaTree();
+                                if (_mediaTree.ContainsKey((int)SelectedTreeRoot))
+                                {
+                                    treeMedia.SelectedNode = _mediaTree[(int)SelectedTreeRoot];
+                                }
+                            }
+
+                            PopulateMovieListV2(SelectedTreeRoot);
+                        }
+                    }
+                    this.Cursor = Cursors.Default;
+                }
             }
-
-            Point mouseLocation = treeMedia.PointToClient(new Point(e.X, e.Y));
-            TreeNode selectednode = treeMedia.GetNodeAt(mouseLocation);
-
-            if (selectednode != null)
+            catch (Exception ex)
             {
-                this.Cursor = Cursors.WaitCursor;
-
-                // Find the titleid of the destination title
-                int? parentid;
-
-                if (selectednode.Name == "All Media")
-                {
-                    parentid = null;
-                }
-                else
-                {
-                    parentid = Convert.ToInt32(selectednode.Name);
-                }
-
-                // Received a file drag and drop
-                if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                {
-                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                    if (files.Length > 0)
-                    {
-                        CreateTitlesFromPathArray(parentid, files);
-                    }
-                }
-
-                // Received an internal drag and drop
-                if (e.Data.GetDataPresent(typeof(OMLDragAndDropClass)))
-                {
-                    bool foldermoved = false;
-
-                    OMLDragAndDropClass OMLDragAndDrop = (OMLDragAndDropClass)e.Data.GetData(typeof(OMLDragAndDropClass));
-
-                    if (OMLDragAndDrop.OMLDragAndDropType == OMLDragAndDropTypes.Title)
-                    {
-                        int[] items = OMLDragAndDrop.iItems;
-                        foreach (int item in items)
-                        {
-                            if ((_movieList[item].TitleType & TitleTypes.AllFolders) != 0)
-                            {
-                                foldermoved = true;
-                            }
-
-                            if (parentid == null)
-                            {
-                                // Item is being moved to root
-                                _movieList[item].ParentTitleId = null;
-                                _movieList[item].TitleType = _movieList[item].TitleType | TitleTypes.Root;
-                            }
-                            else
-                            {
-                                // Item is being moved to a folder
-                                _movieList[item].ParentTitleId = parentid;
-                                _movieList[item].TitleType = _movieList[item].TitleType & (TitleTypes.AllMedia | TitleTypes.AllFolders);
-                            }
-                        }
-                        TitleCollectionManager.SaveTitleUpdates();
-
-                        if (foldermoved)
-                        {
-                            PopulateMediaTree();
-                            if (_mediaTree.ContainsKey((int)SelectedTreeRoot))
-                            {
-                                treeMedia.SelectedNode = _mediaTree[(int)SelectedTreeRoot];
-                            }
-                        }
-
-                        PopulateMovieListV2(SelectedTreeRoot);
-                    }
-                }
-                this.Cursor = Cursors.Default;
+                Utilities.DebugLine("[OMLDatabaseEditor] treeMedia_DragDrop exception" + ex.Message);
             }
         }
 
@@ -2004,6 +2011,7 @@ namespace OMLDatabaseEditor
                             }
                             catch (Exception ex)
                             {
+                                Utilities.DebugLine("[OMLDatabaseEditor] treeMedia_DragOver Inner exception" + ex.Message);
                             }
                         }
 
@@ -2027,7 +2035,7 @@ namespace OMLDatabaseEditor
             }
             catch (Exception ex)
             {
-                OMLEngine.Utilities.DebugLine("Drag and drop exception", ex.Message);
+                Utilities.DebugLine("[OMLDatabaseEditor] treeMedia_DragOver Outer exception" + ex.Message);
             }
         }
 
@@ -3543,144 +3551,154 @@ namespace OMLDatabaseEditor
             // TODO - Wrap this up in another thread
             foreach (string file in path)
             {
-                if (Directory.Exists(file))
+                try
                 {
-                    // Folder passed in. This is where St Sana kicks in
-                    Servant stsana = new Servant();
-                    stsana.Log += new Servant.SSEventHandler(stsana_Log);
-                    stsana.BasePaths.Add(file);
-                    stsana.Scan();
-
-                    int? a_parent;
-
-                    if (OMLEngine.Settings.OMLSettings.DBEStSanaCreateTLFolder)
+                    if (Directory.Exists(file))
                     {
-                        a_parent = CreateFolderNonDuplicate(parentid, Path.GetFileName(file), TitleTypes.Collection, false);
-                    }
-                    else
-                    {
-                        a_parent = parentid;
-                    }
+                        // Folder passed in. This is where St Sana kicks in
+                        Servant stsana = new Servant();
+                        stsana.Log += new Servant.SSEventHandler(stsana_Log);
+                        stsana.BasePaths.Add(file);
+                        stsana.Scan();
 
-                    if (stsana.Entities != null)
-                    {
-                        foreach (Entity e in stsana.Entities)
+                        int? a_parent;
+
+                        if (OMLEngine.Settings.OMLSettings.DBEStSanaCreateTLFolder)
                         {
-                            int? e_parent = a_parent;
-                            if (e.Name != file)
-                            {
-                                switch (e.EntityType)
-                                {
-                                    case Serf.EntityType.COLLECTION:
-                                    case Serf.EntityType.MOVIE:
-                                        e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
-                                        break;
-                                    case Serf.EntityType.TV_SHOW:
-                                        e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.TVShow, false);
-                                        break;
-                                }
-                            }
+                            a_parent = CreateFolderNonDuplicate(parentid, Path.GetFileName(file), TitleTypes.Collection, false);
+                        }
+                        else
+                        {
+                            a_parent = parentid;
+                        }
 
-                            foreach (Series s in e.Series)
+                        if (stsana.Entities != null)
+                        {
+                            foreach (Entity e in stsana.Entities)
                             {
-                                int? s_parent = e_parent;
-                                // if the s.name and e.name are the same, its a movie, to be sure though lets check s.number, it should be
-                                // -1 for non tv shows.
-                                if (s.Name.ToUpperInvariant().CompareTo(e.Name.ToUpperInvariant()) != 0 || s.Number > -1)
+                                int? e_parent = a_parent;
+                                if (e.Name != file)
                                 {
-                                    //s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, false);
                                     switch (e.EntityType)
                                     {
                                         case Serf.EntityType.COLLECTION:
                                         case Serf.EntityType.MOVIE:
-                                            s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, false);
+                                            e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
                                             break;
                                         case Serf.EntityType.TV_SHOW:
-                                            s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Season, false);
+                                            e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.TVShow, false);
                                             break;
                                     }
                                 }
 
-                                foreach (Video v in s.Videos)
+                                foreach (Series s in e.Series)
                                 {
-                                    stsana_Log("Processing " + v.Name);
-                                    //int v_parent = CreateFolder(s_parent, Path.GetFileNameWithoutExtension(v.Name), TitleTypes.Collection, false);
-
-                                    List<Disk> disks = new List<Disk>();
-
-                                    if ((e.EntityType == Serf.EntityType.COLLECTION) ||
-                                        (e.EntityType == Serf.EntityType.MOVIE))
+                                    int? s_parent = e_parent;
+                                    // if the s.name and e.name are the same, its a movie, to be sure though lets check s.number, it should be
+                                    // -1 for non tv shows.
+                                    if (s.Name.ToUpperInvariant().CompareTo(e.Name.ToUpperInvariant()) != 0 || s.Number > -1)
                                     {
-                                        // Collection or movie mode. Create one title per folder with multiple disks
-                                        foreach (string f in v.Files)
+                                        //s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, false);
+                                        if (s.Name != e.Name)
                                         {
-                                            string pathWithNoFile = Path.GetDirectoryName(f);
-                                            string pathWithNoExtension = Path.GetDirectoryName(f) + "\\" + Path.GetFileNameWithoutExtension(f);
-                                            string fileExtension = Path.GetExtension(f).ToUpper().Replace(".", "");
-
-                                            fileExtension = fileExtension.Replace("-", "");
-
-                                            if (!TitleCollectionManager.ContainsDisks(OMLEngine.FileSystem.NetworkScanner.FixPath(f)))
+                                            switch (e.EntityType)
                                             {
-                                                if (Enum.IsDefined(typeof(VideoFormat), fileExtension.ToUpperInvariant()))
-                                                {
-                                                    Disk disk = new Disk();
-                                                    disk.Path = f;
-                                                    disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
-                                                    disk.Name = string.Format("Disk {0}", 0);
-
-                                                    disks.Add(disk);
-                                                }
+                                                case Serf.EntityType.COLLECTION:
+                                                case Serf.EntityType.MOVIE:
+                                                    s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, false);
+                                                    break;
+                                                case Serf.EntityType.TV_SHOW:
+                                                    s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Season, false);
+                                                    break;
                                             }
                                         }
-                                        if (disks.Count != 0)
+                                        else
                                         {
-                                            int newTitleID = CreateTitle(s_parent,
-                                                Path.GetFileNameWithoutExtension(v.Name),
-                                                TitleTypes.Unknown,
-                                                disks.ToArray(),
-                                                false);
-
-                                            CheckPathForImages(newTitleID, disks[0].Path);
+                                            s_parent = e_parent;
                                         }
                                     }
-                                    else
+
+                                    foreach (Video v in s.Videos)
                                     {
-                                        // TV mode. Create one title per file, each with single disks
-                                        foreach (string f in v.Files)
+                                        stsana_Log("Processing " + v.Name);
+                                        //int v_parent = CreateFolder(s_parent, Path.GetFileNameWithoutExtension(v.Name), TitleTypes.Collection, false);
+
+                                        List<Disk> disks = new List<Disk>();
+
+                                        if ((e.EntityType == Serf.EntityType.COLLECTION) ||
+                                            (e.EntityType == Serf.EntityType.MOVIE))
                                         {
-                                            string pathWithNoFile = Path.GetDirectoryName(f);
-                                            string pathWithNoExtension = Path.GetDirectoryName(f) + "\\" + Path.GetFileNameWithoutExtension(f);
-                                            string fileExtension = Path.GetExtension(f).ToUpper().Replace(".", "");
-
-                                            fileExtension = fileExtension.Replace("-", "");
-
-                                            if (!TitleCollectionManager.ContainsDisks(OMLEngine.FileSystem.NetworkScanner.FixPath(f)))
+                                            // Collection or movie mode. Create one title per folder with multiple disks
+                                            foreach (string f in v.Files)
                                             {
-                                                if (Enum.IsDefined(typeof(VideoFormat), fileExtension.ToUpperInvariant()))
-                                                {
-                                                    Disk disk = new Disk();
-                                                    disk.Path = f;
-                                                    disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
-                                                    disk.Name = string.Format("Disk {0}", 0);
+                                                string pathWithNoFile = Path.GetDirectoryName(f);
+                                                string pathWithNoExtension = Path.GetDirectoryName(f) + "\\" + Path.GetFileNameWithoutExtension(f);
+                                                string fileExtension = Path.GetExtension(f).ToUpper().Replace(".", "");
 
-                                                    disks.Add(disk);
+                                                fileExtension = fileExtension.Replace("-", "");
+
+                                                if (!TitleCollectionManager.ContainsDisks(OMLEngine.FileSystem.NetworkScanner.FixPath(f)))
+                                                {
+                                                    if (Enum.IsDefined(typeof(VideoFormat), fileExtension.ToUpperInvariant()))
+                                                    {
+                                                        Disk disk = new Disk();
+                                                        disk.Path = f;
+                                                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
+                                                        disk.Name = string.Format("Disk {0}", 0);
+
+                                                        disks.Add(disk);
+                                                    }
                                                 }
                                             }
                                             if (disks.Count != 0)
                                             {
-                                                short episodeno = 0;
-                                                if (v.EpisodeNumbers.Count > 0) episodeno = (short)v.EpisodeNumbers[0];
-                                                
                                                 int newTitleID = CreateTitle(s_parent,
-                                                    Path.GetFileNameWithoutExtension(f),
-                                                    TitleTypes.Episode,
-                                                    (short)s.Number,
-                                                    episodeno,
+                                                    Path.GetFileNameWithoutExtension(v.Name),
+                                                    TitleTypes.Unknown,
                                                     disks.ToArray(),
                                                     false);
-                                                
+
                                                 CheckPathForImages(newTitleID, disks[0].Path);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // TV mode. Create one title per file, each with single disks
+                                            foreach (string f in v.Files)
+                                            {
+                                                string pathWithNoFile = Path.GetDirectoryName(f);
+                                                string pathWithNoExtension = Path.GetDirectoryName(f) + "\\" + Path.GetFileNameWithoutExtension(f);
+                                                string fileExtension = Path.GetExtension(f).ToUpper().Replace(".", "");
+
+                                                fileExtension = fileExtension.Replace("-", "");
+
+                                                if (!TitleCollectionManager.ContainsDisks(OMLEngine.FileSystem.NetworkScanner.FixPath(f)))
+                                                {
+                                                    if (Enum.IsDefined(typeof(VideoFormat), fileExtension.ToUpperInvariant()))
+                                                    {
+                                                        Disk disk = new Disk();
+                                                        disk.Path = f;
+                                                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
+                                                        disk.Name = string.Format("Disk {0}", 0);
+
+                                                        disks.Add(disk);
+                                                    }
+                                                }
+                                                if (disks.Count != 0)
+                                                {
+                                                    short episodeno = 0;
+                                                    if (v.EpisodeNumbers.Count > 0) episodeno = (short)v.EpisodeNumbers[0];
+
+                                                    int newTitleID = CreateTitle(s_parent,
+                                                        Path.GetFileNameWithoutExtension(f),
+                                                        TitleTypes.Episode,
+                                                        (short)s.Number,
+                                                        episodeno,
+                                                        disks.ToArray(),
+                                                        false);
+
+                                                    CheckPathForImages(newTitleID, disks[0].Path);
+                                                }
                                             }
                                         }
                                     }
@@ -3688,30 +3706,34 @@ namespace OMLDatabaseEditor
                             }
                         }
                     }
-                }
 
-                if (File.Exists(file))
-                {
-                    stsana_Log("Processing " + file);
-                    string extension = Path.GetExtension(file).ToUpper().Replace(".", "");
-                    extension = extension.Replace("-", "");
-
-                    if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
+                    if (File.Exists(file))
                     {
-                        Disk disk = new Disk();
-                        disk.Path = file;
-                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension.ToUpperInvariant());
-                        disk.Name = string.Format("Disk {0}", 0);
+                        stsana_Log("Processing " + file);
+                        string extension = Path.GetExtension(file).ToUpper().Replace(".", "");
+                        extension = extension.Replace("-", "");
 
-                        //List<
-                        int newTitleID = CreateTitle(parentid,
-                            Path.GetFileNameWithoutExtension(file),
-                            TitleTypes.Unknown,
-                            new Disk[1] { disk },
-                            false);
+                        if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
+                        {
+                            Disk disk = new Disk();
+                            disk.Path = file;
+                            disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension.ToUpperInvariant());
+                            disk.Name = string.Format("Disk {0}", 0);
 
-                        CheckPathForImages(newTitleID, file);
+                            //List<
+                            int newTitleID = CreateTitle(parentid,
+                                Path.GetFileNameWithoutExtension(file),
+                                TitleTypes.Unknown,
+                                new Disk[1] { disk },
+                                false);
+
+                            CheckPathForImages(newTitleID, file);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Utilities.DebugLine("[OMLDatabaseEditor] CreateTitlesFromPathArray exception" + ex.Message);
                 }
             }
 
@@ -3729,6 +3751,8 @@ namespace OMLDatabaseEditor
 
         private void CheckPathForImages(int TitleID, string path)
         {
+            if ((TitleID == null) || (string.IsNullOrEmpty(path))) return;
+
             string pathWithNoFile = Path.GetDirectoryName(path);
             string pathWithNoExtension = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path);
             //string fileExtension = Path.GetExtension(path).ToUpper().Replace(".", "");
@@ -3750,13 +3774,13 @@ namespace OMLDatabaseEditor
             {
                 image = path = ".png";
             }
-            else if (File.Exists(Path.Combine(Path.GetDirectoryName(pathWithNoFile), "folder.jpg")))
+            else if (File.Exists(Path.Combine(pathWithNoFile, "folder.jpg")))
             {
-                image = Path.Combine(Path.GetDirectoryName(pathWithNoFile), "\\folder.jpg");
+                image = Path.Combine(pathWithNoFile, "\\folder.jpg");
             }
-            else if (File.Exists(Path.Combine(Path.GetDirectoryName(pathWithNoFile), "folder.png")))
+            else if (File.Exists(Path.Combine(pathWithNoFile, "folder.png")))
             {
-                image = Path.Combine(Path.GetDirectoryName(pathWithNoFile), "\\folder.png");
+                image = Path.Combine(pathWithNoFile, "\\folder.png");
             }
 
             if (!string.IsNullOrEmpty(image))
