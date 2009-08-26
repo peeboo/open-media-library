@@ -1,6 +1,6 @@
 <application title="Open Media Library" id="{3f0850a7-0fd7-4cbf-b8dc-c7f7ea31534e}">
 	<entrypoint id="{1044a023-44cc-401c-a5df-4f58601f1f57}"
-				addin="Library.MyAddIn, Library,Culture=Neutral,Version=3.0.0.0,PublicKeyToken=74d3b407d6cf16f1"
+				addin="Library.MyAddIn, Library,Culture=Neutral,Version=4.0.0.0,PublicKeyToken=74d3b407d6cf16f1"
 				title="Open Media Library"
 				context="Menu"
 				description="Open Media Library"
@@ -9,7 +9,7 @@
     <category category="More Programs" />
   </entrypoint>
   <entrypoint id="{0e62839a-acbe-48d1-b6f1-a7e5992d5c1d}"
-              addin="Library.MyAddIn, Library,Culture=Neutral,Version=3.0.0.0,PublicKeyToken=74d3b407d6cf16f1"
+              addin="Library.MyAddIn, Library,Culture=Neutral,Version=4.0.0.0,PublicKeyToken=74d3b407d6cf16f1"
               title="LibraryFirstRun"
               context="FirstRun"
               description="LibraryFirstRun"
