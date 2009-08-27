@@ -1773,7 +1773,7 @@ namespace OMLEngine
                                 {
                                     if (navigator.Name == "AudioTrack")
                                     {
-                                        t.AudioTracks.Add(navigator.Value);
+                                        t.AddAudioTrack(navigator.Value);
                                         if (!navigator.MoveToNext()) break;
                                     }
                                     else break;
@@ -1876,7 +1876,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.VideoStandard = navigator.Value;
+                                t.VideoStandard = navigator.Value.Substring(0,Math.Min(navigator.Value.Length, 10));
                             }
                             navigator.MoveToParent();
                         }
