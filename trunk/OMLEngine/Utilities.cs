@@ -203,7 +203,7 @@ namespace OMLEngine
             {
                 Utilities.DebugLine("[Utilities] Setup Error in createRootDirectory: " + ex.Message);
             }
-            try
+            /*try
             {
                 if (!FileSystemWalker.PluginsDirExists)
                     FileSystemWalker.createPluginsDirectory();
@@ -211,7 +211,7 @@ namespace OMLEngine
             catch (Exception ex)
             {
                 Utilities.DebugLine("[Utilities] Setup Error in createPluginsDirectory: " + ex.Message);
-            }
+            }*/
 
             if (!FileSystemWalker.PublicRootDirExists)
                 FileSystemWalker.createPublicRootDirectory();
