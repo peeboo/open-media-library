@@ -33,8 +33,10 @@ namespace TVDBMetadata
     {
         private const string DEFAULT_API_KEY = "FC18699D6C4514F7";
         private string API_KEY;
+        private const string API_KEY_HIDDEN_TEXT = "[Enter your API key here to override the OML key]";
 
-        public List<string> BackDrops = null;
+        private bool FanartEnabled = false;
+        private List<string> BackDrops = null;
 
         List<string> xmlmirrors;
         List<string> bannermirrors;
@@ -128,11 +130,11 @@ namespace TVDBMetadata
         {
             List<OMLMetadataOption> options = new List<OMLMetadataOption>();
 
+            // API Key option
             OMLMetadataOption apikey = null;
-
             if (API_KEY == DEFAULT_API_KEY)
             {
-                apikey = new OMLMetadataOption("API Key", "[Enter your API key here to override the OML key]", null, false);
+                apikey = new OMLMetadataOption("API Key", API_KEY_HIDDEN_TEXT, null, false);
             }
             else
             {
@@ -140,6 +142,22 @@ namespace TVDBMetadata
             }
 
             options.Add(apikey);
+            
+            // Fan Art enabled option
+            Dictionary<string,string> YesNo = new Dictionary<string,string>();
+            YesNo["Yes"] = "Yes";
+            YesNo["No"] = "No";
+            OMLMetadataOption fanart = null;
+            if (FanartEnabled)
+            {
+                 fanart = new OMLMetadataOption("Fanart Enabled", "Yes", YesNo, true);
+            }
+            else
+            {
+                fanart = new OMLMetadataOption("Fanart Enabled", "No", YesNo, true);
+            }
+            options.Add(fanart);
+
 
             return options;
         }
@@ -148,13 +166,26 @@ namespace TVDBMetadata
         {
             if (string.Compare(option, "API Key", true) == 0)
             {
-                if (string.IsNullOrEmpty(value))
+                API_KEY = DEFAULT_API_KEY;
+
+                if (!string.IsNullOrEmpty(value))
                 {
-                    API_KEY = DEFAULT_API_KEY;
+                    if (value != API_KEY_HIDDEN_TEXT)
+                    {
+                        API_KEY = value;
+                    }
                 }
-                else
+            }
+
+            if (string.Compare(option, "Fanart Enabled", true) == 0)
+            {
+                FanartEnabled = false;
+                if (!string.IsNullOrEmpty(value))
                 {
-                    API_KEY = value;
+                    if (string.Compare(value, "yes", true) == 0)
+                    {
+                        FanartEnabled = true;
+                    }
                 }
             }
             return true;
@@ -229,7 +260,14 @@ namespace TVDBMetadata
 
         public List<string> GetBackDropUrlsForTitle()
         {
-            return BackDrops;
+            if (FanartEnabled)
+            {
+                return BackDrops;
+            }
+            else
+            {
+                return null;
+            }
         }
 
 
