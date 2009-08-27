@@ -194,11 +194,24 @@ namespace OMLEngine
         /// <returns>True on success</returns>
         public static bool RawSetup()
         {
-            if (!FileSystemWalker.RootDirExists)
-                FileSystemWalker.createRootDirectory();
-
-            if (!FileSystemWalker.PluginsDirExists)
-                FileSystemWalker.createPluginsDirectory();
+            try
+            {
+                if (!FileSystemWalker.RootDirExists)
+                    FileSystemWalker.createRootDirectory();
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[Utilities] Setup Error in createRootDirectory: " + ex.Message);
+            }
+            try
+            {
+                if (!FileSystemWalker.PluginsDirExists)
+                    FileSystemWalker.createPluginsDirectory();
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[Utilities] Setup Error in createPluginsDirectory: " + ex.Message);
+            }
 
             if (!FileSystemWalker.PublicRootDirExists)
                 FileSystemWalker.createPublicRootDirectory();
