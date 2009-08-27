@@ -5,6 +5,7 @@
 In many cases it is possible to use an existing installation of Microsoft SQL Server 2008 Service Pack 1 as the backend database of OML. There are a number of steps to be performed in order to set this up summarised below. This is aimed at advanced user so it doesn't go into the detail required for a novice user.
 
 Steps
+
 1. Create the OML database.
 
 2. Create an OML Login in the database.
