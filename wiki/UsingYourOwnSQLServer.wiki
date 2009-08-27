@@ -29,6 +29,19 @@ Steps
 4) Enter 'OML' as the database name. Click 'OK' to create database.
 
 = Create an OML Login in the database =
+1) Click the '+' symbol by 'Security' then again near 'Logins'.
+
+2) Right Hand Click 'Logins' and select 'New Login'.
+
+3) Enter 'oml' as the login name.
+
+4) Select 'SQL Server authentication'.
+
+5) Enter 'oml' in the 'Password' and 'Confirm password' boxes.
+
+6) Untick 'Enforce password polocy', 'Enforce password expiration' and 'User must change password at next login'.
+
+7) Change the default database to 'oml'.
 
 = Create a user mapping in the Login 'OML' to the 'OML' with a user 'OML' =
 
