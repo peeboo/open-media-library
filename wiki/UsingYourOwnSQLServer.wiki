@@ -69,7 +69,7 @@ Steps
 2) Change settings to configure OML to use the database.
 
 Example settings.xml file
-
+{{{
 <OML>
  <Settings>
   <SQLServerName>localhost</SQLServerName> 
@@ -80,3 +80,4 @@ Example settings.xml file
   <OMLUserPassword>oml</OMLUserPassword> 
  </Settings>
 </OML>
+}}}
