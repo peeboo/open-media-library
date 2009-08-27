@@ -868,6 +868,19 @@ namespace OMLDatabaseEditor
                             }
                         }
 
+                        if ((titleEditor.EditedTitle.TitleType & TitleTypes.Episode) != 0) {
+                            if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsTVSearch) != 0) {
+                                Int32 seasonNumber = Int32.Parse(titleEditor.EditedTitle.SeasonNumber.ToString());
+                                Int32 episodeNumber = Int32.Parse(titleEditor.EditedTitle.EpisodeNumber.ToString());
+                                metadata.PluginDLL.SearchForTVDrillDown(titleEditor.EditedTitle.Id, null, seasonNumber, episodeNumber, 1);
+                                title = metadata.PluginDLL.GetBestMatch();
+                                title.MetadataSourceName = metadata.DataProviderName;
+
+                                Utilities.DebugLine("[OMLDatabaseEditor] Found tv episode " + titleNameSearch + " using default plugin " + metadata.DataProviderName);
+                                titleEditor.EditedTitle.CopyMetadata(title, false);
+                            }
+                        }
+
                         Cursor = Cursors.Default;
                         CheckGenresAgainstSupported(titleEditor.EditedTitle);
                         titleEditor.RefreshEditor();
@@ -888,31 +901,29 @@ namespace OMLDatabaseEditor
 
         private void LoadFanartFromPlugin(MetaDataPluginDescriptor metadata, Title title)
         {
-            if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsBackDrops) != 0)
-            {
-                List<string> images = new List<string>();
+            if (title.TitleType != TitleTypes.Episode) { // skip this for episode items
+                if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsBackDrops) != 0) {
+                    List<string> images = new List<string>();
 
-                foreach (string image in metadata.PluginDLL.GetBackDropUrlsForTitle())
-                {
-                    if (!ImageManager.CheckImageOriginalNameTitleThreadSafe(titleEditor.EditedTitle.Id, image))
-                    {
-                        images.Add(image);
+                    foreach (string image in metadata.PluginDLL.GetBackDropUrlsForTitle()) {
+                        if (!ImageManager.CheckImageOriginalNameTitleThreadSafe(titleEditor.EditedTitle.Id, image)) {
+                            images.Add(image);
+                        }
                     }
+
+                    if (images.Count > 0) {
+                        DownloadingBackDropsForm dbdForm =
+                            new DownloadingBackDropsForm(titleEditor.EditedTitle, images);
+
+                        dbdForm.ShowDialog();
+                    }
+                    //metadata.PluginDLL.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
+                    //List<string> images = metadata.PluginDLL.GetBackDropUrlsForTitle();
+
+
+                    //dbdForm.Hide();
+                    //dbdForm.Dispose();                
                 }
-
-                if (images.Count > 0)
-                {
-                    DownloadingBackDropsForm dbdForm =
-                        new DownloadingBackDropsForm(titleEditor.EditedTitle, images);
-
-                    dbdForm.ShowDialog();
-                }
-                //metadata.PluginDLL.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
-                //List<string> images = metadata.PluginDLL.GetBackDropUrlsForTitle();
-
-
-                //dbdForm.Hide();
-                //dbdForm.Dispose();                
             }
         }
 
