@@ -1,0 +1,43 @@
+#summary Using your own installation of SQL Server.
+
+= Introduction =
+
+In many cases it is possible to use an existing installation of Microsoft SQL Server 2008 Service Pack 1 as the backend database of OML. There are a number of steps to be performed in order to set this up summarised below. This is aimed at advanced user so it doesn't go into the detail required for a novice user.
+
+Steps
+1. Create the OML database.
+
+2. Create an OML Login in the database.
+
+3. Create a user mapping in the Login 'OML' to the 'OML' with a user 'OML'.
+
+4. Assign the 'db_owner' role to this user/database.
+
+5. Create the database schema.
+
+6. Configure OML to use this database.  
+
+
+=  Create the OML database=
+1) Under 'Microsoft SQL Server 2008' in the start menu, click on 'SQL Server Management Studio'.
+
+2) Click 'Connect' at the login prompt should sucessfully log you in to SQL.
+
+3) Right Hand Click on 'Databases' and select 'New Database'.
+
+4) Enter 'OML' as the database name. Click 'OK' to create database.
+
+= Create an OML Login in the database =
+
+= Create a user mapping in the Login 'OML' to the 'OML' with a user 'OML' =
+
+= Assign the 'db_owner' role to this user/database =
+
+= Create the database schema =
+1) In Windows Explorer, double click on 'Title Database.sql' under 'SQL Scripts' in the OML source folder stucture.
+
+2) SQL Server Management Studio should now be showing the SQL creation script. Look for a database selection drop down on a Management Studio Toolbar. Change this from 'master' to 'OML'.
+
+3) Click 'Execute' in the tool bar. The database should now be created ready for use. 
+= Configure OML to use this database = 
+
