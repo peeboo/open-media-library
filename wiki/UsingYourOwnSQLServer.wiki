@@ -34,10 +34,9 @@ Steps
 = Assign the 'db_owner' role to this user/database =
 
 = Create the database schema =
-1) In Windows Explorer, double click on 'Title Database.sql' under 'SQL Scripts' in the OML source folder stucture.
+1) In Windows Explorer, double click on 'Title Database.sql' under 'C:\Program Files \OpenMediaLibrary\SQLInstaller' in the OML source folder stucture.
 
 2) SQL Server Management Studio should now be showing the SQL creation script. Look for a database selection drop down on a Management Studio Toolbar. Change this from 'master' to 'OML'.
 
 3) Click 'Execute' in the tool bar. The database should now be created ready for use. 
 = Configure OML to use this database = 
-
