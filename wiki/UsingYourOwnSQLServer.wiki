@@ -10,13 +10,11 @@ Steps
 
 2. Create an OML Login in the database.
 
-3. Create a user mapping in the Login 'OML' to the 'OML' with a user 'OML'.
+3. Assign login 'oml' to the database 'oml'.
 
-4. Assign the 'db_owner' role to this user/database.
+4. Create the database schema.
 
-5. Create the database schema.
-
-6. Configure OML to use this database.  
+5. Configure OML to use this database.  
 
 
 =  Create the OML database=
@@ -54,6 +52,8 @@ Steps
 3) Place a tick in the 'Map' column for the database 'oml'.
 
 4) Tick the 'db_owner' role.
+
+5) Click 'OK'.
 
 = Create the database schema =
 1) In Windows Explorer, double click on 'Title Database.sql' under 'C:\Program Files \OpenMediaLibrary\SQLInstaller' in the OML source folder stucture.
