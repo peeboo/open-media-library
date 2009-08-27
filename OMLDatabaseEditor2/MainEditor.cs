@@ -356,7 +356,7 @@ namespace OMLDatabaseEditor
                             foreach (OMLMetadataOption option in provider.PluginDLL.GetOptions())
                             {
                                 string setting = OMLEngine.Settings.SettingsManager.GetSettingByName(option.Name, "PLG-" + provider.DataProviderName);
-                                if (!string.IsNullOrEmpty(setting))
+                                if (setting != null)
                                 {
                                     provider.PluginDLL.SetOptionValue(option.Name, setting);
                                 }
