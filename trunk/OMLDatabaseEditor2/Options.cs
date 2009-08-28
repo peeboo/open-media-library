@@ -89,8 +89,10 @@ namespace OMLDatabaseEditor
             foreach (MetaDataPluginDescriptor plugin in MainEditor._metadataPlugins)
             {
                 cmbDefaultMetadataPlugin.Properties.Items.Add(plugin.DataProviderName);
+                cmbDefaultMetadataPluginTV.Properties.Items.Add(plugin.DataProviderName);
             }
             cmbDefaultMetadataPlugin.SelectedItem = OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin;
+            cmbDefaultMetadataPluginTV.SelectedItem = OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV;
 
             seMetadataLookupResultsQty.Value = OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty;
 
@@ -104,6 +106,7 @@ namespace OMLDatabaseEditor
             ceAutoScanDiskOnAdd.Checked = OMLSettings.AutoScanDiskOnAdding;
             ceScanDiskRollInfoToTitle.Checked = OMLSettings.ScanDiskRollInfoToTitle;
             ceStSanaCreateTLFolder.Checked = OMLSettings.DBEStSanaCreateTLFolder;
+            ceDBEStSanaAutoLookupMeta.Checked = OMLEngine.Settings.OMLSettings.DBEStSanaAutoLookupMeta;
 
             // Mounting Tools
             foreach (string toolName in Enum.GetNames(typeof(OMLEngine.FileSystem.MountingTool.Tool)))
@@ -168,9 +171,11 @@ namespace OMLDatabaseEditor
 
                 bDirty = true;
                 OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin = (string)cmbDefaultMetadataPlugin.SelectedItem;
+                OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV = (string)cmbDefaultMetadataPluginTV.SelectedItem;
 
                 OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty = (int)seMetadataLookupResultsQty.Value;
-
+                OMLEngine.Settings.OMLSettings.DBEStSanaAutoLookupMeta = ceDBEStSanaAutoLookupMeta.Checked;
+                
                 if (bDirty)
                 {
                     OptionsDirty = bDirty;
@@ -336,6 +341,11 @@ namespace OMLDatabaseEditor
                 mnt.ScanForMountTool((OMLEngine.FileSystem.MountingTool.Tool)Enum.Parse(typeof(OMLEngine.FileSystem.MountingTool.Tool), rgMountingTool.Text), cmbMntToolScan.Text);
 
             if (teMntToolPath.Text == "") XtraMessageBox.Show("Cannot find the selected image mounting tool!");
+
+        }
+
+        private void tpMetadata_Paint(object sender, PaintEventArgs e)
+        {
 
         }
     }
