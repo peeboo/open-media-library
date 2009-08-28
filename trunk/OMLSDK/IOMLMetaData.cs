@@ -28,7 +28,8 @@ using OMLEngine;
 // Step 13: compile and make sure you copy the plugin to the OML plugins directory.
 
 namespace OMLSDK
-{    
+{
+
     public enum MetadataPluginCapabilities : int
     {
         SupportsBackDrops = 0x0001,
