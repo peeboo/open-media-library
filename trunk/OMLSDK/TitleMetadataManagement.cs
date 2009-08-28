@@ -61,6 +61,16 @@ namespace OMLSDK
         {
             title = null;
 
+            string preferredplugin = OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin;
+            
+            if (((titletype & TitleTypes.Episode) != 0) && (!string.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV)))
+            {
+                // If we are looking for an episode and there is a preferred setting for this, use it
+                preferredplugin = OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV;
+            }
+
+            if (string.IsNullOrEmpty(preferredplugin)) return false;
+
             if (FanArt == null)
             {
                 FanArt = new List<string>();
@@ -88,7 +98,7 @@ namespace OMLSDK
                     {
                         try
                         {
-                            if (map.Key == OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin) continue;
+                            if (map.Key == preferredplugin) continue;
                             metadata = _metadataPlugins.First(p => p.DataProviderName == map.Key);
 
                             MetadataSearch(metadata, titletype, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, out title);
@@ -127,7 +137,7 @@ namespace OMLSDK
                         }
                     }
                     // Use default plugin for remaining fields
-                    metadata = _metadataPlugins.First(p => p.DataProviderName == OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin);
+                    metadata = _metadataPlugins.First(p => p.DataProviderName == preferredplugin);
 
                     MetadataSearch(metadata, titletype, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, out title);
 

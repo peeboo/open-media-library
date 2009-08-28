@@ -439,6 +439,15 @@ namespace TVDBMetadata
         private void SearchForEpisode(string EpisodeName, int? SeasonNo, int? EpisodeNo, int maxResults)
         {
             UriBuilder uri = new UriBuilder("http://thetvdb.com/api/" + API_KEY + "/series/" + SeriesID.ToString() + "/all/");
+            
+            if (BackDrops == null)
+            {
+                BackDrops = new List<string>();
+            }
+            else
+            {
+                BackDrops.Clear();
+            }
 
             string actors = "";
             string genres = "";
@@ -489,11 +498,9 @@ namespace TVDBMetadata
                                                 //runtime = int.Parse(GetElementValue(reader));
                                                 break;
                                             case "fanart":
-                                                if (BackDrops == null) BackDrops = new List<string>();
                                                 BackDrops.Add("http://images.thetvdb.com/banners/" + GetElementValue(reader));
                                                 break;
                                             case "poster":
-                                                if (BackDrops == null) BackDrops = new List<string>();
                                                 BackDrops.Add("http://images.thetvdb.com/banners/" + GetElementValue(reader));
                                                 break;
                                             case "contentrating":
