@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.ServiceModel;
@@ -203,7 +202,7 @@ namespace OMLEngineService
 
         internal MediaSource Source { get { return TranscodingProcess.Source; } }
         internal Transcode TranscodingProcess { get; private set; }
-        internal Process Process { get { return TranscodingProcess.Process; } }
+        internal System.Diagnostics.Process Process { get { return TranscodingProcess.Process; } }
         internal TranscodingStatus Status { get; private set; }
         internal System.Timers.Timer Timer { get; private set; }
 

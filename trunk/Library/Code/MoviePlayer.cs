@@ -44,13 +44,15 @@ namespace Library
             //  strongly believes that the app should not be responsible for auto-correcting movie locations.
             //  For what it's worth I agree so I'm commenting it out for now.
             // source.Disk.FindPath();
+            // NOTE FROM TRANSLUCENT:  We dot NOT code for personal quirks at the expense of everyone else when it kills performance.
+            // Keep this turned OFF!  If you disagree feel free to chat with me about it.
 
             string mediaPath = null;
             VideoFormat mediaFormat = VideoFormat.UNKNOWN;
 
             // for now play just online titles. add offline capabilities later
             OMLApplication.DebugLine("[MoviePlayerFactory] Determing MoviePlayer to use for: {0}", source);
-            if (File.Exists(source.MediaPath) || Directory.Exists(source.MediaPath))
+            if ((File.Exists(source.MediaPath) || Directory.Exists(source.MediaPath)) || source.Format == VideoFormat.URL)
             {
                 // This is for transcoding debugging
                 if (OMLSettings.DebugTranscoding)
@@ -70,6 +72,11 @@ namespace Library
                 {
                     mediaFormat = source.Format;
                     mediaPath = source.MediaPath;
+                }
+
+                if (mediaFormat == VideoFormat.URL) {
+                    OMLApplication.DebugLine("[MoviePlayerFactory] UrlMoviePlayer created: {0}", source);
+                    return new MoviePlayerUrl(source);
                 }
 
                 if (!OMLApplication.Current.IsExtender &&
@@ -278,6 +285,8 @@ namespace Library
                 case VideoFormat.DVRMS:
                     return false;
                 case VideoFormat.MPEG:
+                    return false;
+                case VideoFormat.VOB:
                     return false;
                 case VideoFormat.MPG:
                     return false;

@@ -31,7 +31,7 @@ namespace Library.Code.V3
         {
             this.Invoked += delegate(object sender, EventArgs args)
             {
-                this.PlayMedia();
+                this.PlayMovie();
             };
 
             //this.Description = title.Caption;
@@ -85,12 +85,15 @@ namespace Library.Code.V3
             }
             return strFilename;
         }
-        public void PlayMedia()
-        {
-            OMLApplication.DebugLine("Playing trailer: {0}", this.TrailerUrl);
-            Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.PlayMedia(Microsoft.MediaCenter.MediaType.Video, createTempPlaylistWrapper(this.TrailerUrl, this.Description), false);
-            Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
-            Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += new PropertyChangedEventHandler(Transport_PropertyChanged);
+
+        /// <summary>
+        /// Plays the movie.
+        /// </summary>
+        public void PlayMovie() {
+            Disk disk = new Disk("trailer", TrailerUrl, VideoFormat.URL);
+            MediaSource source = new MediaSource(disk);
+            IPlayMovie moviePlayer = MoviePlayerFactory.CreateMoviePlayer(source);
+            moviePlayer.PlayMovie();
         }
 
         static public void Transport_PropertyChanged(IPropertyObject sender, string property)
