@@ -9,7 +9,8 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
      xmlns:sql="http://schemas.microsoft.com/wix/SqlExtension"
-     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension">
   <Product Id="$(var.Property_ProductCode)"
 	         UpgradeCode="$(var.Property_UpgradeCode)"
 	         Name="!(loc.Property_ProductName)"
@@ -45,11 +46,20 @@
           <File Name="SQLEXPR_x86_ENU.exe"
                             Source="..\..\PostInstallerWizard\SQLInstallers\SQLEXPR_x86_ENU.exe" Checksum="no" />
         </Component>
+        <Component Id="SQLFIREWALLEXCEPTION" Guid="8245A624-243C-4CEB-A663-C98D96AF7E86" DiskId="1">
+          <fire:FirewallException Name="TCPNORMALPORT" Id="TCPNORMALPORT" Port="1433" Protocol="tcp" IgnoreFailure="yes" Scope="localSubnet"/>
+          <fire:FirewallException Name="UDPNORMALPORT" Id="UDPNORMALPORT" Port="1433" Protocol="udp" IgnoreFailure="yes" Scope="localSubnet"/>
+          <fire:FirewallException Name="TCPALTERNATEPORT" Id="TCPALTERNATEPORT" Port="1434" Protocol="tcp" IgnoreFailure="yes" Scope="localSubnet"/>
+          <fire:FirewallException Name="UDPALTERNATEPORT" Id="UDPALTERNATEPORT" Port="1434" Protocol="udp" IgnoreFailure="yes" Scope="localSubnet"/>
+          <CreateFolder/>
+        </Component>
       </Directory>
     </DirectoryRef>
 
+
     <ComponentGroup Id="ServerGroup">
       <ComponentRef Id ="SQLEXPR_x86_ENU.exe"/>
+      <ComponentRef Id="SQLFIREWALLEXCEPTION"/>
     </ComponentGroup>
 
     <Feature Id="APPLICATIONROOTFEATURE" Title="Open Media Library" Level="1" AllowAdvertise="no" Absent="disallow">
