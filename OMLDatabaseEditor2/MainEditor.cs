@@ -901,29 +901,31 @@ namespace OMLDatabaseEditor
 
         private void LoadFanartFromPlugin(MetaDataPluginDescriptor metadata, Title title)
         {
-            if (title.TitleType != TitleTypes.Episode) { // skip this for episode items
-                if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsBackDrops) != 0) {
-                    List<string> images = new List<string>();
+            if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsBackDrops) != 0)
+            {
+                List<string> images = new List<string>();
 
-                    foreach (string image in metadata.PluginDLL.GetBackDropUrlsForTitle()) {
-                        if (!ImageManager.CheckImageOriginalNameTitleThreadSafe(titleEditor.EditedTitle.Id, image)) {
-                            images.Add(image);
-                        }
+                foreach (string image in metadata.PluginDLL.GetBackDropUrlsForTitle())
+                {
+                    if (!ImageManager.CheckImageOriginalNameTitleThreadSafe(titleEditor.EditedTitle.Id, image))
+                    {
+                        images.Add(image);
                     }
-
-                    if (images.Count > 0) {
-                        DownloadingBackDropsForm dbdForm =
-                            new DownloadingBackDropsForm(titleEditor.EditedTitle, images);
-
-                        dbdForm.ShowDialog();
-                    }
-                    //metadata.PluginDLL.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
-                    //List<string> images = metadata.PluginDLL.GetBackDropUrlsForTitle();
-
-
-                    //dbdForm.Hide();
-                    //dbdForm.Dispose();                
                 }
+
+                if (images.Count > 0)
+                {
+                    DownloadingBackDropsForm dbdForm =
+                        new DownloadingBackDropsForm(titleEditor.EditedTitle, images);
+
+                    dbdForm.ShowDialog();
+                }
+                //metadata.PluginDLL.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
+                //List<string> images = metadata.PluginDLL.GetBackDropUrlsForTitle();
+
+
+                //dbdForm.Hide();
+                //dbdForm.Dispose();                
             }
         }
 
