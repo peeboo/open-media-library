@@ -537,6 +537,12 @@ namespace OMLEngine.Settings
             set { SettingsManager.SaveSettingByName("DefaultMetadataPlugin", value, InstanceName); }
         }
 
+        public static string DefaultMetadataPluginTV
+        {
+            get { return SettingsManager.GetSettingByName("DefaultMetadataPluginTV", InstanceName) ?? ""; }
+            set { SettingsManager.SaveSettingByName("DefaultMetadataPluginTV", value, InstanceName); }
+        }
+
         public static int MetadataLookupResultsQty
         {
             get { return SettingsManager.GetSettingByNameInt("MetadataLookupResultsQty", InstanceName) ?? 10; }
@@ -588,6 +594,12 @@ namespace OMLEngine.Settings
         {
             get { return SettingsManager.GetSettingByNameBool("DBEStSanaCreateTLFolder", InstanceName) ?? false; }
             set { SettingsManager.SaveSettingByName("DBEStSanaCreateTLFolder", value.ToString(), InstanceName); }
+        }
+
+        public static bool DBEStSanaAutoLookupMeta
+        {
+            get { return SettingsManager.GetSettingByNameBool("DBEStSanaAutoLookupMeta", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("DBEStSanaAutoLookupMeta", value.ToString(), InstanceName); }
         }
         #endregion
 
