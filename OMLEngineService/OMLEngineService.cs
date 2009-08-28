@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.ServiceModel;
 using System.ServiceProcess;
 using System.Timers;
@@ -28,10 +27,7 @@ namespace OMLEngineService
         #region overridden control methods (start, stop, pause, continue, etc)
         protected override void OnStart(string[] args)
         {
-#if DEBUG
-            //System.Diagnostics.Debugger.Launch();
-#endif
-            WriteToLog(EventLogEntryType.Information, "OMLEngineService Start");
+            WriteToLog(System.Diagnostics.EventLogEntryType.Information, "OMLEngineService Start");
 
             _transcodingServiceHost = WCFUtilites.StartService(EventSource, typeof(TranscodingService));
             //_titleCollectionServiceHost = WCFUtilites.StartService(EventSource, typeof(TitleCollectionAPI));
@@ -41,12 +37,12 @@ namespace OMLEngineService
         {
             WCFUtilites.StopService(EventSource, ref _transcodingServiceHost);
             WCFUtilites.StopService(EventSource, ref _titleCollectionServiceHost);
-            WriteToLog(EventLogEntryType.Information, "OMLEngineService Stop");
+            WriteToLog(System.Diagnostics.EventLogEntryType.Information, "OMLEngineService Stop");
         }
         #endregion
 
         const string EventSource = "OMLEngineService";
-        internal static void WriteToLog(EventLogEntryType type, string msg, params object[] args)
+        internal static void WriteToLog(System.Diagnostics.EventLogEntryType type, string msg, params object[] args)
         {
             WCFUtilites.WriteToLog(EventSource, type, msg, args);
         }
