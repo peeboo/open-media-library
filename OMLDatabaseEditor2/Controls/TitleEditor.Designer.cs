@@ -106,6 +106,7 @@
             this.setSingleBackdropToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearSingleBackdropToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miAddNewBackdrop = new System.Windows.Forms.ToolStripMenuItem();
+            this.miRemoveBackdrop = new System.Windows.Forms.ToolStripMenuItem();
             this.contextImage = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1032,12 +1033,14 @@
             this.contextBackdrop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setSingleBackdropToolStripMenuItem,
             this.clearSingleBackdropToolStripMenuItem,
-            this.miAddNewBackdrop});
+            this.miAddNewBackdrop,
+            this.miRemoveBackdrop});
             this.contextBackdrop.Name = "contextBackdrop";
-            this.contextBackdrop.Size = new System.Drawing.Size(203, 70);
+            this.contextBackdrop.Size = new System.Drawing.Size(203, 114);
             // 
             // setSingleBackdropToolStripMenuItem
             // 
+            this.setSingleBackdropToolStripMenuItem.Enabled = false;
             this.setSingleBackdropToolStripMenuItem.Name = "setSingleBackdropToolStripMenuItem";
             this.setSingleBackdropToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.setSingleBackdropToolStripMenuItem.Text = "Set as single backdrop";
@@ -1045,6 +1048,7 @@
             // 
             // clearSingleBackdropToolStripMenuItem
             // 
+            this.clearSingleBackdropToolStripMenuItem.Enabled = false;
             this.clearSingleBackdropToolStripMenuItem.Name = "clearSingleBackdropToolStripMenuItem";
             this.clearSingleBackdropToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.clearSingleBackdropToolStripMenuItem.Text = "Clear as single backdrop";
@@ -1056,6 +1060,13 @@
             this.miAddNewBackdrop.Size = new System.Drawing.Size(202, 22);
             this.miAddNewBackdrop.Text = "Add new backdrop";
             this.miAddNewBackdrop.Click += new System.EventHandler(this.miAddNewBackdrop_Click);
+            // 
+            // miRemoveBackdrop
+            // 
+            this.miRemoveBackdrop.Name = "miRemoveBackdrop";
+            this.miRemoveBackdrop.Size = new System.Drawing.Size(202, 22);
+            this.miRemoveBackdrop.Text = "Remove backdrop";
+            this.miRemoveBackdrop.Click += new System.EventHandler(this.miRemoveBackdrop_Click);
             // 
             // contextImage
             // 
@@ -1273,5 +1284,6 @@
         private DevExpress.XtraEditors.SpinEdit seEpisode;
         private DevExpress.XtraEditors.SpinEdit seSeason;
         private System.Windows.Forms.PictureBox picUserRating;
+        private System.Windows.Forms.ToolStripMenuItem miRemoveBackdrop;
     }
 }
