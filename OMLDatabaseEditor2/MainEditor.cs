@@ -626,8 +626,12 @@ namespace OMLDatabaseEditor
                         LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
                         MetaDataPluginSelect selectPlugin = new MetaDataPluginSelect(_metadataPlugins);
                         selectPlugin.ShowDialog();
-                        MetaDataPluginDescriptor plugin = selectPlugin.SelectedPlugin();
-                        StartMetadataImport(editedTitle, plugin, false);
+                        MetaDataPluginDescriptor plugin = null;
+
+                        if (selectPlugin.SelectedPlugin(out plugin))
+                        {
+                            StartMetadataImport(editedTitle, plugin, false);
+                        }
                     }
                     else
                     {
