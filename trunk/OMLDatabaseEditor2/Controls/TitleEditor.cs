@@ -113,8 +113,16 @@ namespace OMLDatabaseEditor.Controls
             DrawUserRating((int)_dvdTitle.UserStarRating);
 
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TitleEditor));
-            this.pbFrontCover.Image = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.Image")));
-            this.pbBackCover.Image = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.Image")));
+
+            if (!File.Exists(_dvdTitle.FrontCoverPath))
+            {
+                this.pbFrontCover.Image = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.Image")));
+            }
+
+            if (!File.Exists(_dvdTitle.BackCoverPath))
+            {
+                this.pbBackCover.Image = ((System.Drawing.Image)(resources.GetObject("pbFrontCover.Image")));
+            }
             
             LoadBackdrops();
             _isLoading = false;
