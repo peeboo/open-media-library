@@ -776,8 +776,6 @@ namespace OMLDatabaseEditor
 
                             if (searchresult != null)
                             {
-                                LoadFanartFromPlugin(plugin, searchresult);
-
                                 if (coverArtOnly)
                                 {
                                     title.FrontCoverPath = searchresult.FrontCoverPath;
@@ -787,6 +785,9 @@ namespace OMLDatabaseEditor
                                 {
                                     title.CopyMetadata(searchresult, searchResultForm.OverwriteMetadata);
                                 }
+
+                                LoadFanartFromPlugin(plugin, title);
+
                             }
                             CheckGenresAgainstSupported(title);
                             titleEditor.RefreshEditor(); 
@@ -3733,8 +3734,11 @@ namespace OMLDatabaseEditor
                                                     disks.ToArray(),
                                                     false);
 
-                                                LookupPreferredMetaData(newTitleID);
-                                                CheckPathForImages(newTitleID, disks[0].Path);
+                                                // Reload title from db, lookup metadata and find images
+                                                Title newTitle = TitleCollectionManager.GetTitle(newTitleID);
+                                                LookupPreferredMetaData(newTitle);
+                                                CheckPathForImages(newTitle, disks[0].Path);
+                                                TitleCollectionManager.SaveTitleUpdates();
                                             }
                                         }
                                         else
@@ -3772,9 +3776,13 @@ namespace OMLDatabaseEditor
                                                         episodeno,
                                                         disks.ToArray(),
                                                         false);
-                                                            
-                                                    LookupPreferredMetaData(newTitleID);
-                                                    CheckPathForImages(newTitleID, disks[0].Path);
+
+                                                    // Reload title from db, lookup metadata and find images
+                                                    Title newTitle = TitleCollectionManager.GetTitle(newTitleID);
+                                                    LookupPreferredMetaData(newTitle);
+                                                    CheckPathForImages(newTitle, disks[0].Path);
+                                                    TitleCollectionManager.SaveTitleUpdates();
+
                                                 }
                                             }
                                         }
@@ -3803,8 +3811,12 @@ namespace OMLDatabaseEditor
                                 TitleTypes.Unknown,
                                 new Disk[1] { disk },
                                 false);
-
-                            CheckPathForImages(newTitleID, file);
+                            
+                            // Reload title from db, lookup metadata and find images
+                            Title newTitle = TitleCollectionManager.GetTitle(newTitleID);
+                            LookupPreferredMetaData(newTitle);
+                            CheckPathForImages(newTitle, file);
+                            TitleCollectionManager.SaveTitleUpdates();
                         }
                     }
                 }
@@ -3826,9 +3838,9 @@ namespace OMLDatabaseEditor
             StSanaEvents.UpdateStatus(message);
         }
 
-        private void CheckPathForImages(int TitleID, string path)
+        private void CheckPathForImages(Title title, string path)
         {
-            if ((TitleID == null) || (string.IsNullOrEmpty(path))) return;
+            if ((title == null) || (string.IsNullOrEmpty(path))) return;
 
             string pathWithNoFile = Path.GetDirectoryName(path);
             string pathWithNoExtension = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path);
@@ -3853,29 +3865,44 @@ namespace OMLDatabaseEditor
             }
             else if (File.Exists(Path.Combine(pathWithNoFile, "folder.jpg")))
             {
-                image = Path.Combine(pathWithNoFile, "\\folder.jpg");
+                image = Path.Combine(pathWithNoFile, "folder.jpg");
             }
             else if (File.Exists(Path.Combine(pathWithNoFile, "folder.png")))
             {
-                image = Path.Combine(pathWithNoFile, "\\folder.png");
+                image = Path.Combine(pathWithNoFile, "folder.png");
             }
 
             if (!string.IsNullOrEmpty(image))
             {
-                Title newTitle = TitleCollectionManager.GetTitle(TitleID);
-                newTitle.FrontCoverPath = image;
-                TitleCollectionManager.SaveTitleUpdates();
+                title.FrontCoverPath = image;
+            }
+
+            // Check for fanart
+            string fanartfolder = Path.Combine(pathWithNoFile, "Fanart");
+            if (Directory.Exists(fanartfolder))
+            {
+                foreach (string imagefile in Directory.GetFiles(fanartfolder))
+                {
+                    string extension = Path.GetExtension(imagefile);
+                    if (!string.IsNullOrEmpty(extension))
+                    {
+                        if ((string.Compare(extension, ".jpg", true) == 0) ||
+                            (string.Compare(extension, ".png", true) == 0) ||
+                            (string.Compare(extension, ".bmp", true) == 0))
+                        {
+                            title.AddFanArtImage(imagefile);
+                        }
+                    }
+                }
             }
         }
 
-        private void LookupPreferredMetaData(int TitleID)
+        private void LookupPreferredMetaData(Title title)
         {
             if (OMLEngine.Settings.OMLSettings.DBEStSanaAutoLookupMeta)
             {
-                if ((TitleID == null) || (string.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))) return;
-                Title newTitle = TitleCollectionManager.GetTitle(TitleID);
-                StartMetadataImport(newTitle, null, false);
-                TitleCollectionManager.SaveTitleUpdates();
+                if ((title == null) || (string.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))) return;
+                StartMetadataImport(title, null, false);
             }
         }
 
