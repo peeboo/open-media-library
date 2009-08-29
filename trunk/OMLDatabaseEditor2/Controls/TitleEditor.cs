@@ -679,6 +679,7 @@ namespace OMLDatabaseEditor.Controls
                 {
                     clearSingleBackdropToolStripMenuItem.Visible = true;
                     setSingleBackdropToolStripMenuItem.Visible = true;
+                    miRemoveBackdrop.Visible = true;
                     contextBackdrop.Show(sender as PictureBox, e.Location);
                 }
                 else
@@ -686,6 +687,7 @@ namespace OMLDatabaseEditor.Controls
                     {
                         clearSingleBackdropToolStripMenuItem.Visible = false;
                         setSingleBackdropToolStripMenuItem.Visible = false;
+                        miRemoveBackdrop.Visible = false;
                         contextBackdrop.Show(sender as DevExpress.XtraTab.XtraTabPage, e.Location);
                     }
                     else
@@ -693,6 +695,7 @@ namespace OMLDatabaseEditor.Controls
                         {
                             clearSingleBackdropToolStripMenuItem.Visible = false;
                             setSingleBackdropToolStripMenuItem.Visible = false;
+                            miRemoveBackdrop.Visible = false;
                             contextBackdrop.Show(sender as TableLayoutPanel, e.Location);
                         }
             }
@@ -726,6 +729,14 @@ namespace OMLDatabaseEditor.Controls
                 titleSource.ResetCurrentItem();
                 LoadBackdrops();
             }
+        }
+
+        private void miRemoveBackdrop_Click(object sender, EventArgs e)
+        {
+            PictureBox pb = (sender as ToolStripItem).Owner.Tag as PictureBox;
+            _dvdTitle.RemoveFanArtImage(pb.ImageLocation); 
+            titleSource.ResetCurrentItem();
+            LoadBackdrops();
         }
         #endregion
 
