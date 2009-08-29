@@ -108,7 +108,7 @@ namespace OMLEngine
             DaoTitle.UpdatedProducers = null;
             DaoTitle.UpdatedTags = null;
             DaoTitle.UpdatedWriters = null;
-
+            _peopleProcesed = false;
         }
 
 
@@ -2130,6 +2130,26 @@ namespace OMLEngine
 
                         }
 
+
+                        // Don't know how much mileage there is in this
+                        // Check for fanart
+                        string fanartfolder = Path.Combine(t.FileLocation, "Fanart");
+                        if (Directory.Exists(fanartfolder))
+                        {
+                            foreach (string imagefile in Directory.GetFiles(fanartfolder))
+                            {
+                                string extension = Path.GetExtension(imagefile);
+                                if (!string.IsNullOrEmpty(extension))
+                                {
+                                    if ((string.Compare(extension, ".jpg", true) == 0) ||
+                                        (string.Compare(extension, ".png", true) == 0) ||
+                                        (string.Compare(extension, ".bmp", true) == 0))
+                                    {
+                                        t.AddFanArtImage(imagefile);
+                                    }
+                                }
+                            }
+                        }
                         /*if (navigator.MoveToChild("CustomFields", XmlNameSpace))
                         {
                             if (navigator.MoveToFirstChild())
