@@ -23,6 +23,26 @@ namespace OMLEngine
     [XmlRootAttribute("OMLTitle", Namespace = "http://www.openmedialibrary.org/", IsNullable = false)]
     public class Title : IComparable, ISerializable
     {
+        // Database field sizes
+        const int NameLength = 255;
+        const int SortNameLength = 255;
+        const int MetadataSourceLength = 200;
+        const int ParentalRatingLength = 80;
+        const int StudioLength = 255;
+        const int CountryOfOriginLength = 255;
+        const int WebsiteUrlLength = 255;
+        const int AudioTracksLength = 255;
+        const int AspectRatioLength = 10;
+        const int VideoStandardLength = 10;
+        const int UPCLength = 100;
+        const int TrailersLength = 255;
+        const int ParentalRatingReasonLength = 255;
+        const int SubtitlesLength = 255;
+        const int VideoResolutionLength = 20;
+        const int OriginalNameLength = 255;
+        const int ImporterSourceLength = 255;
+        const int MetaDataSourceItemIdLength = 255;
+
         #region locals
         private static string XmlNameSpace = "http://www.openmedialibrary.org/";
         //private bool _needsTranscode = false;        
@@ -65,14 +85,6 @@ namespace OMLEngine
 
         #endregion
 
-        /// <summary>
-        /// Unique id from the Source of our title info (MyMovies, DVD Profiler, etc).
-        /// </summary>
-        public string MetadataSourceID
-        {
-            get { return _title.MetaDataSourceItemId ?? string.Empty; }
-            set { _title.MetaDataSourceItemId = value; }
-        }
 
         internal Dao.Title DaoTitle
         {
@@ -99,14 +111,22 @@ namespace OMLEngine
 
         }
 
+
         public string VideoResolution
         {
             get { return _title.VideoResolution; }
             set
             {
-                if (value.Length > 20)
-                    throw new FormatException("VideoResolution must be 20 characters or less.");
+                if (value.Length > VideoResolutionLength)
+                    throw new FormatException("VideoResolution must be " + VideoResolutionLength.ToString() + " characters or less.");
                 _title.VideoResolution = value;
+            }
+        }
+        public string VideoResolutionTrimmed
+        {
+            set
+            {
+                VideoResolution = value.Substring(0, Math.Min(value.Length, VideoResolutionLength));
             }
         }
 
@@ -132,10 +152,7 @@ namespace OMLEngine
         public string VideoDetails
         {
             get { return _title.VideoDetails; }
-            set
-            {
-                _title.VideoDetails = value;
-            }
+            set { _title.VideoDetails = value; }
         }
 
         public short? SeasonNumber {
@@ -165,12 +182,18 @@ namespace OMLEngine
             get { return _title.ParentalRatingReason; }
             set
             {
-                if (value.Length > 255)
-                    throw new FormatException("ParentalRatingReason must be 255 characters or less.");
+                if (value.Length > ParentalRatingReasonLength)
+                    throw new FormatException("ParentalRatingReason must be " + ParentalRatingReasonLength.ToString() + " characters or less.");
                 _title.ParentalRatingReason = value;
             }
         }
-
+        public string ParentalRatingReasonTrimmed
+        {
+            set
+            {
+                ParentalRatingReason = value.Substring(0, Math.Min(value.Length, ParentalRatingReasonLength));
+            }
+        }
 
         public string SortName
         {
@@ -185,12 +208,18 @@ namespace OMLEngine
                     _title.SortName = _title.Name;
                     return;
                 }
-                if (value.Length > 255)
-                    throw new FormatException("SortName must be 255 characters or less.");
+                if (value.Length > SortNameLength)
+                    throw new FormatException("SortName must be " + SortNameLength.ToString() + " characters or less.");
                 _title.SortName = value;
             }
         }
-
+        public string SortNameTrimmed
+        {
+            set
+            {
+                SortName = value.Substring(0, Math.Min(value.Length, SortNameLength));
+            }
+        }
         /// <summary>
         /// Gets or sets the name of the original name (especially for foreign movies)
         /// </summary>
@@ -200,12 +229,18 @@ namespace OMLEngine
             get { return _title.OriginalName; }
             set
             {
-                if (value.Length > 255)
-                    throw new FormatException("OriginalName must be 255 characters or less.");
+                if (value.Length > OriginalNameLength)
+                    throw new FormatException("OriginalName must be " + OriginalNameLength.ToString() + " characters or less.");
                 _title.OriginalName = value;
             }
         }
-
+        public string OriginalNameTrimmed
+        {
+            set
+            {
+                OriginalName = value.Substring(0, Math.Min(value.Length, OriginalNameLength));
+            }
+        }
         /// <summary>
         /// A user can add tags to movies
         /// </summary>
@@ -236,9 +271,16 @@ namespace OMLEngine
             get { return _title.VideoStandard; }
             set
             {
-                if (value.Length > 10)
-                    throw new FormatException("VideoStandard must be 10 characters or less.");
+                if (value.Length > VideoStandardLength)
+                    throw new FormatException("VideoStandard must be " + VideoStandardLength.ToString() + " characters or less.");
                 _title.VideoStandard = value;
+            }
+        }
+        public string VideoStandardTrimmed
+        {
+            set
+            {
+                VideoStandard = value.Substring(0, Math.Min(value.Length, VideoStandardLength));
             }
         }
 
@@ -251,12 +293,19 @@ namespace OMLEngine
             get { return _title.AspectRatio; }
             set
             {
-                if (value.Length > 10)
-                    throw new FormatException("AspectRatio must be 10 characters or less.");
+                if (value.Length > AspectRatioLength)
+                    throw new FormatException("AspectRatio must be " + AspectRatioLength + " characters or less.");
                 _title.AspectRatio = value;
             }
         }
-
+        public string AspectRatioTrimmed
+        {
+            set
+            {
+                AspectRatio = value.Substring(0, Math.Min(value.Length, AspectRatioLength));
+            }
+        }
+        
         /// <summary>
         /// Gets or sets the UPC.
         /// </summary>
@@ -266,12 +315,18 @@ namespace OMLEngine
             get { return _title.UPC; }
             set
             {
-                if (value.Length > 100)
-                    throw new FormatException("UPC must be 100 characters or less.");
+                if (value.Length > UPCLength)
+                    throw new FormatException("UPC must be " + UPCLength.ToString() + " characters or less.");
                 _title.UPC = value;
             }
         }
-
+        public string UPCTrimmed
+        {
+            set
+            {
+                UPC = value.Substring(0, Math.Min(value.Length, UPCLength));
+            }
+        }
         /// <summary>
         /// Gets or sets the user star rating (0 to 100) - null will make the item unrated
         /// </summary>
@@ -355,12 +410,18 @@ namespace OMLEngine
             get { return _title.Name; }
             set
             {
-                if (value.Length > 255)
-                    throw new FormatException("Name must be 255 characters or less.");
+                if (value.Length > NameLength)
+                    throw new FormatException("Name must be " + NameLength.ToString() + " characters or less.");
                 _title.Name = value;
             }
         }
-
+        public string NameTrimmed
+        {
+            set
+            {
+                Name = value.Substring(0, Math.Min(value.Length, NameLength));
+            }
+        }
         /// <summary>
         /// Internal id of the Title
         /// </summary>
@@ -421,9 +482,37 @@ namespace OMLEngine
             get { return _title.MetaDataSource; }
             set
             {
-                if (value.Length > 200)
-                    throw new FormatException("MetaDataSourceName must be 200 characters or less.");
+                if (value.Length > MetadataSourceLength)
+                    throw new FormatException("MetaDataSourceName must be " + MetadataSourceLength.ToString() + " characters or less.");
                 _title.MetaDataSource = value;
+            }
+        }
+        public string MetadataSourceNameTrimmed
+        {
+            set
+            {
+                MetadataSourceName = value.Substring(0, Math.Min(value.Length, MetadataSourceLength));
+            }
+        }
+
+        /// <summary>
+        /// Unique id from the Source of our title info (MyMovies, DVD Profiler, etc).
+        /// </summary>
+        public string MetadataSourceID
+        {
+            get { return _title.MetaDataSourceItemId ?? string.Empty; }
+            set
+            {
+                if (value.Length > MetaDataSourceItemIdLength)
+                    throw new FormatException("MetadataSourceID must be " + MetaDataSourceItemIdLength.ToString() + " characters or less.");
+                _title.MetaDataSourceItemId = value;
+            }
+        }
+        public string MetadataSourceIDTrimmed
+        {
+            set
+            {
+                MetadataSourceID = value.Substring(0, Math.Min(value.Length, MetaDataSourceItemIdLength));
             }
         }
 
@@ -441,9 +530,16 @@ namespace OMLEngine
             get { return _title.ImporterSource; }
             set
             {
-                if (value.Length > 255)
-                    throw new FormatException("ImporterSource must be 255 characters or less.");
+                if (value.Length > ImporterSourceLength)
+                    throw new FormatException("ImporterSource must be " + ImporterSourceLength.ToString() + " characters or less.");
                 _title.ImporterSource = value;
+            }
+        }
+        public string ImporterSourceTrimmed
+        {
+            set
+            {
+                ImporterSource = value.Substring(0, Math.Min(value.Length, ImporterSourceLength));
             }
         }
 
@@ -735,12 +831,18 @@ namespace OMLEngine
             get { return _title.ParentalRating ?? string.Empty; }
             set
             {
-                if (value.Length > 80)
-                    throw new FormatException("ParentalRating must be 80 characters or less.");
+                if (value.Length > ParentalRatingLength)
+                    throw new FormatException("ParentalRating must be " + ParentalRatingLength.ToString() + " characters or less.");
                 _title.ParentalRating = value;
             }
         }
-
+        public string ParentalRatingTrimmed
+        {
+            set
+            {
+                ParentalRating = value.Substring(0, Math.Min(value.Length, ParentalRatingLength));
+            }
+        }
         /// <summary>
         /// Long description of title
         /// </summary>
@@ -758,11 +860,19 @@ namespace OMLEngine
             get { return _title.Studio ?? string.Empty; }
             set
             {
-                if (value.Length > 255)
-                    throw new FormatException("Studio must be 255 characters or less.");
+                if (value.Length > StudioLength)
+                    throw new FormatException("Studio must be " + StudioLength.ToString() + " characters or less.");
                 _title.Studio = value;
             }
         }
+        public string StudioTrimmed
+        {
+            set
+            {
+                Studio = value.Substring(0, Math.Min(value.Length, StudioLength));
+            }
+        }
+
         /// <summary>
         /// Country where the title was created/first released
         /// </summary>
@@ -771,11 +881,19 @@ namespace OMLEngine
             get { return _title.CountryOfOrigin ?? string.Empty; }
             set
             {
-                if (value.Length > 255)
-                    throw new FormatException("CountryOfOrigin must be 255 characters or less.");
+                if (value.Length > CountryOfOriginLength)
+                    throw new FormatException("CountryOfOrigin must be " + CountryOfOriginLength.ToString() + " characters or less.");
                 _title.CountryOfOrigin = value;
             }
         }
+        public string CountryOfOriginTrimmed
+        {
+            set
+            {
+                CountryOfOrigin = value.Substring(0, Math.Min(value.Length, CountryOfOriginLength));
+            }
+        }
+
         /// <summary>
         /// website for title (if it has one)
         /// </summary>
@@ -784,12 +902,18 @@ namespace OMLEngine
             get { return _title.WebsiteUrl ?? string.Empty; }
             set
             {
-                if (value.Length > 255)
-                    throw new FormatException("OfficialWebsiteURL must be 255 characters or less.");
+                if (value.Length > WebsiteUrlLength)
+                    throw new FormatException("OfficialWebsiteURL must be " + WebsiteUrlLength.ToString() + " characters or less.");
                 _title.WebsiteUrl = value;
             }
         }
-
+        public string OfficialWebsiteURLTrimmed
+        {
+            set
+            {
+                OfficialWebsiteURL = value.Substring(0, Math.Min(value.Length, WebsiteUrlLength));
+            }
+        }
         /// <summary>
         /// Original date of release (or re-release)
         /// </summary>
@@ -1451,7 +1575,7 @@ namespace OMLEngine
                     {
                         if (navigator.MoveToChild("Name", XmlNameSpace))
                         {
-                            t.Name = navigator.Value;
+                            t.NameTrimmed = navigator.Value;
                             navigator.MoveToParent();
                         }
                         else
@@ -1462,18 +1586,18 @@ namespace OMLEngine
                         if (navigator.MoveToChild("OriginalName", XmlNameSpace))
                         {
                             if (String.IsNullOrEmpty(navigator.Value))
-                                t.OriginalName = t.Name;
+                                t.OriginalNameTrimmed = t.Name;
                             else
-                                t.OriginalName = navigator.Value;
+                                t.OriginalNameTrimmed = navigator.Value;
                             navigator.MoveToParent();
                         }
                         
                         if (navigator.MoveToChild("SortName", XmlNameSpace))
                         {
                             if (String.IsNullOrEmpty(navigator.Value))
-                                t.SortName = t.Name;
+                                t.SortNameTrimmed = t.Name;
                             else
-                                t.SortName = navigator.Value;
+                                t.SortNameTrimmed = navigator.Value;
                             navigator.MoveToParent();
                         }
                         
@@ -1563,7 +1687,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.Studio = navigator.Value;
+                                t.StudioTrimmed = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -1573,7 +1697,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.CountryOfOrigin = navigator.Value;
+                                t.CountryOfOriginTrimmed = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -1584,7 +1708,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.OfficialWebsiteURL = navigator.Value;
+                                t.OfficialWebsiteURLTrimmed = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -1607,7 +1731,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.ParentalRating = navigator.Value;
+                                t.ParentalRatingTrimmed = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -1617,7 +1741,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.ParentalRatingReason = navigator.Value;
+                                t.ParentalRatingReasonTrimmed = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -1866,7 +1990,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.AspectRatio = navigator.Value;
+                                t.AspectRatioTrimmed = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -1876,7 +2000,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.VideoStandard = navigator.Value.Substring(0,Math.Min(navigator.Value.Length, 10));
+                                t.VideoStandardTrimmed = navigator.Value.Substring(0, Math.Min(navigator.Value.Length, 10));
                             }
                             navigator.MoveToParent();
                         }
@@ -1886,7 +2010,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.VideoResolution = navigator.Value;
+                                t.VideoResolutionTrimmed = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -2620,21 +2744,21 @@ namespace OMLEngine
         {
             _title = new OMLEngine.Dao.Title();
             //Utilities.DebugLine("[Title] Loading Title from Serialization");
-            Name = GetSerializedString(info, "name");
+            NameTrimmed = GetSerializedString(info, "name");
             //Id = GetSerializedInt( info,"itemid");
-            MetadataSourceID = GetSerializedString(info, "sourceid");
-            MetadataSourceName = GetSerializedString(info, "sourcename");
+            MetadataSourceIDTrimmed = GetSerializedString(info, "sourceid");
+            MetadataSourceNameTrimmed = GetSerializedString(info, "sourcename");
             FrontCoverPath = GetSerializedString(info, "front_boxart_path");
             //FrontCoverMenuPath = GetSerializedString(info, "front_boxart_menu_path");
             BackCoverPath = GetSerializedString(info, "back_boxart_path");
             Synopsis = GetSerializedString(info, "synopsis");
-            Studio = GetSerializedString(info, "distributor");
-            CountryOfOrigin = GetSerializedString(info, "country_of_origin");
-            OfficialWebsiteURL = GetSerializedString(info, "official_website_url");
+            StudioTrimmed = GetSerializedString(info, "distributor");
+            CountryOfOriginTrimmed = GetSerializedString(info, "country_of_origin");
+            OfficialWebsiteURLTrimmed = GetSerializedString(info, "official_website_url");
             DateAdded = CheckDateRange(GetSerializedDateTime(info, "date_added"));
-            ImporterSource = GetSerializedString(info, "importer_source");
+            ImporterSourceTrimmed = GetSerializedString(info, "importer_source");
             Runtime = GetSerializedInt(info, "runtime");
-            ParentalRating = GetSerializedString(info, "mpaa_rating");
+            ParentalRatingTrimmed = GetSerializedString(info, "mpaa_rating");
 
 
             ReleaseDate = CheckDateRange(GetSerializedDateTime(info, "release_date"));
@@ -2652,10 +2776,10 @@ namespace OMLEngine
             DaoTitle.UpdatedGenres = GetSerializedList<List<string>>(info, "genres");
 
             UserStarRating = GetSerializedInt(info, "user_star_rating");
-            AspectRatio = GetSerializedString(info, "aspect_ratio");
-            VideoStandard = GetSerializedString(info, "video_standard");
-            UPC = GetSerializedString(info, "upc");
-            OriginalName = GetSerializedString(info, "original_name");
+            AspectRatioTrimmed = GetSerializedString(info, "aspect_ratio");
+            VideoStandardTrimmed = GetSerializedString(info, "video_standard");
+            UPCTrimmed = GetSerializedString(info, "upc");
+            OriginalNameTrimmed = GetSerializedString(info, "original_name");
             DaoTitle.UpdatedTags = GetSerializedList<List<string>>(info, "tags");
 
             Dictionary<string, string> actors = GetSerializedList<Dictionary<string, string>>(info, "acting_roles");
@@ -2672,8 +2796,8 @@ namespace OMLEngine
 
             _trailers = GetSerializedList<List<string>>(info, "trailers");
             _title.Trailers = Dao.TitleDao.GetDelimitedStringFromCollection(_trailers);
-            SortName = GetSerializedString(info, "sort_name");
-            ParentalRatingReason = GetSerializedString(info, "mpaa_rating_reason");
+            SortNameTrimmed = GetSerializedString(info, "sort_name");
+            ParentalRatingReasonTrimmed = GetSerializedString(info, "mpaa_rating_reason");
             VideoDetails = GetSerializedString(info, "video_details");
             _subtitles = GetSerializedList<List<string>>(info, "subtitles");
             _title.Subtitles = Dao.TitleDao.GetDelimitedStringFromCollection(_subtitles);
@@ -2689,7 +2813,7 @@ namespace OMLEngine
                 else
                     VideoResolution = "720x480";
             }
-            VideoResolution = GetSerializedString(info, "video_resolution");
+            VideoResolutionTrimmed = GetSerializedString(info, "video_resolution");
             ExtraFeatures = GetSerializedList<List<string>>(info, "extra_features");
             WatchedCount = GetSerializedInt(info, "watched_count");
         }
