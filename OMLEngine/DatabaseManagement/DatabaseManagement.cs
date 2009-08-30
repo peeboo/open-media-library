@@ -20,8 +20,8 @@ namespace OMLEngine.DatabaseManagement
             DatabaseInformation.SQLState dbstatus = CheckOMLDatabase();
 
             if ((dbstatus == DatabaseInformation.SQLState.OMLDBVersionCodeOlderThanSchema) ||
-                (dbstatus == DatabaseInformation.SQLState.OMLDBVersionUpgradeRequired) ||
-                (dbstatus == DatabaseInformation.SQLState.OMLDBVersionNotFound))
+                (dbstatus == DatabaseInformation.SQLState.OMLDBVersionUpgradeRequired)) // ||
+                //(dbstatus == DatabaseInformation.SQLState.OMLDBVersionNotFound))
             {
                 // Return to the ui / editor to deal with
                 return dbstatus;
@@ -57,8 +57,17 @@ namespace OMLEngine.DatabaseManagement
                 return DatabaseInformation.SQLState.LoginFailure;
             }
 
+            // Test 2. Ensure the database is in multiuser mode - could be a result of a bad restore
+            // -------------------------------------------------------------------------------------
+            string sql = "ALTER DATABASE [" + DatabaseInformation.DatabaseName + "] SET MULTI_USER";
+            if (!ExecuteNonQuery(sqlConn, sql))
+            {
+                sqlConn.Close();
+                sqlConn.Dispose();
+                return DatabaseInformation.SQLState.UnknownState;
+            }
 
-            // Test 2. Get the schema version number for later comparison
+            // Test 3. Get the schema version number for later comparison
             // ----------------------------------------------------------
             // Schema versioning disabled for now
             int ReqMajor;
@@ -70,7 +79,7 @@ namespace OMLEngine.DatabaseManagement
 
             GetRequiredSchemaVersion(out ReqMajor, out ReqMinor);
 
-            if (GetSchemaVersion(out CurrentMajor, out CurrentMinor))
+            if (GetSchemaVersion(sqlConn, out CurrentMajor, out CurrentMinor))
             {
                 if (ReqMajor > CurrentMajor) sqlstate = DatabaseInformation.SQLState.OMLDBVersionUpgradeRequired;
                 if (ReqMajor < CurrentMajor) sqlstate = DatabaseInformation.SQLState.OMLDBVersionCodeOlderThanSchema;
@@ -146,7 +155,6 @@ namespace OMLEngine.DatabaseManagement
                 CreateOMLUser(sqlConn);
                 return DatabaseInformation.SQLState.OMLUserNotFound;
             }
-
 
             // Test 4. Check user account exists in oml database
             // -------------------------------------------------
@@ -231,25 +239,38 @@ namespace OMLEngine.DatabaseManagement
 
             if (sqlConn != null)
             {
+                // This method used to work in earlier versions of SQL ???
                 // Kill all users connected to OML
-                string sql = "DECLARE @SQL varchar(max) " +
+                /*string sql = "DECLARE @SQL varchar(max) " +
                     "SET @SQL = '' " +
                     "SELECT @SQL = @SQL + 'Kill ' + Convert(varchar, SPId) + ';' " +
                     "FROM MASTER..SysProcesses " +
                     "WHERE DBId = DB_ID('" + DatabaseInformation.DatabaseName + "') " +
-                    "EXEC(@SQL)";
+                    "EXEC(@SQL)";*/ 
 
-                if (!ExecuteNonQuery(sqlConn, sql, 1200))
+
+                // Put the database into single user mode
+                string sql = "ALTER DATABASE [" + DatabaseInformation.DatabaseName + "] SET SINGLE_USER WITH ROLLBACK IMMEDIATE";
+
+                if (ExecuteNonQuery(sqlConn, sql, 1200))
                 {
-                    retval = false;
-                }
-                else
-                {
+                    // Succeeded - Database should now be in single user mode
                     // Launch backup job
-                    sql = "RESTORE DATABASE [" + DatabaseInformation.DatabaseName + "] FROM DISK = '" + path + "'";
+                    sql = "RESTORE DATABASE [" + DatabaseInformation.DatabaseName + "] FROM DISK = '" + path + "' WITH REPLACE";
+
                     if (ExecuteNonQuery(sqlConn, sql, 1200))
                     {
+                        // Database should now be restored
                         retval = true;
+                    }
+
+                    // Put database backinto multiuser mode    
+                    sql = "ALTER DATABASE [" + DatabaseInformation.DatabaseName + "] SET MULTI_USER";
+
+                    if (!ExecuteNonQuery(sqlConn, sql, 1200))
+                    {
+                        // If this fails set the retval to false
+                        retval = false;
                     }
                 }
             }
@@ -442,9 +463,9 @@ namespace OMLEngine.DatabaseManagement
 
             if (sqlConn != null)
             {
-                GetSchemaVersion(sqlConn, out Major, out Minor);
+                return GetSchemaVersion(sqlConn, out Major, out Minor);
             }
-            return true;
+            return false;
         }
 
 
