@@ -1807,7 +1807,7 @@ namespace OMLEngine
                                 {
                                     if (navigator.Name == "Tag")
                                     {
-                                        t.Tags.Add(navigator.Value);
+                                        t.AddTag(navigator.Value);
                                         if (!navigator.MoveToNext()) break;
                                     }
                                     else
@@ -1830,7 +1830,7 @@ namespace OMLEngine
                                 {
                                     if (navigator.Name == "Trailer")
                                     {
-                                        t.Trailers.Add(navigator.Value);
+                                        t.AddTrailer(navigator.Value);
                                         if (!navigator.MoveToNext()) break;
                                     }
                                     else
@@ -1877,7 +1877,7 @@ namespace OMLEngine
                                 {
                                     if (navigator.Name == "Subtitle")
                                     {
-                                        t.Subtitles.Add(navigator.Value);
+                                        t.AddSubtitle(navigator.Value);
                                         if (!navigator.MoveToNext()) break;
                                     }
                                     else break;
@@ -2506,8 +2506,10 @@ namespace OMLEngine
             if (t.EpisodeNumber > 0) EpisodeNumber = t.EpisodeNumber;
             if (t.Runtime > 0) Runtime = t.Runtime;
             if (t.UserStarRating > 0) UserStarRating = t.UserStarRating;
+            
             if (t.ProductionYear > 0) ProductionYear = t.ProductionYear;
-
+            if (ProductionYear == 0) ProductionYear = ReleaseDate.Year;
+            
             if (t.Directors != null && t.Directors.Count > 0)
             {
                 if (overWrite || Directors.Count == 0)
