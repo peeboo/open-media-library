@@ -120,7 +120,8 @@ namespace MovieCollectorzPlugin
 
                 if (nav.MoveToChild("runtimeminutes", ""))
                 {
-                    newTitle.Runtime = nav.ValueAsInt;
+                    //newTitle.Runtime = nav.ValueAsInt;
+                    newTitle.Runtime = ConvertStringToInt(nav.Value);
                     nav.MoveToParent();
                 }
 
@@ -357,6 +358,14 @@ namespace MovieCollectorzPlugin
                 nav.MoveToParent();
             }
             return value;
+        }
+
+        private int ConvertStringToInt(string str)
+        {
+            if (string.IsNullOrEmpty(str)) return 0;
+            int result = 0;
+            int.TryParse(Regex.Replace(str, @"\D+", ""), out result);
+            return result;
         }
     }
 }
