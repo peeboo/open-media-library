@@ -209,7 +209,7 @@ namespace OMLDatabaseEditor
                     return false;
 
                 case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OMLDBVersionNotFound:
-                    return true;
+                    return false;
 
                 case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.LoginFailure:
                     if (XtraMessageBox.Show("This could be caused by the OML Server computer being unavailable. Do you want to specify the server used?", "Problem accessing database!", MessageBoxButtons.YesNo) == DialogResult.Yes)

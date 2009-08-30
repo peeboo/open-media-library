@@ -30,6 +30,11 @@ namespace OMLEngine.Dao
             return DBContext.Instance.BioDatas.SingleOrDefault(t => t.FullName.ToLower() == name.ToLower());
         }
 
+        public static BioData GetPersonBioDataByName(OMLDataDataContext context, string name)
+        {
+            return context.BioDatas.SingleOrDefault(t => t.FullName.ToLower() == name.ToLower());
+        }
+
         public static IEnumerable<Dao.BioData> GetAllBioDatas()
         {
             var BioData = from db in Dao.DBContext.Instance.BioDatas
@@ -58,6 +63,18 @@ namespace OMLEngine.Dao
         public static void AddTitle(OMLDataDataContext context, Title title)
         {            
             context.Titles.InsertOnSubmit(title);
+            // Find actual SQL run to process the update - debugging purposes
+            /*string s = context.GetType().GetMethod("GetChangeText", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Invoke(context, null) as string;
+            
+            System.Data.Linq.ChangeSet cs = context.GetChangeSet();
+            foreach (var insert in cs.Inserts)
+            {
+                if (insert is BioData)
+                {
+                    BioData bd = insert as BioData;
+                    System.Diagnostics.Trace.WriteLine(bd.FullName + " - " + bd.Id);
+                }
+            }*/
             context.SubmitChanges();            
         }        
 
