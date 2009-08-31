@@ -1,5 +1,6 @@
 * [Wiki Home]
-  * [UsingYourOwnSQLServer]
-  * [ConfiguringWindowsFirewall]
-  * [Compiling]
-  * [InstallSQLServerManually]
+  * Custom Configuration
+    * [UsingYourOwnSQLServer]
+    * [ConfiguringWindowsFirewall]
+    * [Compiling]
+    * [InstallSQLServerManually]
