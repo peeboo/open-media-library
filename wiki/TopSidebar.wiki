@@ -1,5 +1,4 @@
 * [Wiki Home]
-  * Custom Configuration
     * [UsingYourOwnSQLServer]
     * [ConfiguringWindowsFirewall]
     * [Compiling]
