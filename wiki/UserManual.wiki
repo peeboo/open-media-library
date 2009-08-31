@@ -1,13 +1,6 @@
-#summary One-sentence summary of this page.
+#summary Open Media Library User Manual
 #sidebar UserManualSidebar
-= Introduction =
 
-Add your content here.
+* [Wiki OMLHome]
 
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+* [UserManual User Manual Home]
