@@ -1,6 +1,2 @@
 #summary Open Media Library User Manual
 #sidebar UserManualSidebar
-
-* [Wiki OMLHome]
-
-* [UserManual User Manual Home]
