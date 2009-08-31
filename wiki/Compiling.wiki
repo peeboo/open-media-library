@@ -1,5 +1,6 @@
 #summary Compiling the OML source is easy
 #labels compile,source
+#sidebar TopSidebar
 
 = Introduction =
 
