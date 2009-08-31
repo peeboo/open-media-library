@@ -1,5 +1,6 @@
 #summary Install SQL Server and create the database manually
 #labels sql
+#sidebar TopSidebar
 
 = Install SQL Server and create the database Manually: =
 
