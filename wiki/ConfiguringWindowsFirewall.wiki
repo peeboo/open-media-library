@@ -1,5 +1,5 @@
 #summary How to configure Windows Firewall to work with OML
-
+#sidebar TopSidebar
 = Introduction =
 
 To use a client / server installation of Open Media Library certain firwall ports need opening.
