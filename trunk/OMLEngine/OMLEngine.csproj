@@ -66,6 +66,7 @@
     <Compile Include="BackgroundProcessor.cs" />
     <Compile Include="BioData.cs" />
     <Compile Include="DatabaseManagement\DatabaseIntegrityChecks.cs" />
+    <Compile Include="TrailersProxyService.cs" />
     <Compile Include="OMLWebClient.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -7,6 +7,7 @@ using System.IO;
 using Microsoft.MediaCenter.UI;
 using OMLEngine.Settings;
 
+
 namespace Library.Code.V3
 {
     public class TrailerItem : GalleryItem
@@ -90,10 +91,12 @@ namespace Library.Code.V3
         /// Plays the movie.
         /// </summary>
         public void PlayMovie() {
-            Disk disk = new Disk("trailer", TrailerUrl, VideoFormat.URL);
-            MediaSource source = new MediaSource(disk);
-            IPlayMovie moviePlayer = MoviePlayerFactory.CreateMoviePlayer(source);
-            moviePlayer.PlayMovie();
+            //Disk disk = new Disk("trailer", TrailerUrl, VideoFormat.URL);
+            //MediaSource source = new MediaSource(disk);
+            //IPlayMovie moviePlayer = MoviePlayerFactory.CreateMoviePlayer(source);
+            //moviePlayer.PlayMovie();
+            Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.PlayMedia(Microsoft.MediaCenter.MediaType.Video, string.Format("http://127.0.0.1:8484/3f0850a7-0fd7-4cbf-b8dc-c7f7ea31534e/{0}", this.TrailerUrl.Replace("http://", "")), false);
+            Microsoft.MediaCenter.Hosting.AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
         }
 
         static public void Transport_PropertyChanged(IPropertyObject sender, string property)
