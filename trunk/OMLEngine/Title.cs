@@ -2134,6 +2134,10 @@ namespace OMLEngine
                         // Don't know how much mileage there is in this
                         // Check for fanart
                         string fanartfolder = Path.Combine(t.FileLocation, "Fanart");
+                        if (!Directory.Exists(fanartfolder))
+                        {
+                            fanartfolder = Path.Combine(Path.GetDirectoryName(t.FileLocation), "Fanart");
+                        }
                         if (Directory.Exists(fanartfolder))
                         {
                             foreach (string imagefile in Directory.GetFiles(fanartfolder))
@@ -2838,6 +2842,30 @@ namespace OMLEngine
             VideoResolutionTrimmed = GetSerializedString(info, "video_resolution");
             ExtraFeatures = GetSerializedList<List<string>>(info, "extra_features");
             WatchedCount = GetSerializedInt(info, "watched_count");
+
+            // Don't know how much mileage there is in this
+            // Check for fanart
+            string fanartfolder = Path.Combine(FileLocation, "Fanart");
+            if (!Directory.Exists(fanartfolder))
+            {
+                fanartfolder = Path.Combine(Path.GetDirectoryName(FileLocation), "Fanart");
+            }
+            if (Directory.Exists(fanartfolder))
+            {
+                foreach (string imagefile in Directory.GetFiles(fanartfolder))
+                {
+                    string extension = Path.GetExtension(imagefile);
+                    if (!string.IsNullOrEmpty(extension))
+                    {
+                        if ((string.Compare(extension, ".jpg", true) == 0) ||
+                            (string.Compare(extension, ".png", true) == 0) ||
+                            (string.Compare(extension, ".bmp", true) == 0))
+                        {
+                            AddFanArtImage(imagefile);
+                        }
+                    }
+                }
+            }
         }
 
         public DateTime CheckDateRange(DateTime dt)
