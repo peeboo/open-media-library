@@ -1,3 +1,2 @@
-* [Wiki OMLHome]
-
-* [UserManual User Manual Home]
+ * [Wiki OMLHome]
+ * [UserManual User Manual Home]
