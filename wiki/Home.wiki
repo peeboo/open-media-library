@@ -2,9 +2,7 @@
 
 #summary One-sentence summary of this page.
 
-= Introduction =
-
-Welcome to Open Media Library
+= Open Media Library =
 
 = Details =
 
