@@ -1,3 +1,4 @@
+#summary Open Media Library Wiki Homepage
 #sidebar TopSidebar
 
 = Open Media Library =
