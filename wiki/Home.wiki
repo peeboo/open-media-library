@@ -1,7 +1,5 @@
 #sidebar TopSidebar
 
-#summary One-sentence summary of this page.
-
 = Open Media Library =
 
 = Details =
