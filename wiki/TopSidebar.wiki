@@ -1,4 +1,4 @@
-* [Home]
+* [Wiki Home]
 * [UsingYourOwnSQLServer]
 * [ConfiguringWindowsFirewall]
 * [Compiling]
