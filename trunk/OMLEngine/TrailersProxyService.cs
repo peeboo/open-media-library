@@ -70,7 +70,7 @@ namespace OMLEngine
             if (Listener != null)
             {
                 this.Listener.Abort();
-                this.Listener.Close();
+                //this.Listener.Close();
 
                 this.Listener = null;
 
