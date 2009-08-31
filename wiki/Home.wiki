@@ -4,12 +4,8 @@
 
 = Introduction =
 
-Add your content here.
-
+Welcome to Open Media Library
 
 = Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+Open Media Library is an MCML/Managed Code plugin for Vista/Windows7 media center.
