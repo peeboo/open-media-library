@@ -1,4 +1,5 @@
 #summary Using your own installation of SQL Server.
+#sidebar TopSidebar
 
 = Introduction =
 
