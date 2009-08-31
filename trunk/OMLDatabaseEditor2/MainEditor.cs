@@ -844,7 +844,11 @@ namespace OMLDatabaseEditor
         {
             if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsBackDrops) != 0)
             {
-                LoadFanart(metadata.PluginDLL.GetBackDropUrlsForTitle(), title);
+                List<string> _images = metadata.PluginDLL.GetBackDropUrlsForTitle();
+                if (_images != null)
+                {
+                    LoadFanart(metadata.PluginDLL.GetBackDropUrlsForTitle(), title);
+                }
             }
         }
 

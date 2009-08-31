@@ -28,10 +28,11 @@ namespace OMLDatabaseEditor
 
         public string _lastMetaPluginName;
 
-        List<KeyValuePair<int, string>> ImageLoadQueue = new List<KeyValuePair<int,string>>();
+        List<KeyValuePair<string, string>> ImageLoadQueue = new List<KeyValuePair<string,string>>();
 
         bool TVSearch;
         bool SearchDrillDownReq;
+        bool TVShowFound;
 
 
         public bool OverwriteMetadata
@@ -118,6 +119,7 @@ namespace OMLDatabaseEditor
                     {
                         SearchDrillDownReq = _plugin.PluginDLL.SearchForTVSeries(reSearchTitle.Text, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
                         TVSearch = true;
+                        TVShowFound = !SearchDrillDownReq;
                     }
                 }
 
@@ -207,7 +209,7 @@ namespace OMLDatabaseEditor
                             if (string.Compare(t.FrontCoverPath.Substring(0, 4), "http", true) == 0)
                             {
                                 // Images are not downloaded. Add to lazy load queue
-                                ImageLoadQueue.Add(new KeyValuePair<int,string>(i, t.FrontCoverPath));
+                                ImageLoadQueue.Add(new KeyValuePair<string, string>(i.ToString() + t.Name, t.FrontCoverPath));
                             }
                             else
                             {
@@ -217,6 +219,7 @@ namespace OMLDatabaseEditor
                                 }
                             }
                         }
+
                         string releaseDate = "";
                         if (t.ReleaseDate.Year > 1900)
                             releaseDate = t.ReleaseDate.Year.ToString();
@@ -235,7 +238,13 @@ namespace OMLDatabaseEditor
                             Name = t.Name;
                         }
 
-                        grdTitles.Rows.Add(i.ToString(), coverArt, Name, t.Synopsis, releaseDate, MakeStringFromList(t.Genres), MakeStringFromPersonList(t.Directors), MakeStringFromRoleList(t.ActingRoles));
+                        DataGridViewRow dr = new DataGridViewRow();
+                        dr.CreateCells(grdTitles,new object[] { i.ToString(), coverArt, Name, t.Synopsis, releaseDate, MakeStringFromList(t.Genres), MakeStringFromPersonList(t.Directors), MakeStringFromRoleList(t.ActingRoles) } );
+                        dr.Height = 120;
+                        dr.Tag = i.ToString() + t.Name;
+                        grdTitles.Rows.Add(dr);
+
+                        //grdTitles.Rows.Add(i.ToString(), coverArt, Name, t.Synopsis, releaseDate, MakeStringFromList(t.Genres), MakeStringFromPersonList(t.Directors), MakeStringFromRoleList(t.ActingRoles));
                         i++;
                     }
                 }
@@ -279,11 +288,15 @@ namespace OMLDatabaseEditor
                 {
                     if (SearchDrillDownReq)
                     {
-                        Cursor = Cursors.WaitCursor;
-                        SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
-                        _titles = _plugin.PluginDLL.GetAvailableTitles();
-                        ShowResults();
-                        Cursor = Cursors.Default;
+                        if (grdTitles.SelectedRows.Count > 0)
+                        {
+                            Cursor = Cursors.WaitCursor;
+                            SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
+                            TVShowFound = true;
+                            _titles = _plugin.PluginDLL.GetAvailableTitles();
+                            ShowResults();
+                            Cursor = Cursors.Default;
+                        }
                     }
                     else
                     {
@@ -318,14 +331,21 @@ namespace OMLDatabaseEditor
                         (LastSeasonNo != seSeasonNo.Value) ||
                         (LastEpisodeNo != seEpisodeNo.Value))
                     {
-                        LastEpisodeName = teEpisodeName.Text;
-                        LastSeasonNo = (int)seSeasonNo.Value;
-                        LastEpisodeNo = (int)seEpisodeNo.Value;
-                        Cursor = Cursors.WaitCursor;
-                        SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
-                        _titles = _plugin.PluginDLL.GetAvailableTitles();
-                        ShowResults();
-                        Cursor = Cursors.Default;
+                        if (TVShowFound)
+                        {
+                            //if (grdTitles.SelectedRows.Count > 0)
+                            //{
+                            LastEpisodeName = teEpisodeName.Text;
+                            LastSeasonNo = (int)seSeasonNo.Value;
+                            LastEpisodeNo = (int)seEpisodeNo.Value;
+                            Cursor = Cursors.WaitCursor;
+                            //SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
+                            SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(0, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
+                            _titles = _plugin.PluginDLL.GetAvailableTitles();
+                            ShowResults();
+                            Cursor = Cursors.Default;
+                            //}
+                        }
                     }
                 }
             }
@@ -381,7 +401,7 @@ namespace OMLDatabaseEditor
         {
             if (ImageLoadQueue.Count > 0)
             {
-                KeyValuePair<int, string> src = ImageLoadQueue[0];
+                KeyValuePair<string, string> src = ImageLoadQueue[0];
 
                 ImageLoadQueue.RemoveAt(0);
 
@@ -389,7 +409,7 @@ namespace OMLDatabaseEditor
 
                 web.DownloadFileCompleted += new AsyncCompletedEventHandler(FileDownloadedEvent);
 
-                KeyValuePair<int, string> dest = new KeyValuePair<int, string>(src.Key, Path.GetTempFileName());
+                KeyValuePair<string, string> dest = new KeyValuePair<string, string>(src.Key, Path.GetTempFileName());
 
                 web.DownloadFileAsync(new Uri(src.Value), dest.Value, dest);
             }
@@ -397,15 +417,23 @@ namespace OMLDatabaseEditor
 
         private void FileDownloadedEvent(object sender, AsyncCompletedEventArgs c)
         {
-            KeyValuePair<int, string> img = (KeyValuePair<int, string>)c.UserState;
+            KeyValuePair<string, string> img = (KeyValuePair<string, string>)c.UserState;
 
             if (File.Exists(img.Value))
             {
                 Image coverArt = Utilities.ReadImageFromFile(img.Value);
+                //grdTitles.Rows[0].tag
 
-                ((DataGridViewImageCell)grdTitles[colCoverArt.Index,img.Key]).Value = coverArt;
+                // Find the row
+                foreach (DataGridViewRow dr in grdTitles.Rows)
+                {
+                    if (string.Compare((string)dr.Tag, img.Key) == 0)
+                    {
+                        dr.Cells[colCoverArt.Index].Value = coverArt;
+                    }
+                }
+                //((DataGridViewImageCell)grdTitles[colCoverArt.Index, img.Key]).Value = coverArt;
 
-                //_titles[img.Key].FrontCoverPath = img.Value;
             }
             LoadImage();
         }
