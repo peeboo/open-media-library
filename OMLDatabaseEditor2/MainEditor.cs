@@ -3568,7 +3568,26 @@ namespace OMLDatabaseEditor
 
             return newTitle.Id;
         }
-        
+
+        private int CreateFolder(int? parentid, string Name, TitleTypes titletype, short? seriesNumber, bool RefreshUI) {
+            if (parentid == null) {
+                return CreateTitle(null, Name, titletype, null, RefreshUI);
+            } else {
+                if ((titletype & TitleTypes.Unknown) != 0) {
+                    // Title type is unknown. Attempt to find title type by looking at parent
+                    if (((_movieList[(int)parentid].TitleType & TitleTypes.TVShow) != 0) ||
+                    (((_movieList[(int)parentid].TitleType & TitleTypes.Season) != 0))) {
+                        titletype = TitleTypes.Season;
+                    }
+
+                    if ((_movieList[(int)parentid].TitleType & TitleTypes.Collection) != 0) {
+                        titletype = TitleTypes.Collection;
+                    }
+                }
+                return CreateTitle(parentid, Name, titletype, seriesNumber, null, null, RefreshUI);
+            }
+        }
+
         private int CreateFolder(int? parentid, string Name, TitleTypes titletype, bool RefreshUI)
         {
             if (parentid == null)
@@ -3649,7 +3668,7 @@ namespace OMLDatabaseEditor
 
                         if (OMLEngine.Settings.OMLSettings.DBEStSanaCreateTLFolder)
                         {
-                            a_parent = CreateFolderNonDuplicate(parentid, Path.GetFileName(file), TitleTypes.Collection, false);
+                            a_parent = CreateFolderNonDuplicate(parentid, Path.GetFileName(file), TitleTypes.Collection, null, false);
                         }
                         else
                         {
@@ -3667,10 +3686,10 @@ namespace OMLDatabaseEditor
                                     {
                                         case Serf.EntityType.COLLECTION:
                                         case Serf.EntityType.MOVIE:
-                                            e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
+                                            e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, null, false);
                                             break;
                                         case Serf.EntityType.TV_SHOW:
-                                            e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.TVShow, false);
+                                            e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.TVShow, null, false);
                                             break;
                                     }
                                 }
@@ -3689,10 +3708,10 @@ namespace OMLDatabaseEditor
                                             {
                                                 case Serf.EntityType.COLLECTION:
                                                 case Serf.EntityType.MOVIE:
-                                                    s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, false);
+                                                    s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, null, false);
                                                     break;
                                                 case Serf.EntityType.TV_SHOW:
-                                                    s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Season, false);
+                                                    s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Season, (short)s.Number, false);
                                                     break;
                                             }
                                         }
@@ -3922,7 +3941,7 @@ namespace OMLDatabaseEditor
         /// <param name="Name"></param>
         /// <param name="titletype"></param>
         /// <param name="RefreshUI"></param>
-        private int CreateFolderNonDuplicate(int? parentid, string Name, TitleTypes titletype, bool RefreshUI)
+        private int CreateFolderNonDuplicate(int? parentid, string Name, TitleTypes titletype, short? seriesNumber, bool RefreshUI)
         {
             int titleid;
 
@@ -3939,7 +3958,7 @@ namespace OMLDatabaseEditor
             }
             else
             {
-                titleid = CreateFolder(parentid, Name, titletype, RefreshUI);
+                titleid = CreateFolder(parentid, Name, titletype, seriesNumber, RefreshUI);
             }
             return titleid;
         }
