@@ -220,8 +220,8 @@ namespace Library
                 DialogButtons.Ok, 5, false);
 
             OMLEngine.Utilities.DebugLine("Local file is: {0}", localFile);
-            string updateBatch = "msiexec.exe /qb /i \"" + localFile + "\n";
-            string ehshellPath = Path.Combine(Environment.ExpandEnvironmentVariables("%SystemRoot%"), @"ehome\eshell");
+            string updateBatch = "msiexec.exe /qb /log c:\\programdata\\openmedialibrary\\logs\\update.log /i \"" + localFile + "\n";
+            string ehshellPath = Path.Combine(Environment.ExpandEnvironmentVariables("%SystemRoot%"), @"ehome\ehshell");
             updateBatch += ehshellPath + " /entrypoint:{ad208fce-2431-47d6-abed-1974a2a0555f}\\{7533724D-C7CB-4ac2-8AEE-1B0B91ADD393}";
             string filename = Path.GetTempFileName() + ".bat";
             OMLEngine.Utilities.DebugLine("batch file to run is: {0}", filename);

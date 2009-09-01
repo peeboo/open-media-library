@@ -2,8 +2,8 @@
 
 <!-- These variables define the Windows Installer product version, product code and upgrade code. They   -->
 <!-- will be used later on in this file.                                                                 -->
-<?define Property_ProductVersion = "4.0.0.1669" ?>
-<?define Property_ProductCode = "5D2A3D69-9C98-4AC0-91CA-F6B6A5D4095E" ?>
+<?define Property_ProductVersion = "4.0.1.1669" ?>
+<?define Property_ProductCode = "1A4F8E3B-2D62-4424-8DF1-4AB9B96C4E2B" ?>
 <?define Property_UpgradeCode = "0921ec75-fddc-46f8-bdf4-a5d697351567" ?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
@@ -52,13 +52,13 @@
     <!-- described in more detail in the WiX documentation.                                              -->
     <UI>
       <UIRef Id="WixUI_FeatureTree" />
-      <Publish Dialog="ExitDialog"
-               Control="Finish"
-               Event="DoAction"
-               Value="LaunchApplication">1</Publish>
     </UI>
     
-    <Property Id="WixShellExecTarget" Value="[#PostInstallerWizard.exe]" />
+    <!--<Property Id="WixShellExecTarget" Value="[#PostInstallerWizard.exe]" />
+    <CustomAction Id="LaunchApplication"
+        BinaryKey="WixCA"
+        DllEntry="WixShellExec"
+        Impersonate="yes" />-->
 
   </Product>
 </Wix>

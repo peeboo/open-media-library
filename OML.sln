@@ -118,6 +118,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonMetaData", "AmazonMet
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileDownloader", "FileDownloader\FileDownloader.csproj", "{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMLCustomWiXAction", "OMLCustomWiXAction\OMLCustomWiXAction.csproj", "{54B1AA9C-0123-4EE5-801F-120A82BE4296}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -506,6 +508,18 @@ Global
 		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Release|x64.ActiveCfg = Release|Any CPU
 		{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}.Release|x86.ActiveCfg = Release|Any CPU
+		{54B1AA9C-0123-4EE5-801F-120A82BE4296}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{54B1AA9C-0123-4EE5-801F-120A82BE4296}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{54B1AA9C-0123-4EE5-801F-120A82BE4296}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{54B1AA9C-0123-4EE5-801F-120A82BE4296}.Debug|x64.ActiveCfg = Debug|x86
+		{54B1AA9C-0123-4EE5-801F-120A82BE4296}.Debug|x86.ActiveCfg = Debug|x86
+		{54B1AA9C-0123-4EE5-801F-120A82BE4296}.Debug|x86.Build.0 = Debug|x86
+		{54B1AA9C-0123-4EE5-801F-120A82BE4296}.Release|Any CPU.ActiveCfg = Release|x86
+		{54B1AA9C-0123-4EE5-801F-120A82BE4296}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{54B1AA9C-0123-4EE5-801F-120A82BE4296}.Release|Mixed Platforms.Build.0 = Release|x86
+		{54B1AA9C-0123-4EE5-801F-120A82BE4296}.Release|x64.ActiveCfg = Release|x86
+		{54B1AA9C-0123-4EE5-801F-120A82BE4296}.Release|x86.ActiveCfg = Release|x86
+		{54B1AA9C-0123-4EE5-801F-120A82BE4296}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
