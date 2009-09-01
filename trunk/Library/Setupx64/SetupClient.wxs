@@ -60,12 +60,6 @@
     </UI>
 
     <Property Id="WixShellExecTarget" Value="[#PostInstallerWizard.exe]" />
-
-    <CustomAction Id="LaunchApplication"
-        BinaryKey="WixCA"
-        DllEntry="WixShellExec"
-        Impersonate="yes" />
-    
   </Product>
 </Wix>
 

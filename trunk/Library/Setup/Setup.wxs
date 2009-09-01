@@ -488,6 +488,7 @@
         <![CDATA[NEWERVERSIONDETECTED]]>
       </Custom>
       <RemoveExistingProducts After="InstallInitialize" />
+      <Custom Action="LaunchApplication" After="InstallFinalize" />
       <LaunchConditions After="AppSearch"/>
 
       <!-- This custom action searches for Windows version 6.0, the Windows Media Center Ident registry  -->

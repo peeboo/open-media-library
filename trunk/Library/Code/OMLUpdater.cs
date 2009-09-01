@@ -48,12 +48,15 @@ namespace Library
                 newVersion = new System.Version(node.Attributes["version"].Value);
                 remoteFile = node.Attributes["url"].Value;
 
-                if (CurrentVersion < newVersion) {
+                if (newVersion > CurrentVersion) {
+                    OMLEngine.Utilities.DebugLine("Found new version {0}, current running version is {1}", newVersion.ToString(), CurrentVersion.ToString());
                     if (OMLApplication.Current.MediaCenterEnvironment.Capabilities.ContainsKey("Console")) {
                         DialogResult reply = OMLApplication.Current.MediaCenterEnvironment.Dialog("A new version of OML is available, would you like to upgrade now?", "Update Available", DialogButtons.Yes | DialogButtons.No, 10, true);
 
-                        if (reply == DialogResult.Yes)
+                        if (reply == DialogResult.Yes) {
+                            OMLEngine.Utilities.DebugLine("User selected to download the update");
                             DownloadUpdate();
+                        }
                     } else {
                         // at the extender
                         OMLApplication.Current.MediaCenterEnvironment.Dialog("An update for OML is available, please update from your Media Center PC.", "Update Available", DialogButtons.Ok, 10, true);
@@ -152,7 +155,7 @@ namespace Library
         {
             int bytesDone = 0;
 
-            localFile = Path.Combine(Path.GetTempFileName(), ".msi");
+            localFile = Path.GetTempFileName() + @".msi";
 
             Stream readStream = null;
             Stream writeStream = null;
@@ -164,6 +167,7 @@ namespace Library
                 WebRequest req = WebRequest.Create(remoteFile);
                 if (req != null)
                 {
+                    OMLEngine.Utilities.DebugLine("Beginning update download, total expected filesize to be: {0}", req.ContentLength);
                     res = req.GetResponse();
                     if (res != null)
                     {
@@ -182,8 +186,9 @@ namespace Library
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                OMLEngine.Utilities.DebugLine("Error: an error ocurred downloading the update: {0}", e.Message);
                 bytesDone = 0;
             }
             finally
@@ -213,10 +218,12 @@ namespace Library
                 "Ready to Update",
                 DialogButtons.Ok, 5, false);
 
-            string updateBatch = "msiexec.exe /qb /i \"" + localFile + "\"n";
+            OMLEngine.Utilities.DebugLine("Local file is: {0}", localFile);
+            string updateBatch = "msiexec.exe /qb /i \"" + localFile + "\n";
             string ehshellPath = Path.Combine(Environment.ExpandEnvironmentVariables("%SystemRoot%"), @"ehome\eshell");
             updateBatch += ehshellPath + " /entrypoint:{ad208fce-2431-47d6-abed-1974a2a0555f}\\{7533724D-C7CB-4ac2-8AEE-1B0B91ADD393}";
-            string filename = Path.Combine(Path.GetTempFileName(), ".bat");
+            string filename = Path.GetTempFileName() + ".bat";
+            OMLEngine.Utilities.DebugLine("batch file to run is: {0}", filename);
             File.WriteAllText(filename, updateBatch);
 
             Process update = new Process();
@@ -232,6 +239,6 @@ namespace Library
         string localFile;
         System.Version newVersion;
 
-        const string infoURL = "http://open-media-library.googlecode.com/svn/trunk/Library/OMLInfo.xml";
+        const string infoURL = @"http://www.openmedialibrary.org/OMLInfo.xml";
     }
 }
