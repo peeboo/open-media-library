@@ -37,8 +37,8 @@ namespace OMLEngine.Dao
 
                         db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
                     }
+                    return db;
                 }
-                return db;
             }
         }
         public static OMLDataDataContext InstanceOrNull { get { return db; } }        
