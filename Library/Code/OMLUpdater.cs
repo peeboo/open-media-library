@@ -36,11 +36,12 @@ namespace Library
         {
             try
             {
+                bool enableBetaUpdates = (bool)stateInfo;
                 XmlDocument xDoc = new XmlDocument();
                 xDoc.Load(new XmlTextReader(infoURL));
 
                 XmlNode node;
-                if (OMLSettings.EnableAutomaticUpdatesDailyBuilds)
+                if (enableBetaUpdates)
                     node = xDoc.SelectSingleNode("/Config/Beta");
                 else
                     node = xDoc.SelectSingleNode("/Config/Release");
