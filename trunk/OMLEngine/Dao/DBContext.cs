@@ -5,6 +5,18 @@ using System.Text;
 
 namespace OMLEngine.Dao
 {
+    /// <summary>
+    /// If you noticed issues with ExecuteReader complaining it is closed, opening or otherwise barfing
+    /// you will find yourself here!
+    /// 
+    /// Your issue is with hitting the context from multiple threads. It isn't thread safe.
+    /// You can lock, you can double-check but it will do you no good-
+    /// 
+    /// Follow the link - http://stackoverflow.com/questions/441293/linqtosql-and-the-exception-executereader-requires-an-open-and-available-connec
+    /// Your only choice is to refactor your code or create a new context for your call (which would suck the perf out of it).
+    /// 
+    /// Wait for PLINQ?
+    /// </summary>
     internal static class DBContext
     {
         private static OMLDataDataContext db = null;
