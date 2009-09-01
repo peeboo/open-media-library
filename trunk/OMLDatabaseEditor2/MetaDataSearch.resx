@@ -534,52 +534,52 @@
   <data name="&gt;&gt;lcEpisodeLabel.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="labelControl1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="lcSeasonNoLabel.Location" type="System.Drawing.Point, System.Drawing">
     <value>503, 7</value>
   </data>
-  <data name="labelControl1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="lcSeasonNoLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>57, 13</value>
   </data>
-  <data name="labelControl1.TabIndex" type="System.Int32, mscorlib">
+  <data name="lcSeasonNoLabel.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
   </data>
-  <data name="labelControl1.Text" xml:space="preserve">
+  <data name="lcSeasonNoLabel.Text" xml:space="preserve">
     <value>Season no :</value>
   </data>
-  <data name="&gt;&gt;labelControl1.Name" xml:space="preserve">
-    <value>labelControl1</value>
+  <data name="&gt;&gt;lcSeasonNoLabel.Name" xml:space="preserve">
+    <value>lcSeasonNoLabel</value>
   </data>
-  <data name="&gt;&gt;labelControl1.Type" xml:space="preserve">
+  <data name="&gt;&gt;lcSeasonNoLabel.Type" xml:space="preserve">
     <value>DevExpress.XtraEditors.LabelControl, DevExpress.XtraEditors.v8.2, Version=8.2.6.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1</value>
   </data>
-  <data name="&gt;&gt;labelControl1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;lcSeasonNoLabel.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;labelControl1.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;lcSeasonNoLabel.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="labelControl2.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="lcEpisodeNoLabel.Location" type="System.Drawing.Point, System.Drawing">
     <value>616, 8</value>
   </data>
-  <data name="labelControl2.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="lcEpisodeNoLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>59, 13</value>
   </data>
-  <data name="labelControl2.TabIndex" type="System.Int32, mscorlib">
+  <data name="lcEpisodeNoLabel.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
   </data>
-  <data name="labelControl2.Text" xml:space="preserve">
+  <data name="lcEpisodeNoLabel.Text" xml:space="preserve">
     <value>Episode no :</value>
   </data>
-  <data name="&gt;&gt;labelControl2.Name" xml:space="preserve">
-    <value>labelControl2</value>
+  <data name="&gt;&gt;lcEpisodeNoLabel.Name" xml:space="preserve">
+    <value>lcEpisodeNoLabel</value>
   </data>
-  <data name="&gt;&gt;labelControl2.Type" xml:space="preserve">
+  <data name="&gt;&gt;lcEpisodeNoLabel.Type" xml:space="preserve">
     <value>DevExpress.XtraEditors.LabelControl, DevExpress.XtraEditors.v8.2, Version=8.2.6.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1</value>
   </data>
-  <data name="&gt;&gt;labelControl2.Parent" xml:space="preserve">
+  <data name="&gt;&gt;lcEpisodeNoLabel.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;labelControl2.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;lcEpisodeNoLabel.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

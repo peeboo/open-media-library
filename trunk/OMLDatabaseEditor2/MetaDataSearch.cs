@@ -68,6 +68,8 @@ namespace OMLDatabaseEditor
                 seEpisodeNo.Visible = false;
                 seSeasonNo.Visible = false;
                 lcEpisodeLabel.Visible = false;
+                lcSeasonNoLabel.Visible = false;
+                lcEpisodeNoLabel.Visible = false;
                 reSearchSubmitButton.Location = new Point(335, 3);
             }
 

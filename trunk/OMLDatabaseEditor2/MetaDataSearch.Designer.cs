@@ -58,8 +58,8 @@
             this.seSeasonNo = new DevExpress.XtraEditors.SpinEdit();
             this.seEpisodeNo = new DevExpress.XtraEditors.SpinEdit();
             this.lcEpisodeLabel = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
+            this.lcSeasonNoLabel = new DevExpress.XtraEditors.LabelControl();
+            this.lcEpisodeNoLabel = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.grdTitles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.seSeasonNo.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.seEpisodeNo.Properties)).BeginInit();
@@ -247,22 +247,22 @@
             resources.ApplyResources(this.lcEpisodeLabel, "lcEpisodeLabel");
             this.lcEpisodeLabel.Name = "lcEpisodeLabel";
             // 
-            // labelControl1
+            // lcSeasonNoLabel
             // 
-            resources.ApplyResources(this.labelControl1, "labelControl1");
-            this.labelControl1.Name = "labelControl1";
+            resources.ApplyResources(this.lcSeasonNoLabel, "lcSeasonNoLabel");
+            this.lcSeasonNoLabel.Name = "lcSeasonNoLabel";
             // 
-            // labelControl2
+            // lcEpisodeNoLabel
             // 
-            resources.ApplyResources(this.labelControl2, "labelControl2");
-            this.labelControl2.Name = "labelControl2";
+            resources.ApplyResources(this.lcEpisodeNoLabel, "lcEpisodeNoLabel");
+            this.lcEpisodeNoLabel.Name = "lcEpisodeNoLabel";
             // 
             // frmSearchResult
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.labelControl2);
-            this.Controls.Add(this.labelControl1);
+            this.Controls.Add(this.lcEpisodeNoLabel);
+            this.Controls.Add(this.lcSeasonNoLabel);
             this.Controls.Add(this.lcEpisodeLabel);
             this.Controls.Add(this.seEpisodeNo);
             this.Controls.Add(this.seSeasonNo);
@@ -309,7 +309,7 @@
         private DevExpress.XtraEditors.SpinEdit seSeasonNo;
         private DevExpress.XtraEditors.SpinEdit seEpisodeNo;
         private DevExpress.XtraEditors.LabelControl lcEpisodeLabel;
-        private DevExpress.XtraEditors.LabelControl labelControl1;
-        private DevExpress.XtraEditors.LabelControl labelControl2;
+        private DevExpress.XtraEditors.LabelControl lcSeasonNoLabel;
+        private DevExpress.XtraEditors.LabelControl lcEpisodeNoLabel;
     }
 }
