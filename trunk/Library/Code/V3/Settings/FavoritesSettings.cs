@@ -157,7 +157,19 @@ namespace Library.Code.V3
                         if (res == DialogResult.Yes)
                         {
                             //delete
+                            IList<UserFilter> oldFilters = OMLSettings.UserFilters;
+                            UserFilter[] newFilters = new UserFilter[oldFilters.Count -1];
+                            //deal with the existing userfilters
+                            this.favoritesArray.Remove(cmd);
 
+                            for (int i = 0; i < oldFilters.Count-1; i++)
+                            {
+                                if (oldFilters[i] != ((FavoritesCommand)favoritesSender).Filter)
+                                    newFilters[i] = ((FavoritesCommand)this.favoritesArray[i]).Filter;
+                            }
+
+                            OMLSettings.UserFilters = newFilters;
+                            
                         }
                     }
                 };
