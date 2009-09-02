@@ -212,6 +212,7 @@
   <UI Name="DetailsPane">
     <Properties>
       <shl:ExtenderSettings Name="Page" ExtenderSettings="$Required"/>
+      <Color Name="ButtonNoFocusColor" Color="color://core:OffWhite"/>
     </Properties>
     <Locals>
       <Inset Name="Margins43" Inset="20,34,5,0"/>
@@ -321,8 +322,8 @@
                           <AnchorLayoutInput Left="Parent,0, 60" Top="Parent,0, 70"/>
                         </LayoutInput>
                         <Children>
-                          <ctl:Button Model="[Page.GoToImpersonation]" TileSize="590,51" Margins="10,0,0,0"/>
-                          <ctl:Button Model="[Page.GoToTranscode]" TileSize="590,51" Margins="10,0,0,0"/>
+                          <ctl:Button Model="[Page.GoToImpersonation]" TileSize="590,51" Margins="10,0,0,0" NoFocusColor="[ButtonNoFocusColor]"/>
+                          <ctl:Button Model="[Page.GoToTranscode]" TileSize="590,51" Margins="10,0,0,0" NoFocusColor="[ButtonNoFocusColor]"/>
                         </Children>
                       </Panel>
                     </Children>

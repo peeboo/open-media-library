@@ -217,7 +217,7 @@
     </Properties>
     <Locals>
       <Inset Name="Margins43" Inset="105,85,85,0"/>
-      <Inset Name="Margins169" Inset="105,85,485,0"/>
+      <Inset Name="Margins169" Inset="105,85,285,0"/>
       <Environment Name="Environment" />
     </Locals>
     <Rules>
@@ -271,7 +271,7 @@
         </Animations>
         <Children>
           <!-- main layout panel -->
-          <Panel Name="MainPanel" Margins="105,85,485,0">
+          <Panel Name="MainPanel" Margins="105,85,285,0">
             <Layout>
               <FlowLayout Orientation="Horizontal"/>
             </Layout>
