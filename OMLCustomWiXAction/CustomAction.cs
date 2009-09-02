@@ -4,6 +4,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Management;
 using System.ServiceProcess;
+using System.Security.Principal;
 using Microsoft.Deployment.WindowsInstaller;
 
 using OMLEngine;
@@ -50,6 +51,24 @@ namespace OMLCustomWiXAction {
         [CustomAction]
         public static ActionResult ValidateDatabase(Session session) {
             return ActionResult.Success;
+        }
+
+        [CustomAction]
+        public static ActionResult ReserveTrailersUrl(Session session) {
+            try {
+                NTAccount act;
+                SecurityIdentifier sid;
+
+                act = new NTAccount("everyone");
+                sid = (SecurityIdentifier)act.Translate(typeof(SecurityIdentifier));
+                URLReservation.UrlReservation rev = new URLReservation.UrlReservation("http://+8484/3f0850a7-0fd7-4cbf-b8dc-c7f7ea31534e");
+                rev.AddSecurityIdentifier(sid);
+                rev.Create();
+                return ActionResult.Success;
+
+            } catch (Exception e) {
+                return ActionResult.Failure;
+            }
         }
 
         #region private methods
