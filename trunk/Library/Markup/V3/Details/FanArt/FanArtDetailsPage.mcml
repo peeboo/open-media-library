@@ -215,7 +215,29 @@
       <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
       <Image Name="MovieDefaultImage" Image="resx://Library/Library.Resources/V3_Controls_Movie_Icon_Default"/>
     </Properties>
+    <Locals>
+      <Inset Name="Margins43" Inset="105,85,85,0"/>
+      <Inset Name="Margins169" Inset="105,85,485,0"/>
+      <Environment Name="Environment" />
+    </Locals>
     <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Environment.IsWidescreen]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[MainPanel.Margins]" Value="[Margins169]" />
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Environment.IsWidescreen]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[MainPanel.Margins]" Value="[Margins43]" />
+        </Actions>
+      </Rule>
       <!--Condition Source="[Page.Background]" SourceValue="null">
         <Actions>
           <Set Target="[CoverGraphic.Content]" Value="[MovieDefaultImage]"/>
@@ -249,7 +271,7 @@
         </Animations>
         <Children>
           <!-- main layout panel -->
-          <Panel Margins="105,85,485,0">
+          <Panel Name="MainPanel" Margins="105,85,485,0">
             <Layout>
               <FlowLayout Orientation="Horizontal"/>
             </Layout>

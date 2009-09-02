@@ -228,7 +228,33 @@
     <Properties>
       <shl:FavoritesSettings Name="Page" FavoritesSettings="$Required"/>
     </Properties>
+    <Locals>
+      <Inset Name="Margins43" Inset="20,34,5,0"/>
+      <Inset Name="Margins169" Inset="176,34,205,0"/>
+      <Inset Name="ContentMargins43" Inset="55,120,25,0"/>
+      <Inset Name="ContentMargins169" Inset="205,120,205,0"/>
+      <Environment Name="Environment" />
+    </Locals>
     <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Environment.IsWidescreen]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[MainPanel.Margins]" Value="[Margins169]" />
+          <Set Target="[ContentPanel.Margins]" Value="[ContentMargins169]" />
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Environment.IsWidescreen]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[MainPanel.Margins]" Value="[Margins43]" />
+          <Set Target="[ContentPanel.Margins]" Value="[ContentMargins43]" />
+        </Actions>
+      </Rule>
       <Changed Source="[Page.ShowEmptyContentMessage]" InitialEvaluate="true">
         <Conditions>
           <Equality Source="[Page.ShowEmptyContentMessage]" Value="true"/>
@@ -258,7 +284,7 @@
           </Animation>
         </Animations>
         <Children>
-          <Panel Margins="176,34,205,0">
+          <Panel Name="MainPanel" Margins="176,34,205,0">
             <Children>
               <Clip FadeSize="25" MaximumSize="500,70" NearOffset="-40" Orientation="Vertical">
                 <Children>
@@ -269,7 +295,7 @@
             </Children>
           </Panel>
           <!-- main layout panel -->
-          <Panel Margins="205,120,205,0">
+          <Panel Name="ContentPanel" Margins="205,120,205,0">
             <Layout>
               <FlowLayout Orientation="Horizontal"/>
             </Layout>
