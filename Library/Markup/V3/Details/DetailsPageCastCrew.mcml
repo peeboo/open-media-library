@@ -175,7 +175,33 @@
       <shl:DetailsPage Name="Page" DetailsPage="$Required"/>
       <Image Name="MovieDefaultImage" Image="resx://Library/Library.Resources/V3_Controls_Movie_Icon_Default"/>
     </Properties>
+    <Locals>
+      <Inset Name="Margins43" Inset="20,34,5,0"/>
+      <Inset Name="Margins169" Inset="176,34,205,0"/>
+      <Inset Name="ContentMargins43" Inset="355,20,25,0"/>
+      <Inset Name="ContentMargins169" Inset="505,20,205,0"/>
+      <Environment Name="Environment" />
+    </Locals>
     <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Environment.IsWidescreen]" Value="true" />
+        </Conditions>
+        <Actions>
+          <Set Target="[MainPanel.Margins]" Value="[Margins169]" />
+          <Set Target="[ContentPanel.Margins]" Value="[ContentMargins169]" />
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Environment.IsWidescreen]" Value="false" />
+        </Conditions>
+        <Actions>
+          <Set Target="[MainPanel.Margins]" Value="[Margins43]" />
+          <Set Target="[ContentPanel.Margins]" Value="[ContentMargins43]" />
+        </Actions>
+      </Rule>
       <Condition Source="[Page.Background]" SourceValue="null">
         <Actions>
           <Set Target="[CoverGraphic.Content]" Value="[MovieDefaultImage]"/>
@@ -202,7 +228,7 @@
           </Animation>
         </Animations>
         <Children>
-          <Panel Margins="176,34,205,0">
+          <Panel Name="MainPanel" Margins="176,34,205,0">
             <Children>
               <Clip FadeSize="25" MaximumSize="500,70" NearOffset="-40" Orientation="Vertical">
                 <Children>
@@ -213,7 +239,7 @@
             </Children>
           </Panel>
           <!-- main layout panel -->
-          <Panel Margins="505,20,205,0">
+          <Panel Name="ContentPanel" Margins="505,20,205,0">
             <Layout>
               <FlowLayout Orientation="Horizontal"/>
             </Layout>
