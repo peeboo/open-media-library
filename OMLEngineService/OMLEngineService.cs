@@ -12,7 +12,9 @@ namespace OMLEngineService
     {
         //private IList<Title> titles;
         //private ServiceHost _transcodingServiceHost, _titleCollectionServiceHost;
-        private ServiceHost _transcodingServiceHost, _trailersProxyServiecHost;
+        //private ServiceHost _transcodingServiceHost, _trailersProxyServiecHost;
+        private ServiceHost _transcodingServiceHost;
+        private TrailersProxyService _trailersProxyService;
 
         public OMLEngineService()
         {
@@ -32,13 +34,16 @@ namespace OMLEngineService
 
             _transcodingServiceHost = WCFUtilites.StartService(EventSource, typeof(TranscodingService));
             //_titleCollectionServiceHost = WCFUtilites.StartService(EventSource, typeof(TitleCollectionAPI));
-            _trailersProxyServiecHost = WCFUtilites.StartService(EventSource, typeof(TrailersProxyService));
+            //_trailersProxyServiecHost = WCFUtilites.StartService(EventSource, typeof(TrailersProxyService));
+            _trailersProxyService = new TrailersProxyService();
+
         }
 
         protected override void OnStop()
         {
             WCFUtilites.StopService(EventSource, ref _transcodingServiceHost);
-            WCFUtilites.StopService(EventSource, ref _trailersProxyServiecHost);
+            //WCFUtilites.StopService(EventSource, ref _trailersProxyServiecHost);
+            _trailersProxyService.Server.Stop();
             //WCFUtilites.StopService(EventSource, ref _titleCollectionServiceHost);
             WriteToLog(System.Diagnostics.EventLogEntryType.Information, "OMLEngineService Stop");
         }
