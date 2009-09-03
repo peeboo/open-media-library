@@ -595,6 +595,22 @@
 
     <PropertyRef Id="NETFRAMEWORK35"/>
 
+    <!-- OML Custom Managed Actions -->
+    <CustomAction Id="ReserveTrailersUrlAction"
+                  BinaryKey="OMLCALib"
+                  DllEntry="ReserveTrailersUrl"
+                  Execute="deferred"
+                  Return="ignore" />
+
+    <CustomAction Id="StartOMLEngineServiceAction"
+                  BinaryKey="OMLCALib"
+                  DllEntry="StartOMLEngineService"
+                  Execute="deferred"
+                  Return="ignore"  />
+
+    <Binary Id="OMLCALib"
+            SourceFile="..\..\OMLCustomWiXAction\bin\$(var.BuildType)\OMLWiXActionsCAsPackage.dll" />
+
   </Fragment>
 </Wix>
 

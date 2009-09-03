@@ -92,6 +92,13 @@
         DllEntry="WixShellExec"
         Impersonate="yes" />
 
+    <!--
+    <InstallExecuteSequence>
+      <Custom Action='ReserveTrailersUrlAction' After='StartOMLEngineServiceAction'/>
+      <Custom Action='StartOMLEngineServiceAction' Before='InstallFinalize' />
+    </InstallExecuteSequence>
+    -->
+
   </Product>
 </Wix>
 

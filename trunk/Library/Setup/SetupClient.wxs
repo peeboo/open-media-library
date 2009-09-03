@@ -52,17 +52,14 @@
     <!-- described in more detail in the WiX documentation.                                              -->
     <UI>
       <UIRef Id="WixUI_FeatureTree" />
-      <Publish Dialog="ExitDialog"
-               Control="Finish"
-               Event="DoAction"
-               Value="LaunchApplication">1</Publish>
     </UI>
-    
-    <Property Id="WixShellExecTarget" Value="[#PostInstallerWizard.exe]" />
-    <CustomAction Id="LaunchApplication"
-        BinaryKey="WixCA"
-        DllEntry="WixShellExec"
-        Impersonate="yes" />
+
+    <!--
+    <InstallExecuteSequence>
+      <Custom Action='ReserveTrailersUrlAction' Before='StartOMLEngineServiceAction'/>
+      <Custom Action='StartOMLEngineServiceAction' Before='InstallFinalize' />
+    </InstallExecuteSequence>
+    -->
 
   </Product>
 </Wix>
