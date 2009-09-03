@@ -59,9 +59,14 @@ namespace OMLCustomWiXAction {
                 NTAccount act;
                 SecurityIdentifier sid;
 
-                act = new NTAccount("everyone");
+                //add users in case someone runs the service as themselves
+                act = new NTAccount("users");
                 sid = (SecurityIdentifier)act.Translate(typeof(SecurityIdentifier));
-                URLReservation.UrlReservation rev = new URLReservation.UrlReservation("http://+8484/3f0850a7-0fd7-4cbf-b8dc-c7f7ea31534e");
+                URLReservation.UrlReservation rev = new URLReservation.UrlReservation("http://127.0.0.1:8484/3f0850a7-0fd7-4cbf-b8dc-c7f7ea31534e/");
+                rev.AddSecurityIdentifier(sid);
+                //add system because that is the default
+                act = new NTAccount("system");
+                sid = (SecurityIdentifier)act.Translate(typeof(SecurityIdentifier));
                 rev.AddSecurityIdentifier(sid);
                 rev.Create();
                 return ActionResult.Success;
