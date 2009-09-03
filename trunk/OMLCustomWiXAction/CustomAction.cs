@@ -20,17 +20,19 @@ namespace OMLCustomWiXAction {
 
         [CustomAction]
         public static ActionResult StartOMLEngineService(Session session) {
+            session.Log("Inside StartOMLEngineService");
             try {
                 ServiceController omlengineController = new ServiceController(@"OMLEngineService");
                 TimeSpan timeout = TimeSpan.FromSeconds(20);
                 omlengineController.Start();
                 omlengineController.WaitForStatus(ServiceControllerStatus.Running, timeout);
                 omlengineController.Close();
+                session.Log("StartOMLEngineService CA: Success");
+                return ActionResult.Success;
             } catch (Exception e) {
                 session.Log("Error starting OMLEngineService: {0}", e.Message);
                 return ActionResult.Failure;
             }
-            return ActionResult.Success;
         }
 
         [CustomAction]
@@ -55,6 +57,8 @@ namespace OMLCustomWiXAction {
 
         [CustomAction]
         public static ActionResult ReserveTrailersUrl(Session session) {
+            session.Log("Inside ReserveTrailersUrl");
+            session.SetMode(InstallRunMode.Admin, true);
             try {
                 NTAccount act;
                 SecurityIdentifier sid;
@@ -64,14 +68,17 @@ namespace OMLCustomWiXAction {
                 sid = (SecurityIdentifier)act.Translate(typeof(SecurityIdentifier));
                 URLReservation.UrlReservation rev = new URLReservation.UrlReservation("http://127.0.0.1:8484/3f0850a7-0fd7-4cbf-b8dc-c7f7ea31534e/");
                 rev.AddSecurityIdentifier(sid);
+
                 //add system because that is the default
                 act = new NTAccount("system");
                 sid = (SecurityIdentifier)act.Translate(typeof(SecurityIdentifier));
                 rev.AddSecurityIdentifier(sid);
                 rev.Create();
+                session.Log("ReserveTrailersUrl CA: Success");
                 return ActionResult.Success;
 
             } catch (Exception e) {
+                session.Log("Error in ReserveTrailersUrl: {0}", e.Message);
                 return ActionResult.Failure;
             }
         }
