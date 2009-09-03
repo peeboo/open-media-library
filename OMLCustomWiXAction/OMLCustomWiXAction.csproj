@@ -78,4 +78,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(WixCATargetsPath)" />
+  <PropertyGroup>
+    <PostBuildEvent>"c:\program files\windows installer xml v3\sdk\MakeSfxCA.exe" $(ProjectDir)$(OutDir)OMLWiXActionsCAsPackage.dll "c:\Program Files\Windows Installer XML v3\SDK\x86\SfxCA.dll" $(TargetPath) $(ProjectDir)CustomAction.config "c:\program files\windows installer xml v3\sdk\Microsoft.Deployment.WindowsInstaller.dll" $(ProjectDir)..\OMLEngine\bin\$(ConfigurationName)\OMLEngine.dll</PostBuildEvent>
+  </PropertyGroup>
 </Project>
