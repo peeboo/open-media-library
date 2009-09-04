@@ -84,13 +84,17 @@
       <ProgressText Action="StartOMLEngineServiceAction">Starting up OMLEngineService</ProgressText>
     </UI>
 
-    <!--
     <InstallExecuteSequence>
-      <Custom Action="ActivateNetTcpPortSharing" Before="ReserveTrailersUrlAction">NOT RemoveExistingProducts</Custom>
-      <Custom Action='ReserveTrailersUrlAction' Before='StartOMLEngineServiceAction'>NOT RemoveExistingProducts</Custom>
-      <Custom Action='StartOMLEngineServiceAction' Before='InstallFinalize'>NOT RemoveExistingProducts</Custom>
+      <Custom Action="ActivateNetTcpPortSharing" Before="ReserveTrailersUrlAction">
+        <![CDATA[NOT REMOVE]]>
+      </Custom>
+      <Custom Action='ReserveTrailersUrlAction' Before='StartOMLEngineServiceAction'>
+        <![CDATA[NOT REMOVE]]>
+      </Custom>
+      <Custom Action='StartOMLEngineServiceAction' Before='InstallFinalize'>
+        <![CDATA[NOT REMOVE]]>
+      </Custom>
     </InstallExecuteSequence>
-    -->
 
   </Product>
 </Wix>

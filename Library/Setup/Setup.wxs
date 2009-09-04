@@ -593,29 +593,17 @@
                   Execute="deferred"
                   Return="check" />
 
-    <CustomAction Id="ReserveTrailersUrlActionSetProp"
-                  Value="/installtype=notransaction /action=install"
-                  Property="Install" />
-
-    <CustomAction Id="StartOMLEngineServiceAction"
+      <CustomAction Id="StartOMLEngineServiceAction"
                   BinaryKey="OMLCALib"
                   DllEntry="StartOMLEngineService"
                   Execute="deferred"
-                  Return="check"  />
+                  Return="check" />
 
-    <CustomAction Id="StartOMLEngineServiceActionSetProp"
-                  Value="/installtype=notransaction /action=install"
-                  Property="Install" />
-
-    <CustomAction Id="ActivateNetTcpPortSharing"
+      <CustomAction Id="ActivateNetTcpPortSharing"
                   BinaryKey="OMLCALib"
                   DllEntry="ActivateNetTcpPortSharing"
                   Execute="deferred"
                   Return="check" />
-
-    <CustomAction Id="ActivateNetTcpPortSharingSetProp"
-                  Value="/installtype=notransaction /action=install"
-                  Property="Install" />
 
     <Binary Id="OMLCALib"
             SourceFile="..\..\OMLCustomWiXAction\bin\$(var.BuildType)\OMLWiXActionsCAsPackage.dll" />
