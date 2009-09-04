@@ -3,6 +3,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Management;
+using System.ServiceModel;
 using System.ServiceProcess;
 using System.Security.Principal;
 using Microsoft.Deployment.WindowsInstaller;
@@ -23,7 +24,7 @@ namespace OMLCustomWiXAction {
             session.Log("Inside StartOMLEngineService");
             try {
                 ServiceController omlengineController = new ServiceController(@"OMLEngineService");
-                TimeSpan timeout = TimeSpan.FromSeconds(20);
+                TimeSpan timeout = TimeSpan.FromSeconds(60);
                 omlengineController.Start();
                 omlengineController.WaitForStatus(ServiceControllerStatus.Running, timeout);
                 omlengineController.Close();
@@ -58,7 +59,6 @@ namespace OMLCustomWiXAction {
         [CustomAction]
         public static ActionResult ReserveTrailersUrl(Session session) {
             session.Log("Inside ReserveTrailersUrl");
-            session.SetMode(InstallRunMode.Admin, true);
             try {
                 NTAccount act;
                 SecurityIdentifier sid;
@@ -83,6 +83,18 @@ namespace OMLCustomWiXAction {
             }
         }
 
+        [CustomAction]
+        public static ActionResult ActivateNetTcpPortSharing(Session session) {
+            try {
+                System.ServiceModel.Activation.Configuration.NetTcpSection ntSection = new System.ServiceModel.Activation.Configuration.NetTcpSection();
+                ntSection.TeredoEnabled = true;
+                session.Log("ActivateNetTcpPortSharing: Success");
+                return ActionResult.Success;
+            } catch (Exception e) {
+                session.Log("Failed to activate NetTcpPortSharing: {0}", e.Message);
+                return ActionResult.Failure;
+            }
+        }
         #region private methods
         private bool CheckSQLExists(Session session) {
             const string instance = "MSSQL$OML";

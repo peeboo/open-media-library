@@ -52,12 +52,16 @@
     <!-- described in more detail in the WiX documentation.                                              -->
     <UI>
       <UIRef Id="WixUI_FeatureTree" />
+      <ProgressText Action="ReserveTrailersUrlAction">Reserving Url for Trailers Proxy Server</ProgressText>
+      <ProgressText Action="ActivateNetTcpPortSharing">Activating NetTcpPortSharing for Transcoding Services</ProgressText>
+      <ProgressText Action="StartOMLEngineServiceAction">Starting up OMLEngineService</ProgressText>
     </UI>
 
     <!--
     <InstallExecuteSequence>
-      <Custom Action='ReserveTrailersUrlAction' Before='StartOMLEngineServiceAction'/>
-      <Custom Action='StartOMLEngineServiceAction' Before='InstallFinalize' />
+      <Custom Action="ActivateNetTcpPortSharing" Before="ReserveTrailersUrlAction"/>
+      <Custom Action='ReserveTrailersUrlAction' Before='StartOMLEngineServiceAction'>$Library.dll&gt;2</Custom>
+      <Custom Action='StartOMLEngineServiceAction' Before='InstallFinalize'>$Library.dll&gt;2</Custom>
     </InstallExecuteSequence>
     -->
 
