@@ -79,23 +79,16 @@
     <!-- described in more detail in the WiX documentation.                                              -->
     <UI>
       <UIRef Id="WixUI_FeatureTree" />
-      <Publish Dialog="ExitDialog"
-               Control="Finish"
-               Event="DoAction"
-               Value="LaunchApplication">1</Publish>
+      <ProgressText Action="ReserveTrailersUrlAction">Reserving Url for Trailers Proxy Server</ProgressText>
+      <ProgressText Action="ActivateNetTcpPortSharing">Activating NetTcpPortSharing for Transcoding Services</ProgressText>
+      <ProgressText Action="StartOMLEngineServiceAction">Starting up OMLEngineService</ProgressText>
     </UI>
-
-    <Property Id="WixShellExecTarget" Value="[#PostInstallerWizard.exe]" />
-    
-    <CustomAction Id="LaunchApplication"
-        BinaryKey="WixCA"
-        DllEntry="WixShellExec"
-        Impersonate="yes" />
 
     <!--
     <InstallExecuteSequence>
-      <Custom Action='ReserveTrailersUrlAction' After='StartOMLEngineServiceAction'/>
-      <Custom Action='StartOMLEngineServiceAction' Before='InstallFinalize' />
+      <Custom Action="ActivateNetTcpPortSharing" Before="ReserveTrailersUrlAction">NOT RemoveExistingProducts</Custom>
+      <Custom Action='ReserveTrailersUrlAction' Before='StartOMLEngineServiceAction'>NOT RemoveExistingProducts</Custom>
+      <Custom Action='StartOMLEngineServiceAction' Before='InstallFinalize'>NOT RemoveExistingProducts</Custom>
     </InstallExecuteSequence>
     -->
 
