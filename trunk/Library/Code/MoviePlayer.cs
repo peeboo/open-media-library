@@ -124,7 +124,7 @@ namespace Library
                 {
                     OMLApplication.DebugLine("[MoviePlayerFactory] TranscodePlayer created ({1}): {0}", source, mediaFormat);
                     // we need to figure out if you are on an extender and using windows7, then don't try to transcode stuff
-                    if (OMLApplication.IsWindows7) {
+                    if (OMLApplication.IsWindows7 && mediaFormat != VideoFormat.MKV) {
                         OMLApplication.DebugLine("[MoviePlayerFactory] VideoPlayer created: {0}", source);
                         return new VideoPlayer(source);
                     }
