@@ -103,6 +103,41 @@ namespace OMLEngine
             return VideoFormat.UNKNOWN;            
         }
 
+        public string GetDiskFolder
+        {
+            get
+            {
+                if (File.Exists(Path))
+                {
+                    // Disk if a movie file
+                    return System.IO.Path.GetDirectoryName(Path);
+                }
+                if (Directory.Exists(Path))
+                {
+                    // Disk is a movie folder (DVD etc)
+                    return Path;
+                }
+                return "";
+            }
+        }
+
+        public string GetDiskFile
+        {
+            get
+            {
+                if (File.Exists(Path))
+                {
+                    // Disk if a movie file
+                    return System.IO.Path.GetFileName(Path);
+                }
+                else
+                {
+                    // Disk is a movie folder (DVD etc)
+                    return "";
+                }
+            }
+        }
+
         #region -- DVD Members --
         [NonSerialized]
         DVDDiskInfo _dvdDiskInfo;

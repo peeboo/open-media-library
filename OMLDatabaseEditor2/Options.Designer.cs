@@ -71,6 +71,7 @@ namespace OMLDatabaseEditor
             this.sbCancel = new DevExpress.XtraEditors.SimpleButton();
             this.sbOK = new DevExpress.XtraEditors.SimpleButton();
             this.cmGenreMappings = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ceStSanaAlwaysCreateMovieFolder = new DevExpress.XtraEditors.CheckEdit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
@@ -102,6 +103,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolVDrive.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolScan.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgMountingTool.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceStSanaAlwaysCreateMovieFolder.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -141,6 +143,7 @@ namespace OMLDatabaseEditor
             // 
             // tpOptions
             // 
+            this.tpOptions.Controls.Add(this.ceStSanaAlwaysCreateMovieFolder);
             this.tpOptions.Controls.Add(this.ceStSanaCreateTLFolder);
             this.tpOptions.Controls.Add(this.ceScanDiskRollInfoToTitle);
             this.tpOptions.Controls.Add(this.ceAutoScanDiskOnAdd);
@@ -159,7 +162,7 @@ namespace OMLDatabaseEditor
             // 
             this.ceStSanaCreateTLFolder.Location = new System.Drawing.Point(7, 151);
             this.ceStSanaCreateTLFolder.Name = "ceStSanaCreateTLFolder";
-            this.ceStSanaCreateTLFolder.Properties.Caption = "Create top level folder when dragging folders into the editor";
+            this.ceStSanaCreateTLFolder.Properties.Caption = "Create top level folder (St Sana Drag and Drop)";
             this.ceStSanaCreateTLFolder.Size = new System.Drawing.Size(325, 19);
             this.ceStSanaCreateTLFolder.TabIndex = 14;
             // 
@@ -583,6 +586,14 @@ namespace OMLDatabaseEditor
             this.cmGenreMappings.Name = "cmGenreMappings";
             this.cmGenreMappings.Size = new System.Drawing.Size(61, 4);
             // 
+            // ceStSanaAlwaysCreateMovieFolder
+            // 
+            this.ceStSanaAlwaysCreateMovieFolder.Location = new System.Drawing.Point(7, 176);
+            this.ceStSanaAlwaysCreateMovieFolder.Name = "ceStSanaAlwaysCreateMovieFolder";
+            this.ceStSanaAlwaysCreateMovieFolder.Properties.Caption = "Always Create a movie folder (St Sana Drag and Drop)";
+            this.ceStSanaAlwaysCreateMovieFolder.Size = new System.Drawing.Size(325, 19);
+            this.ceStSanaAlwaysCreateMovieFolder.TabIndex = 15;
+            // 
             // Options
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -628,6 +639,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolVDrive.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolScan.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgMountingTool.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceStSanaAlwaysCreateMovieFolder.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -676,5 +688,6 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraEditors.CheckEdit ceDBEStSanaAutoLookupMeta;
         private DevExpress.XtraEditors.ComboBoxEdit cmbDefaultMetadataPluginTV;
         private DevExpress.XtraEditors.LabelControl labelControl8;
+        private DevExpress.XtraEditors.CheckEdit ceStSanaAlwaysCreateMovieFolder;
     }
 }

@@ -3666,7 +3666,7 @@ namespace OMLDatabaseEditor
 
                         int? a_parent;
 
-                        if (OMLEngine.Settings.OMLSettings.DBEStSanaCreateTLFolder)
+                        if (OMLEngine.Settings.OMLSettings.StSanaCreateTLFolder)
                         {
                             a_parent = CreateFolderNonDuplicate(parentid, Path.GetFileName(file), TitleTypes.Collection, null, false);
                         }
@@ -3686,7 +3686,14 @@ namespace OMLDatabaseEditor
                                     {
                                         case Serf.EntityType.COLLECTION:
                                         case Serf.EntityType.MOVIE:
-                                            e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, null, false);
+                                            if ((e.Series.Count() > 1) || (OMLEngine.Settings.OMLSettings.StSanaAlwaysCreateMovieFolder))
+                                            {
+                                                e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, null, false);
+                                            }
+                                            else
+                                            {
+                                                e_parent = a_parent;
+                                            }
                                             break;
                                         case Serf.EntityType.TV_SHOW:
                                             e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.TVShow, null, false);
@@ -3708,7 +3715,14 @@ namespace OMLDatabaseEditor
                                             {
                                                 case Serf.EntityType.COLLECTION:
                                                 case Serf.EntityType.MOVIE:
-                                                    s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, null, false);
+                                                    if ((e_parent == a_parent) || (OMLEngine.Settings.OMLSettings.StSanaAlwaysCreateMovieFolder))
+                                                    {
+                                                        s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, null, false);
+                                                    }
+                                                    else
+                                                    {
+                                                        s_parent = e_parent;
+                                                    }
                                                     break;
                                                 case Serf.EntityType.TV_SHOW:
                                                     s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Season, (short)s.Number, false);
@@ -3734,21 +3748,14 @@ namespace OMLDatabaseEditor
                                             // Collection or movie mode. Create one title per folder with multiple disks
                                             foreach (string f in v.Files)
                                             {
-                                                string pathWithNoFile = Path.GetDirectoryName(f);
-                                                string pathWithNoExtension = Path.GetDirectoryName(f) + "\\" + Path.GetFileNameWithoutExtension(f);
-                                                string fileExtension = Path.GetExtension(f).ToUpper().Replace(".", "");
-
-                                                fileExtension = fileExtension.Replace("-", "");
-
                                                 if (!TitleCollectionManager.ContainsDisks(OMLEngine.FileSystem.NetworkScanner.FixPath(f)))
                                                 {
-                                                    if (Enum.IsDefined(typeof(VideoFormat), fileExtension.ToUpperInvariant()))
+                                                    Disk disk = new Disk();
+                                                    disk.Path = f;
+                                                    disk.Format = disk.GetFormatFromPath(f); // (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
+                                                    disk.Name = string.Format("Disk {0}", 0);
+                                                    if (disk.Format != VideoFormat.UNKNOWN)
                                                     {
-                                                        Disk disk = new Disk();
-                                                        disk.Path = f;
-                                                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
-                                                        disk.Name = string.Format("Disk {0}", 0);
-
                                                         disks.Add(disk);
                                                     }
                                                 }
@@ -3764,7 +3771,7 @@ namespace OMLDatabaseEditor
                                                 // Reload title from db, lookup metadata and find images
                                                 Title newTitle = TitleCollectionManager.GetTitle(newTitleID);
                                                 LookupPreferredMetaData(newTitle);
-                                                CheckPathForImages(newTitle, disks[0].Path);
+                                                CheckDiskPathForImages(newTitle, disks[0]);
                                                 TitleCollectionManager.SaveTitleUpdates();
                                             }
                                         }
@@ -3773,21 +3780,14 @@ namespace OMLDatabaseEditor
                                             // TV mode. Create one title per file, each with single disks
                                             foreach (string f in v.Files)
                                             {
-                                                string pathWithNoFile = Path.GetDirectoryName(f);
-                                                string pathWithNoExtension = Path.GetDirectoryName(f) + "\\" + Path.GetFileNameWithoutExtension(f);
-                                                string fileExtension = Path.GetExtension(f).ToUpper().Replace(".", "");
-
-                                                fileExtension = fileExtension.Replace("-", "");
-
                                                 if (!TitleCollectionManager.ContainsDisks(OMLEngine.FileSystem.NetworkScanner.FixPath(f)))
                                                 {
-                                                    if (Enum.IsDefined(typeof(VideoFormat), fileExtension.ToUpperInvariant()))
+                                                    Disk disk = new Disk();
+                                                    disk.Path = f;
+                                                    disk.Format = disk.GetFormatFromPath(f); //(VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
+                                                    disk.Name = string.Format("Disk {0}", 0);
+                                                    if (disk.Format != VideoFormat.UNKNOWN)
                                                     {
-                                                        Disk disk = new Disk();
-                                                        disk.Path = f;
-                                                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
-                                                        disk.Name = string.Format("Disk {0}", 0);
-
                                                         disks.Add(disk);
                                                     }
                                                 }
@@ -3807,7 +3807,7 @@ namespace OMLDatabaseEditor
                                                     // Reload title from db, lookup metadata and find images
                                                     Title newTitle = TitleCollectionManager.GetTitle(newTitleID);
                                                     LookupPreferredMetaData(newTitle);
-                                                    CheckPathForImages(newTitle, disks[0].Path);
+                                                    CheckDiskPathForImages(newTitle, disks[0]);
                                                     TitleCollectionManager.SaveTitleUpdates();
 
                                                 }
@@ -3825,14 +3825,13 @@ namespace OMLDatabaseEditor
                         string extension = Path.GetExtension(file).ToUpper().Replace(".", "");
                         extension = extension.Replace("-", "");
 
-                        if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
-                        {
-                            Disk disk = new Disk();
-                            disk.Path = file;
-                            disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension.ToUpperInvariant());
-                            disk.Name = string.Format("Disk {0}", 0);
+                        Disk disk = new Disk();
+                        disk.Path = file;
+                        disk.Format = disk.GetFormatFromPath(file); // (VideoFormat)Enum.Parse(typeof(VideoFormat), extension.ToUpperInvariant());
+                        disk.Name = string.Format("Disk {0}", 0);
 
-                            //List<
+                        if (disk.Format != VideoFormat.UNKNOWN)
+                        {
                             int newTitleID = CreateTitle(parentid,
                                 Path.GetFileNameWithoutExtension(file),
                                 TitleTypes.Unknown,
@@ -3842,7 +3841,7 @@ namespace OMLDatabaseEditor
                             // Reload title from db, lookup metadata and find images
                             Title newTitle = TitleCollectionManager.GetTitle(newTitleID);
                             LookupPreferredMetaData(newTitle);
-                            CheckPathForImages(newTitle, file);
+                            CheckDiskPathForImages(newTitle, disk);
                             TitleCollectionManager.SaveTitleUpdates();
                         }
                     }
@@ -3865,39 +3864,77 @@ namespace OMLDatabaseEditor
             StSanaEvents.UpdateStatus(message);
         }
 
-        private void CheckPathForImages(Title title, string path)
+        private void CheckDiskPathForImages(Title title, Disk disk)
         {
-            if ((title == null) || (string.IsNullOrEmpty(path))) return;
+            if ((disk == null) || (string.IsNullOrEmpty(disk.Path))) return;
 
-            string pathWithNoFile = Path.GetDirectoryName(path);
-            string pathWithNoExtension = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path);
-            //string fileExtension = Path.GetExtension(path).ToUpper().Replace(".", "");
+            string diskFolder = disk.GetDiskFolder;
+            string diskPathWithExtension = null;
+            string diskPathWithoutExtension = null;
+
+            if (!string.IsNullOrEmpty(disk.GetDiskFile))
+            {
+                diskPathWithExtension = disk.Path;
+                diskPathWithoutExtension = disk.GetDiskFolder + "\\" + Path.GetFileNameWithoutExtension(disk.GetDiskFile);
+            }
 
             string image = null;
-            if (File.Exists(pathWithNoExtension + ".jpg"))
+
+            // If the Disk is a media file, look for an image in the disk 
+            // folder with the same name as the media file.
+            if (!string.IsNullOrEmpty(diskPathWithExtension))
             {
-                image = pathWithNoExtension + ".jpg";
+                if (File.Exists(diskPathWithExtension + ".jpg"))
+                {
+                    image = diskPathWithExtension + ".jpg";
+                }
+                else if (File.Exists(diskPathWithExtension + ".png"))
+                {
+                    image = diskPathWithExtension + ".png";
+                }
+                else if (File.Exists(diskPathWithoutExtension + ".jpg"))
+                {
+                    image = diskPathWithoutExtension + ".jpg";
+                }
+                else if (File.Exists(diskPathWithoutExtension + ".png"))
+                {
+                    image = diskPathWithoutExtension + ".png";
+                }
             }
-            else if (File.Exists(pathWithNoExtension + ".png"))
+
+            // Look for a generic folder.xxx image
+            if (string.IsNullOrEmpty(image))
             {
-                image = pathWithNoExtension + ".png";
-            }
-            else if (File.Exists(path + ".jpg"))
+                if (File.Exists(Path.Combine(diskFolder, "folder.jpg")))
+                {
+                    image = Path.Combine(diskFolder, "folder.jpg");
+                }
+                else if (File.Exists(Path.Combine(diskFolder, "folder.png")))
+                {
+                    image = Path.Combine(diskFolder, "folder.png");
+                }
+            } 
+            
+            // Look for any jpg image
+            if (string.IsNullOrEmpty(image))
             {
-                image = path + ".jpg";
+                string[] imagefiles = Directory.GetFiles(diskFolder, "*.jpg");
+                if (imagefiles.Count() > 0)
+                {
+                    image = imagefiles[0];
+                }
             }
-            else if (File.Exists(path + ".png"))
+
+            // Look for any jpg image
+            if (string.IsNullOrEmpty(image))
             {
-                image = path = ".png";
+                string[] imagefiles = Directory.GetFiles(diskFolder, "*.png");
+                if (imagefiles.Count() > 0)
+                {
+                    image = imagefiles[0];
+                }
             }
-            else if (File.Exists(Path.Combine(pathWithNoFile, "folder.jpg")))
-            {
-                image = Path.Combine(pathWithNoFile, "folder.jpg");
-            }
-            else if (File.Exists(Path.Combine(pathWithNoFile, "folder.png")))
-            {
-                image = Path.Combine(pathWithNoFile, "folder.png");
-            }
+
 
             if (!string.IsNullOrEmpty(image))
             {
@@ -3905,7 +3942,7 @@ namespace OMLDatabaseEditor
             }
 
             // Check for fanart
-            string fanartfolder = Path.Combine(pathWithNoFile, "Fanart");
+            string fanartfolder = Path.Combine(diskFolder, "Fanart");
             if (Directory.Exists(fanartfolder))
             {
                 foreach (string imagefile in Directory.GetFiles(fanartfolder))
@@ -3926,7 +3963,7 @@ namespace OMLDatabaseEditor
 
         private void LookupPreferredMetaData(Title title)
         {
-            if (OMLEngine.Settings.OMLSettings.DBEStSanaAutoLookupMeta)
+            if (OMLEngine.Settings.OMLSettings.StSanaAutoLookupMeta)
             {
                 if ((title == null) || (string.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))) return;
                 StartMetadataImport(title, null, false);
@@ -3951,8 +3988,13 @@ namespace OMLDatabaseEditor
             List<TitleFilter> tf = new List<TitleFilter>();
             tf.Add(tf1);
             tf.Add(tf2);
-            List<Title> existingTitle = TitleCollectionManager.GetFilteredTitles(tf).ToList();
-            if (existingTitle.Count > 0)
+            List<Title> existingTitle = (from t in TitleCollectionManager.GetFilteredTitles(tf)
+                                         where t.Name == Name
+                                         select t).ToList();
+
+
+
+            if (existingTitle.Count() > 0)
             {
                 titleid = existingTitle[0].Id;
             }

@@ -156,12 +156,13 @@ namespace OMLDatabaseEditor
 
         private void sbRecreateDatabase_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("This will recreate the database deleting ALL movies, genres, people etc.\n\t Are you sure?", "Recreate database", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("This will recreate the database deleting ALL movies, genres, people etc.\n\t Are you sure?", "Recreate database", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
-                if (MessageBox.Show("Are you really sure?", "Recreate database", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("Are you really sure?", "Recreate database", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {      
                     OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
                     dbm.CreateSchema();
+                    OMLEngine.ImageManager.RemoveAllCachedImages();
                     MessageBox.Show("The database has been recreated.\n Please restart any open OML appliations.", "Recreate database", MessageBoxButtons.OK);
                 }
             }
