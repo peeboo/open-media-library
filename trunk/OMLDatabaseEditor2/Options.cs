@@ -105,8 +105,9 @@ namespace OMLDatabaseEditor
 
             ceAutoScanDiskOnAdd.Checked = OMLSettings.AutoScanDiskOnAdding;
             ceScanDiskRollInfoToTitle.Checked = OMLSettings.ScanDiskRollInfoToTitle;
-            ceStSanaCreateTLFolder.Checked = OMLSettings.DBEStSanaCreateTLFolder;
-            ceDBEStSanaAutoLookupMeta.Checked = OMLEngine.Settings.OMLSettings.DBEStSanaAutoLookupMeta;
+            ceStSanaCreateTLFolder.Checked = OMLSettings.StSanaCreateTLFolder;
+            ceStSanaAlwaysCreateMovieFolder.Checked = OMLSettings.StSanaAlwaysCreateMovieFolder;
+            ceDBEStSanaAutoLookupMeta.Checked = OMLEngine.Settings.OMLSettings.StSanaAutoLookupMeta;
 
             // Mounting Tools
             foreach (string toolName in Enum.GetNames(typeof(OMLEngine.FileSystem.MountingTool.Tool)))
@@ -174,7 +175,10 @@ namespace OMLDatabaseEditor
                 OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV = (string)cmbDefaultMetadataPluginTV.SelectedItem;
 
                 OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty = (int)seMetadataLookupResultsQty.Value;
-                OMLEngine.Settings.OMLSettings.DBEStSanaAutoLookupMeta = ceDBEStSanaAutoLookupMeta.Checked;
+                
+                OMLSettings.StSanaCreateTLFolder = ceStSanaCreateTLFolder.Checked;
+                OMLSettings.StSanaAlwaysCreateMovieFolder = ceStSanaAlwaysCreateMovieFolder.Checked;
+                OMLEngine.Settings.OMLSettings.StSanaAutoLookupMeta = ceDBEStSanaAutoLookupMeta.Checked;
                 
                 if (bDirty)
                 {
@@ -193,7 +197,6 @@ namespace OMLDatabaseEditor
 
                 OMLSettings.AutoScanDiskOnAdding = ceAutoScanDiskOnAdd.Checked;
                 OMLSettings.ScanDiskRollInfoToTitle = ceScanDiskRollInfoToTitle.Checked;
-                OMLSettings.DBEStSanaCreateTLFolder = ceStSanaCreateTLFolder.Checked;
 
 
                 MountingTool.Tool tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), rgMountingTool.Text);

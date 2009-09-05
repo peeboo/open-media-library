@@ -498,7 +498,6 @@ namespace OMLEngine.Settings
 
 
         #region DBEditor
-
         public static string DBEditorSkin
         {
             get { return SettingsManager.GetSettingByName("DBEditorSkin", InstanceName) ?? "Blue"; }
@@ -585,23 +584,30 @@ namespace OMLEngine.Settings
             get { return SettingsManager.GetSettingByNameBool("DBEAlwaysShowTitleList", InstanceName) ?? false; }
             set { SettingsManager.SaveSettingByName("DBEAlwaysShowTitleList", value.ToString(), InstanceName); }
         }
+        #endregion
 
         /// <summary>
         /// Create top level folder when dragging in a folder structure from Windows Explorer
-        /// into the editor
+        /// into the editor. Also applies to watched folders using StSana (When implemented)
         /// </summary>
-        public static bool DBEStSanaCreateTLFolder
+        public static bool StSanaCreateTLFolder
         {
-            get { return SettingsManager.GetSettingByNameBool("DBEStSanaCreateTLFolder", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("DBEStSanaCreateTLFolder", value.ToString(), InstanceName); }
+            get { return SettingsManager.GetSettingByNameBool("StSanaCreateTLFolder", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("StSanaCreateTLFolder", value.ToString(), InstanceName); }
         }
 
-        public static bool DBEStSanaAutoLookupMeta
+        public static bool StSanaAlwaysCreateMovieFolder
         {
-            get { return SettingsManager.GetSettingByNameBool("DBEStSanaAutoLookupMeta", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("DBEStSanaAutoLookupMeta", value.ToString(), InstanceName); }
+            get { return SettingsManager.GetSettingByNameBool("StSanaAlwaysCreateMovieFolder", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("StSanaAlwaysCreateMovieFolder", value.ToString(), InstanceName); }
         }
-        #endregion
+
+        public static bool StSanaAutoLookupMeta
+        {
+            get { return SettingsManager.GetSettingByNameBool("StSanaAutoLookupMeta", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("StSanaAutoLookupMeta", value.ToString(), InstanceName); }
+        }
+
 
         public static string MPAARatings
         {

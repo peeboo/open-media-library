@@ -493,6 +493,33 @@ namespace OMLEngine
             return totalBytesRemove;
         }
 
+        public static void RemoveAllCachedImages()
+        {
+            string[] files = Directory.GetFiles(FileSystemWalker.ImageDirectory, "*.*");
+            foreach (string file in files)
+            {
+                FileInfo info = new FileInfo(file);
+
+                try
+                {
+                    info.Delete();
+                }
+                catch { }
+            }
+
+            string[] files2 = Directory.GetFiles(FileSystemWalker.ImageDownloadDirectory, "*.*");
+            foreach (string file in files2)
+            {
+                FileInfo info = new FileInfo(file);
+
+                try
+                {
+                    info.Delete();
+                }
+                catch { }
+            }
+        }
+
         public static int? GetImageIdForTitleThreadSafe(int titleId, ImageType imageType)
         {
             using (Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext())
