@@ -194,8 +194,8 @@ namespace OMLEngine.Dao
 		{
 			OnCreated();
 		}
-		
-		[Column(Storage="_Name", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+
+        [Column(Storage = "_Name", DbType = "NVarChar(255) NOT NULL", CanBeNull = false, UpdateCheck = UpdateCheck.Never)]
 		public string Name
 		{
 			get
@@ -214,8 +214,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+
+        [Column(Storage = "_Id", AutoSync = AutoSync.OnInsert, DbType = "BigInt NOT NULL IDENTITY", IsPrimaryKey = true, IsDbGenerated = true, UpdateCheck = UpdateCheck.Never)]
 		public long Id
 		{
 			get
@@ -234,8 +234,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_ModifiedDate", DbType="datetime")]
+
+        [Column(Storage = "_ModifiedDate", DbType = "datetime", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> ModifiedDate
 		{
 			get
@@ -254,8 +254,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Photo", DbType="Int")]
+
+        [Column(Storage = "_Photo", DbType = "Int", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<int> PhotoID
 		{
 			get
@@ -331,7 +331,7 @@ namespace OMLEngine.Dao
 			OnCreated();
 		}
 		
-		[Column(Storage="_TitleId", DbType="Int NOT NULL")]
+		[Column(Storage="_TitleId", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public int TitleId
 		{
 			get
@@ -354,8 +354,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_GenreMetaDataId", DbType="BigInt NOT NULL")]
+
+        [Column(Storage = "_GenreMetaDataId", DbType = "BigInt NOT NULL", UpdateCheck = UpdateCheck.Never)]
 		public long GenreMetaDataId
 		{
 			get
@@ -378,8 +378,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+
+        [Column(Storage = "_Id", AutoSync = AutoSync.OnInsert, DbType = "BigInt NOT NULL IDENTITY", IsPrimaryKey = true, IsDbGenerated = true, UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<long> Id
 		{
 			get
@@ -635,8 +635,8 @@ namespace OMLEngine.Dao
 			this._Images = new EntitySet<ImageMapping>(new Action<ImageMapping>(this.attach_Images), new Action<ImageMapping>(this.detach_Images));
 			OnCreated();
 		}
-		
-		[Column(Storage="_Name", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+
+        [Column(Storage = "_Name", DbType = "NVarChar(255) NOT NULL", CanBeNull = false, UpdateCheck = UpdateCheck.Never)]
 		public string Name
 		{
 			get
@@ -655,8 +655,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+
+        [Column(Storage = "_Id", AutoSync = AutoSync.OnInsert, DbType = "Int NOT NULL IDENTITY", IsPrimaryKey = true, IsDbGenerated = true, UpdateCheck = UpdateCheck.Never)]
 		public int Id
 		{
 			get
@@ -675,8 +675,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_SortName", DbType="NVarChar(255) NOT NULL")]
+
+        [Column(Storage = "_SortName", DbType = "NVarChar(255) NOT NULL", UpdateCheck = UpdateCheck.Never)]
 		public string SortName
 		{
 			get
@@ -695,8 +695,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_WatchedCount", DbType="Int")]
+
+        [Column(Storage = "_WatchedCount", DbType = "Int", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<int> WatchedCount
 		{
 			get
@@ -715,8 +715,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_MetaDataSource", DbType="NVarChar(200)")]
+
+        [Column(Storage = "_MetaDataSource", DbType = "NVarChar(200)", UpdateCheck = UpdateCheck.Never)]
 		public string MetaDataSource
 		{
 			get
@@ -735,8 +735,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Runtime", DbType="SmallInt")]
+
+        [Column(Storage = "_Runtime", DbType = "SmallInt", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<short> Runtime
 		{
 			get
@@ -755,8 +755,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_ParentalRating", DbType="NVarChar(80)")]
+
+        [Column(Storage = "_ParentalRating", DbType = "NVarChar(80)", UpdateCheck = UpdateCheck.Never)]
 		public string ParentalRating
 		{
 			get
@@ -775,8 +775,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Synopsis", DbType="NVarChar(MAX)")]
+
+        [Column(Storage = "_Synopsis", DbType = "NVarChar(MAX)", UpdateCheck = UpdateCheck.Never)]
 		public string Synopsis
 		{
 			get
@@ -795,8 +795,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Studio", DbType="NVarChar(255)")]
+
+        [Column(Storage = "_Studio", DbType = "NVarChar(255)", UpdateCheck = UpdateCheck.Never)]
 		public string Studio
 		{
 			get
@@ -815,8 +815,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_CountryOfOrgin", DbType="NVarChar(255)")]
+
+        [Column(Storage = "_CountryOfOrgin", DbType = "NVarChar(255)", UpdateCheck = UpdateCheck.Never)]
 		public string CountryOfOrigin
 		{
 			get
@@ -835,8 +835,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_WebsiteUrl", DbType="NVarChar(255)")]
+
+        [Column(Storage = "_WebsiteUrl", DbType = "NVarChar(255)", UpdateCheck = UpdateCheck.Never)]
 		public string WebsiteUrl
 		{
 			get
@@ -855,8 +855,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_ReleaseDate", DbType="SmallDateTime")]
+
+        [Column(Storage = "_ReleaseDate", DbType = "SmallDateTime", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> ReleaseDate
 		{
 			get
@@ -875,8 +875,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_DateAdded", DbType="SmallDateTime")]
+
+        [Column(Storage = "_DateAdded", DbType = "SmallDateTime", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> DateAdded
 		{
 			get
@@ -895,8 +895,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_AudioTracks", DbType="NVarChar(255)")]
+
+        [Column(Storage = "_AudioTracks", DbType = "NVarChar(255)", UpdateCheck = UpdateCheck.Never)]
 		public string AudioTracks
 		{
 			get
@@ -915,8 +915,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_UserRating", DbType="TinyInt")]
+
+        [Column(Storage = "_UserRating", DbType = "TinyInt", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<byte> UserRating
 		{
 			get
@@ -935,8 +935,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_AspectRatio", DbType="NVarChar(5)")]
+
+        [Column(Storage = "_AspectRatio", DbType = "NVarChar(5)", UpdateCheck = UpdateCheck.Never)]
 		public string AspectRatio
 		{
 			get
@@ -955,8 +955,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_VideoStandard", DbType="NVarChar(10)")]
+
+        [Column(Storage = "_VideoStandard", DbType = "NVarChar(10)", UpdateCheck = UpdateCheck.Never)]
 		public string VideoStandard
 		{
 			get
@@ -975,8 +975,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_UPC", DbType="NVarChar(20)")]
+
+        [Column(Storage = "_UPC", DbType = "NVarChar(20)", UpdateCheck = UpdateCheck.Never)]
 		public string UPC
 		{
 			get
@@ -995,8 +995,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Trailers", DbType="NVarChar(255)")]
+
+        [Column(Storage = "_Trailers", DbType = "NVarChar(255)", UpdateCheck = UpdateCheck.Never)]
 		public string Trailers
 		{
 			get
@@ -1015,8 +1015,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_ParentalRatingReason", DbType="NVarChar(255)")]
+
+        [Column(Storage = "_ParentalRatingReason", DbType = "NVarChar(255)", UpdateCheck = UpdateCheck.Never)]
 		public string ParentalRatingReason
 		{
 			get
@@ -1035,8 +1035,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_VideoDetails", DbType="NVarChar(MAX)")]
+
+        [Column(Storage = "_VideoDetails", DbType = "NVarChar(MAX)", UpdateCheck = UpdateCheck.Never)]
 		public string VideoDetails
 		{
 			get
@@ -1055,8 +1055,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Subtitles", DbType="NVarChar(255)")]
+
+        [Column(Storage = "_Subtitles", DbType = "NVarChar(255)", UpdateCheck = UpdateCheck.Never)]
 		public string Subtitles
 		{
 			get
@@ -1075,8 +1075,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_VideoResolution", DbType="NVarChar(20)")]
+
+        [Column(Storage = "_VideoResolution", DbType = "NVarChar(20)", UpdateCheck = UpdateCheck.Never)]
 		public string VideoResolution
 		{
 			get
@@ -1095,8 +1095,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_OriginalName", DbType="NVarChar(255)")]
+
+        [Column(Storage = "_OriginalName", DbType = "NVarChar(255)", UpdateCheck = UpdateCheck.Never)]
 		public string OriginalName
 		{
 			get
@@ -1115,8 +1115,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_ImporterSource", DbType="NVarChar(255)")]
+
+        [Column(Storage = "_ImporterSource", DbType = "NVarChar(255)", UpdateCheck = UpdateCheck.Never)]
 		public string ImporterSource
 		{
 			get
@@ -1135,8 +1135,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_GroupId", DbType="int (System.Int32)")]
+
+        [Column(Storage = "_GroupId", DbType = "int (System.Int32)", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<int> GroupId
 		{
 			get
@@ -1155,8 +1155,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_MetaDataSourceItemId", DbType="NVarChar(255)")]
+
+        [Column(Storage = "_MetaDataSourceItemId", DbType = "NVarChar(255)", UpdateCheck = UpdateCheck.Never)]
 		public string MetaDataSourceItemId
 		{
 			get
@@ -1175,8 +1175,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_ProductionYear", DbType="Int")]
+
+        [Column(Storage = "_ProductionYear", DbType = "Int", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<int> ProductionYear
 		{
 			get
@@ -1195,8 +1195,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_ParentTitleId", DbType="Int")]
+
+        [Column(Storage = "_ParentTitleId", DbType = "Int", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<int> ParentTitleId
 		{
 			get
@@ -1215,8 +1215,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_ModifiedDate", DbType="datetime")]
+
+        [Column(Storage = "_ModifiedDate", DbType = "datetime", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> ModifiedDate
 		{
 			get
@@ -1235,8 +1235,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_TitleType", DbType="int")]
+
+        [Column(Storage = "_TitleType", DbType = "int", UpdateCheck = UpdateCheck.Never)]
 		public int TitleType
 		{
 			get
@@ -1255,8 +1255,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_SeasonNumber", DbType="SmallInt")]
+
+        [Column(Storage = "_SeasonNumber", DbType = "SmallInt", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<short> SeasonNumber
 		{
 			get
@@ -1275,8 +1275,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_EpisodeNumber", DbType="SmallInt")]
+
+        [Column(Storage = "_EpisodeNumber", DbType = "SmallInt", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<short> EpisodeNumber
 		{
 			get
@@ -1488,8 +1488,8 @@ namespace OMLEngine.Dao
 			this._Title = default(EntityRef<Title>);
 			OnCreated();
 		}
-		
-		[Column(Storage="_CharacterName", DbType="NVarChar(255)")]
+
+        [Column(Storage = "_CharacterName", DbType = "NVarChar(255)", UpdateCheck = UpdateCheck.Never)]
 		public string CharacterName
 		{
 			get
@@ -1508,8 +1508,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_TitleId", DbType="Int NOT NULL")]
+
+        [Column(Storage = "_TitleId", DbType = "Int NOT NULL", UpdateCheck = UpdateCheck.Never)]
 		public int TitleId
 		{
 			get
@@ -1532,8 +1532,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Sort", DbType="SmallInt NOT NULL")]
+
+        [Column(Storage = "_Sort", DbType = "SmallInt NOT NULL", UpdateCheck = UpdateCheck.Never)]
 		public short Sort
 		{
 			get
@@ -1552,8 +1552,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Role", DbType="TinyInt")]
+
+        [Column(Storage = "_Role", DbType = "TinyInt", UpdateCheck = UpdateCheck.Never)]
 		public byte Role
 		{
 			get
@@ -1572,8 +1572,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_BioId", DbType="BigInt NOT NULL")]
+
+        [Column(Storage = "_BioId", DbType = "BigInt NOT NULL", UpdateCheck = UpdateCheck.Never)]
 		public long BioId
 		{
 			get
@@ -1596,8 +1596,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+
+        [Column(Storage = "_Id", AutoSync = AutoSync.OnInsert, DbType = "BigInt NOT NULL IDENTITY", IsPrimaryKey = true, IsDbGenerated = true, UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<long> Id
 		{
 			get
@@ -1730,8 +1730,8 @@ namespace OMLEngine.Dao
 		{
 			OnCreated();
 		}
-		
-		[Column(Storage="_FullName", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+
+        [Column(Storage = "_FullName", DbType = "NVarChar(255) NOT NULL", CanBeNull = false, UpdateCheck = UpdateCheck.Never)]
 		public string FullName
 		{
 			get
@@ -1750,8 +1750,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Photo", DbType="Int")]
+
+        [Column(Storage = "_Photo", DbType = "Int", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<int> PhotoID
 		{
 			get
@@ -1770,8 +1770,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+
+        [Column(Storage = "_Id", AutoSync = AutoSync.OnInsert, DbType = "BigInt NOT NULL IDENTITY", IsPrimaryKey = true, IsDbGenerated = true, UpdateCheck = UpdateCheck.Never)]
 		public long Id
 		{
 			get
@@ -1790,8 +1790,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_DateOfBirth", DbType="SmallDateTime")]
+
+        [Column(Storage = "_DateOfBirth", DbType = "SmallDateTime", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> DateOfBirth
 		{
 			get
@@ -1810,8 +1810,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Name="Biography ", Storage="_Synopsis", DbType="NVarChar(MAX)")]
+
+        [Column(Name = "Biography ", Storage = "_Synopsis", DbType = "NVarChar(MAX)", UpdateCheck = UpdateCheck.Never)]
 		public string Biography
 		{
 			get
@@ -1830,8 +1830,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_ModifiedDate", DbType="datetime")]
+
+        [Column(Storage = "_ModifiedDate", DbType = "datetime", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> ModifiedDate
 		{
 			get
@@ -1903,8 +1903,8 @@ namespace OMLEngine.Dao
 			this._Title = default(EntityRef<Title>);
 			OnCreated();
 		}
-		
-		[Column(Storage="_MovieId", DbType="Int NOT NULL")]
+
+        [Column(Storage = "_MovieId", DbType = "Int NOT NULL", UpdateCheck = UpdateCheck.Never)]
 		public int TitleId
 		{
 			get
@@ -1927,8 +1927,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Name", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+
+        [Column(Storage = "_Name", DbType = "NVarChar(255) NOT NULL", CanBeNull = false, UpdateCheck = UpdateCheck.Never)]
 		public string Name
 		{
 			get
@@ -1947,8 +1947,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+
+        [Column(Storage = "_Id", AutoSync = AutoSync.OnInsert, DbType = "BigInt NOT NULL IDENTITY", IsPrimaryKey = true, IsDbGenerated = true, UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<long> Id
 		{
 			get
@@ -2086,8 +2086,8 @@ namespace OMLEngine.Dao
 			this._Title = default(EntityRef<Title>);
 			OnCreated();
 		}
-		
-		[Column(Storage="_Name", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+
+        [Column(Storage = "_Name", DbType = "NVarChar(255) NOT NULL", CanBeNull = false, UpdateCheck = UpdateCheck.Never)]
 		public string Name
 		{
 			get
@@ -2106,8 +2106,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Path", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+
+        [Column(Storage = "_Path", DbType = "NVarChar(255) NOT NULL", CanBeNull = false, UpdateCheck = UpdateCheck.Never)]
 		public string Path
 		{
 			get
@@ -2126,8 +2126,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_VideoFormat", DbType="TinyInt NOT NULL")]
+
+        [Column(Storage = "_VideoFormat", DbType = "TinyInt NOT NULL", UpdateCheck = UpdateCheck.Never)]
 		public byte VideoFormat
 		{
 			get
@@ -2146,8 +2146,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+
+        [Column(Storage = "_Id", AutoSync = AutoSync.OnInsert, DbType = "BigInt NOT NULL IDENTITY", IsPrimaryKey = true, IsDbGenerated = true, UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<long> Id
 		{
 			get
@@ -2166,8 +2166,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_TitleId", DbType="Int NOT NULL")]
+
+        [Column(Storage = "_TitleId", DbType = "Int NOT NULL", UpdateCheck = UpdateCheck.Never)]
 		public int TitleId
 		{
 			get
@@ -2190,8 +2190,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_ExtraOptions", DbType="NVarChar(255)")]
+
+        [Column(Storage = "_ExtraOptions", DbType = "NVarChar(255)", UpdateCheck = UpdateCheck.Never)]
 		public string ExtraOptions
 		{
 			get
@@ -2210,8 +2210,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_MainFeatureXRes", DbType="Int")]
+
+        [Column(Storage = "_MainFeatureXRes", DbType = "Int", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<int> MainFeatureXRes
 		{
 			get
@@ -2230,8 +2230,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_MainFeatureYRes", DbType="Int")]
+
+        [Column(Storage = "_MainFeatureYRes", DbType = "Int", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<int> MainFeatureYRes
 		{
 			get
@@ -2250,8 +2250,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_MainFeatureAspectRatio", DbType="NVarChar(10)")]
+
+        [Column(Storage = "_MainFeatureAspectRatio", DbType = "NVarChar(10)", UpdateCheck = UpdateCheck.Never)]
 		public string MainFeatureAspectRatio
 		{
 			get
@@ -2270,8 +2270,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_MainFeatureFPS", DbType="Float")]
+
+        [Column(Storage = "_MainFeatureFPS", DbType = "Float", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<double> MainFeatureFPS
 		{
 			get
@@ -2290,8 +2290,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_MainFeatureLength", DbType="Int")]
+
+        [Column(Storage = "_MainFeatureLength", DbType = "Int", UpdateCheck = UpdateCheck.Never)]
 		public System.Nullable<int> MainFeatureLength
 		{
 			get
@@ -2393,8 +2393,8 @@ namespace OMLEngine.Dao
 			this._ImageMappings = new EntitySet<ImageMapping>(new Action<ImageMapping>(this.attach_ImageMappings), new Action<ImageMapping>(this.detach_ImageMappings));
 			OnCreated();
 		}
-		
-		[Column(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+
+        [Column(Storage = "_Id", AutoSync = AutoSync.OnInsert, DbType = "Int NOT NULL IDENTITY", IsPrimaryKey = true, IsDbGenerated = true, UpdateCheck = UpdateCheck.Never)]
 		public int Id
 		{
 			get
@@ -2518,8 +2518,8 @@ namespace OMLEngine.Dao
 			this._DBImage = default(EntityRef<DBImage>);
 			OnCreated();
 		}
-		
-		[Column(Storage="_TitleId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+
+        [Column(Storage = "_TitleId", DbType = "Int NOT NULL", IsPrimaryKey = true, UpdateCheck = UpdateCheck.Never)]
 		public int TitleId
 		{
 			get
@@ -2542,8 +2542,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_ImageId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+
+        [Column(Storage = "_ImageId", DbType = "Int NOT NULL", IsPrimaryKey = true, UpdateCheck = UpdateCheck.Never)]
 		public int ImageId
 		{
 			get
@@ -2566,8 +2566,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_ImageType", DbType="TinyInt NOT NULL")]
+
+        [Column(Storage = "_ImageType", DbType = "TinyInt NOT NULL", UpdateCheck = UpdateCheck.Never)]
 		public byte ImageType
 		{
 			get
@@ -2586,8 +2586,8 @@ namespace OMLEngine.Dao
 				}
 			}
 		}
-		
-		[Column(Storage="_OriginalName", DbType="NVarChar(80)")]
+
+        [Column(Storage = "_OriginalName", DbType = "NVarChar(80)", UpdateCheck = UpdateCheck.Never)]
 		public string OriginalName
 		{
 			get

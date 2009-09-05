@@ -1,10 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Diagnostics;
 using System.Text;
 
 namespace OMLEngine.Dao
 {
+    internal static class OMLDBContextLogger {
+        private static FileStream Log;
+        private static TextWriter writer;
+
+        public static TextWriter Logger() {
+            if (Log == null || writer == null) {
+                try {
+                    string file = Path.Combine(OMLEngine.FileSystemWalker.LogDirectory, "dbaccess-debug.txt");
+                    if (Directory.Exists(OMLEngine.FileSystemWalker.LogDirectory) == false)
+                        Directory.CreateDirectory(OMLEngine.FileSystemWalker.LogDirectory);
+
+                    bool tooLarge = (File.Exists(file) && (new FileInfo(file)).Length > 1000000);
+
+                    Log = new FileStream(file, File.Exists(file) && !tooLarge ? FileMode.Append : FileMode.Create);
+                    writer = new StreamWriter(Log);
+                } catch (Exception e) {
+                    Utilities.DebugLine("Error creating db logfile: {0}", e.Message);
+                    return Console.Out;
+                }
+            }
+            return writer;
+        }
+    }
     /// <summary>
     /// If you noticed issues with ExecuteReader complaining it is closed, opening or otherwise barfing
     /// you will find yourself here!
@@ -34,6 +59,8 @@ namespace OMLEngine.Dao
                         //loadOptions.LoadWith<Title>(t => t.Disks;)
                         loadOptions.LoadWith<Title>(i => i.Images);
                         db.LoadOptions = loadOptions;
+                        db.Log = OMLDBContextLogger.Logger();
+                        db.ObjectTrackingEnabled = false;
 
                         db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
                     }
@@ -60,6 +87,8 @@ namespace OMLEngine.Dao
                 //loadOptions.LoadWith<Title>(t => t.Disks);
                 loadOptions.LoadWith<Title>(i => i.Images);
                 db.LoadOptions = loadOptions;
+                db.Log = OMLDBContextLogger.Logger();
+                db.ObjectTrackingEnabled = false;
 
                 db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
             }
@@ -86,6 +115,8 @@ namespace OMLEngine.Dao
                     if (db == null) {
                         db = new OMLDataSettingsDataContext();
                         db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
+                        db.Log = OMLDBContextLogger.Logger();
+                        //db.ObjectTrackingEnabled = false; leave this active for the settings context
                     }
                     return db;
                 }
