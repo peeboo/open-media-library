@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 namespace OMLEngine.DatabaseManagement
 {
@@ -209,6 +210,79 @@ namespace OMLEngine.DatabaseManagement
             return true;
         }
 
+        public class DatabaseFile
+        {
+            public string Name;
+            public int Size;
+            public string SizeString;
+            public int MaxSize;
+            public string MaxSizeString;
+            public int Growth;
+            public string GrowthString;
+        }
+
+        public List<DatabaseFile> GetDatabaseFileInfo()
+        {
+            List<DatabaseFile> DBFS = new List<DatabaseFile>(); 
+            
+            // Create database connection to OML and open it
+            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
+
+            SqlDataReader reader;
+
+            if (!ExecuteReader(sqlConn, "select * from oml.dbo.sysfiles", out reader))
+            {
+                return null;
+            }
+
+            while (reader.Read())
+            {
+                DatabaseFile DBF = new DatabaseFile();
+                DBF.Name = (string)reader["name"];
+                DBF.Size = (int)reader["size"] / 128;
+                DBF.SizeString = ((int)reader["size"] / 128).ToString() + "MB";
+
+                if ((int)reader["maxsize"] > 0)
+                {
+                    DBF.MaxSize = (int)reader["maxsize"] / 128;
+                    DBF.MaxSizeString = ((int)reader["maxsize"] / 128).ToString() + "MB";
+                }
+                else 
+                {
+                    DBF.MaxSize = 0;
+                    if ((int)reader["maxsize"] == 0)
+                        DBF.MaxSizeString = "No Growth";
+                    else
+                        DBF.MaxSizeString = "Unlimited Growth";
+                }
+
+                
+                if ((int)reader["growth"] == 0)
+                {
+                    DBF.Growth = 0;
+                    DBF.GrowthString = "No Growth";
+
+                }
+                else
+                {
+                    if (((int)reader["status"] & 0x100000) != 0)
+                    {
+                        // Percentage growth
+                        DBF.Growth = (int)reader["growth"];
+                        DBF.GrowthString = (int)reader["growth"] + "%";
+                    }
+                    else
+                    {
+                        DBF.Growth = (int)reader["growth"] / 128;
+                        DBF.GrowthString = ((int)reader["growth"] / 128).ToString() + "MB";
+
+                    }
+                }
+
+                DBFS.Add(DBF);
+            }
+            return DBFS;
+        }
         #region Database Maintenance
         public bool BackupDatabase(string path)
         {
@@ -418,6 +492,28 @@ namespace OMLEngine.DatabaseManagement
             // Run schema creation script
             RunSQLScript(ScriptsPath + "\\Title Database.sql");
             CreateOMLUser();
+        }
+
+        public void CreateSchema()
+        {      
+            // Run schema creation script
+            RunSQLScript(GetScriptsPath + "\\Title Database.sql");
+        }
+
+        public string GetScriptsPath
+        {
+            get
+            {
+                string location = System.Reflection.Assembly.GetEntryAssembly().Location;
+
+                // Find the script path. Also include hack to find scripts if running from VS rather than c:\program files....
+                string ScriptsPath = Path.GetDirectoryName(location) + "\\SQLInstaller";
+                if (Directory.Exists(Path.GetDirectoryName(location) + "\\..\\..\\..\\SQL Scripts"))
+                {
+                    ScriptsPath = Path.GetDirectoryName(location) + "\\..\\..\\..\\SQL Scripts";
+                }
+                return ScriptsPath;
+            }
         }
         #endregion
 

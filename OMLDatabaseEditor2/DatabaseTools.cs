@@ -130,5 +130,41 @@ namespace OMLDatabaseEditor
                 XtraMessageBox.Show("No orphaned titles were found.", "Orphaned Titles!");
             }
         }
+
+        private void sbViewDatabaseFileInfo_Click(object sender, EventArgs e)
+        {
+            OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
+            
+            List<OMLEngine.DatabaseManagement.DatabaseManagement.DatabaseFile> DBFS = dbm.GetDatabaseFileInfo();
+
+            if (DBFS != null)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                foreach (OMLEngine.DatabaseManagement.DatabaseManagement.DatabaseFile DBF in DBFS)
+                {
+                    sb.AppendLine("Name : " + DBF.Name + ", " +
+                        "Size : " + DBF.SizeString + ", " +
+                        "Max Size : " + DBF.MaxSizeString + ", " +
+                        "Growth : " + DBF.GrowthString);
+
+                }
+
+                MessageBox.Show(sb.ToString(), "Database File Information");
+            }
+        }
+
+        private void sbRecreateDatabase_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("This will recreate the database deleting ALL movies, genres, people etc. Are you sure?", "Recreate database", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                if (MessageBox.Show("Are you really sure?", "Recreate database", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {      
+                    OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
+                    dbm.CreateSchema();
+                    MessageBox.Show("The database has been recreated. Please restart any open OML appliations.", "Recreate database", MessageBoxButtons.OK);
+                }
+            }
+        }
     }
 }
