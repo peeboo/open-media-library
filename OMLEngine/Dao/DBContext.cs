@@ -56,11 +56,9 @@ namespace OMLEngine.Dao
                         db.DeferredLoadingEnabled = true;
 
                         System.Data.Linq.DataLoadOptions loadOptions = new System.Data.Linq.DataLoadOptions();
-                        //loadOptions.LoadWith<Title>(t => t.Disks;)
                         loadOptions.LoadWith<Title>(i => i.Images);
                         db.LoadOptions = loadOptions;
                         db.Log = OMLDBContextLogger.Logger();
-                        db.ObjectTrackingEnabled = false;
 
                         db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
                     }
@@ -88,7 +86,6 @@ namespace OMLEngine.Dao
                 loadOptions.LoadWith<Title>(i => i.Images);
                 db.LoadOptions = loadOptions;
                 db.Log = OMLDBContextLogger.Logger();
-                db.ObjectTrackingEnabled = false;
 
                 db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
             }
@@ -116,7 +113,6 @@ namespace OMLEngine.Dao
                         db = new OMLDataSettingsDataContext();
                         db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
                         db.Log = OMLDBContextLogger.Logger();
-                        //db.ObjectTrackingEnabled = false; leave this active for the settings context
                     }
                     return db;
                 }
