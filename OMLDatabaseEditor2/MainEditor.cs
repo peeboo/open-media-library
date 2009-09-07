@@ -706,7 +706,9 @@ namespace OMLDatabaseEditor
             int? SeasonNo = null;
             int? EpisodeNo = null;
 
-            if ((title.TitleType & TitleTypes.Episode) != 0)
+            if (((title.TitleType & TitleTypes.Episode) != 0) ||
+            ((title.TitleType & TitleTypes.Season) != 0) ||
+            ((title.TitleType & TitleTypes.TVShow) != 0))
             {
                 // TV Search
                 if (title.SeasonNumber != null) SeasonNo = title.SeasonNumber.Value;
@@ -764,11 +766,22 @@ namespace OMLDatabaseEditor
 
                         if ((plugin.DataProviderCapabilities & MetadataPluginCapabilities.SupportsTVSearch) != 0)
                         {
-                            searchResultForm = new frmSearchResult(plugin, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, true);
+                            // TV Search
+                            if (((title.TitleType & TitleTypes.Season) != 0) ||
+                                ((title.TitleType & TitleTypes.TVShow) != 0))
+                            {
+                                // Only searching for the Show
+                                searchResultForm = new frmSearchResult(plugin, titleNameSearch, "", 0, 0, true, true);
+                            }
+                            else
+                            {
+                                // Searching for an episode
+                                searchResultForm = new frmSearchResult(plugin, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, true, false);
+                            }
                         }
                         else
                         {
-                            searchResultForm = new frmSearchResult(plugin, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, false);
+                            searchResultForm = new frmSearchResult(plugin, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, false, false);
                         }
 
                         DialogResult result = searchResultForm.ShowDialog(); // ShowResults(plugin.GetAvailableTitles());
@@ -2317,6 +2330,9 @@ namespace OMLDatabaseEditor
 
                     Title title = _movieList[Convert.ToInt32(item.Text)];
                     if ((title.TitleType & TitleTypes.Episode) != 0) EpisodeSelected = true;
+                    if ((title.TitleType & TitleTypes.Season) != 0) EpisodeSelected = true;
+                    if ((title.TitleType & TitleTypes.TVShow) != 0) EpisodeSelected = true;
+
                     if ((title.TitleType & TitleTypes.Movie) != 0) MovieSelected = true;
                     if ((title.TitleType & TitleTypes.Video) != 0) MovieSelected = true;
                     if ((title.TitleType & TitleTypes.MusicVideo) != 0) MusicVideoSelected = true;
@@ -2330,7 +2346,8 @@ namespace OMLDatabaseEditor
                 cms.Items.Add(metadata);
 
                 // Preferred sources
-                if (!String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))
+                if (((MovieSelected) && (!String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))) ||
+                    ((EpisodeSelected) && (!String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV))))
                 {
                     ToolStripMenuItem metadataItem = new ToolStripMenuItem("From Preferred Sources");
                     metadataItem.Click += new System.EventHandler(this.fromPreferredSourcesToolStripMenuItem_Click);

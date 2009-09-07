@@ -27,11 +27,21 @@ namespace OMLSDK
         {
             title = null;
 
-            if (((titletype & TitleTypes.Episode) != 0) && ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsTVSearch) != 0))
+            if ((((titletype & TitleTypes.TVShow) != 0) ||
+                ((titletype & TitleTypes.Season) != 0) ||
+                ((titletype & TitleTypes.Episode) != 0)) &&
+                ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsTVSearch) != 0))
             {
                 // Perform a tv show search. This will return true if it has found an exact show match, false
-                // if it finds multiple shows matching the show name.  
-                if (metadata.PluginDLL.SearchForTVSeries(titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, 1))
+                // if it finds multiple shows matching the show name.
+                bool SearchTVShowOnly = false;
+
+                if (((titletype & TitleTypes.Season) != 0) ||
+                    ((titletype & TitleTypes.TVShow) != 0))
+                {
+                    SearchTVShowOnly = true;
+                }
+                if (metadata.PluginDLL.SearchForTVSeries(titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, 1, SearchTVShowOnly))
                 {
                     // Requires a search drilldown
                     metadata.PluginDLL.SearchForTVDrillDown(1, EpisodeName, SeasonNo, EpisodeNo, 1);
@@ -63,7 +73,10 @@ namespace OMLSDK
 
             string preferredplugin = OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin;
             
-            if (((titletype & TitleTypes.Episode) != 0) && (!string.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV)))
+            if ((((titletype & TitleTypes.TVShow) != 0) ||
+                ((titletype & TitleTypes.Season) != 0) ||
+                ((titletype & TitleTypes.Episode) != 0)) && 
+                (!string.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV)))
             {
                 // If we are looking for an episode and there is a preferred setting for this, use it
                 preferredplugin = OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV;

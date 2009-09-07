@@ -20,7 +20,7 @@ namespace OMLTestSuite
             int ? episodeno = 0;
 
             // Search for show
-            if (!tvd.SearchForTVSeries(show, episode, seasonno, episodeno, OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty))
+            if (!tvd.SearchForTVSeries(show, episode, seasonno, episodeno, OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty, false))
             {
                 Console.WriteLine("We found the show. Episode list below.");
                  
