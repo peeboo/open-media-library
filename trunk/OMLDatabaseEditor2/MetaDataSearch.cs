@@ -31,6 +31,7 @@ namespace OMLDatabaseEditor
         List<KeyValuePair<string, string>> ImageLoadQueue = new List<KeyValuePair<string,string>>();
 
         bool TVSearch;
+        bool SearchTVShowOnly;
         bool SearchDrillDownReq;
         bool TVShowFound;
 
@@ -46,9 +47,10 @@ namespace OMLDatabaseEditor
             get { return _selectedTitle; }
         }
 
-        public frmSearchResult(MetaDataPluginDescriptor plugin, string searchstr, string EpisodeName, int ? SeasonNo, int ? EpisodeNo, bool ShowTVFields) //MainEditor opener)
+        public frmSearchResult(MetaDataPluginDescriptor plugin, string searchstr, string EpisodeName, int ? SeasonNo, int ? EpisodeNo, bool ShowTVFields, bool pSearchTVShowOnly) //MainEditor opener)
         {
             _plugin = plugin;
+            SearchTVShowOnly = pSearchTVShowOnly;
 
             InitializeComponent();
 
@@ -121,7 +123,12 @@ namespace OMLDatabaseEditor
                 {
                     if ((_plugin.DataProviderCapabilities & MetadataPluginCapabilities.SupportsTVSearch) != 0)
                     {
-                        SearchDrillDownReq = _plugin.PluginDLL.SearchForTVSeries(reSearchTitle.Text, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
+                        SearchDrillDownReq = _plugin.PluginDLL.SearchForTVSeries(reSearchTitle.Text, 
+                            teEpisodeName.Text, 
+                            Convert.ToInt32(seSeasonNo.Value), 
+                            Convert.ToInt32(seEpisodeNo.Value), 
+                            OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty,
+                            SearchTVShowOnly);
                         TVSearch = true;
                         TVShowFound = !SearchDrillDownReq;
                     }

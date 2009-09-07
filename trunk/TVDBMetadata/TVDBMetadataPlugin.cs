@@ -286,7 +286,7 @@ namespace TVDBMetadata
         /// <param name="SeriesNo"></param>
         /// <param name="EpisodeNo"></param>
         /// <returns>Boolean to indicate a drill down is required</returns>
-        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeasonNo, int? EpisodeNo, int maxResults)
+        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeasonNo, int? EpisodeNo, int maxResults, bool SearchTVShowOnly)
         {
             // Store the search criteria for later
             /*SeriesName = pSeriesName;
@@ -308,23 +308,36 @@ namespace TVDBMetadata
 
             if (results.Count <= 0) return false;
 
-            if (results.Count > 1)
+            if (SearchTVShowOnly)
             {
-                // Found more than one possible show. Present the list to the user
-                // but first load up all the titles with images
+                // Only searching for the show
                 foreach (TheTVDBDbResult title in results)
                 {
                     title.Title.FrontCoverPath = "http://images.thetvdb.com/banners/" + title.ImageUrl;
                     //DownloadImage(title.Title, "http://images.thetvdb.com/banners/" + title.ImageUrl);
                 }
-                return true;
+                return false;
             }
             else
             {
-                // We have a single match on the series. Try to load the episodes
-                SeriesID = results[0].Id;
-                SearchForEpisode(EpisodeName, SeasonNo, EpisodeNo, maxResults);
-                return false;
+                if (results.Count > 1)
+                {
+                    // Found more than one possible show. Present the list to the user
+                    // but first load up all the titles with images
+                    foreach (TheTVDBDbResult title in results)
+                    {
+                        title.Title.FrontCoverPath = "http://images.thetvdb.com/banners/" + title.ImageUrl;
+                        //DownloadImage(title.Title, "http://images.thetvdb.com/banners/" + title.ImageUrl);
+                    }
+                    return true;
+                }
+                else
+                {
+                    // We have a single match on the series. Try to load the episodes
+                    SeriesID = results[0].Id;
+                    SearchForEpisode(EpisodeName, SeasonNo, EpisodeNo, maxResults);
+                    return false;
+                }
             }
         }
 
