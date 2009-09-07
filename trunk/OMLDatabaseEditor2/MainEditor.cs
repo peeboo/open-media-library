@@ -787,7 +787,10 @@ namespace OMLDatabaseEditor
                                 }
                                 else
                                 {
-                                    title.CopyMetadata(searchresult, searchResultForm.OverwriteMetadata);
+                                    title.CopyMetadata(searchresult,
+                                        OMLEngine.Settings.OMLSettings.MetadataLookupUpdateMissingDataOnly,
+                                        OMLEngine.Settings.OMLSettings.MetadataLookupUpdateName,
+                                        OMLEngine.Settings.OMLSettings.MetadataLookupUpdateMissingDataOnly);
                                 }
 
                                 LoadFanartFromPlugin(plugin, title);
@@ -814,7 +817,7 @@ namespace OMLDatabaseEditor
                         if (retval)
                         {    
                             // Successful lookup, process
-                            title.CopyMetadata(searchresult, false);
+                            title.CopyMetadata(searchresult, false, false, false);
 
                             LoadFanart(mds.FanArt, title); 
 

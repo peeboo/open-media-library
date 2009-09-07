@@ -18,7 +18,7 @@ namespace OMLDatabaseEditor
 
         Title[] _titles = null;
         int _selectedTitle = -1;
-        bool _overwriteMetadata;
+        //bool _overwriteMetadata;
 
         // Store last search criteria to avoid researching if nothing changes
         string LastSearchTitle;
@@ -35,11 +35,11 @@ namespace OMLDatabaseEditor
         bool TVShowFound;
 
 
-        public bool OverwriteMetadata
+        /*public bool OverwriteMetadata
         {
             get { return _overwriteMetadata; }
             set { _overwriteMetadata = value; }
-        }
+        }*/
 
         public int SelectedTitleIndex
         {
@@ -51,6 +51,9 @@ namespace OMLDatabaseEditor
             _plugin = plugin;
 
             InitializeComponent();
+
+            chkUpdateMissingDataOnly.Checked = OMLEngine.Settings.OMLSettings.MetadataLookupUpdateMissingDataOnly;
+            chkUpdateTitleName.Checked = OMLEngine.Settings.OMLSettings.MetadataLookupUpdateName;
 
             if (string.IsNullOrEmpty(_plugin.DataProviderLink))
             {
@@ -96,7 +99,6 @@ namespace OMLDatabaseEditor
         {
             InitializeComponent();
         }
-
 
         private void frmSearchResult_Load(object sender, EventArgs e)
         {
@@ -265,10 +267,13 @@ namespace OMLDatabaseEditor
 
         private void btnSelectMovie_Click(object sender, EventArgs e)
         {
-            if (chkUpdateMissingDataOnly.Checked)
+            OMLEngine.Settings.OMLSettings.MetadataLookupUpdateMissingDataOnly = chkUpdateMissingDataOnly.Checked;
+            OMLEngine.Settings.OMLSettings.MetadataLookupUpdateName = chkUpdateTitleName.Checked;
+
+            /*if (chkUpdateMissingDataOnly.Checked)
                 _overwriteMetadata = false;
             else
-                _overwriteMetadata = true;
+                _overwriteMetadata = true;*/
 
             if (TVSearch == false)
             {
