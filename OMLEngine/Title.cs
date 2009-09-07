@@ -2485,10 +2485,11 @@ namespace OMLEngine
             }
         }
 
-        public void CopyMetadata(Title t, bool overWrite)
+        public void CopyMetadata(Title t, bool overWrite, bool overWriteName, bool overWriteSortName)
         {
-            Name = CopyStringValue(t.Name, Name, overWrite);
-            
+            Name = CopyStringValue(t.Name, Name, overWriteName);
+            SortName = CopyStringValue(t.SortName, SortName, overWriteSortName);
+           
             MetadataSourceID = CopyStringValue(t.MetadataSourceID, MetadataSourceID, overWrite);
             MetadataSourceName = CopyStringValue(t.MetadataSourceName, MetadataSourceName, overWrite);
 
@@ -2501,7 +2502,6 @@ namespace OMLEngine
             VideoStandard = CopyStringValue(t.VideoStandard, VideoStandard, overWrite);
             UPC = CopyStringValue(t.UPC, UPC, overWrite);
             OriginalName = CopyStringValue(t.OriginalName, OriginalName, overWrite);
-            SortName = CopyStringValue(t.SortName, SortName, overWrite);
             ParentalRatingReason = CopyStringValue(t.ParentalRatingReason, ParentalRatingReason, overWrite);
             VideoDetails = CopyStringValue(t.VideoDetails, VideoDetails, overWrite);
             ReleaseDate = CheckDateRange(t.ReleaseDate);

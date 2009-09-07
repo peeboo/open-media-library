@@ -530,25 +530,6 @@ namespace OMLEngine.Settings
             set { SettingsManager.SaveSettingByName("UseGenreList", value.ToString(), InstanceName); }
         }
 
-        public static string DefaultMetadataPlugin
-        {
-            get { return SettingsManager.GetSettingByName("DefaultMetadataPlugin", InstanceName) ?? ""; }
-            set { SettingsManager.SaveSettingByName("DefaultMetadataPlugin", value, InstanceName); }
-        }
-
-        public static string DefaultMetadataPluginTV
-        {
-            get { return SettingsManager.GetSettingByName("DefaultMetadataPluginTV", InstanceName) ?? ""; }
-            set { SettingsManager.SaveSettingByName("DefaultMetadataPluginTV", value, InstanceName); }
-        }
-
-        public static int MetadataLookupResultsQty
-        {
-            get { return SettingsManager.GetSettingByNameInt("MetadataLookupResultsQty", InstanceName) ?? 10; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupResultsQty", value.ToString(), InstanceName); }
-
-        }
-
         public static bool TitledFanArtFolder
         {
             get { return SettingsManager.GetSettingByNameBool("TitledFanArtFolder", InstanceName) ?? false; }
@@ -585,6 +566,40 @@ namespace OMLEngine.Settings
             set { SettingsManager.SaveSettingByName("DBEAlwaysShowTitleList", value.ToString(), InstanceName); }
         }
         #endregion
+
+
+        #region MetaData
+        public static string DefaultMetadataPlugin
+        {
+            get { return SettingsManager.GetSettingByName("DefaultMetadataPlugin", InstanceName) ?? ""; }
+            set { SettingsManager.SaveSettingByName("DefaultMetadataPlugin", value, InstanceName); }
+        }
+
+        public static string DefaultMetadataPluginTV
+        {
+            get { return SettingsManager.GetSettingByName("DefaultMetadataPluginTV", InstanceName) ?? ""; }
+            set { SettingsManager.SaveSettingByName("DefaultMetadataPluginTV", value, InstanceName); }
+        }
+
+        public static int MetadataLookupResultsQty
+        {
+            get { return SettingsManager.GetSettingByNameInt("MetadataLookupResultsQty", InstanceName) ?? 10; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupResultsQty", value.ToString(), InstanceName); }
+        }
+
+        public static bool MetadataLookupUpdateMissingDataOnly
+        {
+            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateMissingDataOnly", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateMissingDataOnly", value.ToString(), InstanceName); }
+        }
+
+        public static bool MetadataLookupUpdateName
+        {
+            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateName", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateName", value.ToString(), InstanceName); }
+        }   
+        #endregion
+
 
         /// <summary>
         /// Create top level folder when dragging in a folder structure from Windows Explorer
