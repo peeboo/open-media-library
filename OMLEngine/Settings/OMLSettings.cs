@@ -587,10 +587,10 @@ namespace OMLEngine.Settings
             set { SettingsManager.SaveSettingByName("MetadataLookupResultsQty", value.ToString(), InstanceName); }
         }
 
-        public static bool MetadataLookupUpdateMissingDataOnly
+        public static bool MetadataLookupOverwriteExistingData
         {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateMissingDataOnly", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateMissingDataOnly", value.ToString(), InstanceName); }
+            get { return SettingsManager.GetSettingByNameBool("MetadataLookupOverwriteExistingData", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupOverwriteExistingData", value.ToString(), InstanceName); }
         }
 
         public static bool MetadataLookupUpdateName

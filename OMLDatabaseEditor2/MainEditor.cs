@@ -801,9 +801,9 @@ namespace OMLDatabaseEditor
                                 else
                                 {
                                     title.CopyMetadata(searchresult,
-                                        OMLEngine.Settings.OMLSettings.MetadataLookupUpdateMissingDataOnly,
+                                        OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingData,
                                         OMLEngine.Settings.OMLSettings.MetadataLookupUpdateName,
-                                        OMLEngine.Settings.OMLSettings.MetadataLookupUpdateMissingDataOnly);
+                                        OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingData);
                                 }
 
                                 LoadFanartFromPlugin(plugin, title);
