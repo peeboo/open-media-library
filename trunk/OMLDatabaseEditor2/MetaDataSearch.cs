@@ -54,7 +54,7 @@ namespace OMLDatabaseEditor
 
             InitializeComponent();
 
-            chkUpdateMissingDataOnly.Checked = OMLEngine.Settings.OMLSettings.MetadataLookupUpdateMissingDataOnly;
+            chkUpdateMissingDataOnly.Checked = !OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingData;
             chkUpdateTitleName.Checked = OMLEngine.Settings.OMLSettings.MetadataLookupUpdateName;
 
             if (string.IsNullOrEmpty(_plugin.DataProviderLink))
@@ -274,7 +274,7 @@ namespace OMLDatabaseEditor
 
         private void btnSelectMovie_Click(object sender, EventArgs e)
         {
-            OMLEngine.Settings.OMLSettings.MetadataLookupUpdateMissingDataOnly = chkUpdateMissingDataOnly.Checked;
+            OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingData = !chkUpdateMissingDataOnly.Checked;
             OMLEngine.Settings.OMLSettings.MetadataLookupUpdateName = chkUpdateTitleName.Checked;
 
             /*if (chkUpdateMissingDataOnly.Checked)
