@@ -24,7 +24,7 @@ namespace OMLCustomWiXAction {
             session.Log("Inside StartOMLEngineService");
             try {
                 ServiceController omlengineController = new ServiceController(@"OMLEngineService");
-                TimeSpan timeout = TimeSpan.FromSeconds(60);
+                TimeSpan timeout = TimeSpan.FromSeconds(20);
                 omlengineController.Start();
                 omlengineController.WaitForStatus(ServiceControllerStatus.Running, timeout);
                 omlengineController.Close();
