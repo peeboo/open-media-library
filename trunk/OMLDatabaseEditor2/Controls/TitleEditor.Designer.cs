@@ -117,6 +117,7 @@
             this.imageWatcherFront = new System.IO.FileSystemWatcher();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.pnlMain = new DevExpress.XtraEditors.PanelControl();
+            this.miRemoveAllBackdrops = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tpVisual.SuspendLayout();
@@ -1034,9 +1035,10 @@
             this.setSingleBackdropToolStripMenuItem,
             this.clearSingleBackdropToolStripMenuItem,
             this.miAddNewBackdrop,
-            this.miRemoveBackdrop});
+            this.miRemoveBackdrop,
+            this.miRemoveAllBackdrops});
             this.contextBackdrop.Name = "contextBackdrop";
-            this.contextBackdrop.Size = new System.Drawing.Size(203, 114);
+            this.contextBackdrop.Size = new System.Drawing.Size(203, 136);
             // 
             // setSingleBackdropToolStripMenuItem
             // 
@@ -1134,6 +1136,13 @@
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(526, 526);
             this.pnlMain.TabIndex = 3;
+            // 
+            // miRemoveAllBackdrops
+            // 
+            this.miRemoveAllBackdrops.Name = "miRemoveAllBackdrops";
+            this.miRemoveAllBackdrops.Size = new System.Drawing.Size(202, 22);
+            this.miRemoveAllBackdrops.Text = "Remove all backdrops";
+            this.miRemoveAllBackdrops.Click += new System.EventHandler(this.miRemoveAllBackdrops_Click);
             // 
             // TitleEditor
             // 
@@ -1285,5 +1294,6 @@
         private DevExpress.XtraEditors.SpinEdit seSeason;
         private System.Windows.Forms.PictureBox picUserRating;
         private System.Windows.Forms.ToolStripMenuItem miRemoveBackdrop;
+        private System.Windows.Forms.ToolStripMenuItem miRemoveAllBackdrops;
     }
 }

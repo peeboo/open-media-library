@@ -680,6 +680,7 @@ namespace OMLDatabaseEditor.Controls
                     clearSingleBackdropToolStripMenuItem.Visible = true;
                     setSingleBackdropToolStripMenuItem.Visible = true;
                     miRemoveBackdrop.Visible = true;
+                    miRemoveAllBackdrops.Visible = true;
                     contextBackdrop.Show(sender as PictureBox, e.Location);
                 }
                 else
@@ -688,6 +689,7 @@ namespace OMLDatabaseEditor.Controls
                         clearSingleBackdropToolStripMenuItem.Visible = false;
                         setSingleBackdropToolStripMenuItem.Visible = false;
                         miRemoveBackdrop.Visible = false;
+                        miRemoveAllBackdrops.Visible = false;
                         contextBackdrop.Show(sender as DevExpress.XtraTab.XtraTabPage, e.Location);
                     }
                     else
@@ -696,6 +698,7 @@ namespace OMLDatabaseEditor.Controls
                             clearSingleBackdropToolStripMenuItem.Visible = false;
                             setSingleBackdropToolStripMenuItem.Visible = false;
                             miRemoveBackdrop.Visible = false;
+                            miRemoveAllBackdrops.Visible = false; 
                             contextBackdrop.Show(sender as TableLayoutPanel, e.Location);
                         }
             }
@@ -737,6 +740,22 @@ namespace OMLDatabaseEditor.Controls
             _dvdTitle.RemoveFanArtImage(pb.ImageLocation); 
             titleSource.ResetCurrentItem();
             LoadBackdrops();
+        }
+
+        private void miRemoveAllBackdrops_Click(object sender, EventArgs e)
+        {
+            if (XtraMessageBox.Show("Are you sure you want to delete all Fanart images for this title?", "Delete all Fanart images", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                List<string> imagepaths = new List<string>();
+                imagepaths.AddRange(_dvdTitle.FanArtPaths);
+
+                foreach (string path in imagepaths)
+                {
+                    _dvdTitle.RemoveFanArtImage(path);
+                }
+                titleSource.ResetCurrentItem();
+                LoadBackdrops();
+            }
         }
         #endregion
 
