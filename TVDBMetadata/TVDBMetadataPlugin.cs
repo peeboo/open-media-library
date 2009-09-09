@@ -9,7 +9,6 @@ using System.Xml;
 using System.Globalization;
 using System.Linq;
 
-
 namespace TVDBMetadata
 {
     public class TheTVDBDbResult
@@ -28,6 +27,23 @@ namespace TVDBMetadata
         }
     }
 
+    public class TheTVDBSeries {
+        public int Id { get; set; }
+        public string ContentRating { get; set; }
+        public string Genre { get; set; }
+        public string IMDBId { get; set; }
+        public string network { get; set; }
+        public int Runtime { get; set; }
+        public int SeriesId { get; set; }
+        public string SeriesName { get; set; }
+        public string BannerUrl { get; set; }
+        public string FanartUrl { get; set; }
+        public string PosterUrl { get; set; }
+        public string Zap2ItId { get; set; }
+    }
+
+    public class TheTVDBSeason {
+    }
 
     public class TVDBMetadataPlugin : IOMLMetadataPlugin
     {
@@ -341,6 +357,62 @@ namespace TVDBMetadata
             }
         }
 
+        private TheTVDBSeries GetFullSeriesData(int seriesId) {
+            //http://www.thetvdb.com/api/FC18699D6C4514F7/series/79488/all/en.zip
+            UriBuilder builder = new UriBuilder(string.Format("http://www.thetvdb.com/api/{0}/series/{1}/", API_KEY, seriesId));
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(builder.Uri);
+
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()) {
+                using (Stream resStream = response.GetResponseStream()) {
+                    XmlDocument xDoc = new XmlDocument();
+                    xDoc.Load(resStream);
+
+                    XmlNodeList seriesNodes = xDoc.SelectNodes("//Data/Series");
+                    foreach (XmlNode seriesNode in seriesNodes) {
+                        XmlNode idNode = seriesNode.SelectSingleNode("id");
+                        if (seriesId == Int32.Parse(idNode.ChildNodes[0].Value)) {
+                            TheTVDBSeries series = new TheTVDBSeries();
+                            series.Id = seriesId;
+
+                            XmlNode contentRatingNode = seriesNode.SelectSingleNode("ContentRating");
+                            series.ContentRating = contentRatingNode.ChildNodes[0].Value;
+
+                            XmlNode genreNode = seriesNode.SelectSingleNode("Genre");
+                            series.Genre = genreNode.ChildNodes[0].Value;
+
+                            XmlNode imdbidNode = seriesNode.SelectSingleNode("IMDB_ID");
+                            series.IMDBId = imdbidNode.ChildNodes[0].Value;
+
+                            XmlNode networkNode = seriesNode.SelectSingleNode("Network");
+                            series.network = networkNode.ChildNodes[0].Value;
+
+                            XmlNode runtimeNode = seriesNode.SelectSingleNode("Runtime");
+                            series.Runtime = Int16.Parse(runtimeNode.ChildNodes[0].Value);
+
+                            XmlNode seriesNameNode = seriesNode.SelectSingleNode("SeriesName");
+                            series.SeriesName = seriesNameNode.ChildNodes[0].Value;
+
+                            XmlNode bannerNode = seriesNode.SelectSingleNode("banner");
+                            series.BannerUrl = "http://images.thetvdb.com/banners/" + bannerNode.ChildNodes[0].Value;
+
+                            XmlNode fanartNode = seriesNode.SelectSingleNode("fanart");
+                            series.FanartUrl = "http://images.thetvdb.com/banners/" + fanartNode.ChildNodes[0].Value;
+
+                            XmlNode posterNode = seriesNode.SelectSingleNode("poster");
+                            series.PosterUrl = posterNode.ChildNodes[0].Value;
+
+                            XmlNode zap2itNode = seriesNode.SelectSingleNode("zap2it_id");
+                            series.Zap2ItId = zap2itNode.ChildNodes[0].Value;
+
+                            return series;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
         public bool SearchForTVDrillDown(int id, string EpisodeName, int? SeasonNo, int? EpisodeNo, int maxResults)
         {
             // If no series ID cached, get from the id passed to function.
@@ -406,7 +478,9 @@ namespace TVDBMetadata
                                                 result.Title.Name = GetElementValue(reader);
                                                 break;
                                             case "banner":
-                                                result.ImageUrl = GetElementValue(reader);
+                                                TheTVDBSeries seriesObj = GetFullSeriesData(result.Id);
+                                                if (seriesObj != null)
+                                                    result.ImageUrl = seriesObj.PosterUrl;
                                                 break;
                                             case "overview":
                                                 result.Title.Synopsis = GetElementValue(reader);
