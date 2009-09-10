@@ -19,6 +19,12 @@ namespace OMLEngineService
 
         [OperationContract(IsOneWay = true)]
         void RegisterNotifyer(string url, bool register);
+
+        [OperationContract]
+        bool CreateSymbolicLink(string mpegFile, string vob);
+
+        [OperationContract]
+        string MakeMPEGLink(string mpegFolder, string vob);
     }
 
     public enum TranscodingStatus
