@@ -91,8 +91,12 @@ namespace OMLDatabaseEditor
                 cmbDefaultMetadataPlugin.Properties.Items.Add(plugin.DataProviderName);
                 cmbDefaultMetadataPluginTV.Properties.Items.Add(plugin.DataProviderName);
             }
-            cmbDefaultMetadataPlugin.SelectedItem = OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin;
+            cmbDefaultMetadataPlugin.SelectedItem = OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies;
             cmbDefaultMetadataPluginTV.SelectedItem = OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV;
+            ceUpdateMissingDataOnlyMovies.Checked = !OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefMovies;
+            ceUpdateTitleNameMovies.Checked = OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefMovies;
+            ceUpdateMissingDataOnlyTV.Checked = !OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefTV;
+            ceUpdateTitleNameTV.Checked = OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefTV;
 
             seMetadataLookupResultsQty.Value = OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty;
 
@@ -171,8 +175,14 @@ namespace OMLDatabaseEditor
                 }
 
                 bDirty = true;
-                OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin = (string)cmbDefaultMetadataPlugin.SelectedItem;
+
+                // Preferred metadata lookup
+                OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies = (string)cmbDefaultMetadataPlugin.SelectedItem;
                 OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV = (string)cmbDefaultMetadataPluginTV.SelectedItem;
+                OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefMovies = !ceUpdateMissingDataOnlyMovies.Checked;
+                OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefMovies = ceUpdateTitleNameMovies.Checked;
+                OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefTV = !ceUpdateMissingDataOnlyTV.Checked;
+                OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefTV = ceUpdateTitleNameTV.Checked;
 
                 OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty = (int)seMetadataLookupResultsQty.Value;
                 
@@ -344,11 +354,6 @@ namespace OMLDatabaseEditor
                 mnt.ScanForMountTool((OMLEngine.FileSystem.MountingTool.Tool)Enum.Parse(typeof(OMLEngine.FileSystem.MountingTool.Tool), rgMountingTool.Text), cmbMntToolScan.Text);
 
             if (teMntToolPath.Text == "") XtraMessageBox.Show("Cannot find the selected image mounting tool!");
-
-        }
-
-        private void tpMetadata_Paint(object sender, PaintEventArgs e)
-        {
 
         }
     }
