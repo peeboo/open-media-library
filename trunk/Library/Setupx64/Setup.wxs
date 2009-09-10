@@ -595,11 +595,13 @@
                   Execute="deferred"
                   Return="check" />
 
+    <!--
     <CustomAction Id="StartOMLEngineServiceAction"
                 BinaryKey="OMLCALib"
                 DllEntry="StartOMLEngineService"
                 Execute="deferred"
                 Return="ignore" />
+    -->
 
     <CustomAction Id="ActivateNetTcpPortSharing"
                 BinaryKey="OMLCALib"
