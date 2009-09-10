@@ -19,7 +19,7 @@
 
     <Package Description="!(loc.Package_Description)"
 		         Comments="!(loc.Package_Comments)"
-		         InstallerVersion="200"
+		         InstallerVersion="405"
 		         Compressed="yes" />
 
     <!--<Binary Id="OMLDB" SourceFile="..\..\SQL Scripts\Title Database.sql" />-->
