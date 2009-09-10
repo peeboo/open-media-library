@@ -569,15 +569,15 @@ namespace OMLEngine.Settings
 
 
         #region MetaData
-        public static string DefaultMetadataPlugin
+        public static string DefaultMetadataPluginMovies
         {
-            get { return SettingsManager.GetSettingByName("DefaultMetadataPlugin", InstanceName) ?? ""; }
-            set { SettingsManager.SaveSettingByName("DefaultMetadataPlugin", value, InstanceName); }
+            get { return SettingsManager.GetSettingByName("DefaultMetadataPluginMovies", InstanceName) ?? "themoviedb.org"; }
+            set { SettingsManager.SaveSettingByName("DefaultMetadataPluginMovies", value, InstanceName); }
         }
 
         public static string DefaultMetadataPluginTV
         {
-            get { return SettingsManager.GetSettingByName("DefaultMetadataPluginTV", InstanceName) ?? ""; }
+            get { return SettingsManager.GetSettingByName("DefaultMetadataPluginTV", InstanceName) ?? "thetvdb.com"; }
             set { SettingsManager.SaveSettingByName("DefaultMetadataPluginTV", value, InstanceName); }
         }
 
@@ -587,17 +587,44 @@ namespace OMLEngine.Settings
             set { SettingsManager.SaveSettingByName("MetadataLookupResultsQty", value.ToString(), InstanceName); }
         }
 
-        public static bool MetadataLookupOverwriteExistingData
+        // Overwrite settings for a manual search
+        public static bool MetadataLookupOverwriteExistingDataManual
         {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupOverwriteExistingData", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupOverwriteExistingData", value.ToString(), InstanceName); }
+            get { return SettingsManager.GetSettingByNameBool("MetadataLookupOverwriteExistingDataManual", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupOverwriteExistingDataManual", value.ToString(), InstanceName); }
         }
 
-        public static bool MetadataLookupUpdateName
+        public static bool MetadataLookupUpdateNameManual
         {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateName", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateName", value.ToString(), InstanceName); }
-        }   
+            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateNameManual", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateNameManual", value.ToString(), InstanceName); }
+        }
+
+        // Overwrite settings for a preferred search for TV shows
+        public static bool MetadataLookupOverwriteExistingDataPrefTV
+        {
+            get { return SettingsManager.GetSettingByNameBool("MetadataLookupOverwriteExistingDataPrefTV", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupOverwriteExistingDataPrefTV", value.ToString(), InstanceName); }
+        }
+
+        public static bool MetadataLookupUpdateNamePrefTV
+        {
+            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateNamePrefTV", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateNamePrefTV", value.ToString(), InstanceName); }
+        }
+
+        // Overwrite settings for a preferred search for Movies
+        public static bool MetadataLookupOverwriteExistingDataPrefMovies
+        {
+            get { return SettingsManager.GetSettingByNameBool("MetadataLookupOverwriteExistingDataPrefMovies", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupOverwriteExistingDataPrefMovies", value.ToString(), InstanceName); }
+        }
+
+        public static bool MetadataLookupUpdateNamePrefMovies
+        {
+            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateNamePrefMovies", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateNamePrefMovies", value.ToString(), InstanceName); }
+        } 
         #endregion
 
 
