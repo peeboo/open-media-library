@@ -49,6 +49,18 @@ namespace OMLEngineService
                 host.Channel.Transcode(Source, Environment.UserName);
         }
 
+        public string MakeMPEGLink(string mpegFolder, string vob) {
+            Utilities.DebugLine("[TranscodingAPI] MakeMPEGLink", mpegFolder, vob);
+            using (var host = TranscodingNotifyingService.NewTranscodingServiceProxy())
+                return host.Channel.MakeMPEGLink(mpegFolder, vob);
+        }
+
+        public bool CreateSymbolicLink(string mpegFile, string vob) {
+            Utilities.DebugLine("");
+            using (var host = TranscodingNotifyingService.NewTranscodingServiceProxy())
+                return host.Channel.CreateSymbolicLink(mpegFile, vob);
+        }
+
         public void Cancel()
         {
             Utilities.DebugLine("[TranscodingAPI] Cancel", Source);

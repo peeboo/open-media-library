@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Web;
 
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.Hosting;
-
+using System.Runtime.InteropServices;
 using OMLEngine;
 using OMLEngine.Settings;
 using OMLGetDVDInfo;
 using System.ComponentModel;
+using OMLTranscoder;
+using OMLEngineService;
 
 namespace Library
 {
@@ -21,12 +22,14 @@ namespace Library
     /// </summary>
     public class ExtenderDVDPlayer : IPlayMovie
     {
+        TranscodingAPI transcoder;
         MediaSource _source;
         DVDDiskInfo _info;
 
         public ExtenderDVDPlayer(MediaSource source)
         {
             _source = source;
+            transcoder = new TranscodingAPI(_source, null);
         }
 
         public static bool CanPlay(MediaSource source)
@@ -36,6 +39,24 @@ namespace Library
 
             // TODO: allow to play auto-merging VOBs, asx, and other handings below
             return false;
+        }
+
+        [DllImport("Kernel32.Dll", CharSet = CharSet.Unicode)]
+        static extern bool GetVolumeInformation(
+            string lpRootPathName,
+            IntPtr /*StringBulider*/ lpVolumeNameBuffer,
+            int nVolumeNameSize,
+            /*ref*/ IntPtr lpVolumeSerialNumber,
+            /*ref*/ IntPtr lpMaximumComponentLength,
+            /*ref*/ IntPtr lpFileSystemFlags,
+            StringBuilder lpFileSystemNameBuffer,
+            int nFileSystemNameSize
+        );
+
+        internal static bool IsNTFS(string rootPath) {
+            StringBuilder sb = new StringBuilder(255);
+            GetVolumeInformation(Directory.GetDirectoryRoot(rootPath), IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, sb, 255);
+            return sb.ToString().CompareTo("NTFS") == 0;
         }
 
         public static string FindMPeg(MediaSource source)
@@ -67,7 +88,8 @@ namespace Library
                 if (Directory.Exists(mpegFolder) == false)
                     return null;
 
-                string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);
+                TranscodingAPI transcoder = new TranscodingAPI(source, null);
+                string mpegFile = transcoder.MakeMPEGLink(mpegFolder, vobs[0]);
                 if (File.Exists(mpegFile))
                     return mpegFile;
             }
@@ -83,7 +105,8 @@ namespace Library
                 string vob = Path.Combine(videoTSDir, vobs[0]);
                 OMLApplication.DebugLine("Trying to create '{0}' soft-link to '{1}'", mpegFile, vob);
 
-                bool ret = CreateSymbolicLink(mpegFile, vob, SYMLINK_FLAG_FILE);
+                TranscodingAPI transcoder = new TranscodingAPI(source, null);
+                bool ret = transcoder.CreateSymbolicLink(mpegFile, vob);
                 string retMsg = ret ? "success" : "Sym-Link failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message;
 
                 if (File.Exists(mpegFile))
@@ -132,7 +155,7 @@ namespace Library
                     if (vobs.Count == 1)
                     {
                         OMLApplication.DebugLine("Single VOB file, trying to use a hard-link approach and direct playback");
-                        string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);
+                        string mpegFile = transcoder.MakeMPEGLink(mpegFolder, vobs[0]);
                         if (File.Exists(mpegFile))
                         {
                             OMLApplication.DebugLine("directly use MPEG");
@@ -143,7 +166,7 @@ namespace Library
                     {
                         OMLApplication.DebugLine("Multiple VOB files, and Extender_UseAsx == true, trying to use a hard-link and asx playlist approach ");
                         foreach (string vob in vobs)
-                            MakeMPEGLink(mpegFolder, vob);
+                            transcoder.MakeMPEGLink(mpegFolder, vob);
 
                         if (File.Exists(GetMPEGName(mpegFolder, vobs[0])))
                             videoFile = CreateASX(mpegFolder, vts, _source.Name, vobs);
@@ -151,7 +174,7 @@ namespace Library
                     else if (OMLSettings.Extender_MergeVOB)
                     {
                         OMLApplication.DebugLine("Multiple VOB files, and Extender_MergeVOB == true, trying to use a hard-link and auto-merge into single large .VOB file approach ");
-                        string mpegFile = MakeMPEGLink(mpegFolder, vobs[0]);
+                        string mpegFile = transcoder.MakeMPEGLink(mpegFolder, vobs[0]);
                         OMLApplication.DebugLine("Merge VOB's, use first VOB to play and merge into");
 
                         if (File.Exists(mpegFile) == false)
@@ -271,51 +294,6 @@ namespace Library
                 }
         }
 
-        static string MakeMPEGLink(string mpegFolder, string vob)
-        {
-            string mpegFile = GetMPEGName(mpegFolder, vob);
-            if (File.Exists(mpegFile))
-                return mpegFile;
-
-            bool ret = CreateSymbolicLink(mpegFile, vob, SYMLINK_FLAG_FILE);
-            string retMsg = ret ? "success" : "Sym-Link failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message;
-            if (File.Exists(mpegFile))
-            {
-                OMLApplication.DebugLine("created a sym-link {0} -> {1}, kernel32 success", vob, mpegFile);
-                return mpegFile;
-            }
-
-            OMLApplication.DebugLine("created a sym-link {0} -> {1}, failed, {2}", vob, mpegFile, retMsg);
-
-            string args = string.Format("/c mklink \"{0}\" \"{1}\"", mpegFile, vob);
-            System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("cmd.exe", args);
-            psi.CreateNoWindow = true;
-            psi.UseShellExecute = true;
-            psi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
-            p.WaitForExit();
-            int exitCode = p.ExitCode;
-
-            if (File.Exists(mpegFile))
-            {
-                OMLApplication.DebugLine("created a sym-link {0} -> {1}, cmd.exe success", vob, mpegFile);
-                return mpegFile;
-            }
-
-            OMLApplication.DebugLine("created a sym-link {0} -> {1}, mklink failed: args:'{2}', exit code: {3}", vob, mpegFile, args, exitCode);
-
-            ret = CreateHardLinkAPI(mpegFile, vob, IntPtr.Zero);
-            retMsg = ret ? "success" : "Hard-Link failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message;
-            if (File.Exists(mpegFile))
-            {
-                OMLApplication.DebugLine("created a hard-link {0} -> {1}, success", vob, mpegFile);
-                return mpegFile;
-            }
-
-            OMLApplication.DebugLine("failed to create link {0} -> {1}, neither with sym-link, mklink nor hard-link", vob, mpegFile);
-            return null;
-        }
-
         static string CreateASX(string mpegFolder, string vts, string name, IEnumerable<string> vobs)
         {
             string videoFile = Path.Combine(mpegFolder, vts.Trim('_')) + ".asx";
@@ -361,42 +339,6 @@ namespace Library
             Utilities.DebugLine("ExtenderDVDPlayer.GetAsxFile: no asx file found {0}", _source.MediaPath);
             return null;
         }
-
-        #region -- NTFS helper functions to create hard-links --
-        [DllImport("Kernel32.Dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        static extern bool CreateSymbolicLink(
-            [MarshalAs(UnmanagedType.LPTStr)] string lpSymlinkFileName,
-            [MarshalAs(UnmanagedType.LPTStr)] string lpTargetFileName, 
-            int dwFlags);
-        const int SYMLINK_FLAG_DIRECTORY = 1;
-        const int SYMLINK_FLAG_FILE = 0;
-
-        [DllImport("Kernel32.Dll", CharSet = CharSet.Unicode, EntryPoint = "CreateHardLink", SetLastError = true)]
-        static extern bool CreateHardLinkAPI(
-            [MarshalAs(UnmanagedType.LPTStr)] string lpFileName,
-            [MarshalAs(UnmanagedType.LPTStr)] string lpExistingFileName,
-            IntPtr /* LPSECURITY_ATTRIBUTES */ lpSecurityAttributes
-        );
-
-        [DllImport("Kernel32.Dll", CharSet = CharSet.Unicode)]
-        static extern bool GetVolumeInformation(
-            string lpRootPathName,
-            IntPtr /*StringBulider*/ lpVolumeNameBuffer,
-            int nVolumeNameSize,
-            /*ref*/ IntPtr lpVolumeSerialNumber,
-            /*ref*/ IntPtr lpMaximumComponentLength,
-            /*ref*/ IntPtr lpFileSystemFlags,
-            StringBuilder lpFileSystemNameBuffer,
-            int nFileSystemNameSize
-        );
-
-        internal static bool IsNTFS(string rootPath)
-        {
-            StringBuilder sb = new StringBuilder(255);
-            GetVolumeInformation(Directory.GetDirectoryRoot(rootPath), IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, sb, 255);
-            return sb.ToString().CompareTo("NTFS") == 0;
-        }
-        #endregion        
 
         public static void Uninitialize()
         {
