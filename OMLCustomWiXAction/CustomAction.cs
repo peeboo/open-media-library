@@ -60,18 +60,15 @@ namespace OMLCustomWiXAction {
         public static ActionResult ReserveTrailersUrl(Session session) {
             session.Log("Inside ReserveTrailersUrl");
             try {
-                NTAccount act;
                 SecurityIdentifier sid;
 
                 //add users in case someone runs the service as themselves
-                act = new NTAccount("users");
-                sid = (SecurityIdentifier)act.Translate(typeof(SecurityIdentifier));
+                sid = new SecurityIdentifier("S-1-5-32-545");//users
                 URLReservation.UrlReservation rev = new URLReservation.UrlReservation("http://127.0.0.1:8484/3f0850a7-0fd7-4cbf-b8dc-c7f7ea31534e/");
                 rev.AddSecurityIdentifier(sid);
 
                 //add system because that is the default
-                act = new NTAccount("system");
-                sid = (SecurityIdentifier)act.Translate(typeof(SecurityIdentifier));
+                sid = new SecurityIdentifier("S-1-5-18");//system
                 rev.AddSecurityIdentifier(sid);
                 rev.Create();
                 session.Log("ReserveTrailersUrl CA: Success");
