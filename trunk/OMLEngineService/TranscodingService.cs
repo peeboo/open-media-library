@@ -110,11 +110,11 @@ namespace OMLEngineService
             bool ret = CreateSymbolicLink(mpegFile, vob, SYMLINK_FLAG_FILE);
             string retMsg = ret ? "success" : "Sym-Link failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message;
             if (File.Exists(mpegFile)) {
-                //WCFUtilites.WriteToLog(string.Format("created a sym-link {0} -> {1}, kernel32 success", vob, mpegFile));
+                Utilities.DebugLine(string.Format("created a sym-link {0} -> {1}, kernel32 success", vob, mpegFile));
                 return mpegFile;
             }
 
-            //OMLApplication.DebugLine("created a sym-link {0} -> {1}, failed, {2}", vob, mpegFile, retMsg);
+            Utilities.DebugLine("created a sym-link {0} -> {1}, failed, {2}", vob, mpegFile, retMsg);
 
             string args = string.Format("/c mklink \"{0}\" \"{1}\"", mpegFile, vob);
             System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("cmd.exe", args);
@@ -126,20 +126,20 @@ namespace OMLEngineService
             int exitCode = p.ExitCode;
 
             if (File.Exists(mpegFile)) {
-                //OMLApplication.DebugLine("created a sym-link {0} -> {1}, cmd.exe success", vob, mpegFile);
+                Utilities.DebugLine("created a sym-link {0} -> {1}, cmd.exe success", vob, mpegFile);
                 return mpegFile;
             }
 
-            //OMLApplication.DebugLine("created a sym-link {0} -> {1}, mklink failed: args:'{2}', exit code: {3}", vob, mpegFile, args, exitCode);
+            Utilities.DebugLine("created a sym-link {0} -> {1}, mklink failed: args:'{2}', exit code: {3}", vob, mpegFile, args, exitCode);
 
             ret = CreateHardLinkAPI(mpegFile, vob, IntPtr.Zero);
             retMsg = ret ? "success" : "Hard-Link failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message;
             if (File.Exists(mpegFile)) {
-                //OMLApplication.DebugLine("created a hard-link {0} -> {1}, success", vob, mpegFile);
+                Utilities.DebugLine("created a hard-link {0} -> {1}, success", vob, mpegFile);
                return mpegFile;
             }
 
-            //OMLApplication.DebugLine("failed to create link {0} -> {1}, neither with sym-link, mklink nor hard-link", vob, mpegFile);
+            Utilities.DebugLine("failed to create link {0} -> {1}, neither with sym-link, mklink nor hard-link", vob, mpegFile);
             return null;
         }
 
