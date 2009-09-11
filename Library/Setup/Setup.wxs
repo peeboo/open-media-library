@@ -154,7 +154,9 @@
                   Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe" Checksum="yes"/>
             <File Name="OMLEngineService.exe.config"
                   Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe.config" Checksum="no"/>
-            <ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService" Stop="both" Remove="uninstall"/>
+            <ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService" Stop="both" Start="install" Remove="uninstall"/>
+            <!--ServiceControl Id="StartOMLEngineService" Name="OMLEngineService" Start="install" Wait="no" />
+            <ServiceControl Id="StopOMLEngineService" Name="OMLEngineService" Stop="both" Wait="yes" Remove="uninstall" /-->
             <ServiceInstall Id="OMLEngineService" Name="OMLEngineService" DisplayName="OMLEngineService"
                             Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
                             ErrorControl="normal">
@@ -164,8 +166,8 @@
               <util:ServiceConfig ServiceName="OMLEngineService" FirstFailureActionType="restart" SecondFailureActionType="restart"
                                   ThirdFailureActionType="restart" ResetPeriodInDays="7" RestartServiceDelayInSeconds="60"/>
             </ServiceInstall>
-            <!--<ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
-                                        Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
+            <!--ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
+                                        Start="install" Stop="install" Wait="yes" Remove="uninstall"/-->
           </Component>
 
           <Component Id="OMLFWService.exe" Guid="8F57190C-0489-40b4-9C46-5E9B09EC0DEC" DiskId="1">
@@ -592,15 +594,14 @@
                   BinaryKey="OMLCALib"
                   DllEntry="ReserveTrailersUrl"
                   Execute="deferred"
+                  Impersonate="no"
                   Return="check" />
 
-    <!--
-      <CustomAction Id="StartOMLEngineServiceAction"
+      <!--CustomAction Id="StartOMLEngineServiceAction"
                   BinaryKey="OMLCALib"
                   DllEntry="StartOMLEngineService"
-                  Execute="deferred"
-                  Return="ignore" />
-    -->
+                  Impersonate="no"
+                  Return="ignore" /-->
     
       <CustomAction Id="ActivateNetTcpPortSharing"
                   BinaryKey="OMLCALib"

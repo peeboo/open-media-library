@@ -593,6 +593,7 @@
                   BinaryKey="OMLCALib"
                   DllEntry="ReserveTrailersUrl"
                   Execute="deferred"
+                  Impersonate="no"
                   Return="check" />
 
     <!--

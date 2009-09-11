@@ -21,6 +21,7 @@
 		         Comments="!(loc.Package_Comments)"
              Platform="x64"
 		         InstallerVersion="405"
+             InstallPrivileges="elevated"
 		         Compressed="yes" />
 
     <Binary Id="OMLDB" SourceFile="..\..\SQL Scripts\Title Database.sql" />

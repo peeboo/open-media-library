@@ -20,6 +20,7 @@
     <Package Description="!(loc.Package_Description)"
 		         Comments="!(loc.Package_Comments)"
 		         InstallerVersion="405"
+             InstallPrivileges="elevated"
 		         Compressed="yes" />
 
     <!--<Binary Id="OMLDB" SourceFile="..\..\SQL Scripts\Title Database.sql" />-->
@@ -75,9 +76,9 @@
         <Custom Action='ReserveTrailersUrlAction' Before='InstallFinalize'>
           <![CDATA[NOT REMOVE]]>
         </Custom>
-      <!--<Custom Action='StartOMLEngineServiceAction' Before='InstallFinalize'>
+      <!--Custom Action='StartOMLEngineServiceAction' After='InstallFinalize'>
         <![CDATA[NOT REMOVE]]>
-      </Custom>-->
+      </Custom-->
     </InstallExecuteSequence>
 
   </Product>
