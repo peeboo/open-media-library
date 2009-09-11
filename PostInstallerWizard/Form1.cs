@@ -60,28 +60,6 @@ namespace PostInstallerWizard
         {
             ServerInstall = false;
 
-            // start up the windows services (if they exist)
-            //try {
-            //    ServiceController omlengineController = new ServiceController(@"OMLEngineService");
-            //    TimeSpan timeout = TimeSpan.FromSeconds(20);
-            //    omlengineController.Start();
-            //    omlengineController.WaitForStatus(ServiceControllerStatus.Running, timeout);
-            //    omlengineController.Close();
-            //} catch (Exception e) {
-            //    MessageBox.Show("Error starting OMLEngineService: {0}", e.Message);
-            //    Utilities.DebugLine("An error occured starting the OMLEngine Service: {0}", e.Message);
-            //}
-
-            //try {
-            //    ServiceController omlfsserviceController = new ServiceController(@"OMLFWService");
-            //    TimeSpan timeout = TimeSpan.FromSeconds(10);
-            //    omlfsserviceController.Start();
-            //    omlfsserviceController.WaitForStatus(ServiceControllerStatus.Running, timeout);
-            //    omlfsserviceController.Close();
-            //} catch (Exception e) {
-            //    Utilities.DebugLine("An error occured starting the OMLFW Service: {0}", e.Message);
-            //}
-
             // Check if this a server installation. This needs to be changed to a better method.
             // Maybe a registry setting in wix to indicate server install
             if ((File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\SQLInstaller\\SQLEXPR_x86_ENU.exe")) ||

@@ -31,7 +31,7 @@ namespace OMLCustomWiXAction {
                 session.Log("StartOMLEngineService CA: Success");
                 return ActionResult.Success;
             } catch (Exception e) {
-                session.Log("Error starting OMLEngineService: {0}", e.Message);
+                session.Log(string.Format("Error starting OMLEngineService: {0}", e.Message));
                 return ActionResult.Failure;
             }
         }
@@ -45,7 +45,7 @@ namespace OMLCustomWiXAction {
                 omlfsserviceController.WaitForStatus(ServiceControllerStatus.Running, timeout);
                 omlfsserviceController.Close();
             } catch (Exception e) {
-                session.Log("An error occured starting the OMLFW Service: {0}", e.Message);
+                session.Log(string.Format("An error occured starting the OMLFW Service: {0}", e.Message));
                 return ActionResult.Failure;
             }
             return ActionResult.Success;
@@ -88,7 +88,7 @@ namespace OMLCustomWiXAction {
                 session.Log("ActivateNetTcpPortSharing: Success");
                 return ActionResult.Success;
             } catch (Exception e) {
-                session.Log("Failed to activate NetTcpPortSharing: {0}", e.Message);
+                session.Log(string.Format("Failed to activate NetTcpPortSharing: {0}", e.Message));
                 return ActionResult.Failure;
             }
         }
