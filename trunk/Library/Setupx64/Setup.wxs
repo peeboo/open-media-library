@@ -603,6 +603,10 @@
                 Execute="deferred"
                 Return="ignore" />
     -->
+    <CustomAction Id="StartOMLEngineServiceAction"
+                  BinaryKey="OMLCALib"
+                  DllEntry="StartOMLEngineService"
+                  Return="ignore" />
 
     <CustomAction Id="ActivateNetTcpPortSharing"
                 BinaryKey="OMLCALib"
