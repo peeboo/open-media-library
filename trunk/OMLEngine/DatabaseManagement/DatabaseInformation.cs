@@ -86,7 +86,7 @@ namespace OMLEngine.DatabaseManagement
         {
             get
             {
-                return (_SAPassword ?? "omladmin");
+                return (_SAPassword ?? "R3WztB4#9");
             }
             set
             {

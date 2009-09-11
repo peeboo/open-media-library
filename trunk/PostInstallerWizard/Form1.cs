@@ -123,7 +123,7 @@ namespace PostInstallerWizard
             CurrentPage = null;
 
             // Default database info
-            sapassword = "omladmin";
+            sapassword = "R3WztB4#9";
             instancename = "oml";
             servername = "localhost";
 
