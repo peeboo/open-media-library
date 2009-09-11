@@ -53,10 +53,10 @@
     <!-- described in more detail in the WiX documentation.                                              -->
     <UI>
       <UIRef Id="WixUI_FeatureTree" />
-      <Publish Dialog="ExitDialog"
+      <!--Publish Dialog="ExitDialog"
                Control="Finish"
                Event="DoAction"
-               Value="LaunchApplication">1</Publish>
+               Value="LaunchApplication">1</Publish-->
 
       <ProgressText Action="ReserveTrailersUrlAction">Reserving Url for Trailers Proxy Server</ProgressText>
       <ProgressText Action="ActivateNetTcpPortSharing">Activating NetTcpPortSharing for Transcoding Services</ProgressText>
@@ -77,6 +77,9 @@
           <![CDATA[NOT REMOVE]]>
         </Custom>
       <Custom Action='StartOMLEngineServiceAction' After='InstallFinalize'>
+        <![CDATA[NOT REMOVE]]>
+      </Custom>
+      <Custom Action='LaunchApplication' After='StartOMLEngineServiceAction'>
         <![CDATA[NOT REMOVE]]>
       </Custom>
     </InstallExecuteSequence>
