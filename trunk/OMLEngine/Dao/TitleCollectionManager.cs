@@ -676,8 +676,14 @@ namespace OMLEngine
         {
             Dao.Title daoTitle = Dao.TitleCollectionDao.GetTitleById(title.Id);
             //daoTitle.WatchedCount = (daoTitle.WatchedCount == null) ? 1 : daoTitle.WatchedCount.Value + 1;
+
+            bool wasTracking = Dao.DBContext.Instance.ObjectTrackingEnabled;
+            if (wasTracking)
+                Dao.DBContext.Instance.ObjectTrackingEnabled = false;
             daoTitle.Images.Add(image);
             Dao.DBContext.Instance.SubmitChanges();
+
+            Dao.DBContext.Instance.ObjectTrackingEnabled = wasTracking;
         }
 
         /// <summary>
@@ -688,8 +694,12 @@ namespace OMLEngine
         {
             Dao.Title daoTitle = Dao.TitleCollectionDao.GetTitleById(title.Id);
             daoTitle.WatchedCount = (daoTitle.WatchedCount == null) ? 1 : daoTitle.WatchedCount.Value + 1;
-            
+
+            bool wasTracking = Dao.DBContext.Instance.ObjectTrackingEnabled;
+            if (wasTracking)
+                Dao.DBContext.Instance.ObjectTrackingEnabled = false;
             Dao.DBContext.Instance.SubmitChanges();
+            Dao.DBContext.Instance.ObjectTrackingEnabled = wasTracking;
 
             title.WatchedCount = daoTitle.WatchedCount.Value;
         }
