@@ -24,7 +24,7 @@
              InstallPrivileges="elevated"
 		         Compressed="yes" />
 
-    <Binary Id="OMLDB" SourceFile="..\..\SQL Scripts\Title Database.sql" />
+    <!--<Binary Id="OMLDB" SourceFile="..\..\SQL Scripts\Title Database.sql" />-->
     <!-- This information enables Windows Installer major upgrade functionality so users can seamlessly  -->
     <!-- install a new version of the product and have the old version automatically uninstall behind    -->
     <!-- the scenes. See the following topic in the MSDN Library for additional information:             -->
@@ -54,10 +54,10 @@
     <!-- described in more detail in the WiX documentation.                                              -->
     <UI>
       <UIRef Id="WixUI_FeatureTree" />
-      <Publish Dialog="ExitDialog"
+      <!--<Publish Dialog="ExitDialog"
                Control="Finish"
                Event="DoAction"
-               Value="LaunchApplication">1</Publish>
+               Value="LaunchApplication">1</Publish>-->
       
       <ProgressText Action="ReserveTrailersUrlAction">Reserving Url for Trailers Proxy Server</ProgressText>
       <ProgressText Action="ActivateNetTcpPortSharing">Activating NetTcpPortSharing for Transcoding Services</ProgressText>
@@ -69,7 +69,7 @@
                   BinaryKey="WixCA"
                   DllEntry="WixShellExec"
                   Impersonate="yes"/>
-    
+
     <InstallExecuteSequence>
       <Custom Action="ActivateNetTcpPortSharing" Before="ReserveTrailersUrlAction">
         <![CDATA[NOT REMOVE]]>
@@ -78,6 +78,9 @@
         <![CDATA[NOT REMOVE]]>
       </Custom>
       <Custom Action='StartOMLEngineServiceAction' After='InstallFinalize'>
+        <![CDATA[NOT REMOVE]]>
+      </Custom>
+      <Custom Action='LaunchApplication' After='StartOMLEngineServiceAction'>
         <![CDATA[NOT REMOVE]]>
       </Custom>
     </InstallExecuteSequence>
