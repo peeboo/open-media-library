@@ -7,14 +7,6 @@ using Dao = OMLEngine.Dao;
 
 namespace OMLEngine
 {
-    /*public enum TitleTypes : int
-    {
-        Movie, // (uses media logic)
-        Episode, // (uses media logic)
-        Collection, // (uses folder logic)
-        TVShow, // (uses folder logic)
-        Season // (uses folder logic)
-    }*/
     public enum TitleTypes : int
     {
         Root = 0x0001,
@@ -46,10 +38,10 @@ namespace OMLEngine
         /// <returns></returns>
         public static bool AddTitle(Title title)
         {
-            using (OMLEngine.Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext())
+            using (OMLEngine.Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext(false))
             {                
                 // Set default titletype if none specified
-                if ((title.TitleType == null) || (title.TitleType == 0)) { title.TitleType = TitleTypes.Root | TitleTypes.Video; }
+                if ((title.TitleType == 0)) { title.TitleType = TitleTypes.Root | TitleTypes.Video; }
 
                 // setup all the collections objects
                 // todo : solomon : this should go away once it's understood how people 

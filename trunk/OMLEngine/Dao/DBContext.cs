@@ -53,7 +53,7 @@ namespace OMLEngine.Dao
                     if (db == null) {
                         db = new OMLDataDataContext();
 
-                        db.DeferredLoadingEnabled = true;
+                        db.DeferredLoadingEnabled = false;
 
                         System.Data.Linq.DataLoadOptions loadOptions = new System.Data.Linq.DataLoadOptions();
                         loadOptions.LoadWith<Title>(i => i.Images);
@@ -75,14 +75,15 @@ namespace OMLEngine.Dao
         private static object lockObject = new object();
         public OMLDataDataContext Context { get { return db; } }
 
-        public LocalDataContext()
+        public LocalDataContext(bool readOnly)
         {
             lock (lockObject) {
                 db = new OMLDataDataContext();
-                db.DeferredLoadingEnabled = true;
+                db.DeferredLoadingEnabled = false;
+                if (readOnly)
+                    db.ObjectTrackingEnabled = false;
 
                 System.Data.Linq.DataLoadOptions loadOptions = new System.Data.Linq.DataLoadOptions();
-                //loadOptions.LoadWith<Title>(t => t.Disks);
                 loadOptions.LoadWith<Title>(i => i.Images);
                 db.LoadOptions = loadOptions;
                 db.Log = OMLDBContextLogger.Logger();
@@ -112,6 +113,7 @@ namespace OMLEngine.Dao
                     if (db == null) {
                         db = new OMLDataSettingsDataContext();
                         db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
+                        db.DeferredLoadingEnabled = false;
                         db.Log = OMLDBContextLogger.Logger();
                     }
                     return db;
