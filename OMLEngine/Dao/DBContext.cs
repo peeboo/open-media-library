@@ -58,7 +58,7 @@ namespace OMLEngine.Dao
                         System.Data.Linq.DataLoadOptions loadOptions = new System.Data.Linq.DataLoadOptions();
                         loadOptions.LoadWith<Title>(i => i.Images);
                         db.LoadOptions = loadOptions;
-                        db.Log = OMLDBContextLogger.Logger();
+                        //db.Log = OMLDBContextLogger.Logger();
 
                         db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
                     }
@@ -80,13 +80,13 @@ namespace OMLEngine.Dao
             lock (lockObject) {
                 db = new OMLDataDataContext();
                 db.DeferredLoadingEnabled = false;
-                if (readOnly)
-                    db.ObjectTrackingEnabled = false;
+//                if (readOnly)
+//                    db.ObjectTrackingEnabled = false;
 
                 System.Data.Linq.DataLoadOptions loadOptions = new System.Data.Linq.DataLoadOptions();
                 loadOptions.LoadWith<Title>(i => i.Images);
                 db.LoadOptions = loadOptions;
-                db.Log = OMLDBContextLogger.Logger();
+                //db.Log = OMLDBContextLogger.Logger();
 
                 db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
             }
@@ -114,7 +114,7 @@ namespace OMLEngine.Dao
                         db = new OMLDataSettingsDataContext();
                         db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
                         db.DeferredLoadingEnabled = false;
-                        db.Log = OMLDBContextLogger.Logger();
+                        //db.Log = OMLDBContextLogger.Logger();
                     }
                     return db;
                 }
