@@ -53,7 +53,7 @@ namespace OMLEngine.Dao
                     if (db == null) {
                         db = new OMLDataDataContext();
 
-                        db.DeferredLoadingEnabled = false;
+                        //db.DeferredLoadingEnabled = false;
 
                         System.Data.Linq.DataLoadOptions loadOptions = new System.Data.Linq.DataLoadOptions();
                         loadOptions.LoadWith<Title>(i => i.Images);
@@ -79,7 +79,7 @@ namespace OMLEngine.Dao
         {
             lock (lockObject) {
                 db = new OMLDataDataContext();
-                db.DeferredLoadingEnabled = false;
+                //db.DeferredLoadingEnabled = false;
 //                if (readOnly)
 //                    db.ObjectTrackingEnabled = false;
 
@@ -113,7 +113,7 @@ namespace OMLEngine.Dao
                     if (db == null) {
                         db = new OMLDataSettingsDataContext();
                         db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
-                        db.DeferredLoadingEnabled = false;
+                        //db.DeferredLoadingEnabled = false;
                         //db.Log = OMLDBContextLogger.Logger();
                     }
                     return db;
