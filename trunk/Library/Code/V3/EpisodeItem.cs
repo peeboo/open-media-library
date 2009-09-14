@@ -388,7 +388,8 @@ namespace Library.Code.V3
 
             // create a disk out of the playlist of all items
             if (OMLApplication.Current.IsExtender)
-                this.TitleObject.SelectedDisk = new Disk(this.Description, CreatePlayListFromAllDisks(), VideoFormat.WPL);
+                this.TitleObject.SelectedDisk = this.TitleObject.Disks[0];
+                //this.TitleObject.SelectedDisk = new Disk(this.Description, CreatePlayListFromAllDisks(), VideoFormat.WPL);
             else
                 this.TitleObject.SelectedDisk = new Disk(this.Description, CreatePlayListFromAllDisks(), VideoFormat.WVX);
 
