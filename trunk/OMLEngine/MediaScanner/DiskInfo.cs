@@ -330,8 +330,9 @@ namespace OMLEngine
                     difeature.VideoStreams.Add(divideostream);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Utilities.DebugLine("[DiskInfo:QueryMediaFile] An error occured during file scan: {0}", ex.Message);
             }
 
             try
@@ -410,8 +411,9 @@ namespace OMLEngine
                     difeature.AudioStreams.Add(diaudiostream);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Utilities.DebugLine("[DiskInfo:QueryMediaFile] An error occured during file scan: {0}", ex.Message);
             }
 
             Console.WriteLine(MI.Count_Get(MediaInfoLib.StreamKind.Audio));

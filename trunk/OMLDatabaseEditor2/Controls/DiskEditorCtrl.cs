@@ -137,44 +137,33 @@ namespace OMLDatabaseEditor.Controls
             Parent.Controls["lbDisks"].Refresh();
         }
 
-        private void AutoScanDisk()
-        {
-            try
-            {
+        private void AutoScanDisk() {
+            try {
                 // Auto scan disk
-                if (OMLEngine.Settings.OMLSettings.AutoScanDiskOnAdding)
-                {
-                    int Feature = 0;
-                    int Length = 0;
-                    for (int i = 0; i < _currentDisk.DiskFeatures.Count; i++)
-                    {
-                        int calclength = _currentDisk.DiskFeatures[Feature].Duration.Hours * 60 + _currentDisk.DiskFeatures[Feature].Duration.Minutes;
-                        if (calclength > Length)
-                        {
-                            Length = calclength;
-                            Feature = i;
-                        }
-
-                    }
-                    _currentDisk.MainFeatureXRes = _currentDisk.DiskFeatures[Feature].VideoStreams[0].Resolution.Width;
-                    _currentDisk.MainFeatureYRes = _currentDisk.DiskFeatures[Feature].VideoStreams[0].Resolution.Height;
-                    _currentDisk.MainFeatureAspectRatio = _currentDisk.DiskFeatures[Feature].VideoStreams[0].AspectRatio;
-                    _currentDisk.MainFeatureFPS = _currentDisk.DiskFeatures[Feature].VideoStreams[0].FrameRate;
-                    _currentDisk.MainFeatureLength = _currentDisk.DiskFeatures[Feature].Duration.Hours * 60 + _currentDisk.DiskFeatures[Feature].Duration.Minutes;
-
-                    if (OMLEngine.Settings.OMLSettings.ScanDiskRollInfoToTitle)
-                    {
-                        _currentTitle.VideoResolution = _currentDisk.MainFeatureXRes.ToString() + "x" + _currentDisk.MainFeatureYRes.ToString();
-                        _currentTitle.AspectRatio = _currentDisk.MainFeatureAspectRatio;
-                        //_disk.MainFeatureFPS = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].FrameRate;
-                        _currentTitle.Runtime = _currentDisk.MainFeatureLength ?? 0;
+                int Feature = 0;
+                int Length = 0;
+                for (int i = 0; i < _currentDisk.DiskFeatures.Count; i++) {
+                    int calclength = _currentDisk.DiskFeatures[Feature].Duration.Hours * 60 + _currentDisk.DiskFeatures[Feature].Duration.Minutes;
+                    if (calclength > Length) {
+                        Length = calclength;
+                        Feature = i;
                     }
 
-                    (Parent as DiskEditorFrm).DiskDirty = true;
                 }
-            }
-            catch (Exception ex)
-            {
+                _currentDisk.MainFeatureXRes = _currentDisk.DiskFeatures[Feature].VideoStreams[0].Resolution.Width;
+                _currentDisk.MainFeatureYRes = _currentDisk.DiskFeatures[Feature].VideoStreams[0].Resolution.Height;
+                _currentDisk.MainFeatureAspectRatio = _currentDisk.DiskFeatures[Feature].VideoStreams[0].AspectRatio;
+                _currentDisk.MainFeatureFPS = _currentDisk.DiskFeatures[Feature].VideoStreams[0].FrameRate;
+                _currentDisk.MainFeatureLength = _currentDisk.DiskFeatures[Feature].Duration.Hours * 60 + _currentDisk.DiskFeatures[Feature].Duration.Minutes;
+
+                _currentTitle.VideoResolution = _currentDisk.MainFeatureXRes.ToString() + "x" + _currentDisk.MainFeatureYRes.ToString();
+                _currentTitle.AspectRatio = _currentDisk.MainFeatureAspectRatio;
+                //_disk.MainFeatureFPS = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].FrameRate;
+                _currentTitle.Runtime = _currentDisk.MainFeatureLength ?? 0;
+
+                (Parent as DiskEditorFrm).DiskDirty = true;
+            } catch (Exception ex) {
+                Utilities.DebugLine("[DiskEditorCtrl] Failed to autoscan disk: {0}", ex.Message);
             }
         }
 
