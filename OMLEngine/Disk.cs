@@ -232,6 +232,12 @@ namespace OMLEngine
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
+            if (info == null)
+                throw new System.ArgumentNullException("info");
+            info.AddValue("name", this.Name);
+            info.AddValue("path", this.Path);
+            if(!string.IsNullOrEmpty(this.ExtraOptions))
+                info.AddValue("extraOptions", this.ExtraOptions);
         }
 
         public Disk(SerializationInfo info, StreamingContext ctxt)
